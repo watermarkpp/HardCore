@@ -1,0 +1,3690 @@
+{
+	"accounting": {
+		"atlas_commands": 248,
+		"legacy_commands": 3,
+		"shadow_chunk_commands": 125,
+		"total_commands": 376
+	},
+	"atlas_command_indices": [
+		1,
+		2,
+		4,
+		5,
+		77,
+		78,
+		151,
+		152,
+		196,
+		197,
+		268,
+		269,
+		341,
+		342,
+		7,
+		8,
+		80,
+		81,
+		154,
+		155,
+		193,
+		194,
+		265,
+		266,
+		338,
+		339,
+		10,
+		11,
+		83,
+		84,
+		157,
+		158,
+		202,
+		203,
+		274,
+		275,
+		347,
+		348,
+		14,
+		15,
+		86,
+		87,
+		160,
+		161,
+		199,
+		200,
+		271,
+		272,
+		344,
+		345,
+		17,
+		18,
+		89,
+		90,
+		163,
+		164,
+		208,
+		209,
+		280,
+		281,
+		353,
+		354,
+		20,
+		21,
+		92,
+		93,
+		166,
+		167,
+		205,
+		206,
+		277,
+		278,
+		350,
+		351,
+		23,
+		24,
+		95,
+		96,
+		169,
+		170,
+		214,
+		215,
+		286,
+		287,
+		359,
+		360,
+		26,
+		27,
+		100,
+		101,
+		172,
+		173,
+		211,
+		212,
+		283,
+		284,
+		356,
+		357,
+		29,
+		30,
+		103,
+		104,
+		220,
+		221,
+		292,
+		293,
+		32,
+		33,
+		106,
+		107,
+		217,
+		218,
+		289,
+		290,
+		35,
+		36,
+		109,
+		110,
+		226,
+		227,
+		298,
+		299,
+		38,
+		39,
+		112,
+		113,
+		223,
+		224,
+		295,
+		296,
+		41,
+		42,
+		115,
+		116,
+		232,
+		233,
+		304,
+		305,
+		44,
+		45,
+		118,
+		119,
+		229,
+		230,
+		301,
+		302,
+		47,
+		48,
+		121,
+		122,
+		238,
+		239,
+		310,
+		311,
+		50,
+		51,
+		124,
+		125,
+		235,
+		236,
+		307,
+		308,
+		53,
+		54,
+		127,
+		128,
+		244,
+		245,
+		317,
+		318,
+		56,
+		57,
+		130,
+		131,
+		241,
+		242,
+		313,
+		314,
+		59,
+		60,
+		133,
+		134,
+		250,
+		251,
+		323,
+		324,
+		62,
+		63,
+		136,
+		137,
+		247,
+		248,
+		320,
+		321,
+		65,
+		66,
+		139,
+		140,
+		256,
+		257,
+		329,
+		330,
+		68,
+		69,
+		142,
+		143,
+		253,
+		254,
+		326,
+		327,
+		71,
+		72,
+		145,
+		146,
+		262,
+		263,
+		335,
+		336,
+		74,
+		75,
+		148,
+		149,
+		259,
+		260,
+		332,
+		333,
+		175,
+		176,
+		365,
+		366,
+		178,
+		179,
+		362,
+		363,
+		181,
+		182,
+		371,
+		372,
+		184,
+		185,
+		368,
+		369,
+		187,
+		188,
+		190,
+		191,
+		374,
+		375
+	],
+	"atlas_entries": [
+		{
+			"command_indices": [
+				187,
+				188
+			],
+			"composite_size": [
+				160,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000004:21:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						187,
+						188
+					],
+					"group_key": "wall_part:inst_000004:21:0",
+					"representative_command_index": 187
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_base.png@(-80.0, -144.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_front.png@(-80.0, -144.0)",
+			"layers": [
+				{
+					"command_index": 187,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_base.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				},
+				{
+					"command_index": 188,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_front.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-80.0,
+				-144.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				384,
+				160,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				374,
+				375
+			],
+			"composite_size": [
+				160,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000003:39:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						374,
+						375
+					],
+					"group_key": "wall_part:inst_000003:39:0",
+					"representative_command_index": 374
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_base.png@(-80.0, -144.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_front.png@(-80.0, -144.0)",
+			"layers": [
+				{
+					"command_index": 374,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_base.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				},
+				{
+					"command_index": 375,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_front.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-80.0,
+				-144.0
+			],
+			"page": 0,
+			"region": [
+				928,
+				384,
+				160,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				1,
+				2
+			],
+			"composite_size": [
+				160,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000001:4:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						1,
+						2
+					],
+					"group_key": "wall_part:inst_000001:4:0",
+					"representative_command_index": 1
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_base.png@(-80.0, -144.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_front.png@(-80.0, -144.0)",
+			"layers": [
+				{
+					"command_index": 1,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_base.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				},
+				{
+					"command_index": 2,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_front.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-80.0,
+				-144.0
+			],
+			"page": 0,
+			"region": [
+				1088,
+				384,
+				160,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				190,
+				191
+			],
+			"composite_size": [
+				160,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000002:22:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						190,
+						191
+					],
+					"group_key": "wall_part:inst_000002:22:0",
+					"representative_command_index": 190
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_base.png@(-80.0, -144.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_front.png@(-80.0, -144.0)",
+			"layers": [
+				{
+					"command_index": 190,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_base.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				},
+				{
+					"command_index": 191,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_front.png",
+					"offset": [
+						-80.0,
+						-144.0
+					],
+					"size": [
+						160,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-80.0,
+				-144.0
+			],
+			"page": 0,
+			"region": [
+				1248,
+				384,
+				160,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				178,
+				179,
+				362,
+				363
+			],
+			"composite_size": [
+				128,
+				160
+			],
+			"group_keys": [
+				"wall_part:inst_000012:20:0",
+				"wall_part:inst_000020:37:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						178,
+						179
+					],
+					"group_key": "wall_part:inst_000012:20:0",
+					"representative_command_index": 178
+				},
+				{
+					"command_indices": [
+						362,
+						363
+					],
+					"group_key": "wall_part:inst_000020:37:0",
+					"representative_command_index": 362
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 178,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				},
+				{
+					"command_index": 179,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1408,
+				384,
+				128,
+				160
+			]
+		},
+		{
+			"command_indices": [
+				184,
+				185,
+				368,
+				369
+			],
+			"composite_size": [
+				128,
+				160
+			],
+			"group_keys": [
+				"wall_part:inst_000012:20:1",
+				"wall_part:inst_000020:37:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						184,
+						185
+					],
+					"group_key": "wall_part:inst_000012:20:1",
+					"representative_command_index": 184
+				},
+				{
+					"command_indices": [
+						368,
+						369
+					],
+					"group_key": "wall_part:inst_000020:37:1",
+					"representative_command_index": 368
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 184,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				},
+				{
+					"command_index": 185,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				384,
+				128,
+				160
+			]
+		},
+		{
+			"command_indices": [
+				7,
+				8,
+				80,
+				81,
+				154,
+				155,
+				193,
+				194,
+				265,
+				266,
+				338,
+				339
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000005:6:0",
+				"wall_part:inst_000008:12:0",
+				"wall_part:inst_000011:18:0",
+				"wall_part:inst_000013:23:0",
+				"wall_part:inst_000016:29:0",
+				"wall_part:inst_000019:35:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						7,
+						8
+					],
+					"group_key": "wall_part:inst_000005:6:0",
+					"representative_command_index": 7
+				},
+				{
+					"command_indices": [
+						80,
+						81
+					],
+					"group_key": "wall_part:inst_000008:12:0",
+					"representative_command_index": 80
+				},
+				{
+					"command_indices": [
+						154,
+						155
+					],
+					"group_key": "wall_part:inst_000011:18:0",
+					"representative_command_index": 154
+				},
+				{
+					"command_indices": [
+						193,
+						194
+					],
+					"group_key": "wall_part:inst_000013:23:0",
+					"representative_command_index": 193
+				},
+				{
+					"command_indices": [
+						265,
+						266
+					],
+					"group_key": "wall_part:inst_000016:29:0",
+					"representative_command_index": 265
+				},
+				{
+					"command_indices": [
+						338,
+						339
+					],
+					"group_key": "wall_part:inst_000019:35:0",
+					"representative_command_index": 338
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 7,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 8,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				14,
+				15,
+				86,
+				87,
+				160,
+				161,
+				199,
+				200,
+				271,
+				272,
+				344,
+				345
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000005:6:1",
+				"wall_part:inst_000008:12:1",
+				"wall_part:inst_000011:18:1",
+				"wall_part:inst_000013:23:1",
+				"wall_part:inst_000016:29:1",
+				"wall_part:inst_000019:35:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						14,
+						15
+					],
+					"group_key": "wall_part:inst_000005:6:1",
+					"representative_command_index": 14
+				},
+				{
+					"command_indices": [
+						86,
+						87
+					],
+					"group_key": "wall_part:inst_000008:12:1",
+					"representative_command_index": 86
+				},
+				{
+					"command_indices": [
+						160,
+						161
+					],
+					"group_key": "wall_part:inst_000011:18:1",
+					"representative_command_index": 160
+				},
+				{
+					"command_indices": [
+						199,
+						200
+					],
+					"group_key": "wall_part:inst_000013:23:1",
+					"representative_command_index": 199
+				},
+				{
+					"command_indices": [
+						271,
+						272
+					],
+					"group_key": "wall_part:inst_000016:29:1",
+					"representative_command_index": 271
+				},
+				{
+					"command_indices": [
+						344,
+						345
+					],
+					"group_key": "wall_part:inst_000019:35:1",
+					"representative_command_index": 344
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 14,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 15,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				20,
+				21,
+				92,
+				93,
+				166,
+				167,
+				205,
+				206,
+				277,
+				278,
+				350,
+				351
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000005:6:2",
+				"wall_part:inst_000008:12:2",
+				"wall_part:inst_000011:18:2",
+				"wall_part:inst_000013:23:2",
+				"wall_part:inst_000016:29:2",
+				"wall_part:inst_000019:35:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						20,
+						21
+					],
+					"group_key": "wall_part:inst_000005:6:2",
+					"representative_command_index": 20
+				},
+				{
+					"command_indices": [
+						92,
+						93
+					],
+					"group_key": "wall_part:inst_000008:12:2",
+					"representative_command_index": 92
+				},
+				{
+					"command_indices": [
+						166,
+						167
+					],
+					"group_key": "wall_part:inst_000011:18:2",
+					"representative_command_index": 166
+				},
+				{
+					"command_indices": [
+						205,
+						206
+					],
+					"group_key": "wall_part:inst_000013:23:2",
+					"representative_command_index": 205
+				},
+				{
+					"command_indices": [
+						277,
+						278
+					],
+					"group_key": "wall_part:inst_000016:29:2",
+					"representative_command_index": 277
+				},
+				{
+					"command_indices": [
+						350,
+						351
+					],
+					"group_key": "wall_part:inst_000019:35:2",
+					"representative_command_index": 350
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 20,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 21,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				26,
+				27,
+				100,
+				101,
+				172,
+				173,
+				211,
+				212,
+				283,
+				284,
+				356,
+				357
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000005:6:3",
+				"wall_part:inst_000008:12:3",
+				"wall_part:inst_000011:18:3",
+				"wall_part:inst_000013:23:3",
+				"wall_part:inst_000016:29:3",
+				"wall_part:inst_000019:35:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						26,
+						27
+					],
+					"group_key": "wall_part:inst_000005:6:3",
+					"representative_command_index": 26
+				},
+				{
+					"command_indices": [
+						100,
+						101
+					],
+					"group_key": "wall_part:inst_000008:12:3",
+					"representative_command_index": 100
+				},
+				{
+					"command_indices": [
+						172,
+						173
+					],
+					"group_key": "wall_part:inst_000011:18:3",
+					"representative_command_index": 172
+				},
+				{
+					"command_indices": [
+						211,
+						212
+					],
+					"group_key": "wall_part:inst_000013:23:3",
+					"representative_command_index": 211
+				},
+				{
+					"command_indices": [
+						283,
+						284
+					],
+					"group_key": "wall_part:inst_000016:29:3",
+					"representative_command_index": 283
+				},
+				{
+					"command_indices": [
+						356,
+						357
+					],
+					"group_key": "wall_part:inst_000019:35:3",
+					"representative_command_index": 356
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 26,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 27,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				32,
+				33,
+				106,
+				107,
+				217,
+				218,
+				289,
+				290
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000006:8:0",
+				"wall_part:inst_000009:14:0",
+				"wall_part:inst_000014:25:0",
+				"wall_part:inst_000017:31:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						32,
+						33
+					],
+					"group_key": "wall_part:inst_000006:8:0",
+					"representative_command_index": 32
+				},
+				{
+					"command_indices": [
+						106,
+						107
+					],
+					"group_key": "wall_part:inst_000009:14:0",
+					"representative_command_index": 106
+				},
+				{
+					"command_indices": [
+						217,
+						218
+					],
+					"group_key": "wall_part:inst_000014:25:0",
+					"representative_command_index": 217
+				},
+				{
+					"command_indices": [
+						289,
+						290
+					],
+					"group_key": "wall_part:inst_000017:31:0",
+					"representative_command_index": 289
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 32,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 33,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				38,
+				39,
+				112,
+				113,
+				223,
+				224,
+				295,
+				296
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000006:8:1",
+				"wall_part:inst_000009:14:1",
+				"wall_part:inst_000014:25:1",
+				"wall_part:inst_000017:31:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						38,
+						39
+					],
+					"group_key": "wall_part:inst_000006:8:1",
+					"representative_command_index": 38
+				},
+				{
+					"command_indices": [
+						112,
+						113
+					],
+					"group_key": "wall_part:inst_000009:14:1",
+					"representative_command_index": 112
+				},
+				{
+					"command_indices": [
+						223,
+						224
+					],
+					"group_key": "wall_part:inst_000014:25:1",
+					"representative_command_index": 223
+				},
+				{
+					"command_indices": [
+						295,
+						296
+					],
+					"group_key": "wall_part:inst_000017:31:1",
+					"representative_command_index": 295
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 38,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 39,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				44,
+				45,
+				118,
+				119,
+				229,
+				230,
+				301,
+				302
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000006:8:2",
+				"wall_part:inst_000009:14:2",
+				"wall_part:inst_000014:25:2",
+				"wall_part:inst_000017:31:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						44,
+						45
+					],
+					"group_key": "wall_part:inst_000006:8:2",
+					"representative_command_index": 44
+				},
+				{
+					"command_indices": [
+						118,
+						119
+					],
+					"group_key": "wall_part:inst_000009:14:2",
+					"representative_command_index": 118
+				},
+				{
+					"command_indices": [
+						229,
+						230
+					],
+					"group_key": "wall_part:inst_000014:25:2",
+					"representative_command_index": 229
+				},
+				{
+					"command_indices": [
+						301,
+						302
+					],
+					"group_key": "wall_part:inst_000017:31:2",
+					"representative_command_index": 301
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 44,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 45,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				50,
+				51,
+				124,
+				125,
+				235,
+				236,
+				307,
+				308
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000006:8:3",
+				"wall_part:inst_000009:14:3",
+				"wall_part:inst_000014:25:3",
+				"wall_part:inst_000017:31:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						50,
+						51
+					],
+					"group_key": "wall_part:inst_000006:8:3",
+					"representative_command_index": 50
+				},
+				{
+					"command_indices": [
+						124,
+						125
+					],
+					"group_key": "wall_part:inst_000009:14:3",
+					"representative_command_index": 124
+				},
+				{
+					"command_indices": [
+						235,
+						236
+					],
+					"group_key": "wall_part:inst_000014:25:3",
+					"representative_command_index": 235
+				},
+				{
+					"command_indices": [
+						307,
+						308
+					],
+					"group_key": "wall_part:inst_000017:31:3",
+					"representative_command_index": 307
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 50,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 51,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				56,
+				57,
+				130,
+				131,
+				241,
+				242,
+				313,
+				314
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000007:10:0",
+				"wall_part:inst_000010:16:0",
+				"wall_part:inst_000015:27:0",
+				"wall_part:inst_000018:33:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						56,
+						57
+					],
+					"group_key": "wall_part:inst_000007:10:0",
+					"representative_command_index": 56
+				},
+				{
+					"command_indices": [
+						130,
+						131
+					],
+					"group_key": "wall_part:inst_000010:16:0",
+					"representative_command_index": 130
+				},
+				{
+					"command_indices": [
+						241,
+						242
+					],
+					"group_key": "wall_part:inst_000015:27:0",
+					"representative_command_index": 241
+				},
+				{
+					"command_indices": [
+						313,
+						314
+					],
+					"group_key": "wall_part:inst_000018:33:0",
+					"representative_command_index": 313
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 56,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 57,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				62,
+				63,
+				136,
+				137,
+				247,
+				248,
+				320,
+				321
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000007:10:1",
+				"wall_part:inst_000010:16:1",
+				"wall_part:inst_000015:27:1",
+				"wall_part:inst_000018:33:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						62,
+						63
+					],
+					"group_key": "wall_part:inst_000007:10:1",
+					"representative_command_index": 62
+				},
+				{
+					"command_indices": [
+						136,
+						137
+					],
+					"group_key": "wall_part:inst_000010:16:1",
+					"representative_command_index": 136
+				},
+				{
+					"command_indices": [
+						247,
+						248
+					],
+					"group_key": "wall_part:inst_000015:27:1",
+					"representative_command_index": 247
+				},
+				{
+					"command_indices": [
+						320,
+						321
+					],
+					"group_key": "wall_part:inst_000018:33:1",
+					"representative_command_index": 320
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 62,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 63,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				68,
+				69,
+				142,
+				143,
+				253,
+				254,
+				326,
+				327
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000007:10:2",
+				"wall_part:inst_000010:16:2",
+				"wall_part:inst_000015:27:2",
+				"wall_part:inst_000018:33:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						68,
+						69
+					],
+					"group_key": "wall_part:inst_000007:10:2",
+					"representative_command_index": 68
+				},
+				{
+					"command_indices": [
+						142,
+						143
+					],
+					"group_key": "wall_part:inst_000010:16:2",
+					"representative_command_index": 142
+				},
+				{
+					"command_indices": [
+						253,
+						254
+					],
+					"group_key": "wall_part:inst_000015:27:2",
+					"representative_command_index": 253
+				},
+				{
+					"command_indices": [
+						326,
+						327
+					],
+					"group_key": "wall_part:inst_000018:33:2",
+					"representative_command_index": 326
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 68,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 69,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				74,
+				75,
+				148,
+				149,
+				259,
+				260,
+				332,
+				333
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000007:10:3",
+				"wall_part:inst_000010:16:3",
+				"wall_part:inst_000015:27:3",
+				"wall_part:inst_000018:33:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						74,
+						75
+					],
+					"group_key": "wall_part:inst_000007:10:3",
+					"representative_command_index": 74
+				},
+				{
+					"command_indices": [
+						148,
+						149
+					],
+					"group_key": "wall_part:inst_000010:16:3",
+					"representative_command_index": 148
+				},
+				{
+					"command_indices": [
+						259,
+						260
+					],
+					"group_key": "wall_part:inst_000015:27:3",
+					"representative_command_index": 259
+				},
+				{
+					"command_indices": [
+						332,
+						333
+					],
+					"group_key": "wall_part:inst_000018:33:3",
+					"representative_command_index": 332
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 74,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 75,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				175,
+				176,
+				365,
+				366
+			],
+			"composite_size": [
+				128,
+				160
+			],
+			"group_keys": [
+				"wall_part:inst_000028:19:0",
+				"wall_part:inst_000036:38:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						175,
+						176
+					],
+					"group_key": "wall_part:inst_000028:19:0",
+					"representative_command_index": 175
+				},
+				{
+					"command_indices": [
+						365,
+						366
+					],
+					"group_key": "wall_part:inst_000036:38:0",
+					"representative_command_index": 365
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_base.png@(-80.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_front.png@(-80.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 175,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_base.png",
+					"offset": [
+						-80.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				},
+				{
+					"command_index": 176,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_front.png",
+					"offset": [
+						-80.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				}
+			],
+			"min_offset": [
+				-80.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1664,
+				384,
+				128,
+				160
+			]
+		},
+		{
+			"command_indices": [
+				181,
+				182,
+				371,
+				372
+			],
+			"composite_size": [
+				128,
+				160
+			],
+			"group_keys": [
+				"wall_part:inst_000028:19:1",
+				"wall_part:inst_000036:38:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						181,
+						182
+					],
+					"group_key": "wall_part:inst_000028:19:1",
+					"representative_command_index": 181
+				},
+				{
+					"command_indices": [
+						371,
+						372
+					],
+					"group_key": "wall_part:inst_000036:38:1",
+					"representative_command_index": 371
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_base.png@(-80.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_front.png@(-80.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 181,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_base.png",
+					"offset": [
+						-80.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				},
+				{
+					"command_index": 182,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_front.png",
+					"offset": [
+						-80.0,
+						-112.0
+					],
+					"size": [
+						128,
+						160
+					]
+				}
+			],
+			"min_offset": [
+				-80.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1792,
+				384,
+				128,
+				160
+			]
+		},
+		{
+			"command_indices": [
+				4,
+				5,
+				77,
+				78,
+				151,
+				152,
+				196,
+				197,
+				268,
+				269,
+				341,
+				342
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000021:5:0",
+				"wall_part:inst_000024:11:0",
+				"wall_part:inst_000027:17:0",
+				"wall_part:inst_000029:24:0",
+				"wall_part:inst_000032:30:0",
+				"wall_part:inst_000035:36:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						4,
+						5
+					],
+					"group_key": "wall_part:inst_000021:5:0",
+					"representative_command_index": 4
+				},
+				{
+					"command_indices": [
+						77,
+						78
+					],
+					"group_key": "wall_part:inst_000024:11:0",
+					"representative_command_index": 77
+				},
+				{
+					"command_indices": [
+						151,
+						152
+					],
+					"group_key": "wall_part:inst_000027:17:0",
+					"representative_command_index": 151
+				},
+				{
+					"command_indices": [
+						196,
+						197
+					],
+					"group_key": "wall_part:inst_000029:24:0",
+					"representative_command_index": 196
+				},
+				{
+					"command_indices": [
+						268,
+						269
+					],
+					"group_key": "wall_part:inst_000032:30:0",
+					"representative_command_index": 268
+				},
+				{
+					"command_indices": [
+						341,
+						342
+					],
+					"group_key": "wall_part:inst_000035:36:0",
+					"representative_command_index": 341
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 4,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 5,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				10,
+				11,
+				83,
+				84,
+				157,
+				158,
+				202,
+				203,
+				274,
+				275,
+				347,
+				348
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000021:5:1",
+				"wall_part:inst_000024:11:1",
+				"wall_part:inst_000027:17:1",
+				"wall_part:inst_000029:24:1",
+				"wall_part:inst_000032:30:1",
+				"wall_part:inst_000035:36:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						10,
+						11
+					],
+					"group_key": "wall_part:inst_000021:5:1",
+					"representative_command_index": 10
+				},
+				{
+					"command_indices": [
+						83,
+						84
+					],
+					"group_key": "wall_part:inst_000024:11:1",
+					"representative_command_index": 83
+				},
+				{
+					"command_indices": [
+						157,
+						158
+					],
+					"group_key": "wall_part:inst_000027:17:1",
+					"representative_command_index": 157
+				},
+				{
+					"command_indices": [
+						202,
+						203
+					],
+					"group_key": "wall_part:inst_000029:24:1",
+					"representative_command_index": 202
+				},
+				{
+					"command_indices": [
+						274,
+						275
+					],
+					"group_key": "wall_part:inst_000032:30:1",
+					"representative_command_index": 274
+				},
+				{
+					"command_indices": [
+						347,
+						348
+					],
+					"group_key": "wall_part:inst_000035:36:1",
+					"representative_command_index": 347
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 10,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 11,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				17,
+				18,
+				89,
+				90,
+				163,
+				164,
+				208,
+				209,
+				280,
+				281,
+				353,
+				354
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000021:5:2",
+				"wall_part:inst_000024:11:2",
+				"wall_part:inst_000027:17:2",
+				"wall_part:inst_000029:24:2",
+				"wall_part:inst_000032:30:2",
+				"wall_part:inst_000035:36:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						17,
+						18
+					],
+					"group_key": "wall_part:inst_000021:5:2",
+					"representative_command_index": 17
+				},
+				{
+					"command_indices": [
+						89,
+						90
+					],
+					"group_key": "wall_part:inst_000024:11:2",
+					"representative_command_index": 89
+				},
+				{
+					"command_indices": [
+						163,
+						164
+					],
+					"group_key": "wall_part:inst_000027:17:2",
+					"representative_command_index": 163
+				},
+				{
+					"command_indices": [
+						208,
+						209
+					],
+					"group_key": "wall_part:inst_000029:24:2",
+					"representative_command_index": 208
+				},
+				{
+					"command_indices": [
+						280,
+						281
+					],
+					"group_key": "wall_part:inst_000032:30:2",
+					"representative_command_index": 280
+				},
+				{
+					"command_indices": [
+						353,
+						354
+					],
+					"group_key": "wall_part:inst_000035:36:2",
+					"representative_command_index": 353
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 17,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 18,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				23,
+				24,
+				95,
+				96,
+				169,
+				170,
+				214,
+				215,
+				286,
+				287,
+				359,
+				360
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000021:5:3",
+				"wall_part:inst_000024:11:3",
+				"wall_part:inst_000027:17:3",
+				"wall_part:inst_000029:24:3",
+				"wall_part:inst_000032:30:3",
+				"wall_part:inst_000035:36:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						23,
+						24
+					],
+					"group_key": "wall_part:inst_000021:5:3",
+					"representative_command_index": 23
+				},
+				{
+					"command_indices": [
+						95,
+						96
+					],
+					"group_key": "wall_part:inst_000024:11:3",
+					"representative_command_index": 95
+				},
+				{
+					"command_indices": [
+						169,
+						170
+					],
+					"group_key": "wall_part:inst_000027:17:3",
+					"representative_command_index": 169
+				},
+				{
+					"command_indices": [
+						214,
+						215
+					],
+					"group_key": "wall_part:inst_000029:24:3",
+					"representative_command_index": 214
+				},
+				{
+					"command_indices": [
+						286,
+						287
+					],
+					"group_key": "wall_part:inst_000032:30:3",
+					"representative_command_index": 286
+				},
+				{
+					"command_indices": [
+						359,
+						360
+					],
+					"group_key": "wall_part:inst_000035:36:3",
+					"representative_command_index": 359
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 23,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 24,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				29,
+				30,
+				103,
+				104,
+				220,
+				221,
+				292,
+				293
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000022:7:0",
+				"wall_part:inst_000025:13:0",
+				"wall_part:inst_000030:26:0",
+				"wall_part:inst_000033:32:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						29,
+						30
+					],
+					"group_key": "wall_part:inst_000022:7:0",
+					"representative_command_index": 29
+				},
+				{
+					"command_indices": [
+						103,
+						104
+					],
+					"group_key": "wall_part:inst_000025:13:0",
+					"representative_command_index": 103
+				},
+				{
+					"command_indices": [
+						220,
+						221
+					],
+					"group_key": "wall_part:inst_000030:26:0",
+					"representative_command_index": 220
+				},
+				{
+					"command_indices": [
+						292,
+						293
+					],
+					"group_key": "wall_part:inst_000033:32:0",
+					"representative_command_index": 292
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 29,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 30,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				35,
+				36,
+				109,
+				110,
+				226,
+				227,
+				298,
+				299
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000022:7:1",
+				"wall_part:inst_000025:13:1",
+				"wall_part:inst_000030:26:1",
+				"wall_part:inst_000033:32:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						35,
+						36
+					],
+					"group_key": "wall_part:inst_000022:7:1",
+					"representative_command_index": 35
+				},
+				{
+					"command_indices": [
+						109,
+						110
+					],
+					"group_key": "wall_part:inst_000025:13:1",
+					"representative_command_index": 109
+				},
+				{
+					"command_indices": [
+						226,
+						227
+					],
+					"group_key": "wall_part:inst_000030:26:1",
+					"representative_command_index": 226
+				},
+				{
+					"command_indices": [
+						298,
+						299
+					],
+					"group_key": "wall_part:inst_000033:32:1",
+					"representative_command_index": 298
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 35,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 36,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				41,
+				42,
+				115,
+				116,
+				232,
+				233,
+				304,
+				305
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000022:7:2",
+				"wall_part:inst_000025:13:2",
+				"wall_part:inst_000030:26:2",
+				"wall_part:inst_000033:32:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						41,
+						42
+					],
+					"group_key": "wall_part:inst_000022:7:2",
+					"representative_command_index": 41
+				},
+				{
+					"command_indices": [
+						115,
+						116
+					],
+					"group_key": "wall_part:inst_000025:13:2",
+					"representative_command_index": 115
+				},
+				{
+					"command_indices": [
+						232,
+						233
+					],
+					"group_key": "wall_part:inst_000030:26:2",
+					"representative_command_index": 232
+				},
+				{
+					"command_indices": [
+						304,
+						305
+					],
+					"group_key": "wall_part:inst_000033:32:2",
+					"representative_command_index": 304
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 41,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 42,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				47,
+				48,
+				121,
+				122,
+				238,
+				239,
+				310,
+				311
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000022:7:3",
+				"wall_part:inst_000025:13:3",
+				"wall_part:inst_000030:26:3",
+				"wall_part:inst_000033:32:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						47,
+						48
+					],
+					"group_key": "wall_part:inst_000022:7:3",
+					"representative_command_index": 47
+				},
+				{
+					"command_indices": [
+						121,
+						122
+					],
+					"group_key": "wall_part:inst_000025:13:3",
+					"representative_command_index": 121
+				},
+				{
+					"command_indices": [
+						238,
+						239
+					],
+					"group_key": "wall_part:inst_000030:26:3",
+					"representative_command_index": 238
+				},
+				{
+					"command_indices": [
+						310,
+						311
+					],
+					"group_key": "wall_part:inst_000033:32:3",
+					"representative_command_index": 310
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 47,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 48,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				192,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				53,
+				54,
+				127,
+				128,
+				244,
+				245,
+				317,
+				318
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000023:9:0",
+				"wall_part:inst_000026:15:0",
+				"wall_part:inst_000031:28:0",
+				"wall_part:inst_000034:34:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						53,
+						54
+					],
+					"group_key": "wall_part:inst_000023:9:0",
+					"representative_command_index": 53
+				},
+				{
+					"command_indices": [
+						127,
+						128
+					],
+					"group_key": "wall_part:inst_000026:15:0",
+					"representative_command_index": 127
+				},
+				{
+					"command_indices": [
+						244,
+						245
+					],
+					"group_key": "wall_part:inst_000031:28:0",
+					"representative_command_index": 244
+				},
+				{
+					"command_indices": [
+						317,
+						318
+					],
+					"group_key": "wall_part:inst_000034:34:0",
+					"representative_command_index": 317
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 53,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 54,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				384,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				59,
+				60,
+				133,
+				134,
+				250,
+				251,
+				323,
+				324
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000023:9:1",
+				"wall_part:inst_000026:15:1",
+				"wall_part:inst_000031:28:1",
+				"wall_part:inst_000034:34:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						59,
+						60
+					],
+					"group_key": "wall_part:inst_000023:9:1",
+					"representative_command_index": 59
+				},
+				{
+					"command_indices": [
+						133,
+						134
+					],
+					"group_key": "wall_part:inst_000026:15:1",
+					"representative_command_index": 133
+				},
+				{
+					"command_indices": [
+						250,
+						251
+					],
+					"group_key": "wall_part:inst_000031:28:1",
+					"representative_command_index": 250
+				},
+				{
+					"command_indices": [
+						323,
+						324
+					],
+					"group_key": "wall_part:inst_000034:34:1",
+					"representative_command_index": 323
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 59,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 60,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				384,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				65,
+				66,
+				139,
+				140,
+				256,
+				257,
+				329,
+				330
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000023:9:2",
+				"wall_part:inst_000026:15:2",
+				"wall_part:inst_000031:28:2",
+				"wall_part:inst_000034:34:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						65,
+						66
+					],
+					"group_key": "wall_part:inst_000023:9:2",
+					"representative_command_index": 65
+				},
+				{
+					"command_indices": [
+						139,
+						140
+					],
+					"group_key": "wall_part:inst_000026:15:2",
+					"representative_command_index": 139
+				},
+				{
+					"command_indices": [
+						256,
+						257
+					],
+					"group_key": "wall_part:inst_000031:28:2",
+					"representative_command_index": 256
+				},
+				{
+					"command_indices": [
+						329,
+						330
+					],
+					"group_key": "wall_part:inst_000034:34:2",
+					"representative_command_index": 329
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 65,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 66,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				384,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				71,
+				72,
+				145,
+				146,
+				262,
+				263,
+				335,
+				336
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000023:9:3",
+				"wall_part:inst_000026:15:3",
+				"wall_part:inst_000031:28:3",
+				"wall_part:inst_000034:34:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						71,
+						72
+					],
+					"group_key": "wall_part:inst_000023:9:3",
+					"representative_command_index": 71
+				},
+				{
+					"command_indices": [
+						145,
+						146
+					],
+					"group_key": "wall_part:inst_000026:15:3",
+					"representative_command_index": 145
+				},
+				{
+					"command_indices": [
+						262,
+						263
+					],
+					"group_key": "wall_part:inst_000031:28:3",
+					"representative_command_index": 262
+				},
+				{
+					"command_indices": [
+						335,
+						336
+					],
+					"group_key": "wall_part:inst_000034:34:3",
+					"representative_command_index": 335
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 71,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 72,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				384,
+				192,
+				192
+			]
+		}
+	],
+	"atlas_page_heights": [
+		576
+	],
+	"atlas_pages": [
+		{
+			"height": 576,
+			"page_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/cda50930287010ee2c02bee5edbafac0219e1745e0dc05f6e36070112a6e545a.png",
+			"png_bytes": 265766,
+			"sha256": "cda50930287010ee2c02bee5edbafac0219e1745e0dc05f6e36070112a6e545a",
+			"width": 2048
+		}
+	],
+	"compiler_version": 2,
+	"contract_id": "hardcore.wall_render_plan.v1",
+	"design_size": [
+		32,
+		32
+	],
+	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+	"legacy_command_indices": [
+		12,
+		97,
+		98
+	],
+	"map_key": "hidden_fallen_graveyard",
+	"shadow_chunk_command_indices": [
+		0,
+		3,
+		6,
+		9,
+		13,
+		16,
+		19,
+		22,
+		25,
+		28,
+		31,
+		34,
+		37,
+		40,
+		43,
+		46,
+		49,
+		52,
+		55,
+		58,
+		61,
+		64,
+		67,
+		70,
+		73,
+		76,
+		79,
+		82,
+		85,
+		88,
+		91,
+		94,
+		99,
+		102,
+		105,
+		108,
+		111,
+		114,
+		117,
+		120,
+		123,
+		126,
+		129,
+		132,
+		135,
+		138,
+		141,
+		144,
+		147,
+		150,
+		153,
+		156,
+		159,
+		162,
+		165,
+		168,
+		171,
+		174,
+		177,
+		180,
+		183,
+		186,
+		189,
+		192,
+		195,
+		198,
+		201,
+		204,
+		207,
+		210,
+		213,
+		216,
+		219,
+		222,
+		225,
+		228,
+		231,
+		234,
+		237,
+		240,
+		243,
+		246,
+		249,
+		252,
+		255,
+		258,
+		261,
+		264,
+		267,
+		270,
+		273,
+		276,
+		279,
+		282,
+		285,
+		288,
+		291,
+		294,
+		297,
+		300,
+		303,
+		306,
+		309,
+		312,
+		315,
+		316,
+		319,
+		322,
+		325,
+		328,
+		331,
+		334,
+		337,
+		340,
+		343,
+		346,
+		349,
+		352,
+		355,
+		358,
+		361,
+		364,
+		367,
+		370,
+		373
+	],
+	"shadow_chunks": [
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/8785205083f483e68c12d93fbfaf9ee706c9c8d8686c4d60e5c7e1e4b411068c.png",
+			"png_bytes": 20648,
+			"position_px": [
+				-933.0,
+				-483.0
+			],
+			"segment_index": 0,
+			"sha256": "8785205083f483e68c12d93fbfaf9ee706c9c8d8686c4d60e5c7e1e4b411068c",
+			"size_px": [
+				933,
+				483
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"insert_command_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/df5cb1a870483c4f69d2c94cc99276e30b8f75bcade54fcee2ce180996e0dc80.png",
+			"png_bytes": 43313,
+			"position_px": [
+				-1018.0,
+				0.0
+			],
+			"segment_index": 0,
+			"sha256": "df5cb1a870483c4f69d2c94cc99276e30b8f75bcade54fcee2ce180996e0dc80",
+			"size_px": [
+				1018,
+				543
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/204e657fb64e1c885f009f745f6467e1414f1398f5269e12047ae4cc0e61da78.png",
+			"png_bytes": 18855,
+			"position_px": [
+				0.0,
+				-477.0
+			],
+			"segment_index": 0,
+			"sha256": "204e657fb64e1c885f009f745f6467e1414f1398f5269e12047ae4cc0e61da78",
+			"size_px": [
+				941,
+				477
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/0468bf04d0a4d7e300abc233caf7908eb8bb91deab0ab832a2f945fd2b4d0354.png",
+			"png_bytes": 44775,
+			"position_px": [
+				0.0,
+				0.0
+			],
+			"segment_index": 0,
+			"sha256": "0468bf04d0a4d7e300abc233caf7908eb8bb91deab0ab832a2f945fd2b4d0354",
+			"size_px": [
+				1022,
+				544
+			]
+		}
+	],
+	"shadow_segments": [
+		{
+			"command_indices": [
+				0,
+				3,
+				6,
+				9,
+				13,
+				16,
+				19,
+				22,
+				25,
+				28,
+				31,
+				34,
+				37,
+				40,
+				43,
+				46,
+				49,
+				52,
+				55,
+				58,
+				61,
+				64,
+				67,
+				70,
+				73,
+				76,
+				79,
+				82,
+				85,
+				88,
+				91,
+				94,
+				99,
+				102,
+				105,
+				108,
+				111,
+				114,
+				117,
+				120,
+				123,
+				126,
+				129,
+				132,
+				135,
+				138,
+				141,
+				144,
+				147,
+				150,
+				153,
+				156,
+				159,
+				162,
+				165,
+				168,
+				171,
+				174,
+				177,
+				180,
+				183,
+				186,
+				189,
+				192,
+				195,
+				198,
+				201,
+				204,
+				207,
+				210,
+				213,
+				216,
+				219,
+				222,
+				225,
+				228,
+				231,
+				234,
+				237,
+				240,
+				243,
+				246,
+				249,
+				252,
+				255,
+				258,
+				261,
+				264,
+				267,
+				270,
+				273,
+				276,
+				279,
+				282,
+				285,
+				288,
+				291,
+				294,
+				297,
+				300,
+				303,
+				306,
+				309,
+				312,
+				315,
+				316,
+				319,
+				322,
+				325,
+				328,
+				331,
+				334,
+				337,
+				340,
+				343,
+				346,
+				349,
+				352,
+				355,
+				358,
+				361,
+				364,
+				367,
+				370,
+				373
+			],
+			"insert_command_index": 0,
+			"segment_index": 0
+		}
+	],
+	"source_commands_sha256": "07168d2ffe7bba804a0504b36eb2b3938c6c12992c4c0ffde8b02bdc915dda17",
+	"source_image_sha256": {
+		"assets/art/maps/_shared/user_palette/decorations_1/ground_graffiti/3×3/graffiti_03.png": "773f04e03e3b6b388677f02aa5557ac0170dc6124d600e48ce7ac419b29b0fd4",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_base.png": "81a96553beecd4181303d11f8660abf4c59d82e7c02bb0eb52fc7f0b794d09c6",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_front.png": "3a2b25c13b3b76f09464d7577d130c1669690e8ad000bad7c283408f2163cfe3",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_shadow.png": "3c9d9e66137d99452a82916c80f32624266fa7eee066eb12c1ffed0a2a6d9599",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_base.png": "133e7de88bf8fbf2f3ba4b34e581ca5ff8e47323599c1bfb8bcedd430e570edf",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_front.png": "653c7a7fe331d1b59d4eabb490ab88d136e4cd74ec728cf33d529e5f72aa85dd",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_shadow.png": "e01caf898d880cde59f46d423e3be72e7728ebff76671efc58f98793eef79862",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_base.png": "58234fe211bed31c77d2b953f3d0f954cee83515b374ef9c3c4b496a4d372271",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_front.png": "4734d84c0812d7dc4a822c03ead2016fa475e7e57299008bc11ff36f13b71972",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_shadow.png": "1b104194ac83d81b3a1dfc48af0080118e8ffd258f408691dbfbaae30e6d8953",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_base.png": "96718a05dd10b5d292d9b2dde1e3b9e1c10909acbaba7da1cbbe1a8380a55a8e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_front.png": "9b1581c626b60d4ebea93a7c1672c70f52566c31ed0ca881af0d8c73afbb24c9",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_shadow.png": "f6b0c3586c8a1c1bdf95ac6aa7eb58c79250e279b8a09030f565a0a6e89ac3b6",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_base.png": "c88d637e8d94f66c6089fe7254d607dfaca389189b74020d5b7292196dc4e5ba",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_front.png": "5219a8e69a7b54dc5633d543a2eaf05ed82d10d87105e5c63db0fba55002fb15",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_shadow.png": "8f9b5619dab88a6826dbdae36e20da36cd1e7d054a89e0dace212277965ea136",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_base.png": "67f28fdd35cd3f1665afb1b853659fc4bcd8ca2058ecf09243467f1527bfd6ff",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_front.png": "c9a868ce2f2fb198300d52e1959c53e600f39bda837e303f70acc70f38b1a2a3",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_shadow.png": "e56bfd8822b91f7d3e358170c42a2e9b88011422f53f467ea8ee60cc767fb71b",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_base.png": "3f5a83debe1b8670530254b8b62f94efee4cff2533d2ad227d2d9693e42e3d63",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_front.png": "58053eec92ffe739abe46e9ce9ab4499fd5561636e9cb53811265d0d54ec7420",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_shadow.png": "8e3762304484507dccf7dd9eae6f5ac8ad8a83af9cfdde26fc01897849a95f41",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_base.png": "13ca39768a28d3a78ce9efe611f8c07a0155024b2c0c7f2f1858a240944f074e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_front.png": "fc6d49afb38b18626e9b995499ff9c6f10e039510a3fefd89205ccfef77c17c9",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_shadow.png": "5cec40d73722c11edd1c97bb814a0a648a2135aa815ecb622a68d64e525b6dcb",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_base.png": "99a6d9e43dc37ed61a637e323fd9f3a56d77ff380e3f441dd4a88f44131d36bd",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_front.png": "ae6fa4255b6336bee827cd91f0e4655217223e8b628b901918d7cc41147879c6",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_shadow.png": "5b6eb978b47b7a178cc77f33e8a89f03efc36e7a83d710b5c6902fde6beffb90",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_base.png": "db5bd5868b5816c62504c4118ef2678e2510b847e38602f1cc31f7b0263c0d8b",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_front.png": "2a8c5cddaa6447f443fb0e116bb1b81d5ef1cff05712a047c395e66572f0a0e7",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_shadow.png": "4896b78f43b8cea18c6d0b0a3f5a4f189699f1310ef45edef33b272da319f93e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_base.png": "5104ff5667bae9a8b9737d4483ff58c3a3b0e2aeb94c623018062633c08b472c",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_front.png": "f8d9a4876767ade6fc530da4d1e92cdb9b7a6455c46c5290fe843985a7a0e79f",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_shadow.png": "8e3762304484507dccf7dd9eae6f5ac8ad8a83af9cfdde26fc01897849a95f41",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_base.png": "08eebe1354d98c84f978314e950e0c458b65c3216dd8669f501f83d402d2a33d",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_front.png": "12594498adeeeb580a198f2f1f94072e0a7ff6f7fe89241de01c568147c15b35",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_shadow.png": "5cec40d73722c11edd1c97bb814a0a648a2135aa815ecb622a68d64e525b6dcb",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_base.png": "2eb4816f4ca5203fc9d46dcab2058750ec9976c10b31b72db4f7137a711fdbc0",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_front.png": "9fdee0d30eaf982ba9247e0246c9c4a1b211f014e8f98954cc92ca46f076c23a",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_shadow.png": "5b6eb978b47b7a178cc77f33e8a89f03efc36e7a83d710b5c6902fde6beffb90",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_base.png": "c3190352c61bfac4b2c2ffd527c62a90f9af2c2c6d449d949d8c5912749a2f73",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_front.png": "f7d9c5e9bfa59630c3d9ec2575f47e3ec0019c38ff5a272d4b370c887b79a2a5",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_shadow.png": "4896b78f43b8cea18c6d0b0a3f5a4f189699f1310ef45edef33b272da319f93e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png": "a05ff31a56eb045040612ffd06b9a32436da131ce42dad7dbec755ef53fef229",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png": "66dc8d7ea7609244ee985d26b1a28a9f6960884bde71733e8996248e35b8cda2",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_shadow.png": "8e3762304484507dccf7dd9eae6f5ac8ad8a83af9cfdde26fc01897849a95f41",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png": "5f75045955554644899208ad01b7593dbfe668dc362e98dc35a82de89b59b281",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png": "ef299d2ea3ded25b1faec196f1f9dd405a5ef4f7f07f930620ecaacec83586e6",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_shadow.png": "5cec40d73722c11edd1c97bb814a0a648a2135aa815ecb622a68d64e525b6dcb",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png": "1f556eb15640e66ab92237a5df52beb0572f7d164e1b15aae7caa40fa2fa85a5",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png": "63e5192e7a1d3605936aa25b86fc2411f7dc88302407f6ef3f9517535d8a9299",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_shadow.png": "5b6eb978b47b7a178cc77f33e8a89f03efc36e7a83d710b5c6902fde6beffb90",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png": "2141b6ff3b6687134232ce97fceb789030406ea933b022ccf804667027ee2979",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png": "792ada60175134e3c8fbf830ebc9fdd7a28642013fb2d653a69776db02fcf8e1",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_shadow.png": "4896b78f43b8cea18c6d0b0a3f5a4f189699f1310ef45edef33b272da319f93e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_base.png": "8f7e40dd1a536c7c84a75ac179687b7c4b3afb6171923e655318d28001aa1c75",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_front.png": "440817d6dc98309ec902adb27888a0c24be30d6913c9f5609b2e73c5c648b1ee",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_shadow.png": "a961e0d3f36b29e5288eb4b7e2c6c3e7409c649f9b8d4063062aaad26e9e549e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_base.png": "589dc4f3ee90dd48d19a7051c328331e8044de95a79a168cd751890ec93f7040",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_front.png": "a7cf44a15182669a123f120920a5d03baae6c15987a4d15a39f51881ef18740b",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_shadow.png": "8b82f5482ddc5330605880183e713db1f73f2236567334610ffd2d8e6ddce479",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_base.png": "fb48bbd63e58208ac24a225315c305e0475a6664c38ac0bc99172d60a7daae54",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_front.png": "90d695a6c71346b7c1b3c07cbfb91ce705ff9658dbd725961d1e45e8f1466288",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_shadow.png": "407c152b68dbb5ad136dc1e1707096f1611f68588a578ceabcd205723e468768",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_base.png": "2295e66bb9243f5f4fa2fe705b3762bf78fceb4869cbf949981ce9fa62248caa",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_front.png": "40d67b82ad2579d5ec1a3e6ecd4600442204e49cf67d67f79e9ca2f3ccc50987",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_shadow.png": "e389e86d5c121132ccdac0e6bdfae0ece911e0c17bd521ae4c9c2320b8649024",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_base.png": "2aa4da828caa241dec1cfc16743132623eef46a1159f608c87d4c8fe80ec39ea",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_front.png": "5d8442d45c108a2c1d1ee5cefb573fd2e76eb831fd344fe4b9a9b912d02d7094",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_shadow.png": "f645762a1eeca4c8054e16366b673dcac7bce4260c90e96ea4c9ef6ad8550ab2",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_base.png": "8f5a896e4c4687d5030137bacea021d79565a546dc4a42e08a0e8b11a5d719e9",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_front.png": "cf9ebf24ec42ad1ae0ac310ecec015e9ac0238591a609db239c3a68830aa8ac5",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_shadow.png": "5f58dff85ef8fafc2d01cb866d6aed3550a53e3283e0625f55c747d3296d5ae0",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_base.png": "909ba87579dd33e2ddfcd66ed510161037635bbcb260f4ccdb191cd4508b0810",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_front.png": "e60f0805b93d65d0f60dce737fea31bef7284ea88ad115806e45d6b80c47978c",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_shadow.png": "407c152b68dbb5ad136dc1e1707096f1611f68588a578ceabcd205723e468768",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_base.png": "fda5578e4e22347043cdbf4620bc331d06a9557bf981b063f158baf684fd96bd",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_front.png": "0fc7ed65c45d34afff0c6a18127f45eeffa7dd1c3e84d95762b17288206f5f6c",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_shadow.png": "e389e86d5c121132ccdac0e6bdfae0ece911e0c17bd521ae4c9c2320b8649024",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_base.png": "55b66ba1231c140f5ea16f0a38b8006ac86db71935dcee86563ae735bfcb18db",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_front.png": "da586e8216f49d01225264faa8727880225d4c3c349f411c04e5856755eb72a4",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_shadow.png": "f645762a1eeca4c8054e16366b673dcac7bce4260c90e96ea4c9ef6ad8550ab2",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_base.png": "928f62c7f78fa7d14ba8a2f198f18040016a0497fbf55cdd230c33cccbdf95d8",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_front.png": "793140a9a8f2c3b17898c8671d988e8004aa982c86b82f85efb0a1ea3b896a56",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_shadow.png": "5f58dff85ef8fafc2d01cb866d6aed3550a53e3283e0625f55c747d3296d5ae0",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png": "a58884c528d39eb82fd30c639f8bd0834fbc3d0f8d9e51f6abd9ea7ca5ab713d",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png": "038f98c57a3bdc405941fa5cea0f3fa86c373b239780f6344c0593d3a1dcaed9",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_shadow.png": "407c152b68dbb5ad136dc1e1707096f1611f68588a578ceabcd205723e468768",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png": "226f8a7e71c6e81c96e387082dcf96a1dd8eebc8a5ac48f5ee4117e885f5af52",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png": "3dc9a55fb95919e53e97f992e0ff72bc921eeae71f8e79030c0e71992c51456e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_shadow.png": "e389e86d5c121132ccdac0e6bdfae0ece911e0c17bd521ae4c9c2320b8649024",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png": "1d15c1bb453cba9b2de224ff26d495f706749180cc0fcc574f7c8fab74b823ca",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png": "343b16c3f8b0a985f74bf075a0a7dc71741b4720cbb7ca95e5f9e340cec1ed85",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_shadow.png": "f645762a1eeca4c8054e16366b673dcac7bce4260c90e96ea4c9ef6ad8550ab2",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png": "80c17247617010c6eac5d7de2b523cb57b74025bc481590412de0e693cf59227",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png": "4734fcb2ac5782428bfd7dce168466cd6166e4a9cbac375725284c3a9488aada",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_shadow.png": "5f58dff85ef8fafc2d01cb866d6aed3550a53e3283e0625f55c747d3296d5ae0"
+	},
+	"source_runtime_json_sha256": "6837523bc7f36ee48a5d2381d5df67dae9dd49772096eec286485d2ce3375ccb",
+	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
+}
