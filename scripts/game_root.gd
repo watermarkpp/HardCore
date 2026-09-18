@@ -2975,7 +2975,14 @@ func _run_map_transition(
 	# placement); WorldBackground.set_zone_data() skips the rebuild because the
 	# environment was already staged-built for the same map.
 	var built_ok := await _run_world_build_pipeline(target_map_id, transition_id)
-	if not built_ok or not _map_transition_in_progress or _active_map_transition_id != transition_id:
+	if not built_ok:
+		# P0-3: pre-arrival failure - the coordinator is already FAILED and
+		# the old world is untouched. Own the whole FAILED transition through
+		# the central recovery function instead of stranding the transition
+		# lock, the player combat token and the Loading overlay.
+		_fail_map_transition(&"pre_arrival_keep_world")
+		return
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	_collecting_staged_actor_plan = true
 	_staged_actor_source_index = 0
@@ -3006,9 +3013,11 @@ func _run_map_transition(
 		!= int(actor_summary.get("spawned_actors", 0))
 		+ int(actor_summary.get("deferred_actors", 0))
 	):
-		_active_map_transition_id = ""
-		_map_transition_in_progress = false
 		_world_bootstrap_coordinator.finish(false, "actor_spawn_plan_failed")
+		# P0-3: the world was already swapped by operation.call(), so this
+		# is a post-arrival failure - recover through the safe home instead
+		# of stranding the lock/token/Loading over an incomplete world.
+		_fail_map_transition(&"post_arrival_safe_home")
 		return
 	if not PlayerState.test_mode:
 		await get_tree().process_frame
@@ -3083,11 +3092,103 @@ func _run_map_transition(
 		if not PlayerState.test_mode and hud.has_method("start_budgeted_panel_prewarm"):
 			hud.start_budgeted_panel_prewarm(_system_menu_panel)
 	else:
-		# READY contract failed: keep the input lock and Loading overlay so the
-		# player never acts on an incomplete world.
-		_active_map_transition_id = ""
-		_map_transition_in_progress = false
+		# P0-3: READY contract failed after the world swap (post-arrival).
+		# The player must never act on an incomplete world, but the FAILED
+		# transition may not strand its lock/token/Loading either - hand the
+		# whole thing to the central recovery owner (safe home).
 		_world_bootstrap_coordinator.finish(false, "ready_contract_failed")
+		_fail_map_transition(&"post_arrival_safe_home")
+
+
+## P0-3: single owner for a FAILED map transition. Every FAILED path funnels
+## here; no implicit combat token, map-transition lock or Loading overlay may
+## survive the call. Callers must have already finished the coordinator with
+## the concrete failure reason (this function reads it for the user message).
+## pre_arrival_keep_world: the old world is still current - keep it playable
+## and surface a retryable error.
+## post_arrival_safe_home: the world was swapped but is not contract-ready -
+## relocate the player to the resolved safe home so an incomplete map is
+## never handed to gameplay input.
+func _fail_map_transition(recovery_policy: StringName) -> void:
+	var coordinator := _world_bootstrap_coordinator
+	var reason := "map_transition_failed"
+	if coordinator != null and is_instance_valid(coordinator):
+		reason = str(coordinator.diagnostic.get("failure_reason", reason))
+	if player != null and is_instance_valid(player):
+		player.finish_combat_transition(str(get_meta("map_combat_transition_token", "")))
+	_cancel_map_transition_movement_input()
+	_active_map_transition_id = ""
+	_map_transition_in_progress = false
+	if is_instance_valid(hud):
+		hud.finish_loading_transition()
+		if recovery_policy == &"pre_arrival_keep_world":
+			hud.show_error_message("地图切换失败：%s，已保留当前区域，可稍后重试。" % reason, 4.0)
+		elif recovery_policy == &"post_arrival_safe_home":
+			hud.show_error_message("地图加载未完成：%s，正在送回安全点。" % reason, 4.0)
+		else:
+			hud.show_error_message("地图切换失败：%s" % reason, 4.0)
+	print("[MapTransition] FAILED reason=%s policy=%s" % [reason, str(recovery_policy)])
+	if recovery_policy == &"post_arrival_safe_home":
+		# A player killed during the failed arrival goes through the
+		# production death revival (home relocation + death state cleanup);
+		# a living player goes through the plain safe-home relocation. An
+		# in-flight death flow (hp 0, _dead not yet set) gets a short settle
+		# window so the revival sees the real state; the transition lock is
+		# only released after the recovery finished.
+		if player != null and is_instance_valid(player):
+			# Death settlement is queued and may land after the transition
+			# already ended (the arrival fight can kill the player while the
+			# ready-contract check is still running); give it a bounded
+			# window to land so the recovery picks the right branch.
+			var death_settle := Time.get_ticks_msec() + 5000
+			while (
+				not bool(player._dead)
+				and Time.get_ticks_msec() < death_settle
+			):
+				await get_tree().create_timer(0.05, true).timeout
+			print("[MapTransition] recovery state dead=%s hp=%d" % [
+				str(player._dead), int(player.current_hp),
+			])
+			# The FAILED transition's own lock must go before a new home
+			# transition can acquire it; the recovery transition re-owns
+			# the lock and releases it through its own READY/FAILED path.
+			_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+			var recovery_started := false
+			if bool(player._dead):
+				# Formal production town revival: full home travel +
+				# _finish_death_revival completion boundary (no bare
+				# teleport - the player must land in the home WORLD).
+				recovery_started = _request_production_town_revival()
+			else:
+				recovery_started = travel_to_service_home(
+					false, false, "比奇省", Callable()
+				)
+			if recovery_started:
+				print("[MapTransition] safe-home recovery transition started")
+				return
+		# Recovery could not start (no player / home unresolvable): release
+		# the FAILED transition lock so the state is not double-locked and
+		# leave the explicit error message pointing at the retry path.
+		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		return
+	# pre_arrival_keep_world (and future title-return): the current world is
+	# safe to hand back to gameplay input, so the transition lock goes away.
+	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+
+
+## P0-3: formal production town revival for a dead player - constructs the
+## revival request and hands it to the production handler, which owns the
+## home travel, the revival completion boundary and the death-lock release.
+func _request_production_town_revival() -> bool:
+	if _active_death_id.is_empty() or _death_revival_request_in_flight:
+		return false
+	_on_revival_requested({
+		"contract_id": DEATH_REVIVAL_CONTRACT_ID,
+		"death_id": _active_death_id,
+		"option_slot": "town",
+		"method_id": "revive.nearest_town",
+	})
+	return _death_revival_request_in_flight
 
 
 func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
