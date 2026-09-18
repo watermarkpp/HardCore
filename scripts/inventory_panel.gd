@@ -13,6 +13,7 @@ const UIRuntimeLayoutOverridesScript = preload("res://scripts/ui_runtime_layout_
 const ItemDetailPresenterScript = preload("res://scripts/item_detail_docked_presenter.gd")
 
 const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
 const UISelectionDismissGuardScript := preload("res://scripts/ui_selection_dismiss_guard.gd")
 
@@ -870,6 +871,10 @@ func _select_inventory_item(index: int) -> void:
 		else:
 			_ui_dismiss_selection()
 		return
+	if not selected_equipment_slot.is_empty() and _first_empty_inventory_slot() < 0:
+		# An unequip attempt cannot proceed while the bag has no empty cell;
+		# surface the failure instead of silently swallowing the intent.
+		_show_error_message("背包已满，没有空位可以卸下装备。")
 	if _suppress_next_pressed_index == index:
 		_suppress_next_pressed_index = -1
 		return
@@ -935,10 +940,13 @@ func _refresh_inventory_action_states() -> void:
 ## Center-screen timed toast via the owning HUD — the same channel as the
 ## spell prompts (e.g. "目标被遮挡或已失效"). The HUD instantiates and owns
 ## this panel (hud._ensure_inventory_panel), so the parent is the GameHUD.
-func _show_center_message(message: String, seconds := 2.0) -> void:
+## Unified player-error exit for every equipment/inventory rejection. Routed to
+## the HUD's dedicated error channel (above all modal panels); the item detail
+## region keeps presenting item name/attributes/requirements only.
+func _show_error_message(message: String, seconds := 2.0) -> void:
 	var hud_node := get_parent()
-	if hud_node != null and hud_node.has_method("show_message"):
-		hud_node.show_message(message, seconds)
+	if hud_node != null and hud_node.has_method("show_error_message"):
+		hud_node.show_error_message(message, seconds)
 
 
 func _select_equipment_slot(slot: String) -> void:
@@ -956,6 +964,12 @@ func _select_equipment_slot(slot: String) -> void:
 				# A rejected slot click must leave both the source selection and its
 				# attribute view intact; the authority was never called.
 				_show_inventory_detail(selected_inventory_index)
+				_show_error_message(
+					"%s不能装备到%s位置。" % [
+						str(item.get("name", "该装备")),
+						slot,
+					]
+				)
 				return
 			var source_index := selected_inventory_index
 			var expected_instance_id := str(selected_inventory_ref.get("instance_id", ""))
@@ -973,13 +987,13 @@ func _select_equipment_slot(slot: String) -> void:
 				_show_equipment_detail(selected_equipment_slot)
 			else:
 				# Rejected transactions leave the original source selection and
-				# detail intact; result.reason is the authority signal, and its
-				# authoritative prose returns to the player via the center-screen
-				# toast (restored 2026-09-15).
+				# detail intact; the failure surfaces through the dedicated
+				# center-screen error channel, never as a machine reason.
 				_show_inventory_detail(source_index)
-				var rejection_message := str(result.get("message", ""))
-				if not rejection_message.is_empty():
-					_show_center_message(rejection_message, 2.0)
+				_show_error_message(
+					UIErrorFeedbackScript.from_result(result, "无法装备该装备。"),
+					2.0
+				)
 			return
 	if selected_equipment_slot == slot:
 		_clear_equipment_selection()
@@ -1035,8 +1049,13 @@ func _unequip_to_inventory_slot(index: int) -> void:
 	var result: Dictionary = PlayerState.unequip_to_inventory_slot(slot, index, expected_instance_id)
 	if not bool(result.get("success", false)):
 		# Keep the source slot selected after any rejection (stale, occupied,
-		# overweight, capacity or save failure).
+		# overweight, capacity or save failure). The rejection itself surfaces
+		# through the dedicated error channel.
 		_show_equipment_detail(slot)
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(result, "无法卸下该装备，请重新操作。"),
+			2.0
+		)
 		return
 	_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
 	selected_equipment_slot = ""
@@ -1249,10 +1268,8 @@ func _on_context_action(id: int) -> void:
 			var target_slot := _first_empty_inventory_slot()
 			if target_slot < 0:
 				var occupied_slot := str(action.get("slot", ""))
-				item_detail_presenter.show_message(
-					"没有可用的空背包格。",
-					_selection_control_context(equipment_buttons.get(occupied_slot), {"presentation_zone": "equipment", "slot": occupied_slot}),
-				)
+				_show_equipment_detail(occupied_slot)
+				_show_error_message("背包已满，没有空位可以卸下装备。")
 				return
 			var equipped: Variant = PlayerState.equipment.get(str(action.get("slot", "")), {})
 			result = PlayerState.unequip_to_inventory_slot(str(action.get("slot", "")), target_slot, str(equipped.get("instance_id", "")) if equipped is Dictionary else "")
@@ -1282,14 +1299,15 @@ func _on_context_action(id: int) -> void:
 	else:
 		# Failed transaction keeps the prior selection and presenter; no prose
 		# substring is used to infer the authority result. The authoritative
-		# message surfaces via the center-screen toast.
+		# failure message surfaces via the dedicated error channel.
 		if not selected_inventory_ref.is_empty():
 			_show_inventory_detail(selected_inventory_index)
 		elif not selected_equipment_slot.is_empty():
 			_show_equipment_detail(selected_equipment_slot)
-		var action_rejection_message := str(result.get("message", ""))
-		if not action_rejection_message.is_empty():
-			_show_center_message(action_rejection_message, 2.0)
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(result, "操作未能完成，请重新操作。"),
+			2.0
+		)
 
 
 # Direct action helpers remain available for automated tests and accessibility.
@@ -1333,9 +1351,10 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 			_show_equipment_detail(selected_equipment_slot)
 		else:
 			_show_inventory_detail(index)
-			var rejection_message := str(result.get("message", ""))
-			if not rejection_message.is_empty():
-				_show_center_message(rejection_message, 2.0)
+			_show_error_message(
+				UIErrorFeedbackScript.from_result(result, "无法装备该装备。"),
+				2.0
+			)
 		return
 	var result_message := PlayerState.use_inventory_index(index)
 	_clear_inventory_selection_styles()
@@ -1362,7 +1381,12 @@ func _on_auto_sort_pressed() -> void:
 	_clear_inventory_selection_styles()
 	_clear_equipment_selection()
 	refresh()
-	item_detail_presenter.show_message("[color=#e8c277]自动整理%s[/color]" % ("完成" if bool(result.get("success", false)) else "失败"))
+	if bool(result.get("success", false)):
+		item_detail_presenter.show_message("[color=#e8c277]自动整理完成[/color]")
+	else:
+		# A rejected sort is an operation failure: dedicated error channel,
+		# while the success notice stays in the original presenter lane.
+		_show_error_message("自动整理失败，物品顺序未改变。")
 	_show_inventory_action_result(auto_sort_button, bool(result.get("success", false)), "inventory.sort")
 
 
@@ -1385,7 +1409,8 @@ func _on_discard_pressed() -> void:
 	var message := str(result.get("message", ""))
 	if message.is_empty():
 		message = "部分物品未能丢弃，请重新选择后重试。" if destroyed > 0 else "物品状态已变化，未能丢弃，请重新选择。"
-	item_detail_presenter.show_message(message)
+	# A failed discard is an operation failure: dedicated error channel.
+	_show_error_message(UIErrorFeedbackScript.from_result(result, message))
 
 
 func _show_inventory_action_result(button: Button, success: bool, group: String) -> void:
@@ -1419,15 +1444,17 @@ func _unequip_selected() -> void:
 		return
 	var target_slot := _first_empty_inventory_slot()
 	if target_slot < 0:
-		item_detail_presenter.show_message(
-			"没有可用的空背包格。",
-			_selection_control_context(equipment_buttons.get(selected_equipment_slot), {"presentation_zone": "equipment", "slot": selected_equipment_slot}),
-		)
+		_show_equipment_detail(selected_equipment_slot)
+		_show_error_message("背包已满，没有空位可以卸下装备。")
 		return
 	var slot := selected_equipment_slot
 	var result: Dictionary = PlayerState.unequip_to_inventory_slot(slot, target_slot, str(selected_equipment_ref.get("instance_id", "")))
 	if not bool(result.get("success", false)):
 		_show_equipment_detail(slot)
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(result, "无法卸下该装备，请重新操作。"),
+			2.0
+		)
 		return
 	_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
 	selected_equipment_slot = ""

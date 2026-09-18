@@ -1,6 +1,7 @@
 extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const UIErrorFeedbackScript = preload("res://scripts/ui_error_feedback.gd")
 const EquipmentTestLoadoutCatalogScript = preload("res://scripts/equipment_test_loadout_catalog.gd")
 const TestCharacterSkillProfilesScript = preload("res://scripts/test_character_skill_profiles.gd")
 const SkillLoadoutRulesScript = preload("res://scripts/skill_loadout_rules.gd")
@@ -2413,7 +2414,12 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 			"level_requirement":
 				return "需要人物等级%d" % int(learn_result.get("required_level", 1))
 			_:
-				return "技能学习失败：%s" % str(learn_result.get("reason", "unknown"))
+				# Player-readable Chinese only; the raw progression reason stays
+				# in diagnostics, never concatenated into the player message.
+				return UIErrorFeedbackScript.from_result(
+					learn_result,
+					"技能学习失败，请稍后重试。"
+				)
 	if not _consume_inventory_index_without_commit(book_index):
 		_skill_progression.load_snapshot(progress_before)
 		return "技能书消耗失败"
