@@ -1346,6 +1346,14 @@ func _register_command_resources(runtime: Dictionary, region: String) -> void:
 ## register its derived textures (atlas pages + shadow chunks) as optional
 ## best-effort prefetch. Legacy command textures stay fully registered above,
 ## so a complete legacy fallback never needs a resource it does not have.
+## R11: the measurement-only A/B hook must never activate in release builds
+## - release players cannot flip the wall pipeline through an environment
+## variable. Dev/editor/test binaries (is_debug_build) keep the hook so the
+## formal R8/R9 A/B measurements keep working.
+static func wall_render_legacy_force_allowed() -> bool:
+	return OS.is_debug_build()
+
+
 func _register_wall_render_plan_resources(
 	map_id: int,
 	runtime: Dictionary,
@@ -1361,8 +1369,12 @@ func _register_wall_render_plan_resources(
 		return
 	# Measurement-only A/B hook (WALL-P1R C10): forces the complete legacy
 	# path for the same map through the same production pipeline. Fail-closed
-	# by construction - unset (or any other value) keeps normal behavior.
-	if OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1":
+	# by construction - unset (or any other value) keeps normal behavior,
+	# and release builds ignore the variable entirely (R11).
+	if (
+		wall_render_legacy_force_allowed()
+		and OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1"
+	):
 		_wall_render_fallback_reason = (
 			"forced legacy (WALL_RENDER_FORCE_LEGACY)"
 		)
