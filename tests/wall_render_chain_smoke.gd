@@ -156,6 +156,11 @@ func _travel(game: Node, map_id: int, map_key: String) -> Dictionary:
 		var blocked := _strict_snapshot(game, map_key, map_id)
 		blocked["hop_kind"] = "unreachable_input_locked"
 		return blocked
+	# Sampled BEFORE _begin_map_transition: in test_mode the whole bootstrap
+	# and a chained recovery can complete within one driver poll, so the
+	# only stable baseline is pre-request. The target bootstrap's generation
+	# is pre_generation + 1.
+	var pre_generation := int(coord.generation)
 	var op := Callable(game, "_travel_to_map_immediate").bind(map_id)
 	if not game._begin_map_transition(op, map_id):
 		_log("R7_STAGE travel_refused map=%d" % map_id)
@@ -173,11 +178,6 @@ func _travel(game: Node, map_id: int, map_key: String) -> Dictionary:
 		"transition_id": game._active_map_transition_id,
 	})
 	await get_tree().create_timer(0.016, true).timeout
-	# Sampled BEFORE _begin_map_transition (see R6 strict driver): in
-	# test_mode the whole bootstrap and a chained recovery can complete
-	# within one driver poll, so the only stable baseline is pre-request.
-	# The target bootstrap's generation is pre_generation + 1.
-	var pre_generation := int(coord.generation)
 	var poll_deadline := Time.get_ticks_msec() + 120000
 	while Time.get_ticks_msec() < poll_deadline:
 		var snap: Dictionary = coord.snapshot()
