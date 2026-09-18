@@ -118,6 +118,28 @@ const MONSTER_STREAMING_DIAGNOSTIC_FIELDS := [
 	"same_key_reload_count",
 	"evicted_before_first_apply_count",
 	"late_completion_resident_skip_count",
+	# perf(R13): loading-pending and map-pin accounting (device diagnostics
+	# only; read straight from the coordinator's single diagnostics surface).
+	"loaded_pending_request_count",
+	"loaded_pending_decoded_rgba8_bytes",
+	"map_pinned_profile_count",
+	"pinned_decoded_rgba8_bytes",
+]
+
+## perf(R13): caster first-cast readiness snapshot. Values come EXCLUSIVELY
+## from CasterSkillVisualRegistry.frame_texture_cache_diagnostics() - this
+## list is a projection, never a second copy of the cache state.
+const CASTER_SKILL_VISUAL_DIAGNOSTIC_FIELDS := [
+	"entries",
+	"resident_bytes",
+	"evictions",
+	"pinned_count",
+	"pinned_bytes",
+	"combat_frame_miss_count",
+	"pending_warm_count",
+	"sync_decode_calls",
+	"sync_decode_usec",
+	"loading_window_active",
 ]
 
 var _game_root: Node
@@ -747,6 +769,7 @@ static func build_snapshot(root: Node) -> Dictionary:
 		"loot_runtime": _loot_runtime_snapshot(root),
 		"performance_diagnostics": _performance_window_snapshot(root, enemy_activity),
 		"monster_streaming": _monster_streaming_snapshot(root),
+		"caster_skill_visuals": _caster_skill_visual_snapshot(),
 		"monster_visuals": _monster_visual_snapshot(root),
 		"controls": [],
 		"node2d": [],
@@ -1044,6 +1067,20 @@ static func _monster_streaming_snapshot(root: Node) -> Dictionary:
 		return result
 	var diagnostics := raw_diagnostics as Dictionary
 	for field: String in MONSTER_STREAMING_DIAGNOSTIC_FIELDS:
+		result[field] = _non_negative_counter(diagnostics.get(field, 0))
+	return result
+
+
+## perf(R13): caster first-cast readiness snapshot. Read-only projection of
+## the registry's single diagnostics surface - no second state copy.
+static func _caster_skill_visual_snapshot() -> Dictionary:
+	var result := {}
+	for field: String in CASTER_SKILL_VISUAL_DIAGNOSTIC_FIELDS:
+		result[field] = 0
+	var diagnostics: Dictionary = (
+		CasterSkillVisualRegistry.frame_texture_cache_diagnostics()
+	)
+	for field: String in CASTER_SKILL_VISUAL_DIAGNOSTIC_FIELDS:
 		result[field] = _non_negative_counter(diagnostics.get(field, 0))
 	return result
 
