@@ -2090,7 +2090,10 @@ func _prewarm_texture_paths_until(
 	}
 
 
-func _prewarm_learned_skill_visuals() -> void:
+## perf(R13-D2): returns the prewarm diagnostics Dictionary so the caller can
+## fold it into the self-contained [LOADING-TOTAL] record - no second state
+## copy, the values are the same pump/pin/gate results already printed.
+func _prewarm_learned_skill_visuals() -> Dictionary:
 	# perf-smoothness-r1 Phase C + C-R1: the loading window is explicitly
 	# opened for this one prewarm entry and closed at READY release; combat
 	# texture misses go through the async warm-up channel instead. The whole
@@ -2100,7 +2103,14 @@ func _prewarm_learned_skill_visuals() -> void:
 	CasterSkillVisualRegistry.unpin_all_frames()
 	var workset: Array[String] = _active_skill_workset_candidates()
 	if workset.is_empty():
-		return
+		return {
+			"deadline_exceeded": false,
+			"tail_after_deadline_ms": 0.0,
+			"loaded": 0,
+			"failed": 0,
+			"not_admitted": 0,
+			"incomplete_skills": [],
+		}
 	var started_usec := Time.get_ticks_usec()
 	var deadline_usec := started_usec + LOADING_PREWARM_BUDGET_USEC
 	var all_paths: Array[String] = []
@@ -2157,6 +2167,16 @@ func _prewarm_learned_skill_visuals() -> void:
 			str(incomplete_skills),
 		]
 	)
+	return {
+		"deadline_exceeded": bool(pump_result.get("deadline_exceeded", false)),
+		"tail_after_deadline_ms": float(
+			pump_result.get("tail_after_deadline_ms", 0.0)
+		),
+		"loaded": int(pump_result.get("loaded", 0)),
+		"failed": int(pump_result.get("failed", 0)),
+		"not_admitted": int(pump_result.get("not_admitted", 0)),
+		"incomplete_skills": incomplete_skills,
+	}
 
 
 ## FW-COLD2 Phase B (remote review 2026-09-16): RESOURCE WARM is not RENDER
@@ -3188,7 +3208,7 @@ func _run_map_transition(
 	# perf(R13-D1): total-loading timing profile. Read-only diagnostics only;
 	# the production execution order below is untouched. Covered = the moment
 	# the overlay confirmed coverage (loading_transition_covered); total = the
-	# moment hud.finish_loading_transition() starts (fade excluded).
+	# moment the loading cover lift starts (fade excluded).
 	var r13_mode := "map_transition"
 	if _world_bootstrap_in_progress:
 		r13_mode = "initial_world"
@@ -3317,7 +3337,9 @@ func _run_map_transition(
 		# hit. Loading-phase work only: damage, spatial index and fire wall
 		# systems are untouched.
 		r13_stage_started_usec = Time.get_ticks_usec()
-		await _prewarm_learned_skill_visuals()
+		var r13_workset_diag: Dictionary = (
+			await _prewarm_learned_skill_visuals()
+		)
 		r13_loading_profile["skill_workset_ms"] = (
 			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 		)
@@ -3332,6 +3354,9 @@ func _run_map_transition(
 		)
 		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 			return
+		# perf(R13-D2): Finalize restarts its own timer HERE - it must never
+		# include the render-warm span (stages do not overlap).
+		r13_stage_started_usec = Time.get_ticks_usec()
 		if is_instance_valid(_town_music_controller):
 			_town_music_controller.set_map_context(
 				current_map_id,
@@ -3373,6 +3398,12 @@ func _run_map_transition(
 				"render_warm_ms": float(r13_loading_profile.get("render_warm_ms", 0.0)),
 				"finalize_ms": float(r13_loading_profile.get("finalize_ms", 0.0)),
 				"total_ms": float(r13_loading_profile.get("total_ms", 0.0)),
+				"prewarm_deadline_exceeded": bool(
+					r13_workset_diag.get("deadline_exceeded", false)
+				),
+				"prewarm_tail_after_deadline_ms": float(
+					r13_workset_diag.get("tail_after_deadline_ms", 0.0)
+				),
 				"stage_elapsed_ms": r13_bootstrap_diag.get("stage_elapsed_ms", {}),
 				"map_slice_count": int(r13_bootstrap_diag.get("map_slice_count", 0)),
 				"collision_slice_count": int(r13_bootstrap_diag.get("collision_slice_count", 0)),
