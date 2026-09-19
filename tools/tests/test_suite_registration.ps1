@@ -873,6 +873,49 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $slpIncluded = ($RunnerSource -match '\$Suites\.skill_panel_layout_critical\s*\+')
 $slpValidateSet = ($RunnerSource -match "skill_panel_layout_critical")
 
+# device_lab_critical verification (R14-A formal suite gate)
+$DeviceLabSuite = 'device_lab_critical'
+$DeviceLabExpected = @(
+    'tests/device_lab_runtime_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/perf_frame_diagnostics_test.tscn',
+    'tests/r14_diagnostic_mode_test.tscn'
+)
+
+$dlMissing = @()
+$dlDuplicates = @()
+$dlGitTracked = @()
+foreach ($path in $DeviceLabExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $dlMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $dlGitTracked += $path
+    }
+}
+$dlDuplicates = @($DeviceLabExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$dlBlock = $false
+$dlFound = $false
+$dlEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.device_lab_critical\s*=') {
+        $dlBlock = $true
+        $dlFound = $true
+        continue
+    }
+    if ($dlBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $dlEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $dlBlock = $false
+            break
+        }
+    }
+}
+$dlIncluded = ($RunnerSource -match '\$Suites\.device_lab_critical\s*\+')
+$dlValidateSet = ($RunnerSource -match "device_lab_critical")
+
 $ok = $suiteFound -and (Test-StringSetEqual $Expected $suiteEntries) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and (Test-StringSetEqual $ProductionExpected $prodEntries) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and (Test-StringSetEqual $ProjectileExpected $projEntries) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
@@ -891,6 +934,7 @@ $ok = $ok -and $rlFound -and (Test-StringSetEqual $ReleaseExpected $rlEntries) -
 $ok = $ok -and $rtFound -and (Test-StringSetEqual $TransactionExpected $rtEntries) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
 $ok = $ok -and $pvFound -and (Test-StringSetEqual $PlayerVisualExpected $pvEntries) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
 $ok = $ok -and $slpFound -and (Test-StringSetEqual $SkillPanelExpected $slpEntries) -and ($slpMissing.Count -eq 0) -and ($slpDuplicates.Count -eq 0) -and ($slpGitTracked.Count -eq 0) -and $slpIncluded -and $slpValidateSet
+$ok = $ok -and $dlFound -and (Test-StringSetEqual $DeviceLabExpected $dlEntries) -and ($dlMissing.Count -eq 0) -and ($dlDuplicates.Count -eq 0) -and ($dlGitTracked.Count -eq 0) -and $dlIncluded -and $dlValidateSet
 $auditExpected = @(
     'tests/profile_business_validation_recovery_test.tscn',
     'tests/persistence_business_transactions_test.tscn',
@@ -1069,6 +1113,14 @@ $report = [ordered]@{
     skill_panel_layout_not_git_tracked = $slpGitTracked
     skill_panel_layout_included_in_default_critical = $slpIncluded
     skill_panel_layout_validate_set = $slpValidateSet
+    device_lab_suite = $DeviceLabSuite
+    device_lab_expected_count = $DeviceLabExpected.Count
+    device_lab_actual_count = $dlEntries.Count
+    device_lab_missing = $dlMissing
+    device_lab_duplicates = $dlDuplicates
+    device_lab_not_git_tracked = $dlGitTracked
+    device_lab_included_in_default_critical = $dlIncluded
+    device_lab_validate_set = $dlValidateSet
     audit_upgrade_expected_count = $auditExpected.Count
     audit_upgrade_actual_count = $auditEntries.Count
     audit_upgrade_missing_or_untracked = $auditMissing

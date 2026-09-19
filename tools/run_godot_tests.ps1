@@ -475,7 +475,8 @@ $Suites.skill_panel_layout_critical = @(
 $Suites.device_lab_critical = @(
     'tests/device_lab_runtime_test.tscn',
     'tests/device_lab_patch_bootstrap_test.tscn',
-    'tests/perf_frame_diagnostics_test.tscn'
+    'tests/perf_frame_diagnostics_test.tscn',
+    'tests/r14_diagnostic_mode_test.tscn'
 )
 
 $Suites.audit_upgrade_critical = @(
