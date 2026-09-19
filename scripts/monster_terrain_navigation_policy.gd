@@ -40,6 +40,9 @@ static func build_context(
 	runtime: Dictionary,
 	ground_coordinate_contract_id: String,
 ) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.runtime_enabled(runtime):
+		return HCPPolyRuntime.context(runtime_map_id, runtime, ground_coordinate_contract_id, CONTRACT_ID)
 	var invalid := {
 		"contract_id": CONTRACT_ID,
 		"valid": false,
@@ -131,6 +134,11 @@ static func cell_walkable(
 	combat_radius_gu: float,
 	extra_blocked_cell := Vector2i(-2147483648, -2147483648),
 ) -> bool:
+	# HC-POLY-R2
+	if context.has("poly_index"):
+		if not context_valid(context) or cell == extra_blocked_cell:
+			return false
+		return HCPPolyRuntime.point_walkable(context, Vector2(cell) + Vector2(0.5, 0.5), combat_radius_gu)
 	# Only immutable authored terrain can be memoized. Dynamic environment,
 	# safe zones and live bodies remain separately checked by the caller.
 	# Identity, exact radius and cell are the key; no map-ID or rounded-radius
@@ -179,6 +187,11 @@ static func _cell_walkable_uncached(
 	combat_radius_gu: float,
 	extra_blocked_cell: Vector2i,
 ) -> bool:
+	# HC-POLY-R2
+	if context.has("poly_index"):
+		if not context_valid(context) or cell == extra_blocked_cell:
+			return false
+		return HCPPolyRuntime.point_walkable(context, Vector2(cell) + Vector2(0.5, 0.5), combat_radius_gu)
 	if not context_valid(context):
 		return false
 	var design_size: Vector2i = context.get("design_size", Vector2i.ZERO)
@@ -227,6 +240,12 @@ static func can_traverse_neighbor(
 	combat_radius_gu: float,
 	extra_blocked_cell := Vector2i(-2147483648, -2147483648),
 ) -> bool:
+	# HC-POLY-R2
+	if context.has("poly_index"):
+		var hc_delta := to_cell - from_cell
+		if not context_valid(context) or hc_delta == Vector2i.ZERO or absi(hc_delta.x) > 1 or absi(hc_delta.y) > 1 or to_cell == extra_blocked_cell:
+			return false
+		return HCPPolyRuntime.segment_walkable(context, Vector2(from_cell) + Vector2(0.5, 0.5), Vector2(to_cell) + Vector2(0.5, 0.5), combat_radius_gu)
 	var delta := to_cell - from_cell
 	if delta == Vector2i.ZERO or abs(delta.x) > 1 or abs(delta.y) > 1:
 		return false
@@ -257,6 +276,9 @@ static func static_line_of_sight_clear(
 	start_ground_gu: Vector2,
 	end_ground_gu: Vector2,
 ) -> bool:
+	# HC-POLY-R2
+	if context.has("poly_index"):
+		return HCPPolyRuntime.segment_walkable(context, start_ground_gu, end_ground_gu, 0.0)
 	if not context_valid(context) or not start_ground_gu.is_finite() or not end_ground_gu.is_finite():
 		return false
 	var current := Vector2i(floori(start_ground_gu.x), floori(start_ground_gu.y))
@@ -303,6 +325,9 @@ static func find_bounded_path(
 	combat_radius_gu: float,
 	extra_blocked_cell := Vector2i(-2147483648, -2147483648),
 ) -> Dictionary:
+	# HC-POLY-R2
+	if context.has("poly_index"):
+		return {"accepted": false, "found": false, "reason": "polygon_requires_continuous_path_search", "waypoints": [], "expansions": 0}
 	if not context_valid(context):
 		return {"accepted": false, "found": false, "reason": "invalid_context"}
 	if not _claim_path_query_budget():
@@ -473,3 +498,15 @@ static func _cell_order_less(a: Vector2i, b: Vector2i) -> bool:
 static func _read_only(value: Dictionary) -> Dictionary:
 	value.make_read_only()
 	return value
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
+
+static func point_walkable(context: Dictionary, ground_gu: Vector2, combat_radius_gu: float) -> bool:
+	if not ground_gu.is_finite():
+		return false
+	if context.has("poly_index"):
+		return context_valid(context) and HCPPolyRuntime.point_walkable(context, ground_gu, combat_radius_gu)
+	return cell_walkable(context, Vector2i(floori(ground_gu.x), floori(ground_gu.y)), combat_radius_gu)

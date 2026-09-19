@@ -81,6 +81,8 @@ New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 
 $Suites = @{
     monster = @(
+        # HC-POLY-R2: registered production regression scenes
+        'tests/hc_polygon_navigation_test.tscn',
 		'tests/canonical_monster_catalog_test.tscn',
 		'tests/monster_drop_authoring_overlay_contract_test.tscn',
 		'tests/monster_id_contract_test.tscn',
@@ -450,6 +452,26 @@ $Suites.formal_map_projection_critical = @(
 )
 
 $Suites.map_runtime_release_critical = @(
+
+    # HC-POLY-R2: registered production regression scenes
+
+    'tests/hc_polygon_geometry_test.tscn',
+
+    'tests/hc_polygon_navigation_test.tscn',
+
+    'tests/hc_polygon_physics_test.tscn',
+
+    'tests/hc_polygon_precision_test.tscn',
+
+    'tests/hc_polygon_editor_input_test.tscn',
+
+    'tests/hc_polygon_release_alignment_test.tscn',
+
+    'tests/hc_polygon_numerics_test.tscn',
+
+    'tests/hc_polygon_reset_test.tscn',
+
+    'tests/hc_polygon_reset_release_test.tscn',
     'tests/map_runtime_release_registry_contract_test.tscn',
     'tests/map_ui_presentation_projection_test.tscn',
     'tests/map_persistent_boss_spawn_identity_test.tscn',
@@ -892,7 +914,7 @@ $resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $Eff
 @{
     suite = $EffectiveSuite
     generated_at = (Get-Date -Format o)
-    git_head = (git rev-parse HEAD 2>$null | Out-String).Trim()
+    git_head = (& git -C $ProjectRoot rev-parse HEAD 2>$null | Out-String).Trim()
     total = $StructuredResults.Count
     passed = $passedCount
     failed = $failedCount

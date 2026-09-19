@@ -20,6 +20,14 @@ static func compile_runtime_collision(
 	runtime: Dictionary,
 	expected_runtime_map_id := -1
 ) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.runtime_enabled(runtime):
+		var hc_result := HCPPolyRuntime.compile(runtime, expected_runtime_map_id, false)
+		if hc_result.ok:
+			var hc_snapshot: Dictionary = hc_result.snapshot
+			hc_snapshot["boundary_world"] = map_actor_boundary_world(hc_snapshot.design_size)
+			hc_snapshot["outer_boundary_world"] = map_outer_boundary_world(hc_snapshot.design_size)
+		return hc_result
 	var errors: Array[String] = []
 	if runtime.is_empty():
 		errors.append("runtime_missing")
@@ -149,6 +157,9 @@ static func compiled_collision_cell_blocked(
 	compiled_collision: Dictionary,
 	cell: Vector2i
 ) -> bool:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return compiled_collision.poly_index.point_blocked(Vector2(cell) + Vector2(0.5, 0.5))
 	var raw_design_size: Variant = compiled_collision.get(
 		"design_size", Vector2i.ZERO
 	)
@@ -177,6 +188,9 @@ static func compiled_collision_contains_world(
 	compiled_collision: Dictionary,
 	world: Vector2
 ) -> bool:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return HCPPolyRuntime.point_world(compiled_collision, world)
 	if not world.is_finite():
 		return true
 	var boundary: Variant = compiled_collision.get("boundary_world", null)
@@ -200,6 +214,9 @@ static func compiled_collision_contains_ground(
 	compiled_collision: Dictionary,
 	ground_position_gu: Vector2
 ) -> bool:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return compiled_collision.poly_index.point_blocked(ground_position_gu)
 	if not ground_position_gu.is_finite():
 		return true
 	var raw_design_size: Variant = compiled_collision.get(
@@ -490,6 +507,9 @@ static func blocked_cell_runs(runtime_collision: Dictionary) -> Array[Rect2i]:
 static func compiled_collision_blocked_cell_runs(
 	compiled_collision: Dictionary
 ) -> Array[Rect2i]:
+	# HC-POLY-R2
+	if compiled_collision.has("poly_index"):
+		return []
 	var design_size: Vector2i = compiled_collision.get(
 		"design_size", Vector2i.ZERO
 	)
@@ -705,3 +725,8 @@ static func _tile_polygon(points: Array) -> PackedVector2Array:
 		if raw is Array and raw.size() == 2:
 			result.append(Vector2(float(raw[0]), float(raw[1])))
 	return result
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")

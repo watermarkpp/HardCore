@@ -717,7 +717,14 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 		errors.append("map_has_no_walkable_tile")
 	if MapEditorInstanceService.all_instances(document).filter(func(instance: Dictionary) -> bool: return not bool(instance.get("runtime_export", true))).size() > 0:
 		warnings.append("non_runtime_instances_excluded")
-	return {"ok": errors.is_empty(), "errors": errors, "warnings": warnings, "walkability": walkability}
+	# HC-POLY-R2: bake only after all existing authoring validators succeed.
+	var hc_polygon_build: Dictionary = {}
+	if HCPPolyGeo.enabled(document):
+		errors.append_array(walkability.get("errors", []))
+		if errors.is_empty():
+			hc_polygon_build = HCPPolyBuild.build(document)
+			errors.append_array(hc_polygon_build.get("errors", []))
+	return {"ok": errors.is_empty(), "errors": errors, "warnings": warnings, "walkability": walkability, "polygon_build": hc_polygon_build}
 
 
 static func document_binding(document: Dictionary) -> Dictionary:
@@ -840,6 +847,8 @@ static func build_candidate(document: Dictionary) -> Dictionary:
 		return validation
 	var binding := document_binding(document)
 	var runtime := _compile_runtime_with_hash(document, validation, binding)
+	if runtime.is_empty():
+		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
 	var map_key := str(document.get("map_id", "unknown"))
 	var build_hash := str(runtime.get("build_sha256", ""))
 	var candidate_path := CANDIDATE_ROOT + map_key + "/" + build_hash + ".runtime.json"
@@ -872,6 +881,8 @@ static func build(document: Dictionary, output_path := "") -> Dictionary:
 	var runtime := _compile_runtime_with_hash(
 		document, validation, document_binding(document)
 	)
+	if runtime.is_empty():
+		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
 	var write := _write_atomic(output_path, runtime)
 	if not write.ok:
 		return write
@@ -884,6 +895,20 @@ static func _compile_runtime_with_hash(
 	binding: Dictionary
 ) -> Dictionary:
 	var runtime := _compile(document, validation.walkability, binding)
+	# Freeze the catalog geometry used for this exact build, before the hash.
+	var hc_visual := HCPVisualSnapshot.capture(runtime.get("instances", []))
+	if not bool(hc_visual.get("ok", false)):
+		push_error("HC-POLY-R2: material snapshot failed: %s" % hc_visual.get("errors", []))
+		return {}
+	runtime["precision_contract_id"] = HCPVisualSnapshot.PRECISION_CONTRACT
+	runtime["visual_asset_snapshot"] = hc_visual.snapshot
+	# HC-POLY-R2: replace the ENTIRE legacy collision payload before hashing.
+	if HCPPolyGeo.enabled(document):
+		var hc_build: Dictionary = validation.get("polygon_build", {})
+		if not bool(hc_build.get("ok", false)) or not hc_build.has("collision"):
+			push_error("HC-POLY-R2: missing validated polygon build")
+			return {}
+		runtime["collision"] = hc_build.collision.duplicate(true)
 	var normalized: Variant = JSON.parse_string(MapEditorJsonCodec.encode(runtime))
 	if normalized is Dictionary:
 		runtime = normalized
@@ -1001,3 +1026,12 @@ static func _file_sha256(path: String) -> String:
 	hashing.update(file.get_buffer(file.get_length()))
 	file.close()
 	return hashing.finish().hex_encode()
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyBuild := preload("res://scripts/map_editor/polygon/poly_build.gd")
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPVisualSnapshot := preload("res://scripts/map_editor/polygon/poly_visual_snapshot.gd")

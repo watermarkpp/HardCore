@@ -265,6 +265,22 @@ class StaticGoalField:
 		return first
 
 func configure(ctx: Dictionary, from: Vector2i, destinations: Dictionary, r: float, edge: Callable) -> void:
+	# HC-POLY-R2
+	_hc_polygon_search = null
+	if ctx.has("poly_index"):
+		detach_shared_goal_field()
+		context = ctx
+		start = from
+		radius = r
+		path.clear()
+		expansions = 0
+		var hc_destinations := destinations.duplicate()
+		_hc_polygon_search = HCPPolySearch.new()
+		var hc_origin := _hc_polygon_origin if _hc_polygon_origin.is_finite() else Vector2(from) + Vector2(0.5, 0.5)
+		var hc_builder: Callable = func() -> Dictionary: return hc_destinations
+		_hc_polygon_search.configure(ctx, hc_origin, hc_builder, r)
+		state = _hc_polygon_search.state
+		return
 	detach_shared_goal_field()
 	context = ctx
 	start = from
@@ -311,6 +327,20 @@ func configure(ctx: Dictionary, from: Vector2i, destinations: Dictionary, r: flo
 	_push([_heuristic(start), 0.0, start.y, start.x, start])
 
 func configure_deferred(ctx: Dictionary, from: Vector2i, builder: Callable, r: float, edge: Callable, static_scope: Array = []) -> void:
+	# HC-POLY-R2
+	_hc_polygon_search = null
+	if ctx.has("poly_index"):
+		detach_shared_goal_field()
+		context = ctx
+		start = from
+		radius = r
+		path.clear()
+		expansions = 0
+		_hc_polygon_search = HCPPolySearch.new()
+		var hc_origin := _hc_polygon_origin if _hc_polygon_origin.is_finite() else Vector2(from) + Vector2(0.5, 0.5)
+		_hc_polygon_search.configure(ctx, hc_origin, builder, r)
+		state = _hc_polygon_search.state
+		return
 	detach_shared_goal_field()
 	context = ctx
 	start = from
@@ -340,6 +370,12 @@ func _goal_signature() -> String:
 	return "|".join(cells)
 
 func advance(limit := 384, deadline_usec := 0) -> String:
+	# HC-POLY-R2
+	if _hc_polygon_search != null:
+		state = _hc_polygon_search.advance(limit, deadline_usec)
+		expansions = _hc_polygon_search.expansions
+		path = _hc_polygon_search.path
+		return state
 	if state == "PREPARING":
 		if not goal_builder.is_valid():
 			state = "INVALID_CONTEXT"
@@ -534,3 +570,12 @@ func _pop() -> Array:
 		index = best
 	heap[index] = last
 	return first
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolySearch := preload("res://scripts/map_editor/polygon/poly_path_search.gd")
+var _hc_polygon_origin := Vector2.INF
+var _hc_polygon_search: HCPPolySearch
+
+func set_polygon_origin(origin_ground_gu: Vector2) -> void:
+	_hc_polygon_origin = origin_ground_gu

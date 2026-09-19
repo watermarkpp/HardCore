@@ -125,6 +125,7 @@ func _notification(what: int) -> void:
 
 func _ready() -> void:
 	_build_ui()
+	_hc_polygon_install()
 	if not load_default_workspace_on_ready:
 		return
 	# Opening a document can migrate ground state, repair semantic IDs, and
@@ -3071,6 +3072,13 @@ static func _polygon_tile_center(points: Array[Vector2i]) -> Vector2i:
 
 
 func _on_collision_draw_toggled(enabled: bool) -> void:
+	# HC-POLY-R2
+	if enabled and is_instance_valid(_hc_polygon_controller):
+		var hc_shape := _selected_collision_shape()
+		if hc_shape == "polygon" or HCPPolyGeo.enabled(current_document):
+			_set_active_tool("select")
+			_hc_polygon_controller.open_polygon_tool(hc_shape)
+			return
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
 	_sync_manual_collision_draft()
@@ -3084,6 +3092,11 @@ func _on_collision_draw_toggled(enabled: bool) -> void:
 
 
 func _on_collision_erase_toggled(enabled: bool) -> void:
+	# HC-POLY-R2
+	if enabled and HCPPolyGeo.enabled(current_document) and is_instance_valid(_hc_polygon_controller):
+		_set_active_tool("select")
+		_hc_polygon_controller.open_legacy_erase()
+		return
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
 	_sync_manual_collision_draft()
@@ -3099,6 +3112,11 @@ func _on_collision_erase_toggled(enabled: bool) -> void:
 
 
 func _on_collision_erase_whole_toggled(enabled: bool) -> void:
+	# HC-POLY-R2
+	if enabled and HCPPolyGeo.enabled(current_document) and is_instance_valid(_hc_polygon_controller):
+		_set_active_tool("select")
+		_hc_polygon_controller.open_legacy_erase()
+		return
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
 	_sync_manual_collision_draft()
@@ -3114,6 +3132,13 @@ func _on_collision_erase_whole_toggled(enabled: bool) -> void:
 
 
 func _on_collision_shape_selected(_index: int) -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_controller):
+		var hc_shape := _selected_collision_shape()
+		if hc_shape == "polygon" or HCPPolyGeo.enabled(current_document):
+			_set_active_tool("select")
+			_hc_polygon_controller.open_polygon_tool(hc_shape)
+			return
 	manual_collision_start = Vector2i(-1, -1)
 	manual_polygon_points.clear()
 	_set_active_tool("manual_collision")
@@ -3323,3 +3348,20 @@ func _refresh_ground_preview() -> void:
 	var initialized := MapEditorGroundService.initialize(current_document)
 	if initialized.ok:
 		preview.set_ground_state(initialized.state)
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyController := preload("res://scripts/map_editor/polygon/poly_editor_controller.gd")
+var _hc_polygon_controller: HCPPolyController
+
+func _hc_polygon_install() -> void:
+	if is_instance_valid(_hc_polygon_controller):
+		return
+	_hc_polygon_controller = HCPPolyController.new()
+	_hc_polygon_controller.name = "PolygonCollisionTools"
+	add_child(_hc_polygon_controller)
+	_hc_polygon_controller.setup(self)
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
