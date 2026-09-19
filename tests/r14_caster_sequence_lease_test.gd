@@ -11,6 +11,9 @@ extends Node2D
 ## C4: a mid-sequence miss keeps the current texture, freezes the logical
 ##     clock and never advances the frame index past an uncommitted texture.
 ## C5: one-shot completion releases the lease; _exit_tree releases it too.
+## C6 (R14-C-R2): combat partial residency (frame 0 resident, rest missing)
+##     waits ATOMICALLY - no early frame 0, no logical-clock start; full
+##     warm starts from frame 0 with the lease held.
 ## Uses laser (playback=once, 16 directions x 6 frames) as the directional
 ## carrier and drives _process manually so the contract is engine-frame
 ## independent.
@@ -49,12 +52,13 @@ func _run() -> void:
 	await _case_3_first_frame_miss_waits_for_residency()
 	await _case_4_mid_sequence_miss_does_not_advance_frame()
 	await _case_5_lifecycle_releases_lease()
+	await _case_6_partial_residency_waits_atomically()
 
 	Registry.clear_frame_texture_cache()
 	Registry.unpin_all_frames()
 	Registry.set_loading_window_active(true)
 	if _failures == 0:
-		print("R14_CASTER_SEQUENCE_LEASE_PASS C1-C5 sequence residency contract")
+		print("R14_CASTER_SEQUENCE_LEASE_PASS C1-C6 sequence residency contract")
 		get_tree().quit(0)
 	else:
 		push_error("R14_CASTER_SEQUENCE_LEASE_FAIL failures=" + str(_failures))
@@ -349,3 +353,95 @@ func _case_5_lifecycle_releases_lease() -> void:
 		int(diag_after.get("leased_sequence_paths", -1)) < fw_paths.size(),
 		"C5 _exit_tree releases the looping lease (registry refcount dropped)",
 	)
+
+
+## C6 (R14-C-R2): combat partial-residency atomic start. A sequence is the
+## atomic playback unit in combat: with frame 0 resident but frames 1-5
+## missing, configure must NOT show frame 0 early, must NOT start the
+## logical clock and must NOT claim visual_loaded. After the full warm the
+## player acquires the lease and starts from frame 0.
+func _case_6_partial_residency_waits_atomically() -> void:
+	Registry.clear_frame_texture_cache()
+	Registry.clear_pending_warm_paths()
+	Registry.set_loading_window_active(true)
+	var paths := Registry.animation_sequence_paths("wizard.laser", 8)
+	# Load ONLY frame 0 (synchronously, inside the loading window).
+	Registry.load_texture_path(paths[0])
+	_check(
+		Registry.frame_texture_is_resident(paths[0]),
+		"C6 setup frame 0 is resident",
+	)
+	_check(
+		not Registry.sequence_resident(paths),
+		"C6 setup sequence is NOT fully resident (frames 1-5 missing)",
+	)
+	Registry.set_loading_window_active(false)
+	var player := SequencePlayer.new()
+	add_child(player)
+	var configured := player.configure("wizard.laser", Vector2.DOWN)
+	_check(
+		configured,
+		"C6 partial-resident configure is accepted",
+	)
+	_check(
+		not player.visual_loaded,
+		"C6 partial residency does NOT claim visual_loaded",
+	)
+	_check(
+		player._waiting_for_residency,
+		"C6 partial residency arms waiting-for-residency",
+	)
+	_check(
+		player.current_frame_index == 0,
+		"C6 waiting player holds frame index 0",
+	)
+	_check(
+		player.texture == null,
+		"C6 resident frame 0 is NOT shown early (texture null)",
+	)
+	_check(
+		player.is_processing(),
+		"C6 waiting player keeps processing",
+	)
+	# C-R2-6: complete the warm, then ONE process tick must start from
+	# frame 0 with the lease held - never from a late logical position.
+	Registry.set_loading_window_active(true)
+	_make_resident(paths)
+	Registry.set_loading_window_active(false)
+	var frame0_texture: Texture2D = Registry.load_texture_path(paths[0])
+	player._process(0.016)
+	_check(
+		Registry.sequence_resident(paths),
+		"C6 sequence fully resident after warm",
+	)
+	_check(
+		player._sequence_lease_held,
+		"C6 lease held after warm completion",
+	)
+	_check(
+		not player._waiting_for_residency,
+		"C6 waiting cleared after warm completion",
+	)
+	_check(
+		player.visual_loaded,
+		"C6 playback started once fully resident",
+	)
+	_check(
+		player.current_frame_index == 0,
+		"C6 starts from frame 0, not a late logical position",
+	)
+	_check(
+		player.texture == frame0_texture,
+		"C6 committed texture is the frame 0 texture",
+	)
+	# Normal time advance 0 -> 1 -> 2 (laser frame_time 50 ms).
+	player._elapsed = 0.0
+	player._process(0.05)
+	_check(
+		player.current_frame_index == 1,
+		"C6 normal advance reaches frame 1, got %d" % player.current_frame_index,
+	)
+	player._release_sequence_lease()
+	Registry.set_loading_window_active(true)
+	player.queue_free()
+	await get_tree().process_frame

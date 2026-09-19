@@ -22,9 +22,11 @@ var _frame_time_seconds := 0.05
 var _elapsed := 0.0
 var _loop := false
 var _manual_mode := false
-## R14-C3/C4: active-sequence residency lease + wait state. _sequence_paths
-## is the ONE selected direction's frame paths; a first-frame miss keeps the
-## player alive waiting for residency instead of permanently stopping, and a
+## R14-C3/C4 + R14-C-R2: active-sequence residency lease + wait state.
+## _sequence_paths is the ONE selected direction's frame paths. Combat plays
+## a sequence as an ATOMIC unit: a first-frame miss AND a partial-residency
+## miss keep the player alive waiting for the WHOLE sequence (no early frame
+## 0, no logical-clock start) instead of permanently stopping, and a
 ## mid-sequence miss freezes the logical clock without skipping a frame.
 ## R14-C-R1 P0-4/5/6/7: _sequence_lease_held is the ownership truth - a
 ## waiter that has never acquired must never decrement the registry refcount
@@ -258,6 +260,28 @@ func configure(
 	_sequence_paths = CasterSkillVisualRegistry.animation_sequence_paths(
 		skill_id, direction_index, phase_id
 	)
+	# R14-C-R2 C-R2-1/2/3: combat plays a sequence as an ATOMIC unit. When
+	# the loading window is closed and ANY frame of the sequence is missing,
+	# the player must NOT show an already-resident frame 0, must not start
+	# the logical clock and must not claim visual_loaded: it queues the
+	# async warm and waits, then starts from frame 0 once the WHOLE sequence
+	# is resident. Inside the loading window the pre-existing synchronous
+	# semantics stay (request_animation_frame_texture resolves frame 0 -
+	# and later frames - synchronously), and GameRoot's loading prewarm
+	# makes whole workset sequences resident so the formal Loading->READY
+	# path still reaches the full-resident branch below.
+	if CasterSkillVisualRegistry.combat_sequence_requires_wait(_sequence_paths):
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		_waiting_for_residency = true
+		visual_loaded = false
+		current_frame_index = 0
+		_elapsed = 0.0
+		texture = null
+		set_process(true)
+		return true
+	# Combat full-resident or loading-window path: acquire the lease (only
+	# when the whole sequence is resident - never a phantom lease) and try
+	# frame 0 exactly like the pre-R14-C path.
 	_acquire_sequence_lease_if_ready()
 	visual_loaded = _apply_frame(0)
 	if visual_loaded:

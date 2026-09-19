@@ -51,9 +51,10 @@ static var _pinned_paths: Dictionary = {}
 static var _pinned_bytes := 0
 static var _loading_window_active := true
 static var _pending_warm_paths: Array[String] = []
-## perf-smoothness-r1 C-R1 (PERF-R2 R13): combat-time frame misses. A miss
-## degrades to a skipped frame by design, but the SUCCESS criterion is zero
-## misses on the first real cast of every active workset skill.
+## perf-smoothness-r1 C-R1 (PERF-R2 R13): combat-time frame misses. Combat
+## miss queues async sequence warm; AnimationPlayer waits without
+## logical-frame advancement. The SUCCESS criterion is zero misses on the
+## first real cast of every active workset skill.
 static var combat_frame_miss_count := 0
 
 
@@ -286,6 +287,16 @@ static func sequence_resident(paths: Array[String]) -> bool:
 		if not _frame_textures.has(path):
 			return false
 	return true
+
+
+## R14-C-R2 C-R2-4: combat atomicity probe. A sequence is the atomic playback
+## unit in combat: whenever the loading window is closed and ANY frame of the
+## sequence is missing, the player must wait for the WHOLE sequence instead of
+## showing an already-resident frame 0 early. Same residency authority as
+## sequence_resident() - no second residency source. Read-only: loads
+## nothing, queues nothing.
+static func combat_sequence_requires_wait(paths: Array[String]) -> bool:
+	return not _loading_window_active and not sequence_resident(paths)
 
 
 ## R14-C2: queue every non-resident path of the sequence for async warm-up

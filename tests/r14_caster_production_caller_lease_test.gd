@@ -16,6 +16,10 @@ extends Node2D
 ##
 ## P0-10 (hard gate): a never-acquired waiter sharing the same _sequence_paths
 ## must NOT decrement the registry refcount of a real owner when destroyed.
+##
+## C-R2-7 (R14-C-R2): partial residency (frame 0 resident / rest missing)
+## through the formal CasterSkillVisualEffect path produces a WAITING sprite
+## - never a half animation - and a full warm starts it from frame 0.
 const Registry := preload("res://scripts/caster_skill_visual_registry.gd")
 const SequencePlayer := preload(
 	"res://scripts/caster_skill_animation_player.gd"
@@ -50,14 +54,20 @@ func _run() -> void:
 	Registry.set_loading_window_active(true)
 
 	await _case_1_production_caller_keeps_sprite_on_first_frame_miss()
-	_case_2_shared_refcount_ownership()
-	_case_3_never_acquired_waiter_never_releases_owner()
+	# Cases 2/3 contain await points (queue_free + process_frame) and are
+	# coroutines; they MUST be awaited or the next case interleaves with
+	# their pending section and clears the registry state mid-check.
+	await _case_2_shared_refcount_ownership()
+	await _case_3_never_acquired_waiter_never_releases_owner()
+	await _case_4_production_caller_partial_residency_starts_atomically()
 
 	Registry.clear_frame_texture_cache()
 	Registry.unpin_all_frames()
 	Registry.set_loading_window_active(true)
 	if _failures == 0:
-		print("R14_CASTER_PRODUCTION_CALLER_LEASE_PASS P0-3/P0-9/P0-10")
+		print(
+			"R14_CASTER_PRODUCTION_CALLER_LEASE_PASS P0-3/P0-9/P0-10/C-R2-7"
+		)
 		get_tree().quit(0)
 	else:
 		push_error(
@@ -252,12 +262,15 @@ func _case_3_never_acquired_waiter_never_releases_owner() -> void:
 	)
 	waiter.queue_free()
 	await get_tree().process_frame
-	_check(
-		int(Registry.frame_texture_cache_diagnostics().get(
+	var after_waiter_total := int(
+		Registry.frame_texture_cache_diagnostics().get(
 			"leased_sequence_refcount_total", -1
-		)) == owner_total,
-		"P0-10 never-acquired waiter destroy does NOT change owner refcount (%d)"
-		% owner_total,
+		)
+	)
+	_check(
+		after_waiter_total == owner_total,
+		"P0-10 never-acquired waiter destroy does NOT change owner refcount (owner=%d actual=%d)"
+		% [owner_total, after_waiter_total],
 	)
 	owner.queue_free()
 	await get_tree().process_frame
@@ -267,3 +280,77 @@ func _case_3_never_acquired_waiter_never_releases_owner() -> void:
 		)) == 0,
 		"P0-10 owner teardown releases to 0",
 	)
+
+
+## C-R2-7 (R14-C-R2): partial residency through the FORMAL production path.
+## Frame 0 resident / frames 1-5 missing must produce a WAITING sprite (no
+## half animation: no early frame 0, visual_loaded stays false), and a full
+## warm must start the sprite from frame 0.
+func _case_4_production_caller_partial_residency_starts_atomically() -> void:
+	Registry.clear_frame_texture_cache()
+	Registry.clear_pending_warm_paths()
+	Registry.set_loading_window_active(true)
+	var paths := Registry.animation_sequence_paths("wizard.laser", 8)
+	# Load ONLY frame 0 (synchronously, inside the loading window).
+	Registry.load_texture_path(paths[0])
+	_check(
+		Registry.frame_texture_is_resident(paths[0])
+		and not Registry.sequence_resident(paths),
+		"C-R2-7 setup frame 0 resident with the sequence partial",
+	)
+	Registry.set_loading_window_active(false)
+	var effect := VisualEffectScript.new()
+	# Production order (see case 1): setup() first, then add_child - the
+	# visual install runs in _ready().
+	effect.setup(
+		Vector2(320.0, 240.0),
+		"wizard.laser",
+		72.0,
+		0.8,
+		Vector2.DOWN,
+		null,
+		"",
+		{"visual_type": "beam", "enable_beam_visual": true},
+	)
+	add_child(effect)
+	_check(
+		effect._sprites.size() == 1,
+		"C-R2-7 production caller keeps ONE sprite on partial residency",
+	)
+	var sprite := effect._sprites[0] as SequencePlayer
+	_check(
+		is_instance_valid(sprite) and not sprite.is_queued_for_deletion(),
+		"C-R2-7 sprite child is NOT queue_free'd",
+	)
+	_check(
+		sprite._waiting_for_residency,
+		"C-R2-7 sprite waits atomically for the whole sequence",
+	)
+	_check(
+		not sprite.visual_loaded,
+		"C-R2-7 no half animation: visual_loaded stays false",
+	)
+	_check(
+		sprite.texture == null,
+		"C-R2-7 resident frame 0 is NOT shown early (texture null)",
+	)
+	# Full warm -> the sprite starts from frame 0.
+	Registry.set_loading_window_active(true)
+	_make_resident(paths)
+	Registry.set_loading_window_active(false)
+	sprite._process(0.016)
+	_check(
+		sprite.visual_loaded,
+		"C-R2-7 sprite starts once the sequence is fully resident",
+	)
+	_check(
+		sprite.current_frame_index == 0,
+		"C-R2-7 sprite starts from frame 0",
+	)
+	_check(
+		not sprite._waiting_for_residency,
+		"C-R2-7 waiting cleared after warm completion",
+	)
+	Registry.set_loading_window_active(true)
+	effect.queue_free()
+	await get_tree().process_frame
