@@ -4,9 +4,10 @@ const Geo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
 const Author := preload("res://scripts/map_editor/polygon/poly_authoring.gd")
 const Binding := preload("res://scripts/map_editor/polygon/poly_instance_binding.gd")
 const PixelLayout := preload("res://scripts/map_editor/polygon/poly_pixel_layout.gd")
+const Reset := preload("res://scripts/map_editor/polygon/poly_reset.gd")
 const Overlay := preload("res://scripts/map_editor/polygon/poly_editor_overlay.gd")
 const Coord := preload("res://scripts/map_editor/map_editor_coordinate.gd")
-const META_KEYS := ["collision_authority", "collision_migration_contract_id", "collision_migration_blocked_count", "collision_backup_path"]
+const META_KEYS := ["collision_authority", "collision_migration_contract_id", "collision_migration_blocked_count", "collision_backup_path", "collision_reset_contract_id"]
 const MODES := ["select", "polygon", "rect", "ellipse", "legacy_cut", "cell"]
 var app: Variant
 var canvas: Variant
@@ -28,6 +29,12 @@ var hover := Vector2.INF
 var document_ref: Dictionary = {}
 var cache: Array[Dictionary] = []
 var cache_dirty := true
+var clear_all_button: Button
+var clear_all_dialog: ConfirmationDialog
+var _reset_confirmation: Dictionary = {}
+var _reset_busy: bool = false
+# Test-only redirection; production uses the project outputs directory.
+var test_reset_backup_root: String = ""
 var left_latched := false
 var last_cell := Vector2i(-1, -1)
 
@@ -46,6 +53,18 @@ func setup(editor_app: Node) -> void:
 	title.text = "HardCore · 自由多边形 / 像素布置 R2"
 	panel.add_child(title)
 	_button(panel, "升级当前老地图（先备份，不自动保存）", _migrate)
+	clear_all_button = Button.new()
+	clear_all_button.text = "清空当前地图全部碰撞，重新绘制"
+	clear_all_button.tooltip_text = "清除本地图全部障碍轮廓；保留地图外边界和安全区规则。先备份，可撤销，不自动保存。"
+	clear_all_button.pressed.connect(_request_clear_all)
+	panel.add_child(clear_all_button)
+	clear_all_dialog = ConfirmationDialog.new()
+	clear_all_dialog.title = "确认清空当前地图碰撞"
+	clear_all_dialog.get_ok_button().text = "备份并清空"
+	clear_all_dialog.get_cancel_button().text = "取消"
+	clear_all_dialog.confirmed.connect(_confirm_clear_all)
+	clear_all_dialog.canceled.connect(_cancel_clear_all)
+	add_child(clear_all_dialog)
 	active_button = CheckButton.new()
 	active_button.text = "启用精细碰撞工具"
 	active_button.toggled.connect(_activate)
@@ -138,7 +157,7 @@ func _activate(value: bool) -> void:
 		active = false
 		canvas.set_interaction_mode("select")
 		active_button.set_pressed_no_signal(false)
-		_status("先点击“升级当前老地图”。会先备份当前文档并保留旧有效阻挡，不自动保存。")
+		_status("先选择“升级当前老地图”保留旧碰撞，或“清空当前地图全部碰撞，重新绘制”。两者都先备份，不自动保存。")
 		return
 	active = value
 	active_button.set_pressed_no_signal(active)
@@ -460,7 +479,10 @@ func _snapshot(document: Dictionary) -> Dictionary:
 	for instance: Dictionary in Binding.instances(document):
 		if instance.has(Binding.FIELD):
 			owners[str(instance.instance_id)] = instance[Binding.FIELD].duplicate(true)
-	return {"entries": document.get("layers", {}).get("collision", []).duplicate(true), "meta": values, "owners": owners}
+	return {"entries": document.get("layers", {}).get("collision", []).duplicate(true),
+		"erase_present": document.get("layers", {}).has("collision_erase"),
+		"erased": document.get("layers", {}).get("collision_erase", []).duplicate(true),
+		"meta": values, "owners": owners}
 
 func _transact(candidate: Dictionary, label: String) -> void:
 	var document: Dictionary = app.current_document
@@ -500,6 +522,10 @@ func _apply_state(document: Dictionary, state: Dictionary, label: String) -> voi
 			found.instance[Binding.FIELD] = state.owners[id].duplicate(true)
 		document.layers[found.layer][found.index] = found.instance
 	document.layers.collision = state.entries.duplicate(true)
+	if bool(state.get("erase_present", false)):
+		document.layers["collision_erase"] = state.get("erased", []).duplicate(true)
+	else:
+		document.layers.erase("collision_erase")
 	var meta: Dictionary = document.get("editor_meta", {}).duplicate(true)
 	for key: String in META_KEYS:
 		meta.erase(key)
@@ -606,3 +632,67 @@ func draw_overlay(surface: Control) -> void:
 		surface.draw_circle(_gu_to_screen(point), 4, Color(0.2, 1, 1))
 	if screen.size() >= 2:
 		surface.draw_polyline(screen, Color(0.2, 1, 1), 2, true)
+
+
+func _cancel_clear_all() -> void:
+	_reset_confirmation = {}
+	if is_instance_valid(clear_all_dialog):
+		clear_all_dialog.hide()
+
+func _request_clear_all() -> void:
+	if _reset_busy:
+		return
+	_sync_document()
+	var document: Dictionary = app.current_document
+	var counts: Dictionary = Reset.summary(document)
+	if not bool(counts.get("ok", false)):
+		_status("无法清空：%s" % str(counts.get("errors", [])))
+		return
+	_cancel_draft()
+	_reset_confirmation = {"document": document, "fingerprint": Reset.fingerprint(document)}
+	clear_all_dialog.dialog_text = (
+		"地图：%s\n地图 ID：%s\n地图级多边形：%d；素材绑定轮廓：%d\n旧碰撞形状：%d；旧擦除记录：%d\n保留但不再参与生成的实例策略：%d\n\n"
+		% [counts.map_name, counts.map_id, counts.map_polygons, counts.bound_polygons,
+			counts.legacy_shapes, counts.legacy_erase_cells, counts.instance_policy_sources]
+		+ "将清空当前地图全部障碍碰撞。素材、NPC、门点、刷怪点、地面和视觉对象不会删除。\n"
+		+ "地图外边界和安全区规则保留，防止角色走出地图。\n"
+		+ "操作前自动备份，Ctrl+Z 可撤销。本次不会自动保存、构建或发布。")
+	clear_all_dialog.popup_centered(Vector2i(620, 360))
+
+func _confirm_clear_all() -> Dictionary:
+	if _reset_busy or _reset_confirmation.is_empty():
+		return {"ok": false, "errors": ["reset_confirmation_missing_or_busy"]}
+	var request: Dictionary = _reset_confirmation
+	_cancel_clear_all()
+	var document: Dictionary = app.current_document
+	if not is_same(document, request.document) or Reset.fingerprint(document) != str(request.fingerprint):
+		_status("确认后地图或文档已变化，未执行清空；请重新点击按钮。")
+		return {"ok": false, "errors": ["reset_document_changed"]}
+	_reset_busy = true
+	var prepared: Dictionary = Reset.plan(document, str(app.current_document_path))
+	if not bool(prepared.get("ok", false)):
+		_reset_busy = false
+		_status("清空准备失败，文档未改动：%s" % str(prepared.get("errors", [])))
+		return prepared
+	var root: String = test_reset_backup_root if not test_reset_backup_root.is_empty() else Reset.BACKUP_ROOT
+	var backup: Dictionary = Reset.write_backup(prepared.backup_payload, root)
+	if not bool(backup.get("ok", false)):
+		_reset_busy = false
+		_status("备份失败，取消清空；文档未改动：%s" % str(backup.get("errors", [])))
+		return backup
+	if not is_same(app.current_document, document) or Reset.fingerprint(document) != str(prepared.before_fingerprint):
+		_reset_busy = false
+		_status("备份后文档已变化，未执行清空；备份已保留。")
+		return {"ok": false, "errors": ["reset_document_changed"]}
+	var candidate: Dictionary = prepared.candidate
+	candidate.editor_meta["collision_backup_path"] = str(backup.path)
+	# The shared transaction owns the sole mutation, revision increment and
+	# candidate invalidation. No second UndoRedo stack and no disk map save.
+	_transact(candidate, "清空当前地图全部碰撞，重新绘制")
+	mode = "polygon"
+	mode_option.select(MODES.find(mode))
+	draw_owner = ""
+	_activate(true)
+	_reset_busy = false
+	_status("当前地图全部障碍碰撞已清空；已备份；未保存；未构建；未发布。地图外边界与安全区规则保留。备份：%s" % str(backup.path))
+	return {"ok": true, "errors": [], "backup_path": str(backup.path), "summary": prepared.summary}

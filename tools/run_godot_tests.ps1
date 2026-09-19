@@ -461,6 +461,12 @@ $Suites.map_runtime_release_critical = @(
     'tests/hc_polygon_editor_input_test.tscn',
 
     'tests/hc_polygon_release_alignment_test.tscn',
+
+    'tests/hc_polygon_numerics_test.tscn',
+
+    'tests/hc_polygon_reset_test.tscn',
+
+    'tests/hc_polygon_reset_release_test.tscn',
     'tests/map_runtime_release_registry_contract_test.tscn',
     'tests/map_ui_presentation_projection_test.tscn',
     'tests/map_persistent_boss_spawn_identity_test.tscn',

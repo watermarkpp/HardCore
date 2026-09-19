@@ -43,9 +43,19 @@ static func decode(value: Variant) -> PackedVector2Array:
 	return result
 
 static func area(points: PackedVector2Array) -> float:
-	var result := 0.0
-	for i: int in range(points.size()):
-		result += points[i].cross(points[(i + 1) % points.size()])
+	# Vector2.cross uses real_t (normally float32). Large global products
+	# cancel out small valid areas. Translate first; use scalar float64 math.
+	if points.size() < 3:
+		return 0.0
+	var origin_x: float = float(points[0].x)
+	var origin_y: float = float(points[0].y)
+	var result: float = 0.0
+	for i: int in range(1, points.size() - 1):
+		var ax: float = float(points[i].x) - origin_x
+		var ay: float = float(points[i].y) - origin_y
+		var bx: float = float(points[i + 1].x) - origin_x
+		var by: float = float(points[i + 1].y) - origin_y
+		result += ax * by - ay * bx
 	return result * 0.5
 
 static func validate(raw: Variant, design_size: Vector2i) -> Dictionary:
