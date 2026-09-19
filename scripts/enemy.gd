@@ -449,6 +449,22 @@ var _last_spatial_index_runtime_map_id := -1
 var _last_spatial_index_zone_generation := -1
 var _last_spatial_index_environment_revision := -1
 var _last_spatial_index_projection := Callable()
+## R14-B3: single physics-frame cache for the current target's ground
+## position. Keyed by physics frame + target instance id + target screen
+## position + map + zone generation + projection Callable. Only ever used for
+## the current target's own screen position; arbitrary points always project.
+var _target_ground_cache_physics_frame := -1
+var _target_ground_cache_target_instance_id := 0
+var _target_ground_cache_target_screen_position_px := Vector2.INF
+var _target_ground_cache_ground_position_gu := Vector2.INF
+var _target_ground_cache_runtime_map_id := -1
+var _target_ground_cache_zone_generation := -1
+var _target_ground_cache_projection := Callable()
+## R14-B4: actor-owned retarget scratch. Reused across retarget passes to
+## avoid per-candidate {node, order} Dictionary allocation; ordering rules are
+## unchanged (records reference the shared grid's existing record objects).
+var _target_grid_candidate_scratch: Array[Dictionary] = []
+var _target_grid_candidate_seen: Dictionary = {}
 var actual_ground_motion_gu := Vector2.ZERO
 
 var _movement_cadence
@@ -901,6 +917,15 @@ func _play_attack_animation(duration: float) -> void:
 
 
 func _audio_observe_visual_state() -> void:
+	# R14-B5: only observe MonsterVisual while this attack sequence's frame
+	# audio is still pending. Once the frame sound has settled (or no accepted
+	# attack is running), return immediately without touching the visual node.
+	if (
+		_audio_attack_sequence <= 0
+		or not _audio_attack_start_accepted
+		or _audio_attack_frame_sequence == _audio_attack_sequence
+	):
+		return
 	if visual == null or not is_instance_valid(visual):
 		return
 	var state := str(visual.current_state)
@@ -2841,18 +2866,98 @@ func projection_ready() -> bool:
 	return runtime_screen_to_ground_position_px.is_valid()
 
 
+## R14-B1/B2/B3: Enemy hot-path ground projection.
+## B1: allocation-free Vector2 projection (no projection_result Dictionary).
+## B2: exact self-position reuse of the proven spatial-index snapshot.
+## B3: single physics-frame cache for the current target's own position.
 func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	if (
+		screen_position_px == global_position
+		and _spatial_index_projection_cache_matches()
+	):
+		# R14-B2: the spatial-index transaction already projected this exact
+		# screen position under the same authority; reuse the immutable result
+		# instead of re-running the map projection once per physics tick.
+		return _last_spatial_index_ground_position_gu
+	if _target_ground_projection_cache_matches(screen_position_px):
+		# R14-B3: same physics frame, same target identity/position, same map,
+		# same zone generation, same projection Callable.
+		return _target_ground_cache_ground_position_gu
 	var projection_started_usec := RuntimeDiagnostics.begin_timed_segment(
 		&"enemy_projection_calls"
 	)
-	var ground_position_gu := _screen_position_px_to_ground_position_gu_internal(
+	var ground_position_gu := _screen_position_px_to_ground_position_gu_vector2(
 		screen_position_px
 	)
 	RuntimeDiagnostics.end_timed_segment(
 		&"enemy_projection_usec",
 		projection_started_usec,
 	)
+	_write_target_ground_projection_cache_if_current_target(
+		screen_position_px,
+		ground_position_gu,
+	)
 	return ground_position_gu
+
+
+## R14-B1: allocation-free fail-closed projection. Keeps the exact authority
+## and rejection contract of try_screen_position_px_to_ground_position_gu()
+## without building a Dictionary for every hot-path call.
+func _screen_position_px_to_ground_position_gu_vector2(
+	screen_position_px: Vector2
+) -> Vector2:
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return ground_position_gu
+	if runtime_map_id < 0:
+		return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			screen_position_px
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+	)
+	return Vector2.INF
+
+
+func _target_ground_projection_cache_matches(
+	screen_position_px: Vector2
+) -> bool:
+	if not is_instance_valid(target):
+		return false
+	return (
+		_target_ground_cache_physics_frame == Engine.get_physics_frames()
+		and _target_ground_cache_target_instance_id == target.get_instance_id()
+		and _target_ground_cache_target_screen_position_px == screen_position_px
+		and _target_ground_cache_runtime_map_id == runtime_map_id
+		and _target_ground_cache_zone_generation
+			== int(get_meta("zone_generation", -1))
+		and _target_ground_cache_projection
+			== runtime_screen_to_ground_position_px
+	)
+
+
+## R14-B3: record the projection result only when the requested screen
+## position is exactly the current target's own position. Never caches
+## arbitrary points; approximate/quantized/tile caches are forbidden.
+func _write_target_ground_projection_cache_if_current_target(
+	screen_position_px: Vector2,
+	ground_position_gu: Vector2,
+) -> void:
+	if not is_instance_valid(target):
+		return
+	if screen_position_px != target.global_position:
+		return
+	_target_ground_cache_physics_frame = Engine.get_physics_frames()
+	_target_ground_cache_target_instance_id = target.get_instance_id()
+	_target_ground_cache_target_screen_position_px = screen_position_px
+	_target_ground_cache_ground_position_gu = ground_position_gu
+	_target_ground_cache_runtime_map_id = runtime_map_id
+	_target_ground_cache_zone_generation = int(get_meta("zone_generation", -1))
+	_target_ground_cache_projection = runtime_screen_to_ground_position_px
 
 
 ## Preserve the fail-closed projection result while the public helper above
@@ -4996,6 +5101,13 @@ func configure_spatial_index(
 	_last_spatial_index_zone_generation = -1
 	_last_spatial_index_environment_revision = -1
 	_last_spatial_index_projection = Callable()
+	_target_ground_cache_physics_frame = -1
+	_target_ground_cache_target_instance_id = 0
+	_target_ground_cache_target_screen_position_px = Vector2.INF
+	_target_ground_cache_ground_position_gu = Vector2.INF
+	_target_ground_cache_runtime_map_id = -1
+	_target_ground_cache_zone_generation = -1
+	_target_ground_cache_projection = Callable()
 
 
 func _exit_tree() -> void:
@@ -5910,8 +6022,11 @@ func _target_grid_candidates(max_range_gu: float) -> Array[Node2D]:
 	var half_extents := TARGET_GRID_HALF_EXTENTS_PER_GU * max_range_gu
 	var min_cell := _target_grid_cell(global_position - half_extents)
 	var max_cell := _target_grid_cell(global_position + half_extents)
-	var records: Array[Dictionary] = []
-	var seen: Dictionary = {}
+	# R14-B4: reuse actor-owned scratch instead of allocating a fresh
+	# {node, order} Dictionary per candidate. Records reference the shared
+	# grid's existing record objects; ordering rules are unchanged.
+	_target_grid_candidate_scratch.clear()
+	_target_grid_candidate_seen.clear()
 	for cell_y in range(min_cell.y, max_cell.y + 1):
 		for cell_x in range(min_cell.x, max_cell.x + 1):
 			var bucket: Array = _target_grid.get(Vector2i(cell_x, cell_y), [])
@@ -5926,15 +6041,15 @@ func _target_grid_candidates(max_range_gu: float) -> Array[Node2D]:
 				if node.is_queued_for_deletion():
 					continue
 				var instance_id := node.get_instance_id()
-				if seen.has(instance_id):
+				if _target_grid_candidate_seen.has(instance_id):
 					continue
-				seen[instance_id] = true
-				records.append({"node": node, "order": int(record.get("order", 0))})
-	records.sort_custom(
+				_target_grid_candidate_seen[instance_id] = true
+				_target_grid_candidate_scratch.append(record)
+	_target_grid_candidate_scratch.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
 			return int(a.get("order", 0)) < int(b.get("order", 0))
 	)
-	for record: Dictionary in records:
+	for record: Dictionary in _target_grid_candidate_scratch:
 		var raw_node: Variant = record.get("node")
 		if is_instance_valid(raw_node) and raw_node is Node2D:
 			var node := raw_node as Node2D
