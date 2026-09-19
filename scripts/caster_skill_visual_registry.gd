@@ -153,8 +153,14 @@ static func unpin_all_frames() -> void:
 ## granularity is the WHOLE SKILL - every manifest frame of a skill is
 ## pinned together or the skill is rejected as a whole; a half-pinned skill
 ## would silently break first-cast completeness while looking like a pin.
+## R14-C6: `direction_index >= 0` pins ONLY the selected direction's
+## sequence (runtime workset); `direction_index < 0` preserves the legacy
+## whole-skill enumeration (test/manual callers).
 ## Result: {accepted_skills, rejected_skills, pinned_paths, pinned_bytes}.
-static func pin_skill_workset(skill_ids: Array[String]) -> Dictionary:
+static func pin_skill_workset(
+	skill_ids: Array[String],
+	direction_index := -1
+) -> Dictionary:
 	var accepted_skills: Array[String] = []
 	var rejected_skills: Array[String] = []
 	var pinned_paths := 0
@@ -162,7 +168,11 @@ static func pin_skill_workset(skill_ids: Array[String]) -> Dictionary:
 	for skill_id: String in skill_ids:
 		if skill_id.is_empty() or not is_runtime_ready(skill_id):
 			continue
-		var paths := animation_frame_paths(skill_id)
+		var paths: Array[String] = (
+			animation_sequence_paths(skill_id, direction_index)
+			if direction_index >= 0
+			else animation_frame_paths(skill_id)
+		)
 		if paths.is_empty():
 			continue
 		var frame_bytes: Dictionary = {}
@@ -228,6 +238,91 @@ static func workset_skill_order(
 		if ordered.size() >= max_skills:
 			break
 	return ordered
+
+
+## R14-C2: active-sequence refcount lease. A leased path is exempt from LRU
+## eviction while at least one player holds its sequence; the shared refcount
+## lets many instances of the same sequence share one lease.
+static var _sequence_lease_refcounts: Dictionary = {}
+
+
+## R14-C2: acquire a refcounted lease over the given sequence paths. Safe to
+## call repeatedly for the same sequence from multiple players.
+static func acquire_sequence_lease(paths: Array[String]) -> void:
+	for path: String in paths:
+		if path.is_empty():
+			continue
+		_sequence_lease_refcounts[path] = (
+			int(_sequence_lease_refcounts.get(path, 0)) + 1
+		)
+
+
+## R14-C2: release one refcount on each path. The path leaves the lease only
+## when the last holder releases it.
+static func release_sequence_lease(paths: Array[String]) -> void:
+	for path: String in paths:
+		if path.is_empty() or not _sequence_lease_refcounts.has(path):
+			continue
+		var remaining := int(_sequence_lease_refcounts[path]) - 1
+		if remaining <= 0:
+			_sequence_lease_refcounts.erase(path)
+		else:
+			_sequence_lease_refcounts[path] = remaining
+
+
+## R14-C2: read-only residency probe for a sequence's paths. Loads nothing.
+static func sequence_resident(paths: Array[String]) -> bool:
+	for path: String in paths:
+		if path.is_empty():
+			continue
+		if not _frame_textures.has(path):
+			return false
+	return true
+
+
+## R14-C2: queue every non-resident path of the sequence for async warm-up
+## (combat-safe channel; never loads synchronously).
+static func queue_sequence_warm(paths: Array[String]) -> void:
+	for path: String in paths:
+		if path.is_empty() or _frame_textures.has(path):
+			continue
+		if not _pending_warm_paths.has(path):
+			_pending_warm_paths.append(path)
+
+
+## R14-C1: enumerate the frame paths of ONE direction's sequence only.
+## direction_count==1 returns the unique sequence; direction_count>1 returns
+## the sequence selected for the given direction index (same selection rule
+## as CasterSkillAnimationPlayer.configure). Read-only: loads nothing.
+static func animation_sequence_paths(
+	skill_name_or_id: String,
+	direction_index: int,
+	phase_id := ""
+) -> Array[String]:
+	var skill_id := ProfessionRules.skill_id(skill_name_or_id)
+	var result: Array[String] = []
+	if skill_id.is_empty() or not is_runtime_ready(skill_id):
+		return result
+	var animation := animation_profile(skill_id, phase_id)
+	if str(animation.get("contract", "")) != "caster_skill_animation.v1":
+		return result
+	var sequences: Array = animation.get("sequences", [])
+	if sequences.is_empty():
+		return result
+	var selected: Dictionary
+	if int(animation.get("direction_count", 1)) <= 1:
+		selected = sequences[0]
+	else:
+		selected = sequences[
+			sequence_index(posmod(direction_index, 16), sequences)
+		]
+	for frame: Variant in selected.get("frames", []):
+		if not frame is Dictionary:
+			continue
+		var path := "res://%s" % str(frame.get("path", ""))
+		if path != "res://" and not result.has(path):
+			result.append(path)
+	return result
 
 
 ## Enumerate every manifest frame path of a skill's animations (default
@@ -419,7 +514,8 @@ static func _retain_frame_texture(path: String, loaded: Texture2D, forced_bytes 
 		for key: String in _frame_texture_use:
 			# Pinned workset lease (perf-smoothness-r1 Phase C): a pinned
 			# first-cast frame is exempt from eviction while its budget holds.
-			if _pinned_paths.has(key):
+			# R14-C2: an active-sequence leased frame is exempt the same way.
+			if _pinned_paths.has(key) or _sequence_lease_refcounts.has(key):
 				continue
 			if int(_frame_texture_use[key]) < oldest_serial:
 				oldest = key
@@ -452,6 +548,7 @@ static func clear_frame_texture_cache() -> void:
 	_frame_texture_evictions = 0
 	_sync_decode_calls = 0
 	_sync_decode_usec = 0
+	_sequence_lease_refcounts.clear()
 
 
 static func frame_texture_cache_diagnostics() -> Dictionary:
@@ -466,6 +563,8 @@ static func frame_texture_cache_diagnostics() -> Dictionary:
 		# perf-smoothness-r1 Phase C workset lease + combat gate accounting.
 		"pinned_count": _pinned_paths.size(),
 		"pinned_bytes": _pinned_bytes,
+		# R14-C2: active-sequence lease accounting.
+		"leased_sequence_paths": _sequence_lease_refcounts.size(),
 		"loading_window_active": _loading_window_active,
 		"pending_warm_count": _pending_warm_paths.size(),
 		"combat_frame_miss_count": combat_frame_miss_count,

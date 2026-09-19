@@ -2113,10 +2113,21 @@ func _prewarm_learned_skill_visuals() -> Dictionary:
 		}
 	var started_usec := Time.get_ticks_usec()
 	var deadline_usec := started_usec + LOADING_PREWARM_BUDGET_USEC
+	# R14-C6: directional skills prewarm ONLY the current player-facing
+	# sequence instead of every direction (a 16-direction laser sequence is
+	# ~3-4 MiB, not ~48 MiB); non-directional skills prewarm their unique
+	# sequence. Same workset, same deadlines, same pin budget.
+	var facing_direction_index := 8
+	if is_instance_valid(player):
+		facing_direction_index = CasterSkillVisualRegistry.direction_index(
+			player.facing
+		)
 	var all_paths: Array[String] = []
 	for skill_id: String in workset:
 		all_paths.append_array(
-			CasterSkillVisualRegistry.animation_frame_paths(skill_id)
+			CasterSkillVisualRegistry.animation_sequence_paths(
+				skill_id, facing_direction_index
+			)
 		)
 	var pump_result: Dictionary = await _prewarm_texture_paths_until(
 		all_paths, deadline_usec
@@ -2131,21 +2142,23 @@ func _prewarm_learned_skill_visuals() -> Dictionary:
 			PresentationAssets.player_texture(action_key)
 	else:
 		optional_skipped = true
-	# READY-critical workset gate: every workset skill must be fully resident
-	# before Loading ends. A deadline-exceeded skill stays admitted on the
-	# next frames ONLY if the hard budget still allows it - the gate reports
-	# truthfully instead of pretending.
+	# READY-critical workset gate: every workset skill's PREWARMED SEQUENCE
+	# (R14-C6: the current-facing sequence for directional skills) must be
+	# fully resident before Loading ends. The gate reports truthfully.
 	var incomplete_skills: Array[String] = []
 	for skill_id: String in workset:
-		var residency: Dictionary = CasterSkillVisualRegistry.animation_residency(
-			skill_id
+		var sequence_paths := (
+			CasterSkillVisualRegistry.animation_sequence_paths(
+				skill_id, facing_direction_index
+			)
 		)
-		if int(residency.get("missing_paths", []).size()) > 0:
+		if not CasterSkillVisualRegistry.sequence_resident(sequence_paths):
 			incomplete_skills.append(skill_id)
-	# Pin the bounded workset lease (atomic per skill): accepted skills are
-	# exempt from LRU eviction; rejected skills are reported truthfully.
+	# Pin the bounded workset lease (atomic per skill, R14-C6 sequence-level):
+	# accepted skills are exempt from LRU eviction; rejected skills are
+	# reported truthfully.
 	var pin_result: Dictionary = CasterSkillVisualRegistry.pin_skill_workset(
-		workset
+		workset, facing_direction_index
 	)
 	var prewarm_usec := Time.get_ticks_usec() - started_usec
 	print(
@@ -2195,23 +2208,37 @@ func _warm_fire_wall_render_path() -> void:
 		# Automated headless runs have no real rendering server; the CPU
 		# residency gate already proves everything headless can prove.
 		return
-	var warm_visual := CasterSkillAnimationPlayer.new()
-	if not warm_visual.configure("wizard.fire_wall", Vector2.DOWN):
-		warm_visual.free()
-		return
-	# Production GroundSkillEffect._install_visual presentation values.
-	warm_visual.modulate = Color(1.0, 1.0, 1.0, 0.78)
-	warm_visual.scale.y *= 0.6
+	# R14-C7: warm the ACTUAL prewarmed sequences - the workset skills with
+	# the same facing direction used by the CPU prewarm. Fire wall keeps its
+	# production presentation values; everything stays presentation-only.
+	var warm_position := Vector2.ZERO
 	if is_instance_valid(_world_camera):
-		warm_visual.global_position = _world_camera.get_screen_center_position()
+		warm_position = _world_camera.get_screen_center_position()
 	elif is_instance_valid(player):
-		warm_visual.global_position = player.global_position
-	add_child(warm_visual)
-	for frame_index: int in warm_visual.frame_count():
-		warm_visual.set_manual_frame(frame_index)
+		warm_position = player.global_position
+	var facing_direction := Vector2.DOWN
+	if is_instance_valid(player):
+		var normalized := player.facing.normalized()
+		if normalized.length_squared() > 0.0:
+			facing_direction = normalized
+	for skill_id: String in _active_skill_workset_candidates():
+		if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
+			continue
+		var warm_visual := CasterSkillAnimationPlayer.new()
+		if not warm_visual.configure(skill_id, facing_direction):
+			warm_visual.free()
+			continue
+		if skill_id == "wizard.fire_wall":
+			# Production GroundSkillEffect._install_visual presentation values.
+			warm_visual.modulate = Color(1.0, 1.0, 1.0, 0.78)
+			warm_visual.scale.y *= 0.6
+		warm_visual.global_position = warm_position
+		add_child(warm_visual)
+		for frame_index: int in warm_visual.frame_count():
+			warm_visual.set_manual_frame(frame_index)
+			await RenderingServer.frame_post_draw
+		warm_visual.queue_free()
 		await RenderingServer.frame_post_draw
-	warm_visual.queue_free()
-	await RenderingServer.frame_post_draw
 	# FRAME-STALL baseline: one print at the end of the loading window. The
 	# one-time long-frame probe (see _process) prints the same counters when
 	# the first >250ms wall-clock frame occurs; the delta localizes the stall
@@ -3345,9 +3372,10 @@ func _run_map_transition(
 		)
 		# FW-COLD2 Phase B + PERF-R2 R7/C8: the GPU render warm is bound to
 		# the workset - a warrior/taoist without fire wall bound never pays
-		# for fire-wall warm-up here.
+		# for fire-wall warm-up here. R14-C7: the warm covers every workset
+		# skill's prewarmed facing sequence (fire wall included when bound).
 		r13_stage_started_usec = Time.get_ticks_usec()
-		if _active_skill_workset_candidates().has("wizard.fire_wall"):
+		if not _active_skill_workset_candidates().is_empty():
 			await _warm_fire_wall_render_path()
 		r13_loading_profile["render_warm_ms"] = (
 			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
