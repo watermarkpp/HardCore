@@ -57,6 +57,8 @@ static func load_runtime(path: String) -> Dictionary:
 		"runtime_schema_version", -1
 	)) == MapEditorBuildRuntimeService.LEGACY_RUNTIME_SCHEMA_VERSION:
 		runtime = UnitLegacyAdapter.adapt_runtime_v1_to_v2(raw_runtime)
+	if errors.is_empty() and HCPPolyGeo.runtime_enabled(runtime):
+		HCPPolyRuntime.seal_loaded(runtime)
 	return {"ok": errors.is_empty(), "runtime": runtime, "errors": errors, "path": path}
 
 
@@ -113,6 +115,12 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 					errors.append("runtime_portal_%s_missing" % field)
 			if not bool(map_exit.get("travel_request_single_flight", false)):
 				errors.append("runtime_portal_single_flight_required")
+	errors.append_array(HCPVisualSnapshot.validate(runtime))
+	if HCPPolyGeo.runtime_enabled(runtime):
+		var hc_checked := HCPPolyRuntime.compile(runtime, -1, true)
+		errors.append_array(hc_checked.get("errors", []))
+		if errors.is_empty():
+			HCPPolyRuntime.remember_validation(runtime, hc_checked)
 	return errors
 
 
@@ -202,6 +210,10 @@ static func _validate_v2_semantic_units(
 
 
 static func is_blocked(runtime: Dictionary, tile: Vector2i) -> bool:
+	# HC-POLY-R2
+	if HCPPolyGeo.runtime_enabled(runtime):
+		var checked := HCPPolyRuntime.compile(runtime, -1, false)
+		return not bool(checked.get("ok", false)) or checked.snapshot.poly_index.point_blocked(Vector2(tile) + Vector2(0.5, 0.5))
 	return runtime.get("collision", {}).get("blocked_tiles", []).has("%d,%d" % [tile.x, tile.y])
 
 
@@ -231,3 +243,9 @@ static func _is_lower_hex_sha256(value: String) -> bool:
 		):
 			return false
 	return true
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
+const HCPVisualSnapshot := preload("res://scripts/map_editor/polygon/poly_visual_snapshot.gd")

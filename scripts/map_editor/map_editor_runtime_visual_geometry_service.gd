@@ -384,7 +384,7 @@ static func instance_draw_commands(
 					# Their part offset selects the occupied cell; the actual
 					# actor crossing baseline is that cell's physical centre.
 					"sort_baseline_tile": part_sort_baseline,
-					"sort_baseline_offset_px": Vector2.ZERO,
+					"sort_baseline_offset_px": instance_sort_baseline_world_offset(instance, asset),
 					"layer_index": layer_index,
 					"image_pass": pass_index,
 					"render_domain": render_domain,
@@ -473,14 +473,14 @@ static func legacy_profile_prop_actor_sort_world(prop: Dictionary) -> Vector2:
 	return prop.get("position", Vector2.ZERO)
 
 
-static func sorted_draw_commands(instances: Array) -> Array[Dictionary]:
+static func sorted_draw_commands(instances: Array, published_snapshot: Dictionary = {}) -> Array[Dictionary]:
 	var commands: Array[Dictionary] = []
 	var asset_cache := {}
 	var sequence := 0
 	for instance: Dictionary in instances:
 		var asset_id := str(instance.get("asset_id", ""))
 		if not asset_cache.has(asset_id):
-			asset_cache[asset_id] = MapAssetCatalogService.find_asset(asset_id)
+			asset_cache[asset_id] = HCPVisualSnapshot.resolve_asset(asset_id, published_snapshot)
 		var asset: Dictionary = asset_cache[asset_id]
 		var layer_index := MATERIAL_LAYER_NAMES.find(
 			str(instance.get("layer", "object_base"))
@@ -795,3 +795,7 @@ static func _sha256_text(value: String) -> String:
 	hashing.start(HashingContext.HASH_SHA256)
 	hashing.update(value.to_utf8_buffer())
 	return hashing.finish().hex_encode()
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPVisualSnapshot := preload("res://scripts/map_editor/polygon/poly_visual_snapshot.gd")

@@ -60,6 +60,9 @@ var selected_selectable_id := ""
 
 
 func set_document(value: Dictionary) -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_controller):
+		_hc_polygon_controller.invalidate_document()
 	var next_map_id := str(value.get("map_id", ""))
 	if next_map_id != _cached_map_id:
 		_cached_map_id = next_map_id
@@ -236,6 +239,10 @@ func set_walkability_preview(result: Dictionary, enabled: bool) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_controller) and _hc_polygon_controller.handle_input(event):
+		accept_event()
+		return
 	if document.is_empty():
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -803,6 +810,9 @@ static func instance_visual_geometry(instance: Dictionary, design_size: Vector2i
 
 
 func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return
 	if not show_walkable_preview:
 		return
 	for key: String in _blocked_tiles:
@@ -1141,3 +1151,8 @@ func _draw_center_text(text: String) -> void:
 	var font := ThemeDB.fallback_font
 	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 	draw_string(font, (size - text_size) * 0.5, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("aeb7c2"))
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+var _hc_polygon_controller: Variant = null

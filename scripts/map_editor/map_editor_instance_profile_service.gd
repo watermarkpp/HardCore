@@ -268,15 +268,19 @@ static func apply_adaptive_corner_offset(
 		int((next_raw as Array)[0]),
 		int((next_raw as Array)[1]),
 	]
+	# Pixel-authored offset is absolute author intent, not an auto-corner hint.
+	# Directional asset/sort updates ABOVE still execute.
+	if not force and bool(instance.get("hc_pixel_offset_authored", false)):
+		return
 	var current_raw: Array = instance.get("offset_px", [0, 0])
 	var current_offset := [
-		int(current_raw[0]) if current_raw.size() >= 1 else 0,
-		int(current_raw[1]) if current_raw.size() >= 2 else 0,
+		float(current_raw[0]) if current_raw.size() >= 1 else 0.0,
+		float(current_raw[1]) if current_raw.size() >= 2 else 0.0,
 	]
 	var prior_raw: Array = instance.get("adaptive_corner_offset_px", [])
 	var follows_auto := (
 		prior_raw.size() == 2
-		and current_offset == [int(prior_raw[0]), int(prior_raw[1])]
+		and current_offset == [float(prior_raw[0]), float(prior_raw[1])]
 	)
 	var legacy_default := (
 		not instance.has("adaptive_corner_offset_px")

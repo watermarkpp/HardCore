@@ -3,6 +3,9 @@ extends RefCounted
 
 
 static func add_manual_shape(document: Dictionary, shape_type: String, data: Dictionary) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return {"ok": false, "errors": ["polygon_mode_use_precision_tools"]}
 	if shape_type not in ["rect", "ellipse", "polygon"]:
 		return {"ok": false, "errors": ["invalid_collision_shape"]}
 	var errors := _validate_shape(shape_type, data)
@@ -25,6 +28,9 @@ static func remove_manual_shape_at_tile(document: Dictionary, tile: Vector2i) ->
 
 
 static func paint_collision_cell(document: Dictionary, tile: Vector2i) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return {"ok": false, "errors": ["polygon_mode_use_precision_tools"]}
 	if not _tile_inside_map(document, tile):
 		return {"ok": false, "errors": ["collision_tile_out_of_bounds"]}
 	var erased_cells: Array = document.layers.get("collision_erase", [])
@@ -46,6 +52,9 @@ static func paint_collision_cell(document: Dictionary, tile: Vector2i) -> Dictio
 
 
 static func erase_collision_cell(document: Dictionary, tile: Vector2i) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return {"ok": false, "errors": ["polygon_mode_use_precision_tools"]}
 	if not _tile_inside_map(document, tile):
 		return {"ok": false, "errors": ["collision_tile_out_of_bounds"]}
 	var key := "%d,%d" % [tile.x, tile.y]
@@ -65,6 +74,9 @@ static func erase_collision_cell(document: Dictionary, tile: Vector2i) -> Dictio
 
 
 static func erase_collision_at_tile(document: Dictionary, tile: Vector2i) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return {"ok": false, "errors": ["polygon_mode_use_precision_tools"]}
 	var removed_manual: Array[Dictionary] = []
 	var manual_entries: Array = document.layers.collision
 	for index in range(manual_entries.size() - 1, -1, -1):
@@ -154,6 +166,9 @@ static func _manual_contains_tile(manual: Dictionary, tile: Vector2i) -> bool:
 
 
 static func build_walkability(document: Dictionary) -> Dictionary:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return HCPPolyAuthor.walkability(document)
 	var size: Array = document.design.design_size
 	var map_size := Vector2i(int(size[0]), int(size[1]))
 	var blocked := {}
@@ -274,3 +289,8 @@ static func _mark_manual(blocked: Dictionary, manual: Dictionary, map_size: Vect
 		for y in map_size.y:
 			for x in map_size.x:
 				if Geometry2D.is_point_in_polygon(Vector2(x+0.5,y+0.5),points): blocked["%d,%d"%[x,y]]=true
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyAuthor := preload("res://scripts/map_editor/polygon/poly_authoring.gd")

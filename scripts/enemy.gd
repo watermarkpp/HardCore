@@ -1565,6 +1565,8 @@ func _begin_autonomous_step_without_cadence(
 	reason: StringName,
 	engagement_target: Node2D = null,
 ) -> bool:
+	# HC-POLY-R2
+	_hc_polygon_step_override = Vector2.INF
 	if _movement_step_active:
 		return false
 	if _movement_authority_failed_closed or stationary or dormant:
@@ -1612,6 +1614,8 @@ func _begin_autonomous_step_without_cadence(
 	if not bool(step.get("valid", false)):
 		return false
 	var target_ground_gu: Vector2 = step.get("target_ground_gu", Vector2.INF)
+	if _hc_polygon_step_override.is_finite():
+		target_ground_gu = _hc_polygon_step_override
 	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and _hc_step_override.is_finite():
 		target_ground_gu = _hc_step_override
 	if _hc_owned_movement_call and _hc_standard_melee():
@@ -1650,6 +1654,8 @@ func _terrain_neighbor_for_pursuit(
 ) -> Vector2i:
 	if _hc_owned_movement_call and _hc_standard_melee():
 		return _hc_neighbor(current_ground_gu, engagement_target, direct_neighbor)
+	if _terrain_navigation_context.has("poly_index"):
+		return _hc_polygon_nonhc_neighbor(current_ground_gu, engagement_target)
 	if runtime_map_id < 0:
 		return direct_neighbor
 	if not MonsterTerrainNavigationPolicyScript.context_valid(
@@ -1800,6 +1806,9 @@ func _clear_terrain_route_cache() -> void:
 
 
 func _reset_terrain_navigation_state() -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_pursuit):
+		_hc_polygon_pursuit.reset()
 	_hc_close_debt = false
 	_hc_cancel_path()
 	_clear_terrain_route_cache()
@@ -8085,8 +8094,7 @@ func _hc_point_walkable(p: Vector2) -> bool:
 	return result
 
 func _hc_point_walkable_uncached(p: Vector2) -> bool:
-	var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
-	if not MonsterTerrainNavigationPolicyScript.cell_walkable(_terrain_navigation_context, cell, combat_radius_gu):
+	if not MonsterTerrainNavigationPolicyScript.point_walkable(_terrain_navigation_context, p, combat_radius_gu):
 		return false
 	var px := _ground_gu_to_screen_position_px(p)
 	return px.is_finite() and not _hc_point_inside_safe_zone(px) and not WorldSpatialRulesScript.environment_blocks_actor_screen_px(environment_blocker, px, collision_radius_px)
@@ -8151,6 +8159,7 @@ func _hc_submit_path(anchor: Vector2, tier: int) -> void:
 	_hc_path_tier = tier
 	_hc_path_anchor = anchor
 	var search := HCSearch.new()
+	search.set_polygon_origin(current)
 	# Goal sampling/LOS belongs to the same budgeted service as path expansion.
 	# A hidden target uses this captured last-known anchor, never its live cell.
 	var failed_edge_filter := Callable(self, "_hc_edge_blocked") if not _hc_failed_edges.is_empty() else Callable()
@@ -8203,13 +8212,16 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 	var preferred := _hc_preferred(hit_target)
 	if _hc_observed and _hc_world_between(current, anchor):
 		var intended := Vector2(cell + direct) + Vector2(0.5, 0.5)
+		if _terrain_navigation_context.has("poly_index"):
+			var hc_direction := anchor - current
+			intended = current + hc_direction.normalized() * minf(1.0, hc_direction.length())
 		if current.distance_to(anchor) <= preferred + 1.0:
 			intended = anchor + (current - anchor).normalized() * preferred
 		var next := MonsterNeighborStepPolicyScript.temporary_cell(intended)
 		var neighbor := next - cell
 		if neighbor == Vector2i.ZERO:
 			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(intended - current)
-		var legal_neighbor := next == cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, next, combat_radius_gu)
+		var legal_neighbor := _hc_polygon_neighbor_clear(current, intended, cell, next)
 		var r6_direct_static_clear := legal_neighbor and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended)
 		var r6_motion_checked := false
 		var r6_motion_clear := false
@@ -8241,7 +8253,7 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 				if batched:
 					if query_offset < 0:
 						continue
-				elif not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, cell + option, combat_radius_gu) or not _hc_point_walkable(endpoint):
+				elif not _hc_polygon_neighbor_clear(current, endpoint, cell, cell + option) or not _hc_point_walkable(endpoint):
 					continue
 				var motion_clear := (
 					_hc_motion_candidates(current, endpoint, _hc_flank_outputs[query_offset])
@@ -8263,7 +8275,7 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 			if best != Vector2i.ZERO:
 				_hc_step_override = Vector2(cell + best) + Vector2(0.5, 0.5)
 			return best
-	while _hc_route_index < _hc_route.size() and current.distance_to(_hc_route[_hc_route_index]) <= 0.08:
+	while _hc_route_index < _hc_route.size() and current.distance_to(_hc_route[_hc_route_index]) <= (0.005 if _terrain_navigation_context.has("poly_index") else 0.08):
 		_hc_route_index += 1
 	if not _hc_observed and not _hc_route.is_empty() and _hc_route_index >= _hc_route.size():
 		_hc_investigation_arrived = true
@@ -8271,11 +8283,14 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		return Vector2i.ZERO
 	if _hc_route_index < _hc_route.size():
 		var point := _hc_route[_hc_route_index]
+		if _terrain_navigation_context.has("poly_index"):
+			var hc_delta := point - current
+			point = current + hc_delta.normalized() * minf(1.0, hc_delta.length())
 		var next := MonsterNeighborStepPolicyScript.temporary_cell(point)
 		var neighbor := next - cell
 		if next == cell:
 			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(point - current)
-		var adjacent := next == cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, next, combat_radius_gu)
+		var adjacent := _hc_polygon_neighbor_clear(current, point, cell, next)
 		if adjacent and _hc_point_walkable(point) and not _hc_edge_blocked(cell, next):
 			if not _hc_motion_clear(current, point):
 				# Keep the static route while a live body temporarily occupies it.
@@ -8377,7 +8392,7 @@ func _hc_prepare_flank_batch(current: Vector2, anchor: Vector2, cell: Vector2i) 
 	# evaluates ZERO broadphase queries, not one unnecessary union query.
 	for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
 		var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
-		if not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, cell, cell + option, combat_radius_gu) or not _hc_point_walkable(endpoint):
+		if not _hc_polygon_neighbor_clear(current, endpoint, cell, cell + option) or not _hc_point_walkable(endpoint):
 			_hc_flank_option_offsets.append(-1)
 			continue
 		_hc_flank_option_offsets.append(_hc_flank_starts.size())
@@ -8393,3 +8408,32 @@ func _hc_prepare_flank_batch(current: Vector2, anchor: Vector2, cell: Vector2i) 
 		runtime_map_id, _hc_flank_starts, _hc_flank_ends, _hc_flank_expansions,
 		_hc_flank_outputs, _hc_flank_scratch,
 	)
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
+const HCPPolyPursuit := preload("res://scripts/map_editor/polygon/poly_pursuit_driver.gd")
+var _hc_polygon_step_override := Vector2.INF
+var _hc_polygon_pursuit: HCPPolyPursuit
+
+func _hc_polygon_neighbor_clear(a: Vector2, b: Vector2, from_cell: Vector2i, to_cell: Vector2i) -> bool:
+	if _terrain_navigation_context.has("poly_index"):
+		return HCPPolyRuntime.segment_walkable(_terrain_navigation_context, a, b, combat_radius_gu)
+	return to_cell == from_cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, from_cell, to_cell, combat_radius_gu)
+
+func _hc_polygon_nonhc_neighbor(current_ground_gu: Vector2, engagement_target: Node2D) -> Vector2i:
+	if not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
+		return Vector2i.ZERO
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(engagement_target.global_position)
+	if not target_ground_gu.is_finite():
+		return Vector2i.ZERO
+	if not is_instance_valid(_hc_polygon_pursuit):
+		_hc_polygon_pursuit = HCPPolyPursuit.new()
+		_hc_polygon_pursuit.name = "PolygonPursuitBudgetAdapter"
+		add_child(_hc_polygon_pursuit)
+		_hc_polygon_pursuit.setup(self)
+	var point := _hc_polygon_pursuit.choose(_terrain_navigation_context, current_ground_gu, target_ground_gu, engagement_target, combat_radius_gu)
+	if not point.is_finite():
+		return Vector2i.ZERO
+	_hc_polygon_step_override = point
+	return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(point - current_ground_gu)

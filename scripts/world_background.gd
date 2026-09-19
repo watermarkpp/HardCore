@@ -384,6 +384,12 @@ func is_environment_actor_blocked(
 	center_world_px: Vector2,
 	collision_radius_px: float
 ) -> bool:
+	# HC-POLY-R2
+	if _editor_runtime_collision_snapshot.has("poly_index"):
+		if not is_finite(collision_radius_px) or collision_radius_px < 0.0:
+			return true
+		return HCPPolyRuntime.actor_world(_editor_runtime_collision_snapshot, center_world_px,
+			WorldSpatialRulesScript.actor_footprint_polygon_px(maxf(0.0, collision_radius_px)))
 	if not center_world_px.is_finite():
 		return true
 	var sample_radius_px := maxf(0.0, collision_radius_px - 1.0)
@@ -428,6 +434,11 @@ func is_environment_segment_blocked_ground(
 	target_ground_gu: Vector2,
 	step_gu := 0.25
 ) -> bool:
+	# HC-POLY-R2
+	if _editor_runtime_collision_snapshot.has("poly_index"):
+		if not is_finite(step_gu) or step_gu <= 0.0:
+			return true
+		return _editor_runtime_collision_snapshot.poly_index.capsule_blocked(source_ground_gu, target_ground_gu, 0.0)
 	if (
 		not source_ground_gu.is_finite()
 		or not target_ground_gu.is_finite()
@@ -1146,7 +1157,7 @@ func _append_instance_descriptors(
 	var raw_size: Array = runtime.get("design", {}).get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
 	_editor_runtime_bridge_commands = commands
 	_editor_runtime_bridge_size = size
@@ -1332,7 +1343,7 @@ func _register_command_resources(runtime: Dictionary, region: String) -> void:
 	if coord == null:
 		return
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
 	for command: Dictionary in commands:
 		var image_path := _res_path(str(command.get("image_path", "")))
@@ -1386,7 +1397,7 @@ func _register_wall_render_plan_resources(
 		return
 	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
 	var candidate := WallRenderPlanRuntimeServiceScript.load_candidate(
 		plan_path, _res_path(runtime_path), map_key, design_size, commands
@@ -2023,6 +2034,12 @@ func _append_editor_runtime_collision_descriptors(
 			},
 			generation
 		))
+	# HC-POLY-R2: boundary descriptors above remain unchanged.
+	if compiled_collision.has("poly_index"):
+		for polygon: PackedVector2Array in compiled_collision.poly_index.parts:
+			descriptors.append(_collision_descriptor("polygon_convex", descriptors.size(),
+				{"polygon": polygon, "size": _editor_runtime_size}, generation))
+		return
 	for rect: Rect2i in RuntimeCollisionGeometryScript.compiled_collision_blocked_cell_runs(
 		compiled_collision
 	):
@@ -2154,6 +2171,8 @@ func build_one_collision(descriptor: Dictionary) -> CollisionObject2D:
 	var kind := str(descriptor.get("kind", ""))
 	var payload: Dictionary = descriptor.get("payload", {})
 	match kind:
+		"polygon_convex":
+			return _build_hc_polygon_part(payload)
 		"boundary_side":
 			return _build_editor_boundary_side(payload)
 		"blocked_rect_run":
@@ -2467,7 +2486,7 @@ func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	var raw_size: Array = runtime.design.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
 	_editor_runtime_bridge_commands = commands
 	_editor_runtime_bridge_size = size
@@ -2514,6 +2533,9 @@ func _build_one_editor_runtime_instance(
 	sprite.set_meta("editor_runtime_command_index", command_index)
 	sprite.texture = texture
 	sprite.centered = false
+	if _hc_precision_probe_enabled:
+		sprite.set_meta("hc_expected_visual_corners_world", HCPAlignmentProbe.world_corners(geometry, texture.get_size()))
+		sprite.set_meta("hc_precision_generation", _generation_token())
 	# Keep the node at the authored foot/part center and move only the drawn
 	# pixels.  Using top_left as position would rotate wall parts around the
 	# wrong pivot and recreate the editor/runtime offset.
@@ -3607,3 +3629,46 @@ func _draw_city() -> void:
 		draw_line(rect.position + Vector2(rect.size.x, 0), rect.position + Vector2(rect.size.x * 0.5, -80), Color(0.56, 0.20, 0.10), 18.0)
 	for x in range(-800, 801, 80):
 		draw_rect(Rect2(x, -560, 72, 45), Color(0.32, 0.29, 0.25))
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPAlignmentProbe := preload("res://scripts/map_editor/polygon/poly_alignment_probe.gd")
+var _hc_precision_probe_enabled := OS.get_environment("HC_POLYGON_DEBUG") == "1"
+var _hc_precision_debug_generation := -1
+var _hc_precision_debug_parts := 0
+var _hc_precision_debug_revision := -1
+
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
+
+func _build_hc_polygon_part(payload: Dictionary) -> CollisionObject2D:
+	var polygon: Variant = payload.get("polygon", null)
+	var design_size: Variant = payload.get("size", null)
+	if not polygon is PackedVector2Array or polygon.size() < 3 or not design_size is Vector2i:
+		return null
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	body.set_meta("editor_runtime_collision_kind", "polygon_convex")
+	var collision := CollisionShape2D.new()
+	var shape := ConvexPolygonShape2D.new()
+	shape.points = RuntimeCollisionGeometryScript.tile_polygon_world(polygon, design_size)
+	if _hc_precision_probe_enabled:
+		body.set_meta("hc_polygon_expected_world", shape.points)
+	collision.shape = shape
+	body.add_child(collision)
+	_source_collision_shape_count += 1
+	var appended := _append_environment_node(body) as CollisionObject2D
+	if _hc_precision_probe_enabled:
+		var generation := _generation_token()
+		if generation != _hc_precision_debug_generation or _hc_precision_debug_revision != _environment_collision_revision:
+			_hc_precision_debug_generation = generation
+			_hc_precision_debug_revision = _environment_collision_revision
+			_hc_precision_debug_parts = 0
+		_hc_precision_debug_parts += 1
+		if _editor_runtime_collision_snapshot.has("poly_index") and _hc_precision_debug_parts == _editor_runtime_collision_snapshot.poly_index.parts.size():
+			call_deferred("_hc_polygon_debug_probe", generation, _environment_collision_revision)
+	return appended
+
+func _hc_polygon_debug_probe(expected_generation: int, expected_revision: int) -> void:
+	if expected_generation == _generation_token() and expected_revision == _environment_collision_revision and _generation_is_current():
+		HCPAlignmentProbe.attach_if_enabled(self)
