@@ -1907,40 +1907,56 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	# C1.2 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit), revised by
-	# R14-CAM-R1 (user ruling 2026-09-19): center-lock until max black.
-	#   Hard: the player stays inside the visibility window - at least 15%
-	#         from every screen edge (central 70%) and never closer than
-	#         two ground cells - and the view height is exactly
-	#         ArtSpec.CAMERA_ZOOM (1.06); no dynamic zoom exists here.
+	# R14-CAM-R2 BLACK-BUDGET REGION (user work order 2026-09-19, review of
+	# 7c2631d3), replacing the superseded R14-CAM-R1 per-axis anchor box:
 	#   Ruled follow shape: the player stays EXACTLY at the camera center
-	#         while walking toward the map edge; the camera only unlocks
-	#         (clamps) once the centered view exposes the configured
-	#         maximum black area - the same frozen visibility window
-	#         mirrored onto the camera's zero-black excursion. The early
-	#         glide unlock is rejected by device ruling.
-	# Step 1 computes the zero-black ideal center (strict constrained
-	# solve, cached per map/viewport/zoom with a value-compared single
-	# slot). Step 2 is the center-lock visibility guard in the camera
-	# constraint service (see apply_player_visibility_guard). Rendering
-	# stability (smoothing/pixel snap) is G2 and is deliberately NOT
-	# touched here.
+	#         while black(player) <= B - the unlock threshold event happens
+	#         EXACTLY when the centered view reaches the frozen black
+	#         budget (the review-declared cap). Past it the camera is the
+	#         nearest point of the FIXED convex budget region K_B
+	#         intersected with the player display visibility box, so the
+	#         black exposure stays capped AND the full player display stays
+	#         on screen (the box is centered on the player, so it never
+	#         triggers or delays the unlock). The early glide unlock of
+	#         C1.5 stays rejected by device ruling.
+	#   The view height is exactly ArtSpec.CAMERA_ZOOM (1.06); no dynamic
+	#         zoom exists here. Rendering stability (smoothing/pixel snap)
+	#         is G2 and is deliberately NOT touched here.
 	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	var strict_center := (
-		MapDiamondCameraConstraintScript.resolve_strict_follow_cached(
-			design_size, viewport_half, fixed_zoom, player.global_position
-		)
-	)
 	var camera_center := (
 		MapDiamondCameraConstraintScript.apply_player_visibility_guard(
-			strict_center,
-			player.global_position,
+			design_size,
+			viewport_half,
 			fixed_zoom,
-			viewport_half * 2.0
+			player.global_position,
+			_player_display_extent_world_px()
 		)
 	)
 	_world_camera.zoom = fixed_zoom
 	_world_camera.global_position = camera_center
+
+
+## R14-CAM-R2: the real display geometry of the player composite, derived
+## from the ArtSpec display contract (the final displayed character cell
+## CHARACTER_FRAME 64x96 with its foot anchor, placed by the approved
+## visual composite offset) and measured against the approved logical foot
+## point (visual.position + PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT = origin).
+## This is the real displayed-character bound - NOT a hardcoded body width
+## and NOT the padded 192x160 source atlas cell the body sprite samples
+## from (that cell is mostly transparent padding and would phantom-tighten
+## the visibility box). Returned as Vector3(sideways half extent,
+## above-foot, below-foot) in world px relative to the logical foot.
+func _player_display_extent_world_px() -> Vector3:
+	var frame_size := Vector2(ArtSpec.CHARACTER_FRAME)
+	var foot_in_frame := Vector2(ArtSpec.CHARACTER_FOOT_ANCHOR)
+	var composite := ArtSpec.PLAYER_VISUAL_RUNTIME_POSITION
+	# Cell edges relative to the logical foot (the player origin): the
+	# cell top-left sits at composite - foot_in_frame in the actor space.
+	var left := foot_in_frame.x - composite.x
+	var right := frame_size.x - foot_in_frame.x + composite.x
+	var above := foot_in_frame.y - composite.y
+	var below := frame_size.y - foot_in_frame.y + composite.y
+	return Vector3(maxf(left, right), above, below)
 
 
 ## FW-COLD (GPT audit 2026-09-16): prewarm the caster-skill animation frames
