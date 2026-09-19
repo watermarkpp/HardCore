@@ -1,0 +1,27 @@
+extends Node
+
+func _ready() -> void:
+	assert(RuntimeDiagnostics.set_device_lab_performance_enabled(true))
+	assert(RuntimeDiagnostics.set_device_lab_detail_mode("frame_only"))
+	RuntimeDiagnostics.reset_performance_window()
+	assert(RuntimeDiagnostics.performance_enabled())
+	assert(not RuntimeDiagnostics.performance_detail_enabled())
+	var token := RuntimeDiagnostics.begin_timed_segment(&"enemy_physics_calls")
+	assert(token == 0)
+	RuntimeDiagnostics.increment_performance_counter(&"enemy_physics_calls")
+	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_calls") == 0)
+	RuntimeDiagnostics.reset_device_lab_frame_interval()
+	RuntimeDiagnostics.record_device_lab_frame_interval()
+	OS.delay_msec(30)
+	RuntimeDiagnostics.record_device_lab_frame_interval()
+	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", 0)) == 1)
+
+	assert(RuntimeDiagnostics.set_device_lab_detail_mode("full"))
+	RuntimeDiagnostics.reset_performance_window()
+	assert(RuntimeDiagnostics.performance_detail_enabled())
+	RuntimeDiagnostics.increment_performance_counter(&"enemy_physics_calls")
+	assert(RuntimeDiagnostics.performance_counter(&"enemy_physics_calls") == 1)
+	assert(str(RuntimeDiagnostics.read_performance_window().get("detail_mode", "")) == "full")
+	RuntimeDiagnostics.set_device_lab_performance_enabled(false)
+	print("R14_DIAGNOSTIC_MODE_PASS")
+	get_tree().quit(0)

@@ -49,7 +49,7 @@ const COMMON_COMMAND_FIELDS := {
 const ACTION_COMMAND_FIELDS := {
 	"status": {},
 	"snapshot": {},
-	"reset_diagnostics": {},
+	"reset_diagnostics": {"detailMode": true},
 	"read_diagnostics": {},
 	"stop_diagnostics": {},
 	"repair_diagnostics": {},
@@ -391,6 +391,13 @@ static func validate_command(command: Dictionary) -> Dictionary:
 			return {"ok": false, "error": "profile_payload_missing"}
 	if action == "apply_player_state" and not command.has("path"):
 		return {"ok": false, "error": "player_state_payload_missing"}
+	if action == "reset_diagnostics" and command.has("detailMode"):
+		var detail_mode := str(command.get("detailMode", ""))
+		if detail_mode not in [
+			RuntimeDiagnostics.DEVICE_LAB_DETAIL_FRAME_ONLY,
+			RuntimeDiagnostics.DEVICE_LAB_DETAIL_FULL,
+		]:
+			return {"ok": false, "error": "diagnostic_detail_mode"}
 	if action in ["rollback_player_state", "rollback_ui_profile"]:
 		var checkpoint := str(command.get("checkpoint", ""))
 		if not _is_safe_token(checkpoint) or checkpoint.contains(".."):
@@ -437,12 +444,22 @@ func _execute(command: Dictionary) -> Dictionary:
 		"snapshot":
 			return {"ok": true, "action": action, "snapshot": build_snapshot(_game_root)}
 		"reset_diagnostics":
+			# R14-A: detailMode selects the observer mode. frame_only keeps the
+			# wall-clock frame pacing ring and disables the per-call counters/
+			# timers so the observer does not skew CPU attribution.
+			var detail_mode := str(command.get(
+				"detailMode",
+				RuntimeDiagnostics.DEVICE_LAB_DETAIL_FULL
+			))
+			if not RuntimeDiagnostics.set_device_lab_detail_mode(detail_mode):
+				return {"ok": false, "action": action, "error": "diagnostic_detail_mode"}
 			if not RuntimeDiagnostics.set_device_lab_performance_enabled(true):
 				return {"ok": false, "action": action, "error": "performance_unavailable"}
 			RuntimeDiagnostics.reset_performance_window()
 			return {
 				"ok": true,
 				"action": action,
+				"detailMode": RuntimeDiagnostics.device_lab_detail_mode(),
 				"performance_diagnostics": _performance_window_snapshot(_game_root),
 			}
 		"read_diagnostics":

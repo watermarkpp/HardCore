@@ -286,7 +286,10 @@ static func refresh_performance_gate() -> bool:
 
 
 static func performance_timing_enabled() -> bool:
-	return performance_enabled()
+	# R14-A: detailed per-call counters/timers are observer work; they must
+	# be disabled in frame_only mode so the frame pacing sample is measured
+	# without instrumenting every enemy hot path.
+	return performance_detail_enabled()
 
 
 static func performance_window_enabled() -> bool:
@@ -311,6 +314,36 @@ static func device_lab_performance_override_enabled() -> bool:
 	)
 
 
+# R14-A: Device Lab measurement observer correction. Two detail modes:
+# "full" keeps the R13 attribution counters/timers; "frame_only" keeps the
+# wall-clock frame pacing ring but disables the per-call micro timers and
+# performance Dictionary updates, so a release-like pacing baseline can be
+# measured without the observer itself skewing CPU attribution. Release is
+# fail-closed: performance_enabled() is already false there.
+const DEVICE_LAB_DETAIL_FRAME_ONLY := "frame_only"
+const DEVICE_LAB_DETAIL_FULL := "full"
+static var _device_lab_detail_mode := DEVICE_LAB_DETAIL_FULL
+
+
+static func set_device_lab_detail_mode(mode: String) -> bool:
+	if mode not in [DEVICE_LAB_DETAIL_FRAME_ONLY, DEVICE_LAB_DETAIL_FULL]:
+		return false
+	_device_lab_detail_mode = mode
+	return true
+
+
+static func device_lab_detail_mode() -> String:
+	return _device_lab_detail_mode
+
+
+static func performance_detail_enabled() -> bool:
+	if not performance_enabled():
+		return false
+	if _device_lab_performance_override_set and _device_lab_performance_override:
+		return _device_lab_detail_mode == DEVICE_LAB_DETAIL_FULL
+	return true
+
+
 static func _ensure_performance_window() -> void:
 	if _performance_window_started_msec <= 0:
 		_performance_window_started_msec = Time.get_ticks_msec()
@@ -322,7 +355,8 @@ static func _ensure_performance_window() -> void:
 
 
 static func increment_performance_counter(field: StringName, amount := 1) -> void:
-	if not performance_enabled() or amount == 0:
+	# R14-A: observer counters are disabled in frame_only mode.
+	if not performance_detail_enabled() or amount == 0:
 		return
 	_ensure_performance_window()
 	var key := str(field)
@@ -330,7 +364,8 @@ static func increment_performance_counter(field: StringName, amount := 1) -> voi
 
 
 static func add_performance_value(field: StringName, amount: float) -> void:
-	if not performance_enabled() or not is_finite(amount) or is_zero_approx(amount):
+	# R14-A: observer values are disabled in frame_only mode.
+	if not performance_detail_enabled() or not is_finite(amount) or is_zero_approx(amount):
 		return
 	_ensure_performance_window()
 	var key := str(field)
@@ -338,14 +373,16 @@ static func add_performance_value(field: StringName, amount: float) -> void:
 
 
 static func set_performance_value(field: StringName, value: float) -> void:
-	if not performance_enabled() or not is_finite(value):
+	# R14-A: observer values are disabled in frame_only mode.
+	if not performance_detail_enabled() or not is_finite(value):
 		return
 	_ensure_performance_window()
 	_performance_values[str(field)] = value
 
 
 static func record_performance_max(field: StringName, value: float) -> void:
-	if not performance_enabled() or not is_finite(value):
+	# R14-A: observer maxima are disabled in frame_only mode.
+	if not performance_detail_enabled() or not is_finite(value):
 		return
 	_ensure_performance_window()
 	var key := str(field)
@@ -678,6 +715,7 @@ static func read_performance_window(context: Dictionary = {}) -> Dictionary:
 	)
 	result["diagnostics_enabled"] = performance_enabled()
 	result["timing_enabled"] = performance_timing_enabled()
+	result["detail_mode"] = device_lab_detail_mode()
 	result["context"] = context.duplicate(true)
 	result["counters"] = performance_counters()
 	return result
