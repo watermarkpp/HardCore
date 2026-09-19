@@ -704,9 +704,20 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $pfIncluded = ($RunnerSource -match '\$Suites\.formal_map_projection_critical\s*\+')
 $pfValidateSet = ($RunnerSource -match "formal_map_projection_critical")
 
-# map_runtime_release_critical verification (FREEZE-P0.3)
+# map_runtime_release_critical verification (FREEZE-P0.3 + HC-POLY-R2 suite
+# extension: the nine polygon production regression scenes were registered
+# into this suite when R3.1 polygon precision landed on integration).
 $ReleaseSuite = 'map_runtime_release_critical'
 $ReleaseExpected = @(
+    'tests/hc_polygon_geometry_test.tscn',
+    'tests/hc_polygon_navigation_test.tscn',
+    'tests/hc_polygon_physics_test.tscn',
+    'tests/hc_polygon_precision_test.tscn',
+    'tests/hc_polygon_editor_input_test.tscn',
+    'tests/hc_polygon_release_alignment_test.tscn',
+    'tests/hc_polygon_numerics_test.tscn',
+    'tests/hc_polygon_reset_test.tscn',
+    'tests/hc_polygon_reset_release_test.tscn',
     'tests/map_runtime_release_registry_contract_test.tscn',
     'tests/map_ui_presentation_projection_test.tscn',
     'tests/map_persistent_boss_spawn_identity_test.tscn',
