@@ -1,6 +1,14 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-14。
+Branch: `codex/integration`。Updated: 2026-09-20。
+
+## 2026-09-20：全量合入——墙体 P1R 战役 + 受击 V4 历史闭环
+
+- 集成落库源码：wall 合并 `fdb298c2`（codex/wall-p1r-final-v2 @ ab0d5524 → integration @ 3d572da1，唯一冲突 game_root.gd 按"R13 计时行 + P0-3 pre-arrival 失败接管 + 常规 guard"并集裁决；P0-3b blocked-arrival 重定位与 R14 相机约束共存）；受击 V4 归并 `88784258`（13 文件中 12 个 blob 级相同、player.gd 唯一改动已在集成 L1148 原文存在，合并零内容变更，仅关闭祖先链）；`.uid` 侧车入库 `ed497c32`；注册契约对齐 `ade575d1`（map_runtime_release_critical 期望列表 5→14 对齐 HC-POLY-R2 实际 suite）。
+- 门禁（同 commit ade575d1）：注册检查 PASS；冒烟 PASS；受击 V4 六场景 6/6；相机五场景 5/5；多边形九场景 9/9；map_runtime_release_critical 14/14；transaction critical 6/6；P0-3 转移专项 3/3；R11 force_legacy gate PASS；R7 全程直跑 `WALL_RENDER_R7_STRICT_PASS hops=16 checks=74`；R6 全程直跑 `WALL_RENDER_R6_STRICT_PASS maps=67 a_maps=60 checks=387`；monster 45/47；full critical 360/377。
+- 失败逐项基线归因（对照 3d572da1 主树与 ab0d5524 wall tip）：14 项同断言基线旧债（含 ID76/V505 :344 既有接受债、fire_wall_exact_2x2、W7 affix、共享金币 :342、shop 价格行等）；2 项摇摆/噪声（canonical_skill_production_entry 三次运行断言点 :154/:184/:222 跨两树漂移，技能代码与数据零差异；source_collision_chunk 自身 PASS 后仅退出期引擎日志噪声，隔离复跑 PASS）；1 项环境（complete_client_resource_catalog 新树缺 outputs/resource_catalog 生成产物，重建属冻结验收管线待用户授权）。**本轮零合并回归。**
+- classic_boss_order_test 按方案 E3 十次专项：候选隔离 10/10 PASS；基线 9/10（第 7 次复现同断言 :104）→ 既有间歇债。
+- APK_BUILD=NOT_RUN；打包前检查与工作树清理见本轮交付报告（HardCore-consolidation-evidence/20260919-2）。设备帧率/触感 NOT_RUN。
 
 ## 2026-09-14：物品详情、Buff、设置与地面名称 v81
 
