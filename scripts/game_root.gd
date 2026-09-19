@@ -1907,18 +1907,22 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	# C1.2 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit): the camera
-	# contract has ONE hard constraint and ONE optimization goal.
+	# C1.2 CAMERA-EDGE-V2 (user ruling 2026-09-16, GPT audit), revised by
+	# R14-CAM-R1 (user ruling 2026-09-19): center-lock until max black.
 	#   Hard: the player stays inside the visibility window - at least 15%
 	#         from every screen edge (central 70%) and never closer than
 	#         two ground cells - and the view height is exactly
 	#         ArtSpec.CAMERA_ZOOM (1.06); no dynamic zoom exists here.
-	#   Goal: the black area outside the map is minimized, NOT forbidden.
+	#   Ruled follow shape: the player stays EXACTLY at the camera center
+	#         while walking toward the map edge; the camera only unlocks
+	#         (clamps) once the centered view exposes the configured
+	#         maximum black area - the same frozen visibility window
+	#         mirrored onto the camera's zero-black excursion. The early
+	#         glide unlock is rejected by device ruling.
 	# Step 1 computes the zero-black ideal center (strict constrained
 	# solve, cached per map/viewport/zoom with a value-compared single
-	# slot). Step 2 re-follows the player by exactly the amount that
-	# exceeds the visibility window — and no more — so any black area is
-	# the minimum required to keep the player comfortable. Rendering
+	# slot). Step 2 is the center-lock visibility guard in the camera
+	# constraint service (see apply_player_visibility_guard). Rendering
 	# stability (smoothing/pixel snap) is G2 and is deliberately NOT
 	# touched here.
 	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM

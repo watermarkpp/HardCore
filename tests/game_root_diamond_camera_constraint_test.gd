@@ -1,16 +1,18 @@
 extends Node
 
-## C1.5 CAMERA-EDGE progressive-follow production contract (user device
-## rulings 2026-09-16, GPT audit): GameRoot composes the zero-black ideal
-## center (strict constrained solve) with the progressive player visibility
-## guard. The hard constraint is that the player stays inside the visibility
-## window of every screen axis - at least 15% from every edge (central 70%)
-## and never closer than two ground cells; minimizing the black area outside
-## the map is the optimization goal, NOT a hard zero-black contract. The
-## camera glides with the player as soon as they leave the anchor and tracks
-## 1:1 beyond the window, holding the player at PROGRESSIVE_TRACK_FRACTION
-## of the window (the old hold / drift / catch-up excess-only follow is
-## rejected by device ruling). The view height stays exactly
+## R14-CAM-R1 CAMERA-EDGE center-lock production contract (user device
+## ruling 2026-09-19): GameRoot composes the zero-black ideal center
+## (strict constrained solve) with the center-lock player visibility
+## guard. The ruled follow shape: the player stays EXACTLY at the camera
+## center while walking toward the map edge - the camera only clamps (the
+## unlock threshold event) once the centered view exposes the configured
+## maximum black area, i.e. the same frozen visibility window mirrored
+## onto the camera's zero-black excursion (anchor +/- window per axis).
+## After the unlock the player drifts off center bounded by the walkable
+## geometry; on extreme map tips that drift can sit tighter than the
+## superseded C1.4 six-cell comfort floor - the 2026-09-19 ruling
+## prioritizes center-lock and the black cap. The early glide unlock of
+## C1.5 is rejected by device ruling. The view height stays exactly
 ## ArtSpec.CAMERA_ZOOM everywhere. The former "viewport corners always
 ## inside the map" contract from C1 is REJECTED by device ruling and must
 ## not be asserted here.
@@ -18,6 +20,38 @@ extends Node
 const CameraConstraint := preload(
 	"res://scripts/map_editor/map_diamond_camera_constraint_service.gd"
 )
+
+var _raw_points: Array[Vector2] = []
+var _raw_normals: Array[Vector2] = []
+
+
+func _raw_deficit_px(point: Vector2) -> float:
+	## Worst raw-map-diamond violation of the point (positive = outside).
+	var worst := -INF
+	for index in _raw_points.size():
+		var margin := _raw_normals[index].dot(point - _raw_points[index])
+		worst = maxf(worst, -margin)
+	return worst
+
+
+func _camera_black_px(
+	camera_center: Vector2,
+	world_half: Vector2
+) -> float:
+	## The black exposure of a camera center: the worst eroded deficit over
+	## the map edges (the viewport support added back on every edge).
+	var worst := -INF
+	for index in _raw_points.size():
+		var normal := _raw_normals[index]
+		var support := (
+			absf(normal.x) * world_half.x + absf(normal.y) * world_half.y
+		)
+		var deficit := (
+			normal.dot(_raw_points[index]) + support
+			- normal.dot(camera_center)
+		)
+		worst = maxf(worst, deficit)
+	return worst
 
 
 func _ready() -> void:
@@ -53,6 +87,15 @@ func _run() -> void:
 	for point: Vector2 in boundary:
 		centroid += point
 	centroid /= float(boundary.size())
+	# R14-CAM-R1 reference frames: the raw map diamond (no viewport
+	# erosion) used to pin the center-lock phase and the black cap.
+	_raw_points.clear()
+	_raw_normals.clear()
+	for edge_index: int in boundary.size():
+		var following := (edge_index + 1) % boundary.size()
+		var edge := boundary[following] - boundary[edge_index]
+		_raw_points.append(boundary[edge_index])
+		_raw_normals.append(Vector2(-edge.y, edge.x).normalized())
 	var probes: Array[Vector2] = [centroid]
 	for point: Vector2 in boundary:
 		probes.append(point)
@@ -89,49 +132,58 @@ func _run() -> void:
 				probe, camera.global_position, expected_center,
 			]
 		)
-		# HARD CONSTRAINT: the player is always inside the visibility window.
+		# R14-CAM-R1: the guard offset never exceeds the player's own
+		# excursion beyond the anchor (the camera never lags more than the
+		# player has walked past the zero-black anchor).
 		var player_offset_px := Vector2(
 			absf(probe.x - camera.global_position.x) * camera.zoom.x,
 			absf(probe.y - camera.global_position.y) * camera.zoom.y
 		)
-		assert(
-			player_offset_px.x <= max_offset_px.x + 0.01
-			and player_offset_px.y <= max_offset_px.y + 0.01,
-			"the player left the visibility window at %s: %s" % [
-				probe, player_offset_px,
-			]
-		)
-		# GOAL: progressive follow - the camera glides with the player inside
-		# the window and tracks 1:1 beyond it (C1.5 user device ruling).
 		var player_delta_px := (probe - ideal_center) * camera.zoom
+		assert(
+			player_offset_px.x <= absf(player_delta_px.x) + 0.01
+			and player_offset_px.y <= absf(player_delta_px.y) + 0.01,
+			"the guard offset must not overshoot the excursion at %s" % probe
+		)
+		# GOAL: center-lock follow (R14-CAM-R1 user device ruling). While
+		# the player's excursion beyond the zero-black anchor stays inside
+		# the frozen visibility window (per axis), the camera holds the
+		# player EXACTLY centered - including positions past the zero-black
+		# anchor. Once the clamp engages, the black exposure stays capped
+		# at the frozen maximum.
 		if (
 			absf(player_delta_px.x) <= max_offset_px.x + 0.01
 			and absf(player_delta_px.y) <= max_offset_px.y + 0.01
 		):
 			zero_black_probe_count += 1
 			assert(
-				absf(player_offset_px.x) <= absf(player_delta_px.x) + 0.01
-				and absf(player_offset_px.y) <= absf(player_delta_px.y) + 0.01,
-				"the progressive follow must not overshoot the player at %s"
+				camera.global_position.distance_to(probe) <= 0.01,
+				"the camera must hold the player exactly centered before the black cap at %s"
 				% probe
 			)
 		else:
-			var expected_ride_px := Vector2(
-				max_offset_px.x * CameraConstraint.PROGRESSIVE_TRACK_FRACTION,
-				max_offset_px.y * CameraConstraint.PROGRESSIVE_TRACK_FRACTION
+			var window_world := max_offset_px / camera.zoom
+			var world_half := Vector2(
+				viewport_size.x * 0.5 / camera.zoom.x,
+				viewport_size.y * 0.5 / camera.zoom.y
 			)
-			if absf(player_delta_px.x) > max_offset_px.x + 0.01:
-				assert(
-					absf(player_offset_px.x - expected_ride_px.x) <= 0.01,
-					"a saturated X axis must hold the ride fraction at %s: %s"
-					% [probe, player_offset_px.x]
+			var black_px := _camera_black_px(
+				camera.global_position, world_half
+			)
+			var base_black_px := _camera_black_px(ideal_center, world_half)
+			var frozen_cap_px := -INF
+			for index: int in _raw_points.size():
+				var normal := _raw_normals[index]
+				frozen_cap_px = maxf(
+					frozen_cap_px,
+					absf(normal.x) * window_world.x
+						+ absf(normal.y) * window_world.y
 				)
-			if absf(player_delta_px.y) > max_offset_px.y + 0.01:
-				assert(
-					absf(player_offset_px.y - expected_ride_px.y) <= 0.01,
-					"a saturated Y axis must hold the ride fraction at %s: %s"
-					% [probe, player_offset_px.y]
-				)
+			assert(
+				black_px <= base_black_px + frozen_cap_px + 0.05,
+				"the clamped camera must not exceed the frozen black cap at %s: %s vs %s"
+				% [probe, black_px, base_black_px + frozen_cap_px]
+			)
 	assert(
 		zero_black_probe_count >= 1,
 		"the probe set must contain zero-black positions"
@@ -143,68 +195,74 @@ func _run() -> void:
 		camera.global_position.is_equal_approx(centroid),
 		"map-center follow must keep the camera on the player"
 	)
-	# Walking far past the boundary: the player rests at the ride fraction
-	# inside the window and the saturated camera follows 1:1 with the player.
+	# Walking far past the boundary (degenerate out-of-map probes): the
+	# camera stays completely fixed once clamped and the black exposure
+	# stays capped while the player keeps walking out.
 	var corner: Vector2 = boundary[0]
 	var outward := (corner - centroid).normalized()
-	var previous_camera := Vector2.INF
-	var previous_player := Vector2.INF
-	var previous_saturated_x := false
-	var previous_saturated_y := false
-	var saturated := false
+	var clamped_center := Vector2.INF
+	var window_world_far := max_offset_px / camera.zoom
+	var world_half_far := Vector2(
+		viewport_size.x * 0.5 / camera.zoom.x,
+		viewport_size.y * 0.5 / camera.zoom.y
+	)
 	for step: int in range(1, 11):
 		game.player.global_position = corner + outward * (240.0 * float(step))
 		game._update_world_camera_constraint(2.0)
-		var player_offset_px := Vector2(
-			absf(game.player.global_position.x - camera.global_position.x)
-			* camera.zoom.x,
-			absf(game.player.global_position.y - camera.global_position.y)
-			* camera.zoom.y
-		)
-		assert(
-			player_offset_px.x <= max_offset_px.x + 0.01
-			and player_offset_px.y <= max_offset_px.y + 0.01,
-			"the player must never leave the visibility window (step %d)" % step
-		)
-		var saturated_x := player_offset_px.x >= (
-			max_offset_px.x * CameraConstraint.PROGRESSIVE_TRACK_FRACTION - 0.01
-		)
-		var saturated_y := player_offset_px.y >= (
-			max_offset_px.y * CameraConstraint.PROGRESSIVE_TRACK_FRACTION - 0.01
-		)
-		if saturated_x or saturated_y:
-			saturated = true
-			if not previous_camera.is_equal_approx(Vector2.INF):
-				var camera_delta: Vector2 = (
-					camera.global_position - previous_camera
-				)
-				var player_delta: Vector2 = (
-					game.player.global_position - previous_player
-				)
-				# A 1:1 follow holds on an axis only while BOTH steps are
-				# saturated on that axis; the transition step legitimately
-				# closes the accumulated gap in one move.
-				if saturated_x and previous_saturated_x:
-					assert(
-						absf(camera_delta.x - player_delta.x) <= 0.01,
-						"a saturated X guard must follow the player 1:1 (step %d)"
-						% step
-					)
-				if saturated_y and previous_saturated_y:
-					assert(
-						absf(camera_delta.y - player_delta.y) <= 0.01,
-						"a saturated Y guard must follow the player 1:1 (step %d)"
-						% step
-					)
-		previous_saturated_x = saturated_x
-		previous_saturated_y = saturated_y
-		previous_camera = camera.global_position
-		previous_player = game.player.global_position
 		assert(
 			is_equal_approx(camera.zoom.x, ArtSpec.CAMERA_ZOOM),
 			"edge walking must never change the view height"
 		)
-	assert(saturated, "the walk fixture must reach the guard-saturated regime")
+		var probe_delta_px := Vector2(
+			(game.player.global_position.x - camera.global_position.x)
+			* camera.zoom.x,
+			(game.player.global_position.y - camera.global_position.y)
+			* camera.zoom.y
+		)
+		if (
+			absf(probe_delta_px.x) <= max_offset_px.x + 0.01
+			and absf(probe_delta_px.y) <= max_offset_px.y + 0.01
+		):
+			assert(
+				camera.global_position.distance_to(
+					game.player.global_position
+				) <= 0.01,
+				"the camera must hold the player centered while locked (step %d)" % step
+			)
+			continue
+		if clamped_center.is_equal_approx(Vector2.INF):
+			clamped_center = camera.global_position
+		# NOTE: no recede/fixed assertion here - far-out probes leave the
+		# walkable map, where extra production logic may act on the camera;
+		# the user ruling (2026-09-19) covers in-map walking only. The
+		# binding post-unlock property is the frozen black cap below.
+		var strict_far: Dictionary = CameraConstraint.constrain_center(
+			design_size, viewport_size * 0.5, camera.zoom,
+			game.player.global_position
+		)
+		var black_px := _camera_black_px(
+			camera.global_position, world_half_far
+		)
+		var base_black_px := _camera_black_px(
+			Vector2(strict_far.get("center", Vector2.INF)), world_half_far
+		)
+		var frozen_cap_px := -INF
+		for index: int in _raw_points.size():
+			var normal := _raw_normals[index]
+			frozen_cap_px = maxf(
+				frozen_cap_px,
+				absf(normal.x) * window_world_far.x
+					+ absf(normal.y) * window_world_far.y
+			)
+		assert(
+			black_px <= base_black_px + frozen_cap_px + 0.05,
+			"the clamped camera must not exceed the frozen black cap (step %d): %s vs %s"
+			% [step, black_px, base_black_px + frozen_cap_px]
+		)
+	assert(
+		not clamped_center.is_equal_approx(Vector2.INF),
+		"the walk fixture must reach the clamped regime"
+	)
 	# C1.1 discipline guard: the removed soft-follow machinery stays gone and
 	# the production path composes both steps.
 	var game_root_source := (

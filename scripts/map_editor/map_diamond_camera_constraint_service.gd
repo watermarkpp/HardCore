@@ -33,19 +33,25 @@ const PLAYER_VISIBLE_SCREEN_MARGIN := 0.15
 const PLAYER_MIN_VISIBLE_VERTICAL_CELL_COUNT := 6.0
 const VERTICAL_CELL_WORLD_PX := 32.0
 
-## C1.5 PROGRESSIVE FOLLOW (user device ruling 2026-09-16): the previous
-## step-2 guard held the camera on the zero-black ideal center while the
-## player drifted toward the visibility window boundary, then followed by
-## exactly the excess - a hold / drift / catch-up cycle. On small maps
-## (viewport larger than the map diamond, strict solve infeasible -> the
-## ideal center is the map centroid) the camera did not move at all until
-## the player nearly reached the map edge. The user ruled the follow must
-## be PROGRESSIVE: the camera glides as soon as the player leaves the
-## anchor, ramping smoothly to full tracking, so the player rides
-## comfortably inside the window instead of drift-then-catch. The frozen
-## window caps (0.15 fraction, six vertical cells = 192 world px, zoom
-## 1.06) are unchanged - they remain the hard ceiling; the player now
-## steadily rides at this fraction of the window.
+## C1.5 PROGRESSIVE FOLLOW (user device ruling 2026-09-16): SUPERSEDED by
+## R14-CAM-R1 (user ruling 2026-09-19), kept as history. It ramped the
+## camera into a glide as soon as the player left the zero-black anchor, so
+## the camera unlocked (the player drifted off center) long before the
+## black area reached its maximum - exactly what the user rejected on
+## device.
+## R14-CAM-R1 CENTER-LOCK UNTIL MAX BLACK (user ruling 2026-09-19): the
+## player stays EXACTLY at the camera center while walking toward the map
+## edge; the black exposure grows 1:1 with the excursion and the UI unlock
+## must not happen early. The camera only clamps (the unlock threshold
+## event) once the centered view exposes the configured maximum black
+## area: the SAME frozen visibility window that caps the player's own
+## screen offset, mirrored onto the camera's zero-black excursion
+## (anchor +/- window per axis). Past the unlock the black stays capped
+## and the player drifts inside the same window. The frozen window caps
+## (0.15 fraction, six vertical cells = 192 world px, zoom 1.06) are
+## unchanged; the superseded C1.5 glide ramp is gone and
+## PROGRESSIVE_TRACK_FRACTION is retained only as historical tuning
+## context. See apply_player_visibility_guard().
 const PROGRESSIVE_TRACK_FRACTION := 0.6
 
 
@@ -173,47 +179,39 @@ static func apply_player_visibility_guard(
 	zoom: Vector2,
 	viewport_size: Vector2
 ) -> Vector2:
-	## STEP 2 (C1.5 progressive follow): the camera re-follows the player
-	## progressively - see _visible_axis. While the player sits on the
-	## anchor the camera stays on the ideal center (zero black). Pure
-	## value math: no allocation on the per-frame path.
+	## STEP 2 (R14-CAM-R1 center-lock until max black, user ruling
+	## 2026-09-19): the camera follows the player 1:1 - the player sits
+	## EXACTLY at the camera center - while doing so keeps the camera
+	## inside the frozen visibility window measured FROM the zero-black
+	## anchor. That is exactly until the centered view exposes the
+	## configured maximum black area: the SAME frozen window that caps the
+	## player's own screen offset, mirrored onto the camera's zero-black
+	## excursion. Past that threshold the camera clamps to
+	## anchor +/- window per axis (the unlock threshold event): the black
+	## exposure stays capped at that maximum and the player drifts off
+	## center. The post-unlock drift is bounded by the walkable geometry;
+	## on extreme map tips it can sit tighter than the C1.4 six-cell
+	## comfort floor - the 2026-09-19 ruling prioritizes center-lock and
+	## the black cap over the post-unlock margin. Pure value math: no
+	## allocation on the per-frame path.
 	var safe_zoom := Vector2(
 		maxf(absf(zoom.x), 0.0001),
 		maxf(absf(zoom.y), 0.0001)
 	)
 	var max_offset_px := visibility_max_offset_px(viewport_size, safe_zoom)
-	var player_delta_px := (player_center - strict_center) * safe_zoom
-	var visible_delta_px := Vector2(
-		_visible_axis(player_delta_px.x, max_offset_px.x),
-		_visible_axis(player_delta_px.y, max_offset_px.y)
+	var max_offset_world := max_offset_px / safe_zoom
+	return Vector2(
+		clampf(
+			player_center.x,
+			strict_center.x - max_offset_world.x,
+			strict_center.x + max_offset_world.x
+		),
+		clampf(
+			player_center.y,
+			strict_center.y - max_offset_world.y,
+			strict_center.y + max_offset_world.y
+		)
 	)
-	return player_center - visible_delta_px / safe_zoom
-
-
-static func _visible_axis(delta_px: float, max_offset: float) -> float:
-	## The player's allowed screen offset along one axis; the camera
-	## re-follows by the remainder (player_delta - visible). Properties:
-	## - delta 0            -> offset 0: the camera sits on the ideal center
-	##                         (interior maps: the ideal center IS the
-	##                         player, so follow stays exact).
-	## - 0 < delta < window -> the offset rides a smoothstep ramp from 0 to
-	##                         PROGRESSIVE_TRACK_FRACTION of the window, so
-	##                         the camera is already gliding while the
-	##                         player walks - no frozen-view phase.
-	## - delta >= window    -> the offset holds at the ride fraction: the
-	##                         camera tracks 1:1 and the player rests well
-	##                         inside the frozen hard cap.
-	## - the ramp slope never exceeds 1 (0.6 * smoothstep' <= 0.9 < 1), so
-	##   the camera follow amount grows monotonically (the camera never
-	##   recedes while the player advances) and the offset never exceeds
-	##   the delta (no overshoot past the player).
-	var magnitude := absf(delta_px)
-	if magnitude <= 0.0 or max_offset <= 0.0:
-		return 0.0
-	var ride := max_offset * PROGRESSIVE_TRACK_FRACTION
-	var window_ratio := minf(magnitude / max_offset, 1.0)
-	var ramp := window_ratio * window_ratio * (3.0 - 2.0 * window_ratio)
-	return signf(delta_px) * minf(ride * ramp, magnitude)
 
 
 static func _build_strict_entry(
