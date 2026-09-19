@@ -157,6 +157,7 @@ func _ready() -> void:
 			"accounting_closure": int(accounting.get("total_commands", -1))
 				== commands.size(),
 		}
+		var self_check_failed := false
 		for check_name: String in checks:
 			if not bool(checks[check_name]):
 				rows.append({
@@ -164,6 +165,9 @@ func _ready() -> void:
 					"error": "census self-check failed: %s" % check_name,
 				})
 				failures += 1
+				self_check_failed = true
+		if self_check_failed:
+			continue
 		rows.append({
 			"map_id": map_id, "map_key": map_key, "class": "A",
 			"design_size": [design_size.x, design_size.y],

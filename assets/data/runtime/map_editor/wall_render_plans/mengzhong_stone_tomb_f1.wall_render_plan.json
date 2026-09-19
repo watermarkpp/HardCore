@@ -1,0 +1,7298 @@
+{
+	"accounting": {
+		"atlas_commands": 788,
+		"legacy_commands": 20,
+		"shadow_chunk_commands": 394,
+		"total_commands": 1202
+	},
+	"atlas_command_indices": [
+		4,
+		6,
+		36,
+		37,
+		61,
+		62,
+		85,
+		86,
+		109,
+		110,
+		121,
+		122,
+		148,
+		149,
+		158,
+		160,
+		200,
+		201,
+		209,
+		210,
+		248,
+		249,
+		257,
+		258,
+		296,
+		297,
+		305,
+		306,
+		317,
+		318,
+		336,
+		338,
+		369,
+		370,
+		393,
+		394,
+		428,
+		430,
+		436,
+		437,
+		446,
+		448,
+		467,
+		468,
+		483,
+		484,
+		513,
+		514,
+		516,
+		517,
+		528,
+		529,
+		541,
+		542,
+		556,
+		557,
+		581,
+		583,
+		592,
+		593,
+		610,
+		611,
+		680,
+		681,
+		692,
+		693,
+		740,
+		741,
+		753,
+		754,
+		757,
+		759,
+		771,
+		772,
+		814,
+		816,
+		840,
+		841,
+		873,
+		874,
+		889,
+		890,
+		922,
+		923,
+		937,
+		938,
+		970,
+		971,
+		985,
+		986,
+		1019,
+		1020,
+		1034,
+		1035,
+		1067,
+		1068,
+		1098,
+		1099,
+		1122,
+		1123,
+		1146,
+		1147,
+		1170,
+		1171,
+		5,
+		7,
+		16,
+		18,
+		45,
+		46,
+		70,
+		71,
+		94,
+		95,
+		118,
+		119,
+		130,
+		131,
+		166,
+		167,
+		182,
+		183,
+		215,
+		216,
+		230,
+		231,
+		263,
+		264,
+		278,
+		279,
+		311,
+		312,
+		329,
+		330,
+		332,
+		333,
+		352,
+		354,
+		382,
+		384,
+		399,
+		400,
+		489,
+		490,
+		562,
+		563,
+		572,
+		574,
+		617,
+		619,
+		624,
+		626,
+		655,
+		657,
+		698,
+		699,
+		701,
+		702,
+		719,
+		720,
+		762,
+		763,
+		765,
+		766,
+		789,
+		790,
+		843,
+		844,
+		858,
+		859,
+		892,
+		893,
+		907,
+		908,
+		940,
+		941,
+		955,
+		956,
+		988,
+		989,
+		1004,
+		1005,
+		1037,
+		1038,
+		1052,
+		1053,
+		1089,
+		1090,
+		1113,
+		1114,
+		1137,
+		1138,
+		1161,
+		1162,
+		1174,
+		1176,
+		9,
+		10,
+		25,
+		27,
+		51,
+		52,
+		76,
+		77,
+		100,
+		101,
+		127,
+		128,
+		142,
+		143,
+		179,
+		180,
+		194,
+		195,
+		227,
+		228,
+		242,
+		243,
+		275,
+		276,
+		290,
+		291,
+		326,
+		327,
+		353,
+		355,
+		357,
+		358,
+		376,
+		378,
+		409,
+		411,
+		424,
+		425,
+		507,
+		508,
+		586,
+		587,
+		595,
+		596,
+		646,
+		648,
+		651,
+		652,
+		673,
+		674,
+		713,
+		714,
+		716,
+		717,
+		734,
+		735,
+		783,
+		784,
+		786,
+		787,
+		810,
+		811,
+		855,
+		856,
+		870,
+		871,
+		904,
+		905,
+		919,
+		920,
+		952,
+		953,
+		967,
+		968,
+		1000,
+		1001,
+		1016,
+		1017,
+		1049,
+		1050,
+		1064,
+		1065,
+		1095,
+		1096,
+		1119,
+		1120,
+		1143,
+		1144,
+		1167,
+		1168,
+		1183,
+		1185,
+		12,
+		13,
+		42,
+		43,
+		67,
+		68,
+		91,
+		92,
+		115,
+		116,
+		133,
+		134,
+		163,
+		164,
+		173,
+		174,
+		212,
+		213,
+		221,
+		222,
+		260,
+		261,
+		269,
+		270,
+		308,
+		309,
+		320,
+		321,
+		337,
+		339,
+		361,
+		363,
+		396,
+		397,
+		418,
+		419,
+		451,
+		452,
+		460,
+		461,
+		473,
+		474,
+		486,
+		487,
+		501,
+		502,
+		531,
+		532,
+		535,
+		536,
+		547,
+		548,
+		559,
+		560,
+		577,
+		578,
+		602,
+		604,
+		613,
+		614,
+		639,
+		640,
+		695,
+		696,
+		707,
+		708,
+		758,
+		760,
+		774,
+		775,
+		778,
+		780,
+		792,
+		793,
+		835,
+		837,
+		852,
+		853,
+		886,
+		887,
+		901,
+		902,
+		934,
+		935,
+		949,
+		950,
+		982,
+		983,
+		997,
+		998,
+		1031,
+		1032,
+		1046,
+		1047,
+		1079,
+		1080,
+		1104,
+		1105,
+		1128,
+		1129,
+		1152,
+		1153,
+		1179,
+		1180,
+		17,
+		19,
+		33,
+		34,
+		58,
+		59,
+		82,
+		83,
+		106,
+		107,
+		139,
+		140,
+		154,
+		155,
+		191,
+		192,
+		206,
+		207,
+		239,
+		240,
+		254,
+		255,
+		287,
+		288,
+		302,
+		303,
+		347,
+		348,
+		377,
+		379,
+		383,
+		385,
+		403,
+		405,
+		433,
+		434,
+		447,
+		449,
+		525,
+		526,
+		607,
+		608,
+		618,
+		620,
+		667,
+		668,
+		670,
+		671,
+		689,
+		690,
+		728,
+		729,
+		731,
+		732,
+		749,
+		750,
+		804,
+		805,
+		807,
+		808,
+		831,
+		832,
+		867,
+		868,
+		883,
+		884,
+		916,
+		917,
+		931,
+		932,
+		964,
+		965,
+		979,
+		980,
+		1013,
+		1014,
+		1028,
+		1029,
+		1061,
+		1062,
+		1076,
+		1077,
+		1101,
+		1102,
+		1125,
+		1126,
+		1149,
+		1150,
+		1175,
+		1177,
+		1191,
+		1192,
+		21,
+		22,
+		48,
+		49,
+		73,
+		74,
+		97,
+		98,
+		124,
+		125,
+		145,
+		146,
+		176,
+		177,
+		185,
+		186,
+		224,
+		225,
+		233,
+		234,
+		272,
+		273,
+		281,
+		282,
+		323,
+		324,
+		341,
+		342,
+		362,
+		364,
+		388,
+		390,
+		421,
+		422,
+		439,
+		440,
+		476,
+		477,
+		480,
+		481,
+		492,
+		493,
+		504,
+		505,
+		519,
+		520,
+		550,
+		551,
+		553,
+		554,
+		565,
+		566,
+		582,
+		584,
+		598,
+		599,
+		629,
+		630,
+		642,
+		643,
+		661,
+		662,
+		710,
+		711,
+		722,
+		723,
+		779,
+		781,
+		795,
+		796,
+		799,
+		801,
+		815,
+		817,
+		849,
+		850,
+		864,
+		865,
+		898,
+		899,
+		913,
+		914,
+		946,
+		947,
+		961,
+		962,
+		994,
+		995,
+		1010,
+		1011,
+		1043,
+		1044,
+		1058,
+		1059,
+		1085,
+		1086,
+		1110,
+		1111,
+		1134,
+		1135,
+		1158,
+		1159,
+		1188,
+		1189,
+		26,
+		28,
+		39,
+		40,
+		64,
+		65,
+		88,
+		89,
+		112,
+		113,
+		151,
+		152,
+		169,
+		170,
+		203,
+		204,
+		218,
+		219,
+		251,
+		252,
+		266,
+		267,
+		299,
+		300,
+		314,
+		315,
+		372,
+		373,
+		404,
+		406,
+		410,
+		412,
+		429,
+		431,
+		456,
+		458,
+		470,
+		471,
+		544,
+		545,
+		634,
+		636,
+		647,
+		649,
+		683,
+		684,
+		686,
+		687,
+		704,
+		705,
+		743,
+		744,
+		746,
+		747,
+		768,
+		769,
+		824,
+		826,
+		828,
+		829,
+		846,
+		847,
+		880,
+		881,
+		895,
+		896,
+		928,
+		929,
+		943,
+		944,
+		976,
+		977,
+		991,
+		992,
+		1025,
+		1026,
+		1040,
+		1041,
+		1072,
+		1074,
+		1082,
+		1083,
+		1107,
+		1108,
+		1131,
+		1132,
+		1155,
+		1156,
+		1184,
+		1186,
+		1195,
+		1197,
+		30,
+		31,
+		55,
+		56,
+		79,
+		80,
+		103,
+		104,
+		136,
+		137,
+		159,
+		161,
+		188,
+		189,
+		197,
+		198,
+		236,
+		237,
+		245,
+		246,
+		284,
+		285,
+		293,
+		294,
+		344,
+		345,
+		366,
+		367,
+		389,
+		391,
+		415,
+		416,
+		442,
+		443,
+		463,
+		464,
+		495,
+		496,
+		498,
+		499,
+		510,
+		511,
+		522,
+		523,
+		538,
+		539,
+		568,
+		569,
+		573,
+		575,
+		589,
+		590,
+		603,
+		605,
+		625,
+		627,
+		656,
+		658,
+		664,
+		665,
+		677,
+		678,
+		725,
+		726,
+		737,
+		738,
+		800,
+		802,
+		819,
+		820,
+		823,
+		825,
+		836,
+		838,
+		861,
+		862,
+		876,
+		877,
+		910,
+		911,
+		925,
+		926,
+		958,
+		959,
+		973,
+		974,
+		1007,
+		1008,
+		1022,
+		1023,
+		1055,
+		1056,
+		1071,
+		1073,
+		1092,
+		1093,
+		1116,
+		1117,
+		1140,
+		1141,
+		1164,
+		1165,
+		1196,
+		1198,
+		455,
+		457,
+		633,
+		635
+	],
+	"atlas_entries": [
+		{
+			"command_indices": [
+				455,
+				457,
+				633,
+				635
+			],
+			"composite_size": [
+				96,
+				160
+			],
+			"group_keys": [
+				"wall_part:inst_000101:118:0",
+				"wall_part:inst_000102:119:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						455,
+						457
+					],
+					"group_key": "wall_part:inst_000101:118:0",
+					"representative_command_index": 455
+				},
+				{
+					"command_indices": [
+						633,
+						635
+					],
+					"group_key": "wall_part:inst_000102:119:0",
+					"representative_command_index": 633
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_base.png@(-48.0, -128.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_front.png@(-48.0, -128.0)",
+			"layers": [
+				{
+					"command_index": 455,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_base.png",
+					"offset": [
+						-48.0,
+						-128.0
+					],
+					"size": [
+						96,
+						160
+					]
+				},
+				{
+					"command_index": 457,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_front.png",
+					"offset": [
+						-48.0,
+						-128.0
+					],
+					"size": [
+						96,
+						160
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-128.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				0,
+				96,
+				160
+			]
+		},
+		{
+			"command_indices": [
+				4,
+				6,
+				36,
+				37,
+				61,
+				62,
+				85,
+				86,
+				109,
+				110,
+				121,
+				122,
+				148,
+				149,
+				158,
+				160,
+				200,
+				201,
+				209,
+				210,
+				248,
+				249,
+				257,
+				258,
+				296,
+				297,
+				305,
+				306,
+				317,
+				318,
+				336,
+				338,
+				369,
+				370,
+				393,
+				394,
+				428,
+				430,
+				436,
+				437,
+				446,
+				448,
+				467,
+				468,
+				483,
+				484,
+				513,
+				514,
+				516,
+				517,
+				528,
+				529,
+				541,
+				542,
+				556,
+				557,
+				581,
+				583,
+				592,
+				593,
+				610,
+				611,
+				680,
+				681,
+				692,
+				693,
+				740,
+				741,
+				753,
+				754,
+				757,
+				759,
+				771,
+				772,
+				814,
+				816,
+				840,
+				841,
+				873,
+				874,
+				889,
+				890,
+				922,
+				923,
+				937,
+				938,
+				970,
+				971,
+				985,
+				986,
+				1019,
+				1020,
+				1034,
+				1035,
+				1067,
+				1068,
+				1098,
+				1099,
+				1122,
+				1123,
+				1146,
+				1147,
+				1170,
+				1171
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000001:20:0",
+				"wall_part:inst_000002:21:0",
+				"wall_part:inst_000003:22:0",
+				"wall_part:inst_000004:23:0",
+				"wall_part:inst_000005:24:0",
+				"wall_part:inst_000078:95:0",
+				"wall_part:inst_000006:25:0",
+				"wall_part:inst_000077:94:0",
+				"wall_part:inst_000007:26:0",
+				"wall_part:inst_000076:93:0",
+				"wall_part:inst_000008:27:0",
+				"wall_part:inst_000075:92:0",
+				"wall_part:inst_000009:28:0",
+				"wall_part:inst_000074:91:0",
+				"wall_part:inst_000098:115:0",
+				"wall_part:inst_000097:114:0",
+				"wall_part:inst_000010:29:0",
+				"wall_part:inst_000073:90:0",
+				"wall_part:inst_000085:102:0",
+				"wall_part:inst_000096:113:0",
+				"wall_part:inst_000062:79:0",
+				"wall_part:inst_000011:30:0",
+				"wall_part:inst_000072:89:0",
+				"wall_part:inst_000086:103:0",
+				"wall_part:inst_000095:112:0",
+				"wall_part:inst_000061:78:0",
+				"wall_part:inst_000012:31:0",
+				"wall_part:inst_000071:88:0",
+				"wall_part:inst_000013:32:0",
+				"wall_part:inst_000087:104:0",
+				"wall_part:inst_000053:70:0",
+				"wall_part:inst_000088:105:0",
+				"wall_part:inst_000054:71:0",
+				"wall_part:inst_000089:106:0",
+				"wall_part:inst_000055:72:0",
+				"wall_part:inst_000090:107:0",
+				"wall_part:inst_000037:56:0",
+				"wall_part:inst_000036:55:0",
+				"wall_part:inst_000056:73:0",
+				"wall_part:inst_000035:54:0",
+				"wall_part:inst_000057:74:0",
+				"wall_part:inst_000034:53:0",
+				"wall_part:inst_000058:75:0",
+				"wall_part:inst_000033:52:0",
+				"wall_part:inst_000059:76:0",
+				"wall_part:inst_000032:51:0",
+				"wall_part:inst_000060:77:0",
+				"wall_part:inst_000031:50:0",
+				"wall_part:inst_000030:49:0",
+				"wall_part:inst_000029:48:0",
+				"wall_part:inst_000028:47:0",
+				"wall_part:inst_000027:46:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						4,
+						6
+					],
+					"group_key": "wall_part:inst_000001:20:0",
+					"representative_command_index": 4
+				},
+				{
+					"command_indices": [
+						36,
+						37
+					],
+					"group_key": "wall_part:inst_000002:21:0",
+					"representative_command_index": 36
+				},
+				{
+					"command_indices": [
+						61,
+						62
+					],
+					"group_key": "wall_part:inst_000003:22:0",
+					"representative_command_index": 61
+				},
+				{
+					"command_indices": [
+						85,
+						86
+					],
+					"group_key": "wall_part:inst_000004:23:0",
+					"representative_command_index": 85
+				},
+				{
+					"command_indices": [
+						109,
+						110
+					],
+					"group_key": "wall_part:inst_000005:24:0",
+					"representative_command_index": 109
+				},
+				{
+					"command_indices": [
+						121,
+						122
+					],
+					"group_key": "wall_part:inst_000078:95:0",
+					"representative_command_index": 121
+				},
+				{
+					"command_indices": [
+						148,
+						149
+					],
+					"group_key": "wall_part:inst_000006:25:0",
+					"representative_command_index": 148
+				},
+				{
+					"command_indices": [
+						158,
+						160
+					],
+					"group_key": "wall_part:inst_000077:94:0",
+					"representative_command_index": 158
+				},
+				{
+					"command_indices": [
+						200,
+						201
+					],
+					"group_key": "wall_part:inst_000007:26:0",
+					"representative_command_index": 200
+				},
+				{
+					"command_indices": [
+						209,
+						210
+					],
+					"group_key": "wall_part:inst_000076:93:0",
+					"representative_command_index": 209
+				},
+				{
+					"command_indices": [
+						248,
+						249
+					],
+					"group_key": "wall_part:inst_000008:27:0",
+					"representative_command_index": 248
+				},
+				{
+					"command_indices": [
+						257,
+						258
+					],
+					"group_key": "wall_part:inst_000075:92:0",
+					"representative_command_index": 257
+				},
+				{
+					"command_indices": [
+						296,
+						297
+					],
+					"group_key": "wall_part:inst_000009:28:0",
+					"representative_command_index": 296
+				},
+				{
+					"command_indices": [
+						305,
+						306
+					],
+					"group_key": "wall_part:inst_000074:91:0",
+					"representative_command_index": 305
+				},
+				{
+					"command_indices": [
+						317,
+						318
+					],
+					"group_key": "wall_part:inst_000098:115:0",
+					"representative_command_index": 317
+				},
+				{
+					"command_indices": [
+						336,
+						338
+					],
+					"group_key": "wall_part:inst_000097:114:0",
+					"representative_command_index": 336
+				},
+				{
+					"command_indices": [
+						369,
+						370
+					],
+					"group_key": "wall_part:inst_000010:29:0",
+					"representative_command_index": 369
+				},
+				{
+					"command_indices": [
+						393,
+						394
+					],
+					"group_key": "wall_part:inst_000073:90:0",
+					"representative_command_index": 393
+				},
+				{
+					"command_indices": [
+						428,
+						430
+					],
+					"group_key": "wall_part:inst_000085:102:0",
+					"representative_command_index": 428
+				},
+				{
+					"command_indices": [
+						436,
+						437
+					],
+					"group_key": "wall_part:inst_000096:113:0",
+					"representative_command_index": 436
+				},
+				{
+					"command_indices": [
+						446,
+						448
+					],
+					"group_key": "wall_part:inst_000062:79:0",
+					"representative_command_index": 446
+				},
+				{
+					"command_indices": [
+						467,
+						468
+					],
+					"group_key": "wall_part:inst_000011:30:0",
+					"representative_command_index": 467
+				},
+				{
+					"command_indices": [
+						483,
+						484
+					],
+					"group_key": "wall_part:inst_000072:89:0",
+					"representative_command_index": 483
+				},
+				{
+					"command_indices": [
+						513,
+						514
+					],
+					"group_key": "wall_part:inst_000086:103:0",
+					"representative_command_index": 513
+				},
+				{
+					"command_indices": [
+						516,
+						517
+					],
+					"group_key": "wall_part:inst_000095:112:0",
+					"representative_command_index": 516
+				},
+				{
+					"command_indices": [
+						528,
+						529
+					],
+					"group_key": "wall_part:inst_000061:78:0",
+					"representative_command_index": 528
+				},
+				{
+					"command_indices": [
+						541,
+						542
+					],
+					"group_key": "wall_part:inst_000012:31:0",
+					"representative_command_index": 541
+				},
+				{
+					"command_indices": [
+						556,
+						557
+					],
+					"group_key": "wall_part:inst_000071:88:0",
+					"representative_command_index": 556
+				},
+				{
+					"command_indices": [
+						581,
+						583
+					],
+					"group_key": "wall_part:inst_000013:32:0",
+					"representative_command_index": 581
+				},
+				{
+					"command_indices": [
+						592,
+						593
+					],
+					"group_key": "wall_part:inst_000087:104:0",
+					"representative_command_index": 592
+				},
+				{
+					"command_indices": [
+						610,
+						611
+					],
+					"group_key": "wall_part:inst_000053:70:0",
+					"representative_command_index": 610
+				},
+				{
+					"command_indices": [
+						680,
+						681
+					],
+					"group_key": "wall_part:inst_000088:105:0",
+					"representative_command_index": 680
+				},
+				{
+					"command_indices": [
+						692,
+						693
+					],
+					"group_key": "wall_part:inst_000054:71:0",
+					"representative_command_index": 692
+				},
+				{
+					"command_indices": [
+						740,
+						741
+					],
+					"group_key": "wall_part:inst_000089:106:0",
+					"representative_command_index": 740
+				},
+				{
+					"command_indices": [
+						753,
+						754
+					],
+					"group_key": "wall_part:inst_000055:72:0",
+					"representative_command_index": 753
+				},
+				{
+					"command_indices": [
+						757,
+						759
+					],
+					"group_key": "wall_part:inst_000090:107:0",
+					"representative_command_index": 757
+				},
+				{
+					"command_indices": [
+						771,
+						772
+					],
+					"group_key": "wall_part:inst_000037:56:0",
+					"representative_command_index": 771
+				},
+				{
+					"command_indices": [
+						814,
+						816
+					],
+					"group_key": "wall_part:inst_000036:55:0",
+					"representative_command_index": 814
+				},
+				{
+					"command_indices": [
+						840,
+						841
+					],
+					"group_key": "wall_part:inst_000056:73:0",
+					"representative_command_index": 840
+				},
+				{
+					"command_indices": [
+						873,
+						874
+					],
+					"group_key": "wall_part:inst_000035:54:0",
+					"representative_command_index": 873
+				},
+				{
+					"command_indices": [
+						889,
+						890
+					],
+					"group_key": "wall_part:inst_000057:74:0",
+					"representative_command_index": 889
+				},
+				{
+					"command_indices": [
+						922,
+						923
+					],
+					"group_key": "wall_part:inst_000034:53:0",
+					"representative_command_index": 922
+				},
+				{
+					"command_indices": [
+						937,
+						938
+					],
+					"group_key": "wall_part:inst_000058:75:0",
+					"representative_command_index": 937
+				},
+				{
+					"command_indices": [
+						970,
+						971
+					],
+					"group_key": "wall_part:inst_000033:52:0",
+					"representative_command_index": 970
+				},
+				{
+					"command_indices": [
+						985,
+						986
+					],
+					"group_key": "wall_part:inst_000059:76:0",
+					"representative_command_index": 985
+				},
+				{
+					"command_indices": [
+						1019,
+						1020
+					],
+					"group_key": "wall_part:inst_000032:51:0",
+					"representative_command_index": 1019
+				},
+				{
+					"command_indices": [
+						1034,
+						1035
+					],
+					"group_key": "wall_part:inst_000060:77:0",
+					"representative_command_index": 1034
+				},
+				{
+					"command_indices": [
+						1067,
+						1068
+					],
+					"group_key": "wall_part:inst_000031:50:0",
+					"representative_command_index": 1067
+				},
+				{
+					"command_indices": [
+						1098,
+						1099
+					],
+					"group_key": "wall_part:inst_000030:49:0",
+					"representative_command_index": 1098
+				},
+				{
+					"command_indices": [
+						1122,
+						1123
+					],
+					"group_key": "wall_part:inst_000029:48:0",
+					"representative_command_index": 1122
+				},
+				{
+					"command_indices": [
+						1146,
+						1147
+					],
+					"group_key": "wall_part:inst_000028:47:0",
+					"representative_command_index": 1146
+				},
+				{
+					"command_indices": [
+						1170,
+						1171
+					],
+					"group_key": "wall_part:inst_000027:46:0",
+					"representative_command_index": 1170
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 4,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 6,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				12,
+				13,
+				42,
+				43,
+				67,
+				68,
+				91,
+				92,
+				115,
+				116,
+				133,
+				134,
+				163,
+				164,
+				173,
+				174,
+				212,
+				213,
+				221,
+				222,
+				260,
+				261,
+				269,
+				270,
+				308,
+				309,
+				320,
+				321,
+				337,
+				339,
+				361,
+				363,
+				396,
+				397,
+				418,
+				419,
+				451,
+				452,
+				460,
+				461,
+				473,
+				474,
+				486,
+				487,
+				501,
+				502,
+				531,
+				532,
+				535,
+				536,
+				547,
+				548,
+				559,
+				560,
+				577,
+				578,
+				602,
+				604,
+				613,
+				614,
+				639,
+				640,
+				695,
+				696,
+				707,
+				708,
+				758,
+				760,
+				774,
+				775,
+				778,
+				780,
+				792,
+				793,
+				835,
+				837,
+				852,
+				853,
+				886,
+				887,
+				901,
+				902,
+				934,
+				935,
+				949,
+				950,
+				982,
+				983,
+				997,
+				998,
+				1031,
+				1032,
+				1046,
+				1047,
+				1079,
+				1080,
+				1104,
+				1105,
+				1128,
+				1129,
+				1152,
+				1153,
+				1179,
+				1180
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000001:20:1",
+				"wall_part:inst_000002:21:1",
+				"wall_part:inst_000003:22:1",
+				"wall_part:inst_000004:23:1",
+				"wall_part:inst_000005:24:1",
+				"wall_part:inst_000078:95:1",
+				"wall_part:inst_000006:25:1",
+				"wall_part:inst_000077:94:1",
+				"wall_part:inst_000007:26:1",
+				"wall_part:inst_000076:93:1",
+				"wall_part:inst_000008:27:1",
+				"wall_part:inst_000075:92:1",
+				"wall_part:inst_000009:28:1",
+				"wall_part:inst_000074:91:1",
+				"wall_part:inst_000098:115:1",
+				"wall_part:inst_000097:114:1",
+				"wall_part:inst_000010:29:1",
+				"wall_part:inst_000073:90:1",
+				"wall_part:inst_000085:102:1",
+				"wall_part:inst_000096:113:1",
+				"wall_part:inst_000062:79:1",
+				"wall_part:inst_000011:30:1",
+				"wall_part:inst_000072:89:1",
+				"wall_part:inst_000086:103:1",
+				"wall_part:inst_000095:112:1",
+				"wall_part:inst_000061:78:1",
+				"wall_part:inst_000012:31:1",
+				"wall_part:inst_000071:88:1",
+				"wall_part:inst_000013:32:1",
+				"wall_part:inst_000087:104:1",
+				"wall_part:inst_000053:70:1",
+				"wall_part:inst_000088:105:1",
+				"wall_part:inst_000054:71:1",
+				"wall_part:inst_000089:106:1",
+				"wall_part:inst_000055:72:1",
+				"wall_part:inst_000090:107:1",
+				"wall_part:inst_000037:56:1",
+				"wall_part:inst_000036:55:1",
+				"wall_part:inst_000056:73:1",
+				"wall_part:inst_000035:54:1",
+				"wall_part:inst_000057:74:1",
+				"wall_part:inst_000034:53:1",
+				"wall_part:inst_000058:75:1",
+				"wall_part:inst_000033:52:1",
+				"wall_part:inst_000059:76:1",
+				"wall_part:inst_000032:51:1",
+				"wall_part:inst_000060:77:1",
+				"wall_part:inst_000031:50:1",
+				"wall_part:inst_000030:49:1",
+				"wall_part:inst_000029:48:1",
+				"wall_part:inst_000028:47:1",
+				"wall_part:inst_000027:46:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						12,
+						13
+					],
+					"group_key": "wall_part:inst_000001:20:1",
+					"representative_command_index": 12
+				},
+				{
+					"command_indices": [
+						42,
+						43
+					],
+					"group_key": "wall_part:inst_000002:21:1",
+					"representative_command_index": 42
+				},
+				{
+					"command_indices": [
+						67,
+						68
+					],
+					"group_key": "wall_part:inst_000003:22:1",
+					"representative_command_index": 67
+				},
+				{
+					"command_indices": [
+						91,
+						92
+					],
+					"group_key": "wall_part:inst_000004:23:1",
+					"representative_command_index": 91
+				},
+				{
+					"command_indices": [
+						115,
+						116
+					],
+					"group_key": "wall_part:inst_000005:24:1",
+					"representative_command_index": 115
+				},
+				{
+					"command_indices": [
+						133,
+						134
+					],
+					"group_key": "wall_part:inst_000078:95:1",
+					"representative_command_index": 133
+				},
+				{
+					"command_indices": [
+						163,
+						164
+					],
+					"group_key": "wall_part:inst_000006:25:1",
+					"representative_command_index": 163
+				},
+				{
+					"command_indices": [
+						173,
+						174
+					],
+					"group_key": "wall_part:inst_000077:94:1",
+					"representative_command_index": 173
+				},
+				{
+					"command_indices": [
+						212,
+						213
+					],
+					"group_key": "wall_part:inst_000007:26:1",
+					"representative_command_index": 212
+				},
+				{
+					"command_indices": [
+						221,
+						222
+					],
+					"group_key": "wall_part:inst_000076:93:1",
+					"representative_command_index": 221
+				},
+				{
+					"command_indices": [
+						260,
+						261
+					],
+					"group_key": "wall_part:inst_000008:27:1",
+					"representative_command_index": 260
+				},
+				{
+					"command_indices": [
+						269,
+						270
+					],
+					"group_key": "wall_part:inst_000075:92:1",
+					"representative_command_index": 269
+				},
+				{
+					"command_indices": [
+						308,
+						309
+					],
+					"group_key": "wall_part:inst_000009:28:1",
+					"representative_command_index": 308
+				},
+				{
+					"command_indices": [
+						320,
+						321
+					],
+					"group_key": "wall_part:inst_000074:91:1",
+					"representative_command_index": 320
+				},
+				{
+					"command_indices": [
+						337,
+						339
+					],
+					"group_key": "wall_part:inst_000098:115:1",
+					"representative_command_index": 337
+				},
+				{
+					"command_indices": [
+						361,
+						363
+					],
+					"group_key": "wall_part:inst_000097:114:1",
+					"representative_command_index": 361
+				},
+				{
+					"command_indices": [
+						396,
+						397
+					],
+					"group_key": "wall_part:inst_000010:29:1",
+					"representative_command_index": 396
+				},
+				{
+					"command_indices": [
+						418,
+						419
+					],
+					"group_key": "wall_part:inst_000073:90:1",
+					"representative_command_index": 418
+				},
+				{
+					"command_indices": [
+						451,
+						452
+					],
+					"group_key": "wall_part:inst_000085:102:1",
+					"representative_command_index": 451
+				},
+				{
+					"command_indices": [
+						460,
+						461
+					],
+					"group_key": "wall_part:inst_000096:113:1",
+					"representative_command_index": 460
+				},
+				{
+					"command_indices": [
+						473,
+						474
+					],
+					"group_key": "wall_part:inst_000062:79:1",
+					"representative_command_index": 473
+				},
+				{
+					"command_indices": [
+						486,
+						487
+					],
+					"group_key": "wall_part:inst_000011:30:1",
+					"representative_command_index": 486
+				},
+				{
+					"command_indices": [
+						501,
+						502
+					],
+					"group_key": "wall_part:inst_000072:89:1",
+					"representative_command_index": 501
+				},
+				{
+					"command_indices": [
+						531,
+						532
+					],
+					"group_key": "wall_part:inst_000086:103:1",
+					"representative_command_index": 531
+				},
+				{
+					"command_indices": [
+						535,
+						536
+					],
+					"group_key": "wall_part:inst_000095:112:1",
+					"representative_command_index": 535
+				},
+				{
+					"command_indices": [
+						547,
+						548
+					],
+					"group_key": "wall_part:inst_000061:78:1",
+					"representative_command_index": 547
+				},
+				{
+					"command_indices": [
+						559,
+						560
+					],
+					"group_key": "wall_part:inst_000012:31:1",
+					"representative_command_index": 559
+				},
+				{
+					"command_indices": [
+						577,
+						578
+					],
+					"group_key": "wall_part:inst_000071:88:1",
+					"representative_command_index": 577
+				},
+				{
+					"command_indices": [
+						602,
+						604
+					],
+					"group_key": "wall_part:inst_000013:32:1",
+					"representative_command_index": 602
+				},
+				{
+					"command_indices": [
+						613,
+						614
+					],
+					"group_key": "wall_part:inst_000087:104:1",
+					"representative_command_index": 613
+				},
+				{
+					"command_indices": [
+						639,
+						640
+					],
+					"group_key": "wall_part:inst_000053:70:1",
+					"representative_command_index": 639
+				},
+				{
+					"command_indices": [
+						695,
+						696
+					],
+					"group_key": "wall_part:inst_000088:105:1",
+					"representative_command_index": 695
+				},
+				{
+					"command_indices": [
+						707,
+						708
+					],
+					"group_key": "wall_part:inst_000054:71:1",
+					"representative_command_index": 707
+				},
+				{
+					"command_indices": [
+						758,
+						760
+					],
+					"group_key": "wall_part:inst_000089:106:1",
+					"representative_command_index": 758
+				},
+				{
+					"command_indices": [
+						774,
+						775
+					],
+					"group_key": "wall_part:inst_000055:72:1",
+					"representative_command_index": 774
+				},
+				{
+					"command_indices": [
+						778,
+						780
+					],
+					"group_key": "wall_part:inst_000090:107:1",
+					"representative_command_index": 778
+				},
+				{
+					"command_indices": [
+						792,
+						793
+					],
+					"group_key": "wall_part:inst_000037:56:1",
+					"representative_command_index": 792
+				},
+				{
+					"command_indices": [
+						835,
+						837
+					],
+					"group_key": "wall_part:inst_000036:55:1",
+					"representative_command_index": 835
+				},
+				{
+					"command_indices": [
+						852,
+						853
+					],
+					"group_key": "wall_part:inst_000056:73:1",
+					"representative_command_index": 852
+				},
+				{
+					"command_indices": [
+						886,
+						887
+					],
+					"group_key": "wall_part:inst_000035:54:1",
+					"representative_command_index": 886
+				},
+				{
+					"command_indices": [
+						901,
+						902
+					],
+					"group_key": "wall_part:inst_000057:74:1",
+					"representative_command_index": 901
+				},
+				{
+					"command_indices": [
+						934,
+						935
+					],
+					"group_key": "wall_part:inst_000034:53:1",
+					"representative_command_index": 934
+				},
+				{
+					"command_indices": [
+						949,
+						950
+					],
+					"group_key": "wall_part:inst_000058:75:1",
+					"representative_command_index": 949
+				},
+				{
+					"command_indices": [
+						982,
+						983
+					],
+					"group_key": "wall_part:inst_000033:52:1",
+					"representative_command_index": 982
+				},
+				{
+					"command_indices": [
+						997,
+						998
+					],
+					"group_key": "wall_part:inst_000059:76:1",
+					"representative_command_index": 997
+				},
+				{
+					"command_indices": [
+						1031,
+						1032
+					],
+					"group_key": "wall_part:inst_000032:51:1",
+					"representative_command_index": 1031
+				},
+				{
+					"command_indices": [
+						1046,
+						1047
+					],
+					"group_key": "wall_part:inst_000060:77:1",
+					"representative_command_index": 1046
+				},
+				{
+					"command_indices": [
+						1079,
+						1080
+					],
+					"group_key": "wall_part:inst_000031:50:1",
+					"representative_command_index": 1079
+				},
+				{
+					"command_indices": [
+						1104,
+						1105
+					],
+					"group_key": "wall_part:inst_000030:49:1",
+					"representative_command_index": 1104
+				},
+				{
+					"command_indices": [
+						1128,
+						1129
+					],
+					"group_key": "wall_part:inst_000029:48:1",
+					"representative_command_index": 1128
+				},
+				{
+					"command_indices": [
+						1152,
+						1153
+					],
+					"group_key": "wall_part:inst_000028:47:1",
+					"representative_command_index": 1152
+				},
+				{
+					"command_indices": [
+						1179,
+						1180
+					],
+					"group_key": "wall_part:inst_000027:46:1",
+					"representative_command_index": 1179
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 12,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 13,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				21,
+				22,
+				48,
+				49,
+				73,
+				74,
+				97,
+				98,
+				124,
+				125,
+				145,
+				146,
+				176,
+				177,
+				185,
+				186,
+				224,
+				225,
+				233,
+				234,
+				272,
+				273,
+				281,
+				282,
+				323,
+				324,
+				341,
+				342,
+				362,
+				364,
+				388,
+				390,
+				421,
+				422,
+				439,
+				440,
+				476,
+				477,
+				480,
+				481,
+				492,
+				493,
+				504,
+				505,
+				519,
+				520,
+				550,
+				551,
+				553,
+				554,
+				565,
+				566,
+				582,
+				584,
+				598,
+				599,
+				629,
+				630,
+				642,
+				643,
+				661,
+				662,
+				710,
+				711,
+				722,
+				723,
+				779,
+				781,
+				795,
+				796,
+				799,
+				801,
+				815,
+				817,
+				849,
+				850,
+				864,
+				865,
+				898,
+				899,
+				913,
+				914,
+				946,
+				947,
+				961,
+				962,
+				994,
+				995,
+				1010,
+				1011,
+				1043,
+				1044,
+				1058,
+				1059,
+				1085,
+				1086,
+				1110,
+				1111,
+				1134,
+				1135,
+				1158,
+				1159,
+				1188,
+				1189
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000001:20:2",
+				"wall_part:inst_000002:21:2",
+				"wall_part:inst_000003:22:2",
+				"wall_part:inst_000004:23:2",
+				"wall_part:inst_000005:24:2",
+				"wall_part:inst_000078:95:2",
+				"wall_part:inst_000006:25:2",
+				"wall_part:inst_000077:94:2",
+				"wall_part:inst_000007:26:2",
+				"wall_part:inst_000076:93:2",
+				"wall_part:inst_000008:27:2",
+				"wall_part:inst_000075:92:2",
+				"wall_part:inst_000009:28:2",
+				"wall_part:inst_000074:91:2",
+				"wall_part:inst_000098:115:2",
+				"wall_part:inst_000097:114:2",
+				"wall_part:inst_000010:29:2",
+				"wall_part:inst_000073:90:2",
+				"wall_part:inst_000085:102:2",
+				"wall_part:inst_000096:113:2",
+				"wall_part:inst_000062:79:2",
+				"wall_part:inst_000011:30:2",
+				"wall_part:inst_000072:89:2",
+				"wall_part:inst_000086:103:2",
+				"wall_part:inst_000095:112:2",
+				"wall_part:inst_000061:78:2",
+				"wall_part:inst_000012:31:2",
+				"wall_part:inst_000071:88:2",
+				"wall_part:inst_000013:32:2",
+				"wall_part:inst_000087:104:2",
+				"wall_part:inst_000053:70:2",
+				"wall_part:inst_000088:105:2",
+				"wall_part:inst_000054:71:2",
+				"wall_part:inst_000089:106:2",
+				"wall_part:inst_000055:72:2",
+				"wall_part:inst_000090:107:2",
+				"wall_part:inst_000037:56:2",
+				"wall_part:inst_000036:55:2",
+				"wall_part:inst_000056:73:2",
+				"wall_part:inst_000035:54:2",
+				"wall_part:inst_000057:74:2",
+				"wall_part:inst_000034:53:2",
+				"wall_part:inst_000058:75:2",
+				"wall_part:inst_000033:52:2",
+				"wall_part:inst_000059:76:2",
+				"wall_part:inst_000032:51:2",
+				"wall_part:inst_000060:77:2",
+				"wall_part:inst_000031:50:2",
+				"wall_part:inst_000030:49:2",
+				"wall_part:inst_000029:48:2",
+				"wall_part:inst_000028:47:2",
+				"wall_part:inst_000027:46:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						21,
+						22
+					],
+					"group_key": "wall_part:inst_000001:20:2",
+					"representative_command_index": 21
+				},
+				{
+					"command_indices": [
+						48,
+						49
+					],
+					"group_key": "wall_part:inst_000002:21:2",
+					"representative_command_index": 48
+				},
+				{
+					"command_indices": [
+						73,
+						74
+					],
+					"group_key": "wall_part:inst_000003:22:2",
+					"representative_command_index": 73
+				},
+				{
+					"command_indices": [
+						97,
+						98
+					],
+					"group_key": "wall_part:inst_000004:23:2",
+					"representative_command_index": 97
+				},
+				{
+					"command_indices": [
+						124,
+						125
+					],
+					"group_key": "wall_part:inst_000005:24:2",
+					"representative_command_index": 124
+				},
+				{
+					"command_indices": [
+						145,
+						146
+					],
+					"group_key": "wall_part:inst_000078:95:2",
+					"representative_command_index": 145
+				},
+				{
+					"command_indices": [
+						176,
+						177
+					],
+					"group_key": "wall_part:inst_000006:25:2",
+					"representative_command_index": 176
+				},
+				{
+					"command_indices": [
+						185,
+						186
+					],
+					"group_key": "wall_part:inst_000077:94:2",
+					"representative_command_index": 185
+				},
+				{
+					"command_indices": [
+						224,
+						225
+					],
+					"group_key": "wall_part:inst_000007:26:2",
+					"representative_command_index": 224
+				},
+				{
+					"command_indices": [
+						233,
+						234
+					],
+					"group_key": "wall_part:inst_000076:93:2",
+					"representative_command_index": 233
+				},
+				{
+					"command_indices": [
+						272,
+						273
+					],
+					"group_key": "wall_part:inst_000008:27:2",
+					"representative_command_index": 272
+				},
+				{
+					"command_indices": [
+						281,
+						282
+					],
+					"group_key": "wall_part:inst_000075:92:2",
+					"representative_command_index": 281
+				},
+				{
+					"command_indices": [
+						323,
+						324
+					],
+					"group_key": "wall_part:inst_000009:28:2",
+					"representative_command_index": 323
+				},
+				{
+					"command_indices": [
+						341,
+						342
+					],
+					"group_key": "wall_part:inst_000074:91:2",
+					"representative_command_index": 341
+				},
+				{
+					"command_indices": [
+						362,
+						364
+					],
+					"group_key": "wall_part:inst_000098:115:2",
+					"representative_command_index": 362
+				},
+				{
+					"command_indices": [
+						388,
+						390
+					],
+					"group_key": "wall_part:inst_000097:114:2",
+					"representative_command_index": 388
+				},
+				{
+					"command_indices": [
+						421,
+						422
+					],
+					"group_key": "wall_part:inst_000010:29:2",
+					"representative_command_index": 421
+				},
+				{
+					"command_indices": [
+						439,
+						440
+					],
+					"group_key": "wall_part:inst_000073:90:2",
+					"representative_command_index": 439
+				},
+				{
+					"command_indices": [
+						476,
+						477
+					],
+					"group_key": "wall_part:inst_000085:102:2",
+					"representative_command_index": 476
+				},
+				{
+					"command_indices": [
+						480,
+						481
+					],
+					"group_key": "wall_part:inst_000096:113:2",
+					"representative_command_index": 480
+				},
+				{
+					"command_indices": [
+						492,
+						493
+					],
+					"group_key": "wall_part:inst_000062:79:2",
+					"representative_command_index": 492
+				},
+				{
+					"command_indices": [
+						504,
+						505
+					],
+					"group_key": "wall_part:inst_000011:30:2",
+					"representative_command_index": 504
+				},
+				{
+					"command_indices": [
+						519,
+						520
+					],
+					"group_key": "wall_part:inst_000072:89:2",
+					"representative_command_index": 519
+				},
+				{
+					"command_indices": [
+						550,
+						551
+					],
+					"group_key": "wall_part:inst_000086:103:2",
+					"representative_command_index": 550
+				},
+				{
+					"command_indices": [
+						553,
+						554
+					],
+					"group_key": "wall_part:inst_000095:112:2",
+					"representative_command_index": 553
+				},
+				{
+					"command_indices": [
+						565,
+						566
+					],
+					"group_key": "wall_part:inst_000061:78:2",
+					"representative_command_index": 565
+				},
+				{
+					"command_indices": [
+						582,
+						584
+					],
+					"group_key": "wall_part:inst_000012:31:2",
+					"representative_command_index": 582
+				},
+				{
+					"command_indices": [
+						598,
+						599
+					],
+					"group_key": "wall_part:inst_000071:88:2",
+					"representative_command_index": 598
+				},
+				{
+					"command_indices": [
+						629,
+						630
+					],
+					"group_key": "wall_part:inst_000013:32:2",
+					"representative_command_index": 629
+				},
+				{
+					"command_indices": [
+						642,
+						643
+					],
+					"group_key": "wall_part:inst_000087:104:2",
+					"representative_command_index": 642
+				},
+				{
+					"command_indices": [
+						661,
+						662
+					],
+					"group_key": "wall_part:inst_000053:70:2",
+					"representative_command_index": 661
+				},
+				{
+					"command_indices": [
+						710,
+						711
+					],
+					"group_key": "wall_part:inst_000088:105:2",
+					"representative_command_index": 710
+				},
+				{
+					"command_indices": [
+						722,
+						723
+					],
+					"group_key": "wall_part:inst_000054:71:2",
+					"representative_command_index": 722
+				},
+				{
+					"command_indices": [
+						779,
+						781
+					],
+					"group_key": "wall_part:inst_000089:106:2",
+					"representative_command_index": 779
+				},
+				{
+					"command_indices": [
+						795,
+						796
+					],
+					"group_key": "wall_part:inst_000055:72:2",
+					"representative_command_index": 795
+				},
+				{
+					"command_indices": [
+						799,
+						801
+					],
+					"group_key": "wall_part:inst_000090:107:2",
+					"representative_command_index": 799
+				},
+				{
+					"command_indices": [
+						815,
+						817
+					],
+					"group_key": "wall_part:inst_000037:56:2",
+					"representative_command_index": 815
+				},
+				{
+					"command_indices": [
+						849,
+						850
+					],
+					"group_key": "wall_part:inst_000036:55:2",
+					"representative_command_index": 849
+				},
+				{
+					"command_indices": [
+						864,
+						865
+					],
+					"group_key": "wall_part:inst_000056:73:2",
+					"representative_command_index": 864
+				},
+				{
+					"command_indices": [
+						898,
+						899
+					],
+					"group_key": "wall_part:inst_000035:54:2",
+					"representative_command_index": 898
+				},
+				{
+					"command_indices": [
+						913,
+						914
+					],
+					"group_key": "wall_part:inst_000057:74:2",
+					"representative_command_index": 913
+				},
+				{
+					"command_indices": [
+						946,
+						947
+					],
+					"group_key": "wall_part:inst_000034:53:2",
+					"representative_command_index": 946
+				},
+				{
+					"command_indices": [
+						961,
+						962
+					],
+					"group_key": "wall_part:inst_000058:75:2",
+					"representative_command_index": 961
+				},
+				{
+					"command_indices": [
+						994,
+						995
+					],
+					"group_key": "wall_part:inst_000033:52:2",
+					"representative_command_index": 994
+				},
+				{
+					"command_indices": [
+						1010,
+						1011
+					],
+					"group_key": "wall_part:inst_000059:76:2",
+					"representative_command_index": 1010
+				},
+				{
+					"command_indices": [
+						1043,
+						1044
+					],
+					"group_key": "wall_part:inst_000032:51:2",
+					"representative_command_index": 1043
+				},
+				{
+					"command_indices": [
+						1058,
+						1059
+					],
+					"group_key": "wall_part:inst_000060:77:2",
+					"representative_command_index": 1058
+				},
+				{
+					"command_indices": [
+						1085,
+						1086
+					],
+					"group_key": "wall_part:inst_000031:50:2",
+					"representative_command_index": 1085
+				},
+				{
+					"command_indices": [
+						1110,
+						1111
+					],
+					"group_key": "wall_part:inst_000030:49:2",
+					"representative_command_index": 1110
+				},
+				{
+					"command_indices": [
+						1134,
+						1135
+					],
+					"group_key": "wall_part:inst_000029:48:2",
+					"representative_command_index": 1134
+				},
+				{
+					"command_indices": [
+						1158,
+						1159
+					],
+					"group_key": "wall_part:inst_000028:47:2",
+					"representative_command_index": 1158
+				},
+				{
+					"command_indices": [
+						1188,
+						1189
+					],
+					"group_key": "wall_part:inst_000027:46:2",
+					"representative_command_index": 1188
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 21,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 22,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				30,
+				31,
+				55,
+				56,
+				79,
+				80,
+				103,
+				104,
+				136,
+				137,
+				159,
+				161,
+				188,
+				189,
+				197,
+				198,
+				236,
+				237,
+				245,
+				246,
+				284,
+				285,
+				293,
+				294,
+				344,
+				345,
+				366,
+				367,
+				389,
+				391,
+				415,
+				416,
+				442,
+				443,
+				463,
+				464,
+				495,
+				496,
+				498,
+				499,
+				510,
+				511,
+				522,
+				523,
+				538,
+				539,
+				568,
+				569,
+				573,
+				575,
+				589,
+				590,
+				603,
+				605,
+				625,
+				627,
+				656,
+				658,
+				664,
+				665,
+				677,
+				678,
+				725,
+				726,
+				737,
+				738,
+				800,
+				802,
+				819,
+				820,
+				823,
+				825,
+				836,
+				838,
+				861,
+				862,
+				876,
+				877,
+				910,
+				911,
+				925,
+				926,
+				958,
+				959,
+				973,
+				974,
+				1007,
+				1008,
+				1022,
+				1023,
+				1055,
+				1056,
+				1071,
+				1073,
+				1092,
+				1093,
+				1116,
+				1117,
+				1140,
+				1141,
+				1164,
+				1165,
+				1196,
+				1198
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000001:20:3",
+				"wall_part:inst_000002:21:3",
+				"wall_part:inst_000003:22:3",
+				"wall_part:inst_000004:23:3",
+				"wall_part:inst_000005:24:3",
+				"wall_part:inst_000078:95:3",
+				"wall_part:inst_000006:25:3",
+				"wall_part:inst_000077:94:3",
+				"wall_part:inst_000007:26:3",
+				"wall_part:inst_000076:93:3",
+				"wall_part:inst_000008:27:3",
+				"wall_part:inst_000075:92:3",
+				"wall_part:inst_000009:28:3",
+				"wall_part:inst_000074:91:3",
+				"wall_part:inst_000098:115:3",
+				"wall_part:inst_000097:114:3",
+				"wall_part:inst_000010:29:3",
+				"wall_part:inst_000073:90:3",
+				"wall_part:inst_000085:102:3",
+				"wall_part:inst_000096:113:3",
+				"wall_part:inst_000062:79:3",
+				"wall_part:inst_000011:30:3",
+				"wall_part:inst_000072:89:3",
+				"wall_part:inst_000086:103:3",
+				"wall_part:inst_000095:112:3",
+				"wall_part:inst_000061:78:3",
+				"wall_part:inst_000012:31:3",
+				"wall_part:inst_000071:88:3",
+				"wall_part:inst_000013:32:3",
+				"wall_part:inst_000087:104:3",
+				"wall_part:inst_000053:70:3",
+				"wall_part:inst_000088:105:3",
+				"wall_part:inst_000054:71:3",
+				"wall_part:inst_000089:106:3",
+				"wall_part:inst_000055:72:3",
+				"wall_part:inst_000090:107:3",
+				"wall_part:inst_000037:56:3",
+				"wall_part:inst_000036:55:3",
+				"wall_part:inst_000056:73:3",
+				"wall_part:inst_000035:54:3",
+				"wall_part:inst_000057:74:3",
+				"wall_part:inst_000034:53:3",
+				"wall_part:inst_000058:75:3",
+				"wall_part:inst_000033:52:3",
+				"wall_part:inst_000059:76:3",
+				"wall_part:inst_000032:51:3",
+				"wall_part:inst_000060:77:3",
+				"wall_part:inst_000031:50:3",
+				"wall_part:inst_000030:49:3",
+				"wall_part:inst_000029:48:3",
+				"wall_part:inst_000028:47:3",
+				"wall_part:inst_000027:46:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						30,
+						31
+					],
+					"group_key": "wall_part:inst_000001:20:3",
+					"representative_command_index": 30
+				},
+				{
+					"command_indices": [
+						55,
+						56
+					],
+					"group_key": "wall_part:inst_000002:21:3",
+					"representative_command_index": 55
+				},
+				{
+					"command_indices": [
+						79,
+						80
+					],
+					"group_key": "wall_part:inst_000003:22:3",
+					"representative_command_index": 79
+				},
+				{
+					"command_indices": [
+						103,
+						104
+					],
+					"group_key": "wall_part:inst_000004:23:3",
+					"representative_command_index": 103
+				},
+				{
+					"command_indices": [
+						136,
+						137
+					],
+					"group_key": "wall_part:inst_000005:24:3",
+					"representative_command_index": 136
+				},
+				{
+					"command_indices": [
+						159,
+						161
+					],
+					"group_key": "wall_part:inst_000078:95:3",
+					"representative_command_index": 159
+				},
+				{
+					"command_indices": [
+						188,
+						189
+					],
+					"group_key": "wall_part:inst_000006:25:3",
+					"representative_command_index": 188
+				},
+				{
+					"command_indices": [
+						197,
+						198
+					],
+					"group_key": "wall_part:inst_000077:94:3",
+					"representative_command_index": 197
+				},
+				{
+					"command_indices": [
+						236,
+						237
+					],
+					"group_key": "wall_part:inst_000007:26:3",
+					"representative_command_index": 236
+				},
+				{
+					"command_indices": [
+						245,
+						246
+					],
+					"group_key": "wall_part:inst_000076:93:3",
+					"representative_command_index": 245
+				},
+				{
+					"command_indices": [
+						284,
+						285
+					],
+					"group_key": "wall_part:inst_000008:27:3",
+					"representative_command_index": 284
+				},
+				{
+					"command_indices": [
+						293,
+						294
+					],
+					"group_key": "wall_part:inst_000075:92:3",
+					"representative_command_index": 293
+				},
+				{
+					"command_indices": [
+						344,
+						345
+					],
+					"group_key": "wall_part:inst_000009:28:3",
+					"representative_command_index": 344
+				},
+				{
+					"command_indices": [
+						366,
+						367
+					],
+					"group_key": "wall_part:inst_000074:91:3",
+					"representative_command_index": 366
+				},
+				{
+					"command_indices": [
+						389,
+						391
+					],
+					"group_key": "wall_part:inst_000098:115:3",
+					"representative_command_index": 389
+				},
+				{
+					"command_indices": [
+						415,
+						416
+					],
+					"group_key": "wall_part:inst_000097:114:3",
+					"representative_command_index": 415
+				},
+				{
+					"command_indices": [
+						442,
+						443
+					],
+					"group_key": "wall_part:inst_000010:29:3",
+					"representative_command_index": 442
+				},
+				{
+					"command_indices": [
+						463,
+						464
+					],
+					"group_key": "wall_part:inst_000073:90:3",
+					"representative_command_index": 463
+				},
+				{
+					"command_indices": [
+						495,
+						496
+					],
+					"group_key": "wall_part:inst_000085:102:3",
+					"representative_command_index": 495
+				},
+				{
+					"command_indices": [
+						498,
+						499
+					],
+					"group_key": "wall_part:inst_000096:113:3",
+					"representative_command_index": 498
+				},
+				{
+					"command_indices": [
+						510,
+						511
+					],
+					"group_key": "wall_part:inst_000062:79:3",
+					"representative_command_index": 510
+				},
+				{
+					"command_indices": [
+						522,
+						523
+					],
+					"group_key": "wall_part:inst_000011:30:3",
+					"representative_command_index": 522
+				},
+				{
+					"command_indices": [
+						538,
+						539
+					],
+					"group_key": "wall_part:inst_000072:89:3",
+					"representative_command_index": 538
+				},
+				{
+					"command_indices": [
+						568,
+						569
+					],
+					"group_key": "wall_part:inst_000086:103:3",
+					"representative_command_index": 568
+				},
+				{
+					"command_indices": [
+						573,
+						575
+					],
+					"group_key": "wall_part:inst_000095:112:3",
+					"representative_command_index": 573
+				},
+				{
+					"command_indices": [
+						589,
+						590
+					],
+					"group_key": "wall_part:inst_000061:78:3",
+					"representative_command_index": 589
+				},
+				{
+					"command_indices": [
+						603,
+						605
+					],
+					"group_key": "wall_part:inst_000012:31:3",
+					"representative_command_index": 603
+				},
+				{
+					"command_indices": [
+						625,
+						627
+					],
+					"group_key": "wall_part:inst_000071:88:3",
+					"representative_command_index": 625
+				},
+				{
+					"command_indices": [
+						656,
+						658
+					],
+					"group_key": "wall_part:inst_000013:32:3",
+					"representative_command_index": 656
+				},
+				{
+					"command_indices": [
+						664,
+						665
+					],
+					"group_key": "wall_part:inst_000087:104:3",
+					"representative_command_index": 664
+				},
+				{
+					"command_indices": [
+						677,
+						678
+					],
+					"group_key": "wall_part:inst_000053:70:3",
+					"representative_command_index": 677
+				},
+				{
+					"command_indices": [
+						725,
+						726
+					],
+					"group_key": "wall_part:inst_000088:105:3",
+					"representative_command_index": 725
+				},
+				{
+					"command_indices": [
+						737,
+						738
+					],
+					"group_key": "wall_part:inst_000054:71:3",
+					"representative_command_index": 737
+				},
+				{
+					"command_indices": [
+						800,
+						802
+					],
+					"group_key": "wall_part:inst_000089:106:3",
+					"representative_command_index": 800
+				},
+				{
+					"command_indices": [
+						819,
+						820
+					],
+					"group_key": "wall_part:inst_000055:72:3",
+					"representative_command_index": 819
+				},
+				{
+					"command_indices": [
+						823,
+						825
+					],
+					"group_key": "wall_part:inst_000090:107:3",
+					"representative_command_index": 823
+				},
+				{
+					"command_indices": [
+						836,
+						838
+					],
+					"group_key": "wall_part:inst_000037:56:3",
+					"representative_command_index": 836
+				},
+				{
+					"command_indices": [
+						861,
+						862
+					],
+					"group_key": "wall_part:inst_000036:55:3",
+					"representative_command_index": 861
+				},
+				{
+					"command_indices": [
+						876,
+						877
+					],
+					"group_key": "wall_part:inst_000056:73:3",
+					"representative_command_index": 876
+				},
+				{
+					"command_indices": [
+						910,
+						911
+					],
+					"group_key": "wall_part:inst_000035:54:3",
+					"representative_command_index": 910
+				},
+				{
+					"command_indices": [
+						925,
+						926
+					],
+					"group_key": "wall_part:inst_000057:74:3",
+					"representative_command_index": 925
+				},
+				{
+					"command_indices": [
+						958,
+						959
+					],
+					"group_key": "wall_part:inst_000034:53:3",
+					"representative_command_index": 958
+				},
+				{
+					"command_indices": [
+						973,
+						974
+					],
+					"group_key": "wall_part:inst_000058:75:3",
+					"representative_command_index": 973
+				},
+				{
+					"command_indices": [
+						1007,
+						1008
+					],
+					"group_key": "wall_part:inst_000033:52:3",
+					"representative_command_index": 1007
+				},
+				{
+					"command_indices": [
+						1022,
+						1023
+					],
+					"group_key": "wall_part:inst_000059:76:3",
+					"representative_command_index": 1022
+				},
+				{
+					"command_indices": [
+						1055,
+						1056
+					],
+					"group_key": "wall_part:inst_000032:51:3",
+					"representative_command_index": 1055
+				},
+				{
+					"command_indices": [
+						1071,
+						1073
+					],
+					"group_key": "wall_part:inst_000060:77:3",
+					"representative_command_index": 1071
+				},
+				{
+					"command_indices": [
+						1092,
+						1093
+					],
+					"group_key": "wall_part:inst_000031:50:3",
+					"representative_command_index": 1092
+				},
+				{
+					"command_indices": [
+						1116,
+						1117
+					],
+					"group_key": "wall_part:inst_000030:49:3",
+					"representative_command_index": 1116
+				},
+				{
+					"command_indices": [
+						1140,
+						1141
+					],
+					"group_key": "wall_part:inst_000029:48:3",
+					"representative_command_index": 1140
+				},
+				{
+					"command_indices": [
+						1164,
+						1165
+					],
+					"group_key": "wall_part:inst_000028:47:3",
+					"representative_command_index": 1164
+				},
+				{
+					"command_indices": [
+						1196,
+						1198
+					],
+					"group_key": "wall_part:inst_000027:46:3",
+					"representative_command_index": 1196
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png@(-48.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png@(-48.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 30,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 31,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png",
+					"offset": [
+						-48.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-48.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				5,
+				7,
+				16,
+				18,
+				45,
+				46,
+				70,
+				71,
+				94,
+				95,
+				118,
+				119,
+				130,
+				131,
+				166,
+				167,
+				182,
+				183,
+				215,
+				216,
+				230,
+				231,
+				263,
+				264,
+				278,
+				279,
+				311,
+				312,
+				329,
+				330,
+				332,
+				333,
+				352,
+				354,
+				382,
+				384,
+				399,
+				400,
+				489,
+				490,
+				562,
+				563,
+				572,
+				574,
+				617,
+				619,
+				624,
+				626,
+				655,
+				657,
+				698,
+				699,
+				701,
+				702,
+				719,
+				720,
+				762,
+				763,
+				765,
+				766,
+				789,
+				790,
+				843,
+				844,
+				858,
+				859,
+				892,
+				893,
+				907,
+				908,
+				940,
+				941,
+				955,
+				956,
+				988,
+				989,
+				1004,
+				1005,
+				1037,
+				1038,
+				1052,
+				1053,
+				1089,
+				1090,
+				1113,
+				1114,
+				1137,
+				1138,
+				1161,
+				1162,
+				1174,
+				1176
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000052:69:0",
+				"wall_part:inst_000051:68:0",
+				"wall_part:inst_000050:67:0",
+				"wall_part:inst_000049:66:0",
+				"wall_part:inst_000048:65:0",
+				"wall_part:inst_000047:64:0",
+				"wall_part:inst_000079:96:0",
+				"wall_part:inst_000046:63:0",
+				"wall_part:inst_000080:97:0",
+				"wall_part:inst_000045:62:0",
+				"wall_part:inst_000081:98:0",
+				"wall_part:inst_000044:61:0",
+				"wall_part:inst_000082:99:0",
+				"wall_part:inst_000043:60:0",
+				"wall_part:inst_000083:100:0",
+				"wall_part:inst_000099:116:0",
+				"wall_part:inst_000084:101:0",
+				"wall_part:inst_000100:117:0",
+				"wall_part:inst_000042:59:0",
+				"wall_part:inst_000041:58:0",
+				"wall_part:inst_000040:57:0",
+				"wall_part:inst_000094:111:0",
+				"wall_part:inst_000093:110:0",
+				"wall_part:inst_000070:87:0",
+				"wall_part:inst_000014:33:0",
+				"wall_part:inst_000092:109:0",
+				"wall_part:inst_000069:86:0",
+				"wall_part:inst_000015:34:0",
+				"wall_part:inst_000091:108:0",
+				"wall_part:inst_000068:85:0",
+				"wall_part:inst_000016:35:0",
+				"wall_part:inst_000067:84:0",
+				"wall_part:inst_000017:36:0",
+				"wall_part:inst_000066:83:0",
+				"wall_part:inst_000018:37:0",
+				"wall_part:inst_000065:82:0",
+				"wall_part:inst_000019:38:0",
+				"wall_part:inst_000064:81:0",
+				"wall_part:inst_000020:39:0",
+				"wall_part:inst_000063:80:0",
+				"wall_part:inst_000021:40:0",
+				"wall_part:inst_000022:41:0",
+				"wall_part:inst_000023:42:0",
+				"wall_part:inst_000024:43:0",
+				"wall_part:inst_000025:44:0",
+				"wall_part:inst_000026:45:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						5,
+						7
+					],
+					"group_key": "wall_part:inst_000052:69:0",
+					"representative_command_index": 5
+				},
+				{
+					"command_indices": [
+						16,
+						18
+					],
+					"group_key": "wall_part:inst_000051:68:0",
+					"representative_command_index": 16
+				},
+				{
+					"command_indices": [
+						45,
+						46
+					],
+					"group_key": "wall_part:inst_000050:67:0",
+					"representative_command_index": 45
+				},
+				{
+					"command_indices": [
+						70,
+						71
+					],
+					"group_key": "wall_part:inst_000049:66:0",
+					"representative_command_index": 70
+				},
+				{
+					"command_indices": [
+						94,
+						95
+					],
+					"group_key": "wall_part:inst_000048:65:0",
+					"representative_command_index": 94
+				},
+				{
+					"command_indices": [
+						118,
+						119
+					],
+					"group_key": "wall_part:inst_000047:64:0",
+					"representative_command_index": 118
+				},
+				{
+					"command_indices": [
+						130,
+						131
+					],
+					"group_key": "wall_part:inst_000079:96:0",
+					"representative_command_index": 130
+				},
+				{
+					"command_indices": [
+						166,
+						167
+					],
+					"group_key": "wall_part:inst_000046:63:0",
+					"representative_command_index": 166
+				},
+				{
+					"command_indices": [
+						182,
+						183
+					],
+					"group_key": "wall_part:inst_000080:97:0",
+					"representative_command_index": 182
+				},
+				{
+					"command_indices": [
+						215,
+						216
+					],
+					"group_key": "wall_part:inst_000045:62:0",
+					"representative_command_index": 215
+				},
+				{
+					"command_indices": [
+						230,
+						231
+					],
+					"group_key": "wall_part:inst_000081:98:0",
+					"representative_command_index": 230
+				},
+				{
+					"command_indices": [
+						263,
+						264
+					],
+					"group_key": "wall_part:inst_000044:61:0",
+					"representative_command_index": 263
+				},
+				{
+					"command_indices": [
+						278,
+						279
+					],
+					"group_key": "wall_part:inst_000082:99:0",
+					"representative_command_index": 278
+				},
+				{
+					"command_indices": [
+						311,
+						312
+					],
+					"group_key": "wall_part:inst_000043:60:0",
+					"representative_command_index": 311
+				},
+				{
+					"command_indices": [
+						329,
+						330
+					],
+					"group_key": "wall_part:inst_000083:100:0",
+					"representative_command_index": 329
+				},
+				{
+					"command_indices": [
+						332,
+						333
+					],
+					"group_key": "wall_part:inst_000099:116:0",
+					"representative_command_index": 332
+				},
+				{
+					"command_indices": [
+						352,
+						354
+					],
+					"group_key": "wall_part:inst_000084:101:0",
+					"representative_command_index": 352
+				},
+				{
+					"command_indices": [
+						382,
+						384
+					],
+					"group_key": "wall_part:inst_000100:117:0",
+					"representative_command_index": 382
+				},
+				{
+					"command_indices": [
+						399,
+						400
+					],
+					"group_key": "wall_part:inst_000042:59:0",
+					"representative_command_index": 399
+				},
+				{
+					"command_indices": [
+						489,
+						490
+					],
+					"group_key": "wall_part:inst_000041:58:0",
+					"representative_command_index": 489
+				},
+				{
+					"command_indices": [
+						562,
+						563
+					],
+					"group_key": "wall_part:inst_000040:57:0",
+					"representative_command_index": 562
+				},
+				{
+					"command_indices": [
+						572,
+						574
+					],
+					"group_key": "wall_part:inst_000094:111:0",
+					"representative_command_index": 572
+				},
+				{
+					"command_indices": [
+						617,
+						619
+					],
+					"group_key": "wall_part:inst_000093:110:0",
+					"representative_command_index": 617
+				},
+				{
+					"command_indices": [
+						624,
+						626
+					],
+					"group_key": "wall_part:inst_000070:87:0",
+					"representative_command_index": 624
+				},
+				{
+					"command_indices": [
+						655,
+						657
+					],
+					"group_key": "wall_part:inst_000014:33:0",
+					"representative_command_index": 655
+				},
+				{
+					"command_indices": [
+						698,
+						699
+					],
+					"group_key": "wall_part:inst_000092:109:0",
+					"representative_command_index": 698
+				},
+				{
+					"command_indices": [
+						701,
+						702
+					],
+					"group_key": "wall_part:inst_000069:86:0",
+					"representative_command_index": 701
+				},
+				{
+					"command_indices": [
+						719,
+						720
+					],
+					"group_key": "wall_part:inst_000015:34:0",
+					"representative_command_index": 719
+				},
+				{
+					"command_indices": [
+						762,
+						763
+					],
+					"group_key": "wall_part:inst_000091:108:0",
+					"representative_command_index": 762
+				},
+				{
+					"command_indices": [
+						765,
+						766
+					],
+					"group_key": "wall_part:inst_000068:85:0",
+					"representative_command_index": 765
+				},
+				{
+					"command_indices": [
+						789,
+						790
+					],
+					"group_key": "wall_part:inst_000016:35:0",
+					"representative_command_index": 789
+				},
+				{
+					"command_indices": [
+						843,
+						844
+					],
+					"group_key": "wall_part:inst_000067:84:0",
+					"representative_command_index": 843
+				},
+				{
+					"command_indices": [
+						858,
+						859
+					],
+					"group_key": "wall_part:inst_000017:36:0",
+					"representative_command_index": 858
+				},
+				{
+					"command_indices": [
+						892,
+						893
+					],
+					"group_key": "wall_part:inst_000066:83:0",
+					"representative_command_index": 892
+				},
+				{
+					"command_indices": [
+						907,
+						908
+					],
+					"group_key": "wall_part:inst_000018:37:0",
+					"representative_command_index": 907
+				},
+				{
+					"command_indices": [
+						940,
+						941
+					],
+					"group_key": "wall_part:inst_000065:82:0",
+					"representative_command_index": 940
+				},
+				{
+					"command_indices": [
+						955,
+						956
+					],
+					"group_key": "wall_part:inst_000019:38:0",
+					"representative_command_index": 955
+				},
+				{
+					"command_indices": [
+						988,
+						989
+					],
+					"group_key": "wall_part:inst_000064:81:0",
+					"representative_command_index": 988
+				},
+				{
+					"command_indices": [
+						1004,
+						1005
+					],
+					"group_key": "wall_part:inst_000020:39:0",
+					"representative_command_index": 1004
+				},
+				{
+					"command_indices": [
+						1037,
+						1038
+					],
+					"group_key": "wall_part:inst_000063:80:0",
+					"representative_command_index": 1037
+				},
+				{
+					"command_indices": [
+						1052,
+						1053
+					],
+					"group_key": "wall_part:inst_000021:40:0",
+					"representative_command_index": 1052
+				},
+				{
+					"command_indices": [
+						1089,
+						1090
+					],
+					"group_key": "wall_part:inst_000022:41:0",
+					"representative_command_index": 1089
+				},
+				{
+					"command_indices": [
+						1113,
+						1114
+					],
+					"group_key": "wall_part:inst_000023:42:0",
+					"representative_command_index": 1113
+				},
+				{
+					"command_indices": [
+						1137,
+						1138
+					],
+					"group_key": "wall_part:inst_000024:43:0",
+					"representative_command_index": 1137
+				},
+				{
+					"command_indices": [
+						1161,
+						1162
+					],
+					"group_key": "wall_part:inst_000025:44:0",
+					"representative_command_index": 1161
+				},
+				{
+					"command_indices": [
+						1174,
+						1176
+					],
+					"group_key": "wall_part:inst_000026:45:0",
+					"representative_command_index": 1174
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 5,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 7,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				9,
+				10,
+				25,
+				27,
+				51,
+				52,
+				76,
+				77,
+				100,
+				101,
+				127,
+				128,
+				142,
+				143,
+				179,
+				180,
+				194,
+				195,
+				227,
+				228,
+				242,
+				243,
+				275,
+				276,
+				290,
+				291,
+				326,
+				327,
+				353,
+				355,
+				357,
+				358,
+				376,
+				378,
+				409,
+				411,
+				424,
+				425,
+				507,
+				508,
+				586,
+				587,
+				595,
+				596,
+				646,
+				648,
+				651,
+				652,
+				673,
+				674,
+				713,
+				714,
+				716,
+				717,
+				734,
+				735,
+				783,
+				784,
+				786,
+				787,
+				810,
+				811,
+				855,
+				856,
+				870,
+				871,
+				904,
+				905,
+				919,
+				920,
+				952,
+				953,
+				967,
+				968,
+				1000,
+				1001,
+				1016,
+				1017,
+				1049,
+				1050,
+				1064,
+				1065,
+				1095,
+				1096,
+				1119,
+				1120,
+				1143,
+				1144,
+				1167,
+				1168,
+				1183,
+				1185
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000052:69:1",
+				"wall_part:inst_000051:68:1",
+				"wall_part:inst_000050:67:1",
+				"wall_part:inst_000049:66:1",
+				"wall_part:inst_000048:65:1",
+				"wall_part:inst_000047:64:1",
+				"wall_part:inst_000079:96:1",
+				"wall_part:inst_000046:63:1",
+				"wall_part:inst_000080:97:1",
+				"wall_part:inst_000045:62:1",
+				"wall_part:inst_000081:98:1",
+				"wall_part:inst_000044:61:1",
+				"wall_part:inst_000082:99:1",
+				"wall_part:inst_000043:60:1",
+				"wall_part:inst_000083:100:1",
+				"wall_part:inst_000099:116:1",
+				"wall_part:inst_000084:101:1",
+				"wall_part:inst_000100:117:1",
+				"wall_part:inst_000042:59:1",
+				"wall_part:inst_000041:58:1",
+				"wall_part:inst_000040:57:1",
+				"wall_part:inst_000094:111:1",
+				"wall_part:inst_000093:110:1",
+				"wall_part:inst_000070:87:1",
+				"wall_part:inst_000014:33:1",
+				"wall_part:inst_000092:109:1",
+				"wall_part:inst_000069:86:1",
+				"wall_part:inst_000015:34:1",
+				"wall_part:inst_000091:108:1",
+				"wall_part:inst_000068:85:1",
+				"wall_part:inst_000016:35:1",
+				"wall_part:inst_000067:84:1",
+				"wall_part:inst_000017:36:1",
+				"wall_part:inst_000066:83:1",
+				"wall_part:inst_000018:37:1",
+				"wall_part:inst_000065:82:1",
+				"wall_part:inst_000019:38:1",
+				"wall_part:inst_000064:81:1",
+				"wall_part:inst_000020:39:1",
+				"wall_part:inst_000063:80:1",
+				"wall_part:inst_000021:40:1",
+				"wall_part:inst_000022:41:1",
+				"wall_part:inst_000023:42:1",
+				"wall_part:inst_000024:43:1",
+				"wall_part:inst_000025:44:1",
+				"wall_part:inst_000026:45:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						9,
+						10
+					],
+					"group_key": "wall_part:inst_000052:69:1",
+					"representative_command_index": 9
+				},
+				{
+					"command_indices": [
+						25,
+						27
+					],
+					"group_key": "wall_part:inst_000051:68:1",
+					"representative_command_index": 25
+				},
+				{
+					"command_indices": [
+						51,
+						52
+					],
+					"group_key": "wall_part:inst_000050:67:1",
+					"representative_command_index": 51
+				},
+				{
+					"command_indices": [
+						76,
+						77
+					],
+					"group_key": "wall_part:inst_000049:66:1",
+					"representative_command_index": 76
+				},
+				{
+					"command_indices": [
+						100,
+						101
+					],
+					"group_key": "wall_part:inst_000048:65:1",
+					"representative_command_index": 100
+				},
+				{
+					"command_indices": [
+						127,
+						128
+					],
+					"group_key": "wall_part:inst_000047:64:1",
+					"representative_command_index": 127
+				},
+				{
+					"command_indices": [
+						142,
+						143
+					],
+					"group_key": "wall_part:inst_000079:96:1",
+					"representative_command_index": 142
+				},
+				{
+					"command_indices": [
+						179,
+						180
+					],
+					"group_key": "wall_part:inst_000046:63:1",
+					"representative_command_index": 179
+				},
+				{
+					"command_indices": [
+						194,
+						195
+					],
+					"group_key": "wall_part:inst_000080:97:1",
+					"representative_command_index": 194
+				},
+				{
+					"command_indices": [
+						227,
+						228
+					],
+					"group_key": "wall_part:inst_000045:62:1",
+					"representative_command_index": 227
+				},
+				{
+					"command_indices": [
+						242,
+						243
+					],
+					"group_key": "wall_part:inst_000081:98:1",
+					"representative_command_index": 242
+				},
+				{
+					"command_indices": [
+						275,
+						276
+					],
+					"group_key": "wall_part:inst_000044:61:1",
+					"representative_command_index": 275
+				},
+				{
+					"command_indices": [
+						290,
+						291
+					],
+					"group_key": "wall_part:inst_000082:99:1",
+					"representative_command_index": 290
+				},
+				{
+					"command_indices": [
+						326,
+						327
+					],
+					"group_key": "wall_part:inst_000043:60:1",
+					"representative_command_index": 326
+				},
+				{
+					"command_indices": [
+						353,
+						355
+					],
+					"group_key": "wall_part:inst_000083:100:1",
+					"representative_command_index": 353
+				},
+				{
+					"command_indices": [
+						357,
+						358
+					],
+					"group_key": "wall_part:inst_000099:116:1",
+					"representative_command_index": 357
+				},
+				{
+					"command_indices": [
+						376,
+						378
+					],
+					"group_key": "wall_part:inst_000084:101:1",
+					"representative_command_index": 376
+				},
+				{
+					"command_indices": [
+						409,
+						411
+					],
+					"group_key": "wall_part:inst_000100:117:1",
+					"representative_command_index": 409
+				},
+				{
+					"command_indices": [
+						424,
+						425
+					],
+					"group_key": "wall_part:inst_000042:59:1",
+					"representative_command_index": 424
+				},
+				{
+					"command_indices": [
+						507,
+						508
+					],
+					"group_key": "wall_part:inst_000041:58:1",
+					"representative_command_index": 507
+				},
+				{
+					"command_indices": [
+						586,
+						587
+					],
+					"group_key": "wall_part:inst_000040:57:1",
+					"representative_command_index": 586
+				},
+				{
+					"command_indices": [
+						595,
+						596
+					],
+					"group_key": "wall_part:inst_000094:111:1",
+					"representative_command_index": 595
+				},
+				{
+					"command_indices": [
+						646,
+						648
+					],
+					"group_key": "wall_part:inst_000093:110:1",
+					"representative_command_index": 646
+				},
+				{
+					"command_indices": [
+						651,
+						652
+					],
+					"group_key": "wall_part:inst_000070:87:1",
+					"representative_command_index": 651
+				},
+				{
+					"command_indices": [
+						673,
+						674
+					],
+					"group_key": "wall_part:inst_000014:33:1",
+					"representative_command_index": 673
+				},
+				{
+					"command_indices": [
+						713,
+						714
+					],
+					"group_key": "wall_part:inst_000092:109:1",
+					"representative_command_index": 713
+				},
+				{
+					"command_indices": [
+						716,
+						717
+					],
+					"group_key": "wall_part:inst_000069:86:1",
+					"representative_command_index": 716
+				},
+				{
+					"command_indices": [
+						734,
+						735
+					],
+					"group_key": "wall_part:inst_000015:34:1",
+					"representative_command_index": 734
+				},
+				{
+					"command_indices": [
+						783,
+						784
+					],
+					"group_key": "wall_part:inst_000091:108:1",
+					"representative_command_index": 783
+				},
+				{
+					"command_indices": [
+						786,
+						787
+					],
+					"group_key": "wall_part:inst_000068:85:1",
+					"representative_command_index": 786
+				},
+				{
+					"command_indices": [
+						810,
+						811
+					],
+					"group_key": "wall_part:inst_000016:35:1",
+					"representative_command_index": 810
+				},
+				{
+					"command_indices": [
+						855,
+						856
+					],
+					"group_key": "wall_part:inst_000067:84:1",
+					"representative_command_index": 855
+				},
+				{
+					"command_indices": [
+						870,
+						871
+					],
+					"group_key": "wall_part:inst_000017:36:1",
+					"representative_command_index": 870
+				},
+				{
+					"command_indices": [
+						904,
+						905
+					],
+					"group_key": "wall_part:inst_000066:83:1",
+					"representative_command_index": 904
+				},
+				{
+					"command_indices": [
+						919,
+						920
+					],
+					"group_key": "wall_part:inst_000018:37:1",
+					"representative_command_index": 919
+				},
+				{
+					"command_indices": [
+						952,
+						953
+					],
+					"group_key": "wall_part:inst_000065:82:1",
+					"representative_command_index": 952
+				},
+				{
+					"command_indices": [
+						967,
+						968
+					],
+					"group_key": "wall_part:inst_000019:38:1",
+					"representative_command_index": 967
+				},
+				{
+					"command_indices": [
+						1000,
+						1001
+					],
+					"group_key": "wall_part:inst_000064:81:1",
+					"representative_command_index": 1000
+				},
+				{
+					"command_indices": [
+						1016,
+						1017
+					],
+					"group_key": "wall_part:inst_000020:39:1",
+					"representative_command_index": 1016
+				},
+				{
+					"command_indices": [
+						1049,
+						1050
+					],
+					"group_key": "wall_part:inst_000063:80:1",
+					"representative_command_index": 1049
+				},
+				{
+					"command_indices": [
+						1064,
+						1065
+					],
+					"group_key": "wall_part:inst_000021:40:1",
+					"representative_command_index": 1064
+				},
+				{
+					"command_indices": [
+						1095,
+						1096
+					],
+					"group_key": "wall_part:inst_000022:41:1",
+					"representative_command_index": 1095
+				},
+				{
+					"command_indices": [
+						1119,
+						1120
+					],
+					"group_key": "wall_part:inst_000023:42:1",
+					"representative_command_index": 1119
+				},
+				{
+					"command_indices": [
+						1143,
+						1144
+					],
+					"group_key": "wall_part:inst_000024:43:1",
+					"representative_command_index": 1143
+				},
+				{
+					"command_indices": [
+						1167,
+						1168
+					],
+					"group_key": "wall_part:inst_000025:44:1",
+					"representative_command_index": 1167
+				},
+				{
+					"command_indices": [
+						1183,
+						1185
+					],
+					"group_key": "wall_part:inst_000026:45:1",
+					"representative_command_index": 1183
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 9,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 10,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				17,
+				19,
+				33,
+				34,
+				58,
+				59,
+				82,
+				83,
+				106,
+				107,
+				139,
+				140,
+				154,
+				155,
+				191,
+				192,
+				206,
+				207,
+				239,
+				240,
+				254,
+				255,
+				287,
+				288,
+				302,
+				303,
+				347,
+				348,
+				377,
+				379,
+				383,
+				385,
+				403,
+				405,
+				433,
+				434,
+				447,
+				449,
+				525,
+				526,
+				607,
+				608,
+				618,
+				620,
+				667,
+				668,
+				670,
+				671,
+				689,
+				690,
+				728,
+				729,
+				731,
+				732,
+				749,
+				750,
+				804,
+				805,
+				807,
+				808,
+				831,
+				832,
+				867,
+				868,
+				883,
+				884,
+				916,
+				917,
+				931,
+				932,
+				964,
+				965,
+				979,
+				980,
+				1013,
+				1014,
+				1028,
+				1029,
+				1061,
+				1062,
+				1076,
+				1077,
+				1101,
+				1102,
+				1125,
+				1126,
+				1149,
+				1150,
+				1175,
+				1177,
+				1191,
+				1192
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000052:69:2",
+				"wall_part:inst_000051:68:2",
+				"wall_part:inst_000050:67:2",
+				"wall_part:inst_000049:66:2",
+				"wall_part:inst_000048:65:2",
+				"wall_part:inst_000047:64:2",
+				"wall_part:inst_000079:96:2",
+				"wall_part:inst_000046:63:2",
+				"wall_part:inst_000080:97:2",
+				"wall_part:inst_000045:62:2",
+				"wall_part:inst_000081:98:2",
+				"wall_part:inst_000044:61:2",
+				"wall_part:inst_000082:99:2",
+				"wall_part:inst_000043:60:2",
+				"wall_part:inst_000083:100:2",
+				"wall_part:inst_000099:116:2",
+				"wall_part:inst_000084:101:2",
+				"wall_part:inst_000100:117:2",
+				"wall_part:inst_000042:59:2",
+				"wall_part:inst_000041:58:2",
+				"wall_part:inst_000040:57:2",
+				"wall_part:inst_000094:111:2",
+				"wall_part:inst_000093:110:2",
+				"wall_part:inst_000070:87:2",
+				"wall_part:inst_000014:33:2",
+				"wall_part:inst_000092:109:2",
+				"wall_part:inst_000069:86:2",
+				"wall_part:inst_000015:34:2",
+				"wall_part:inst_000091:108:2",
+				"wall_part:inst_000068:85:2",
+				"wall_part:inst_000016:35:2",
+				"wall_part:inst_000067:84:2",
+				"wall_part:inst_000017:36:2",
+				"wall_part:inst_000066:83:2",
+				"wall_part:inst_000018:37:2",
+				"wall_part:inst_000065:82:2",
+				"wall_part:inst_000019:38:2",
+				"wall_part:inst_000064:81:2",
+				"wall_part:inst_000020:39:2",
+				"wall_part:inst_000063:80:2",
+				"wall_part:inst_000021:40:2",
+				"wall_part:inst_000022:41:2",
+				"wall_part:inst_000023:42:2",
+				"wall_part:inst_000024:43:2",
+				"wall_part:inst_000025:44:2",
+				"wall_part:inst_000026:45:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						17,
+						19
+					],
+					"group_key": "wall_part:inst_000052:69:2",
+					"representative_command_index": 17
+				},
+				{
+					"command_indices": [
+						33,
+						34
+					],
+					"group_key": "wall_part:inst_000051:68:2",
+					"representative_command_index": 33
+				},
+				{
+					"command_indices": [
+						58,
+						59
+					],
+					"group_key": "wall_part:inst_000050:67:2",
+					"representative_command_index": 58
+				},
+				{
+					"command_indices": [
+						82,
+						83
+					],
+					"group_key": "wall_part:inst_000049:66:2",
+					"representative_command_index": 82
+				},
+				{
+					"command_indices": [
+						106,
+						107
+					],
+					"group_key": "wall_part:inst_000048:65:2",
+					"representative_command_index": 106
+				},
+				{
+					"command_indices": [
+						139,
+						140
+					],
+					"group_key": "wall_part:inst_000047:64:2",
+					"representative_command_index": 139
+				},
+				{
+					"command_indices": [
+						154,
+						155
+					],
+					"group_key": "wall_part:inst_000079:96:2",
+					"representative_command_index": 154
+				},
+				{
+					"command_indices": [
+						191,
+						192
+					],
+					"group_key": "wall_part:inst_000046:63:2",
+					"representative_command_index": 191
+				},
+				{
+					"command_indices": [
+						206,
+						207
+					],
+					"group_key": "wall_part:inst_000080:97:2",
+					"representative_command_index": 206
+				},
+				{
+					"command_indices": [
+						239,
+						240
+					],
+					"group_key": "wall_part:inst_000045:62:2",
+					"representative_command_index": 239
+				},
+				{
+					"command_indices": [
+						254,
+						255
+					],
+					"group_key": "wall_part:inst_000081:98:2",
+					"representative_command_index": 254
+				},
+				{
+					"command_indices": [
+						287,
+						288
+					],
+					"group_key": "wall_part:inst_000044:61:2",
+					"representative_command_index": 287
+				},
+				{
+					"command_indices": [
+						302,
+						303
+					],
+					"group_key": "wall_part:inst_000082:99:2",
+					"representative_command_index": 302
+				},
+				{
+					"command_indices": [
+						347,
+						348
+					],
+					"group_key": "wall_part:inst_000043:60:2",
+					"representative_command_index": 347
+				},
+				{
+					"command_indices": [
+						377,
+						379
+					],
+					"group_key": "wall_part:inst_000083:100:2",
+					"representative_command_index": 377
+				},
+				{
+					"command_indices": [
+						383,
+						385
+					],
+					"group_key": "wall_part:inst_000099:116:2",
+					"representative_command_index": 383
+				},
+				{
+					"command_indices": [
+						403,
+						405
+					],
+					"group_key": "wall_part:inst_000084:101:2",
+					"representative_command_index": 403
+				},
+				{
+					"command_indices": [
+						433,
+						434
+					],
+					"group_key": "wall_part:inst_000100:117:2",
+					"representative_command_index": 433
+				},
+				{
+					"command_indices": [
+						447,
+						449
+					],
+					"group_key": "wall_part:inst_000042:59:2",
+					"representative_command_index": 447
+				},
+				{
+					"command_indices": [
+						525,
+						526
+					],
+					"group_key": "wall_part:inst_000041:58:2",
+					"representative_command_index": 525
+				},
+				{
+					"command_indices": [
+						607,
+						608
+					],
+					"group_key": "wall_part:inst_000040:57:2",
+					"representative_command_index": 607
+				},
+				{
+					"command_indices": [
+						618,
+						620
+					],
+					"group_key": "wall_part:inst_000094:111:2",
+					"representative_command_index": 618
+				},
+				{
+					"command_indices": [
+						667,
+						668
+					],
+					"group_key": "wall_part:inst_000093:110:2",
+					"representative_command_index": 667
+				},
+				{
+					"command_indices": [
+						670,
+						671
+					],
+					"group_key": "wall_part:inst_000070:87:2",
+					"representative_command_index": 670
+				},
+				{
+					"command_indices": [
+						689,
+						690
+					],
+					"group_key": "wall_part:inst_000014:33:2",
+					"representative_command_index": 689
+				},
+				{
+					"command_indices": [
+						728,
+						729
+					],
+					"group_key": "wall_part:inst_000092:109:2",
+					"representative_command_index": 728
+				},
+				{
+					"command_indices": [
+						731,
+						732
+					],
+					"group_key": "wall_part:inst_000069:86:2",
+					"representative_command_index": 731
+				},
+				{
+					"command_indices": [
+						749,
+						750
+					],
+					"group_key": "wall_part:inst_000015:34:2",
+					"representative_command_index": 749
+				},
+				{
+					"command_indices": [
+						804,
+						805
+					],
+					"group_key": "wall_part:inst_000091:108:2",
+					"representative_command_index": 804
+				},
+				{
+					"command_indices": [
+						807,
+						808
+					],
+					"group_key": "wall_part:inst_000068:85:2",
+					"representative_command_index": 807
+				},
+				{
+					"command_indices": [
+						831,
+						832
+					],
+					"group_key": "wall_part:inst_000016:35:2",
+					"representative_command_index": 831
+				},
+				{
+					"command_indices": [
+						867,
+						868
+					],
+					"group_key": "wall_part:inst_000067:84:2",
+					"representative_command_index": 867
+				},
+				{
+					"command_indices": [
+						883,
+						884
+					],
+					"group_key": "wall_part:inst_000017:36:2",
+					"representative_command_index": 883
+				},
+				{
+					"command_indices": [
+						916,
+						917
+					],
+					"group_key": "wall_part:inst_000066:83:2",
+					"representative_command_index": 916
+				},
+				{
+					"command_indices": [
+						931,
+						932
+					],
+					"group_key": "wall_part:inst_000018:37:2",
+					"representative_command_index": 931
+				},
+				{
+					"command_indices": [
+						964,
+						965
+					],
+					"group_key": "wall_part:inst_000065:82:2",
+					"representative_command_index": 964
+				},
+				{
+					"command_indices": [
+						979,
+						980
+					],
+					"group_key": "wall_part:inst_000019:38:2",
+					"representative_command_index": 979
+				},
+				{
+					"command_indices": [
+						1013,
+						1014
+					],
+					"group_key": "wall_part:inst_000064:81:2",
+					"representative_command_index": 1013
+				},
+				{
+					"command_indices": [
+						1028,
+						1029
+					],
+					"group_key": "wall_part:inst_000020:39:2",
+					"representative_command_index": 1028
+				},
+				{
+					"command_indices": [
+						1061,
+						1062
+					],
+					"group_key": "wall_part:inst_000063:80:2",
+					"representative_command_index": 1061
+				},
+				{
+					"command_indices": [
+						1076,
+						1077
+					],
+					"group_key": "wall_part:inst_000021:40:2",
+					"representative_command_index": 1076
+				},
+				{
+					"command_indices": [
+						1101,
+						1102
+					],
+					"group_key": "wall_part:inst_000022:41:2",
+					"representative_command_index": 1101
+				},
+				{
+					"command_indices": [
+						1125,
+						1126
+					],
+					"group_key": "wall_part:inst_000023:42:2",
+					"representative_command_index": 1125
+				},
+				{
+					"command_indices": [
+						1149,
+						1150
+					],
+					"group_key": "wall_part:inst_000024:43:2",
+					"representative_command_index": 1149
+				},
+				{
+					"command_indices": [
+						1175,
+						1177
+					],
+					"group_key": "wall_part:inst_000025:44:2",
+					"representative_command_index": 1175
+				},
+				{
+					"command_indices": [
+						1191,
+						1192
+					],
+					"group_key": "wall_part:inst_000026:45:2",
+					"representative_command_index": 1191
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 17,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 19,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				0,
+				192,
+				192
+			]
+		},
+		{
+			"command_indices": [
+				26,
+				28,
+				39,
+				40,
+				64,
+				65,
+				88,
+				89,
+				112,
+				113,
+				151,
+				152,
+				169,
+				170,
+				203,
+				204,
+				218,
+				219,
+				251,
+				252,
+				266,
+				267,
+				299,
+				300,
+				314,
+				315,
+				372,
+				373,
+				404,
+				406,
+				410,
+				412,
+				429,
+				431,
+				456,
+				458,
+				470,
+				471,
+				544,
+				545,
+				634,
+				636,
+				647,
+				649,
+				683,
+				684,
+				686,
+				687,
+				704,
+				705,
+				743,
+				744,
+				746,
+				747,
+				768,
+				769,
+				824,
+				826,
+				828,
+				829,
+				846,
+				847,
+				880,
+				881,
+				895,
+				896,
+				928,
+				929,
+				943,
+				944,
+				976,
+				977,
+				991,
+				992,
+				1025,
+				1026,
+				1040,
+				1041,
+				1072,
+				1074,
+				1082,
+				1083,
+				1107,
+				1108,
+				1131,
+				1132,
+				1155,
+				1156,
+				1184,
+				1186,
+				1195,
+				1197
+			],
+			"composite_size": [
+				192,
+				192
+			],
+			"group_keys": [
+				"wall_part:inst_000052:69:3",
+				"wall_part:inst_000051:68:3",
+				"wall_part:inst_000050:67:3",
+				"wall_part:inst_000049:66:3",
+				"wall_part:inst_000048:65:3",
+				"wall_part:inst_000047:64:3",
+				"wall_part:inst_000079:96:3",
+				"wall_part:inst_000046:63:3",
+				"wall_part:inst_000080:97:3",
+				"wall_part:inst_000045:62:3",
+				"wall_part:inst_000081:98:3",
+				"wall_part:inst_000044:61:3",
+				"wall_part:inst_000082:99:3",
+				"wall_part:inst_000043:60:3",
+				"wall_part:inst_000083:100:3",
+				"wall_part:inst_000099:116:3",
+				"wall_part:inst_000084:101:3",
+				"wall_part:inst_000100:117:3",
+				"wall_part:inst_000042:59:3",
+				"wall_part:inst_000041:58:3",
+				"wall_part:inst_000040:57:3",
+				"wall_part:inst_000094:111:3",
+				"wall_part:inst_000093:110:3",
+				"wall_part:inst_000070:87:3",
+				"wall_part:inst_000014:33:3",
+				"wall_part:inst_000092:109:3",
+				"wall_part:inst_000069:86:3",
+				"wall_part:inst_000015:34:3",
+				"wall_part:inst_000091:108:3",
+				"wall_part:inst_000068:85:3",
+				"wall_part:inst_000016:35:3",
+				"wall_part:inst_000067:84:3",
+				"wall_part:inst_000017:36:3",
+				"wall_part:inst_000066:83:3",
+				"wall_part:inst_000018:37:3",
+				"wall_part:inst_000065:82:3",
+				"wall_part:inst_000019:38:3",
+				"wall_part:inst_000064:81:3",
+				"wall_part:inst_000020:39:3",
+				"wall_part:inst_000063:80:3",
+				"wall_part:inst_000021:40:3",
+				"wall_part:inst_000022:41:3",
+				"wall_part:inst_000023:42:3",
+				"wall_part:inst_000024:43:3",
+				"wall_part:inst_000025:44:3",
+				"wall_part:inst_000026:45:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						26,
+						28
+					],
+					"group_key": "wall_part:inst_000052:69:3",
+					"representative_command_index": 26
+				},
+				{
+					"command_indices": [
+						39,
+						40
+					],
+					"group_key": "wall_part:inst_000051:68:3",
+					"representative_command_index": 39
+				},
+				{
+					"command_indices": [
+						64,
+						65
+					],
+					"group_key": "wall_part:inst_000050:67:3",
+					"representative_command_index": 64
+				},
+				{
+					"command_indices": [
+						88,
+						89
+					],
+					"group_key": "wall_part:inst_000049:66:3",
+					"representative_command_index": 88
+				},
+				{
+					"command_indices": [
+						112,
+						113
+					],
+					"group_key": "wall_part:inst_000048:65:3",
+					"representative_command_index": 112
+				},
+				{
+					"command_indices": [
+						151,
+						152
+					],
+					"group_key": "wall_part:inst_000047:64:3",
+					"representative_command_index": 151
+				},
+				{
+					"command_indices": [
+						169,
+						170
+					],
+					"group_key": "wall_part:inst_000079:96:3",
+					"representative_command_index": 169
+				},
+				{
+					"command_indices": [
+						203,
+						204
+					],
+					"group_key": "wall_part:inst_000046:63:3",
+					"representative_command_index": 203
+				},
+				{
+					"command_indices": [
+						218,
+						219
+					],
+					"group_key": "wall_part:inst_000080:97:3",
+					"representative_command_index": 218
+				},
+				{
+					"command_indices": [
+						251,
+						252
+					],
+					"group_key": "wall_part:inst_000045:62:3",
+					"representative_command_index": 251
+				},
+				{
+					"command_indices": [
+						266,
+						267
+					],
+					"group_key": "wall_part:inst_000081:98:3",
+					"representative_command_index": 266
+				},
+				{
+					"command_indices": [
+						299,
+						300
+					],
+					"group_key": "wall_part:inst_000044:61:3",
+					"representative_command_index": 299
+				},
+				{
+					"command_indices": [
+						314,
+						315
+					],
+					"group_key": "wall_part:inst_000082:99:3",
+					"representative_command_index": 314
+				},
+				{
+					"command_indices": [
+						372,
+						373
+					],
+					"group_key": "wall_part:inst_000043:60:3",
+					"representative_command_index": 372
+				},
+				{
+					"command_indices": [
+						404,
+						406
+					],
+					"group_key": "wall_part:inst_000083:100:3",
+					"representative_command_index": 404
+				},
+				{
+					"command_indices": [
+						410,
+						412
+					],
+					"group_key": "wall_part:inst_000099:116:3",
+					"representative_command_index": 410
+				},
+				{
+					"command_indices": [
+						429,
+						431
+					],
+					"group_key": "wall_part:inst_000084:101:3",
+					"representative_command_index": 429
+				},
+				{
+					"command_indices": [
+						456,
+						458
+					],
+					"group_key": "wall_part:inst_000100:117:3",
+					"representative_command_index": 456
+				},
+				{
+					"command_indices": [
+						470,
+						471
+					],
+					"group_key": "wall_part:inst_000042:59:3",
+					"representative_command_index": 470
+				},
+				{
+					"command_indices": [
+						544,
+						545
+					],
+					"group_key": "wall_part:inst_000041:58:3",
+					"representative_command_index": 544
+				},
+				{
+					"command_indices": [
+						634,
+						636
+					],
+					"group_key": "wall_part:inst_000040:57:3",
+					"representative_command_index": 634
+				},
+				{
+					"command_indices": [
+						647,
+						649
+					],
+					"group_key": "wall_part:inst_000094:111:3",
+					"representative_command_index": 647
+				},
+				{
+					"command_indices": [
+						683,
+						684
+					],
+					"group_key": "wall_part:inst_000093:110:3",
+					"representative_command_index": 683
+				},
+				{
+					"command_indices": [
+						686,
+						687
+					],
+					"group_key": "wall_part:inst_000070:87:3",
+					"representative_command_index": 686
+				},
+				{
+					"command_indices": [
+						704,
+						705
+					],
+					"group_key": "wall_part:inst_000014:33:3",
+					"representative_command_index": 704
+				},
+				{
+					"command_indices": [
+						743,
+						744
+					],
+					"group_key": "wall_part:inst_000092:109:3",
+					"representative_command_index": 743
+				},
+				{
+					"command_indices": [
+						746,
+						747
+					],
+					"group_key": "wall_part:inst_000069:86:3",
+					"representative_command_index": 746
+				},
+				{
+					"command_indices": [
+						768,
+						769
+					],
+					"group_key": "wall_part:inst_000015:34:3",
+					"representative_command_index": 768
+				},
+				{
+					"command_indices": [
+						824,
+						826
+					],
+					"group_key": "wall_part:inst_000091:108:3",
+					"representative_command_index": 824
+				},
+				{
+					"command_indices": [
+						828,
+						829
+					],
+					"group_key": "wall_part:inst_000068:85:3",
+					"representative_command_index": 828
+				},
+				{
+					"command_indices": [
+						846,
+						847
+					],
+					"group_key": "wall_part:inst_000016:35:3",
+					"representative_command_index": 846
+				},
+				{
+					"command_indices": [
+						880,
+						881
+					],
+					"group_key": "wall_part:inst_000067:84:3",
+					"representative_command_index": 880
+				},
+				{
+					"command_indices": [
+						895,
+						896
+					],
+					"group_key": "wall_part:inst_000017:36:3",
+					"representative_command_index": 895
+				},
+				{
+					"command_indices": [
+						928,
+						929
+					],
+					"group_key": "wall_part:inst_000066:83:3",
+					"representative_command_index": 928
+				},
+				{
+					"command_indices": [
+						943,
+						944
+					],
+					"group_key": "wall_part:inst_000018:37:3",
+					"representative_command_index": 943
+				},
+				{
+					"command_indices": [
+						976,
+						977
+					],
+					"group_key": "wall_part:inst_000065:82:3",
+					"representative_command_index": 976
+				},
+				{
+					"command_indices": [
+						991,
+						992
+					],
+					"group_key": "wall_part:inst_000019:38:3",
+					"representative_command_index": 991
+				},
+				{
+					"command_indices": [
+						1025,
+						1026
+					],
+					"group_key": "wall_part:inst_000064:81:3",
+					"representative_command_index": 1025
+				},
+				{
+					"command_indices": [
+						1040,
+						1041
+					],
+					"group_key": "wall_part:inst_000020:39:3",
+					"representative_command_index": 1040
+				},
+				{
+					"command_indices": [
+						1072,
+						1074
+					],
+					"group_key": "wall_part:inst_000063:80:3",
+					"representative_command_index": 1072
+				},
+				{
+					"command_indices": [
+						1082,
+						1083
+					],
+					"group_key": "wall_part:inst_000021:40:3",
+					"representative_command_index": 1082
+				},
+				{
+					"command_indices": [
+						1107,
+						1108
+					],
+					"group_key": "wall_part:inst_000022:41:3",
+					"representative_command_index": 1107
+				},
+				{
+					"command_indices": [
+						1131,
+						1132
+					],
+					"group_key": "wall_part:inst_000023:42:3",
+					"representative_command_index": 1131
+				},
+				{
+					"command_indices": [
+						1155,
+						1156
+					],
+					"group_key": "wall_part:inst_000024:43:3",
+					"representative_command_index": 1155
+				},
+				{
+					"command_indices": [
+						1184,
+						1186
+					],
+					"group_key": "wall_part:inst_000025:44:3",
+					"representative_command_index": 1184
+				},
+				{
+					"command_indices": [
+						1195,
+						1197
+					],
+					"group_key": "wall_part:inst_000026:45:3",
+					"representative_command_index": 1195
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png@(-144.0, -112.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png@(-144.0, -112.0)",
+			"layers": [
+				{
+					"command_index": 26,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				},
+				{
+					"command_index": 28,
+					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png",
+					"offset": [
+						-144.0,
+						-112.0
+					],
+					"size": [
+						192,
+						192
+					]
+				}
+			],
+			"min_offset": [
+				-144.0,
+				-112.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				0,
+				192,
+				192
+			]
+		}
+	],
+	"atlas_page_heights": [
+		192
+	],
+	"atlas_pages": [
+		{
+			"height": 192,
+			"page_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/91080c4d2548a12ffd84f3175eba7628126734a3047b33bad6b58881daf0abab.png",
+			"png_bytes": 77566,
+			"sha256": "91080c4d2548a12ffd84f3175eba7628126734a3047b33bad6b58881daf0abab",
+			"width": 2048
+		}
+	],
+	"compiler_version": 2,
+	"contract_id": "hardcore.wall_render_plan.v1",
+	"design_size": [
+		50,
+		50
+	],
+	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+	"legacy_command_indices": [
+		0,
+		1,
+		53,
+		171,
+		349,
+		413,
+		465,
+		478,
+		533,
+		621,
+		637,
+		659,
+		675,
+		751,
+		878,
+		1002,
+		1087,
+		1199,
+		1200,
+		1201
+	],
+	"map_key": "mengzhong_stone_tomb_f1",
+	"shadow_chunk_command_indices": [
+		2,
+		3,
+		8,
+		11,
+		14,
+		15,
+		20,
+		23,
+		24,
+		29,
+		32,
+		35,
+		38,
+		41,
+		44,
+		47,
+		50,
+		54,
+		57,
+		60,
+		63,
+		66,
+		69,
+		72,
+		75,
+		78,
+		81,
+		84,
+		87,
+		90,
+		93,
+		96,
+		99,
+		102,
+		105,
+		108,
+		111,
+		114,
+		117,
+		120,
+		123,
+		126,
+		129,
+		132,
+		135,
+		138,
+		141,
+		144,
+		147,
+		150,
+		153,
+		156,
+		157,
+		162,
+		165,
+		168,
+		172,
+		175,
+		178,
+		181,
+		184,
+		187,
+		190,
+		193,
+		196,
+		199,
+		202,
+		205,
+		208,
+		211,
+		214,
+		217,
+		220,
+		223,
+		226,
+		229,
+		232,
+		235,
+		238,
+		241,
+		244,
+		247,
+		250,
+		253,
+		256,
+		259,
+		262,
+		265,
+		268,
+		271,
+		274,
+		277,
+		280,
+		283,
+		286,
+		289,
+		292,
+		295,
+		298,
+		301,
+		304,
+		307,
+		310,
+		313,
+		316,
+		319,
+		322,
+		325,
+		328,
+		331,
+		334,
+		335,
+		340,
+		343,
+		346,
+		350,
+		351,
+		356,
+		359,
+		360,
+		365,
+		368,
+		371,
+		374,
+		375,
+		380,
+		381,
+		386,
+		387,
+		392,
+		395,
+		398,
+		401,
+		402,
+		407,
+		408,
+		414,
+		417,
+		420,
+		423,
+		426,
+		427,
+		432,
+		435,
+		438,
+		441,
+		444,
+		445,
+		450,
+		453,
+		454,
+		459,
+		462,
+		466,
+		469,
+		472,
+		475,
+		479,
+		482,
+		485,
+		488,
+		491,
+		494,
+		497,
+		500,
+		503,
+		506,
+		509,
+		512,
+		515,
+		518,
+		521,
+		524,
+		527,
+		530,
+		534,
+		537,
+		540,
+		543,
+		546,
+		549,
+		552,
+		555,
+		558,
+		561,
+		564,
+		567,
+		570,
+		571,
+		576,
+		579,
+		580,
+		585,
+		588,
+		591,
+		594,
+		597,
+		600,
+		601,
+		606,
+		609,
+		612,
+		615,
+		616,
+		622,
+		623,
+		628,
+		631,
+		632,
+		638,
+		641,
+		644,
+		645,
+		650,
+		653,
+		654,
+		660,
+		663,
+		666,
+		669,
+		672,
+		676,
+		679,
+		682,
+		685,
+		688,
+		691,
+		694,
+		697,
+		700,
+		703,
+		706,
+		709,
+		712,
+		715,
+		718,
+		721,
+		724,
+		727,
+		730,
+		733,
+		736,
+		739,
+		742,
+		745,
+		748,
+		752,
+		755,
+		756,
+		761,
+		764,
+		767,
+		770,
+		773,
+		776,
+		777,
+		782,
+		785,
+		788,
+		791,
+		794,
+		797,
+		798,
+		803,
+		806,
+		809,
+		812,
+		813,
+		818,
+		821,
+		822,
+		827,
+		830,
+		833,
+		834,
+		839,
+		842,
+		845,
+		848,
+		851,
+		854,
+		857,
+		860,
+		863,
+		866,
+		869,
+		872,
+		875,
+		879,
+		882,
+		885,
+		888,
+		891,
+		894,
+		897,
+		900,
+		903,
+		906,
+		909,
+		912,
+		915,
+		918,
+		921,
+		924,
+		927,
+		930,
+		933,
+		936,
+		939,
+		942,
+		945,
+		948,
+		951,
+		954,
+		957,
+		960,
+		963,
+		966,
+		969,
+		972,
+		975,
+		978,
+		981,
+		984,
+		987,
+		990,
+		993,
+		996,
+		999,
+		1003,
+		1006,
+		1009,
+		1012,
+		1015,
+		1018,
+		1021,
+		1024,
+		1027,
+		1030,
+		1033,
+		1036,
+		1039,
+		1042,
+		1045,
+		1048,
+		1051,
+		1054,
+		1057,
+		1060,
+		1063,
+		1066,
+		1069,
+		1070,
+		1075,
+		1078,
+		1081,
+		1084,
+		1088,
+		1091,
+		1094,
+		1097,
+		1100,
+		1103,
+		1106,
+		1109,
+		1112,
+		1115,
+		1118,
+		1121,
+		1124,
+		1127,
+		1130,
+		1133,
+		1136,
+		1139,
+		1142,
+		1145,
+		1148,
+		1151,
+		1154,
+		1157,
+		1160,
+		1163,
+		1166,
+		1169,
+		1172,
+		1173,
+		1178,
+		1181,
+		1182,
+		1187,
+		1190,
+		1193,
+		1194
+	],
+	"shadow_chunks": [
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 2,
+			"path": "assets/data/runtime/map_editor/wall_render_store/4f56450d1a23106e1cdc75ccc3289dfe017b20168ce926c4c45bf56ec3446af3.png",
+			"png_bytes": 4423,
+			"position_px": [
+				-228.0,
+				-770.0
+			],
+			"segment_index": 0,
+			"sha256": "4f56450d1a23106e1cdc75ccc3289dfe017b20168ce926c4c45bf56ec3446af3",
+			"size_px": [
+				228,
+				152
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 2,
+			"path": "assets/data/runtime/map_editor/wall_render_store/546b1fb40109641966812cd233de61895eb988964ccab51afe94ea3f8f55349e.png",
+			"png_bytes": 3258,
+			"position_px": [
+				0.0,
+				-771.0
+			],
+			"segment_index": 0,
+			"sha256": "546b1fb40109641966812cd233de61895eb988964ccab51afe94ea3f8f55349e",
+			"size_px": [
+				207,
+				137
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 54,
+			"path": "assets/data/runtime/map_editor/wall_render_store/4d4d4cd485ea3395d028bcc98db0a6448adf854658fb486e8a70192035bdda48.png",
+			"png_bytes": 11236,
+			"position_px": [
+				0.0,
+				-658.0
+			],
+			"segment_index": 1,
+			"sha256": "4d4d4cd485ea3395d028bcc98db0a6448adf854658fb486e8a70192035bdda48",
+			"size_px": [
+				687,
+				264
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 54,
+			"path": "assets/data/runtime/map_editor/wall_render_store/76f16187a0dc81e15d79f1aa50e851a6d545830aed0852cfd29b9293779052d4.png",
+			"png_bytes": 11991,
+			"position_px": [
+				-708.0,
+				-643.0
+			],
+			"segment_index": 1,
+			"sha256": "76f16187a0dc81e15d79f1aa50e851a6d545830aed0852cfd29b9293779052d4",
+			"size_px": [
+				708,
+				265
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 172,
+			"path": "assets/data/runtime/map_editor/wall_render_store/8ba43e353e78348c3f52e5c40ec41a0aa66a87df8df448f4967803f1442d3e7e.png",
+			"png_bytes": 12267,
+			"position_px": [
+				0.0,
+				-418.0
+			],
+			"segment_index": 2,
+			"sha256": "8ba43e353e78348c3f52e5c40ec41a0aa66a87df8df448f4967803f1442d3e7e",
+			"size_px": [
+				1024,
+				248
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 172,
+			"path": "assets/data/runtime/map_editor/wall_render_store/4acf8ecf04d81a4d2494037cda2d4da2c443d0d4d3c650c318646e482c3a14b9.png",
+			"png_bytes": 11999,
+			"position_px": [
+				-1024.0,
+				-403.0
+			],
+			"segment_index": 2,
+			"sha256": "4acf8ecf04d81a4d2494037cda2d4da2c443d0d4d3c650c318646e482c3a14b9",
+			"size_px": [
+				1024,
+				233
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"insert_command_index": 172,
+			"path": "assets/data/runtime/map_editor/wall_render_store/475eb81519784b2f75c7178ae7c9315fe550981dcef59bc285d1ea88868a89bf.png",
+			"png_bytes": 1461,
+			"position_px": [
+				1024.0,
+				-247.0
+			],
+			"segment_index": 2,
+			"sha256": "475eb81519784b2f75c7178ae7c9315fe550981dcef59bc285d1ea88868a89bf",
+			"size_px": [
+				110,
+				71
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				-1
+			],
+			"insert_command_index": 172,
+			"path": "assets/data/runtime/map_editor/wall_render_store/3cec2258d9d2a9f2c3fcc15006d78de153bdcc8d9ef8db6cdf324ffb222b2841.png",
+			"png_bytes": 1943,
+			"position_px": [
+				-1156.0,
+				-242.0
+			],
+			"segment_index": 2,
+			"sha256": "3cec2258d9d2a9f2c3fcc15006d78de153bdcc8d9ef8db6cdf324ffb222b2841",
+			"size_px": [
+				132,
+				88
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 350,
+			"path": "assets/data/runtime/map_editor/wall_render_store/7ac4283b3966d9211762b7bb33bc8b2263712a45ecec26ede8a3cd6068674701.png",
+			"png_bytes": 4048,
+			"position_px": [
+				-644.0,
+				-195.0
+			],
+			"segment_index": 3,
+			"sha256": "7ac4283b3966d9211762b7bb33bc8b2263712a45ecec26ede8a3cd6068674701",
+			"size_px": [
+				627,
+				73
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 350,
+			"path": "assets/data/runtime/map_editor/wall_render_store/71fd94f16c84521388d37b9415fbab20c1baaff780727f21760b226a2f7f9ad1.png",
+			"png_bytes": 3269,
+			"position_px": [
+				28.0,
+				-194.0
+			],
+			"segment_index": 3,
+			"sha256": "71fd94f16c84521388d37b9415fbab20c1baaff780727f21760b226a2f7f9ad1",
+			"size_px": [
+				595,
+				56
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"insert_command_index": 350,
+			"path": "assets/data/runtime/map_editor/wall_render_store/7083e17a1c855d4c6e06bd298738c1fbf339009133552dd9e1c37098468d745d.png",
+			"png_bytes": 1293,
+			"position_px": [
+				1116.0,
+				-194.0
+			],
+			"segment_index": 3,
+			"sha256": "7083e17a1c855d4c6e06bd298738c1fbf339009133552dd9e1c37098468d745d",
+			"size_px": [
+				83,
+				56
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				-1
+			],
+			"insert_command_index": 350,
+			"path": "assets/data/runtime/map_editor/wall_render_store/277d75045e38b7d2fefc8e41061669945a147d392318a266d8193bc7d5cdce35.png",
+			"png_bytes": 1350,
+			"position_px": [
+				-1220.0,
+				-179.0
+			],
+			"segment_index": 3,
+			"sha256": "277d75045e38b7d2fefc8e41061669945a147d392318a266d8193bc7d5cdce35",
+			"size_px": [
+				83,
+				57
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 414,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c4d053ec01afde722fb4043649e3e5bb6327da41bf51ed0ad634a65740394d98.png",
+			"png_bytes": 3744,
+			"position_px": [
+				-708.0,
+				-147.0
+			],
+			"segment_index": 4,
+			"sha256": "c4d053ec01afde722fb4043649e3e5bb6327da41bf51ed0ad634a65740394d98",
+			"size_px": [
+				595,
+				57
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 414,
+			"path": "assets/data/runtime/map_editor/wall_render_store/2bbd99150da17f5d54018b8743de750a22da55f93dd480e6bc3e52cfe25ba8a7.png",
+			"png_bytes": 2737,
+			"position_px": [
+				92.0,
+				-162.0
+			],
+			"segment_index": 4,
+			"sha256": "2bbd99150da17f5d54018b8743de750a22da55f93dd480e6bc3e52cfe25ba8a7",
+			"size_px": [
+				626,
+				72
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"insert_command_index": 414,
+			"path": "assets/data/runtime/map_editor/wall_render_store/be0d679eedcd23e15b134f7127920d3ef76da83c9911047d1ffb179fa7dea602.png",
+			"png_bytes": 1211,
+			"position_px": [
+				1180.0,
+				-162.0
+			],
+			"segment_index": 4,
+			"sha256": "be0d679eedcd23e15b134f7127920d3ef76da83c9911047d1ffb179fa7dea602",
+			"size_px": [
+				82,
+				50
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				-1
+			],
+			"insert_command_index": 414,
+			"path": "assets/data/runtime/map_editor/wall_render_store/e8676f35a6d2c6cf9199b98b6f932e3ae2d6fefe29eca8e015d9bdcad5f34911.png",
+			"png_bytes": 1960,
+			"position_px": [
+				-1316.0,
+				-147.0
+			],
+			"segment_index": 4,
+			"sha256": "e8676f35a6d2c6cf9199b98b6f932e3ae2d6fefe29eca8e015d9bdcad5f34911",
+			"size_px": [
+				115,
+				57
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				0
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/5744274d5fb8f70589a069eb93e42057110ce3a25ad6df16533105d4aa5bcb79.png",
+			"png_bytes": 2164,
+			"position_px": [
+				-1540.0,
+				0.0
+			],
+			"segment_index": 5,
+			"sha256": "5744274d5fb8f70589a069eb93e42057110ce3a25ad6df16533105d4aa5bcb79",
+			"size_px": [
+				516,
+				38
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/1e84766eff8a87758f5c58a38bf0565e6140f7c2e31164204fdecb4945b57436.png",
+			"png_bytes": 3540,
+			"position_px": [
+				1244.0,
+				-130.0
+			],
+			"segment_index": 5,
+			"sha256": "1e84766eff8a87758f5c58a38bf0565e6140f7c2e31164204fdecb4945b57436",
+			"size_px": [
+				271,
+				130
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				-1
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/234aa949a60ea207c78cfef718d3bf12a7e4d2be24d2d1d1b46b4205a0e8150b.png",
+			"png_bytes": 6487,
+			"position_px": [
+				-1509.0,
+				-115.0
+			],
+			"segment_index": 5,
+			"sha256": "234aa949a60ea207c78cfef718d3bf12a7e4d2be24d2d1d1b46b4205a0e8150b",
+			"size_px": [
+				466,
+				115
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				-1
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/49ccc29375c3709a8269370544761f79934ca5f02e88380673c02adc1559f80b.png",
+			"png_bytes": 2456,
+			"position_px": [
+				-644.0,
+				-114.0
+			],
+			"segment_index": 5,
+			"sha256": "49ccc29375c3709a8269370544761f79934ca5f02e88380673c02adc1559f80b",
+			"size_px": [
+				241,
+				114
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/ecd254c37b8ba2c9cce73eaea3d97b2be19a40d8534bfa7c03cb23c96d4bda8f.png",
+			"png_bytes": 1455,
+			"position_px": [
+				-1024.0,
+				0.0
+			],
+			"segment_index": 5,
+			"sha256": "ecd254c37b8ba2c9cce73eaea3d97b2be19a40d8534bfa7c03cb23c96d4bda8f",
+			"size_px": [
+				655,
+				38
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/4c47c54bf76bea66077aeeed3e5540a0eae787f6c5529b17d0ab3808a9a86478.png",
+			"png_bytes": 5967,
+			"position_px": [
+				188.0,
+				-114.0
+			],
+			"segment_index": 5,
+			"sha256": "4c47c54bf76bea66077aeeed3e5540a0eae787f6c5529b17d0ab3808a9a86478",
+			"size_px": [
+				751,
+				114
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				0
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/eada60b4e1464eaf860c281887fede87a886c288c3816991a8e9ce5d610bf7be.png",
+			"png_bytes": 642,
+			"position_px": [
+				1462.0,
+				0.0
+			],
+			"segment_index": 5,
+			"sha256": "eada60b4e1464eaf860c281887fede87a886c288c3816991a8e9ce5d610bf7be",
+			"size_px": [
+				57,
+				22
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 466,
+			"path": "assets/data/runtime/map_editor/wall_render_store/34a13d94449ab4155a682101d192777f58505f67090f79db7404fd5174d7673b.png",
+			"png_bytes": 2134,
+			"position_px": [
+				316.0,
+				0.0
+			],
+			"segment_index": 5,
+			"sha256": "34a13d94449ab4155a682101d192777f58505f67090f79db7404fd5174d7673b",
+			"size_px": [
+				627,
+				38
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				0
+			],
+			"insert_command_index": 622,
+			"path": "assets/data/runtime/map_editor/wall_render_store/543edeb39d61e103076192a9cecf3d6f5e580756c5c13a44be74e5096d20d533.png",
+			"png_bytes": 1294,
+			"position_px": [
+				-1604.0,
+				13.0
+			],
+			"segment_index": 6,
+			"sha256": "543edeb39d61e103076192a9cecf3d6f5e580756c5c13a44be74e5096d20d533",
+			"size_px": [
+				83,
+				35
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				-1
+			],
+			"insert_command_index": 622,
+			"path": "assets/data/runtime/map_editor/wall_render_store/e323ce9c22fd35a49365b70c2658d2fb1fd5f3876d26ec944ac94385ad0f9e1b.png",
+			"png_bytes": 116,
+			"position_px": [
+				928.0,
+				-3.0
+			],
+			"segment_index": 6,
+			"sha256": "e323ce9c22fd35a49365b70c2658d2fb1fd5f3876d26ec944ac94385ad0f9e1b",
+			"size_px": [
+				74,
+				3
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 622,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c58014e9abc225b09ae5c5ec419759af7639b4bf3e50769776a750921de8ff70.png",
+			"png_bytes": 1347,
+			"position_px": [
+				924.0,
+				0.0
+			],
+			"segment_index": 6,
+			"sha256": "c58014e9abc225b09ae5c5ec419759af7639b4bf3e50769776a750921de8ff70",
+			"size_px": [
+				83,
+				38
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				-1
+			],
+			"insert_command_index": 622,
+			"path": "assets/data/runtime/map_editor/wall_render_store/f24ab3b59cf8a209d84080c4979c6646c07c1bbe257661a1d5b71ee2128db73a.png",
+			"png_bytes": 96,
+			"position_px": [
+				1504.0,
+				-2.0
+			],
+			"segment_index": 6,
+			"sha256": "f24ab3b59cf8a209d84080c4979c6646c07c1bbe257661a1d5b71ee2128db73a",
+			"size_px": [
+				13,
+				2
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				0
+			],
+			"insert_command_index": 622,
+			"path": "assets/data/runtime/map_editor/wall_render_store/8628f6c998fd8d0c4976d2401f13b694a5229f6af192004782b15e621cc5d80f.png",
+			"png_bytes": 781,
+			"position_px": [
+				1500.0,
+				0.0
+			],
+			"segment_index": 6,
+			"sha256": "8628f6c998fd8d0c4976d2401f13b694a5229f6af192004782b15e621cc5d80f",
+			"size_px": [
+				51,
+				38
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				0
+			],
+			"insert_command_index": 638,
+			"path": "assets/data/runtime/map_editor/wall_render_store/9e440abccce386b8d224329dc11be6eb6bb686ab5707cc3e3028adb5896dbc59.png",
+			"png_bytes": 4628,
+			"position_px": [
+				-1348.0,
+				16.0
+			],
+			"segment_index": 7,
+			"sha256": "9e440abccce386b8d224329dc11be6eb6bb686ab5707cc3e3028adb5896dbc59",
+			"size_px": [
+				324,
+				262
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"insert_command_index": 638,
+			"path": "assets/data/runtime/map_editor/wall_render_store/9c2f6f87d4e26b74441a668d855bfccf7add6e23172ba85aae5ced62895c01a8.png",
+			"png_bytes": 14257,
+			"position_px": [
+				-1024.0,
+				14.0
+			],
+			"segment_index": 7,
+			"sha256": "9c2f6f87d4e26b74441a668d855bfccf7add6e23172ba85aae5ced62895c01a8",
+			"size_px": [
+				1024,
+				258
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 638,
+			"path": "assets/data/runtime/map_editor/wall_render_store/8b5dd2a4944351c403c33eb29b0e72c41ebc13c5319290af037a4802036e1799.png",
+			"png_bytes": 12269,
+			"position_px": [
+				0.0,
+				13.0
+			],
+			"segment_index": 7,
+			"sha256": "8b5dd2a4944351c403c33eb29b0e72c41ebc13c5319290af037a4802036e1799",
+			"size_px": [
+				975,
+				249
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				0
+			],
+			"insert_command_index": 638,
+			"path": "assets/data/runtime/map_editor/wall_render_store/ab3a555777c2b0c5b9041054b9076f2530a6428ac42f6eb9a21f77e3ca48fa02.png",
+			"png_bytes": 6723,
+			"position_px": [
+				1148.0,
+				13.0
+			],
+			"segment_index": 7,
+			"sha256": "ab3a555777c2b0c5b9041054b9076f2530a6428ac42f6eb9a21f77e3ca48fa02",
+			"size_px": [
+				467,
+				249
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 879,
+			"path": "assets/data/runtime/map_editor/wall_render_store/4d2c5b3e2facae4d6164cf39e016933f098374255106cbc474324848cd64e1dc.png",
+			"png_bytes": 9385,
+			"position_px": [
+				156.0,
+				237.0
+			],
+			"segment_index": 8,
+			"sha256": "4d2c5b3e2facae4d6164cf39e016933f098374255106cbc474324848cd64e1dc",
+			"size_px": [
+				868,
+				201
+			]
+		},
+		{
+			"grid_cell": [
+				1,
+				0
+			],
+			"insert_command_index": 879,
+			"path": "assets/data/runtime/map_editor/wall_render_store/277d4f16185b78f17b101d70ad336204d0dead474e83c459b232e68210db6a11.png",
+			"png_bytes": 2056,
+			"position_px": [
+				1024.0,
+				237.0
+			],
+			"segment_index": 8,
+			"sha256": "277d4f16185b78f17b101d70ad336204d0dead474e83c459b232e68210db6a11",
+			"size_px": [
+				143,
+				94
+			]
+		},
+		{
+			"grid_cell": [
+				-2,
+				0
+			],
+			"insert_command_index": 879,
+			"path": "assets/data/runtime/map_editor/wall_render_store/640ba086b2b9674f8a668b5ba899b3c390ae3af909c3fb196c6ef3b60b912158.png",
+			"png_bytes": 1380,
+			"position_px": [
+				-1124.0,
+				254.0
+			],
+			"segment_index": 8,
+			"sha256": "640ba086b2b9674f8a668b5ba899b3c390ae3af909c3fb196c6ef3b60b912158",
+			"size_px": [
+				100,
+				69
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"insert_command_index": 879,
+			"path": "assets/data/runtime/map_editor/wall_render_store/2019f72fdad5b0d6b80447665062512c95b3807fd40e3ffc7e0501628538f9ad.png",
+			"png_bytes": 7888,
+			"position_px": [
+				-1024.0,
+				254.0
+			],
+			"segment_index": 8,
+			"sha256": "2019f72fdad5b0d6b80447665062512c95b3807fd40e3ffc7e0501628538f9ad",
+			"size_px": [
+				815,
+				184
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 1003,
+			"path": "assets/data/runtime/map_editor/wall_render_store/fc51ff05f82a1154635f39b3b7847088ac2f99587ac2466e1312230888ff7769.png",
+			"png_bytes": 6996,
+			"position_px": [
+				0.0,
+				397.0
+			],
+			"segment_index": 9,
+			"sha256": "fc51ff05f82a1154635f39b3b7847088ac2f99587ac2466e1312230888ff7769",
+			"size_px": [
+				847,
+				147
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"insert_command_index": 1003,
+			"path": "assets/data/runtime/map_editor/wall_render_store/5a05aa1b2d6aeaef9668a34fc7eb9cfa88487b05272952729cf4cb3fe709b8c1.png",
+			"png_bytes": 6917,
+			"position_px": [
+				-804.0,
+				414.0
+			],
+			"segment_index": 9,
+			"sha256": "5a05aa1b2d6aeaef9668a34fc7eb9cfa88487b05272952729cf4cb3fe709b8c1",
+			"size_px": [
+				804,
+				152
+			]
+		},
+		{
+			"grid_cell": [
+				0,
+				0
+			],
+			"insert_command_index": 1088,
+			"path": "assets/data/runtime/map_editor/wall_render_store/8585f9edcde7e6dafa83cf4d6b46ab3a3b220b18efb3b77bebf3d0fc70d95289.png",
+			"png_bytes": 12784,
+			"position_px": [
+				0.0,
+				525.0
+			],
+			"segment_index": 10,
+			"sha256": "8585f9edcde7e6dafa83cf4d6b46ab3a3b220b18efb3b77bebf3d0fc70d95289",
+			"size_px": [
+				591,
+				307
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
+				0
+			],
+			"insert_command_index": 1088,
+			"path": "assets/data/runtime/map_editor/wall_render_store/b9ef16dc2c3e0c7a6f17f3f5632efb350db7dcb442733a32519ec1d5362d6a61.png",
+			"png_bytes": 10461,
+			"position_px": [
+				-548.0,
+				542.0
+			],
+			"segment_index": 10,
+			"sha256": "b9ef16dc2c3e0c7a6f17f3f5632efb350db7dcb442733a32519ec1d5362d6a61",
+			"size_px": [
+				548,
+				290
+			]
+		}
+	],
+	"shadow_segments": [
+		{
+			"command_indices": [
+				2,
+				3,
+				8,
+				11,
+				14,
+				15,
+				20,
+				23,
+				24,
+				29,
+				32,
+				35,
+				38,
+				41,
+				44,
+				47,
+				50
+			],
+			"insert_command_index": 2,
+			"segment_index": 0
+		},
+		{
+			"command_indices": [
+				54,
+				57,
+				60,
+				63,
+				66,
+				69,
+				72,
+				75,
+				78,
+				81,
+				84,
+				87,
+				90,
+				93,
+				96,
+				99,
+				102,
+				105,
+				108,
+				111,
+				114,
+				117,
+				120,
+				123,
+				126,
+				129,
+				132,
+				135,
+				138,
+				141,
+				144,
+				147,
+				150,
+				153,
+				156,
+				157,
+				162,
+				165,
+				168
+			],
+			"insert_command_index": 54,
+			"segment_index": 1
+		},
+		{
+			"command_indices": [
+				172,
+				175,
+				178,
+				181,
+				184,
+				187,
+				190,
+				193,
+				196,
+				199,
+				202,
+				205,
+				208,
+				211,
+				214,
+				217,
+				220,
+				223,
+				226,
+				229,
+				232,
+				235,
+				238,
+				241,
+				244,
+				247,
+				250,
+				253,
+				256,
+				259,
+				262,
+				265,
+				268,
+				271,
+				274,
+				277,
+				280,
+				283,
+				286,
+				289,
+				292,
+				295,
+				298,
+				301,
+				304,
+				307,
+				310,
+				313,
+				316,
+				319,
+				322,
+				325,
+				328,
+				331,
+				334,
+				335,
+				340,
+				343,
+				346
+			],
+			"insert_command_index": 172,
+			"segment_index": 2
+		},
+		{
+			"command_indices": [
+				350,
+				351,
+				356,
+				359,
+				360,
+				365,
+				368,
+				371,
+				374,
+				375,
+				380,
+				381,
+				386,
+				387,
+				392,
+				395,
+				398,
+				401,
+				402,
+				407,
+				408
+			],
+			"insert_command_index": 350,
+			"segment_index": 3
+		},
+		{
+			"command_indices": [
+				414,
+				417,
+				420,
+				423,
+				426,
+				427,
+				432,
+				435,
+				438,
+				441,
+				444,
+				445,
+				450,
+				453,
+				454,
+				459,
+				462
+			],
+			"insert_command_index": 414,
+			"segment_index": 4
+		},
+		{
+			"command_indices": [
+				466,
+				469,
+				472,
+				475,
+				479,
+				482,
+				485,
+				488,
+				491,
+				494,
+				497,
+				500,
+				503,
+				506,
+				509,
+				512,
+				515,
+				518,
+				521,
+				524,
+				527,
+				530,
+				534,
+				537,
+				540,
+				543,
+				546,
+				549,
+				552,
+				555,
+				558,
+				561,
+				564,
+				567,
+				570,
+				571,
+				576,
+				579,
+				580,
+				585,
+				588,
+				591,
+				594,
+				597,
+				600,
+				601,
+				606,
+				609,
+				612,
+				615,
+				616
+			],
+			"insert_command_index": 466,
+			"segment_index": 5
+		},
+		{
+			"command_indices": [
+				622,
+				623,
+				628,
+				631,
+				632
+			],
+			"insert_command_index": 622,
+			"segment_index": 6
+		},
+		{
+			"command_indices": [
+				638,
+				641,
+				644,
+				645,
+				650,
+				653,
+				654,
+				660,
+				663,
+				666,
+				669,
+				672,
+				676,
+				679,
+				682,
+				685,
+				688,
+				691,
+				694,
+				697,
+				700,
+				703,
+				706,
+				709,
+				712,
+				715,
+				718,
+				721,
+				724,
+				727,
+				730,
+				733,
+				736,
+				739,
+				742,
+				745,
+				748,
+				752,
+				755,
+				756,
+				761,
+				764,
+				767,
+				770,
+				773,
+				776,
+				777,
+				782,
+				785,
+				788,
+				791,
+				794,
+				797,
+				798,
+				803,
+				806,
+				809,
+				812,
+				813,
+				818,
+				821,
+				822,
+				827,
+				830,
+				833,
+				834,
+				839,
+				842,
+				845,
+				848,
+				851,
+				854,
+				857,
+				860,
+				863,
+				866,
+				869,
+				872,
+				875
+			],
+			"insert_command_index": 638,
+			"segment_index": 7
+		},
+		{
+			"command_indices": [
+				879,
+				882,
+				885,
+				888,
+				891,
+				894,
+				897,
+				900,
+				903,
+				906,
+				909,
+				912,
+				915,
+				918,
+				921,
+				924,
+				927,
+				930,
+				933,
+				936,
+				939,
+				942,
+				945,
+				948,
+				951,
+				954,
+				957,
+				960,
+				963,
+				966,
+				969,
+				972,
+				975,
+				978,
+				981,
+				984,
+				987,
+				990,
+				993,
+				996,
+				999
+			],
+			"insert_command_index": 879,
+			"segment_index": 8
+		},
+		{
+			"command_indices": [
+				1003,
+				1006,
+				1009,
+				1012,
+				1015,
+				1018,
+				1021,
+				1024,
+				1027,
+				1030,
+				1033,
+				1036,
+				1039,
+				1042,
+				1045,
+				1048,
+				1051,
+				1054,
+				1057,
+				1060,
+				1063,
+				1066,
+				1069,
+				1070,
+				1075,
+				1078,
+				1081,
+				1084
+			],
+			"insert_command_index": 1003,
+			"segment_index": 9
+		},
+		{
+			"command_indices": [
+				1088,
+				1091,
+				1094,
+				1097,
+				1100,
+				1103,
+				1106,
+				1109,
+				1112,
+				1115,
+				1118,
+				1121,
+				1124,
+				1127,
+				1130,
+				1133,
+				1136,
+				1139,
+				1142,
+				1145,
+				1148,
+				1151,
+				1154,
+				1157,
+				1160,
+				1163,
+				1166,
+				1169,
+				1172,
+				1173,
+				1178,
+				1181,
+				1182,
+				1187,
+				1190,
+				1193,
+				1194
+			],
+			"insert_command_index": 1088,
+			"segment_index": 10
+		}
+	],
+	"source_commands_sha256": "0dec417eb8a5a654668469b6a9d7c24dbeb519af58e2ebf2fb8f79878c8a930e",
+	"source_image_sha256": {
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_base.png": "039ac1f1dfe0ba61a77e5b0917608f5a2bfab65cac9bc7138565224a24ebbde6",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_front.png": "e185202ca31a2a51a52936f2a56dc799cbf63dc90402314b4f0b8d661f1381a9",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_shadow.png": "87253f4d6d36220bcfb52c46743ce32edf87686228d5da3516fa8863f3d19ad1",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png": "a05ff31a56eb045040612ffd06b9a32436da131ce42dad7dbec755ef53fef229",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png": "66dc8d7ea7609244ee985d26b1a28a9f6960884bde71733e8996248e35b8cda2",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_shadow.png": "8e3762304484507dccf7dd9eae6f5ac8ad8a83af9cfdde26fc01897849a95f41",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png": "5f75045955554644899208ad01b7593dbfe668dc362e98dc35a82de89b59b281",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png": "ef299d2ea3ded25b1faec196f1f9dd405a5ef4f7f07f930620ecaacec83586e6",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_shadow.png": "5cec40d73722c11edd1c97bb814a0a648a2135aa815ecb622a68d64e525b6dcb",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png": "1f556eb15640e66ab92237a5df52beb0572f7d164e1b15aae7caa40fa2fa85a5",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png": "63e5192e7a1d3605936aa25b86fc2411f7dc88302407f6ef3f9517535d8a9299",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_shadow.png": "5b6eb978b47b7a178cc77f33e8a89f03efc36e7a83d710b5c6902fde6beffb90",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png": "2141b6ff3b6687134232ce97fceb789030406ea933b022ccf804667027ee2979",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png": "792ada60175134e3c8fbf830ebc9fdd7a28642013fb2d653a69776db02fcf8e1",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_shadow.png": "4896b78f43b8cea18c6d0b0a3f5a4f189699f1310ef45edef33b272da319f93e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png": "a58884c528d39eb82fd30c639f8bd0834fbc3d0f8d9e51f6abd9ea7ca5ab713d",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png": "038f98c57a3bdc405941fa5cea0f3fa86c373b239780f6344c0593d3a1dcaed9",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_shadow.png": "407c152b68dbb5ad136dc1e1707096f1611f68588a578ceabcd205723e468768",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png": "226f8a7e71c6e81c96e387082dcf96a1dd8eebc8a5ac48f5ee4117e885f5af52",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png": "3dc9a55fb95919e53e97f992e0ff72bc921eeae71f8e79030c0e71992c51456e",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_shadow.png": "e389e86d5c121132ccdac0e6bdfae0ece911e0c17bd521ae4c9c2320b8649024",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png": "1d15c1bb453cba9b2de224ff26d495f706749180cc0fcc574f7c8fab74b823ca",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png": "343b16c3f8b0a985f74bf075a0a7dc71741b4720cbb7ca95e5f9e340cec1ed85",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_shadow.png": "f645762a1eeca4c8054e16366b673dcac7bce4260c90e96ea4c9ef6ad8550ab2",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png": "80c17247617010c6eac5d7de2b523cb57b74025bc481590412de0e693cf59227",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png": "4734fcb2ac5782428bfd7dce168466cd6166e4a9cbac375725284c3a9488aada",
+		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_shadow.png": "5f58dff85ef8fafc2d01cb866d6aed3550a53e3283e0625f55c747d3296d5ae0"
+	},
+	"source_runtime_json_sha256": "f226abd6e319e5b65201c9255ee7d80dab831821ab2bbee787924fa58ab0ffd2",
+	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
+}

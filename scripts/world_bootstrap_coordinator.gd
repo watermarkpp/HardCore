@@ -39,6 +39,9 @@ var generation := 0
 var map_id := -1
 var mode := ""
 var started_at_usec := 0
+# P0-1/P0-3 audit trail: the most recent FAILED bootstrap, kept across
+# chained recovery transitions that overwrite stage/diagnostic.
+var last_failure: Dictionary = {}
 
 # When false the budget queues drain without yielding between slices. This is
 # the production adapter's test-mode fast path; slicing, metrics and per-item
@@ -248,6 +251,17 @@ func finish(success: bool, reason: String) -> Dictionary:
 		stage = Stage.READY
 	else:
 		stage = Stage.FAILED
+		# P0-1/P0-3 audit trail: a FAILED bootstrap may be immediately
+		# followed by a chained recovery transition (central failure owner),
+		# which re-runs this coordinator and overwrites stage/diagnostic
+		# within the same frame. Keep the last FAILED record persistent so
+		# strict drivers and diagnostics can still attribute the failure.
+		last_failure = {
+			"generation": generation,
+			"map_id": int(diagnostic.get("map_id", -1)),
+			"reason": reason,
+			"total_duration_ms": float(diagnostic.get("total_duration_ms", 0.0)),
+		}
 	diagnostic["success"] = success
 	diagnostic["failure_reason"] = reason
 	diagnostic["sync_load_spawn"] = _synchronous_load_during_spawn

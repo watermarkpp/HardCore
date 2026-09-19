@@ -1,0 +1,127 @@
+{
+  "pairs": [
+    {
+      "requested_map_id": 911001,
+      "frame_p95_ms_legacy": 8.33,
+      "sample_count_opt": 2401,
+      "video_adapter": "AMD Radeon RX 6750 GRE 12GB",
+      "mode_legacy": "LEGACY",
+      "actual_map_id_legacy": 911001,
+      "viewport_opt": [
+        1598.0,
+        720.0
+      ],
+      "draw_avg_legacy": 475.0,
+      "actual_map_id_opt": 911001,
+      "draw_avg_opt": 263.0,
+      "draw_reduction_pct": 44.6,
+      "viewport_legacy": [
+        1598.0,
+        720.0
+      ],
+      "mode_opt": "OPTIMIZED",
+      "frame_p95_ms_opt": 8.33,
+      "map_key": "bich_orc_tomb_f1",
+      "sample_count_legacy": 2400
+    },
+    {
+      "requested_map_id": 912002,
+      "frame_p95_ms_legacy": 8.33,
+      "sample_count_opt": 2398,
+      "video_adapter": "AMD Radeon RX 6750 GRE 12GB",
+      "mode_legacy": "LEGACY",
+      "actual_map_id_legacy": 912002,
+      "viewport_opt": [
+        1598.0,
+        720.0
+      ],
+      "draw_avg_legacy": 745.13,
+      "actual_map_id_opt": 912002,
+      "draw_avg_opt": 300.08,
+      "draw_reduction_pct": 59.7,
+      "viewport_legacy": [
+        1598.0,
+        720.0
+      ],
+      "mode_opt": "OPTIMIZED",
+      "frame_p95_ms_opt": 8.33,
+      "map_key": "snake_mine_passage_2",
+      "sample_count_legacy": 2401
+    },
+    {
+      "requested_map_id": 915003,
+      "frame_p95_ms_legacy": 8.33,
+      "sample_count_opt": 2401,
+      "video_adapter": "AMD Radeon RX 6750 GRE 12GB",
+      "mode_legacy": "LEGACY",
+      "actual_map_id_legacy": 915003,
+      "viewport_opt": [
+        1598.0,
+        720.0
+      ],
+      "draw_avg_legacy": 414.05,
+      "actual_map_id_opt": 915003,
+      "draw_avg_opt": 386.0,
+      "draw_reduction_pct": 6.8,
+      "viewport_legacy": [
+        1598.0,
+        720.0
+      ],
+      "mode_opt": "OPTIMIZED",
+      "frame_p95_ms_opt": 8.33,
+      "map_key": "wooma_temple_boss_hall",
+      "sample_count_legacy": 2401
+    },
+    {
+      "requested_map_id": 916001,
+      "frame_p95_ms_legacy": 8.33,
+      "sample_count_opt": 2401,
+      "video_adapter": "AMD Radeon RX 6750 GRE 12GB",
+      "mode_legacy": "LEGACY",
+      "actual_map_id_legacy": 916001,
+      "viewport_opt": [
+        1598.0,
+        720.0
+      ],
+      "draw_avg_legacy": 363.04,
+      "actual_map_id_opt": 916001,
+      "draw_avg_opt": 272.04,
+      "draw_reduction_pct": 25.1,
+      "viewport_legacy": [
+        1598.0,
+        720.0
+      ],
+      "mode_opt": "OPTIMIZED",
+      "frame_p95_ms_opt": 8.33,
+      "map_key": "chiyue_valley",
+      "sample_count_legacy": 2401
+    },
+    {
+      "requested_map_id": 918006,
+      "frame_p95_ms_legacy": 8.33,
+      "sample_count_opt": 2401,
+      "video_adapter": "AMD Radeon RX 6750 GRE 12GB",
+      "mode_legacy": "LEGACY",
+      "actual_map_id_legacy": 918006,
+      "viewport_opt": [
+        1598.0,
+        720.0
+      ],
+      "draw_avg_legacy": 303.18,
+      "actual_map_id_opt": 918006,
+      "draw_avg_opt": 205.86,
+      "draw_reduction_pct": 32.1,
+      "viewport_legacy": [
+        1598.0,
+        720.0
+      ],
+      "mode_opt": "OPTIMIZED",
+      "frame_p95_ms_opt": 8.33,
+      "map_key": "hidden_pincer_nest",
+      "sample_count_legacy": 2401
+    }
+  ],
+  "pair_validation": "5/5: requested==actual id, OPTIMIZED/LEGACY modes, same adapter (AMD Radeon RX 6750 GRE 12GB), same viewport 1598x720, ~2400 samples each",
+  "contract_id": "hardcore.wall_render_r9_perf_summary.v1",
+  "final_v2_note": "formal R9 pairs retained: the final-v2 rebuild (4b001cbc + 7950b0c5 + final-r1) touches no wall render/frame path (mainline game_root hunks at :10222/:13118/:13185); per review, R9 rerun not required absent render-path conflict"
+}

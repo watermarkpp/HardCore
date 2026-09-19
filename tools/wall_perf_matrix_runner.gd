@@ -29,6 +29,10 @@ var _c10_summaries: Array = []
 # the PRODUCTION staged travel (_request_map_travel) instead of the legacy
 # change_zone path, so the wall render plan pipeline actually engages.
 var _map_ids: PackedInt64Array = PackedInt64Array()
+# P1-2: optional parallel list of registry map keys, index-aligned with
+# maps/map_ids, so every report row carries its requested identity
+# explicitly (no more rows[i] == maps[0] implicit semantics).
+var _map_keys: PackedStringArray = PackedStringArray()
 
 
 func _ready() -> void:
@@ -53,6 +57,9 @@ func _ready() -> void:
 			"map_ids":
 				for id_text: String in pair[1].split(",", false):
 					_map_ids.append(int(id_text))
+			"map_keys":
+				for key_text: String in pair[1].split(",", false):
+					_map_keys.append(key_text.strip_edges())
 	if _hotspots.is_empty():
 		_parse_hotspots(DEFAULT_HOTSPOTS)
 	_run.call_deferred()
@@ -158,6 +165,25 @@ func _run() -> void:
 		summary["runner_tag"] = _tag
 		summary["forced_legacy"] = (
 			OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1"
+		)
+		# P1-2 formal row identity: every row names exactly what was
+		# requested and what actually happened, so A/B pair validation
+		# never depends on implicit rows[i] == maps[0] ordering.
+		summary["requested_map_key"] = (
+			_map_keys[i] if i < _map_keys.size() else ""
+		)
+		summary["requested_map_id"] = (
+			int(_map_ids[i]) if i < _map_ids.size() else -1
+		)
+		summary["actual_current_map_id"] = int(_game.get("current_map_id"))
+		summary["actual_zone_name"] = str(_game.get("current_zone"))
+		summary["wall_render_mode"] = str(mode_stats.get("wall_render_mode", "?"))
+		summary["viewport_size"] = [
+			snappedf(get_viewport().get_visible_rect().size.x, 0.5),
+			snappedf(get_viewport().get_visible_rect().size.y, 0.5),
+		]
+		summary["sample_count"] = int(
+			(summary.get("frame_ms", {}) as Dictionary).get("samples", 0)
 		)
 		_c10_summaries.append(summary)
 		if _screenshot:
