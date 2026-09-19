@@ -9,6 +9,7 @@ const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
 ## is pinned. Combat never synchronously loads/decodes textures: misses are
 ## queued and drained through the bounded threaded warm-up channel below.
 const LOADING_PREWARM_BUDGET_USEC := 1500000
+const LOADING_RENDER_WARM_BUDGET_USEC := 1000000
 const FRAME_TEXTURE_WARM_PER_FRAME := 2
 const FRAME_TEXTURE_WARM_MAX_IN_FLIGHT := 4
 const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
@@ -2203,14 +2204,44 @@ func _prewarm_learned_skill_visuals() -> Dictionary:
 ## combat-side registration, no MP cost. The visual must stay visible -
 ## visible=false or alpha 0 lets the renderer skip the draw - the loading
 ## overlay is what hides it from the player.
-func _warm_fire_wall_render_path() -> void:
+## R14-C-R1 P0-11..16: the warm covers EVERY workset skill's actual
+## prewarmed facing sequence under a hard wall-clock budget
+## (LOADING_RENDER_WARM_BUDGET_USEC, ~1s) so GPU warm can never consume the
+## user-allowed Loading budget. Skills whose sequence is not fully resident
+## are skipped (no extending resource loading for render warm). Every warm
+## visual is deterministically released (P0-13) so _exit_tree reclaims its
+## sequence lease; the active-sequence lease refcount before/after must be
+## identical (P0-15). Returns a structured diagnostic merged into
+## [LOADING-TOTAL] (P0-16).
+func _warm_fire_wall_render_path() -> Dictionary:
+	var result := {
+		"skills_considered": 0,
+		"skills_warmed": 0,
+		"frames_drawn": 0,
+		"budget_exhausted": false,
+		"elapsed_ms": 0.0,
+		"lease_refcount_before": 0,
+		"lease_refcount_after": 0,
+	}
+	var lease_before := 0
+	var lease_after := 0
 	if DisplayServer.get_name() == "headless":
 		# Automated headless runs have no real rendering server; the CPU
-		# residency gate already proves everything headless can prove.
-		return
-	# R14-C7: warm the ACTUAL prewarmed sequences - the workset skills with
-	# the same facing direction used by the CPU prewarm. Fire wall keeps its
-	# production presentation values; everything stays presentation-only.
+		# residency gate already proves everything headless can prove. Still
+		# report the structured result with the (trivially equal) lease pair.
+		lease_before = 0
+		lease_after = 0
+		result["lease_refcount_before"] = lease_before
+		result["lease_refcount_after"] = lease_after
+		return result
+	lease_before = int(
+		CasterSkillVisualRegistry.frame_texture_cache_diagnostics().get(
+			"leased_sequence_refcount_total", 0
+		)
+	)
+	result["lease_refcount_before"] = lease_before
+	var started_usec := Time.get_ticks_usec()
+	var deadline_usec := started_usec + LOADING_RENDER_WARM_BUDGET_USEC
 	var warm_position := Vector2.ZERO
 	if is_instance_valid(_world_camera):
 		warm_position = _world_camera.get_screen_center_position()
@@ -2221,24 +2252,71 @@ func _warm_fire_wall_render_path() -> void:
 		var normalized := player.facing.normalized()
 		if normalized.length_squared() > 0.0:
 			facing_direction = normalized
+	var facing_direction_index := (
+		CasterSkillVisualRegistry.direction_index(facing_direction)
+	)
 	for skill_id: String in _active_skill_workset_candidates():
+		result["skills_considered"] += 1
 		if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
 			continue
+		# P0-12: warm only fully-resident facing sequences; never extend
+		# resource loading for the sake of render warm.
+		var sequence_paths := (
+			CasterSkillVisualRegistry.animation_sequence_paths(
+				skill_id, facing_direction_index
+			)
+		)
+		if not CasterSkillVisualRegistry.sequence_resident(sequence_paths):
+			continue
 		var warm_visual := CasterSkillAnimationPlayer.new()
+		# P0-1: configure returns true for any ACCEPTED configuration; a
+		# structural failure (unknown skill/contract/frames) still returns
+		# false and frees the candidate.
 		if not warm_visual.configure(skill_id, facing_direction):
 			warm_visual.free()
 			continue
+		result["skills_warmed"] += 1
 		if skill_id == "wizard.fire_wall":
-			# Production GroundSkillEffect._install_visual presentation values.
+			# P0-14: fire wall keeps its production presentation values.
 			warm_visual.modulate = Color(1.0, 1.0, 1.0, 0.78)
 			warm_visual.scale.y *= 0.6
 		warm_visual.global_position = warm_position
+		# P0-12: the visual must be actually visible so the renderer cannot
+		# skip the draw; the loading overlay hides it from the player.
+		warm_visual.visible = true
 		add_child(warm_visual)
+		var budget_exhausted := false
 		for frame_index: int in warm_visual.frame_count():
 			warm_visual.set_manual_frame(frame_index)
 			await RenderingServer.frame_post_draw
+			result["frames_drawn"] += 1
+			if Time.get_ticks_usec() >= deadline_usec:
+				budget_exhausted = true
+				break
+		if budget_exhausted:
+			result["budget_exhausted"] = true
+		# P0-13: EVERY warm visual is deterministically released so
+		# _exit_tree reclaims its sequence lease.
 		warm_visual.queue_free()
 		await RenderingServer.frame_post_draw
+		if Time.get_ticks_usec() >= deadline_usec:
+			result["budget_exhausted"] = true
+			break
+	lease_after = int(
+		CasterSkillVisualRegistry.frame_texture_cache_diagnostics().get(
+			"leased_sequence_refcount_total", 0
+		)
+	)
+	result["lease_refcount_after"] = lease_after
+	result["elapsed_ms"] = (
+		float(Time.get_ticks_usec() - started_usec) / 1000.0
+	)
+	if lease_after != lease_before:
+		# P0-15: render warm must never leak or drop an active-sequence lease.
+		push_error(
+			"[RENDER-WARM] sequence lease leak detected: before=%d after=%d"
+			% [lease_before, lease_after]
+		)
 	# FRAME-STALL baseline: one print at the end of the loading window. The
 	# one-time long-frame probe (see _process) prints the same counters when
 	# the first >250ms wall-clock frame occurs; the delta localizes the stall
@@ -2267,6 +2345,7 @@ func _warm_fire_wall_render_path() -> void:
 			JSON.stringify(body_streaming),
 		]
 	)
+	return result
 
 
 ## Session identity header (perf-smoothness-r1 Phase A): once per process.
@@ -3372,14 +3451,18 @@ func _run_map_transition(
 		)
 		# FW-COLD2 Phase B + PERF-R2 R7/C8: the GPU render warm is bound to
 		# the workset - a warrior/taoist without fire wall bound never pays
-		# for fire-wall warm-up here. R14-C7: the warm covers every workset
-		# skill's prewarmed facing sequence (fire wall included when bound).
+		# for fire-wall warm-up here. R14-C7 + R14-C-R1 P0-11..16: the warm
+		# covers every workset skill's prewarmed facing sequence under a hard
+		# ~1s budget and reports a structured result merged into
+		# [LOADING-TOTAL].
 		r13_stage_started_usec = Time.get_ticks_usec()
+		var r13_render_warm_diag: Dictionary = {}
 		if not _active_skill_workset_candidates().is_empty():
-			await _warm_fire_wall_render_path()
+			r13_render_warm_diag = await _warm_fire_wall_render_path()
 		r13_loading_profile["render_warm_ms"] = (
 			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 		)
+		r13_loading_profile["render_warm_diag"] = r13_render_warm_diag
 		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 			return
 		# perf(R13-D2): Finalize restarts its own timer HERE - it must never
@@ -3424,6 +3507,29 @@ func _run_map_transition(
 				"actor_spawn_ms": float(r13_loading_profile.get("actor_spawn_ms", 0.0)),
 				"skill_workset_ms": float(r13_loading_profile.get("skill_workset_ms", 0.0)),
 				"render_warm_ms": float(r13_loading_profile.get("render_warm_ms", 0.0)),
+				"render_warm": {
+					"skills_considered": int(
+						r13_render_warm_diag.get("skills_considered", 0)
+					),
+					"skills_warmed": int(
+						r13_render_warm_diag.get("skills_warmed", 0)
+					),
+					"frames_drawn": int(
+						r13_render_warm_diag.get("frames_drawn", 0)
+					),
+					"budget_exhausted": bool(
+						r13_render_warm_diag.get("budget_exhausted", false)
+					),
+					"elapsed_ms": float(
+						r13_render_warm_diag.get("elapsed_ms", 0.0)
+					),
+					"lease_refcount_before": int(
+						r13_render_warm_diag.get("lease_refcount_before", 0)
+					),
+					"lease_refcount_after": int(
+						r13_render_warm_diag.get("lease_refcount_after", 0)
+					),
+				},
 				"finalize_ms": float(r13_loading_profile.get("finalize_ms", 0.0)),
 				"total_ms": float(r13_loading_profile.get("total_ms", 0.0)),
 				"prewarm_deadline_exceeded": bool(

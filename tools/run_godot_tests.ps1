@@ -241,7 +241,9 @@ $Suites.caster_visual_critical = @(
     "tests/input_release_cleanup_test.tscn",
     "tests/initial_world_input_lock_test.tscn",
     "tests/map_transition_input_lock_test.tscn",
-    'tests/caster_skill_workset_lease_test.tscn'
+    'tests/caster_skill_workset_lease_test.tscn',
+    'tests/r14_caster_sequence_lease_test.tscn',
+    'tests/r14_caster_production_caller_lease_test.tscn'
 )
 
 $Suites.taoist_critical = @(

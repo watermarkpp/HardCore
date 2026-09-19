@@ -26,7 +26,12 @@ var _manual_mode := false
 ## is the ONE selected direction's frame paths; a first-frame miss keeps the
 ## player alive waiting for residency instead of permanently stopping, and a
 ## mid-sequence miss freezes the logical clock without skipping a frame.
+## R14-C-R1 P0-4/5/6/7: _sequence_lease_held is the ownership truth - a
+## waiter that has never acquired must never decrement the registry refcount
+## (no phantom release of another owner's lease), and retry must not stack a
+## second refcount after an acquire.
 var _sequence_paths: Array[String] = []
+var _sequence_lease_held := false
 var _waiting_for_residency := false
 ## External clock mode: when set, frame selection is derived from the shared
 ## clock value (ms) instead of this player's own accumulator. Keeps the
@@ -68,6 +73,7 @@ func configure(
 	visual_loaded = false
 	playback_complete = false
 	_waiting_for_residency = false
+	_sequence_lease_held = false
 	texture = null
 	transform = Transform2D.IDENTITY
 	offset = Vector2.ZERO
@@ -241,23 +247,18 @@ func configure(
 	_elapsed = 0.0
 	_manual_mode = false
 	playback_complete = false
-	# R14-C3: sequence-level residency lease. The lease covers ONLY the
-	# selected direction's sequence (not the whole skill). configure() first
-	# tries frame 0 exactly like the pre-R14-C path: inside the loading
-	# window request_animation_frame_texture synchronously loads it, so a
-	# cold test/first-cast still resolves. Only when frame 0 genuinely misses
-	# (combat mode, async warm-up channel) does the player queue the
-	# sequence and keep processing; playback starts once residency completes
-	# instead of permanently stopping on `set_process(visual_loaded)`.
+	# R14-C3 + R14-C-R1 P0-1/P0-5: configure() returns whether the
+	# configuration was ACCEPTED, not whether frame 0 is already resident.
+	# Structural failures (unknown skill, bad contract, empty frames) return
+	# false. A legal configuration whose texture sequence is still warming up
+	# returns true with visual_loaded=false and _waiting_for_residency=true;
+	# the production caller keeps the node and playback starts on residency.
+	# The sequence lease is acquired through the helper (only when the whole
+	# sequence is resident - never a phantom lease on missing paths).
 	_sequence_paths = CasterSkillVisualRegistry.animation_sequence_paths(
 		skill_id, direction_index, phase_id
 	)
-	# Acquire the sequence lease whenever the whole sequence is resident:
-	# mid-playback misses then hold the last frame instead of evicting under
-	# LRU pressure. A partially-missing sequence (combat miss) skips the
-	# lease so LRU stays free while the async warm-up channel fills it.
-	if CasterSkillVisualRegistry.sequence_resident(_sequence_paths):
-		CasterSkillVisualRegistry.acquire_sequence_lease(_sequence_paths)
+	_acquire_sequence_lease_if_ready()
 	visual_loaded = _apply_frame(0)
 	if visual_loaded:
 		_waiting_for_residency = false
@@ -266,14 +267,28 @@ func configure(
 		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
 		_waiting_for_residency = true
 		set_process(true)
-	return visual_loaded
+	return true
 
 
+## R14-C-R1 P0-5: acquire the sequence lease exactly once. Already held ->
+## true (no refcount stacking). Not fully resident -> false (waiter stays
+## un-leased; the async warm-up channel fills the sequence without a lease).
+func _acquire_sequence_lease_if_ready() -> bool:
+	if _sequence_lease_held:
+		return true
+	if not CasterSkillVisualRegistry.acquire_sequence_lease(_sequence_paths):
+		return false
+	_sequence_lease_held = true
+	return true
+
+
+## R14-C-R1 P0-6: safe release. Only a real owner decrements the registry
+## refcount; a never-acquired waiter must not release another owner's lease.
 func _release_sequence_lease() -> void:
-	if _sequence_paths.is_empty():
-		return
-	CasterSkillVisualRegistry.release_sequence_lease(_sequence_paths)
-	_sequence_paths = []
+	if _sequence_lease_held:
+		CasterSkillVisualRegistry.release_sequence_lease(_sequence_paths)
+		_sequence_lease_held = false
+	_sequence_paths.clear()
 
 
 func _exit_tree() -> void:
@@ -349,7 +364,10 @@ func _retry_after_warm() -> void:
 	if not CasterSkillVisualRegistry.sequence_resident(_sequence_paths):
 		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
 		return
-	CasterSkillVisualRegistry.acquire_sequence_lease(_sequence_paths)
+	# R14-C-R1 P0-7: acquire at most once. If _apply_frame below edge-fails
+	# after a successful acquire, the lease is KEPT and the next retry sees
+	# _sequence_lease_held==true - it must not stack a second refcount.
+	_acquire_sequence_lease_if_ready()
 	_waiting_for_residency = false
 	_elapsed = 0.0
 	# C3 first-frame miss: index is still 0 -> starts from frame 0.

@@ -130,8 +130,10 @@ func _case_2_refcount_lease_protects_and_shares() -> void:
 
 
 ## C3: configure() with a missing sequence must NOT permanently stop the
-## player. It queues the sequence, keeps processing, and starts from frame 0
-## once residency completes.
+## player. P0-1: configure returns TRUE (configuration accepted) even when
+## frame 0 is not resident yet; the live visual state is visual_loaded=false
+## + _waiting_for_residency=true. It queues the sequence, keeps processing,
+## and starts from frame 0 once residency completes.
 func _case_3_first_frame_miss_waits_for_residency() -> void:
 	Registry.clear_frame_texture_cache()
 	Registry.clear_pending_warm_paths()
@@ -146,16 +148,24 @@ func _case_3_first_frame_miss_waits_for_residency() -> void:
 	add_child(player)
 	var configured := player.configure("wizard.laser", Vector2.DOWN)
 	_check(
-		not configured,
-		"C3 configure with missing sequence reports not-loaded (waits)",
+		configured,
+		"C3 configure accepts a legal configuration while the sequence warms",
+	)
+	_check(
+		not player.visual_loaded,
+		"C3 first-frame miss does not claim a loaded texture",
 	)
 	_check(
 		player._waiting_for_residency,
 		"C3 configure arms waiting-for-residency on first-frame miss",
 	)
 	_check(
-		not player.visual_loaded,
-		"C3 first-frame miss does not claim a loaded texture",
+		player.is_processing(),
+		"C3 waiting player keeps processing (never permanently stops)",
+	)
+	_check(
+		player.current_frame_index == 0,
+		"C3 waiting player holds frame index 0",
 	)
 	# Warm the sequence (the residency source), then drive the next process
 	# tick manually so the waiting branch runs deterministically.
@@ -228,7 +238,12 @@ func _case_4_mid_sequence_miss_does_not_advance_frame() -> void:
 	var extended: Array[String] = paths.duplicate()
 	extended.append(not_yet_resident)
 	player._sequence_paths = extended
-	Registry.acquire_sequence_lease(player._sequence_paths)
+	# Simulate the formal lease path: configure() succeeded with the base
+	# sequence resident and this player holds the lease. The extra probe
+	# frame is NOT resident, so the next apply misses - the C4 guard must
+	# freeze the index. (P0-4: registry acquire refuses non-resident paths,
+	# so the owner flag is set directly to model the pre-miss lease state.)
+	player._sequence_lease_held = true
 	player._elapsed = 0.0
 	var before_index := player.current_frame_index
 	player._process(0.05)
@@ -254,7 +269,8 @@ func _case_4_mid_sequence_miss_does_not_advance_frame() -> void:
 		player.current_frame_index == before_index,
 		"C4 resume keeps the last committed frame index",
 	)
-	Registry.release_sequence_lease(player._sequence_paths)
+	# The simulated owner releases through the safe path (held flag decides).
+	player._release_sequence_lease()
 	Registry.set_loading_window_active(true)
 	player.queue_free()
 	await get_tree().process_frame

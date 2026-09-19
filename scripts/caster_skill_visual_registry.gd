@@ -248,13 +248,21 @@ static var _sequence_lease_refcounts: Dictionary = {}
 
 ## R14-C2: acquire a refcounted lease over the given sequence paths. Safe to
 ## call repeatedly for the same sequence from multiple players.
-static func acquire_sequence_lease(paths: Array[String]) -> void:
+## R14-C-R1 P0-4: returns true ONLY when paths is non-empty AND every path is
+## resident. A missing path never receives a phantom lease refcount, so a
+## waiter that has not acquired cannot accidentally protect (or later
+## release) another owner's frames.
+static func acquire_sequence_lease(paths: Array[String]) -> bool:
+	if paths.is_empty():
+		return false
 	for path: String in paths:
-		if path.is_empty():
-			continue
+		if path.is_empty() or not _frame_textures.has(path):
+			return false
+	for path: String in paths:
 		_sequence_lease_refcounts[path] = (
 			int(_sequence_lease_refcounts.get(path, 0)) + 1
 		)
+	return true
 
 
 ## R14-C2: release one refcount on each path. The path leaves the lease only
@@ -563,8 +571,14 @@ static func frame_texture_cache_diagnostics() -> Dictionary:
 		# perf-smoothness-r1 Phase C workset lease + combat gate accounting.
 		"pinned_count": _pinned_paths.size(),
 		"pinned_bytes": _pinned_bytes,
-		# R14-C2: active-sequence lease accounting.
+		# R14-C2: active-sequence lease accounting. P0-8: unique leased paths
+		# plus the sum of every path's refcount (multiple players on the same
+		# sequence inflate the total without changing the unique count).
 		"leased_sequence_paths": _sequence_lease_refcounts.size(),
+		"leased_sequence_refcount_total": _sequence_lease_refcounts.values().reduce(
+			func(acc: int, count: Variant) -> int: return acc + int(count),
+			0,
+		),
 		"loading_window_active": _loading_window_active,
 		"pending_warm_count": _pending_warm_paths.size(),
 		"combat_frame_miss_count": combat_frame_miss_count,
