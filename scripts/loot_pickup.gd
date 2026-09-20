@@ -18,6 +18,13 @@ var gold_amount := 0
 var target: PlayerCharacter
 var icon_sprite: Sprite2D
 var name_label: Label
+## Measured plate size of the name label (text width + padding). The layout
+## authority uses it for honest overlap tests; the label rect is resized to
+## match so the visible text and the tested rect are the same box.
+var name_plate_size := Vector2(96, 24)
+## Current display offset from the label home position (set only by the
+## event-driven name layout; zero keeps the label at its home).
+var name_label_display_offset := Vector2.ZERO
 var _filter_threshold := 0
 var filtered := false
 var _overweight_retry_remaining := 0.0
@@ -203,6 +210,12 @@ func _ready() -> void:
 	label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(label)
 	name_label = label
+	# Measure the real text plate once: the layout authority and the drawn
+	# label must share the same rectangle, and long names must not silently
+	# overflow the tested box.
+	name_plate_size = Vector2(maxf(48.0, label.get_minimum_size().x) + 8.0, 24.0)
+	label.size = name_plate_size
+	label.position = name_label_home_position()
 	# Names remain readable above world actors; the item artwork stays at -2.
 	name_label.z_as_relative = false
 	name_label.z_index = 1
@@ -214,6 +227,32 @@ func _ready() -> void:
 	if icon_sprite == null:
 		RuntimeDiagnostics.increment_performance_counter(&"loot_fallback_redraw_requests")
 		queue_redraw()
+
+
+## 2026-09-20 user principle: the label's HOME is the single-drop presentation
+## position — horizontally centered on the item, 36px above the footpoint.
+func name_label_home_position() -> Vector2:
+	return Vector2(-name_plate_size.x * 0.5, -36.0)
+
+
+## Only the event-driven ground-name layout writes offsets. Zero keeps the
+## label at its home position above its own icon.
+func set_name_label_display_offset(offset: Vector2) -> void:
+	name_label_display_offset = offset
+	if is_instance_valid(name_label):
+		name_label.position = name_label_home_position() + offset
+
+
+## Local-space rect of this pickup's ground icon. The name layout treats
+## OTHER pickups' icon rects as association obstacles: a name plate must
+## never cover another item's icon.
+func ground_icon_rect_local() -> Rect2:
+	var icon_size := Vector2(24, 24)
+	if is_instance_valid(icon_sprite) and icon_sprite.texture != null:
+		var texture_size := icon_sprite.texture.get_size()
+		if texture_size.x > 1.0 and texture_size.y > 1.0:
+			icon_size = Vector2(minf(texture_size.x, 48.0), minf(texture_size.y, 48.0))
+	return Rect2(Vector2(0, -5) - icon_size * 0.5, icon_size)
 
 
 func _apply_filter(level: int) -> void:
