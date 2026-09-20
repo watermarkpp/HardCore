@@ -195,7 +195,9 @@ func _run() -> void:
 	assert(bool(buy.get("valid", false)) and int(buy.get("unit_price", 0)) == 55)
 	var full_instance := {"name": "木剑", "durability": 4, "max_durability": 4, "instance_id": "pricing-full"}
 	var sell := PricingServiceScript.quote_sell(wood, GameData.get_item_record("木剑"), full_instance)
-	assert(bool(sell.get("valid", false)) and int(sell.get("unit_price", 0)) == 28)
+	# 原版 GetSellItemPrice 契约（ObjNpc.pas）：出售 = 调整后主库价 ÷ 2（木剑 50 → 25）；
+	# 商人 stockMarkup 不再进入出售基准（2026-09 用户裁决口径：神水 5000 / 思贝儿 8760）。
+	assert(bool(sell.get("valid", false)) and int(sell.get("unit_price", 0)) == 25, "木剑满耐久出售价必须为主库价50的一半(25)")
 	var starter_context := GameData.merchant_context("starter_gear")
 	var general_context := GameData.merchant_context("general")
 	var book_context := GameData.merchant_context("books")
@@ -224,8 +226,53 @@ func _run() -> void:
 	)
 	assert(
 		bool(rated_sell.get("valid", false))
-		and int(rated_sell.get("unit_price", 0)) == 36,
-		"Merchant Rate没有进入出售权威报价"
+		and int(rated_sell.get("unit_price", 0)) == 25,
+		"商人倍率不得进入出售权威报价（原版GetSellItemPrice=主库价/2，出售不经过GetUserPrice）"
+	)
+	# 用户裁决价（2026-09-20）：神水系出售 5000、思贝儿手镯出售 8760。
+	# 出售 = 调整后主库价 ÷ 2；思贝儿手镯主库价按策略 itemBps 修至 17520。
+	var divine_water := GameData.get_item_price_record("神水")
+	var divine_sell := PricingServiceScript.quote_sell(
+		divine_water, GameData.get_item_record("神水"), {"name": "神水", "instance_id": "pricing-divine"}
+	)
+	assert(
+		bool(divine_sell.get("valid", false)) and int(divine_sell.get("unit_price", 0)) == 5000,
+		"神水出售价必须是用户裁决的5000（主库价10000的一半）"
+	)
+	var buff_water := GameData.get_item_price_record("体力强效神水")
+	assert(str(buff_water.get("item_key", "")) == "item:910001", "910xxx神水系必须经newItems注册进价格索引")
+	var buff_water_sell := PricingServiceScript.quote_sell(
+		buff_water,
+		GameData.get_item_record("体力强效神水"),
+		{"name": "体力强效神水", "instance_id": "pricing-buff-water"}
+	)
+	assert(
+		bool(buff_water_sell.get("valid", false)) and int(buff_water_sell.get("unit_price", 0)) == 5000,
+		"体力强效神水出售价必须是5000（此前完全没有价格记录无法出售）"
+	)
+	var bracelet_record := GameData.get_item_price_record("思贝儿手镯")
+	assert(
+		str(bracelet_record.get("item_key", "")) == "service:493",
+		"思贝儿手镯必须经别名挂回服务目录价格身份service:493"
+	)
+	var legacy_alias_record := GameData.get_item_price_record("思贝尔手镯")
+	assert(
+		int(legacy_alias_record.get("base_price", -1)) == 10000,
+		"思贝尔手镯旧名必须解析到同一服务目录价格记录"
+	)
+	var bracelet_catalog := GameData.get_item_record("思贝儿手镯")
+	assert(int(bracelet_catalog.get("maxDurability", 0)) == 6, "思贝儿手镯目录耐久必须为6，测试实例按此构造")
+	var bracelet_full := {"name": "思贝儿手镯", "durability": 6, "max_durability": 6, "instance_id": "pricing-bracelet-full"}
+	var bracelet_sell := PricingServiceScript.quote_sell(bracelet_record, bracelet_catalog, bracelet_full)
+	assert(
+		bool(bracelet_sell.get("valid", false)) and int(bracelet_sell.get("unit_price", 0)) == 8760,
+		"思贝儿手镯满耐久出售价必须是用户裁决的8760（主库价17520的一半）"
+	)
+	var bracelet_half := {"name": "思贝儿手镯", "durability": 3, "max_durability": 6, "instance_id": "pricing-bracelet-half"}
+	var bracelet_half_sell := PricingServiceScript.quote_sell(bracelet_record, bracelet_catalog, bracelet_half)
+	assert(
+		int(bracelet_half_sell.get("unit_price", 0)) == 6570,
+		"思贝儿手镯半耐久出售价必须按原版耐久曲线为6570（17520×3/4÷2）"
 	)
 	var half_instance := full_instance.duplicate(true)
 	half_instance["durability"] = 2

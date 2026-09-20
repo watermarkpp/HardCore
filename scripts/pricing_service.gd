@@ -150,18 +150,23 @@ static func quote_sell(
 	):
 		rejection["reason"] = "绑定物品不能出售。"
 		return rejection
-	var buy_basis := _quote_buy_resolved(price_record, 1, context, active)
-	if not bool(buy_basis.get("valid", false)):
-		rejection["reason"] = str(buy_basis.get("reason", "该物品无法估值。"))
+	# 原版 M2Server 出售契约（ObjNpc.pas GetUserItemPrice → GetSellItemPrice =
+	# Round(nPrice / 2.0)，且出售不经过 GetUserPrice）：商人回收价 =
+	# 主数据库价（含耐久曲线）的一半。stockMarkupBps 与商人倍率仅是买方概念，
+	# 不得进入出售估值基准（用户裁决：神水出售 5000 = 10000÷2，
+	# 思贝儿手镯出售 8760 = 17520÷2）。
+	var adjusted := _adjusted_database_price_resolved(price_record, active)
+	if adjusted <= 0:
+		rejection["reason"] = "该物品没有有效的主数据库价格。"
 		return rejection
-	var instance_value := _instance_value(int(buy_basis.get("unit_price", 0)), catalog, instance)
+	var instance_value := _instance_value(adjusted, catalog, instance)
 	var sell_rate_bps := int(sell_policy.get("rateBps", 5000))
 	var unit_price := _apply_bps(instance_value, sell_rate_bps)
 	if instance_value > 0:
 		unit_price = maxi(int(sell_policy.get("minimumPositivePrice", 1)), unit_price)
 	return _complete_quote(rejection, unit_price, quantity, {
 		"database_price": int(price_record.get("base_price", 0)),
-		"merchant_unit_price": int(buy_basis.get("unit_price", 0)),
+		"adjusted_database_price": adjusted,
 		"instance_value": instance_value,
 		"sell_rate_bps": sell_rate_bps,
 		"durability": int(instance.get("durability", instance.get("max_durability", 0))),

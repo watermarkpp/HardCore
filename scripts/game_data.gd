@@ -106,6 +106,9 @@ const ITEM_ALIASES := {
 	"食人树叶": "食人花叶",
 	"食人树的果实": "食人花果",
 	"蝎子的尾巴": "蝎尾",
+	# 服务目录(cjlaaa)把该手镯记录为"思贝尔手镯"，运行时目录/掉落与 1.76 资料站
+	# 均为"思贝儿手镯"；价格记录必须挂回运行时物品身份，否则无法估值。
+	"思贝尔手镯": "思贝儿手镯",
 
 }
 # 服务端使用经典MAP代码；正式地图运行时使用冻结 canonical IDs。
@@ -2521,6 +2524,10 @@ func _build_price_index() -> void:
 	for raw: Variant in service_item_catalog.get("runtimeItems", []):
 		_register_price_record(raw)
 	for raw: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
+		_register_price_record(raw)
+	# 项目权威 newItems（910xxx 神水系等）由 item_runtime_authority 直接定义；
+	# 携带 price 的记录在此入索引，避免"目录有身份、估值无主库价格"的裂缝。
+	for raw: Variant in item_runtime_authority.get("newItems", []):
 		_register_price_record(raw)
 	# Primary database records always register first. These candidates are used
 	# only for exact official items proven missing from every configured
