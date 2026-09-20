@@ -2,6 +2,17 @@ extends Node
 
 
 func _ready() -> void:
+	# MAP-SAFETY-R1: formal document guard. These three editor documents were
+	# overwritten by the sandbox-redirect bug once; the whole test must leave
+	# them byte-identical or fail.
+	var formal_guard_paths := [
+		"res://map_editor_workspace/world_bich_province/world_bich_province.editor.json",
+		"res://map_editor_workspace/world_wooma_forest/world_wooma_forest.editor.json",
+		"res://map_editor_workspace/bich_orc_tomb_f1/bich_orc_tomb_f1.editor.json",
+	]
+	var formal_guard_before := {}
+	for guard_path: String in formal_guard_paths:
+		formal_guard_before[guard_path] = FileAccess.get_file_as_string(guard_path).sha256_text()
 	# 2026-09-20 identity contract: bich_province / mengzhong_province were
 	# migrated to the formal world_* keys; catalog values are unchanged.
 	var bich := MapEditorTypes.new_map_from_catalog("world_bich_province")
@@ -109,6 +120,29 @@ func _ready() -> void:
 	var workspace_maps := MapEditorSaveService.list_workspace_maps()
 	assert(workspace_maps.any(func(entry: Dictionary) -> bool: return str(entry.get("map_id", "")) == "world_cangyue_island"))
 	assert(not workspace_maps.any(func(entry: Dictionary) -> bool: return str(entry.get("map_id", "")) == "cyd_1"))
+	# MAP-SAFETY-R1: from here on every template open / save test runs inside
+	# a sandboxed formal workspace; the formal res://map_editor_workspace tree
+	# must stay untouched for the rest of the test.
+	MapEditorSaveService.test_workspace_root_override = "user://mse_stage0_formal_workspace/"
+	# MAP-SAFETY-R1 negative test: a document whose explicit save path file
+	# name disagrees with its map_id must fail closed with
+	# document_path_map_id_mismatch, must not create or touch the formal
+	# default workspace file, and must not write anywhere.
+	var negative_root := "user://mse_stage0_negative"
+	var negative_document := negative_root.path_join("orc_tomb_1.editor.json")
+	var negative_workspace := negative_root.path_join("ground_workspace")
+	_cleanup_template_test_files(negative_root, negative_document, negative_workspace)
+	var mismatch_document := MapEditorTypes.new_map_from_blank_template("blank.orc_tomb_1")
+	editor._adopt_new_document(mismatch_document, "负向测试", negative_document)
+	assert(editor.current_document.map_id == "bich_orc_tomb_f1")
+	assert(editor.current_document_path == negative_document)
+	var formal_default_path := MapEditorSaveService.default_path("bich_orc_tomb_f1")
+	var formal_default_existed := FileAccess.file_exists(formal_default_path)
+	var mismatch_result := editor._save_current_document()
+	assert(not bool(mismatch_result.get("ok", false)), str(mismatch_result))
+	assert((mismatch_result.get("errors", []) as Array).has("document_path_map_id_mismatch"))
+	assert(FileAccess.file_exists(formal_default_path) == formal_default_existed)
+	_cleanup_template_test_files(negative_root, negative_document, negative_workspace)
 	var sandbox_test_root := "user://mse_stage0_sandbox"
 	var sandbox_test_document := sandbox_test_root.path_join("sandbox_64.editor.json")
 	var sandbox_test_workspace := sandbox_test_root.path_join("ground_workspace")
@@ -228,6 +262,11 @@ func _ready() -> void:
 	_cleanup_template_test_files(sandbox_test_root, sandbox_test_document, sandbox_test_workspace)
 	_cleanup_template_test_files(bich_test_root, bich_test_document, bich_test_workspace)
 	editor.queue_free()
+	# MAP-SAFETY-R1: formal documents must be byte-identical to test start.
+	for guard_path: String in formal_guard_paths:
+		var guard_after := FileAccess.get_file_as_string(guard_path).sha256_text()
+		assert(str(formal_guard_before[guard_path]) == guard_after, "formal document changed: " + guard_path)
+	MapEditorSaveService.test_workspace_root_override = ""
 	print("MAP_EDITOR_STAGE0_PASS")
 	get_tree().quit(0)
 

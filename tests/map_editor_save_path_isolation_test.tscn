@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://msr1saveisotest"]
+
+[ext_resource type="Script" path="res://tests/map_editor_save_path_isolation_test.gd" id="1_msri"]
+
+[node name="MapEditorSavePathIsolationTest" type="Node"]
+script = ExtResource("1_msri")

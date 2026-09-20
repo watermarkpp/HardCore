@@ -1275,24 +1275,41 @@ func _on_open_pressed() -> void:
 	if current_document.is_empty():
 		status_label.text = "当前没有可重新载入的地图"
 		return
+	var resolved_path := _resolved_current_document_path()
+	## MAP-SAFETY-R1: a mismatched explicit document path must fail closed
+	## here too -- never forward an empty/redirected path into the loader.
+	if resolved_path.is_empty():
+		status_label.text = "无法载入：当前工作文件名与地图 ID 不一致（document_path_map_id_mismatch）"
+		return
 	MapAssetCatalogService.invalidate_cache()
 	_refresh_asset_tree()
 	_refresh_map_template_options(
 		"blank.%s" % str(current_document.get("map_id", ""))
 	)
-	_open_document_path(_resolved_current_document_path())
+	_open_document_path(resolved_path)
 
 
+## MAP-SAFETY-R1: resolves the save/reload target for the current document.
+## An empty current_document_path falls back to the formal default path.
+## An explicit path whose file name exactly matches <map_id>.editor.json is
+## honored (sandboxed tests rely on this). Any other explicit path FAILS
+## CLOSED: the caller must refuse to save/reload. The previous silent
+## redirect to default_path(map_id) was the write channel that let sandboxed
+## test saves overwrite formal workspace documents.
 func _resolved_current_document_path() -> String:
 	var map_id := str(current_document.get("map_id", ""))
 	var expected_file := "%s.editor.json" % map_id
-	if current_document_path.is_empty() or current_document_path.get_file() != expected_file:
+	if current_document_path.is_empty():
 		return MapEditorSaveService.default_path(map_id)
+	if current_document_path.get_file() != expected_file:
+		return ""
 	return current_document_path
 
 
 func _save_current_document() -> Dictionary:
 	var path := _resolved_current_document_path()
+	if path.is_empty():
+		return {"ok": false, "errors": ["document_path_map_id_mismatch"]}
 	var initialized := MapEditorGroundService.initialize(current_document)
 	if not initialized.get("ok", false):
 		return initialized

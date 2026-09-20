@@ -22,7 +22,10 @@ static var test_force_workspace_restore_failure := false
 
 
 static func default_path(map_id: String) -> String:
-	return EDITOR_ROOT + map_id + "/" + map_id + ".editor.json"
+	## MAP-SAFETY-R1: route through _workspace_root_path() so an active
+	## test_workspace_root_override redirects this path into the sandbox
+	## instead of the formal workspace.
+	return _workspace_root_path() + map_id + "/" + map_id + ".editor.json"
 
 
 static func canonical_workspace_path(path: String) -> String:
@@ -66,6 +69,13 @@ static func save_document(document: Dictionary, path := "") -> Dictionary:
 	if not errors.is_empty():
 		return {"ok": false, "errors": errors}
 	var target_path := path if not path.is_empty() else default_path(str(document.map_id))
+	## MAP-SAFETY-R1 defense-in-depth: with a test workspace override active,
+	## any save whose resolved target still points at the formal workspace is
+	## forbidden and must fail before touching any file API.
+	if not test_workspace_root_override.strip_edges().is_empty():
+		var normalized_target := target_path.replace("\\", "/")
+		if normalized_target.begins_with("res://map_editor_workspace"):
+			return {"ok": false, "errors": ["test_formal_workspace_write_forbidden"]}
 	var absolute := ProjectSettings.globalize_path(target_path)
 	var directory := absolute.get_base_dir()
 	var mkdir_error := DirAccess.make_dir_recursive_absolute(directory)
@@ -100,7 +110,9 @@ static func save_document(document: Dictionary, path := "") -> Dictionary:
 
 static func list_workspace_maps() -> Array:
 	var result: Array = []
-	var dir := DirAccess.open(EDITOR_ROOT)
+	## MAP-SAFETY-R1: workspace scans must respect the test override.
+	var workspace_root := _workspace_root_path()
+	var dir := DirAccess.open(workspace_root)
 	if dir == null:
 		return result
 	var static_ids := {}
@@ -115,7 +127,7 @@ static func list_workspace_maps() -> Array:
 			and not static_ids.has(entry)
 			and not superseded_legacy_ids.has(entry)
 		):
-			var editor_path := EDITOR_ROOT + entry + "/" + entry + ".editor.json"
+			var editor_path := workspace_root + entry + "/" + entry + ".editor.json"
 			if FileAccess.file_exists(editor_path):
 				var summary := _read_document_summary(editor_path)
 				if not summary.is_empty():
@@ -881,13 +893,15 @@ static func collect_used_runtime_map_ids() -> Dictionary:
 	## Documents outside the identity registry (user customs, out-of-registry
 	## artifacts) may already occupy formal-range ids; only those directories
 	## are parsed so the scan stays cheap.
-	var dir := DirAccess.open(EDITOR_ROOT)
+	## MAP-SAFETY-R1: workspace scans must respect the test override.
+	var workspace_root := _workspace_root_path()
+	var dir := DirAccess.open(workspace_root)
 	if dir != null:
 		dir.list_dir_begin()
 		var entry := dir.get_next()
 		while entry != "":
 			if dir.current_is_dir() and not known_ids.has(entry) and entry != "." and entry != "..":
-				var editor_path := EDITOR_ROOT + entry + "/" + entry + ".editor.json"
+				var editor_path := workspace_root + entry + "/" + entry + ".editor.json"
 				if FileAccess.file_exists(editor_path):
 					var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(editor_path))
 					if parsed is Dictionary:
