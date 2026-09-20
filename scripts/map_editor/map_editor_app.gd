@@ -54,10 +54,6 @@ var object_role_option: OptionButton
 var map_portal_note_container: VBoxContainer
 var map_portal_note_edit: LineEdit
 var collision_shape_option: OptionButton
-var collision_draw_toggle: CheckBox
-var collision_erase_toggle: CheckBox
-var collision_erase_whole_toggle: CheckBox
-var collision_instruction_label: Label
 var manual_collision_start := Vector2i(-1, -1)
 var manual_polygon_points: Array[Vector2i] = []
 var safe_polygon_points: Array[Vector2i] = []
@@ -266,17 +262,6 @@ func _build_ui() -> void:
 	for role: Array in [["装饰物","decoration"],["障碍物","obstacle"],["建筑","building"],["可交互物","interactable"],["地形结构","terrain"]]:
 		object_role_option.add_item(role[0]); object_role_option.set_item_metadata(object_role_option.item_count-1,role[1])
 	sidebar.add_child(object_role_option)
-	var walkable_button := CheckBox.new(); walkable_button.text = "显示不可走区域"; walkable_button.toggled.connect(_on_walkable_preview_toggled); sidebar.add_child(walkable_button)
-	var collision_title := Label.new(); collision_title.text = "手工碰撞"; collision_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(collision_title)
-	collision_shape_option = OptionButton.new()
-	for shape: Array in [["单格（左键点击或拖动）","cell"],["矩形（两点）","rect"],["椭圆（两点）","ellipse"],["多边形（逐点，Enter完成）","polygon"]]:
-		collision_shape_option.add_item(shape[0]); collision_shape_option.set_item_metadata(collision_shape_option.item_count-1,shape[1])
-	collision_shape_option.item_selected.connect(_on_collision_shape_selected)
-	sidebar.add_child(collision_shape_option)
-	collision_draw_toggle = CheckBox.new(); collision_draw_toggle.text = "在画布绘制碰撞（右键取消；单格快捷键 R）"; collision_draw_toggle.toggled.connect(_on_collision_draw_toggled); sidebar.add_child(collision_draw_toggle)
-	collision_erase_toggle = CheckBox.new(); collision_erase_toggle.text = "单格擦除碰撞（左键点击或拖动，右键退出；快捷键 T）"; collision_erase_toggle.toggled.connect(_on_collision_erase_toggled); sidebar.add_child(collision_erase_toggle)
-	collision_erase_whole_toggle = CheckBox.new(); collision_erase_whole_toggle.text = "整块擦除碰撞（删除形状或禁用素材碰撞）"; collision_erase_whole_toggle.toggled.connect(_on_collision_erase_whole_toggled); sidebar.add_child(collision_erase_whole_toggle)
-	collision_instruction_label = Label.new(); collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"; collision_instruction_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; collision_instruction_label.modulate = Color("d7aa62"); sidebar.add_child(collision_instruction_label)
 	var semantic_title := Label.new(); semantic_title.text = "NPC、怪物与地图功能点"; semantic_title.add_theme_font_size_override("font_size", 13); sidebar.add_child(semantic_title)
 	semantic_kind_option = OptionButton.new()
 	for kind: Array in [
@@ -1799,9 +1784,6 @@ func _set_active_tool(mode: String) -> void:
 	active_tool_mode = mode
 	if random_region_fill_toggle != null: random_region_fill_toggle.set_pressed_no_signal(mode == "lasso")
 	if point_erase_toggle != null: point_erase_toggle.set_pressed_no_signal(mode == "erase")
-	if collision_draw_toggle != null: collision_draw_toggle.set_pressed_no_signal(mode == "manual_collision")
-	if collision_erase_toggle != null: collision_erase_toggle.set_pressed_no_signal(mode == "manual_collision_erase")
-	if collision_erase_whole_toggle != null: collision_erase_whole_toggle.set_pressed_no_signal(mode == "manual_collision_erase_whole")
 	if semantic_place_toggle != null: semantic_place_toggle.set_pressed_no_signal(mode == "semantic")
 	if preview == null:
 		return
@@ -2351,11 +2333,6 @@ func _on_bake_dirty_pressed() -> void:
 		status_label.text = "已烘焙 %d 个Chunk预览，运行时目录未写入" % (result.get("baked_chunks", []) as Array).size()
 	else:
 		status_label.text = "烘焙失败：%s" % result.get("errors", [])
-
-
-func _on_walkable_preview_toggled(enabled: bool) -> void:
-	preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), enabled)
-	status_label.text = "不可走区域预览已开启" if enabled else "不可走区域预览已关闭"
 
 
 func _on_semantic_place_toggled(enabled: bool) -> void:
@@ -3071,94 +3048,10 @@ static func _polygon_tile_center(points: Array[Vector2i]) -> Vector2i:
 	return Vector2i(roundi(total.x / float(points.size())), roundi(total.y / float(points.size())))
 
 
-func _on_collision_draw_toggled(enabled: bool) -> void:
-	# HC-POLY-R2
-	if enabled and is_instance_valid(_hc_polygon_controller):
-		var hc_shape := _selected_collision_shape()
-		if hc_shape == "polygon" or HCPPolyGeo.enabled(current_document):
-			_set_active_tool("select")
-			_hc_polygon_controller.open_polygon_tool(hc_shape)
-			return
-	manual_collision_start = Vector2i(-1, -1)
-	manual_polygon_points.clear()
-	_sync_manual_collision_draft()
-	if enabled:
-		_set_active_tool("manual_collision")
-	elif active_tool_mode == "manual_collision":
-		_set_active_tool("place")
-	var shape := _selected_collision_shape()
-	collision_instruction_label.text = _collision_shape_help(shape) if enabled else "选择形状后将自动进入碰撞绘制"
-	status_label.text = collision_instruction_label.text if enabled else "已返回素材放置"
-
-
-func _on_collision_erase_toggled(enabled: bool) -> void:
-	# HC-POLY-R2
-	if enabled and HCPPolyGeo.enabled(current_document) and is_instance_valid(_hc_polygon_controller):
-		_set_active_tool("select")
-		_hc_polygon_controller.open_legacy_erase()
-		return
-	manual_collision_start = Vector2i(-1, -1)
-	manual_polygon_points.clear()
-	_sync_manual_collision_draft()
-	if enabled:
-		_set_active_tool("manual_collision_erase")
-		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
-		collision_instruction_label.text = "单格擦除：左键点击或拖动；每次只把鼠标所在的一格改为可走"
-		status_label.text = "已开启单格碰撞擦除；右键退出"
-	elif active_tool_mode == "manual_collision_erase":
-		_set_active_tool("place")
-		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
-		status_label.text = "已退出单格碰撞擦除，并返回素材放置"
-
-
-func _on_collision_erase_whole_toggled(enabled: bool) -> void:
-	# HC-POLY-R2
-	if enabled and HCPPolyGeo.enabled(current_document) and is_instance_valid(_hc_polygon_controller):
-		_set_active_tool("select")
-		_hc_polygon_controller.open_legacy_erase()
-		return
-	manual_collision_start = Vector2i(-1, -1)
-	manual_polygon_points.clear()
-	_sync_manual_collision_draft()
-	if enabled:
-		_set_active_tool("manual_collision_erase_whole")
-		preview.set_walkability_preview(MapEditorCollisionService.build_walkability(current_document), true)
-		collision_instruction_label.text = "整块擦除：删除命中的完整手工形状，并禁用命中素材的当前地图碰撞"
-		status_label.text = "已开启整块碰撞擦除；右键退出"
-	elif active_tool_mode == "manual_collision_erase_whole":
-		_set_active_tool("place")
-		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
-		status_label.text = "已退出整块碰撞擦除，并返回素材放置"
-
-
-func _on_collision_shape_selected(_index: int) -> void:
-	# HC-POLY-R2
-	if is_instance_valid(_hc_polygon_controller):
-		var hc_shape := _selected_collision_shape()
-		if hc_shape == "polygon" or HCPPolyGeo.enabled(current_document):
-			_set_active_tool("select")
-			_hc_polygon_controller.open_polygon_tool(hc_shape)
-			return
-	manual_collision_start = Vector2i(-1, -1)
-	manual_polygon_points.clear()
-	_set_active_tool("manual_collision")
-	var shape := _selected_collision_shape()
-	collision_instruction_label.text = _collision_shape_help(shape)
-	status_label.text = "已选择%s；%s" % [collision_shape_option.get_item_text(collision_shape_option.selected), collision_instruction_label.text]
-	_sync_manual_collision_draft()
-
-
 func _selected_collision_shape() -> String:
 	if collision_shape_option == null or collision_shape_option.selected < 0:
 		return "rect"
 	return str(collision_shape_option.get_item_metadata(collision_shape_option.selected))
-
-
-func _collision_shape_metadata_index(metadata: String) -> int:
-	for index in collision_shape_option.item_count:
-		if str(collision_shape_option.get_item_metadata(index)) == metadata:
-			return index
-	return -1
 
 
 func _collision_shape_help(shape: String) -> String:
@@ -3204,7 +3097,6 @@ func _on_manual_collision_tile_clicked(tile: Vector2i) -> void:
 func _on_manual_collision_cancelled() -> void:
 	if active_tool_mode in ["manual_collision_erase", "manual_collision_erase_whole"]:
 		_set_active_tool("place")
-		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
 		status_label.text = "已退出碰撞擦除，并返回素材放置"
 		return
 	var had_unfinished_shape := manual_collision_start.x >= 0 or not manual_polygon_points.is_empty()
@@ -3213,10 +3105,8 @@ func _on_manual_collision_cancelled() -> void:
 	_sync_manual_collision_draft()
 	if had_unfinished_shape:
 		status_label.text = "已取消本次碰撞形状；碰撞绘制仍然开启，再次右键可退出"
-		collision_instruction_label.text = _collision_shape_help(_selected_collision_shape())
 	else:
 		_set_active_tool("place")
-		collision_instruction_label.text = "选择形状后将自动进入碰撞绘制"
 		status_label.text = "已退出手工碰撞绘制，并返回素材放置"
 
 
@@ -3295,17 +3185,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_commit_safe_area_polygon()
 		get_viewport().set_input_as_handled()
 		return
-	if event.keycode == KEY_ENTER and collision_draw_toggle.button_pressed and str(collision_shape_option.get_item_metadata(collision_shape_option.selected)) == "polygon":
-		if manual_polygon_points.size() >= 3:
-			var points: Array = []
-			for point: Vector2i in manual_polygon_points: points.append([point.x, point.y])
-			_commit_manual_collision("polygon", {"points": points})
-			manual_polygon_points.clear()
-			_sync_manual_collision_draft()
-		else: status_label.text = "多边形至少需要3个点"
-		get_viewport().set_input_as_handled()
-		return
-	# 单键快捷键 W/S/R/T/E。LineEdit/SpinBox 等编辑控件会先消费可打印键，
+	# 单键快捷键 W/S/E。LineEdit/SpinBox 等编辑控件会先消费可打印键，
 	# 因此在名称输入框打字不会触发工具切换（与上方 Delete 快捷键同一机制）。
 	if event.keycode in [KEY_W, KEY_S]:
 		var scaled_id := preview.selected_selectable_id if preview != null else ""
@@ -3314,18 +3194,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		_resize_instance_by_action(scaled_id, 1 if event.keycode == KEY_W else 2)
-		get_viewport().set_input_as_handled()
-		return
-	if event.keycode == KEY_R:
-		var cell_index := _collision_shape_metadata_index("cell")
-		if cell_index >= 0:
-			collision_shape_option.select(cell_index)
-			_on_collision_shape_selected(cell_index)
-		get_viewport().set_input_as_handled()
-		return
-	if event.keycode == KEY_T:
-		collision_erase_toggle.set_pressed_no_signal(true)
-		_on_collision_erase_toggled(true)
 		get_viewport().set_input_as_handled()
 		return
 	if event.keycode == KEY_E:

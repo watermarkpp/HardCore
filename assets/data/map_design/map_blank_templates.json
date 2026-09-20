@@ -18,7 +18,7 @@
 		{
 			"template_id": "blank.bich_province",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "bich_province",
+			"map_id": "world_bich_province",
 			"runtime_map_id": 4.0,
 			"display_name": "比奇省（当前地图）",
 			"map_type": "outdoor_province",
@@ -40,7 +40,7 @@
 		{
 			"template_id": "blank.mengzhong_province",
 			"template_kind": "empty_map",
-			"map_id": "mengzhong_province",
+			"map_id": "world_mengzhong_province",
 			"runtime_map_id": 478.0,
 			"display_name": "盟重省",
 			"map_type": "outdoor_province",
@@ -60,7 +60,7 @@
 		{
 			"template_id": "blank.wooma_forest",
 			"template_kind": "empty_map",
-			"map_id": "wooma_forest",
+			"map_id": "world_wooma_forest",
 			"runtime_map_id": 268.0,
 			"display_name": "沃玛森林",
 			"map_type": "outdoor_field",
@@ -80,7 +80,7 @@
 		{
 			"template_id": "blank.snake_valley",
 			"template_kind": "empty_map",
-			"map_id": "snake_valley",
+			"map_id": "world_snake_valley",
 			"runtime_map_id": 338.0,
 			"display_name": "毒蛇山谷",
 			"map_type": "outdoor_field",
@@ -100,7 +100,7 @@
 		{
 			"template_id": "blank.orc_tomb_1",
 			"template_kind": "empty_map",
-			"map_id": "orc_tomb_1",
+			"map_id": "bich_orc_tomb_f1",
 			"runtime_map_id": 217.0,
 			"display_name": "兽人古墓一层",
 			"map_type": "dungeon_floor",
@@ -120,7 +120,7 @@
 		{
 			"template_id": "blank.orc_tomb_2",
 			"template_kind": "empty_map",
-			"map_id": "orc_tomb_2",
+			"map_id": "bich_orc_tomb_f2",
 			"runtime_map_id": 218.0,
 			"display_name": "兽人古墓二层",
 			"map_type": "dungeon_floor",
@@ -143,7 +143,7 @@
 		{
 			"template_id": "blank.orc_tomb_3",
 			"template_kind": "empty_map",
-			"map_id": "orc_tomb_3",
+			"map_id": "bich_orc_tomb_f3",
 			"runtime_map_id": 221.0,
 			"display_name": "兽人古墓三层",
 			"map_type": "dungeon_floor",
@@ -166,7 +166,7 @@
 		{
 			"template_id": "blank.wooma_temple_1",
 			"template_kind": "empty_map",
-			"map_id": "wooma_temple_1",
+			"map_id": "wooma_temple_f1",
 			"runtime_map_id": 313.0,
 			"display_name": "沃玛寺庙一层",
 			"map_type": "temple_floor",
@@ -186,7 +186,7 @@
 		{
 			"template_id": "blank.wooma_temple_2",
 			"template_kind": "empty_map",
-			"map_id": "wooma_temple_2",
+			"map_id": "wooma_temple_f2",
 			"runtime_map_id": 314.0,
 			"display_name": "沃玛寺庙二层",
 			"map_type": "temple_floor",
@@ -209,7 +209,7 @@
 		{
 			"template_id": "blank.wooma_temple_3",
 			"template_kind": "empty_map",
-			"map_id": "wooma_temple_3",
+			"map_id": "wooma_temple_boss_hall",
 			"runtime_map_id": 315.0,
 			"display_name": "沃玛教主大厅",
 			"map_type": "temple_floor",
@@ -232,7 +232,7 @@
 		{
 			"template_id": "blank.bich_mine_1",
 			"template_kind": "empty_map",
-			"map_id": "bich_mine_1",
+			"map_id": "bich_mine_f1",
 			"runtime_map_id": 406.0,
 			"display_name": "矿区一层",
 			"map_type": "mine_floor",
@@ -252,7 +252,7 @@
 		{
 			"template_id": "blank.bich_mine_2",
 			"template_kind": "empty_map",
-			"map_id": "bich_mine_2",
+			"map_id": "bich_mine_f2",
 			"runtime_map_id": 408.0,
 			"display_name": "矿区二层",
 			"map_type": "mine_floor",
@@ -274,7 +274,7 @@
 		{
 			"template_id": "blank.connection_passage_1",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "connection_passage_1",
+			"map_id": "snake_mine_passage_1",
 			"runtime_map_id": 1544.0,
 			"display_name": "连接通道1",
 			"map_type": "corridor",
@@ -298,7 +298,7 @@
 		{
 			"template_id": "blank.connection_passage_2",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "connection_passage_2",
+			"map_id": "snake_mine_passage_2",
 			"runtime_map_id": 1545.0,
 			"display_name": "连接通道2",
 			"map_type": "corridor",
@@ -322,7 +322,7 @@
 		{
 			"template_id": "blank.corpse_king_hall",
 			"template_kind": "empty_map",
-			"map_id": "corpse_king_hall",
+			"map_id": "bich_corpse_king_hall",
 			"runtime_map_id": 1578.0,
 			"display_name": "尸王殿",
 			"map_type": "boss_room",
@@ -342,7 +342,7 @@
 		{
 			"template_id": "blank.zuma_temple_1",
 			"template_kind": "empty_map",
-			"map_id": "zuma_temple_1",
+			"map_id": "mengzhong_zuma_temple_f1",
 			"runtime_map_id": 660.0,
 			"display_name": "祖玛寺庙一层",
 			"map_type": "temple_floor",
@@ -362,7 +362,7 @@
 		{
 			"template_id": "blank.zuma_temple_2",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "zuma_temple_2",
+			"map_id": "mengzhong_zuma_temple_f2",
 			"runtime_map_id": 661.0,
 			"display_name": "祖玛寺庙二层",
 			"map_type": "temple_floor",
@@ -386,7 +386,7 @@
 		{
 			"template_id": "blank.zuma_temple_3",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "zuma_temple_3",
+			"map_id": "mengzhong_zuma_temple_f3",
 			"runtime_map_id": 662.0,
 			"display_name": "祖玛寺庙三层",
 			"map_type": "temple_floor",
@@ -410,7 +410,7 @@
 		{
 			"template_id": "blank.zuma_temple_4",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "zuma_temple_4",
+			"map_id": "mengzhong_zuma_temple_f4",
 			"runtime_map_id": 663.0,
 			"display_name": "祖玛寺庙四层",
 			"map_type": "temple_floor",
@@ -434,7 +434,7 @@
 		{
 			"template_id": "blank.stone_tomb_1",
 			"template_kind": "empty_map",
-			"map_id": "stone_tomb_1",
+			"map_id": "mengzhong_stone_tomb_f1",
 			"runtime_map_id": 1198.0,
 			"display_name": "石墓一层",
 			"map_type": "dungeon_floor",
@@ -456,7 +456,7 @@
 		{
 			"template_id": "blank.stone_tomb_2",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "stone_tomb_2",
+			"map_id": "mengzhong_stone_tomb_f2",
 			"runtime_map_id": 1199.0,
 			"display_name": "石墓二层",
 			"map_type": "dungeon_floor",
@@ -480,7 +480,7 @@
 		{
 			"template_id": "blank.stone_tomb_3",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "stone_tomb_3",
+			"map_id": "mengzhong_stone_tomb_f3",
 			"runtime_map_id": 1200.0,
 			"display_name": "石墓三层",
 			"map_type": "dungeon_floor",
@@ -504,7 +504,7 @@
 		{
 			"template_id": "blank.stone_tomb_4",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "stone_tomb_4",
+			"map_id": "mengzhong_stone_tomb_f4",
 			"runtime_map_id": 1201.0,
 			"display_name": "石墓四层",
 			"map_type": "dungeon_floor",
@@ -528,7 +528,7 @@
 		{
 			"template_id": "blank.hadd_2",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "hadd_2",
+			"map_id": "mengzhong_dark_area",
 			"runtime_map_id": 990104.0,
 			"display_name": "黑暗地带",
 			"map_type": "quest_room",
@@ -551,7 +551,7 @@
 		{
 			"template_id": "blank.between_life_and_death",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "between_life_and_death",
+			"map_id": "mengzhong_between_life_and_death",
 			"runtime_map_id": 1446.0,
 			"display_name": "生死之间",
 			"map_type": "quest_room",
@@ -575,7 +575,7 @@
 		{
 			"template_id": "blank.terror_space",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "terror_space",
+			"map_id": "mengzhong_terror_space",
 			"runtime_map_id": 1450.0,
 			"display_name": "恐怖空间",
 			"map_type": "quest_room",
@@ -599,7 +599,7 @@
 		{
 			"template_id": "blank.thin_sky_passage",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "thin_sky_passage",
+			"map_id": "mengzhong_thin_sky_passage",
 			"runtime_map_id": 1451.0,
 			"display_name": "一线天",
 			"map_type": "quest_room",
@@ -623,7 +623,7 @@
 		{
 			"template_id": "blank.death_coffin",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "death_coffin",
+			"map_id": "mengzhong_death_coffin",
 			"runtime_map_id": 1383.0,
 			"display_name": "死亡棺材",
 			"map_type": "quest_room",
@@ -647,7 +647,7 @@
 		{
 			"template_id": "blank.gmd_1",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmd_1",
+			"map_id": "cangyue_bone_cave_f1",
 			"runtime_map_id": 99011.0,
 			"display_name": "骨魔洞一层",
 			"map_type": "dungeon_floor",
@@ -670,7 +670,7 @@
 		{
 			"template_id": "blank.gmd_2",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmd_2",
+			"map_id": "cangyue_bone_cave_f2",
 			"runtime_map_id": 99012.0,
 			"display_name": "骨魔洞二层",
 			"map_type": "dungeon_floor",
@@ -694,7 +694,7 @@
 		{
 			"template_id": "blank.gmd_3",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmd_3",
+			"map_id": "cangyue_bone_cave_f3",
 			"runtime_map_id": 99013.0,
 			"display_name": "骨魔洞三层",
 			"map_type": "dungeon_floor",
@@ -718,7 +718,7 @@
 		{
 			"template_id": "blank.gmd_4",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmd_4",
+			"map_id": "cangyue_bone_cave_f4",
 			"runtime_map_id": 99014.0,
 			"display_name": "骨魔洞四层",
 			"map_type": "dungeon_floor",
@@ -742,7 +742,7 @@
 		{
 			"template_id": "blank.gmd_5",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmd_5",
+			"map_id": "cangyue_bone_cave_f5",
 			"runtime_map_id": 99015.0,
 			"display_name": "骨魔洞五层",
 			"map_type": "dungeon_floor",
@@ -766,7 +766,7 @@
 		{
 			"template_id": "blank.nmsm_1",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "nmsm_1",
+			"map_id": "cangyue_bull_temple_f1",
 			"runtime_map_id": 990177.0,
 			"display_name": "牛魔寺庙一层",
 			"map_type": "dungeon_floor",
@@ -789,7 +789,7 @@
 		{
 			"template_id": "blank.nmsm_2",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "nmsm_2",
+			"map_id": "cangyue_bull_temple_f2",
 			"runtime_map_id": 990185.0,
 			"display_name": "牛魔寺庙二层",
 			"map_type": "dungeon_floor",
@@ -813,7 +813,7 @@
 		{
 			"template_id": "blank.nmsm_3",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "nmsm_3",
+			"map_id": "cangyue_bull_temple_f3",
 			"runtime_map_id": 990186.0,
 			"display_name": "牛魔寺庙三层",
 			"map_type": "dungeon_floor",
@@ -837,7 +837,7 @@
 		{
 			"template_id": "blank.nmsm_4",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "nmsm_4",
+			"map_id": "cangyue_bull_temple_f4",
 			"runtime_map_id": 990187.0,
 			"display_name": "牛魔寺庙四层",
 			"map_type": "dungeon_floor",
@@ -861,7 +861,7 @@
 		{
 			"template_id": "blank.nmsm_hall",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "nmsm_hall",
+			"map_id": "cangyue_bull_temple_hall",
 			"runtime_map_id": 990188.0,
 			"display_name": "牛魔寺庙大厅",
 			"map_type": "dungeon_floor",
@@ -885,7 +885,7 @@
 		{
 			"template_id": "blank.gmhl_1",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_1",
+			"map_id": "fengmo_light_corridor",
 			"runtime_map_id": 99450.0,
 			"display_name": "光芒回廊",
 			"map_type": "dungeon_floor",
@@ -908,7 +908,7 @@
 		{
 			"template_id": "blank.gmhl_thunder_road",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_thunder_road",
+			"map_id": "fengmo_thunder_road",
 			"runtime_map_id": 99451.0,
 			"display_name": "雷霆之路",
 			"map_type": "dungeon_floor",
@@ -932,7 +932,7 @@
 		{
 			"template_id": "blank.gmhl_bazhe_hall",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_bazhe_hall",
+			"map_id": "fengmo_bazhe_hall",
 			"runtime_map_id": 99452.0,
 			"display_name": "霸者大厅",
 			"map_type": "dungeon_floor",
@@ -956,7 +956,7 @@
 		{
 			"template_id": "blank.gmhl_zonghengdao",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_zonghengdao",
+			"map_id": "fengmo_zonghengdao",
 			"runtime_map_id": 99453.0,
 			"display_name": "纵横道",
 			"map_type": "dungeon_floor",
@@ -980,7 +980,7 @@
 		{
 			"template_id": "blank.gmhl_mohun_dian",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_mohun_dian",
+			"map_id": "fengmo_mohun_hall",
 			"runtime_map_id": 99454.0,
 			"display_name": "魔魂殿",
 			"map_type": "dungeon_floor",
@@ -1004,7 +1004,7 @@
 		{
 			"template_id": "blank.gmhl_purgatory_corridor",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_purgatory_corridor",
+			"map_id": "fengmo_purgatory_corridor",
 			"runtime_map_id": 99455.0,
 			"display_name": "炼狱回廊",
 			"map_type": "dungeon_floor",
@@ -1028,7 +1028,7 @@
 		{
 			"template_id": "blank.gmhl_fengmo_dian",
 			"template_kind": "existing_map_or_empty_template",
-			"map_id": "gmhl_fengmo_dian",
+			"map_id": "fengmo_final_hall",
 			"runtime_map_id": 99456.0,
 			"display_name": "封魔殿",
 			"map_type": "dungeon_floor",

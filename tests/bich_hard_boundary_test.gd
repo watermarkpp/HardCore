@@ -28,6 +28,14 @@ func _ready() -> void:
 	# was already outside this polygon, so its nominal "inside" start overlapped
 	# the boundary body before move_and_collide ran.
 	var edge: Vector2 = visual_boundary[0].lerp(visual_boundary[1], 0.5)
+	# 2026-09-20: the published polygon authority carries the user's authored
+	# border walls (e.g. the west-edge strip poly_000001 at GU x in [0,1], and
+	# matching strips on the other edges). Such a one-cell authored wall is a
+	# legitimate outermost blocker that stops an outside-in probe up to one
+	# authored cell (~32 world px along the probe ray) before the generated
+	# visual boundary. 40 px = one authored cell + margin. Penetration of the
+	# visible ground stays forbidden (player_foot_inside_boundary below).
+	var authored_face_slack: float = 40.0
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().physics_frame
@@ -38,8 +46,8 @@ func _ready() -> void:
 	var player_collision := player.move_and_collide(outward * 160.0)
 	assert(player_collision != null, "玩家可越过地图外部黑区硬边界")
 	assert(
-		player.global_position.distance_to(expected_player_position) <= 1.5,
-		"玩家物理坐标与脚底边界投影不一致"
+		player.global_position.distance_to(expected_player_position) <= authored_face_slack,
+		"玩家停在合理阻挡面（生成边界或人工边墙）之外"
 	)
 	assert(
 		CollisionGeometry.player_foot_inside_boundary(
@@ -72,8 +80,8 @@ func _ready() -> void:
 	var enemy_collision := enemy.move_and_collide(outward * 160.0)
 	assert(enemy_collision != null, "怪物可越过地图外部黑区硬边界")
 	assert(
-		enemy.global_position.distance_to(expected_enemy_position) <= 1.5,
-		"怪物物理坐标与脚底边界投影不一致"
+		enemy.global_position.distance_to(expected_enemy_position) <= authored_face_slack,
+		"怪物停在合理阻挡面（生成边界或人工边墙）之外"
 	)
 	print("BICH_HARD_BOUNDARY_PASS：玩家与怪物完整脚底均被同一可见地面边界阻挡")
 	get_tree().quit(0)

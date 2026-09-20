@@ -37,6 +37,13 @@ var _reset_busy: bool = false
 var test_reset_backup_root: String = ""
 var left_latched := false
 var last_cell := Vector2i(-1, -1)
+# T-key toggle: the non-select mode to restore when leaving select mode again.
+var select_toggle_memory := ""
+
+## 2026-09-20 user order: highlight overlapping drawn polygons.
+var overlap_cache: Dictionary = {}
+var overlap_cache_dirty := true
+var draft_overlap_notice := false
 
 func setup(editor_app: Node) -> void:
 	app = editor_app
@@ -142,7 +149,36 @@ func _records() -> Array[Dictionary]:
 		var checked := Geo.validate(Geo.encode(row.points), _size_gu())
 		row["valid_geometry"] = bool(checked.ok)
 		cache.append(row)
+	overlap_cache_dirty = true
 	return cache
+
+## True when the given polygon shares area with any record except
+## exclude_index (used to skip the record being edited in place).
+static func polygon_overlaps_records(points: PackedVector2Array, records: Array, exclude_index: int) -> bool:
+	if points.size() < 3:
+		return false
+	for index: int in records.size():
+		if index == exclude_index:
+			continue
+		var other: PackedVector2Array = records[index].get("points", PackedVector2Array())
+		if other.size() < 3:
+			continue
+		if not Geometry2D.intersect_polygons(points, other).is_empty():
+			return true
+	return false
+
+func _overlap_map() -> Dictionary:
+	if not overlap_cache_dirty:
+		return overlap_cache
+	overlap_cache_dirty = false
+	overlap_cache.clear()
+	for i: int in cache.size():
+		var points: PackedVector2Array = cache[i].get("points", PackedVector2Array())
+		if points.size() < 3:
+			continue
+		if polygon_overlaps_records(points, cache, i):
+			overlap_cache[i] = true
+	return overlap_cache
 
 func _selected_record() -> Dictionary:
 	var rows := _records()
@@ -238,6 +274,9 @@ func handle_input(event: InputEvent) -> bool:
 					overlay.queue_redraw()
 				else:
 					_delete_vertex()
+				return true
+			KEY_T:
+				_toggle_select_mode()
 				return true
 		return false
 	if event is InputEventMouseMotion:
@@ -393,6 +432,7 @@ func _finish_polygon() -> void:
 		return
 	if _add_polygon(draft, "新增自由多边形"):
 		draft.clear()
+		draft_overlap_notice = false
 		overlay.queue_redraw()
 
 func _replace_selected(points: PackedVector2Array, label: String) -> void:
@@ -461,12 +501,34 @@ func _unbind_selected() -> void:
 	candidate.layers.collision.append(Author.entry(Author.next_id(candidate.layers.collision), record.points))
 	_transact(candidate, "解除绑定并保持当前位置")
 
+## T key: flip between the select mode and the last non-select drawing mode.
+## Press once to jump to 选择/拖顶点/Alt 整块, press again to restore the
+## previous dropdown choice. Only the mode dropdown moves; the tool stays on.
+func _toggle_select_mode() -> void:
+	if mode == "select":
+		var restore := select_toggle_memory
+		if restore.is_empty() or not restore in MODES:
+			_status("已在选择模式；没有可恢复的绘制模式。")
+			return
+		select_toggle_memory = ""
+		var index := MODES.find(restore)
+		mode_option.select(index)
+		_mode_changed(index)
+		_status("已恢复 %s。" % mode_option.get_item_text(index))
+	else:
+		select_toggle_memory = mode
+		mode_option.select(MODES.find("select"))
+		_mode_changed(MODES.find("select"))
+		_status("已切换到选择模式；再按 T 恢复 %s。" % mode_option.get_item_text(MODES.find(select_toggle_memory)))
+
+
 func _cancel_draft() -> void:
 	draft.clear()
 	drag_original.clear()
 	drag_kind = ""
 	left_latched = false
 	last_cell = Vector2i(-1, -1)
+	draft_overlap_notice = false
 	if is_instance_valid(overlay):
 		overlay.queue_redraw()
 
@@ -594,6 +656,7 @@ func draw_overlay(surface: Control) -> void:
 	if app.current_document.is_empty() or not Geo.enabled(app.current_document) or (not active and not canvas.show_walkable_preview):
 		return
 	var rows := _records()
+	var overlap_map := _overlap_map()
 	for i: int in range(rows.size()):
 		var points: PackedVector2Array = rows[i].points
 		if i == selected and not drag_kind.is_empty():
@@ -606,6 +669,11 @@ func draw_overlay(surface: Control) -> void:
 		var color := Color(1, 0.65, 0.25) if str(rows[i].get("source", "")) == "legacy_final" else Color(0.15, 0.85, 0.95)
 		if not str(rows[i].get("owner", "")).is_empty():
 			color = Color(0.75, 0.45, 1)
+		var record_overlap := bool(overlap_map.get(i, false))
+		if i == selected and not drag_kind.is_empty():
+			record_overlap = polygon_overlaps_records(points, rows, i)
+		if record_overlap:
+			color = Color(1, 0.42, 0.1)
 		if i == selected:
 			color = Color(0.3, 1, 0.45)
 		if bool(rows[i].valid_geometry) and drag_kind.is_empty():
@@ -625,13 +693,21 @@ func draw_overlay(surface: Control) -> void:
 				shown.append(shown[0])
 		elif mode == "polygon":
 			shown.append(hover)
+	var draft_overlap := polygon_overlaps_records(shown, rows, -1)
+	if draft_overlap != draft_overlap_notice:
+		draft_overlap_notice = draft_overlap
+		if draft_overlap:
+			_status("警告：绘制中的轮廓与现有碰撞重合（构建时会自动并集合并，不影响阻挡结果）")
+		else:
+			_status("轮廓绘制中")
+	var draft_color := Color(1, 0.35, 0.15) if draft_overlap else Color(0.2, 1, 1)
 	var screen := PackedVector2Array()
 	for point: Vector2 in shown:
 		screen.append(_gu_to_screen(point))
 	for point: Vector2 in draft:
-		surface.draw_circle(_gu_to_screen(point), 4, Color(0.2, 1, 1))
+		surface.draw_circle(_gu_to_screen(point), 4, draft_color)
 	if screen.size() >= 2:
-		surface.draw_polyline(screen, Color(0.2, 1, 1), 2, true)
+		surface.draw_polyline(screen, draft_color, 2, true)
 
 
 func _cancel_clear_all() -> void:

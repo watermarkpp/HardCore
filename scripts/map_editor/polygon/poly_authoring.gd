@@ -9,11 +9,11 @@ static func prepare(document: Dictionary) -> Dictionary:
 	var gathered := Binding.gather(document)
 	errors.append_array(gathered.errors)
 	var raw_entries: Variant = gathered.records
-	var entries: Array = []
 	var parts: Array = []
-	var seen: Dictionary = {}
 	if design_size == Vector2i.ZERO or not raw_entries is Array:
-		return {"ok": false, "errors": ["polygon_document_invalid"], "parts": [], "entries": []}
+		return {"ok": false, "errors": ["polygon_document_invalid"], "parts": [], "entries": [], "merged_polys": 0}
+	var seen: Dictionary = {}
+	var valid: Array = []
 	for raw: Variant in raw_entries:
 		if not raw is Dictionary:
 			errors.append("polygon_entry_not_dictionary")
@@ -35,27 +35,98 @@ static func prepare(document: Dictionary) -> Dictionary:
 			for message: String in checked.errors:
 				errors.append("%s:%s" % [id, message])
 			continue
-		var points: PackedVector2Array = checked.points
+		valid.append({
+			"id": id,
+			"owner": str(raw.get("owner", "")),
+			"content_layer": str(raw.get("content_layer", "personal_expansion")),
+			"points": checked.points,
+		})
+	var merged := union_merge_entries(valid)
+	for entry: Dictionary in merged:
+		var points: PackedVector2Array = entry.points
 		var pieces: Array[PackedVector2Array] = Geometry2D.decompose_polygon_in_convex(points)
 		var piece_area := 0.0
 		if pieces.is_empty():
-			errors.append("polygon_decomposition_failed:%s" % id)
+			errors.append("polygon_decomposition_failed:%s" % entry.id)
 			continue
 		for piece: PackedVector2Array in pieces:
 			if not Geo.convex(piece):
-				errors.append("polygon_nonconvex_piece:%s" % id)
+				errors.append("polygon_nonconvex_piece:%s" % entry.id)
 			piece_area += absf(Geo.area(piece))
 			parts.append(Geo.encode(piece))
 		if absf(piece_area - absf(Geo.area(points))) > maxf(0.0001, absf(Geo.area(points)) * 0.00001):
-			errors.append("polygon_decomposition_area_changed:%s" % id)
-		entries.append({"collision_id": id, "id": id, "shape": "polygon",
-			"source": "instance" if not str(raw.get("owner", "")).is_empty() else "manual",
-			"owner_instance_id": str(raw.get("owner", "")),
-			"polygon_ground_gu": Geo.encode(points),
-			"content_layer": str(raw.get("content_layer", "personal_expansion"))})
+			errors.append("polygon_decomposition_area_changed:%s" % entry.id)
+	var entries: Array = []
+	for entry: Dictionary in merged:
+		entries.append({"collision_id": entry.id, "id": entry.id, "shape": "polygon",
+			"source": "instance" if not str(entry.owner).is_empty() else "manual",
+			"owner_instance_id": str(entry.owner),
+			"polygon_ground_gu": Geo.encode(entry.points),
+			"content_layer": str(entry.content_layer)})
 	if parts.size() > Geo.MAX_PARTS:
 		errors.append("polygon_piece_limit_exceeded:%d" % parts.size())
-	return {"ok": errors.is_empty(), "errors": errors, "entries": entries, "parts": parts, "design_size": design_size}
+	return {"ok": errors.is_empty(), "errors": errors, "entries": entries, "parts": parts,
+		"design_size": design_size, "merged_polys": int(valid.size()) - int(merged.size())}
+
+## Conservative build-time union merge (user-ordered 2026-09-20). Overlapping
+## drawn polygons are legal (union semantics at every consumer), but redundant
+## convex parts cost query time. This pass removes that redundancy with
+## coverage-preserving merges only:
+##   - exact duplicates and fully-contained polygons are dropped;
+##   - two same-owner polygons overlap -> merge via Geometry2D union ONLY when
+##     the result is a single polygon, within MAX_VERTICES, and its area
+##     equals |A|+|B|-|A∩B| (a hole or multi-piece result leaves the pair
+##     untouched -- coverage stays exact via union semantics either way).
+## Different owners never merge (instance bindings keep their provenance).
+static func union_merge_entries(entries: Array) -> Array:
+	var working: Array = []
+	for entry: Dictionary in entries:
+		working.append({
+			"id": str(entry.get("id", entry.get("collision_id", ""))),
+			"owner": str(entry.get("owner", entry.get("owner_instance_id", ""))),
+			"content_layer": str(entry.get("content_layer", "personal_expansion")),
+			"points": entry.get("points", PackedVector2Array()) as PackedVector2Array,
+		})
+	var merged := true
+	while merged:
+		merged = false
+		for i: int in range(working.size()):
+			if merged:
+				break
+			for j: int in range(i + 1, working.size()):
+				if str(working[i].owner) != str(working[j].owner):
+					continue
+				var a: PackedVector2Array = working[i].points
+				var b: PackedVector2Array = working[j].points
+				var area_a := absf(Geo.area(a))
+				var area_b := absf(Geo.area(b))
+				var inter_area := 0.0
+				for piece: PackedVector2Array in Geometry2D.intersect_polygons(a, b):
+					inter_area += absf(Geo.area(piece))
+				if inter_area <= 0.0001:
+					continue
+				var eps := maxf(0.0002, maxf(area_a, area_b) * 0.00001)
+				if inter_area >= area_a - eps:
+					working.remove_at(i)
+					merged = true
+					break
+				if inter_area >= area_b - eps:
+					working.remove_at(j)
+					merged = true
+					break
+				var union: Array = Geometry2D.merge_polygons(a, b)
+				if union.is_empty() or union.size() != 1 or (union[0] as PackedVector2Array).size() > Geo.MAX_VERTICES:
+					continue
+				var unified: PackedVector2Array = union[0]
+				var expected := area_a + area_b - inter_area
+				if absf(absf(Geo.area(unified)) - expected) > eps:
+					continue
+				working[i].points = unified
+				working.remove_at(j)
+				merged = true
+				break
+	return working
+
 
 static func walkability(document: Dictionary) -> Dictionary:
 	var prepared := prepare(document)

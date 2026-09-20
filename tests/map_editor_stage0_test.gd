@@ -2,7 +2,9 @@ extends Node
 
 
 func _ready() -> void:
-	var bich := MapEditorTypes.new_map_from_catalog("bich_province")
+	# 2026-09-20 identity contract: bich_province / mengzhong_province were
+	# migrated to the formal world_* keys; catalog values are unchanged.
+	var bich := MapEditorTypes.new_map_from_catalog("world_bich_province")
 	assert(bich.runtime_map_id == 4)
 	assert(bich.design.design_size == [80, 80])
 	assert(bich.design.size_status == "user_confirmed_final")
@@ -13,21 +15,19 @@ func _ready() -> void:
 	assert(not bich.ground.blank_generated and str(bich.ground.blank_fill_asset_id).is_empty())
 	assert(bich.ground.mask_storage == "chunked_l8")
 	assert(MapEditorTypes.validate_document(bich).is_empty())
-	var mengzhong := MapEditorTypes.new_map_from_catalog("mengzhong_province")
+	var mengzhong := MapEditorTypes.new_map_from_catalog("world_mengzhong_province")
 	assert(mengzhong.design.design_size == [88, 88])
 	var blank_templates := MapDesignCatalogService.blank_templates()
-	assert(blank_templates.size() == 24)
+	# 2026-09-20 template contract: catalog grew 24 -> 45 blank templates;
+	# the legacy 未知暗殿 blank template entry was removed from the catalog.
+	assert(blank_templates.size() == 45)
 	var passage_1_template := MapDesignCatalogService.find_blank_template("blank.connection_passage_1")
 	var passage_2_template := MapDesignCatalogService.find_blank_template("blank.connection_passage_2")
-	var unknown_dark_template := MapDesignCatalogService.find_blank_template("blank.unknown_dark_palace")
 	assert(passage_1_template.display_name == "连接通道1" and passage_1_template.design_size == [50.0, 50.0])
 	assert(passage_2_template.display_name == "连接通道2" and passage_2_template.design_size == [50.0, 50.0])
 	assert(passage_1_template.runtime_map_id == 1544 and passage_2_template.runtime_map_id == 1545)
 	assert(passage_1_template.content_policy == "open_existing_workspace_first")
 	assert(passage_2_template.content_policy == "open_existing_workspace_first")
-	assert(unknown_dark_template.display_name == "未知暗殿")
-	assert(unknown_dark_template.runtime_map_id == 1571 and unknown_dark_template.design_size == [40.0, 40.0])
-	assert(unknown_dark_template.content_policy == "empty_layers")
 	var bich_blank := MapEditorTypes.new_map_from_blank_template("blank.bich_province")
 	assert(bich_blank.design.design_size == [80, 80])
 	assert(bich_blank.editor_meta.blank_template_id == "blank.bich_province")
@@ -129,7 +129,10 @@ func _ready() -> void:
 	assert(unloaded_asset_item != null and unloaded_asset_item.get_icon(0) == null)
 	editor._ensure_asset_tree_item_icon(unloaded_asset_item)
 	assert(unloaded_asset_item.get_icon(0) != null)
-	assert(editor.map_template_option.item_count == 24)
+	# The dropdown lists all blank templates plus unmerged workspace documents;
+	# the workspace row count depends on the local workspace state, so assert
+	# the stable lower bound (every template must be present).
+	assert(editor.map_template_option.item_count >= 45)
 	editor._refresh_map_template_options("blank.orc_tomb_2")
 	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.orc_tomb_2")
 	assert("38×38" in editor.map_template_option.get_item_text(editor.map_template_option.selected))
@@ -137,10 +140,17 @@ func _ready() -> void:
 	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.orc_tomb_3")
 	assert("38×38" in editor.map_template_option.get_item_text(editor.map_template_option.selected))
 	assert(editor.save_map_button.text == "保存地图")
-	assert(editor.collision_shape_option.item_count == 4)
-	assert(str(editor.collision_shape_option.get_item_metadata(0)) == "cell")
-	assert(editor.collision_erase_toggle.text.begins_with("单格擦除碰撞"))
-	assert(editor.collision_erase_whole_toggle.text.begins_with("整块擦除碰撞"))
+	# 2026-09-20 user order: the legacy grid-collision menu (手工碰撞 block and
+	# the 显示不可走区域 preview) was removed; the polygon tool (自由多边形 R2
+	# panel) is the only collision editor. The old controls must not come back.
+	assert(editor.collision_shape_option == null)
+	var sidebar_checkboxes: Array[String] = []
+	for candidate: Node in editor.find_children("*", "CheckBox", true, false):
+		sidebar_checkboxes.append((candidate as CheckBox).text)
+	assert(not sidebar_checkboxes.any(func(text: String) -> bool: return text.begins_with("单格擦除碰撞")))
+	assert(not sidebar_checkboxes.any(func(text: String) -> bool: return text.begins_with("整块擦除碰撞")))
+	assert(not sidebar_checkboxes.any(func(text: String) -> bool: return text.begins_with("在画布绘制碰撞")))
+	assert(not sidebar_checkboxes.any(func(text: String) -> bool: return text == "显示不可走区域"))
 	assert(editor.open_template_button.text == "打开地图模板")
 	assert(editor.create_map_button.text == "创建地图模板")
 	assert(editor.create_map_dialog.title == "创建地图模板")
@@ -156,7 +166,10 @@ func _ready() -> void:
 	editor._on_map_template_selected(0)
 	assert("80×80" in editor.template_info_label.text)
 	var template_test_root := "user://mse_template_open_test"
-	var template_test_document := template_test_root.path_join("orc_tomb_1.editor.json")
+	# The file name must match the template's formal map_id (bich_orc_tomb_f1):
+	# _resolved_current_document_path redirects a mismatched save target to the
+	# formal workspace path, which must never happen inside a test sandbox.
+	var template_test_document := template_test_root.path_join("bich_orc_tomb_f1.editor.json")
 	var template_test_workspace := template_test_root.path_join("ground_workspace")
 	_cleanup_template_test_files(template_test_root, template_test_document, template_test_workspace)
 	editor.preview.set_walkability_preview({"blocked_tiles": {"1,1": true, "2,2": true}}, true)
@@ -166,41 +179,48 @@ func _ready() -> void:
 	var old_command_counter := [0]
 	assert(editor.command_stack.execute({"do": func(): old_command_counter[0] += 1, "undo": func(): old_command_counter[0] -= 1}))
 	assert(editor._open_template_by_id("blank.orc_tomb_1", template_test_document, template_test_workspace))
-	assert(editor.current_document.map_id == "orc_tomb_1")
+	# 2026-09-20 formal identity keys: template map_id now resolves to the
+	# formal registry key (bich_orc_tomb_f1), not the legacy orc_tomb_1.
+	assert(editor.current_document.map_id == "bich_orc_tomb_f1")
 	assert(editor.current_document.design.design_size == [38, 38])
 	assert(not editor.current_document.ground.blank_generated)
 	assert(str(editor.current_document.ground.blank_fill_asset_id).is_empty())
-	assert(editor.preview.document.map_id == "orc_tomb_1")
+	assert(editor.preview.document.map_id == "bich_orc_tomb_f1")
 	assert(editor.preview._blocked_tiles.is_empty())
 	assert(editor.preview.selected_selectable_id.is_empty() and editor.preview.hovered_selectable_id.is_empty())
 	assert(editor.preview._view_pan == Vector2.ZERO and is_equal_approx(editor.preview._zoom_multiplier, 1.0))
 	assert(not editor.command_stack.can_undo() and editor.active_tool_mode == "select")
 	assert(FileAccess.file_exists(template_test_document))
+	# A fresh template document is still legacy grid-collision mode (no
+	# collision_authority flag), so the service-level manual shape API applies;
+	# polygon-authority documents (user-redrawn maps) reject it instead.
 	assert(MapEditorCollisionService.add_manual_shape(editor.current_document, "rect", {"rect": [4, 5, 1, 1]}).ok)
 	assert(editor._save_current_document().ok)
 	var saved_template := MapEditorLoadService.load_document(ProjectSettings.globalize_path(template_test_document), false)
-	assert(saved_template.ok and saved_template.document.map_id == "orc_tomb_1")
+	assert(saved_template.ok and saved_template.document.map_id == "bich_orc_tomb_f1")
 	assert(saved_template.document.layers.collision.size() == 1)
 	assert(editor._open_template_by_id("blank.orc_tomb_1", template_test_document, template_test_workspace))
 	assert("地图打开成功" in editor.status_label.text)
 	_cleanup_template_test_files(template_test_root, template_test_document, template_test_workspace)
 	var wooma_test_root := "user://mse_wooma_template_open_test"
-	var wooma_test_document := wooma_test_root.path_join("wooma_forest.editor.json")
+	# File name must match the template's formal map_id (world_wooma_forest) or
+	# the save resolver redirects to the formal workspace path.
+	var wooma_test_document := wooma_test_root.path_join("world_wooma_forest.editor.json")
 	var wooma_test_workspace := wooma_test_root.path_join("ground_workspace")
 	_cleanup_template_test_files(wooma_test_root, wooma_test_document, wooma_test_workspace)
 	var wooma_open_started := Time.get_ticks_msec()
 	assert(editor._open_template_by_id("blank.wooma_forest", wooma_test_document, wooma_test_workspace))
 	await get_tree().process_frame
 	assert(Time.get_ticks_msec() - wooma_open_started < 3000, "沃玛森林模板打开超过3秒")
-	assert(editor.current_document.map_id == "wooma_forest")
+	assert(editor.current_document.map_id == "world_wooma_forest")
 	assert(str(editor.map_template_option.get_item_metadata(editor.map_template_option.selected)) == "blank.wooma_forest")
 	assert(MapEditorCanvasPreview.VIRTUAL_TILE_DRAW_LIMIT < 56 * 56)
 	_cleanup_template_test_files(wooma_test_root, wooma_test_document, wooma_test_workspace)
 	var bich_test_root := "user://mse_stage0_bich"
-	var bich_test_document := bich_test_root.path_join("bich_province.editor.json")
+	var bich_test_document := bich_test_root.path_join("world_bich_province.editor.json")
 	var bich_test_workspace := bich_test_root.path_join("ground_workspace")
 	_cleanup_template_test_files(bich_test_root, bich_test_document, bich_test_workspace)
-	var editor_bich_document := MapEditorTypes.new_map_from_catalog("bich_province", "outdoor_province", 4, "比奇省")
+	var editor_bich_document := MapEditorTypes.new_map_from_catalog("world_bich_province", "outdoor_province", 4, "比奇省")
 	editor_bich_document.editor_meta["workspace"] = bich_test_workspace
 	editor._adopt_new_document(editor_bich_document, "测试比奇", bich_test_document)
 	assert(editor.current_document.design.design_size == [80, 80])

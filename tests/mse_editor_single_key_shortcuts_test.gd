@@ -1,12 +1,14 @@
 extends Node
 
-## Editor single-key shortcuts contract:
+## Editor single-key shortcuts contract (2026-09-20):
 ##   W / S -- scale the selected placed instance (same 10% step as the
 ##            instance context menu); hint when nothing is selected.
-##   R     -- single-cell manual collision draw (forces the cell shape).
-##   T     -- single-cell collision erase.
 ##   E     -- selection tool.
-## The keys reach the app through _unhandled_key_input, so LineEdit/SpinBox
+##   R / T -- the legacy grid-collision shortcuts were removed together with
+##            the legacy collision menu; the app must ignore both keys.
+##   T inside the enabled polygon tool -- toggle its mode dropdown between
+##            选择/拖顶点/Alt 整块 and the previous drawing mode (poly tool).
+## The app keys reach the app through _unhandled_key_input, so LineEdit/SpinBox
 ## editing consumes printable keys first and never toggles tools.
 
 const InstanceService := preload("res://scripts/map_editor/map_editor_instance_service.gd")
@@ -17,13 +19,6 @@ func _key(keycode: int) -> InputEventKey:
 	event.keycode = keycode
 	event.pressed = true
 	return event
-
-
-func _shape_index(option: OptionButton, metadata: String) -> int:
-	for index in option.item_count:
-		if str(option.get_item_metadata(index)) == metadata:
-			return index
-	return -1
 
 
 func _instance_scale(instance: Dictionary) -> float:
@@ -52,29 +47,46 @@ func _ready() -> void:
 	editor.preview.set_document(editor.current_document)
 	await get_tree().process_frame
 
-	# R -- force single-cell manual collision draw even when another shape was selected.
-	var rect_index := _shape_index(editor.collision_shape_option, "rect")
-	assert(rect_index >= 0)
-	editor.collision_shape_option.select(rect_index)
-	editor._on_collision_shape_selected(rect_index)
-	assert(editor._selected_collision_shape() == "rect")
+	# R / T -- removed legacy grid-collision shortcuts; the app ignores both.
+	var mode_before_legacy_keys: String = editor.active_tool_mode
 	editor._unhandled_key_input(_key(KEY_R))
-	assert(editor.active_tool_mode == "manual_collision", "R must enter manual collision draw")
-	assert(editor.preview.interaction_mode == "manual_collision")
-	assert(editor.collision_draw_toggle.button_pressed)
-	assert(editor._selected_collision_shape() == "cell", "R must force the single-cell shape")
-
-	# T -- single-cell collision erase.
+	assert(
+		editor.active_tool_mode == mode_before_legacy_keys,
+		"R must not enter any collision mode anymore"
+	)
 	editor._unhandled_key_input(_key(KEY_T))
-	assert(editor.active_tool_mode == "manual_collision_erase", "T must enter single-cell erase")
-	assert(editor.preview.interaction_mode == "manual_collision_erase")
-	assert(editor.collision_erase_toggle.button_pressed and not editor.collision_draw_toggle.button_pressed)
+	assert(
+		editor.active_tool_mode == mode_before_legacy_keys,
+		"app-level T must not enter any collision mode anymore"
+	)
 
 	# E -- selection tool from any mode.
 	editor._unhandled_key_input(_key(KEY_E))
 	assert(editor.active_tool_mode == "select", "E must activate the selection tool")
 	assert(editor.preview.interaction_mode == "select")
-	assert(not editor.collision_erase_toggle.button_pressed and not editor.collision_draw_toggle.button_pressed)
+
+	# T inside the enabled polygon tool -- select-mode toggle (poly tool keys
+	# reach the controller through the canvas _gui_input focus chain).
+	var controller: Variant = editor._hc_polygon_controller
+	assert(is_instance_valid(controller), "polygon tool controller must be installed")
+	var poly_meta: Dictionary = editor.current_document.get("editor_meta", {})
+	poly_meta["collision_authority"] = "hc_polygon_v1"
+	editor.current_document["editor_meta"] = poly_meta
+	var select_index: int = controller.MODES.find("select")
+	var polygon_index: int = controller.MODES.find("polygon")
+	controller.mode_option.select(polygon_index)
+	controller._mode_changed(polygon_index)
+	assert(controller.active and controller.mode == "polygon")
+	assert(editor.preview.interaction_mode == "polygon_precision")
+	controller.handle_input(_key(KEY_T))
+	assert(controller.mode == "select", "T must switch the polygon tool to select mode")
+	assert(controller.mode_option.selected == select_index)
+	controller.handle_input(_key(KEY_T))
+	assert(controller.mode == "polygon", "second T must restore the previous drawing mode")
+	assert(controller.mode_option.selected == polygon_index)
+	controller.handle_input(_key(KEY_T))
+	assert(controller.mode == "select", "T keeps toggling back to select mode")
+	editor._activate_select_tool()
 
 	# W/S -- resize the selected placed instance; hint when nothing is selected.
 	editor.preview.selected_selectable_id = ""

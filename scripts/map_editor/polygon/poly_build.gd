@@ -98,7 +98,8 @@ static func build(document: Dictionary) -> Dictionary:
 	_cache_key = key
 	_cache = {"ok": true, "errors": [], "collision": payload,
 		"report": {"convex_parts": prepared.parts.size(), "nav_profiles": nav_profiles.size(),
-			"nav_faces": total_faces, "editor_build_usec": Time.get_ticks_usec() - started,
+			"nav_faces": total_faces, "overlap_merged": int(prepared.get("merged_polys", 0)),
+			"editor_build_usec": Time.get_ticks_usec() - started,
 			"loading_bake_required": false}}
 	return _cache.duplicate(true)
 
