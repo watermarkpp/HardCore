@@ -44,14 +44,16 @@
       16.0,
       16.0
     ],
+    "collision_authority": "hc_polygon_v1",
     "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 3,
-    "source_editor_schema_version": 4,
+    "revision": 6,
+    "runtime_approved": false,
+    "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
     "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/hidden_abyss_domain"
@@ -134,142 +136,241 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000001",
+        "collision_id": "poly_000001",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            31.0,
-            32.0,
-            1.0
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              32.0,
+              0.0
+            ],
+            [
+              32.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000002",
+        "collision_id": "poly_000002",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            31.0,
-            0.0,
-            1.0,
-            32.0
+          "points": [
+            [
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              1.0
+            ],
+            [
+              1.0,
+              32.0
+            ],
+            [
+              0.0,
+              32.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000003",
+        "collision_id": "poly_000003",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            32.0,
-            1.0
+          "points": [
+            [
+              31.0,
+              1.0
+            ],
+            [
+              32.0,
+              1.0
+            ],
+            [
+              32.0,
+              32.0
+            ],
+            [
+              31.0,
+              32.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000004",
+        "collision_id": "poly_000004",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            32.0
+          "points": [
+            [
+              13.0,
+              11.0
+            ],
+            [
+              15.0,
+              11.0
+            ],
+            [
+              15.0,
+              15.0
+            ],
+            [
+              13.0,
+              15.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000005",
+        "collision_id": "poly_000005",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            12.0,
-            11.0,
-            5.0,
-            4.0
+          "points": [
+            [
+              12.0,
+              12.0
+            ],
+            [
+              13.0,
+              12.0
+            ],
+            [
+              13.0,
+              14.0
+            ],
+            [
+              12.0,
+              14.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000006",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              15.0,
+              12.0
+            ],
+            [
+              16.0,
+              12.0
+            ],
+            [
+              16.0,
+              15.0
+            ],
+            [
+              15.0,
+              15.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000007",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              1.0,
+              31.0
+            ],
+            [
+              31.0,
+              31.0
+            ],
+            [
+              31.0,
+              32.0
+            ],
+            [
+              1.0,
+              32.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000008",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              12.0,
+              12.0
+            ],
+            [
+              13.0,
+              11.0
+            ],
+            [
+              15.0,
+              11.0
+            ],
+            [
+              16.0,
+              12.0
+            ],
+            [
+              16.0,
+              15.0
+            ],
+            [
+              13.0,
+              15.0
+            ],
+            [
+              12.0,
+              14.0
+            ]
+          ]
+        },
+        "shape": "polygon",
         "source": "manual"
       }
     ],
-    "collision_erase": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16,
-          11
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16,
-          12
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16,
-          13
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16,
-          14
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          12,
-          14
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15,
-          11
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          12,
-          11
-        ]
-      }
-    ],
+    "collision_erase": [],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -3842,6 +3943,6 @@
   "legacy_runtime_map_id": 991111.0,
   "map_id": "hidden_abyss_domain",
   "runtime_map_id": 918005.0,
-  "schema_version": 5,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable"
 }

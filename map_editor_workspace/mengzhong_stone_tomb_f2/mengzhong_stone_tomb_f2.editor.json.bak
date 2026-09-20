@@ -33,6 +33,7 @@
     "clone_policy": "full_workspace_clone_without_exit_links_v1",
     "clone_source_document_sha256": "4241d74fc3c5ccae7166a1113c3ad953692434eb7a7484458e22541f8a47cbea",
     "clone_source_map_id": "stone_tomb_1",
+    "collision_authority": "hc_polygon_v1",
     "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "open_existing_workspace_first",
     "created_by": "human_codex_shared_tool",
@@ -40,8 +41,9 @@
     "exit_link_status": "intentionally_unlinked",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 2.0,
-    "source_editor_schema_version": 4,
+    "revision": 24,
+    "runtime_approved": false,
+    "source_editor_schema_version": 4.0,
     "template_kind": "existing_map_or_empty_template",
     "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
     "workspace": "res://map_editor_workspace/mengzhong_stone_tomb_f2",
@@ -145,734 +147,397 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000001",
+        "collision_id": "poly_000001",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            50.0
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              50.0,
+              0.0
+            ],
+            [
+              50.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000002",
+        "collision_id": "poly_000002",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            50.0,
-            1.0
+          "points": [
+            [
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              1.0
+            ],
+            [
+              1.0,
+              50.0
+            ],
+            [
+              0.0,
+              50.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000003",
+        "collision_id": "poly_000005",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            49.0,
-            0.0,
-            1.0,
-            50.0
+          "points": [
+            [
+              49.0,
+              1.0
+            ],
+            [
+              50.0,
+              1.0
+            ],
+            [
+              50.0,
+              50.0
+            ],
+            [
+              49.0,
+              50.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000004",
+        "collision_id": "poly_000006",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            8.0,
-            49.0,
-            42.0,
-            1.0
+          "points": [
+            [
+              9.0,
+              9.0
+            ],
+            [
+              40.0,
+              9.0
+            ],
+            [
+              40.0,
+              10.0
+            ],
+            [
+              9.0,
+              10.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000005",
+        "collision_id": "poly_000007",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            40.0,
-            40.0,
-            1.0
+          "points": [
+            [
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              10.0
+            ],
+            [
+              10.0,
+              31.0
+            ],
+            [
+              9.0,
+              31.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000006",
+        "collision_id": "poly_000008",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            39.0,
-            9.0,
-            1.0,
-            32.0
+          "points": [
+            [
+              39.0,
+              10.0
+            ],
+            [
+              40.0,
+              10.0
+            ],
+            [
+              40.0,
+              41.0
+            ],
+            [
+              39.0,
+              41.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000007",
+        "collision_id": "poly_000009",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            10.0,
-            9.0,
-            30.0,
-            1.0
+          "points": [
+            [
+              17.0,
+              17.0
+            ],
+            [
+              30.0,
+              17.0
+            ],
+            [
+              30.0,
+              18.0
+            ],
+            [
+              17.0,
+              18.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000008",
+        "collision_id": "poly_000010",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            9.0,
-            9.0,
-            1.0,
-            22.0
+          "points": [
+            [
+              17.0,
+              18.0
+            ],
+            [
+              18.0,
+              18.0
+            ],
+            [
+              18.0,
+              25.0
+            ],
+            [
+              17.0,
+              25.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000009",
+        "collision_id": "poly_000011",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            9.0,
-            30.0,
-            21.0,
-            1.0
+          "points": [
+            [
+              29.0,
+              18.0
+            ],
+            [
+              30.0,
+              18.0
+            ],
+            [
+              30.0,
+              31.0
+            ],
+            [
+              29.0,
+              31.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000010",
+        "collision_id": "poly_000012",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            29.0,
-            17.0,
-            1.0,
-            14.0
+          "points": [
+            [
+              10.0,
+              22.0
+            ],
+            [
+              11.0,
+              22.0
+            ],
+            [
+              11.0,
+              24.0
+            ],
+            [
+              10.0,
+              24.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000011",
+        "collision_id": "poly_000014",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            17.0,
-            17.0,
-            13.0,
-            1.0
+          "points": [
+            [
+              10.0,
+              30.0
+            ],
+            [
+              29.0,
+              30.0
+            ],
+            [
+              29.0,
+              31.0
+            ],
+            [
+              10.0,
+              31.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000012",
+        "collision_id": "poly_000016",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            17.0,
-            17.0,
-            1.0,
-            7.0
+          "points": [
+            [
+              1.0,
+              40.0
+            ],
+            [
+              39.0,
+              40.0
+            ],
+            [
+              39.0,
+              41.0
+            ],
+            [
+              1.0,
+              41.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000013",
+        "collision_id": "poly_000017",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            35.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              1.0,
+              49.0
+            ],
+            [
+              2.0,
+              49.0
+            ],
+            [
+              2.0,
+              50.0
+            ],
+            [
+              1.0,
+              50.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000014",
+        "collision_id": "poly_000018",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            2.0,
-            35.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              7.0,
+              49.0
+            ],
+            [
+              49.0,
+              49.0
+            ],
+            [
+              49.0,
+              50.0
+            ],
+            [
+              7.0,
+              50.0
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000015",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000016",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            34.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000017",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            5.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000018",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            5.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000019",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            6.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000020",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            7.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000021",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            8.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000022",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            7.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000023",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            6.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000024",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            8.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000025",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            10.0,
-            23.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000026",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            11.0,
-            23.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000027",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            11.0,
-            22.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000028",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            10.0,
-            22.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000029",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            36.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000030",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            37.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000031",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            37.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000032",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            36.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000033",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            49.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000034",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            7.0,
-            49.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000035",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            24.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000036",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            30.0,
-            29.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000037",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            31.0,
-            28.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000038",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            31.0,
-            29.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       }
     ],
-    "collision_erase": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1,
-          35
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2,
-          34
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2,
-          35
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          5,
-          2
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          5,
-          1
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          6,
-          2
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          7,
-          2
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          8,
-          2
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          37,
-          2
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          37,
-          1
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          36,
-          2
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          31,
-          28
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          31,
-          29
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          11,
-          23
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          11,
-          22
-        ]
-      }
-    ],
+    "collision_erase": [],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -893,10 +558,20 @@
         "display_name": "石墓一层",
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000124",
         "official_connection_id": "portal.mengzhong_stone_tomb_f2.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          4,
+          47
+        ],
         "reciprocal_exit_id": "map_exit_000002",
         "reciprocal_map_key": "mengzhong_stone_tomb_f1",
         "requires_leave_before_retrigger": true,
@@ -917,8 +592,8 @@
           22.0
         ],
         "tile": [
-          4.0,
-          47.0
+          4,
+          47
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -935,10 +610,20 @@
         "display_name": "石墓三层",
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000125",
         "official_connection_id": "portal.mengzhong_stone_tomb_f2.map_exit_000002",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          22,
+          22
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "mengzhong_stone_tomb_f3",
         "requires_leave_before_retrigger": true,
@@ -959,8 +644,8 @@
           47.0
         ],
         "tile": [
-          22.0,
-          22.0
+          22,
+          22
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -2975,11 +2660,13 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000106",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
-        "material_layer_order": 0.0,
+        "material_layer_order": -1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3046,11 +2733,13 @@
           3.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000107",
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
-        "material_layer_order": 0.0,
+        "material_layer_order": -1.0,
         "movable": true,
         "navigation_policy": "ignore",
         "object_role": "decoration",
@@ -3092,14 +2781,14 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           172.0,
-          110.55555725097656
+          145.4166717529297
         ],
         "asset_id": "user.50579dc474c3f840",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3116,10 +2805,10 @@
           3.0,
           3.0
         ],
-        "instance_base_scale": 0.38247011952191234,
+        "instance_base_scale": 0.382470119521912,
         "instance_custom_scale": true,
         "instance_id": "inst_000108",
-        "instance_scale_level": -4,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3139,15 +2828,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           172.0,
-          110.55555725097656
+          145.4166717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.2294820717131473,
-          0.2294820717131473
+          0.3059760956175294,
+          0.3059760956175294
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3169,14 +2858,14 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           170.0,
-          110.1111068725586
+          129.95237731933594
         ],
         "asset_id": "user.33ff89346abf48a1",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3196,7 +2885,7 @@
         "instance_base_scale": 0.384,
         "instance_custom_scale": true,
         "instance_id": "inst_000109",
-        "instance_scale_level": -4,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3216,15 +2905,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           170.0,
-          110.1111068725586
+          129.95237731933594
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.23040000000000005,
-          0.23040000000000005
+          0.2688,
+          0.2688
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3246,14 +2935,14 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           154.0,
-          71.33333587646484
+          112.66666412353516
         ],
         "asset_id": "user.b0718ccd448ca4a7",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3270,10 +2959,10 @@
           3.0,
           3.0
         ],
-        "instance_base_scale": 0.4423963133640553,
+        "instance_base_scale": 0.442396313364055,
         "instance_custom_scale": true,
         "instance_id": "inst_000110",
-        "instance_scale_level": -5,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3293,15 +2982,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           154.0,
-          71.33333587646484
+          112.66666412353516
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.22119815668202772,
-          0.22119815668202772
+          0.309677419354839,
+          0.309677419354839
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3323,7 +3012,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           178.0,
-          155.0
+          103.0
         ],
         "asset_id": "user.80c9e5d572d16893",
         "collision_authority": "asset",
@@ -3339,18 +3028,18 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
           3.0,
           3.0
         ],
-        "instance_base_scale": 0.41025641025641024,
+        "instance_base_scale": 0.41025641025641,
         "instance_custom_scale": true,
         "instance_id": "inst_000111",
-        "instance_scale_level": -5,
+        "instance_scale_level": -4,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3360,8 +3049,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3370,44 +3059,44 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           178.0,
-          155.0
+          103.0
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20512820512820507,
-          0.20512820512820507
+          0.246153846153846,
+          0.246153846153846
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          3,
-          4
+          2,
+          3
         ],
         "tile_anchor": [
-          3,
-          4
+          2,
+          3
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           177.0,
-          73.33332824707031
+          98.1111068725586
         ],
         "asset_id": "user.916b24806f8dfdb6",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3424,10 +3113,10 @@
           3.0,
           3.0
         ],
-        "instance_base_scale": 0.4304932735426009,
+        "instance_base_scale": 0.430493273542601,
         "instance_custom_scale": true,
         "instance_id": "inst_000112",
-        "instance_scale_level": -5,
+        "instance_scale_level": -4,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3447,15 +3136,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           177.0,
-          73.33332824707031
+          98.1111068725586
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.21524663677130046,
-          0.21524663677130046
+          0.2582959641255601,
+          0.2582959641255601
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3477,14 +3166,14 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           165.0,
-          110.1111068725586
+          144.83334350585938
         ],
         "asset_id": "user.c8910d198a7cfd2a",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3504,7 +3193,7 @@
         "instance_base_scale": 0.384,
         "instance_custom_scale": true,
         "instance_id": "inst_000113",
-        "instance_scale_level": -4,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3524,15 +3213,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           165.0,
-          110.1111068725586
+          144.83334350585938
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.23040000000000005,
-          0.23040000000000005
+          0.3072,
+          0.3072
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3554,7 +3243,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           177.0,
-          169.0
+          132.57142639160156
         ],
         "asset_id": "user.dbcf36c91f48fe8e",
         "collision_authority": "asset",
@@ -3570,18 +3259,18 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
           3.0,
           3.0
         ],
-        "instance_base_scale": 0.3764705882352941,
+        "instance_base_scale": 0.376470588235294,
         "instance_custom_scale": true,
         "instance_id": "inst_000114",
-        "instance_scale_level": -5,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -3591,8 +3280,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -3601,15 +3290,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           177.0,
-          169.0
+          132.57142639160156
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.188235294117647,
-          0.188235294117647
+          0.2635294117647058,
+          0.2635294117647058
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -3623,22 +3312,22 @@
           10
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           112.0,
-          89.8636474609375
+          94.12501525878906
         ],
         "asset_id": "cave_dungeon.barrel_crates_01",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3658,7 +3347,7 @@
         "instance_base_scale": 0.568889,
         "instance_custom_scale": true,
         "instance_id": "inst_000115",
-        "instance_scale_level": -3,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3678,25 +3367,25 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           112.0,
-          89.8636474609375
+          94.12501525878906
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.6257779328102111,
-          0.6257779328102111
+          0.682666832810211,
+          0.682666832810211
         ],
         "scene_intent": "block_path",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          7,
+          2,
           1
         ],
         "tile_anchor": [
-          7,
+          2,
           1
         ],
         "visual_footprint_tiles": [
@@ -3714,8 +3403,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3724,8 +3413,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3735,7 +3424,7 @@
         "instance_base_scale": 0.901408,
         "instance_custom_scale": true,
         "instance_id": "inst_000116",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3745,8 +3434,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3762,8 +3451,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.6309855999999999,
-          0.6309855999999999
+          0.6309856,
+          0.6309856
         ],
         "scene_intent": "block_path",
         "selectable": true,
@@ -3777,8 +3466,8 @@
           35
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ]
       },
       {
@@ -3791,8 +3480,8 @@
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -3801,8 +3490,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3812,7 +3501,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000117",
-        "instance_scale_level": -5,
+        "instance_scale_level": -5.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3822,8 +3511,8 @@
         "object_role": "obstacle",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -3839,8 +3528,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5000000000000001,
-          0.5000000000000001
+          0.5,
+          0.5
         ],
         "scene_intent": "block_path",
         "selectable": true,
@@ -3854,22 +3543,22 @@
           23
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           57.0,
-          58.333335876464844
+          62.14285659790039
         ],
         "asset_id": "cave_dungeon.broken_crate_01",
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "project_prop_manual_collision_only_v1",
@@ -3889,7 +3578,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000118",
-        "instance_scale_level": -4,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "default",
@@ -3909,15 +3598,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           57.0,
-          58.333335876464844
+          62.14285659790039
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.6000000000000001,
-          0.6000000000000001
+          0.7,
+          0.7
         ],
         "scene_intent": "block_path",
         "selectable": true,
@@ -3938,8 +3627,8 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          79.28572845458984,
-          96.4285888671875
+          111.0,
+          88.5000228881836
         ],
         "asset_id": "cave_dungeon.pottery_cluster_02",
         "collision_authority": "asset",
@@ -3956,7 +3645,7 @@
         "flip_y": false,
         "footprint_tiles": [
           2,
-          1
+          2
         ],
         "gameplay_role": "navigation_blocker",
         "instance_base_footprint_tiles": [
@@ -3966,7 +3655,7 @@
         "instance_base_scale": 0.720721,
         "instance_custom_scale": true,
         "instance_id": "inst_000119",
-        "instance_scale_level": -3,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -3977,7 +3666,7 @@
         "occlusion": false,
         "occupancy_footprint_tiles": [
           2,
-          1
+          2
         ],
         "offset_px": [
           0.0,
@@ -3985,16 +3674,16 @@
         ],
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
-          79.28572845458984,
-          96.4285888671875
+          111.0,
+          88.5000228881836
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5045047,
-          0.5045047
+          0.5765768,
+          0.5765768
         ],
         "scene_intent": "block_path",
         "selectable": true,
@@ -4009,21 +3698,21 @@
         ],
         "visual_footprint_tiles": [
           2,
-          1
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           62.0,
-          111.4166488647461
+          115.6428451538086
         ],
         "asset_id": "cave_dungeon.wood_crate_01",
         "collision_authority": "asset",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0,
-          0
+          0.0,
+          0.0
         ],
         "collision_policy": "none",
         "collision_policy_id": "",
@@ -4043,7 +3732,7 @@
         "instance_base_scale": 0.901408,
         "instance_custom_scale": true,
         "instance_id": "inst_000120",
-        "instance_scale_level": -4,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "disabled",
@@ -4063,15 +3752,15 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           62.0,
-          111.4166488647461
+          115.6428451538086
         ],
         "placement_rule": "non_overlapping",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.5408447999999999,
-          0.5408447999999999
+          0.6309856,
+          0.6309856
         ],
         "scene_intent": "block_path",
         "selectable": true,
@@ -4109,8 +3798,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4120,7 +3809,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000121",
-        "instance_scale_level": -8,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -4130,8 +3819,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -4147,8 +3836,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.2,
+          0.2
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -4162,8 +3851,8 @@
           49
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ]
       },
       {
@@ -4186,8 +3875,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4197,7 +3886,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000122",
-        "instance_scale_level": -8,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -4207,8 +3896,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -4224,8 +3913,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.2,
+          0.2
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -4239,8 +3928,8 @@
           49
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ]
       },
       {
@@ -4263,8 +3952,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4274,7 +3963,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000123",
-        "instance_scale_level": -8,
+        "instance_scale_level": -8.0,
         "layer": "object_base",
         "manual_collision_expected": false,
         "map_collision_override": "default",
@@ -4284,8 +3973,8 @@
         "object_role": "decoration",
         "occlusion": true,
         "occupancy_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
         ],
         "offset_px": [
           0.0,
@@ -4301,8 +3990,8 @@
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.20000000000000015,
-          0.20000000000000015
+          0.2,
+          0.2
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
@@ -4316,8 +4005,170 @@
           24
         ],
         "visual_footprint_tiles": [
-          1,
-          1
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000124",
+        "instance_scale_level": 4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.4000000000000004,
+          1.4000000000000004
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          4,
+          47
+        ],
+        "tile_anchor": [
+          4,
+          47
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000125",
+        "instance_scale_level": 4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.4000000000000004,
+          1.4000000000000004
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          22,
+          22
+        ],
+        "tile_anchor": [
+          22,
+          22
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
         ]
       }
     ],
@@ -11435,7 +11286,7 @@
   "legacy_runtime_map_id": 1199.0,
   "map_id": "mengzhong_stone_tomb_f2",
   "runtime_map_id": 913002.0,
-  "schema_version": 5,
+  "schema_version": 5.0,
   "source_policy": "expansion_editable",
   "source_reference": {
     "audit_status": "derived_editor_clone",

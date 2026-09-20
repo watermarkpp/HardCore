@@ -1,13 +1,536 @@
 {
-  "build_sha256": "f35029be4c89562719a46d15cb6293e3465f575d1512efaa37e65ae937c6dfee",
+  "build_sha256": "59afc8ee024278fb9c1b6d08c773c53d130bff0606c53f4c20d2604354b87ca7",
   "collision": {
-    "blocked_count": 129.0,
+    "authored_polygons_ground_gu": [
+      {
+        "collision_id": "poly_000001",
+        "content_layer": "personal_expansion",
+        "id": "poly_000001",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            5.0,
+            0.0
+          ],
+          [
+            5.0,
+            4.0
+          ],
+          [
+            0.0,
+            4.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000002",
+        "content_layer": "personal_expansion",
+        "id": "poly_000002",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            5.0,
+            0.0
+          ],
+          [
+            6.0,
+            1.0
+          ],
+          [
+            6.0,
+            3.0
+          ],
+          [
+            5.0,
+            4.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000003",
+        "content_layer": "personal_expansion",
+        "id": "poly_000003",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            4.0
+          ],
+          [
+            5.0,
+            4.0
+          ],
+          [
+            4.0,
+            5.0
+          ],
+          [
+            0.0,
+            5.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000004",
+        "content_layer": "personal_expansion",
+        "id": "poly_000004",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            5.0
+          ],
+          [
+            4.0,
+            5.0
+          ],
+          [
+            3.0,
+            6.0
+          ],
+          [
+            1.0,
+            6.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000005",
+        "content_layer": "personal_expansion",
+        "id": "poly_000005",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            3.0,
+            28.0
+          ],
+          [
+            4.0,
+            28.0
+          ],
+          [
+            4.0,
+            29.0
+          ],
+          [
+            3.0,
+            29.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000006",
+        "content_layer": "personal_expansion",
+        "id": "poly_000006",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            1.0,
+            30.0
+          ],
+          [
+            4.0,
+            30.0
+          ],
+          [
+            4.0,
+            37.0
+          ],
+          [
+            1.0,
+            37.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000007",
+        "content_layer": "personal_expansion",
+        "id": "poly_000007",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            4.0,
+            31.0
+          ],
+          [
+            5.0,
+            31.0
+          ],
+          [
+            5.0,
+            38.0
+          ],
+          [
+            4.0,
+            38.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000008",
+        "content_layer": "personal_expansion",
+        "id": "poly_000008",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            5.0,
+            32.0
+          ],
+          [
+            6.0,
+            32.0
+          ],
+          [
+            6.0,
+            38.0
+          ],
+          [
+            5.0,
+            38.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000009",
+        "content_layer": "personal_expansion",
+        "id": "poly_000009",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            6.0,
+            33.0
+          ],
+          [
+            7.0,
+            33.0
+          ],
+          [
+            7.0,
+            36.0
+          ],
+          [
+            6.0,
+            36.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000010",
+        "content_layer": "personal_expansion",
+        "id": "poly_000010",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            7.0,
+            34.0
+          ],
+          [
+            8.0,
+            34.0
+          ],
+          [
+            8.0,
+            36.0
+          ],
+          [
+            7.0,
+            36.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000011",
+        "content_layer": "personal_expansion",
+        "id": "poly_000011",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            2.0,
+            38.0
+          ],
+          [
+            3.0,
+            38.0
+          ],
+          [
+            3.0,
+            39.0
+          ],
+          [
+            2.0,
+            39.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000012",
+        "content_layer": "personal_expansion",
+        "id": "poly_000012",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            45.0,
+            41.0
+          ],
+          [
+            47.0,
+            42.0
+          ],
+          [
+            47.0,
+            48.0
+          ],
+          [
+            45.0,
+            48.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000013",
+        "content_layer": "personal_expansion",
+        "id": "poly_000013",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            44.0,
+            42.0
+          ],
+          [
+            45.0,
+            41.0
+          ],
+          [
+            45.0,
+            48.0
+          ],
+          [
+            44.0,
+            48.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000014",
+        "content_layer": "personal_expansion",
+        "id": "poly_000014",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            47.0,
+            42.0
+          ],
+          [
+            48.0,
+            43.25
+          ],
+          [
+            48.0,
+            48.0
+          ],
+          [
+            47.0,
+            48.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000015",
+        "content_layer": "personal_expansion",
+        "id": "poly_000015",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            43.0,
+            43.0
+          ],
+          [
+            44.0,
+            42.0
+          ],
+          [
+            44.0,
+            48.0
+          ],
+          [
+            43.0,
+            47.5
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000016",
+        "content_layer": "personal_expansion",
+        "id": "poly_000016",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            2.0,
+            44.0
+          ],
+          [
+            6.0,
+            44.0
+          ],
+          [
+            6.0,
+            47.0
+          ],
+          [
+            2.0,
+            47.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000017",
+        "content_layer": "personal_expansion",
+        "id": "poly_000017",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            42.0,
+            44.0
+          ],
+          [
+            43.0,
+            43.0
+          ],
+          [
+            43.0,
+            47.5
+          ],
+          [
+            42.0,
+            46.5
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000018",
+        "content_layer": "personal_expansion",
+        "id": "poly_000018",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            11.0,
+            45.0
+          ],
+          [
+            15.0,
+            45.0
+          ],
+          [
+            15.0,
+            47.0
+          ],
+          [
+            11.0,
+            47.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000019",
+        "content_layer": "personal_expansion",
+        "id": "poly_000019",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            41.0,
+            45.0
+          ],
+          [
+            42.0,
+            44.0
+          ],
+          [
+            42.0,
+            46.5
+          ],
+          [
+            41.5,
+            46.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000020",
+        "content_layer": "personal_expansion",
+        "id": "poly_000020",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            3.0,
+            47.0
+          ],
+          [
+            6.0,
+            47.0
+          ],
+          [
+            6.0,
+            48.0
+          ],
+          [
+            3.0,
+            48.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      }
+    ],
+    "blocked_count": 134.0,
     "blocked_tiles": [
       "0,0",
       "0,1",
       "0,2",
       "0,3",
       "0,4",
+      "0,5",
       "1,0",
       "1,1",
       "1,2",
@@ -63,6 +586,7 @@
       "3,45",
       "3,46",
       "3,47",
+      "3,5",
       "4,0",
       "4,1",
       "4,2",
@@ -74,21 +598,24 @@
       "4,35",
       "4,36",
       "4,37",
+      "4,4",
       "4,44",
       "4,45",
       "4,46",
       "4,47",
+      "41,44",
       "41,45",
-      "41,46",
+      "42,43",
       "42,44",
       "42,45",
       "42,46",
-      "42,47",
+      "43,42",
       "43,43",
       "43,44",
       "43,45",
       "43,46",
       "43,47",
+      "44,41",
       "44,42",
       "44,43",
       "44,44",
@@ -102,21 +629,21 @@
       "45,45",
       "45,46",
       "45,47",
-      "46,41",
       "46,42",
       "46,43",
       "46,44",
       "46,45",
       "46,46",
       "46,47",
-      "47,42",
       "47,43",
       "47,44",
       "47,45",
       "47,46",
       "47,47",
+      "5,0",
       "5,1",
       "5,2",
+      "5,3",
       "5,32",
       "5,33",
       "5,34",
@@ -133,692 +660,5442 @@
       "7,34",
       "7,35"
     ],
-    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v3",
-    "erased_cells": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          6.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          6.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          5.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          4.0,
-          4.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+    "blocked_tiles_role": "diagnostic_center_sample_only",
+    "convex_parts_ground_gu": [
+      [
+        [
+          0.0,
+          0.0
+        ],
+        [
           5.0,
           0.0
+        ],
+        [
+          5.0,
+          4.0
+        ],
+        [
+          0.0,
+          4.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
+          5.0,
+          0.0
+        ],
+        [
+          6.0,
+          1.0
+        ],
+        [
+          6.0,
+          3.0
+        ],
+        [
+          5.0,
+          4.0
+        ]
+      ],
+      [
+        [
+          0.0,
+          4.0
+        ],
+        [
+          5.0,
+          4.0
+        ],
+        [
+          4.0,
+          5.0
+        ],
+        [
           0.0,
           5.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
+          0.0,
+          5.0
+        ],
+        [
+          4.0,
+          5.0
+        ],
+        [
+          3.0,
+          6.0
+        ],
+        [
+          1.0,
+          6.0
+        ]
+      ],
+      [
+        [
+          3.0,
+          28.0
+        ],
+        [
+          4.0,
+          28.0
+        ],
+        [
+          4.0,
+          29.0
+        ],
+        [
+          3.0,
+          29.0
+        ]
+      ],
+      [
+        [
+          1.0,
+          30.0
+        ],
+        [
+          4.0,
+          30.0
+        ],
+        [
+          4.0,
+          37.0
+        ],
+        [
+          1.0,
+          37.0
+        ]
+      ],
+      [
+        [
+          4.0,
+          31.0
+        ],
+        [
+          5.0,
+          31.0
+        ],
+        [
+          5.0,
+          38.0
+        ],
+        [
+          4.0,
+          38.0
+        ]
+      ],
+      [
+        [
+          5.0,
+          32.0
+        ],
+        [
+          6.0,
+          32.0
+        ],
+        [
+          6.0,
+          38.0
+        ],
+        [
+          5.0,
+          38.0
+        ]
+      ],
+      [
+        [
+          6.0,
+          33.0
+        ],
+        [
           7.0,
           33.0
+        ],
+        [
+          7.0,
+          36.0
+        ],
+        [
+          6.0,
+          36.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          19.0,
-          44.0
+      ],
+      [
+        [
+          7.0,
+          34.0
+        ],
+        [
+          8.0,
+          34.0
+        ],
+        [
+          8.0,
+          36.0
+        ],
+        [
+          7.0,
+          36.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          19.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          19.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          18.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          18.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          18.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          17.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          17.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          17.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          38.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          37.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
           2.0,
-          37.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          38.0
+        ],
+        [
           3.0,
           38.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+        ],
+        [
           3.0,
-          37.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          27.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          39.0
+        ],
+        [
           2.0,
-          27.0
+          39.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
+          45.0,
+          41.0
+        ],
+        [
+          47.0,
+          42.0
+        ],
+        [
+          47.0,
+          48.0
+        ],
+        [
+          45.0,
+          48.0
+        ]
+      ],
+      [
+        [
+          44.0,
+          42.0
+        ],
+        [
+          45.0,
+          41.0
+        ],
+        [
+          45.0,
+          48.0
+        ],
+        [
+          44.0,
+          48.0
+        ]
+      ],
+      [
+        [
+          47.0,
+          42.0
+        ],
+        [
+          48.0,
+          43.25
+        ],
+        [
+          48.0,
+          48.0
+        ],
+        [
+          47.0,
+          48.0
+        ]
+      ],
+      [
+        [
+          43.0,
+          43.0
+        ],
+        [
+          44.0,
+          42.0
+        ],
+        [
+          44.0,
+          48.0
+        ],
+        [
+          43.0,
+          47.5
+        ]
+      ],
+      [
+        [
           2.0,
-          28.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          28.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          27.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          44.0
+        ],
+        [
+          6.0,
+          44.0
+        ],
+        [
+          6.0,
+          47.0
+        ],
+        [
           2.0,
-          29.0
+          47.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          29.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          29.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          10.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          10.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          10.0,
+      ],
+      [
+        [
+          42.0,
           44.0
+        ],
+        [
+          43.0,
+          43.0
+        ],
+        [
+          43.0,
+          47.5
+        ],
+        [
+          42.0,
+          46.5
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          14.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          13.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          12.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
           11.0,
+          45.0
+        ],
+        [
+          15.0,
+          45.0
+        ],
+        [
+          15.0,
+          47.0
+        ],
+        [
+          11.0,
+          47.0
+        ]
+      ],
+      [
+        [
+          41.0,
+          45.0
+        ],
+        [
+          42.0,
           44.0
+        ],
+        [
+          42.0,
+          46.5
+        ],
+        [
+          41.5,
+          46.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          43.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
           3.0,
-          43.0
+          47.0
+        ],
+        [
+          6.0,
+          47.0
+        ],
+        [
+          6.0,
+          48.0
+        ],
+        [
+          3.0,
+          48.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          5.0,
-          43.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          4.0,
-          43.0
-        ]
-      }
+      ]
     ],
-    "manual_shapes": [
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000001",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              20.0,
-              44.0
-            ],
-            [
-              17.0,
-              44.0
-            ],
-            [
-              17.0,
-              47.0
-            ],
-            [
-              20.0,
-              47.0
-            ],
-            [
-              20.0,
-              44.0
-            ]
-          ]
-        },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000002",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              14.0,
-              47.0
-            ],
-            [
-              15.0,
-              44.0
-            ],
-            [
-              10.0,
-              44.0
-            ],
-            [
-              10.0,
-              47.0
-            ],
-            [
-              15.0,
-              47.0
-            ],
-            [
-              15.0,
-              44.0
-            ]
-          ]
-        },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000003",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              6.0,
-              47.0
-            ],
-            [
-              6.0,
-              43.0
-            ],
-            [
-              2.0,
-              43.0
-            ],
-            [
-              2.0,
-              47.0
-            ],
-            [
-              6.0,
-              47.0
-            ]
-          ]
-        },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000004",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              1.0,
-              37.0
-            ],
-            [
-              1.0,
-              32.0
-            ],
-            [
-              8.0,
-              33.0
-            ],
-            [
-              8.0,
-              36.0
-            ],
-            [
-              6.0,
-              36.0
-            ],
-            [
-              6.0,
-              38.0
-            ],
-            [
-              4.0,
-              38.0
-            ],
-            [
-              4.0,
-              39.0
-            ],
-            [
-              1.0,
-              39.0
-            ],
-            [
-              1.0,
-              37.0
-            ]
-          ]
-        },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000005",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              4.0,
-              32.0
-            ],
-            [
-              4.0,
-              27.0
-            ],
-            [
-              1.0,
-              27.0
-            ],
-            [
-              1.0,
-              32.0
-            ],
-            [
-              4.0,
-              32.0
-            ]
-          ]
-        },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000006",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              43.0,
-              48.0
-            ],
-            [
-              41.0,
-              46.0
-            ],
-            [
-              46.0,
-              41.0
-            ],
-            [
-              48.0,
-              43.0
-            ],
-            [
-              48.0,
-              48.0
-            ],
-            [
-              43.0,
-              48.0
-            ]
-          ]
-        },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000007",
-        "content_layer": "personal_expansion",
-        "data": {
-          "points": [
-            [
-              2.0,
-              7.0
-            ],
+    "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
+    "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+    "navigation": {
+      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "clearance_gu": 0.025,
+      "contract_id": "hc.polygon_nav_faces.v1",
+      "profiles": [
+        {
+          "faces": [
             [
               0.0,
-              5.0
-            ],
-            [
-              0.0,
-              0.0
-            ],
-            [
-              5.0,
-              0.0
-            ],
-            [
-              7.0,
+              1.0,
               2.0
             ],
             [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              4.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              4.0,
+              6.0,
+              11.0
+            ],
+            [
+              12.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              11.0,
+              13.0
+            ],
+            [
+              4.0,
+              13.0,
+              14.0
+            ],
+            [
+              12.0,
+              0.0,
+              15.0
+            ],
+            [
+              10.0,
+              12.0,
+              15.0
+            ],
+            [
+              10.0,
+              15.0,
+              16.0
+            ],
+            [
+              3.0,
               2.0,
-              7.0
+              17.0
+            ],
+            [
+              16.0,
+              3.0,
+              17.0
+            ],
+            [
+              10.0,
+              16.0,
+              17.0
+            ],
+            [
+              10.0,
+              17.0,
+              18.0
+            ],
+            [
+              19.0,
+              10.0,
+              18.0
+            ],
+            [
+              20.0,
+              21.0,
+              22.0
+            ],
+            [
+              22.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              26.0,
+              27.0,
+              28.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              32.0,
+              33.0,
+              34.0
+            ],
+            [
+              32.0,
+              34.0,
+              35.0
+            ],
+            [
+              36.0,
+              8.0,
+              4.0
+            ],
+            [
+              36.0,
+              4.0,
+              14.0
+            ],
+            [
+              37.0,
+              36.0,
+              14.0
+            ],
+            [
+              37.0,
+              14.0,
+              38.0
+            ],
+            [
+              39.0,
+              37.0,
+              38.0
+            ],
+            [
+              18.0,
+              32.0,
+              35.0
+            ],
+            [
+              11.0,
+              31.0,
+              20.0
+            ],
+            [
+              13.0,
+              11.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              22.0
+            ],
+            [
+              13.0,
+              22.0,
+              24.0
+            ],
+            [
+              13.0,
+              24.0,
+              26.0
+            ],
+            [
+              13.0,
+              26.0,
+              28.0
+            ],
+            [
+              40.0,
+              13.0,
+              28.0
+            ],
+            [
+              40.0,
+              28.0,
+              41.0
+            ],
+            [
+              38.0,
+              40.0,
+              41.0
+            ],
+            [
+              29.0,
+              31.0,
+              11.0
+            ],
+            [
+              29.0,
+              11.0,
+              10.0
+            ],
+            [
+              42.0,
+              29.0,
+              10.0
+            ],
+            [
+              42.0,
+              10.0,
+              43.0
+            ],
+            [
+              44.0,
+              42.0,
+              43.0
+            ],
+            [
+              45.0,
+              44.0,
+              43.0
+            ],
+            [
+              45.0,
+              43.0,
+              46.0
+            ],
+            [
+              45.0,
+              46.0,
+              19.0
+            ],
+            [
+              39.0,
+              38.0,
+              41.0
+            ],
+            [
+              47.0,
+              39.0,
+              41.0
+            ],
+            [
+              35.0,
+              47.0,
+              41.0
+            ],
+            [
+              35.0,
+              41.0,
+              45.0
+            ],
+            [
+              18.0,
+              35.0,
+              45.0
+            ],
+            [
+              18.0,
+              45.0,
+              19.0
+            ]
+          ],
+          "radius_gu": 0.41984465132951254,
+          "radius_key": "0217b719bcdeda3f",
+          "vertices_ground_gu": [
+            [
+              15.44482421875,
+              47.44482421875
+            ],
+            [
+              42.4261474609375,
+              47.55517578125
+            ],
+            [
+              6.44482421875,
+              47.55517578125
+            ],
+            [
+              10.55517578125,
+              47.44482421875
+            ],
+            [
+              47.55517578125,
+              0.44482421875
+            ],
+            [
+              47.55517578125,
+              41.981689453125
+            ],
+            [
+              47.286376953125,
+              41.645751953125
+            ],
+            [
+              41.1343994140625,
+              46.263427734375
+            ],
+            [
+              6.44482421875,
+              0.8157958984375
+            ],
+            [
+              6.0738525390625,
+              0.44482421875
+            ],
+            [
+              3.44482421875,
+              39.44482421875
+            ],
+            [
+              44.9122314453125,
+              40.458740234375
+            ],
+            [
+              40.458740234375,
+              44.9122314453125
+            ],
+            [
+              4.44482421875,
+              29.44482421875
+            ],
+            [
+              4.44482421875,
+              27.55517578125
+            ],
+            [
+              15.44482421875,
+              44.55517578125
+            ],
+            [
+              10.55517578125,
+              44.55517578125
+            ],
+            [
+              6.44482421875,
+              43.55517578125
+            ],
+            [
+              1.55517578125,
+              43.55517578125
+            ],
+            [
+              1.55517578125,
+              39.44482421875
+            ],
+            [
+              8.44482421875,
+              33.55517578125
+            ],
+            [
+              7.44482421875,
+              33.55517578125
+            ],
+            [
+              7.44482421875,
+              32.55517578125
+            ],
+            [
+              6.44482421875,
+              32.55517578125
+            ],
+            [
+              6.44482421875,
+              31.55517578125
+            ],
+            [
+              5.44482421875,
+              31.55517578125
+            ],
+            [
+              5.44482421875,
+              30.55517578125
+            ],
+            [
+              4.44482421875,
+              30.55517578125
+            ],
+            [
+              4.44482421875,
+              29.55517578125
+            ],
+            [
+              6.44482421875,
+              38.44482421875
+            ],
+            [
+              6.44482421875,
+              36.44482421875
+            ],
+            [
+              8.44482421875,
+              36.44482421875
+            ],
+            [
+              1.55517578125,
+              47.44482421875
+            ],
+            [
+              2.55517578125,
+              47.44482421875
+            ],
+            [
+              2.55517578125,
+              47.55517578125
+            ],
+            [
+              0.44482421875,
+              47.55517578125
+            ],
+            [
+              6.44482421875,
+              3.1842041015625
+            ],
+            [
+              3.1842041015625,
+              6.44482421875
+            ],
+            [
+              2.55517578125,
+              27.55517578125
+            ],
+            [
+              0.8157958984375,
+              6.44482421875
+            ],
+            [
+              2.55517578125,
+              29.44482421875
+            ],
+            [
+              0.55517578125,
+              29.55517578125
+            ],
+            [
+              3.55517578125,
+              38.44482421875
+            ],
+            [
+              3.44482421875,
+              37.55517578125
+            ],
+            [
+              3.55517578125,
+              37.44482421875
+            ],
+            [
+              0.55517578125,
+              37.44482421875
+            ],
+            [
+              1.55517578125,
+              37.55517578125
+            ],
+            [
+              0.44482421875,
+              6.0738525390625
             ]
           ]
         },
-        "shape": "polygon",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000008",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            4.0,
-            31.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              10.0
+            ],
+            [
+              11.0,
+              12.0,
+              4.0
+            ],
+            [
+              13.0,
+              14.0,
+              15.0
+            ],
+            [
+              4.0,
+              6.0,
+              14.0
+            ],
+            [
+              15.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              14.0,
+              16.0
+            ],
+            [
+              4.0,
+              16.0,
+              17.0
+            ],
+            [
+              15.0,
+              0.0,
+              18.0
+            ],
+            [
+              13.0,
+              15.0,
+              18.0
+            ],
+            [
+              13.0,
+              18.0,
+              19.0
+            ],
+            [
+              3.0,
+              2.0,
+              20.0
+            ],
+            [
+              19.0,
+              3.0,
+              20.0
+            ],
+            [
+              13.0,
+              19.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              21.0
+            ],
+            [
+              22.0,
+              13.0,
+              21.0
+            ],
+            [
+              23.0,
+              24.0,
+              25.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              27.0,
+              28.0,
+              29.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              32.0,
+              33.0,
+              34.0
+            ],
+            [
+              35.0,
+              36.0,
+              37.0
+            ],
+            [
+              35.0,
+              37.0,
+              8.0
+            ],
+            [
+              38.0,
+              11.0,
+              4.0
+            ],
+            [
+              38.0,
+              4.0,
+              17.0
+            ],
+            [
+              39.0,
+              38.0,
+              17.0
+            ],
+            [
+              39.0,
+              17.0,
+              40.0
+            ],
+            [
+              10.0,
+              39.0,
+              40.0
+            ],
+            [
+              14.0,
+              34.0,
+              23.0
+            ],
+            [
+              16.0,
+              14.0,
+              23.0
+            ],
+            [
+              16.0,
+              23.0,
+              25.0
+            ],
+            [
+              16.0,
+              25.0,
+              27.0
+            ],
+            [
+              16.0,
+              27.0,
+              29.0
+            ],
+            [
+              16.0,
+              29.0,
+              31.0
+            ],
+            [
+              41.0,
+              16.0,
+              31.0
+            ],
+            [
+              41.0,
+              31.0,
+              42.0
+            ],
+            [
+              40.0,
+              41.0,
+              42.0
+            ],
+            [
+              21.0,
+              35.0,
+              8.0
+            ],
+            [
+              32.0,
+              34.0,
+              14.0
+            ],
+            [
+              32.0,
+              14.0,
+              13.0
+            ],
+            [
+              43.0,
+              32.0,
+              13.0
+            ],
+            [
+              43.0,
+              13.0,
+              44.0
+            ],
+            [
+              45.0,
+              43.0,
+              44.0
+            ],
+            [
+              46.0,
+              45.0,
+              44.0
+            ],
+            [
+              46.0,
+              44.0,
+              47.0
+            ],
+            [
+              46.0,
+              47.0,
+              22.0
+            ],
+            [
+              10.0,
+              40.0,
+              42.0
+            ],
+            [
+              8.0,
+              10.0,
+              42.0
+            ],
+            [
+              8.0,
+              42.0,
+              46.0
+            ],
+            [
+              21.0,
+              8.0,
+              46.0
+            ],
+            [
+              21.0,
+              46.0,
+              22.0
+            ]
+          ],
+          "radius_gu": 0.3314563036811941,
+          "radius_key": "0f4817809436d53f",
+          "vertices_ground_gu": [
+            [
+              15.3564453125,
+              47.3564453125
+            ],
+            [
+              42.6395263671875,
+              47.6435546875
+            ],
+            [
+              6.3564453125,
+              47.6435546875
+            ],
+            [
+              10.6435546875,
+              47.3564453125
+            ],
+            [
+              47.6435546875,
+              0.3564453125
+            ],
+            [
+              47.6435546875,
+              42.23388671875
+            ],
+            [
+              47.2293701171875,
+              41.71630859375
+            ],
+            [
+              41.20703125,
+              46.2110595703125
+            ],
+            [
+              0.3564453125,
+              47.6435546875
+            ],
+            [
+              0.3564453125,
+              5.8604736328125
+            ],
+            [
+              0.852294921875,
+              6.3564453125
+            ],
+            [
+              6.3564453125,
+              0.852294921875
+            ],
+            [
+              5.8604736328125,
+              0.3564453125
+            ],
+            [
+              3.3564453125,
+              39.3564453125
+            ],
+            [
+              44.9296875,
+              40.5662841796875
+            ],
+            [
+              40.5662841796875,
+              44.9296875
+            ],
+            [
+              4.3564453125,
+              29.3564453125
+            ],
+            [
+              4.3564453125,
+              27.6435546875
+            ],
+            [
+              15.3564453125,
+              44.6435546875
+            ],
+            [
+              10.6435546875,
+              44.6435546875
+            ],
+            [
+              6.3564453125,
+              43.6435546875
+            ],
+            [
+              1.6435546875,
+              43.6435546875
+            ],
+            [
+              1.6435546875,
+              39.3564453125
+            ],
+            [
+              8.3564453125,
+              33.6435546875
+            ],
+            [
+              7.3564453125,
+              33.6435546875
+            ],
+            [
+              7.3564453125,
+              32.6435546875
+            ],
+            [
+              6.3564453125,
+              32.6435546875
+            ],
+            [
+              6.3564453125,
+              31.6435546875
+            ],
+            [
+              5.3564453125,
+              31.6435546875
+            ],
+            [
+              5.3564453125,
+              30.6435546875
+            ],
+            [
+              4.3564453125,
+              30.6435546875
+            ],
+            [
+              4.3564453125,
+              29.6435546875
+            ],
+            [
+              6.3564453125,
+              38.3564453125
+            ],
+            [
+              6.3564453125,
+              36.3564453125
+            ],
+            [
+              8.3564453125,
+              36.3564453125
+            ],
+            [
+              1.6435546875,
+              47.3564453125
+            ],
+            [
+              2.6435546875,
+              47.3564453125
+            ],
+            [
+              2.6435546875,
+              47.6435546875
+            ],
+            [
+              6.3564453125,
+              3.147705078125
+            ],
+            [
+              3.147705078125,
+              6.3564453125
+            ],
+            [
+              2.6435546875,
+              27.6435546875
+            ],
+            [
+              2.6435546875,
+              29.3564453125
+            ],
+            [
+              0.6435546875,
+              29.6435546875
+            ],
+            [
+              3.6435546875,
+              38.3564453125
+            ],
+            [
+              3.3564453125,
+              37.6435546875
+            ],
+            [
+              3.6435546875,
+              37.3564453125
+            ],
+            [
+              0.6435546875,
+              37.3564453125
+            ],
+            [
+              1.6435546875,
+              37.6435546875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000009",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            5.0,
-            32.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              4.0
+            ],
+            [
+              10.0,
+              7.0,
+              0.0
+            ],
+            [
+              11.0,
+              12.0,
+              13.0
+            ],
+            [
+              4.0,
+              6.0,
+              12.0
+            ],
+            [
+              13.0,
+              10.0,
+              0.0
+            ],
+            [
+              4.0,
+              12.0,
+              14.0
+            ],
+            [
+              4.0,
+              14.0,
+              15.0
+            ],
+            [
+              13.0,
+              0.0,
+              16.0
+            ],
+            [
+              11.0,
+              13.0,
+              16.0
+            ],
+            [
+              11.0,
+              16.0,
+              17.0
+            ],
+            [
+              3.0,
+              2.0,
+              18.0
+            ],
+            [
+              17.0,
+              3.0,
+              18.0
+            ],
+            [
+              11.0,
+              17.0,
+              18.0
+            ],
+            [
+              11.0,
+              18.0,
+              19.0
+            ],
+            [
+              20.0,
+              11.0,
+              19.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              23.0,
+              24.0,
+              25.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              27.0,
+              28.0,
+              29.0
+            ],
+            [
+              30.0,
+              31.0,
+              32.0
+            ],
+            [
+              33.0,
+              34.0,
+              35.0
+            ],
+            [
+              33.0,
+              35.0,
+              36.0
+            ],
+            [
+              37.0,
+              8.0,
+              4.0
+            ],
+            [
+              37.0,
+              4.0,
+              15.0
+            ],
+            [
+              38.0,
+              37.0,
+              15.0
+            ],
+            [
+              39.0,
+              38.0,
+              15.0
+            ],
+            [
+              40.0,
+              39.0,
+              15.0
+            ],
+            [
+              40.0,
+              15.0,
+              41.0
+            ],
+            [
+              42.0,
+              40.0,
+              41.0
+            ],
+            [
+              12.0,
+              32.0,
+              21.0
+            ],
+            [
+              14.0,
+              12.0,
+              21.0
+            ],
+            [
+              14.0,
+              21.0,
+              23.0
+            ],
+            [
+              14.0,
+              23.0,
+              25.0
+            ],
+            [
+              14.0,
+              25.0,
+              27.0
+            ],
+            [
+              14.0,
+              27.0,
+              29.0
+            ],
+            [
+              43.0,
+              14.0,
+              29.0
+            ],
+            [
+              43.0,
+              29.0,
+              44.0
+            ],
+            [
+              41.0,
+              43.0,
+              44.0
+            ],
+            [
+              19.0,
+              33.0,
+              36.0
+            ],
+            [
+              30.0,
+              32.0,
+              12.0
+            ],
+            [
+              30.0,
+              12.0,
+              11.0
+            ],
+            [
+              45.0,
+              30.0,
+              11.0
+            ],
+            [
+              45.0,
+              11.0,
+              46.0
+            ],
+            [
+              47.0,
+              45.0,
+              46.0
+            ],
+            [
+              48.0,
+              47.0,
+              46.0
+            ],
+            [
+              48.0,
+              46.0,
+              49.0
+            ],
+            [
+              48.0,
+              49.0,
+              20.0
+            ],
+            [
+              42.0,
+              41.0,
+              44.0
+            ],
+            [
+              50.0,
+              42.0,
+              44.0
+            ],
+            [
+              36.0,
+              50.0,
+              44.0
+            ],
+            [
+              36.0,
+              44.0,
+              48.0
+            ],
+            [
+              19.0,
+              36.0,
+              48.0
+            ],
+            [
+              19.0,
+              48.0,
+              20.0
+            ]
+          ],
+          "radius_gu": 0.397747564417433,
+          "radius_key": "46234f33b274d93f",
+          "vertices_ground_gu": [
+            [
+              15.4228515625,
+              47.4228515625
+            ],
+            [
+              42.479248046875,
+              47.5771484375
+            ],
+            [
+              6.4228515625,
+              47.5771484375
+            ],
+            [
+              10.5771484375,
+              47.4228515625
+            ],
+            [
+              47.5771484375,
+              0.4228515625
+            ],
+            [
+              47.5771484375,
+              42.044677734375
+            ],
+            [
+              47.27197265625,
+              41.6634521484375
+            ],
+            [
+              41.7010498046875,
+              46.7989501953125
+            ],
+            [
+              6.4228515625,
+              0.8248291015625
+            ],
+            [
+              6.020751953125,
+              0.4228515625
+            ],
+            [
+              41.1524658203125,
+              46.25048828125
+            ],
+            [
+              3.4228515625,
+              39.4228515625
+            ],
+            [
+              44.91650390625,
+              40.485595703125
+            ],
+            [
+              40.485595703125,
+              44.91650390625
+            ],
+            [
+              4.4228515625,
+              29.4228515625
+            ],
+            [
+              4.4228515625,
+              27.5771484375
+            ],
+            [
+              15.4228515625,
+              44.5771484375
+            ],
+            [
+              10.5771484375,
+              44.5771484375
+            ],
+            [
+              6.4228515625,
+              43.5771484375
+            ],
+            [
+              1.5771484375,
+              43.5771484375
+            ],
+            [
+              1.5771484375,
+              39.4228515625
+            ],
+            [
+              8.4228515625,
+              33.5771484375
+            ],
+            [
+              7.4228515625,
+              33.5771484375
+            ],
+            [
+              7.4228515625,
+              32.5771484375
+            ],
+            [
+              6.4228515625,
+              32.5771484375
+            ],
+            [
+              6.4228515625,
+              31.5771484375
+            ],
+            [
+              5.4228515625,
+              31.5771484375
+            ],
+            [
+              5.4228515625,
+              30.5771484375
+            ],
+            [
+              4.4228515625,
+              30.5771484375
+            ],
+            [
+              4.4228515625,
+              29.5771484375
+            ],
+            [
+              6.4228515625,
+              38.4228515625
+            ],
+            [
+              6.4228515625,
+              36.4228515625
+            ],
+            [
+              8.4228515625,
+              36.4228515625
+            ],
+            [
+              1.5771484375,
+              47.4228515625
+            ],
+            [
+              2.5771484375,
+              47.4228515625
+            ],
+            [
+              2.5771484375,
+              47.5771484375
+            ],
+            [
+              0.4228515625,
+              47.5771484375
+            ],
+            [
+              6.4228515625,
+              3.1751708984375
+            ],
+            [
+              5.2989501953125,
+              4.2989501953125
+            ],
+            [
+              4.2989501953125,
+              5.2989501953125
+            ],
+            [
+              3.1751708984375,
+              6.4228515625
+            ],
+            [
+              2.5771484375,
+              27.5771484375
+            ],
+            [
+              0.8248291015625,
+              6.4228515625
+            ],
+            [
+              2.5771484375,
+              29.4228515625
+            ],
+            [
+              0.5771484375,
+              29.5771484375
+            ],
+            [
+              3.5771484375,
+              38.4228515625
+            ],
+            [
+              3.4228515625,
+              37.5771484375
+            ],
+            [
+              3.5771484375,
+              37.4228515625
+            ],
+            [
+              0.5771484375,
+              37.4228515625
+            ],
+            [
+              1.5771484375,
+              37.5771484375
+            ],
+            [
+              0.4228515625,
+              6.0206298828125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000010",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            5.0,
-            47.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              6.0,
+              7.0,
+              8.0
+            ],
+            [
+              5.0,
+              9.0,
+              10.0
+            ],
+            [
+              11.0,
+              6.0,
+              8.0
+            ],
+            [
+              11.0,
+              8.0,
+              12.0
+            ],
+            [
+              3.0,
+              5.0,
+              10.0
+            ],
+            [
+              13.0,
+              3.0,
+              10.0
+            ],
+            [
+              13.0,
+              10.0,
+              11.0
+            ],
+            [
+              13.0,
+              11.0,
+              12.0
+            ],
+            [
+              14.0,
+              13.0,
+              12.0
+            ],
+            [
+              15.0,
+              0.0,
+              2.0
+            ],
+            [
+              16.0,
+              15.0,
+              2.0
+            ],
+            [
+              16.0,
+              2.0,
+              14.0
+            ],
+            [
+              17.0,
+              16.0,
+              14.0
+            ],
+            [
+              18.0,
+              19.0,
+              20.0
+            ],
+            [
+              18.0,
+              20.0,
+              21.0
+            ],
+            [
+              22.0,
+              23.0,
+              24.0
+            ],
+            [
+              22.0,
+              24.0,
+              25.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              22.0,
+              25.0,
+              27.0
+            ],
+            [
+              21.0,
+              22.0,
+              27.0
+            ],
+            [
+              21.0,
+              27.0,
+              28.0
+            ],
+            [
+              28.0,
+              29.0,
+              30.0
+            ],
+            [
+              21.0,
+              28.0,
+              30.0
+            ],
+            [
+              30.0,
+              31.0,
+              32.0
+            ],
+            [
+              33.0,
+              34.0,
+              35.0
+            ],
+            [
+              35.0,
+              36.0,
+              37.0
+            ],
+            [
+              37.0,
+              38.0,
+              39.0
+            ],
+            [
+              39.0,
+              40.0,
+              17.0
+            ],
+            [
+              18.0,
+              21.0,
+              30.0
+            ],
+            [
+              18.0,
+              30.0,
+              32.0
+            ],
+            [
+              12.0,
+              18.0,
+              32.0
+            ],
+            [
+              12.0,
+              32.0,
+              33.0
+            ],
+            [
+              14.0,
+              12.0,
+              33.0
+            ],
+            [
+              17.0,
+              14.0,
+              33.0
+            ],
+            [
+              17.0,
+              33.0,
+              35.0
+            ],
+            [
+              17.0,
+              35.0,
+              37.0
+            ],
+            [
+              17.0,
+              37.0,
+              39.0
+            ]
+          ],
+          "radius_gu": 0.6187184335382291,
+          "radius_key": "5354af998acce33f",
+          "vertices_ground_gu": [
+            [
+              0.643798828125,
+              29.356201171875
+            ],
+            [
+              0.643798828125,
+              6.5540771484375
+            ],
+            [
+              0.7333984375,
+              6.643798828125
+            ],
+            [
+              6.643798828125,
+              0.7333984375
+            ],
+            [
+              6.5540771484375,
+              0.643798828125
+            ],
+            [
+              47.356201171875,
+              0.643798828125
+            ],
+            [
+              40.970947265625,
+              46.3812255859375
+            ],
+            [
+              41.9459228515625,
+              47.356201171875
+            ],
+            [
+              15.643798828125,
+              47.356201171875
+            ],
+            [
+              47.356201171875,
+              41.458251953125
+            ],
+            [
+              44.8729248046875,
+              40.2166748046875
+            ],
+            [
+              40.2166748046875,
+              44.8729248046875
+            ],
+            [
+              15.643798828125,
+              44.356201171875
+            ],
+            [
+              6.643798828125,
+              3.2666015625
+            ],
+            [
+              3.2666015625,
+              6.643798828125
+            ],
+            [
+              2.356201171875,
+              29.356201171875
+            ],
+            [
+              2.356201171875,
+              27.356201171875
+            ],
+            [
+              4.643798828125,
+              27.356201171875
+            ],
+            [
+              10.356201171875,
+              44.356201171875
+            ],
+            [
+              10.356201171875,
+              47.356201171875
+            ],
+            [
+              6.643798828125,
+              47.356201171875
+            ],
+            [
+              6.643798828125,
+              43.356201171875
+            ],
+            [
+              1.356201171875,
+              43.356201171875
+            ],
+            [
+              1.356201171875,
+              47.356201171875
+            ],
+            [
+              0.643798828125,
+              47.356201171875
+            ],
+            [
+              0.643798828125,
+              37.643798828125
+            ],
+            [
+              1.356201171875,
+              37.643798828125
+            ],
+            [
+              1.356201171875,
+              39.643798828125
+            ],
+            [
+              3.643798828125,
+              39.643798828125
+            ],
+            [
+              3.643798828125,
+              38.643798828125
+            ],
+            [
+              6.643798828125,
+              38.643798828125
+            ],
+            [
+              6.643798828125,
+              36.643798828125
+            ],
+            [
+              8.643798828125,
+              36.643798828125
+            ],
+            [
+              8.643798828125,
+              33.356201171875
+            ],
+            [
+              7.643798828125,
+              33.356201171875
+            ],
+            [
+              7.643798828125,
+              32.356201171875
+            ],
+            [
+              6.643798828125,
+              32.356201171875
+            ],
+            [
+              6.643798828125,
+              31.356201171875
+            ],
+            [
+              5.643798828125,
+              31.356201171875
+            ],
+            [
+              5.643798828125,
+              30.356201171875
+            ],
+            [
+              4.643798828125,
+              30.356201171875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000011",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            4.0,
-            47.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              4.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              4.0,
+              6.0,
+              11.0
+            ],
+            [
+              12.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              11.0,
+              13.0
+            ],
+            [
+              4.0,
+              13.0,
+              14.0
+            ],
+            [
+              12.0,
+              0.0,
+              15.0
+            ],
+            [
+              10.0,
+              12.0,
+              15.0
+            ],
+            [
+              10.0,
+              15.0,
+              16.0
+            ],
+            [
+              3.0,
+              2.0,
+              17.0
+            ],
+            [
+              16.0,
+              3.0,
+              17.0
+            ],
+            [
+              10.0,
+              16.0,
+              17.0
+            ],
+            [
+              10.0,
+              17.0,
+              18.0
+            ],
+            [
+              19.0,
+              10.0,
+              18.0
+            ],
+            [
+              20.0,
+              21.0,
+              22.0
+            ],
+            [
+              22.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              26.0,
+              27.0,
+              28.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              32.0,
+              33.0,
+              34.0
+            ],
+            [
+              32.0,
+              34.0,
+              35.0
+            ],
+            [
+              36.0,
+              8.0,
+              4.0
+            ],
+            [
+              36.0,
+              4.0,
+              14.0
+            ],
+            [
+              37.0,
+              36.0,
+              14.0
+            ],
+            [
+              37.0,
+              14.0,
+              38.0
+            ],
+            [
+              39.0,
+              37.0,
+              38.0
+            ],
+            [
+              18.0,
+              32.0,
+              35.0
+            ],
+            [
+              11.0,
+              31.0,
+              20.0
+            ],
+            [
+              13.0,
+              11.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              22.0
+            ],
+            [
+              13.0,
+              22.0,
+              24.0
+            ],
+            [
+              13.0,
+              24.0,
+              26.0
+            ],
+            [
+              13.0,
+              26.0,
+              28.0
+            ],
+            [
+              40.0,
+              13.0,
+              28.0
+            ],
+            [
+              40.0,
+              28.0,
+              41.0
+            ],
+            [
+              38.0,
+              40.0,
+              41.0
+            ],
+            [
+              29.0,
+              31.0,
+              11.0
+            ],
+            [
+              29.0,
+              11.0,
+              10.0
+            ],
+            [
+              42.0,
+              29.0,
+              10.0
+            ],
+            [
+              42.0,
+              10.0,
+              43.0
+            ],
+            [
+              44.0,
+              42.0,
+              43.0
+            ],
+            [
+              45.0,
+              44.0,
+              43.0
+            ],
+            [
+              45.0,
+              43.0,
+              46.0
+            ],
+            [
+              45.0,
+              46.0,
+              19.0
+            ],
+            [
+              39.0,
+              38.0,
+              41.0
+            ],
+            [
+              47.0,
+              39.0,
+              41.0
+            ],
+            [
+              35.0,
+              47.0,
+              41.0
+            ],
+            [
+              35.0,
+              41.0,
+              45.0
+            ],
+            [
+              18.0,
+              35.0,
+              45.0
+            ],
+            [
+              18.0,
+              45.0,
+              19.0
+            ]
+          ],
+          "radius_gu": 0.4640388251536718,
+          "radius_key": "7cfe86e6cfb2dd3f",
+          "vertices_ground_gu": [
+            [
+              15.489013671875,
+              47.489013671875
+            ],
+            [
+              42.3193359375,
+              47.510986328125
+            ],
+            [
+              6.489013671875,
+              47.510986328125
+            ],
+            [
+              10.510986328125,
+              47.489013671875
+            ],
+            [
+              47.510986328125,
+              0.489013671875
+            ],
+            [
+              47.510986328125,
+              41.8555908203125
+            ],
+            [
+              47.3148193359375,
+              41.610595703125
+            ],
+            [
+              41.09814453125,
+              46.2896728515625
+            ],
+            [
+              6.489013671875,
+              0.7974853515625
+            ],
+            [
+              6.1806640625,
+              0.489013671875
+            ],
+            [
+              3.489013671875,
+              39.489013671875
+            ],
+            [
+              44.9034423828125,
+              40.405029296875
+            ],
+            [
+              40.405029296875,
+              44.9034423828125
+            ],
+            [
+              4.489013671875,
+              29.489013671875
+            ],
+            [
+              4.489013671875,
+              27.510986328125
+            ],
+            [
+              15.489013671875,
+              44.510986328125
+            ],
+            [
+              10.510986328125,
+              44.510986328125
+            ],
+            [
+              6.489013671875,
+              43.510986328125
+            ],
+            [
+              1.510986328125,
+              43.510986328125
+            ],
+            [
+              1.510986328125,
+              39.489013671875
+            ],
+            [
+              8.489013671875,
+              33.510986328125
+            ],
+            [
+              7.489013671875,
+              33.510986328125
+            ],
+            [
+              7.489013671875,
+              32.510986328125
+            ],
+            [
+              6.489013671875,
+              32.510986328125
+            ],
+            [
+              6.489013671875,
+              31.510986328125
+            ],
+            [
+              5.489013671875,
+              31.510986328125
+            ],
+            [
+              5.489013671875,
+              30.510986328125
+            ],
+            [
+              4.489013671875,
+              30.510986328125
+            ],
+            [
+              4.489013671875,
+              29.510986328125
+            ],
+            [
+              6.489013671875,
+              38.489013671875
+            ],
+            [
+              6.489013671875,
+              36.489013671875
+            ],
+            [
+              8.489013671875,
+              36.489013671875
+            ],
+            [
+              1.510986328125,
+              47.489013671875
+            ],
+            [
+              2.510986328125,
+              47.489013671875
+            ],
+            [
+              2.510986328125,
+              47.510986328125
+            ],
+            [
+              0.489013671875,
+              47.510986328125
+            ],
+            [
+              6.489013671875,
+              3.2025146484375
+            ],
+            [
+              3.2025146484375,
+              6.489013671875
+            ],
+            [
+              2.510986328125,
+              27.510986328125
+            ],
+            [
+              0.7974853515625,
+              6.489013671875
+            ],
+            [
+              2.510986328125,
+              29.489013671875
+            ],
+            [
+              0.510986328125,
+              29.510986328125
+            ],
+            [
+              3.510986328125,
+              38.489013671875
+            ],
+            [
+              3.489013671875,
+              37.510986328125
+            ],
+            [
+              3.510986328125,
+              37.489013671875
+            ],
+            [
+              0.510986328125,
+              37.489013671875
+            ],
+            [
+              1.510986328125,
+              37.510986328125
+            ],
+            [
+              0.489013671875,
+              6.1806640625
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000012",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            47.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              10.0
+            ],
+            [
+              11.0,
+              12.0,
+              4.0
+            ],
+            [
+              13.0,
+              14.0,
+              15.0
+            ],
+            [
+              4.0,
+              6.0,
+              14.0
+            ],
+            [
+              15.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              14.0,
+              16.0
+            ],
+            [
+              4.0,
+              16.0,
+              17.0
+            ],
+            [
+              15.0,
+              0.0,
+              18.0
+            ],
+            [
+              13.0,
+              15.0,
+              18.0
+            ],
+            [
+              13.0,
+              18.0,
+              19.0
+            ],
+            [
+              3.0,
+              2.0,
+              20.0
+            ],
+            [
+              19.0,
+              3.0,
+              20.0
+            ],
+            [
+              13.0,
+              19.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              21.0
+            ],
+            [
+              22.0,
+              13.0,
+              21.0
+            ],
+            [
+              23.0,
+              24.0,
+              25.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              27.0,
+              28.0,
+              29.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              32.0,
+              33.0,
+              34.0
+            ],
+            [
+              35.0,
+              36.0,
+              37.0
+            ],
+            [
+              35.0,
+              37.0,
+              8.0
+            ],
+            [
+              38.0,
+              11.0,
+              4.0
+            ],
+            [
+              38.0,
+              4.0,
+              17.0
+            ],
+            [
+              39.0,
+              38.0,
+              17.0
+            ],
+            [
+              39.0,
+              17.0,
+              40.0
+            ],
+            [
+              10.0,
+              39.0,
+              40.0
+            ],
+            [
+              14.0,
+              34.0,
+              23.0
+            ],
+            [
+              16.0,
+              14.0,
+              23.0
+            ],
+            [
+              16.0,
+              23.0,
+              25.0
+            ],
+            [
+              16.0,
+              25.0,
+              27.0
+            ],
+            [
+              16.0,
+              27.0,
+              29.0
+            ],
+            [
+              16.0,
+              29.0,
+              31.0
+            ],
+            [
+              41.0,
+              16.0,
+              31.0
+            ],
+            [
+              41.0,
+              31.0,
+              42.0
+            ],
+            [
+              40.0,
+              41.0,
+              42.0
+            ],
+            [
+              21.0,
+              35.0,
+              8.0
+            ],
+            [
+              32.0,
+              34.0,
+              14.0
+            ],
+            [
+              32.0,
+              14.0,
+              13.0
+            ],
+            [
+              43.0,
+              32.0,
+              13.0
+            ],
+            [
+              43.0,
+              13.0,
+              44.0
+            ],
+            [
+              45.0,
+              43.0,
+              44.0
+            ],
+            [
+              46.0,
+              45.0,
+              44.0
+            ],
+            [
+              46.0,
+              44.0,
+              47.0
+            ],
+            [
+              46.0,
+              47.0,
+              22.0
+            ],
+            [
+              10.0,
+              40.0,
+              42.0
+            ],
+            [
+              8.0,
+              10.0,
+              42.0
+            ],
+            [
+              8.0,
+              42.0,
+              46.0
+            ],
+            [
+              21.0,
+              8.0,
+              46.0
+            ],
+            [
+              21.0,
+              46.0,
+              22.0
+            ]
+          ],
+          "radius_gu": 0.37565047750535335,
+          "radius_key": "892fe74ca80ad83f",
+          "vertices_ground_gu": [
+            [
+              15.400634765625,
+              47.400634765625
+            ],
+            [
+              42.5328369140625,
+              47.599365234375
+            ],
+            [
+              6.400634765625,
+              47.599365234375
+            ],
+            [
+              10.599365234375,
+              47.400634765625
+            ],
+            [
+              47.599365234375,
+              0.400634765625
+            ],
+            [
+              47.599365234375,
+              42.1077880859375
+            ],
+            [
+              47.2578125,
+              41.680908203125
+            ],
+            [
+              41.1707763671875,
+              46.2373046875
+            ],
+            [
+              0.400634765625,
+              47.599365234375
+            ],
+            [
+              0.400634765625,
+              5.9671630859375
+            ],
+            [
+              0.8341064453125,
+              6.400634765625
+            ],
+            [
+              6.400634765625,
+              0.8341064453125
+            ],
+            [
+              5.9671630859375,
+              0.400634765625
+            ],
+            [
+              3.400634765625,
+              39.400634765625
+            ],
+            [
+              44.9208984375,
+              40.512451171875
+            ],
+            [
+              40.512451171875,
+              44.9208984375
+            ],
+            [
+              4.400634765625,
+              29.400634765625
+            ],
+            [
+              4.400634765625,
+              27.599365234375
+            ],
+            [
+              15.400634765625,
+              44.599365234375
+            ],
+            [
+              10.599365234375,
+              44.599365234375
+            ],
+            [
+              6.400634765625,
+              43.599365234375
+            ],
+            [
+              1.599365234375,
+              43.599365234375
+            ],
+            [
+              1.599365234375,
+              39.400634765625
+            ],
+            [
+              8.400634765625,
+              33.599365234375
+            ],
+            [
+              7.400634765625,
+              33.599365234375
+            ],
+            [
+              7.400634765625,
+              32.599365234375
+            ],
+            [
+              6.400634765625,
+              32.599365234375
+            ],
+            [
+              6.400634765625,
+              31.599365234375
+            ],
+            [
+              5.400634765625,
+              31.599365234375
+            ],
+            [
+              5.400634765625,
+              30.599365234375
+            ],
+            [
+              4.400634765625,
+              30.599365234375
+            ],
+            [
+              4.400634765625,
+              29.599365234375
+            ],
+            [
+              6.400634765625,
+              38.400634765625
+            ],
+            [
+              6.400634765625,
+              36.400634765625
+            ],
+            [
+              8.400634765625,
+              36.400634765625
+            ],
+            [
+              1.599365234375,
+              47.400634765625
+            ],
+            [
+              2.599365234375,
+              47.400634765625
+            ],
+            [
+              2.599365234375,
+              47.599365234375
+            ],
+            [
+              6.400634765625,
+              3.1658935546875
+            ],
+            [
+              3.1658935546875,
+              6.400634765625
+            ],
+            [
+              2.599365234375,
+              27.599365234375
+            ],
+            [
+              2.599365234375,
+              29.400634765625
+            ],
+            [
+              0.599365234375,
+              29.599365234375
+            ],
+            [
+              3.599365234375,
+              38.400634765625
+            ],
+            [
+              3.400634765625,
+              37.599365234375
+            ],
+            [
+              3.599365234375,
+              37.400634765625
+            ],
+            [
+              0.599365234375,
+              37.400634765625
+            ],
+            [
+              1.599365234375,
+              37.599365234375
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      }
-    ],
-    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              3.0,
+              2.0
+            ],
+            [
+              5.0,
+              6.0,
+              7.0
+            ],
+            [
+              8.0,
+              0.0,
+              3.0
+            ],
+            [
+              9.0,
+              10.0,
+              11.0
+            ],
+            [
+              12.0,
+              13.0,
+              5.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              5.0,
+              7.0,
+              15.0
+            ],
+            [
+              16.0,
+              8.0,
+              3.0
+            ],
+            [
+              5.0,
+              15.0,
+              17.0
+            ],
+            [
+              5.0,
+              17.0,
+              18.0
+            ],
+            [
+              4.0,
+              2.0,
+              19.0
+            ],
+            [
+              20.0,
+              4.0,
+              19.0
+            ],
+            [
+              16.0,
+              3.0,
+              21.0
+            ],
+            [
+              14.0,
+              16.0,
+              21.0
+            ],
+            [
+              14.0,
+              21.0,
+              20.0
+            ],
+            [
+              14.0,
+              20.0,
+              19.0
+            ],
+            [
+              14.0,
+              19.0,
+              22.0
+            ],
+            [
+              23.0,
+              14.0,
+              22.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              26.0,
+              27.0,
+              28.0
+            ],
+            [
+              28.0,
+              29.0,
+              30.0
+            ],
+            [
+              30.0,
+              31.0,
+              32.0
+            ],
+            [
+              33.0,
+              34.0,
+              35.0
+            ],
+            [
+              36.0,
+              37.0,
+              38.0
+            ],
+            [
+              36.0,
+              38.0,
+              9.0
+            ],
+            [
+              39.0,
+              12.0,
+              5.0
+            ],
+            [
+              39.0,
+              5.0,
+              18.0
+            ],
+            [
+              40.0,
+              39.0,
+              18.0
+            ],
+            [
+              40.0,
+              18.0,
+              41.0
+            ],
+            [
+              11.0,
+              40.0,
+              41.0
+            ],
+            [
+              15.0,
+              35.0,
+              24.0
+            ],
+            [
+              17.0,
+              15.0,
+              24.0
+            ],
+            [
+              17.0,
+              24.0,
+              26.0
+            ],
+            [
+              17.0,
+              26.0,
+              28.0
+            ],
+            [
+              17.0,
+              28.0,
+              30.0
+            ],
+            [
+              17.0,
+              30.0,
+              32.0
+            ],
+            [
+              42.0,
+              17.0,
+              32.0
+            ],
+            [
+              42.0,
+              32.0,
+              43.0
+            ],
+            [
+              41.0,
+              42.0,
+              43.0
+            ],
+            [
+              22.0,
+              36.0,
+              9.0
+            ],
+            [
+              33.0,
+              35.0,
+              15.0
+            ],
+            [
+              33.0,
+              15.0,
+              14.0
+            ],
+            [
+              44.0,
+              33.0,
+              14.0
+            ],
+            [
+              44.0,
+              14.0,
+              45.0
+            ],
+            [
+              46.0,
+              44.0,
+              45.0
+            ],
+            [
+              47.0,
+              46.0,
+              45.0
+            ],
+            [
+              47.0,
+              45.0,
+              48.0
+            ],
+            [
+              47.0,
+              48.0,
+              23.0
+            ],
+            [
+              11.0,
+              41.0,
+              43.0
+            ],
+            [
+              9.0,
+              11.0,
+              43.0
+            ],
+            [
+              9.0,
+              43.0,
+              47.0
+            ],
+            [
+              22.0,
+              9.0,
+              47.0
+            ],
+            [
+              22.0,
+              47.0,
+              23.0
+            ]
+          ],
+          "radius_gu": 0.22097086912079608,
+          "radius_key": "bf0a1f00c648cc3f",
+          "vertices_ground_gu": [
+            [
+              42.8543701171875,
+              47.7021484375
+            ],
+            [
+              42.9581298828125,
+              47.7540283203125
+            ],
+            [
+              6.2459716796875,
+              47.7540283203125
+            ],
+            [
+              15.2459716796875,
+              47.2459716796875
+            ],
+            [
+              10.7540283203125,
+              47.2459716796875
+            ],
+            [
+              47.7540283203125,
+              0.2459716796875
+            ],
+            [
+              47.7540283203125,
+              42.5489501953125
+            ],
+            [
+              47.1583251953125,
+              41.80419921875
+            ],
+            [
+              41.2978515625,
+              46.1456298828125
+            ],
+            [
+              0.2459716796875,
+              47.7540283203125
+            ],
+            [
+              0.2459716796875,
+              5.59375
+            ],
+            [
+              0.8980712890625,
+              6.2459716796875
+            ],
+            [
+              6.2459716796875,
+              0.8980712890625
+            ],
+            [
+              5.59375,
+              0.2459716796875
+            ],
+            [
+              3.2459716796875,
+              39.2459716796875
+            ],
+            [
+              44.951416015625,
+              40.7008056640625
+            ],
+            [
+              40.7008056640625,
+              44.951416015625
+            ],
+            [
+              4.2459716796875,
+              29.2459716796875
+            ],
+            [
+              4.2459716796875,
+              27.7540283203125
+            ],
+            [
+              6.2459716796875,
+              43.7540283203125
+            ],
+            [
+              10.7540283203125,
+              44.7540283203125
+            ],
+            [
+              15.2459716796875,
+              44.7540283203125
+            ],
+            [
+              1.7540283203125,
+              43.7540283203125
+            ],
+            [
+              1.7540283203125,
+              39.2459716796875
+            ],
+            [
+              8.2459716796875,
+              33.7540283203125
+            ],
+            [
+              7.2459716796875,
+              33.7540283203125
+            ],
+            [
+              7.2459716796875,
+              32.7540283203125
+            ],
+            [
+              6.2459716796875,
+              32.7540283203125
+            ],
+            [
+              6.2459716796875,
+              31.7540283203125
+            ],
+            [
+              5.2459716796875,
+              31.7540283203125
+            ],
+            [
+              5.2459716796875,
+              30.7540283203125
+            ],
+            [
+              4.2459716796875,
+              30.7540283203125
+            ],
+            [
+              4.2459716796875,
+              29.7540283203125
+            ],
+            [
+              6.2459716796875,
+              38.2459716796875
+            ],
+            [
+              6.2459716796875,
+              36.2459716796875
+            ],
+            [
+              8.2459716796875,
+              36.2459716796875
+            ],
+            [
+              1.7540283203125,
+              47.2459716796875
+            ],
+            [
+              2.7540283203125,
+              47.2459716796875
+            ],
+            [
+              2.7540283203125,
+              47.7540283203125
+            ],
+            [
+              6.2459716796875,
+              3.1019287109375
+            ],
+            [
+              3.1019287109375,
+              6.2459716796875
+            ],
+            [
+              2.7540283203125,
+              27.7540283203125
+            ],
+            [
+              2.7540283203125,
+              29.2459716796875
+            ],
+            [
+              0.7540283203125,
+              29.7540283203125
+            ],
+            [
+              3.7540283203125,
+              38.2459716796875
+            ],
+            [
+              3.2459716796875,
+              37.7540283203125
+            ],
+            [
+              3.7540283203125,
+              37.2459716796875
+            ],
+            [
+              0.7540283203125,
+              37.2459716796875
+            ],
+            [
+              1.7540283203125,
+              37.7540283203125
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              4.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              4.0,
+              6.0,
+              11.0
+            ],
+            [
+              12.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              11.0,
+              13.0
+            ],
+            [
+              4.0,
+              13.0,
+              14.0
+            ],
+            [
+              12.0,
+              0.0,
+              15.0
+            ],
+            [
+              10.0,
+              12.0,
+              15.0
+            ],
+            [
+              10.0,
+              15.0,
+              16.0
+            ],
+            [
+              3.0,
+              2.0,
+              17.0
+            ],
+            [
+              16.0,
+              3.0,
+              17.0
+            ],
+            [
+              10.0,
+              16.0,
+              17.0
+            ],
+            [
+              10.0,
+              17.0,
+              18.0
+            ],
+            [
+              19.0,
+              10.0,
+              18.0
+            ],
+            [
+              20.0,
+              21.0,
+              22.0
+            ],
+            [
+              22.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              26.0,
+              27.0,
+              28.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              32.0,
+              33.0,
+              34.0
+            ],
+            [
+              32.0,
+              34.0,
+              35.0
+            ],
+            [
+              36.0,
+              8.0,
+              4.0
+            ],
+            [
+              36.0,
+              4.0,
+              14.0
+            ],
+            [
+              37.0,
+              36.0,
+              14.0
+            ],
+            [
+              37.0,
+              14.0,
+              38.0
+            ],
+            [
+              39.0,
+              37.0,
+              38.0
+            ],
+            [
+              18.0,
+              32.0,
+              35.0
+            ],
+            [
+              11.0,
+              31.0,
+              20.0
+            ],
+            [
+              13.0,
+              11.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              22.0
+            ],
+            [
+              13.0,
+              22.0,
+              24.0
+            ],
+            [
+              13.0,
+              24.0,
+              26.0
+            ],
+            [
+              13.0,
+              26.0,
+              28.0
+            ],
+            [
+              40.0,
+              13.0,
+              28.0
+            ],
+            [
+              40.0,
+              28.0,
+              41.0
+            ],
+            [
+              38.0,
+              40.0,
+              41.0
+            ],
+            [
+              29.0,
+              31.0,
+              11.0
+            ],
+            [
+              29.0,
+              11.0,
+              10.0
+            ],
+            [
+              42.0,
+              29.0,
+              10.0
+            ],
+            [
+              42.0,
+              10.0,
+              43.0
+            ],
+            [
+              44.0,
+              42.0,
+              43.0
+            ],
+            [
+              45.0,
+              44.0,
+              43.0
+            ],
+            [
+              45.0,
+              43.0,
+              46.0
+            ],
+            [
+              45.0,
+              46.0,
+              19.0
+            ],
+            [
+              39.0,
+              38.0,
+              41.0
+            ],
+            [
+              47.0,
+              39.0,
+              41.0
+            ],
+            [
+              35.0,
+              47.0,
+              41.0
+            ],
+            [
+              35.0,
+              41.0,
+              45.0
+            ],
+            [
+              18.0,
+              35.0,
+              45.0
+            ],
+            [
+              18.0,
+              45.0,
+              19.0
+            ]
+          ],
+          "radius_gu": 0.44194173824159216,
+          "radius_key": "bf0a1f00c648dc3f",
+          "vertices_ground_gu": [
+            [
+              15.4669189453125,
+              47.4669189453125
+            ],
+            [
+              42.372802734375,
+              47.5330810546875
+            ],
+            [
+              6.4669189453125,
+              47.5330810546875
+            ],
+            [
+              10.5330810546875,
+              47.4669189453125
+            ],
+            [
+              47.5330810546875,
+              0.4669189453125
+            ],
+            [
+              47.5330810546875,
+              41.918701171875
+            ],
+            [
+              47.3006591796875,
+              41.6282958984375
+            ],
+            [
+              41.1162109375,
+              46.276611328125
+            ],
+            [
+              6.4669189453125,
+              0.8065185546875
+            ],
+            [
+              6.127197265625,
+              0.4669189453125
+            ],
+            [
+              3.4669189453125,
+              39.4669189453125
+            ],
+            [
+              44.9078369140625,
+              40.431884765625
+            ],
+            [
+              40.431884765625,
+              44.9078369140625
+            ],
+            [
+              4.4669189453125,
+              29.4669189453125
+            ],
+            [
+              4.4669189453125,
+              27.5330810546875
+            ],
+            [
+              15.4669189453125,
+              44.5330810546875
+            ],
+            [
+              10.5330810546875,
+              44.5330810546875
+            ],
+            [
+              6.4669189453125,
+              43.5330810546875
+            ],
+            [
+              1.5330810546875,
+              43.5330810546875
+            ],
+            [
+              1.5330810546875,
+              39.4669189453125
+            ],
+            [
+              8.4669189453125,
+              33.5330810546875
+            ],
+            [
+              7.4669189453125,
+              33.5330810546875
+            ],
+            [
+              7.4669189453125,
+              32.5330810546875
+            ],
+            [
+              6.4669189453125,
+              32.5330810546875
+            ],
+            [
+              6.4669189453125,
+              31.5330810546875
+            ],
+            [
+              5.4669189453125,
+              31.5330810546875
+            ],
+            [
+              5.4669189453125,
+              30.5330810546875
+            ],
+            [
+              4.4669189453125,
+              30.5330810546875
+            ],
+            [
+              4.4669189453125,
+              29.5330810546875
+            ],
+            [
+              6.4669189453125,
+              38.4669189453125
+            ],
+            [
+              6.4669189453125,
+              36.4669189453125
+            ],
+            [
+              8.4669189453125,
+              36.4669189453125
+            ],
+            [
+              1.5330810546875,
+              47.4669189453125
+            ],
+            [
+              2.5330810546875,
+              47.4669189453125
+            ],
+            [
+              2.5330810546875,
+              47.5330810546875
+            ],
+            [
+              0.4669189453125,
+              47.5330810546875
+            ],
+            [
+              6.4669189453125,
+              3.1934814453125
+            ],
+            [
+              3.1934814453125,
+              6.4669189453125
+            ],
+            [
+              2.5330810546875,
+              27.5330810546875
+            ],
+            [
+              0.8065185546875,
+              6.4669189453125
+            ],
+            [
+              2.5330810546875,
+              29.4669189453125
+            ],
+            [
+              0.5330810546875,
+              29.5330810546875
+            ],
+            [
+              3.5330810546875,
+              38.4669189453125
+            ],
+            [
+              3.4669189453125,
+              37.5330810546875
+            ],
+            [
+              3.5330810546875,
+              37.4669189453125
+            ],
+            [
+              0.5330810546875,
+              37.4669189453125
+            ],
+            [
+              1.5330810546875,
+              37.5330810546875
+            ],
+            [
+              0.4669189453125,
+              6.127197265625
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              10.0
+            ],
+            [
+              11.0,
+              12.0,
+              4.0
+            ],
+            [
+              13.0,
+              14.0,
+              15.0
+            ],
+            [
+              4.0,
+              6.0,
+              14.0
+            ],
+            [
+              15.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              14.0,
+              16.0
+            ],
+            [
+              4.0,
+              16.0,
+              17.0
+            ],
+            [
+              15.0,
+              0.0,
+              18.0
+            ],
+            [
+              13.0,
+              15.0,
+              18.0
+            ],
+            [
+              13.0,
+              18.0,
+              19.0
+            ],
+            [
+              3.0,
+              2.0,
+              20.0
+            ],
+            [
+              19.0,
+              3.0,
+              20.0
+            ],
+            [
+              13.0,
+              19.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              21.0
+            ],
+            [
+              22.0,
+              13.0,
+              21.0
+            ],
+            [
+              23.0,
+              24.0,
+              25.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              27.0,
+              28.0,
+              29.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              32.0,
+              33.0,
+              34.0
+            ],
+            [
+              35.0,
+              36.0,
+              37.0
+            ],
+            [
+              35.0,
+              37.0,
+              8.0
+            ],
+            [
+              38.0,
+              11.0,
+              4.0
+            ],
+            [
+              38.0,
+              4.0,
+              17.0
+            ],
+            [
+              39.0,
+              38.0,
+              17.0
+            ],
+            [
+              40.0,
+              39.0,
+              17.0
+            ],
+            [
+              41.0,
+              40.0,
+              17.0
+            ],
+            [
+              41.0,
+              17.0,
+              42.0
+            ],
+            [
+              10.0,
+              41.0,
+              42.0
+            ],
+            [
+              14.0,
+              34.0,
+              23.0
+            ],
+            [
+              16.0,
+              14.0,
+              23.0
+            ],
+            [
+              16.0,
+              23.0,
+              25.0
+            ],
+            [
+              16.0,
+              25.0,
+              27.0
+            ],
+            [
+              16.0,
+              27.0,
+              29.0
+            ],
+            [
+              16.0,
+              29.0,
+              31.0
+            ],
+            [
+              43.0,
+              16.0,
+              31.0
+            ],
+            [
+              43.0,
+              31.0,
+              44.0
+            ],
+            [
+              42.0,
+              43.0,
+              44.0
+            ],
+            [
+              21.0,
+              35.0,
+              8.0
+            ],
+            [
+              32.0,
+              34.0,
+              14.0
+            ],
+            [
+              32.0,
+              14.0,
+              13.0
+            ],
+            [
+              45.0,
+              32.0,
+              13.0
+            ],
+            [
+              45.0,
+              13.0,
+              46.0
+            ],
+            [
+              47.0,
+              45.0,
+              46.0
+            ],
+            [
+              48.0,
+              47.0,
+              46.0
+            ],
+            [
+              48.0,
+              46.0,
+              49.0
+            ],
+            [
+              48.0,
+              49.0,
+              22.0
+            ],
+            [
+              10.0,
+              42.0,
+              44.0
+            ],
+            [
+              8.0,
+              10.0,
+              44.0
+            ],
+            [
+              8.0,
+              44.0,
+              48.0
+            ],
+            [
+              21.0,
+              8.0,
+              48.0
+            ],
+            [
+              21.0,
+              48.0,
+              22.0
+            ]
+          ],
+          "radius_gu": 0.35355339059327373,
+          "radius_key": "cc3b7f669ea0d63f",
+          "vertices_ground_gu": [
+            [
+              15.3785400390625,
+              47.3785400390625
+            ],
+            [
+              42.5860595703125,
+              47.6214599609375
+            ],
+            [
+              6.3785400390625,
+              47.6214599609375
+            ],
+            [
+              10.6214599609375,
+              47.3785400390625
+            ],
+            [
+              47.6214599609375,
+              0.3785400390625
+            ],
+            [
+              47.6214599609375,
+              42.1707763671875
+            ],
+            [
+              47.24365234375,
+              41.6986083984375
+            ],
+            [
+              41.18896484375,
+              46.2242431640625
+            ],
+            [
+              0.3785400390625,
+              47.6214599609375
+            ],
+            [
+              0.3785400390625,
+              5.9139404296875
+            ],
+            [
+              0.8431396484375,
+              6.3785400390625
+            ],
+            [
+              6.3785400390625,
+              0.8431396484375
+            ],
+            [
+              5.9140625,
+              0.3785400390625
+            ],
+            [
+              3.3785400390625,
+              39.3785400390625
+            ],
+            [
+              44.92529296875,
+              40.5394287109375
+            ],
+            [
+              40.5394287109375,
+              44.92529296875
+            ],
+            [
+              4.3785400390625,
+              29.3785400390625
+            ],
+            [
+              4.3785400390625,
+              27.6214599609375
+            ],
+            [
+              15.3785400390625,
+              44.6214599609375
+            ],
+            [
+              10.6214599609375,
+              44.6214599609375
+            ],
+            [
+              6.3785400390625,
+              43.6214599609375
+            ],
+            [
+              1.6214599609375,
+              43.6214599609375
+            ],
+            [
+              1.6214599609375,
+              39.3785400390625
+            ],
+            [
+              8.3785400390625,
+              33.6214599609375
+            ],
+            [
+              7.3785400390625,
+              33.6214599609375
+            ],
+            [
+              7.3785400390625,
+              32.6214599609375
+            ],
+            [
+              6.3785400390625,
+              32.6214599609375
+            ],
+            [
+              6.3785400390625,
+              31.6214599609375
+            ],
+            [
+              5.3785400390625,
+              31.6214599609375
+            ],
+            [
+              5.3785400390625,
+              30.6214599609375
+            ],
+            [
+              4.3785400390625,
+              30.6214599609375
+            ],
+            [
+              4.3785400390625,
+              29.6214599609375
+            ],
+            [
+              6.3785400390625,
+              38.3785400390625
+            ],
+            [
+              6.3785400390625,
+              36.3785400390625
+            ],
+            [
+              8.3785400390625,
+              36.3785400390625
+            ],
+            [
+              1.6214599609375,
+              47.3785400390625
+            ],
+            [
+              2.6214599609375,
+              47.3785400390625
+            ],
+            [
+              2.6214599609375,
+              47.6214599609375
+            ],
+            [
+              6.3785400390625,
+              3.1568603515625
+            ],
+            [
+              5.2677001953125,
+              4.2677001953125
+            ],
+            [
+              4.2677001953125,
+              5.2677001953125
+            ],
+            [
+              3.1568603515625,
+              6.3785400390625
+            ],
+            [
+              2.6214599609375,
+              27.6214599609375
+            ],
+            [
+              2.6214599609375,
+              29.3785400390625
+            ],
+            [
+              0.6214599609375,
+              29.6214599609375
+            ],
+            [
+              3.6214599609375,
+              38.3785400390625
+            ],
+            [
+              3.3785400390625,
+              37.6214599609375
+            ],
+            [
+              3.6214599609375,
+              37.3785400390625
+            ],
+            [
+              0.6214599609375,
+              37.3785400390625
+            ],
+            [
+              1.6214599609375,
+              37.6214599609375
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              0.0,
+              2.0
+            ],
+            [
+              4.0,
+              5.0,
+              6.0
+            ],
+            [
+              7.0,
+              1.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              10.0
+            ],
+            [
+              11.0,
+              12.0,
+              4.0
+            ],
+            [
+              13.0,
+              14.0,
+              15.0
+            ],
+            [
+              13.0,
+              15.0,
+              16.0
+            ],
+            [
+              13.0,
+              16.0,
+              17.0
+            ],
+            [
+              4.0,
+              6.0,
+              14.0
+            ],
+            [
+              17.0,
+              7.0,
+              0.0
+            ],
+            [
+              4.0,
+              14.0,
+              18.0
+            ],
+            [
+              4.0,
+              18.0,
+              19.0
+            ],
+            [
+              3.0,
+              2.0,
+              20.0
+            ],
+            [
+              21.0,
+              3.0,
+              20.0
+            ],
+            [
+              17.0,
+              0.0,
+              22.0
+            ],
+            [
+              13.0,
+              17.0,
+              22.0
+            ],
+            [
+              13.0,
+              22.0,
+              21.0
+            ],
+            [
+              13.0,
+              21.0,
+              20.0
+            ],
+            [
+              13.0,
+              20.0,
+              23.0
+            ],
+            [
+              24.0,
+              13.0,
+              23.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              27.0,
+              28.0,
+              29.0
+            ],
+            [
+              29.0,
+              30.0,
+              31.0
+            ],
+            [
+              31.0,
+              32.0,
+              33.0
+            ],
+            [
+              34.0,
+              35.0,
+              36.0
+            ],
+            [
+              37.0,
+              38.0,
+              39.0
+            ],
+            [
+              37.0,
+              39.0,
+              8.0
+            ],
+            [
+              40.0,
+              11.0,
+              4.0
+            ],
+            [
+              40.0,
+              4.0,
+              19.0
+            ],
+            [
+              41.0,
+              40.0,
+              19.0
+            ],
+            [
+              41.0,
+              19.0,
+              42.0
+            ],
+            [
+              10.0,
+              41.0,
+              42.0
+            ],
+            [
+              14.0,
+              36.0,
+              25.0
+            ],
+            [
+              18.0,
+              14.0,
+              25.0
+            ],
+            [
+              18.0,
+              25.0,
+              27.0
+            ],
+            [
+              18.0,
+              27.0,
+              29.0
+            ],
+            [
+              18.0,
+              29.0,
+              31.0
+            ],
+            [
+              18.0,
+              31.0,
+              33.0
+            ],
+            [
+              43.0,
+              18.0,
+              33.0
+            ],
+            [
+              43.0,
+              33.0,
+              44.0
+            ],
+            [
+              42.0,
+              43.0,
+              44.0
+            ],
+            [
+              23.0,
+              37.0,
+              8.0
+            ],
+            [
+              34.0,
+              36.0,
+              14.0
+            ],
+            [
+              34.0,
+              14.0,
+              13.0
+            ],
+            [
+              45.0,
+              34.0,
+              13.0
+            ],
+            [
+              45.0,
+              13.0,
+              46.0
+            ],
+            [
+              47.0,
+              45.0,
+              46.0
+            ],
+            [
+              48.0,
+              47.0,
+              46.0
+            ],
+            [
+              48.0,
+              46.0,
+              49.0
+            ],
+            [
+              48.0,
+              49.0,
+              24.0
+            ],
+            [
+              10.0,
+              42.0,
+              44.0
+            ],
+            [
+              8.0,
+              10.0,
+              44.0
+            ],
+            [
+              8.0,
+              44.0,
+              48.0
+            ],
+            [
+              23.0,
+              8.0,
+              48.0
+            ],
+            [
+              23.0,
+              48.0,
+              24.0
+            ]
+          ],
+          "radius_gu": 0.2651650429449553,
+          "radius_key": "d96cdfcc76f8d03f",
+          "vertices_ground_gu": [
+            [
+              15.2901611328125,
+              47.2901611328125
+            ],
+            [
+              42.799560546875,
+              47.7098388671875
+            ],
+            [
+              6.2901611328125,
+              47.7098388671875
+            ],
+            [
+              10.7098388671875,
+              47.2901611328125
+            ],
+            [
+              47.7098388671875,
+              0.2901611328125
+            ],
+            [
+              47.7098388671875,
+              42.4228515625
+            ],
+            [
+              47.186767578125,
+              41.7689208984375
+            ],
+            [
+              41.2615966796875,
+              46.171875
+            ],
+            [
+              0.2901611328125,
+              47.7098388671875
+            ],
+            [
+              0.2901611328125,
+              5.700439453125
+            ],
+            [
+              0.8798828125,
+              6.2901611328125
+            ],
+            [
+              6.2901611328125,
+              0.8798828125
+            ],
+            [
+              5.700439453125,
+              0.2901611328125
+            ],
+            [
+              3.2901611328125,
+              39.2901611328125
+            ],
+            [
+              44.942626953125,
+              40.6468505859375
+            ],
+            [
+              43.7947998046875,
+              41.7947998046875
+            ],
+            [
+              41.7947998046875,
+              43.7947998046875
+            ],
+            [
+              40.6468505859375,
+              44.942626953125
+            ],
+            [
+              4.2901611328125,
+              29.2901611328125
+            ],
+            [
+              4.2901611328125,
+              27.7098388671875
+            ],
+            [
+              6.2901611328125,
+              43.7098388671875
+            ],
+            [
+              10.7098388671875,
+              44.7098388671875
+            ],
+            [
+              15.2901611328125,
+              44.7098388671875
+            ],
+            [
+              1.7098388671875,
+              43.7098388671875
+            ],
+            [
+              1.7098388671875,
+              39.2901611328125
+            ],
+            [
+              8.2901611328125,
+              33.7098388671875
+            ],
+            [
+              7.2901611328125,
+              33.7098388671875
+            ],
+            [
+              7.2901611328125,
+              32.7098388671875
+            ],
+            [
+              6.2901611328125,
+              32.7098388671875
+            ],
+            [
+              6.2901611328125,
+              31.7098388671875
+            ],
+            [
+              5.2901611328125,
+              31.7098388671875
+            ],
+            [
+              5.2901611328125,
+              30.7098388671875
+            ],
+            [
+              4.2901611328125,
+              30.7098388671875
+            ],
+            [
+              4.2901611328125,
+              29.7098388671875
+            ],
+            [
+              6.2901611328125,
+              38.2901611328125
+            ],
+            [
+              6.2901611328125,
+              36.2901611328125
+            ],
+            [
+              8.2901611328125,
+              36.2901611328125
+            ],
+            [
+              1.7098388671875,
+              47.2901611328125
+            ],
+            [
+              2.7098388671875,
+              47.2901611328125
+            ],
+            [
+              2.7098388671875,
+              47.7098388671875
+            ],
+            [
+              6.2901611328125,
+              3.1201171875
+            ],
+            [
+              3.1201171875,
+              6.2901611328125
+            ],
+            [
+              2.7098388671875,
+              27.7098388671875
+            ],
+            [
+              2.7098388671875,
+              29.2901611328125
+            ],
+            [
+              0.7098388671875,
+              29.7098388671875
+            ],
+            [
+              3.7098388671875,
+              38.2901611328125
+            ],
+            [
+              3.2901611328125,
+              37.7098388671875
+            ],
+            [
+              3.7098388671875,
+              37.2901611328125
+            ],
+            [
+              0.7098388671875,
+              37.2901611328125
+            ],
+            [
+              1.7098388671875,
+              37.7098388671875
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              6.0,
+              7.0,
+              0.0
+            ],
+            [
+              8.0,
+              9.0,
+              10.0
+            ],
+            [
+              0.0,
+              2.0,
+              11.0
+            ],
+            [
+              12.0,
+              8.0,
+              10.0
+            ],
+            [
+              12.0,
+              10.0,
+              13.0
+            ],
+            [
+              6.0,
+              0.0,
+              11.0
+            ],
+            [
+              14.0,
+              6.0,
+              11.0
+            ],
+            [
+              14.0,
+              11.0,
+              15.0
+            ],
+            [
+              16.0,
+              14.0,
+              15.0
+            ],
+            [
+              16.0,
+              15.0,
+              17.0
+            ],
+            [
+              16.0,
+              17.0,
+              12.0
+            ],
+            [
+              16.0,
+              12.0,
+              13.0
+            ],
+            [
+              18.0,
+              3.0,
+              5.0
+            ],
+            [
+              19.0,
+              18.0,
+              5.0
+            ],
+            [
+              19.0,
+              5.0,
+              16.0
+            ],
+            [
+              20.0,
+              19.0,
+              16.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              25.0,
+              26.0,
+              27.0
+            ],
+            [
+              25.0,
+              27.0,
+              28.0
+            ],
+            [
+              28.0,
+              29.0,
+              30.0
+            ],
+            [
+              25.0,
+              28.0,
+              30.0
+            ],
+            [
+              24.0,
+              25.0,
+              30.0
+            ],
+            [
+              24.0,
+              30.0,
+              31.0
+            ],
+            [
+              31.0,
+              32.0,
+              33.0
+            ],
+            [
+              24.0,
+              31.0,
+              33.0
+            ],
+            [
+              33.0,
+              34.0,
+              35.0
+            ],
+            [
+              36.0,
+              37.0,
+              38.0
+            ],
+            [
+              38.0,
+              39.0,
+              40.0
+            ],
+            [
+              40.0,
+              41.0,
+              42.0
+            ],
+            [
+              42.0,
+              43.0,
+              20.0
+            ],
+            [
+              21.0,
+              24.0,
+              33.0
+            ],
+            [
+              21.0,
+              33.0,
+              35.0
+            ],
+            [
+              13.0,
+              21.0,
+              35.0
+            ],
+            [
+              13.0,
+              35.0,
+              36.0
+            ],
+            [
+              16.0,
+              13.0,
+              36.0
+            ],
+            [
+              20.0,
+              16.0,
+              36.0
+            ],
+            [
+              20.0,
+              36.0,
+              38.0
+            ],
+            [
+              20.0,
+              38.0,
+              40.0
+            ],
+            [
+              20.0,
+              40.0,
+              42.0
+            ]
+          ],
+          "radius_gu": 0.5303300858899106,
+          "radius_key": "d96cdfcc76f8e03f",
+          "vertices_ground_gu": [
+            [
+              47.4447021484375,
+              0.5552978515625
+            ],
+            [
+              47.4447021484375,
+              41.666748046875
+            ],
+            [
+              47.3575439453125,
+              41.557861328125
+            ],
+            [
+              0.5552978515625,
+              29.4447021484375
+            ],
+            [
+              0.5552978515625,
+              6.340576171875
+            ],
+            [
+              0.77001953125,
+              6.5552978515625
+            ],
+            [
+              6.5552978515625,
+              0.77001953125
+            ],
+            [
+              6.340576171875,
+              0.5552978515625
+            ],
+            [
+              41.0435791015625,
+              46.328857421875
+            ],
+            [
+              42.159423828125,
+              47.4447021484375
+            ],
+            [
+              15.5552978515625,
+              47.4447021484375
+            ],
+            [
+              44.8902587890625,
+              40.32421875
+            ],
+            [
+              40.32421875,
+              44.8902587890625
+            ],
+            [
+              15.5552978515625,
+              44.4447021484375
+            ],
+            [
+              6.5552978515625,
+              3.22998046875
+            ],
+            [
+              43.6072998046875,
+              41.6072998046875
+            ],
+            [
+              3.22998046875,
+              6.5552978515625
+            ],
+            [
+              41.6072998046875,
+              43.6072998046875
+            ],
+            [
+              2.4447021484375,
+              29.4447021484375
+            ],
+            [
+              2.4447021484375,
+              27.4447021484375
+            ],
+            [
+              4.5552978515625,
+              27.4447021484375
+            ],
+            [
+              10.4447021484375,
+              44.4447021484375
+            ],
+            [
+              10.4447021484375,
+              47.4447021484375
+            ],
+            [
+              6.5552978515625,
+              47.4447021484375
+            ],
+            [
+              6.5552978515625,
+              43.4447021484375
+            ],
+            [
+              1.4447021484375,
+              43.4447021484375
+            ],
+            [
+              1.4447021484375,
+              47.4447021484375
+            ],
+            [
+              0.5552978515625,
+              47.4447021484375
+            ],
+            [
+              0.5552978515625,
+              37.5552978515625
+            ],
+            [
+              1.4447021484375,
+              37.5552978515625
+            ],
+            [
+              1.4447021484375,
+              39.5552978515625
+            ],
+            [
+              3.5552978515625,
+              39.5552978515625
+            ],
+            [
+              3.5552978515625,
+              38.5552978515625
+            ],
+            [
+              6.5552978515625,
+              38.5552978515625
+            ],
+            [
+              6.5552978515625,
+              36.5552978515625
+            ],
+            [
+              8.5552978515625,
+              36.5552978515625
+            ],
+            [
+              8.5552978515625,
+              33.4447021484375
+            ],
+            [
+              7.5552978515625,
+              33.4447021484375
+            ],
+            [
+              7.5552978515625,
+              32.4447021484375
+            ],
+            [
+              6.5552978515625,
+              32.4447021484375
+            ],
+            [
+              6.5552978515625,
+              31.4447021484375
+            ],
+            [
+              5.5552978515625,
+              31.4447021484375
+            ],
+            [
+              5.5552978515625,
+              30.4447021484375
+            ],
+            [
+              4.5552978515625,
+              30.4447021484375
+            ]
+          ]
+        }
+      ]
+    },
+    "physics_source_id": "published_convex_polygon_parts_gu.v1"
   },
   "design": {
     "design_size": [
@@ -3153,7 +8430,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         190.0,
-        305.333343505859
+        305.3333435058594
       ],
       "asset_id": "user.0d19aae6e127fe6d",
       "base_footprint_tiles": [
@@ -3204,7 +8481,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         190.0,
-        305.333343505859
+        305.3333435058594
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -3234,7 +8511,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         184.0,
-        321.111114501953
+        321.1111145019531
       ],
       "asset_id": "user.d3c477bcd0d11efc",
       "base_footprint_tiles": [
@@ -3285,7 +8562,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         184.0,
-        321.111114501953
+        321.1111145019531
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -3315,7 +8592,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         179.0,
-        302.571441650391
+        302.5714416503906
       ],
       "asset_id": "user.9ccd75cbbbf3147c",
       "base_footprint_tiles": [
@@ -3366,7 +8643,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         179.0,
-        302.571441650391
+        302.5714416503906
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -4125,7 +9402,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         228.0,
-        119.333335876465
+        119.33333587646484
       ],
       "asset_id": "user.boss_entrance.20260823.pincer_nest",
       "base_footprint_tiles": [
@@ -4160,7 +9437,7 @@
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
-      "material_layer_order": 0.0,
+      "material_layer_order": -1.0,
       "movable": true,
       "navigation_policy": "ignore",
       "object_role": "terrain",
@@ -4176,7 +9453,7 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         228.0,
-        119.333335876465
+        119.33333587646484
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
@@ -4206,7 +9483,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         26.0,
-        67.0
+        71.57142639160156
       ],
       "asset_id": "user.portal_gate.20260916.s01_r1_c1",
       "base_footprint_tiles": [
@@ -4235,7 +9512,9 @@
         1.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000018",
+      "instance_scale_level": 4.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4255,15 +9534,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         26.0,
-        67.0
+        71.57142639160156
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        1.0,
-        1.0
+        1.4000000000000004,
+        1.4000000000000004
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4285,7 +9564,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         26.0,
-        67.0
+        71.57142639160156
       ],
       "asset_id": "user.portal_gate.20260916.s01_r1_c1",
       "base_footprint_tiles": [
@@ -4314,7 +9593,9 @@
         1.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000019",
+      "instance_scale_level": 4.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4334,15 +9615,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         26.0,
-        67.0
+        71.57142639160156
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        1.0,
-        1.0
+        1.4000000000000004,
+        1.4000000000000004
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4364,7 +9645,7 @@
       "anchor_mode": "foot_tile",
       "anchor_px": [
         26.0,
-        67.0
+        71.57142639160156
       ],
       "asset_id": "user.portal_gate.20260916.s02_r1_c1",
       "base_footprint_tiles": [
@@ -4393,7 +9674,9 @@
         1.0
       ],
       "instance_base_scale": 1.0,
+      "instance_custom_scale": true,
       "instance_id": "inst_000020",
+      "instance_scale_level": 4.0,
       "layer": "object_base",
       "manual_collision_expected": true,
       "map_collision_override": "disabled",
@@ -4413,15 +9696,15 @@
       "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
       "placement_anchor_px": [
         26.0,
-        67.0
+        71.57142639160156
       ],
       "placement_rule": "inside_map",
       "position_mode": "tile_anchor",
       "rotation_deg": 0.0,
       "runtime_export": true,
       "scale": [
-        1.0,
-        1.0
+        1.4000000000000004,
+        1.4000000000000004
       ],
       "scene_intent": "visual_detail",
       "selectable": true,
@@ -4440,6 +9723,7 @@
       ]
     }
   ],
+  "precision_contract_id": "hc.map_precision.r2",
   "projection_contract_id": "world.ground_projection.iso_64x32.v1",
   "runtime_schema_version": 2.0,
   "semantics": {
@@ -4478,9 +9762,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000001",
@@ -4524,9 +9805,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000002",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000002",
@@ -4570,9 +9848,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000003",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000003",
@@ -4616,8 +9891,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000004",
@@ -4662,8 +9935,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000005",
@@ -4708,8 +9979,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000006",
@@ -4754,9 +10023,7 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "elite",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 1800.0,
+        "respawn_policy_id": "beginner_outdoor",
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000007",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000007",
@@ -4786,8 +10053,17 @@
         "linked_visual_instance_id": "inst_000018",
         "official_connection_id": "portal.world_white_day_gate.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          40.0,
+          41.0
+        ],
         "reciprocal_exit_id": "map_exit_000003",
         "reciprocal_map_key": "world_wooma_forest",
         "requires_leave_before_retrigger": true,
@@ -4829,8 +10105,17 @@
         "linked_visual_instance_id": "inst_000019",
         "official_connection_id": "portal.world_white_day_gate.map_exit_000002",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          6.0,
+          6.0
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "chiyue_valley",
         "requires_leave_before_retrigger": true,
@@ -4871,8 +10156,17 @@
         "linked_visual_instance_id": "inst_000020",
         "official_connection_id": "portal.world_white_day_gate.map_exit_000003",
         "one_way": true,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "one_way_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          41.0,
+          5.0
+        ],
         "requires_leave_before_retrigger": true,
         "return_minimum_seconds": 3.0,
         "return_requires_fresh_activation": true,
@@ -4934,8 +10228,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000001",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000001",
@@ -4980,8 +10272,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000002",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000002",
@@ -5026,8 +10316,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000004",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000004",
@@ -5072,8 +10360,6 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000005",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000005",
@@ -5341,10 +10627,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "4c3d2aa5acde14683a3815d576905f53db0a1d227d3804ce247c74e92c9c0b13",
+      "authoring_sha256": "5a2267e5cff1b4a3801a8be7fb1066d953905977deca581df771130571909269",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 23.0,
-      "document_sha256": "3b088b5a3b98847f419b8a6b420c489b3d648bdd6d50f34c9fb7b410aeb63ffe",
+      "document_revision": 46.0,
+      "document_sha256": "873a0041b41e2aaf079aaf07e68382c8b7519699ec9cc19f7f9b5ff5248e8729",
       "ground_manifest_sha256": "83cd2fcbcb56986390a894caac3caf57b31cf121b8bc9bbaf823679b1d1207b2",
       "ground_state_sha256": "bf353a8225d1f7d915512b1f649004f23222b7dbed6e582a8a3299c05ad46d63",
       "map_key": "world_white_day_gate",
@@ -5354,8 +10640,401 @@
     "display_name": "白日门",
     "editor_schema_version": 5.0,
     "map_id": "world_white_day_gate",
-    "revision": 23.0,
+    "revision": 46.0,
     "runtime_map_id": 910006.0
   },
-  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+  "unit_contract_id": "combat.unit.gu_gs_px.v1",
+  "visual_asset_snapshot": {
+    "assets": {
+      "mse.small_decor.004": {
+        "anchor_px": [
+          173.0,
+          358.0
+        ],
+        "asset_id": "mse.small_decor.004",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          7.0,
+          8.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_004.png",
+        "image_size": [
+          347.0,
+          367.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          331.0,
+          351.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "mse.small_decor.011": {
+        "anchor_px": [
+          139.0,
+          318.0
+        ],
+        "asset_id": "mse.small_decor.011",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_011.png",
+        "image_size": [
+          278.0,
+          378.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          262.0,
+          362.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "mse.small_decor.017": {
+        "anchor_px": [
+          149.0,
+          298.0
+        ],
+        "asset_id": "mse.small_decor.017",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_017.png",
+        "image_size": [
+          298.0,
+          307.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          282.0,
+          291.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "mse.small_decor.018": {
+        "anchor_px": [
+          162.0,
+          362.0
+        ],
+        "asset_id": "mse.small_decor.018",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_018.png",
+        "image_size": [
+          324.0,
+          371.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          308.0,
+          355.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "mse.small_decor.026": {
+        "anchor_px": [
+          208.0,
+          311.0
+        ],
+        "asset_id": "mse.small_decor.026",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          9.0,
+          6.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_026.png",
+        "image_size": [
+          350.0,
+          316.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          334.0,
+          300.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "mse.small_decor.027": {
+        "anchor_px": [
+          176.0,
+          272.0
+        ],
+        "asset_id": "mse.small_decor.027",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          6.0,
+          5.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_027.png",
+        "image_size": [
+          353.0,
+          281.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          337.0,
+          265.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "mse.small_decor.043": {
+        "anchor_px": [
+          178.0,
+          240.0
+        ],
+        "asset_id": "mse.small_decor.043",
+        "asset_type": "small_prop",
+        "category": "visual_detail",
+        "footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/small_decorations_20260822/small_decoration_043.png",
+        "image_size": [
+          356.0,
+          249.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          340.0,
+          233.0
+        ],
+        "semantic_role": "visual_detail"
+      },
+      "user.0d19aae6e127fe6d": {
+        "anchor_px": [
+          190.0,
+          412.0
+        ],
+        "asset_id": "user.0d19aae6e127fe6d",
+        "asset_type": "large_prop",
+        "category": "building",
+        "footprint_tiles": [
+          7.0,
+          6.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/houses_and_tents/11.png",
+        "image_size": [
+          381.0,
+          413.0
+        ],
+        "object_class": "building",
+        "occlusion": true,
+        "semantic_role": ""
+      },
+      "user.9ccd75cbbbf3147c": {
+        "anchor_px": [
+          179.0,
+          394.0
+        ],
+        "asset_id": "user.9ccd75cbbbf3147c",
+        "asset_type": "large_prop",
+        "category": "building",
+        "footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/houses_and_tents/5.png",
+        "image_size": [
+          358.0,
+          395.0
+        ],
+        "object_class": "building",
+        "occlusion": true,
+        "semantic_role": ""
+      },
+      "user.boss_entrance.20260823.pincer_nest": {
+        "anchor_px": [
+          228.0,
+          226.0
+        ],
+        "asset_id": "user.boss_entrance.20260823.pincer_nest",
+        "asset_type": "large_prop",
+        "category": "map_entrance",
+        "footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/boss_entrances_20260823/boss_entrance_pincer_nest.png",
+        "image_size": [
+          456.0,
+          235.0
+        ],
+        "object_class": "map_entrance",
+        "occlusion": false,
+        "selection_bounds_px": [
+          4.0,
+          6.0,
+          448.0,
+          221.0
+        ],
+        "semantic_role": "map_portal"
+      },
+      "user.d3c477bcd0d11efc": {
+        "anchor_px": [
+          184.0,
+          410.0
+        ],
+        "asset_id": "user.d3c477bcd0d11efc",
+        "asset_type": "large_prop",
+        "category": "building",
+        "footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/houses_and_tents/2.png",
+        "image_size": [
+          368.0,
+          411.0
+        ],
+        "object_class": "building",
+        "occlusion": true,
+        "semantic_role": ""
+      },
+      "user.map_exit.20260822.s03_r1_c1": {
+        "anchor_px": [
+          211.0,
+          430.0
+        ],
+        "asset_id": "user.map_exit.20260822.s03_r1_c1",
+        "asset_type": "large_prop",
+        "category": "map_entrance",
+        "footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/new_20260822/map_exit_s03_r1_c1.png",
+        "image_size": [
+          423.0,
+          435.0
+        ],
+        "object_class": "map_entrance",
+        "occlusion": false,
+        "selection_bounds_px": [
+          4.0,
+          4.0,
+          415.0,
+          427.0
+        ],
+        "semantic_role": "map_portal"
+      },
+      "user.map_exit.20260822.s06_r2_c1": {
+        "anchor_px": [
+          205.0,
+          345.0
+        ],
+        "asset_id": "user.map_exit.20260822.s06_r2_c1",
+        "asset_type": "large_prop",
+        "category": "map_entrance",
+        "footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/new_20260822/map_exit_s06_r2_c1.png",
+        "image_size": [
+          411.0,
+          350.0
+        ],
+        "object_class": "map_entrance",
+        "occlusion": false,
+        "selection_bounds_px": [
+          4.0,
+          4.0,
+          403.0,
+          342.0
+        ],
+        "semantic_role": "map_portal"
+      },
+      "user.portal_gate.20260916.s01_r1_c1": {
+        "anchor_px": [
+          26.0,
+          83.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "asset_type": "large_prop",
+        "category": "map_entrance",
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/portal_gates_20260916/portal_gate_bidirectional_blue.png",
+        "image_size": [
+          53.0,
+          88.0
+        ],
+        "object_class": "map_entrance",
+        "occlusion": true,
+        "selection_bounds_px": [
+          4.0,
+          4.0,
+          49.0,
+          84.0
+        ],
+        "semantic_role": "map_portal"
+      },
+      "user.portal_gate.20260916.s02_r1_c1": {
+        "anchor_px": [
+          26.0,
+          83.0
+        ],
+        "asset_id": "user.portal_gate.20260916.s02_r1_c1",
+        "asset_type": "large_prop",
+        "category": "map_entrance",
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/map_entrances/portal_gates_20260916/portal_gate_one_way_red.png",
+        "image_size": [
+          53.0,
+          88.0
+        ],
+        "object_class": "map_entrance",
+        "occlusion": true,
+        "selection_bounds_px": [
+          4.0,
+          4.0,
+          49.0,
+          84.0
+        ],
+        "semantic_role": "map_portal"
+      }
+    },
+    "contract_id": "hc.published_material_geometry.v1",
+    "sha256": "add98050fd0472b69064b7f383070ddef27ff3a6f53bbf8bc54861a5d681a006"
+  }
 }

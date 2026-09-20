@@ -44,13 +44,15 @@
       16.0,
       16.0
     ],
+    "collision_authority": "hc_polygon_v1",
     "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
     "default_connection_mode": "bidirectional",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 33.0,
+    "revision": 111,
+    "runtime_approved": false,
     "source_editor_schema_version": 4.0,
     "template_kind": "custom_empty_map",
     "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
@@ -90,2518 +92,4093 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000001",
+        "collision_id": "poly_000001",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            47.0,
-            80.0,
-            1.0
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              80.0,
+              0.0
+            ],
+            [
+              80.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000002",
+        "collision_id": "poly_000003",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            48.0
+          "points": [
+            [
+              12.0,
+              1.0
+            ],
+            [
+              13.0,
+              1.0
+            ],
+            [
+              13.0,
+              26.0
+            ],
+            [
+              12.0,
+              26.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000003",
+        "collision_id": "poly_000005",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            80.0,
-            1.0
+          "points": [
+            [
+              43.0,
+              1.0
+            ],
+            [
+              44.0,
+              1.0
+            ],
+            [
+              44.0,
+              20.0
+            ],
+            [
+              43.0,
+              20.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000004",
+        "collision_id": "poly_000007",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            79.0,
-            0.0,
-            1.0,
-            48.0
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              48.0
+            ],
+            [
+              0.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000005",
+        "collision_id": "poly_000008",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            51.0,
-            10.0,
-            18.0,
-            1.0
+          "points": [
+            [
+              79.0,
+              0.0
+            ],
+            [
+              80.0,
+              0.0
+            ],
+            [
+              80.0,
+              21.0
+            ],
+            [
+              79.0,
+              21.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000006",
+        "collision_id": "poly_000014",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            59.0,
-            10.0,
-            1.0,
-            27.0
+          "points": [
+            [
+              19.0,
+              10.0
+            ],
+            [
+              33.0,
+              10.0
+            ],
+            [
+              33.0,
+              11.0
+            ],
+            [
+              19.0,
+              11.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000007",
+        "collision_id": "poly_000015",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            34.0,
-            36.0,
-            17.0,
-            1.0
+          "points": [
+            [
+              52.0,
+              10.0
+            ],
+            [
+              67.0,
+              10.0
+            ],
+            [
+              67.0,
+              11.0
+            ],
+            [
+              52.0,
+              11.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000008",
+        "collision_id": "poly_000016",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            43.0,
-            0.0,
-            1.0,
-            20.0
+          "points": [
+            [
+              59.0,
+              11.0
+            ],
+            [
+              60.0,
+              11.0
+            ],
+            [
+              60.0,
+              37.0
+            ],
+            [
+              59.0,
+              37.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000009",
+        "collision_id": "poly_000023",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            18.0,
-            10.0,
-            17.0,
-            1.0
+          "points": [
+            [
+              27.0,
+              19.0
+            ],
+            [
+              28.0,
+              19.0
+            ],
+            [
+              28.0,
+              48.0
+            ],
+            [
+              27.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000010",
+        "collision_id": "poly_000029",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            27.0,
-            19.0,
-            1.0,
-            29.0
+          "points": [
+            [
+              79.0,
+              27.0
+            ],
+            [
+              80.0,
+              27.0
+            ],
+            [
+              80.0,
+              48.0
+            ],
+            [
+              79.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000011",
+        "collision_id": "poly_000031",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            12.0,
-            34.0,
-            1.0,
-            14.0
+          "points": [
+            [
+              12.0,
+              34.0
+            ],
+            [
+              13.0,
+              34.0
+            ],
+            [
+              13.0,
+              48.0
+            ],
+            [
+              12.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000012",
+        "collision_id": "poly_000037",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            12.0,
-            0.0,
-            1.0,
-            26.0
+          "points": [
+            [
+              35.0,
+              36.0
+            ],
+            [
+              49.0,
+              36.0
+            ],
+            [
+              49.0,
+              37.0
+            ],
+            [
+              35.0,
+              37.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000013",
+        "collision_id": "poly_000041",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            2.0,
-            36.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              0.0,
+              47.0
+            ],
+            [
+              12.0,
+              47.0
+            ],
+            [
+              12.0,
+              48.0
+            ],
+            [
+              0.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000014",
+        "collision_id": "poly_000042",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            36.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              13.0,
+              47.0
+            ],
+            [
+              27.0,
+              47.0
+            ],
+            [
+              27.0,
+              48.0
+            ],
+            [
+              13.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000015",
+        "collision_id": "poly_000043",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            2.0,
-            35.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              28.0,
+              47.0
+            ],
+            [
+              34.0,
+              47.0
+            ],
+            [
+              34.0,
+              48.0
+            ],
+            [
+              28.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000016",
+        "collision_id": "poly_000044",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            35.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              34.0,
+              47.0
+            ],
+            [
+              80.0,
+              47.0
+            ],
+            [
+              80.0,
+              48.0
+            ],
+            [
+              34.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000017",
+        "collision_id": "poly_000017",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000018",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000019",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000020",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000021",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000022",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000023",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000024",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000025",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            10.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000026",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            10.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000027",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000028",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000029",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000030",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000031",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000032",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000033",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000034",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000035",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000036",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000037",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000038",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000039",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000040",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000041",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000042",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000043",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000044",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            44.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000045",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            2.0,
-            44.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000046",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            3.0,
-            44.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000047",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            36.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000048",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            36.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000049",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000050",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000051",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000052",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000053",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000054",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000055",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000056",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000057",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000058",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000059",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            10.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000060",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000061",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000062",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            17.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000063",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            18.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000064",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            36.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000065",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000066",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000067",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000068",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            49.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000069",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000070",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000071",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            44.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000072",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            44.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000073",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000074",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000075",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            35.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000076",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            35.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000077",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            35.0,
-            44.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000078",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000079",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000080",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            32.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000081",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            32.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000082",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            31.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000083",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            31.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000084",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000085",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            32.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000086",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000087",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000088",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000089",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000090",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000091",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000092",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            34.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000093",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            33.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000094",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            49.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000095",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000096",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000097",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            49.0,
-            26.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000098",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000099",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            51.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000100",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            51.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000101",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000102",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            10.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000103",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            50.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000104",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            51.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000105",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000106",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            9.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000107",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000108",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000109",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            18.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000110",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            19.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000111",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            28.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000112",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000113",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            27.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000114",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            28.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000115",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            36.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000116",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            68.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000117",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            35.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000118",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            67.0,
-            36.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000119",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            31.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000120",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            61.0,
-            31.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000121",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            61.0,
-            30.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000122",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            30.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000123",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            61.0,
-            32.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000124",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            32.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000125",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            14.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000126",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            61.0,
-            14.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000127",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            61.0,
-            13.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000128",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            60.0,
-            13.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000129",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            78.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000130",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            77.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000131",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            76.0,
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000132",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            76.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000133",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            76.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000134",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            77.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000135",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            78.0,
-            3.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000136",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            78.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000137",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            77.0,
-            2.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000138",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            78.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000139",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            77.0,
-            45.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000140",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            77.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000141",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            78.0,
-            46.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
+          "points": [
+            [
+              79.75,
+              1.75
+            ],
+            [
+              79.72117614746094,
+              2.042635440826416
+            ],
+            [
+              79.63581848144531,
+              2.3240251541137695
+            ],
+            [
+              79.49720764160156,
+              2.58335542678833
+            ],
+            [
+              79.31066131591797,
+              2.8106601238250732
+            ],
+            [
+              79.08335876464844,
+              2.997204303741455
+            ],
+            [
+              78.82402801513672,
+              3.13581919670105
+            ],
+            [
+              78.54263305664063,
+              3.221177816390991
+            ],
+            [
+              78.25,
+              3.25
+            ],
+            [
+              77.95736694335938,
+              3.221177816390991
+            ],
+            [
+              77.67597198486328,
+              3.135819435119629
+            ],
+            [
+              77.41664123535156,
+              2.997204542160034
+            ],
+            [
+              77.18933868408203,
+              2.8106601238250732
+            ],
+            [
+              77.00279235839844,
+              2.58335542678833
+            ],
+            [
+              76.86418151855469,
+              2.3240251541137695
+            ],
+            [
+              76.77882385253906,
+              2.042635440826416
+            ],
+            [
+              76.75,
+              1.7499998807907104
+            ],
+            [
+              76.77882385253906,
+              1.457364559173584
+            ],
+            [
+              76.86418151855469,
+              1.1759748458862305
+            ],
+            [
+              77.00279235839844,
+              0.9166445732116699
+            ],
+            [
+              77.18933868408203,
+              0.6893398761749268
+            ],
+            [
+              77.41664123535156,
+              0.5027958154678345
+            ],
+            [
+              77.67597198486328,
+              0.3641808032989502
+            ],
+            [
+              77.95736694335938,
+              0.2788221836090088
+            ],
+            [
+              78.25,
+              0.25
+            ],
+            [
+              78.54263305664063,
+              0.2788221836090088
+            ],
+            [
+              78.82402801513672,
+              0.3641808032989502
+            ],
+            [
+              79.08335876464844,
+              0.5027954578399658
+            ],
+            [
+              79.31066131591797,
+              0.6893396377563477
+            ],
+            [
+              79.49720764160156,
+              0.9166445732116699
+            ],
+            [
+              79.63581848144531,
+              1.1759748458862305
+            ],
+            [
+              79.72117614746094,
+              1.4573646783828735
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000018",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              79.5,
+              46.0
+            ],
+            [
+              79.47117614746094,
+              46.29263687133789
+            ],
+            [
+              79.38581848144531,
+              46.57402420043945
+            ],
+            [
+              79.24720764160156,
+              46.83335494995117
+            ],
+            [
+              79.06066131591797,
+              47.06066131591797
+            ],
+            [
+              78.83335876464844,
+              47.2472038269043
+            ],
+            [
+              78.57402801513672,
+              47.38581848144531
+            ],
+            [
+              78.29263305664063,
+              47.47117614746094
+            ],
+            [
+              78.0,
+              47.5
+            ],
+            [
+              77.70736694335938,
+              47.47117614746094
+            ],
+            [
+              77.42597198486328,
+              47.38581848144531
+            ],
+            [
+              77.16664123535156,
+              47.2472038269043
+            ],
+            [
+              76.93933868408203,
+              47.06066131591797
+            ],
+            [
+              76.75279235839844,
+              46.83335494995117
+            ],
+            [
+              76.61418151855469,
+              46.57402420043945
+            ],
+            [
+              76.52882385253906,
+              46.29263687133789
+            ],
+            [
+              76.5,
+              46.0
+            ],
+            [
+              76.52882385253906,
+              45.70736312866211
+            ],
+            [
+              76.61418151855469,
+              45.42597579956055
+            ],
+            [
+              76.75279235839844,
+              45.16664505004883
+            ],
+            [
+              76.93933868408203,
+              44.93933868408203
+            ],
+            [
+              77.16664123535156,
+              44.7527961730957
+            ],
+            [
+              77.42597198486328,
+              44.61418151855469
+            ],
+            [
+              77.70736694335938,
+              44.52882385253906
+            ],
+            [
+              78.0,
+              44.5
+            ],
+            [
+              78.29263305664063,
+              44.52882385253906
+            ],
+            [
+              78.57402801513672,
+              44.61418151855469
+            ],
+            [
+              78.83335876464844,
+              44.7527961730957
+            ],
+            [
+              79.06066131591797,
+              44.93933868408203
+            ],
+            [
+              79.24720764160156,
+              45.16664505004883
+            ],
+            [
+              79.38581848144531,
+              45.42597579956055
+            ],
+            [
+              79.47117614746094,
+              45.70736312866211
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              69.25,
+              36.25
+            ],
+            [
+              69.23078155517578,
+              36.445091247558594
+            ],
+            [
+              69.17388153076172,
+              36.63268280029297
+            ],
+            [
+              69.08146667480469,
+              36.80556869506836
+            ],
+            [
+              68.95710754394531,
+              36.95710754394531
+            ],
+            [
+              68.80557250976563,
+              37.08147048950195
+            ],
+            [
+              68.63268280029297,
+              37.17387771606445
+            ],
+            [
+              68.4450912475586,
+              37.23078536987305
+            ],
+            [
+              68.25,
+              37.25
+            ],
+            [
+              68.0549087524414,
+              37.23078536987305
+            ],
+            [
+              67.86731719970703,
+              37.17387771606445
+            ],
+            [
+              67.69442749023438,
+              37.08147048950195
+            ],
+            [
+              67.54289245605469,
+              36.95710754394531
+            ],
+            [
+              67.41853332519531,
+              36.80556869506836
+            ],
+            [
+              67.32611846923828,
+              36.63268280029297
+            ],
+            [
+              67.26921844482422,
+              36.445091247558594
+            ],
+            [
+              67.25,
+              36.25
+            ],
+            [
+              67.26921844482422,
+              36.054908752441406
+            ],
+            [
+              67.32611846923828,
+              35.86731719970703
+            ],
+            [
+              67.41853332519531,
+              35.69443130493164
+            ],
+            [
+              67.54289245605469,
+              35.54289245605469
+            ],
+            [
+              67.69442749023438,
+              35.41852951049805
+            ],
+            [
+              67.86731719970703,
+              35.32612228393555
+            ],
+            [
+              68.0549087524414,
+              35.26921463012695
+            ],
+            [
+              68.25,
+              35.25
+            ],
+            [
+              68.4450912475586,
+              35.26921463012695
+            ],
+            [
+              68.63268280029297,
+              35.32612228393555
+            ],
+            [
+              68.80557250976563,
+              35.41852951049805
+            ],
+            [
+              68.95710754394531,
+              35.54289245605469
+            ],
+            [
+              69.08146667480469,
+              35.69443130493164
+            ],
+            [
+              69.17388153076172,
+              35.86731719970703
+            ],
+            [
+              69.23078155517578,
+              36.054908752441406
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000020",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              69.25,
+              28.25
+            ],
+            [
+              69.23078155517578,
+              28.445091247558594
+            ],
+            [
+              69.17388153076172,
+              28.63268280029297
+            ],
+            [
+              69.08146667480469,
+              28.805570602416992
+            ],
+            [
+              68.95710754394531,
+              28.957107543945313
+            ],
+            [
+              68.80557250976563,
+              29.081470489501953
+            ],
+            [
+              68.63268280029297,
+              29.173879623413086
+            ],
+            [
+              68.4450912475586,
+              29.230785369873047
+            ],
+            [
+              68.25,
+              29.25
+            ],
+            [
+              68.0549087524414,
+              29.230785369873047
+            ],
+            [
+              67.86731719970703,
+              29.173879623413086
+            ],
+            [
+              67.69442749023438,
+              29.081470489501953
+            ],
+            [
+              67.54289245605469,
+              28.957107543945313
+            ],
+            [
+              67.41853332519531,
+              28.805570602416992
+            ],
+            [
+              67.32611846923828,
+              28.63268280029297
+            ],
+            [
+              67.26921844482422,
+              28.445091247558594
+            ],
+            [
+              67.25,
+              28.25
+            ],
+            [
+              67.26921844482422,
+              28.05491065979004
+            ],
+            [
+              67.32611846923828,
+              27.86731719970703
+            ],
+            [
+              67.41853332519531,
+              27.694429397583008
+            ],
+            [
+              67.54289245605469,
+              27.542892456054688
+            ],
+            [
+              67.69442749023438,
+              27.41853141784668
+            ],
+            [
+              67.86731719970703,
+              27.326120376586914
+            ],
+            [
+              68.0549087524414,
+              27.269214630126953
+            ],
+            [
+              68.25,
+              27.25
+            ],
+            [
+              68.4450912475586,
+              27.269214630126953
+            ],
+            [
+              68.63268280029297,
+              27.326120376586914
+            ],
+            [
+              68.80557250976563,
+              27.418529510498047
+            ],
+            [
+              68.95710754394531,
+              27.542892456054688
+            ],
+            [
+              69.08146667480469,
+              27.694429397583008
+            ],
+            [
+              69.17388153076172,
+              27.86731719970703
+            ],
+            [
+              69.23078155517578,
+              28.05491065979004
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000021",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              69.25,
+              19.25
+            ],
+            [
+              69.22838592529297,
+              19.445091247558594
+            ],
+            [
+              69.16436767578125,
+              19.63268280029297
+            ],
+            [
+              69.0604019165039,
+              19.805570602416992
+            ],
+            [
+              68.92049407958984,
+              19.957107543945313
+            ],
+            [
+              68.75001525878906,
+              20.081470489501953
+            ],
+            [
+              68.5555191040039,
+              20.173879623413086
+            ],
+            [
+              68.34447479248047,
+              20.230785369873047
+            ],
+            [
+              68.125,
+              20.25
+            ],
+            [
+              67.90552520751953,
+              20.230785369873047
+            ],
+            [
+              67.6944808959961,
+              20.173879623413086
+            ],
+            [
+              67.49998474121094,
+              20.081470489501953
+            ],
+            [
+              67.32950592041016,
+              19.957107543945313
+            ],
+            [
+              67.1895980834961,
+              19.805570602416992
+            ],
+            [
+              67.08563232421875,
+              19.63268280029297
+            ],
+            [
+              67.02161407470703,
+              19.445091247558594
+            ],
+            [
+              67.0,
+              19.25
+            ],
+            [
+              67.02161407470703,
+              19.05491065979004
+            ],
+            [
+              67.08563232421875,
+              18.86731719970703
+            ],
+            [
+              67.1895980834961,
+              18.694429397583008
+            ],
+            [
+              67.32950592041016,
+              18.542892456054688
+            ],
+            [
+              67.49998474121094,
+              18.41853141784668
+            ],
+            [
+              67.6944808959961,
+              18.326120376586914
+            ],
+            [
+              67.90552520751953,
+              18.269214630126953
+            ],
+            [
+              68.125,
+              18.25
+            ],
+            [
+              68.34447479248047,
+              18.269214630126953
+            ],
+            [
+              68.5555191040039,
+              18.326120376586914
+            ],
+            [
+              68.75001525878906,
+              18.418529510498047
+            ],
+            [
+              68.92049407958984,
+              18.542892456054688
+            ],
+            [
+              69.0604019165039,
+              18.694429397583008
+            ],
+            [
+              69.16436767578125,
+              18.86731719970703
+            ],
+            [
+              69.22838592529297,
+              19.05491065979004
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000022",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              69.25,
+              10.25
+            ],
+            [
+              69.22598266601563,
+              10.445090293884277
+            ],
+            [
+              69.15484619140625,
+              10.632683753967285
+            ],
+            [
+              69.03933715820313,
+              10.805570602416992
+            ],
+            [
+              68.88388061523438,
+              10.957106590270996
+            ],
+            [
+              68.69446563720703,
+              11.081469535827637
+            ],
+            [
+              68.47835540771484,
+              11.173879623413086
+            ],
+            [
+              68.24386596679688,
+              11.230785369873047
+            ],
+            [
+              68.0,
+              11.25
+            ],
+            [
+              67.75613403320313,
+              11.230785369873047
+            ],
+            [
+              67.52164459228516,
+              11.173879623413086
+            ],
+            [
+              67.30553436279297,
+              11.081469535827637
+            ],
+            [
+              67.11611938476563,
+              10.957106590270996
+            ],
+            [
+              66.96066284179688,
+              10.805570602416992
+            ],
+            [
+              66.84515380859375,
+              10.632683753967285
+            ],
+            [
+              66.77401733398438,
+              10.445090293884277
+            ],
+            [
+              66.75,
+              10.25
+            ],
+            [
+              66.77401733398438,
+              10.054909706115723
+            ],
+            [
+              66.84515380859375,
+              9.867316246032715
+            ],
+            [
+              66.96066284179688,
+              9.694429397583008
+            ],
+            [
+              67.11611938476563,
+              9.542893409729004
+            ],
+            [
+              67.30553436279297,
+              9.418530464172363
+            ],
+            [
+              67.52164459228516,
+              9.326120376586914
+            ],
+            [
+              67.75613403320313,
+              9.269214630126953
+            ],
+            [
+              68.0,
+              9.25
+            ],
+            [
+              68.24386596679688,
+              9.269214630126953
+            ],
+            [
+              68.47835540771484,
+              9.326120376586914
+            ],
+            [
+              68.69446563720703,
+              9.418530464172363
+            ],
+            [
+              68.88388061523438,
+              9.542893409729004
+            ],
+            [
+              69.03933715820313,
+              9.694429397583008
+            ],
+            [
+              69.15484619140625,
+              9.867316246032715
+            ],
+            [
+              69.22598266601563,
+              10.054909706115723
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000024",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              62.25,
+              14.25
+            ],
+            [
+              62.225982666015625,
+              14.445090293884277
+            ],
+            [
+              62.154850006103516,
+              14.632683753967285
+            ],
+            [
+              62.039337158203125,
+              14.805570602416992
+            ],
+            [
+              61.88388442993164,
+              14.957106590270996
+            ],
+            [
+              61.694461822509766,
+              15.081469535827637
+            ],
+            [
+              61.478355407714844,
+              15.173879623413086
+            ],
+            [
+              61.24386215209961,
+              15.230785369873047
+            ],
+            [
+              61.0,
+              15.25
+            ],
+            [
+              60.75613784790039,
+              15.230785369873047
+            ],
+            [
+              60.521644592285156,
+              15.173879623413086
+            ],
+            [
+              60.305538177490234,
+              15.081469535827637
+            ],
+            [
+              60.11611557006836,
+              14.957106590270996
+            ],
+            [
+              59.960662841796875,
+              14.805570602416992
+            ],
+            [
+              59.845149993896484,
+              14.632683753967285
+            ],
+            [
+              59.774017333984375,
+              14.445090293884277
+            ],
+            [
+              59.75,
+              14.25
+            ],
+            [
+              59.774017333984375,
+              14.054909706115723
+            ],
+            [
+              59.845149993896484,
+              13.867316246032715
+            ],
+            [
+              59.960662841796875,
+              13.694429397583008
+            ],
+            [
+              60.11611557006836,
+              13.542893409729004
+            ],
+            [
+              60.305538177490234,
+              13.418530464172363
+            ],
+            [
+              60.521644592285156,
+              13.326120376586914
+            ],
+            [
+              60.75613784790039,
+              13.269214630126953
+            ],
+            [
+              61.0,
+              13.25
+            ],
+            [
+              61.24386215209961,
+              13.269214630126953
+            ],
+            [
+              61.478355407714844,
+              13.326120376586914
+            ],
+            [
+              61.694461822509766,
+              13.418530464172363
+            ],
+            [
+              61.88388442993164,
+              13.542893409729004
+            ],
+            [
+              62.039337158203125,
+              13.694429397583008
+            ],
+            [
+              62.154850006103516,
+              13.867316246032715
+            ],
+            [
+              62.225982666015625,
+              14.054909706115723
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000025",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              62.25,
+              31.125
+            ],
+            [
+              62.22357940673828,
+              31.3444766998291
+            ],
+            [
+              62.14533615112305,
+              31.555519104003906
+            ],
+            [
+              62.018272399902344,
+              31.750017166137695
+            ],
+            [
+              61.84727096557617,
+              31.920495986938477
+            ],
+            [
+              61.63890838623047,
+              32.060401916503906
+            ],
+            [
+              61.401187896728516,
+              32.164363861083984
+            ],
+            [
+              61.14324951171875,
+              32.2283821105957
+            ],
+            [
+              60.875,
+              32.25
+            ],
+            [
+              60.60675048828125,
+              32.2283821105957
+            ],
+            [
+              60.348812103271484,
+              32.164363861083984
+            ],
+            [
+              60.11109161376953,
+              32.060401916503906
+            ],
+            [
+              59.90272903442383,
+              31.920495986938477
+            ],
+            [
+              59.731727600097656,
+              31.750017166137695
+            ],
+            [
+              59.60466384887695,
+              31.555519104003906
+            ],
+            [
+              59.52642059326172,
+              31.3444766998291
+            ],
+            [
+              59.5,
+              31.125
+            ],
+            [
+              59.52642059326172,
+              30.9055233001709
+            ],
+            [
+              59.60466384887695,
+              30.694480895996094
+            ],
+            [
+              59.731727600097656,
+              30.499982833862305
+            ],
+            [
+              59.90272903442383,
+              30.329505920410156
+            ],
+            [
+              60.11109161376953,
+              30.18959617614746
+            ],
+            [
+              60.34880828857422,
+              30.085636138916016
+            ],
+            [
+              60.60675048828125,
+              30.021615982055664
+            ],
+            [
+              60.875,
+              30.0
+            ],
+            [
+              61.14324951171875,
+              30.021615982055664
+            ],
+            [
+              61.40119171142578,
+              30.085636138916016
+            ],
+            [
+              61.63890838623047,
+              30.18959617614746
+            ],
+            [
+              61.84727096557617,
+              30.329504013061523
+            ],
+            [
+              62.018272399902344,
+              30.499982833862305
+            ],
+            [
+              62.14533615112305,
+              30.694480895996094
+            ],
+            [
+              62.22357940673828,
+              30.9055233001709
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000026",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              51.25,
+              36.25
+            ],
+            [
+              51.225982666015625,
+              36.445091247558594
+            ],
+            [
+              51.154850006103516,
+              36.63268280029297
+            ],
+            [
+              51.039337158203125,
+              36.80556869506836
+            ],
+            [
+              50.88388442993164,
+              36.95710754394531
+            ],
+            [
+              50.694461822509766,
+              37.08147048950195
+            ],
+            [
+              50.478355407714844,
+              37.17387771606445
+            ],
+            [
+              50.24386215209961,
+              37.23078536987305
+            ],
+            [
+              50.0,
+              37.25
+            ],
+            [
+              49.75613784790039,
+              37.23078536987305
+            ],
+            [
+              49.521644592285156,
+              37.17387771606445
+            ],
+            [
+              49.305538177490234,
+              37.08147048950195
+            ],
+            [
+              49.11611557006836,
+              36.95710754394531
+            ],
+            [
+              48.960662841796875,
+              36.80556869506836
+            ],
+            [
+              48.845149993896484,
+              36.63268280029297
+            ],
+            [
+              48.774017333984375,
+              36.445091247558594
+            ],
+            [
+              48.75,
+              36.25
+            ],
+            [
+              48.774017333984375,
+              36.054908752441406
+            ],
+            [
+              48.845149993896484,
+              35.86731719970703
+            ],
+            [
+              48.960662841796875,
+              35.69443130493164
+            ],
+            [
+              49.11611557006836,
+              35.54289245605469
+            ],
+            [
+              49.305538177490234,
+              35.41852951049805
+            ],
+            [
+              49.521644592285156,
+              35.32612228393555
+            ],
+            [
+              49.75613784790039,
+              35.26921463012695
+            ],
+            [
+              50.0,
+              35.25
+            ],
+            [
+              50.24386215209961,
+              35.26921463012695
+            ],
+            [
+              50.478355407714844,
+              35.32612228393555
+            ],
+            [
+              50.694461822509766,
+              35.41852951049805
+            ],
+            [
+              50.88388442993164,
+              35.54289245605469
+            ],
+            [
+              51.039337158203125,
+              35.69443130493164
+            ],
+            [
+              51.154850006103516,
+              35.86731719970703
+            ],
+            [
+              51.225982666015625,
+              36.054908752441406
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000027",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              51.25,
+              27.25
+            ],
+            [
+              51.2283821105957,
+              27.445091247558594
+            ],
+            [
+              51.164363861083984,
+              27.63268280029297
+            ],
+            [
+              51.060401916503906,
+              27.805570602416992
+            ],
+            [
+              50.920494079589844,
+              27.957107543945313
+            ],
+            [
+              50.75001525878906,
+              28.081470489501953
+            ],
+            [
+              50.555519104003906,
+              28.173879623413086
+            ],
+            [
+              50.34447479248047,
+              28.230785369873047
+            ],
+            [
+              50.125,
+              28.25
+            ],
+            [
+              49.90552520751953,
+              28.230785369873047
+            ],
+            [
+              49.694480895996094,
+              28.173879623413086
+            ],
+            [
+              49.49998474121094,
+              28.081470489501953
+            ],
+            [
+              49.329505920410156,
+              27.957107543945313
+            ],
+            [
+              49.189598083496094,
+              27.805570602416992
+            ],
+            [
+              49.085636138916016,
+              27.63268280029297
+            ],
+            [
+              49.0216178894043,
+              27.445091247558594
+            ],
+            [
+              49.0,
+              27.25
+            ],
+            [
+              49.0216178894043,
+              27.05491065979004
+            ],
+            [
+              49.085636138916016,
+              26.86731719970703
+            ],
+            [
+              49.189598083496094,
+              26.694429397583008
+            ],
+            [
+              49.329505920410156,
+              26.542892456054688
+            ],
+            [
+              49.49998474121094,
+              26.41853141784668
+            ],
+            [
+              49.694480895996094,
+              26.326120376586914
+            ],
+            [
+              49.90552520751953,
+              26.269214630126953
+            ],
+            [
+              50.125,
+              26.25
+            ],
+            [
+              50.344478607177734,
+              26.269214630126953
+            ],
+            [
+              50.555519104003906,
+              26.326120376586914
+            ],
+            [
+              50.75001525878906,
+              26.418529510498047
+            ],
+            [
+              50.920494079589844,
+              26.542892456054688
+            ],
+            [
+              51.060401916503906,
+              26.694429397583008
+            ],
+            [
+              51.164363861083984,
+              26.86731719970703
+            ],
+            [
+              51.2283821105957,
+              27.05491065979004
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000028",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              52.25,
+              19.25
+            ],
+            [
+              52.23078536987305,
+              19.445091247558594
+            ],
+            [
+              52.17387771606445,
+              19.63268280029297
+            ],
+            [
+              52.08147048950195,
+              19.805570602416992
+            ],
+            [
+              51.95710754394531,
+              19.957107543945313
+            ],
+            [
+              51.80556869506836,
+              20.081470489501953
+            ],
+            [
+              51.63268280029297,
+              20.173879623413086
+            ],
+            [
+              51.445091247558594,
+              20.230785369873047
+            ],
+            [
+              51.25,
+              20.25
+            ],
+            [
+              51.054908752441406,
+              20.230785369873047
+            ],
+            [
+              50.86731719970703,
+              20.173879623413086
+            ],
+            [
+              50.69443130493164,
+              20.081470489501953
+            ],
+            [
+              50.54289245605469,
+              19.957107543945313
+            ],
+            [
+              50.41852951049805,
+              19.805570602416992
+            ],
+            [
+              50.32612228393555,
+              19.63268280029297
+            ],
+            [
+              50.26921463012695,
+              19.445091247558594
+            ],
+            [
+              50.25,
+              19.25
+            ],
+            [
+              50.26921463012695,
+              19.05491065979004
+            ],
+            [
+              50.32612228393555,
+              18.86731719970703
+            ],
+            [
+              50.41852951049805,
+              18.694429397583008
+            ],
+            [
+              50.54289245605469,
+              18.542892456054688
+            ],
+            [
+              50.69443130493164,
+              18.41853141784668
+            ],
+            [
+              50.86731719970703,
+              18.326120376586914
+            ],
+            [
+              51.054908752441406,
+              18.269214630126953
+            ],
+            [
+              51.25,
+              18.25
+            ],
+            [
+              51.445091247558594,
+              18.269214630126953
+            ],
+            [
+              51.63268280029297,
+              18.326120376586914
+            ],
+            [
+              51.80556869506836,
+              18.418529510498047
+            ],
+            [
+              51.95710754394531,
+              18.542892456054688
+            ],
+            [
+              52.08147048950195,
+              18.694429397583008
+            ],
+            [
+              52.17387771606445,
+              18.86731719970703
+            ],
+            [
+              52.23078536987305,
+              19.05491065979004
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              52.25,
+              10.25
+            ],
+            [
+              52.23078536987305,
+              10.445090293884277
+            ],
+            [
+              52.17387771606445,
+              10.632683753967285
+            ],
+            [
+              52.08147048950195,
+              10.805570602416992
+            ],
+            [
+              51.95710754394531,
+              10.957106590270996
+            ],
+            [
+              51.80556869506836,
+              11.081469535827637
+            ],
+            [
+              51.63268280029297,
+              11.173879623413086
+            ],
+            [
+              51.445091247558594,
+              11.230785369873047
+            ],
+            [
+              51.25,
+              11.25
+            ],
+            [
+              51.054908752441406,
+              11.230785369873047
+            ],
+            [
+              50.86731719970703,
+              11.173879623413086
+            ],
+            [
+              50.69443130493164,
+              11.081469535827637
+            ],
+            [
+              50.54289245605469,
+              10.957106590270996
+            ],
+            [
+              50.41852951049805,
+              10.805570602416992
+            ],
+            [
+              50.32612228393555,
+              10.632683753967285
+            ],
+            [
+              50.26921463012695,
+              10.445090293884277
+            ],
+            [
+              50.25,
+              10.25
+            ],
+            [
+              50.26921463012695,
+              10.054909706115723
+            ],
+            [
+              50.32612228393555,
+              9.867316246032715
+            ],
+            [
+              50.41852951049805,
+              9.694429397583008
+            ],
+            [
+              50.54289245605469,
+              9.542893409729004
+            ],
+            [
+              50.69443130493164,
+              9.418530464172363
+            ],
+            [
+              50.86731719970703,
+              9.326120376586914
+            ],
+            [
+              51.054908752441406,
+              9.269214630126953
+            ],
+            [
+              51.25,
+              9.25
+            ],
+            [
+              51.445091247558594,
+              9.269214630126953
+            ],
+            [
+              51.63268280029297,
+              9.326120376586914
+            ],
+            [
+              51.80556869506836,
+              9.418530464172363
+            ],
+            [
+              51.95710754394531,
+              9.542893409729004
+            ],
+            [
+              52.08147048950195,
+              9.694429397583008
+            ],
+            [
+              52.17387771606445,
+              9.867316246032715
+            ],
+            [
+              52.23078536987305,
+              10.054909706115723
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              34.25,
+              1.875
+            ],
+            [
+              34.23078536987305,
+              2.143249273300171
+            ],
+            [
+              34.17387771606445,
+              2.4011898040771484
+            ],
+            [
+              34.08147048950195,
+              2.638909101486206
+            ],
+            [
+              33.95710754394531,
+              2.8472719192504883
+            ],
+            [
+              33.80556869506836,
+              3.01827073097229
+            ],
+            [
+              33.63268280029297,
+              3.145334243774414
+            ],
+            [
+              33.445091247558594,
+              3.2235798835754395
+            ],
+            [
+              33.25,
+              3.25
+            ],
+            [
+              33.054908752441406,
+              3.2235798835754395
+            ],
+            [
+              32.86731719970703,
+              3.145334243774414
+            ],
+            [
+              32.69443130493164,
+              3.01827073097229
+            ],
+            [
+              32.54289245605469,
+              2.8472719192504883
+            ],
+            [
+              32.41852951049805,
+              2.638908863067627
+            ],
+            [
+              32.32612228393555,
+              2.4011898040771484
+            ],
+            [
+              32.26921463012695,
+              2.143249273300171
+            ],
+            [
+              32.25,
+              1.8749998807907104
+            ],
+            [
+              32.26921463012695,
+              1.6067509651184082
+            ],
+            [
+              32.32612228393555,
+              1.3488103151321411
+            ],
+            [
+              32.41852951049805,
+              1.111090898513794
+            ],
+            [
+              32.54289245605469,
+              0.902728259563446
+            ],
+            [
+              32.69443130493164,
+              0.7317295074462891
+            ],
+            [
+              32.86731719970703,
+              0.6046656370162964
+            ],
+            [
+              33.054908752441406,
+              0.5264202356338501
+            ],
+            [
+              33.25,
+              0.5
+            ],
+            [
+              33.445091247558594,
+              0.5264202356338501
+            ],
+            [
+              33.63268280029297,
+              0.6046657562255859
+            ],
+            [
+              33.80556869506836,
+              0.7317291498184204
+            ],
+            [
+              33.95710754394531,
+              0.9027280211448669
+            ],
+            [
+              34.08147048950195,
+              1.111090898513794
+            ],
+            [
+              34.17387771606445,
+              1.3488103151321411
+            ],
+            [
+              34.23078536987305,
+              1.6067509651184082
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              35.25,
+              10.25
+            ],
+            [
+              35.22357940673828,
+              10.445090293884277
+            ],
+            [
+              35.14533615112305,
+              10.632683753967285
+            ],
+            [
+              35.018272399902344,
+              10.805570602416992
+            ],
+            [
+              34.84727096557617,
+              10.957106590270996
+            ],
+            [
+              34.63890838623047,
+              11.081469535827637
+            ],
+            [
+              34.401187896728516,
+              11.173879623413086
+            ],
+            [
+              34.14324951171875,
+              11.230785369873047
+            ],
+            [
+              33.875,
+              11.25
+            ],
+            [
+              33.60675048828125,
+              11.230785369873047
+            ],
+            [
+              33.348812103271484,
+              11.173879623413086
+            ],
+            [
+              33.11109161376953,
+              11.081469535827637
+            ],
+            [
+              32.90272903442383,
+              10.957106590270996
+            ],
+            [
+              32.731727600097656,
+              10.805570602416992
+            ],
+            [
+              32.60466384887695,
+              10.632683753967285
+            ],
+            [
+              32.52642059326172,
+              10.445090293884277
+            ],
+            [
+              32.5,
+              10.25
+            ],
+            [
+              32.52642059326172,
+              10.054909706115723
+            ],
+            [
+              32.60466384887695,
+              9.867316246032715
+            ],
+            [
+              32.731727600097656,
+              9.694429397583008
+            ],
+            [
+              32.90272903442383,
+              9.542893409729004
+            ],
+            [
+              33.11109161376953,
+              9.418530464172363
+            ],
+            [
+              33.34880828857422,
+              9.326120376586914
+            ],
+            [
+              33.60675048828125,
+              9.269214630126953
+            ],
+            [
+              33.875,
+              9.25
+            ],
+            [
+              34.14324951171875,
+              9.269214630126953
+            ],
+            [
+              34.40119171142578,
+              9.326120376586914
+            ],
+            [
+              34.63890838623047,
+              9.418530464172363
+            ],
+            [
+              34.84727096557617,
+              9.542893409729004
+            ],
+            [
+              35.018272399902344,
+              9.694429397583008
+            ],
+            [
+              35.14533615112305,
+              9.867316246032715
+            ],
+            [
+              35.22357940673828,
+              10.054909706115723
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000034",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              35.25,
+              19.25
+            ],
+            [
+              35.23078536987305,
+              19.445091247558594
+            ],
+            [
+              35.17387771606445,
+              19.63268280029297
+            ],
+            [
+              35.08147048950195,
+              19.805570602416992
+            ],
+            [
+              34.95710754394531,
+              19.957107543945313
+            ],
+            [
+              34.80556869506836,
+              20.081470489501953
+            ],
+            [
+              34.63268280029297,
+              20.173879623413086
+            ],
+            [
+              34.445091247558594,
+              20.230785369873047
+            ],
+            [
+              34.25,
+              20.25
+            ],
+            [
+              34.054908752441406,
+              20.230785369873047
+            ],
+            [
+              33.86731719970703,
+              20.173879623413086
+            ],
+            [
+              33.69443130493164,
+              20.081470489501953
+            ],
+            [
+              33.54289245605469,
+              19.957107543945313
+            ],
+            [
+              33.41852951049805,
+              19.805570602416992
+            ],
+            [
+              33.32612228393555,
+              19.63268280029297
+            ],
+            [
+              33.26921463012695,
+              19.445091247558594
+            ],
+            [
+              33.25,
+              19.25
+            ],
+            [
+              33.26921463012695,
+              19.05491065979004
+            ],
+            [
+              33.32612228393555,
+              18.86731719970703
+            ],
+            [
+              33.41852951049805,
+              18.694429397583008
+            ],
+            [
+              33.54289245605469,
+              18.542892456054688
+            ],
+            [
+              33.69443130493164,
+              18.41853141784668
+            ],
+            [
+              33.86731719970703,
+              18.326120376586914
+            ],
+            [
+              34.054908752441406,
+              18.269214630126953
+            ],
+            [
+              34.25,
+              18.25
+            ],
+            [
+              34.445091247558594,
+              18.269214630126953
+            ],
+            [
+              34.63268280029297,
+              18.326120376586914
+            ],
+            [
+              34.80556869506836,
+              18.418529510498047
+            ],
+            [
+              34.95710754394531,
+              18.542892456054688
+            ],
+            [
+              35.08147048950195,
+              18.694429397583008
+            ],
+            [
+              35.17387771606445,
+              18.86731719970703
+            ],
+            [
+              35.23078536987305,
+              19.05491065979004
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              35.25,
+              27.25
+            ],
+            [
+              35.23078536987305,
+              27.445091247558594
+            ],
+            [
+              35.17387771606445,
+              27.63268280029297
+            ],
+            [
+              35.08147048950195,
+              27.805570602416992
+            ],
+            [
+              34.95710754394531,
+              27.957107543945313
+            ],
+            [
+              34.80556869506836,
+              28.081470489501953
+            ],
+            [
+              34.63268280029297,
+              28.173879623413086
+            ],
+            [
+              34.445091247558594,
+              28.230785369873047
+            ],
+            [
+              34.25,
+              28.25
+            ],
+            [
+              34.054908752441406,
+              28.230785369873047
+            ],
+            [
+              33.86731719970703,
+              28.173879623413086
+            ],
+            [
+              33.69443130493164,
+              28.081470489501953
+            ],
+            [
+              33.54289245605469,
+              27.957107543945313
+            ],
+            [
+              33.41852951049805,
+              27.805570602416992
+            ],
+            [
+              33.32612228393555,
+              27.63268280029297
+            ],
+            [
+              33.26921463012695,
+              27.445091247558594
+            ],
+            [
+              33.25,
+              27.25
+            ],
+            [
+              33.26921463012695,
+              27.05491065979004
+            ],
+            [
+              33.32612228393555,
+              26.86731719970703
+            ],
+            [
+              33.41852951049805,
+              26.694429397583008
+            ],
+            [
+              33.54289245605469,
+              26.542892456054688
+            ],
+            [
+              33.69443130493164,
+              26.41853141784668
+            ],
+            [
+              33.86731719970703,
+              26.326120376586914
+            ],
+            [
+              34.054908752441406,
+              26.269214630126953
+            ],
+            [
+              34.25,
+              26.25
+            ],
+            [
+              34.445091247558594,
+              26.269214630126953
+            ],
+            [
+              34.63268280029297,
+              26.326120376586914
+            ],
+            [
+              34.80556869506836,
+              26.418529510498047
+            ],
+            [
+              34.95710754394531,
+              26.542892456054688
+            ],
+            [
+              35.08147048950195,
+              26.694429397583008
+            ],
+            [
+              35.17387771606445,
+              26.86731719970703
+            ],
+            [
+              35.23078536987305,
+              27.05491065979004
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000036",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              35.25,
+              36.25
+            ],
+            [
+              35.23078536987305,
+              36.445091247558594
+            ],
+            [
+              35.17387771606445,
+              36.63268280029297
+            ],
+            [
+              35.08147048950195,
+              36.80556869506836
+            ],
+            [
+              34.95710754394531,
+              36.95710754394531
+            ],
+            [
+              34.80556869506836,
+              37.08147048950195
+            ],
+            [
+              34.63268280029297,
+              37.17387771606445
+            ],
+            [
+              34.445091247558594,
+              37.23078536987305
+            ],
+            [
+              34.25,
+              37.25
+            ],
+            [
+              34.054908752441406,
+              37.23078536987305
+            ],
+            [
+              33.86731719970703,
+              37.17387771606445
+            ],
+            [
+              33.69443130493164,
+              37.08147048950195
+            ],
+            [
+              33.54289245605469,
+              36.95710754394531
+            ],
+            [
+              33.41852951049805,
+              36.80556869506836
+            ],
+            [
+              33.32612228393555,
+              36.63268280029297
+            ],
+            [
+              33.26921463012695,
+              36.445091247558594
+            ],
+            [
+              33.25,
+              36.25
+            ],
+            [
+              33.26921463012695,
+              36.054908752441406
+            ],
+            [
+              33.32612228393555,
+              35.86731719970703
+            ],
+            [
+              33.41852951049805,
+              35.69443130493164
+            ],
+            [
+              33.54289245605469,
+              35.54289245605469
+            ],
+            [
+              33.69443130493164,
+              35.41852951049805
+            ],
+            [
+              33.86731719970703,
+              35.32612228393555
+            ],
+            [
+              34.054908752441406,
+              35.26921463012695
+            ],
+            [
+              34.25,
+              35.25
+            ],
+            [
+              34.445091247558594,
+              35.26921463012695
+            ],
+            [
+              34.63268280029297,
+              35.32612228393555
+            ],
+            [
+              34.80556869506836,
+              35.41852951049805
+            ],
+            [
+              34.95710754394531,
+              35.54289245605469
+            ],
+            [
+              35.08147048950195,
+              35.69443130493164
+            ],
+            [
+              35.17387771606445,
+              35.86731719970703
+            ],
+            [
+              35.23078536987305,
+              36.054908752441406
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000039",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              19.25,
+              36.25
+            ],
+            [
+              19.230785369873047,
+              36.445091247558594
+            ],
+            [
+              19.173879623413086,
+              36.63268280029297
+            ],
+            [
+              19.081470489501953,
+              36.80556869506836
+            ],
+            [
+              18.957107543945313,
+              36.95710754394531
+            ],
+            [
+              18.805570602416992,
+              37.08147048950195
+            ],
+            [
+              18.63268280029297,
+              37.17387771606445
+            ],
+            [
+              18.445091247558594,
+              37.23078536987305
+            ],
+            [
+              18.25,
+              37.25
+            ],
+            [
+              18.054908752441406,
+              37.23078536987305
+            ],
+            [
+              17.86731719970703,
+              37.17387771606445
+            ],
+            [
+              17.694429397583008,
+              37.08147048950195
+            ],
+            [
+              17.542892456054688,
+              36.95710754394531
+            ],
+            [
+              17.418529510498047,
+              36.80556869506836
+            ],
+            [
+              17.326120376586914,
+              36.63268280029297
+            ],
+            [
+              17.269214630126953,
+              36.445091247558594
+            ],
+            [
+              17.25,
+              36.25
+            ],
+            [
+              17.269214630126953,
+              36.054908752441406
+            ],
+            [
+              17.326120376586914,
+              35.86731719970703
+            ],
+            [
+              17.418529510498047,
+              35.69443130493164
+            ],
+            [
+              17.542892456054688,
+              35.54289245605469
+            ],
+            [
+              17.694429397583008,
+              35.41852951049805
+            ],
+            [
+              17.86731719970703,
+              35.32612228393555
+            ],
+            [
+              18.054908752441406,
+              35.26921463012695
+            ],
+            [
+              18.25,
+              35.25
+            ],
+            [
+              18.445091247558594,
+              35.26921463012695
+            ],
+            [
+              18.63268280029297,
+              35.32612228393555
+            ],
+            [
+              18.805570602416992,
+              35.41852951049805
+            ],
+            [
+              18.957107543945313,
+              35.54289245605469
+            ],
+            [
+              19.081470489501953,
+              35.69443130493164
+            ],
+            [
+              19.173879623413086,
+              35.86731719970703
+            ],
+            [
+              19.230785369873047,
+              36.054908752441406
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000040",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              19.25,
+              27.375
+            ],
+            [
+              19.230785369873047,
+              27.545703887939453
+            ],
+            [
+              19.173879623413086,
+              27.709848403930664
+            ],
+            [
+              19.081470489501953,
+              27.86112403869629
+            ],
+            [
+              18.957107543945313,
+              27.99371910095215
+            ],
+            [
+              18.805570602416992,
+              28.102535247802734
+            ],
+            [
+              18.63268280029297,
+              28.183395385742188
+            ],
+            [
+              18.445091247558594,
+              28.233186721801758
+            ],
+            [
+              18.25,
+              28.25
+            ],
+            [
+              18.054908752441406,
+              28.233186721801758
+            ],
+            [
+              17.86731719970703,
+              28.183395385742188
+            ],
+            [
+              17.694429397583008,
+              28.102535247802734
+            ],
+            [
+              17.542892456054688,
+              27.99371910095215
+            ],
+            [
+              17.418529510498047,
+              27.86112403869629
+            ],
+            [
+              17.326120376586914,
+              27.709848403930664
+            ],
+            [
+              17.269214630126953,
+              27.545703887939453
+            ],
+            [
+              17.25,
+              27.375
+            ],
+            [
+              17.269214630126953,
+              27.204296112060547
+            ],
+            [
+              17.326120376586914,
+              27.040151596069336
+            ],
+            [
+              17.418529510498047,
+              26.88887596130371
+            ],
+            [
+              17.542892456054688,
+              26.75628089904785
+            ],
+            [
+              17.694429397583008,
+              26.647464752197266
+            ],
+            [
+              17.86731719970703,
+              26.566604614257813
+            ],
+            [
+              18.054908752441406,
+              26.516813278198242
+            ],
+            [
+              18.25,
+              26.5
+            ],
+            [
+              18.445091247558594,
+              26.516813278198242
+            ],
+            [
+              18.63268280029297,
+              26.566604614257813
+            ],
+            [
+              18.805570602416992,
+              26.647464752197266
+            ],
+            [
+              18.957107543945313,
+              26.75628089904785
+            ],
+            [
+              19.081470489501953,
+              26.88887596130371
+            ],
+            [
+              19.173879623413086,
+              27.040151596069336
+            ],
+            [
+              19.230785369873047,
+              27.204296112060547
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000045",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              19.25,
+              19.375
+            ],
+            [
+              19.230785369873047,
+              19.545703887939453
+            ],
+            [
+              19.173879623413086,
+              19.709848403930664
+            ],
+            [
+              19.081470489501953,
+              19.86112403869629
+            ],
+            [
+              18.957107543945313,
+              19.99371910095215
+            ],
+            [
+              18.805570602416992,
+              20.102535247802734
+            ],
+            [
+              18.63268280029297,
+              20.183395385742188
+            ],
+            [
+              18.445091247558594,
+              20.233186721801758
+            ],
+            [
+              18.25,
+              20.25
+            ],
+            [
+              18.054908752441406,
+              20.233186721801758
+            ],
+            [
+              17.86731719970703,
+              20.183395385742188
+            ],
+            [
+              17.694429397583008,
+              20.102535247802734
+            ],
+            [
+              17.542892456054688,
+              19.99371910095215
+            ],
+            [
+              17.418529510498047,
+              19.86112403869629
+            ],
+            [
+              17.326120376586914,
+              19.709848403930664
+            ],
+            [
+              17.269214630126953,
+              19.545703887939453
+            ],
+            [
+              17.25,
+              19.375
+            ],
+            [
+              17.269214630126953,
+              19.204296112060547
+            ],
+            [
+              17.326120376586914,
+              19.040151596069336
+            ],
+            [
+              17.418529510498047,
+              18.88887596130371
+            ],
+            [
+              17.542892456054688,
+              18.75628089904785
+            ],
+            [
+              17.694429397583008,
+              18.647464752197266
+            ],
+            [
+              17.86731719970703,
+              18.566604614257813
+            ],
+            [
+              18.054908752441406,
+              18.516813278198242
+            ],
+            [
+              18.25,
+              18.5
+            ],
+            [
+              18.445091247558594,
+              18.516813278198242
+            ],
+            [
+              18.63268280029297,
+              18.566604614257813
+            ],
+            [
+              18.805570602416992,
+              18.647464752197266
+            ],
+            [
+              18.957107543945313,
+              18.75628089904785
+            ],
+            [
+              19.081470489501953,
+              18.88887596130371
+            ],
+            [
+              19.173879623413086,
+              19.040151596069336
+            ],
+            [
+              19.230785369873047,
+              19.204296112060547
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000046",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              19.25,
+              10.375
+            ],
+            [
+              19.233186721801758,
+              10.545703887939453
+            ],
+            [
+              19.183395385742188,
+              10.709848403930664
+            ],
+            [
+              19.102535247802734,
+              10.861124038696289
+            ],
+            [
+              18.99371910095215,
+              10.993718147277832
+            ],
+            [
+              18.86112403869629,
+              11.10253620147705
+            ],
+            [
+              18.709848403930664,
+              11.183394432067871
+            ],
+            [
+              18.545703887939453,
+              11.233186721801758
+            ],
+            [
+              18.375,
+              11.25
+            ],
+            [
+              18.204296112060547,
+              11.233186721801758
+            ],
+            [
+              18.040151596069336,
+              11.183394432067871
+            ],
+            [
+              17.88887596130371,
+              11.10253620147705
+            ],
+            [
+              17.75628089904785,
+              10.993718147277832
+            ],
+            [
+              17.647464752197266,
+              10.861124038696289
+            ],
+            [
+              17.566604614257813,
+              10.709848403930664
+            ],
+            [
+              17.516813278198242,
+              10.545703887939453
+            ],
+            [
+              17.5,
+              10.375
+            ],
+            [
+              17.516813278198242,
+              10.204296112060547
+            ],
+            [
+              17.566604614257813,
+              10.040151596069336
+            ],
+            [
+              17.647464752197266,
+              9.888875961303711
+            ],
+            [
+              17.75628089904785,
+              9.756281852722168
+            ],
+            [
+              17.88887596130371,
+              9.64746379852295
+            ],
+            [
+              18.040151596069336,
+              9.566605567932129
+            ],
+            [
+              18.204296112060547,
+              9.516813278198242
+            ],
+            [
+              18.375,
+              9.5
+            ],
+            [
+              18.545703887939453,
+              9.516813278198242
+            ],
+            [
+              18.709848403930664,
+              9.566605567932129
+            ],
+            [
+              18.86112403869629,
+              9.64746379852295
+            ],
+            [
+              18.99371910095215,
+              9.756281852722168
+            ],
+            [
+              19.102535247802734,
+              9.888875961303711
+            ],
+            [
+              19.183395385742188,
+              10.040151596069336
+            ],
+            [
+              19.233186721801758,
+              10.204296112060547
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000047",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              3.25,
+              10.375
+            ],
+            [
+              3.233187198638916,
+              10.545703887939453
+            ],
+            [
+              3.183394432067871,
+              10.709848403930664
+            ],
+            [
+              3.1025359630584717,
+              10.861124038696289
+            ],
+            [
+              2.993718385696411,
+              10.993718147277832
+            ],
+            [
+              2.861124038696289,
+              11.10253620147705
+            ],
+            [
+              2.709847927093506,
+              11.183394432067871
+            ],
+            [
+              2.5457041263580322,
+              11.233186721801758
+            ],
+            [
+              2.375,
+              11.25
+            ],
+            [
+              2.2042958736419678,
+              11.233186721801758
+            ],
+            [
+              2.040152072906494,
+              11.183394432067871
+            ],
+            [
+              1.8888760805130005,
+              11.10253620147705
+            ],
+            [
+              1.7562816143035889,
+              10.993718147277832
+            ],
+            [
+              1.6474640369415283,
+              10.861124038696289
+            ],
+            [
+              1.5666054487228394,
+              10.709848403930664
+            ],
+            [
+              1.516812801361084,
+              10.545703887939453
+            ],
+            [
+              1.5,
+              10.375
+            ],
+            [
+              1.516812801361084,
+              10.204296112060547
+            ],
+            [
+              1.5666054487228394,
+              10.040151596069336
+            ],
+            [
+              1.6474641561508179,
+              9.888875961303711
+            ],
+            [
+              1.7562814950942993,
+              9.756281852722168
+            ],
+            [
+              1.8888758420944214,
+              9.64746379852295
+            ],
+            [
+              2.040151834487915,
+              9.566605567932129
+            ],
+            [
+              2.2042958736419678,
+              9.516813278198242
+            ],
+            [
+              2.375,
+              9.5
+            ],
+            [
+              2.5457041263580322,
+              9.516813278198242
+            ],
+            [
+              2.709848165512085,
+              9.566605567932129
+            ],
+            [
+              2.86112380027771,
+              9.64746379852295
+            ],
+            [
+              2.993718385696411,
+              9.756281852722168
+            ],
+            [
+              3.1025359630584717,
+              9.888875961303711
+            ],
+            [
+              3.18339467048645,
+              10.040151596069336
+            ],
+            [
+              3.233187198638916,
+              10.204296112060547
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000048",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              3.25,
+              19.375
+            ],
+            [
+              3.230785369873047,
+              19.545703887939453
+            ],
+            [
+              3.173879623413086,
+              19.709848403930664
+            ],
+            [
+              3.0814695358276367,
+              19.86112403869629
+            ],
+            [
+              2.957106828689575,
+              19.99371910095215
+            ],
+            [
+              2.805570125579834,
+              20.102535247802734
+            ],
+            [
+              2.632683515548706,
+              20.183395385742188
+            ],
+            [
+              2.4450902938842773,
+              20.233186721801758
+            ],
+            [
+              2.25,
+              20.25
+            ],
+            [
+              2.0549097061157227,
+              20.233186721801758
+            ],
+            [
+              1.8673166036605835,
+              20.183395385742188
+            ],
+            [
+              1.694429874420166,
+              20.102535247802734
+            ],
+            [
+              1.5428931713104248,
+              19.99371910095215
+            ],
+            [
+              1.4185303449630737,
+              19.86112403869629
+            ],
+            [
+              1.3261204957962036,
+              19.709848403930664
+            ],
+            [
+              1.2692146301269531,
+              19.545703887939453
+            ],
+            [
+              1.25,
+              19.375
+            ],
+            [
+              1.2692146301269531,
+              19.204296112060547
+            ],
+            [
+              1.3261204957962036,
+              19.040151596069336
+            ],
+            [
+              1.4185304641723633,
+              18.88887596130371
+            ],
+            [
+              1.5428931713104248,
+              18.75628089904785
+            ],
+            [
+              1.694429636001587,
+              18.647464752197266
+            ],
+            [
+              1.867316484451294,
+              18.566604614257813
+            ],
+            [
+              2.0549097061157227,
+              18.516813278198242
+            ],
+            [
+              2.25,
+              18.5
+            ],
+            [
+              2.4450902938842773,
+              18.516813278198242
+            ],
+            [
+              2.632683515548706,
+              18.566604614257813
+            ],
+            [
+              2.805570125579834,
+              18.647464752197266
+            ],
+            [
+              2.957106590270996,
+              18.75628089904785
+            ],
+            [
+              3.0814695358276367,
+              18.88887596130371
+            ],
+            [
+              3.173879623413086,
+              19.040151596069336
+            ],
+            [
+              3.230785369873047,
+              19.204296112060547
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000050",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              3.101959228515625,
+              36.2922477722168
+            ],
+            [
+              3.083313226699829,
+              36.47503662109375
+            ],
+            [
+              3.0280919075012207,
+              36.65079879760742
+            ],
+            [
+              2.938417434692383,
+              36.812782287597656
+            ],
+            [
+              2.8177359104156494,
+              36.95476531982422
+            ],
+            [
+              2.670685052871704,
+              37.071285247802734
+            ],
+            [
+              2.502915859222412,
+              37.157867431640625
+            ],
+            [
+              2.320875883102417,
+              37.211185455322266
+            ],
+            [
+              2.1315603256225586,
+              37.22918701171875
+            ],
+            [
+              1.9422448873519897,
+              37.211185455322266
+            ],
+            [
+              1.760204792022705,
+              37.157867431640625
+            ],
+            [
+              1.592435598373413,
+              37.071285247802734
+            ],
+            [
+              1.4453847408294678,
+              36.95476531982422
+            ],
+            [
+              1.3247030973434448,
+              36.812782287597656
+            ],
+            [
+              1.2350287437438965,
+              36.65079879760742
+            ],
+            [
+              1.179807424545288,
+              36.47503662109375
+            ],
+            [
+              1.1611614227294922,
+              36.2922477722168
+            ],
+            [
+              1.179807424545288,
+              36.109458923339844
+            ],
+            [
+              1.2350287437438965,
+              35.93369674682617
+            ],
+            [
+              1.3247032165527344,
+              35.77171325683594
+            ],
+            [
+              1.4453846216201782,
+              35.629730224609375
+            ],
+            [
+              1.592435359954834,
+              35.51321029663086
+            ],
+            [
+              1.760204553604126,
+              35.42662811279297
+            ],
+            [
+              1.9422447681427002,
+              35.37331008911133
+            ],
+            [
+              2.1315603256225586,
+              35.355308532714844
+            ],
+            [
+              2.320875883102417,
+              35.37331008911133
+            ],
+            [
+              2.502916097640991,
+              35.42662811279297
+            ],
+            [
+              2.670684814453125,
+              35.51321029663086
+            ],
+            [
+              2.8177359104156494,
+              35.629730224609375
+            ],
+            [
+              2.938417434692383,
+              35.77171325683594
+            ],
+            [
+              3.0280919075012207,
+              35.93369674682617
+            ],
+            [
+              3.083313226699829,
+              36.109458923339844
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000049",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              3.14614200592041,
+              27.269062042236328
+            ],
+            [
+              3.1292104721069336,
+              27.44967269897461
+            ],
+            [
+              3.079066753387451,
+              27.62334442138672
+            ],
+            [
+              2.997637987136841,
+              27.78339958190918
+            ],
+            [
+              2.8880529403686523,
+              27.923690795898438
+            ],
+            [
+              2.754523515701294,
+              28.0388240814209
+            ],
+            [
+              2.6021807193756104,
+              28.124374389648438
+            ],
+            [
+              2.4368791580200195,
+              28.17705726623535
+            ],
+            [
+              2.2649712562561035,
+              28.194847106933594
+            ],
+            [
+              2.0930633544921875,
+              28.17705726623535
+            ],
+            [
+              1.9277617931365967,
+              28.124374389648438
+            ],
+            [
+              1.775418996810913,
+              28.0388240814209
+            ],
+            [
+              1.6418894529342651,
+              27.923690795898438
+            ],
+            [
+              1.5323045253753662,
+              27.78339958190918
+            ],
+            [
+              1.4508756399154663,
+              27.62334442138672
+            ],
+            [
+              1.4007319211959839,
+              27.44967269897461
+            ],
+            [
+              1.3838005065917969,
+              27.269062042236328
+            ],
+            [
+              1.4007319211959839,
+              27.088451385498047
+            ],
+            [
+              1.4508756399154663,
+              26.914779663085938
+            ],
+            [
+              1.5323046445846558,
+              26.754724502563477
+            ],
+            [
+              1.6418893337249756,
+              26.61443328857422
+            ],
+            [
+              1.7754188776016235,
+              26.499300003051758
+            ],
+            [
+              1.9277616739273071,
+              26.41374969482422
+            ],
+            [
+              2.0930633544921875,
+              26.361066818237305
+            ],
+            [
+              2.2649712562561035,
+              26.343276977539063
+            ],
+            [
+              2.4368791580200195,
+              26.361066818237305
+            ],
+            [
+              2.6021809577941895,
+              26.41374969482422
+            ],
+            [
+              2.754523277282715,
+              26.499300003051758
+            ],
+            [
+              2.8880529403686523,
+              26.61443328857422
+            ],
+            [
+              2.997637987136841,
+              26.754724502563477
+            ],
+            [
+              3.0790669918060303,
+              26.914779663085938
+            ],
+            [
+              3.1292104721069336,
+              27.088451385498047
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000051",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              2.9198105335235596,
+              1.7950692176818848
+            ],
+            [
+              2.8965682983398438,
+              2.0224175453186035
+            ],
+            [
+              2.827735424041748,
+              2.2410287857055664
+            ],
+            [
+              2.715956687927246,
+              2.44250226020813
+            ],
+            [
+              2.5655276775360107,
+              2.6190953254699707
+            ],
+            [
+              2.3822295665740967,
+              2.764021396636963
+            ],
+            [
+              2.1731059551239014,
+              2.871711015701294
+            ],
+            [
+              1.9461939334869385,
+              2.938025951385498
+            ],
+            [
+              1.7102131843566895,
+              2.9604179859161377
+            ],
+            [
+              1.4742324352264404,
+              2.938025951385498
+            ],
+            [
+              1.2473204135894775,
+              2.871711254119873
+            ],
+            [
+              1.0381970405578613,
+              2.764021396636963
+            ],
+            [
+              0.8548986911773682,
+              2.6190953254699707
+            ],
+            [
+              0.7044696807861328,
+              2.44250226020813
+            ],
+            [
+              0.5926909446716309,
+              2.2410290241241455
+            ],
+            [
+              0.523857831954956,
+              2.0224175453186035
+            ],
+            [
+              0.5006158351898193,
+              1.7950690984725952
+            ],
+            [
+              0.523857831954956,
+              1.5677210092544556
+            ],
+            [
+              0.5926909446716309,
+              1.3491095304489136
+            ],
+            [
+              0.7044697999954224,
+              1.14763605594635
+            ],
+            [
+              0.8548986315727234,
+              0.9710432887077332
+            ],
+            [
+              1.0381966829299927,
+              0.8261172771453857
+            ],
+            [
+              1.2473201751708984,
+              0.7184274196624756
+            ],
+            [
+              1.4742324352264404,
+              0.6521123647689819
+            ],
+            [
+              1.7102131843566895,
+              0.6297204494476318
+            ],
+            [
+              1.946194052696228,
+              0.6521123647689819
+            ],
+            [
+              2.1731061935424805,
+              0.7184274196624756
+            ],
+            [
+              2.3822293281555176,
+              0.8261170387268066
+            ],
+            [
+              2.5655274391174316,
+              0.971043050289154
+            ],
+            [
+              2.715956687927246,
+              1.14763605594635
+            ],
+            [
+              2.827735424041748,
+              1.3491095304489136
+            ],
+            [
+              2.896568536758423,
+              1.5677210092544556
+            ]
+          ]
+        },
+        "shape": "polygon",
         "source": "manual"
       }
     ],
-    "collision_erase": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          33.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          32.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          35.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          34.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          33.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          61.0,
-          32.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          32.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          79.0,
-          26.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          79.0,
-          25.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          79.0,
-          24.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          79.0,
-          23.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          79.0,
-          22.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          79.0,
-          21.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          78.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          76.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          77.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          76.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          76.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          33.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          33.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          31.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          31.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          44.0
-        ]
-      }
-    ],
+    "collision_erase": [],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -2625,8 +4202,17 @@
         "linked_visual_instance_id": "inst_000234",
         "official_connection_id": "portal.cangyue_bull_temple_f1.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          76,
+          23
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "world_cangyue_island",
         "requires_leave_before_retrigger": true,
@@ -2647,8 +4233,8 @@
           6.0
         ],
         "tile": [
-          76.0,
-          23.0
+          76,
+          23
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -2668,8 +4254,17 @@
         "linked_visual_instance_id": "inst_000235",
         "official_connection_id": "portal.cangyue_bull_temple_f1.map_exit_000002",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          5,
+          5
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "cangyue_bull_temple_f2",
         "requires_leave_before_retrigger": true,
@@ -2690,8 +4285,8 @@
           23.0
         ],
         "tile": [
-          5.0,
-          5.0
+          5,
+          5
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -4132,12 +5727,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          79.0,
-          20.0
+          79,
+          20
         ],
         "tile_anchor": [
-          79.0,
-          20.0
+          79,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4213,12 +5808,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          79.0,
-          27.0
+          79,
+          27
         ],
         "tile_anchor": [
-          79.0,
-          27.0
+          79,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -4294,12 +5889,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          67.0,
-          27.0
+          67,
+          27
         ],
         "tile_anchor": [
-          67.0,
-          27.0
+          67,
+          27
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4375,12 +5970,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          67.0,
-          18.0
+          67,
+          18
         ],
         "tile_anchor": [
-          67.0,
-          18.0
+          67,
+          18
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4456,12 +6051,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          67.0,
-          9.0
+          67,
+          9
         ],
         "tile_anchor": [
-          67.0,
-          9.0
+          67,
+          9
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4537,12 +6132,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          67.0,
-          35.0
+          67,
+          35
         ],
         "tile_anchor": [
-          67.0,
-          35.0
+          67,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4618,12 +6213,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          50.0,
-          18.0
+          50,
+          18
         ],
         "tile_anchor": [
-          50.0,
-          18.0
+          50,
+          18
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4699,12 +6294,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          50.0,
-          9.0
+          50,
+          9
         ],
         "tile_anchor": [
-          50.0,
-          9.0
+          50,
+          9
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4780,12 +6375,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          49.0,
-          26.0
+          49,
+          26
         ],
         "tile_anchor": [
-          49.0,
-          26.0
+          49,
+          26
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4861,12 +6456,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          49.0,
-          35.0
+          49,
+          35
         ],
         "tile_anchor": [
-          49.0,
-          35.0
+          49,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4942,12 +6537,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          35.0
+          33,
+          35
         ],
         "tile_anchor": [
-          33.0,
-          35.0
+          33,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5023,12 +6618,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          26.0
+          33,
+          26
         ],
         "tile_anchor": [
-          33.0,
-          26.0
+          33,
+          26
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5104,12 +6699,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          18.0
+          33,
+          18
         ],
         "tile_anchor": [
-          33.0,
-          18.0
+          33,
+          18
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5185,12 +6780,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          9.0
+          33,
+          9
         ],
         "tile_anchor": [
-          33.0,
-          9.0
+          33,
+          9
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5266,12 +6861,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          18.0
+          17,
+          18
         ],
         "tile_anchor": [
-          17.0,
-          18.0
+          17,
+          18
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5347,12 +6942,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          18.0
+          1,
+          18
         ],
         "tile_anchor": [
-          1.0,
-          18.0
+          1,
+          18
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5428,12 +7023,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          26.0
+          17,
+          26
         ],
         "tile_anchor": [
-          17.0,
-          26.0
+          17,
+          26
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5509,12 +7104,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          35.0
+          17,
+          35
         ],
         "tile_anchor": [
-          17.0,
-          35.0
+          17,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5590,12 +7185,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          17.0,
-          9.0
+          17,
+          9
         ],
         "tile_anchor": [
-          17.0,
-          9.0
+          17,
+          9
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5671,12 +7266,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          35.0
+          1,
+          35
         ],
         "tile_anchor": [
-          1.0,
-          35.0
+          1,
+          35
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5752,12 +7347,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          26.0
+          1,
+          26
         ],
         "tile_anchor": [
-          1.0,
-          26.0
+          1,
+          26
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5833,12 +7428,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          9.0
+          1,
+          9
         ],
         "tile_anchor": [
-          1.0,
-          9.0
+          1,
+          9
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -5849,7 +7444,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           190.0,
-          359.666656494141
+          359.6666564941406
         ],
         "asset_id": "user.f2fff8dc89de5453",
         "base_footprint_tiles": [
@@ -5900,7 +7495,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           190.0,
-          359.666656494141
+          359.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5914,12 +7509,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          61.0,
-          14.0
+          61,
+          14
         ],
         "tile_anchor": [
-          61.0,
-          14.0
+          61,
+          14
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5930,7 +7525,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           190.0,
-          359.666656494141
+          359.6666564941406
         ],
         "asset_id": "user.f2fff8dc89de5453",
         "base_footprint_tiles": [
@@ -5981,7 +7576,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           190.0,
-          359.666656494141
+          359.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -5995,12 +7590,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          61.0,
-          31.0
+          61,
+          31
         ],
         "tile_anchor": [
-          61.0,
-          31.0
+          61,
+          31
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6076,12 +7671,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          43.0,
-          19.0
+          43,
+          19
         ],
         "tile_anchor": [
-          43.0,
-          19.0
+          43,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6157,12 +7752,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          36.0
+          59,
+          36
         ],
         "tile_anchor": [
-          59.0,
-          36.0
+          59,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6238,12 +7833,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          27.0,
-          19.0
+          27,
+          19
         ],
         "tile_anchor": [
-          27.0,
-          19.0
+          27,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6319,12 +7914,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12.0,
-          25.0
+          12,
+          25
         ],
         "tile_anchor": [
-          12.0,
-          25.0
+          12,
+          25
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6400,12 +7995,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          12.0,
-          34.0
+          12,
+          34
         ],
         "tile_anchor": [
-          12.0,
-          34.0
+          12,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6481,12 +8076,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "tile_anchor": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6497,7 +8092,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           140.0,
-          357.666656494141
+          357.6666564941406
         ],
         "asset_id": "user.aa1eed4e6f085590",
         "base_footprint_tiles": [
@@ -6548,7 +8143,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           140.0,
-          357.666656494141
+          357.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -6562,12 +8157,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          2.0,
-          44.0
+          2,
+          44
         ],
         "tile_anchor": [
-          2.0,
-          44.0
+          2,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6578,7 +8173,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           152.0,
-          359.666656494141
+          359.6666564941406
         ],
         "asset_id": "user.5bc26f0181587097",
         "base_footprint_tiles": [
@@ -6629,7 +8224,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           152.0,
-          359.666656494141
+          359.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -6643,93 +8238,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          2.0
+          33,
+          2
         ],
         "tile_anchor": [
-          33.0,
-          2.0
-        ],
-        "visual_footprint_tiles": [
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          160.0,
-          344.666656494141
-        ],
-        "asset_id": "user.d2ca69e761034ea9",
-        "base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "none",
-        "instance_base_footprint_tiles": [
-          3.0,
-          3.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_custom_scale": true,
-        "instance_id": "inst_000228",
-        "instance_scale_level": -7.0,
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "material_layer_order": 0.0,
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "decoration",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
-        "placement_anchor_px": [
-          160.0,
-          344.666656494141
-        ],
-        "placement_rule": "inside_map",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          0.3,
-          0.3
-        ],
-        "scene_intent": "visual_detail",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          34.0,
-          44.0
-        ],
-        "tile_anchor": [
-          34.0,
-          44.0
+          33,
+          2
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6740,7 +8254,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           201.0,
-          346.666656494141
+          346.6666564941406
         ],
         "asset_id": "user.2a4ca216beb37aa9",
         "base_footprint_tiles": [
@@ -6791,7 +8305,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           201.0,
-          346.666656494141
+          346.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -6805,12 +8319,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          76.0,
-          44.0
+          76,
+          44
         ],
         "tile_anchor": [
-          76.0,
-          44.0
+          76,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6821,7 +8335,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           152.0,
-          361.666656494141
+          361.6666564941406
         ],
         "asset_id": "user.0da97f08519bd179",
         "base_footprint_tiles": [
@@ -6872,7 +8386,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           152.0,
-          361.666656494141
+          361.6666564941406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -6886,12 +8400,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          77.0,
-          2.0
+          77,
+          2
         ],
         "tile_anchor": [
-          77.0,
-          2.0
+          77,
+          2
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6933,7 +8447,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000232",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -6971,8 +8485,8 @@
           4.0
         ],
         "tile_anchor": [
-          4.0,
-          4.0
+          4,
+          4
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -7014,7 +8528,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000233",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7052,8 +8566,8 @@
           22.0
         ],
         "tile_anchor": [
-          75.0,
-          22.0
+          75,
+          22
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -7064,7 +8578,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "asset_id": "user.portal_gate.20260916.s01_r1_c1",
         "base_footprint_tiles": [
@@ -7093,7 +8607,9 @@
           1.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000234",
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7113,26 +8629,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          1.4000000000000004,
+          1.4000000000000004
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          76.0,
-          23.0
+          76,
+          23
         ],
         "tile_anchor": [
-          76.0,
-          23.0
+          76,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7143,7 +8659,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "asset_id": "user.portal_gate.20260916.s01_r1_c1",
         "base_footprint_tiles": [
@@ -7172,7 +8688,9 @@
           1.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000235",
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -7192,26 +8710,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          1.4000000000000004,
+          1.4000000000000004
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
-          5.0
+          5,
+          5
         ],
         "tile_anchor": [
-          5.0,
-          5.0
+          5,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7300,8 +8818,8 @@
           8.0
         ],
         "tile_anchor": [
-          0.0,
-          8.0
+          0,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7382,8 +8900,8 @@
           0.0
         ],
         "tile_anchor": [
-          8.0,
-          0.0
+          8,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7464,8 +8982,8 @@
           12.0
         ],
         "tile_anchor": [
-          0.0,
-          12.0
+          0,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7546,8 +9064,8 @@
           0.0
         ],
         "tile_anchor": [
-          12.0,
-          0.0
+          12,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7628,8 +9146,8 @@
           20.0
         ],
         "tile_anchor": [
-          0.0,
-          20.0
+          0,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7710,8 +9228,8 @@
           0.0
         ],
         "tile_anchor": [
-          20.0,
-          0.0
+          20,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7792,8 +9310,8 @@
           24.0
         ],
         "tile_anchor": [
-          0.0,
-          24.0
+          0,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7874,8 +9392,8 @@
           0.0
         ],
         "tile_anchor": [
-          24.0,
-          0.0
+          24,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7956,8 +9474,8 @@
           32.0
         ],
         "tile_anchor": [
-          0.0,
-          32.0
+          0,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8038,8 +9556,8 @@
           0.0
         ],
         "tile_anchor": [
-          32.0,
-          0.0
+          32,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8120,8 +9638,8 @@
           36.0
         ],
         "tile_anchor": [
-          0.0,
-          36.0
+          0,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8202,8 +9720,8 @@
           0.0
         ],
         "tile_anchor": [
-          36.0,
-          0.0
+          36,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8284,8 +9802,8 @@
           44.0
         ],
         "tile_anchor": [
-          0.0,
-          44.0
+          0,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8366,8 +9884,8 @@
           0.0
         ],
         "tile_anchor": [
-          44.0,
-          0.0
+          44,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8448,8 +9966,8 @@
           47.0
         ],
         "tile_anchor": [
-          0.0,
-          47.0
+          0,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8530,8 +10048,8 @@
           0.0
         ],
         "tile_anchor": [
-          48.0,
-          0.0
+          48,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8612,8 +10130,8 @@
           47.0
         ],
         "tile_anchor": [
-          8.0,
-          47.0
+          8,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8694,8 +10212,8 @@
           0.0
         ],
         "tile_anchor": [
-          56.0,
-          0.0
+          56,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8776,8 +10294,8 @@
           47.0
         ],
         "tile_anchor": [
-          12.0,
-          47.0
+          12,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8858,8 +10376,8 @@
           0.0
         ],
         "tile_anchor": [
-          60.0,
-          0.0
+          60,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8940,8 +10458,8 @@
           47.0
         ],
         "tile_anchor": [
-          20.0,
-          47.0
+          20,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9022,8 +10540,8 @@
           0.0
         ],
         "tile_anchor": [
-          68.0,
-          0.0
+          68,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9104,8 +10622,8 @@
           47.0
         ],
         "tile_anchor": [
-          24.0,
-          47.0
+          24,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9186,8 +10704,8 @@
           0.0
         ],
         "tile_anchor": [
-          72.0,
-          0.0
+          72,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9268,8 +10786,8 @@
           0.0
         ],
         "tile_anchor": [
-          76.0,
-          0.0
+          76,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9350,8 +10868,8 @@
           47.0
         ],
         "tile_anchor": [
-          32.0,
-          47.0
+          32,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9432,8 +10950,8 @@
           0.0
         ],
         "tile_anchor": [
-          79.0,
-          0.0
+          79,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9514,8 +11032,8 @@
           8.0
         ],
         "tile_anchor": [
-          79.0,
-          8.0
+          79,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9596,8 +11114,8 @@
           47.0
         ],
         "tile_anchor": [
-          44.0,
-          47.0
+          44,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9678,8 +11196,8 @@
           12.0
         ],
         "tile_anchor": [
-          79.0,
-          12.0
+          79,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9760,8 +11278,8 @@
           47.0
         ],
         "tile_anchor": [
-          56.0,
-          47.0
+          56,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9842,8 +11360,8 @@
           32.0
         ],
         "tile_anchor": [
-          79.0,
-          32.0
+          79,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9924,8 +11442,8 @@
           47.0
         ],
         "tile_anchor": [
-          68.0,
-          47.0
+          68,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10006,8 +11524,8 @@
           36.0
         ],
         "tile_anchor": [
-          79.0,
-          36.0
+          79,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10085,8 +11603,8 @@
           40.0
         ],
         "tile_anchor": [
-          79.0,
-          40.0
+          79,
+          40
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10164,8 +11682,8 @@
           44.0
         ],
         "tile_anchor": [
-          79.0,
-          44.0
+          79,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10243,8 +11761,8 @@
           47.0
         ],
         "tile_anchor": [
-          76.0,
-          47.0
+          76,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10322,8 +11840,8 @@
           47.0
         ],
         "tile_anchor": [
-          72.0,
-          47.0
+          72,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10401,8 +11919,8 @@
           47.0
         ],
         "tile_anchor": [
-          64.0,
-          47.0
+          64,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10480,8 +11998,8 @@
           47.0
         ],
         "tile_anchor": [
-          60.0,
-          47.0
+          60,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10559,8 +12077,8 @@
           47.0
         ],
         "tile_anchor": [
-          52.0,
-          47.0
+          52,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10638,8 +12156,8 @@
           47.0
         ],
         "tile_anchor": [
-          48.0,
-          47.0
+          48,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10717,8 +12235,8 @@
           47.0
         ],
         "tile_anchor": [
-          40.0,
-          47.0
+          40,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10796,8 +12314,8 @@
           47.0
         ],
         "tile_anchor": [
-          36.0,
-          47.0
+          36,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10875,8 +12393,8 @@
           47.0
         ],
         "tile_anchor": [
-          28.0,
-          47.0
+          28,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10954,8 +12472,8 @@
           47.0
         ],
         "tile_anchor": [
-          16.0,
-          47.0
+          16,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11033,8 +12551,8 @@
           47.0
         ],
         "tile_anchor": [
-          4.0,
-          47.0
+          4,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11112,8 +12630,8 @@
           28.0
         ],
         "tile_anchor": [
-          0.0,
-          28.0
+          0,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11191,8 +12709,8 @@
           16.0
         ],
         "tile_anchor": [
-          0.0,
-          16.0
+          0,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11270,8 +12788,8 @@
           4.0
         ],
         "tile_anchor": [
-          0.0,
-          4.0
+          0,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11349,8 +12867,8 @@
           1.0
         ],
         "tile_anchor": [
-          0.0,
-          1.0
+          0,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11428,8 +12946,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          0.0
+          4,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11507,8 +13025,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11586,8 +13104,8 @@
           0.0
         ],
         "tile_anchor": [
-          16.0,
-          0.0
+          16,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11665,8 +13183,8 @@
           0.0
         ],
         "tile_anchor": [
-          28.0,
-          0.0
+          28,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11744,8 +13262,8 @@
           0.0
         ],
         "tile_anchor": [
-          40.0,
-          0.0
+          40,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11823,8 +13341,8 @@
           0.0
         ],
         "tile_anchor": [
-          52.0,
-          0.0
+          52,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11902,8 +13420,8 @@
           0.0
         ],
         "tile_anchor": [
-          64.0,
-          0.0
+          64,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11981,8 +13499,8 @@
           4.0
         ],
         "tile_anchor": [
-          79.0,
-          4.0
+          79,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12060,8 +13578,8 @@
           16.0
         ],
         "tile_anchor": [
-          79.0,
-          16.0
+          79,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12139,8 +13657,8 @@
           28.0
         ],
         "tile_anchor": [
-          79.0,
-          28.0
+          79,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12218,8 +13736,8 @@
           19.0
         ],
         "tile_anchor": [
-          79.0,
-          19.0
+          79,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12297,8 +13815,8 @@
           30.0
         ],
         "tile_anchor": [
-          59.0,
-          30.0
+          59,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12376,8 +13894,8 @@
           26.0
         ],
         "tile_anchor": [
-          59.0,
-          26.0
+          59,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12455,8 +13973,8 @@
           22.0
         ],
         "tile_anchor": [
-          59.0,
-          22.0
+          59,
+          22
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12534,8 +14052,8 @@
           18.0
         ],
         "tile_anchor": [
-          59.0,
-          18.0
+          59,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12613,8 +14131,8 @@
           11.0
         ],
         "tile_anchor": [
-          59.0,
-          11.0
+          59,
+          11
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12692,8 +14210,8 @@
           15.0
         ],
         "tile_anchor": [
-          59.0,
-          15.0
+          59,
+          15
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12771,8 +14289,8 @@
           32.0
         ],
         "tile_anchor": [
-          59.0,
-          32.0
+          59,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12850,8 +14368,8 @@
           35.0
         ],
         "tile_anchor": [
-          59.0,
-          35.0
+          59,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12929,8 +14447,8 @@
           13.0
         ],
         "tile_anchor": [
-          43.0,
-          13.0
+          43,
+          13
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13008,8 +14526,8 @@
           9.0
         ],
         "tile_anchor": [
-          43.0,
-          9.0
+          43,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13087,8 +14605,8 @@
           5.0
         ],
         "tile_anchor": [
-          43.0,
-          5.0
+          43,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13166,8 +14684,8 @@
           1.0
         ],
         "tile_anchor": [
-          43.0,
-          1.0
+          43,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13245,8 +14763,8 @@
           18.0
         ],
         "tile_anchor": [
-          43.0,
-          18.0
+          43,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13324,8 +14842,8 @@
           15.0
         ],
         "tile_anchor": [
-          43.0,
-          15.0
+          43,
+          15
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13403,8 +14921,8 @@
           43.0
         ],
         "tile_anchor": [
-          12.0,
-          43.0
+          12,
+          43
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13482,8 +15000,8 @@
           21.0
         ],
         "tile_anchor": [
-          12.0,
-          21.0
+          12,
+          21
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13561,8 +15079,8 @@
           17.0
         ],
         "tile_anchor": [
-          12.0,
-          17.0
+          12,
+          17
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13640,8 +15158,8 @@
           13.0
         ],
         "tile_anchor": [
-          12.0,
-          13.0
+          12,
+          13
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13719,8 +15237,8 @@
           9.0
         ],
         "tile_anchor": [
-          12.0,
-          9.0
+          12,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13798,8 +15316,8 @@
           5.0
         ],
         "tile_anchor": [
-          12.0,
-          5.0
+          12,
+          5
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13877,8 +15395,8 @@
           1.0
         ],
         "tile_anchor": [
-          12.0,
-          1.0
+          12,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13956,8 +15474,8 @@
           31.0
         ],
         "tile_anchor": [
-          27.0,
-          31.0
+          27,
+          31
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14035,8 +15553,8 @@
           27.0
         ],
         "tile_anchor": [
-          27.0,
-          27.0
+          27,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14114,8 +15632,8 @@
           35.0
         ],
         "tile_anchor": [
-          27.0,
-          35.0
+          27,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14193,8 +15711,8 @@
           39.0
         ],
         "tile_anchor": [
-          27.0,
-          39.0
+          27,
+          39
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14272,8 +15790,8 @@
           43.0
         ],
         "tile_anchor": [
-          27.0,
-          43.0
+          27,
+          43
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14351,8 +15869,8 @@
           10.0
         ],
         "tile_anchor": [
-          64.0,
-          10.0
+          64,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14430,8 +15948,8 @@
           10.0
         ],
         "tile_anchor": [
-          60.0,
-          10.0
+          60,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14509,8 +16027,8 @@
           10.0
         ],
         "tile_anchor": [
-          56.0,
-          10.0
+          56,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14588,8 +16106,8 @@
           10.0
         ],
         "tile_anchor": [
-          52.0,
-          10.0
+          52,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14667,8 +16185,8 @@
           10.0
         ],
         "tile_anchor": [
-          67.0,
-          10.0
+          67,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -14746,8 +16264,8 @@
           36.0
         ],
         "tile_anchor": [
-          35.0,
-          36.0
+          35,
+          36
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14825,8 +16343,8 @@
           36.0
         ],
         "tile_anchor": [
-          39.0,
-          36.0
+          39,
+          36
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14904,8 +16422,8 @@
           36.0
         ],
         "tile_anchor": [
-          43.0,
-          36.0
+          43,
+          36
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -14983,8 +16501,8 @@
           36.0
         ],
         "tile_anchor": [
-          46.0,
-          36.0
+          46,
+          36
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -15062,8 +16580,8 @@
           36.0
         ],
         "tile_anchor": [
-          49.0,
-          36.0
+          49,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15141,8 +16659,8 @@
           23.0
         ],
         "tile_anchor": [
-          27.0,
-          23.0
+          27,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15220,8 +16738,8 @@
           20.0
         ],
         "tile_anchor": [
-          27.0,
-          20.0
+          27,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15299,8 +16817,8 @@
           10.0
         ],
         "tile_anchor": [
-          30.0,
-          10.0
+          30,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -15378,8 +16896,8 @@
           10.0
         ],
         "tile_anchor": [
-          26.0,
-          10.0
+          26,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -15457,8 +16975,8 @@
           10.0
         ],
         "tile_anchor": [
-          22.0,
-          10.0
+          22,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -15536,8 +17054,8 @@
           10.0
         ],
         "tile_anchor": [
-          19.0,
-          10.0
+          19,
+          10
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -15615,8 +17133,8 @@
           10.0
         ],
         "tile_anchor": [
-          33.0,
-          10.0
+          33,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15694,8 +17212,8 @@
           39.0
         ],
         "tile_anchor": [
-          12.0,
-          39.0
+          12,
+          39
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15773,8 +17291,8 @@
           35.0
         ],
         "tile_anchor": [
-          12.0,
-          35.0
+          12,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15852,8 +17370,8 @@
           24.0
         ],
         "tile_anchor": [
-          12.0,
-          24.0
+          12,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -15933,8 +17451,8 @@
           40.0
         ],
         "tile_anchor": [
-          0.0,
-          40.0
+          0,
+          40
         ],
         "visual_footprint_tiles": [
           1.0,

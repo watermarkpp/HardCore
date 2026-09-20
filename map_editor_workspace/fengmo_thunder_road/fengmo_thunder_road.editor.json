@@ -48,6 +48,7 @@
     "clone_policy": "full_workspace_clone_without_exit_links_v1",
     "clone_source_document_sha256": "cf4bed38eaeceff53ba2006151cef31217e5c3f70b89a65442fa403e62ae3514",
     "clone_source_map_id": "gmhl_1",
+    "collision_authority": "hc_polygon_v1",
     "connection_policy_id": "map_connection_unified_bidirectional_v2",
     "content_policy": "open_existing_workspace_first",
     "created_by": "human_codex_shared_tool",
@@ -55,7 +56,7 @@
     "exit_link_status": "intentionally_unlinked",
     "identity_contract_id": "hardcore.formal_map_identity.v1",
     "portal_contract_id": "unified_map_portal_endpoint_v1",
-    "revision": 74.0,
+    "revision": 100,
     "source_editor_schema_version": 4.0,
     "template_kind": "existing_map_or_empty_template",
     "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
@@ -316,862 +317,901 @@
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000001",
+        "collision_id": "poly_000001",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            63.0,
-            0.0,
-            1.0,
-            48.0
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              64.0,
+              0.0
+            ],
+            [
+              64.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000002",
+        "collision_id": "poly_000002",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            64.0,
-            1.0
+          "points": [
+            [
+              0.0,
+              1.0
+            ],
+            [
+              3.0,
+              1.0
+            ],
+            [
+              3.0,
+              3.0
+            ],
+            [
+              0.0,
+              3.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000003",
+        "collision_id": "poly_000003",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            48.0
+          "points": [
+            [
+              15.0,
+              1.0
+            ],
+            [
+              16.0,
+              1.0
+            ],
+            [
+              16.0,
+              2.0
+            ],
+            [
+              15.0,
+              2.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000004",
+        "collision_id": "poly_000004",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            47.0,
-            64.0,
-            1.0
+          "points": [
+            [
+              30.0,
+              1.0
+            ],
+            [
+              31.0,
+              1.0
+            ],
+            [
+              31.0,
+              2.0
+            ],
+            [
+              30.0,
+              2.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000005",
+        "collision_id": "poly_000005",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            14.0,
-            35.0,
-            33.0,
-            1.0
+          "points": [
+            [
+              46.0,
+              1.0
+            ],
+            [
+              47.0,
+              1.0
+            ],
+            [
+              47.0,
+              2.0
+            ],
+            [
+              46.0,
+              2.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000006",
+        "collision_id": "poly_000006",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            14.0,
-            14.0,
-            1.0,
-            22.0
+          "points": [
+            [
+              61.0,
+              1.0
+            ],
+            [
+              64.0,
+              1.0
+            ],
+            [
+              64.0,
+              3.0
+            ],
+            [
+              61.0,
+              3.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000007",
+        "collision_id": "poly_000007",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            14.0,
-            14.0,
-            11.0,
-            1.0
+          "points": [
+            [
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0
+            ],
+            [
+              1.0,
+              48.0
+            ],
+            [
+              0.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000008",
+        "collision_id": "poly_000008",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            29.0,
-            19.0,
-            1.0,
-            8.0
+          "points": [
+            [
+              63.0,
+              3.0
+            ],
+            [
+              64.0,
+              3.0
+            ],
+            [
+              64.0,
+              21.0
+            ],
+            [
+              63.0,
+              21.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000009",
+        "collision_id": "poly_000009",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            29.0,
-            19.0,
-            7.0,
-            1.0
+          "points": [
+            [
+              24.0,
+              9.0
+            ],
+            [
+              48.0,
+              9.0
+            ],
+            [
+              48.0,
+              10.0
+            ],
+            [
+              24.0,
+              10.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000010",
+        "collision_id": "poly_000010",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            24.0,
-            19.0,
-            6.0,
-            1.0
+          "points": [
+            [
+              24.0,
+              10.0
+            ],
+            [
+              26.0,
+              10.0
+            ],
+            [
+              26.0,
+              11.0
+            ],
+            [
+              24.0,
+              11.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000011",
+        "collision_id": "poly_000011",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            24.0,
-            9.0,
-            1.0,
-            11.0
+          "points": [
+            [
+              31.0,
+              10.0
+            ],
+            [
+              35.0,
+              10.0
+            ],
+            [
+              35.0,
+              11.0
+            ],
+            [
+              31.0,
+              11.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000012",
+        "collision_id": "poly_000012",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            24.0,
-            9.0,
-            24.0,
-            1.0
+          "points": [
+            [
+              24.0,
+              11.0
+            ],
+            [
+              25.0,
+              11.0
+            ],
+            [
+              25.0,
+              20.0
+            ],
+            [
+              24.0,
+              20.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000013",
+        "collision_id": "poly_000013",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            46.0,
-            19.0,
-            1.0,
-            17.0
+          "points": [
+            [
+              1.0,
+              14.0
+            ],
+            [
+              2.0,
+              14.0
+            ],
+            [
+              2.0,
+              15.0
+            ],
+            [
+              1.0,
+              15.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000014",
+        "collision_id": "poly_000014",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            46.0,
-            19.0,
-            18.0,
-            1.0
+          "points": [
+            [
+              14.0,
+              14.0
+            ],
+            [
+              24.0,
+              14.0
+            ],
+            [
+              24.0,
+              15.0
+            ],
+            [
+              14.0,
+              15.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000015",
+        "collision_id": "poly_000015",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            44.0,
-            4.0,
-            4.0
+          "points": [
+            [
+              14.0,
+              15.0
+            ],
+            [
+              16.0,
+              15.0
+            ],
+            [
+              16.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000016",
+        "collision_id": "poly_000016",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            0.0,
-            0.0,
-            4.0,
-            4.0
+          "points": [
+            [
+              14.0,
+              16.0
+            ],
+            [
+              15.0,
+              16.0
+            ],
+            [
+              15.0,
+              36.0
+            ],
+            [
+              14.0,
+              36.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000017",
+        "collision_id": "poly_000017",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            60.0,
-            0.0,
-            4.0,
-            4.0
+          "points": [
+            [
+              25.0,
+              19.0
+            ],
+            [
+              36.0,
+              19.0
+            ],
+            [
+              36.0,
+              20.0
+            ],
+            [
+              25.0,
+              20.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000018",
+        "collision_id": "poly_000018",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            60.0,
-            44.0,
-            4.0,
-            4.0
+          "points": [
+            [
+              46.0,
+              19.0
+            ],
+            [
+              63.0,
+              19.0
+            ],
+            [
+              63.0,
+              20.0
+            ],
+            [
+              46.0,
+              20.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000019",
+        "collision_id": "poly_000019",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            47.0,
-            25.0,
-            1.0,
-            5.0
+          "points": [
+            [
+              29.0,
+              20.0
+            ],
+            [
+              31.0,
+              20.0
+            ],
+            [
+              31.0,
+              21.0
+            ],
+            [
+              29.0,
+              21.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000020",
+        "collision_id": "poly_000020",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            48.0,
-            25.0,
-            1.0,
-            5.0
+          "points": [
+            [
+              46.0,
+              20.0
+            ],
+            [
+              48.0,
+              20.0
+            ],
+            [
+              48.0,
+              21.0
+            ],
+            [
+              46.0,
+              21.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000021",
+        "collision_id": "poly_000021",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            30.0,
-            10.0,
-            5.0,
-            2.0
+          "points": [
+            [
+              29.0,
+              21.0
+            ],
+            [
+              30.0,
+              21.0
+            ],
+            [
+              30.0,
+              27.0
+            ],
+            [
+              29.0,
+              27.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000022",
+        "collision_id": "poly_000022",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            33.0,
-            1.0,
-            4.0
+          "points": [
+            [
+              46.0,
+              21.0
+            ],
+            [
+              47.0,
+              21.0
+            ],
+            [
+              47.0,
+              36.0
+            ],
+            [
+              46.0,
+              36.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000023",
+        "collision_id": "poly_000023",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            29.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              63.0,
+              27.0
+            ],
+            [
+              64.0,
+              27.0
+            ],
+            [
+              64.0,
+              48.0
+            ],
+            [
+              63.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000024",
+        "collision_id": "poly_000024",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            21.0,
-            36.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              47.0,
+              28.0
+            ],
+            [
+              48.0,
+              28.0
+            ],
+            [
+              48.0,
+              30.0
+            ],
+            [
+              47.0,
+              30.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000025",
+        "collision_id": "poly_000025",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            37.0,
-            36.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              1.0,
+              29.0
+            ],
+            [
+              2.0,
+              29.0
+            ],
+            [
+              2.0,
+              30.0
+            ],
+            [
+              1.0,
+              30.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000026",
+        "collision_id": "poly_000026",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            47.0,
-            20.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              1.0,
+              34.0
+            ],
+            [
+              2.0,
+              34.0
+            ],
+            [
+              2.0,
+              37.0
+            ],
+            [
+              1.0,
+              37.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000027",
+        "collision_id": "poly_000027",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            25.0,
-            10.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              15.0,
+              35.0
+            ],
+            [
+              46.0,
+              35.0
+            ],
+            [
+              46.0,
+              36.0
+            ],
+            [
+              15.0,
+              36.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000028",
+        "collision_id": "poly_000028",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            15.0,
-            15.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              21.0,
+              36.0
+            ],
+            [
+              22.0,
+              36.0
+            ],
+            [
+              22.0,
+              37.0
+            ],
+            [
+              21.0,
+              37.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000029",
+        "collision_id": "poly_000029",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            1.0,
-            14.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              37.0,
+              36.0
+            ],
+            [
+              38.0,
+              36.0
+            ],
+            [
+              38.0,
+              37.0
+            ],
+            [
+              37.0,
+              37.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000030",
+        "collision_id": "poly_000030",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            15.0,
-            1.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              1.0,
+              45.0
+            ],
+            [
+              3.0,
+              45.0
+            ],
+            [
+              3.0,
+              48.0
+            ],
+            [
+              1.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000031",
+        "collision_id": "poly_000031",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            30.0,
-            1.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              61.0,
+              45.0
+            ],
+            [
+              63.0,
+              45.0
+            ],
+            [
+              63.0,
+              48.0
+            ],
+            [
+              61.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       },
       {
         "blocks_monster": true,
         "blocks_player": true,
-        "collision_id": "manual_000032",
+        "collision_id": "poly_000032",
         "content_layer": "personal_expansion",
         "data": {
-          "rect": [
-            46.0,
-            1.0,
-            1.0,
-            1.0
+          "points": [
+            [
+              3.0,
+              47.0
+            ],
+            [
+              61.0,
+              47.0
+            ],
+            [
+              61.0,
+              48.0
+            ],
+            [
+              3.0,
+              48.0
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000033",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            30.0,
-            20.0,
-            1.0,
-            1.0
-          ]
-        },
-        "shape": "rect",
+        "shape": "polygon",
         "source": "manual"
       }
     ],
-    "collision_erase": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          63.0,
-          26.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          63.0,
-          25.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          63.0,
-          24.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          63.0,
-          23.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          63.0,
-          22.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          63.0,
-          21.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          62.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          61.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          48.0,
-          29.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          48.0,
-          28.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          48.0,
-          27.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          47.0,
-          27.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          47.0,
-          26.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          48.0,
-          25.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          47.0,
-          25.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          48.0,
-          26.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          62.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          61.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          60.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          1.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          2.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          3.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          46.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          45.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          44.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          1.0,
-          33.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          34.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          33.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          32.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          31.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          30.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          30.0,
-          10.0
-        ]
-      }
-    ],
+    "collision_erase": [],
     "door_points": [],
     "editor_guides": [],
     "ground_base": [],
@@ -1195,8 +1235,17 @@
         "linked_visual_instance_id": "inst_000148",
         "official_connection_id": "portal.fengmo_thunder_road.map_exit_000001",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          19,
+          19
+        ],
         "reciprocal_exit_id": "map_exit_000002",
         "reciprocal_map_key": "fengmo_bazhe_hall",
         "requires_leave_before_retrigger": true,
@@ -1217,8 +1266,8 @@
           23.0
         ],
         "tile": [
-          19.0,
-          19.0
+          19,
+          19
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -1238,8 +1287,17 @@
         "linked_visual_instance_id": "inst_000149",
         "official_connection_id": "portal.fengmo_thunder_road.map_exit_000002",
         "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
         "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          59,
+          23
+        ],
         "reciprocal_exit_id": "map_exit_000001",
         "reciprocal_map_key": "fengmo_light_corridor",
         "requires_leave_before_retrigger": true,
@@ -1260,8 +1318,8 @@
           19.0
         ],
         "tile": [
-          59.0,
-          23.0
+          59,
+          23
         ],
         "travel_request_single_flight": true,
         "trigger_on_enter": true
@@ -2652,7 +2710,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000057",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2690,8 +2748,8 @@
           22.0
         ],
         "tile_anchor": [
-          58.0,
-          22.0
+          58,
+          22
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -2767,12 +2825,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          63.0,
-          20.0
+          63,
+          20
         ],
         "tile_anchor": [
-          63.0,
-          20.0
+          63,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -2848,12 +2906,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          63.0,
-          27.0
+          63,
+          27
         ],
         "tile_anchor": [
-          63.0,
-          27.0
+          63,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -2895,7 +2953,7 @@
         "instance_base_scale": 1.0,
         "instance_custom_scale": true,
         "instance_id": "inst_000107",
-        "instance_scale_level": -3,
+        "instance_scale_level": -3.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -2933,8 +2991,8 @@
           18.0
         ],
         "tile_anchor": [
-          18.0,
-          18.0
+          18,
+          18
         ],
         "visual_footprint_tiles": [
           3.0,
@@ -3010,12 +3068,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          47.0,
-          20.0
+          47,
+          20
         ],
         "tile_anchor": [
-          47.0,
-          20.0
+          47,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3091,12 +3149,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          37.0,
-          36.0
+          37,
+          36
         ],
         "tile_anchor": [
-          37.0,
-          36.0
+          37,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3172,12 +3230,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          21.0,
-          36.0
+          21,
+          36
         ],
         "tile_anchor": [
-          21.0,
-          36.0
+          21,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3253,12 +3311,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          15.0,
-          15.0
+          15,
+          15
         ],
         "tile_anchor": [
-          15.0,
-          15.0
+          15,
+          15
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3334,12 +3392,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          25.0,
-          10.0
+          25,
+          10
         ],
         "tile_anchor": [
-          25.0,
-          10.0
+          25,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3415,12 +3473,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          14.0
+          1,
+          14
         ],
         "tile_anchor": [
-          1.0,
-          14.0
+          1,
+          14
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3496,12 +3554,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          29.0
+          1,
+          29
         ],
         "tile_anchor": [
-          1.0,
-          29.0
+          1,
+          29
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3577,12 +3635,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          15.0,
-          1.0
+          15,
+          1
         ],
         "tile_anchor": [
-          15.0,
-          1.0
+          15,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3658,12 +3716,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          30.0,
-          1.0
+          30,
+          1
         ],
         "tile_anchor": [
-          30.0,
-          1.0
+          30,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3739,12 +3797,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          46.0,
-          1.0
+          46,
+          1
         ],
         "tile_anchor": [
-          46.0,
-          1.0
+          46,
+          1
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3820,12 +3878,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          30.0,
-          20.0
+          30,
+          20
         ],
         "tile_anchor": [
-          30.0,
-          20.0
+          30,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -3901,12 +3959,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "tile_anchor": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -3982,12 +4040,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          1.0
+          59,
+          1
         ],
         "tile_anchor": [
-          59.0,
-          1.0
+          59,
+          1
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4063,12 +4121,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          43.0
+          59,
+          43
         ],
         "tile_anchor": [
-          59.0,
-          43.0
+          59,
+          43
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4144,12 +4202,12 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          43.0
+          1,
+          43
         ],
         "tile_anchor": [
-          1.0,
-          43.0
+          1,
+          43
         ],
         "visual_footprint_tiles": [
           2.0,
@@ -4160,7 +4218,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           171.0,
-          109.222221374512
+          143.6666717529297
         ],
         "asset_id": "user.adde7a65453c0cbc",
         "base_footprint_tiles": [
@@ -4180,8 +4238,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4191,7 +4249,7 @@
         "instance_base_scale": 0.387096774193548,
         "instance_custom_scale": true,
         "instance_id": "inst_000126",
-        "instance_scale_level": -4.0,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4201,8 +4259,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -4211,37 +4269,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           171.0,
-          109.222221374512
+          143.6666717529297
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.232258064516129,
-          0.232258064516129
+          0.3096774193548386,
+          0.3096774193548386
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          35.0
+          31,
+          36
         ],
         "tile_anchor": [
-          31.0,
-          35.0
+          31,
+          36
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           168.0,
-          110.111106872559
+          144.83334350585938
         ],
         "asset_id": "user.7f6c3a92d4eb22eb",
         "base_footprint_tiles": [
@@ -4261,8 +4319,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4272,7 +4330,7 @@
         "instance_base_scale": 0.384,
         "instance_custom_scale": true,
         "instance_id": "inst_000127",
-        "instance_scale_level": -4.0,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4282,8 +4340,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -4292,37 +4350,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           168.0,
-          110.111106872559
+          144.83334350585938
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.2304,
-          0.2304
+          0.3072,
+          0.3072
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          23.0,
-          22.0
+          23,
+          22
         ],
         "tile_anchor": [
-          23.0,
-          22.0
+          23,
+          22
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           181.0,
-          107.375
+          143.5
         ],
         "asset_id": "user.f541f8d1a66f1355",
         "base_footprint_tiles": [
@@ -4342,8 +4400,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4353,7 +4411,7 @@
         "instance_base_scale": 0.442906574394464,
         "instance_custom_scale": true,
         "instance_id": "inst_000129",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -5,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4363,8 +4421,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -4373,37 +4431,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           181.0,
-          107.375
+          143.5
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.177162629757785,
-          0.177162629757785
+          0.2214532871972314,
+          0.2214532871972314
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          14.0,
-          28.0
+          14,
+          28
         ],
         "tile_anchor": [
-          14.0,
-          28.0
+          14,
+          28
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           163.0,
-          161.0
+          149.42855834960938
         ],
         "asset_id": "user.2ac356ebea0bc411",
         "base_footprint_tiles": [
@@ -4413,8 +4471,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -4423,8 +4481,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          3,
+          3
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4434,7 +4492,7 @@
         "instance_base_scale": 0.395061728395062,
         "instance_custom_scale": true,
         "instance_id": "inst_000130",
-        "instance_scale_level": -5.0,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4444,8 +4502,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          3,
+          3
         ],
         "offset_px": [
           0.0,
@@ -4454,37 +4512,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           163.0,
-          161.0
+          149.42855834960938
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.197530864197531,
-          0.197530864197531
+          0.2765432098765434,
+          0.2765432098765434
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          22.0
+          0,
+          21
         ],
         "tile_anchor": [
-          1.0,
-          22.0
+          0,
+          21
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          3,
+          3
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           190.0,
-          159.5
+          148.03570556640625
         ],
         "asset_id": "user.46e10d787d4daceb",
         "base_footprint_tiles": [
@@ -4494,8 +4552,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -4504,8 +4562,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          2.0,
-          2.0
+          3,
+          3
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4515,7 +4573,7 @@
         "instance_base_scale": 0.398753894080997,
         "instance_custom_scale": true,
         "instance_id": "inst_000131",
-        "instance_scale_level": -5.0,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4525,8 +4583,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          2.0,
-          2.0
+          3,
+          3
         ],
         "offset_px": [
           0.0,
@@ -4535,37 +4593,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           190.0,
-          159.5
+          148.03570556640625
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.199376947040498,
-          0.199376947040498
+          0.27912772585669743,
+          0.27912772585669743
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          11.0,
-          1.0
+          10,
+          0
         ],
         "tile_anchor": [
-          11.0,
-          1.0
+          10,
+          0
         ],
         "visual_footprint_tiles": [
-          2.0,
-          2.0
+          3,
+          3
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           107.0,
-          91.8888854980469
+          138.3333282470703
         ],
         "asset_id": "user.83ef012d55284f48",
         "base_footprint_tiles": [
@@ -4585,8 +4643,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4596,7 +4654,7 @@
         "instance_base_scale": 0.45933014354067,
         "instance_custom_scale": true,
         "instance_id": "inst_000137",
-        "instance_scale_level": -7.0,
+        "instance_scale_level": -5,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4606,8 +4664,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -4616,37 +4674,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           107.0,
-          91.8888854980469
+          138.3333282470703
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.137799043062201,
-          0.137799043062201
+          0.229665071770335,
+          0.229665071770335
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          34.0
+          1,
+          34
         ],
         "tile_anchor": [
-          1.0,
-          34.0
+          1,
+          34
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           108.0,
-          151.388885498047
+          122.08333587646484
         ],
         "asset_id": "user.f4efc016a43e4ce0",
         "base_footprint_tiles": [
@@ -4656,8 +4714,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -4666,8 +4724,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4677,7 +4735,7 @@
         "instance_base_scale": 0.454976303317536,
         "instance_custom_scale": true,
         "instance_id": "inst_000138",
-        "instance_scale_level": -4.0,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4687,8 +4745,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -4697,37 +4755,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           108.0,
-          151.388885498047
+          122.08333587646484
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.272985781990521,
-          0.272985781990521
+          0.3639810426540282,
+          0.3639810426540282
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          31.0,
-          10.0
+          30,
+          9
         ],
         "tile_anchor": [
-          31.0,
-          10.0
+          30,
+          9
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           105.0,
-          141.66667175293
+          162.04762268066406
         ],
         "asset_id": "user.22a599149664a7e9",
         "base_footprint_tiles": [
@@ -4747,8 +4805,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4758,7 +4816,7 @@
         "instance_base_scale": 0.448598130841121,
         "instance_custom_scale": true,
         "instance_id": "inst_000139",
-        "instance_scale_level": -5.0,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4768,8 +4826,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -4778,37 +4836,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           105.0,
-          141.66667175293
+          162.04762268066406
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.224299065420561,
-          0.224299065420561
+          0.31401869158878526,
+          0.31401869158878526
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          35.0
+          1,
+          35
         ],
         "tile_anchor": [
-          1.0,
-          35.0
+          1,
+          35
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           102.0,
-          158.238098144531
+          130.59259033203125
         ],
         "asset_id": "user.ca033dd96fc7de0c",
         "base_footprint_tiles": [
@@ -4818,8 +4876,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -4828,8 +4886,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4839,7 +4897,7 @@
         "instance_base_scale": 0.45933014354067,
         "instance_custom_scale": true,
         "instance_id": "inst_000140",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -1,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4849,8 +4907,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -4859,37 +4917,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           102.0,
-          158.238098144531
+          130.59259033203125
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.321531100478469,
-          0.321531100478469
+          0.413397129186603,
+          0.413397129186603
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          33.0,
-          10.0
+          32,
+          9
         ],
         "tile_anchor": [
-          33.0,
-          10.0
+          32,
+          9
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           108.0,
-          124.416664123535
+          142.3333282470703
         ],
         "asset_id": "user.d9a53a150a36ff0e",
         "base_footprint_tiles": [
@@ -4909,8 +4967,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -4920,7 +4978,7 @@
         "instance_base_scale": 0.446511627906977,
         "instance_custom_scale": true,
         "instance_id": "inst_000141",
-        "instance_scale_level": -6.0,
+        "instance_scale_level": -5,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -4930,8 +4988,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -4940,37 +4998,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           108.0,
-          124.416664123535
+          142.3333282470703
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.178604651162791,
-          0.178604651162791
+          0.2232558139534887,
+          0.2232558139534887
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          32.0,
-          10.0
+          32,
+          10
         ],
         "tile_anchor": [
-          32.0,
-          10.0
+          32,
+          10
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           105.0,
-          162.047622680664
+          133.74073791503906
         ],
         "asset_id": "user.22a599149664a7e9",
         "base_footprint_tiles": [
@@ -4980,8 +5038,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -4990,8 +5048,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5001,7 +5059,7 @@
         "instance_base_scale": 0.448598130841121,
         "instance_custom_scale": true,
         "instance_id": "inst_000143",
-        "instance_scale_level": -3.0,
+        "instance_scale_level": -1,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5011,8 +5069,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -5021,37 +5079,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           105.0,
-          162.047622680664
+          133.74073791503906
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.314018691588785,
-          0.314018691588785
+          0.4037383177570092,
+          0.4037383177570092
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          47.0,
-          29.0
+          46,
+          28
         ],
         "tile_anchor": [
-          47.0,
-          29.0
+          46,
+          28
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           106.0,
-          137.0
+          148.5
         ],
         "asset_id": "user.cb5ec321760a2f62",
         "base_footprint_tiles": [
@@ -5071,8 +5129,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5082,7 +5140,7 @@
         "instance_base_scale": 0.463768115942029,
         "instance_custom_scale": true,
         "instance_id": "inst_000144",
-        "instance_scale_level": -5.0,
+        "instance_scale_level": -4,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5092,8 +5150,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -5102,37 +5160,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           106.0,
-          137.0
+          148.5
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.231884057971014,
-          0.231884057971014
+          0.2782608695652169,
+          0.2782608695652169
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          47.0,
-          28.0
+          47,
+          28
         ],
         "tile_anchor": [
-          47.0,
-          28.0
+          47,
+          28
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           108.0,
-          151.388885498047
+          122.08333587646484
         ],
         "asset_id": "user.f4efc016a43e4ce0",
         "base_footprint_tiles": [
@@ -5142,8 +5200,8 @@
         "collision_authority": "manual_by_user",
         "collision_cells": [],
         "collision_footprint_tiles": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "collision_policy": "none",
         "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
@@ -5152,8 +5210,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5163,7 +5221,7 @@
         "instance_base_scale": 0.454976303317536,
         "instance_custom_scale": true,
         "instance_id": "inst_000146",
-        "instance_scale_level": -4.0,
+        "instance_scale_level": -2,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5173,8 +5231,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ],
         "offset_px": [
           0.0,
@@ -5183,37 +5241,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           108.0,
-          151.388885498047
+          122.08333587646484
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.272985781990521,
-          0.272985781990521
+          0.3639810426540282,
+          0.3639810426540282
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          1.0,
-          36.0
+          0,
+          35
         ],
         "tile_anchor": [
-          1.0,
-          36.0
+          0,
+          35
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          2,
+          2
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           108.0,
-          154.277770996094
+          162.8095245361328
         ],
         "asset_id": "user.d9a53a150a36ff0e",
         "base_footprint_tiles": [
@@ -5233,8 +5291,8 @@
         "flip_x": false,
         "flip_y": false,
         "footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "gameplay_role": "none",
         "instance_base_footprint_tiles": [
@@ -5244,7 +5302,7 @@
         "instance_base_scale": 0.446511627906977,
         "instance_custom_scale": true,
         "instance_id": "inst_000147",
-        "instance_scale_level": -4.0,
+        "instance_scale_level": -3,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5254,8 +5312,8 @@
         "object_role": "decoration",
         "occlusion": false,
         "occupancy_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ],
         "offset_px": [
           0.0,
@@ -5264,37 +5322,37 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           108.0,
-          154.277770996094
+          162.8095245361328
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          0.267906976744186,
-          0.267906976744186
+          0.3125581395348837,
+          0.3125581395348837
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
-          10.0
+          34,
+          10
         ],
         "tile_anchor": [
-          34.0,
-          10.0
+          34,
+          10
         ],
         "visual_footprint_tiles": [
-          1.0,
-          1.0
+          1,
+          1
         ]
       },
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "asset_id": "user.portal_gate.20260916.s01_r1_c1",
         "base_footprint_tiles": [
@@ -5323,7 +5381,9 @@
           1.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000148",
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5343,26 +5403,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          1.4000000000000004,
+          1.4000000000000004
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          19.0,
-          19.0
+          19,
+          19
         ],
         "tile_anchor": [
-          19.0,
-          19.0
+          19,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5373,7 +5433,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "asset_id": "user.portal_gate.20260916.s01_r1_c1",
         "base_footprint_tiles": [
@@ -5402,7 +5462,9 @@
           1.0
         ],
         "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
         "instance_id": "inst_000149",
+        "instance_scale_level": 4.0,
         "layer": "object_base",
         "manual_collision_expected": true,
         "map_collision_override": "disabled",
@@ -5422,26 +5484,26 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           26.0,
-          67.0
+          71.57142639160156
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
         "rotation_deg": 0.0,
         "runtime_export": true,
         "scale": [
-          1.0,
-          1.0
+          1.4000000000000004,
+          1.4000000000000004
         ],
         "scene_intent": "visual_detail",
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          59.0,
-          23.0
+          59,
+          23
         ],
         "tile_anchor": [
-          59.0,
-          23.0
+          59,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5530,8 +5592,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -5612,8 +5674,8 @@
           0.0
         ],
         "tile_anchor": [
-          0.0,
-          0.0
+          0,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5694,8 +5756,8 @@
           4.0
         ],
         "tile_anchor": [
-          0.0,
-          4.0
+          0,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5776,8 +5838,8 @@
           0.0
         ],
         "tile_anchor": [
-          4.0,
-          0.0
+          4,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -5858,8 +5920,8 @@
           8.0
         ],
         "tile_anchor": [
-          0.0,
-          8.0
+          0,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -5940,8 +6002,8 @@
           0.0
         ],
         "tile_anchor": [
-          8.0,
-          0.0
+          8,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -6022,8 +6084,8 @@
           12.0
         ],
         "tile_anchor": [
-          0.0,
-          12.0
+          0,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6104,8 +6166,8 @@
           0.0
         ],
         "tile_anchor": [
-          12.0,
-          0.0
+          12,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -6186,8 +6248,8 @@
           16.0
         ],
         "tile_anchor": [
-          0.0,
-          16.0
+          0,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6268,8 +6330,8 @@
           0.0
         ],
         "tile_anchor": [
-          16.0,
-          0.0
+          16,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -6350,8 +6412,8 @@
           20.0
         ],
         "tile_anchor": [
-          0.0,
-          20.0
+          0,
+          20
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6432,8 +6494,8 @@
           0.0
         ],
         "tile_anchor": [
-          20.0,
-          0.0
+          20,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -6514,8 +6576,8 @@
           24.0
         ],
         "tile_anchor": [
-          0.0,
-          24.0
+          0,
+          24
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6596,8 +6658,8 @@
           0.0
         ],
         "tile_anchor": [
-          24.0,
-          0.0
+          24,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -6678,8 +6740,8 @@
           28.0
         ],
         "tile_anchor": [
-          0.0,
-          28.0
+          0,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6760,8 +6822,8 @@
           0.0
         ],
         "tile_anchor": [
-          28.0,
-          0.0
+          28,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -6842,8 +6904,8 @@
           32.0
         ],
         "tile_anchor": [
-          0.0,
-          32.0
+          0,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -6924,8 +6986,8 @@
           0.0
         ],
         "tile_anchor": [
-          32.0,
-          0.0
+          32,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7006,8 +7068,8 @@
           36.0
         ],
         "tile_anchor": [
-          0.0,
-          36.0
+          0,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7088,8 +7150,8 @@
           0.0
         ],
         "tile_anchor": [
-          36.0,
-          0.0
+          36,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7170,8 +7232,8 @@
           40.0
         ],
         "tile_anchor": [
-          0.0,
-          40.0
+          0,
+          40
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7252,8 +7314,8 @@
           0.0
         ],
         "tile_anchor": [
-          40.0,
-          0.0
+          40,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7334,8 +7396,8 @@
           44.0
         ],
         "tile_anchor": [
-          0.0,
-          44.0
+          0,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -7416,8 +7478,8 @@
           0.0
         ],
         "tile_anchor": [
-          44.0,
-          0.0
+          44,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7498,8 +7560,8 @@
           47.0
         ],
         "tile_anchor": [
-          0.0,
-          47.0
+          0,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7580,8 +7642,8 @@
           0.0
         ],
         "tile_anchor": [
-          48.0,
-          0.0
+          48,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7662,8 +7724,8 @@
           47.0
         ],
         "tile_anchor": [
-          4.0,
-          47.0
+          4,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7744,8 +7806,8 @@
           0.0
         ],
         "tile_anchor": [
-          52.0,
-          0.0
+          52,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7826,8 +7888,8 @@
           47.0
         ],
         "tile_anchor": [
-          8.0,
-          47.0
+          8,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7908,8 +7970,8 @@
           0.0
         ],
         "tile_anchor": [
-          56.0,
-          0.0
+          56,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -7990,8 +8052,8 @@
           47.0
         ],
         "tile_anchor": [
-          12.0,
-          47.0
+          12,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8072,8 +8134,8 @@
           0.0
         ],
         "tile_anchor": [
-          60.0,
-          0.0
+          60,
+          0
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8154,8 +8216,8 @@
           47.0
         ],
         "tile_anchor": [
-          16.0,
-          47.0
+          16,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8236,8 +8298,8 @@
           0.0
         ],
         "tile_anchor": [
-          63.0,
-          0.0
+          63,
+          0
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8318,8 +8380,8 @@
           47.0
         ],
         "tile_anchor": [
-          20.0,
-          47.0
+          20,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8400,8 +8462,8 @@
           4.0
         ],
         "tile_anchor": [
-          63.0,
-          4.0
+          63,
+          4
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8482,8 +8544,8 @@
           47.0
         ],
         "tile_anchor": [
-          24.0,
-          47.0
+          24,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8564,8 +8626,8 @@
           8.0
         ],
         "tile_anchor": [
-          63.0,
-          8.0
+          63,
+          8
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8646,8 +8708,8 @@
           47.0
         ],
         "tile_anchor": [
-          28.0,
-          47.0
+          28,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8728,8 +8790,8 @@
           12.0
         ],
         "tile_anchor": [
-          63.0,
-          12.0
+          63,
+          12
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8810,8 +8872,8 @@
           47.0
         ],
         "tile_anchor": [
-          32.0,
-          47.0
+          32,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -8892,8 +8954,8 @@
           16.0
         ],
         "tile_anchor": [
-          63.0,
-          16.0
+          63,
+          16
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -8974,8 +9036,8 @@
           47.0
         ],
         "tile_anchor": [
-          36.0,
-          47.0
+          36,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9056,8 +9118,8 @@
           47.0
         ],
         "tile_anchor": [
-          40.0,
-          47.0
+          40,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9138,8 +9200,8 @@
           47.0
         ],
         "tile_anchor": [
-          44.0,
-          47.0
+          44,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9220,8 +9282,8 @@
           28.0
         ],
         "tile_anchor": [
-          63.0,
-          28.0
+          63,
+          28
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9302,8 +9364,8 @@
           47.0
         ],
         "tile_anchor": [
-          48.0,
-          47.0
+          48,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9384,8 +9446,8 @@
           32.0
         ],
         "tile_anchor": [
-          63.0,
-          32.0
+          63,
+          32
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9466,8 +9528,8 @@
           47.0
         ],
         "tile_anchor": [
-          52.0,
-          47.0
+          52,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9548,8 +9610,8 @@
           36.0
         ],
         "tile_anchor": [
-          63.0,
-          36.0
+          63,
+          36
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9630,8 +9692,8 @@
           47.0
         ],
         "tile_anchor": [
-          56.0,
-          47.0
+          56,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9712,8 +9774,8 @@
           40.0
         ],
         "tile_anchor": [
-          63.0,
-          40.0
+          63,
+          40
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9794,8 +9856,8 @@
           47.0
         ],
         "tile_anchor": [
-          60.0,
-          47.0
+          60,
+          47
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -9876,8 +9938,8 @@
           44.0
         ],
         "tile_anchor": [
-          63.0,
-          44.0
+          63,
+          44
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -9955,8 +10017,8 @@
           19.0
         ],
         "tile_anchor": [
-          63.0,
-          19.0
+          63,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10034,8 +10096,8 @@
           19.0
         ],
         "tile_anchor": [
-          59.0,
-          19.0
+          59,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10113,8 +10175,8 @@
           19.0
         ],
         "tile_anchor": [
-          55.0,
-          19.0
+          55,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10192,8 +10254,8 @@
           19.0
         ],
         "tile_anchor": [
-          51.0,
-          19.0
+          51,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10271,8 +10333,8 @@
           19.0
         ],
         "tile_anchor": [
-          47.0,
-          19.0
+          47,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10350,8 +10412,8 @@
           19.0
         ],
         "tile_anchor": [
-          46.0,
-          19.0
+          46,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10429,8 +10491,8 @@
           23.0
         ],
         "tile_anchor": [
-          46.0,
-          23.0
+          46,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10508,8 +10570,8 @@
           27.0
         ],
         "tile_anchor": [
-          46.0,
-          27.0
+          46,
+          27
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10587,8 +10649,8 @@
           31.0
         ],
         "tile_anchor": [
-          46.0,
-          31.0
+          46,
+          31
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -10666,8 +10728,8 @@
           35.0
         ],
         "tile_anchor": [
-          43.0,
-          35.0
+          43,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10745,8 +10807,8 @@
           35.0
         ],
         "tile_anchor": [
-          39.0,
-          35.0
+          39,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10824,8 +10886,8 @@
           35.0
         ],
         "tile_anchor": [
-          35.0,
-          35.0
+          35,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10903,8 +10965,8 @@
           35.0
         ],
         "tile_anchor": [
-          31.0,
-          35.0
+          31,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -10982,8 +11044,8 @@
           35.0
         ],
         "tile_anchor": [
-          27.0,
-          35.0
+          27,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11061,8 +11123,8 @@
           35.0
         ],
         "tile_anchor": [
-          23.0,
-          35.0
+          23,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11140,8 +11202,8 @@
           35.0
         ],
         "tile_anchor": [
-          19.0,
-          35.0
+          19,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11219,8 +11281,8 @@
           35.0
         ],
         "tile_anchor": [
-          15.0,
-          35.0
+          15,
+          35
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11298,8 +11360,8 @@
           30.0
         ],
         "tile_anchor": [
-          14.0,
-          30.0
+          14,
+          30
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11377,8 +11439,8 @@
           26.0
         ],
         "tile_anchor": [
-          14.0,
-          26.0
+          14,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11456,8 +11518,8 @@
           22.0
         ],
         "tile_anchor": [
-          14.0,
-          22.0
+          14,
+          22
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11535,8 +11597,8 @@
           18.0
         ],
         "tile_anchor": [
-          14.0,
-          18.0
+          14,
+          18
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11614,8 +11676,8 @@
           14.0
         ],
         "tile_anchor": [
-          14.0,
-          14.0
+          14,
+          14
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -11693,8 +11755,8 @@
           14.0
         ],
         "tile_anchor": [
-          16.0,
-          14.0
+          16,
+          14
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11772,8 +11834,8 @@
           14.0
         ],
         "tile_anchor": [
-          20.0,
-          14.0
+          20,
+          14
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11851,8 +11913,8 @@
           19.0
         ],
         "tile_anchor": [
-          24.0,
-          19.0
+          24,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -11930,8 +11992,8 @@
           19.0
         ],
         "tile_anchor": [
-          28.0,
-          19.0
+          28,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -12009,8 +12071,8 @@
           19.0
         ],
         "tile_anchor": [
-          32.0,
-          19.0
+          32,
+          19
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -12088,8 +12150,8 @@
           14.0
         ],
         "tile_anchor": [
-          24.0,
-          14.0
+          24,
+          14
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12167,8 +12229,8 @@
           15.0
         ],
         "tile_anchor": [
-          24.0,
-          15.0
+          24,
+          15
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12246,8 +12308,8 @@
           19.0
         ],
         "tile_anchor": [
-          29.0,
-          19.0
+          29,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12325,8 +12387,8 @@
           23.0
         ],
         "tile_anchor": [
-          29.0,
-          23.0
+          29,
+          23
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12404,8 +12466,8 @@
           26.0
         ],
         "tile_anchor": [
-          29.0,
-          26.0
+          29,
+          26
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12483,8 +12545,8 @@
           19.0
         ],
         "tile_anchor": [
-          35.0,
-          19.0
+          35,
+          19
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12562,8 +12624,8 @@
           10.0
         ],
         "tile_anchor": [
-          24.0,
-          10.0
+          24,
+          10
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -12641,8 +12703,8 @@
           9.0
         ],
         "tile_anchor": [
-          24.0,
-          9.0
+          24,
+          9
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -12720,8 +12782,8 @@
           9.0
         ],
         "tile_anchor": [
-          28.0,
-          9.0
+          28,
+          9
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -12799,8 +12861,8 @@
           9.0
         ],
         "tile_anchor": [
-          32.0,
-          9.0
+          32,
+          9
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -12878,8 +12940,8 @@
           9.0
         ],
         "tile_anchor": [
-          36.0,
-          9.0
+          36,
+          9
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -12957,8 +13019,8 @@
           9.0
         ],
         "tile_anchor": [
-          40.0,
-          9.0
+          40,
+          9
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13036,8 +13098,8 @@
           9.0
         ],
         "tile_anchor": [
-          44.0,
-          9.0
+          44,
+          9
         ],
         "visual_footprint_tiles": [
           4.0,
@@ -13115,8 +13177,8 @@
           9.0
         ],
         "tile_anchor": [
-          47.0,
-          9.0
+          47,
+          9
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13194,8 +13256,8 @@
           34.0
         ],
         "tile_anchor": [
-          14.0,
-          34.0
+          14,
+          34
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13273,8 +13335,8 @@
           35.0
         ],
         "tile_anchor": [
-          14.0,
-          35.0
+          14,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13352,8 +13414,8 @@
           14.0
         ],
         "tile_anchor": [
-          15.0,
-          14.0
+          15,
+          14
         ],
         "visual_footprint_tiles": [
           1.0,
@@ -13431,8 +13493,8 @@
           35.0
         ],
         "tile_anchor": [
-          46.0,
-          35.0
+          46,
+          35
         ],
         "visual_footprint_tiles": [
           1.0,

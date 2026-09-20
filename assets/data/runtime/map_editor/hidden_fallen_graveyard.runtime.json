@@ -1,6 +1,346 @@
 {
-  "build_sha256": "d65302ec9137aa8e23c412428e68a5cf9d87a0d5873ffda998c945e2f8079454",
+  "build_sha256": "b4052981dfd0593c1aba7d8e285af339410775c8b7215baef0597cc504c5edc6",
   "collision": {
+    "authored_polygons_ground_gu": [
+      {
+        "collision_id": "poly_000001",
+        "content_layer": "personal_expansion",
+        "id": "poly_000001",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            32.0,
+            0.0
+          ],
+          [
+            32.0,
+            1.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000002",
+        "content_layer": "personal_expansion",
+        "id": "poly_000002",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            2.0,
+            1.0
+          ],
+          [
+            2.0,
+            2.0
+          ],
+          [
+            0.0,
+            2.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000003",
+        "content_layer": "personal_expansion",
+        "id": "poly_000003",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            15.0,
+            1.0
+          ],
+          [
+            16.0,
+            1.0
+          ],
+          [
+            16.0,
+            2.0
+          ],
+          [
+            15.0,
+            2.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000004",
+        "content_layer": "personal_expansion",
+        "id": "poly_000004",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            30.0,
+            1.0
+          ],
+          [
+            32.0,
+            1.0
+          ],
+          [
+            32.0,
+            2.0
+          ],
+          [
+            30.0,
+            2.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000005",
+        "content_layer": "personal_expansion",
+        "id": "poly_000005",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            2.0
+          ],
+          [
+            1.0,
+            2.0
+          ],
+          [
+            1.0,
+            32.0
+          ],
+          [
+            0.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000006",
+        "content_layer": "personal_expansion",
+        "id": "poly_000006",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            31.0,
+            2.0
+          ],
+          [
+            32.0,
+            2.0
+          ],
+          [
+            32.0,
+            32.0
+          ],
+          [
+            31.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000007",
+        "content_layer": "personal_expansion",
+        "id": "poly_000007",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            1.0,
+            15.0
+          ],
+          [
+            2.0,
+            15.0
+          ],
+          [
+            2.0,
+            16.0
+          ],
+          [
+            1.0,
+            16.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000008",
+        "content_layer": "personal_expansion",
+        "id": "poly_000008",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            30.0,
+            15.0
+          ],
+          [
+            31.0,
+            15.0
+          ],
+          [
+            31.0,
+            16.0
+          ],
+          [
+            30.0,
+            16.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000009",
+        "content_layer": "personal_expansion",
+        "id": "poly_000009",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            1.0,
+            30.0
+          ],
+          [
+            2.0,
+            30.0
+          ],
+          [
+            2.0,
+            32.0
+          ],
+          [
+            1.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000010",
+        "content_layer": "personal_expansion",
+        "id": "poly_000010",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            15.0,
+            30.0
+          ],
+          [
+            16.0,
+            30.0
+          ],
+          [
+            16.0,
+            32.0
+          ],
+          [
+            15.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000011",
+        "content_layer": "personal_expansion",
+        "id": "poly_000011",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            30.0,
+            30.0
+          ],
+          [
+            31.0,
+            30.0
+          ],
+          [
+            31.0,
+            32.0
+          ],
+          [
+            30.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000012",
+        "content_layer": "personal_expansion",
+        "id": "poly_000012",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            2.0,
+            31.0
+          ],
+          [
+            15.0,
+            31.0
+          ],
+          [
+            15.0,
+            32.0
+          ],
+          [
+            2.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000013",
+        "content_layer": "personal_expansion",
+        "id": "poly_000013",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            16.0,
+            31.0
+          ],
+          [
+            30.0,
+            31.0
+          ],
+          [
+            30.0,
+            32.0
+          ],
+          [
+            16.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      }
+    ],
     "blocked_count": 132.0,
     "blocked_tiles": [
       "0,0",
@@ -136,644 +476,3003 @@
       "9,0",
       "9,31"
     ],
-    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v3",
-    "erased_cells": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+    "blocked_tiles_role": "diagnostic_center_sample_only",
+    "convex_parts_ground_gu": [
+      [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          32.0,
+          0.0
+        ],
+        [
+          32.0,
+          1.0
+        ],
+        [
+          0.0,
+          1.0
+        ]
+      ],
+      [
+        [
+          0.0,
+          1.0
+        ],
+        [
           2.0,
-          15.0
+          1.0
+        ],
+        [
+          2.0,
+          2.0
+        ],
+        [
+          0.0,
+          2.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          3.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          4.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          5.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          6.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          7.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          8.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          9.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          10.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          11.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          12.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          13.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
           15.0,
-          16.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          1.0
+        ],
+        [
           16.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          14.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          14.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          13.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          10.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          9.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          8.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          7.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          6.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          5.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          4.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          1.0
+        ],
+        [
+          16.0,
+          2.0
+        ],
+        [
           15.0,
           2.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          3.0
+      ],
+      [
+        [
+          30.0,
+          1.0
+        ],
+        [
+          32.0,
+          1.0
+        ],
+        [
+          32.0,
+          2.0
+        ],
+        [
+          30.0,
+          2.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          12.0
+      ],
+      [
+        [
+          0.0,
+          2.0
+        ],
+        [
+          1.0,
+          2.0
+        ],
+        [
+          1.0,
+          32.0
+        ],
+        [
+          0.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          17.0,
+      ],
+      [
+        [
+          31.0,
+          2.0
+        ],
+        [
+          32.0,
+          2.0
+        ],
+        [
+          32.0,
+          32.0
+        ],
+        [
+          31.0,
+          32.0
+        ]
+      ],
+      [
+        [
+          1.0,
           15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          18.0,
+        ],
+        [
+          2.0,
           15.0
+        ],
+        [
+          2.0,
+          16.0
+        ],
+        [
+          1.0,
+          16.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          19.0,
+      ],
+      [
+        [
+          30.0,
           15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          20.0,
+        ],
+        [
+          31.0,
           15.0
+        ],
+        [
+          31.0,
+          16.0
+        ],
+        [
+          30.0,
+          16.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          22.0,
-          15.0
+      ],
+      [
+        [
+          1.0,
+          30.0
+        ],
+        [
+          2.0,
+          30.0
+        ],
+        [
+          2.0,
+          32.0
+        ],
+        [
+          1.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          23.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          24.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          25.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          26.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          29.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          28.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          27.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          21.0,
-          15.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
           15.0,
-          29.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          30.0
+        ],
+        [
+          16.0,
+          30.0
+        ],
+        [
+          16.0,
+          32.0
+        ],
+        [
           15.0,
-          28.0
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
+          30.0,
+          30.0
+        ],
+        [
+          31.0,
+          30.0
+        ],
+        [
+          31.0,
+          32.0
+        ],
+        [
+          30.0,
+          32.0
+        ]
+      ],
+      [
+        [
+          2.0,
+          31.0
+        ],
+        [
           15.0,
-          27.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          31.0
+        ],
+        [
           15.0,
-          26.0
+          32.0
+        ],
+        [
+          2.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          25.0
+      ],
+      [
+        [
+          16.0,
+          31.0
+        ],
+        [
+          30.0,
+          31.0
+        ],
+        [
+          30.0,
+          32.0
+        ],
+        [
+          16.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          24.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          23.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          22.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          21.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          20.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          19.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          18.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          15.0,
-          17.0
-        ]
-      }
+      ]
     ],
-    "manual_shapes": [
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000001",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            31.0,
-            32.0,
-            1.0
+    "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
+    "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+    "navigation": {
+      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "clearance_gu": 0.025,
+      "contract_id": "hc.polygon_nav_faces.v1",
+      "profiles": [
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.41984465132951254,
+          "radius_key": "0217b719bcdeda3f",
+          "vertices_ground_gu": [
+            [
+              16.44482421875,
+              2.44482421875
+            ],
+            [
+              16.44482421875,
+              1.44482421875
+            ],
+            [
+              29.55517578125,
+              1.44482421875
+            ],
+            [
+              29.55517578125,
+              2.44482421875
+            ],
+            [
+              30.55517578125,
+              2.44482421875
+            ],
+            [
+              30.55517578125,
+              14.55517578125
+            ],
+            [
+              29.55517578125,
+              14.55517578125
+            ],
+            [
+              29.55517578125,
+              16.44482421875
+            ],
+            [
+              30.55517578125,
+              16.44482421875
+            ],
+            [
+              30.55517578125,
+              29.55517578125
+            ],
+            [
+              29.55517578125,
+              29.55517578125
+            ],
+            [
+              29.55517578125,
+              30.55517578125
+            ],
+            [
+              16.44482421875,
+              30.55517578125
+            ],
+            [
+              16.44482421875,
+              29.55517578125
+            ],
+            [
+              14.55517578125,
+              29.55517578125
+            ],
+            [
+              14.55517578125,
+              30.55517578125
+            ],
+            [
+              2.44482421875,
+              30.55517578125
+            ],
+            [
+              2.44482421875,
+              29.55517578125
+            ],
+            [
+              1.44482421875,
+              29.55517578125
+            ],
+            [
+              1.44482421875,
+              16.44482421875
+            ],
+            [
+              2.44482421875,
+              16.44482421875
+            ],
+            [
+              2.44482421875,
+              14.55517578125
+            ],
+            [
+              1.44482421875,
+              14.55517578125
+            ],
+            [
+              1.44482421875,
+              2.44482421875
+            ],
+            [
+              2.44482421875,
+              2.44482421875
+            ],
+            [
+              2.44482421875,
+              1.44482421875
+            ],
+            [
+              14.55517578125,
+              1.44482421875
+            ],
+            [
+              14.55517578125,
+              2.44482421875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000002",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            31.0,
-            0.0,
-            1.0,
-            32.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.3314563036811941,
+          "radius_key": "0f4817809436d53f",
+          "vertices_ground_gu": [
+            [
+              16.3564453125,
+              2.3564453125
+            ],
+            [
+              16.3564453125,
+              1.3564453125
+            ],
+            [
+              29.6435546875,
+              1.3564453125
+            ],
+            [
+              29.6435546875,
+              2.3564453125
+            ],
+            [
+              30.6435546875,
+              2.3564453125
+            ],
+            [
+              30.6435546875,
+              14.6435546875
+            ],
+            [
+              29.6435546875,
+              14.6435546875
+            ],
+            [
+              29.6435546875,
+              16.3564453125
+            ],
+            [
+              30.6435546875,
+              16.3564453125
+            ],
+            [
+              30.6435546875,
+              29.6435546875
+            ],
+            [
+              29.6435546875,
+              29.6435546875
+            ],
+            [
+              29.6435546875,
+              30.6435546875
+            ],
+            [
+              16.3564453125,
+              30.6435546875
+            ],
+            [
+              16.3564453125,
+              29.6435546875
+            ],
+            [
+              14.6435546875,
+              29.6435546875
+            ],
+            [
+              14.6435546875,
+              30.6435546875
+            ],
+            [
+              2.3564453125,
+              30.6435546875
+            ],
+            [
+              2.3564453125,
+              29.6435546875
+            ],
+            [
+              1.3564453125,
+              29.6435546875
+            ],
+            [
+              1.3564453125,
+              16.3564453125
+            ],
+            [
+              2.3564453125,
+              16.3564453125
+            ],
+            [
+              2.3564453125,
+              14.6435546875
+            ],
+            [
+              1.3564453125,
+              14.6435546875
+            ],
+            [
+              1.3564453125,
+              2.3564453125
+            ],
+            [
+              2.3564453125,
+              2.3564453125
+            ],
+            [
+              2.3564453125,
+              1.3564453125
+            ],
+            [
+              14.6435546875,
+              1.3564453125
+            ],
+            [
+              14.6435546875,
+              2.3564453125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000003",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            0.0,
-            32.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.397747564417433,
+          "radius_key": "46234f33b274d93f",
+          "vertices_ground_gu": [
+            [
+              16.4228515625,
+              2.4228515625
+            ],
+            [
+              16.4228515625,
+              1.4228515625
+            ],
+            [
+              29.5771484375,
+              1.4228515625
+            ],
+            [
+              29.5771484375,
+              2.4228515625
+            ],
+            [
+              30.5771484375,
+              2.4228515625
+            ],
+            [
+              30.5771484375,
+              14.5771484375
+            ],
+            [
+              29.5771484375,
+              14.5771484375
+            ],
+            [
+              29.5771484375,
+              16.4228515625
+            ],
+            [
+              30.5771484375,
+              16.4228515625
+            ],
+            [
+              30.5771484375,
+              29.5771484375
+            ],
+            [
+              29.5771484375,
+              29.5771484375
+            ],
+            [
+              29.5771484375,
+              30.5771484375
+            ],
+            [
+              16.4228515625,
+              30.5771484375
+            ],
+            [
+              16.4228515625,
+              29.5771484375
+            ],
+            [
+              14.5771484375,
+              29.5771484375
+            ],
+            [
+              14.5771484375,
+              30.5771484375
+            ],
+            [
+              2.4228515625,
+              30.5771484375
+            ],
+            [
+              2.4228515625,
+              29.5771484375
+            ],
+            [
+              1.4228515625,
+              29.5771484375
+            ],
+            [
+              1.4228515625,
+              16.4228515625
+            ],
+            [
+              2.4228515625,
+              16.4228515625
+            ],
+            [
+              2.4228515625,
+              14.5771484375
+            ],
+            [
+              1.4228515625,
+              14.5771484375
+            ],
+            [
+              1.4228515625,
+              2.4228515625
+            ],
+            [
+              2.4228515625,
+              2.4228515625
+            ],
+            [
+              2.4228515625,
+              1.4228515625
+            ],
+            [
+              14.5771484375,
+              1.4228515625
+            ],
+            [
+              14.5771484375,
+              2.4228515625
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000004",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            32.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.6187184335382291,
+          "radius_key": "5354af998acce33f",
+          "vertices_ground_gu": [
+            [
+              16.643798828125,
+              2.643798828125
+            ],
+            [
+              16.643798828125,
+              1.643798828125
+            ],
+            [
+              29.356201171875,
+              1.643798828125
+            ],
+            [
+              29.356201171875,
+              2.643798828125
+            ],
+            [
+              30.356201171875,
+              2.643798828125
+            ],
+            [
+              30.356201171875,
+              14.356201171875
+            ],
+            [
+              29.356201171875,
+              14.356201171875
+            ],
+            [
+              29.356201171875,
+              16.643798828125
+            ],
+            [
+              30.356201171875,
+              16.643798828125
+            ],
+            [
+              30.356201171875,
+              29.356201171875
+            ],
+            [
+              29.356201171875,
+              29.356201171875
+            ],
+            [
+              29.356201171875,
+              30.356201171875
+            ],
+            [
+              16.643798828125,
+              30.356201171875
+            ],
+            [
+              16.643798828125,
+              29.356201171875
+            ],
+            [
+              14.356201171875,
+              29.356201171875
+            ],
+            [
+              14.356201171875,
+              30.356201171875
+            ],
+            [
+              2.643798828125,
+              30.356201171875
+            ],
+            [
+              2.643798828125,
+              29.356201171875
+            ],
+            [
+              1.643798828125,
+              29.356201171875
+            ],
+            [
+              1.643798828125,
+              16.643798828125
+            ],
+            [
+              2.643798828125,
+              16.643798828125
+            ],
+            [
+              2.643798828125,
+              14.356201171875
+            ],
+            [
+              1.643798828125,
+              14.356201171875
+            ],
+            [
+              1.643798828125,
+              2.643798828125
+            ],
+            [
+              2.643798828125,
+              2.643798828125
+            ],
+            [
+              2.643798828125,
+              1.643798828125
+            ],
+            [
+              14.356201171875,
+              1.643798828125
+            ],
+            [
+              14.356201171875,
+              2.643798828125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000005",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            1.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.4640388251536718,
+          "radius_key": "7cfe86e6cfb2dd3f",
+          "vertices_ground_gu": [
+            [
+              16.489013671875,
+              2.489013671875
+            ],
+            [
+              16.489013671875,
+              1.489013671875
+            ],
+            [
+              29.510986328125,
+              1.489013671875
+            ],
+            [
+              29.510986328125,
+              2.489013671875
+            ],
+            [
+              30.510986328125,
+              2.489013671875
+            ],
+            [
+              30.510986328125,
+              14.510986328125
+            ],
+            [
+              29.510986328125,
+              14.510986328125
+            ],
+            [
+              29.510986328125,
+              16.489013671875
+            ],
+            [
+              30.510986328125,
+              16.489013671875
+            ],
+            [
+              30.510986328125,
+              29.510986328125
+            ],
+            [
+              29.510986328125,
+              29.510986328125
+            ],
+            [
+              29.510986328125,
+              30.510986328125
+            ],
+            [
+              16.489013671875,
+              30.510986328125
+            ],
+            [
+              16.489013671875,
+              29.510986328125
+            ],
+            [
+              14.510986328125,
+              29.510986328125
+            ],
+            [
+              14.510986328125,
+              30.510986328125
+            ],
+            [
+              2.489013671875,
+              30.510986328125
+            ],
+            [
+              2.489013671875,
+              29.510986328125
+            ],
+            [
+              1.489013671875,
+              29.510986328125
+            ],
+            [
+              1.489013671875,
+              16.489013671875
+            ],
+            [
+              2.489013671875,
+              16.489013671875
+            ],
+            [
+              2.489013671875,
+              14.510986328125
+            ],
+            [
+              1.489013671875,
+              14.510986328125
+            ],
+            [
+              1.489013671875,
+              2.489013671875
+            ],
+            [
+              2.489013671875,
+              2.489013671875
+            ],
+            [
+              2.489013671875,
+              1.489013671875
+            ],
+            [
+              14.510986328125,
+              1.489013671875
+            ],
+            [
+              14.510986328125,
+              2.489013671875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000006",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            15.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.37565047750535335,
+          "radius_key": "892fe74ca80ad83f",
+          "vertices_ground_gu": [
+            [
+              16.400634765625,
+              2.400634765625
+            ],
+            [
+              16.400634765625,
+              1.400634765625
+            ],
+            [
+              29.599365234375,
+              1.400634765625
+            ],
+            [
+              29.599365234375,
+              2.400634765625
+            ],
+            [
+              30.599365234375,
+              2.400634765625
+            ],
+            [
+              30.599365234375,
+              14.599365234375
+            ],
+            [
+              29.599365234375,
+              14.599365234375
+            ],
+            [
+              29.599365234375,
+              16.400634765625
+            ],
+            [
+              30.599365234375,
+              16.400634765625
+            ],
+            [
+              30.599365234375,
+              29.599365234375
+            ],
+            [
+              29.599365234375,
+              29.599365234375
+            ],
+            [
+              29.599365234375,
+              30.599365234375
+            ],
+            [
+              16.400634765625,
+              30.599365234375
+            ],
+            [
+              16.400634765625,
+              29.599365234375
+            ],
+            [
+              14.599365234375,
+              29.599365234375
+            ],
+            [
+              14.599365234375,
+              30.599365234375
+            ],
+            [
+              2.400634765625,
+              30.599365234375
+            ],
+            [
+              2.400634765625,
+              29.599365234375
+            ],
+            [
+              1.400634765625,
+              29.599365234375
+            ],
+            [
+              1.400634765625,
+              16.400634765625
+            ],
+            [
+              2.400634765625,
+              16.400634765625
+            ],
+            [
+              2.400634765625,
+              14.599365234375
+            ],
+            [
+              1.400634765625,
+              14.599365234375
+            ],
+            [
+              1.400634765625,
+              2.400634765625
+            ],
+            [
+              2.400634765625,
+              2.400634765625
+            ],
+            [
+              2.400634765625,
+              1.400634765625
+            ],
+            [
+              14.599365234375,
+              1.400634765625
+            ],
+            [
+              14.599365234375,
+              2.400634765625
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000007",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            30.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.22097086912079608,
+          "radius_key": "bf0a1f00c648cc3f",
+          "vertices_ground_gu": [
+            [
+              16.2459716796875,
+              2.2459716796875
+            ],
+            [
+              16.2459716796875,
+              1.2459716796875
+            ],
+            [
+              29.7540283203125,
+              1.2459716796875
+            ],
+            [
+              29.7540283203125,
+              2.2459716796875
+            ],
+            [
+              30.7540283203125,
+              2.2459716796875
+            ],
+            [
+              30.7540283203125,
+              14.7540283203125
+            ],
+            [
+              29.7540283203125,
+              14.7540283203125
+            ],
+            [
+              29.7540283203125,
+              16.2459716796875
+            ],
+            [
+              30.7540283203125,
+              16.2459716796875
+            ],
+            [
+              30.7540283203125,
+              29.7540283203125
+            ],
+            [
+              29.7540283203125,
+              29.7540283203125
+            ],
+            [
+              29.7540283203125,
+              30.7540283203125
+            ],
+            [
+              16.2459716796875,
+              30.7540283203125
+            ],
+            [
+              16.2459716796875,
+              29.7540283203125
+            ],
+            [
+              14.7540283203125,
+              29.7540283203125
+            ],
+            [
+              14.7540283203125,
+              30.7540283203125
+            ],
+            [
+              2.2459716796875,
+              30.7540283203125
+            ],
+            [
+              2.2459716796875,
+              29.7540283203125
+            ],
+            [
+              1.2459716796875,
+              29.7540283203125
+            ],
+            [
+              1.2459716796875,
+              16.2459716796875
+            ],
+            [
+              2.2459716796875,
+              16.2459716796875
+            ],
+            [
+              2.2459716796875,
+              14.7540283203125
+            ],
+            [
+              1.2459716796875,
+              14.7540283203125
+            ],
+            [
+              1.2459716796875,
+              2.2459716796875
+            ],
+            [
+              2.2459716796875,
+              2.2459716796875
+            ],
+            [
+              2.2459716796875,
+              1.2459716796875
+            ],
+            [
+              14.7540283203125,
+              1.2459716796875
+            ],
+            [
+              14.7540283203125,
+              2.2459716796875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000008",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            15.0,
-            1.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.44194173824159216,
+          "radius_key": "bf0a1f00c648dc3f",
+          "vertices_ground_gu": [
+            [
+              16.4669189453125,
+              2.4669189453125
+            ],
+            [
+              16.4669189453125,
+              1.4669189453125
+            ],
+            [
+              29.5330810546875,
+              1.4669189453125
+            ],
+            [
+              29.5330810546875,
+              2.4669189453125
+            ],
+            [
+              30.5330810546875,
+              2.4669189453125
+            ],
+            [
+              30.5330810546875,
+              14.5330810546875
+            ],
+            [
+              29.5330810546875,
+              14.5330810546875
+            ],
+            [
+              29.5330810546875,
+              16.4669189453125
+            ],
+            [
+              30.5330810546875,
+              16.4669189453125
+            ],
+            [
+              30.5330810546875,
+              29.5330810546875
+            ],
+            [
+              29.5330810546875,
+              29.5330810546875
+            ],
+            [
+              29.5330810546875,
+              30.5330810546875
+            ],
+            [
+              16.4669189453125,
+              30.5330810546875
+            ],
+            [
+              16.4669189453125,
+              29.5330810546875
+            ],
+            [
+              14.5330810546875,
+              29.5330810546875
+            ],
+            [
+              14.5330810546875,
+              30.5330810546875
+            ],
+            [
+              2.4669189453125,
+              30.5330810546875
+            ],
+            [
+              2.4669189453125,
+              29.5330810546875
+            ],
+            [
+              1.4669189453125,
+              29.5330810546875
+            ],
+            [
+              1.4669189453125,
+              16.4669189453125
+            ],
+            [
+              2.4669189453125,
+              16.4669189453125
+            ],
+            [
+              2.4669189453125,
+              14.5330810546875
+            ],
+            [
+              1.4669189453125,
+              14.5330810546875
+            ],
+            [
+              1.4669189453125,
+              2.4669189453125
+            ],
+            [
+              2.4669189453125,
+              2.4669189453125
+            ],
+            [
+              2.4669189453125,
+              1.4669189453125
+            ],
+            [
+              14.5330810546875,
+              1.4669189453125
+            ],
+            [
+              14.5330810546875,
+              2.4669189453125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000009",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            30.0,
-            30.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.35355339059327373,
+          "radius_key": "cc3b7f669ea0d63f",
+          "vertices_ground_gu": [
+            [
+              16.3785400390625,
+              2.3785400390625
+            ],
+            [
+              16.3785400390625,
+              1.3785400390625
+            ],
+            [
+              29.6214599609375,
+              1.3785400390625
+            ],
+            [
+              29.6214599609375,
+              2.3785400390625
+            ],
+            [
+              30.6214599609375,
+              2.3785400390625
+            ],
+            [
+              30.6214599609375,
+              14.6214599609375
+            ],
+            [
+              29.6214599609375,
+              14.6214599609375
+            ],
+            [
+              29.6214599609375,
+              16.3785400390625
+            ],
+            [
+              30.6214599609375,
+              16.3785400390625
+            ],
+            [
+              30.6214599609375,
+              29.6214599609375
+            ],
+            [
+              29.6214599609375,
+              29.6214599609375
+            ],
+            [
+              29.6214599609375,
+              30.6214599609375
+            ],
+            [
+              16.3785400390625,
+              30.6214599609375
+            ],
+            [
+              16.3785400390625,
+              29.6214599609375
+            ],
+            [
+              14.6214599609375,
+              29.6214599609375
+            ],
+            [
+              14.6214599609375,
+              30.6214599609375
+            ],
+            [
+              2.3785400390625,
+              30.6214599609375
+            ],
+            [
+              2.3785400390625,
+              29.6214599609375
+            ],
+            [
+              1.3785400390625,
+              29.6214599609375
+            ],
+            [
+              1.3785400390625,
+              16.3785400390625
+            ],
+            [
+              2.3785400390625,
+              16.3785400390625
+            ],
+            [
+              2.3785400390625,
+              14.6214599609375
+            ],
+            [
+              1.3785400390625,
+              14.6214599609375
+            ],
+            [
+              1.3785400390625,
+              2.3785400390625
+            ],
+            [
+              2.3785400390625,
+              2.3785400390625
+            ],
+            [
+              2.3785400390625,
+              1.3785400390625
+            ],
+            [
+              14.6214599609375,
+              1.3785400390625
+            ],
+            [
+              14.6214599609375,
+              2.3785400390625
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000010",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            30.0,
-            1.0,
-            1.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.2651650429449553,
+          "radius_key": "d96cdfcc76f8d03f",
+          "vertices_ground_gu": [
+            [
+              16.2901611328125,
+              2.2901611328125
+            ],
+            [
+              16.2901611328125,
+              1.2901611328125
+            ],
+            [
+              29.7098388671875,
+              1.2901611328125
+            ],
+            [
+              29.7098388671875,
+              2.2901611328125
+            ],
+            [
+              30.7098388671875,
+              2.2901611328125
+            ],
+            [
+              30.7098388671875,
+              14.7098388671875
+            ],
+            [
+              29.7098388671875,
+              14.7098388671875
+            ],
+            [
+              29.7098388671875,
+              16.2901611328125
+            ],
+            [
+              30.7098388671875,
+              16.2901611328125
+            ],
+            [
+              30.7098388671875,
+              29.7098388671875
+            ],
+            [
+              29.7098388671875,
+              29.7098388671875
+            ],
+            [
+              29.7098388671875,
+              30.7098388671875
+            ],
+            [
+              16.2901611328125,
+              30.7098388671875
+            ],
+            [
+              16.2901611328125,
+              29.7098388671875
+            ],
+            [
+              14.7098388671875,
+              29.7098388671875
+            ],
+            [
+              14.7098388671875,
+              30.7098388671875
+            ],
+            [
+              2.2901611328125,
+              30.7098388671875
+            ],
+            [
+              2.2901611328125,
+              29.7098388671875
+            ],
+            [
+              1.2901611328125,
+              29.7098388671875
+            ],
+            [
+              1.2901611328125,
+              16.2901611328125
+            ],
+            [
+              2.2901611328125,
+              16.2901611328125
+            ],
+            [
+              2.2901611328125,
+              14.7098388671875
+            ],
+            [
+              1.2901611328125,
+              14.7098388671875
+            ],
+            [
+              1.2901611328125,
+              2.2901611328125
+            ],
+            [
+              2.2901611328125,
+              2.2901611328125
+            ],
+            [
+              2.2901611328125,
+              1.2901611328125
+            ],
+            [
+              14.7098388671875,
+              1.2901611328125
+            ],
+            [
+              14.7098388671875,
+              2.2901611328125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000011",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            1.0,
-            15.0,
-            31.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              0.0,
+              2.0,
+              3.0
+            ],
+            [
+              3.0,
+              4.0,
+              5.0
+            ],
+            [
+              3.0,
+              5.0,
+              6.0
+            ],
+            [
+              0.0,
+              3.0,
+              6.0
+            ],
+            [
+              7.0,
+              8.0,
+              9.0
+            ],
+            [
+              7.0,
+              9.0,
+              10.0
+            ],
+            [
+              10.0,
+              11.0,
+              12.0
+            ],
+            [
+              10.0,
+              12.0,
+              13.0
+            ],
+            [
+              7.0,
+              10.0,
+              13.0
+            ],
+            [
+              14.0,
+              15.0,
+              16.0
+            ],
+            [
+              14.0,
+              16.0,
+              17.0
+            ],
+            [
+              17.0,
+              18.0,
+              19.0
+            ],
+            [
+              17.0,
+              19.0,
+              20.0
+            ],
+            [
+              14.0,
+              17.0,
+              20.0
+            ],
+            [
+              21.0,
+              22.0,
+              23.0
+            ],
+            [
+              21.0,
+              23.0,
+              24.0
+            ],
+            [
+              24.0,
+              25.0,
+              26.0
+            ],
+            [
+              24.0,
+              26.0,
+              27.0
+            ],
+            [
+              21.0,
+              24.0,
+              27.0
+            ],
+            [
+              0.0,
+              6.0,
+              7.0
+            ],
+            [
+              0.0,
+              7.0,
+              13.0
+            ],
+            [
+              27.0,
+              0.0,
+              13.0
+            ],
+            [
+              21.0,
+              27.0,
+              13.0
+            ],
+            [
+              20.0,
+              21.0,
+              13.0
+            ],
+            [
+              20.0,
+              13.0,
+              14.0
+            ]
+          ],
+          "radius_gu": 0.5303300858899106,
+          "radius_key": "d96cdfcc76f8e03f",
+          "vertices_ground_gu": [
+            [
+              16.5552978515625,
+              2.5552978515625
+            ],
+            [
+              16.5552978515625,
+              1.5552978515625
+            ],
+            [
+              29.4447021484375,
+              1.5552978515625
+            ],
+            [
+              29.4447021484375,
+              2.5552978515625
+            ],
+            [
+              30.4447021484375,
+              2.5552978515625
+            ],
+            [
+              30.4447021484375,
+              14.4447021484375
+            ],
+            [
+              29.4447021484375,
+              14.4447021484375
+            ],
+            [
+              29.4447021484375,
+              16.5552978515625
+            ],
+            [
+              30.4447021484375,
+              16.5552978515625
+            ],
+            [
+              30.4447021484375,
+              29.4447021484375
+            ],
+            [
+              29.4447021484375,
+              29.4447021484375
+            ],
+            [
+              29.4447021484375,
+              30.4447021484375
+            ],
+            [
+              16.5552978515625,
+              30.4447021484375
+            ],
+            [
+              16.5552978515625,
+              29.4447021484375
+            ],
+            [
+              14.4447021484375,
+              29.4447021484375
+            ],
+            [
+              14.4447021484375,
+              30.4447021484375
+            ],
+            [
+              2.5552978515625,
+              30.4447021484375
+            ],
+            [
+              2.5552978515625,
+              29.4447021484375
+            ],
+            [
+              1.5552978515625,
+              29.4447021484375
+            ],
+            [
+              1.5552978515625,
+              16.5552978515625
+            ],
+            [
+              2.5552978515625,
+              16.5552978515625
+            ],
+            [
+              2.5552978515625,
+              14.4447021484375
+            ],
+            [
+              1.5552978515625,
+              14.4447021484375
+            ],
+            [
+              1.5552978515625,
+              2.5552978515625
+            ],
+            [
+              2.5552978515625,
+              2.5552978515625
+            ],
+            [
+              2.5552978515625,
+              1.5552978515625
+            ],
+            [
+              14.4447021484375,
+              1.5552978515625
+            ],
+            [
+              14.4447021484375,
+              2.5552978515625
+            ]
           ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000012",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            15.0,
-            1.0,
-            1.0,
-            31.0
-          ]
-        },
-        "shape": "rect",
-        "source": "manual"
-      }
-    ],
-    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+        }
+      ]
+    },
+    "physics_source_id": "published_convex_polygon_parts_gu.v1"
   },
   "design": {
     "design_size": [
@@ -5114,6 +7813,7 @@
       ]
     }
   ],
+  "precision_contract_id": "hc.map_precision.r2",
   "projection_contract_id": "world.ground_projection.iso_64x32.v1",
   "runtime_schema_version": 2.0,
   "semantics": {
@@ -5152,9 +7852,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "boss",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_fallen_graveyard.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_fallen_graveyard.boss_spawn.000001",
@@ -5210,10 +7907,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "f7ac3d6d5d6c0aaa9ac71e71d4be374c18ed4b720e5c07709dc43f937d7c5da4",
+      "authoring_sha256": "a6b16ad6747c7bf6f5a3ffb9e4e88c5bcfd067f82f582b9c0489494d09c2ecdc",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 12.0,
-      "document_sha256": "970f7f436319e376472b1f1dd968b9baad1c9da7ccdef9e0fdafd65e68193f88",
+      "document_revision": 14.0,
+      "document_sha256": "b76d97dd837a27f5f34fa7747fd482a70e3f440cc53a81f6be64d12e278f450d",
       "ground_manifest_sha256": "162b330a2719a95559fbb79e61291543d83bd51bd461bb072dea160bb04dd45b",
       "ground_state_sha256": "28a8d7e279f1aa5cb70c54521373dff33e1008478b50e1fd03fa97b0869e07af",
       "map_key": "hidden_fallen_graveyard",
@@ -5223,8 +7920,928 @@
     "display_name": "堕落坟场",
     "editor_schema_version": 5.0,
     "map_id": "hidden_fallen_graveyard",
-    "revision": 12.0,
+    "revision": 14.0,
     "runtime_map_id": 918003.0
   },
-  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+  "unit_contract_id": "combat.unit.gu_gs_px.v1",
+  "visual_asset_snapshot": {
+    "assets": {
+      "mse.ground_graffiti.3x3.03": {
+        "anchor_px": [
+          96.0,
+          48.0
+        ],
+        "asset_id": "mse.ground_graffiti.3x3.03",
+        "asset_type": "decoration",
+        "category": "ground_graffiti",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/ground_graffiti/3×3/graffiti_03.png",
+        "image_size": [
+          192.0,
+          96.0
+        ],
+        "object_class": "ground_graffiti",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "orc_tomb_wall_outer_ne_v01": {
+        "anchor_px": [
+          80.0,
+          144.0
+        ],
+        "asset_id": "orc_tomb_wall_outer_ne_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/composite.png",
+        "image_size": [
+          160.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              80.0,
+              144.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_ne_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_outer_nw_v01": {
+        "anchor_px": [
+          80.0,
+          144.0
+        ],
+        "asset_id": "orc_tomb_wall_outer_nw_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/composite.png",
+        "image_size": [
+          160.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              80.0,
+              144.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_nw_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_outer_se_v01": {
+        "anchor_px": [
+          80.0,
+          144.0
+        ],
+        "asset_id": "orc_tomb_wall_outer_se_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/composite.png",
+        "image_size": [
+          160.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              80.0,
+              144.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_se_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_outer_sw_v01": {
+        "anchor_px": [
+          80.0,
+          144.0
+        ],
+        "asset_id": "orc_tomb_wall_outer_sw_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/composite.png",
+        "image_size": [
+          160.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              80.0,
+              144.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_outer_sw_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_x_l2_v01": {
+        "anchor_px": [
+          48.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l2_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/composite.png",
+        "image_size": [
+          128.0,
+          160.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l2_v01/part_01_shadow.png",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_x_l4_v01": {
+        "anchor_px": [
+          48.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l4_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/composite.png",
+        "image_size": [
+          192.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_01_shadow.png",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_base.png",
+            "draw_order_index": 2.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_front.png",
+            "part_id": "p02",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_02_shadow.png",
+            "sort_tile_offset": [
+              2.0,
+              0.0
+            ],
+            "tile_offset": [
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_base.png",
+            "draw_order_index": 3.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_front.png",
+            "part_id": "p03",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v01/part_03_shadow.png",
+            "sort_tile_offset": [
+              3.0,
+              0.0
+            ],
+            "tile_offset": [
+              3.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_x_l4_v02": {
+        "anchor_px": [
+          48.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l4_v02",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/composite.png",
+        "image_size": [
+          192.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_01_shadow.png",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_base.png",
+            "draw_order_index": 2.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_front.png",
+            "part_id": "p02",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_02_shadow.png",
+            "sort_tile_offset": [
+              2.0,
+              0.0
+            ],
+            "tile_offset": [
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_base.png",
+            "draw_order_index": 3.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_front.png",
+            "part_id": "p03",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v02/part_03_shadow.png",
+            "sort_tile_offset": [
+              3.0,
+              0.0
+            ],
+            "tile_offset": [
+              3.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_x_l4_v03": {
+        "anchor_px": [
+          48.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l4_v03",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/composite.png",
+        "image_size": [
+          192.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_01_shadow.png",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_base.png",
+            "draw_order_index": 2.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_front.png",
+            "part_id": "p02",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_02_shadow.png",
+            "sort_tile_offset": [
+              2.0,
+              0.0
+            ],
+            "tile_offset": [
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              48.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_base.png",
+            "draw_order_index": 3.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_front.png",
+            "part_id": "p03",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l4_v03/part_03_shadow.png",
+            "sort_tile_offset": [
+              3.0,
+              0.0
+            ],
+            "tile_offset": [
+              3.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_y_l2_v01": {
+        "anchor_px": [
+          80.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_y_l2_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          2.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/composite.png",
+        "image_size": [
+          128.0,
+          160.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              80.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              80.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l2_v01/part_01_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_y_l4_v01": {
+        "anchor_px": [
+          144.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_y_l4_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/composite.png",
+        "image_size": [
+          192.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_01_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_base.png",
+            "draw_order_index": 2.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_front.png",
+            "part_id": "p02",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_02_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              2.0
+            ],
+            "tile_offset": [
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_base.png",
+            "draw_order_index": 3.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_front.png",
+            "part_id": "p03",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v01/part_03_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              3.0
+            ],
+            "tile_offset": [
+              0.0,
+              3.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_y_l4_v02": {
+        "anchor_px": [
+          144.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_y_l4_v02",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/composite.png",
+        "image_size": [
+          192.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_01_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_base.png",
+            "draw_order_index": 2.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_front.png",
+            "part_id": "p02",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_02_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              2.0
+            ],
+            "tile_offset": [
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_base.png",
+            "draw_order_index": 3.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_front.png",
+            "part_id": "p03",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v02/part_03_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              3.0
+            ],
+            "tile_offset": [
+              0.0,
+              3.0
+            ]
+          }
+        ]
+      },
+      "orc_tomb_wall_straight_y_l4_v03": {
+        "anchor_px": [
+          144.0,
+          112.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_y_l4_v03",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/composite.png",
+        "image_size": [
+          192.0,
+          192.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_base.png",
+            "draw_order_index": 0.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_front.png",
+            "part_id": "p00",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_00_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_base.png",
+            "draw_order_index": 1.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_front.png",
+            "part_id": "p01",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_01_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_base.png",
+            "draw_order_index": 2.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_front.png",
+            "part_id": "p02",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_02_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              2.0
+            ],
+            "tile_offset": [
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "anchor": [
+              144.0,
+              112.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_base.png",
+            "draw_order_index": 3.0,
+            "front_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png",
+            "part_id": "p03",
+            "shadow_image": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_shadow.png",
+            "sort_tile_offset": [
+              0.0,
+              3.0
+            ],
+            "tile_offset": [
+              0.0,
+              3.0
+            ]
+          }
+        ]
+      },
+      "user.8c02110c6c156d86": {
+        "anchor_px": [
+          81.0,
+          387.0
+        ],
+        "asset_id": "user.8c02110c6c156d86",
+        "asset_type": "large_prop",
+        "category": "decoration",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/xzsc/cat_05918994da/ChatGPTImage2026年8月20日10_46_41_part2.png",
+        "image_size": [
+          163.0,
+          407.0
+        ],
+        "object_class": "decoration",
+        "occlusion": true,
+        "semantic_role": ""
+      }
+    },
+    "contract_id": "hc.published_material_geometry.v1",
+    "sha256": "e3117bdd481474a0dbdeab66bd002965211fabd1ef72c99fbc2ff99ebdc6a6d1"
+  }
 }

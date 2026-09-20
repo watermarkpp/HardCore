@@ -1,7 +1,151 @@
 {
-  "build_sha256": "aaa7d826158219486b9933921881f3a4f1e36fa868682b1e760d6e3bf17862a8",
+  "build_sha256": "bdcfb6d30917ce3ccda5e189580b937a39b4d5f23ac8624c888300b8dc2194a1",
   "collision": {
-    "blocked_count": 137.0,
+    "authored_polygons_ground_gu": [
+      {
+        "collision_id": "poly_000001",
+        "content_layer": "personal_expansion",
+        "id": "poly_000001",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            32.0,
+            0.0
+          ],
+          [
+            32.0,
+            1.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000002",
+        "content_layer": "personal_expansion",
+        "id": "poly_000002",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            1.0
+          ],
+          [
+            1.0,
+            32.0
+          ],
+          [
+            0.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000003",
+        "content_layer": "personal_expansion",
+        "id": "poly_000003",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            31.0,
+            1.0
+          ],
+          [
+            32.0,
+            1.0
+          ],
+          [
+            32.0,
+            32.0
+          ],
+          [
+            31.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000007",
+        "content_layer": "personal_expansion",
+        "id": "poly_000007",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            1.0,
+            31.0
+          ],
+          [
+            31.0,
+            31.0
+          ],
+          [
+            31.0,
+            32.0
+          ],
+          [
+            1.0,
+            32.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "collision_id": "poly_000008",
+        "content_layer": "personal_expansion",
+        "id": "poly_000008",
+        "owner_instance_id": "",
+        "polygon_ground_gu": [
+          [
+            12.0,
+            12.0
+          ],
+          [
+            13.0,
+            11.0
+          ],
+          [
+            15.0,
+            11.0
+          ],
+          [
+            16.0,
+            12.0
+          ],
+          [
+            16.0,
+            15.0
+          ],
+          [
+            13.0,
+            15.0
+          ],
+          [
+            12.0,
+            14.0
+          ]
+        ],
+        "shape": "polygon",
+        "source": "manual"
+      }
+    ],
+    "blocked_count": 140.0,
     "blocked_tiles": [
       "0,0",
       "0,1",
@@ -42,8 +186,10 @@
       "11,0",
       "11,31",
       "12,0",
+      "12,11",
       "12,12",
       "12,13",
+      "12,14",
       "12,31",
       "13,0",
       "13,11",
@@ -58,6 +204,7 @@
       "14,14",
       "14,31",
       "15,0",
+      "15,11",
       "15,12",
       "15,13",
       "15,14",
@@ -141,148 +288,1298 @@
       "9,0",
       "9,31"
     ],
-    "coordinate_contract_id": "map_editor_runtime_collision_geometry_v3",
-    "erased_cells": [
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16.0,
-          11.0
+    "blocked_tiles_role": "diagnostic_center_sample_only",
+    "convex_parts_ground_gu": [
+      [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          32.0,
+          0.0
+        ],
+        [
+          32.0,
+          1.0
+        ],
+        [
+          0.0,
+          1.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16.0,
-          12.0
+      ],
+      [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          32.0
+        ],
+        [
+          0.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16.0,
-          13.0
+      ],
+      [
+        [
+          31.0,
+          1.0
+        ],
+        [
+          32.0,
+          1.0
+        ],
+        [
+          32.0,
+          32.0
+        ],
+        [
+          31.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          16.0,
-          14.0
+      ],
+      [
+        [
+          1.0,
+          31.0
+        ],
+        [
+          31.0,
+          31.0
+        ],
+        [
+          31.0,
+          32.0
+        ],
+        [
+          1.0,
+          32.0
         ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+      ],
+      [
+        [
           12.0,
-          14.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+          12.0
+        ],
+        [
+          13.0,
+          11.0
+        ],
+        [
           15.0,
           11.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
+        ],
+        [
+          16.0,
+          12.0
+        ],
+        [
+          16.0,
+          15.0
+        ],
+        [
+          13.0,
+          15.0
+        ],
+        [
           12.0,
-          11.0
+          14.0
         ]
-      }
+      ]
     ],
-    "manual_shapes": [
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000001",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            31.0,
-            32.0,
-            1.0
+    "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
+    "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+    "navigation": {
+      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "clearance_gu": 0.025,
+      "contract_id": "hc.polygon_nav_faces.v1",
+      "profiles": [
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.41984465132951254,
+          "radius_key": "0217b719bcdeda3f",
+          "vertices_ground_gu": [
+            [
+              30.55517578125,
+              1.44482421875
+            ],
+            [
+              16.44482421875,
+              15.44482421875
+            ],
+            [
+              16.44482421875,
+              11.8157958984375
+            ],
+            [
+              30.55517578125,
+              30.55517578125
+            ],
+            [
+              1.44482421875,
+              30.55517578125
+            ],
+            [
+              12.8157958984375,
+              15.44482421875
+            ],
+            [
+              11.55517578125,
+              14.1842041015625
+            ],
+            [
+              1.44482421875,
+              1.44482421875
+            ],
+            [
+              11.55517578125,
+              11.8157958984375
+            ],
+            [
+              12.8157958984375,
+              10.55517578125
+            ],
+            [
+              15.1842041015625,
+              10.55517578125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000002",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            31.0,
-            0.0,
-            1.0,
-            32.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.3314563036811941,
+          "radius_key": "0f4817809436d53f",
+          "vertices_ground_gu": [
+            [
+              30.6435546875,
+              1.3564453125
+            ],
+            [
+              16.3564453125,
+              15.3564453125
+            ],
+            [
+              16.3564453125,
+              11.852294921875
+            ],
+            [
+              30.6435546875,
+              30.6435546875
+            ],
+            [
+              1.3564453125,
+              30.6435546875
+            ],
+            [
+              12.852294921875,
+              15.3564453125
+            ],
+            [
+              11.6435546875,
+              14.147705078125
+            ],
+            [
+              1.3564453125,
+              1.3564453125
+            ],
+            [
+              11.6435546875,
+              11.852294921875
+            ],
+            [
+              12.852294921875,
+              10.6435546875
+            ],
+            [
+              15.147705078125,
+              10.6435546875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000003",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            0.0,
-            32.0,
-            1.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.397747564417433,
+          "radius_key": "46234f33b274d93f",
+          "vertices_ground_gu": [
+            [
+              30.5771484375,
+              1.4228515625
+            ],
+            [
+              16.4228515625,
+              15.4228515625
+            ],
+            [
+              16.4228515625,
+              11.8248291015625
+            ],
+            [
+              30.5771484375,
+              30.5771484375
+            ],
+            [
+              1.4228515625,
+              30.5771484375
+            ],
+            [
+              12.8248291015625,
+              15.4228515625
+            ],
+            [
+              11.5771484375,
+              14.1751708984375
+            ],
+            [
+              1.4228515625,
+              1.4228515625
+            ],
+            [
+              11.5771484375,
+              11.8248291015625
+            ],
+            [
+              12.8248291015625,
+              10.5771484375
+            ],
+            [
+              15.1751708984375,
+              10.5771484375
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000004",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            0.0,
-            0.0,
-            1.0,
-            32.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.6187184335382291,
+          "radius_key": "5354af998acce33f",
+          "vertices_ground_gu": [
+            [
+              30.356201171875,
+              1.643798828125
+            ],
+            [
+              16.643798828125,
+              15.643798828125
+            ],
+            [
+              16.643798828125,
+              11.7333984375
+            ],
+            [
+              30.356201171875,
+              30.356201171875
+            ],
+            [
+              1.643798828125,
+              30.356201171875
+            ],
+            [
+              12.7333984375,
+              15.643798828125
+            ],
+            [
+              11.356201171875,
+              14.2666015625
+            ],
+            [
+              1.643798828125,
+              1.643798828125
+            ],
+            [
+              11.356201171875,
+              11.7333984375
+            ],
+            [
+              12.7333984375,
+              10.356201171875
+            ],
+            [
+              15.2666015625,
+              10.356201171875
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      },
-      {
-        "blocks_monster": true,
-        "blocks_player": true,
-        "collision_id": "manual_000005",
-        "content_layer": "personal_expansion",
-        "data": {
-          "rect": [
-            12.0,
-            11.0,
-            5.0,
-            4.0
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.4640388251536718,
+          "radius_key": "7cfe86e6cfb2dd3f",
+          "vertices_ground_gu": [
+            [
+              30.510986328125,
+              1.489013671875
+            ],
+            [
+              16.489013671875,
+              15.489013671875
+            ],
+            [
+              16.489013671875,
+              11.7974853515625
+            ],
+            [
+              30.510986328125,
+              30.510986328125
+            ],
+            [
+              1.489013671875,
+              30.510986328125
+            ],
+            [
+              12.7974853515625,
+              15.489013671875
+            ],
+            [
+              11.510986328125,
+              14.2025146484375
+            ],
+            [
+              1.489013671875,
+              1.489013671875
+            ],
+            [
+              11.510986328125,
+              11.7974853515625
+            ],
+            [
+              12.7974853515625,
+              10.510986328125
+            ],
+            [
+              15.2025146484375,
+              10.510986328125
+            ]
           ]
         },
-        "shape": "rect",
-        "source": "manual"
-      }
-    ],
-    "physics_source_id": "published_blocked_cells_after_erasure_v1"
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.37565047750535335,
+          "radius_key": "892fe74ca80ad83f",
+          "vertices_ground_gu": [
+            [
+              30.599365234375,
+              1.400634765625
+            ],
+            [
+              16.400634765625,
+              15.400634765625
+            ],
+            [
+              16.400634765625,
+              11.8341064453125
+            ],
+            [
+              30.599365234375,
+              30.599365234375
+            ],
+            [
+              1.400634765625,
+              30.599365234375
+            ],
+            [
+              12.8341064453125,
+              15.400634765625
+            ],
+            [
+              11.599365234375,
+              14.1658935546875
+            ],
+            [
+              1.400634765625,
+              1.400634765625
+            ],
+            [
+              11.599365234375,
+              11.8341064453125
+            ],
+            [
+              12.8341064453125,
+              10.599365234375
+            ],
+            [
+              15.1658935546875,
+              10.599365234375
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.22097086912079608,
+          "radius_key": "bf0a1f00c648cc3f",
+          "vertices_ground_gu": [
+            [
+              30.7540283203125,
+              1.2459716796875
+            ],
+            [
+              16.2459716796875,
+              15.2459716796875
+            ],
+            [
+              16.2459716796875,
+              11.8980712890625
+            ],
+            [
+              30.7540283203125,
+              30.7540283203125
+            ],
+            [
+              1.2459716796875,
+              30.7540283203125
+            ],
+            [
+              12.8980712890625,
+              15.2459716796875
+            ],
+            [
+              11.7540283203125,
+              14.1019287109375
+            ],
+            [
+              1.2459716796875,
+              1.2459716796875
+            ],
+            [
+              11.7540283203125,
+              11.8980712890625
+            ],
+            [
+              12.8980712890625,
+              10.7540283203125
+            ],
+            [
+              15.1019287109375,
+              10.7540283203125
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.44194173824159216,
+          "radius_key": "bf0a1f00c648dc3f",
+          "vertices_ground_gu": [
+            [
+              30.5330810546875,
+              1.4669189453125
+            ],
+            [
+              16.4669189453125,
+              15.4669189453125
+            ],
+            [
+              16.4669189453125,
+              11.8065185546875
+            ],
+            [
+              30.5330810546875,
+              30.5330810546875
+            ],
+            [
+              1.4669189453125,
+              30.5330810546875
+            ],
+            [
+              12.8065185546875,
+              15.4669189453125
+            ],
+            [
+              11.5330810546875,
+              14.1934814453125
+            ],
+            [
+              1.4669189453125,
+              1.4669189453125
+            ],
+            [
+              11.5330810546875,
+              11.8065185546875
+            ],
+            [
+              12.8065185546875,
+              10.5330810546875
+            ],
+            [
+              15.1934814453125,
+              10.5330810546875
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.35355339059327373,
+          "radius_key": "cc3b7f669ea0d63f",
+          "vertices_ground_gu": [
+            [
+              30.6214599609375,
+              1.3785400390625
+            ],
+            [
+              16.3785400390625,
+              15.3785400390625
+            ],
+            [
+              16.3785400390625,
+              11.8431396484375
+            ],
+            [
+              30.6214599609375,
+              30.6214599609375
+            ],
+            [
+              1.3785400390625,
+              30.6214599609375
+            ],
+            [
+              12.8431396484375,
+              15.3785400390625
+            ],
+            [
+              11.6214599609375,
+              14.1568603515625
+            ],
+            [
+              1.3785400390625,
+              1.3785400390625
+            ],
+            [
+              11.6214599609375,
+              11.8431396484375
+            ],
+            [
+              12.8431396484375,
+              10.6214599609375
+            ],
+            [
+              15.1568603515625,
+              10.6214599609375
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.2651650429449553,
+          "radius_key": "d96cdfcc76f8d03f",
+          "vertices_ground_gu": [
+            [
+              30.7098388671875,
+              1.2901611328125
+            ],
+            [
+              16.2901611328125,
+              15.2901611328125
+            ],
+            [
+              16.2901611328125,
+              11.8798828125
+            ],
+            [
+              30.7098388671875,
+              30.7098388671875
+            ],
+            [
+              1.2901611328125,
+              30.7098388671875
+            ],
+            [
+              12.8798828125,
+              15.2901611328125
+            ],
+            [
+              11.7098388671875,
+              14.1201171875
+            ],
+            [
+              1.2901611328125,
+              1.2901611328125
+            ],
+            [
+              11.7098388671875,
+              11.8798828125
+            ],
+            [
+              12.8798828125,
+              10.7098388671875
+            ],
+            [
+              15.1201171875,
+              10.7098388671875
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0.0,
+              1.0,
+              2.0
+            ],
+            [
+              1.0,
+              0.0,
+              3.0
+            ],
+            [
+              1.0,
+              3.0,
+              4.0
+            ],
+            [
+              5.0,
+              1.0,
+              4.0
+            ],
+            [
+              6.0,
+              5.0,
+              4.0
+            ],
+            [
+              6.0,
+              4.0,
+              7.0
+            ],
+            [
+              8.0,
+              6.0,
+              7.0
+            ],
+            [
+              9.0,
+              8.0,
+              7.0
+            ],
+            [
+              9.0,
+              7.0,
+              0.0
+            ],
+            [
+              10.0,
+              9.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0,
+              2.0
+            ]
+          ],
+          "radius_gu": 0.5303300858899106,
+          "radius_key": "d96cdfcc76f8e03f",
+          "vertices_ground_gu": [
+            [
+              30.4447021484375,
+              1.5552978515625
+            ],
+            [
+              16.5552978515625,
+              15.5552978515625
+            ],
+            [
+              16.5552978515625,
+              11.77001953125
+            ],
+            [
+              30.4447021484375,
+              30.4447021484375
+            ],
+            [
+              1.5552978515625,
+              30.4447021484375
+            ],
+            [
+              12.77001953125,
+              15.5552978515625
+            ],
+            [
+              11.4447021484375,
+              14.22998046875
+            ],
+            [
+              1.5552978515625,
+              1.5552978515625
+            ],
+            [
+              11.4447021484375,
+              11.77001953125
+            ],
+            [
+              12.77001953125,
+              10.4447021484375
+            ],
+            [
+              15.22998046875,
+              10.4447021484375
+            ]
+          ]
+        }
+      ]
+    },
+    "physics_source_id": "published_convex_polygon_parts_gu.v1"
   },
   "design": {
     "design_size": [
@@ -4862,6 +6159,7 @@
       ]
     }
   ],
+  "precision_contract_id": "hc.map_precision.r2",
   "projection_contract_id": "world.ground_projection.iso_64x32.v1",
   "runtime_schema_version": 2.0,
   "semantics": {
@@ -4900,9 +6198,6 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "boss",
-        "respawn_random_seconds": 0.0,
-        "respawn_seconds": 3600.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.hidden_abyss_domain.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.hidden_abyss_domain.boss_spawn.000001",
@@ -4958,10 +6253,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "d42d215baf35db4c1a8dc46e70515676a8be66bf1a3a7204e54966d2b6a99a6d",
+      "authoring_sha256": "68a9c99c2819cc9f3101f1acc93aded849428179ee63665da954eaaae1869443",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 3.0,
-      "document_sha256": "fb6d2b540d113bfe3579b544119a27a9d3c6a9004cdf8e931d2684f279bb1783",
+      "document_revision": 6.0,
+      "document_sha256": "e432564ed3cfab56aa24ec7c59b1f1873856515a042ddf9dedb0ea18fdaaacde",
       "ground_manifest_sha256": "e3516baf51ee924d617cf6b253dfc64c4390ee83f74c231d7a68775632ae625e",
       "ground_state_sha256": "6581e6047ea9045d15171a9a82b23f7d71c457a894e2cd4ce6fdb37185bfea0f",
       "map_key": "hidden_abyss_domain",
@@ -4971,8 +6266,970 @@
     "display_name": "深渊魔域",
     "editor_schema_version": 5.0,
     "map_id": "hidden_abyss_domain",
-    "revision": 3.0,
+    "revision": 6.0,
     "runtime_map_id": 918005.0
   },
-  "unit_contract_id": "combat.unit.gu_gs_px.v1"
+  "unit_contract_id": "combat.unit.gu_gs_px.v1",
+  "visual_asset_snapshot": {
+    "assets": {
+      "chiyue_valley_ground_rock_pile_05": {
+        "anchor_px": [
+          64.0,
+          139.0
+        ],
+        "asset_id": "chiyue_valley_ground_rock_pile_05",
+        "asset_type": "large_prop",
+        "category": "object",
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "image": "assets/art/maps/_shared/terrain/chiyue_valley/ground_rocks/chiyue_valley_ground_rock_11.png",
+        "image_size": [
+          128.0,
+          147.0
+        ],
+        "object_class": "decoration",
+        "occlusion": false,
+        "selection_bounds_px": [
+          8.0,
+          8.0,
+          112.0,
+          131.0
+        ]
+      },
+      "chiyue_valley_wall_straight_x_l4_v01": {
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l4_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+        "image_size": [
+          192.0,
+          272.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+            "cap_source_variant": 2.0,
+            "draw_order_index": 0.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+            "front_source_variant": 1.0,
+            "part_id": "p00",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+            "cap_source_variant": 3.0,
+            "draw_order_index": 1.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+            "front_source_variant": 2.0,
+            "part_id": "p01",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+            "cap_source_variant": 4.0,
+            "draw_order_index": 2.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+            "front_source_variant": 3.0,
+            "part_id": "p02",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              2.0,
+              0.0
+            ],
+            "tile_offset": [
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+            "cap_source_variant": 1.0,
+            "draw_order_index": 3.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+            "front_source_variant": 4.0,
+            "part_id": "p03",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              3.0,
+              0.0
+            ],
+            "tile_offset": [
+              3.0,
+              0.0
+            ]
+          }
+        ],
+        "selection_bounds_px": [
+          32.0,
+          8.0,
+          159.0,
+          239.0
+        ]
+      },
+      "chiyue_valley_wall_straight_x_l4_v02": {
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l4_v02",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+        "image_size": [
+          192.0,
+          272.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+            "cap_source_variant": 4.0,
+            "draw_order_index": 0.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+            "front_source_variant": 2.0,
+            "part_id": "p00",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+            "cap_source_variant": 1.0,
+            "draw_order_index": 1.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+            "front_source_variant": 4.0,
+            "part_id": "p01",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+            "cap_source_variant": 3.0,
+            "draw_order_index": 2.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+            "front_source_variant": 1.0,
+            "part_id": "p02",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              2.0,
+              0.0
+            ],
+            "tile_offset": [
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+            "cap_source_variant": 2.0,
+            "draw_order_index": 3.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+            "front_source_variant": 3.0,
+            "part_id": "p03",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              3.0,
+              0.0
+            ],
+            "tile_offset": [
+              3.0,
+              0.0
+            ]
+          }
+        ],
+        "selection_bounds_px": [
+          32.0,
+          8.0,
+          159.0,
+          239.0
+        ]
+      },
+      "chiyue_valley_wall_straight_x_l4_v03": {
+        "anchor_px": [
+          64.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_x_l4_v03",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          4.0,
+          1.0
+        ],
+        "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+        "image_size": [
+          192.0,
+          272.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+            "cap_source_variant": 1.0,
+            "draw_order_index": 0.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+            "front_source_variant": 3.0,
+            "part_id": "p00",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+            "cap_source_variant": 4.0,
+            "draw_order_index": 1.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+            "front_source_variant": 1.0,
+            "part_id": "p01",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              1.0,
+              0.0
+            ],
+            "tile_offset": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+            "cap_source_variant": 2.0,
+            "draw_order_index": 2.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+            "front_source_variant": 4.0,
+            "part_id": "p02",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              2.0,
+              0.0
+            ],
+            "tile_offset": [
+              2.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              64.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_x_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+            "cap_source_variant": 3.0,
+            "draw_order_index": 3.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+            "front_source_variant": 2.0,
+            "part_id": "p03",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              3.0,
+              0.0
+            ],
+            "tile_offset": [
+              3.0,
+              0.0
+            ]
+          }
+        ],
+        "selection_bounds_px": [
+          32.0,
+          8.0,
+          159.0,
+          239.0
+        ]
+      },
+      "chiyue_valley_wall_straight_y_l4_v01": {
+        "anchor_px": [
+          128.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l4_v01",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+        "image_size": [
+          192.0,
+          272.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+            "cap_source_variant": 4.0,
+            "draw_order_index": 0.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+            "front_source_variant": 2.0,
+            "part_id": "p00",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+            "cap_source_variant": 2.0,
+            "draw_order_index": 1.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+            "front_source_variant": 1.0,
+            "part_id": "p01",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+            "cap_source_variant": 1.0,
+            "draw_order_index": 2.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+            "front_source_variant": 3.0,
+            "part_id": "p02",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              2.0
+            ],
+            "tile_offset": [
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v01/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+            "cap_source_variant": 3.0,
+            "draw_order_index": 3.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+            "front_source_variant": 4.0,
+            "part_id": "p03",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              3.0
+            ],
+            "tile_offset": [
+              0.0,
+              3.0
+            ]
+          }
+        ],
+        "selection_bounds_px": [
+          1.0,
+          8.0,
+          159.0,
+          239.0
+        ]
+      },
+      "chiyue_valley_wall_straight_y_l4_v02": {
+        "anchor_px": [
+          128.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l4_v02",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+        "image_size": [
+          192.0,
+          272.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+            "cap_source_variant": 3.0,
+            "draw_order_index": 0.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+            "front_source_variant": 4.0,
+            "part_id": "p00",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+            "cap_source_variant": 1.0,
+            "draw_order_index": 1.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+            "front_source_variant": 2.0,
+            "part_id": "p01",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+            "cap_source_variant": 4.0,
+            "draw_order_index": 2.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+            "front_source_variant": 3.0,
+            "part_id": "p02",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              2.0
+            ],
+            "tile_offset": [
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v02/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+            "cap_source_variant": 2.0,
+            "draw_order_index": 3.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+            "front_source_variant": 1.0,
+            "part_id": "p03",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              3.0
+            ],
+            "tile_offset": [
+              0.0,
+              3.0
+            ]
+          }
+        ],
+        "selection_bounds_px": [
+          1.0,
+          8.0,
+          159.0,
+          239.0
+        ]
+      },
+      "chiyue_valley_wall_straight_y_l4_v03": {
+        "anchor_px": [
+          128.0,
+          184.0
+        ],
+        "asset_id": "chiyue_valley_wall_straight_y_l4_v03",
+        "asset_type": "wall_module",
+        "category": "wall_module",
+        "footprint_tiles": [
+          1.0,
+          4.0
+        ],
+        "image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/composite_chiyue_valley_native_2to1_rock_wall_v1.png",
+        "image_size": [
+          192.0,
+          272.0
+        ],
+        "object_class": "wall",
+        "occlusion": true,
+        "render_parts": [
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_00_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+            "cap_source_variant": 1.0,
+            "draw_order_index": 0.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+            "front_source_variant": 3.0,
+            "part_id": "p00",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              0.0
+            ],
+            "tile_offset": [
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_01_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+            "cap_source_variant": 2.0,
+            "draw_order_index": 1.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+            "front_source_variant": 4.0,
+            "part_id": "p01",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              1.0
+            ],
+            "tile_offset": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_02_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+            "cap_source_variant": 4.0,
+            "draw_order_index": 2.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+            "front_source_variant": 1.0,
+            "part_id": "p02",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              2.0
+            ],
+            "tile_offset": [
+              0.0,
+              2.0
+            ]
+          },
+          {
+            "anchor": [
+              128.0,
+              184.0
+            ],
+            "base_image": "assets/art/maps/_shared/walls/chiyue_valley/chiyue_valley_rock_wall_u0/chiyue_valley_wall_straight_y_l4_v03/part_03_chiyue_valley_native_2to1_rock_wall_v1_base.png",
+            "cap_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+            "cap_source_variant": 3.0,
+            "draw_order_index": 3.0,
+            "front_image": "",
+            "front_source_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+            "front_source_variant": 2.0,
+            "part_id": "p03",
+            "shadow_image": "",
+            "sort_tile_offset": [
+              0.0,
+              3.0
+            ],
+            "tile_offset": [
+              0.0,
+              3.0
+            ]
+          }
+        ],
+        "selection_bounds_px": [
+          1.0,
+          8.0,
+          159.0,
+          239.0
+        ]
+      },
+      "mse.ground_graffiti.3x3.03": {
+        "anchor_px": [
+          96.0,
+          48.0
+        ],
+        "asset_id": "mse.ground_graffiti.3x3.03",
+        "asset_type": "decoration",
+        "category": "ground_graffiti",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/ground_graffiti/3×3/graffiti_03.png",
+        "image_size": [
+          192.0,
+          96.0
+        ],
+        "object_class": "ground_graffiti",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.012d42c4d8832618": {
+        "anchor_px": [
+          134.0,
+          226.0
+        ],
+        "asset_id": "user.012d42c4d8832618",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r03_c04.png",
+        "image_size": [
+          269.0,
+          246.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.2cebc1463b240891": {
+        "anchor_px": [
+          141.0,
+          228.0
+        ],
+        "asset_id": "user.2cebc1463b240891",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r01_c03.png",
+        "image_size": [
+          283.0,
+          248.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.370456dc670ece18": {
+        "anchor_px": [
+          114.0,
+          246.0
+        ],
+        "asset_id": "user.370456dc670ece18",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r02_c04.png",
+        "image_size": [
+          228.0,
+          266.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.668ebcb115eefe75": {
+        "anchor_px": [
+          131.0,
+          239.0
+        ],
+        "asset_id": "user.668ebcb115eefe75",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r02_c01.png",
+        "image_size": [
+          262.0,
+          259.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.72e309ca30846ca3": {
+        "anchor_px": [
+          130.0,
+          239.0
+        ],
+        "asset_id": "user.72e309ca30846ca3",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r02_c03.png",
+        "image_size": [
+          260.0,
+          259.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.7b762f3109f73f4e": {
+        "anchor_px": [
+          115.0,
+          267.0
+        ],
+        "asset_id": "user.7b762f3109f73f4e",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r01_c04.png",
+        "image_size": [
+          230.0,
+          287.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.e46ac879aee805eb": {
+        "anchor_px": [
+          127.0,
+          261.0
+        ],
+        "asset_id": "user.e46ac879aee805eb",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r01_c01.png",
+        "image_size": [
+          255.0,
+          281.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.e5c2eb2715a15b17": {
+        "anchor_px": [
+          117.0,
+          226.0
+        ],
+        "asset_id": "user.e5c2eb2715a15b17",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r03_c03.png",
+        "image_size": [
+          234.0,
+          246.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      },
+      "user.f2475acf9bddb307": {
+        "anchor_px": [
+          128.0,
+          245.0
+        ],
+        "asset_id": "user.f2475acf9bddb307",
+        "asset_type": "large_prop",
+        "category": "tree",
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "image": "assets/art/maps/_shared/user_palette/decorations_1/trees/新增/蘑菇/tree_new_20260821_s12_r04_c01.png",
+        "image_size": [
+          257.0,
+          265.0
+        ],
+        "object_class": "tree",
+        "occlusion": false,
+        "semantic_role": ""
+      }
+    },
+    "contract_id": "hc.published_material_geometry.v1",
+    "sha256": "5c90a4afc703d6eb5e231b7d22b1cfd5b7819e530abf0d44ce748569231f5999"
+  }
 }
