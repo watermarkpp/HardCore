@@ -29,7 +29,9 @@ const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runti
 const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
 const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
 const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
-const HUD_CHASSIS_SIZE := Vector2(820, 273)
+## 2026-09-20 user order: chassis shrunk 20% from 820x273 (keep in sync with
+## HUDChassisDesigns.DISPLAY_SIZE).
+const HUD_CHASSIS_SIZE := Vector2(656, 218.4)
 const HUD_CHASSIS_STATE_LABEL_GAP := 8.0
 const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
 const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
@@ -223,6 +225,9 @@ var _panel_prewarm_user_interaction := false
 # two worlds apart; the exact callable is stored so world teardown can release
 # it and re-entry never stacks a dead binding onto the shared viewport.
 var _safe_area_size_changed_callable := Callable()
+## Controls exempted from safe-area horizontal centering (2026-09-20 user
+## order): they must sit on the true screen midline, not the safe-area one.
+var _center_exempt_controls: Array[Control] = []
 var _panel_script_warm_refs: Array[Script] = []
 
 
@@ -287,8 +292,7 @@ func _build_approved_hud() -> void:
 		)
 	MobileLayoutRules.apply_display_safe_area(root, get_viewport())
 	_safe_area_size_changed_callable = (
-		MobileLayoutRules
-		.apply_display_safe_area
+		_on_safe_area_size_changed
 		.bind(root, get_viewport())
 	)
 	get_viewport().size_changed.connect(_safe_area_size_changed_callable)
@@ -394,6 +398,7 @@ func _build_approved_hud() -> void:
 	update_quick_slots()
 	update_item_quick_slots()
 	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
+	_apply_center_alignment()
 	if loading_profile_enabled:
 		stage_started_usec = _hud_loading_profile_mark(
 			loading_profile,
@@ -405,6 +410,53 @@ func _build_approved_hud() -> void:
 			float(Time.get_ticks_usec() - profile_started_usec) / 1000.0
 		)
 		print("[InitialHUDProfile] ", JSON.stringify(loading_profile))
+
+
+## 2026-09-20 user order: the dragon chassis and the top enemy bar must sit
+## on the TRUE screen midline (the vertical line through the camera-centered
+## character), not on the safe-area center. Devices with asymmetric left/right
+## safe insets push the safe-area center sideways; these controls get a
+## horizontal exemption of (right - left) / 2 so their center lands exactly on
+## the viewport center. Desktop insets are 0 -> delta 0, behavior unchanged.
+func _register_center_exempt(control: Control) -> void:
+	if control.has_meta("center_exempt_base_offset_left"):
+		return
+	control.set_meta("center_exempt_base_offset_left", control.offset_left)
+	control.set_meta("center_exempt_base_offset_right", control.offset_right)
+	_center_exempt_controls.append(control)
+
+
+func _apply_center_alignment_delta(delta: float) -> void:
+	for control: Control in _center_exempt_controls:
+		if not is_instance_valid(control):
+			continue
+		control.offset_left = (
+			float(control.get_meta("center_exempt_base_offset_left")) + delta
+		)
+		control.offset_right = (
+			float(control.get_meta("center_exempt_base_offset_right")) + delta
+		)
+
+
+func _center_alignment_delta() -> float:
+	var viewport := get_viewport()
+	if viewport == null:
+		return 0.0
+	var margins := MobileLayoutRules.safe_margins(
+		Vector2(DisplayServer.window_get_size()),
+		Rect2(DisplayServer.get_display_safe_area()),
+		viewport.get_visible_rect().size,
+	)
+	return (margins.z - margins.x) * 0.5
+
+
+func _apply_center_alignment() -> void:
+	_apply_center_alignment_delta(_center_alignment_delta())
+
+
+func _on_safe_area_size_changed(root: Control, viewport: Viewport) -> void:
+	MobileLayoutRules.apply_display_safe_area(root, viewport)
+	_apply_center_alignment()
 
 
 func _build_hidden_compatibility_info(root: Control) -> void:
@@ -458,6 +510,7 @@ func _build_target_bar(root: Control) -> void:
 	target_panel.offset_bottom = 93
 	target_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(target_panel)
+	_register_center_exempt(target_panel)
 	target_health_fill = ColorRect.new()
 	target_health_fill.name = "TargetHealthFill"
 	target_health_fill.position = Vector2(60, 24)
@@ -560,15 +613,22 @@ func _build_bottom_chassis(root: Control) -> void:
 	chassis_root.anchor_top = 1.0
 	chassis_root.anchor_right = 0.5
 	chassis_root.anchor_bottom = 1.0
-	chassis_root.offset_left = -410
-	chassis_root.offset_top = -273
-	chassis_root.offset_right = 410
-	chassis_root.offset_bottom = 0
+	# 2026-09-20 user order: 20% shrink anchored at the bottom spike tip
+	# (alpha-measured source (1085, 705)). The tip keeps its pre-shrink global
+	# position: top = -(273 - 265.84 + 212.67), bottom = top + 218.4, so the
+	# frame bottom stays ~1.4px above the screen edge exactly as the anchor
+	# demands. Horizontal centering is finished by the center-exemption
+	# alignment (true screen midline, not safe-area midline).
+	chassis_root.offset_left = -328
+	chassis_root.offset_top = -219.83
+	chassis_root.offset_right = 328
+	chassis_root.offset_bottom = -1.43
 	chassis_root.custom_minimum_size = HUD_CHASSIS_SIZE
 	chassis_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chassis_root.set_meta("contents", ["health_orb", "four_item_slots", "mana_orb"])
 	chassis_root.set_meta("geometry_policy", "source_pixel_to_display_fit.v1")
 	root.add_child(chassis_root)
+	_register_center_exempt(chassis_root)
 
 	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
 	var orb_display_size: float = chassis_design["orb_display_size"]
@@ -795,7 +855,11 @@ func _build_experience_bar(chassis_root: Control) -> void:
 		var segment := ColorRect.new()
 		segment.name = "Segment%02d" % (index + 1)
 		segment.position = Vector2(index * (segment_width + gap), 0)
-		segment.size = Vector2(segment_width, HUD_EXPERIENCE_BAR_HEIGHT)
+		# 2026-09-20 user order: the visible segments must FILL the reserved
+		# experience slot. Height follows the bar control (slot rect + bleed)
+		# instead of the legacy fixed 10px constant; the legacy policy branch
+		# still derives size.y = HUD_EXPERIENCE_BAR_HEIGHT, so it is unchanged.
+		segment.size = Vector2(segment_width, experience_bar.size.y)
 		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
 		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])

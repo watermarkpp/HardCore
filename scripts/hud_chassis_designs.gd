@@ -12,7 +12,16 @@ extends RefCounted
 ## All geometry is stored in source pixel space and mapped to the display rect
 ## with the same aspect fit as GameHUD._chassis_source_to_local.
 
-const DISPLAY_SIZE := Vector2(820, 273)
+## 2026-09-20 user order: shrink the whole chassis 20% (820x273 -> 656x218.4),
+## anchored at the bottom spike tip (source ~(1085, 705), measured by alpha
+## scan). Internal wells (orbs, item slots, experience slot) scale through the
+## same source_to_local mapping; item icons intentionally stay at native
+## texture size (user decision, icon art must not shrink).
+const LEGACY_DISPLAY_SIZE := Vector2(820, 273)
+const DISPLAY_SIZE := Vector2(656, 218.4)
+## Display-pixel sizes authored for the legacy 820x273 mapping must shrink by
+## the same ratio so wells keep filling their cutouts.
+const DISPLAY_SCALE_RATIO := DISPLAY_SIZE.x / LEGACY_DISPLAY_SIZE.x
 
 const COMPARE_DESIGN_IDS: Array[String] = [
 	"v3_dragon",
@@ -32,18 +41,18 @@ const DESIGNS := {
 		# the generator bbox for render coverage).
 		"health_orb_center_source": Vector2(532.0, 410.0),
 		"mana_orb_center_source": Vector2(1640.0, 410.0),
-		"orb_display_size": 93.0,
+		"orb_display_size": 93.0 * DISPLAY_SCALE_RATIO,
 		"item_slot_centers_source": [
 			Vector2(785.0, 412.5),
 			Vector2(981.0, 412.5),
 			Vector2(1190.5, 412.5),
 			Vector2(1388.0, 412.5),
 		],
-		"item_slot_fill_display_size": Vector2(50, 51),
-		"item_slot_fill_render_size": Vector2(56, 57),
+		"item_slot_fill_display_size": Vector2(50, 51) * DISPLAY_SCALE_RATIO,
+		"item_slot_fill_render_size": Vector2(56, 57) * DISPLAY_SCALE_RATIO,
 		"experience_bar_policy": "chassis_design_xp_slot.v1",
 		"experience_slot_source_rect": Rect2(675, 560, 821, 35),
-		"experience_slot_render_bleed": Vector2(16, 8),
+		"experience_slot_render_bleed": Vector2(16, 8) * DISPLAY_SCALE_RATIO,
 		"chassis_stable_id": "ui.hud.gothic.v3.bottom_chassis",
 		"sanitize_policy": "none",
 		"center_peak_source": Vector2(1086, 139),

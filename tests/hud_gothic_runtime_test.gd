@@ -44,7 +44,11 @@ func _run() -> void:
 	assert(death_panel != null and not death_panel.visible, "死亡界面没有以隐藏状态接入 HUD")
 
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
-	assert(chassis != null and chassis.size == Vector2(820, 273))
+	assert(
+		chassis != null
+		and is_equal_approx(chassis.size.x, 656.0)
+		and is_equal_approx(chassis.size.y, 218.4),
+	)
 	assert(chassis.get_meta("contents") == ["health_orb", "four_item_slots", "mana_orb"])
 	assert(chassis.get_meta("active_design", "") == ChassisDesigns.ACTIVE_DESIGN_ID)
 	var design: Dictionary = ChassisDesigns.active_design()
@@ -119,7 +123,15 @@ func _run() -> void:
 			assert(is_equal_approx(float(segment.get_meta("fill_ratio")), expected_ratio))
 			assert(is_equal_approx(fill.size.x, segment.size.x * expected_ratio))
 	var expected_orb_size := Vector2(design["orb_display_size"], design["orb_display_size"])
-	assert(health_orb.size == expected_orb_size and mana_orb.size == expected_orb_size, "血蓝球尺寸没有匹配当前框体设计的透明孔")
+	# Scaled display sizes carry float dust through Control's float32 rect; the
+	# comparison must be approximate now that orb_display_size is 93 * 0.8.
+	assert(
+		is_equal_approx(health_orb.size.x, expected_orb_size.x)
+		and is_equal_approx(health_orb.size.y, expected_orb_size.y)
+		and is_equal_approx(mana_orb.size.x, expected_orb_size.x)
+		and is_equal_approx(mana_orb.size.y, expected_orb_size.y),
+		"血蓝球尺寸没有匹配当前框体设计的透明孔",
+	)
 	var buff_strip := root.get_node("TaoistDefenseBuffStrip") as Control
 	assert(buff_strip != null)
 	assert(buff_strip.get_meta("stable_id") == GameHUD.TAOIST_BUFF_STRIP_STABLE_ID)
@@ -201,10 +213,24 @@ func _run() -> void:
 		assert(item_slot != null and item_slot.get_meta("stable_id") == "hud.item_slot.%d" % (index + 1))
 		# The fill well is oversized under the frame art so the opaque rim
 		# masks the anti-aliased well edge; the touch slot keeps the well size.
-		assert(item_fill != null and item_fill.size == expected_fill_render_size, "物品框底色没有按外扩尺寸盖住金属内孔")
-		assert(item_slot.size == expected_fill_size and item_slot.get_meta("metal_masked", false), "物品框触控层没有按金属内孔建立")
-		assert(item_fill.position + item_fill.size * 0.5 == expected_item_centers[index], "物品框底色没有使用底框源像素坐标")
-		assert(item_slot.position + item_slot.size * 0.5 == expected_item_centers[index], "物品框没有使用底框源像素坐标")
+		# 2026-09-20: scaled display sizes carry float dust through Control's
+		# float32 rect, so every geometry comparison here is approximate.
+		assert(item_fill != null
+			and is_equal_approx(item_fill.size.x, expected_fill_render_size.x)
+			and is_equal_approx(item_fill.size.y, expected_fill_render_size.y),
+			"物品框底色没有按外扩尺寸盖住金属内孔")
+		assert(item_slot != null
+			and is_equal_approx(item_slot.size.x, expected_fill_size.x)
+			and is_equal_approx(item_slot.size.y, expected_fill_size.y)
+			and item_slot.get_meta("metal_masked", false), "物品框触控层没有按金属内孔建立")
+		assert(
+			is_equal_approx(item_fill.position.x + item_fill.size.x * 0.5, expected_item_centers[index].x)
+			and is_equal_approx(item_fill.position.y + item_fill.size.y * 0.5, expected_item_centers[index].y),
+			"物品框底色没有使用底框源像素坐标")
+		assert(
+			is_equal_approx(item_slot.position.x + item_slot.size.x * 0.5, expected_item_centers[index].x)
+			and is_equal_approx(item_slot.position.y + item_slot.size.y * 0.5, expected_item_centers[index].y),
+			"物品框没有使用底框源像素坐标")
 		assert(item_fill.get_index() < chassis_art.get_index() and chassis_art.get_index() < item_slot.get_index(), "物品填充、金属框与触控层次序错误")
 
 	assert(hud.quick_buttons.is_empty() and hud.quick_slot_icons.is_empty(), "底框上方旧四个中央技能按钮仍然存在")
@@ -363,7 +389,11 @@ func _run() -> void:
 	assert(hud.item_quick_slot_icons.size() == 4 and hud.item_quick_slot_count_labels.size() == 4, "四槽图标与数量层应存在")
 	for slot_index in range(4):
 		var item_slot_button := hud.hud_item_buttons[slot_index] as Button
-		assert(item_slot_button.size == expected_fill_size, "快捷物品槽几何被改动")
+		assert(
+			is_equal_approx(item_slot_button.size.x, expected_fill_size.x)
+			and is_equal_approx(item_slot_button.size.y, expected_fill_size.y),
+			"快捷物品槽几何被改动",
+		)
 		assert(item_slot_button.get_node_or_null("ItemQuickSlotIcon") != null, "快捷物品槽缺少图标层")
 		assert(item_slot_button.get_node_or_null("ItemQuickSlotCount") != null, "快捷物品槽缺少数量层")
 		assert(item_slot_button.get_meta("stable_id") == "hud.item_slot.%d" % (slot_index + 1), "快捷物品槽 stable id 被改动")
@@ -563,7 +593,10 @@ func _run() -> void:
 	picker_reverse_up.pressed = false
 	picker_reverse_up.position = picker_reverse_drag.position
 	hud._on_item_quick_slot_popup_input(picker_reverse_up)
-	await get_tree().create_timer(0.18).timeout
+	# The shared scroll policy keeps a 160ms drag-release guard after a real
+	# content drag; 0.30s gives the guard a deterministic margin to expire
+	# before the candidate press must be treated as a tap.
+	await get_tree().create_timer(0.30).timeout
 	var later_candidate := hud.item_quick_slot_candidate_buttons[5] as Button
 	assert(
 		Rect2(later_candidate.get_screen_position(), later_candidate.size).intersects(picker_scroll_screen_rect),
@@ -785,4 +818,11 @@ func _assert_2664x1200_landscape_layout(root: Control, chassis: Control, health_
 	var expected_landscape_orb_size: Vector2 = (
 		ChassisDesigns.active_design()["orb_display_size"] * Vector2.ONE
 	)
-	assert(health_orb.size == expected_landscape_orb_size and mana_orb.size == expected_landscape_orb_size, "2664x1200 布局错误缩小了血蓝球")
+	# Scaled display sizes carry float dust through Control's float32 rect.
+	assert(
+		is_equal_approx(health_orb.size.x, expected_landscape_orb_size.x)
+		and is_equal_approx(health_orb.size.y, expected_landscape_orb_size.y)
+		and is_equal_approx(mana_orb.size.x, expected_landscape_orb_size.x)
+		and is_equal_approx(mana_orb.size.y, expected_landscape_orb_size.y),
+		"2664x1200 布局错误缩小了血蓝球",
+	)
