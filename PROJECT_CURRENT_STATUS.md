@@ -167,7 +167,7 @@ Use annotated tag `standard-20260829-main-tree` for the immutable consolidated s
 - `TestPaths`：`adhoc only`
 - timeout hard range：`1..60`
 - `monster_streaming_critical` direct suite remains available。
-- `monster_streaming_critical` excluded from default critical while `HOLD`。
+- 2026-09-21 RV14-04 (O07)：`monster_streaming_critical` 重新加入默认 critical suite（去重保留）；runner 对包含 streaming 成员的运行强制 `-TimeoutSeconds >= 30`，低于预算启动前直接拒绝。注册自检（`tools/tests/test_suite_registration.ps1`）同步断言包含与预算守卫。历史 HOLD 记录保留为档案，不再作为排除默认 suite 的依据。
 - formal suite smoke：`player_visual_contract_critical = PASS / 1_OF_1`
 - `confirmed_runner_blockers = 0`
 - registration guard remaining weakness：`NON_BLOCKING_TEST_INFRA_DEBT`

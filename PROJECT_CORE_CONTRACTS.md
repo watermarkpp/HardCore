@@ -50,7 +50,7 @@ SkillRuntimeRouter → Canonical Skill Plan → Gameplay → CasterSkillRuntime 
 
 - 一个全局 StreamingCoordinator poll（`poll_once`）；`MonsterVisual` 不得 per-instance 全局 poll。
 - apply-order 历史证据保留：20-run 为 17 PASS / 3 FAIL。
-- 当前状态：Monster Streaming = `HOLD`；不是 active must-fix，不自动启动 20-run。除非更晚的正式状态明确重新激活，否则不得为此修改生产代码。
+- 2026-09-21 RV14-04 (O07)：`monster_streaming_critical`（13 场景）重新纳入默认 critical suite；runner 强制包含 streaming 成员的运行 `-TimeoutSeconds >= 30`（低于预算启动前拒绝）。历史 20-run HOLD 档案保留，但不再排除该 suite；生产实现冻结不变。
 
 ## Map
 

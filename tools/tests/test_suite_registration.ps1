@@ -386,11 +386,12 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
         }
     }
 }
-# Monster Streaming is intentionally excluded from default critical while
-# PROJECT_CURRENT_STATUS marks it HOLD. The direct suite remains registered.
+# 2026-09-21 RV14-04 (O07): Monster Streaming returned to the default critical
+# suite, and the runner must refuse any streaming run below a 30s budget.
 $msIncluded = ($RunnerSource -match '\$Suites\.monster_streaming_critical\s*\+')
-$msExcludedFromDefaultCritical = -not $msIncluded
+$msIncludedInDefaultCritical = $msIncluded
 $msValidateSet = ($RunnerSource -match "monster_streaming_critical")
+$msBudgetGuard = ($RunnerSource -match 'MonsterStreamingBudgetFloor')
 
 # skill_execution_plan_critical verification
 $spMissing = @()
@@ -938,7 +939,7 @@ $ok = $ok -and $projFound -and (Test-StringSetEqual $ProjectileExpected $projEnt
 $ok = $ok -and $slFound -and (Test-StringSetEqual $SafeLogoutExpected $slEntries) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
 $ok = $ok -and $pgFound -and (Test-StringSetEqual $PersistentExpected $pgEntries) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
 $ok = $ok -and $fwFound -and (Test-StringSetEqual $FireWallExpected $fwEntries) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
-$ok = $ok -and $msFound -and (Test-StringSetEqual $MonsterStreamingExpected $msEntries) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msExcludedFromDefaultCritical -and $msValidateSet
+$ok = $ok -and $msFound -and (Test-StringSetEqual $MonsterStreamingExpected $msEntries) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncludedInDefaultCritical -and $msBudgetGuard -and $msValidateSet
 $ok = $ok -and $spFound -and (Test-StringSetEqual $SkillPlanExpected $spEntries) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
 $ok = $ok -and $pmFound -and (Test-StringSetEqual $ProductionMigrationExpected $pmEntries) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
 $ok = $ok -and $clFound -and (Test-StringSetEqual $CleanupExpected $clEntries) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
@@ -1041,8 +1042,8 @@ $report = [ordered]@{
     monster_streaming_missing = $msMissing
     monster_streaming_duplicates = $msDuplicates
     monster_streaming_not_git_tracked = $msGitTracked
-    monster_streaming_included_in_default_critical = $msIncluded
-    monster_streaming_excluded_from_default_critical_while_hold = $msExcludedFromDefaultCritical
+    monster_streaming_included_in_default_critical = $msIncludedInDefaultCritical
+    monster_streaming_budget_guard_present = $msBudgetGuard
     monster_streaming_validate_set = $msValidateSet
     skill_execution_plan_suite = $SkillPlanSuite
     skill_execution_plan_expected_count = $SkillPlanExpected.Count

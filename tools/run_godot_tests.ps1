@@ -540,8 +540,11 @@ $Suites.critical = @(
     $Suites.safe_logout_critical +
     $Suites.persistent_ground_effect_critical +
     $Suites.fire_wall_controller_critical +
-    # Monster Streaming is intentionally excluded from default critical while
-    # PROJECT_CURRENT_STATUS marks it HOLD. Its direct suite remains callable.
+    # 2026-09-21 RV14-04 (O07): Monster Streaming returns to the default
+    # critical suite (HOLD lifted for the streaming runtime). These scenes
+    # need the elevated per-test budget; the runner refuses to start any run
+    # that includes them below 30 seconds.
+    $Suites.monster_streaming_critical +
     $Suites.skill_execution_plan_critical +
     $Suites.skill_production_migration_critical +
     $Suites.skill_runtime_cleanup_critical +
@@ -777,6 +780,19 @@ function Get-NewGodotProcesses {
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
+# 2026-09-21 RV14-04 (O07): Monster Streaming scenes stream chunks with real
+# generation windows and exceed the 8-second default budget. Refuse before
+# launching anything when the selected set includes them below 30 seconds so
+# a run cannot masquerade as a timeout regression.
+$MonsterStreamingBudgetFloor = 30
+$MonsterStreamingMembers = $Suites.monster_streaming_critical
+$SelectedIncludesStreaming = @($SelectedTests | Where-Object { $MonsterStreamingMembers -contains $_ }).Count -gt 0
+if ($SelectedIncludesStreaming -and $TimeoutSeconds -lt $MonsterStreamingBudgetFloor) {
+    throw (
+        'Monster Streaming tests require -TimeoutSeconds {0} or higher ' +
+        '(got {1}). Re-run with -TimeoutSeconds 30.' -f $MonsterStreamingBudgetFloor, $TimeoutSeconds
+    )
+}
 $StructuredResults = @()
 foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
