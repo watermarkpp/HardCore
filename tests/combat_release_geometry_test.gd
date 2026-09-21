@@ -379,6 +379,7 @@ func _verify_attack_and_skill_release_ids_are_unique_and_stable() -> void:
 		0.0,
 		{"mode": "normal"},
 		first_attack_action_id,
+		player.combat_epoch,
 		Vector2.RIGHT,
 		0
 	)
@@ -396,6 +397,7 @@ func _verify_attack_and_skill_release_ids_are_unique_and_stable() -> void:
 		1,
 		0.0,
 		skill_action_id,
+		player.combat_epoch,
 		Vector2.RIGHT,
 		0,
 		false
@@ -415,6 +417,7 @@ func _verify_attack_and_skill_release_ids_are_unique_and_stable() -> void:
 		0.0,
 		{"mode": "normal"},
 		second_attack_action_id,
+		player.combat_epoch,
 		Vector2.RIGHT,
 		0
 	)

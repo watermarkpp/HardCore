@@ -128,6 +128,11 @@ var _combat_action_sequence := 0
 var _pending_combat_action_id := 0
 var _pending_combat_action_active := false
 var _pending_combat_action_committed := false
+# RV14-01: lifecycle identity frozen when the action is accepted. A delayed
+# release carries the epoch it was admitted under; transitions, formal death
+# and leaving the tree all advance the epoch, which voids stale releases even
+# when the actor is alive and back inside the tree by the time the timer fires.
+var _pending_combat_action_epoch := 0
 var _pending_combat_action_kind := ""
 var _test_combat_time_ms := -1
 var _last_temporary_item_buff_revision := -1
@@ -169,6 +174,14 @@ func approved_ground_footpoint_local_px() -> Vector2:
 
 func approved_ground_footpoint_world_px() -> Vector2:
 	return to_global(approved_ground_footpoint_local_px())
+
+
+func _exit_tree() -> void:
+	# RV14-01: leaving the tree ends the lifetime of every pending delayed
+	# release. Re-entering the tree must not re-arm them; a fresh action
+	# freezes a new epoch at acceptance time. The epoch is only compared for
+	# equality by release ownership, so advancing it here has no other effect.
+	combat_epoch += 1
 
 
 func _ready() -> void:
@@ -398,6 +411,7 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 		attack_hit_windup,
 		context,
 		action_id,
+		combat_epoch,
 		facing.normalized(),
 		locked_target_instance_id
 	)
@@ -596,6 +610,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		0,
 		release_seconds,
 		action_id,
+		combat_epoch,
 		facing.normalized(),
 		locked_target_instance_id,
 		track_locked_target
@@ -980,6 +995,7 @@ func _emit_attack_after_windup(
 	windup: float,
 	context: Dictionary,
 	action_id: int,
+	action_epoch: int,
 	input_direction: Vector2,
 	locked_target_instance_id: int
 ) -> void:
@@ -988,9 +1004,16 @@ func _emit_attack_after_windup(
 	# R2-W5: a begun action owns its delayed release. A superseding action
 	# replaces the presentation/action slot but must never void this release:
 	# the cast already charged its cooldown, so the effect still resolves
-	# unless the player died or left the tree. The committed flag is only
-	# advanced while this release is still the current action.
-	if is_inside_tree() and not _dead:
+	# unless the player died, left the tree, or its lifecycle epoch advanced
+	# (map transition, formal death, explicit teardown). RV14-01: the release
+	# carries the epoch frozen at acceptance and re-checks it here — never a
+	# value read after the await. At most one release per action.
+	if (
+		is_inside_tree()
+		and not _dead
+		and not combat_transition_is_active()
+		and combat_epoch == action_epoch
+	):
 		if action_id == _pending_combat_action_id and _pending_combat_action_active:
 			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
@@ -1021,6 +1044,7 @@ func _emit_skill_after_windup(
 	damage: int,
 	windup: float,
 	action_id: int,
+	action_epoch: int,
 	input_direction: Vector2,
 	locked_target_instance_id: int,
 	track_locked_target: bool
@@ -1028,9 +1052,16 @@ func _emit_skill_after_windup(
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
 	# R2-W5: same release ownership as _emit_attack_after_windup — a superseding
-	# action never voids a pending delayed release; only death or leaving the
-	# tree does. Committed tracking stays owned by the current action.
-	if is_inside_tree() and not _dead:
+	# action never voids a pending delayed release; only death, leaving the
+	# tree, or an advanced lifecycle epoch does (RV14-01: map transition,
+	# formal death + revival, exit/re-enter tree). Committed tracking stays
+	# owned by the current action; at most one release per action.
+	if (
+		is_inside_tree()
+		and not _dead
+		and not combat_transition_is_active()
+		and combat_epoch == action_epoch
+	):
 		if action_id == _pending_combat_action_id and _pending_combat_action_active:
 			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
@@ -1136,6 +1167,9 @@ func _begin_combat_action(action_kind: String) -> int:
 	_pending_combat_action_active = true
 	_pending_combat_action_committed = false
 	_pending_combat_action_kind = action_kind
+	# RV14-01: freeze the lifecycle identity at acceptance time. The pending
+	# release resolves only under this same epoch.
+	_pending_combat_action_epoch = combat_epoch
 	return _pending_combat_action_id
 
 
@@ -1180,6 +1214,7 @@ func combat_action_snapshot() -> Dictionary:
 		"kind": _pending_combat_action_kind,
 		"active": _pending_combat_action_active,
 		"committed": _pending_combat_action_committed,
+		"epoch": _pending_combat_action_epoch,
 	}
 
 
