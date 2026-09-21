@@ -13,7 +13,12 @@ func apply(damage: int, seconds: float, interval: float) -> bool:
 		return false
 	if remaining_seconds <= 0.0:
 		elapsed_seconds = 0.0
-	tick_damage = damage
+		# An expired lane starts clean so a weaker poison takes over after
+		# the strong one fully expired.
+		tick_damage = 0
+	# Poison never stacks: while a poison is active, a weaker application
+	# must not downgrade its damage (both legacy lanes take the max).
+	tick_damage = maxi(tick_damage, damage)
 	remaining_seconds = maxf(remaining_seconds, seconds)
 	interval_seconds = interval
 	return true

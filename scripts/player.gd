@@ -923,6 +923,10 @@ func _apply_resolved_damage(
 			return
 		_dead = true
 		_monster_source_poison.clear()
+		# Formal death clears every poison lane: no poison may survive the
+		# revival boundary and keep ticking on the revived actor.
+		poison_time = 0.0
+		poison_damage = 0
 		combat_epoch += 1
 		reset_locomotion()
 		velocity = Vector2.ZERO

@@ -521,7 +521,8 @@ $Suites.audit_upgrade_critical = @(
     'tests/lootclock/loot_visual_clock_test.tscn',
     'tests/runtime_loot_spatial_index_order_test.tscn',
     'tests/audit_39fe_regressions.tscn',
-    'tests/player_cast_release_overwrite_test.tscn'
+    'tests/player_cast_release_overwrite_test.tscn',
+    'tests/player_status_effect_lifecycle_test.tscn'
 )
 
 $Suites.critical = @(
