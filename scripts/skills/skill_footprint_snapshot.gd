@@ -1787,21 +1787,40 @@ static func _audit_strict_payload_reason(snapshot: Dictionary) -> String:
 		return "shape_contract_invalid"
 	for key: String in ["origin_ground_gu", "projection_origin_ground_gu"]:
 		var point: Variant = snapshot.get(key)
-		if not point is Vector2 or not (point as Vector2).is_finite():
+		if not point is Vector2:
 			return "invalid_%s" % key
+		if not (point as Vector2).is_finite():
+			return "non_finite_%s" % key
 	# Guard types before the older validator's typed casts execute.
 	for key: String in ["direction_ground_gu", "axis_screen_offset_px", "axis_screen_direction_px", "start_ground_gu", "end_ground_gu", "cell_origin_offset_gu", "perpendicular_ground_gu"]:
 		if snapshot.has(key):
 			var point: Variant = snapshot[key]
-			if not point is Vector2 or not (point as Vector2).is_finite():
+			if not point is Vector2:
 				return "invalid_%s" % key
+			if not (point as Vector2).is_finite():
+				return "non_finite_%s" % key
 	for key: String in ["effect_length_gu", "effect_width_gu", "axis_screen_length_px"]:
 		if snapshot.has(key) and not _audit_nonnegative_number(snapshot[key]):
 			return "invalid_%s" % key
+	# Q1-A: an absolute snapshot created with a failing position converter
+	# legitimately stores an EMPTY screen-offset polygon (explicit projection
+	# failure marker). The empty state is owned by the converter checks in
+	# validate()/validate_for_consumer(), not by this payload audit; only
+	# non-empty screen polygons must be well-formed. Ground polygons have no
+	# converter path, so they must always be real polygons.
 	for key: String in ["polygon_ground_gu", "polygon_screen_offset_px"]:
 		var polygon: Variant = snapshot.get(key)
-		if not polygon is PackedVector2Array or (polygon as PackedVector2Array).size() < 3 or not _polygon_is_finite(polygon):
+		if not polygon is PackedVector2Array:
 			return "invalid_%s" % key
+		var points := polygon as PackedVector2Array
+		if points.is_empty():
+			if key == "polygon_screen_offset_px":
+				continue
+			return "invalid_%s" % key
+		if points.size() < 3:
+			return "invalid_%s" % key
+		if not _polygon_is_finite(points):
+			return "non_finite_%s" % key
 	for key: String in ["polygons_ground_gu", "polygons_screen_offset_px"]:
 		if not snapshot.has(key):
 			continue # Directed-rectangle builder intentionally uses singular keys.
@@ -1809,7 +1828,14 @@ static func _audit_strict_payload_reason(snapshot: Dictionary) -> String:
 		if not polygons is Array or (polygons as Array).is_empty():
 			return "invalid_%s" % key
 		for polygon: Variant in polygons:
-			if not polygon is PackedVector2Array or (polygon as PackedVector2Array).size() < 3 or not _polygon_is_finite(polygon):
+			if not polygon is PackedVector2Array:
+				return "invalid_%s_member" % key
+			var member := polygon as PackedVector2Array
+			if not _polygon_is_finite(member):
+				return "non_finite_%s_member" % key
+			if member.size() < 3:
+				if key == "polygons_screen_offset_px" and member.is_empty():
+					continue
 				return "invalid_%s_member" % key
 	if shape_type in [SHAPE_DIRECTED_RECTANGLE, SHAPE_SECTOR_ARC]:
 		var direction: Variant = snapshot.get("direction_ground_gu")

@@ -46,6 +46,10 @@ func _run() -> void:
 	_claim_gc()
 	_inventory()
 	print("AUDIT_RESULT checks=%d failures=%d" % [_checked, _failed])
+	if _failed == 0:
+		print("AUDIT_39FE_PASS")
+	else:
+		print("AUDIT_39FE_FAIL")
 	get_tree().quit(0 if _failed == 0 else 1)
 
 func _sector() -> void:
