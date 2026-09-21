@@ -981,7 +981,14 @@ func _emit_attack_after_windup(
 ) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
-	if is_inside_tree() and _commit_combat_action(action_id):
+	# R2-W5: a begun action owns its delayed release. A superseding action
+	# replaces the presentation/action slot but must never void this release:
+	# the cast already charged its cooldown, so the effect still resolves
+	# unless the player died or left the tree. The committed flag is only
+	# advanced while this release is still the current action.
+	if is_inside_tree() and not _dead:
+		if action_id == _pending_combat_action_id and _pending_combat_action_active:
+			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
 			input_direction,
 			locked_target_instance_id,
@@ -1016,7 +1023,12 @@ func _emit_skill_after_windup(
 ) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
-	if is_inside_tree() and _commit_combat_action(action_id):
+	# R2-W5: same release ownership as _emit_attack_after_windup — a superseding
+	# action never voids a pending delayed release; only death or leaving the
+	# tree does. Committed tracking stays owned by the current action.
+	if is_inside_tree() and not _dead:
+		if action_id == _pending_combat_action_id and _pending_combat_action_active:
+			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
 			input_direction,
 			locked_target_instance_id,
