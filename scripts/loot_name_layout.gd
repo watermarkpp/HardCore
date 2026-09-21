@@ -50,7 +50,13 @@ static func arrange(pickups: Array) -> void:
 		# drops transparent texture edges): a plate brushing 2-5px of a
 		# neighbour icon's transparent top edge must not force displacement,
 		# while a plate actually sitting on the icon body is rejected.
-		_index_rect(icon_index, _icon_world_rect(pickup).grow(-5.0), pickup.get_instance_id())
+		var icon_core := _icon_world_rect(pickup).grow(-5.0)
+		if icon_core.size.x <= 0.0 or icon_core.size.y <= 0.0:
+			# Tiny icons (small gold piles) collapse under the 5px shrink;
+			# keep the ungrown visual core so the obstacle stays valid instead
+			# of feeding negative-size rects into Rect2.intersects.
+			icon_core = _icon_world_rect(pickup)
+		_index_rect(icon_index, icon_core, pickup.get_instance_id())
 	# Oldest registration first: first come keeps home priority.
 	ordered.sort_custom(func(a: Node2D, b: Node2D) -> bool:
 		return int(a.get_meta("loot_registration_order", a.get_instance_id())) < int(b.get_meta("loot_registration_order", b.get_instance_id())))

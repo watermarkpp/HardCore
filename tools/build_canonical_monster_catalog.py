@@ -119,6 +119,9 @@ WOOma_SLUG_BY_ID = {
 }
 
 SPECIAL_NORMAL_IDS = frozenset({39, 57, 74, 77, 90, 121, 137, 142})
+# Elite monsters that keep authored ordinary-layer spawn points after the
+# user loot sheet classification migration (218 牛魔将军 / 222 牛魔祭司).
+ELITE_ORDINARY_SPAWN_PLACEMENT_IDS = frozenset({218, 222})
 SPECIAL_NORMAL_AUTHORITY_SCHEMA = "hardcore.monster_special_normal_spawn_authority.v1"
 SPECIAL_NORMAL_AUTHORITY_STATUS = "FORMAL_SPAWN_AUTHORITY_ACTIVE"
 SPECIAL_NORMAL_DEFAULTS = {
@@ -361,7 +364,7 @@ def validate_special_normal_authority(
 
     expected_sources = {
         "assets/data/vanilla_176/monsters.json": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-        "assets/data/canonical_monster_classification_v1.json": "0A6DB865644E2B91D972B438B14D51974A32524080A62ED5D30C620421F4B377",
+        "assets/data/canonical_monster_classification_v1.json": "BD7DD9DE8ED9995220BE94C9A095A2FB1FE2A8862FAA31EDE976A53173FCAF76",
     }
     source_rows = authority.get("authority", {}).get("sources", [])
     source_by_path = {
@@ -795,11 +798,15 @@ def classification_for(
         placement_allowed = False
     placement_kind = str(override.get("placement_kind", ""))
     if placement_kind == "":
-        placement_kind = (
-            "monster_spawn"
-            if classification_name in ("ordinary", "special", "non_hostile", "version_difference")
-            else policy_table.get("placement_kind", "")
-        )
+        if classification_name in ("ordinary", "special", "non_hostile", "version_difference"):
+            placement_kind = "monster_spawn"
+        elif monster_id in ELITE_ORDINARY_SPAWN_PLACEMENT_IDS:
+            # 218/222 migrated to elite together with the user loot sheet
+            # activation while keeping their ordinary-layer spawn points, so
+            # the elite combat classification must not clear the placement.
+            placement_kind = "monster_spawn"
+        else:
+            placement_kind = policy_table.get("placement_kind", "")
     if policy_override.get("placement_semantics") == "ordinary_spawn":
         placement_kind = "monster_spawn"
     map_codes: list[str] = []

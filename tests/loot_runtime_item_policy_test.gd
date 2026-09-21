@@ -188,22 +188,20 @@ func _test_small_monster_probability(service: Node) -> void:
 	rng.seed = 19003176
 	var ordinary_roll: Dictionary = service.roll_monster_drops(19, rng)
 	assert(bool(ordinary_roll.get("configured", false)), str(ordinary_roll))
+	# The small-monster denominator policy is retired from production: every
+	# attempt draws with the exact sheet value and no denominator multiplier.
 	for attempt: Dictionary in ordinary_roll.get("attempts", []):
 		var attempt_item_id := int(attempt.get("canonical_item_id", -1))
-		if attempt_item_id in [910001, 910003, 910004]:
-			assert(int(attempt.get("small_monster_denominator_multiplier", 1)) == 6)
-		elif GameData.canonical_item_kind(attempt_item_id) == "equipment":
-			assert(int(attempt.get("small_monster_denominator_multiplier", 1)) == 3)
+		if attempt_item_id in [910001, 910003, 910004] or GameData.canonical_item_kind(attempt_item_id) == "equipment":
+			assert(int(attempt.get("drop_denominator_multiplier", 1)) == 1)
+			assert(int(attempt.get("small_monster_denominator_multiplier", 1)) == 1)
 
 	rng.seed = 76001931
 	var boss_roll: Dictionary = service.roll_monster_drops(76, rng)
 	assert(bool(boss_roll.get("configured", false)), str(boss_roll))
 	for attempt: Dictionary in boss_roll.get("attempts", []):
-		var item_id := int(attempt.get("canonical_item_id", -1))
-		if item_id in [920014, 920016]:
-			assert(int(attempt.get("elite_boss_solar_denominator_multiplier", 1)) == 2)
-		else:
-			assert(int(attempt.get("drop_denominator_multiplier", 1)) == 1)
+		assert(int(attempt.get("drop_denominator_multiplier", 1)) == 1)
+		assert(int(attempt.get("elite_boss_solar_denominator_multiplier", 1)) == 1)
 
 
 func _test_elite_boss_solar_probability(service: Node) -> void:
@@ -391,7 +389,9 @@ func _test_corpse_king_boost_consumption(service: Node) -> void:
 				continue
 			saw_book_attempt = true
 			var attempt_uid := str(attempt.get("slot_uid", ""))
-			var expected := GameData.dpv2_effective_slot_probability(89, attempt_uid)
+			# Sheet values are final: the runtime draw must match the compiled
+			# user sheet authority exactly (no V5 book re-derivation).
+			var expected: Dictionary = service._sheet_authority.probability(89, attempt_uid)
 			assert(bool(expected.get("ok", false)), str(expected))
 			assert(
 				int(attempt.get("final_numerator", 0))

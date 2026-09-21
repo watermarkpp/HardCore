@@ -41,6 +41,13 @@ var _v5_trace_enabled := OS.has_feature("debug") and OS.get_environment("HARDCOR
 var _v5_roll_sequence := 0
 var _user_balance := preload("res://scripts/drop/user_drop_balance.gd").new()
 var _user_additions := preload("res://scripts/drop/user_drop_additions_v81.gd").new()
+# User spreadsheet authority (v1): the compiled sheet is the sole production
+# probability source.  Its E column already contains every historical factor
+# (SPB, V5, denominator policy, v80/v81, global 1x, gold x5), so downstream
+# probability stages are retired for compiled monsters.  The v80/v81 helpers
+# stay loaded only for sealed-file history tests and the v81 fate-blade item
+# identity path.
+var _sheet_authority := preload("res://scripts/drop/user_loot_sheet_provider.gd").new()
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 var _lean_profile_by_monster_id: Dictionary = {}
 var _lean_probability_by_key: Dictionary = {}
@@ -49,19 +56,16 @@ var _lean_cache_misses := {"profile": 0, "probability": 0, "reward": 0}
 
 
 func _production_profile(monster_id: int) -> Dictionary:
-	return _user_additions.extend_profile(_user_balance.extend_profile(GameData.dpv2_direct_profile(monster_id), monster_id), monster_id)
+	# Compiled sheet profile.  Monsters absent from the sheet (retired baseline
+	# rows with zero live spawns) resolve to an empty profile, which is a valid
+	# zero-drop answer and never falls back to legacy probability authorities.
+	return _sheet_authority.profile(monster_id)
 
 
 func _production_probability(monster_id: int, slot_uid: String) -> Dictionary:
-	if _user_additions.owns(monster_id, slot_uid):
-		return _user_additions.probability(_production_probability(monster_id, str(_user_additions.policy.reference_slot_uid)))
-	var row: Dictionary = _user_balance.records.get(slot_uid, {})
-	var source_id := int(row.get("source_monster_id", monster_id))
-	var source_uid := str(row.get("source_uid", slot_uid))
-	var probability := GameData.dpv2_effective_slot_probability(source_id, source_uid)
-	if bool(probability.get("ok", false)):
-		probability = _apply_drop_probability_policy(probability, GameData.canonical_monster_classification(source_id))
-	return _user_balance.apply(probability, slot_uid, monster_id)
+	# The sheet value IS the final pre-RNG probability.  No SPB, no V5, no
+	# monster-class denominator policy, no v80/v81, no global multiplier.
+	return _sheet_authority.probability(monster_id, slot_uid)
 
 
 func _lean_profile(monster_id: int) -> Dictionary:
@@ -72,16 +76,11 @@ func _lean_profile(monster_id: int) -> Dictionary:
 
 
 func _lean_probability(monster_id: int, slot_uid: String) -> Dictionary:
-	var production: Variant = GameData.dpv2_single_player_drop_boost.get("production", {})
-	var boost_enabled := bool((production as Dictionary).get("enabled", false)) if production is Dictionary else false
-	var scale := GameData.dpv2_active_global_drop_rate()
-	var cache_key := "%d|%s|%s|%d|%d|%d" % [
+	var authority_digest := _sheet_authority.digest
+	var cache_key := "%d|%s|%s" % [
 		monster_id,
 		slot_uid,
-		str(scale.get("preset", "")),
-		int(scale.get("numerator", 0)),
-		int(scale.get("denominator", 0)),
-		int(boost_enabled),
+		authority_digest,
 	]
 	if not _lean_probability_by_key.has(cache_key):
 		_lean_cache_misses["probability"] = int(_lean_cache_misses.get("probability", 0)) + 1
@@ -164,19 +163,17 @@ func roll_monster_drops(
 	var result := {
 		"contract_id": DROP_CONTRACT_ID,
 		"runtime_authority": {
-			"authority_id": "dpv2.direct_baseline.v2",
-			"schema": "hardcore.dpv2.direct_monster_drop_baseline.v2",
-			"effective_probability_authority_id": "dpv2.single_player_drop_boost.v1",
+			"authority_id": _sheet_authority.authority_id,
+			"schema": "hardcore.dpv2.user_loot_sheet_authority.v1",
+			"effective_probability_authority_id": "dpv2.user_loot_sheet.v1",
 			"effective_probability_schema": (
-				"hardcore.dpv2.single_player_effective_probability.v1"
+				"hardcore.dpv2.user_loot_sheet_authority.v1"
 			),
 			"identity_key": "canonical_monster_id",
 			"fallback_forbidden": true,
-			"user_balance_authority_id": "drop.user_balance.v80",
-			"user_additions_authority_id": "drop.user_additions.v81",
 			"probability_formula": (
-				"SPB enabled: effective x required 1x x runtime denominator policy x user balance; "
-				+ "SPB disabled: base x global exactly once"
+				"sheet E column as final pre-RNG per-slot probability; "
+				+ "sheet D column as final gold amount; no legacy stages"
 			),
 		},
 		"monster_id": monster_id,
@@ -213,7 +210,11 @@ func roll_monster_drops(
 		"debug": [],
 	}
 	result["source_slot_gate"] = GameData.dpv2_source_slot_gate()
+	if not _sheet_authority.valid:
+		result.reason = "user_loot_sheet_authority_unavailable"
+		return result
 	if not GameData.is_dpv2_direct_baseline_loaded():
+		# The sealed baseline stays the identity map for reward resolution.
 		result.reason = "dpv2_direct_baseline_unavailable"
 		return result
 	if not GameData.is_dpv2_single_player_drop_boost_loaded():
@@ -699,6 +700,8 @@ func _build_attempt(
 		"final_probability": float(probability.get("final_probability", 0.0)),
 		"probability_numerator": int(probability.get("final_numerator", 0)),
 		"probability_denominator": int(probability.get("final_denominator", 0)),
+		"slot_origin": str(probability.get("slot_origin", "")),
+		"drop_authority": str(probability.get("drop_authority", "")),
 		"small_monster_probability_policy": str(
 			probability.get("small_monster_probability_policy", "")
 		),

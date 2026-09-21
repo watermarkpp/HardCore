@@ -257,26 +257,28 @@ func _test_gold_amount_overlay() -> void:
 		assert(int(disabled.get("final_gold_amount", 0)) == int(record.gold_amount))
 	production["enabled"] = original_enabled
 	_assert_service_gold_amount(7500)
+	# The user loot sheet D column is the final gold amount: the SPB
+	# production switch no longer changes any reward amount.
 	production["enabled"] = false
-	_assert_service_gold_amount(1500)
+	_assert_service_gold_amount(7500)
 	production["enabled"] = original_enabled
 
 
 func _test_enabled_non_1x_and_missing_row_fail_before_rng() -> void:
 	var service := LootRuntimeScript.new()
+	# The global drop-rate multiplier is retired from the production path:
+	# sheet values are final, so a non-1x preset must not change any draw.
 	var original_preset := str(GameData.dpv2_global_drop_rate_authority.get("active_preset", ""))
 	GameData.dpv2_global_drop_rate_authority["active_preset"] = "2x"
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260828
-	var state_before := rng.state
-	var rejected := service.roll_monster_drops(135, rng)
-	assert(str(rejected.get("reason", "")) == "spb_effective_probability_fail_closed")
-	assert(int(rejected.get("rng_roll_count", -1)) == 0)
-	assert(rng.state == state_before)
-	assert(not (rejected.get("rejected_entries", []) as Array).is_empty())
-	assert(str(rejected.rejected_entries[0].reason) == "spb_enabled_requires_global_1x")
+	var scaled := service.roll_monster_drops(135, rng)
+	assert(bool(scaled.get("configured", false)), str(scaled))
+	assert(int(scaled.get("rng_roll_count", -1)) == 128)
 	GameData.dpv2_global_drop_rate_authority["active_preset"] = original_preset
 
+	# The sealed SPB ledger is retired from the production path as well:
+	# removing a ledger row must not change the sheet-driven roll.
 	var index: Dictionary = GameData.get("_dpv2_spb_effective_by_uid")
 	var uid := "dpv2.direct.m135.slot_124"
 	var saved: Dictionary = index.get(uid, {}).duplicate(true)
@@ -285,22 +287,9 @@ func _test_enabled_non_1x_and_missing_row_fail_before_rng() -> void:
 	GameData.set("_dpv2_spb_effective_by_uid", index)
 	var missing_rng := RandomNumberGenerator.new()
 	missing_rng.seed = 135124
-	var missing_state := missing_rng.state
 	var missing := service.roll_monster_drops(135, missing_rng)
-	assert(str(missing.get("reason", "")) == "spb_effective_probability_fail_closed")
-	assert(int(missing.get("rng_roll_count", -1)) == 0)
-	assert(missing_rng.state == missing_state)
-	var missing_rejections: Array = missing.get("rejected_entries", [])
-	assert(not missing_rejections.is_empty())
-	var found_unresolved := false
-	for raw_rejection: Variant in missing_rejections:
-		if (
-			raw_rejection is Dictionary
-			and str(raw_rejection.get("reason", ""))
-				== "spb_effective_probability_unresolved"
-		):
-			found_unresolved = true
-	assert(found_unresolved)
+	assert(bool(missing.get("configured", false)), str(missing))
+	assert(int(missing.get("rng_roll_count", -1)) == 128)
 	index[uid] = saved
 	GameData.set("_dpv2_spb_effective_by_uid", index)
 
@@ -309,22 +298,19 @@ func _test_production_service_uses_effective_probability() -> void:
 	var service := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 135124
-	var profile := GameData.dpv2_direct_profile(135)
+	var profile: Dictionary = service._sheet_authority.profile(135)
 	var slots: Array = profile.get("slots", [])
+	assert(slots.size() == 128, "ID 135 sheet slot count drifted")
 	var roll := service.roll_monster_drops(135, rng)
 	assert(bool(roll.get("configured", false)), str(roll))
 	assert(int(roll.get("rng_roll_count", -1)) == slots.size())
 	assert(bool(roll.get("all_enabled_resolved_slots_rng_before_overflow", false)))
 	var attempt := _find_attempt(roll.get("attempts", []), "dpv2.direct.m135.slot_124")
 	assert(not attempt.is_empty())
-	assert(Vector2i(attempt.base_numerator, attempt.base_denominator) == Vector2i(1, 5000))
-	assert(Vector2i(attempt.effective_numerator, attempt.effective_denominator) == Vector2i(1, 200))
-	# v80 explicitly multiplies the current elite high-tier item draw by four.
-	assert(Vector2i(attempt.final_numerator, attempt.final_denominator) == Vector2i(1, 50))
-	assert(str(attempt.get("boost_policy", "")) == "AUTO_BOOST")
-	assert(str(attempt.get("global_preset", "")) == "1x")
-	assert(int(attempt.get("global_scale_numerator", 0)) == 1)
-	assert(int(attempt.get("global_scale_denominator", 0)) == 1)
+	# The user sheet value is the final probability: item 105 on row 96 is 1/120.
+	assert(Vector2i(attempt.final_numerator, attempt.final_denominator) == Vector2i(1, 120))
+	assert(int(attempt.get("overflow_priority", 0)) == 600)
+	assert(attempt.has("protected_overflow"))
 
 
 func _test_overflow_contract_is_unchanged() -> void:
@@ -375,10 +361,12 @@ func _assert_service_gold_amount(expected_amount: int) -> void:
 		var gold_drops: Array = roll.get("gold_drops", [])
 		if not gold_drops.is_empty():
 			assert(gold_drops == [expected_amount], str(roll))
+			# Sheet-driven production: the attempt carries the compiled sheet
+			# authority and the final D-column amount, with no SPB overlay.
 			var attempt: Dictionary = (roll.get("attempts", []) as Array)[0]
-			assert(int(attempt.get("base_gold_amount", 0)) == 1500)
-			assert(int(attempt.get("effective_gold_amount", 0)) == 7500)
 			assert(int(attempt.get("final_gold_amount", 0)) == expected_amount)
+			assert(str(attempt.get("slot_origin", "")) == "sheet_row")
+			assert(int(attempt.get("effective_gold_amount", 0)) == -1)
 			found = true
 			break
 	assert(found)

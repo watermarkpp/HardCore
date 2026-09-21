@@ -1406,7 +1406,10 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 		)
 		var expected := DPV2RepairV5.final_formula(
 			record, authority.get("repair_v5_contract", {}), base_stage_expected,
-			canonical_monster_classification(_dpv2_json_integer(record.get("canonical_monster_id", null)))
+			DPV2RepairV5.historical_classification(
+				_dpv2_json_integer(record.get("canonical_monster_id", null)),
+				canonical_monster_classification(_dpv2_json_integer(record.get("canonical_monster_id", null)))
+			)
 		)
 		if not bool(expected.get("ok", false)):
 			load_error = "spb_v5_formula_contract_invalid"

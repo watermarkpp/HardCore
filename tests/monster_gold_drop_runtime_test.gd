@@ -115,14 +115,17 @@ func _run() -> void:
 	assert(bool(profile_145.get("runtime_allowed", false)))
 	assert(not bool(profile_145.get("drop_enabled", true)), "ID 145 must be NON_LOOT")
 	assert((profile_145.get("slots", []) as Array).is_empty(), "ID 145 must have no direct slots")
+	# ID 145 (explicit NON_LOOT) is absent from the compiled user sheet: the
+	# runtime must fail closed with zero drops instead of consulting any
+	# legacy table.
 	var rng_non_loot := RandomNumberGenerator.new()
 	rng_non_loot.seed = 145
 	var non_loot := LootRuntimeScript.new().roll_monster_drops(145, rng_non_loot)
-	assert(bool(non_loot.get("configured", false)))
-	assert(str(non_loot.get("reason", "")) == "drop_disabled")
-	assert((non_loot.get("gold_drops", []) as Array).is_empty())
+	assert(not bool(non_loot.get("configured", true)))
+	assert(str(non_loot.get("reason", "")) == "dpv2_direct_profile_unresolved")
+	assert((non_loot.get("gold_drops", [1]) as Array).is_empty())
 	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
-	assert((non_loot.get("attempts", []) as Array).is_empty())
+	assert((non_loot.get("attempts", [1]) as Array).is_empty())
 
 	print("MONSTER_GOLD_DROP_RUNTIME_PASS: base_gold_19=30 spb_gold_19=300 direct_gold_226=3000 direct_probability=1/4 non_loot_145=1")
 	get_tree().quit(0)

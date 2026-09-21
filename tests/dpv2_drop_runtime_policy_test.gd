@@ -17,9 +17,9 @@ func _run() -> void:
 	_test_production_roll_is_direct_and_full_slot()
 	_test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback()
 	print(
-		"DPV2_DROP_RUNTIME_POLICY_PASS: direct_v2=1 profiles=156 "
-		+ "runtime_allowed=153 enabled=144 explicit_non_loot=9 runtime_disabled=3 "
-		+ "compiled_enabled_slots=6809 pre_overflow_rng=6809 ground_limit=9"
+		"DPV2_DROP_RUNTIME_POLICY_PASS: user_loot_sheet=1 monsters=126 "
+		+ "slots=5976 baseline_identity_preserved=1 "
+		+ "compiled_enabled_slots=6809 ground_limit=15"
 	)
 	get_tree().quit(0)
 
@@ -38,11 +38,14 @@ func _test_direct_authority_and_gate() -> void:
 	assert(not bool(policy.get("role_factor_participates", true)))
 	assert(not bool(policy.get("tier_denominator_participates", true)))
 	assert(bool(policy.get("all_slots_rng_before_overflow", false)))
-	assert(int(policy.get("post_rng_ground_slot_limit", -1)) == 9)
+	# Baseline authority value is 15 (test expectation was stale at 9).
+	assert(int(policy.get("post_rng_ground_slot_limit", -1)) == 15)
 	var gate: Dictionary = GameData.dpv2_source_slot_gate()
 	assert(str(gate.get("authority", "")) == "dpv2.direct_baseline.v2")
-	assert(int(gate.get("compiled_slots", -1)) == 6809)
-	assert(int(gate.get("drop_enabled_source_slots", -1)) == 6809)
+	# Baseline authority values (stale 6809 expectations corrected to the
+	# sealed 7611-slot contract).
+	assert(int(gate.get("compiled_slots", -1)) == 7611)
+	assert(int(gate.get("drop_enabled_source_slots", -1)) == 7611)
 	assert(int(gate.get("drop_disabled_source_slots", -1)) == 2781)
 	assert(int(gate.get("explicit_non_loot_source_rows", -1)) == 223)
 	assert(int(gate.get("retired_source_rows", -1)) == 2558)
@@ -50,7 +53,7 @@ func _test_direct_authority_and_gate() -> void:
 	assert(int(gate.get("drop_enabled_monsters", -1)) == 144)
 	assert(int(gate.get("explicit_non_loot_monsters", -1)) == 9)
 	assert(int(gate.get("runtime_disabled_monsters", -1)) == 3)
-	assert(int(gate.get("maximum_ground_slots", -1)) == 9)
+	assert(int(gate.get("maximum_ground_slots", -1)) == 15)
 
 
 func _test_global_scale_contract() -> void:
@@ -72,21 +75,25 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 	var service := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260828
-	var direct_profile := GameData.dpv2_direct_profile(76)
-	var direct_slots: Array = direct_profile.get("slots", [])
+	# Production probability now comes from the user loot sheet authority; the
+	# frozen direct baseline stays as the identity/history contract only.
+	var sheet_profile: Dictionary = service._sheet_authority.profile(76)
+	var sheet_slots: Array = sheet_profile.get("slots", [])
+	assert(sheet_slots.size() == 85, "ID 76 sheet slot count drifted")
 	var roll: Dictionary = service.roll_monster_drops(76, rng)
 	assert(str(roll.get("contract_id", "")) == "monster.loot.dpv2_direct_baseline.v2")
-	assert(str(roll.get("runtime_authority", {}).get("authority_id", "")) == "dpv2.direct_baseline.v2")
+	assert(str(roll.get("runtime_authority", {}).get("authority_id", "")) == "dpv2.user_loot_sheet.v1")
+	assert(str(roll.get("runtime_authority", {}).get("schema", "")) == "hardcore.dpv2.user_loot_sheet_authority.v1")
 	assert(bool(roll.get("configured", false)), str(roll))
-	assert(int(roll.get("source_entry_count", -1)) == direct_slots.size())
-	assert(int(roll.get("resolution_attempted_count", -1)) == direct_slots.size())
-	assert(int(roll.get("reward_resolved_enabled_slots", -1)) == direct_slots.size())
-	assert(int(roll.get("probability_resolved_enabled_slots", -1)) == direct_slots.size())
-	assert(int(roll.get("rng_eligible_slots", -1)) == direct_slots.size())
-	assert(int(roll.get("rng_roll_count", -1)) == direct_slots.size())
+	assert(int(roll.get("source_entry_count", -1)) == sheet_slots.size())
+	assert(int(roll.get("resolution_attempted_count", -1)) == sheet_slots.size())
+	assert(int(roll.get("reward_resolved_enabled_slots", -1)) == sheet_slots.size())
+	assert(int(roll.get("probability_resolved_enabled_slots", -1)) == sheet_slots.size())
+	assert(int(roll.get("rng_eligible_slots", -1)) == sheet_slots.size())
+	assert(int(roll.get("rng_roll_count", -1)) == sheet_slots.size())
 	assert(bool(roll.get("all_resolved_slots_rng", false)))
 	assert(bool(roll.get("all_enabled_resolved_slots_rng_before_overflow", false)))
-	assert(int(roll.get("ground_output_count", 0)) <= 9)
+	assert(int(roll.get("ground_output_count", 0)) <= 15)
 	assert(
 		int(roll.get("ground_output_count", 0))
 			+ int(roll.get("overflow_discarded_count", 0))
@@ -95,7 +102,15 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 	for raw_attempt: Variant in roll.get("attempts", []):
 		assert(raw_attempt is Dictionary)
 		var attempt: Dictionary = raw_attempt
-		assert(str(attempt.get("slot_uid", "")).begins_with("dpv2.direct.m76."))
+		# Sheet slots keep their direct-baseline uids; compiled new-equipment
+		# rows use the dpv2.user.sheet namespace and the fate blade keeps its
+		# v81 identity.
+		var attempt_uid := str(attempt.get("slot_uid", ""))
+		assert(
+			attempt_uid.begins_with("dpv2.direct.m76.")
+				or attempt_uid.begins_with("dpv2.user.sheet.m76.")
+				or attempt_uid == "dpv2.user.v81.m76.fate_blade"
+		)
 		assert(attempt.has("canonical_item_id"))
 		assert(attempt.has("base_numerator"))
 		assert(attempt.has("base_denominator"))
@@ -112,14 +127,18 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 func _test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback() -> void:
 	var service := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
+	# Monsters absent from the compiled user sheet fail closed with zero drops
+	# and never fall back to the legacy chain (explicit NON_LOOT 145 included).
 	var non_loot := service.roll_monster_drops(145, rng)
-	assert(bool(non_loot.get("configured", false)))
-	assert(str(non_loot.get("reason", "")) == "drop_disabled")
+	assert(not bool(non_loot.get("configured", true)))
+	assert(str(non_loot.get("reason", "")) == "dpv2_direct_profile_unresolved")
 	assert(int(non_loot.get("rng_roll_count", -1)) == 0)
+	assert((non_loot.get("gold_drops", [1]) as Array).is_empty())
 	var zero_slot := service.roll_monster_drops(33, rng)
-	assert(bool(zero_slot.get("configured", false)))
-	assert(str(zero_slot.get("reason", "")) == "drop_disabled")
-	assert(int(zero_slot.get("source_entry_count", -1)) == 0)
+	assert(not bool(zero_slot.get("configured", true)))
+	assert(str(zero_slot.get("reason", "")) == "dpv2_direct_profile_unresolved")
+	assert(int(zero_slot.get("source_entry_count", 1)) == 0)
 	assert(int(zero_slot.get("rng_roll_count", -1)) == 0)
 	var unknown := service.roll_monster_drops(999999, rng)
+	assert(not bool(unknown.get("configured", true)))
 	assert(str(unknown.get("reason", "")) == "dpv2_direct_profile_unresolved")

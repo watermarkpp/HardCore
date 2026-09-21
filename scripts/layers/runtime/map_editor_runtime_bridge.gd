@@ -12,6 +12,9 @@ const MapAssetCatalogServiceScript := preload(
 	"res://scripts/map_assets/map_asset_catalog_service.gd"
 )
 const BICH_MAP_ID := 910001
+# Elite monsters that keep authored ordinary-layer spawn points after the
+# user loot sheet classification migration (218 牛魔将军 / 222 牛魔祭司).
+const ELITE_ORDINARY_SPAWN_IDS := [218, 222]
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
 const BOSS_RESPAWN_OVERRIDES := {
@@ -711,7 +714,12 @@ static func _combat_spawn(
 		if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
 			return {}
 		if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
-			return {}
+			# 218/222 migrated to elite together with the user loot sheet
+			# activation while keeping their ordinary-layer spawn points, so
+			# they stay eligible for monster_spawn; every other elite/boss
+			# monster is still rejected on the ordinary layer.
+			if numeric_id not in ELITE_ORDINARY_SPAWN_IDS:
+				return {}
 	var respawn_seconds := float(entry.get("respawn_seconds", 60.0))
 	var respawn_policy_id := str(entry.get("respawn_policy_id", ""))
 	if spawn_classification == MonsterRespawnPolicyScript.SPECIAL_NORMAL:

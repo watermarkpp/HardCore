@@ -145,5 +145,7 @@ func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> in
 	elif source_layer == "boss_spawn":
 		assert(classification in ["elite", "boss"])
 	else:
-		assert(classification not in ["elite", "boss"])
+		# Ordinary layers may carry elite monsters (218/222 migrated to
+		# elite with the user loot sheet activation); bosses may not.
+		assert(classification != "boss")
 	return monster_id

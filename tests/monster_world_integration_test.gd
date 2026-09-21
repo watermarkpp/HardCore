@@ -325,7 +325,9 @@ func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> vo
 	elif source_layer == "boss_spawn":
 		assert(classification in ["elite", "boss"])
 	else:
-		assert(classification not in ["elite", "boss"])
+		# Ordinary layers may carry elite monsters (218/222 migrated to
+		# elite with the user loot sheet activation); bosses may not.
+		assert(classification != "boss")
 
 
 func _test_loot_contract() -> void:
@@ -530,7 +532,16 @@ func _test_runtime_no_drop_rejection() -> void:
 		"monster_spawn"
 	)
 	var rng := RandomNumberGenerator.new()
-	var roll := LootRuntimeScript.new().roll_monster_drops(64, rng)
+	var loot_service: Variant = LootRuntimeScript.new()
+	# The production authority is now the compiled user sheet provider. The
+	# fail-closed equivalent of a missing profile is an invalid authority:
+	# injecting one must stop every drop with zero RNG and no legacy fallback.
+	var saved_authority: Variant = loot_service._sheet_authority
+	var broken_authority: Variant = load("res://scripts/drop/user_loot_sheet_provider.gd").new()
+	broken_authority.valid = false
+	loot_service._sheet_authority = broken_authority
+	var roll: Dictionary = loot_service.roll_monster_drops(64, rng)
+	loot_service._sheet_authority = saved_authority
 	var identity_ok := canonical_id == 64
 	var game_data_ok := (
 		not game_data_entry.is_empty()
@@ -542,7 +553,8 @@ func _test_runtime_no_drop_rejection() -> void:
 	)
 	var loot_ok := (
 		not bool(roll.get("configured", false))
-		and str(roll.get("reason", "")) == "dpv2_direct_profile_unresolved"
+		and str(roll.get("reason", "")) == "user_loot_sheet_authority_unavailable"
+		and int(roll.get("rng_roll_count", -1)) == 0
 	)
 	if had_profile:
 		GameData._dpv2_direct_profile_by_id[64] = saved_profile
@@ -552,7 +564,7 @@ func _test_runtime_no_drop_rejection() -> void:
 	assert(identity_ok, "canonical identity changed while direct profile was absent")
 	assert(game_data_ok, "GameData identity became inaccessible while direct profile was absent")
 	assert(bridge_ok, "bridge identity became inaccessible while direct profile was absent")
-	assert(loot_ok, "direct V2 unresolved profile did not fail closed: %s" % str(roll))
+	assert(loot_ok, "sheet authority failure did not fail closed: %s" % str(roll))
 	assert(
 		not restored.is_empty() if had_profile else restored.is_empty(),
 		"direct profile index was not restored"

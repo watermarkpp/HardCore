@@ -650,6 +650,14 @@ $Suites.critical = @($Suites.critical + @(
     'tests/skill_learning_notice_real_input_test.tscn'
 ) | Select-Object -Unique)
 
+# September 22 user loot sheet authority: the compiled spreadsheet is the sole
+# production drop probability source. The sheet contract and the retired-chain
+# production gate are permanent regression gates.
+$Suites.critical = @($Suites.critical + @(
+    'tests/user_loot_sheet_authority_test.tscn',
+    'tests/dpv2_drop_runtime_policy_test.tscn'
+) | Select-Object -Unique)
+
 $Suites.equipment = @($Suites.equipment + @(
     'tests/player_notice_item_style_test.tscn',
     'tests/equipment_success_notice_real_input_test.tscn'

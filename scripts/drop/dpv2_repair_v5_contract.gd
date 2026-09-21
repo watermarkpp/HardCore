@@ -7,6 +7,21 @@ const EFFECTIVE_SHA256 := "2959F0FB0493984FCA6252307AD831D4C79AAAF1C83D7E6EC21AB
 const BASELINE_SHA256 := "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7"
 const MAX_RATIONAL := 2147483647
 
+# The classification authority migrated 218/222 to elite together with the
+# user loot sheet activation. This sealed contract froze its ledger
+# verification while those identities were still ordinary, so the historical
+# classification stays pinned here: the sealed ledger keeps validating the
+# exact inputs it was sealed with, while gameplay reads the live catalog.
+const HISTORICAL_CLASSIFICATION_BY_MONSTER_ID := {
+	218: "ordinary",
+	222: "ordinary",
+}
+
+
+static func historical_classification(monster_id: int, current: String) -> String:
+	var pinned: Variant = HISTORICAL_CLASSIFICATION_BY_MONSTER_ID.get(monster_id, null)
+	return str(pinned) if pinned != null else current
+
 
 static func _integer(value: Variant) -> int:
 	if value is int:
