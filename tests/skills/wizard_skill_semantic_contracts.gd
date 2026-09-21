@@ -213,7 +213,13 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"exploding_flame_power_formula":
 			return _support.execute(skill_id, 3, {"primary_stat_roll": 10}).effects[0].raw_power == 24
 		"fire_wall_exact_2x2":
-			return _support.execute(skill_id, 3).geometry_cells.size() == 4
+			# Contract id retained for archived-manifest parity (the archived
+			# package is immutable); the 2026-09-13 user ruling replaced the
+			# old 2x2 project geometry with an exact centered 3x3 square
+			# (SOT width_tiles/height_tiles = 3, selected cell centered).
+			return _is_exact_centered_3x3(
+				_support.execute(skill_id, 3).geometry_cells, Vector2i(8, 8)
+			)
 		"fire_wall_duration_scales":
 			var low := _support.execute(skill_id, 0, {"primary_stat_roll": 0})
 			var high := _support.execute(skill_id, 3, {"primary_stat_roll": 20})
@@ -224,8 +230,13 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"fire_wall_refresh_not_stack":
 			return str(_support.execute(skill_id, 3).effects[0].stacking_policy).contains("refresh")
 		"fire_wall_not_circle_or_cross":
-			var cells: Array = _support.execute(skill_id, 3).geometry_cells
-			return cells.size() == 4 and cells.has(Vector2i(8, 8)) and cells.has(Vector2i(9, 9))
+			# A cross is 5 cells and a diamond/circle 4; the wall is the full
+			# 3x3 square centered on an arbitrary selected cell, verified at
+			# a different target tile than fire_wall_exact_2x2.
+			return _is_exact_centered_3x3(
+				_support.execute(skill_id, 3, {"target_tile": Vector2i(12, 12)}).geometry_cells,
+				Vector2i(12, 12)
+			)
 		"laser_exact_eight_tile_line":
 			return _support.execute(skill_id, 3).geometry_cells.size() == 8
 		"laser_width_one":
@@ -312,6 +323,20 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 func _rank_power_increases(skill_id: String) -> bool:
 	var values := _support.rank_effect_values(skill_id, "raw_power", {"primary_stat_roll": 0})
 	return values.size() == 4 and values[0] < values[1] and values[1] < values[2] and values[2] < values[3]
+
+
+## Exact centered 3x3 square: exactly nine cells, containing every cell of the
+## closed square centered on the selected cell (center_policy from the SOT
+## geometry ruling), so a 2x2 block, a 5-cell cross, or a 4-cell diamond all
+## fail.
+static func _is_exact_centered_3x3(cells: Array, center: Vector2i) -> bool:
+	if cells.size() != 9:
+		return false
+	for dx in range(-1, 2):
+		for dy in range(-1, 2):
+			if not cells.has(center + Vector2i(dx, dy)):
+				return false
+	return true
 
 
 func _floats_equal(actual: Array, expected: Array) -> bool:
