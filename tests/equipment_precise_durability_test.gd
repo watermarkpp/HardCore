@@ -177,7 +177,11 @@ func _run() -> void:
 		{"confirmed_hit": true, "damage": 1, "weapon_roll": 0}
 	)
 	assert(str(PlayerState.equipment["武器"].instance_id) == instance_id and int(weapon.durability_raw) == 0, "零耐久装备实例未保留")
-	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 5, "raw零耐久装备仍提供属性")
+	# The zero-durability authority contract (recalculate_stats skips equipment
+	# with no positive raw durability, player_state.gd:2820) leaves the base
+	# stat untouched: the generated growth table gives a level-1 warrior
+	# attack_max=1, so the broken wooden sword contributes nothing.
+	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 1, "raw零耐久装备仍被计入属性")
 
 	weapon.durability_raw = 1000
 	weapon.max_durability_raw = 10000

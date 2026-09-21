@@ -38,7 +38,13 @@ func _run() -> void:
 	assert(not PlayerState.equipment["武器"].is_empty(), "耐久归零后装备被删除")
 	assert(str(PlayerState.equipment["武器"].get("instance_id", "")) == instance_id, "耐久归零后装备实例被替换")
 	assert(int(PlayerState.equipment["武器"].get("durability", -1)) == 0, "装备耐久没有归零")
-	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 5, "零耐久装备仍提供属性")
+	# Zero-durability authority contract: the attribute stops applying
+	# (recalculate_stats skips equipment without positive raw durability), so
+	# only the base remains: attack_with_weapon minus the wooden sword's 5.
+	assert(
+		int(PlayerState.computed_stats.get("attack_max", 0)) == attack_with_weapon - 5,
+		"零耐久装备仍提供属性"
+	)
 
 	var blacksmith_context := GameData.merchant_context("starter_gear")
 	assert(PricingServiceScript.merchant_supports_full_equipment_repair(blacksmith_context))
