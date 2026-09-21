@@ -211,7 +211,13 @@ static func publish_runtime_release(
 				runtime_map_id
 			)
 	if not registry_write_ok:
-		_restore_runtime(formal_path, backup_path)
+		var runtime_restored := _restore_runtime(formal_path, backup_path)
+		if not bool(runtime_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "registry_write_failed_and_runtime_restore_failed",
+				"errors": [str(runtime_restored.get("reason", "unknown"))],
+			}
 		return {"success": false, "reason": "registry_write_failed"}
 	# Cache invalidate then post-publish verification. Publish never returns
 	# success unless the published build is actually formal playable.
@@ -224,15 +230,22 @@ static func publish_runtime_release(
 		) == approved_hash
 	)
 	if not post_ok:
-		_restore_runtime(formal_path, backup_path)
+		var runtime_restored := _restore_runtime(formal_path, backup_path)
 		var registry_restored := _restore_registry_bytes(
 			registry_path, old_registry_bytes
 		)
 		RuntimeBridge.invalidate_release_registry()
-		if not registry_restored:
+		if not bool(registry_restored.get("ok", false)):
 			return {
 				"success": false,
 				"reason": "post_publish_rollback_failed",
+				"errors": [str(registry_restored.get("reason", "unknown"))],
+			}
+		if not bool(runtime_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "post_publish_runtime_rollback_failed",
+				"errors": [str(runtime_restored.get("reason", "unknown"))],
 			}
 		return {"success": false, "reason": "post_publish_verify_failed"}
 	if (
@@ -358,17 +371,24 @@ static func _promote_runtime(
 	}
 
 
-static func _restore_runtime(formal_path: String, backup_path: String) -> void:
+static func _restore_runtime(formal_path: String, backup_path: String) -> Dictionary:
+	## RV14-02: removal/rename results are reported so the publish caller can
+	## distinguish "publish failed and recovered" from "recovery failed".
 	var absolute_formal := _absolute_path(formal_path)
 	if (
 		not backup_path.is_empty()
 		and FileAccess.file_exists(backup_path)
 	):
 		if FileAccess.file_exists(absolute_formal):
-			DirAccess.remove_absolute(absolute_formal)
-		DirAccess.rename_absolute(backup_path, absolute_formal)
+			if DirAccess.remove_absolute(absolute_formal) != OK:
+				return {"ok": false, "reason": "formal_remove_failed"}
+		if DirAccess.rename_absolute(backup_path, absolute_formal) != OK:
+			return {"ok": false, "reason": "backup_rename_failed"}
+		return {"ok": true, "reason": ""}
 	elif FileAccess.file_exists(absolute_formal):
-		DirAccess.remove_absolute(absolute_formal)
+		if DirAccess.remove_absolute(absolute_formal) != OK:
+			return {"ok": false, "reason": "formal_remove_failed"}
+	return {"ok": true, "reason": ""}
 
 
 static func _absolute_path(path: String) -> String:
@@ -381,31 +401,78 @@ static func _absolute_path(path: String) -> String:
 
 static func _read_registry(registry_path: String) -> Dictionary:
 	if not FileAccess.file_exists(registry_path):
-		# R2-W1: a missing registry next to its atomic-write backup is a
-		# crashed previous registry commit. Recover the last complete registry
-		# (validated) so the next publish proceeds instead of stranding the
-		# release in a fail-closed dead state. Invalid backups stay refused.
-		var absolute_backup := _absolute_path(registry_path) + ".bak"
-		if FileAccess.file_exists(absolute_backup):
-			var backup_file := FileAccess.open(absolute_backup, FileAccess.READ)
-			if backup_file != null:
-				var backup_bytes := backup_file.get_buffer(
-					backup_file.get_length()
+		# R2-W1: a missing registry next to an atomic-write backup is a
+		# crashed previous registry commit. RV14-02: the recovery entry must
+		# recognize BOTH real backup protocols — ".bak" from the whole-registry
+		# atomic writer and ".restore_bak" from the single-map preserving
+		# writer (a crashed single-map publish leaves exactly that state:
+		# main renamed away, temp never promoted). Candidates are validated
+		# before any restore; two valid but conflicting candidates need
+		# reliable transaction/approval-version evidence, otherwise the
+		# publish fails closed with both backups preserved.
+		var absolute_bak := _absolute_path(registry_path) + ".bak"
+		var absolute_restore_bak := _absolute_path(registry_path) + ".restore_bak"
+		var candidates: Array = []
+		for candidate_path: String in [absolute_bak, absolute_restore_bak]:
+			if not FileAccess.file_exists(candidate_path):
+				continue
+			var candidate_file := FileAccess.open(candidate_path, FileAccess.READ)
+			if candidate_file == null:
+				continue
+			var candidate_bytes := candidate_file.get_buffer(
+				candidate_file.get_length()
+			)
+			candidate_file.close()
+			var candidate_parser := JSON.new()
+			if candidate_parser.parse(
+				candidate_bytes.get_string_from_utf8()
+			) != OK or not candidate_parser.data is Dictionary:
+				continue
+			var candidate_registry: Dictionary = candidate_parser.data
+			if not candidate_registry.get("maps", null) is Array:
+				continue
+			if not RuntimeBridge.validate_release_registry(
+				candidate_registry
+			).is_empty():
+				continue
+			candidates.append({
+				"path": candidate_path,
+				"bytes": candidate_bytes,
+				"registry": candidate_registry,
+			})
+		if candidates.size() == 1:
+			var restore := _restore_registry_bytes(
+				registry_path, candidates[0].bytes, candidates[0].path
+			)
+			if not bool(restore.get("ok", false)):
+				return {
+					"ok": false,
+					"reason": "release_registry_restore_failed",
+					"errors": [str(restore.get("reason", "unknown"))],
+				}
+		elif candidates.size() == 2:
+			var chosen: Dictionary = {}
+			if candidates[0].bytes == candidates[1].bytes:
+				chosen = candidates[0]
+			else:
+				chosen = _select_registry_backup_by_approval_evidence(
+					candidates[0], candidates[1]
 				)
-				backup_file.close()
-				var backup_parser := JSON.new()
-				if backup_parser.parse(
-					backup_bytes.get_string_from_utf8()
-				) == OK and backup_parser.data is Dictionary:
-					var backup_registry: Dictionary = backup_parser.data
-					if backup_registry.get("maps", null) is Array \
-							and RuntimeBridge.validate_release_registry(
-								backup_registry
-							).is_empty() \
-							and _restore_registry_bytes(
-								registry_path, backup_bytes
-							):
-						pass  # fall through to the normal read below.
+			if chosen.is_empty():
+				return {
+					"ok": false,
+					"reason": "release_registry_backup_conflict",
+					"errors": ["backup_backups_conflict_no_reliable_evidence"],
+				}
+			var restore := _restore_registry_bytes(
+				registry_path, chosen.bytes, chosen.path
+			)
+			if not bool(restore.get("ok", false)):
+				return {
+					"ok": false,
+					"reason": "release_registry_restore_failed",
+					"errors": [str(restore.get("reason", "unknown"))],
+				}
 		if not FileAccess.file_exists(registry_path):
 			return {"ok": false, "reason": "release_registry_missing"}
 	var file := FileAccess.open(registry_path, FileAccess.READ)
@@ -441,43 +508,115 @@ static func _read_registry(registry_path: String) -> Dictionary:
 	}
 
 
+## RV14-02: resolve two valid but byte-different backups. Only reliable
+## transaction/approval-version evidence decides: for every shared map_key the
+## approval_revision must strictly order the two documents, and the strictly
+## newer one wins. Any tie, missing counterpart, or unreadable revision is
+## evidence insufficiency -> return empty (caller fails closed and preserves
+## both backups). Never decide by file name or mtime.
+static func _select_registry_backup_by_approval_evidence(
+	first: Dictionary,
+	second: Dictionary
+) -> Dictionary:
+	var first_registry: Dictionary = first.registry
+	var second_registry: Dictionary = second.registry
+	var first_newer_count := 0
+	var second_newer_count := 0
+	var first_entries: Dictionary = {}
+	for raw_entry: Variant in first_registry.get("maps", []):
+		if raw_entry is Dictionary:
+			first_entries[str(raw_entry.get("map_key", ""))] = raw_entry
+	for raw_entry: Variant in second_registry.get("maps", []):
+		if not raw_entry is Dictionary:
+			continue
+		var map_key := str(raw_entry.get("map_key", ""))
+		var second_revision := int(raw_entry.get("approval_revision", -1))
+		var first_revision := -1
+		if first_entries.has(map_key):
+			first_revision = int(
+				first_entries[map_key].get("approval_revision", -1)
+			)
+		if second_revision > first_revision:
+			second_newer_count += 1
+		elif first_revision > second_revision:
+			first_newer_count += 1
+		else:
+			return {}  # tie or missing counterpart: not reliable evidence
+	if second_newer_count > 0 and first_newer_count == 0:
+		return second
+	if first_newer_count > 0 and second_newer_count == 0:
+		return first
+	return {}
+
+
 static func _restore_registry_bytes(
 	registry_path: String,
-	raw_bytes: PackedByteArray
-) -> bool:
+	raw_bytes: PackedByteArray,
+	preserve_source_absolute := ""
+) -> Dictionary:
+	## RV14-02: restore a validated backup over a missing/corrupt registry.
+	## Every removal/copy/rename/verify result is checked and reported. When
+	## preserve_source_absolute points at the backup this restore reads from,
+	## that source is never removed: it survives until the restored
+	## destination bytes are verified, and a failed restore keeps it for
+	## diagnosis. Returns {"ok": bool, "reason": String}.
 	var absolute_dst := _absolute_path(registry_path)
 	var absolute_tmp := absolute_dst + ".restore_tmp"
 	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
 	if file == null:
-		return false
+		return {"ok": false, "reason": "tmp_write_failed"}
 	file.store_buffer(raw_bytes)
 	file.flush()
 	file.close()
 	var verify := FileAccess.open(absolute_tmp, FileAccess.READ)
 	if verify == null:
 		DirAccess.remove_absolute(absolute_tmp)
-		return false
+		return {"ok": false, "reason": "tmp_verify_open_failed"}
 	var verified_bytes := verify.get_buffer(verify.get_length())
 	verify.close()
 	if verified_bytes != raw_bytes:
 		DirAccess.remove_absolute(absolute_tmp)
-		return false
+		return {"ok": false, "reason": "tmp_verify_mismatch"}
 	var backup := absolute_dst + ".restore_bak"
-	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
+	var staged_old_main := false
 	if FileAccess.file_exists(absolute_dst):
+		if backup == preserve_source_absolute:
+			# The staging slot collides with the preserved source; refuse
+			# rather than delete the source.
+			DirAccess.remove_absolute(absolute_tmp)
+			return {"ok": false, "reason": "source_slot_collision"}
+		if FileAccess.file_exists(backup):
+			if DirAccess.remove_absolute(backup) != OK:
+				DirAccess.remove_absolute(absolute_tmp)
+				return {"ok": false, "reason": "old_backup_remove_failed"}
 		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
 		if backup_error != OK:
 			DirAccess.remove_absolute(absolute_tmp)
-			return false
+			return {"ok": false, "reason": "staging_rename_failed"}
+		staged_old_main = true
 	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
 	if promote_error != OK:
-		if FileAccess.file_exists(backup):
+		if staged_old_main:
 			DirAccess.rename_absolute(backup, absolute_dst)
-		return false
-	if FileAccess.file_exists(backup):
+		DirAccess.remove_absolute(absolute_tmp)
+		return {"ok": false, "reason": "promote_failed"}
+	# Final destination verification against the source bytes.
+	var restored := FileAccess.open(absolute_dst, FileAccess.READ)
+	if restored == null:
+		return {"ok": false, "reason": "restored_open_failed"}
+	var restored_bytes := restored.get_buffer(restored.get_length())
+	restored.close()
+	if restored_bytes != raw_bytes:
+		if staged_old_main and FileAccess.file_exists(backup):
+			DirAccess.remove_absolute(absolute_dst)
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return {"ok": false, "reason": "restored_verify_mismatch"}
+	# Success. The preserved source (recovery scenario) is intentionally kept;
+	# the staging backup of an old main (rollback scenario) is consumed only
+	# when it is not the preserved source.
+	if staged_old_main and backup != preserve_source_absolute:
 		DirAccess.remove_absolute(backup)
-	return true
+	return {"ok": true, "reason": ""}
 
 
 static func _write_registry_atomic(
