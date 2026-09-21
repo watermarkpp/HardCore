@@ -8292,13 +8292,24 @@ func _hc_submit_path(anchor: Vector2, tier: int) -> void:
 	_hc_scheduler.submit(self, _hc_path_token, search)
 
 func _hc_path_job_current(token: int) -> bool:
-	return (
-		token == _hc_path_token and _hc_path_pending and is_inside_tree()
-		and _hc_target_usable(target) and _hc_known_target_id == target.get_instance_id()
-		and runtime_map_id == _hc_path_map and int(get_meta("zone_generation", -1)) == _hc_path_generation
+	# An old scheduler callback must never clear a newer request.
+	if token != _hc_path_token or not _hc_path_pending:
+		return false
+	var current := (
+		is_inside_tree()
+		and _hc_target_usable(target)
+		and _hc_known_target_id == target.get_instance_id()
+		and runtime_map_id == _hc_path_map
+		and int(get_meta("zone_generation", -1)) == _hc_path_generation
 		and _hc_environment_revision() == _hc_path_revision
 		and is_same(_hc_path_context, _terrain_navigation_context)
 	)
+	if not current:
+		# Scheduler detaches/discards the job after a false return. The owner
+		# must release pending too, otherwise the next request cannot be queued.
+		_hc_path_pending = false
+	return current
+
 
 func _hc_path_completed(token: int, status: String, route: PackedVector2Array) -> void:
 	if not _hc_path_job_current(token):

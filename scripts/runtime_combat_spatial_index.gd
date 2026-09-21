@@ -78,6 +78,8 @@ func register(
 ) -> void:
 	if actor_runtime_id <= 0 or runtime_map_id < 0:
 		return
+	if not absolute_ground_gu.is_finite() or not is_finite(bounds_radius_gu) or not is_instance_valid(node):
+		return
 	unregister(actor_runtime_id)
 	var safe_bounds := maxf(0.0, bounds_radius_gu)
 	_entries[actor_runtime_id] = {
@@ -123,6 +125,8 @@ func unregister(actor_runtime_id: int) -> void:
 
 
 func update_actor(actor_runtime_id: int, absolute_ground_gu: Vector2) -> void:
+	if not absolute_ground_gu.is_finite():
+		return
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
@@ -509,7 +513,7 @@ func _query_aabb_candidates(
 ) -> Array[Dictionary]:
 	index_query_count += 1
 	var result: Array[Dictionary] = []
-	if runtime_map_id < 0 or bounds_ground_gu.size.x < 0.0:
+	if runtime_map_id < 0 or not bounds_ground_gu.position.is_finite() or not bounds_ground_gu.size.is_finite() or bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
 		return result
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
 	if map_buckets.is_empty():
@@ -549,6 +553,9 @@ func _query_aabb_candidates(
 					var live_value: Variant = position_provider.call()
 					if live_value is Vector2:
 						live_position_gu = live_value as Vector2
+				if not live_position_gu.is_finite():
+					continue
+				entry["absolute_ground_gu"] = live_position_gu
 				var current_bucket := _bucket_key(live_position_gu)
 				if current_bucket != query_bucket:
 					# Lazy re-home: entry's stored bucket is stale. Move it and

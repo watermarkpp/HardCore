@@ -59,7 +59,7 @@ func pump(soft_budget_usec: int = SOFT_BUDGET_USEC) -> void:
 	var started_usec := Time.get_ticks_usec()
 	var pump_deadline_usec := started_usec + soft_budget_usec if soft_budget_usec > 0 else 0
 	while not queue.is_empty() and visits < initial_count and services < 2:
-		if soft_budget_usec > 0 and services > 0 and Time.get_ticks_usec() - started_usec >= soft_budget_usec:
+		if soft_budget_usec > 0 and visits > 0 and Time.get_ticks_usec() - started_usec >= soft_budget_usec:
 			break
 		var id: int = queue.pop_front()
 		visits += 1
