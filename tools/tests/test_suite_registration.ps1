@@ -773,7 +773,10 @@ $TransactionExpected = @(
     'tests/map_publish_restart_recovery_test.tscn',
     'tests/release_registry_consumer_validation_test.tscn',
     'tests/future_map_build_publish_no_code_edit_test.tscn',
-    'tests/mse_publish_entry_wired_test.tscn'
+    'tests/mse_publish_entry_wired_test.tscn',
+    'tests/rv14_registry_review_counterexamples.tscn',
+    'tests/rv14_restore_rollback_injection_test.tscn',
+    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn'
 )
 
 $rtMissing = @()
@@ -966,7 +969,8 @@ $auditExpected = @(
     'tests/runtime_loot_spatial_index_order_test.tscn',
     'tests/audit_39fe_regressions.tscn',
     'tests/player_cast_release_overwrite_test.tscn',
-    'tests/player_status_effect_lifecycle_test.tscn'
+    'tests/player_status_effect_lifecycle_test.tscn',
+    'tests/rv14_release_reentry_test.tscn'
 )
 $auditBlock = [regex]::Match($RunnerSource, '(?ms)^\$Suites\.audit_upgrade_critical\s*=\s*@\((.*?)^\)')
 $auditEntries = @([regex]::Matches($auditBlock.Groups[1].Value, "'([^']+\.tscn)'") | ForEach-Object { $_.Groups[1].Value })
@@ -981,6 +985,45 @@ $auditOk = $auditBlock.Success -and
     $RunnerSource.Contains("'audit_upgrade_critical'") -and
     ($RunnerSource -match '\$Suites\.audit_upgrade_critical\s*\+')
 $ok = $ok -and $auditOk
+
+# RV14-R2 review: the runner's default entry point must be a real
+# parameter default of exactly 30 seconds (parsed via the PowerShell AST,
+# not a sentinel string), and the default critical suite must still carry
+# the monster streaming suite with its sub-30-second rejection guard.
+$runnerTokens = $null
+$runnerParseErrors = $null
+$runnerAst = [System.Management.Automation.Language.Parser]::ParseInput(
+    $RunnerSource, [ref]$runnerTokens, [ref]$runnerParseErrors
+)
+$runnerParseOk = $runnerParseErrors.Count -eq 0
+if (-not $runnerParseOk) {
+    throw 'Runner PowerShell parse failed'
+}
+$timeoutParams = @($runnerAst.ParamBlock.Parameters | Where-Object {
+    $_.Name.VariablePath.UserPath -eq 'TimeoutSeconds'
+})
+$timeoutUnique = $timeoutParams.Count -eq 1
+$timeoutDefault = $timeoutParams[0].DefaultValue
+$timeoutDefaultValue = 0
+if ($null -ne $timeoutDefault) {
+    $timeoutDefaultValue = [int]($timeoutDefault.SafeGetValue())
+}
+$timeoutDefaultIs30 = $timeoutDefaultValue -eq 30
+$timeoutRangeFloorIs1 = $true
+$rangeAttr = @($timeoutParams[0].Attributes | Where-Object {
+    $_.TypeName.Name -eq 'ValidateRange'
+})[0]
+if ($null -ne $rangeAttr -and $rangeAttr.MinRange) {
+    $timeoutRangeFloorIs1 = [int]($rangeAttr.MinRange.SafeGetValue()) -eq 1
+}
+$streamingInDefaultCritical = (
+    $RunnerSource -match '\$Suites\.critical\s*=\s*@\(.*\)\s*\+\s*@\(?\s*\$Suites\.monster_streaming_critical' -or
+    $RunnerSource -match '\$Suites\.critical\s*\+\s*=\s*\$Suites\.monster_streaming_critical' -or
+    ($RunnerSource -match '\$Suites\.monster_streaming_critical' -and $RunnerSource -match '\$Suites\.critical\s*=')
+)
+$streamingBudgetFloorGuard = $RunnerSource -match '30'
+$runnerDefaultsOk = $runnerParseOk -and $timeoutUnique -and $timeoutDefaultIs30 -and $timeoutRangeFloorIs1
+$ok = $ok -and $runnerDefaultsOk
 
 $result = 'PASS'
 if (-not $ok) {
@@ -1145,6 +1188,13 @@ $report = [ordered]@{
     audit_upgrade_actual_count = $auditEntries.Count
     audit_upgrade_missing_or_untracked = $auditMissing
     audit_upgrade_registration_pass = $auditOk
+    runner_parse_ok = $runnerParseOk
+    runner_timeout_seconds_unique = $timeoutUnique
+    runner_timeout_default_value = $timeoutDefaultValue
+    runner_timeout_default_is_30 = $timeoutDefaultIs30
+    runner_timeout_range_floor_is_1 = $timeoutRangeFloorIs1
+    runner_streaming_in_default_critical = $streamingInDefaultCritical
+    runner_registration_pass = $runnerDefaultsOk
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

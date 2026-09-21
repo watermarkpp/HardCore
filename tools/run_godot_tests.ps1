@@ -2,7 +2,7 @@ param(
     [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
     [string]$Suite = 'critical',
     [ValidateRange(1, 60)]
-    [int]$TimeoutSeconds = 8,
+    [int]$TimeoutSeconds = 30,
     [string[]]$TestPaths = @()
 )
 
