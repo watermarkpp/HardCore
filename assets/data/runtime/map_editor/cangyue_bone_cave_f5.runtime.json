@@ -1,5 +1,5 @@
 {
-  "build_sha256": "d83a8edf7795e9bf1a05690d33b1483de1435c9ca7a21d05ff9bb03c14fc12a3",
+  "build_sha256": "5d59939f9688a931ee99306f1841a8f7cba2784136728b6e91e97ec69f200f89",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -31645,7 +31645,7 @@
         "spawn_rule": "ambient",
         "tile": [
           5.0,
-          19.0
+          20.0
         ]
       },
       {
@@ -31666,7 +31666,7 @@
         "spawn_rule": "ambient",
         "tile": [
           5.0,
-          11.0
+          9.0
         ]
       },
       {
@@ -31709,48 +31709,6 @@
         "tile": [
           5.0,
           25.0
-        ]
-      },
-      {
-        "authority_ref": {
-          "map_id": "cangyue_bone_cave_f5"
-        },
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "宝箱8",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": 234.0,
-        "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f5.monster_spawn.000018",
-        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f5.monster_spawn.000018",
-        "spawn_rule": "ambient",
-        "tile": [
-          5.0,
-          22.0
-        ]
-      },
-      {
-        "authority_ref": {
-          "map_id": "cangyue_bone_cave_f5"
-        },
-        "content_layer": "personal_expansion",
-        "count": 1.0,
-        "display_name": "宝箱7",
-        "kind": "monster_spawn",
-        "max_alive": 1.0,
-        "monster_id": 233.0,
-        "radius_gu": 3.0,
-        "respawn_seconds": 60.0,
-        "runtime_export": true,
-        "semantic_id": "mse.placement.v1.cangyue_bone_cave_f5.monster_spawn.000019",
-        "spawn_group_id": "mse.group.v1.cangyue_bone_cave_f5.monster_spawn.000019",
-        "spawn_rule": "ambient",
-        "tile": [
-          5.0,
-          8.0
         ]
       },
       {
@@ -32197,7 +32155,7 @@
         "spawn_rule": "ambient",
         "tile": [
           5.0,
-          14.0
+          13.0
         ]
       }
     ],
@@ -32208,10 +32166,10 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "e91cc28502eb4cf4666b40ccda74593c1e6f4d9a9a6a3e304c81455b8ddfbcce",
+      "authoring_sha256": "65553a9aba9544361d53aab44d61a07e8007a5781046c038cf0a615edc49f7cc",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 64.0,
-      "document_sha256": "38ca80d474883b2e83ab08c2eb83e5f7bd1dca1388e4074ef5b35fe363244230",
+      "document_revision": 65.0,
+      "document_sha256": "1ce64c7324b0909b0ddb8e226823607284b06425a796d34ef22d1649a84e733c",
       "ground_manifest_sha256": "348c0a82a3f3a551f500d7b2d6df9016fcbd7a93f46b91b51cebe7f92c5a638b",
       "ground_state_sha256": "765cbf6c2257ac0f9019d3a22b896ed44fd40642b4d645284cef6c9b5904af83",
       "map_key": "cangyue_bone_cave_f5",
@@ -32221,7 +32179,7 @@
     "display_name": "骨魔洞五层",
     "editor_schema_version": 5.0,
     "map_id": "cangyue_bone_cave_f5",
-    "revision": 64.0,
+    "revision": 65.0,
     "runtime_map_id": 917005.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1",

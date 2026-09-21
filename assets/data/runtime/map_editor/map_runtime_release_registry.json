@@ -2169,34 +2169,34 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "d83a8edf7795e9bf1a05690d33b1483de1435c9ca7a21d05ff9bb03c14fc12a3",
-      "display_name": "骨魔洞五层",
-      "map_key": "cangyue_bone_cave_f5",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 917005.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f5.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "黄泉教主"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "骷髅锤兵",
-          "骷髅长枪兵",
-          "骷髅刀斧手",
-          "骷髅弓箭手",
-          "宝箱8",
-          "宝箱7",
-          "宝箱6"
-        ],
-        "npc_kinds": [],
-        "portals": [],
-        "runtime_build_sha256": "d83a8edf7795e9bf1a05690d33b1483de1435c9ca7a21d05ff9bb03c14fc12a3"
-      }
-    },
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "5d59939f9688a931ee99306f1841a8f7cba2784136728b6e91e97ec69f200f89",
+  "display_name": "骨魔洞五层",
+  "map_key": "cangyue_bone_cave_f5",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 917005,
+  "runtime_path": "res://assets/data/runtime/map_editor/cangyue_bone_cave_f5.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "黄泉教主"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "骷髅锤兵",
+      "骷髅长枪兵",
+      "骷髅刀斧手",
+      "骷髅弓箭手",
+      "宝箱8",
+      "宝箱7",
+      "宝箱6"
+    ],
+    "npc_kinds": [],
+    "portals": [],
+    "runtime_build_sha256": "5d59939f9688a931ee99306f1841a8f7cba2784136728b6e91e97ec69f200f89"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",
