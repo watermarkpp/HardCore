@@ -478,7 +478,8 @@ $Suites.map_runtime_release_critical = @(
     'tests/release_registry_current_maps_test.tscn',
     'tests/map_runtime_release_gate_test.tscn',
     'tests/map_editor_save_path_isolation_test.tscn',
-    'tests/map_release_identity_matrix_test.tscn'
+    'tests/map_release_identity_matrix_test.tscn',
+    'tests/hc_polygon_counterexample_matrix_test.tscn'
 )
 
 $Suites.map_runtime_release_transaction_critical = @(
