@@ -343,18 +343,7 @@ func _apply_damage(
 
 
 func _snapshot_bounds_ground_gu(snapshot: Dictionary) -> Rect2:
-	var min_gu := Vector2.INF
-	var max_gu := -Vector2.INF
-	var polygons: Variant = snapshot.get("polygons_ground_gu", [])
-	if polygons is Array:
-		for raw_polygon: Variant in polygons:
-			if raw_polygon is PackedVector2Array:
-				for point: Vector2 in raw_polygon as PackedVector2Array:
-					min_gu.x = minf(min_gu.x, point.x)
-					min_gu.y = minf(min_gu.y, point.y)
-					max_gu.x = maxf(max_gu.x, point.x)
-					max_gu.y = maxf(max_gu.y, point.y)
-	if not min_gu.is_finite() or not max_gu.is_finite():
-		var origin := snapshot.get("origin_ground_gu", Vector2.ZERO) as Vector2
-		return Rect2(origin, Vector2.ZERO)
-	return Rect2(min_gu, max_gu - min_gu)
+	var result := Snapshot.ground_aabb(snapshot)
+	if not bool(result.get("valid", false)):
+		return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
+	return result.get("bounds_ground_gu", Rect2(Vector2.ZERO, Vector2(-1.0, -1.0)))

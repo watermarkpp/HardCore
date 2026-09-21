@@ -710,6 +710,12 @@ static func validate_for_consumer(
 	policy: StringName = VALIDATION_STRICT_V2
 ) -> Dictionary:
 	if policy == VALIDATION_STRICT_V2:
+		var payload_reason := _audit_strict_payload_reason(snapshot)
+		if not payload_reason.is_empty():
+			return {"valid": false, "reason": payload_reason, "schema_version": 0,
+				"coordinate_space": str(snapshot.get("coordinate_space", "")),
+				"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+				"policy": VALIDATION_STRICT_V2, "legacy_used": false, "details": {}}
 		var strict := validate(snapshot, expected_context)
 		if not bool(strict.get("valid", false)):
 			return {
@@ -1140,31 +1146,39 @@ static func ground_aabb(snapshot: Dictionary) -> Dictionary:
 		return _ground_aabb_failure("shape_type_invalid")
 	if shape_type == SHAPE_CELL_UNION:
 		return _ground_aabb_cell_union(snapshot)
-	if shape_type == SHAPE_CIRCLE and (
-		snapshot.has("center_ground_gu")
-		or snapshot.has("radius_gu")
-	):
-		if not snapshot.has("center_ground_gu") or not snapshot.has("radius_gu"):
-			return _ground_aabb_failure("circle_fields_incomplete")
-		var raw_center: Variant = snapshot.get("center_ground_gu", null)
-		var raw_radius: Variant = snapshot.get("radius_gu", null)
-		if (
-			not raw_center is Vector2
-			or not _vector2_is_finite(raw_center as Vector2)
-			or (not raw_radius is int and not raw_radius is float)
-		):
-			return _ground_aabb_failure("circle_fields_invalid")
-		var radius_gu := float(raw_radius)
-		if not is_finite(radius_gu) or radius_gu < 0.0:
-			return _ground_aabb_failure("circle_radius_invalid")
-		var center_ground_gu: Vector2 = raw_center
-		return _ground_aabb_from_min_max(
-			center_ground_gu - Vector2.ONE * radius_gu,
-			center_ground_gu + Vector2.ONE * radius_gu,
-		)
-	return _ground_aabb_from_polygon_value(
-		snapshot.get("polygon_ground_gu", null)
-	)
+	if shape_type == SHAPE_SWEPT_CAPSULE_PATH:
+		var raw_start: Variant = snapshot.get("segment_start_ground_gu")
+		var raw_end: Variant = snapshot.get("segment_end_ground_gu")
+		var raw_radius: Variant = snapshot.get("path_radius_gu")
+		if not raw_start is Vector2 or not raw_end is Vector2 or not _audit_nonnegative_number(raw_radius):
+			return _ground_aabb_failure("capsule_fields_invalid")
+		var start: Vector2 = raw_start
+		var end: Vector2 = raw_end
+		if not start.is_finite() or not end.is_finite():
+			return _ground_aabb_failure("capsule_points_invalid")
+		var radius := float(raw_radius)
+		return _ground_aabb_from_min_max(start.min(end) - Vector2.ONE * radius, start.max(end) + Vector2.ONE * radius)
+	if shape_type in [SHAPE_CIRCLE, SHAPE_SECTOR_ARC, SHAPE_TARGET_FOOTPRINT]:
+		var center_key := "center_ground_gu"
+		var radius_key := "radius_gu"
+		if shape_type == SHAPE_SECTOR_ARC:
+			center_key = "origin_ground_gu"
+		elif shape_type == SHAPE_TARGET_FOOTPRINT:
+			center_key = "target_center_ground_gu"
+			radius_key = "target_combat_radius_gu"
+		var raw_center: Variant = snapshot.get(center_key)
+		var raw_radius: Variant = snapshot.get(radius_key)
+		if not raw_center is Vector2 or not _audit_nonnegative_number(raw_radius):
+			return _ground_aabb_failure("analytic_fields_invalid")
+		var center: Vector2 = raw_center
+		if not center.is_finite():
+			return _ground_aabb_failure("analytic_center_invalid")
+		var radius := float(raw_radius)
+		# A sector's enclosing circle is deliberately conservative. The exact
+		# sector predicate still decides hits; preview tessellation never does.
+		return _ground_aabb_from_min_max(center - Vector2.ONE * radius, center + Vector2.ONE * radius)
+	return _ground_aabb_from_polygon_value(snapshot.get("polygon_ground_gu"))
+
 
 
 static func _ground_aabb_cell_union(snapshot: Dictionary) -> Dictionary:
@@ -1744,3 +1758,79 @@ static func _project_polygon(
 		minimum = minf(minimum, projected)
 		maximum = maxf(maximum, projected)
 	return Vector2(minimum, maximum)
+
+
+static func _audit_nonnegative_number(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value)) and float(value) >= 0.0
+
+
+static func _audit_strict_payload_reason(snapshot: Dictionary) -> String:
+	var version: Variant = snapshot.get("schema_version")
+	if not version is int or int(version) != SCHEMA_VERSION:
+		return "strict_v2_requires_schema_2"
+	if not has_legacy_base_contract(snapshot):
+		return "strict_v2_base_contract_missing"
+	if str(snapshot.get("snapshot_id", "")).is_empty():
+		return "snapshot_id_missing"
+	if str(snapshot.get("projection_api_contract_id", "")) != PROJECTION_API_CONTRACT_ID:
+		return "projection_api_contract_invalid"
+	var shape_type := str(snapshot.get("shape_type", ""))
+	var contracts := {
+		SHAPE_DIRECTED_RECTANGLE: DIRECTED_RECTANGLE_CONTRACT_ID,
+		SHAPE_SECTOR_ARC: SECTOR_ARC_CONTRACT_ID,
+		SHAPE_CIRCLE: CIRCLE_CONTRACT_ID,
+		SHAPE_SWEPT_CAPSULE_PATH: SWEPT_CAPSULE_PATH_CONTRACT_ID,
+		SHAPE_TARGET_FOOTPRINT: TARGET_FOOTPRINT_CONTRACT_ID,
+		SHAPE_CELL_UNION: CELL_UNION_CONTRACT_ID,
+	}
+	if str(snapshot.get("shape_contract_id", "")) != str(contracts.get(shape_type, "INVALID")):
+		return "shape_contract_invalid"
+	for key: String in ["origin_ground_gu", "projection_origin_ground_gu"]:
+		var point: Variant = snapshot.get(key)
+		if not point is Vector2 or not (point as Vector2).is_finite():
+			return "invalid_%s" % key
+	# Guard types before the older validator's typed casts execute.
+	for key: String in ["direction_ground_gu", "axis_screen_offset_px", "axis_screen_direction_px", "start_ground_gu", "end_ground_gu", "cell_origin_offset_gu", "perpendicular_ground_gu"]:
+		if snapshot.has(key):
+			var point: Variant = snapshot[key]
+			if not point is Vector2 or not (point as Vector2).is_finite():
+				return "invalid_%s" % key
+	for key: String in ["effect_length_gu", "effect_width_gu", "axis_screen_length_px"]:
+		if snapshot.has(key) and not _audit_nonnegative_number(snapshot[key]):
+			return "invalid_%s" % key
+	for key: String in ["polygon_ground_gu", "polygon_screen_offset_px"]:
+		var polygon: Variant = snapshot.get(key)
+		if not polygon is PackedVector2Array or (polygon as PackedVector2Array).size() < 3 or not _polygon_is_finite(polygon):
+			return "invalid_%s" % key
+	for key: String in ["polygons_ground_gu", "polygons_screen_offset_px"]:
+		if not snapshot.has(key):
+			continue # Directed-rectangle builder intentionally uses singular keys.
+		var polygons: Variant = snapshot[key]
+		if not polygons is Array or (polygons as Array).is_empty():
+			return "invalid_%s" % key
+		for polygon: Variant in polygons:
+			if not polygon is PackedVector2Array or (polygon as PackedVector2Array).size() < 3 or not _polygon_is_finite(polygon):
+				return "invalid_%s_member" % key
+	if shape_type in [SHAPE_DIRECTED_RECTANGLE, SHAPE_SECTOR_ARC]:
+		var direction: Variant = snapshot.get("direction_ground_gu")
+		if not direction is Vector2 or not (direction as Vector2).is_finite() or (direction as Vector2).length_squared() <= 0.0:
+			return "direction_invalid"
+	if shape_type == SHAPE_DIRECTED_RECTANGLE:
+		for key: String in ["half_width_gu", "effect_length_gu", "effect_width_gu"]:
+			if not _audit_nonnegative_number(snapshot.get(key)):
+				return "invalid_%s" % key
+	if shape_type == SHAPE_SECTOR_ARC:
+		var half_angle: Variant = snapshot.get("half_angle_radians")
+		if not _audit_nonnegative_number(half_angle) or float(half_angle) > PI * 0.5:
+			return "sector_angle_invalid"
+	if shape_type == SHAPE_CELL_UNION:
+		var cells: Variant = snapshot.get("geometry_cells_grid_steps")
+		if not cells is Array or (cells as Array).is_empty():
+			return "cell_union_cells_missing"
+		for cell: Variant in cells:
+			if not cell is Vector2i:
+				return "cell_union_cell_invalid"
+	var bounds_result := ground_aabb(snapshot)
+	if not bool(bounds_result.get("valid", false)):
+		return str(bounds_result.get("reason", "snapshot_bounds_invalid"))
+	return ""

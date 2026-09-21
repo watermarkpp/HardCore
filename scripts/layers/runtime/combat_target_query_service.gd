@@ -209,6 +209,7 @@ func _broadphase_bounds(
 			if (
 				bounds is Rect2
 				and (bounds as Rect2).size.x >= 0.0
+				and (bounds as Rect2).size.y >= 0.0
 				and (bounds as Rect2).position.is_finite()
 				and (bounds as Rect2).size.is_finite()
 			):
@@ -226,59 +227,60 @@ func _exact_hit(
 	target_ground_gu: Vector2,
 	target_bounds: float
 ) -> bool:
+	if not origin.is_finite() or not target_ground_gu.is_finite():
+		return false
+	if not is_finite(target_bounds) or target_bounds < 0.0:
+		return false
 	match shape:
 		SHAPE_SINGLE:
 			return origin.distance_to(target_ground_gu) <= target_bounds
 		SHAPE_CIRCLE:
 			var radius := float(request.get("radius_gu", 0.0))
-			return origin.distance_to(target_ground_gu) <= (
-				radius + target_bounds
-			)
+			return is_finite(radius) and radius >= 0.0 and origin.distance_to(target_ground_gu) <= radius + target_bounds
 		SHAPE_SECTOR:
 			var radius := float(request.get("radius_gu", 0.0))
 			var half_angle := float(request.get("half_angle_rad", 0.0))
-			if origin.distance_to(target_ground_gu) > radius + target_bounds:
+			var raw_direction: Variant = request.get("direction_ground", Vector2.RIGHT)
+			if not raw_direction is Vector2:
 				return false
-			if target_ground_gu == origin:
+			var direction: Vector2 = raw_direction
+			if not direction.is_finite() or direction.length_squared() <= 0.0:
+				return false
+			if not is_finite(radius) or radius < 0.0 or not is_finite(half_angle) or half_angle < 0.0 or half_angle > PI:
+				return false
+			var relative := target_ground_gu - origin
+			var distance := relative.length()
+			if distance <= target_bounds:
 				return true
-			var direction: Vector2 = request.get(
-				"direction_ground", Vector2.RIGHT
+			if distance > radius + target_bounds:
+				return false
+			var angle_delta := absf(wrapf(relative.angle() - direction.angle(), -PI, PI))
+			if angle_delta <= half_angle:
+				return true
+			var unit_direction := direction.normalized()
+			# Distance to the CLOSED finite radial edges, not infinite rays.
+			return (
+				_point_segment_distance(target_ground_gu, origin, origin + unit_direction.rotated(-half_angle) * radius) <= target_bounds
+				or _point_segment_distance(target_ground_gu, origin, origin + unit_direction.rotated(half_angle) * radius) <= target_bounds
 			)
-			var to_target := (target_ground_gu - origin).angle()
-			var facing := direction.angle()
-			var delta := absf(wrapf(to_target - facing, -PI, PI))
-			return delta <= half_angle
 		SHAPE_CAPSULE:
-			var start: Vector2 = request.get(
-				"start_ground_gu", origin
-			)
+			var start: Vector2 = request.get("start_ground_gu", origin)
 			var end: Vector2 = request.get("end_ground_gu", origin)
 			var half_width := float(request.get("half_width_gu", 0.0))
-			return _point_segment_distance(
-				target_ground_gu, start, end
-			) <= half_width + target_bounds
+			return _point_segment_distance(target_ground_gu, start, end) <= half_width + target_bounds
 		SHAPE_CROSS:
 			var arm := float(request.get("arm_gu", 0.0))
 			var half_width := float(request.get("half_width_gu", 0.0))
-			var horizontal := _point_segment_distance(
-				target_ground_gu,
-				origin + Vector2(-arm, 0.0),
-				origin + Vector2(arm, 0.0)
-			)
+			var horizontal := _point_segment_distance(target_ground_gu, origin + Vector2(-arm, 0.0), origin + Vector2(arm, 0.0))
 			if horizontal <= half_width + target_bounds:
 				return true
-			var vertical := _point_segment_distance(
-				target_ground_gu,
-				origin + Vector2(0.0, -arm),
-				origin + Vector2(0.0, arm)
-			)
+			var vertical := _point_segment_distance(target_ground_gu, origin + Vector2(0.0, -arm), origin + Vector2(0.0, arm))
 			return vertical <= half_width + target_bounds
 		SHAPE_AABB:
-			# Exactness is delegated to the consumer's snapshot gate; the
-			# broadphase envelope already is the requested bounds.
-			return true
+			return true # Consumer's immutable snapshot remains the exact authority.
 		_:
 			return false
+
 
 
 func _direction_valid(request: Dictionary) -> bool:

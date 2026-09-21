@@ -369,30 +369,19 @@ func _run_legacy_damage_tick() -> void:
 
 
 func _runtime_effect_bounds_ground_gu() -> Rect2:
-	## Conservative ground-GU query bounds for the effect footprint: the
-	## nominal radius circle plus, when a strict snapshot is present, its
-	## absolute polygon bounds. The index adds every registered actor's own
-	## bounds on top, so the exact-phase gate alone decides the target set.
 	var effect_ground_gu := _runtime_screen_to_ground_position(global_position)
 	if not effect_ground_gu.is_finite():
 		return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
 	var radius := maxf(0.0, radius_gu)
-	var min_gu := effect_ground_gu - Vector2.ONE * radius
-	var max_gu := effect_ground_gu + Vector2.ONE * radius
+	var bounds := Rect2(effect_ground_gu - Vector2.ONE * radius, Vector2.ONE * radius * 2.0)
 	if _snapshot_strict_ok(skill_footprint_snapshot):
-		for raw_polygon: Variant in skill_footprint_snapshot.get(
-			"polygons_ground_gu", []
-		):
-			if not raw_polygon is PackedVector2Array:
-				continue
-			for point: Vector2 in raw_polygon as PackedVector2Array:
-				if not point.is_finite():
-					continue
-				min_gu.x = minf(min_gu.x, point.x)
-				min_gu.y = minf(min_gu.y, point.y)
-				max_gu.x = maxf(max_gu.x, point.x)
-				max_gu.y = maxf(max_gu.y, point.y)
-	return Rect2(min_gu, max_gu - min_gu)
+		var result := SkillFootprintSnapshotScript.ground_aabb(skill_footprint_snapshot)
+		if not bool(result.get("valid", false)):
+			return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
+		var canonical_bounds: Rect2 = result.bounds_ground_gu
+		bounds = bounds.merge(canonical_bounds)
+	return bounds
+
 
 
 func _draw() -> void:
