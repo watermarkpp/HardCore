@@ -32,8 +32,8 @@ $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $GodotDirectory = Split-Path -Parent $Godot
-$LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
-$RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
+$LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
+$RuntimeAppData = if ($env:HARDCORE_AUDIT_RUNTIME_APPDATA) { $env:HARDCORE_AUDIT_RUNTIME_APPDATA } else { Join-Path $ProjectRoot '.godot\runtime_appdata' }
 
 $EffectiveSuite = $Suite
 if ($TestPaths.Count -gt 0) {
