@@ -992,33 +992,45 @@ func _trim_inventory_empty_tail(records: Array = inventory) -> void:
 func remove_item(item_name: String, amount := 1) -> bool:
 	if amount <= 0 or not has_item(item_name, amount):
 		return false
+	var inventory_before := inventory.duplicate(true)
 	var remaining := amount
 	var index := inventory.size() - 1
 	while index >= 0 and remaining > 0:
 		var raw_stack: Variant = inventory[index]
-		if raw_stack is Dictionary and not (raw_stack as Dictionary).is_empty() and raw_stack.get("name", "") == item_name:
+		if raw_stack is Dictionary:
 			var stack: Dictionary = raw_stack
-			var count := int(stack.get("count", 0))
-			var consumed := mini(count, remaining)
-			count -= consumed
-			remaining -= consumed
-			if count <= 0:
-				inventory[index] = {}
-			else:
-				stack["count"] = count
+			if not stack.is_empty() and str(stack.get("name", "")) == item_name:
+				var count := int(stack.get("count", 0))
+				var consumed := mini(count, remaining)
+				count -= consumed
+				remaining -= consumed
+				if count <= 0:
+					inventory[index] = {}
+				else:
+					stack["count"] = count
 		index -= 1
+	if remaining != 0:
+		inventory = inventory_before
+		return false
 	_trim_inventory_empty_tail()
+	if not _commit_save():
+		inventory = inventory_before
+		return false
 	inventory_changed.emit()
-	_commit_save()
 	return true
+
 
 
 func _consume_inventory_index(index: int, amount := 1) -> bool:
+	var inventory_before := inventory.duplicate(true)
 	if not _consume_inventory_index_without_commit(index, amount):
 		return false
-	_commit_save()
+	if not _commit_save():
+		inventory = inventory_before
+		return false
 	inventory_changed.emit()
 	return true
+
 
 
 func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
@@ -1061,8 +1073,8 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 
 
 func sort_inventory_deterministic() -> Dictionary:
-	var inventory_before := inventory
-	var working_inventory := SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	var inventory_before := inventory.duplicate(true)
+	var working_inventory := SpecialConsumableStacks.split_available(inventory.duplicate(true), INVENTORY_CAPACITY, INVENTORY_CAPACITY)
 	var decorated: Array = []
 	for index in range(working_inventory.size()):
 		var record: Variant = working_inventory[index]
