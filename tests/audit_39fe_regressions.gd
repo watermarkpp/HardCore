@@ -10,7 +10,7 @@ const Enemy := preload("res://scripts/enemy.gd")
 
 class FailingInventory:
 	extends "res://scripts/player_state.gd"
-	func _commit_save() -> bool:
+	func _commit_save(_update_profile_index := true) -> bool:
 		return false
 	func _inventory_records_mergeable(a: Dictionary, b: Dictionary) -> bool:
 		return a.get("name") == b.get("name")
