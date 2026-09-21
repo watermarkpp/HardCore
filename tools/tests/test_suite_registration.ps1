@@ -725,7 +725,8 @@ $ReleaseExpected = @(
     'tests/release_registry_current_maps_test.tscn',
     'tests/map_runtime_release_gate_test.tscn',
     'tests/map_release_identity_matrix_test.tscn',
-    'tests/hc_polygon_counterexample_matrix_test.tscn'
+    'tests/hc_polygon_counterexample_matrix_test.tscn',
+    'tests/aoe_shape_edge_counterexample_test.tscn'
 )
 
 $rlMissing = @()
