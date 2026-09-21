@@ -400,6 +400,10 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 	reset_locomotion()
 	velocity = Vector2.ZERO
 	var action_id := _begin_combat_action("attack")
+	# Freeze the accepted epoch before any visual/signal work: a synchronous
+	# observer may finish a begin/finish transition and bump the live epoch
+	# before the delayed release reads it (RV14-R2 reentry boundary).
+	var accepted_action_epoch := _pending_combat_action_epoch
 	var animation_name := str(context.get("skill_name", "attack"))
 	visual.play_action(animation_name, action_duration)
 	var damage := WarriorCombatMath.roll_attack_power(attack_min, attack_max, int(PlayerState.computed_stats.get("luck", 0)), _rng)
@@ -411,7 +415,7 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 		attack_hit_windup,
 		context,
 		action_id,
-		combat_epoch,
+		accepted_action_epoch,
 		facing.normalized(),
 		locked_target_instance_id
 	)
@@ -603,6 +607,10 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	velocity = Vector2.ZERO
 	movement_input_active = false
 	var action_id := _begin_combat_action("skill:%s" % skill_name)
+	# Freeze the accepted epoch before visual.play_action/skill_cast_started:
+	# a synchronous observer may complete a begin/finish transition and bump
+	# the live epoch before the delayed release reads it (RV14-R2 boundary).
+	var accepted_action_epoch := _pending_combat_action_epoch
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
 	skill_cast_started.emit(stable_skill_id)
 	_emit_skill_after_windup(
@@ -610,7 +618,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		0,
 		release_seconds,
 		action_id,
-		combat_epoch,
+		accepted_action_epoch,
 		facing.normalized(),
 		locked_target_instance_id,
 		track_locked_target
@@ -1010,7 +1018,9 @@ func _emit_attack_after_windup(
 	# value read after the await. At most one release per action.
 	if (
 		is_inside_tree()
+		and not is_queued_for_deletion()
 		and not _dead
+		and current_hp > 0
 		and not combat_transition_is_active()
 		and combat_epoch == action_epoch
 	):
@@ -1058,7 +1068,9 @@ func _emit_skill_after_windup(
 	# owned by the current action; at most one release per action.
 	if (
 		is_inside_tree()
+		and not is_queued_for_deletion()
 		and not _dead
+		and current_hp > 0
 		and not combat_transition_is_active()
 		and combat_epoch == action_epoch
 	):

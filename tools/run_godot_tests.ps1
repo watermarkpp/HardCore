@@ -527,7 +527,10 @@ $Suites.audit_upgrade_critical = @(
     'tests/runtime_loot_spatial_index_order_test.tscn',
     'tests/audit_39fe_regressions.tscn',
     'tests/player_cast_release_overwrite_test.tscn',
-    'tests/player_status_effect_lifecycle_test.tscn'
+    'tests/player_status_effect_lifecycle_test.tscn',
+    # RV14-R2 review: synchronous reentry epoch boundary for both spells and
+    # plain attacks, with death/transition/exit-tree lifecycle coverage.
+    'tests/rv14_release_reentry_test.tscn'
 )
 
 $Suites.critical = @(
