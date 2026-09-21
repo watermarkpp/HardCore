@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/rv14_multi_map_publish_sibling_invariance_test.gd" id="1"]
+
+[node name="RV14MultiMapPublishSiblingInvarianceTest" type="Node"]
+script = ExtResource("1")

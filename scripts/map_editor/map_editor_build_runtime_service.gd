@@ -374,18 +374,24 @@ static func _promote_runtime(
 static func _restore_runtime(formal_path: String, backup_path: String) -> Dictionary:
 	## RV14-02: removal/rename results are reported so the publish caller can
 	## distinguish "publish failed and recovered" from "recovery failed".
+	## RV14-R2 review: an empty backup_path means there was NO prior formal
+	## artifact (first-publish rollback); a non-empty backup_path means there
+	## WAS one, so a missing backup file must fail instead of silently turning
+	## into first-publish cleanup that deletes the formal artifact.
 	var absolute_formal := _absolute_path(formal_path)
-	if (
-		not backup_path.is_empty()
-		and FileAccess.file_exists(backup_path)
-	):
+	if not backup_path.is_empty():
+		var absolute_backup := _absolute_path(backup_path)
+		if absolute_backup == absolute_formal:
+			return {"ok": false, "reason": "backup_path_equals_formal"}
+		if not FileAccess.file_exists(absolute_backup):
+			return {"ok": false, "reason": "expected_runtime_backup_missing"}
 		if FileAccess.file_exists(absolute_formal):
 			if DirAccess.remove_absolute(absolute_formal) != OK:
 				return {"ok": false, "reason": "formal_remove_failed"}
-		if DirAccess.rename_absolute(backup_path, absolute_formal) != OK:
+		if DirAccess.rename_absolute(absolute_backup, absolute_formal) != OK:
 			return {"ok": false, "reason": "backup_rename_failed"}
 		return {"ok": true, "reason": ""}
-	elif FileAccess.file_exists(absolute_formal):
+	if FileAccess.file_exists(absolute_formal):
 		if DirAccess.remove_absolute(absolute_formal) != OK:
 			return {"ok": false, "reason": "formal_remove_failed"}
 	return {"ok": true, "reason": ""}
@@ -445,10 +451,17 @@ static func _read_registry(registry_path: String) -> Dictionary:
 				registry_path, candidates[0].bytes, candidates[0].path
 			)
 			if not bool(restore.get("ok", false)):
+				var single_restore_errors: Array[String] = [
+					str(restore.get("reason", "unknown"))
+				]
+				for single_rollback_error: String in restore.get(
+					"rollback_errors", []
+				):
+					single_restore_errors.append(single_rollback_error)
 				return {
 					"ok": false,
 					"reason": "release_registry_restore_failed",
-					"errors": [str(restore.get("reason", "unknown"))],
+					"errors": single_restore_errors,
 				}
 		elif candidates.size() == 2:
 			var chosen: Dictionary = {}
@@ -468,10 +481,17 @@ static func _read_registry(registry_path: String) -> Dictionary:
 				registry_path, chosen.bytes, chosen.path
 			)
 			if not bool(restore.get("ok", false)):
+				var restore_errors: Array[String] = [
+					str(restore.get("reason", "unknown"))
+				]
+				for rollback_error: String in restore.get(
+					"rollback_errors", []
+				):
+					restore_errors.append(rollback_error)
 				return {
 					"ok": false,
 					"reason": "release_registry_restore_failed",
-					"errors": [str(restore.get("reason", "unknown"))],
+					"errors": restore_errors,
 				}
 		if not FileAccess.file_exists(registry_path):
 			return {"ok": false, "reason": "release_registry_missing"}
@@ -508,45 +528,113 @@ static func _read_registry(registry_path: String) -> Dictionary:
 	}
 
 
-## RV14-02: resolve two valid but byte-different backups. Only reliable
-## transaction/approval-version evidence decides: for every shared map_key the
-## approval_revision must strictly order the two documents, and the strictly
-## newer one wins. Any tie, missing counterpart, or unreadable revision is
-## evidence insufficiency -> return empty (caller fails closed and preserves
-## both backups). Never decide by file name or mtime.
+## RV14-R2 review: resolve two valid but byte-different backups with an
+## all-entries consistent / single-direction version-lead rule. A missing,
+## added or re-identified map is not proven safe by another map's approval
+## revision; unversioned top-level metadata must agree; equal revisions must
+## carry identical payloads. Any tie, crossing lead or evidence gap is a
+## conflict -> return empty (caller fails closed and preserves both backups).
+## Never decide by file name or mtime; never merge or re-serialize.
 static func _select_registry_backup_by_approval_evidence(
 	first: Dictionary,
 	second: Dictionary
 ) -> Dictionary:
-	var first_registry: Dictionary = first.registry
-	var second_registry: Dictionary = second.registry
-	var first_newer_count := 0
-	var second_newer_count := 0
-	var first_entries: Dictionary = {}
-	for raw_entry: Variant in first_registry.get("maps", []):
-		if raw_entry is Dictionary:
-			first_entries[str(raw_entry.get("map_key", ""))] = raw_entry
-	for raw_entry: Variant in second_registry.get("maps", []):
-		if not raw_entry is Dictionary:
+	var first_raw: Variant = first.get("registry", null)
+	var second_raw: Variant = second.get("registry", null)
+	if not first_raw is Dictionary or not second_raw is Dictionary:
+		return {}
+	var first_registry: Dictionary = first_raw
+	var second_registry: Dictionary = second_raw
+	var first_checked := _rv14_backup_entry_table(first_registry)
+	var second_checked := _rv14_backup_entry_table(second_registry)
+	if not bool(first_checked.get("valid", false)) or not bool(second_checked.get("valid", false)):
+		return {}
+	var first_entries: Dictionary = first_checked.entries
+	var second_entries: Dictionary = second_checked.entries
+	# A missing/added/reidentified map is not proven safe by another map's
+	# approval revision. An explicit migration/transaction proof is required.
+	if first_entries.size() != second_entries.size():
+		return {}
+	for map_key: String in first_entries:
+		if not second_entries.has(map_key):
+			return {}
+	# Unversioned top-level metadata must agree. Do not infer an ordering.
+	var first_header := first_registry.duplicate(false)
+	var second_header := second_registry.duplicate(false)
+	first_header.erase("maps")
+	second_header.erase("maps")
+	if first_header != second_header:
+		return {}
+	var direction := 0 # +1 first dominates; -1 second dominates.
+	for map_key: String in first_entries:
+		var a: Dictionary = first_entries[map_key]
+		var b: Dictionary = second_entries[map_key]
+		if (
+			_rv14_positive_exact_integer(a.runtime_map_id) != _rv14_positive_exact_integer(b.runtime_map_id)
+			or a.runtime_path != b.runtime_path
+		):
+			return {}
+		var a_revision := _rv14_positive_exact_integer(a.approval_revision)
+		var b_revision := _rv14_positive_exact_integer(b.approval_revision)
+		if a_revision == b_revision:
+			# Identical, unchanged siblings are normal during single-map publish.
+			# Equal revision but different payload is a true conflict.
+			if a != b:
+				return {}
 			continue
-		var map_key := str(raw_entry.get("map_key", ""))
-		var second_revision := int(raw_entry.get("approval_revision", -1))
-		var first_revision := -1
-		if first_entries.has(map_key):
-			first_revision = int(
-				first_entries[map_key].get("approval_revision", -1)
-			)
-		if second_revision > first_revision:
-			second_newer_count += 1
-		elif first_revision > second_revision:
-			first_newer_count += 1
-		else:
-			return {}  # tie or missing counterpart: not reliable evidence
-	if second_newer_count > 0 and first_newer_count == 0:
-		return second
-	if first_newer_count > 0 and second_newer_count == 0:
+		var next_direction := 1 if a_revision > b_revision else -1
+		if direction != 0 and direction != next_direction:
+			return {}
+		direction = next_direction
+	if direction == 1:
 		return first
+	if direction == -1:
+		return second
+	# All revisions equal: byte-equality belongs to the caller; no guess here.
 	return {}
+
+
+static func _rv14_positive_exact_integer(value: Variant) -> int:
+	# JSON.parse can produce float for integral JSON numbers. Reject bool,
+	# numeric strings, fractions, missing values and integers unsafe in JSON.
+	if not value is int and not value is float:
+		return -1
+	var numeric := float(value)
+	if not is_finite(numeric) or numeric < 1.0 or numeric > 9007199254740991.0 or numeric != floorf(numeric):
+		return -1
+	return int(value)
+
+
+static func _rv14_backup_entry_table(registry: Dictionary) -> Dictionary:
+	if _rv14_positive_exact_integer(registry.get("schema_version", null)) != 1:
+		return {"valid": false}
+	if registry.get("registry_contract_id", null) != "mse.map.runtime.release.v1":
+		return {"valid": false}
+	var rows: Variant = registry.get("maps", null)
+	if not rows is Array:
+		return {"valid": false}
+	var entries: Dictionary = {}
+	var ids: Dictionary = {}
+	for raw: Variant in rows:
+		if not raw is Dictionary:
+			return {"valid": false}
+		var entry: Dictionary = raw
+		var key: Variant = entry.get("map_key", null)
+		var path: Variant = entry.get("runtime_path", null)
+		var mid := _rv14_positive_exact_integer(entry.get("runtime_map_id", null))
+		var revision := _rv14_positive_exact_integer(entry.get("approval_revision", null))
+		if not key is String or not path is String:
+			return {"valid": false}
+		if str(key).is_empty() or str(path).is_empty() or mid < 1 or revision < 1:
+			return {"valid": false}
+		if entries.has(key) or ids.has(mid):
+			return {"valid": false}
+		entries[key] = entry
+		ids[mid] = true
+	# Keep the existing official schema validator as an additional gate.
+	if not RuntimeBridge.validate_release_registry(registry).is_empty():
+		return {"valid": false}
+	return {"valid": true, "entries": entries}
 
 
 static func _restore_registry_bytes(
@@ -579,8 +667,12 @@ static func _restore_registry_bytes(
 		return {"ok": false, "reason": "tmp_verify_mismatch"}
 	var backup := absolute_dst + ".restore_bak"
 	var staged_old_main := false
+	# RV14-R2 review: the caller may pass the preserved source in either
+	# res://-style or absolute form; normalize before comparing so a relative
+	# spelling can never bypass the source-slot collision guard.
+	var normalized_preserve := _absolute_path(preserve_source_absolute)
 	if FileAccess.file_exists(absolute_dst):
-		if backup == preserve_source_absolute:
+		if backup == normalized_preserve:
 			# The staging slot collides with the preserved source; refuse
 			# rather than delete the source.
 			DirAccess.remove_absolute(absolute_tmp)
@@ -596,25 +688,50 @@ static func _restore_registry_bytes(
 		staged_old_main = true
 	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
 	if promote_error != OK:
+		# RV14-R2 review: the rollback attempt is reported separately from the
+		# primary error so a caller can distinguish "failed and recovered"
+		# from "failed and the staged copy is still in the backup slot".
+		var rollback_errors: Array[String] = []
 		if staged_old_main:
-			DirAccess.rename_absolute(backup, absolute_dst)
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				rollback_errors.append("rollback_rename_failed")
 		DirAccess.remove_absolute(absolute_tmp)
-		return {"ok": false, "reason": "promote_failed"}
+		var promote_result := {"ok": false, "reason": "promote_failed"}
+		if not rollback_errors.is_empty():
+			promote_result["rollback_errors"] = rollback_errors
+		return promote_result
 	# Final destination verification against the source bytes.
 	var restored := FileAccess.open(absolute_dst, FileAccess.READ)
 	if restored == null:
-		return {"ok": false, "reason": "restored_open_failed"}
+		# The promoted artifact cannot be opened; the staged old main is the
+		# only recoverable copy. Attempt the rollback and report it.
+		var open_rollback_errors: Array[String] = []
+		if staged_old_main and FileAccess.file_exists(backup):
+			if DirAccess.remove_absolute(absolute_dst) != OK:
+				open_rollback_errors.append("rollback_remove_failed")
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				open_rollback_errors.append("rollback_rename_failed")
+		var open_result := {"ok": false, "reason": "restored_open_failed"}
+		if not open_rollback_errors.is_empty():
+			open_result["rollback_errors"] = open_rollback_errors
+		return open_result
 	var restored_bytes := restored.get_buffer(restored.get_length())
 	restored.close()
 	if restored_bytes != raw_bytes:
+		var verify_rollback_errors: Array[String] = []
 		if staged_old_main and FileAccess.file_exists(backup):
-			DirAccess.remove_absolute(absolute_dst)
-			DirAccess.rename_absolute(backup, absolute_dst)
-		return {"ok": false, "reason": "restored_verify_mismatch"}
+			if DirAccess.remove_absolute(absolute_dst) != OK:
+				verify_rollback_errors.append("rollback_remove_failed")
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				verify_rollback_errors.append("rollback_rename_failed")
+		var verify_result := {"ok": false, "reason": "restored_verify_mismatch"}
+		if not verify_rollback_errors.is_empty():
+			verify_result["rollback_errors"] = verify_rollback_errors
+		return verify_result
 	# Success. The preserved source (recovery scenario) is intentionally kept;
 	# the staging backup of an old main (rollback scenario) is consumed only
 	# when it is not the preserved source.
-	if staged_old_main and backup != preserve_source_absolute:
+	if staged_old_main and backup != normalized_preserve:
 		DirAccess.remove_absolute(backup)
 	return {"ok": true, "reason": ""}
 

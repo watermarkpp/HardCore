@@ -491,7 +491,11 @@ $Suites.map_runtime_release_transaction_critical = @(
     'tests/map_publish_restart_recovery_test.tscn',
     'tests/release_registry_consumer_validation_test.tscn',
     'tests/future_map_build_publish_no_code_edit_test.tscn',
-    'tests/mse_publish_entry_wired_test.tscn'
+    'tests/mse_publish_entry_wired_test.tscn',
+    # RV14-R2 review: multi-map backup comparison and recovery counterexamples.
+    'tests/rv14_registry_review_counterexamples.tscn',
+    'tests/rv14_restore_rollback_injection_test.tscn',
+    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn'
 )
 
 $Suites.player_visual_contract_critical = @(
