@@ -22,6 +22,8 @@ const GROUND_LIFETIME_SECONDS := 600.0
 var _ground_age := 0.0
 var _expiry_queue: Array = []
 var _expiry_cursor := 0
+var _audit_expiry_pending: Array = []
+var _audit_expiry_pending_cursor := 0
 
 var _spatial_index: LootIndexScript = LootIndexScript.new()
 var _player: PlayerCharacter
@@ -131,6 +133,8 @@ func clear_map(runtime_map_id: int) -> void:
 
 
 func clear_all() -> void:
+	_audit_expiry_pending.clear()
+	_audit_expiry_pending_cursor = 0
 	_expiry_queue.clear()
 	_expiry_cursor = 0
 	_ground_age = 0.0
@@ -326,17 +330,38 @@ func _process(delta: float) -> void:
 
 func _expire_ground_loot(delta: float) -> void:
 	_ground_age += delta
-	# Birth order makes deadlines sorted. Work scales with expirations only,
-	# never with all ground items each frame. Bound node deletion bursts.
-	for _step in range(32):
+	var work_left := 32
+	# Revisit at most eight earlier pending transactions, once each this pass.
+	# Never delete a pickup while its inventory transaction is unresolved.
+	var pending_visits := mini(8, _audit_expiry_pending.size() - _audit_expiry_pending_cursor)
+	for _visit in range(pending_visits):
+		var entry: Dictionary = _audit_expiry_pending[_audit_expiry_pending_cursor]
+		_audit_expiry_pending_cursor += 1
+		work_left -= 1
+		var pickup: LootPickup = entry.pickup.get_ref()
+		if not is_instance_valid(pickup) or pickup.is_queued_for_deletion():
+			continue
+		if not _registered_pickups.has(pickup.get_instance_id()):
+			continue
+		if pickup.collection_pending():
+			_audit_expiry_pending.append(entry)
+		else:
+			pickup.queue_free()
+	# Birth deadlines stay sorted. Pending records leave this queue so one
+	# slow/failed transaction cannot block every later expiration.
+	for _step in range(work_left):
 		if _expiry_cursor >= _expiry_queue.size():
 			break
 		var entry: Dictionary = _expiry_queue[_expiry_cursor]
 		var pickup: LootPickup = entry.pickup.get_ref()
-		if is_instance_valid(pickup):
-			if float(entry.deadline) > _ground_age or pickup.collection_pending():
+		if is_instance_valid(pickup) and not pickup.is_queued_for_deletion():
+			if float(entry.deadline) > _ground_age:
 				break
-			pickup.queue_free()
+			if _registered_pickups.has(pickup.get_instance_id()):
+				if pickup.collection_pending():
+					_audit_expiry_pending.append(entry)
+				else:
+					pickup.queue_free()
 		_expiry_cursor += 1
 	if _expiry_cursor == _expiry_queue.size():
 		_expiry_queue.clear()
@@ -344,6 +369,13 @@ func _expire_ground_loot(delta: float) -> void:
 	elif _expiry_cursor >= 1024:
 		_expiry_queue = _expiry_queue.slice(_expiry_cursor)
 		_expiry_cursor = 0
+	if _audit_expiry_pending_cursor == _audit_expiry_pending.size():
+		_audit_expiry_pending.clear()
+		_audit_expiry_pending_cursor = 0
+	elif _audit_expiry_pending_cursor >= 1024:
+		_audit_expiry_pending = _audit_expiry_pending.slice(_audit_expiry_pending_cursor)
+		_audit_expiry_pending_cursor = 0
+
 
 
 func _run_collection_pass(delta_seconds: float) -> void:

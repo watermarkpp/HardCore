@@ -56,6 +56,7 @@ var _combat_map_id := -1
 var legacy_tick_delivery_skip_count := 0
 
 static var _runtime_tick_claims: Dictionary = {}
+static var _audit_next_claim_gc_msec := 0
 
 
 func setup_ground_unit_effect(
@@ -273,19 +274,23 @@ static func claim_fire_wall_controller_tick(
 
 static func reset_runtime_tick_claims_for_tests() -> void:
 	_runtime_tick_claims.clear()
+	_audit_next_claim_gc_msec = 0
+
 
 
 static func _cleanup_runtime_tick_claims(now_msec: int) -> void:
+	# GC cadence is independent of damage cadence; claim keys/windows and
+	# same-owner refresh semantics are intentionally unchanged.
 	if _runtime_tick_claims.size() < 256:
 		return
+	if now_msec < _audit_next_claim_gc_msec:
+		return
+	_audit_next_claim_gc_msec = now_msec + 1000
 	for raw_key: Variant in _runtime_tick_claims.keys():
 		var claim: Dictionary = _runtime_tick_claims.get(raw_key, {})
-		if (
-			int(claim.get("next_allowed_msec", 0))
-			+ RUNTIME_TICK_CLAIM_RETENTION_MSEC
-			< now_msec
-		):
+		if int(claim.get("next_allowed_msec", 0)) + RUNTIME_TICK_CLAIM_RETENTION_MSEC < now_msec:
 			_runtime_tick_claims.erase(raw_key)
+
 
 
 func _install_visual() -> void:
