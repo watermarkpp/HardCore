@@ -495,67 +495,33 @@ static func _write_registry_atomic_preserving_existing_entries(
 	map_key: String,
 	runtime_map_id: int
 ) -> bool:
-	## A single-map publish must not reserialize unrelated release entries.  The
-	## parsed registry has already passed schema validation; patch only the
-	## target entry's release revision/build hashes into the previous UTF-8
-	## document so untouched maps retain their exact bytes and numeric style.
+	if old_registry_bytes.is_empty():
+		return _write_registry_atomic(registry_path, registry)
 	var old_text := old_registry_bytes.get_string_from_utf8()
-	if old_text.is_empty():
-		return _write_registry_atomic(registry_path, registry)
-	var target_entry: Dictionary = {}
+	if old_text.to_utf8_buffer() != old_registry_bytes:
+		return false # Invalid UTF-8 must not be silently rewritten.
+	var target: Dictionary = {}
+	var matches := 0
 	for raw_entry: Variant in registry.get("maps", []):
-		if (
-			raw_entry is Dictionary
-			and int(raw_entry.get("runtime_map_id", -1)) == runtime_map_id
-			and str(raw_entry.get("map_key", "")) == map_key
-		):
-			target_entry = raw_entry
-			break
-	if target_entry.is_empty():
-		return _write_registry_atomic(registry_path, registry)
-	var marker := '"map_key": "%s"' % map_key
-	var marker_index := old_text.find(marker)
-	if marker_index < 0:
-		return _write_registry_atomic(registry_path, registry)
-	var object_start := old_text.rfind("{", marker_index)
-	var object_end := _matching_json_object_end(old_text, object_start)
-	if object_start < 0 or object_end < object_start:
-		return _write_registry_atomic(registry_path, registry)
-	var target_text := old_text.substr(object_start, object_end - object_start + 1)
-	var approval_revision := int(target_entry.get("approval_revision", 0))
-	var approved_hash := str(target_entry.get("approved_build_sha256", ""))
-	var approval_replacement := _replace_json_scalar(
-		target_text, '"approval_revision":', str(approval_revision)
+		if raw_entry is Dictionary and str(raw_entry.get("map_key", "")) == map_key and int(raw_entry.get("runtime_map_id", -1)) == runtime_map_id:
+			target = raw_entry
+			matches += 1
+	if matches != 1:
+		return false
+	var splice: Dictionary = preload("res://scripts/map_editor/map_registry_entry_splice.gd").replace_entry(
+		old_text, registry, map_key, runtime_map_id, JsonCodec.encode(target)
 	)
-	if approval_replacement.is_empty():
-		return _write_registry_atomic(registry_path, registry)
-	target_text = approval_replacement
-	var hash_replacement := _replace_json_scalar(
-		target_text, '"approved_build_sha256":', JSON.stringify(approved_hash)
-	)
-	if hash_replacement.is_empty():
-		return _write_registry_atomic(registry_path, registry)
-	target_text = hash_replacement
-	var projection: Dictionary = target_entry.get("ui_presentation", {})
-	var projection_hash := str(projection.get("runtime_build_sha256", ""))
-	var projection_replacement := _replace_json_scalar(
-		target_text, '"runtime_build_sha256":', JSON.stringify(projection_hash)
-	)
-	if projection_replacement.is_empty():
-		return _write_registry_atomic(registry_path, registry)
-	target_text = projection_replacement
-	var preserved_text := (
-		old_text.substr(0, object_start)
-		+ target_text
-		+ old_text.substr(object_end + 1)
-	)
+	if not bool(splice.get("valid", false)):
+		push_error("Single-map registry splice rejected: %s" % str(splice.get("reason", "unknown")))
+		return false
+	var preserved_text := str(splice.get("text", ""))
 	var parsed: Variant = JSON.parse_string(preserved_text)
 	if not parsed is Dictionary:
-		return _write_registry_atomic(registry_path, registry)
-	var parsed_errors := RuntimeBridge.validate_release_registry(parsed)
-	if not parsed_errors.is_empty():
-		return _write_registry_atomic(registry_path, registry)
+		return false
+	if not RuntimeBridge.validate_release_registry(parsed).is_empty():
+		return false
 	return _write_registry_text_atomic(registry_path, preserved_text)
+
 
 
 static func _replace_json_scalar(
