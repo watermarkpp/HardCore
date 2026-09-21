@@ -1,7 +1,7 @@
 {
   "schema": "hardcore.dpv2.user_loot_sheet_authority.v1",
   "authority_id": "dpv2.user_loot_sheet.v1",
-  "status": "ACTIVATED",
+  "status": "PENDING_ACTIVATION",
   "source": {
     "sheet_file": "HardCore_怪物爆率分表.xlsx",
     "sheet_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
@@ -15,6 +15,8 @@
     "new_equipment_slots": 41,
     "fate_blade_slots": 1,
     "excluded_residue_rows": 0,
+    "parser_excluded_residue_rows": 7,
+    "residue_rows_source": "evidence/04_五张空表与七条残留.csv",
     "empty_sheets": [
       "食人花",
       "蝎子",
@@ -6136,7 +6138,7 @@
           "canonical_item_id": 174
         },
         {
-          "slot_uid": "dpv2.direct.m92.v505_0023",
+          "slot_uid": "dpv2.direct.m92.v505_0023_r23",
           "final_numerator": 1,
           "final_denominator": 40,
           "overflow_priority": 300,
@@ -6462,7 +6464,7 @@
           "canonical_item_id": 174
         },
         {
-          "slot_uid": "dpv2.direct.m94.v505_0024",
+          "slot_uid": "dpv2.direct.m94.v505_0024_r23",
           "final_numerator": 1,
           "final_denominator": 40,
           "overflow_priority": 300,
@@ -47042,7 +47044,7 @@
           "canonical_item_id": 224
         },
         {
-          "slot_uid": "dpv2.direct.m225.slot_042",
+          "slot_uid": "dpv2.direct.m225.slot_042_r34",
           "final_numerator": 1,
           "final_denominator": 20,
           "overflow_priority": 600,

@@ -1,0 +1,26 @@
+{
+  "authority": {
+    "status": "PENDING_ACTIVATION",
+    "monsters": 126,
+    "total_slots": 5976.0
+  },
+  "probability_changes_vs_old_chain": 3514,
+  "probability_same_vs_old_chain": 2298,
+  "new_equipment_slots": 41,
+  "gold_rows": 122,
+  "baseline_slots_covered": 5931,
+  "baseline_slots_removed_diff": 1680,
+  "empty_profiles": [
+    "食人花(30)",
+    "蝎子(45)",
+    "毒蜘蛛(18)",
+    "羊(96)",
+    "狼(100)"
+  ],
+  "excluded_residue": 7,
+  "live_spawn_coverage": {
+    "live_spawn_monsters": 86,
+    "live_not_in_sheet": 0,
+    "sheet_not_live": 40
+  }
+}
