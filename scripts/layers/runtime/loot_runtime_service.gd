@@ -217,9 +217,11 @@ func roll_monster_drops(
 		# The sealed baseline stays the identity map for reward resolution.
 		result.reason = "dpv2_direct_baseline_unavailable"
 		return result
-	if not GameData.is_dpv2_single_player_drop_boost_loaded():
-		result.reason = "spb_effective_probability_unavailable"
-		return result
+	# RV15-J3: the legacy SPB probability ledger is history-audit-only and is
+	# deliberately NOT consulted here. The per-slot probabilities below come
+	# from the compiled user loot sheet (sheet E final pre-RNG) via the
+	# provider; the reason strings further down ("spb_effective_*") are kept
+	# historical names for the same sheet-final fail-closed checks.
 	var resolved_id := GameData.canonical_monster_id(monster_id)
 	if resolved_id <= 0:
 		result.reason = "invalid_monster_id"

@@ -50,6 +50,11 @@ const DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH := (
 const DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH := (
 	"res://assets/data/drop/dpv2_single_player_effective_probability_v1.json"
 )
+## RV15-J3 narrow test seam: the decoupling test points the legacy SPB
+## probability ledger at an unavailable location to prove the activated
+## sheet mode boots and drops without it. Production never sets this; when
+## empty the three real paths above are used.
+static var spb_ledger_paths_override: PackedStringArray = PackedStringArray()
 const DPV2_DIRECT_ITEM_MAPPING_PATH := (
 	"res://assets/data/drop/dpv2_21cq_item_mapping_v1.json"
 )
@@ -146,6 +151,11 @@ var dpv2_single_player_drop_boost: Dictionary = {}
 var dpv2_single_player_item_boost_classification: Dictionary = {}
 var dpv2_single_player_effective_probability: Dictionary = {}
 var dpv2_single_player_drop_boost_loaded := false
+## RV15-J3: when the legacy SPB probability ledger cannot be loaded this
+## carries the exact load_error for history-audit diagnostics. It is empty
+## whenever the ledger loaded normally. Sheet-mode startup and drops do not
+## consult this; see load_database.
+var spb_ledger_audit_error := ""
 var maps: Array = []
 var monsters: Array = []
 var bosses: Array = []
@@ -266,8 +276,20 @@ func load_database() -> bool:
 	# retired probability authorities.
 	if not _load_dpv2_direct_baseline():
 		return false
+	# RV15-J3: the legacy SPB probability ledger is history-audit-only. The
+	# activated sheet mode boots on the user loot sheet authority plus the
+	# direct baseline identity/overflow authority; a missing or invalid SPB
+	# ledger is recorded for audit and no longer blocks startup or production
+	# drops. Its loaded flag keeps its real value for audit consumers, and
+	# there is deliberately no fallback from the sheet authority to the old
+	# ledger probabilities.
 	if not _load_dpv2_single_player_drop_boost():
-		return false
+		spb_ledger_audit_error = load_error
+		push_warning(
+			"SPB ledger unavailable (history audit only): " + load_error
+		)
+	else:
+		spb_ledger_audit_error = ""
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
 	_build_indexes()
@@ -982,11 +1004,16 @@ func _load_dpv2_single_player_drop_boost() -> bool:
 	dpv2_single_player_effective_probability = {}
 	dpv2_single_player_drop_boost_loaded = false
 	_dpv2_spb_effective_by_uid.clear()
-	for path: String in [
-		DPV2_SINGLE_PLAYER_DROP_BOOST_PATH,
-		DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH,
-		DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH,
-	]:
+	var ledger_paths := (
+		spb_ledger_paths_override
+		if not spb_ledger_paths_override.is_empty()
+		else PackedStringArray([
+			DPV2_SINGLE_PLAYER_DROP_BOOST_PATH,
+			DPV2_SINGLE_PLAYER_ITEM_BOOST_CLASSIFICATION_PATH,
+			DPV2_SINGLE_PLAYER_EFFECTIVE_PROBABILITY_PATH,
+		])
+	)
+	for path: String in ledger_paths:
 		if not FileAccess.file_exists(path):
 			load_error = "spb_effective_probability_authority_missing:%s" % path
 			return false
