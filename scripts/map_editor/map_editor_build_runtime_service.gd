@@ -308,7 +308,22 @@ static func _promote_runtime(
 			"errors": ["formal_temp_validation_failed", str(verify.errors)],
 		}
 	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
+		if FileAccess.file_exists(absolute_formal):
+			DirAccess.remove_absolute(backup)
+		else:
+			# R2-W1: a backup without its formal artifact is a crashed previous
+			# promote. Recover the old complete release before any new write so
+			# a failing retry can never destroy the last playable version.
+			var recovery_error := DirAccess.rename_absolute(
+				backup, absolute_formal
+			)
+			if recovery_error != OK:
+				return {
+					"ok": false,
+					"errors": [
+						"formal_backup_recovery_failed:%d" % recovery_error
+					],
+				}
 	if FileAccess.file_exists(absolute_formal):
 		var backup_error := DirAccess.rename_absolute(
 			absolute_formal, backup
@@ -366,7 +381,33 @@ static func _absolute_path(path: String) -> String:
 
 static func _read_registry(registry_path: String) -> Dictionary:
 	if not FileAccess.file_exists(registry_path):
-		return {"ok": false, "reason": "release_registry_missing"}
+		# R2-W1: a missing registry next to its atomic-write backup is a
+		# crashed previous registry commit. Recover the last complete registry
+		# (validated) so the next publish proceeds instead of stranding the
+		# release in a fail-closed dead state. Invalid backups stay refused.
+		var absolute_backup := _absolute_path(registry_path) + ".bak"
+		if FileAccess.file_exists(absolute_backup):
+			var backup_file := FileAccess.open(absolute_backup, FileAccess.READ)
+			if backup_file != null:
+				var backup_bytes := backup_file.get_buffer(
+					backup_file.get_length()
+				)
+				backup_file.close()
+				var backup_parser := JSON.new()
+				if backup_parser.parse(
+					backup_bytes.get_string_from_utf8()
+				) == OK and backup_parser.data is Dictionary:
+					var backup_registry: Dictionary = backup_parser.data
+					if backup_registry.get("maps", null) is Array \
+							and RuntimeBridge.validate_release_registry(
+								backup_registry
+							).is_empty() \
+							and _restore_registry_bytes(
+								registry_path, backup_bytes
+							):
+						pass  # fall through to the normal read below.
+		if not FileAccess.file_exists(registry_path):
+			return {"ok": false, "reason": "release_registry_missing"}
 	var file := FileAccess.open(registry_path, FileAccess.READ)
 	if file == null:
 		return {"ok": false, "reason": "release_registry_open_failed"}
@@ -472,7 +513,13 @@ static func _write_registry_atomic(
 		return false
 	var backup := absolute_dst + ".bak"
 	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
+		if FileAccess.file_exists(absolute_dst):
+			DirAccess.remove_absolute(backup)
+		else:
+			# R2-W1: same crash-recovery rule as the runtime promote — recover
+			# the old complete registry before any new write.
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				return false
 	if FileAccess.file_exists(absolute_dst):
 		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
 		if backup_error != OK:
@@ -613,7 +660,14 @@ static func _write_registry_text_atomic(registry_path: String, text: String) -> 
 	verify_file.close()
 	var backup := absolute_dst + ".restore_bak"
 	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
+		if FileAccess.file_exists(absolute_dst):
+			DirAccess.remove_absolute(backup)
+		else:
+			# R2-W1: same crash-recovery rule — recover the old complete
+			# registry before any new write.
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				DirAccess.remove_absolute(absolute_tmp)
+				return false
 	if FileAccess.file_exists(absolute_dst):
 		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
 		if backup_error != OK:

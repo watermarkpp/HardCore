@@ -484,6 +484,7 @@ $Suites.map_runtime_release_transaction_critical = @(
     'tests/build_candidate_does_not_mutate_release_test.tscn',
     'tests/publish_promotes_candidate_test.tscn',
     'tests/publish_failure_rollback_test.tscn',
+    'tests/map_publish_restart_recovery_test.tscn',
     'tests/release_registry_consumer_validation_test.tscn',
     'tests/future_map_build_publish_no_code_edit_test.tscn',
     'tests/mse_publish_entry_wired_test.tscn'
