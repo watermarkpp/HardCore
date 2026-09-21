@@ -718,6 +718,7 @@ $ReleaseExpected = @(
     'tests/hc_polygon_numerics_test.tscn',
     'tests/hc_polygon_reset_test.tscn',
     'tests/hc_polygon_reset_release_test.tscn',
+    'tests/map_editor_save_path_isolation_test.tscn',
     'tests/map_runtime_release_registry_contract_test.tscn',
     'tests/map_ui_presentation_projection_test.tscn',
     'tests/map_persistent_boss_spawn_identity_test.tscn',
@@ -957,7 +958,8 @@ $auditExpected = @(
     'tests/device_lab_patch_bootstrap_test.tscn',
     'tests/lootclock/loot_retry_clock_test.tscn',
     'tests/lootclock/loot_visual_clock_test.tscn',
-    'tests/runtime_loot_spatial_index_order_test.tscn'
+    'tests/runtime_loot_spatial_index_order_test.tscn',
+    'tests/audit_39fe_regressions.tscn'
 )
 $auditBlock = [regex]::Match($RunnerSource, '(?ms)^\$Suites\.audit_upgrade_critical\s*=\s*@\((.*?)^\)')
 $auditEntries = @([regex]::Matches($auditBlock.Groups[1].Value, "'([^']+\.tscn)'") | ForEach-Object { $_.Groups[1].Value })
