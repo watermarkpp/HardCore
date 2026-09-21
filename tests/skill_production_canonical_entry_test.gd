@@ -86,8 +86,8 @@ func _run() -> void:
 		if child is FireWallFieldController:
 			field_count += 1
 			assert(
-				(child as FireWallFieldController).visual_cells.size() == 4,
-				"fire wall must own exactly 4 pure-visual cells"
+				(child as FireWallFieldController).visual_cells.size() == 9,
+				"fire wall must own exactly 9 pure-visual cells (3x3)"
 			)
 	assert(field_count == 1, "fire wall must create exactly one controller")
 	await get_tree().process_frame

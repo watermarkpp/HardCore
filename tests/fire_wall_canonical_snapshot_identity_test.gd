@@ -1,7 +1,11 @@
 extends Node
 
-## Q2-C canonical snapshot identity: one canonical 2x2 union Snapshot V2 per
-## release; all 4 visual cells share its id and hold only display metadata.
+## Q2-C canonical snapshot identity, fixture scope: this test drives the
+## controller directly with a historical 4-cell (2x2) fixture layout — a
+## deliberate alias for the pure unit responsibility (unique snapshot id per
+## release, cells sharing it, display-only metadata). The formal production
+## geometry is the centered 3x3 (9 cells) contract asserted by
+## canonical_snapshot_propagation_test / fire_wall semantic contracts.
 
 const Fixtures := preload(
 	"res://tests/helpers/fire_wall_controller_test_fixtures.gd"
@@ -81,7 +85,8 @@ func _run() -> void:
 	assert(
 		str(first_snapshot.get("shape_type", ""))
 			== Snapshot.SHAPE_CELL_UNION,
-		"canonical snapshot must be the formal 2x2 cell union"
+		"fixture snapshot must be a cell union (2x2 fixture alias; the"
+			+ " production geometry is the centered 3x3 contract)"
 	)
 	var first_id := str(
 		first.fire_wall_controller_diagnostics().get("snapshot_id", "")

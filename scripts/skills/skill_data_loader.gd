@@ -24,7 +24,7 @@ const PROJECT_TEST_MANIFEST_OVERLAY_PATH := (
 const PROJECT_TEST_MANIFEST_OVERLAY_CONTRACT_ID := (
 	"skills.project_test_manifest_overlay.v1"
 )
-const SOURCE_OF_TRUTH_SHA256 := "d439258d5ef1e76f86fb2eb590a8ec22d49757cd909de0c1f889370bd2ccdc19"
+const SOURCE_OF_TRUTH_SHA256 := "7575c45a7bd147f8e60d2efdb15c6c5e9781445ddc2f748e73dd69ed386a62ab"
 const PACKAGE_ZIP_SHA256 := "2dac78d285dff8d5f1ba36a8b83e0e8f11c70b76ace15a34ee7fbfb802862a22"
 const RULESET_ID := "cn_mir2_176_vanilla_project_canonical_v1"
 const CLASS_COUNTS := {"warrior": 6, "wizard": 14, "taoist": 13}

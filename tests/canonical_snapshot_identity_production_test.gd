@@ -88,7 +88,8 @@ func _run() -> void:
 		"lightning visual must carry the release snapshot id"
 	)
 
-	# Fire wall chain: controller + 4 visual cells share one canonical snapshot.
+	# Fire wall chain: controller + 9 visual cells (formal centered 3x3
+	# geometry) share one canonical snapshot.
 	game._set_magic_locked_target(target, true)
 	game._skill_cast_target = target
 	var fire_wall_name := ProfessionRules.skill_display_name("wizard.fire_wall")
@@ -119,8 +120,8 @@ func _run() -> void:
 				child.skill_footprint_snapshot.get("snapshot_id", "")
 			))
 	assert(
-		ground_ids.size() >= 4,
-		"fire wall chain must expose at least 4 consumers"
+		ground_ids.size() >= 9,
+		"fire wall chain must expose at least 9 consumers (3x3)"
 	)
 	for snapshot_id: String in ground_ids:
 		assert(

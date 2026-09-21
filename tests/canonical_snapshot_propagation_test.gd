@@ -138,7 +138,8 @@ func _run() -> void:
 		"lightning visual snapshot runtime_map_id must match the active map"
 	)
 
-	# Fire wall: gameplay result -> one controller owning 4 pure visual cells.
+	# Fire wall: gameplay result -> one controller owning 9 pure visual cells
+	# (the formal centered 3x3 geometry contract).
 	game._set_magic_locked_target(target, true)
 	game._skill_cast_target = target
 	var fire_wall: Dictionary = game._execute_canonical_skill(
@@ -156,8 +157,8 @@ func _run() -> void:
 		if child is FireWallFieldController:
 			found_controller = true
 			assert(
-				child.visual_cells.size() == 4,
-				"fire wall controller must own 4 visual cells"
+				child.visual_cells.size() == 9,
+				"fire wall controller must own 9 visual cells (3x3)"
 			)
 			fire_wall_snapshot = child.visual_cells[0].skill_footprint_snapshot
 			for cell: GroundSkillVisualCell in child.visual_cells:
