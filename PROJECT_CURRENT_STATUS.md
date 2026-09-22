@@ -1,6 +1,50 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-20。
+Branch: `codex/integration`。Updated: 2026-09-22（Astra→Codex 交接现状）。
+
+## 2026-09-22：RV14+RV15 联合成果落主树 + 内部测试 APK v91 + main/integration 统一
+
+**接手者先读**：本轮把 9 月 audit 线全部成果（887 个提交，含 RV14 补件、RV15 手修爆率、九怪精英化与 6144 槽掉落权威、编译链参数化）合入了 `codex/integration` 与 `main`，并交付内部测试 APK。历史合同中"主树=e388e159"已过时，实际主树状态以本节与下述 SHA 为准。
+
+### 一、分支状态（全部实测，2026-09-22 13:4x）
+
+| 分支 | 本地 | 远端 | 内容 |
+|---|---|---|---|
+| `codex/audit-bugfix-performance-20260921` | `85d37077` | `85d37077`（=`codex/rv14-rv15-joint-review`） | 9 月施工线最终源（critical 409 项验证树） |
+| `codex/integration`（主树） | `85d37077` | `85d37077` | **快进**至 audit 最终源（5cdf038e→85d37077，无冲突） |
+| `main` | `c74a7108` | `c74a7108` | **merge commit**（audit 线 + main 独有 8 提交融合，见裁决记录） |
+| `codex/rv14-rv15-joint-review` | — | `85d37077` | review 镜像分支 |
+
+演进链：`3f8cb3dd`（联合复审注册）→ `2b4ef9ef`（九怪精英迁移+overlay 首轮）→ `565711f7`（178 花吻蜘蛛补齐 144→168 槽）→ `85d37077`（编译链参数化+overlay 确定性合成）。工作树 `C:/Users/Administrator/Documents/HardCore` 当前 checkout 在 `main`（c74a7108）。
+
+### 二、main 合并裁决记录（c74a7108，接手必读）
+
+main 独有 8 个提交（8-20 的"217 身份闭合"战役+handoff 文档）与 9 月生产线的"156 活跃目录"合同（P3C）不相容。按用户指令"以现在的进度为准、主树和 main 一致"，裁决如下：
+
+- **生产合同保留 9 月已验证状态（156 活跃身份）**：`canonical_monster_classification_v1.json`、`canonical_monster_catalog.json`、`tools/build_canonical_monster_catalog.py`、`tests/canonical_drop_item_alias_test.gd`、`tests/canonical_monster_classification_closure_test.py`、`tests/monster_world_integration_test.gd` 六文件取 audit 版本。依据：该合同树是 critical 409 项（399 PASS / 10 已知债）与 APK v91 的构建验证源。
+- **217 闭合合同不丢弃**：提交 `ea01f197`…`066e84f6` 完整保留在 main 历史；仅其活体断言不留在生产树（与 156 合同矛盾）。
+- `SOL_HANDOFF.md`：保留 main 的 2026-08-20 handoff 入口头部，融合 audit 侧正文。
+- 合并后冒烟（c74a7108 树）：6 项掉落域/目录合同 5 PASS + monster_world :353 m76 V505（既有基线，merge 前同位同错）。
+
+### 三、本轮交付成果与验证
+
+- **RV14 五补件+RV15 手修爆率+联合复审**：全部在链（7bbf46b7…3f8cb3dd）；确定性注入与 suite 注册闭环。
+- **九怪精英化+赤月/祖玛 overlay 掉落**：七怪（164/166/168/170/172/178/182）elite、174/176 保持普通；权威 JSON 126 怪/6144 槽（5976 编译基础+168 overlay）/UID 全集唯一；178 花吻蜘蛛按用户原指令"其他的"分母组补齐（565711f7）。
+- **编译链最小修正（85d37077）**：路径参数化（隔离树不再读写旧主目录）、工作簿双模式（实盘哈希门禁/存档解析行回退+SOURCE_BINDINGS 绑定 bc234fca）、版本化 overlay 合成（evidence/user_directive_overlay_slots.json 全槽记录）、白名单/新行/意外排除失败改为 exit 1、两次重建字节相同（F0BA6AD7…）且与正式权威 6144 槽逐 UID 语义一致。
+- **验证证据**：最终源 critical `runner_results_critical_20260922_122847_005_18084.json`（git_head=85d37077，total=409，passed=399，failed=10，10 项全部与基线同断言同因）；干净检出门禁 7/8 PASS（唯一 FAIL=m76 基线）；三份运行 JSON 与对照判定见 `D:\HardCoreAudit\RV14_RV15_JOINT_REVIEW_REPORT.md`。
+- **内部测试 APK v91**：`D:\HardCoreAudit\HardCore-20260922-rv15-loot-overlay-85d37077-v91-debug.apk`（480,041,367 B，SHA256 `71E841585D333706FE87B192285649C3BC8F443D1B83F452D24D5F837F0DCDCD`，versionCode=91/versionName 同前/包名 com.personal.mafaoffline/同 debug 证书）。构建与包内核验全 PASS（ANDROID_ISOLATED_BUILD_PASS / DIRECT_UPDATE_IDENTITY_PASS / RUNTIME_RESOURCE_PROBE_PASS；包内权威 JSON 语义 6144/168/m178=72、分类权威与 catalog 字节级一致、掉落链 gdc 在包）。首轮 v87 因用户手机实际安装版本为 90（9-19 更新，非本地 v86）失败，v91 同源重打包修复。构建细节见 `D:\HardCoreAudit\RV15_INTERNAL_TEST_APK_BUILD_MANIFEST.md`。
+- **用户设备**：手机 AADMVB3602042319 已连接；用户选择直接覆盖安装 v91（versionCode 91>90、同签名，存档自动保留）。卸载前已做完整存档备份 `D:\HardCoreAudit\hardcore_save_backup_v90_20260922.tar`（3 角色+仓库+配置，93 条目，JSON 可解析）。设备实测结果待用户反馈，DEVICE TEST 状态以用户回报为准。
+
+### 四、已知债务（不阻断内部测试，清单见 `D:\HardCoreAudit\RV15_INTERNAL_TEST_APK_KNOWN_ISSUES.md`）
+
+critical 10 项 FAIL 全部为既有基线/环境类（canonical_skill_production_entry :222 魔法盾末帧、skill_contract_manifest :57、w6_visual_contract :170、inventory_equipment_ui :142、equipment_luck :182、hud_authority :177、shop_gothic_ui :140、warehouse_gothic_ui :303/:342、monster_world :353 m76、runtime_test timeout）。四项 worktree→主树转 PASS 的逐项归因（缺产物/时序/引擎日志）与 warehouse 单列环境差异已在联合复审报告第 7 节登记。
+
+### 五、接手注意事项
+
+1. **冻结/保留对象**：`HardCore_r14_base` 工作树（12 M+10 untracked，用户裁决前不动）；真实地图重新发布 R01 HOLD；用户桌面工作簿 bc234fca 已不在磁盘（编译链走存档模式，勿臆造重建）；`codex/rv14-rv15-joint-review` 为 review 镜像。
+2. **untracked 现场勿清理**：`outputs/`（测试日志/编译证据/交付脚本）与各 worktree 的 `.godot/` 为运行产物，历史轮次按"保留待用户确认逐树清理"处理。
+3. **测试纪律入口**：分层漏斗与三分类规范按用户长期规则执行；正式结论只认 `runner_results_*.json`；m76/V505 等基线债勿在本轮范围外顺手修。
+4. **AGENTS.md 变更**：5cdf038e 落了协作规则改写（本地 integration 曾领先远端的唯一提交），已随快进进入主树。
 
 ## 2026-09-20：全量合入——墙体 P1R 战役 + 受击 V4 历史闭环
 
