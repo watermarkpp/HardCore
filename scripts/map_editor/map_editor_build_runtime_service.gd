@@ -637,6 +637,56 @@ static func _rv14_backup_entry_table(registry: Dictionary) -> Dictionary:
 	return {"valid": true, "entries": entries}
 
 
+## RV14-R2 deterministic failure injection for the restore/promote path.
+## Production always uses real IO (every budget defaults to 0). A test may
+## point a fail-from counter at N so the Nth and every subsequent matching
+## operation inside _restore_registry_bytes fails deterministically,
+## proving the failure-branch control flow without relying on OS lock
+## behaviour. Tests must reset all counters to 0 afterwards.
+static var test_rename_fail_from_call := 0
+static var test_remove_fail_from_call := 0
+static var test_restored_open_fail_from_call := 0
+static var _test_rename_call_count := 0
+static var _test_remove_call_count := 0
+static var _test_restored_open_call_count := 0
+
+
+static func _injected_rename_absolute(from: String, to: String) -> int:
+	_test_rename_call_count += 1
+	if (
+		test_rename_fail_from_call > 0
+		and _test_rename_call_count >= test_rename_fail_from_call
+	):
+		return ERR_FILE_CANT_WRITE
+	return DirAccess.rename_absolute(from, to)
+
+
+static func _injected_remove_absolute(path: String) -> int:
+	_test_remove_call_count += 1
+	if (
+		test_remove_fail_from_call > 0
+		and _test_remove_call_count >= test_remove_fail_from_call
+	):
+		return ERR_FILE_CANT_WRITE
+	return DirAccess.remove_absolute(path)
+
+
+static func _injected_restored_open(path: String) -> FileAccess:
+	_test_restored_open_call_count += 1
+	if (
+		test_restored_open_fail_from_call > 0
+		and _test_restored_open_call_count >= test_restored_open_fail_from_call
+	):
+		return null
+	return FileAccess.open(path, FileAccess.READ)
+
+
+static func _reset_injection_counters() -> void:
+	_test_rename_call_count = 0
+	_test_remove_call_count = 0
+	_test_restored_open_call_count = 0
+
+
 static func _restore_registry_bytes(
 	registry_path: String,
 	raw_bytes: PackedByteArray,
@@ -658,12 +708,12 @@ static func _restore_registry_bytes(
 	file.close()
 	var verify := FileAccess.open(absolute_tmp, FileAccess.READ)
 	if verify == null:
-		DirAccess.remove_absolute(absolute_tmp)
+		_injected_remove_absolute(absolute_tmp)
 		return {"ok": false, "reason": "tmp_verify_open_failed"}
 	var verified_bytes := verify.get_buffer(verify.get_length())
 	verify.close()
 	if verified_bytes != raw_bytes:
-		DirAccess.remove_absolute(absolute_tmp)
+		_injected_remove_absolute(absolute_tmp)
 		return {"ok": false, "reason": "tmp_verify_mismatch"}
 	var backup := absolute_dst + ".restore_bak"
 	var staged_old_main := false
@@ -675,41 +725,41 @@ static func _restore_registry_bytes(
 		if backup == normalized_preserve:
 			# The staging slot collides with the preserved source; refuse
 			# rather than delete the source.
-			DirAccess.remove_absolute(absolute_tmp)
+			_injected_remove_absolute(absolute_tmp)
 			return {"ok": false, "reason": "source_slot_collision"}
 		if FileAccess.file_exists(backup):
-			if DirAccess.remove_absolute(backup) != OK:
-				DirAccess.remove_absolute(absolute_tmp)
+			if _injected_remove_absolute(backup) != OK:
+				_injected_remove_absolute(absolute_tmp)
 				return {"ok": false, "reason": "old_backup_remove_failed"}
-		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		var backup_error := _injected_rename_absolute(absolute_dst, backup)
 		if backup_error != OK:
-			DirAccess.remove_absolute(absolute_tmp)
+			_injected_remove_absolute(absolute_tmp)
 			return {"ok": false, "reason": "staging_rename_failed"}
 		staged_old_main = true
-	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	var promote_error := _injected_rename_absolute(absolute_tmp, absolute_dst)
 	if promote_error != OK:
 		# RV14-R2 review: the rollback attempt is reported separately from the
 		# primary error so a caller can distinguish "failed and recovered"
 		# from "failed and the staged copy is still in the backup slot".
 		var rollback_errors: Array[String] = []
 		if staged_old_main:
-			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
 				rollback_errors.append("rollback_rename_failed")
-		DirAccess.remove_absolute(absolute_tmp)
+		_injected_remove_absolute(absolute_tmp)
 		var promote_result := {"ok": false, "reason": "promote_failed"}
 		if not rollback_errors.is_empty():
 			promote_result["rollback_errors"] = rollback_errors
 		return promote_result
 	# Final destination verification against the source bytes.
-	var restored := FileAccess.open(absolute_dst, FileAccess.READ)
+	var restored := _injected_restored_open(absolute_dst)
 	if restored == null:
 		# The promoted artifact cannot be opened; the staged old main is the
 		# only recoverable copy. Attempt the rollback and report it.
 		var open_rollback_errors: Array[String] = []
 		if staged_old_main and FileAccess.file_exists(backup):
-			if DirAccess.remove_absolute(absolute_dst) != OK:
+			if _injected_remove_absolute(absolute_dst) != OK:
 				open_rollback_errors.append("rollback_remove_failed")
-			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
 				open_rollback_errors.append("rollback_rename_failed")
 		var open_result := {"ok": false, "reason": "restored_open_failed"}
 		if not open_rollback_errors.is_empty():
@@ -720,9 +770,9 @@ static func _restore_registry_bytes(
 	if restored_bytes != raw_bytes:
 		var verify_rollback_errors: Array[String] = []
 		if staged_old_main and FileAccess.file_exists(backup):
-			if DirAccess.remove_absolute(absolute_dst) != OK:
+			if _injected_remove_absolute(absolute_dst) != OK:
 				verify_rollback_errors.append("rollback_remove_failed")
-			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
 				verify_rollback_errors.append("rollback_rename_failed")
 		var verify_result := {"ok": false, "reason": "restored_verify_mismatch"}
 		if not verify_rollback_errors.is_empty():
@@ -732,7 +782,7 @@ static func _restore_registry_bytes(
 	# the staging backup of an old main (rollback scenario) is consumed only
 	# when it is not the preserved source.
 	if staged_old_main and backup != normalized_preserve:
-		DirAccess.remove_absolute(backup)
+		_injected_remove_absolute(backup)
 	return {"ok": true, "reason": ""}
 
 
