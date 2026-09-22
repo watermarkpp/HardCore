@@ -87,6 +87,18 @@ func _ready() -> void:
 	walkability = MapEditorCollisionService.build_walkability(document)
 	assert(walkability.blocked_tiles.has("21,22"))
 	assert(not walkability.blocked_tiles.has("20,21"))
+	# The presentation switch must never change authoring coordinates,
+	# selection or collision. Runtime's filtered ground canvas is independent.
+	var document_before := JSON.stringify(document)
+	for grid_visible: bool in [false, true, false]:
+		preview.show_grid = grid_visible
+		preview.queue_redraw()
+		await get_tree().process_frame
+		assert(preview.screen_to_grid_vertex(vertex_screen) == target_vertex)
+		_click(preview, vertex_screen)
+		assert(received_cells[-1] == target_vertex)
+		assert(JSON.stringify(document) == document_before)
+		assert(MapEditorCollisionService.build_walkability(document) == walkability)
 
 	print("MSE_COLLISION_GRID_ALIGNMENT_PASS cells=4 polygon_vertex=8,9 instance=21,22")
 	get_tree().quit(0)

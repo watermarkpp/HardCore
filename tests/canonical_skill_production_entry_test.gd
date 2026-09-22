@@ -135,7 +135,7 @@ func _run() -> void:
 	PlayerState.learned_skills = {"瞬息移动": 3, "火墙": 3}
 	caster.current_mp = 100
 	var teleport_origin := caster.global_position
-	var teleport_destination: Vector2 = game._find_valid_random_teleport_position(
+	var teleport_destination: Vector2 = game._find_valid_skill_teleport_position(
 		teleport_origin
 	)
 	assert(teleport_destination != teleport_origin, "测试地图没有可用的瞬息移动目标点")
@@ -147,6 +147,7 @@ func _run() -> void:
 		{
 			"force_success": true,
 			"destination_valid": true,
+			"destination_ground_gu": game._canonical_screen_px_to_ground_gu(teleport_destination),
 			"destination_tile": game._canonical_screen_px_to_grid_cell(teleport_destination),
 		}
 	)
@@ -217,6 +218,12 @@ func _run() -> void:
 	var persistent_shield := persistent_shields[0] as CasterSkillVisualEffect
 	assert(persistent_shield.target_node == caster)
 	var persistent_sprite: CasterSkillAnimationPlayer = persistent_shield._sprites[0]
+	# Combat sequences now warm asynchronously as a complete unit. Playback is
+	# intentionally frozen until resident; elapsed playback time starts there.
+	var shield_warm_deadline := Time.get_ticks_msec() + 3000
+	while not persistent_sprite.visual_loaded and Time.get_ticks_msec() < shield_warm_deadline:
+		await get_tree().process_frame
+	assert(persistent_sprite.visual_loaded, "魔法盾整段动画资源未能就绪")
 	persistent_sprite._process(persistent_sprite.animation_duration() + 0.01)
 	persistent_shield._process(0.1)
 	assert(

@@ -320,6 +320,7 @@ static func _resolve_teleport(
 		"success_probability": probability,
 		"moved": moved,
 		"destination": context.get("destination_tile") if moved else null,
+		"destination_ground_gu": context.get("destination_ground_gu", Vector2.INF),
 		"remain_in_place_on_failure": true,
 	}]
 	plan.effect_success = moved

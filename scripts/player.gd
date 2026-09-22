@@ -182,6 +182,12 @@ func _exit_tree() -> void:
 	# freezes a new epoch at acceptance time. The epoch is only compared for
 	# equality by release ownership, so advancing it here has no other effect.
 	combat_epoch += 1
+	_pending_combat_action_active = false
+	_pending_combat_action_committed = false
+	_pending_combat_action_kind = ""
+	_pending_attack_context.clear()
+	_pending_skill_context.clear()
+	_queued_struck_reaction = false
 
 
 func _ready() -> void:
@@ -246,7 +252,9 @@ func _physics_process(delta: float) -> void:
 			_skill_cooldown_remaining[stable_skill_id] = remaining
 	if _attack_action_timer <= 0.0 and _pending_combat_action_active and _pending_combat_action_committed:
 		_finish_combat_action(_pending_combat_action_id)
-	if _attack_action_timer <= 0.0 and _queued_struck_reaction:
+	# A long frame can expire the physics action clock before the process
+	# timer delivers its accepted release. Finish that transaction first.
+	if _attack_action_timer <= 0.0 and not _pending_combat_action_active and _queued_struck_reaction:
 		_start_queued_struck_reaction()
 		was_struck_locked = true
 	_struck_lock_remaining = maxf(0.0, _struck_lock_remaining - delta)

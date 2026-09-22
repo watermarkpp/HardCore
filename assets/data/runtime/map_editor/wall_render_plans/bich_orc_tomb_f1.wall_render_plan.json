@@ -64,10 +64,10 @@
 		487,
 		16,
 		17,
+		113,
 		114,
-		115,
+		194,
 		195,
-		196,
 		317,
 		318,
 		419,
@@ -76,8 +76,8 @@
 		496,
 		19,
 		20,
+		110,
 		111,
-		112,
 		397,
 		398,
 		400,
@@ -304,8 +304,8 @@
 		472,
 		92,
 		93,
+		188,
 		189,
-		190,
 		358,
 		359,
 		384,
@@ -316,12 +316,12 @@
 		445,
 		540,
 		541,
+		191,
 		192,
-		193,
 		525,
 		526,
+		197,
 		198,
-		199,
 		450,
 		451,
 		546,
@@ -1297,8 +1297,8 @@
 		},
 		{
 			"command_indices": [
+				197,
 				198,
-				199,
 				450,
 				451,
 				546,
@@ -1316,11 +1316,11 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						198,
-						199
+						197,
+						198
 					],
 					"group_key": "wall_part:inst_000042:37:1",
-					"representative_command_index": 198
+					"representative_command_index": 197
 				},
 				{
 					"command_indices": [
@@ -1342,7 +1342,7 @@
 			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_01_base.png@(-48.0, -128.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_01_front.png@(-48.0, -128.0)",
 			"layers": [
 				{
-					"command_index": 198,
+					"command_index": 197,
 					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_01_base.png",
 					"offset": [
 						-48.0,
@@ -1354,7 +1354,7 @@
 					]
 				},
 				{
-					"command_index": 199,
+					"command_index": 198,
 					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_01_front.png",
 					"offset": [
 						-48.0,
@@ -1675,8 +1675,8 @@
 			"command_indices": [
 				19,
 				20,
+				110,
 				111,
-				112,
 				397,
 				398,
 				400,
@@ -1706,11 +1706,11 @@
 				},
 				{
 					"command_indices": [
-						111,
-						112
+						110,
+						111
 					],
 					"group_key": "wall_part:inst_000008:34:2",
-					"representative_command_index": 111
+					"representative_command_index": 110
 				},
 				{
 					"command_indices": [
@@ -2455,8 +2455,8 @@
 			"command_indices": [
 				92,
 				93,
+				188,
 				189,
-				190,
 				358,
 				359,
 				384,
@@ -2483,11 +2483,11 @@
 				},
 				{
 					"command_indices": [
-						189,
-						190
+						188,
+						189
 					],
 					"group_key": "wall_part:inst_000010:41:3",
-					"representative_command_index": 189
+					"representative_command_index": 188
 				},
 				{
 					"command_indices": [
@@ -3067,8 +3067,8 @@
 		},
 		{
 			"command_indices": [
+				191,
 				192,
-				193,
 				525,
 				526
 			],
@@ -3083,11 +3083,11 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						192,
-						193
+						191,
+						192
 					],
 					"group_key": "wall_part:inst_000028:43:0",
-					"representative_command_index": 192
+					"representative_command_index": 191
 				},
 				{
 					"command_indices": [
@@ -3101,7 +3101,7 @@
 			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l3_v02/part_00_base.png@(-112.0, -128.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l3_v02/part_00_front.png@(-112.0, -128.0)",
 			"layers": [
 				{
-					"command_index": 192,
+					"command_index": 191,
 					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l3_v02/part_00_base.png",
 					"offset": [
 						-112.0,
@@ -3113,7 +3113,7 @@
 					]
 				},
 				{
-					"command_index": 193,
+					"command_index": 192,
 					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l3_v02/part_00_front.png",
 					"offset": [
 						-112.0,
@@ -4313,10 +4313,10 @@
 			"command_indices": [
 				16,
 				17,
+				113,
 				114,
-				115,
+				194,
 				195,
-				196,
 				317,
 				318,
 				419,
@@ -4347,19 +4347,19 @@
 				},
 				{
 					"command_indices": [
-						114,
-						115
+						113,
+						114
 					],
 					"group_key": "wall_part:inst_000025:33:3",
-					"representative_command_index": 114
+					"representative_command_index": 113
 				},
 				{
 					"command_indices": [
-						195,
-						196
+						194,
+						195
 					],
 					"group_key": "wall_part:inst_000049:38:3",
-					"representative_command_index": 195
+					"representative_command_index": 194
 				},
 				{
 					"command_indices": [
@@ -4912,10 +4912,10 @@
 	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
 	"legacy_command_indices": [
 		30,
-		109,
+		115,
 		122,
 		168,
-		187,
+		199,
 		239,
 		267,
 		292,
@@ -4964,8 +4964,8 @@
 		100,
 		103,
 		106,
-		110,
-		113,
+		109,
+		112,
 		116,
 		119,
 		123,
@@ -4989,10 +4989,10 @@
 		178,
 		181,
 		184,
-		188,
-		191,
-		194,
-		197,
+		187,
+		190,
+		193,
+		196,
 		200,
 		203,
 		206,
@@ -5161,17 +5161,17 @@
 				-1
 			],
 			"insert_command_index": 31,
-			"path": "assets/data/runtime/map_editor/wall_render_store/7516b5c41b4525c3e4bfb169d134e94034b56f60f40058a659e44584a1b93ff2.png",
-			"png_bytes": 5248,
+			"path": "assets/data/runtime/map_editor/wall_render_store/dfe7ad0978cf7412b2b5585a11f2e7765edfe6a4ea5454c65850cec7991fdc03.png",
+			"png_bytes": 5536,
 			"position_px": [
 				124.0,
 				-498.0
 			],
 			"segment_index": 1,
-			"sha256": "7516b5c41b4525c3e4bfb169d134e94034b56f60f40058a659e44584a1b93ff2",
+			"sha256": "dfe7ad0978cf7412b2b5585a11f2e7765edfe6a4ea5454c65850cec7991fdc03",
 			"size_px": [
-				435,
-				232
+				467,
+				248
 			]
 		},
 		{
@@ -5180,17 +5180,17 @@
 				-1
 			],
 			"insert_command_index": 31,
-			"path": "assets/data/runtime/map_editor/wall_render_store/01ff8d401adfc88fa703ae0c67d50eb4e3a185d0e5dd98f1ffdc0561953bc6da.png",
-			"png_bytes": 5658,
+			"path": "assets/data/runtime/map_editor/wall_render_store/b72ee7c910e6c4f9a5633fb1b06fa5630a340d743fc5cc012e01c8c214cbc786.png",
+			"png_bytes": 5878,
 			"position_px": [
-				-580.0,
+				-612.0,
 				-483.0
 			],
 			"segment_index": 1,
-			"sha256": "01ff8d401adfc88fa703ae0c67d50eb4e3a185d0e5dd98f1ffdc0561953bc6da",
+			"sha256": "b72ee7c910e6c4f9a5633fb1b06fa5630a340d743fc5cc012e01c8c214cbc786",
 			"size_px": [
-				435,
-				233
+				467,
+				243
 			]
 		},
 		{
@@ -5198,18 +5198,18 @@
 				0,
 				-1
 			],
-			"insert_command_index": 110,
-			"path": "assets/data/runtime/map_editor/wall_render_store/be0d679eedcd23e15b134f7127920d3ef76da83c9911047d1ffb179fa7dea602.png",
-			"png_bytes": 1211,
+			"insert_command_index": 116,
+			"path": "assets/data/runtime/map_editor/wall_render_store/33e3e17579cfadec35aefd601a81c94b696ed778fef615d2138231ebc9029474.png",
+			"png_bytes": 718,
 			"position_px": [
-				540.0,
-				-290.0
+				572.0,
+				-274.0
 			],
 			"segment_index": 2,
-			"sha256": "be0d679eedcd23e15b134f7127920d3ef76da83c9911047d1ffb179fa7dea602",
+			"sha256": "33e3e17579cfadec35aefd601a81c94b696ed778fef615d2138231ebc9029474",
 			"size_px": [
-				82,
-				50
+				50,
+				34
 			]
 		},
 		{
@@ -5217,18 +5217,18 @@
 				-1,
 				-1
 			],
-			"insert_command_index": 110,
-			"path": "assets/data/runtime/map_editor/wall_render_store/277d75045e38b7d2fefc8e41061669945a147d392318a266d8193bc7d5cdce35.png",
-			"png_bytes": 1350,
+			"insert_command_index": 116,
+			"path": "assets/data/runtime/map_editor/wall_render_store/e1d8f0de50217586d0afea05c8294b709a2bf564bb63774987325f77624cd27b.png",
+			"png_bytes": 862,
 			"position_px": [
 				-644.0,
-				-275.0
+				-259.0
 			],
 			"segment_index": 2,
-			"sha256": "277d75045e38b7d2fefc8e41061669945a147d392318a266d8193bc7d5cdce35",
+			"sha256": "e1d8f0de50217586d0afea05c8294b709a2bf564bb63774987325f77624cd27b",
 			"size_px": [
-				83,
-				57
+				51,
+				41
 			]
 		},
 		{
@@ -5275,17 +5275,17 @@
 				-1
 			],
 			"insert_command_index": 169,
-			"path": "assets/data/runtime/map_editor/wall_render_store/d250e0b066fec182a501620cd2082cc7244e2465aaf2f7e0698c828ed65ef6af.png",
-			"png_bytes": 2377,
+			"path": "assets/data/runtime/map_editor/wall_render_store/87a0020b64226c351a9799baebb3d4b9afc206f49c8059de43f48b6b6ccdd15e.png",
+			"png_bytes": 3283,
 			"position_px": [
-				-868.0,
+				-900.0,
 				-163.0
 			],
 			"segment_index": 4,
-			"sha256": "d250e0b066fec182a501620cd2082cc7244e2465aaf2f7e0698c828ed65ef6af",
+			"sha256": "87a0020b64226c351a9799baebb3d4b9afc206f49c8059de43f48b6b6ccdd15e",
 			"size_px": [
-				851,
-				57
+				883,
+				73
 			]
 		},
 		{
@@ -5294,17 +5294,17 @@
 				-1
 			],
 			"insert_command_index": 169,
-			"path": "assets/data/runtime/map_editor/wall_render_store/583979ac957248a350b3dc2c223ada2237a86541d4e882484e0a3947bedb30e0.png",
-			"png_bytes": 2094,
+			"path": "assets/data/runtime/map_editor/wall_render_store/050446cc1957b63c0710b4d06a4504d881b049696e55889b16f6b25ba79c7fe7.png",
+			"png_bytes": 2898,
 			"position_px": [
 				28.0,
 				-162.0
 			],
 			"segment_index": 4,
-			"sha256": "583979ac957248a350b3dc2c223ada2237a86541d4e882484e0a3947bedb30e0",
+			"sha256": "050446cc1957b63c0710b4d06a4504d881b049696e55889b16f6b25ba79c7fe7",
 			"size_px": [
-				819,
-				56
+				850,
+				72
 			]
 		},
 		{
@@ -5312,18 +5312,18 @@
 				0,
 				-1
 			],
-			"insert_command_index": 188,
-			"path": "assets/data/runtime/map_editor/wall_render_store/2d1f37118c635a5af3e8bed68bcff5ae46f9e15c01085425ae6ccd3cbe1dac8c.png",
-			"png_bytes": 5024,
+			"insert_command_index": 200,
+			"path": "assets/data/runtime/map_editor/wall_render_store/84121348f7fc96ee8ec9b5dd5c1138a2ac5968cbd725ed2d0deb6e7a152ac6b1.png",
+			"png_bytes": 4312,
 			"position_px": [
-				92.0,
-				-146.0
+				124.0,
+				-130.0
 			],
 			"segment_index": 5,
-			"sha256": "2d1f37118c635a5af3e8bed68bcff5ae46f9e15c01085425ae6ccd3cbe1dac8c",
+			"sha256": "84121348f7fc96ee8ec9b5dd5c1138a2ac5968cbd725ed2d0deb6e7a152ac6b1",
 			"size_px": [
-				915,
-				104
+				883,
+				88
 			]
 		},
 		{
@@ -5331,18 +5331,18 @@
 				-1,
 				-1
 			],
-			"insert_command_index": 188,
-			"path": "assets/data/runtime/map_editor/wall_render_store/695d3f3d79e9180783670715c3c7644b59cabac3ca03baf7e9cad261d3369376.png",
-			"png_bytes": 3981,
+			"insert_command_index": 200,
+			"path": "assets/data/runtime/map_editor/wall_render_store/6a6771dc2e61f871b0451e58b7cc8439456e82f25ea698afeca5a5419d262a8c.png",
+			"png_bytes": 3000,
 			"position_px": [
 				-996.0,
-				-131.0
+				-115.0
 			],
 			"segment_index": 5,
-			"sha256": "695d3f3d79e9180783670715c3c7644b59cabac3ca03baf7e9cad261d3369376",
+			"sha256": "6a6771dc2e61f871b0451e58b7cc8439456e82f25ea698afeca5a5419d262a8c",
 			"size_px": [
-				915,
-				89
+				883,
+				73
 			]
 		},
 		{
@@ -5732,19 +5732,19 @@
 				97,
 				100,
 				103,
-				106
+				106,
+				109,
+				112
 			],
 			"insert_command_index": 31,
 			"segment_index": 1
 		},
 		{
 			"command_indices": [
-				110,
-				113,
 				116,
 				119
 			],
-			"insert_command_index": 110,
+			"insert_command_index": 116,
 			"segment_index": 2
 		},
 		{
@@ -5775,17 +5775,17 @@
 				175,
 				178,
 				181,
-				184
+				184,
+				187,
+				190,
+				193,
+				196
 			],
 			"insert_command_index": 169,
 			"segment_index": 4
 		},
 		{
 			"command_indices": [
-				188,
-				191,
-				194,
-				197,
 				200,
 				203,
 				206,
@@ -5800,7 +5800,7 @@
 				233,
 				236
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"segment_index": 5
 		},
 		{
@@ -5949,7 +5949,7 @@
 			"segment_index": 11
 		}
 	],
-	"source_commands_sha256": "8e1aa2b13cde7837b090487a9c8234f28715b90390ca8b7851c08b6b88dbb232",
+	"source_commands_sha256": "56a3dc815da15024f437c3ce35f094dd1ad6b20c8c43b48b0ec326c1d88f1ea9",
 	"source_image_sha256": {
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_inner_nw_v01/part_00_base.png": "c3f9ad3cca92aed43bb4729daf73fc74cfae4520b7f787f2ca2375bd502dcaf5",
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_inner_nw_v01/part_00_front.png": "8e831d886cfd46b39c9ee14c496ac2d3c60b74c8029d11ef7835ac72fe7abc4a",
@@ -6099,6 +6099,6 @@
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png": "4734fcb2ac5782428bfd7dce168466cd6166e4a9cbac375725284c3a9488aada",
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_shadow.png": "5f58dff85ef8fafc2d01cb866d6aed3550a53e3283e0625f55c747d3296d5ae0"
 	},
-	"source_runtime_json_sha256": "42519ce0e70a805c382919e80d3bce7a33ae3a5968b359c9bfe76037a87b3b4d",
+	"source_runtime_json_sha256": "ab6b1aeba7e51a1b474a282b46edbaf9b1ef43591ee32cd6cb3dc101b29ff198",
 	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
 }

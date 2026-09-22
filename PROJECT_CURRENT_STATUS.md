@@ -1,6 +1,20 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-22（Astra→Codex 交接现状）。
+Branch: `codex/integration`。Updated: 2026-09-22（v92 主控修复与验收中）。
+
+## 2026-09-22：v92 群怪性能、系统修复与掉落复核
+
+当前施工基线 `b961cedff8040c9fc81534e094241ad9fa2330ad`；修复尚在工作树，不能用这个基线 SHA 声称已含 v92 改动。下方 v91 的分支表、设备状态和 399/409 结果是此前交接快照。
+
+累计用户要求以 `docs/repair_v92/USER_REQUEST_RECONCILIATION.md` 对账，主控逐项裁决见 `CONTROLLER_REVIEW.md`。已实施密集地图/火墙与技能动画优化、精确技能分类和物理/法术结算分离、宠物成长与毒归属、掉落队列预算、UI 即时反馈和隐藏刷新、地图 ready/刷新恢复/分类桥接、发布渲染绑定与提示修复，并保留人工地图和已接受美术。完整critical原始459/463；4项失败修正后5/5及最后16/16、3/3回归PASS，火墙公共owner已补齐。原始m30性能并未统一改善，设备性能NOT_RUN，详见docs/repair_v92/FINAL_VERIFICATION.md。
+
+正式掉落 authority 已按用户追加要求改为 6042 槽（删除 102 个重复衣服槽，六暗最高服例外），保留 15 件上限/保护/优先级；7 个赤月精英的 168 overlay 槽已执行赤月 ×1/2、祖玛 ×3/4。桌面 `HardCore_当前地图怪物真实掉率_20260922_衣服单槽修正版.xlsx` 覆盖 67 图/120 刷新怪/121 sheets，精确分数文本与实际上限后概率已验证。旧 6144 槽和旧 Excel 不代表最新表。
+
+20:39最新密度调查见 `docs/repair_v92/MONSTER_DENSITY_INVESTIGATION.md`：13次有效测试，固定12参战的近/远闲置及隔墙追击对照，加三张正式地图与v91对应源码普查。附近闲置怪增加视觉更新，隔墙追击合成场景增加完整AI与寻路；正式地图静止采样未出现寻路积压，不能宣布真实卡顿根因已经关闭。密度性能项重新打开。渲染12次对照、正式空安全区入口修复及一次未定位的Godot原生退出崩溃见 `RENDER_CONTROL_TEST.md`。
+
+源码提交、v92 APK、远端推送：NOT_RUN，待最终验证后执行。20:34重新查询设备连接为空，DEVICE TEST: NOT_RUN；不得沿用下文旧 v91 的设备连接状态。
+
+21:16闲置怪物CPU追加：范围外候选先拒绝，再做安全区/仇恨/视线；真正停驻待机按用户要求0.5秒唤醒，受击立即唤醒、返程与共享缓存0.25秒保持。11项回归与6次采样PASS，后台维护调用750→400，整帧收益尚不能据此保证。见 `docs/repair_v92/IDLE_MONSTER_CPU_REPAIR.md`；继续真实移动的怪物状态与CPU调查。
 
 ## 2026-09-22：RV14+RV15 联合成果落主树 + 内部测试 APK v91 + main/integration 统一
 
@@ -253,3 +267,7 @@ Use annotated tag `standard-20260829-main-tree` for the immutable consolidated s
 - GameRoot 拆分
 - 坐标重新设计
 - Snapshot 重新设计
+
+## 2026-09-22 22:20 打包前追加
+
+当前最后6项影响回归PASS，新增三职业自身成长独立审计PASS（765等级行/13005属性/177实际升级及负重接收），数据未改。Debug游戏设置已加入两种30秒本地性能记录。用户明确要求当前优化打包v92实机验证；手机CPU/GPU结论仍NOT_RUN，原始M30性能FAIL/可比性BLOCKED及Windows退出故障均保留。最终产物身份另见docs/repair_v92/APK_HANDOFF.md，未生成前不得声称已交付。

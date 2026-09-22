@@ -1,0 +1,160 @@
+{
+  "source_after_sha256": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79",
+  "source_before_sha256": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+  "device_test": "NOT_RUN",
+  "rows": [
+    {
+      "map_id": 913203,
+      "enemy_count": 62,
+      "fire_wall_damage_count": 53,
+      "initial_layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "p95_ms": {
+        "before": 12.242,
+        "after": 11.7415,
+        "change_percent": -4.0883842509393915,
+        "runs": {
+          "before": [
+            12.181,
+            12.303
+          ],
+          "after": [
+            11.885,
+            11.598
+          ]
+        }
+      },
+      "enemy_cpu_usec_per_call": {
+        "before": 222.78541666666666,
+        "after": 201.3045343137255,
+        "change_percent": -9.641960714637365,
+        "runs": {
+          "before": [
+            220.8421568627451,
+            224.72867647058823
+          ],
+          "after": [
+            203.31176470588235,
+            199.29730392156864
+          ]
+        }
+      },
+      "safe_zone_queries": {
+        "before": 5584.0,
+        "after": 0.0,
+        "change_percent": -100.0,
+        "runs": {
+          "before": [
+            5581,
+            5587
+          ],
+          "after": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "map_id": 913207,
+      "enemy_count": 71,
+      "fire_wall_damage_count": 43,
+      "initial_layout_sha256": "ed1ab91e8b4d30e3436b0aa185cb208e2d6b9b3c5afa252957f346f9412607cd",
+      "p95_ms": {
+        "before": 10.9175,
+        "after": 10.495999999999999,
+        "change_percent": -3.860773986718591,
+        "runs": {
+          "before": [
+            10.857,
+            10.978
+          ],
+          "after": [
+            10.478,
+            10.514
+          ]
+        }
+      },
+      "enemy_cpu_usec_per_call": {
+        "before": 188.8998611111111,
+        "after": 164.50861111111112,
+        "change_percent": -12.912264655214878,
+        "runs": {
+          "before": [
+            184.19416666666666,
+            193.60555555555555
+          ],
+          "after": [
+            162.9825,
+            166.03472222222223
+          ]
+        }
+      },
+      "safe_zone_queries": {
+        "before": 3830.0,
+        "after": 0.0,
+        "change_percent": -100.0,
+        "runs": {
+          "before": [
+            3830,
+            3830
+          ],
+          "after": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "map_id": 916003,
+      "enemy_count": 54,
+      "fire_wall_damage_count": 42,
+      "initial_layout_sha256": "1ee8bf3f1d2a0d31ee83b8c09e6183e440f0de41c9911ced55a56f813dba3d1c",
+      "p95_ms": {
+        "before": 9.4735,
+        "after": 9.355,
+        "change_percent": -1.2508576555655182,
+        "runs": {
+          "before": [
+            9.462,
+            9.485
+          ],
+          "after": [
+            9.361,
+            9.349
+          ]
+        }
+      },
+      "enemy_cpu_usec_per_call": {
+        "before": 157.07,
+        "after": 145.28208333333333,
+        "change_percent": -7.504881050911482,
+        "runs": {
+          "before": [
+            156.38666666666666,
+            157.75333333333333
+          ],
+          "after": [
+            145.185,
+            145.37916666666666
+          ]
+        }
+      },
+      "safe_zone_queries": {
+        "before": 1996.0,
+        "after": 0.0,
+        "change_percent": -100.0,
+        "runs": {
+          "before": [
+            1991,
+            2001
+          ],
+          "after": [
+            0,
+            0
+          ]
+        }
+      }
+    }
+  ]
+}

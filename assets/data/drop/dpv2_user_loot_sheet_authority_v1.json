@@ -5,16 +5,24 @@
   "source": {
     "sheet_file": "HardCore_怪物爆率分表.xlsx",
     "sheet_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
+    "source_mode": "archived_parsed_rows",
+    "overlay_input": "tools/loot_sheet_compiler/evidence/user_directive_overlay_slots.json",
+    "overlay_source": "user_directive_20260922_v92_赤月概率减半_祖玛概率减少25%",
+    "armor_single_slot_directive": "tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json",
+    "armor_single_slot_directive_sha256": "7d6630c87ef5616655fcdeb3a1c873bebd27bf9742c04c25a5ca032b52031a12",
     "baseline_commit": "84ab22742eee1589ac105a8ff175da8623778f37",
     "probability_contract": "sheet_E_is_final_per_slot_pre_rng_probability_no_spb_no_v5_no_denominator_policy_no_v80_no_v81_no_global_multiplier_no_gold_x5",
     "gold_contract": "sheet_D_is_final_gold_amount"
   },
   "summary": {
     "named_rows": 4876,
-    "slot_rows_compiled": 5934,
+    "slot_rows_compiled": 5832,
     "new_equipment_slots": 41,
     "fate_blade_slots": 1,
     "user_directive_overlay_slots": 168,
+    "armor_single_slot_removed_slots": 102,
+    "armor_single_slot_groups": 102,
+    "total_effective_slots": 6042,
     "excluded_residue_rows": 0,
     "parser_excluded_residue_rows": 7,
     "residue_rows_source": "evidence/04_五张空表与七条残留.csv",
@@ -1116,16 +1124,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 26,
           "canonical_item_id": 118
-        },
-        {
-          "slot_uid": "dpv2.direct.m36.slot_025",
-          "final_numerator": 1,
-          "final_denominator": 30,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 27,
-          "canonical_item_id": 119
         },
         {
           "slot_uid": "dpv2.direct.m36.slot_028",
@@ -4033,16 +4031,6 @@
           "canonical_item_id": 118
         },
         {
-          "slot_uid": "dpv2.direct.m70.slot_034",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 9,
-          "canonical_item_id": 119
-        },
-        {
           "slot_uid": "dpv2.direct.m70.slot_031",
           "final_numerator": 1,
           "final_denominator": 40,
@@ -6069,16 +6057,6 @@
           "canonical_item_id": 116
         },
         {
-          "slot_uid": "dpv2.direct.m92.v505_0026",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 17,
-          "canonical_item_id": 117
-        },
-        {
           "slot_uid": "dpv2.direct.m92.v505_0027",
           "final_numerator": 1,
           "final_denominator": 40,
@@ -6393,16 +6371,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 16,
           "canonical_item_id": 116
-        },
-        {
-          "slot_uid": "dpv2.direct.m94.v505_0027",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 17,
-          "canonical_item_id": 117
         },
         {
           "slot_uid": "dpv2.direct.m94.v505_0028",
@@ -6775,16 +6743,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 16,
           "canonical_item_id": 116
-        },
-        {
-          "slot_uid": "dpv2.direct.m101.slot_023",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 17,
-          "canonical_item_id": 117
         },
         {
           "slot_uid": "dpv2.direct.m101.slot_024",
@@ -7615,16 +7573,6 @@
           "canonical_item_id": 118
         },
         {
-          "slot_uid": "dpv2.direct.m114.slot_044",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 19,
-          "canonical_item_id": 119
-        },
-        {
           "slot_uid": "dpv2.direct.m114.slot_041",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -8091,16 +8039,6 @@
           "canonical_item_id": 118
         },
         {
-          "slot_uid": "dpv2.direct.m116.slot_042",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 19,
-          "canonical_item_id": 119
-        },
-        {
           "slot_uid": "dpv2.direct.m116.slot_039",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -8475,16 +8413,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 9,
           "canonical_item_id": 118
-        },
-        {
-          "slot_uid": "dpv2.direct.m118.slot_043",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 10,
-          "canonical_item_id": 119
         },
         {
           "slot_uid": "dpv2.direct.m118.slot_040",
@@ -13069,12 +12997,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 57,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13083,7 +13010,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13092,7 +13019,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13101,7 +13028,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13110,7 +13037,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13119,7 +13046,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13128,7 +13055,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13137,7 +13064,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13146,7 +13073,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13155,7 +13082,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13164,7 +13091,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13173,7 +13100,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m168.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13181,8 +13108,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13190,8 +13117,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13199,8 +13126,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13208,8 +13135,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13217,8 +13144,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13226,8 +13153,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13235,8 +13162,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13244,8 +13171,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13253,8 +13180,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_helm_001",
-          "final_numerator": 1,
-          "final_denominator": 160,
+          "final_numerator": 3,
+          "final_denominator": 640,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13262,8 +13189,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_weap_001",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13271,8 +13198,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_weap_002",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13280,13 +13207,14 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m168.set_zm_weap_003",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 170,
@@ -13781,12 +13709,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 57,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13795,7 +13722,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13804,7 +13731,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13813,7 +13740,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13822,7 +13749,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13831,7 +13758,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13840,7 +13767,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13849,7 +13776,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13858,7 +13785,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13867,7 +13794,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13876,7 +13803,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13885,7 +13812,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13893,8 +13820,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13902,8 +13829,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13911,8 +13838,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13920,8 +13847,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13929,8 +13856,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13938,8 +13865,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13947,8 +13874,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13956,8 +13883,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13966,7 +13893,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_helm_001",
           "final_numerator": 1,
-          "final_denominator": 120,
+          "final_denominator": 160,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13975,7 +13902,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_weap_001",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13984,7 +13911,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_weap_002",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -13993,12 +13920,13 @@
         {
           "slot_uid": "dpv2.user.sheet.m170.set_zm_weap_003",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 172,
@@ -14483,12 +14411,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 56,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14497,7 +14424,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14506,7 +14433,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14515,7 +14442,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14524,7 +14451,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14533,7 +14460,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14542,7 +14469,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14551,7 +14478,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14560,7 +14487,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14569,7 +14496,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14578,7 +14505,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14587,7 +14514,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m172.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14595,8 +14522,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14604,8 +14531,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14613,8 +14540,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14622,8 +14549,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14631,8 +14558,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14640,8 +14567,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14649,8 +14576,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14658,8 +14585,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14667,8 +14594,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_helm_001",
-          "final_numerator": 1,
-          "final_denominator": 160,
+          "final_numerator": 3,
+          "final_denominator": 640,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14676,8 +14603,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_weap_001",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14685,8 +14612,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_weap_002",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -14694,13 +14621,14 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m172.set_zm_weap_003",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 176,
@@ -15671,12 +15599,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 56,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15685,7 +15612,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15694,7 +15621,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15703,7 +15630,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15712,7 +15639,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15721,7 +15648,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15730,7 +15657,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15739,7 +15666,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15748,7 +15675,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 180,
+          "final_denominator": 360,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15757,7 +15684,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15766,7 +15693,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15775,7 +15702,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m178.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 220,
+          "final_denominator": 440,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15783,8 +15710,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15792,8 +15719,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15801,8 +15728,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15810,8 +15737,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15819,8 +15746,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15828,8 +15755,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15837,8 +15764,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15846,8 +15773,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 140,
+          "final_numerator": 3,
+          "final_denominator": 560,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15855,8 +15782,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_helm_001",
-          "final_numerator": 1,
-          "final_denominator": 160,
+          "final_numerator": 3,
+          "final_denominator": 640,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15864,8 +15791,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_weap_001",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15873,8 +15800,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_weap_002",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -15882,13 +15809,14 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m178.set_zm_weap_003",
-          "final_numerator": 1,
-          "final_denominator": 200,
+          "final_numerator": 3,
+          "final_denominator": 800,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 182,
@@ -16383,12 +16311,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 57,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16397,7 +16324,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16406,7 +16333,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16415,7 +16342,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16424,7 +16351,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16433,7 +16360,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16442,7 +16369,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16451,7 +16378,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16460,7 +16387,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16469,7 +16396,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16478,7 +16405,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16487,7 +16414,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16495,8 +16422,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16504,8 +16431,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16513,8 +16440,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16522,8 +16449,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16531,8 +16458,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16540,8 +16467,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16549,8 +16476,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16558,8 +16485,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16568,7 +16495,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_helm_001",
           "final_numerator": 1,
-          "final_denominator": 120,
+          "final_denominator": 160,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16577,7 +16504,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_weap_001",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16586,7 +16513,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_weap_002",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -16595,12 +16522,13 @@
         {
           "slot_uid": "dpv2.user.sheet.m182.set_zm_weap_003",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 196,
@@ -20085,16 +20013,6 @@
           "canonical_item_id": 203
         },
         {
-          "slot_uid": "dpv2.direct.m216.slot_016",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 33,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m216.slot_017",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -20135,16 +20053,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m216.slot_015",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 38,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m216.slot_020",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -20183,16 +20091,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 42,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m216.slot_019",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 43,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m216.slot_004",
@@ -21187,16 +21085,6 @@
           "canonical_item_id": 920001
         },
         {
-          "slot_uid": "dpv2.direct.m220.slot_016",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 37,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m220.slot_017",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -21277,16 +21165,6 @@
           "canonical_item_id": 124
         },
         {
-          "slot_uid": "dpv2.direct.m220.slot_019",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 47,
-          "canonical_item_id": 125
-        },
-        {
           "slot_uid": "dpv2.direct.m220.slot_011",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -21315,16 +21193,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 51,
           "canonical_item_id": 130
-        },
-        {
-          "slot_uid": "dpv2.direct.m220.slot_044",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 52,
-          "canonical_item_id": 131
         },
         {
           "slot_uid": "dpv2.direct.m220.slot_039",
@@ -23351,16 +23219,6 @@
           "canonical_item_id": 118
         },
         {
-          "slot_uid": "dpv2.direct.m56.slot_076",
-          "final_numerator": 1,
-          "final_denominator": 3,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 29,
-          "canonical_item_id": 119
-        },
-        {
           "slot_uid": "dpv2.direct.m56.slot_073",
           "final_numerator": 1,
           "final_denominator": 3,
@@ -24913,16 +24771,6 @@
           "canonical_item_id": 166
         },
         {
-          "slot_uid": "dpv2.direct.m74.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 16,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m74.slot_008",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -24993,16 +24841,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m74.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 24,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m74.slot_005",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -25041,16 +24879,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 28,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m74.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 29,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m74.slot_026",
@@ -27771,16 +27599,6 @@
           "canonical_item_id": 190
         },
         {
-          "slot_uid": "dpv2.direct.m135.slot_064",
-          "final_numerator": 1,
-          "final_denominator": 5,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 38,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m135.slot_063",
           "final_numerator": 1,
           "final_denominator": 5,
@@ -27881,16 +27699,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m135.slot_062",
-          "final_numerator": 1,
-          "final_denominator": 5,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 49,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m135.slot_067",
           "final_numerator": 1,
           "final_denominator": 5,
@@ -27959,16 +27767,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 56,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m135.slot_066",
-          "final_numerator": 1,
-          "final_denominator": 5,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 57,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m135.slot_092",
@@ -28051,16 +27849,6 @@
           "canonical_item_id": 920011
         },
         {
-          "slot_uid": "dpv2.direct.m135.slot_079",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 66,
-          "canonical_item_id": 133
-        },
-        {
           "slot_uid": "dpv2.direct.m135.slot_078",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -28081,16 +27869,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m135.slot_081",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 69,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m135.slot_076",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -28099,16 +27877,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 70,
           "canonical_item_id": 128
-        },
-        {
-          "slot_uid": "dpv2.direct.m135.slot_077",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 71,
-          "canonical_item_id": 129
         },
         {
           "slot_uid": "dpv2.direct.m135.slot_097",
@@ -29307,16 +29075,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m141.slot_070",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 66,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m141.slot_071",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -29387,16 +29145,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m141.slot_069",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 74,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m141.slot_064",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -29445,16 +29193,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 79,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m141.slot_073",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 80,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m141.slot_050",
@@ -30153,16 +29891,6 @@
           "canonical_item_id": 168
         },
         {
-          "slot_uid": "dpv2.direct.m188.slot_067",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 35,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m188.slot_068",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -30233,16 +29961,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m188.slot_066",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 43,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m188.slot_071",
           "final_numerator": 1,
           "final_denominator": 60,
@@ -30281,16 +29999,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 47,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m188.slot_070",
-          "final_numerator": 1,
-          "final_denominator": 60,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 48,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m188.v505_0061",
@@ -32463,16 +32171,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 61,
           "canonical_item_id": 166
-        },
-        {
-          "slot_uid": "dpv2.direct.m76.v505_0085",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 62,
-          "canonical_item_id": 127
         },
         {
           "slot_uid": "dpv2.direct.m76.v505_0086",
@@ -40053,16 +39751,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m195.slot_072",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 68,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m195.slot_073",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -40133,16 +39821,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m195.slot_071",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 76,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m195.slot_066",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -40191,16 +39869,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 81,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m195.slot_075",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 82,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m195.v505_0071",
@@ -45257,16 +44925,6 @@
           "canonical_item_id": 910007
         },
         {
-          "slot_uid": "dpv2.direct.m39.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 18,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 7,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m39.slot_008",
           "final_numerator": 1,
           "final_denominator": 18,
@@ -45337,16 +44995,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m39.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 18,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 15,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m39.slot_005",
           "final_numerator": 1,
           "final_denominator": 18,
@@ -45385,16 +45033,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 19,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m39.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 18,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 20,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m39.slot_026",
@@ -45503,16 +45141,6 @@
           "canonical_item_id": 97
         },
         {
-          "slot_uid": "dpv2.direct.m57.slot_018",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 7,
-          "canonical_item_id": 133
-        },
-        {
           "slot_uid": "dpv2.direct.m57.slot_017",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -45533,16 +45161,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m57.slot_015",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 10,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m57.slot_020",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -45551,16 +45169,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 11,
           "canonical_item_id": 128
-        },
-        {
-          "slot_uid": "dpv2.direct.m57.slot_019",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 12,
-          "canonical_item_id": 129
         },
         {
           "slot_uid": "dpv2.direct.m57.slot_024",
@@ -45581,16 +45189,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 14,
           "canonical_item_id": 187
-        },
-        {
-          "slot_uid": "dpv2.direct.m57.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 15,
-          "canonical_item_id": 127
         },
         {
           "slot_uid": "dpv2.direct.m57.slot_008",
@@ -45673,16 +45271,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m57.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 24,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m57.slot_005",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -45733,16 +45321,6 @@
           "canonical_item_id": 124
         },
         {
-          "slot_uid": "dpv2.direct.m57.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 30,
-          "canonical_item_id": 125
-        },
-        {
           "slot_uid": "dpv2.direct.m57.slot_021",
           "final_numerator": 1,
           "final_denominator": 36,
@@ -45788,16 +45366,6 @@
       "monster_id": 77,
       "monster_name": "沃玛教主1",
       "slots": [
-        {
-          "slot_uid": "dpv2.direct.m77.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 80,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 6,
-          "canonical_item_id": 127
-        },
         {
           "slot_uid": "dpv2.direct.m77.slot_008",
           "final_numerator": 1,
@@ -45869,16 +45437,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m77.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 80,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 14,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m77.slot_005",
           "final_numerator": 1,
           "final_denominator": 80,
@@ -45917,16 +45475,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 18,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m77.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 80,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 19,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m77.slot_021",
@@ -46065,16 +45613,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m90.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 10,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m90.slot_008",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -46175,16 +45713,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m90.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 21,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m90.slot_005",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -46243,16 +45771,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 27,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m90.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 28,
-          "canonical_item_id": 125
         }
       ]
     },
@@ -46269,16 +45787,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 6,
           "canonical_item_id": 98
-        },
-        {
-          "slot_uid": "dpv2.direct.m121.slot_018",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 7,
-          "canonical_item_id": 133
         },
         {
           "slot_uid": "dpv2.direct.m121.slot_017",
@@ -46301,16 +45809,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m121.slot_015",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 10,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m121.slot_020",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -46321,16 +45819,6 @@
           "canonical_item_id": 128
         },
         {
-          "slot_uid": "dpv2.direct.m121.slot_019",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 12,
-          "canonical_item_id": 129
-        },
-        {
           "slot_uid": "dpv2.direct.m121.slot_024",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -46339,16 +45827,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 13,
           "canonical_item_id": 166
-        },
-        {
-          "slot_uid": "dpv2.direct.m121.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 14,
-          "canonical_item_id": 127
         },
         {
           "slot_uid": "dpv2.direct.m121.slot_008",
@@ -46441,16 +45919,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m121.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 24,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m121.slot_005",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -46489,16 +45957,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 28,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m121.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 29,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m121.slot_026",
@@ -46556,16 +46014,6 @@
       "monster_id": 137,
       "monster_name": "白野猪1",
       "slots": [
-        {
-          "slot_uid": "dpv2.direct.m137.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 6,
-          "canonical_item_id": 127
-        },
         {
           "slot_uid": "dpv2.direct.m137.slot_008",
           "final_numerator": 1,
@@ -46637,16 +46085,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m137.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 14,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m137.slot_005",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -46685,16 +46123,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 18,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m137.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 19,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m137.slot_021",
@@ -46793,16 +46221,6 @@
       "monster_name": "邪恶毒蛇1",
       "slots": [
         {
-          "slot_uid": "dpv2.direct.m142.slot_009",
-          "final_numerator": 1,
-          "final_denominator": 32,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 6,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m142.slot_008",
           "final_numerator": 1,
           "final_denominator": 32,
@@ -46873,16 +46291,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m142.slot_010",
-          "final_numerator": 1,
-          "final_denominator": 32,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 14,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m142.slot_005",
           "final_numerator": 1,
           "final_denominator": 32,
@@ -46923,26 +46331,6 @@
           "canonical_item_id": 124
         },
         {
-          "slot_uid": "dpv2.direct.m142.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 32,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 19,
-          "canonical_item_id": 125
-        },
-        {
-          "slot_uid": "dpv2.direct.m142.slot_018",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 20,
-          "canonical_item_id": 133
-        },
-        {
           "slot_uid": "dpv2.direct.m142.slot_017",
           "final_numerator": 1,
           "final_denominator": 40,
@@ -46963,16 +46351,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m142.slot_015",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 23,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m142.slot_020",
           "final_numerator": 1,
           "final_denominator": 40,
@@ -46981,16 +46359,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 24,
           "canonical_item_id": 128
-        },
-        {
-          "slot_uid": "dpv2.direct.m142.slot_019",
-          "final_numerator": 1,
-          "final_denominator": 40,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 25,
-          "canonical_item_id": 129
         },
         {
           "slot_uid": "dpv2.direct.m142.slot_024",
@@ -47207,16 +46575,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 17,
           "canonical_item_id": 118
-        },
-        {
-          "slot_uid": "dpv2.direct.m144.slot_042",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 18,
-          "canonical_item_id": 119
         },
         {
           "slot_uid": "dpv2.direct.m144.slot_039",
@@ -47469,16 +46827,6 @@
           "canonical_item_id": 126
         },
         {
-          "slot_uid": "dpv2.direct.m144.slot_006",
-          "final_numerator": 1,
-          "final_denominator": 48,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 44,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m144.slot_010",
           "final_numerator": 1,
           "final_denominator": 48,
@@ -47507,16 +46855,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 47,
           "canonical_item_id": 122
-        },
-        {
-          "slot_uid": "dpv2.direct.m144.slot_004",
-          "final_numerator": 1,
-          "final_denominator": 48,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 48,
-          "canonical_item_id": 123
         },
         {
           "slot_uid": "dpv2.direct.m144.slot_009",
@@ -47557,16 +46895,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 52,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m144.slot_008",
-          "final_numerator": 1,
-          "final_denominator": 48,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 53,
-          "canonical_item_id": 125
         }
       ]
     },
@@ -47985,16 +47313,6 @@
           "canonical_item_id": 98
         },
         {
-          "slot_uid": "dpv2.direct.m225.slot_060",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 21,
-          "canonical_item_id": 133
-        },
-        {
           "slot_uid": "dpv2.direct.m225.slot_061",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -48025,16 +47343,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m225.slot_063",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 25,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m225.slot_058",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -48043,16 +47351,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 26,
           "canonical_item_id": 128
-        },
-        {
-          "slot_uid": "dpv2.direct.m225.slot_059",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 27,
-          "canonical_item_id": 129
         },
         {
           "slot_uid": "dpv2.direct.m225.slot_052",
@@ -49915,16 +49213,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m230.slot_041",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 35,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m230.slot_042",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -50015,16 +49303,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m230.slot_040",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 45,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m230.slot_045",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -50103,16 +49381,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 53,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m230.slot_044",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 54,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m230.slot_028",
@@ -50531,16 +49799,6 @@
           "canonical_item_id": 126
         },
         {
-          "slot_uid": "dpv2.direct.m231.slot_024",
-          "final_numerator": 1,
-          "final_denominator": 10,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 31,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m231.slot_028",
           "final_numerator": 1,
           "final_denominator": 10,
@@ -50569,16 +49827,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 34,
           "canonical_item_id": 122
-        },
-        {
-          "slot_uid": "dpv2.direct.m231.slot_022",
-          "final_numerator": 1,
-          "final_denominator": 10,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 35,
-          "canonical_item_id": 123
         },
         {
           "slot_uid": "dpv2.direct.m231.slot_027",
@@ -50619,16 +49867,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 39,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m231.slot_026",
-          "final_numerator": 1,
-          "final_denominator": 10,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 40,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m231.slot_016",
@@ -51307,16 +50545,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m232.slot_072",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 24,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m232.slot_073",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -51487,16 +50715,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m232.slot_071",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 42,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m232.slot_076",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -51635,16 +50853,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 56,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m232.slot_075",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 57,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m232.slot_082",
@@ -52253,16 +51461,6 @@
           "canonical_item_id": 203
         },
         {
-          "slot_uid": "dpv2.direct.m233.slot_067",
-          "final_numerator": 1,
-          "final_denominator": 5,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 30,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m233.slot_068",
           "final_numerator": 1,
           "final_denominator": 5,
@@ -52301,16 +51499,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 34,
           "canonical_item_id": 122
-        },
-        {
-          "slot_uid": "dpv2.direct.m233.slot_066",
-          "final_numerator": 1,
-          "final_denominator": 5,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 35,
-          "canonical_item_id": 123
         },
         {
           "slot_uid": "dpv2.direct.m233.slot_071",
@@ -52353,26 +51541,6 @@
           "canonical_item_id": 124
         },
         {
-          "slot_uid": "dpv2.direct.m233.slot_070",
-          "final_numerator": 1,
-          "final_denominator": 5,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 40,
-          "canonical_item_id": 125
-        },
-        {
-          "slot_uid": "dpv2.direct.m233.slot_078",
-          "final_numerator": 1,
-          "final_denominator": 10,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 41,
-          "canonical_item_id": 133
-        },
-        {
           "slot_uid": "dpv2.direct.m233.slot_079",
           "final_numerator": 1,
           "final_denominator": 10,
@@ -52393,16 +51561,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m233.slot_081",
-          "final_numerator": 1,
-          "final_denominator": 10,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 44,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m233.slot_076",
           "final_numerator": 1,
           "final_denominator": 10,
@@ -52411,16 +51569,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 45,
           "canonical_item_id": 128
-        },
-        {
-          "slot_uid": "dpv2.direct.m233.slot_077",
-          "final_numerator": 1,
-          "final_denominator": 10,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 46,
-          "canonical_item_id": 129
         },
         {
           "slot_uid": "dpv2.direct.m233.v505_0006",
@@ -53780,16 +52928,6 @@
           "canonical_item_id": 116
         },
         {
-          "slot_uid": "dpv2.direct.m19.slot_003",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 12,
-          "canonical_item_id": 117
-        },
-        {
           "slot_uid": "dpv2.direct.m19.slot_004",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -53944,16 +53082,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 14,
           "canonical_item_id": 118
-        },
-        {
-          "slot_uid": "dpv2.direct.m50.slot_014",
-          "final_numerator": 1,
-          "final_denominator": 30,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 15,
-          "canonical_item_id": 119
         },
         {
           "slot_uid": "dpv2.direct.m50.slot_008",
@@ -54984,16 +54112,6 @@
           "canonical_item_id": 118
         },
         {
-          "slot_uid": "dpv2.direct.m107.slot_034",
-          "final_numerator": 1,
-          "final_denominator": 15,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 34,
-          "canonical_item_id": 119
-        },
-        {
           "slot_uid": "dpv2.direct.m107.slot_031",
           "final_numerator": 1,
           "final_denominator": 15,
@@ -55208,16 +54326,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 9,
           "canonical_item_id": 118
-        },
-        {
-          "slot_uid": "dpv2.direct.m112.slot_046",
-          "final_numerator": 1,
-          "final_denominator": 30,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 10,
-          "canonical_item_id": 119
         },
         {
           "slot_uid": "dpv2.direct.m112.slot_043",
@@ -56164,12 +55272,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 56,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56178,7 +55285,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56187,7 +55294,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56196,7 +55303,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56205,7 +55312,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56214,7 +55321,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56223,7 +55330,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56232,7 +55339,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56241,7 +55348,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56250,7 +55357,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56259,7 +55366,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56268,7 +55375,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56276,8 +55383,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56285,8 +55392,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56294,8 +55401,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56303,8 +55410,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56312,8 +55419,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56321,8 +55428,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56330,8 +55437,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56339,8 +55446,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56349,7 +55456,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_helm_001",
           "final_numerator": 1,
-          "final_denominator": 120,
+          "final_denominator": 160,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56358,7 +55465,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_weap_001",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56367,7 +55474,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_weap_002",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56376,12 +55483,13 @@
         {
           "slot_uid": "dpv2.user.sheet.m164.set_zm_weap_003",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 166,
@@ -56876,12 +55984,11 @@
           "origin": "sheet_row",
           "source_sheet_row": 56,
           "canonical_item_id": 211
-        }
-      ,
+        },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_001",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56890,7 +55997,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_002",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56899,7 +56006,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_003",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56908,7 +56015,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_004",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56917,7 +56024,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_005",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56926,7 +56033,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_006",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56935,7 +56042,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_007",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56944,7 +56051,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_008",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56953,7 +56060,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_ch_009",
           "final_numerator": 1,
-          "final_denominator": 140,
+          "final_denominator": 280,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56962,7 +56069,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_helm_001",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56971,7 +56078,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_helm_002",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56980,7 +56087,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_cy_helm_003",
           "final_numerator": 1,
-          "final_denominator": 170,
+          "final_denominator": 340,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56988,8 +56095,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_001",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -56997,8 +56104,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_002",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57006,8 +56113,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_003",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57015,8 +56122,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_004",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57024,8 +56131,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_005",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57033,8 +56140,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_006",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57042,8 +56149,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_007",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57051,8 +56158,8 @@
         },
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_008",
-          "final_numerator": 1,
-          "final_denominator": 100,
+          "final_numerator": 3,
+          "final_denominator": 400,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57061,7 +56168,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_helm_001",
           "final_numerator": 1,
-          "final_denominator": 120,
+          "final_denominator": 160,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57070,7 +56177,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_weap_001",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57079,7 +56186,7 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_weap_002",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
@@ -57088,12 +56195,13 @@
         {
           "slot_uid": "dpv2.user.sheet.m166.set_zm_weap_003",
           "final_numerator": 1,
-          "final_denominator": 150,
+          "final_denominator": 200,
           "overflow_priority": 300,
           "protected_drop": false,
           "origin": "user_directive_overlay",
           "canonical_item_id": 107
-        }]
+        }
+      ]
     },
     {
       "monster_id": 174,
@@ -59056,16 +58164,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m152.slot_037",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 15,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m152.slot_038",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -59196,16 +58294,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m152.slot_036",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 29,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m152.slot_042",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -59304,16 +58392,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 38,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m152.slot_040",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 39,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m152.slot_048",
@@ -59632,16 +58710,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m155.slot_037",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 17,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m155.slot_038",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -59762,16 +58830,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m155.slot_036",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 30,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m155.slot_042",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -59872,16 +58930,6 @@
           "canonical_item_id": 124
         },
         {
-          "slot_uid": "dpv2.direct.m155.slot_040",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 40,
-          "canonical_item_id": 125
-        },
-        {
           "slot_uid": "dpv2.direct.m155.slot_048",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -59900,16 +58948,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 42,
           "canonical_item_id": 203
-        },
-        {
-          "slot_uid": "dpv2.direct.m155.slot_030",
-          "final_numerator": 1,
-          "final_denominator": 28,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 43,
-          "canonical_item_id": 133
         },
         {
           "slot_uid": "dpv2.direct.m155.slot_031",
@@ -59932,16 +58970,6 @@
           "canonical_item_id": 130
         },
         {
-          "slot_uid": "dpv2.direct.m155.slot_033",
-          "final_numerator": 1,
-          "final_denominator": 28,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 46,
-          "canonical_item_id": 131
-        },
-        {
           "slot_uid": "dpv2.direct.m155.slot_028",
           "final_numerator": 1,
           "final_denominator": 28,
@@ -59950,16 +58978,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 47,
           "canonical_item_id": 128
-        },
-        {
-          "slot_uid": "dpv2.direct.m155.slot_029",
-          "final_numerator": 1,
-          "final_denominator": 28,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 48,
-          "canonical_item_id": 129
         },
         {
           "slot_uid": "dpv2.direct.m155.slot_019",
@@ -60248,16 +59266,6 @@
           "canonical_item_id": 187
         },
         {
-          "slot_uid": "dpv2.direct.m158.slot_039",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 17,
-          "canonical_item_id": 127
-        },
-        {
           "slot_uid": "dpv2.direct.m158.slot_040",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -60378,16 +59386,6 @@
           "canonical_item_id": 122
         },
         {
-          "slot_uid": "dpv2.direct.m158.slot_038",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 30,
-          "canonical_item_id": 123
-        },
-        {
           "slot_uid": "dpv2.direct.m158.slot_044",
           "final_numerator": 1,
           "final_denominator": 20,
@@ -60486,16 +59484,6 @@
           "origin": "sheet_row",
           "source_sheet_row": 39,
           "canonical_item_id": 124
-        },
-        {
-          "slot_uid": "dpv2.direct.m158.slot_042",
-          "final_numerator": 1,
-          "final_denominator": 20,
-          "overflow_priority": 300,
-          "protected_drop": false,
-          "origin": "sheet_row",
-          "source_sheet_row": 40,
-          "canonical_item_id": 125
         },
         {
           "slot_uid": "dpv2.direct.m158.slot_050",

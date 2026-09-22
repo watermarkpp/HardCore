@@ -102,7 +102,7 @@ static func normalize(raw: Dictionary) -> Dictionary:
 
 	var duration: float = DEFAULT_DURATION
 	var raw_duration: Variant = raw.get("duration", DEFAULT_DURATION)
-	if raw_duration is float or raw_duration is int:
+	if (raw_duration is float or raw_duration is int) and is_finite(float(raw_duration)):
 		duration = maxf(0.1, float(raw_duration))
 
 	return {

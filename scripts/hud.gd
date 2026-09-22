@@ -229,6 +229,7 @@ var _safe_area_size_changed_callable := Callable()
 ## order): they must sit on the true screen midline, not the safe-area one.
 var _center_exempt_controls: Array[Control] = []
 var _panel_script_warm_refs: Array[Script] = []
+var _panel_script_pending: Dictionary = {}
 
 
 func _ready() -> void:
@@ -236,6 +237,16 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	# Script loaders can still be compiling preloaded textures when the world
+	# exits. Join this HUD's requests before engine/resource teardown; ordinary
+	# prewarming remains asynchronous and never blocks the gameplay frame.
+	for path: String in _panel_script_pending.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+			var panel_script := ResourceLoader.load_threaded_get(path) as Script
+			if panel_script != null:
+				_panel_script_warm_refs.append(panel_script)
+	_panel_script_pending.clear()
 	if not _safe_area_size_changed_callable.is_valid():
 		return
 	var viewport := get_viewport()
@@ -1953,7 +1964,7 @@ func _prefetch_panel_scripts() -> Dictionary:
 		WAREHOUSE_PANEL_SCRIPT_PATH,
 		SHOP_PANEL_SCRIPT_PATH,
 	]
-	var pending: Dictionary = {}
+	var pending := _panel_script_pending
 	var request_failures: Array[String] = []
 	for path: String in paths:
 		var error := ResourceLoader.load_threaded_request(path)

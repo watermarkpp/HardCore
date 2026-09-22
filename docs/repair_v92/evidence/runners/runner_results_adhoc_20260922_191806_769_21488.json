@@ -1,0 +1,41 @@
+{
+  "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "results": [
+    {
+      "test_name": "bich_undead_client_art_test",
+      "test_path": "tests/bich_undead_client_art_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "fire_wall_release_owner_result_test",
+      "test_path": "tests/fire_wall_release_owner_result_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    }
+  ],
+  "failed": 2,
+  "suite": "adhoc",
+  "engine_log_errors": 3,
+  "total": 2,
+  "generated_at": "2026-09-22T19:18:06.7699954+08:00",
+  "passed": 0
+}

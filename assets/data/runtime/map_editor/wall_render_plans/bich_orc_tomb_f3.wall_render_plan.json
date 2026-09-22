@@ -88,16 +88,16 @@
 		322,
 		410,
 		411,
+		450,
 		451,
-		452,
 		523,
 		524,
 		19,
 		20,
 		92,
 		93,
+		188,
 		189,
-		190,
 		407,
 		408,
 		447,
@@ -108,8 +108,8 @@
 		23,
 		95,
 		96,
+		191,
 		192,
-		193,
 		287,
 		289,
 		327,
@@ -128,8 +128,8 @@
 		202,
 		420,
 		421,
+		453,
 		454,
-		455,
 		526,
 		527,
 		28,
@@ -178,8 +178,8 @@
 		542,
 		38,
 		39,
+		110,
 		111,
-		112,
 		225,
 		226,
 		362,
@@ -190,8 +190,8 @@
 		539,
 		41,
 		42,
+		113,
 		114,
-		115,
 		182,
 		183,
 		228,
@@ -220,8 +220,8 @@
 		48,
 		120,
 		121,
+		194,
 		195,
-		196,
 		240,
 		241,
 		324,
@@ -370,8 +370,8 @@
 		174,
 		185,
 		186,
+		197,
 		198,
-		199,
 		210,
 		211,
 		222,
@@ -791,8 +791,8 @@
 		},
 		{
 			"command_indices": [
-				198,
-				199
+				197,
+				198
 			],
 			"composite_size": [
 				160,
@@ -804,17 +804,17 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						198,
-						199
+						197,
+						198
 					],
 					"group_key": "wall_part:inst_000042:29:0",
-					"representative_command_index": 198
+					"representative_command_index": 197
 				}
 			],
 			"key": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_00_base.png@(-48.0, -128.0)|assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_00_front.png@(-48.0, -128.0)",
 			"layers": [
 				{
-					"command_index": 198,
+					"command_index": 197,
 					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_00_base.png",
 					"offset": [
 						-48.0,
@@ -826,7 +826,7 @@
 					]
 				},
 				{
-					"command_index": 199,
+					"command_index": 198,
 					"image_path": "assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l3_v03/part_00_front.png",
 					"offset": [
 						-48.0,
@@ -1210,8 +1210,8 @@
 				20,
 				92,
 				93,
+				188,
 				189,
-				190,
 				407,
 				408,
 				447,
@@ -1250,11 +1250,11 @@
 				},
 				{
 					"command_indices": [
-						189,
-						190
+						188,
+						189
 					],
 					"group_key": "wall_part:inst_000123:28:2",
-					"representative_command_index": 189
+					"representative_command_index": 188
 				},
 				{
 					"command_indices": [
@@ -1330,8 +1330,8 @@
 				202,
 				420,
 				421,
+				453,
 				454,
-				455,
 				526,
 				527
 			],
@@ -1382,11 +1382,11 @@
 				},
 				{
 					"command_indices": [
-						454,
-						455
+						453,
+						454
 					],
 					"group_key": "wall_part:inst_000129:47:3",
-					"representative_command_index": 454
+					"representative_command_index": 453
 				},
 				{
 					"command_indices": [
@@ -1556,8 +1556,8 @@
 			"command_indices": [
 				38,
 				39,
+				110,
 				111,
-				112,
 				225,
 				226,
 				362,
@@ -1590,11 +1590,11 @@
 				},
 				{
 					"command_indices": [
-						111,
-						112
+						110,
+						111
 					],
 					"group_key": "wall_part:inst_000121:23:1",
-					"representative_command_index": 111
+					"representative_command_index": 110
 				},
 				{
 					"command_indices": [
@@ -2825,8 +2825,8 @@
 				322,
 				410,
 				411,
+				450,
 				451,
-				452,
 				523,
 				524
 			],
@@ -2895,11 +2895,11 @@
 				},
 				{
 					"command_indices": [
-						451,
-						452
+						450,
+						451
 					],
 					"group_key": "wall_part:inst_000147:48:2",
-					"representative_command_index": 451
+					"representative_command_index": 450
 				},
 				{
 					"command_indices": [
@@ -2955,8 +2955,8 @@
 				23,
 				95,
 				96,
+				191,
 				192,
-				193,
 				287,
 				289,
 				327,
@@ -3001,11 +3001,11 @@
 				},
 				{
 					"command_indices": [
-						192,
-						193
+						191,
+						192
 					],
 					"group_key": "wall_part:inst_000141:26:3",
-					"representative_command_index": 192
+					"representative_command_index": 191
 				},
 				{
 					"command_indices": [
@@ -3367,8 +3367,8 @@
 			"command_indices": [
 				41,
 				42,
+				113,
 				114,
-				115,
 				182,
 				183,
 				228,
@@ -3407,11 +3407,11 @@
 				},
 				{
 					"command_indices": [
-						114,
-						115
+						113,
+						114
 					],
 					"group_key": "wall_part:inst_000139:22:2",
-					"representative_command_index": 114
+					"representative_command_index": 113
 				},
 				{
 					"command_indices": [
@@ -3507,8 +3507,8 @@
 				48,
 				120,
 				121,
+				194,
 				195,
-				196,
 				240,
 				241,
 				324,
@@ -3553,11 +3553,11 @@
 				},
 				{
 					"command_indices": [
-						195,
-						196
+						194,
+						195
 					],
 					"group_key": "wall_part:inst_000049:27:3",
-					"representative_command_index": 195
+					"representative_command_index": 194
 				},
 				{
 					"command_indices": [
@@ -4214,17 +4214,17 @@
 	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
 	"legacy_command_indices": [
 		30,
-		109,
+		115,
 		134,
 		168,
-		187,
+		199,
 		302,
 		303,
 		304,
 		338,
 		345,
 		412,
-		449
+		455
 	],
 	"map_key": "bich_orc_tomb_f3",
 	"shadow_chunk_command_indices": [
@@ -4264,8 +4264,8 @@
 		100,
 		103,
 		106,
-		110,
-		113,
+		109,
+		112,
 		116,
 		119,
 		122,
@@ -4289,10 +4289,10 @@
 		178,
 		181,
 		184,
-		188,
-		191,
-		194,
-		197,
+		187,
+		190,
+		193,
+		196,
 		200,
 		203,
 		206,
@@ -4374,8 +4374,8 @@
 		440,
 		443,
 		446,
-		450,
-		453,
+		449,
+		452,
 		456,
 		459,
 		462,
@@ -4465,17 +4465,17 @@
 				-1
 			],
 			"insert_command_index": 31,
-			"path": "assets/data/runtime/map_editor/wall_render_store/af95e18053d23632c6b9853a9931ffd3762a15fa0080aef7b16d1f13ffe344f3.png",
-			"png_bytes": 5149,
+			"path": "assets/data/runtime/map_editor/wall_render_store/fc9bc353863349b390e387997f188737f7475018ef4c56dc391484dac24f6d86.png",
+			"png_bytes": 5525,
 			"position_px": [
 				124.0,
 				-498.0
 			],
 			"segment_index": 1,
-			"sha256": "af95e18053d23632c6b9853a9931ffd3762a15fa0080aef7b16d1f13ffe344f3",
+			"sha256": "fc9bc353863349b390e387997f188737f7475018ef4c56dc391484dac24f6d86",
 			"size_px": [
-				435,
-				232
+				467,
+				248
 			]
 		},
 		{
@@ -4484,17 +4484,17 @@
 				-1
 			],
 			"insert_command_index": 31,
-			"path": "assets/data/runtime/map_editor/wall_render_store/9a59724c9a347f524bd517c762709c414702e9bef67d9b23b0081dde6e72cff7.png",
-			"png_bytes": 5639,
+			"path": "assets/data/runtime/map_editor/wall_render_store/cb0bce9f7cf36fd27e8083bb689845252cbbf7c99f5219f9fd07ff9460251359.png",
+			"png_bytes": 5958,
 			"position_px": [
-				-580.0,
+				-612.0,
 				-483.0
 			],
 			"segment_index": 1,
-			"sha256": "9a59724c9a347f524bd517c762709c414702e9bef67d9b23b0081dde6e72cff7",
+			"sha256": "cb0bce9f7cf36fd27e8083bb689845252cbbf7c99f5219f9fd07ff9460251359",
 			"size_px": [
-				435,
-				233
+				467,
+				249
 			]
 		},
 		{
@@ -4502,18 +4502,18 @@
 				0,
 				-1
 			],
-			"insert_command_index": 110,
-			"path": "assets/data/runtime/map_editor/wall_render_store/72e4dee49cf9d3460644bd72cf98bca6626bdc581c6248e0b3d6ca0c8bdcb247.png",
-			"png_bytes": 1961,
+			"insert_command_index": 116,
+			"path": "assets/data/runtime/map_editor/wall_render_store/bb01f710e27610e9d1ba2c992242cd465a85062d68a4a1d4bea015d89824d27e.png",
+			"png_bytes": 1655,
 			"position_px": [
-				540.0,
-				-290.0
+				572.0,
+				-274.0
 			],
 			"segment_index": 2,
-			"sha256": "72e4dee49cf9d3460644bd72cf98bca6626bdc581c6248e0b3d6ca0c8bdcb247",
+			"sha256": "bb01f710e27610e9d1ba2c992242cd465a85062d68a4a1d4bea015d89824d27e",
 			"size_px": [
-				147,
-				88
+				115,
+				72
 			]
 		},
 		{
@@ -4521,18 +4521,18 @@
 				-1,
 				-1
 			],
-			"insert_command_index": 110,
-			"path": "assets/data/runtime/map_editor/wall_render_store/bd23e7ded681d8ede182507879f0019dafe81d5ad51ed06e0fc657fa7b0901ca.png",
-			"png_bytes": 2169,
+			"insert_command_index": 116,
+			"path": "assets/data/runtime/map_editor/wall_render_store/51b3f913e42e46514448d8f08df330eb5385ce882eebd77d2b34778c21d6c710.png",
+			"png_bytes": 1763,
 			"position_px": [
 				-708.0,
-				-275.0
+				-259.0
 			],
 			"segment_index": 2,
-			"sha256": "bd23e7ded681d8ede182507879f0019dafe81d5ad51ed06e0fc657fa7b0901ca",
+			"sha256": "51b3f913e42e46514448d8f08df330eb5385ce882eebd77d2b34778c21d6c710",
 			"size_px": [
-				147,
-				89
+				115,
+				73
 			]
 		},
 		{
@@ -4579,17 +4579,17 @@
 				-1
 			],
 			"insert_command_index": 169,
-			"path": "assets/data/runtime/map_editor/wall_render_store/83734ea60473c93c29f29b437f6c553c7f8c5bcacefc7123ea781be81d0ba3f1.png",
-			"png_bytes": 2281,
+			"path": "assets/data/runtime/map_editor/wall_render_store/545b2c63df5450e78461a903cd9d23f6fbdf91d921d33eb94bcfadb403c123bd.png",
+			"png_bytes": 2912,
 			"position_px": [
-				-868.0,
+				-900.0,
 				-163.0
 			],
 			"segment_index": 4,
-			"sha256": "83734ea60473c93c29f29b437f6c553c7f8c5bcacefc7123ea781be81d0ba3f1",
+			"sha256": "545b2c63df5450e78461a903cd9d23f6fbdf91d921d33eb94bcfadb403c123bd",
 			"size_px": [
-				851,
-				57
+				883,
+				67
 			]
 		},
 		{
@@ -4598,17 +4598,17 @@
 				-1
 			],
 			"insert_command_index": 169,
-			"path": "assets/data/runtime/map_editor/wall_render_store/dc368666a910ecc59eee0b9c5fc5fe9b3e2536009b6ddca7131b3c55b1a6fb0b.png",
-			"png_bytes": 1926,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c2cd37c10dacd3af9018c59929f138852e36c0bf3fa8c4d23c3fc2dcb0af093a.png",
+			"png_bytes": 2779,
 			"position_px": [
 				28.0,
 				-162.0
 			],
 			"segment_index": 4,
-			"sha256": "dc368666a910ecc59eee0b9c5fc5fe9b3e2536009b6ddca7131b3c55b1a6fb0b",
+			"sha256": "c2cd37c10dacd3af9018c59929f138852e36c0bf3fa8c4d23c3fc2dcb0af093a",
 			"size_px": [
-				819,
-				50
+				851,
+				72
 			]
 		},
 		{
@@ -4616,7 +4616,7 @@
 				-2,
 				0
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"path": "assets/data/runtime/map_editor/wall_render_store/9822e5d7a583a0fea1cd0f803df0d07de09489bf90a335e4a264e4433026a6ea.png",
 			"png_bytes": 1923,
 			"position_px": [
@@ -4635,37 +4635,18 @@
 				0,
 				-1
 			],
-			"insert_command_index": 188,
-			"path": "assets/data/runtime/map_editor/wall_render_store/2812c12d38c17dcee8aba623718215da9353c4aada53fa79a5e1f2b1890cac6c.png",
-			"png_bytes": 5754,
+			"insert_command_index": 200,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c9ac20ee4b618ac734872247032909dbff0441a72e5f4593467278475b258f32.png",
+			"png_bytes": 4871,
 			"position_px": [
-				92.0,
-				-146.0
+				124.0,
+				-130.0
 			],
 			"segment_index": 5,
-			"sha256": "2812c12d38c17dcee8aba623718215da9353c4aada53fa79a5e1f2b1890cac6c",
+			"sha256": "c9ac20ee4b618ac734872247032909dbff0441a72e5f4593467278475b258f32",
 			"size_px": [
-				932,
-				117
-			]
-		},
-		{
-			"grid_cell": [
-				-1,
-				-1
-			],
-			"insert_command_index": 188,
-			"path": "assets/data/runtime/map_editor/wall_render_store/af396a86edecc0e150f33234cb3818a310abc1e6c18a19f66545dfa331736c8f.png",
-			"png_bytes": 6036,
-			"position_px": [
-				-1024.0,
-				-131.0
-			],
-			"segment_index": 5,
-			"sha256": "af396a86edecc0e150f33234cb3818a310abc1e6c18a19f66545dfa331736c8f",
-			"size_px": [
-				943,
-				131
+				900,
+				101
 			]
 		},
 		{
@@ -4673,7 +4654,7 @@
 				-2,
 				-1
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"path": "assets/data/runtime/map_editor/wall_render_store/d13a739814b7ffc8246eb7b218aed58afe823951bcc4b4de6ab4dbd89dfea960.png",
 			"png_bytes": 1124,
 			"position_px": [
@@ -4690,9 +4671,28 @@
 		{
 			"grid_cell": [
 				-1,
+				-1
+			],
+			"insert_command_index": 200,
+			"path": "assets/data/runtime/map_editor/wall_render_store/20066cd9a44a6c383f1d728a925acd60b8ec550e7fe74689a77a071a24e6dd0b.png",
+			"png_bytes": 5262,
+			"position_px": [
+				-1024.0,
+				-115.0
+			],
+			"segment_index": 5,
+			"sha256": "20066cd9a44a6c383f1d728a925acd60b8ec550e7fe74689a77a071a24e6dd0b",
+			"size_px": [
+				911,
+				115
+			]
+		},
+		{
+			"grid_cell": [
+				-1,
 				0
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"path": "assets/data/runtime/map_editor/wall_render_store/85b1857373da0c7eb97e303fda168bede83fc3488ff763024ba4e32b0df5b7bf.png",
 			"png_bytes": 1481,
 			"position_px": [
@@ -4711,7 +4711,7 @@
 				1,
 				-1
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"path": "assets/data/runtime/map_editor/wall_render_store/bda6b2eab4800cb331e9870593b08b9987fb6f6d69fd2ea8cad22caf0a18a4e9.png",
 			"png_bytes": 1198,
 			"position_px": [
@@ -4730,7 +4730,7 @@
 				1,
 				0
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"path": "assets/data/runtime/map_editor/wall_render_store/6ac6eae5956ef255fdab4a7390ff2fb02d75b50a511533fc4c6b4d1f644e4a86.png",
 			"png_bytes": 1757,
 			"position_px": [
@@ -4902,17 +4902,17 @@
 				0
 			],
 			"insert_command_index": 413,
-			"path": "assets/data/runtime/map_editor/wall_render_store/699081ac37d5079961a4a24c5ae33239e74abcc64b0131ef7d25abd6b81d03f1.png",
-			"png_bytes": 3956,
+			"path": "assets/data/runtime/map_editor/wall_render_store/4b1b242cd2ade189ec014473406c774b8db0fcc5b81203b62d3e5f73f9a3a6b9.png",
+			"png_bytes": 4653,
 			"position_px": [
 				0.0,
 				189.0
 			],
 			"segment_index": 9,
-			"sha256": "699081ac37d5079961a4a24c5ae33239e74abcc64b0131ef7d25abd6b81d03f1",
+			"sha256": "4b1b242cd2ade189ec014473406c774b8db0fcc5b81203b62d3e5f73f9a3a6b9",
 			"size_px": [
 				879,
-				89
+				105
 			]
 		},
 		{
@@ -4921,17 +4921,17 @@
 				0
 			],
 			"insert_command_index": 413,
-			"path": "assets/data/runtime/map_editor/wall_render_store/b9f85a48f061a0cdfff11f0931b8241f54536a70d2a2e4b5df475b8f864c3f62.png",
-			"png_bytes": 3230,
+			"path": "assets/data/runtime/map_editor/wall_render_store/5fad80250a9eefbfa88b2a8af8aba18c7be48c7381c3b3d91030a2b4de5abb51.png",
+			"png_bytes": 3755,
 			"position_px": [
 				-836.0,
 				206.0
 			],
 			"segment_index": 9,
-			"sha256": "b9f85a48f061a0cdfff11f0931b8241f54536a70d2a2e4b5df475b8f864c3f62",
+			"sha256": "5fad80250a9eefbfa88b2a8af8aba18c7be48c7381c3b3d91030a2b4de5abb51",
 			"size_px": [
 				836,
-				88
+				98
 			]
 		},
 		{
@@ -4939,18 +4939,18 @@
 				0,
 				0
 			],
-			"insert_command_index": 450,
-			"path": "assets/data/runtime/map_editor/wall_render_store/45d31c33dca76cfa6aa41d298ff4f1c4c7261068f1623c86e63d9e05204cc909.png",
-			"png_bytes": 16205,
+			"insert_command_index": 456,
+			"path": "assets/data/runtime/map_editor/wall_render_store/69bbbe2c8214efc00cafb041d5a841e8fc9c5c4d0d0505b87f91eefde029a863.png",
+			"png_bytes": 15499,
 			"position_px": [
 				0.0,
-				253.0
+				269.0
 			],
 			"segment_index": 10,
-			"sha256": "45d31c33dca76cfa6aa41d298ff4f1c4c7261068f1623c86e63d9e05204cc909",
+			"sha256": "69bbbe2c8214efc00cafb041d5a841e8fc9c5c4d0d0505b87f91eefde029a863",
 			"size_px": [
-				751,
-				387
+				719,
+				371
 			]
 		},
 		{
@@ -4958,18 +4958,18 @@
 				-1,
 				0
 			],
-			"insert_command_index": 450,
-			"path": "assets/data/runtime/map_editor/wall_render_store/472c6b150c044d2de98f578c56e2704e4ec04ab49d1bd26358a7465d12c3bef7.png",
-			"png_bytes": 13722,
+			"insert_command_index": 456,
+			"path": "assets/data/runtime/map_editor/wall_render_store/1eded6b4d2c2b8828cfb060ba1e5c0245ce62d1c86931b661bccc89077ed8469.png",
+			"png_bytes": 13046,
 			"position_px": [
-				-708.0,
-				270.0
+				-676.0,
+				286.0
 			],
 			"segment_index": 10,
-			"sha256": "472c6b150c044d2de98f578c56e2704e4ec04ab49d1bd26358a7465d12c3bef7",
+			"sha256": "1eded6b4d2c2b8828cfb060ba1e5c0245ce62d1c86931b661bccc89077ed8469",
 			"size_px": [
-				708,
-				370
+				676,
+				354
 			]
 		}
 	],
@@ -5017,15 +5017,15 @@
 				97,
 				100,
 				103,
-				106
+				106,
+				109,
+				112
 			],
 			"insert_command_index": 31,
 			"segment_index": 1
 		},
 		{
 			"command_indices": [
-				110,
-				113,
 				116,
 				119,
 				122,
@@ -5033,7 +5033,7 @@
 				128,
 				131
 			],
-			"insert_command_index": 110,
+			"insert_command_index": 116,
 			"segment_index": 2
 		},
 		{
@@ -5060,17 +5060,17 @@
 				175,
 				178,
 				181,
-				184
+				184,
+				187,
+				190,
+				193,
+				196
 			],
 			"insert_command_index": 169,
 			"segment_index": 4
 		},
 		{
 			"command_indices": [
-				188,
-				191,
-				194,
-				197,
 				200,
 				203,
 				206,
@@ -5106,7 +5106,7 @@
 				294,
 				299
 			],
-			"insert_command_index": 188,
+			"insert_command_index": 200,
 			"segment_index": 5
 		},
 		{
@@ -5175,15 +5175,15 @@
 				437,
 				440,
 				443,
-				446
+				446,
+				449,
+				452
 			],
 			"insert_command_index": 413,
 			"segment_index": 9
 		},
 		{
 			"command_indices": [
-				450,
-				453,
 				456,
 				459,
 				462,
@@ -5228,11 +5228,11 @@
 				579,
 				580
 			],
-			"insert_command_index": 450,
+			"insert_command_index": 456,
 			"segment_index": 10
 		}
 	],
-	"source_commands_sha256": "93d588d0ae6905341027d47cacde8c98c6b06bfedc643b8bc16885ee9e6c7c41",
+	"source_commands_sha256": "49186a3da164ca6779d7880a2c551a1323f9b8da27f781063026bd2c73a188e3",
 	"source_image_sha256": {
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_base.png": "039ac1f1dfe0ba61a77e5b0917608f5a2bfab65cac9bc7138565224a24ebbde6",
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_x_l1_v01/part_00_front.png": "e185202ca31a2a51a52936f2a56dc799cbf63dc90402314b4f0b8d661f1381a9",
@@ -5337,6 +5337,6 @@
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_front.png": "4734fcb2ac5782428bfd7dce168466cd6166e4a9cbac375725284c3a9488aada",
 		"assets/art/maps/_shared/walls/orc_tomb/orc_tomb_rough_stone_u0/orc_tomb_wall_straight_y_l4_v03/part_03_shadow.png": "5f58dff85ef8fafc2d01cb866d6aed3550a53e3283e0625f55c747d3296d5ae0"
 	},
-	"source_runtime_json_sha256": "0b943ffc1e7faccb90e14c3882ff16a253b8188851e217137c5a6cdd52cfa128",
+	"source_runtime_json_sha256": "6bd2308717a0942295e9979383a82f79520f73cb0a8ad0e8380e6a09d5143db4",
 	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
 }

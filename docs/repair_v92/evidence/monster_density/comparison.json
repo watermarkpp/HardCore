@@ -1,0 +1,895 @@
+{
+  "functional_status": "PASS",
+  "valid_runs": 13,
+  "phone_fps_status": "NOT_RUN",
+  "overall_performance_acceptance": "FAIL",
+  "method": "12 attacking + 50 additional actors, near/far x idle/last-seen pursuit x two repeats; formal-map census outside timed window.",
+  "limitations": [
+    "Headless display uses dummy rendering; intervals are not device FPS.",
+    "Occluded fixture uses a grid WORLD wall and seeded prior target observation, not an authored polygon map.",
+    "Formal map stationary census did not reproduce path queueing.",
+    "Resident texture byte counters estimate decoded RGBA8, not actual mobile GPU residency."
+  ],
+  "density_source_hashes": {
+    "res://scripts/enemy.gd": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79",
+    "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+    "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+    "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+    "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+  },
+  "fixture_snapshots": {
+    "tests/monster_background_density_profile_test.gd": {
+      "file": "monster_background_density_profile_test.gd.txt",
+      "sha256": "ae72149a7a983ddde58682e02a8ec499a7b6426f74b7e2afca1d2d5069d89eea"
+    },
+    "tests/world_crowd_firewall_profile_test.gd": {
+      "file": "world_crowd_firewall_profile_test.gd.txt",
+      "sha256": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702"
+    }
+  },
+  "groups": [
+    {
+      "condition": "idle",
+      "distance": "near",
+      "p95_ms_median": 10.966000000000001,
+      "p95_ms_runs": [
+        10.861,
+        11.071
+      ],
+      "enemy_cpu_usec_per_physics_frame_median": 2339.2541666666666,
+      "visual_updates": [
+        35960,
+        35960
+      ],
+      "start_states": [
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        },
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        }
+      ],
+      "end_states": [
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        },
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        }
+      ],
+      "scheduler_at_end": [
+        {
+          "available": false
+        },
+        {
+          "available": false
+        }
+      ],
+      "damage_calls": [
+        16,
+        16
+      ]
+    },
+    {
+      "condition": "idle",
+      "distance": "far",
+      "p95_ms_median": 10.4045,
+      "p95_ms_runs": [
+        10.316,
+        10.493
+      ],
+      "enemy_cpu_usec_per_physics_frame_median": 2246.522916666667,
+      "visual_updates": [
+        6960,
+        6960
+      ],
+      "start_states": [
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        },
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        }
+      ],
+      "end_states": [
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        },
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        }
+      ],
+      "scheduler_at_end": [
+        {
+          "available": false
+        },
+        {
+          "available": false
+        }
+      ],
+      "damage_calls": [
+        16,
+        16
+      ]
+    },
+    {
+      "condition": "occluded",
+      "distance": "near",
+      "p95_ms_median": 15.445,
+      "p95_ms_runs": [
+        15.323,
+        15.567
+      ],
+      "enemy_cpu_usec_per_physics_frame_median": 6315.0041666666675,
+      "visual_updates": [
+        35898,
+        35898
+      ],
+      "start_states": [
+        {
+          "background_sleeping": 0,
+          "engaged": 62,
+          "observed": 12,
+          "path_pending": 50,
+          "physics_processing": 62,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        },
+        {
+          "background_sleeping": 0,
+          "engaged": 62,
+          "observed": 12,
+          "path_pending": 50,
+          "physics_processing": 62,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        }
+      ],
+      "end_states": [
+        {
+          "background_sleeping": 0,
+          "engaged": 62,
+          "observed": 12,
+          "path_pending": 36,
+          "physics_processing": 62,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        },
+        {
+          "background_sleeping": 0,
+          "engaged": 62,
+          "observed": 12,
+          "path_pending": 37,
+          "physics_processing": 62,
+          "visual_active_resources": 62,
+          "visual_origin_in_viewport": 62,
+          "visual_processing": 62
+        }
+      ],
+      "scheduler_at_end": [
+        {
+          "available": true,
+          "diagnostic_pump_calls": 316,
+          "diagnostic_pump_usec": 330613,
+          "expansions_count": 8912,
+          "pending_jobs": 36,
+          "service_count": 438
+        },
+        {
+          "available": true,
+          "diagnostic_pump_calls": 315,
+          "diagnostic_pump_usec": 332978,
+          "expansions_count": 9280,
+          "pending_jobs": 37,
+          "service_count": 436
+        }
+      ],
+      "damage_calls": [
+        16,
+        16
+      ]
+    },
+    {
+      "condition": "occluded",
+      "distance": "far",
+      "p95_ms_median": 10.622,
+      "p95_ms_runs": [
+        10.554,
+        10.69
+      ],
+      "enemy_cpu_usec_per_physics_frame_median": 2311.2645833333336,
+      "visual_updates": [
+        6960,
+        6960
+      ],
+      "start_states": [
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        },
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        }
+      ],
+      "end_states": [
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        },
+        {
+          "background_sleeping": 50,
+          "engaged": 12,
+          "observed": 12,
+          "path_pending": 0,
+          "physics_processing": 12,
+          "visual_active_resources": 12,
+          "visual_origin_in_viewport": 12,
+          "visual_processing": 12
+        }
+      ],
+      "scheduler_at_end": [
+        {
+          "available": false
+        },
+        {
+          "available": false
+        }
+      ],
+      "damage_calls": [
+        16,
+        16
+      ]
+    }
+  ],
+  "formal_maps": [
+    {
+      "label": "black_1",
+      "map_id": 913203,
+      "enemies": 62,
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "fields": 8,
+      "before": {
+        "alive": 62,
+        "deep_sleep": 46,
+        "moving": 13,
+        "observed": 16,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 16,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 16,
+        "visual_processing": 62,
+        "within_2_gu": 4
+      },
+      "after": {
+        "alive": 62,
+        "deep_sleep": 46,
+        "moving": 6,
+        "observed": 16,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 16,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 16,
+        "visual_processing": 62,
+        "within_2_gu": 6
+      },
+      "scheduler_before": {
+        "available": false
+      },
+      "scheduler_after": {
+        "available": false
+      },
+      "renderer": {
+        "atlas_page_count": 1,
+        "derived_prefetch_failure_count": 0,
+        "derived_texture_pixel_count": 4560385,
+        "dynamic_group_count": 325,
+        "legacy_command_count": 27,
+        "static_chunk_count": 35,
+        "wall_render_fallback_reason": "",
+        "wall_render_mode": "OPTIMIZED",
+        "wall_render_plan_found": true,
+        "wall_render_plan_valid": true
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702"
+      },
+      "frame_interval_ms": {
+        "max": 14.485,
+        "p50": 6.902,
+        "p95": 11.424,
+        "samples": 578
+      }
+    },
+    {
+      "label": "death_1",
+      "map_id": 913207,
+      "enemies": 71,
+      "layout_sha256": "ed1ab91e8b4d30e3436b0aa185cb208e2d6b9b3c5afa252957f346f9412607cd",
+      "fields": 8,
+      "before": {
+        "alive": 71,
+        "deep_sleep": 56,
+        "moving": 11,
+        "observed": 14,
+        "offscreen_physics": 1,
+        "path_pending": 0,
+        "physics_processing": 15,
+        "resident": 71,
+        "sprite_in_viewport": 44,
+        "target_player": 14,
+        "visual_processing": 71,
+        "within_2_gu": 4
+      },
+      "after": {
+        "alive": 71,
+        "deep_sleep": 56,
+        "moving": 3,
+        "observed": 14,
+        "offscreen_physics": 1,
+        "path_pending": 0,
+        "physics_processing": 15,
+        "resident": 71,
+        "sprite_in_viewport": 44,
+        "target_player": 14,
+        "visual_processing": 71,
+        "within_2_gu": 7
+      },
+      "scheduler_before": {
+        "available": false
+      },
+      "scheduler_after": {
+        "available": false
+      },
+      "renderer": {
+        "atlas_page_count": 1,
+        "derived_prefetch_failure_count": 0,
+        "derived_texture_pixel_count": 4727796,
+        "dynamic_group_count": 325,
+        "legacy_command_count": 24,
+        "static_chunk_count": 39,
+        "wall_render_fallback_reason": "",
+        "wall_render_mode": "OPTIMIZED",
+        "wall_render_plan_found": true,
+        "wall_render_plan_valid": true
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702"
+      },
+      "frame_interval_ms": {
+        "max": 13.215,
+        "p50": 6.902,
+        "p95": 10.569,
+        "samples": 578
+      }
+    },
+    {
+      "label": "red_1",
+      "map_id": 916003,
+      "enemies": 54,
+      "layout_sha256": "1ee8bf3f1d2a0d31ee83b8c09e6183e440f0de41c9911ced55a56f813dba3d1c",
+      "fields": 8,
+      "before": {
+        "alive": 54,
+        "deep_sleep": 44,
+        "moving": 6,
+        "observed": 7,
+        "offscreen_physics": 1,
+        "path_pending": 0,
+        "physics_processing": 10,
+        "resident": 45,
+        "sprite_in_viewport": 16,
+        "target_player": 9,
+        "visual_processing": 45,
+        "within_2_gu": 2
+      },
+      "after": {
+        "alive": 54,
+        "deep_sleep": 44,
+        "moving": 0,
+        "observed": 7,
+        "offscreen_physics": 1,
+        "path_pending": 0,
+        "physics_processing": 10,
+        "resident": 45,
+        "sprite_in_viewport": 16,
+        "target_player": 9,
+        "visual_processing": 45,
+        "within_2_gu": 8
+      },
+      "scheduler_before": {
+        "available": false
+      },
+      "scheduler_after": {
+        "available": false
+      },
+      "renderer": {
+        "atlas_page_count": 1,
+        "derived_prefetch_failure_count": 0,
+        "derived_texture_pixel_count": 2195456,
+        "dynamic_group_count": 417,
+        "legacy_command_count": 30,
+        "static_chunk_count": 0,
+        "wall_render_fallback_reason": "",
+        "wall_render_mode": "OPTIMIZED",
+        "wall_render_plan_found": true,
+        "wall_render_plan_valid": true
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702"
+      },
+      "frame_interval_ms": {
+        "max": 11.19,
+        "p50": 6.901,
+        "p95": 9.311,
+        "samples": 578
+      }
+    },
+    {
+      "label": "current_black_no_fire",
+      "map_id": 913203,
+      "enemies": 62,
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "fields": 0,
+      "before": {
+        "alive": 62,
+        "deep_sleep": 46,
+        "moving": 14,
+        "observed": 16,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 16,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 16,
+        "visual_processing": 62,
+        "within_2_gu": 3
+      },
+      "after": {
+        "alive": 62,
+        "deep_sleep": 46,
+        "moving": 9,
+        "observed": 16,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 16,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 16,
+        "visual_processing": 62,
+        "within_2_gu": 5
+      },
+      "scheduler_before": {
+        "available": false
+      },
+      "scheduler_after": {
+        "available": false
+      },
+      "renderer": {
+        "atlas_page_count": 1,
+        "derived_prefetch_failure_count": 0,
+        "derived_texture_pixel_count": 4560385,
+        "dynamic_group_count": 325,
+        "legacy_command_count": 27,
+        "static_chunk_count": 35,
+        "wall_render_fallback_reason": "",
+        "wall_render_mode": "OPTIMIZED",
+        "wall_render_plan_found": true,
+        "wall_render_plan_valid": true
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702"
+      },
+      "frame_interval_ms": {
+        "max": 12.993,
+        "p50": 6.902,
+        "p95": 10.969,
+        "samples": 578
+      }
+    },
+    {
+      "label": "v91_black",
+      "map_id": 913203,
+      "enemies": 62,
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "fields": 0,
+      "before": {
+        "alive": 62,
+        "deep_sleep": 45,
+        "moving": 14,
+        "observed": 17,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 17,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 17,
+        "visual_processing": 62,
+        "within_2_gu": 4
+      },
+      "after": {
+        "alive": 62,
+        "deep_sleep": 45,
+        "moving": 5,
+        "observed": 17,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 17,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 17,
+        "visual_processing": 62,
+        "within_2_gu": 6
+      },
+      "scheduler_before": {
+        "available": false
+      },
+      "scheduler_after": {
+        "available": false
+      },
+      "renderer": {
+        "atlas_page_count": 0,
+        "derived_prefetch_failure_count": 0,
+        "derived_texture_pixel_count": 0,
+        "dynamic_group_count": 0,
+        "legacy_command_count": 0,
+        "static_chunk_count": 0,
+        "wall_render_fallback_reason": "runtime json sha mismatch",
+        "wall_render_mode": "LEGACY",
+        "wall_render_plan_found": true,
+        "wall_render_plan_valid": false
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+        "res://scripts/game_root.gd": "8c5f72d87c20e9b64d0f3225af9a1389e9f277826053e89e1d0339a38048a892",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702"
+      },
+      "frame_interval_ms": {
+        "max": 15.182,
+        "p50": 6.903,
+        "p95": 12.258,
+        "samples": 578
+      }
+    }
+  ],
+  "runs": [
+    {
+      "raw": "density_idle_near_1.json",
+      "runner": "runner_results_adhoc_20260922_203607_719_3520.json",
+      "artifacts": [
+        {
+          "file": "density_idle_near_1.json",
+          "sha256": "46442ecbb96aed4106a9dba5d72d11738fcc5359cf81039e36ef71efb391b050"
+        },
+        {
+          "file": "density_idle_near_1.console.log",
+          "sha256": "082b68f2e9f3a625103b1d35a49123d9c96fd4d4c1e245955f259639b1c8fde8"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203607_719_3520.json",
+          "sha256": "03cffda3a836a98e28f5fa6d0eacfaeda80f58baa11a216ebd3e0b911d6c0350"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_near_2.json",
+      "runner": "runner_results_adhoc_20260922_203650_407_3520.json",
+      "artifacts": [
+        {
+          "file": "density_idle_near_2.json",
+          "sha256": "562cf698adbdef3f008cc836cd8f146f09cceed24d1f9d8025b6f913f136280f"
+        },
+        {
+          "file": "density_idle_near_2.console.log",
+          "sha256": "2b407d9d10d55af499f9666cd0bf0a02e445ba3a83723892c83b90523973230b"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203650_407_3520.json",
+          "sha256": "d3a918316df7b3e00649059ff0a93307e09d6141204d699d5f9fad35b277dd3e"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_far_1.json",
+      "runner": "runner_results_adhoc_20260922_203622_071_3520.json",
+      "artifacts": [
+        {
+          "file": "density_idle_far_1.json",
+          "sha256": "ceff62a3d47ee8acb7359506f8bbb347569e1f3acd52752124c239b9a5ce6c42"
+        },
+        {
+          "file": "density_idle_far_1.console.log",
+          "sha256": "afa03a3216a03db852dd9fc18f2326cb03d0610ef5e2336bbdaf4d706d058584"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203622_071_3520.json",
+          "sha256": "67ea57252b610335d4d95f423bace314d37d555a4ae5bfe1c04b686042118353"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_far_2.json",
+      "runner": "runner_results_adhoc_20260922_203636_231_3520.json",
+      "artifacts": [
+        {
+          "file": "density_idle_far_2.json",
+          "sha256": "13c4f2c1339d01491676fafb1ad8b907200c5f9c9f2b04df2cc3c16528e0c9c4"
+        },
+        {
+          "file": "density_idle_far_2.console.log",
+          "sha256": "36d6f908fb91bf835f843ebf1ffe360bb6fe8d9cc66309db27b299788fc532b9"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203636_231_3520.json",
+          "sha256": "6749f9d8c40c477bcc8992c66963649c5e1fa03675667fe7b0f0f341e2463ce6"
+        }
+      ]
+    },
+    {
+      "raw": "density_occluded_near_1.json",
+      "runner": "runner_results_adhoc_20260922_202220_033_10332.json",
+      "artifacts": [
+        {
+          "file": "density_occluded_near_1.json",
+          "sha256": "f1475f9e44cc761cce84b706cdc53b14be251863805df3a722b5130d2b7db445"
+        },
+        {
+          "file": "density_occluded_near_1.console.log",
+          "sha256": "81fb6f44bf68a2ceaf7e2d6b93a61f98a7057fdc77718ae49c55a51ced8bcf38"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_202220_033_10332.json",
+          "sha256": "ba41a9ac14130cba6e718c76e92da830a64e88f2b39cb21d2d1fdb197cc68fa7"
+        }
+      ]
+    },
+    {
+      "raw": "density_occluded_near_2.json",
+      "runner": "runner_results_adhoc_20260922_202950_373_2836.json",
+      "artifacts": [
+        {
+          "file": "density_occluded_near_2.json",
+          "sha256": "090448616119e6e3aa6db270fea1f47003e5ed6e5bc90530a4b08027c8690e05"
+        },
+        {
+          "file": "density_occluded_near_2.console.log",
+          "sha256": "367b3c2c83dbf10bc6152f692347b3309e2dd50bf2f8deff1c2845a2a8d48117"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_202950_373_2836.json",
+          "sha256": "3d47746a5c2fa48351ec5c7fe3647327f337742c7b00935bd15ca755cd4e3ffe"
+        }
+      ]
+    },
+    {
+      "raw": "density_occluded_far_1.json",
+      "runner": "runner_results_adhoc_20260922_202735_506_11124.json",
+      "artifacts": [
+        {
+          "file": "density_occluded_far_1.json",
+          "sha256": "162d0843134c420bc1108bd14a55693be0aab878c5baac1a6845c8f471968a7f"
+        },
+        {
+          "file": "density_occluded_far_1.console.log",
+          "sha256": "4153ee88c8dbe6a537ebee65b59860a9a4d9771c1f7982245dfb3ad81659764b"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_202735_506_11124.json",
+          "sha256": "b9892e3bc8c4a2052ffdfb1d7dd5c2c833bc7e4172c0b19456fcf6f6bdab7175"
+        }
+      ]
+    },
+    {
+      "raw": "density_occluded_far_2.json",
+      "runner": "runner_results_adhoc_20260922_203339_776_19216.json",
+      "artifacts": [
+        {
+          "file": "density_occluded_far_2.json",
+          "sha256": "db4123a67908809173bb46721d254abf0a102ca3c36424062faad677f3c1fff5"
+        },
+        {
+          "file": "density_occluded_far_2.console.log",
+          "sha256": "1992b09f827a34b43fe1fad6604753c8d562d6a3f54a92c63c0ad9bf208a5977"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203339_776_19216.json",
+          "sha256": "a14de8e7cae50f1aa9bbb630e39122f33ae3fcb383d430296bd3fa4afece6c79"
+        }
+      ]
+    },
+    {
+      "raw": "world_density_census_black_1.json",
+      "runner": "runner_results_adhoc_20260922_202904_683_22572.json",
+      "artifacts": [
+        {
+          "file": "world_density_census_black_1.json",
+          "sha256": "9ded709306c191a9f50fd01ed2479ce8dea4ad7436fa0b4dc6b7dca85e4456f3"
+        },
+        {
+          "file": "density_census_black_1.console.log",
+          "sha256": "5c872368ce617f01bee431c233b7aca1e1964d7079a42968f5f6c3081f97f91d"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_202904_683_22572.json",
+          "sha256": "e16f166d0fcb61fbda503ce063be903260e865c4561a723ba905780d8c6c857d"
+        }
+      ]
+    },
+    {
+      "raw": "world_density_census_death_1.json",
+      "runner": "runner_results_adhoc_20260922_203043_407_15636.json",
+      "artifacts": [
+        {
+          "file": "world_density_census_death_1.json",
+          "sha256": "8ce88bf0c64469ee5b2dc3f38459b739b445cdee580e293ff798a51c028a7862"
+        },
+        {
+          "file": "density_census_death_1.console.log",
+          "sha256": "4e0a7e4ac365b653f0b21c7b2c393845ea779b3d260d34017444d543841cbb8e"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203043_407_15636.json",
+          "sha256": "71834cd8c3c65d9805eeab8cfbaa05af2365c78b7d3f54a2c286c97aa3ee7aec"
+        }
+      ]
+    },
+    {
+      "raw": "world_density_census_red_1.json",
+      "runner": "runner_results_adhoc_20260922_203143_007_19500.json",
+      "artifacts": [
+        {
+          "file": "world_density_census_red_1.json",
+          "sha256": "da7148652b36678eba6ee325cb7917e259b54f3dc80ca51a5cd727b425aadec6"
+        },
+        {
+          "file": "density_census_red_1.console.log",
+          "sha256": "dff9a3104d4574b1ada06f0736166d46184b4495efe76d95c16d612fa9a684b3"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203143_007_19500.json",
+          "sha256": "f450981e04b622701e3fedc28e613df9cd5b7c442336971ab40f8d70e2f03c5e"
+        }
+      ]
+    },
+    {
+      "raw": "world_density_census_current_black_no_fire.json",
+      "runner": "runner_results_adhoc_20260922_203536_289_17692.json",
+      "artifacts": [
+        {
+          "file": "world_density_census_current_black_no_fire.json",
+          "sha256": "c83cb625ddfb4a1b6eae26ea9803055c14c1198834c3d9070371c1783a9d5082"
+        },
+        {
+          "file": "density_census_current_black_no_fire.console.log",
+          "sha256": "f05f35d32d9449b5476cf03660016c9bb9969ac605f22aef2513822e49ccda70"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203536_289_17692.json",
+          "sha256": "5b43e6871818e692be88aaad127c7be32fb21c171e46814dcdd0335a8dc89edb"
+        }
+      ]
+    },
+    {
+      "raw": "world_density_census_v91_black.json",
+      "runner": "runner_results_adhoc_20260922_203454_997_7392.json",
+      "artifacts": [
+        {
+          "file": "world_density_census_v91_black.json",
+          "sha256": "26684de96154cff92a99f620c73ac5592656731e61572f0158eef251f3cdd7c2"
+        },
+        {
+          "file": "density_census_v91_black.console.log",
+          "sha256": "e327c1ba2af8d530e6209af60ba5ee221f4a4478b17a72473530a793384a8197"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_203454_997_7392.json",
+          "sha256": "a5e567dc72006090e3e858c5aa667a11905c44ad6cbb16feb731b795d4c506e0"
+        }
+      ]
+    }
+  ]
+}

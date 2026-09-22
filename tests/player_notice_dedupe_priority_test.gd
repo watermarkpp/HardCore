@@ -98,6 +98,18 @@ func _run() -> void:
 	expect(NoticeScript.priority_for("unknown-kind") == NoticeScript.PRIORITY_INFO, "invalid kinds fall back to info")
 	var normalized := NoticeScript.normalize({"kind": "error", "message": "x", "duration": 0})
 	expect(float(normalized["duration"]) >= 0.1, "duration clamped positive")
+	for invalid_duration: float in [NAN, INF, -INF]:
+		var invalid := NoticeScript.normalize({"duration": invalid_duration})
+		expect(is_finite(float(invalid.duration)) and float(invalid.duration) > 0.0, "invalid duration cannot pin the notice forever")
+
+	# A queued operation can become an error before the current warning ends.
+	# Dedupe must not swallow that escalation or later replay its stale copy.
+	presenter.clear_for_test()
+	hud.show_warning_message("当前警告", 2.0)
+	hud.show_notice({"kind": "info", "message": "操作处理中", "dedupe_key": "operation"})
+	hud.show_notice({"kind": "error", "message": "操作失败", "dedupe_key": "operation"})
+	expect(presenter.full_text() == "操作失败", "queued error escalation immediately preempts warning")
+	expect(presenter.queue_size() == 0, "escalated notice removed from queue")
 
 	hud.queue_free()
 	await settle()

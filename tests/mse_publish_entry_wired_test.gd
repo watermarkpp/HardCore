@@ -25,6 +25,8 @@ func _run() -> void:
 		"_on_publish_runtime_pressed",
 		"build_candidate(",
 		"publish_runtime_release(",
+		"map_editor_wall_render_publish_service.gd",
+		"publisher.publish_map(map_key)",
 	]:
 		assert(app.contains(needle), "map_editor_app.gd missing %s" % needle)
 	# The old single-button Build-as-Publish path must be gone.

@@ -612,6 +612,10 @@ static func visual_context_from_plan(
 			visual_geometry["skill_id"] = skill_id
 		compatibility_context["gameplay_geometry"] = gameplay_geometry
 		compatibility_context["visual_geometry"] = visual_geometry
+		# Explicit snapshot validation belongs to the snapshot, even when the
+		# caller has no legacy cell-geometry declaration.
+		compatibility_context["snapshot_validation_policy"] = validation_policy
+		compatibility_context["snapshot_validation_context"] = validation_context
 		compatibility_context.merge(snapshot_projection_context, true)
 		return compatibility_context
 	var origin_screen_px: Vector2 = plan.get(

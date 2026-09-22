@@ -512,6 +512,7 @@ $Suites.skill_panel_layout_critical = @(
 )
 
 $Suites.device_lab_critical = @(
+    'tests/device_lab_local_capture_test.tscn',
     'tests/device_lab_runtime_test.tscn',
     'tests/device_lab_patch_bootstrap_test.tscn',
     'tests/perf_frame_diagnostics_test.tscn',
@@ -679,6 +680,73 @@ $Suites.equipment = @($Suites.equipment + @(
 ) | Select-Object -Unique)
 
 # ── Q0-A: final judgement contract ──
+$Suites.critical = @($Suites.critical + @(
+    'tests/formal_map_destination_regression_test.tscn',
+    'tests/game_root_fail_map_transition_test.tscn',
+    'tests/formal_map_spawn_policy_test.tscn',
+    'tests/wall_render_binding_test.tscn',
+    'tests/monster_continuous_step_facing_test.tscn',
+    'tests/monster_empty_safe_zone_fast_path_test.tscn',
+    'tests/monster_idle_acquisition_budget_test.tscn',
+    'tests/monster_idle_scan_cadence_test.tscn',
+    'tests/boss_respawn_map_reentry_test.tscn',
+    'tests/skill_visual_cold_lifecycle_test.tscn',
+    'tests/magic_shield_map_lifecycle_test.tscn',
+    'tests/wall_render_publisher_snapshot_test.tscn',
+    'tests/hud_script_prefetch_exit_test.tscn',
+    'tests/random_teleport_destination_contract_test.tscn',
+    'tests/player_struck_release_order_test.tscn',
+    'tests/player_skill_struck_chain_test.tscn',
+    'tests/player_hit_reaction_policy_test.tscn',
+    'tests/player_enemy_struck_chain_e2e_test.tscn',
+    'tests/player_struck_scene_sweep_test.tscn',
+    'tests/player_struck_lock_test.tscn',
+    'tests/camera_black_budget_region_test.tscn',
+    'tests/map_diamond_camera_constraint_test.tscn',
+    'tests/map_diamond_camera_strict_edge_test.tscn',
+    'tests/game_root_diamond_camera_constraint_test.tscn',
+    'tests/live_map_loot_authority_export_test.tscn',
+    'tests/armor_single_slot_authority_test.tscn',
+    'tests/repair_20260913/loot_async_durability_test.tscn'
+) | Select-Object -Unique)
+
+# v92 production regressions and previously unregistered live consumers.
+$Suites.critical = @($Suites.critical + @(
+    'tests/device_lab_local_capture_test.tscn',
+    'tests/player_growth_live_runtime_test.tscn',
+    'tests/skill_runtime_classification_test.tscn',
+    'tests/skill_target_context_partition_test.tscn',
+    'tests/fire_wall_animation_batch_test.tscn',
+    'tests/fire_wall_release_owner_result_test.tscn',
+    'tests/hellfire_catchup_batch_test.tscn',
+    'tests/player_physical_defense_production_test.tscn',
+    'tests/taoist_passive_accuracy_production_test.tscn',
+    'tests/summon_outgoing_defense_production_test.tscn',
+    'tests/summon_growth_rank_upgrade_test.tscn',
+    'tests/taoist_summon_growth_contract_test.tscn',
+    'tests/ui_result_feedback_timing_test.tscn',
+    'tests/hidden_inventory_stats_refresh_test.tscn',
+    'tests/progression_loot_20260913/drop_balance_test.tscn',
+    'tests/loot_ui_20260914/runtime_followup_test.tscn',
+    'tests/repair_20260913/warehouse_prepared_transaction_test.tscn',
+    'tests/repair_20260913/bank_prepared_transaction_test.tscn',
+    'tests/character_delete_transaction_test.tscn',
+    'tests/player_world_position_unit_migration_test.tscn',
+    'tests/loot_ui_20260914/settings_function_test.tscn',
+    'tests/ui_r5_audio_config_strict_test.tscn',
+    'tests/ui_r5_audio_test.tscn',
+    'tests/touch_scroll_support_test.tscn',
+    'tests/character_select_touch_scroll_test.tscn',
+    'tests/r6_1_review/shop_selection_identity_test.tscn',
+    'tests/quest_gothic_ui_test.tscn',
+    'tests/death_revival_gothic_ui_test.tscn',
+    'tests/system_menu_gothic_ui_test.tscn',
+    'tests/town_music_runtime_test.tscn',
+    'tests/equipment_skill_level_affix_test.tscn',
+    'tests/world_background_staged_map_build_test.tscn',
+    'tests/mse_collision_grid_alignment_test.tscn'
+) | Select-Object -Unique)
+
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
 $FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'
@@ -832,7 +900,10 @@ foreach ($testPath in $SelectedTests) {
     $process = Start-Process -FilePath 'cmd.exe' `
         -ArgumentList @('/c', $launchCommand) `
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
-    $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+    # This scene intentionally observes 6 real 4-second attack windows plus
+    # pursuit/detour physics (~36 seconds). Keep ordinary scenes at 30 seconds.
+    $TestTimeoutSeconds = if ($testPath -eq 'tests/hc_monster_ai/runtime_test.tscn') { [Math]::Max(60, $TimeoutSeconds) } else { $TimeoutSeconds }
+    $deadline = [DateTime]::UtcNow.AddSeconds($TestTimeoutSeconds)
     $wrapperExitWithoutChildSince = $null
     $earlyFailure = $false
     $hasPassMarker = $false
@@ -915,7 +986,7 @@ foreach ($testPath in $SelectedTests) {
     $reasons = @()
     if (-not $hasPassMarker) { $reasons += 'missing_pass_marker' }
     if (-not $processExited) { $reasons += 'process_did_not_exit' }
-    if ($timedOut) { $reasons += "timeout_${TimeoutSeconds}s" }
+    if ($timedOut) { $reasons += "timeout_${TestTimeoutSeconds}s" }
     if ($earlyFailure) { $reasons += 'early_script_error' }
     if ($finalEffectiveExitCode -ne 0) {
         if ($null -eq $wrapperExitCode) { $reasons += 'missing_effective_exit_code' } else { $reasons += "non_zero_exit_code_$finalEffectiveExitCode" }

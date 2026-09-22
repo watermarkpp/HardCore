@@ -1,0 +1,766 @@
+{
+  "status": "PASS",
+  "measurement_scope": "Windows Godot headless CPU; not GPU or Android FPS",
+  "sampling": "same authored map population, seed, 8 formal fire_wall casts, 240 physics ticks; wall-clock AI timers mean aggregate work counts are not perfectly equal",
+  "results": [
+    {
+      "map_id": 913203,
+      "baseline": {
+        "source_path": "outputs/repair_v92/world_formal_913203_baseline.json",
+        "source_sha256": "d7b9cf955732e885f3207e7c651f25df31f75558b528c1db53f56b0da2800848",
+        "enemy_count": 62,
+        "cast_ms": {
+          "max": 16.831,
+          "p50": 5.343,
+          "p95": 5.895,
+          "samples": 8
+        },
+        "frame_interval_ms": {
+          "max": 14.324,
+          "p50": 6.902,
+          "p95": 12.014,
+          "samples": 578
+        },
+        "context_profiles": {
+          "taoist.entrapment": {
+            "aabb_queries": 100,
+            "candidate_records": 200,
+            "timings_ms": {
+              "max": 0.57,
+              "p50": 0.484,
+              "p95": 0.516,
+              "samples": 100
+            }
+          },
+          "wizard.fire_wall": {
+            "aabb_queries": 100,
+            "candidate_records": 200,
+            "timings_ms": {
+              "max": 0.756,
+              "p50": 0.509,
+              "p95": 0.585,
+              "samples": 100
+            }
+          },
+          "wizard.fireball": {
+            "aabb_queries": 100,
+            "candidate_records": 2000,
+            "timings_ms": {
+              "max": 0.906,
+              "p50": 0.762,
+              "p95": 0.804,
+              "samples": 100
+            }
+          },
+          "wizard.hellfire": {
+            "aabb_queries": 100,
+            "candidate_records": 2000,
+            "timings_ms": {
+              "max": 0.878,
+              "p50": 0.764,
+              "p95": 0.802,
+              "samples": 100
+            }
+          },
+          "wizard.magic_shield": {
+            "aabb_queries": 100,
+            "candidate_records": 2000,
+            "timings_ms": {
+              "max": 1.294,
+              "p50": 1.071,
+              "p95": 1.186,
+              "samples": 100
+            }
+          },
+          "wizard.repulsion_ring": {
+            "aabb_queries": 100,
+            "candidate_records": 100,
+            "timings_ms": {
+              "max": 0.603,
+              "p50": 0.519,
+              "p95": 0.558,
+              "samples": 100
+            }
+          }
+        },
+        "enemy_physics_usec": 899709,
+        "enemy_physics_calls": 4080,
+        "field_count": 8,
+        "visual_cell_count": 72,
+        "tick_counts": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "duplicate_damage_count": 0,
+        "direction_mismatches": {},
+        "animation_batch": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "batch": {
+        "source_path": "outputs/repair_v92/world_formal_913203_batch.json",
+        "source_sha256": "181bad880636d4bfee9a248a3b12a39437b26cc61e111bd6569ee328a0c4f443",
+        "enemy_count": 62,
+        "cast_ms": {
+          "max": 16.433,
+          "p50": 5.246,
+          "p95": 5.564,
+          "samples": 8
+        },
+        "frame_interval_ms": {
+          "max": 14.067,
+          "p50": 6.901,
+          "p95": 11.687,
+          "samples": 577
+        },
+        "context_profiles": {
+          "taoist.entrapment": {
+            "aabb_queries": 100,
+            "candidate_records": 200,
+            "timings_ms": {
+              "max": 0.573,
+              "p50": 0.455,
+              "p95": 0.481,
+              "samples": 100
+            }
+          },
+          "wizard.fire_wall": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.491,
+              "p50": 0.39,
+              "p95": 0.428,
+              "samples": 100
+            }
+          },
+          "wizard.fireball": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.068,
+              "p50": 0.048,
+              "p95": 0.051,
+              "samples": 100
+            }
+          },
+          "wizard.hellfire": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.059,
+              "p50": 0.047,
+              "p95": 0.049,
+              "samples": 100
+            }
+          },
+          "wizard.magic_shield": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.565,
+              "p50": 0.356,
+              "p95": 0.407,
+              "samples": 100
+            }
+          },
+          "wizard.repulsion_ring": {
+            "aabb_queries": 100,
+            "candidate_records": 100,
+            "timings_ms": {
+              "max": 0.761,
+              "p50": 0.517,
+              "p95": 0.584,
+              "samples": 100
+            }
+          }
+        },
+        "enemy_physics_usec": 830446,
+        "enemy_physics_calls": 3840,
+        "field_count": 8,
+        "visual_cell_count": 72,
+        "tick_counts": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "duplicate_damage_count": 0,
+        "direction_mismatches": {},
+        "animation_batch": [
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          }
+        ]
+      }
+    },
+    {
+      "map_id": 913207,
+      "baseline": {
+        "source_path": "outputs/repair_v92/world_formal_913207_baseline.json",
+        "source_sha256": "f906a16441dcbc070cfeeafaf3ae9b18c9069ba6b6f39bb3870830ffaf501209",
+        "enemy_count": 71,
+        "cast_ms": {
+          "max": 16.688,
+          "p50": 5.592,
+          "p95": 5.688,
+          "samples": 8
+        },
+        "frame_interval_ms": {
+          "max": 16.186,
+          "p50": 6.9,
+          "p95": 10.998,
+          "samples": 577
+        },
+        "context_profiles": {
+          "taoist.entrapment": {
+            "aabb_queries": 100,
+            "candidate_records": 500,
+            "timings_ms": {
+              "max": 0.783,
+              "p50": 0.667,
+              "p95": 0.725,
+              "samples": 100
+            }
+          },
+          "wizard.fire_wall": {
+            "aabb_queries": 100,
+            "candidate_records": 500,
+            "timings_ms": {
+              "max": 0.838,
+              "p50": 0.703,
+              "p95": 0.775,
+              "samples": 100
+            }
+          },
+          "wizard.fireball": {
+            "aabb_queries": 100,
+            "candidate_records": 2600,
+            "timings_ms": {
+              "max": 1.197,
+              "p50": 0.898,
+              "p95": 1.003,
+              "samples": 100
+            }
+          },
+          "wizard.hellfire": {
+            "aabb_queries": 100,
+            "candidate_records": 2600,
+            "timings_ms": {
+              "max": 1.001,
+              "p50": 0.898,
+              "p95": 0.948,
+              "samples": 100
+            }
+          },
+          "wizard.magic_shield": {
+            "aabb_queries": 100,
+            "candidate_records": 2600,
+            "timings_ms": {
+              "max": 1.745,
+              "p50": 1.24,
+              "p95": 1.396,
+              "samples": 100
+            }
+          },
+          "wizard.repulsion_ring": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.821,
+              "p50": 0.506,
+              "p95": 0.565,
+              "samples": 100
+            }
+          }
+        },
+        "enemy_physics_usec": 687856,
+        "enemy_physics_calls": 3600,
+        "field_count": 8,
+        "visual_cell_count": 72,
+        "tick_counts": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "duplicate_damage_count": 0,
+        "direction_mismatches": {},
+        "animation_batch": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "batch": {
+        "source_path": "outputs/repair_v92/world_formal_913207_batch.json",
+        "source_sha256": "a8d0801eed94cb099dfb97bc75cb26cef573966fa1ce97ef72cfd2a095efdb20",
+        "enemy_count": 71,
+        "cast_ms": {
+          "max": 18.867,
+          "p50": 5.549,
+          "p95": 8.257,
+          "samples": 8
+        },
+        "frame_interval_ms": {
+          "max": 13.395,
+          "p50": 6.9,
+          "p95": 10.833,
+          "samples": 578
+        },
+        "context_profiles": {
+          "taoist.entrapment": {
+            "aabb_queries": 100,
+            "candidate_records": 500,
+            "timings_ms": {
+              "max": 1.089,
+              "p50": 0.643,
+              "p95": 0.757,
+              "samples": 100
+            }
+          },
+          "wizard.fire_wall": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.57,
+              "p50": 0.398,
+              "p95": 0.476,
+              "samples": 100
+            }
+          },
+          "wizard.fireball": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.121,
+              "p50": 0.051,
+              "p95": 0.1,
+              "samples": 100
+            }
+          },
+          "wizard.hellfire": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.09,
+              "p50": 0.05,
+              "p95": 0.064,
+              "samples": 100
+            }
+          },
+          "wizard.magic_shield": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 2.509,
+              "p50": 0.369,
+              "p95": 1.562,
+              "samples": 100
+            }
+          },
+          "wizard.repulsion_ring": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.781,
+              "p50": 0.525,
+              "p95": 0.622,
+              "samples": 100
+            }
+          }
+        },
+        "enemy_physics_usec": 668486,
+        "enemy_physics_calls": 3600,
+        "field_count": 8,
+        "visual_cell_count": 72,
+        "tick_counts": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "duplicate_damage_count": 0,
+        "direction_mismatches": {},
+        "animation_batch": [
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          }
+        ]
+      }
+    },
+    {
+      "map_id": 916003,
+      "baseline": {
+        "source_path": "outputs/repair_v92/world_formal_916003_baseline.json",
+        "source_sha256": "6fe4262616c69611b986babb449cf03afe196c98e55e331467a0457c2bfbcefb",
+        "enemy_count": 54,
+        "cast_ms": {
+          "max": 16.819,
+          "p50": 5.329,
+          "p95": 5.96,
+          "samples": 8
+        },
+        "frame_interval_ms": {
+          "max": 11.528,
+          "p50": 6.902,
+          "p95": 9.577,
+          "samples": 577
+        },
+        "context_profiles": {
+          "taoist.entrapment": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.797,
+              "p50": 0.402,
+              "p95": 0.474,
+              "samples": 100
+            }
+          },
+          "wizard.fire_wall": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.912,
+              "p50": 0.432,
+              "p95": 0.682,
+              "samples": 100
+            }
+          },
+          "wizard.fireball": {
+            "aabb_queries": 100,
+            "candidate_records": 1400,
+            "timings_ms": {
+              "max": 0.653,
+              "p50": 0.438,
+              "p95": 0.498,
+              "samples": 100
+            }
+          },
+          "wizard.hellfire": {
+            "aabb_queries": 100,
+            "candidate_records": 1400,
+            "timings_ms": {
+              "max": 0.774,
+              "p50": 0.443,
+              "p95": 0.74,
+              "samples": 100
+            }
+          },
+          "wizard.magic_shield": {
+            "aabb_queries": 100,
+            "candidate_records": 1400,
+            "timings_ms": {
+              "max": 0.991,
+              "p50": 0.768,
+              "p95": 0.84,
+              "samples": 100
+            }
+          },
+          "wizard.repulsion_ring": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 1.021,
+              "p50": 0.507,
+              "p95": 0.759,
+              "samples": 100
+            }
+          }
+        },
+        "enemy_physics_usec": 383690,
+        "enemy_physics_calls": 2400,
+        "field_count": 8,
+        "visual_cell_count": 72,
+        "tick_counts": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "duplicate_damage_count": 0,
+        "direction_mismatches": {},
+        "animation_batch": [
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "batch": {
+        "source_path": "outputs/repair_v92/world_formal_916003_batch.json",
+        "source_sha256": "2596a392e6b7d3579a0056502cbc9f15a8a73904f36f443a0d3739310cb375d8",
+        "enemy_count": 54,
+        "cast_ms": {
+          "max": 15.859,
+          "p50": 5.418,
+          "p95": 6.132,
+          "samples": 8
+        },
+        "frame_interval_ms": {
+          "max": 11.235,
+          "p50": 6.902,
+          "p95": 9.552,
+          "samples": 578
+        },
+        "context_profiles": {
+          "taoist.entrapment": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.473,
+              "p50": 0.39,
+              "p95": 0.413,
+              "samples": 100
+            }
+          },
+          "wizard.fire_wall": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.493,
+              "p50": 0.394,
+              "p95": 0.425,
+              "samples": 100
+            }
+          },
+          "wizard.fireball": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.067,
+              "p50": 0.047,
+              "p95": 0.054,
+              "samples": 100
+            }
+          },
+          "wizard.hellfire": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.08,
+              "p50": 0.047,
+              "p95": 0.053,
+              "samples": 100
+            }
+          },
+          "wizard.magic_shield": {
+            "aabb_queries": 0,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.634,
+              "p50": 0.36,
+              "p95": 0.413,
+              "samples": 100
+            }
+          },
+          "wizard.repulsion_ring": {
+            "aabb_queries": 100,
+            "candidate_records": 0,
+            "timings_ms": {
+              "max": 0.574,
+              "p50": 0.489,
+              "p95": 0.513,
+              "samples": 100
+            }
+          }
+        },
+        "enemy_physics_usec": 388344,
+        "enemy_physics_calls": 2400,
+        "field_count": 8,
+        "visual_cell_count": 72,
+        "tick_counts": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "duplicate_damage_count": 0,
+        "direction_mismatches": {},
+        "animation_batch": [
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          },
+          {
+            "frame_dispatches": 114,
+            "pending_players": 0,
+            "player_commits": 1026,
+            "players": 9
+          }
+        ]
+      }
+    }
+  ]
+}

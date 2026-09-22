@@ -12,6 +12,9 @@ extends Node
 
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
 
+signal local_performance_capture_finished(result: Dictionary)
+const LOCAL_CAPTURE_SECONDS := 30.0
+
 const PROTOCOL_VERSION := 1
 const POLL_INTERVAL_SECONDS := 0.15
 const MAX_COMMAND_BYTES := 64 * 1024
@@ -154,6 +157,12 @@ var _processed_nonces: Dictionary = {}
 var _processed_nonce_order: Array[String] = []
 var _debug_gate_override := -1
 var _mailbox_initialized := false
+var _local_capture_nonce := ""
+var _local_capture_elapsed := 0.0
+var _local_capture_last_msec := -1
+var _local_capture_last_sample_second := -1
+var _local_capture_samples: Array[Dictionary] = []
+var _local_capture_observer_usec := 0
 
 
 func configure(game_root: Node) -> DeviceLabRuntime:
@@ -200,6 +209,8 @@ func _process(delta: float) -> void:
 	# was blind to real stalls. The Device Lab recorder now measures the
 	# wall-clock interval between its own process callbacks instead.
 	RuntimeDiagnostics.record_device_lab_frame_interval()
+	if not _local_capture_nonce.is_empty():
+		_advance_local_capture(Time.get_ticks_msec())
 	if _busy:
 		return
 	_poll_elapsed += maxf(delta, 0.0)
@@ -212,8 +223,115 @@ func _process(delta: float) -> void:
 func _notification(what: int) -> void:
 	# perf-smoothness-r1 Phase A: an app pause is a measurement boundary for
 	# the Device Lab wall-clock frame sampler as well.
-	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_RESUMED]:
+	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_RESUMED,
+		NOTIFICATION_PAUSED, NOTIFICATION_UNPAUSED]:
 		RuntimeDiagnostics.reset_device_lab_frame_interval()
+		_local_capture_last_msec = -1
+
+
+func begin_local_performance_capture(detail_mode: String) -> Dictionary:
+	if not _debug_enabled():
+		return {"ok": false, "error": "debug_only"}
+	if not _local_capture_nonce.is_empty() or RuntimeDiagnostics.performance_enabled():
+		return {"ok": false, "error": "capture_already_active"}
+	if not RuntimeDiagnostics.set_device_lab_detail_mode(detail_mode):
+		return {"ok": false, "error": "diagnostic_detail_mode"}
+	if not RuntimeDiagnostics.set_device_lab_performance_enabled(true):
+		return {"ok": false, "error": "performance_unavailable"}
+	RuntimeDiagnostics.reset_performance_window()
+	RuntimeDiagnostics.reset_device_lab_frame_interval()
+	_local_capture_nonce = "local_%d_%d" % [int(Time.get_unix_time_from_system()), Time.get_ticks_usec()]
+	_local_capture_elapsed = 0.0
+	_local_capture_last_msec = -1
+	_local_capture_last_sample_second = -1
+	_local_capture_samples.clear()
+	_local_capture_observer_usec = 0
+	return {"ok": true, "nonce": _local_capture_nonce, "seconds": LOCAL_CAPTURE_SECONDS, "detailMode": detail_mode}
+
+
+func _advance_local_capture(now_msec: int) -> void:
+	if _local_capture_nonce.is_empty():
+		return
+	if _local_capture_last_msec >= 0:
+		_local_capture_elapsed += float(maxi(0, now_msec - _local_capture_last_msec)) / 1000.0
+	_local_capture_last_msec = now_msec
+	if _local_capture_elapsed >= LOCAL_CAPTURE_SECONDS:
+		_finish_local_capture("duration_complete")
+		return
+	var second := int(_local_capture_elapsed)
+	if second == _local_capture_last_sample_second:
+		return
+	_local_capture_last_sample_second = second
+	var observer_started := Time.get_ticks_usec()
+	# Coarse engine monitors are sampled at most once per second. Their
+	# process values are cached by Godot and are NOT per-frame CPU timings.
+	var sample := {"elapsed_seconds": _local_capture_elapsed, "engine": _performance_snapshot(),
+		"map": _map_snapshot(_game_root)}
+	if RuntimeDiagnostics.device_lab_detail_mode() == RuntimeDiagnostics.DEVICE_LAB_DETAIL_FULL:
+		sample["enemy_activity"] = _enemy_activity_snapshot(_game_root)
+		sample["counters"] = RuntimeDiagnostics.performance_counters()
+		sample["fire_walls"] = _fire_wall_capture_snapshot(_game_root)
+	_local_capture_samples.append(sample)
+	_local_capture_observer_usec += Time.get_ticks_usec() - observer_started
+
+
+func _finish_local_capture(reason: String) -> Dictionary:
+	if _local_capture_nonce.is_empty():
+		return {"ok": false, "error": "no_local_capture"}
+	var nonce := _local_capture_nonce
+	_local_capture_nonce = ""
+	# Stop frame/timing collection before serializing the report so file I/O
+	# and final scene inspection cannot become a reported gameplay hitch.
+	RuntimeDiagnostics.set_device_lab_performance_enabled(false)
+	RuntimeDiagnostics.reset_device_lab_frame_interval()
+	var root := _game_root if is_instance_valid(_game_root) else null
+	var result := {
+		"ok": true, "action": "local_performance_capture", "reason": reason,
+		"complete": reason == "duration_complete", "elapsed_gameplay_seconds": _local_capture_elapsed,
+		"detailMode": RuntimeDiagnostics.device_lab_detail_mode(),
+		"observer_usec": _local_capture_observer_usec,
+		"engine_monitor_caveat": "process_ms/physics_process_ms are cached coarse monitors, not individual frame CPU time",
+		"device": {"model": OS.get_model_name(), "os": OS.get_name(),
+			"processor": OS.get_processor_name(), "processor_count": OS.get_processor_count(),
+			"render_driver": RenderingServer.get_current_rendering_driver_name()},
+		"status": status_snapshot(), "performance_diagnostics": _performance_window_snapshot(root),
+		"build_info": _capture_build_identity(), "fire_walls": _fire_wall_capture_snapshot(root),
+		"map": _map_snapshot(root), "enemy_activity": _enemy_activity_snapshot(root),
+		"caster_skill_visuals": _caster_skill_visual_snapshot(), "monster_streaming": _monster_streaming_snapshot(root),
+		"coarse_samples": _local_capture_samples.duplicate(true),
+	}
+	var written := _write_result(nonce, result)
+	_local_capture_samples.clear()
+	var outcome := {"ok": written, "path": OUTBOX_DIR + "/result_" + nonce + ".json", "nonce": nonce}
+	local_performance_capture_finished.emit(outcome)
+	return outcome
+
+
+static func _capture_build_identity() -> Dictionary:
+	const PATH := "res://assets/generated/build_info.json"
+	if not FileAccess.file_exists(PATH):
+		return {"status": "MISSING"}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
+	return parsed if parsed is Dictionary else {"status": "FAIL"}
+
+
+static func _fire_wall_capture_snapshot(root: Node) -> Dictionary:
+	var result := {"active_fields": 0, "visual_cells": 0}
+	if root == null:
+		return result
+	var registry: Variant = root.get("_fire_wall_field_registry")
+	if not registry is Dictionary:
+		return result
+	for field: Variant in registry.values():
+		if field is FireWallFieldController and is_instance_valid(field) and not field.is_queued_for_deletion():
+			result.active_fields += 1
+			result.visual_cells += field.visual_cells.size()
+	return result
+
+
+func _exit_tree() -> void:
+	if not _local_capture_nonce.is_empty():
+		_finish_local_capture("world_exit")
 
 
 func _poll_inbox() -> void:
@@ -438,6 +556,8 @@ static func _is_hex(value: String) -> bool:
 
 func _execute(command: Dictionary) -> Dictionary:
 	var action := str(command.get("action", ""))
+	if action in ["reset_diagnostics", "stop_diagnostics"] and not _local_capture_nonce.is_empty():
+		_finish_local_capture("host_command")
 	match action:
 		"status":
 			return {"ok": true, "action": action, "status": status_snapshot()}
@@ -1029,6 +1149,8 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 		"active_ground_loot_count": 0,
 		"active_corpse_count": 0,
 		"background_ai_eligible": 0,
+		"physics_enabled_count": 0,
+		"deep_sleeping_count": 0,
 		"inspected": 0,
 		"enemy_diagnostics": _enemy_diagnostics_snapshot(),
 	}
@@ -1073,6 +1195,10 @@ static func _enemy_activity_snapshot(root: Node) -> Dictionary:
 		if not enemy is EnemyActor:
 			continue
 		var enemy_actor := enemy as EnemyActor
+		if enemy_actor.is_physics_processing():
+			result["physics_enabled_count"] = int(result["physics_enabled_count"]) + 1
+		if enemy_actor._background_deep_sleeping:
+			result["deep_sleeping_count"] = int(result["deep_sleeping_count"]) + 1
 		var enemy_velocity: Variant = enemy_actor.get("velocity")
 		if enemy_velocity is Vector2 and (enemy_velocity as Vector2).length_squared() > 0.000001:
 			result["moving_count"] = int(result.get("moving_count", 0)) + 1

@@ -1,0 +1,7484 @@
+{
+	"counts": [
+		30
+	],
+	"display_driver": "headless",
+	"fixture_contract": "hardcore.rev07.real_actor_world_scenarios.v1",
+	"frame_clock": "Time.get_ticks_usec_adjacent_process_callbacks",
+	"head": "b961cedff8040c9fc81534e094241ad9fa2330ad:baseline",
+	"label": "v92_clock_diagnostic_baseline_0",
+	"layout_seed": 20260909,
+	"map_id": 1,
+	"monster_id": 64,
+	"renderer": "opengl3",
+	"rows": [
+		{
+			"actor_proof": [
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.83548951148987,
+					"final_ground_gu": [
+						18.6414222717285,
+						18.3585777282715
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						19.5
+					],
+					"instance_id": 127590729450,
+					"motion_frames": 170,
+					"motion_gu": 2.8114090472227,
+					"path_status": "IDLE",
+					"serial": 1,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 1.50000059604645,
+					"final_ground_gu": [
+						20.1823654174805,
+						19.0340156555176
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						19.5
+					],
+					"instance_id": 129671104264,
+					"motion_frames": 213,
+					"motion_gu": 3.5372364083305,
+					"path_status": "IDLE",
+					"serial": 2,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.49858260154724,
+					"final_ground_gu": [
+						19.3669929504395,
+						19.5191612243652
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						19.5
+					],
+					"instance_id": 130073757466,
+					"motion_frames": 54,
+					"motion_gu": 0.900026138871908,
+					"path_status": "IDLE",
+					"serial": 3,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.49860894680023,
+					"final_ground_gu": [
+						21.6330451965332,
+						19.5191650390625
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						19.5
+					],
+					"instance_id": 130476410668,
+					"motion_frames": 54,
+					"motion_gu": 0.899982070550323,
+					"path_status": "IDLE",
+					"serial": 4,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 2.16476821899414,
+					"final_ground_gu": [
+						21.0741100311279,
+						18.412748336792
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						19.5
+					],
+					"instance_id": 130879063870,
+					"motion_frames": 197,
+					"motion_gu": 3.27416439633816,
+					"path_status": "IDLE",
+					"serial": 5,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.62119650840759,
+					"final_ground_gu": [
+						17.3135547637939,
+						18.7796421051025
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						20.5
+					],
+					"instance_id": 131281717072,
+					"motion_frames": 200,
+					"motion_gu": 3.33227573335171,
+					"path_status": "IDLE",
+					"serial": 6,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.06320095062256,
+					"final_ground_gu": [
+						17.4437828063965,
+						20.2932739257813
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						20.5
+					],
+					"instance_id": 131684370274,
+					"motion_frames": 16,
+					"motion_gu": 0.266676040366292,
+					"path_status": "IDLE",
+					"serial": 7,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						19.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						20.5
+					],
+					"instance_id": 132087023476,
+					"motion_frames": 30,
+					"motion_gu": 0.500898689962924,
+					"path_status": "IDLE",
+					"serial": 8,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						22.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						20.5
+					],
+					"instance_id": 132489676678,
+					"motion_frames": 31,
+					"motion_gu": 0.5000269562006,
+					"path_status": "IDLE",
+					"serial": 9,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.03868889808655,
+					"final_ground_gu": [
+						23.5000038146973,
+						20.0166702270508
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						20.5
+					],
+					"instance_id": 132892329880,
+					"motion_frames": 103,
+					"motion_gu": 1.7153185736388,
+					"path_status": "IDLE",
+					"serial": 10,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.00086641311646,
+					"final_ground_gu": [
+						16.5000019073486,
+						20.583345413208
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						21.5
+					],
+					"instance_id": 133294983082,
+					"motion_frames": 156,
+					"motion_gu": 2.590848388616,
+					"path_status": "IDLE",
+					"serial": 11,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.17809319496155,
+					"final_ground_gu": [
+						17.4833335876465,
+						21.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						21.5
+					],
+					"instance_id": 133697636284,
+					"motion_frames": 1,
+					"motion_gu": 0.0166666507720947,
+					"path_status": "IDLE",
+					"serial": 12,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98669302463531,
+					"final_ground_gu": [
+						18.7833309173584,
+						21.4999980926514
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						21.5
+					],
+					"instance_id": 134100289486,
+					"motion_frames": 17,
+					"motion_gu": 0.283331036567688,
+					"path_status": "IDLE",
+					"serial": 13,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98669493198395,
+					"final_ground_gu": [
+						22.2166690826416,
+						21.5000019073486
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						21.5
+					],
+					"instance_id": 134502942688,
+					"motion_frames": 17,
+					"motion_gu": 0.283331036567688,
+					"path_status": "IDLE",
+					"serial": 14,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.20824646949768,
+					"final_ground_gu": [
+						23.5707111358643,
+						21.4292888641357
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						21.5
+					],
+					"instance_id": 134905595890,
+					"motion_frames": 78,
+					"motion_gu": 1.28884809790179,
+					"path_status": "IDLE",
+					"serial": 15,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.56322813034058,
+					"final_ground_gu": [
+						16.3432121276855,
+						22.3825950622559
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						22.5
+					],
+					"instance_id": 135308249092,
+					"motion_frames": 76,
+					"motion_gu": 1.26666302233934,
+					"path_status": "IDLE",
+					"serial": 16,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.60555124282837,
+					"final_ground_gu": [
+						17.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						22.5
+					],
+					"instance_id": 135710902294,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 17,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.82842707633972,
+					"final_ground_gu": [
+						18.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						22.5
+					],
+					"instance_id": 136113555496,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 18,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98606622219086,
+					"final_ground_gu": [
+						19.6118011474609,
+						22.2763900756836
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						22.5
+					],
+					"instance_id": 136516208698,
+					"motion_frames": 15,
+					"motion_gu": 0.250002415850759,
+					"path_status": "IDLE",
+					"serial": 19,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						20.5,
+						22.0
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						22.5
+					],
+					"instance_id": 136918861900,
+					"motion_frames": 30,
+					"motion_gu": 0.500108000822365,
+					"path_status": "IDLE",
+					"serial": 20,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98605680465698,
+					"final_ground_gu": [
+						21.3881893157959,
+						22.2763843536377
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						21.5,
+						22.5
+					],
+					"instance_id": 137321515102,
+					"motion_frames": 15,
+					"motion_gu": 0.250011060386896,
+					"path_status": "IDLE",
+					"serial": 21,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.82842707633972,
+					"final_ground_gu": [
+						22.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						22.5
+					],
+					"instance_id": 137724168304,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 22,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.72021269798279,
+					"final_ground_gu": [
+						23.4999980926514,
+						22.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						22.5
+					],
+					"instance_id": 138126821506,
+					"motion_frames": 74,
+					"motion_gu": 1.23332154750824,
+					"path_status": "IDLE",
+					"serial": 23,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 5.1225004196167,
+					"final_ground_gu": [
+						16.4999980926514,
+						23.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						23.5
+					],
+					"instance_id": 138529474708,
+					"motion_frames": 74,
+					"motion_gu": 1.23331737518311,
+					"path_status": "IDLE",
+					"serial": 24,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.38634300231934,
+					"final_ground_gu": [
+						17.4999980926514,
+						23.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						23.5
+					],
+					"instance_id": 138932127910,
+					"motion_frames": 74,
+					"motion_gu": 1.23331737518311,
+					"path_status": "IDLE",
+					"serial": 25,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.77359247207642,
+					"final_ground_gu": [
+						18.4999980926514,
+						23.6999988555908
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						23.5
+					],
+					"instance_id": 139334781112,
+					"motion_frames": 74,
+					"motion_gu": 1.23331737518311,
+					"path_status": "IDLE",
+					"serial": 26,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.36852169036865,
+					"final_ground_gu": [
+						19.4999980926514,
+						23.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						23.5
+					],
+					"instance_id": 139737434314,
+					"motion_frames": 75,
+					"motion_gu": 1.24998378753662,
+					"path_status": "IDLE",
+					"serial": 27,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.21666526794434,
+					"final_ground_gu": [
+						20.4999980926514,
+						23.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						23.5
+					],
+					"instance_id": 140140087516,
+					"motion_frames": 75,
+					"motion_gu": 1.24999058246613,
+					"path_status": "IDLE",
+					"serial": 28,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.36852073669434,
+					"final_ground_gu": [
+						21.4999980926514,
+						23.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						21.5,
+						23.5
+					],
+					"instance_id": 140542740718,
+					"motion_frames": 75,
+					"motion_gu": 1.24999058246613,
+					"path_status": "IDLE",
+					"serial": 29,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.07465934753418,
+					"final_ground_gu": [
+						22.6255416870117,
+						23.9763374328613
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						23.5
+					],
+					"instance_id": 140945393920,
+					"motion_frames": 49,
+					"motion_gu": 0.816682305186987,
+					"path_status": "IDLE",
+					"serial": 30,
+					"target_damage_calls_seen": 0
+				}
+			],
+			"actors_with_attack_damage": 11,
+			"actors_with_attack_start": 11,
+			"actors_with_motion": 27,
+			"actual_actor_count": 30,
+			"blocked_cell_count": 0,
+			"enemy_metrics": {
+				"active_enemy_physics_count": 9660,
+				"active_loot_pickups": 0,
+				"actor_redraw_requests": 0,
+				"actor_redraw_requests_from_damage": 0,
+				"aoe_candidate_usec": 0,
+				"aoe_damage_target_count": 0,
+				"aoe_exact_intersection_tests": 0,
+				"aoe_exact_phase_usec": 0,
+				"aoe_full_enemy_group_scans": 0,
+				"aoe_max_single_release_candidate_usec": 0,
+				"aoe_nested_cell_enemy_scans": 0,
+				"aoe_query_plan_builds": 0,
+				"aoe_release_count": 0,
+				"aoe_selected_targets": 0,
+				"aoe_snapshot_validation_calls": 0,
+				"aoe_spatial_candidates": 0,
+				"aoe_spatial_queries": 0,
+				"attack_los_cache_hits": 0,
+				"attack_los_evaluations": 7412,
+				"attack_los_map_samples": 101614,
+				"attack_los_physics_rays": 7412,
+				"attack_los_requests": 7412,
+				"attack_los_usec": 104256,
+				"background_ai_evaluations": 0,
+				"background_deep_sleep_entries": 0,
+				"background_deep_sleep_wakeups": 0,
+				"background_fast_path_skips": 0,
+				"crowd_full_group_scans": 0,
+				"crowd_grid_actor_scans": 0,
+				"crowd_grid_builds": 0,
+				"crowd_index_candidates": 542,
+				"crowd_queries": 29,
+				"crowd_query_candidates": 542,
+				"crowd_steering_evaluations": 29,
+				"crowd_usec": 4312,
+				"death_batch_count": 0,
+				"death_batch_size_max": 0,
+				"death_begin_calls": 0,
+				"death_jobs_per_frame_max": 0,
+				"death_pending_marks": 0,
+				"death_physics_process_calls_after_begin": 0,
+				"death_queue_cancelled_count": 0,
+				"death_queue_committed_count": 0,
+				"death_queue_failed_count": 0,
+				"death_queue_materialization_failures": 0,
+				"death_queue_retry_count": 0,
+				"death_queue_state_transitions": 0,
+				"death_resolve_active_usec": 0,
+				"death_same_release_unregistrations": 0,
+				"death_settlement_usec": 0,
+				"death_target_refresh_count": 0,
+				"death_work_frames": 0,
+				"direct_spell_full_monster_data_duplicates": 0,
+				"direct_spell_resolution_count": 0,
+				"direct_spell_resolution_usec": 0,
+				"direct_spell_stats_snapshot_count": 0,
+				"draw_calls": 0,
+				"drop_node_spawn_count": 0,
+				"drop_node_spawn_usec": 0,
+				"drop_nodes_per_frame_max": 0,
+				"drop_queue_depth_max": 0,
+				"drop_queue_oldest_age_ms": 0,
+				"drop_request_count": 0,
+				"drop_roll_count": 0,
+				"drop_roll_usec": 0,
+				"drop_work_frames": 0,
+				"enemy_background_tick_calls": 0,
+				"enemy_background_tick_usec": 0,
+				"enemy_environment_guard_calls": 293,
+				"enemy_environment_guard_usec": 9191,
+				"enemy_movement_strategy_calls": 2053,
+				"enemy_movement_strategy_usec": 230415,
+				"enemy_physics_calls": 9660,
+				"enemy_physics_usec": 2438287,
+				"enemy_projection_calls": 11726,
+				"enemy_projection_usec": 26811,
+				"enemy_retarget_calls": 9660,
+				"enemy_retarget_usec": 256686,
+				"enemy_terrain_path_accepted": 0,
+				"enemy_terrain_path_budget_rejections": 0,
+				"enemy_terrain_path_calls": 0,
+				"enemy_terrain_path_expansions": 0,
+				"enemy_terrain_path_expansions_max": 0,
+				"enemy_terrain_path_usec": 0,
+				"enemy_visual_update_calls": 9660,
+				"enemy_visual_update_usec": 38584,
+				"engaged_enemy_count": 9660,
+				"environment_guard_batches": 8309,
+				"environment_guard_checks": 293,
+				"environment_point_samples": 0,
+				"environment_query_usec": 185965,
+				"foreground_ai_ticks": 9660,
+				"hit_animation_requests": 0,
+				"lethal_damage_count": 0,
+				"loot_collection_authority_checks": 0,
+				"loot_collection_candidates": 0,
+				"loot_collection_global_checks": 0,
+				"loot_collection_origin_rejections": 0,
+				"loot_collection_spatial_queries": 0,
+				"loot_fallback_redraw_requests": 0,
+				"loot_manager_collection_requests": 0,
+				"loot_manager_exact_range_checks": 0,
+				"loot_manager_fail_safe_checks": 0,
+				"loot_manager_full_scans": 0,
+				"loot_manager_player_events": 0,
+				"loot_manager_registration_checks": 0,
+				"loot_manager_retry_checks": 0,
+				"loot_manager_visual_registry_entries": 0,
+				"loot_manager_visual_registry_scans": 0,
+				"loot_manager_visual_updates": 0,
+				"loot_pickup_process_calls": 0,
+				"loot_spatial_candidates": 0,
+				"loot_spatial_full_scans": 0,
+				"loot_spatial_queries": 0,
+				"loot_spatial_registers": 0,
+				"loot_spatial_unregisters": 0,
+				"loot_visual_updates": 0,
+				"monster_direct_magic_walk_delay_count": 0,
+				"monster_dot_no_struck_count": 0,
+				"monster_magic_mine_struck_count": 0,
+				"monster_presentation_queue_overflow": 0,
+				"monster_struck_event_count": 0,
+				"monster_struck_visual_pending_max": 0,
+				"move_and_slide_usec": 36416,
+				"moving_enemy_count": 2049,
+				"overhead_health_refreshes": 0,
+				"physics_moves": 2049,
+				"physics_process_ms": 0,
+				"process_ms": 0,
+				"render_primitives": 0,
+				"respawn_state_updates": 0,
+				"retarget_decisions": 742,
+				"retarget_full_scans": 21,
+				"retarget_target_candidates": 21,
+				"retarget_target_group_scans": 21,
+				"safe_zone_global_actor_scans": 0,
+				"safe_zone_queries": 12407,
+				"safe_zone_usec": 63754,
+				"take_damage_calls": 0,
+				"take_damage_usec": 0,
+				"texture_mem": 0,
+				"unexpected_sync_loot_texture_loads": 0,
+				"video_mem": 0,
+				"visual_animation_updates": 21030,
+				"visual_render_state_changes": 2018
+			},
+			"fire_wall_diagnostics": [],
+			"fire_wall_fields": 0,
+			"fire_wall_setup_usec": 0,
+			"frame_delta_diagnostic_ms": {
+				"max": 25.8246666666673,
+				"min": 1.089,
+				"p50": 7.57575757575758,
+				"p95": 9.45499999999933,
+				"p99": 12.718,
+				"samples": 701
+			},
+			"full_frame_ms": {
+				"max": 33.12,
+				"min": 0.022,
+				"p50": 1.72,
+				"p95": 25.148,
+				"p99": 30.44,
+				"samples": 701
+			},
+			"full_frame_ms_raw": [
+				0.022,
+				0.308,
+				14.923,
+				0.296,
+				5.585,
+				4.939,
+				15.308,
+				4.138,
+				11.239,
+				4.019,
+				11.542,
+				4.542,
+				10.893,
+				0.288,
+				18.971,
+				0.287,
+				14.894,
+				0.213,
+				14.751,
+				0.223,
+				17.081,
+				0.325,
+				1.479,
+				17.337,
+				0.433,
+				15.573,
+				0.473,
+				8.145,
+				0.375,
+				23.759,
+				0.412,
+				0.229,
+				17.34,
+				0.41,
+				10.599,
+				0.329,
+				15.962,
+				0.323,
+				16.001,
+				0.311,
+				0.595,
+				17.116,
+				0.381,
+				11.975,
+				0.373,
+				18.563,
+				0.356,
+				0.21,
+				16.663,
+				0.369,
+				11.166,
+				0.419,
+				15.569,
+				0.345,
+				7.427,
+				28.021,
+				7.348,
+				0.438,
+				6.547,
+				0.351,
+				33.12,
+				0.483,
+				6.92,
+				0.352,
+				17.035,
+				0.254,
+				14.953,
+				0.285,
+				11.313,
+				0.407,
+				20.057,
+				0.395,
+				6.364,
+				0.765,
+				28.013,
+				0.406,
+				6.432,
+				0.477,
+				19.837,
+				0.292,
+				6.711,
+				0.749,
+				27.384,
+				0.4,
+				6.462,
+				0.439,
+				20.651,
+				0.257,
+				0.237,
+				19.238,
+				0.487,
+				6.982,
+				0.656,
+				17.772,
+				0.288,
+				15.303,
+				0.212,
+				1.088,
+				17.96,
+				0.407,
+				5.645,
+				21.42,
+				0.421,
+				7.134,
+				0.298,
+				16.905,
+				10.312,
+				0.341,
+				11.182,
+				0.429,
+				9.736,
+				25.148,
+				6.263,
+				0.429,
+				6.424,
+				1.097,
+				13.441,
+				0.359,
+				14.424,
+				0.223,
+				19.135,
+				0.456,
+				0.261,
+				12.379,
+				1.426,
+				13.359,
+				0.437,
+				20.214,
+				0.545,
+				0.31,
+				27.277,
+				0.393,
+				5.676,
+				1.225,
+				27.631,
+				0.507,
+				6.763,
+				0.369,
+				13.033,
+				6.564,
+				0.869,
+				19.559,
+				0.385,
+				9.45,
+				0.397,
+				15.843,
+				0.275,
+				8.308,
+				8.284,
+				0.23,
+				17.193,
+				0.44,
+				11.493,
+				0.41,
+				8.712,
+				26.727,
+				0.4,
+				8.016,
+				0.429,
+				20.387,
+				0.279,
+				6.926,
+				0.212,
+				26.543,
+				0.344,
+				0.19,
+				26.727,
+				10.644,
+				0.433,
+				8.136,
+				0.425,
+				11.733,
+				0.406,
+				15.538,
+				0.278,
+				14.573,
+				0.261,
+				19.679,
+				0.36,
+				7.051,
+				0.434,
+				21.956,
+				0.375,
+				8.186,
+				0.363,
+				18.131,
+				0.332,
+				0.586,
+				16.856,
+				0.298,
+				13.083,
+				0.286,
+				18.999,
+				0.417,
+				0.252,
+				30.44,
+				0.511,
+				7.603,
+				0.417,
+				19.121,
+				0.287,
+				0.225,
+				15.813,
+				0.265,
+				14.607,
+				0.277,
+				19.061,
+				0.524,
+				0.248,
+				31.764,
+				7.124,
+				0.38,
+				6.654,
+				0.245,
+				13.372,
+				0.428,
+				14.193,
+				0.205,
+				14.856,
+				0.26,
+				20.312,
+				0.494,
+				0.195,
+				32.207,
+				0.44,
+				6.964,
+				0.392,
+				18.773,
+				0.209,
+				8.525,
+				0.221,
+				22.315,
+				0.244,
+				0.187,
+				19.398,
+				0.39,
+				8.548,
+				0.385,
+				23.445,
+				0.39,
+				6.904,
+				0.299,
+				18.621,
+				0.248,
+				1.525,
+				13.301,
+				0.5,
+				14.292,
+				0.227,
+				20.164,
+				0.459,
+				6.977,
+				0.355,
+				22.543,
+				0.383,
+				0.227,
+				28.174,
+				0.392,
+				6.421,
+				0.477,
+				22.666,
+				0.242,
+				10.67,
+				0.416,
+				20.194,
+				0.59,
+				0.26,
+				18.855,
+				0.368,
+				8.426,
+				0.376,
+				19.532,
+				0.309,
+				7.235,
+				0.23,
+				26.728,
+				0.464,
+				0.19,
+				26.71,
+				0.381,
+				10.757,
+				0.42,
+				19.773,
+				0.36,
+				7.698,
+				0.287,
+				23.074,
+				0.272,
+				11.5,
+				0.53,
+				9.064,
+				0.37,
+				31.593,
+				0.381,
+				6.983,
+				0.363,
+				18.456,
+				0.26,
+				8.735,
+				0.228,
+				24.567,
+				0.355,
+				6.642,
+				0.42,
+				20.291,
+				0.297,
+				0.209,
+				18.971,
+				0.359,
+				9.233,
+				0.337,
+				22.206,
+				0.275,
+				7.316,
+				0.318,
+				22.356,
+				0.467,
+				0.224,
+				26.563,
+				0.433,
+				10.392,
+				0.357,
+				22.285,
+				0.448,
+				6.832,
+				0.319,
+				20.211,
+				0.259,
+				0.558,
+				18.906,
+				0.44,
+				7.329,
+				0.928,
+				24.819,
+				0.403,
+				6.062,
+				0.837,
+				17.485,
+				0.29,
+				17.415,
+				0.353,
+				0.258,
+				14.124,
+				0.362,
+				25.263,
+				0.768,
+				6.467,
+				0.429,
+				15.824,
+				0.394,
+				14.49,
+				0.443,
+				7.488,
+				22.777,
+				0.318,
+				6.006,
+				0.895,
+				27.986,
+				0.557,
+				6.105,
+				0.796,
+				22.998,
+				0.385,
+				6.631,
+				0.396,
+				21.022,
+				0.326,
+				0.209,
+				15.352,
+				0.23,
+				14.069,
+				0.296,
+				18.568,
+				0.486,
+				5.944,
+				0.954,
+				23.528,
+				0.433,
+				0.228,
+				27.092,
+				0.431,
+				6.363,
+				0.534,
+				23.678,
+				0.235,
+				8.013,
+				0.311,
+				24.86,
+				0.438,
+				10.034,
+				0.472,
+				17.577,
+				0.297,
+				0.969,
+				14.973,
+				0.216,
+				15.788,
+				0.252,
+				18.455,
+				0.382,
+				6.185,
+				0.784,
+				28.202,
+				0.577,
+				7.988,
+				0.339,
+				15.462,
+				0.242,
+				15.944,
+				0.241,
+				1.181,
+				14.411,
+				0.466,
+				17.235,
+				0.308,
+				8.313,
+				0.668,
+				24.506,
+				0.44,
+				8.091,
+				0.425,
+				10.902,
+				7.645,
+				0.536,
+				14.455,
+				0.305,
+				15.558,
+				0.304,
+				18.25,
+				0.431,
+				0.213,
+				31.342,
+				0.524,
+				8.0,
+				0.428,
+				18.173,
+				0.327,
+				7.892,
+				0.331,
+				22.851,
+				0.335,
+				0.187,
+				18.118,
+				0.386,
+				9.055,
+				0.359,
+				24.399,
+				0.39,
+				6.344,
+				0.553,
+				12.325,
+				8.952,
+				0.314,
+				13.277,
+				0.397,
+				14.958,
+				0.222,
+				18.254,
+				0.358,
+				0.233,
+				13.229,
+				0.336,
+				19.988,
+				0.37,
+				0.34,
+				26.733,
+				0.364,
+				6.284,
+				0.614,
+				22.909,
+				0.426,
+				0.361,
+				17.901,
+				0.401,
+				8.276,
+				0.658,
+				23.455,
+				0.346,
+				0.19,
+				26.437,
+				6.772,
+				0.306,
+				6.964,
+				0.376,
+				16.681,
+				0.399,
+				15.988,
+				0.262,
+				0.964,
+				13.773,
+				0.305,
+				20.0,
+				0.455,
+				6.86,
+				0.371,
+				19.866,
+				0.296,
+				0.204,
+				15.167,
+				0.37,
+				16.49,
+				0.348,
+				2.125,
+				13.887,
+				0.362,
+				13.319,
+				0.255,
+				9.345,
+				26.574,
+				0.4,
+				7.111,
+				0.407,
+				19.264,
+				0.28,
+				0.536,
+				14.52,
+				0.274,
+				15.144,
+				0.308,
+				8.814,
+				21.964,
+				0.279,
+				11.08,
+				0.371,
+				18.851,
+				0.378,
+				0.279,
+				14.234,
+				0.31,
+				15.806,
+				0.265,
+				16.883,
+				0.332,
+				0.233,
+				15.35,
+				0.317,
+				19.984,
+				0.418,
+				7.502,
+				0.439,
+				10.779,
+				8.95,
+				0.332,
+				16.341,
+				0.352,
+				13.535,
+				0.302,
+				7.19,
+				23.543,
+				12.269,
+				0.485,
+				7.375,
+				0.423,
+				25.307,
+				0.329,
+				12.598,
+				0.345,
+				7.464,
+				0.405,
+				25.474,
+				9.396,
+				0.433,
+				11.335,
+				0.33,
+				9.498,
+				0.386,
+				15.486,
+				0.243,
+				17.55,
+				0.344,
+				0.234,
+				14.632,
+				0.315,
+				6.299,
+				24.373,
+				0.365,
+				11.445,
+				0.424,
+				1.933,
+				16.143,
+				0.349,
+				14.071,
+				0.349,
+				8.141,
+				25.715,
+				7.206,
+				0.363,
+				7.526,
+				0.284,
+				22.462,
+				0.555,
+				6.171,
+				0.728,
+				13.851,
+				0.265,
+				14.739,
+				0.329,
+				16.13,
+				0.276,
+				18.622,
+				0.459,
+				0.206,
+				12.616,
+				0.978,
+				20.463,
+				0.433,
+				0.229,
+				25.062,
+				0.522,
+				5.905,
+				0.995,
+				23.286,
+				0.282,
+				0.505,
+				17.832,
+				0.427,
+				12.548,
+				0.435,
+				19.459,
+				0.505,
+				0.202,
+				25.776,
+				0.398,
+				6.038,
+				0.863,
+				24.209,
+				0.305,
+				0.228,
+				17.071,
+				0.405,
+				12.506,
+				0.404,
+				20.421,
+				0.335,
+				0.192,
+				32.961,
+				5.782,
+				5.62,
+				0.237,
+				7.264,
+				8.497,
+				0.58,
+				6.905,
+				22.559,
+				0.426,
+				11.205,
+				0.487,
+				2.111,
+				14.476,
+				0.445,
+				15.519,
+				0.242,
+				8.726,
+				7.515,
+				1.374,
+				6.905,
+				22.149,
+				0.474,
+				8.853,
+				0.376,
+				26.038,
+				0.513,
+				0.222,
+				30.833,
+				6.139,
+				5.912,
+				0.224,
+				1.883,
+				14.047,
+				0.398,
+				6.263,
+				26.387,
+				0.432,
+				11.659,
+				0.422,
+				1.72,
+				13.546,
+				0.409,
+				15.8,
+				0.255,
+				8.494,
+				22.176,
+				0.328,
+				6.391,
+				0.508,
+				27.76,
+				12.162,
+				0.515,
+				6.589,
+				0.425,
+				23.764,
+				0.249,
+				6.319,
+				0.581,
+				23.778,
+				0.243,
+				6.395,
+				0.546,
+				27.215,
+				12.103,
+				0.561
+			],
+			"godot_process_monitor_ms_diagnostic_only": {
+				"max": 17.451,
+				"min": 5.562,
+				"p50": 13.96,
+				"p95": 17.451,
+				"p99": 17.451,
+				"samples": 701
+			},
+			"initial_layout": {
+				"min_actor_separation_gu": 1.0,
+				"min_target_separation_gu": 2.0,
+				"player_radius_gu": 0.397747564417433,
+				"valid": true
+			},
+			"layout_seed": 20260909,
+			"layout_signature": "fbc5d4a3c4b80553c6c829a36c35f20c0a762223ac94a003eae8a3b1a540385e",
+			"map_id": 1,
+			"monster_count": 30,
+			"optional_probe_section_calls": {},
+			"optional_probe_section_usec": {},
+			"path_search_metrics": {
+				"m30_frontier_rebuild_max_cells": 0,
+				"m30_frontier_rebuild_usec": 0,
+				"m30_frontier_rebuilds": 0,
+				"shared_field_expansions": 0,
+				"shared_field_fallbacks": 0,
+				"shared_field_services": 0
+			},
+			"path_status_counts": {
+				"IDLE": 30
+			},
+			"physics_ticks_per_second": 60,
+			"post_sample_drain": {
+				"completed_within_limit": true,
+				"end_pending_jobs": 0,
+				"expansions": 0,
+				"process_frames": 0,
+				"services": 0,
+				"start_pending_jobs": 0
+			},
+			"sample_physics_ticks": 322,
+			"sample_process_frames": 320,
+			"scenario": "dense_crowd",
+			"scheduler_delta": {
+				"available": false
+			},
+			"tail_frame_counts": {
+				"over_16_67ms": 137,
+				"over_25ms": 37,
+				"over_33_3ms": 0,
+				"over_50ms": 0
+			},
+			"target_damage_calls": 29,
+			"target_damage_total": 591,
+			"terrain_metrics": {
+				"max_queries_per_physics_frame": 2,
+				"path_budget_rejections": 0,
+				"path_expansions": 0,
+				"path_queries": 0,
+				"queries_this_physics_frame": 0
+			},
+			"timing_diagnostic": {
+				"injected_warmup_hitch_ms": 0,
+				"purpose": "clock sensitivity, not performance",
+				"status": "PASS",
+				"trace": [
+					{
+						"attack_starts": 0,
+						"await_iteration": 1,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 7,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 7,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6347
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 2,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 8,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 15,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6370
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 3,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 16,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6374
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 4,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 17,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6377
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 5,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 18,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6406
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 6,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 19,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6420
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 7,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 20,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6436
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 8,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 21,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6453
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 9,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 22,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6468
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 10,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 23,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6483
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 11,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 24,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6499
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 12,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 25,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6515
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 13,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 26,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6530
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 14,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 27,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6545
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 15,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 28,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6561
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 16,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 29,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6591
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 17,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 30,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6607
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 18,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 31,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6623
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 19,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 32,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6639
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 20,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 33,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6654
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 21,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 34,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6670
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 22,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 35,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6686
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 23,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 36,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6701
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 24,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 37,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6717
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 25,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 38,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6734
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 26,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 39,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6749
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 27,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 40,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6764
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 28,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 41,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6779
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 29,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 42,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6795
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 30,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 43,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6828
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 31,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 44,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6833
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 32,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 45,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6858
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 33,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 46,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6872
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 34,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 47,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6888
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 35,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 48,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6904
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 36,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 49,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6919
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 37,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 50,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6936
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 38,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 51,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6950
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 39,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 52,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6965
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 40,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 53,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6981
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 41,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 54,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6996
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 42,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 55,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7012
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 43,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 56,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7028
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 44,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 57,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7043
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 45,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 58,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7074
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 46,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 59,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7090
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 47,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 60,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7096
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 48,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 61,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7120
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 49,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 62,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7135
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 50,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 63,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7152
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 51,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 64,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7182
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 52,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 65,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7197
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 53,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 66,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7212
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 54,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 67,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7229
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 55,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 68,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7248
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 56,
+						"capturing": true,
+						"distance": 2.22117352485657,
+						"ground": [
+							18.5166664123535,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 69,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7264
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 57,
+						"capturing": true,
+						"distance": 2.2063045501709,
+						"ground": [
+							18.533332824707,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 70,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7273
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 58,
+						"capturing": true,
+						"distance": 2.19146132469177,
+						"ground": [
+							18.5499992370605,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 71,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7297
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 59,
+						"capturing": true,
+						"distance": 2.17664456367493,
+						"ground": [
+							18.5666656494141,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 72,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7315
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 60,
+						"capturing": true,
+						"distance": 2.16185474395752,
+						"ground": [
+							18.5833320617676,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 73,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7326
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 61,
+						"capturing": true,
+						"distance": 2.14709234237671,
+						"ground": [
+							18.5999984741211,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 74,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7342
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 62,
+						"capturing": true,
+						"distance": 2.13235807418823,
+						"ground": [
+							18.6166648864746,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 75,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7359
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 63,
+						"capturing": true,
+						"distance": 2.11765241622925,
+						"ground": [
+							18.6333312988281,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 76,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7377
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 64,
+						"capturing": true,
+						"distance": 2.10297346115112,
+						"ground": [
+							18.6499996185303,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 77,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7389
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 65,
+						"capturing": true,
+						"distance": 2.08832693099976,
+						"ground": [
+							18.6666660308838,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 78,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7408
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 66,
+						"capturing": true,
+						"distance": 2.07371091842651,
+						"ground": [
+							18.6833324432373,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 79,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7425
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 67,
+						"capturing": true,
+						"distance": 2.05912613868713,
+						"ground": [
+							18.6999988555908,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 80,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7437
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 68,
+						"capturing": true,
+						"distance": 2.04457306861877,
+						"ground": [
+							18.7166652679443,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 81,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7453
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 69,
+						"capturing": true,
+						"distance": 2.03005242347717,
+						"ground": [
+							18.7333316802979,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 82,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7488
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 70,
+						"capturing": true,
+						"distance": 2.01556515693665,
+						"ground": [
+							18.7499980926514,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 83,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7496
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 71,
+						"capturing": true,
+						"distance": 2.00111174583435,
+						"ground": [
+							18.7666645050049,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 84,
+						"side_retry_ms": 7361,
+						"step_active": true,
+						"wall_ms": 7503
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 72,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "CLEAR",
+						"relative_physics_tick": 85,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7536
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 73,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 86,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7544
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 74,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 87,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7561
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 75,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 88,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7576
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 76,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 89,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7588
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 77,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 90,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7608
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 78,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 91,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7615
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 79,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 92,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7644
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 80,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 93,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7651
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 81,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 94,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7671
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 82,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 95,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7678
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 83,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 96,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7706
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 84,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 97,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7713
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 85,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 98,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7734
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 86,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 99,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7754
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 87,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 100,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7761
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 88,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 101,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7780
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 89,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 102,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7795
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 90,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 103,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7815
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 91,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 104,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7842
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 92,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 105,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7850
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 93,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 106,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7877
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 94,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 107,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7889
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 95,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 108,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7924
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 96,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 109,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7930
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 97,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 110,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7937
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 98,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 111,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7952
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 99,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 112,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7966
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 100,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 113,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7986
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 101,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 114,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 7999
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 102,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 115,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8014
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 103,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 116,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8034
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 104,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 117,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8062
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 105,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 118,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8069
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 106,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 119,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8097
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 107,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 120,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8105
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 108,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 121,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8125
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 109,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 122,
+						"side_retry_ms": 7361,
+						"step_active": false,
+						"wall_ms": 8145
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 110,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 123,
+						"side_retry_ms": 8249,
+						"step_active": false,
+						"wall_ms": 8155
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 111,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 124,
+						"side_retry_ms": 8249,
+						"step_active": false,
+						"wall_ms": 8171
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 112,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 125,
+						"side_retry_ms": 8249,
+						"step_active": false,
+						"wall_ms": 8188
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 113,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 126,
+						"side_retry_ms": 8249,
+						"step_active": false,
+						"wall_ms": 8205
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 114,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 127,
+						"side_retry_ms": 8249,
+						"step_active": false,
+						"wall_ms": 8217
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 115,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 128,
+						"side_retry_ms": 8249,
+						"step_active": false,
+						"wall_ms": 8253
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 116,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 129,
+						"side_retry_ms": 8357,
+						"step_active": false,
+						"wall_ms": 8262
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 117,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 130,
+						"side_retry_ms": 8357,
+						"step_active": false,
+						"wall_ms": 8282
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 118,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 131,
+						"side_retry_ms": 8357,
+						"step_active": false,
+						"wall_ms": 8290
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 119,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 132,
+						"side_retry_ms": 8357,
+						"step_active": false,
+						"wall_ms": 8316
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 120,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 133,
+						"side_retry_ms": 8357,
+						"step_active": false,
+						"wall_ms": 8344
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 121,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 134,
+						"side_retry_ms": 8357,
+						"step_active": false,
+						"wall_ms": 8354
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 122,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 135,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8363
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 123,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 136,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8375
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 124,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 137,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8391
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 125,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 138,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8406
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 126,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 139,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8426
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 127,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 140,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8433
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 128,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 141,
+						"side_retry_ms": 8458,
+						"step_active": false,
+						"wall_ms": 8456
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 129,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 142,
+						"side_retry_ms": 8559,
+						"step_active": false,
+						"wall_ms": 8464
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 130,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 143,
+						"side_retry_ms": 8559,
+						"step_active": false,
+						"wall_ms": 8483
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 131,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 144,
+						"side_retry_ms": 8559,
+						"step_active": false,
+						"wall_ms": 8500
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 132,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 145,
+						"side_retry_ms": 8559,
+						"step_active": false,
+						"wall_ms": 8514
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 133,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 146,
+						"side_retry_ms": 8559,
+						"step_active": false,
+						"wall_ms": 8533
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 134,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 147,
+						"side_retry_ms": 8559,
+						"step_active": false,
+						"wall_ms": 8564
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 135,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 148,
+						"side_retry_ms": 8668,
+						"step_active": false,
+						"wall_ms": 8572
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 136,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 149,
+						"side_retry_ms": 8668,
+						"step_active": false,
+						"wall_ms": 8592
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 137,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 150,
+						"side_retry_ms": 8668,
+						"step_active": false,
+						"wall_ms": 8608
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 138,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 151,
+						"side_retry_ms": 8668,
+						"step_active": false,
+						"wall_ms": 8623
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 139,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 152,
+						"side_retry_ms": 8668,
+						"step_active": false,
+						"wall_ms": 8642
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 140,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 153,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8675
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 141,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 154,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8682
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 142,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 155,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8689
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 143,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 156,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8703
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 144,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 157,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8717
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 145,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 158,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8732
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 146,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 159,
+						"side_retry_ms": 8769,
+						"step_active": false,
+						"wall_ms": 8753
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 147,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 160,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8786
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 148,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 161,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8793
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 149,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 162,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8812
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 150,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 163,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8821
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 151,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 164,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8844
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 152,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 165,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8863
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 153,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 166,
+						"side_retry_ms": 8879,
+						"step_active": false,
+						"wall_ms": 8872
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 154,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 167,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8896
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 155,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 168,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8904
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 156,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 169,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8922
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 157,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 170,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8938
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 158,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 171,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8952
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 159,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 172,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8973
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 160,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 173,
+						"side_retry_ms": 8990,
+						"step_active": false,
+						"wall_ms": 8980
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 161,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 174,
+						"side_retry_ms": 9097,
+						"step_active": false,
+						"wall_ms": 9003
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 162,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 175,
+						"side_retry_ms": 9097,
+						"step_active": false,
+						"wall_ms": 9032
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 163,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 176,
+						"side_retry_ms": 9097,
+						"step_active": false,
+						"wall_ms": 9039
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 164,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 177,
+						"side_retry_ms": 9097,
+						"step_active": false,
+						"wall_ms": 9062
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 165,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 178,
+						"side_retry_ms": 9097,
+						"step_active": false,
+						"wall_ms": 9073
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 166,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 179,
+						"side_retry_ms": 9097,
+						"step_active": false,
+						"wall_ms": 9093
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 167,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 180,
+						"side_retry_ms": 9207,
+						"step_active": false,
+						"wall_ms": 9113
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 168,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 181,
+						"side_retry_ms": 9207,
+						"step_active": false,
+						"wall_ms": 9122
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 169,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 182,
+						"side_retry_ms": 9207,
+						"step_active": false,
+						"wall_ms": 9142
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 170,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 183,
+						"side_retry_ms": 9207,
+						"step_active": false,
+						"wall_ms": 9149
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 171,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 184,
+						"side_retry_ms": 9207,
+						"step_active": false,
+						"wall_ms": 9176
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 172,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 185,
+						"side_retry_ms": 9207,
+						"step_active": false,
+						"wall_ms": 9204
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 173,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 186,
+						"side_retry_ms": 9308,
+						"step_active": false,
+						"wall_ms": 9215
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 174,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 187,
+						"side_retry_ms": 9308,
+						"step_active": false,
+						"wall_ms": 9235
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 175,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 188,
+						"side_retry_ms": 9308,
+						"step_active": false,
+						"wall_ms": 9243
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 176,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 189,
+						"side_retry_ms": 9308,
+						"step_active": false,
+						"wall_ms": 9266
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 177,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 190,
+						"side_retry_ms": 9308,
+						"step_active": false,
+						"wall_ms": 9278
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 178,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 191,
+						"side_retry_ms": 9308,
+						"step_active": false,
+						"wall_ms": 9288
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 179,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 192,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9320
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 180,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 193,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9327
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 181,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 194,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9346
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 182,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 195,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9355
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 183,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 196,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9380
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 184,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 197,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9387
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 185,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 198,
+						"side_retry_ms": 9412,
+						"step_active": false,
+						"wall_ms": 9407
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 186,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 199,
+						"side_retry_ms": 9521,
+						"step_active": false,
+						"wall_ms": 9427
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 187,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 200,
+						"side_retry_ms": 9521,
+						"step_active": false,
+						"wall_ms": 9436
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 188,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 201,
+						"side_retry_ms": 9521,
+						"step_active": false,
+						"wall_ms": 9459
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 189,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 202,
+						"side_retry_ms": 9521,
+						"step_active": false,
+						"wall_ms": 9467
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 190,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 203,
+						"side_retry_ms": 9521,
+						"step_active": false,
+						"wall_ms": 9489
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 191,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 204,
+						"side_retry_ms": 9521,
+						"step_active": false,
+						"wall_ms": 9516
+					},
+					{
+						"attack_starts": 1,
+						"await_iteration": 192,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 205,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9527
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 193,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "CLEAR",
+						"relative_physics_tick": 206,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9550
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 194,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 207,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9557
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 195,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 208,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9578
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 196,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 209,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9597
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 197,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 210,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9605
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 198,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 211,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9631
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 199,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 212,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9637
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 200,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 213,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9656
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 201,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 214,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9673
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 202,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 215,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9688
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 203,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 216,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9714
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 204,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 217,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9721
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 205,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 218,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9737
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 206,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 219,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9752
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 207,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 220,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9783
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 208,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 221,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9789
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 209,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 222,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9818
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 210,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 223,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9825
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 211,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 224,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9849
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 212,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 225,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9856
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 213,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 226,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9877
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 214,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 227,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9893
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 215,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 228,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9907
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 216,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 229,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9926
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 217,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 230,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9932
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 218,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 231,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9957
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 219,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 232,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9985
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 220,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 233,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 9992
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 221,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 234,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10016
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 222,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 235,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10024
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 223,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 236,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10049
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 224,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 237,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10060
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 225,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 238,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10078
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 226,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 239,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10094
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 227,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 240,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10110
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 228,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 241,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10129
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 229,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 242,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10135
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 230,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 243,
+						"side_retry_ms": 9621,
+						"step_active": false,
+						"wall_ms": 10164
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 231,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 244,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10173
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 232,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 245,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10189
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 233,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 246,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10205
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 234,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 247,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10221
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 235,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 248,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10238
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 236,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 249,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10247
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 237,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 250,
+						"side_retry_ms": 10268,
+						"step_active": false,
+						"wall_ms": 10272
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 238,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 251,
+						"side_retry_ms": 10375,
+						"step_active": false,
+						"wall_ms": 10281
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 239,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 252,
+						"side_retry_ms": 10375,
+						"step_active": false,
+						"wall_ms": 10300
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 240,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 253,
+						"side_retry_ms": 10375,
+						"step_active": false,
+						"wall_ms": 10315
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 241,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 254,
+						"side_retry_ms": 10375,
+						"step_active": false,
+						"wall_ms": 10330
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 242,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 255,
+						"side_retry_ms": 10375,
+						"step_active": false,
+						"wall_ms": 10349
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 243,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 256,
+						"side_retry_ms": 10375,
+						"step_active": false,
+						"wall_ms": 10381
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 244,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 257,
+						"side_retry_ms": 10484,
+						"step_active": false,
+						"wall_ms": 10389
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 245,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 258,
+						"side_retry_ms": 10484,
+						"step_active": false,
+						"wall_ms": 10408
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 246,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 259,
+						"side_retry_ms": 10484,
+						"step_active": false,
+						"wall_ms": 10416
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 247,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 260,
+						"side_retry_ms": 10484,
+						"step_active": false,
+						"wall_ms": 10439
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 248,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 261,
+						"side_retry_ms": 10484,
+						"step_active": false,
+						"wall_ms": 10458
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 249,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 262,
+						"side_retry_ms": 10484,
+						"step_active": false,
+						"wall_ms": 10468
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 250,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 263,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10492
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 251,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 264,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10499
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 252,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 265,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10521
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 253,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 266,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10534
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 254,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 267,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10550
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 255,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 268,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10568
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 256,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 269,
+						"side_retry_ms": 10584,
+						"step_active": false,
+						"wall_ms": 10582
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 257,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 270,
+						"side_retry_ms": 10695,
+						"step_active": false,
+						"wall_ms": 10602
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 258,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 271,
+						"side_retry_ms": 10695,
+						"step_active": false,
+						"wall_ms": 10630
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 259,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 272,
+						"side_retry_ms": 10695,
+						"step_active": false,
+						"wall_ms": 10637
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 260,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 273,
+						"side_retry_ms": 10695,
+						"step_active": false,
+						"wall_ms": 10660
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 261,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 274,
+						"side_retry_ms": 10695,
+						"step_active": false,
+						"wall_ms": 10679
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 262,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 275,
+						"side_retry_ms": 10695,
+						"step_active": false,
+						"wall_ms": 10687
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 263,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 276,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10712
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 264,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 277,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10739
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 265,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 278,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10745
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 266,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 279,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10753
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 267,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 280,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10770
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 268,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 281,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10786
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 269,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 282,
+						"side_retry_ms": 10805,
+						"step_active": false,
+						"wall_ms": 10801
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 270,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 283,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10821
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 271,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 284,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10829
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 272,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 285,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10849
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 273,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 286,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10865
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 274,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 287,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10881
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 275,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 288,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10898
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 276,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 289,
+						"side_retry_ms": 10914,
+						"step_active": false,
+						"wall_ms": 10911
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 277,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 290,
+						"side_retry_ms": 11041,
+						"step_active": false,
+						"wall_ms": 10948
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 278,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 291,
+						"side_retry_ms": 11041,
+						"step_active": false,
+						"wall_ms": 10955
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 279,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 292,
+						"side_retry_ms": 11041,
+						"step_active": false,
+						"wall_ms": 10975
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 280,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 293,
+						"side_retry_ms": 11041,
+						"step_active": false,
+						"wall_ms": 10990
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 281,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 294,
+						"side_retry_ms": 11041,
+						"step_active": false,
+						"wall_ms": 11006
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 282,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 295,
+						"side_retry_ms": 11041,
+						"step_active": false,
+						"wall_ms": 11037
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 283,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 296,
+						"side_retry_ms": 11141,
+						"step_active": false,
+						"wall_ms": 11048
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 284,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 297,
+						"side_retry_ms": 11141,
+						"step_active": false,
+						"wall_ms": 11067
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 285,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 298,
+						"side_retry_ms": 11141,
+						"step_active": false,
+						"wall_ms": 11082
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 286,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 299,
+						"side_retry_ms": 11141,
+						"step_active": false,
+						"wall_ms": 11098
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 287,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 300,
+						"side_retry_ms": 11141,
+						"step_active": false,
+						"wall_ms": 11115
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 288,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 301,
+						"side_retry_ms": 11141,
+						"step_active": false,
+						"wall_ms": 11131
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 289,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 302,
+						"side_retry_ms": 11244,
+						"step_active": false,
+						"wall_ms": 11152
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 290,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 303,
+						"side_retry_ms": 11244,
+						"step_active": false,
+						"wall_ms": 11159
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 291,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 304,
+						"side_retry_ms": 11244,
+						"step_active": false,
+						"wall_ms": 11180
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 292,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 305,
+						"side_retry_ms": 11244,
+						"step_active": false,
+						"wall_ms": 11196
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 293,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 306,
+						"side_retry_ms": 11244,
+						"step_active": false,
+						"wall_ms": 11210
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 294,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 307,
+						"side_retry_ms": 11244,
+						"step_active": false,
+						"wall_ms": 11241
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 295,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 308,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11254
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 296,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 309,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11261
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 297,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 310,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11287
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 298,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 311,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11300
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 299,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 312,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11308
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 300,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 313,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11334
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 301,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 314,
+						"side_retry_ms": 11346,
+						"step_active": false,
+						"wall_ms": 11343
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 302,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 315,
+						"side_retry_ms": 11448,
+						"step_active": false,
+						"wall_ms": 11355
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 303,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 316,
+						"side_retry_ms": 11448,
+						"step_active": false,
+						"wall_ms": 11365
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 304,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 317,
+						"side_retry_ms": 11448,
+						"step_active": false,
+						"wall_ms": 11381
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 305,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 318,
+						"side_retry_ms": 11448,
+						"step_active": false,
+						"wall_ms": 11398
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 306,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 319,
+						"side_retry_ms": 11448,
+						"step_active": false,
+						"wall_ms": 11414
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 307,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 320,
+						"side_retry_ms": 11448,
+						"step_active": false,
+						"wall_ms": 11445
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 308,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 321,
+						"side_retry_ms": 11549,
+						"step_active": false,
+						"wall_ms": 11456
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 309,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 322,
+						"side_retry_ms": 11549,
+						"step_active": false,
+						"wall_ms": 11475
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 310,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 323,
+						"side_retry_ms": 11549,
+						"step_active": false,
+						"wall_ms": 11489
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 311,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 324,
+						"side_retry_ms": 11549,
+						"step_active": false,
+						"wall_ms": 11524
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 312,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 325,
+						"side_retry_ms": 11549,
+						"step_active": false,
+						"wall_ms": 11531
+					},
+					{
+						"attack_starts": 2,
+						"await_iteration": 313,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 326,
+						"side_retry_ms": 11549,
+						"step_active": false,
+						"wall_ms": 11539
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 314,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "CLEAR",
+						"relative_physics_tick": 327,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11561
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 315,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 328,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11568
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 316,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 329,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11583
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 317,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 330,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11598
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 318,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 331,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11614
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 319,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 332,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11633
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 320,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 333,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11646
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 321,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 334,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11668
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 322,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 335,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11693
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 323,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 336,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11700
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 324,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 337,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11724
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 325,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 338,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11743
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 326,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 339,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11756
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 327,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 340,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11776
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 328,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 341,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11802
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 329,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 342,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11809
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 330,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 343,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11834
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 331,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 344,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11851
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 332,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 345,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11864
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 333,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 346,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11885
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 334,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 2,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 348,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11918
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 335,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 349,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11924
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 336,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 350,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11930
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 337,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 351,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11946
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 338,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 352,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11976
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 339,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 353,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 11988
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 340,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 354,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12005
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 341,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 355,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12021
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 342,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 356,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12037
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 343,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 357,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12068
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 344,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 358,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12077
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 345,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 359,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12103
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 346,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 2,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 361,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12135
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 347,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 362,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12141
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 348,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 363,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12147
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 349,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "ATTACK_POSE_COMMIT",
+						"relative_physics_tick": 364,
+						"side_retry_ms": 11651,
+						"step_active": false,
+						"wall_ms": 12163
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 350,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 365,
+						"side_retry_ms": 12288,
+						"step_active": false,
+						"wall_ms": 12196
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 351,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 366,
+						"side_retry_ms": 12288,
+						"step_active": false,
+						"wall_ms": 12208
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 352,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 367,
+						"side_retry_ms": 12288,
+						"step_active": false,
+						"wall_ms": 12224
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 353,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 368,
+						"side_retry_ms": 12288,
+						"step_active": false,
+						"wall_ms": 12240
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 354,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 369,
+						"side_retry_ms": 12288,
+						"step_active": false,
+						"wall_ms": 12271
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 355,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 370,
+						"side_retry_ms": 12288,
+						"step_active": false,
+						"wall_ms": 12278
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 356,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 371,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12306
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 357,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 372,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12318
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 358,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 373,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12325
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 359,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 374,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12349
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 360,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 375,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12356
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 361,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 376,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12380
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 362,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 377,
+						"side_retry_ms": 12398,
+						"step_active": false,
+						"wall_ms": 12387
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 363,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 378,
+						"side_retry_ms": 12507,
+						"step_active": false,
+						"wall_ms": 12415
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 364,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 379,
+						"side_retry_ms": 12507,
+						"step_active": false,
+						"wall_ms": 12427
+					},
+					{
+						"attack_starts": 3,
+						"await_iteration": 365,
+						"capturing": true,
+						"distance": 1.98669302463531,
+						"ground": [
+							18.7833309173584,
+							21.4999980926514
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "FRONTLINE_BLOCKED",
+						"relative_physics_tick": 380,
+						"side_retry_ms": 12507,
+						"step_active": false,
+						"wall_ms": 12434
+					}
+				]
+			},
+			"total_attack_damage_applications": 29,
+			"total_attack_starts": 29,
+			"total_motion_frames": 2043,
+			"total_motion_gu": 33.9677446953719,
+			"world_body_count": 0,
+			"world_obstacle_activation": "before_spawn"
+		}
+	],
+	"sample_boundary": "physics_frame_then_process_frame",
+	"sample_frames": 320,
+	"scenarios": [
+		"dense_crowd"
+	],
+	"schema": "hardcore.v3.rev07.scenario_full_frame_comparison.v2",
+	"source_hashes_sha256": {
+		"res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+		"res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+		"res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+		"res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+		"res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4",
+		"res://tests/hc_monster_ai/m30_timing_diagnostic.gd": "642375ff04514358b877273515cdefb476ef3682924cf2030ca41bf3b33f5389"
+	},
+	"threshold": "candidate_p95 <= max(baseline_p95*1.05, baseline_p95+0.5ms)",
+	"warmup_frames": 45
+}

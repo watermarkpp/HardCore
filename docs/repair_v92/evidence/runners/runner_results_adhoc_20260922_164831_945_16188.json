@@ -1,0 +1,56 @@
+{
+  "failed": 3,
+  "suite": "adhoc",
+  "passed": 0,
+  "generated_at": "2026-09-22T16:48:31.9457978+08:00",
+  "results": [
+    {
+      "test_name": "random_teleport_destination_contract_test",
+      "test_path": "tests/random_teleport_destination_contract_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 14,
+      "engine_log_failure_count": 14,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_14;engine_log_failures_14"
+    },
+    {
+      "test_name": "magic_shield_map_lifecycle_test",
+      "test_path": "tests/magic_shield_map_lifecycle_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "player_combat_release_lifecycle_test",
+      "test_path": "tests/player_combat_release_lifecycle_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 3,
+      "engine_log_failure_count": 3,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_3;engine_log_failures_3"
+    }
+  ],
+  "engine_log_errors": 18,
+  "total": 3,
+  "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad"
+}

@@ -62,6 +62,8 @@ func _run() -> void:
 		"GameRoot must declare the staged initial-build contract before attachment"
 	)
 	game._monster_prefetch_enabled = false
+	var initial_ground_canvas: Node = game.background._editor_chunk_ground_canvas
+	_assert_ground_filter_isolation(game.background)
 
 	# Production path: staged map build with real frame-budget slicing.
 	PlayerState.test_mode = false
@@ -80,6 +82,8 @@ func _run() -> void:
 	})
 	assert(await _wait_for_transition(game), "transition did not finish")
 	assert(game.current_map_id == 911001)
+	assert(not is_instance_valid(initial_ground_canvas), "old map ground canvas survived transition")
+	_assert_ground_filter_isolation(game.background)
 
 	var coord = game._world_bootstrap_coordinator
 	assert(coord.planned_map_item_count > max_items, "fixture must exceed single-frame budget")
@@ -111,3 +115,20 @@ func _run() -> void:
 		]
 	)
 	get_tree().quit(0)
+
+
+func _assert_ground_filter_isolation(background: WorldBackground) -> void:
+	var canvas: Node2D = background._editor_chunk_ground_canvas
+	assert(is_instance_valid(canvas) and canvas.is_inside_tree())
+	assert(canvas.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR)
+	assert(background.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST)
+	assert(canvas.position == Vector2.ZERO and canvas.scale == Vector2.ONE)
+	assert(canvas.chunk_draw_count() == background._editor_runtime_chunk_draws.size())
+	assert(canvas.chunk_draw_count() > 0)
+	var collision_before: Dictionary = background._editor_runtime_collision_snapshot.duplicate(true)
+	var draws_before: Array = background._editor_runtime_chunk_draws.duplicate(true)
+	canvas.refresh()
+	for index: int in range(draws_before.size()):
+		assert(canvas._chunk_draws[index].rect == draws_before[index].rect)
+		assert(canvas._chunk_draws[index].texture == draws_before[index].texture)
+	assert(background._editor_runtime_collision_snapshot == collision_before)

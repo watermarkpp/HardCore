@@ -308,8 +308,6 @@ func _show_revival_result_feedback(success: bool) -> void:
 	var button := town_button
 	if special_button.has_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE):
 		button = special_button
-	if is_inside_tree():
-		await get_tree().process_frame
 	if serial != _revival_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
 		return
 	GothicUIThemeScript.set_button_feedback(
@@ -319,7 +317,7 @@ func _show_revival_result_feedback(success: bool) -> void:
 	)
 	if not is_inside_tree():
 		return
-	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS if success else GothicUIThemeScript.BUTTON_RESULT_FAILURE_SECONDS).timeout.connect(func() -> void:
 		if serial == _revival_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

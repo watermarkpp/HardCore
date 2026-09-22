@@ -225,7 +225,10 @@ func setup(
 
 
 func _ready() -> void:
-	add_to_group("zone_content")
+	# The shield belongs to the actor's buff lifetime, including map changes.
+	# Ordinary world effects still expire with the zone that created them.
+	if not _is_persistent_magic_shield_visual():
+		add_to_group("zone_content")
 	if skill_id == "wizard.laser" and is_instance_valid(target_node) and not _skip_legacy_laser_single_active:
 		_replace_existing_laser_visual()
 		add_to_group(SINGLE_ACTIVE_LASER_VISUAL_GROUP)
@@ -291,18 +294,26 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_elapsed += delta
 	if is_instance_valid(target_node):
 		_sync_actor_attachment_position()
 	if _is_persistent_magic_shield_visual():
 		if not _magic_shield_state_is_active():
 			queue_free()
+		# The child owns formation playback (including asynchronous residency).
+		# Shield gameplay state owns removal, even during a long frame or struck
+		# reaction. A generic one-shot timeout must never truncate this owner.
+		return
+	if not visual_loaded:
+		# Structurally rejected effects have no animation owner to finish them.
+		_elapsed += delta
+		if _elapsed >= lifetime + 0.5:
+			queue_free()
+		return
+	for sprite: Sprite2D in _sprites:
+		if not bool(sprite.get("visual_loaded")):
 			return
-		# The source sequence is the shield forming. Play it once, then retain its
-		# complete final frame until either duration or absorption capacity ends.
-		# Re-looping the formation frames makes the shield repeatedly collapse.
-		if visual_loaded and _all_playback_complete():
-			return
+	# A configured sequence owns its completion. Resource waiting and a long
+	# parent tick cannot consume its lifetime before the child gets to advance.
 	if _playback_strategy == "firegun_trail" and visual_loaded:
 		_process_hellfire(delta)
 		if _hellfire_finished:
@@ -313,8 +324,6 @@ func _process(delta: float) -> void:
 		if _completion_elapsed >= COMPLETION_GRACE_SECONDS:
 			queue_free()
 			return
-	if _elapsed >= lifetime + 0.5:
-		queue_free()
 
 
 func _sync_actor_attachment_position() -> void:
@@ -362,6 +371,7 @@ func _replace_existing_magic_shield_visual() -> void:
 			continue
 		if existing is CanvasItem:
 			existing.visible = false
+		existing.queue_free()
 
 
 func _replace_existing_laser_visual() -> void:
@@ -461,6 +471,7 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 		_add_world_visual(sprite)
 		_sprites.append(sprite)
 	_advance_hellfire_trail()
+	_update_hellfire_sprites()
 	lifetime = maxf(
 		lifetime,
 		float(_hellfire_total_emissions + _hellfire_frame_count + 2)
@@ -470,9 +481,13 @@ func _install_hellfire_trail(render: Dictionary) -> void:
 
 func _process_hellfire(delta: float) -> void:
 	_hellfire_tick_elapsed += delta
+	var advanced := false
 	while _hellfire_tick_elapsed >= _hellfire_step_seconds and not _hellfire_finished:
 		_hellfire_tick_elapsed -= _hellfire_step_seconds
 		_advance_hellfire_trail()
+		advanced = true
+	if advanced:
+		_update_hellfire_sprites()
 
 
 func _advance_hellfire_trail() -> void:
@@ -492,7 +507,6 @@ func _advance_hellfire_trail() -> void:
 		)
 		_hellfire_records.push_front({"position": emission_position, "age": 0})
 		_hellfire_emissions += 1
-	_update_hellfire_sprites()
 	_hellfire_finished = (
 		_hellfire_emissions >= _hellfire_total_emissions
 		and _hellfire_records.is_empty()

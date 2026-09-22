@@ -106,7 +106,7 @@ func _run() -> void:
 	expect(
 		bool(real.valid), "real authority must stay valid"
 	)
-	expect(int(real.slot_count) == 6144, "real authority keeps 6144 slots after the overlay")
+	expect(int(real.slot_count) == 6042, "real authority keeps 6042 slots after the explicit armor single-slot directive")
 	expect(int(real.overlay_slot_count) == 168, "real authority keeps 168 overlay slots")
 	real = null
 

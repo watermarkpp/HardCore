@@ -4,6 +4,7 @@ const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
 const LootPickupScript := preload("res://scripts/loot_pickup.gd")
+const LegacyProbability := preload("res://tests/helpers/legacy_drop_probability_policy.gd")
 const V505_SOURCE_AUTHORITY_PATH := (
 	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
 )
@@ -27,15 +28,18 @@ const FEMALE_TO_MALE_DROP_NAMES := {
 func _ready() -> void:
 	assert(GameData.ensure_loaded(), GameData.load_error)
 	var service := LootRuntimeScript.new()
+	var legacy := LegacyProbability.new()
+	assert(legacy.valid, "sealed legacy probability fixture unavailable")
 	_test_female_equipment_output(service)
 	_test_stable_item_identity_and_ground_descriptor(service)
-	_test_small_monster_probability(service)
-	_test_elite_boss_solar_probability(service)
+	_test_small_monster_probability(service, legacy)
+	_test_elite_boss_solar_probability(legacy)
 	_test_corpse_king_boost_consumption(service)
 	_test_all_runtime_drop_identities(service)
 	_test_prewarm_uses_output_identity(service)
 	_test_lean_runtime_cache_stays_hot(service)
-	print("LOOT_RUNTIME_ITEM_POLICY_PASS female_pairs=12 small_monster=ordinary")
+	service.free()
+	print("LOOT_RUNTIME_ITEM_POLICY_PASS female_pairs=12 production=compiled_sheet legacy_policy=archive_only")
 	get_tree().quit(0)
 
 
@@ -130,7 +134,7 @@ func _test_stable_item_identity_and_ground_descriptor(service: Node) -> void:
 	assert(str(unresolved.get("item_name", "")) == "疾风药水-猜测")
 
 
-func _test_small_monster_probability(service: Node) -> void:
+func _test_small_monster_probability(service: Node, legacy: RefCounted) -> void:
 	assert(GameData.canonical_monster_classification(19) == "ordinary")
 	assert(GameData.canonical_monster_classification(31) == "elite")
 	assert(GameData.canonical_monster_classification(76) == "boss")
@@ -140,7 +144,7 @@ func _test_small_monster_probability(service: Node) -> void:
 		"final_denominator": 20,
 		"final_probability": 0.05,
 	}
-	var equipment_adjusted: Dictionary = service._apply_small_monster_probability_policy(
+	var equipment_adjusted: Dictionary = legacy._apply_small_monster_probability_policy(
 		equipment_probability,
 		"ordinary",
 	)
@@ -155,18 +159,18 @@ func _test_small_monster_probability(service: Node) -> void:
 		"final_denominator": 20,
 		"final_probability": 0.05,
 	}
-	var shenshui_adjusted: Dictionary = service._apply_small_monster_probability_policy(
+	var shenshui_adjusted: Dictionary = legacy._apply_small_monster_probability_policy(
 		shenshui_probability,
 		"ordinary",
 	)
 	assert(int(shenshui_adjusted.final_denominator) == 120)
 	assert(int(shenshui_adjusted.small_monster_denominator_multiplier) == 6)
 
-	var elite_unchanged: Dictionary = service._apply_small_monster_probability_policy(
+	var elite_unchanged: Dictionary = legacy._apply_small_monster_probability_policy(
 		equipment_probability,
 		"elite",
 	)
-	var boss_unchanged: Dictionary = service._apply_small_monster_probability_policy(
+	var boss_unchanged: Dictionary = legacy._apply_small_monster_probability_policy(
 		shenshui_probability,
 		"boss",
 	)
@@ -180,7 +184,7 @@ func _test_small_monster_probability(service: Node) -> void:
 		"final_probability": 0.25,
 	}
 	assert(
-		service._apply_small_monster_probability_policy(ordinary_gold, "ordinary")
+		legacy._apply_small_monster_probability_policy(ordinary_gold, "ordinary")
 		== ordinary_gold
 	)
 
@@ -204,7 +208,7 @@ func _test_small_monster_probability(service: Node) -> void:
 		assert(int(attempt.get("elite_boss_solar_denominator_multiplier", 1)) == 1)
 
 
-func _test_elite_boss_solar_probability(service: Node) -> void:
+func _test_elite_boss_solar_probability(legacy: RefCounted) -> void:
 	for classification: String in ["elite", "boss"]:
 		for item_id: int in [920014, 920016]:
 			var source := {
@@ -213,7 +217,7 @@ func _test_elite_boss_solar_probability(service: Node) -> void:
 				"final_denominator": 4,
 				"final_probability": 0.25,
 			}
-			var adjusted: Dictionary = service._apply_drop_probability_policy(
+			var adjusted: Dictionary = legacy._apply_drop_probability_policy(
 				source,
 				classification,
 			)
@@ -231,7 +235,7 @@ func _test_elite_boss_solar_probability(service: Node) -> void:
 		"final_probability": 0.25,
 	}
 	assert(
-		service._apply_drop_probability_policy(ordinary_solar, "ordinary")
+		legacy._apply_drop_probability_policy(ordinary_solar, "ordinary")
 		== ordinary_solar
 	)
 	var boss_other_item := {
@@ -241,7 +245,7 @@ func _test_elite_boss_solar_probability(service: Node) -> void:
 		"final_probability": 0.25,
 	}
 	assert(
-		service._apply_drop_probability_policy(boss_other_item, "boss")
+		legacy._apply_drop_probability_policy(boss_other_item, "boss")
 		== boss_other_item
 	)
 

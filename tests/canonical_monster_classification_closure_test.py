@@ -25,8 +25,10 @@ def main() -> None:
 
     counts = Counter(str(e["classification"]) for e in entries)
 
-    assert counts["ordinary"] == 75, counts
-    assert counts["elite"] == 29, counts
+    # Accepted exact-ID promotions since 60712c13: seven Red Moon monsters
+    # plus 218/222. Keep the same 156 identities and preserve other classes.
+    assert counts["ordinary"] == 66, counts
+    assert counts["elite"] == 38, counts
     assert counts["boss"] == 20, counts
     assert counts["special"] == 25, counts
     assert counts["version_difference"] == 6, counts
@@ -36,6 +38,15 @@ def main() -> None:
     assert catalog["summary"]["runtime_allowed_count"] == 153
 
     by_id = {int(e["monster_id"]): e for e in entries}
+
+    for monster_id in (164, 166, 168, 170, 172, 178, 182, 218, 222):
+        assert source["exact_id_overrides"][str(monster_id)]["classification"] == "elite"
+        assert by_id[monster_id]["classification"] == "elite"
+        assert by_id[monster_id]["editor_placement"]["allowed"] is True
+        assert by_id[monster_id]["runtime_allowed"] is True
+    for monster_id in (174, 176):
+        assert source["exact_id_overrides"][str(monster_id)]["classification"] == "ordinary"
+        assert by_id[monster_id]["classification"] == "ordinary"
 
     assert by_id[41]["classification"] == "elite"
     assert by_id[41]["editor_placement"]["allowed"] is True
@@ -88,7 +99,7 @@ def main() -> None:
 
     print(
         "CANONICAL_MONSTER_CLASSIFICATION_CLOSURE_PASS "
-        "total=156 unresolved=0 ordinary=75 elite=29 boss=20 "
+        "total=156 unresolved=0 ordinary=66 elite=38 boss=20 "
         "special=25 version_difference=6 non_hostile=1 runtime_allowed=153"
     )
 

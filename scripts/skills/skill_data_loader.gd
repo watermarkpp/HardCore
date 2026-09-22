@@ -301,6 +301,23 @@ static func _merge_project_test_manifest_overlay(
 				if assertion_id.is_empty() or not assertion_id in definition.get("required_tests", []):
 					errors.append("overlay_assertion_not_in_sot:%s" % contract_id)
 					continue
+				var replaced_id := str(entry.get("replaces", ""))
+				if not replaced_id.is_empty():
+					var replaced_index := -1
+					var tests: Array = merged.get("skill_tests", [])
+					for index in range(tests.size()):
+						var prior: Dictionary = tests[index]
+						if str(prior.get("id", "")) != replaced_id:
+							continue
+						# Only an obsolete assertion of the exact same skill may
+						# be replaced. The archived source package stays immutable.
+						if str(prior.get("skill_id", "")) == skill_id and str(prior.get("assert", "")) not in definition.get("required_tests", []):
+							replaced_index = index
+					if replaced_index < 0:
+						errors.append("overlay_invalid_replacement:%s" % replaced_id)
+						continue
+					tests.remove_at(replaced_index)
+					existing_ids.erase(replaced_id)
 				(merged.get("skill_tests", []) as Array).append(entry)
 				existing_ids[contract_id] = true
 	var overlay_entry_count := 0

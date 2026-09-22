@@ -319,6 +319,7 @@ try {
             Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
         }
 
+        & (Join-Path $StageProjectPath 'tools/verify_wall_render_bindings.ps1') -ProjectRoot $StageProjectPath
         & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
         $ImportExitCode = $LASTEXITCODE
         if ($ImportExitCode -ne 0) {

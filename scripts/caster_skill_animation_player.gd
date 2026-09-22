@@ -22,6 +22,7 @@ var _frame_time_seconds := 0.05
 var _elapsed := 0.0
 var _loop := false
 var _manual_mode := false
+var _batched_playback := false
 ## R14-C3/C4 + R14-C-R2: active-sequence residency lease + wait state.
 ## _sequence_paths is the ONE selected direction's frame paths. Combat plays
 ## a sequence as an ATOMIC unit: a first-frame miss AND a partial-residency
@@ -35,11 +36,6 @@ var _manual_mode := false
 var _sequence_paths: Array[String] = []
 var _sequence_lease_held := false
 var _waiting_for_residency := false
-## External clock mode: when set, frame selection is derived from the shared
-## clock value (ms) instead of this player's own accumulator. Keeps the
-## canonical frame timing (frame_time_ms) unchanged while removing per-node
-## timer work when many cells share one field clock.
-var _shared_clock_ms: Callable = Callable()
 var _native_extent := 1.0
 var _desired_extent := 0.0
 var _desired_footprint := Vector2.ZERO
@@ -323,6 +319,8 @@ func _exit_tree() -> void:
 
 
 func _process(delta: float) -> void:
+	if _batched_playback:
+		return
 	if _waiting_for_residency:
 		# R14-C3/C4: hold the frame index and logical clock while the active
 		# sequence warms up; resume from frame 0 (first-frame miss) or from
@@ -331,9 +329,6 @@ func _process(delta: float) -> void:
 		_retry_after_warm()
 		return
 	if not visual_loaded or playback_complete or _manual_mode:
-		return
-	if _shared_clock_ms.is_valid():
-		_apply_shared_clock_frame()
 		return
 	# perf-smoothness-r1 C-R1 (PERF-R2 R19/Phase D first item): catch-up must
 	# commit ONLY the final frame. A long frame (e.g. 100 ms) used to bind
@@ -409,31 +404,36 @@ func _retry_after_warm() -> void:
 	set_process(true)
 
 
-func set_shared_clock_ms(clock_ms_provider: Callable) -> void:
-	_shared_clock_ms = clock_ms_provider
+func animation_sequence_key() -> String:
+	return "%s:%s:%d:%d:%f" % [skill_id, phase_id, direction_index, _frames.size(), _frame_time_seconds]
 
 
-func _apply_shared_clock_frame() -> void:
-	if _frames.is_empty() or _frame_time_seconds <= 0.0:
-		return
-	var raw: Variant = _shared_clock_ms.call()
-	if not (raw is float or raw is int):
-		return
-	var clock_ms := float(raw)
-	if clock_ms < 0.0:
-		return
-	var frame_time_ms := _frame_time_seconds * 1000.0
-	var cycle_ms := float(_frames.size()) * frame_time_ms
-	var frame_index := int(floor(fmod(clock_ms, cycle_ms) / frame_time_ms))
-	frame_index = clampi(frame_index, 0, _frames.size() - 1)
-	if frame_index != current_frame_index:
-		# R14-C4: shared-clock mode cannot freeze the external field clock,
-		# but it must not advance the committed index while the texture is
-		# uncommitted; queue the missing path and keep the last frame drawn.
-		if _apply_frame(frame_index):
-			current_frame_index = frame_index
-		elif not _sequence_paths.is_empty():
-			CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+func is_looping_sequence() -> bool:
+	return _loop and not _frames.is_empty()
+
+
+func set_batched_playback(enabled: bool) -> void:
+	_batched_playback = enabled
+	set_process(not enabled)
+
+
+func commit_batched_frame(frame_index: int) -> bool:
+	if not _batched_playback or frame_index < 0 or frame_index >= _frames.size():
+		return false
+	if _waiting_for_residency:
+		_retry_after_warm()
+		# Residency recovery belongs to this batch, never a second process loop.
+		set_process(false)
+		if _waiting_for_residency or not visual_loaded:
+			return false
+	if visual_loaded and current_frame_index == frame_index:
+		return true
+	if not _apply_frame(frame_index):
+		_handle_mid_sequence_miss()
+		return false
+	visual_loaded = true
+	current_frame_index = frame_index
+	return true
 
 
 func set_manual_frame(frame_index: int) -> bool:

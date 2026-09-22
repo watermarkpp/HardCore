@@ -5,7 +5,13 @@ Branch: `codex/integration`
 Generated: 2026-08-08
 Purpose: subsystem/path navigation for model handoff. Read it after current status and historical decisions.
 
+2026-09-22 v92 导航：`docs/repair_v92/USER_REQUEST_RECONCILIATION.md` 是全部累计要求，`CONTROLLER_REVIEW.md` 是主控对历史候选的逐项裁决；`PERFORMANCE_AND_SKILL_CLOSURE.md`、`UI_AND_SYSTEM_CLOSURE.md`、`LOOT_CLEANUP.md` 和 `evidence/loot_workbook_armor_single_slot_20260922.md` 提供专项证据。当前施工/回归/构建状态先看 `PROJECT_CURRENT_STATUS.md` 顶部，不能使用下列历史 SHA 代替当前 Git。
+
 Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
+
+2026-09-22 20:39性能追加：`docs/repair_v92/MONSTER_DENSITY_INVESTIGATION.md` 对应最新“小地图高密度”反馈；`RENDER_CONTROL_TEST.md` 对应独立渲染A/B、正式空安全区入口CPU修复与原生退出故障。两项不得以headless PASS替代手机性能验收。
+
+2026-09-22 21:32追加：`docs/repair_v92/IDLE_MONSTER_CPU_REPAIR.md` 记录闲置范围优先和0.5秒唤醒策略、11项回归及6次采样；密度调查文档新增四次真实移动CPU探针。`NATIVE_EXIT_INVESTIGATION.md` 保存独立退出故障的本机转储定位与上游候选，未关闭风险不隐藏。
 
 2026-09-05 审计升级导航：`docs/AUDIT_UPGRADE_20260905.md` 为完整施工及限制记录，`docs/audits/20260905/MILESTONE_APK.md` 为固定 `52ae0565` 构建与待设备安装交付，`docs/audits/20260905/evidence/` 为已入库验收证据。当前状态优先读取 `PROJECT_CURRENT_STATUS.md` 顶部的新日期章节，不把以下历史导航 SHA 当作当前 HEAD。
 
@@ -45,10 +51,14 @@ tools/tests/test_suite_registration.ps1
 | Projectile | `scripts/skill_projectile.gd`、`scripts/runtime_combat_spatial_index.gd`、`scripts/skills/skill_footprint_snapshot.gd` |
 | 地面持续效果 | `scripts/persistent_ground_effect_manager.gd`、`scripts/ground_effect.gd` |
 | FireWall | `scripts/fire_wall_field_controller.gd`、`scripts/ground_skill_visual_cell.gd` |
+| 全技能分层与目标上下文 | `scripts/skills/skill_runtime_classification.gd`、`scripts/skills/skill_runtime_router.gd`、`scripts/game_root.gd` |
+| 火墙共同动画时钟 | `scripts/caster_skill_animation_batch.gd`、`scripts/caster_skill_animation_player.gd` |
+| 宠物攻击与成长 | `scripts/summon_actor.gd`、`scripts/taoist_combat_math.gd`、`scripts/enemy.gd`（毒死亡归属） |
 | 怪物资源 | `scripts/monster_visual.gd`、`scripts/monster_visual_streaming_coordinator.gd` |
 | Enemy 移动/坐标 | `scripts/enemy.gd`、`scripts/map_coordinate_mapper.gd`、`scripts/runtime_combat_spatial_index.gd` |
 | 地图加载 | `scripts/game_root.gd`、`scripts/layers/runtime/map_editor_runtime_bridge.gd` |
 | 地图发布 | `scripts/map_editor/map_editor_build_runtime_service.gd`、`assets/data/runtime/map_editor/map_runtime_release_registry.json` |
+| 墙体派生发布与绑定 | `scripts/map_editor/map_editor_wall_render_publish_service.gd`、`tools/map_editor/publish_wall_render_plans.gd`、`tools/verify_wall_render_bindings.ps1` |
 | 地图编辑器 | `scripts/map_editor/`（MSE App 入口 `map_editor_app.gd`） |
 | HUD | `scripts/hud.gd`（class GameHUD）及 `scripts/*_panel.gd` |
 | Inventory | `scripts/inventory_panel.gd` |
@@ -110,3 +120,8 @@ When receiving a task:
 4. Open only the listed subsystem files
 5. Use `rg` for additional callers
 6. Do not start with repository-wide scans
+
+- v92 最终回归、性能局限及交付身份：`docs/repair_v92/FINAL_VERIFICATION.md`。
+
+- v92 三职业成长与负重：`docs/repair_v92/CHARACTER_GROWTH_REVIEW.md`、`tests/player_growth_live_runtime_test.gd`、`tools/audit_character_growth_v92.py`。
+- v92 手机采样/交付：`docs/repair_v92/APK_HANDOFF.md`、`scripts/device_lab_runtime.gd`、`tools/collect_android_performance.ps1`。

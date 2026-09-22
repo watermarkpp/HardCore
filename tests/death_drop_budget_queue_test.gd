@@ -36,6 +36,7 @@ func _run() -> void:
 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 	RuntimeDiagnostics.reset_performance_window()
 	_test_budget_and_progress()
+	_test_time_budget_without_diagnostics()
 	_test_save_failure_is_no_reward()
 	_test_generation_guards()
 	_test_materialization_failure_is_terminal()
@@ -164,6 +165,36 @@ func _test_budget_and_progress() -> void:
 		"budgeted materialization duplicated or lost a node",
 	)
 	game.clear_death_drop_work_limits_for_test()
+
+
+func _test_time_budget_without_diagnostics() -> void:
+	# Production normally has diagnostics disabled. Scheduling must still
+	# honor its wall-clock budget; diagnostic timing tokens are then zero.
+	RuntimeDiagnostics.set_device_lab_performance_enabled(false)
+	ProjectSettings.set_setting(RuntimeDiagnostics.SETTING_ENABLED, false)
+	RuntimeDiagnostics.refresh_performance_gate()
+	_expect(not RuntimeDiagnostics.performance_timing_enabled(), "fixture must disable diagnostic timing")
+	var game := _new_game(1010)
+	_queue_death(game)
+	_expect(game._settle_pending_enemy_death_batch(), "uninstrumented fixture did not settle")
+	var death := _set_fixed_plan(game, 8)
+	# Pass an already exhausted real slice. One node may make forward progress,
+	# but the remainder must wait for the next slice regardless of node limit.
+	var result: Dictionary = game._materialize_enemy_death_nodes(
+		death, Time.get_ticks_usec() - 100000, 1200, 8, false)
+	_expect(int(result.nodes) == 1, "disabled diagnostics bypassed drop time budget: %s" % result)
+	_expect(int(death.materialized_node_index) == 1, "expired slice consumed the remaining drop plan")
+	# Exercise the outer production pump as well: a one-microsecond budget
+	# must yield and later synchronous draining must produce all eight once.
+	game.set_death_drop_work_limits_for_test(1, 32, 8)
+	var before := _loot_child_count(game)
+	game._pump_enemy_death_work_queue()
+	_expect(_loot_child_count(game) - before <= 1, "outer pump ignored the uninstrumented time budget")
+	game._flush_enemy_deaths(false)
+	_expect(_loot_child_count(game) == 8, "budgeted continuation lost or duplicated rewards")
+	_expect(game._pending_enemy_deaths.is_empty(), "uninstrumented queue did not drain")
+	game.clear_death_drop_work_limits_for_test()
+	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 
 
 func _test_save_failure_is_no_reward() -> void:

@@ -136,14 +136,6 @@ func set_combat_spatial_context(
 	_combat_map_id = runtime_map_id
 
 
-## Shared animation clock: lets one owner (e.g. FireWallFieldController)
-## drive the frame index of many ground-effect visuals so N cells read a
-## single advancing clock instead of each running an independent timer.
-func set_shared_anim_clock_ms(clock_ms_provider: Callable) -> void:
-	if _sprite != null and _sprite.has_method("set_shared_clock_ms"):
-		_sprite.set_shared_clock_ms(clock_ms_provider)
-
-
 func runtime_target_is_inside(target: Node2D) -> bool:
 	if not is_instance_valid(target):
 		return false

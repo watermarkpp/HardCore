@@ -1,0 +1,71 @@
+{
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-22T20:53:52.1244585+08:00",
+  "passed": 4,
+  "results": [
+    {
+      "test_name": "monster_runtime_density_performance_test",
+      "test_path": "tests/monster_runtime_density_performance_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "runtime_test",
+      "test_path": "tests/hc_monster_ai/runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "world_obstacle_runtime_test",
+      "test_path": "tests/hc_monster_ai/world_obstacle_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_target_magic_attack_test",
+      "test_path": "tests/monster_target_magic_attack_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "suite": "adhoc",
+  "failed": 0,
+  "total": 4
+}

@@ -1,4 +1,8 @@
 *.import text eol=lf
+# Raw diagnostic artifacts carry SHA-256 bindings; preserve captured bytes
+# including Windows CRLF and debugger whitespace, not source-code formatting.
+docs/repair_v92/evidence/** -text -whitespace
+tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json text eol=lf
 
 # DPV2-SPB raw-byte authorities are frozen to their audited Windows CRLF
 # representation.  Keep clean worktrees and isolated Android build worktrees
@@ -30,3 +34,73 @@ docs/bugfix24/20260909/evidence/audio_full_frame_strict/** -text
 docs/bugfix24/20260909/evidence/v3_main_integration/** -text
 docs/bugfix24/20260909/evidence/v3_final_8bf77a34/** -text
 docs/bugfix24/20260909/evidence/t30_gold_cap/** -text
+
+# Published ground-manifest byte provenance: exact released files only.
+# Match each frozen visual release; other editor documents are untouched.
+map_editor_workspace/world_bich_province/ground/ground_manifest.json text eol=crlf
+map_editor_workspace/world_snake_valley/ground/ground_manifest.json text eol=lf
+map_editor_workspace/world_mengzhong_province/ground/ground_manifest.json text eol=lf
+map_editor_workspace/world_wooma_forest/ground/ground_manifest.json text eol=lf
+map_editor_workspace/world_fengmo_valley/ground/ground_manifest.json text eol=lf
+map_editor_workspace/world_white_day_gate/ground/ground_manifest.json text eol=lf
+map_editor_workspace/world_cangyue_island/ground/ground_manifest.json text eol=lf
+map_editor_workspace/bich_orc_tomb_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/bich_orc_tomb_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/bich_orc_tomb_f3/ground/ground_manifest.json text eol=lf
+map_editor_workspace/bich_mine_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/bich_mine_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/bich_corpse_king_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/snake_mine_passage_1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/snake_mine_passage_2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/snake_unknown_dark_palace/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_stone_tomb_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_stone_tomb_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_stone_tomb_f3/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_stone_tomb_f4/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_zuma_temple_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_zuma_temple_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_zuma_temple_f3/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_zuma_temple_f4/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_zuma_pavilion/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_zuma_leader_home/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_death_valley_dungeon/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_stone_coffin_room/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_dark_area/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_between_life_and_death/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_terror_space/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_thin_sky_passage/ground/ground_manifest.json text eol=lf
+map_editor_workspace/mengzhong_death_coffin/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_forked_path/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_light_corridor/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_thunder_road/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_bazhe_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_zonghengdao/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_mohun_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_purgatory_corridor/ground/ground_manifest.json text eol=lf
+map_editor_workspace/fengmo_final_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/wooma_temple_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/wooma_temple_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/wooma_temple_boss_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_valley/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_valley_square/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_choice_land/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_valley_secret_passage_a/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_valley_secret_passage_b/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_demon_altar/ground/ground_manifest.json text eol=lf
+map_editor_workspace/chiyue_red_moon_lair/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bone_cave_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bone_cave_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bone_cave_f3/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bone_cave_f4/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bone_cave_f5/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bull_temple_f1/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bull_temple_f2/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bull_temple_f3/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bull_temple_f4/ground/ground_manifest.json text eol=lf
+map_editor_workspace/cangyue_bull_temple_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/hidden_confusion_hall/ground/ground_manifest.json text eol=lf
+map_editor_workspace/hidden_hellfire/ground/ground_manifest.json text eol=lf
+map_editor_workspace/hidden_fallen_graveyard/ground/ground_manifest.json text eol=lf
+map_editor_workspace/hidden_death_temple/ground/ground_manifest.json text eol=lf
+map_editor_workspace/hidden_abyss_domain/ground/ground_manifest.json text eol=lf
+map_editor_workspace/hidden_pincer_nest/ground/ground_manifest.json text eol=lf

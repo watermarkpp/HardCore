@@ -985,7 +985,7 @@ func _assignment_button_for(slot_group: String, slot_index: int, clear: bool) ->
 func _show_assignment_sent(button: Button, group: String) -> void:
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
-	get_tree().create_timer(0.25).timeout.connect(func() -> void:
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS).timeout.connect(func() -> void:
 		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

@@ -1,0 +1,60 @@
+Opened log file 'C:\Users\Administrator\Documents\HardCore\outputs\repair_v92\native_exit\dbgeng_function_strings.txt'
+No .natvis files found at C:\Windows\System32\Visualizers.
+No .natvis files found at C:\Users\Administrator\AppData\Local\Dbg\Visualizers.
+
+Microsoft (R) Windows Debugger Version 10.0.26100.1 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Users\Administrator\AppData\Local\CrashDumps\Godot_v4.7-stable_win64.exe.3156.dmp]
+User Mini Dump File: Only registers, stack and portions of memory are available
+
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+Symbol search path is: C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+Executable search path is: 
+Windows 10 Version 26200 MP (12 procs) Free x64
+Product: WinNt, suite: SingleUserTS
+Edition build lab: 26100.1.amd64fre.ge_release.240331-1435
+Debug session time: Tue Sep 22 19:53:26.000 2026 (UTC + 8:00)
+System Uptime: 1 days 23:38:21.284
+Process Uptime: 0 days 0:00:17.000
+............................................
+Unable to add extension DLL: ntsdexts
+Unable to add extension DLL: uext
+Unable to add extension DLL: exts
+This dump file has an exception of interest stored in it.
+The stored exception information can be accessed via .ecxr.
+(c54.4a18): Access violation - code c0000005 (first/second chance not available)
+
++------------------------------------------------------------------------+
+| This target supports Hardware-enforced Stack Protection. A HW based    |
+| "Shadow Stack" may be available to assist in debugging and analysis.   |
+| See aka.ms/userhsp for more info.                                      |
+|                                                                        |
+| dps @ssp                                                               |
+|                                                                        |
++------------------------------------------------------------------------+
+
+For analysis of this file, run !analyze -v
+da 00007ff6785fae68 L80
+00007ff6`785fae68  "FATAL: Condition "_copy_on_write"
+00007ff6`785fae88  "()" is true."
+da 00007ff6785f9d58 L80
+00007ff6`785f9d58  "./core/templates/cowdata.h"
+da 00007ff6785fae95 L80
+00007ff6`785fae95  "ptrw"
+da 00007ff6785fa5b0 L80
+00007ff6`785fa5b0  "Condition "p_elem->_root != this"
+00007ff6`785fa5d0  "" is true."
+da 00007ff6785fa433 L80
+00007ff6`785fa433  "./core/templates/self_list.h"
+da 00007ff6785fa5db L80
+00007ff6`785fa5db  "remove"
+Closing open log file C:\Users\Administrator\Documents\HardCore\outputs\repair_v92\native_exit\dbgeng_function_strings.txt

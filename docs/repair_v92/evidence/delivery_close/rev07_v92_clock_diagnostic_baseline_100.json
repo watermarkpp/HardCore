@@ -1,0 +1,7476 @@
+{
+	"counts": [
+		30
+	],
+	"display_driver": "headless",
+	"fixture_contract": "hardcore.rev07.real_actor_world_scenarios.v1",
+	"frame_clock": "Time.get_ticks_usec_adjacent_process_callbacks",
+	"head": "b961cedff8040c9fc81534e094241ad9fa2330ad:baseline",
+	"label": "v92_clock_diagnostic_baseline_100",
+	"layout_seed": 20260909,
+	"map_id": 1,
+	"monster_id": 64,
+	"renderer": "opengl3",
+	"rows": [
+		{
+			"actor_proof": [
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.83671355247498,
+					"final_ground_gu": [
+						18.653205871582,
+						18.346794128418
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						19.5
+					],
+					"instance_id": 127590729450,
+					"motion_frames": 171,
+					"motion_gu": 2.82807475177106,
+					"path_status": "IDLE",
+					"serial": 1,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 2,
+					"attack_start_count": 2,
+					"final_distance_to_target_gu": 1.49999845027924,
+					"final_ground_gu": [
+						20.1591548919678,
+						19.0392398834229
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						19.5
+					],
+					"instance_id": 129671104264,
+					"motion_frames": 213,
+					"motion_gu": 3.52788842329755,
+					"path_status": "IDLE",
+					"serial": 2,
+					"target_damage_calls_seen": 2
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.49858260154724,
+					"final_ground_gu": [
+						19.3669929504395,
+						19.5191612243652
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						19.5
+					],
+					"instance_id": 130073757466,
+					"motion_frames": 54,
+					"motion_gu": 0.900026138871908,
+					"path_status": "IDLE",
+					"serial": 3,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.49860894680023,
+					"final_ground_gu": [
+						21.6330451965332,
+						19.5191650390625
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						19.5
+					],
+					"instance_id": 130476410668,
+					"motion_frames": 54,
+					"motion_gu": 0.899982070550323,
+					"path_status": "IDLE",
+					"serial": 4,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 1,
+					"attack_start_count": 1,
+					"final_distance_to_target_gu": 2.18504977226257,
+					"final_ground_gu": [
+						21.0773315429688,
+						18.3926010131836
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						19.5
+					],
+					"instance_id": 130879063870,
+					"motion_frames": 195,
+					"motion_gu": 3.24136800598353,
+					"path_status": "IDLE",
+					"serial": 5,
+					"target_damage_calls_seen": 1
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.62119650840759,
+					"final_ground_gu": [
+						17.3135547637939,
+						18.7796421051025
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						20.5
+					],
+					"instance_id": 131281717072,
+					"motion_frames": 204,
+					"motion_gu": 3.39894234202802,
+					"path_status": "IDLE",
+					"serial": 6,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.033686876297,
+					"final_ground_gu": [
+						17.4728698730469,
+						20.300651550293
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						20.5
+					],
+					"instance_id": 131684370274,
+					"motion_frames": 14,
+					"motion_gu": 0.233342085033655,
+					"path_status": "IDLE",
+					"serial": 7,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						19.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						20.5
+					],
+					"instance_id": 132087023476,
+					"motion_frames": 30,
+					"motion_gu": 0.500760823488235,
+					"path_status": "IDLE",
+					"serial": 8,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						22.0,
+						20.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						20.5
+					],
+					"instance_id": 132489676678,
+					"motion_frames": 30,
+					"motion_gu": 0.502069500274956,
+					"path_status": "IDLE",
+					"serial": 9,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.03868889808655,
+					"final_ground_gu": [
+						23.5000038146973,
+						20.0166702270508
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						20.5
+					],
+					"instance_id": 132892329880,
+					"motion_frames": 102,
+					"motion_gu": 1.69865163043141,
+					"path_status": "IDLE",
+					"serial": 10,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.00003480911255,
+					"final_ground_gu": [
+						16.5,
+						20.4833335876465
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						21.5
+					],
+					"instance_id": 133294983082,
+					"motion_frames": 162,
+					"motion_gu": 2.69496716279536,
+					"path_status": "IDLE",
+					"serial": 11,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.17809319496155,
+					"final_ground_gu": [
+						17.4833335876465,
+						21.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						21.5
+					],
+					"instance_id": 133697636284,
+					"motion_frames": 1,
+					"motion_gu": 0.0166666507720947,
+					"path_status": "IDLE",
+					"serial": 12,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.00273370742798,
+					"final_ground_gu": [
+						18.7087020874023,
+						21.3956527709961
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						21.5
+					],
+					"instance_id": 134100289486,
+					"motion_frames": 14,
+					"motion_gu": 0.233335588127375,
+					"path_status": "IDLE",
+					"serial": 13,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98960018157959,
+					"final_ground_gu": [
+						22.2787132263184,
+						21.3914527893066
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						21.5
+					],
+					"instance_id": 134502942688,
+					"motion_frames": 15,
+					"motion_gu": 0.246601988561451,
+					"path_status": "IDLE",
+					"serial": 14,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.21614646911621,
+					"final_ground_gu": [
+						23.5824966430664,
+						21.4175033569336
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						21.5
+					],
+					"instance_id": 134905595890,
+					"motion_frames": 79,
+					"motion_gu": 1.30551481572911,
+					"path_status": "IDLE",
+					"serial": 15,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.54896354675293,
+					"final_ground_gu": [
+						16.3387393951416,
+						22.3376560211182
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						22.5
+					],
+					"instance_id": 135308249092,
+					"motion_frames": 79,
+					"motion_gu": 1.31666064821184,
+					"path_status": "IDLE",
+					"serial": 16,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.60555124282837,
+					"final_ground_gu": [
+						17.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						22.5
+					],
+					"instance_id": 135710902294,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 17,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.82842707633972,
+					"final_ground_gu": [
+						18.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						22.5
+					],
+					"instance_id": 136113555496,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 18,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98606622219086,
+					"final_ground_gu": [
+						19.6118011474609,
+						22.2763900756836
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						22.5
+					],
+					"instance_id": 136516208698,
+					"motion_frames": 15,
+					"motion_gu": 0.250002415850759,
+					"path_status": "IDLE",
+					"serial": 19,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.5,
+					"final_ground_gu": [
+						20.5,
+						22.0
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						22.5
+					],
+					"instance_id": 136918861900,
+					"motion_frames": 31,
+					"motion_gu": 0.500025798392016,
+					"path_status": "IDLE",
+					"serial": 20,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 3,
+					"attack_start_count": 3,
+					"final_distance_to_target_gu": 1.98669493198395,
+					"final_ground_gu": [
+						21.5000019073486,
+						22.2166690826416
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						21.5,
+						22.5
+					],
+					"instance_id": 137321515102,
+					"motion_frames": 17,
+					"motion_gu": 0.283331036567688,
+					"path_status": "IDLE",
+					"serial": 21,
+					"target_damage_calls_seen": 3
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 2.82842707633972,
+					"final_ground_gu": [
+						22.5,
+						22.5
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						22.5
+					],
+					"instance_id": 137724168304,
+					"motion_frames": 0,
+					"motion_gu": 0.0,
+					"path_status": "IDLE",
+					"serial": 22,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.73009300231934,
+					"final_ground_gu": [
+						23.4999980926514,
+						22.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						23.5,
+						22.5
+					],
+					"instance_id": 138126821506,
+					"motion_frames": 75,
+					"motion_gu": 1.24998807907104,
+					"path_status": "IDLE",
+					"serial": 23,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 5.13292789459229,
+					"final_ground_gu": [
+						16.4999980926514,
+						23.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						16.5,
+						23.5
+					],
+					"instance_id": 138529474708,
+					"motion_frames": 75,
+					"motion_gu": 1.24998378753662,
+					"path_status": "IDLE",
+					"serial": 24,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 4.39851665496826,
+					"final_ground_gu": [
+						17.4999980926514,
+						23.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						17.5,
+						23.5
+					],
+					"instance_id": 138932127910,
+					"motion_frames": 75,
+					"motion_gu": 1.24998378753662,
+					"path_status": "IDLE",
+					"serial": 25,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.78773593902588,
+					"final_ground_gu": [
+						18.4999980926514,
+						23.7166652679443
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						18.5,
+						23.5
+					],
+					"instance_id": 139334781112,
+					"motion_frames": 75,
+					"motion_gu": 1.24998378753662,
+					"path_status": "IDLE",
+					"serial": 26,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.38444042205811,
+					"final_ground_gu": [
+						19.4999980926514,
+						23.7333316802979
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						19.5,
+						23.5
+					],
+					"instance_id": 139737434314,
+					"motion_frames": 76,
+					"motion_gu": 1.26665019989014,
+					"path_status": "IDLE",
+					"serial": 27,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.23333168029785,
+					"final_ground_gu": [
+						20.4999980926514,
+						23.7333316802979
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						20.5,
+						23.5
+					],
+					"instance_id": 140140087516,
+					"motion_frames": 76,
+					"motion_gu": 1.26665711402893,
+					"path_status": "IDLE",
+					"serial": 28,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.38443922996521,
+					"final_ground_gu": [
+						21.4999980926514,
+						23.7333316802979
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						21.5,
+						23.5
+					],
+					"instance_id": 140542740718,
+					"motion_frames": 76,
+					"motion_gu": 1.26665711402893,
+					"path_status": "IDLE",
+					"serial": 29,
+					"target_damage_calls_seen": 0
+				},
+				{
+					"arrival_reach_gu": 1.27718930265903,
+					"attack_damage_application_count": 0,
+					"attack_start_count": 0,
+					"final_distance_to_target_gu": 3.91530346870422,
+					"final_ground_gu": [
+						22.5830707550049,
+						23.8151798248291
+					],
+					"first_path_arrival_frame": -1,
+					"first_path_arrival_observed": false,
+					"initial_ground_gu": [
+						22.5,
+						23.5
+					],
+					"instance_id": 140945393920,
+					"motion_frames": 59,
+					"motion_gu": 0.983342340216041,
+					"path_status": "IDLE",
+					"serial": 30,
+					"target_damage_calls_seen": 0
+				}
+			],
+			"actors_with_attack_damage": 10,
+			"actors_with_attack_start": 10,
+			"actors_with_motion": 27,
+			"actual_actor_count": 30,
+			"blocked_cell_count": 0,
+			"enemy_metrics": {
+				"active_enemy_physics_count": 9630,
+				"active_loot_pickups": 0,
+				"actor_redraw_requests": 0,
+				"actor_redraw_requests_from_damage": 0,
+				"aoe_candidate_usec": 0,
+				"aoe_damage_target_count": 0,
+				"aoe_exact_intersection_tests": 0,
+				"aoe_exact_phase_usec": 0,
+				"aoe_full_enemy_group_scans": 0,
+				"aoe_max_single_release_candidate_usec": 0,
+				"aoe_nested_cell_enemy_scans": 0,
+				"aoe_query_plan_builds": 0,
+				"aoe_release_count": 0,
+				"aoe_selected_targets": 0,
+				"aoe_snapshot_validation_calls": 0,
+				"aoe_spatial_candidates": 0,
+				"aoe_spatial_queries": 0,
+				"attack_los_cache_hits": 0,
+				"attack_los_evaluations": 7615,
+				"attack_los_map_samples": 104194,
+				"attack_los_physics_rays": 7615,
+				"attack_los_requests": 7615,
+				"attack_los_usec": 107489,
+				"background_ai_evaluations": 0,
+				"background_deep_sleep_entries": 0,
+				"background_deep_sleep_wakeups": 0,
+				"background_fast_path_skips": 0,
+				"crowd_full_group_scans": 0,
+				"crowd_grid_actor_scans": 0,
+				"crowd_grid_builds": 0,
+				"crowd_index_candidates": 542,
+				"crowd_queries": 29,
+				"crowd_query_candidates": 542,
+				"crowd_steering_evaluations": 29,
+				"crowd_usec": 4136,
+				"death_batch_count": 0,
+				"death_batch_size_max": 0,
+				"death_begin_calls": 0,
+				"death_jobs_per_frame_max": 0,
+				"death_pending_marks": 0,
+				"death_physics_process_calls_after_begin": 0,
+				"death_queue_cancelled_count": 0,
+				"death_queue_committed_count": 0,
+				"death_queue_failed_count": 0,
+				"death_queue_materialization_failures": 0,
+				"death_queue_retry_count": 0,
+				"death_queue_state_transitions": 0,
+				"death_resolve_active_usec": 0,
+				"death_same_release_unregistrations": 0,
+				"death_settlement_usec": 0,
+				"death_target_refresh_count": 0,
+				"death_work_frames": 0,
+				"direct_spell_full_monster_data_duplicates": 0,
+				"direct_spell_resolution_count": 0,
+				"direct_spell_resolution_usec": 0,
+				"direct_spell_stats_snapshot_count": 0,
+				"draw_calls": 0,
+				"drop_node_spawn_count": 0,
+				"drop_node_spawn_usec": 0,
+				"drop_nodes_per_frame_max": 0,
+				"drop_queue_depth_max": 0,
+				"drop_queue_oldest_age_ms": 0,
+				"drop_request_count": 0,
+				"drop_roll_count": 0,
+				"drop_roll_usec": 0,
+				"drop_work_frames": 0,
+				"enemy_background_tick_calls": 0,
+				"enemy_background_tick_usec": 0,
+				"enemy_environment_guard_calls": 298,
+				"enemy_environment_guard_usec": 9331,
+				"enemy_movement_strategy_calls": 2076,
+				"enemy_movement_strategy_usec": 232627,
+				"enemy_physics_calls": 9630,
+				"enemy_physics_usec": 2484475,
+				"enemy_projection_calls": 11719,
+				"enemy_projection_usec": 26923,
+				"enemy_retarget_calls": 9630,
+				"enemy_retarget_usec": 255227,
+				"enemy_terrain_path_accepted": 0,
+				"enemy_terrain_path_budget_rejections": 0,
+				"enemy_terrain_path_calls": 0,
+				"enemy_terrain_path_expansions": 0,
+				"enemy_terrain_path_expansions_max": 0,
+				"enemy_terrain_path_usec": 0,
+				"enemy_visual_update_calls": 9630,
+				"enemy_visual_update_usec": 39064,
+				"engaged_enemy_count": 9630,
+				"environment_guard_batches": 8710,
+				"environment_guard_checks": 298,
+				"environment_point_samples": 0,
+				"environment_query_usec": 196534,
+				"foreground_ai_ticks": 9630,
+				"hit_animation_requests": 0,
+				"lethal_damage_count": 0,
+				"loot_collection_authority_checks": 0,
+				"loot_collection_candidates": 0,
+				"loot_collection_global_checks": 0,
+				"loot_collection_origin_rejections": 0,
+				"loot_collection_spatial_queries": 0,
+				"loot_fallback_redraw_requests": 0,
+				"loot_manager_collection_requests": 0,
+				"loot_manager_exact_range_checks": 0,
+				"loot_manager_fail_safe_checks": 0,
+				"loot_manager_full_scans": 0,
+				"loot_manager_player_events": 0,
+				"loot_manager_registration_checks": 0,
+				"loot_manager_retry_checks": 0,
+				"loot_manager_visual_registry_entries": 0,
+				"loot_manager_visual_registry_scans": 0,
+				"loot_manager_visual_updates": 0,
+				"loot_pickup_process_calls": 0,
+				"loot_spatial_candidates": 0,
+				"loot_spatial_full_scans": 0,
+				"loot_spatial_queries": 0,
+				"loot_spatial_registers": 0,
+				"loot_spatial_unregisters": 0,
+				"loot_visual_updates": 0,
+				"monster_direct_magic_walk_delay_count": 0,
+				"monster_dot_no_struck_count": 0,
+				"monster_magic_mine_struck_count": 0,
+				"monster_presentation_queue_overflow": 0,
+				"monster_struck_event_count": 0,
+				"monster_struck_visual_pending_max": 0,
+				"move_and_slide_usec": 37392,
+				"moving_enemy_count": 2071,
+				"overhead_health_refreshes": 0,
+				"physics_moves": 2071,
+				"physics_process_ms": 0,
+				"process_ms": 0,
+				"render_primitives": 0,
+				"respawn_state_updates": 0,
+				"retarget_decisions": 744,
+				"retarget_full_scans": 21,
+				"retarget_target_candidates": 21,
+				"retarget_target_group_scans": 21,
+				"safe_zone_global_actor_scans": 0,
+				"safe_zone_queries": 12844,
+				"safe_zone_usec": 65832,
+				"take_damage_calls": 0,
+				"take_damage_usec": 0,
+				"texture_mem": 0,
+				"unexpected_sync_loot_texture_loads": 0,
+				"video_mem": 0,
+				"visual_animation_updates": 20790,
+				"visual_render_state_changes": 2017
+			},
+			"fire_wall_diagnostics": [],
+			"fire_wall_fields": 0,
+			"fire_wall_setup_usec": 0,
+			"frame_delta_diagnostic_ms": {
+				"max": 25.2349999999999,
+				"min": 0.187,
+				"p50": 7.57575757575758,
+				"p95": 9.09090909090909,
+				"p99": 12.397,
+				"samples": 693
+			},
+			"full_frame_ms": {
+				"max": 33.418,
+				"min": 0.02,
+				"p50": 0.936,
+				"p95": 25.788,
+				"p99": 29.985,
+				"samples": 693
+			},
+			"full_frame_ms_raw": [
+				0.02,
+				0.271,
+				14.507,
+				0.274,
+				18.422,
+				0.456,
+				5.568,
+				1.331,
+				25.675,
+				0.565,
+				0.188,
+				15.111,
+				0.392,
+				15.687,
+				0.303,
+				16.55,
+				0.386,
+				7.064,
+				0.306,
+				22.567,
+				0.377,
+				0.23,
+				29.084,
+				8.894,
+				0.416,
+				7.046,
+				0.31,
+				15.4,
+				0.344,
+				15.057,
+				0.386,
+				12.631,
+				0.31,
+				19.081,
+				0.373,
+				0.19,
+				29.985,
+				0.356,
+				7.849,
+				0.426,
+				21.988,
+				0.41,
+				9.71,
+				0.399,
+				18.206,
+				0.33,
+				0.19,
+				16.918,
+				0.318,
+				13.121,
+				0.321,
+				19.15,
+				0.462,
+				6.53,
+				0.379,
+				24.26,
+				0.399,
+				0.32,
+				27.435,
+				0.415,
+				7.544,
+				0.284,
+				22.466,
+				0.333,
+				9.966,
+				0.373,
+				20.813,
+				0.37,
+				11.091,
+				0.361,
+				19.153,
+				0.419,
+				0.225,
+				15.548,
+				0.377,
+				15.352,
+				0.317,
+				17.896,
+				0.394,
+				6.405,
+				0.493,
+				26.199,
+				0.423,
+				0.217,
+				25.726,
+				0.472,
+				7.039,
+				0.313,
+				22.618,
+				0.397,
+				10.006,
+				0.546,
+				21.319,
+				0.387,
+				10.59,
+				0.449,
+				19.649,
+				0.411,
+				6.47,
+				1.058,
+				23.689,
+				0.321,
+				6.114,
+				0.784,
+				28.726,
+				0.39,
+				6.248,
+				0.651,
+				24.617,
+				0.431,
+				6.011,
+				0.888,
+				19.401,
+				0.271,
+				1.026,
+				17.139,
+				0.346,
+				14.251,
+				0.348,
+				19.07,
+				0.415,
+				10.016,
+				0.354,
+				22.228,
+				0.431,
+				0.184,
+				25.749,
+				0.441,
+				8.127,
+				0.292,
+				22.006,
+				0.292,
+				11.873,
+				0.388,
+				8.317,
+				0.399,
+				30.615,
+				0.376,
+				6.67,
+				0.408,
+				19.293,
+				0.247,
+				7.319,
+				0.564,
+				25.15,
+				0.383,
+				0.218,
+				14.178,
+				0.404,
+				13.343,
+				0.215,
+				19.373,
+				0.469,
+				6.916,
+				0.347,
+				20.772,
+				0.343,
+				0.223,
+				13.52,
+				0.329,
+				18.657,
+				0.35,
+				8.546,
+				0.324,
+				19.704,
+				0.287,
+				0.201,
+				18.914,
+				0.486,
+				7.79,
+				0.46,
+				20.224,
+				0.287,
+				0.241,
+				13.238,
+				0.417,
+				18.846,
+				0.357,
+				1.503,
+				27.094,
+				0.444,
+				11.293,
+				0.444,
+				8.409,
+				0.553,
+				18.875,
+				9.402,
+				0.382,
+				12.23,
+				0.296,
+				18.596,
+				0.342,
+				0.186,
+				13.437,
+				0.34,
+				17.964,
+				0.421,
+				4.269,
+				22.121,
+				0.425,
+				6.789,
+				0.223,
+				25.965,
+				0.332,
+				0.215,
+				17.726,
+				0.321,
+				12.049,
+				0.36,
+				19.019,
+				0.426,
+				0.234,
+				33.418,
+				6.946,
+				9.589,
+				0.302,
+				0.184,
+				27.678,
+				0.36,
+				6.646,
+				0.337,
+				25.464,
+				0.459,
+				6.858,
+				0.422,
+				19.642,
+				0.223,
+				0.452,
+				15.37,
+				0.307,
+				13.327,
+				0.315,
+				18.424,
+				0.396,
+				6.862,
+				0.345,
+				25.576,
+				0.448,
+				0.191,
+				26.555,
+				0.515,
+				8.044,
+				0.33,
+				22.898,
+				0.36,
+				10.729,
+				0.55,
+				22.436,
+				0.341,
+				14.68,
+				0.482,
+				6.766,
+				0.36,
+				23.078,
+				0.3,
+				0.209,
+				13.736,
+				0.334,
+				18.563,
+				0.339,
+				7.998,
+				0.464,
+				24.239,
+				0.367,
+				10.034,
+				0.39,
+				16.044,
+				0.437,
+				0.692,
+				16.081,
+				0.29,
+				13.346,
+				0.311,
+				18.956,
+				0.361,
+				0.216,
+				13.061,
+				0.522,
+				19.202,
+				0.433,
+				8.296,
+				0.397,
+				10.272,
+				24.369,
+				0.332,
+				7.491,
+				0.273,
+				24.503,
+				0.405,
+				7.212,
+				0.351,
+				13.409,
+				11.299,
+				0.421,
+				9.223,
+				0.415,
+				17.499,
+				0.337,
+				2.203,
+				14.563,
+				0.341,
+				13.732,
+				0.341,
+				18.579,
+				0.401,
+				0.338,
+				30.807,
+				7.739,
+				0.47,
+				7.159,
+				0.328,
+				27.195,
+				0.315,
+				5.834,
+				1.069,
+				25.788,
+				0.299,
+				5.789,
+				1.114,
+				27.87,
+				7.196,
+				0.617,
+				7.432,
+				0.455,
+				28.203,
+				0.374,
+				6.194,
+				0.704,
+				24.717,
+				0.408,
+				6.15,
+				0.751,
+				26.634,
+				0.49,
+				6.748,
+				0.358,
+				19.242,
+				0.257,
+				0.993,
+				15.885,
+				0.307,
+				14.222,
+				0.316,
+				19.668,
+				0.505,
+				6.363,
+				0.534,
+				25.055,
+				0.38,
+				0.189,
+				26.26,
+				0.45,
+				7.079,
+				0.348,
+				23.217,
+				0.337,
+				9.056,
+				0.284,
+				22.249,
+				0.424,
+				0.235,
+				18.691,
+				0.388,
+				7.533,
+				0.912,
+				18.917,
+				0.245,
+				7.698,
+				0.743,
+				25.282,
+				0.427,
+				0.281,
+				12.51,
+				1.006,
+				14.761,
+				0.278,
+				18.921,
+				0.468,
+				6.291,
+				0.681,
+				21.532,
+				0.279,
+				0.185,
+				15.276,
+				0.346,
+				15.734,
+				0.343,
+				13.357,
+				0.359,
+				15.859,
+				0.251,
+				0.387,
+				19.214,
+				0.355,
+				1.135,
+				27.487,
+				0.491,
+				6.807,
+				0.358,
+				16.027,
+				10.112,
+				0.418,
+				11.298,
+				0.352,
+				8.883,
+				26.525,
+				7.802,
+				0.375,
+				6.489,
+				0.409,
+				15.268,
+				0.442,
+				11.889,
+				0.456,
+				16.23,
+				0.344,
+				12.496,
+				0.38,
+				16.385,
+				0.371,
+				1.638,
+				18.062,
+				0.372,
+				9.522,
+				0.45,
+				7.434,
+				23.921,
+				0.347,
+				9.811,
+				0.351,
+				18.392,
+				0.365,
+				0.267,
+				14.814,
+				0.253,
+				20.106,
+				0.408,
+				0.189,
+				27.25,
+				0.425,
+				8.073,
+				0.265,
+				23.449,
+				0.356,
+				0.191,
+				13.296,
+				0.333,
+				15.322,
+				0.324,
+				19.248,
+				0.363,
+				0.191,
+				12.691,
+				0.92,
+				14.992,
+				0.263,
+				13.928,
+				0.303,
+				9.399,
+				24.041,
+				6.29,
+				0.345,
+				6.563,
+				0.936,
+				17.623,
+				0.326,
+				14.674,
+				0.672,
+				12.074,
+				0.413,
+				18.458,
+				0.434,
+				6.376,
+				0.525,
+				26.851,
+				0.369,
+				6.366,
+				0.532,
+				24.426,
+				0.377,
+				6.912,
+				0.317,
+				23.218,
+				0.404,
+				0.204,
+				13.563,
+				0.369,
+				15.367,
+				0.242,
+				16.762,
+				0.331,
+				1.458,
+				13.245,
+				0.561,
+				15.739,
+				0.34,
+				13.444,
+				0.278,
+				8.389,
+				23.903,
+				0.512,
+				7.156,
+				0.388,
+				23.863,
+				0.348,
+				0.192,
+				14.705,
+				0.401,
+				17.27,
+				0.447,
+				8.562,
+				0.374,
+				19.803,
+				0.38,
+				0.189,
+				18.13,
+				0.479,
+				11.937,
+				0.49,
+				17.754,
+				0.484,
+				0.25,
+				30.0,
+				0.444,
+				7.695,
+				0.386,
+				18.585,
+				0.392,
+				7.828,
+				0.307,
+				16.379,
+				10.885,
+				0.44,
+				14.245,
+				0.382,
+				8.666,
+				0.328,
+				22.826,
+				0.424,
+				0.243,
+				27.87,
+				7.29,
+				0.219,
+				6.799,
+				0.286,
+				20.05,
+				0.415,
+				9.057,
+				0.33,
+				18.202,
+				0.424,
+				0.22,
+				18.906,
+				0.449,
+				8.123,
+				0.446,
+				19.093,
+				0.271,
+				0.785,
+				13.526,
+				0.325,
+				20.616,
+				0.462,
+				0.239,
+				27.417,
+				0.463,
+				11.672,
+				0.439,
+				8.51,
+				0.413,
+				16.753,
+				7.156,
+				0.292,
+				14.893,
+				0.319,
+				19.051,
+				0.59,
+				0.272,
+				28.912,
+				8.729,
+				0.504,
+				6.238,
+				0.66,
+				13.088,
+				0.712,
+				15.784,
+				0.273,
+				15.402,
+				0.344,
+				18.85,
+				0.406,
+				5.935,
+				0.963,
+				24.533,
+				0.42,
+				0.241,
+				26.554,
+				0.453,
+				6.764,
+				0.274,
+				23.201,
+				0.285,
+				10.017,
+				0.458,
+				21.522,
+				0.426,
+				0.233,
+				18.986,
+				0.336,
+				7.515,
+				0.529,
+				18.541,
+				0.347,
+				7.732,
+				0.98,
+				24.604,
+				0.477,
+				0.272,
+				27.905,
+				0.64,
+				17.452,
+				0.424,
+				8.588,
+				0.476,
+				17.652,
+				0.308,
+				6.51,
+				0.966,
+				26.975,
+				0.448,
+				6.776,
+				0.359,
+				21.89,
+				0.332,
+				0.191,
+				17.072,
+				0.445,
+				13.755,
+				0.441,
+				14.786,
+				0.377,
+				7.051,
+				1.083,
+				25.728,
+				0.351,
+				0.195,
+				28.504,
+				10.107,
+				0.486,
+				8.261,
+				0.42,
+				12.115,
+				0.308,
+				13.803,
+				0.331,
+				15.28,
+				0.244,
+				19.428,
+				0.418,
+				0.191,
+				32.102,
+				0.583,
+				7.534,
+				0.433,
+				16.383,
+				0.251,
+				15.851,
+				0.306,
+				7.038,
+				0.501,
+				27.261,
+				0.455,
+				0.226,
+				31.76,
+				7.207,
+				0.363,
+				6.359,
+				0.54,
+				28.743,
+				0.387,
+				6.878,
+				0.4,
+				26.293,
+				7.132,
+				0.451,
+				6.611,
+				0.288,
+				18.72,
+				0.462,
+				8.944,
+				0.367,
+				15.383,
+				0.356
+			],
+			"godot_process_monitor_ms_diagnostic_only": {
+				"max": 117.262,
+				"min": 3.418,
+				"p50": 12.852,
+				"p95": 117.262,
+				"p99": 117.262,
+				"samples": 693
+			},
+			"initial_layout": {
+				"min_actor_separation_gu": 1.0,
+				"min_target_separation_gu": 2.0,
+				"player_radius_gu": 0.397747564417433,
+				"valid": true
+			},
+			"layout_seed": 20260909,
+			"layout_signature": "fbc5d4a3c4b80553c6c829a36c35f20c0a762223ac94a003eae8a3b1a540385e",
+			"map_id": 1,
+			"monster_count": 30,
+			"optional_probe_section_calls": {},
+			"optional_probe_section_usec": {},
+			"path_search_metrics": {
+				"m30_frontier_rebuild_max_cells": 0,
+				"m30_frontier_rebuild_usec": 0,
+				"m30_frontier_rebuilds": 0,
+				"shared_field_expansions": 0,
+				"shared_field_fallbacks": 0,
+				"shared_field_services": 0
+			},
+			"path_status_counts": {
+				"IDLE": 30
+			},
+			"physics_ticks_per_second": 60,
+			"post_sample_drain": {
+				"completed_within_limit": true,
+				"end_pending_jobs": 0,
+				"expansions": 0,
+				"process_frames": 0,
+				"services": 0,
+				"start_pending_jobs": 0
+			},
+			"sample_physics_ticks": 321,
+			"sample_process_frames": 320,
+			"scenario": "dense_crowd",
+			"scheduler_delta": {
+				"available": false
+			},
+			"tail_frame_counts": {
+				"over_16_67ms": 143,
+				"over_25ms": 44,
+				"over_33_3ms": 1,
+				"over_50ms": 0
+			},
+			"target_damage_calls": 27,
+			"target_damage_total": 589,
+			"terrain_metrics": {
+				"max_queries_per_physics_frame": 2,
+				"path_budget_rejections": 0,
+				"path_expansions": 0,
+				"path_queries": 0,
+				"queries_this_physics_frame": 0
+			},
+			"timing_diagnostic": {
+				"injected_warmup_hitch_ms": 100,
+				"purpose": "clock sensitivity, not performance",
+				"status": "PASS",
+				"trace": [
+					{
+						"attack_starts": 0,
+						"await_iteration": 1,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 7,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 7,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6006
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 2,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 8,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 15,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6029
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 3,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 16,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6032
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 4,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 17,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6043
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 5,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 18,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6059
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 6,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 19,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6075
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 7,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 20,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6090
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 8,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 21,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6106
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 9,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 22,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6122
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 10,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 23,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6138
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 11,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 24,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6153
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 12,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 25,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6185
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 13,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 26,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6201
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 14,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 27,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6216
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 15,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 28,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6231
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 16,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 29,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6263
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 17,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 30,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6279
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 18,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 31,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6295
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 19,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 32,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6311
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 20,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 7,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 39,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6439
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 21,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 2,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 41,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6446
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 22,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 42,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6468
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 23,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 43,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6485
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 24,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 44,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6500
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 25,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 45,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6515
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 26,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 46,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6530
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 27,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 47,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6548
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 28,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 48,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6562
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 29,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 49,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6594
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 30,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 50,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6600
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 31,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 51,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6624
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 32,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 52,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6640
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 33,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 53,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6655
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 34,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 54,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6670
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 35,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 55,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6686
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 36,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 56,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6703
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 37,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 57,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6717
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 38,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 58,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6732
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 39,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 59,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6763
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 40,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 60,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6779
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 41,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 61,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6794
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 42,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 62,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6811
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 43,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 63,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6817
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 44,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 64,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6842
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 45,
+						"capturing": false,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 65,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6857
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 46,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 66,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6872
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 47,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 67,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6891
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 48,
+						"capturing": true,
+						"distance": 2.2360680103302,
+						"ground": [
+							18.5,
+							21.5
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 68,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 6897
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 49,
+						"capturing": true,
+						"distance": 2.21940040588379,
+						"ground": [
+							18.5149078369141,
+							21.492546081543
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 69,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 6924
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 50,
+						"capturing": true,
+						"distance": 2.20273303985596,
+						"ground": [
+							18.5298156738281,
+							21.4850921630859
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 70,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 6940
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 51,
+						"capturing": true,
+						"distance": 2.18606805801392,
+						"ground": [
+							18.5447216033936,
+							21.4776401519775
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 71,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 6956
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 52,
+						"capturing": true,
+						"distance": 2.16940069198608,
+						"ground": [
+							18.5596294403076,
+							21.4701862335205
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 72,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 6973
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 53,
+						"capturing": true,
+						"distance": 2.15273308753967,
+						"ground": [
+							18.5745372772217,
+							21.4627323150635
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 73,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 6980
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 54,
+						"capturing": true,
+						"distance": 2.13606834411621,
+						"ground": [
+							18.5894432067871,
+							21.4552803039551
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 74,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7003
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 55,
+						"capturing": true,
+						"distance": 2.1194007396698,
+						"ground": [
+							18.6043510437012,
+							21.447826385498
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 75,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7033
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 56,
+						"capturing": true,
+						"distance": 2.10273337364197,
+						"ground": [
+							18.6192588806152,
+							21.440372467041
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 76,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7042
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 57,
+						"capturing": true,
+						"distance": 2.08606576919556,
+						"ground": [
+							18.6341667175293,
+							21.432918548584
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 77,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7049
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 58,
+						"capturing": true,
+						"distance": 2.06939840316772,
+						"ground": [
+							18.6490745544434,
+							21.425464630127
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 78,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7065
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 59,
+						"capturing": true,
+						"distance": 2.05273342132568,
+						"ground": [
+							18.6639804840088,
+							21.4180126190186
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 79,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7081
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 60,
+						"capturing": true,
+						"distance": 2.03606605529785,
+						"ground": [
+							18.6788883209229,
+							21.4105587005615
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 80,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7094
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 61,
+						"capturing": true,
+						"distance": 2.01939845085144,
+						"ground": [
+							18.6937961578369,
+							21.4031047821045
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 81,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7113
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 62,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 82,
+						"side_retry_ms": 0,
+						"step_active": true,
+						"wall_ms": 7143
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 63,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 83,
+						"side_retry_ms": 0,
+						"step_active": false,
+						"wall_ms": 7152
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 64,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 84,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7174
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 65,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 85,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7184
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 66,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 86,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7203
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 67,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 87,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7220
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 68,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 88,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7234
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 69,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 89,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7253
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 70,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 90,
+						"side_retry_ms": 7267,
+						"step_active": false,
+						"wall_ms": 7260
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 71,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 91,
+						"side_retry_ms": 7377,
+						"step_active": false,
+						"wall_ms": 7285
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 72,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 92,
+						"side_retry_ms": 7377,
+						"step_active": false,
+						"wall_ms": 7313
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 73,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 93,
+						"side_retry_ms": 7377,
+						"step_active": false,
+						"wall_ms": 7321
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 74,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 94,
+						"side_retry_ms": 7377,
+						"step_active": false,
+						"wall_ms": 7344
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 75,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 95,
+						"side_retry_ms": 7377,
+						"step_active": false,
+						"wall_ms": 7354
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 76,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 96,
+						"side_retry_ms": 7377,
+						"step_active": false,
+						"wall_ms": 7375
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 77,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 97,
+						"side_retry_ms": 7479,
+						"step_active": false,
+						"wall_ms": 7387
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 78,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 98,
+						"side_retry_ms": 7479,
+						"step_active": false,
+						"wall_ms": 7406
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 79,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 99,
+						"side_retry_ms": 7479,
+						"step_active": false,
+						"wall_ms": 7422
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 80,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 100,
+						"side_retry_ms": 7479,
+						"step_active": false,
+						"wall_ms": 7438
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 81,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 101,
+						"side_retry_ms": 7479,
+						"step_active": false,
+						"wall_ms": 7456
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 82,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 102,
+						"side_retry_ms": 7479,
+						"step_active": false,
+						"wall_ms": 7463
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 83,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 103,
+						"side_retry_ms": 7582,
+						"step_active": false,
+						"wall_ms": 7490
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 84,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 104,
+						"side_retry_ms": 7582,
+						"step_active": false,
+						"wall_ms": 7516
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 85,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 105,
+						"side_retry_ms": 7582,
+						"step_active": false,
+						"wall_ms": 7524
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 86,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 106,
+						"side_retry_ms": 7582,
+						"step_active": false,
+						"wall_ms": 7547
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 87,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 107,
+						"side_retry_ms": 7582,
+						"step_active": false,
+						"wall_ms": 7557
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 88,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 108,
+						"side_retry_ms": 7582,
+						"step_active": false,
+						"wall_ms": 7579
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 89,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 109,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7590
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 90,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 110,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7610
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 91,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 111,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7617
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 92,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 112,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7642
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 93,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 113,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7648
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 94,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 114,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7677
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 95,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 115,
+						"side_retry_ms": 7682,
+						"step_active": false,
+						"wall_ms": 7684
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 96,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 116,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7709
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 97,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 117,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7716
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 98,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 118,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7736
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 99,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 119,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7755
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 100,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 120,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7769
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 101,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 121,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7789
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 102,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 122,
+						"side_retry_ms": 7802,
+						"step_active": false,
+						"wall_ms": 7799
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 103,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 123,
+						"side_retry_ms": 7914,
+						"step_active": false,
+						"wall_ms": 7822
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 104,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 124,
+						"side_retry_ms": 7914,
+						"step_active": false,
+						"wall_ms": 7848
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 105,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 125,
+						"side_retry_ms": 7914,
+						"step_active": false,
+						"wall_ms": 7856
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 106,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 126,
+						"side_retry_ms": 7914,
+						"step_active": false,
+						"wall_ms": 7879
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 107,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 127,
+						"side_retry_ms": 7914,
+						"step_active": false,
+						"wall_ms": 7891
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 108,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 128,
+						"side_retry_ms": 7914,
+						"step_active": false,
+						"wall_ms": 7900
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 109,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 129,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 7931
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 110,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 130,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 7938
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 111,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 131,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 7957
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 112,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 132,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 7965
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 113,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 133,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 7991
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 114,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 134,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 8005
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 115,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 135,
+						"side_retry_ms": 8022,
+						"step_active": false,
+						"wall_ms": 8019
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 116,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 136,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8039
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 117,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 137,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8046
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 118,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 138,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8067
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 119,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 139,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8081
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 120,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 140,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8100
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 121,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 141,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8109
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 122,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 142,
+						"side_retry_ms": 8131,
+						"step_active": false,
+						"wall_ms": 8129
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 123,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 143,
+						"side_retry_ms": 8240,
+						"step_active": false,
+						"wall_ms": 8149
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 124,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 144,
+						"side_retry_ms": 8240,
+						"step_active": false,
+						"wall_ms": 8157
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 125,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 145,
+						"side_retry_ms": 8240,
+						"step_active": false,
+						"wall_ms": 8178
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 126,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 146,
+						"side_retry_ms": 8240,
+						"step_active": false,
+						"wall_ms": 8191
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 127,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 147,
+						"side_retry_ms": 8240,
+						"step_active": false,
+						"wall_ms": 8211
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 128,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 148,
+						"side_retry_ms": 8240,
+						"step_active": false,
+						"wall_ms": 8240
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 129,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 149,
+						"side_retry_ms": 8343,
+						"step_active": false,
+						"wall_ms": 8251
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 130,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 150,
+						"side_retry_ms": 8343,
+						"step_active": false,
+						"wall_ms": 8260
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 131,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 151,
+						"side_retry_ms": 8343,
+						"step_active": false,
+						"wall_ms": 8289
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 132,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 152,
+						"side_retry_ms": 8343,
+						"step_active": false,
+						"wall_ms": 8302
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 133,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 153,
+						"side_retry_ms": 8343,
+						"step_active": false,
+						"wall_ms": 8321
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 134,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 154,
+						"side_retry_ms": 8343,
+						"step_active": false,
+						"wall_ms": 8335
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 135,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 155,
+						"side_retry_ms": 8445,
+						"step_active": false,
+						"wall_ms": 8353
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 136,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 156,
+						"side_retry_ms": 8445,
+						"step_active": false,
+						"wall_ms": 8380
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 137,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 157,
+						"side_retry_ms": 8445,
+						"step_active": false,
+						"wall_ms": 8387
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 138,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 158,
+						"side_retry_ms": 8445,
+						"step_active": false,
+						"wall_ms": 8413
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 139,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 159,
+						"side_retry_ms": 8445,
+						"step_active": false,
+						"wall_ms": 8431
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 140,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 160,
+						"side_retry_ms": 8445,
+						"step_active": false,
+						"wall_ms": 8444
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 141,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 161,
+						"side_retry_ms": 8555,
+						"step_active": false,
+						"wall_ms": 8463
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 142,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 2,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 163,
+						"side_retry_ms": 8555,
+						"step_active": false,
+						"wall_ms": 8497
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 143,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 164,
+						"side_retry_ms": 8555,
+						"step_active": false,
+						"wall_ms": 8504
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 144,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 165,
+						"side_retry_ms": 8555,
+						"step_active": false,
+						"wall_ms": 8514
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 145,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 166,
+						"side_retry_ms": 8555,
+						"step_active": false,
+						"wall_ms": 8542
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 146,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 167,
+						"side_retry_ms": 8555,
+						"step_active": false,
+						"wall_ms": 8549
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 147,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 168,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8575
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 148,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 169,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8582
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 149,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 170,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8602
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 150,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 171,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8618
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 151,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 172,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8632
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 152,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 173,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8650
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 153,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 174,
+						"side_retry_ms": 8666,
+						"step_active": false,
+						"wall_ms": 8658
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 154,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 175,
+						"side_retry_ms": 8775,
+						"step_active": false,
+						"wall_ms": 8684
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 155,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 176,
+						"side_retry_ms": 8775,
+						"step_active": false,
+						"wall_ms": 8711
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 156,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 177,
+						"side_retry_ms": 8775,
+						"step_active": false,
+						"wall_ms": 8719
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 157,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 178,
+						"side_retry_ms": 8775,
+						"step_active": false,
+						"wall_ms": 8743
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 158,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 179,
+						"side_retry_ms": 8775,
+						"step_active": false,
+						"wall_ms": 8754
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 159,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 180,
+						"side_retry_ms": 8775,
+						"step_active": false,
+						"wall_ms": 8777
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 160,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 181,
+						"side_retry_ms": 8881,
+						"step_active": false,
+						"wall_ms": 8792
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 161,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 182,
+						"side_retry_ms": 8881,
+						"step_active": false,
+						"wall_ms": 8799
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 162,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 183,
+						"side_retry_ms": 8881,
+						"step_active": false,
+						"wall_ms": 8822
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 163,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 184,
+						"side_retry_ms": 8881,
+						"step_active": false,
+						"wall_ms": 8837
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 164,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 185,
+						"side_retry_ms": 8881,
+						"step_active": false,
+						"wall_ms": 8856
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 165,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 186,
+						"side_retry_ms": 8881,
+						"step_active": false,
+						"wall_ms": 8864
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 166,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 187,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8889
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 167,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 188,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8899
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 168,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 189,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8915
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 169,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 190,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8933
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 170,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 191,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8946
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 171,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 192,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8966
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 172,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 193,
+						"side_retry_ms": 8981,
+						"step_active": false,
+						"wall_ms": 8979
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 173,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 194,
+						"side_retry_ms": 9091,
+						"step_active": false,
+						"wall_ms": 8999
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 174,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 195,
+						"side_retry_ms": 9091,
+						"step_active": false,
+						"wall_ms": 9008
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 175,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 196,
+						"side_retry_ms": 9091,
+						"step_active": false,
+						"wall_ms": 9043
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 176,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 197,
+						"side_retry_ms": 9091,
+						"step_active": false,
+						"wall_ms": 9050
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 177,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 198,
+						"side_retry_ms": 9091,
+						"step_active": false,
+						"wall_ms": 9075
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 178,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 199,
+						"side_retry_ms": 9091,
+						"step_active": false,
+						"wall_ms": 9083
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 179,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 200,
+						"side_retry_ms": 9200,
+						"step_active": false,
+						"wall_ms": 9108
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 180,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 201,
+						"side_retry_ms": 9200,
+						"step_active": false,
+						"wall_ms": 9118
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 181,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 202,
+						"side_retry_ms": 9200,
+						"step_active": false,
+						"wall_ms": 9136
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 182,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 203,
+						"side_retry_ms": 9200,
+						"step_active": false,
+						"wall_ms": 9153
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 183,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 204,
+						"side_retry_ms": 9200,
+						"step_active": false,
+						"wall_ms": 9167
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 184,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 205,
+						"side_retry_ms": 9200,
+						"step_active": false,
+						"wall_ms": 9186
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 185,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 206,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9217
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 186,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 207,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9225
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 187,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 208,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9233
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 188,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 209,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9260
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 189,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 210,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9266
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 190,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 211,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9293
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 191,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 212,
+						"side_retry_ms": 9309,
+						"step_active": false,
+						"wall_ms": 9299
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 192,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 213,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9328
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 193,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 214,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9335
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 194,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 215,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9343
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 195,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 216,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9372
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 196,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 217,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9379
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 197,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 218,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9404
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 198,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 219,
+						"side_retry_ms": 9419,
+						"step_active": false,
+						"wall_ms": 9411
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 199,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 220,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9438
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 200,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 221,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9445
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 201,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 222,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9465
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 202,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 223,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9482
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 203,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 224,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9496
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 204,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 225,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9516
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 205,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 226,
+						"side_retry_ms": 9530,
+						"step_active": false,
+						"wall_ms": 9523
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 206,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 227,
+						"side_retry_ms": 9641,
+						"step_active": false,
+						"wall_ms": 9549
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 207,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 228,
+						"side_retry_ms": 9641,
+						"step_active": false,
+						"wall_ms": 9576
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 208,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 229,
+						"side_retry_ms": 9641,
+						"step_active": false,
+						"wall_ms": 9583
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 209,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 230,
+						"side_retry_ms": 9641,
+						"step_active": false,
+						"wall_ms": 9607
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 210,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 231,
+						"side_retry_ms": 9641,
+						"step_active": false,
+						"wall_ms": 9616
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 211,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 232,
+						"side_retry_ms": 9641,
+						"step_active": false,
+						"wall_ms": 9639
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 212,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 233,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9658
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 213,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 234,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9666
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 214,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 235,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9686
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 215,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 236,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9694
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 216,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 237,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9720
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 217,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 238,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9733
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 218,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 239,
+						"side_retry_ms": 9750,
+						"step_active": false,
+						"wall_ms": 9749
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 219,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 240,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9768
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 220,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 241,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9775
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 221,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 242,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9797
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 222,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 243,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9813
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 223,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 244,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9829
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 224,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 245,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9842
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 225,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 246,
+						"side_retry_ms": 9860,
+						"step_active": false,
+						"wall_ms": 9859
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 226,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 247,
+						"side_retry_ms": 9971,
+						"step_active": false,
+						"wall_ms": 9879
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 227,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 248,
+						"side_retry_ms": 9971,
+						"step_active": false,
+						"wall_ms": 9908
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 228,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 249,
+						"side_retry_ms": 9971,
+						"step_active": false,
+						"wall_ms": 9915
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 229,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 250,
+						"side_retry_ms": 9971,
+						"step_active": false,
+						"wall_ms": 9941
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 230,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 251,
+						"side_retry_ms": 9971,
+						"step_active": false,
+						"wall_ms": 9953
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 231,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 252,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 9989
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 232,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 253,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 9997
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 233,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 254,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 10003
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 234,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 255,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 10019
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 235,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 256,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 10031
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 236,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 257,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 10048
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 237,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 258,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 10061
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 238,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 259,
+						"side_retry_ms": 10080,
+						"step_active": false,
+						"wall_ms": 10078
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 239,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 260,
+						"side_retry_ms": 10189,
+						"step_active": false,
+						"wall_ms": 10098
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 240,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 261,
+						"side_retry_ms": 10189,
+						"step_active": false,
+						"wall_ms": 10108
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 241,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 262,
+						"side_retry_ms": 10189,
+						"step_active": false,
+						"wall_ms": 10140
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 242,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 263,
+						"side_retry_ms": 10189,
+						"step_active": false,
+						"wall_ms": 10150
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 243,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 264,
+						"side_retry_ms": 10189,
+						"step_active": false,
+						"wall_ms": 10168
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 244,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 265,
+						"side_retry_ms": 10189,
+						"step_active": false,
+						"wall_ms": 10184
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 245,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 266,
+						"side_retry_ms": 10296,
+						"step_active": false,
+						"wall_ms": 10204
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 246,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 267,
+						"side_retry_ms": 10296,
+						"step_active": false,
+						"wall_ms": 10232
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 247,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 268,
+						"side_retry_ms": 10296,
+						"step_active": false,
+						"wall_ms": 10241
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 248,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 269,
+						"side_retry_ms": 10296,
+						"step_active": false,
+						"wall_ms": 10264
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 249,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 270,
+						"side_retry_ms": 10296,
+						"step_active": false,
+						"wall_ms": 10278
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 250,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 271,
+						"side_retry_ms": 10296,
+						"step_active": false,
+						"wall_ms": 10294
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 251,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 272,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10313
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 252,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 273,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10327
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 253,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 274,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10343
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 254,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 275,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10357
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 255,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 276,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10390
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 256,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 277,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10397
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 257,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 278,
+						"side_retry_ms": 10406,
+						"step_active": false,
+						"wall_ms": 10404
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 258,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 279,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10422
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 259,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 280,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10437
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 260,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 281,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10450
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 261,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 282,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10469
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 262,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 283,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10476
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 263,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 284,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10503
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 264,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 285,
+						"side_retry_ms": 10517,
+						"step_active": false,
+						"wall_ms": 10510
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 265,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 286,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10535
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 266,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 287,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10542
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 267,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 288,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10566
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 268,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 289,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10580
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 269,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 290,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10595
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 270,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 291,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10612
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 271,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 292,
+						"side_retry_ms": 10629,
+						"step_active": false,
+						"wall_ms": 10627
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 272,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 293,
+						"side_retry_ms": 10738,
+						"step_active": false,
+						"wall_ms": 10644
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 273,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 294,
+						"side_retry_ms": 10738,
+						"step_active": false,
+						"wall_ms": 10658
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 274,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 295,
+						"side_retry_ms": 10738,
+						"step_active": false,
+						"wall_ms": 10690
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 275,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 296,
+						"side_retry_ms": 10738,
+						"step_active": false,
+						"wall_ms": 10698
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 276,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 297,
+						"side_retry_ms": 10738,
+						"step_active": false,
+						"wall_ms": 10722
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 277,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 298,
+						"side_retry_ms": 10738,
+						"step_active": false,
+						"wall_ms": 10737
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 278,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 299,
+						"side_retry_ms": 10849,
+						"step_active": false,
+						"wall_ms": 10755
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 279,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 300,
+						"side_retry_ms": 10849,
+						"step_active": false,
+						"wall_ms": 10764
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 280,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 301,
+						"side_retry_ms": 10849,
+						"step_active": false,
+						"wall_ms": 10784
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 281,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 302,
+						"side_retry_ms": 10849,
+						"step_active": false,
+						"wall_ms": 10803
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 282,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 303,
+						"side_retry_ms": 10849,
+						"step_active": false,
+						"wall_ms": 10815
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 283,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 304,
+						"side_retry_ms": 10849,
+						"step_active": false,
+						"wall_ms": 10834
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 284,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 305,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10864
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 285,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 306,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10872
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 286,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 307,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10891
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 287,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 308,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10900
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 288,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 309,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10927
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 289,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 310,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10942
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 290,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 311,
+						"side_retry_ms": 10958,
+						"step_active": false,
+						"wall_ms": 10951
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 291,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 312,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 10974
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 292,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 313,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 11003
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 293,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 314,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 11010
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 294,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 315,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 11017
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 295,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 316,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 11037
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 296,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 317,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 11047
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 297,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 318,
+						"side_retry_ms": 11067,
+						"step_active": false,
+						"wall_ms": 11065
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 298,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 319,
+						"side_retry_ms": 11177,
+						"step_active": false,
+						"wall_ms": 11085
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 299,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 320,
+						"side_retry_ms": 11177,
+						"step_active": false,
+						"wall_ms": 11093
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 300,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 321,
+						"side_retry_ms": 11177,
+						"step_active": false,
+						"wall_ms": 11113
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 301,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 322,
+						"side_retry_ms": 11177,
+						"step_active": false,
+						"wall_ms": 11127
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 302,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 323,
+						"side_retry_ms": 11177,
+						"step_active": false,
+						"wall_ms": 11148
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 303,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 324,
+						"side_retry_ms": 11177,
+						"step_active": false,
+						"wall_ms": 11177
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 304,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 325,
+						"side_retry_ms": 11281,
+						"step_active": false,
+						"wall_ms": 11189
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 305,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 326,
+						"side_retry_ms": 11281,
+						"step_active": false,
+						"wall_ms": 11198
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 306,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 327,
+						"side_retry_ms": 11281,
+						"step_active": false,
+						"wall_ms": 11222
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 307,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 328,
+						"side_retry_ms": 11281,
+						"step_active": false,
+						"wall_ms": 11237
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 308,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 329,
+						"side_retry_ms": 11281,
+						"step_active": false,
+						"wall_ms": 11256
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 309,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 330,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11286
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 310,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 331,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11295
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 311,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 332,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11302
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 312,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 333,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11315
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 313,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 334,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11332
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 314,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 335,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11348
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 315,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 336,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11367
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 316,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 337,
+						"side_retry_ms": 11382,
+						"step_active": false,
+						"wall_ms": 11373
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 317,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 338,
+						"side_retry_ms": 11492,
+						"step_active": false,
+						"wall_ms": 11399
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 318,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 339,
+						"side_retry_ms": 11492,
+						"step_active": false,
+						"wall_ms": 11426
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 319,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 340,
+						"side_retry_ms": 11492,
+						"step_active": false,
+						"wall_ms": 11433
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 320,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 341,
+						"side_retry_ms": 11492,
+						"step_active": false,
+						"wall_ms": 11457
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 321,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 342,
+						"side_retry_ms": 11492,
+						"step_active": false,
+						"wall_ms": 11467
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 322,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 343,
+						"side_retry_ms": 11492,
+						"step_active": false,
+						"wall_ms": 11489
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 323,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 344,
+						"side_retry_ms": 11602,
+						"step_active": false,
+						"wall_ms": 11509
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 324,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 345,
+						"side_retry_ms": 11602,
+						"step_active": false,
+						"wall_ms": 11516
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 325,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 346,
+						"side_retry_ms": 11602,
+						"step_active": false,
+						"wall_ms": 11535
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 326,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 347,
+						"side_retry_ms": 11602,
+						"step_active": false,
+						"wall_ms": 11544
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 327,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 348,
+						"side_retry_ms": 11602,
+						"step_active": false,
+						"wall_ms": 11569
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 328,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 349,
+						"side_retry_ms": 11602,
+						"step_active": false,
+						"wall_ms": 11598
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 329,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 350,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11616
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 330,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 351,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11625
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 331,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 352,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11643
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 332,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 353,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11650
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 333,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 354,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11678
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 334,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 355,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11685
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 335,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 356,
+						"side_retry_ms": 11705,
+						"step_active": false,
+						"wall_ms": 11707
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 336,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 357,
+						"side_retry_ms": 11818,
+						"step_active": false,
+						"wall_ms": 11725
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 337,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 358,
+						"side_retry_ms": 11818,
+						"step_active": false,
+						"wall_ms": 11739
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 338,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 359,
+						"side_retry_ms": 11818,
+						"step_active": false,
+						"wall_ms": 11754
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 339,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 360,
+						"side_retry_ms": 11818,
+						"step_active": false,
+						"wall_ms": 11762
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 340,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 361,
+						"side_retry_ms": 11818,
+						"step_active": false,
+						"wall_ms": 11788
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 341,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 362,
+						"side_retry_ms": 11818,
+						"step_active": false,
+						"wall_ms": 11818
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 342,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 363,
+						"side_retry_ms": 11921,
+						"step_active": false,
+						"wall_ms": 11828
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 343,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 364,
+						"side_retry_ms": 11921,
+						"step_active": false,
+						"wall_ms": 11836
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 344,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 365,
+						"side_retry_ms": 11921,
+						"step_active": false,
+						"wall_ms": 11849
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 345,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 366,
+						"side_retry_ms": 11921,
+						"step_active": false,
+						"wall_ms": 11863
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 346,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 367,
+						"side_retry_ms": 11921,
+						"step_active": false,
+						"wall_ms": 11879
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 347,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 368,
+						"side_retry_ms": 11921,
+						"step_active": false,
+						"wall_ms": 11898
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 348,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 369,
+						"side_retry_ms": 12024,
+						"step_active": false,
+						"wall_ms": 11931
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 349,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 370,
+						"side_retry_ms": 12024,
+						"step_active": false,
+						"wall_ms": 11939
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 350,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 371,
+						"side_retry_ms": 12024,
+						"step_active": false,
+						"wall_ms": 11956
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 351,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 372,
+						"side_retry_ms": 12024,
+						"step_active": false,
+						"wall_ms": 11972
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 352,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 373,
+						"side_retry_ms": 12024,
+						"step_active": false,
+						"wall_ms": 11979
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 353,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 374,
+						"side_retry_ms": 12024,
+						"step_active": false,
+						"wall_ms": 12007
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 354,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 375,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12040
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 355,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 376,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12047
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 356,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 377,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12054
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 357,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 378,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12083
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 358,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 379,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12090
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 359,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 380,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12117
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 360,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 381,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12124
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 361,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 382,
+						"side_retry_ms": 12132,
+						"step_active": false,
+						"wall_ms": 12131
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 362,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 383,
+						"side_retry_ms": 12242,
+						"step_active": false,
+						"wall_ms": 12150
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 363,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 384,
+						"side_retry_ms": 12242,
+						"step_active": false,
+						"wall_ms": 12159
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 364,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 385,
+						"side_retry_ms": 12242,
+						"step_active": false,
+						"wall_ms": 12175
+					},
+					{
+						"attack_starts": 0,
+						"await_iteration": 365,
+						"capturing": true,
+						"distance": 2.00273370742798,
+						"ground": [
+							18.7087020874023,
+							21.3956527709961
+						],
+						"physics_ticks_since_last_await": 1,
+						"reason": "OUT_OF_RANGE",
+						"relative_physics_tick": 386,
+						"side_retry_ms": 12242,
+						"step_active": false,
+						"wall_ms": 12192
+					}
+				]
+			},
+			"total_attack_damage_applications": 27,
+			"total_attack_starts": 27,
+			"total_motion_frames": 2067,
+			"total_motion_gu": 34.3614580865833,
+			"world_body_count": 0,
+			"world_obstacle_activation": "before_spawn"
+		}
+	],
+	"sample_boundary": "physics_frame_then_process_frame",
+	"sample_frames": 320,
+	"scenarios": [
+		"dense_crowd"
+	],
+	"schema": "hardcore.v3.rev07.scenario_full_frame_comparison.v2",
+	"source_hashes_sha256": {
+		"res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+		"res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+		"res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+		"res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+		"res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4",
+		"res://tests/hc_monster_ai/m30_timing_diagnostic.gd": "642375ff04514358b877273515cdefb476ef3682924cf2030ca41bf3b33f5389"
+	},
+	"threshold": "candidate_p95 <= max(baseline_p95*1.05, baseline_p95+0.5ms)",
+	"warmup_frames": 45
+}

@@ -18,8 +18,8 @@ func _run() -> void:
 	_test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback()
 	print(
 		"DPV2_DROP_RUNTIME_POLICY_PASS: user_loot_sheet=1 monsters=126 "
-		+ "slots=5976 baseline_identity_preserved=1 "
-		+ "compiled_enabled_slots=6809 ground_limit=15"
+		+ "sheet_slots=6042 baseline_identity_preserved=1 "
+		+ "baseline_compiled_enabled_slots=7611 ground_limit=15"
 	)
 	get_tree().quit(0)
 
@@ -79,7 +79,8 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 	# frozen direct baseline stays as the identity/history contract only.
 	var sheet_profile: Dictionary = service._sheet_authority.profile(76)
 	var sheet_slots: Array = sheet_profile.get("slots", [])
-	assert(sheet_slots.size() == 85, "ID 76 sheet slot count drifted")
+	# User's single-slot armor directive removes the duplicate output126 trial.
+	assert(sheet_slots.size() == 84, "ID 76 sheet slot count drifted")
 	var roll: Dictionary = service.roll_monster_drops(76, rng)
 	assert(str(roll.get("contract_id", "")) == "monster.loot.dpv2_direct_baseline.v2")
 	assert(str(roll.get("runtime_authority", {}).get("authority_id", "")) == "dpv2.user_loot_sheet.v1")

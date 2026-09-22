@@ -54,6 +54,7 @@ func _run() -> void:
 			assert(ResourceLoader.exists(str(action.get("path", ""))), "%s %s图集不存在" % [monster_name, action_name])
 
 	var player := PlayerCharacter.new()
+	player.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(player)
 	player.set_physics_process(false)
 	player.global_position = Vector2.ZERO
@@ -65,6 +66,9 @@ func _run() -> void:
 		var canonical_data := GameData.get_monster_by_id(monster_id)
 		assert(monster_id > 0 and not canonical_data.is_empty(), "%s canonical monster_id 无效" % monster_name)
 		var enemy := EnemyActor.new()
+		# This fixture drives visual transitions manually. Physics-only disable
+		# leaves the background wakeup timer active and can resume live attacks.
+		enemy.process_mode = Node.PROCESS_MODE_DISABLED
 		enemy.setup(canonical_data, player, boss)
 		enemy.global_position = Vector2(index * 170, 0)
 		add_child(enemy)
@@ -96,7 +100,7 @@ func _run() -> void:
 		enemy.movement_facing = Vector2.RIGHT
 		enemy.velocity = Vector2.RIGHT * 50.0
 		visual._process(0.12)
-		assert(visual.current_state == "walk" and visual.current_direction == 2 and sprite.texture.get_size() == Vector2(expected_frame.x * 6, expected_frame.y * 8), "%s移动动作错误" % monster_name)
+		assert(visual.current_state == "walk" and visual.current_direction == 2 and sprite.texture.get_size() == Vector2(expected_frame.x * 6, expected_frame.y * 8), "%s移动动作错误 physics=%s sleeping=%s motion=%s" % [monster_name, enemy.is_physics_processing(), enemy._background_deep_sleeping, visual.hc_m30_motion_snapshot()])
 		visual.play_attack()
 		visual._process(0.02)
 		assert(visual.current_state == "attack" and sprite.texture.get_size() == Vector2(expected_frame.x * 6, expected_frame.y * 8), "%s攻击动作错误" % monster_name)

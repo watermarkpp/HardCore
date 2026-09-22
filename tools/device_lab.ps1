@@ -12,6 +12,8 @@ param(
     [string]$Checkpoint = '',
     [string]$Nonce = '',
     [string]$OutputPath = '',
+    [ValidateSet('full', 'frame_only')]
+    [string]$DetailMode = 'full',
     [ValidateRange(1, 120)]
     [int]$TimeoutSeconds = 20,
     [string]$Adb = 'adb'
@@ -349,6 +351,7 @@ switch ($Action) {
             action = $allowAction
             allowlist = @('device_lab.v1', $allowAction)
         }
+        if ($allowAction -eq 'reset_diagnostics') { $command['detailMode'] = $DetailMode }
         Push-Command -Command $command
     }
 }

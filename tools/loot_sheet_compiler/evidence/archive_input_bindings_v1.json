@@ -1,0 +1,344 @@
+{
+  "contract_id": "hardcore.loot_sheet.archive_inputs.v1",
+  "source_workbook_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
+  "source_normalized_sha256": {
+    "tools/loot_sheet_compiler/evidence/workbook_rows_4883.json": "2b67cc2396d271380fd7366f938638143de2d69d9650d256cfa63a14fafc4ecd",
+    "tools/loot_sheet_compiler/evidence/workbook_summary.json": "dfe32350e726b1f57831c473c98fb57b731673b51f20c073dc36cdefe17b7c57",
+    "tools/loot_sheet_compiler/evidence/sheet_coverage_126.json": "e9ecec9e9bedf50927fc3c26bd815a6312ec0bf38f8ce9617f8924f450fcbbe0",
+    "tools/loot_sheet_compiler/evidence/SOURCE_BINDINGS.json": "c8d41fd10e52c6b87d665a33959c490e5865e5c6afd4529a4e4243b1fb23d4b7",
+    "tools/loot_sheet_compiler/evidence/03_合并独立槽320行_待绑定完整UID.csv": "e137f78936fc1717245a4d5aa3774edc9ef6ff38c6e4adbb0a1156e902b7a2f3",
+    "tools/loot_sheet_compiler/evidence/04_五张空表与七条残留.csv": "c71e62e038f613a83dcf3c8ef0943f4c6822367d8d7bc74108b1e472fdd08dcf",
+    "tools/loot_sheet_compiler/evidence/row_to_full_slot_uid_map.v1.json": "8b76c43f45a2c068f8825d7b968e637528e2119db8e16d0d3e12d14d49c81600",
+    "assets/data/drop/dpv2_direct_baseline_v2.json": "a4cd03688418820d4657403da46424ed9bddf0d930d46e4778b54b912555dad7"
+  },
+  "accepted_input_raw_sha256": {
+    "loot_sheet_parsed.json": "c361a3dcbabacedb0cd93cf9b35abac9d7284d75dede0b3e23538e0ddcaa32b8",
+    "row_to_full_slot_uid_map.json": "ad91e747f3e1f92d16581c93d7fb381e0f3f91559a731380ddd2100ea228511d"
+  },
+  "counts": {
+    "archive_rows": 4883,
+    "named_rows": 4876,
+    "residue_rows": 7,
+    "monster_sheets": 126,
+    "empty_sheets": 5,
+    "merged_rows": 320,
+    "nullable_rows": 25,
+    "nullable_fields": 125
+  },
+  "nullable_fields": [
+    {
+      "sheet": "赤月恶魔",
+      "row": 111,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 112,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 113,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 114,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 115,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 116,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 117,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "赤月恶魔",
+      "row": 118,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 82,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 83,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 84,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 85,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 86,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 87,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 88,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 89,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 90,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 91,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 92,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 93,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 94,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 95,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 96,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 97,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    },
+    {
+      "sheet": "祖玛卫士00",
+      "row": 98,
+      "fields": [
+        "item_id",
+        "type",
+        "gold",
+        "composition",
+        "slot_raw"
+      ]
+    }
+  ],
+  "mapping_provenance": {
+    "source": "Accepted row_to_full_slot_uid_map.json output of historical group_merged_rows_v4.ps1; frozen without re-inference.",
+    "historical_modes": {
+      "item_base_all": 317,
+      "base_run_from_rep": 3
+    },
+    "mixed_item_groups": [
+      {
+        "monster_id": 92,
+        "row": 23,
+        "item_ids": [
+          174,
+          200
+        ]
+      },
+      {
+        "monster_id": 94,
+        "row": 23,
+        "item_ids": [
+          174,
+          200
+        ]
+      },
+      {
+        "monster_id": 225,
+        "row": 34,
+        "item_ids": [
+          224,
+          223
+        ]
+      }
+    ],
+    "limitation": "The CSV records representative UIDs only. It cannot independently establish every grouped UID; these explicit accepted mappings preserve the reviewed output, not a new identity inference."
+  },
+  "accepted_compact_json_sha256": {
+    "loot_sheet_parsed.json": "a663a4b6122de93bf0146d6ba9340a2f1ebb4910028953b5b237196bc6f892cb",
+    "row_to_full_slot_uid_map.json": "42f295b2427fd71f1b33c45bac32238312ffbbe1f9d0b6b49a192f2f3113fb9b"
+  },
+  "source_hash_mode": "utf8_lf_text"
+}

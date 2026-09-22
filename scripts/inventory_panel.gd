@@ -90,6 +90,8 @@ var _long_press_opened := false
 var _refresh_pending := false
 var _refresh_execution_count := 0
 var _refresh_scheduled := false
+var _stats_refresh_pending := false
+var _stats_refresh_scheduled := false
 var _layout_initialized := false
 var _layout_apply_count := 0
 var _bag_cells: Array[Control] = []
@@ -133,7 +135,7 @@ func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
 	PlayerState.inventory_changed.connect(_on_inventory_data_changed)
 	PlayerState.equipment_changed.connect(_on_equipment_data_changed)
-	PlayerState.profile_changed.connect(_refresh_character_stats)
+	PlayerState.profile_changed.connect(_on_profile_changed)
 	_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
 	refresh()
 	_continue_bag_cell_initialization.call_deferred()
@@ -484,6 +486,8 @@ func _on_visibility_changed() -> void:
 		_refresh_pending = true
 	if _refresh_pending:
 		refresh()
+	elif _stats_refresh_pending:
+		_refresh_character_stats()
 	# A panel can be kept alive while HUD toggles it.  Action feedback (for
 	# example, "丢弃 1 个物品格") is intentionally transient; a later open must
 	# not expose that result as if it were the currently selected item detail.
@@ -577,9 +581,28 @@ func _refresh_equipment_slots() -> void:
 	_ui_sync_empty_destinations()
 
 
+func _on_profile_changed() -> void:
+	_stats_refresh_pending = true
+	if not is_visible_in_tree() or _stats_refresh_scheduled:
+		return
+	_stats_refresh_scheduled = true
+	_flush_queued_stats_refresh.call_deferred()
+
+
+func _flush_queued_stats_refresh() -> void:
+	_stats_refresh_scheduled = false
+	if not _stats_refresh_pending or not is_visible_in_tree():
+		return
+	# A scheduled full refresh already includes these statistics.
+	if _refresh_scheduled:
+		return
+	_refresh_character_stats()
+
+
 func _refresh_character_stats() -> void:
 	if equipment_stats_label == null:
 		return
+	_stats_refresh_pending = false
 	if character_attribute_help != null:
 		character_attribute_help.dismiss()
 	if character_identity_help != null:
@@ -1522,10 +1545,6 @@ func _on_discard_pressed() -> void:
 func _show_inventory_action_result(button: Button, success: bool, group: String) -> void:
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
-	# Synchronous inventory mutations can finish in the same input frame.  Keep
-	# the busy cue on screen for one rendered frame before presenting the result.
-	if is_inside_tree():
-		await get_tree().process_frame
 	if serial != _action_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
 		return
 	GothicUIThemeScript.set_button_feedback(
@@ -1533,7 +1552,7 @@ func _show_inventory_action_result(button: Button, success: bool, group: String)
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
 		group,
 	)
-	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS if success else GothicUIThemeScript.BUTTON_RESULT_FAILURE_SECONDS).timeout.connect(func() -> void:
 		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

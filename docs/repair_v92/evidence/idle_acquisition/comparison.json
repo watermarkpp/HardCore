@@ -1,0 +1,718 @@
+{
+  "functional_status": "PASS",
+  "phone_fps_status": "NOT_RUN",
+  "method": "Unchanged density fixture, 12 engaged + 50 idle, 240 physics frames, near/far twice each; frozen prior runs retained.",
+  "limitation": "Headless only; wall-clock p95 includes scheduling. Older/newer runs are not interleaved, so small differences do not prove total FPS benefit.",
+  "density": [
+    {
+      "distance": "near",
+      "before": {
+        "p95_ms_runs": [
+          10.861,
+          11.071
+        ],
+        "p95_ms_median": 10.966000000000001,
+        "background_usec_runs": [
+          10922,
+          10628
+        ],
+        "background_calls_runs": [
+          750,
+          750
+        ],
+        "background_usec_median": 10775.0,
+        "actor_cpu_usec_per_physics_frame": 2339.2541666666666,
+        "enemy_source_sha256": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79"
+      },
+      "after": {
+        "p95_ms_runs": [
+          10.864,
+          10.39
+        ],
+        "p95_ms_median": 10.627,
+        "background_usec_runs": [
+          8216,
+          8074
+        ],
+        "background_calls_runs": [
+          750,
+          750
+        ],
+        "background_usec_median": 8145.0,
+        "actor_cpu_usec_per_physics_frame": 2266.710416666667,
+        "enemy_source_sha256": "0cbe62cb453ab9ed3d220dffd39e6a295afab222c10b4f28c6dcb8ad80e7c5b5"
+      }
+    },
+    {
+      "distance": "far",
+      "before": {
+        "p95_ms_runs": [
+          10.316,
+          10.493
+        ],
+        "p95_ms_median": 10.4045,
+        "background_usec_runs": [
+          10733,
+          10553
+        ],
+        "background_calls_runs": [
+          750,
+          750
+        ],
+        "background_usec_median": 10643.0,
+        "actor_cpu_usec_per_physics_frame": 2246.522916666667,
+        "enemy_source_sha256": "b01bbb2441c8fd0750e148b29835d3af4cdecfc40609d49dbd6851009d6ead79"
+      },
+      "after": {
+        "p95_ms_runs": [
+          10.788,
+          10.431
+        ],
+        "p95_ms_median": 10.6095,
+        "background_usec_runs": [
+          8099,
+          7936
+        ],
+        "background_calls_runs": [
+          750,
+          750
+        ],
+        "background_usec_median": 8017.5,
+        "actor_cpu_usec_per_physics_frame": 2234.95,
+        "enemy_source_sha256": "0cbe62cb453ab9ed3d220dffd39e6a295afab222c10b4f28c6dcb8ad80e7c5b5"
+      }
+    }
+  ],
+  "formal_black": [
+    {
+      "frame_ms": {
+        "max": 12.564,
+        "p50": 6.901,
+        "p95": 11.258,
+        "samples": 578
+      },
+      "counts": {
+        "alive": 62,
+        "deep_sleep": 46,
+        "moving": 8,
+        "observed": 16,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 16,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 16,
+        "visual_processing": 62,
+        "within_2_gu": 6
+      },
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "actor_cpu_usec": 726542,
+      "enemy_source_sha256": "0cbe62cb453ab9ed3d220dffd39e6a295afab222c10b4f28c6dcb8ad80e7c5b5"
+    },
+    {
+      "frame_ms": {
+        "max": 14.284,
+        "p50": 6.902,
+        "p95": 11.578,
+        "samples": 577
+      },
+      "counts": {
+        "alive": 62,
+        "deep_sleep": 46,
+        "moving": 9,
+        "observed": 16,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 16,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 16,
+        "visual_processing": 62,
+        "within_2_gu": 5
+      },
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "actor_cpu_usec": 786318,
+      "enemy_source_sha256": "0cbe62cb453ab9ed3d220dffd39e6a295afab222c10b4f28c6dcb8ad80e7c5b5"
+    }
+  ],
+  "runs": [
+    {
+      "raw": "density_idle_gate_near_1.json",
+      "runner": "runner_results_adhoc_20260922_205429_211_22560.json",
+      "artifacts": [
+        {
+          "file": "density_idle_gate_near_1.json",
+          "sha256": "7de1e50970494a73967b67fd0c1ef57807342b302a08c774d95aafe825926c65"
+        },
+        {
+          "file": "density_idle_gate_near_1.console.log",
+          "sha256": "4baf70988a9cdb50fb28b3127b3f80d0a62fa1c4764aef196a8aff24dc9175c9"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205429_211_22560.json",
+          "sha256": "2f99443bb519e0a2de2b7ed6ad8f8c54d6308214d374727c7878e5ee52c71cd2"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_gate_near_2.json",
+      "runner": "runner_results_adhoc_20260922_205512_019_22560.json",
+      "artifacts": [
+        {
+          "file": "density_idle_gate_near_2.json",
+          "sha256": "6aeb368a289a651b79cfd629ef640e1a0ee82a44aeb4f82e3ee3e0f5a14a1ac6"
+        },
+        {
+          "file": "density_idle_gate_near_2.console.log",
+          "sha256": "3b953720c3c493412e14db79cc08252f9aba4b686f3d61e8d431f2c003d42d07"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205512_019_22560.json",
+          "sha256": "f7dd45d90c2c1a4983f465e8c9082e8f05b19543fb6d9ccdcdbb4e3bd84159c6"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_gate_far_1.json",
+      "runner": "runner_results_adhoc_20260922_205443_569_22560.json",
+      "artifacts": [
+        {
+          "file": "density_idle_gate_far_1.json",
+          "sha256": "7d3fbfccbf2540a1c7af90a86ed9fbadfeaf3e221f019af94dc7e5599bfa03b2"
+        },
+        {
+          "file": "density_idle_gate_far_1.console.log",
+          "sha256": "55ab7db4fed48ddb4e21a2459a03c2340e232be5ce76efb669bbead074f4a93f"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205443_569_22560.json",
+          "sha256": "15b927f57e51c4a62dbeb2da2898e46da1ec71f24d93bbe8e460198041bc227a"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_gate_far_2.json",
+      "runner": "runner_results_adhoc_20260922_205457_884_22560.json",
+      "artifacts": [
+        {
+          "file": "density_idle_gate_far_2.json",
+          "sha256": "6b3fb3797a0601bddfbf8167856fac6f5e16db9c397fe2c50b26125162473b99"
+        },
+        {
+          "file": "density_idle_gate_far_2.console.log",
+          "sha256": "3cadff3dd036386f1813b208bf15e28bbdaf437b6f0515b5b7e6b68700c6d9b8"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205457_884_22560.json",
+          "sha256": "5fb0533ddc05692b60a4c78c45f29d95fd563b5994722cd91e20ccb1e3aba202"
+        }
+      ]
+    },
+    {
+      "raw": "world_idle_gate_black_1.json",
+      "runner": "runner_results_adhoc_20260922_205611_339_21384.json",
+      "artifacts": [
+        {
+          "file": "world_idle_gate_black_1.json",
+          "sha256": "aab3777cfbc2e78efae605d46a47aeb189e224ecc5e013157fc5163997e596bc"
+        },
+        {
+          "file": "idle_gate_black_1.console.log",
+          "sha256": "ebf50bab3512fa75f5efa5f26ddc82ba3164363e0b1dcaf6f8a7b29551a2bbd6"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205611_339_21384.json",
+          "sha256": "61fa18b3c01af350322854a19dd4689b67f16a2b02edaddccac4285a0f714d95"
+        }
+      ]
+    },
+    {
+      "raw": "world_idle_gate_black_2.json",
+      "runner": "runner_results_adhoc_20260922_205630_946_21384.json",
+      "artifacts": [
+        {
+          "file": "world_idle_gate_black_2.json",
+          "sha256": "e2792c65c5c90ef0badd2c987ed93d201ca0991929cb1b981fade4c68410fbaf"
+        },
+        {
+          "file": "idle_gate_black_2.console.log",
+          "sha256": "68f894b70e85969a9fc8a7f13f2bb52bc49c8dab40f01cd9a9422c7d1fbf06ea"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205630_946_21384.json",
+          "sha256": "7c04b0e7f248ebe1fb7d6a89b5069ca6313770ca5cfd1ceabc678c0e2faf4ffc"
+        }
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "classification": "FAIL: fixture attempted to override a static projection helper",
+      "result": {
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "engine_log_errors": 2,
+        "suite": "adhoc",
+        "passed": 0,
+        "generated_at": "2026-09-22T20:46:04.9097944+08:00",
+        "results": [
+          {
+            "test_name": "monster_idle_acquisition_budget_test",
+            "test_path": "tests/monster_idle_acquisition_budget_test.tscn",
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 2,
+            "engine_log_failure_count": 2,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+          }
+        ],
+        "total": 1,
+        "failed": 1
+      },
+      "artifacts": [
+        {
+          "file": "idle_acquisition_red.console.log",
+          "sha256": "16ce102cd7d4f231c7b5c4b77ad3437445ee89ec239a6cd8304ad7dff6390316"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_204604_909_13496.json",
+          "sha256": "5be1a1da1591046d06597aa185989a20eb2b59585399cbd0dcb0cc806713ad64"
+        }
+      ]
+    },
+    {
+      "classification": "FAIL: before production repair, 100 unnecessary safety/threat queries",
+      "result": {
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "total": 1,
+        "results": [
+          {
+            "test_name": "monster_idle_acquisition_budget_test",
+            "test_path": "tests/monster_idle_acquisition_budget_test.tscn",
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          }
+        ],
+        "generated_at": "2026-09-22T20:46:40.7790470+08:00",
+        "engine_log_errors": 1,
+        "passed": 0,
+        "suite": "adhoc",
+        "failed": 1
+      },
+      "artifacts": [
+        {
+          "file": "idle_acquisition_valid_red.console.log",
+          "sha256": "d79b27f97ed8232b17d3ac9e42857b0410470581fafd8cb6906d0ce87608ede0"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_204640_778_19724.json",
+          "sha256": "a17004d782506cdcd46d7708adf509aa340042c7859397c7dfebc31ff0e9639c"
+        }
+      ]
+    },
+    {
+      "classification": "FAIL: fixture overlapped player at spawn; original acquisition/cache tests PASS",
+      "result": {
+        "total": 3,
+        "engine_log_errors": 1,
+        "failed": 1,
+        "results": [
+          {
+            "test_name": "monster_idle_acquisition_budget_test",
+            "test_path": "tests/monster_idle_acquisition_budget_test.tscn",
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          },
+          {
+            "test_name": "monster_target_acquisition_test",
+            "test_path": "tests/monster_target_acquisition_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_retarget_spatial_cache_test",
+            "test_path": "tests/monster_retarget_spatial_cache_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "passed": 2,
+        "generated_at": "2026-09-22T20:48:38.4330433+08:00",
+        "suite": "adhoc"
+      },
+      "artifacts": [
+        {
+          "file": "idle_acquisition_green.console.log",
+          "sha256": "0ea25dfd6b401e4ac1ba55dab4df091b9ee7aa0c073613064c2eed3eca9e0c6e"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_204838_432_11052.json",
+          "sha256": "a05e205fcb0a80fdea61ddbd3ed5dcfa75f93214285a7dd2771f54c4fb957ea7"
+        }
+      ]
+    },
+    {
+      "classification": "PASS: exact boundary, threat, safety and real timer wake",
+      "result": {
+        "results": [
+          {
+            "test_name": "monster_idle_acquisition_budget_test",
+            "test_path": "tests/monster_idle_acquisition_budget_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "engine_log_errors": 0,
+        "generated_at": "2026-09-22T20:49:27.2079282+08:00",
+        "suite": "adhoc",
+        "failed": 0,
+        "total": 1,
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "passed": 1
+      },
+      "artifacts": [
+        {
+          "file": "idle_acquisition_green_fixed_fixture.console.log",
+          "sha256": "2df8b4cebd2d63b6f507159b2d095b017d31a9e7acb0de026afedfc2eebdbeff"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_204927_207_6516.json",
+          "sha256": "849e3a9706a44c365637950b64df477705543e75aed2564d7bd2acd961592b5a"
+        }
+      ]
+    },
+    {
+      "classification": "8 PASS / 1 FAIL: baseline projection-counter expectation",
+      "result": {
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "passed": 8,
+        "failed": 1,
+        "total": 9,
+        "generated_at": "2026-09-22T20:51:34.3473230+08:00",
+        "suite": "adhoc",
+        "results": [
+          {
+            "test_name": "monster_idle_acquisition_budget_test",
+            "test_path": "tests/monster_idle_acquisition_budget_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_target_acquisition_test",
+            "test_path": "tests/monster_target_acquisition_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_retarget_spatial_cache_test",
+            "test_path": "tests/monster_retarget_spatial_cache_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_runtime_density_performance_test",
+            "test_path": "tests/monster_runtime_density_performance_test.tscn",
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          },
+          {
+            "test_name": "monster_crowd_performance_test",
+            "test_path": "tests/monster_crowd_performance_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_threat_animation_test",
+            "test_path": "tests/monster_threat_animation_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_natural_regen_policy_test",
+            "test_path": "tests/monster_natural_regen_policy_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "safe_zone_spatial_runtime_test",
+            "test_path": "tests/safe_zone_spatial_runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "w1_special_delivery_runtime_test",
+            "test_path": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "engine_log_errors": 1
+      },
+      "artifacts": [
+        {
+          "file": "idle_acquisition_regression.console.log",
+          "sha256": "2b1266d91459d82732426dff584268f84e7f2ccd2d706d11e45b94ef7762a92d"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205134_347_6336.json",
+          "sha256": "bb13b4baffb9b48639ee0c81f9e80cc7e8b5837e575e6fa772ca06544b4606d4"
+        }
+      ]
+    },
+    {
+      "classification": "FAIL: same projection-counter failure on unchanged b961 production",
+      "result": {
+        "results": [
+          {
+            "test_name": "monster_runtime_density_performance_test",
+            "test_path": "tests/monster_runtime_density_performance_test.tscn",
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          }
+        ],
+        "total": 1,
+        "failed": 1,
+        "engine_log_errors": 1,
+        "generated_at": "2026-09-22T20:51:55.6777858+08:00",
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "suite": "adhoc",
+        "passed": 0
+      },
+      "artifacts": [
+        {
+          "file": "idle_density_baseline_repro.console.log",
+          "sha256": "322a34d5983a41dc606adb938f9ba88cb84f507bfb868bb1386290929ae6ee24"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205155_677_5608.json",
+          "sha256": "ecc5977dbce4500306540d5f8ab9950cff670bca30feaec0b0dc47f17ec83171"
+        }
+      ]
+    },
+    {
+      "classification": "4 PASS: density fixture repaired plus HC runtime/world obstacle/magic target",
+      "result": {
+        "engine_log_errors": 0,
+        "generated_at": "2026-09-22T20:53:52.1244585+08:00",
+        "passed": 4,
+        "results": [
+          {
+            "test_name": "monster_runtime_density_performance_test",
+            "test_path": "tests/monster_runtime_density_performance_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "runtime_test",
+            "test_path": "tests/hc_monster_ai/runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "world_obstacle_runtime_test",
+            "test_path": "tests/hc_monster_ai/world_obstacle_runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_target_magic_attack_test",
+            "test_path": "tests/monster_target_magic_attack_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "suite": "adhoc",
+        "failed": 0,
+        "total": 4
+      },
+      "artifacts": [
+        {
+          "file": "idle_acquisition_followup.console.log",
+          "sha256": "1111228c2ae7fcae5edbec712309682d51eeae6f8f9b509aaba9cb168e4d31e1"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_205352_124_14780.json",
+          "sha256": "4480061240f8d164223410ec513ed10588674918b81774d5aff8babcf74aec0a"
+        }
+      ]
+    }
+  ]
+}

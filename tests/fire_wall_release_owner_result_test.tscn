@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/fire_wall_release_owner_result_test.gd" id="1"]
+
+[node name="FireWallReleaseOwnerResultTest" type="Node"]
+script = ExtResource("1")

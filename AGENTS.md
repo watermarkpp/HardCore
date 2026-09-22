@@ -7,7 +7,7 @@ HardCore 采用单主控、串行工程模式。
 - 当前 Astra/Codex 是任务唯一工程负责人，端到端负责范围、权威源、生产路径、根因、架构、实现、测试、失败分类、自审、集成和最终验收。
 - 优先使用 `gpt-6-astra`，保留用户当前 `high` 或更高推理设置；仅在具体难点需要时提高推理强度。`AGENTS.md` 不能切换实际模型，目标模型不可用时必须如实说明。
 - 禁止创建并行工程代理、agent swarm 或 reviewer agent；禁止把根因、架构、实现、测试裁决或最终审查交给其他模型。
-- 唯一外部模型例外是通过浏览器操作的 Volcengine Ark Agent Plan `GLM-5.3-Flash`。它只能执行高工作量、低推理、只读、可复核的机械任务，不是第二工程负责人。
+- 唯一外部模型例外是通过浏览器操作的 Volcengine Ark Agent Plan `GLM-5.3-Flash`。用户已授权 Astra 自主使用 DeepSeek Harness Web UI；这里的 DeepSeek 是 Harness 界面名称，实际模型必须是 `GLM-5.3-Flash`，不等于授权 DeepSeek 模型。GLM 只能执行高工作量、低推理、只读、可复核的机械任务，不是第二工程负责人。
 - 未经用户明确授权，不新增第三方模型 provider、worker、直连脚本或凭据。DeepSeek 模型、worker、直连脚本及凭据仍然禁止。
 
 完整工程闭环：
@@ -50,7 +50,7 @@ HardCore 采用单主控、串行工程模式。
 
 ### 4.1 调用方式
 
-- 仅由 Astra 主控通过浏览器打开项目已授权的 GLM 工作台/Harness，并明确选择 `GLM-5.3-Flash` 与只读模式。
+- 仅由 Astra 主控通过浏览器打开项目已授权的 GLM 工作台或 DeepSeek Harness Web UI，并核实实际连接模型为 `GLM-5.3-Flash`、任务为只读模式；满足本节条件时无需逐次请求用户授权。
 - 不再使用 GLM CLI、`codex exec --profile arkcli`、直连 API 或自建 worker 作为本项目默认入口。
 - 同一时间只运行一个 GLM 任务；禁止并行 GLM worker 或扫描 swarm。
 - 每次任务必须给出精确范围、只读限制、排除路径、期望字段和输出格式。优先精确搜索，其次有界扫描，确有必要才全仓扫描。

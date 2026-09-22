@@ -22,9 +22,13 @@ if ([string]::IsNullOrWhiteSpace($OutputDir)) {
 }
 $rv = Join-Path $ScriptDir 'evidence'
 
-$doc = Get-Content (Join-Path $ProjectRoot 'outputs\tmp_loot_sheet\loot_sheet_parsed.json') -Raw | ConvertFrom-Json
+# Recreate compiler inputs from the sealed, versioned workbook evidence.
+# A clean checkout must not depend on an earlier machine's outputs or TEMP.
+$preparedInputDir = Join-Path $OutputDir 'source_inputs'
+& (Join-Path $ScriptDir 'prepare_archive_inputs.ps1') -ProjectRoot $ProjectRoot -OutputDir $preparedInputDir
+$doc = Get-Content (Join-Path $preparedInputDir 'loot_sheet_parsed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $db = Get-Content (Join-Path $ProjectRoot 'assets\data\drop\dpv2_direct_baseline_v2.json') -Raw | ConvertFrom-Json
-$grp = Get-Content (Join-Path $ProjectRoot 'outputs\tmp_loot_sheet\row_to_full_slot_uid_map.json') -Raw | ConvertFrom-Json
+$grp = Get-Content (Join-Path $preparedInputDir 'row_to_full_slot_uid_map.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $equ = Get-Content (Join-Path $ProjectRoot 'assets\data\equipment_attribute_master.json') -Raw | ConvertFrom-Json
 
 # workbook sha: real workbook when provided, otherwise the versioned archive
@@ -252,6 +256,152 @@ foreach ($m in $monstersOut) {
 $overlayTotal = [int]$overlayInput.summary.user_directive_overlay_slots
 if ($overlayApplied -ne $overlayTotal) { $overlayConflicts += "OVERLAY-TALLY-MISMATCH applied=$overlayApplied expected=$overlayTotal" }
 
+# The archived sheet remains immutable input. This explicit, versioned user
+# correction removes only the sealed armor slot UIDs after sheet/overlay build.
+# Archived row/group expansion must not reconstruct a second independent draw
+# after the user's deletion. Output aliases identify the exact retained armor;
+# they do not authorize restoring either a deleted row or another source slot.
+$armorDirectivePath = Join-Path $rv 'armor_single_slot_directive_v92.json'
+$armorDirective = Get-Content -LiteralPath $armorDirectivePath -Raw | ConvertFrom-Json
+function Assert-ArmorDirective([bool]$Condition, [string]$Message) {
+    if (-not $Condition) { throw "ARMOR_SINGLE_SLOT_DIRECTIVE_REJECTED: $Message" }
+}
+function Get-CanonicalSlotJson($Slot) {
+    $names = if ($Slot -is [System.Collections.IDictionary]) { @($Slot.Keys | Sort-Object) } else { @($Slot.PSObject.Properties.Name | Sort-Object) }
+    $value = [ordered]@{}
+    foreach ($name in $names) { $value[$name] = $Slot.$name }
+    return ($value | ConvertTo-Json -Depth 8 -Compress)
+}
+function Get-TextSha256([string]$Text) {
+    $hasher = [System.Security.Cryptography.SHA256]::Create()
+    try { return ([System.BitConverter]::ToString($hasher.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($Text)))).Replace('-', '').ToLowerInvariant() }
+    finally { $hasher.Dispose() }
+}
+Assert-ArmorDirective ($armorDirective.schema -eq 'hardcore.loot.armor_single_slot_directive.v1') 'schema mismatch'
+Assert-ArmorDirective ($armorDirective.directive_id -eq 'armor.single_slot.user.20260922.v92') 'directive ID mismatch'
+$armorMasterPath = Join-Path $ProjectRoot ([string]$armorDirective.identity_basis.equipment_master_path)
+$armorPairPath = Join-Path $ProjectRoot ([string]$armorDirective.identity_basis.female_pair_evidence_path)
+Assert-ArmorDirective ($armorDirective.identity_basis.sha256_scope -eq 'utf8_lf_text') 'identity hash scope mismatch'
+Assert-ArmorDirective ((Get-TextSha256 ([IO.File]::ReadAllText($armorMasterPath).Replace("`r`n", "`n"))) -eq $armorDirective.identity_basis.equipment_master_sha256) 'equipment master changed; review exact IDs before recompiling'
+Assert-ArmorDirective ((Get-TextSha256 ([IO.File]::ReadAllText($armorPairPath).Replace("`r`n", "`n"))) -eq $armorDirective.identity_basis.female_pair_evidence_sha256) 'female pairing evidence changed'
+$armorPairEvidence = Get-Content -LiteralPath $armorPairPath -Raw | ConvertFrom-Json
+$armorMasterById = @{}
+foreach ($record in $equ.records) {
+    if ([string]$record.category -eq [string]$armorDirective.identity_basis.armor_category) { $armorMasterById[[int]$record.itemId] = $record }
+}
+$armorOutputBySource = @{}
+foreach ($identity in $armorDirective.armor_output_identities) {
+    $sourceId = [int]$identity.source_item_id
+    $outputId = [int]$identity.output_item_id
+    Assert-ArmorDirective (-not $armorOutputBySource.ContainsKey($sourceId)) "duplicate armor identity $sourceId"
+    Assert-ArmorDirective ($armorMasterById.ContainsKey($sourceId) -and $armorMasterById.ContainsKey($outputId)) "unknown armor identity $sourceId -> $outputId"
+    $sourceRecord = $armorMasterById[$sourceId]
+    $outputRecord = $armorMasterById[$outputId]
+    Assert-ArmorDirective ($sourceRecord.name -ceq $identity.source_name -and $sourceRecord.genderRestriction -ceq $identity.source_gender -and $outputRecord.name -ceq $identity.output_name) "armor identity metadata mismatch $sourceId"
+    if ([string]$sourceRecord.genderRestriction -eq 'female') {
+        $pairProperty = $armorPairEvidence.records.PSObject.Properties[[string]$sourceId]
+        Assert-ArmorDirective ($null -ne $pairProperty -and [int]$pairProperty.Value.pairedPrimary.itemId -eq $outputId) "unproven female pairing $sourceId"
+    } else {
+        Assert-ArmorDirective ($sourceId -eq $outputId -and [string]$sourceRecord.genderRestriction -eq 'male') "invalid male armor identity $sourceId"
+    }
+    $armorOutputBySource[$sourceId] = $outputId
+}
+Assert-ArmorDirective ($armorOutputBySource.Count -eq $armorMasterById.Count -and $armorOutputBySource.Count -eq 24) 'armor identity coverage mismatch'
+$armorMonsters = @{}
+$armorBeforeByMonster = @{}
+$armorBeforeTotal = 0
+$armorNonArmorBefore = New-Object System.Collections.Generic.List[string]
+foreach ($m in $monstersOut) {
+    $mid = [int]$m.monster_id
+    Assert-ArmorDirective (-not $armorMonsters.ContainsKey($mid)) "duplicate monster $mid"
+    $armorMonsters[$mid] = $m
+    $armorBeforeByMonster[$mid] = @($m.slots | ForEach-Object { [string]$_.slot_uid })
+    $armorBeforeTotal += $m.slots.Count
+    foreach ($slot in $m.slots) {
+        if (-not $armorOutputBySource.ContainsKey([int]$slot.canonical_item_id)) { $armorNonArmorBefore.Add("$mid|$(Get-CanonicalSlotJson $slot)") }
+    }
+}
+Assert-ArmorDirective ($armorBeforeTotal -eq [int]$armorDirective.summary.before_total_slots) 'pre-directive slot count mismatch'
+$armorExceptions = @{}
+$expectedExceptionSources = @{ 235 = 140; 236 = 144; 237 = 142; 238 = 141; 239 = 145; 240 = 143 }
+foreach ($exception in $armorDirective.frozen_exceptions) {
+    $mid = [int]$exception.monster_id
+    $sourceId = [int]$exception.source_item_id
+    Assert-ArmorDirective ($expectedExceptionSources.ContainsKey($mid) -and $expectedExceptionSources[$mid] -eq $sourceId) "unapproved exception $mid/$sourceId"
+    Assert-ArmorDirective (-not $armorExceptions.ContainsKey($mid) -and @($exception.expected_slots).Count -eq 1) "duplicate or malformed exception $mid"
+    Assert-ArmorDirective ($armorMonsters.ContainsKey($mid)) "exception monster missing $mid"
+    $actual = @($armorMonsters[$mid].slots | Where-Object { [int]$_.canonical_item_id -eq $sourceId })
+    Assert-ArmorDirective ($actual.Count -eq 1 -and (Get-CanonicalSlotJson $actual[0]) -ceq (Get-CanonicalSlotJson $exception.expected_slots[0])) "frozen exception changed $mid/$sourceId"
+    Assert-ArmorDirective ([int]$exception.output_item_id -eq $armorOutputBySource[$sourceId]) "exception output mismatch $mid"
+    $armorExceptions[$mid] = [string]$actual[0].slot_uid
+}
+Assert-ArmorDirective ($armorExceptions.Count -eq 6) 'six dark-boss exception coverage mismatch'
+$armorRemoveUids = @{}
+$armorGroupKeys = @{}
+foreach ($group in $armorDirective.groups) {
+    $mid = [int]$group.monster_id
+    $outputId = [int]$group.output_item_id
+    $groupKey = "$mid|$outputId"
+    Assert-ArmorDirective (-not $armorGroupKeys.ContainsKey($groupKey) -and $armorMonsters.ContainsKey($mid)) "duplicate/unknown directive group $groupKey"
+    $armorGroupKeys[$groupKey] = $true
+    $actualSlots = @($armorMonsters[$mid].slots | Where-Object { $armorOutputBySource.ContainsKey([int]$_.canonical_item_id) -and $armorOutputBySource[[int]$_.canonical_item_id] -eq $outputId })
+    Assert-ArmorDirective ($actualSlots.Count -gt 1 -and $actualSlots.Count -eq @($group.expected_slots).Count) "directive group cardinality mismatch $groupKey"
+    for ($index = 0; $index -lt $actualSlots.Count; $index++) {
+        Assert-ArmorDirective ((Get-CanonicalSlotJson $actualSlots[$index]) -ceq (Get-CanonicalSlotJson $group.expected_slots[$index])) "slot identity/probability/order drift $groupKey index=$index"
+    }
+    $maleCandidates = @($actualSlots | Where-Object { [int]$_.canonical_item_id -eq $outputId -and [string]$armorMasterById[[int]$_.canonical_item_id].genderRestriction -eq 'male' })
+    $retained = if ($maleCandidates.Count -gt 0) { $maleCandidates[0] } else { $actualSlots[0] }
+    Assert-ArmorDirective ([string]$retained.slot_uid -ceq [string]$group.keep_slot_uid) "retained slot violates approved policy $groupKey"
+    $removeSet = @{}
+    foreach ($uid in $group.remove_slot_uids) {
+        Assert-ArmorDirective (-not $removeSet.ContainsKey([string]$uid) -and -not $armorRemoveUids.ContainsKey([string]$uid)) "duplicate removal UID $uid"
+        $removeSet[[string]$uid] = $true
+        $armorRemoveUids[[string]$uid] = $mid
+    }
+    Assert-ArmorDirective ($removeSet.Count -eq $actualSlots.Count - 1 -and -not $removeSet.ContainsKey([string]$retained.slot_uid)) "invalid removal set $groupKey"
+    foreach ($slot in $actualSlots) {
+        Assert-ArmorDirective ([long]$slot.final_numerator -eq [long]$retained.final_numerator -and [long]$slot.final_denominator -eq [long]$retained.final_denominator -and [int]$slot.overflow_priority -eq [int]$retained.overflow_priority -and [bool]$slot.protected_drop -eq [bool]$retained.protected_drop) "different probability or selection policy needs review $groupKey"
+        Assert-ArmorDirective ([string]$slot.slot_uid -eq [string]$retained.slot_uid -or $removeSet.ContainsKey([string]$slot.slot_uid)) "unlisted source slot $groupKey"
+        Assert-ArmorDirective (-not $armorExceptions.ContainsValue([string]$slot.slot_uid)) "frozen dark-boss slot listed for removal $groupKey"
+    }
+}
+Assert-ArmorDirective ($armorGroupKeys.Count -eq [int]$armorDirective.summary.duplicate_groups -and $armorRemoveUids.Count -eq [int]$armorDirective.summary.removed_slots) 'directive tally mismatch'
+$armorRemoved = 0
+$armorAfterTotal = 0
+$armorNonArmorAfter = New-Object System.Collections.Generic.List[string]
+foreach ($m in $monstersOut) {
+    $mid = [int]$m.monster_id
+    $kept = New-Object System.Collections.Generic.List[object]
+    $outputsSeen = @{}
+    foreach ($slot in $m.slots) {
+        $uid = [string]$slot.slot_uid
+        $sourceId = [int]$slot.canonical_item_id
+        if ($armorRemoveUids.ContainsKey($uid)) {
+            Assert-ArmorDirective ($armorRemoveUids[$uid] -eq $mid -and $armorOutputBySource.ContainsKey($sourceId)) "removal ownership/category mismatch $uid"
+            Assert-ArmorDirective ([string]$slot.origin -eq 'sheet_row') "unexpected removed-slot origin $uid"
+            $armorRemoved++
+            $stat.compiled--
+            continue
+        }
+        $kept.Add($slot)
+        if ($armorOutputBySource.ContainsKey($sourceId)) {
+            $outputId = $armorOutputBySource[$sourceId]
+            Assert-ArmorDirective (-not $outputsSeen.ContainsKey($outputId)) "unresolved duplicate armor $mid/$outputId"
+            $outputsSeen[$outputId] = $true
+        } else { $armorNonArmorAfter.Add("$mid|$(Get-CanonicalSlotJson $slot)") }
+    }
+    $expectedOrder = @($armorBeforeByMonster[$mid] | Where-Object { -not $armorRemoveUids.ContainsKey($_) }) -join '|'
+    Assert-ArmorDirective ((@($kept | ForEach-Object { [string]$_.slot_uid }) -join '|') -ceq $expectedOrder) "remaining slot order changed $mid"
+    $m['slots'] = $kept
+    $armorAfterTotal += $kept.Count
+}
+Assert-ArmorDirective ($armorRemoved -eq [int]$armorDirective.summary.removed_slots -and $armorAfterTotal -eq [int]$armorDirective.summary.after_total_slots) 'applied removal tally mismatch'
+$nonArmorBeforeSha = Get-TextSha256 ($armorNonArmorBefore -join "`n")
+$nonArmorAfterSha = Get-TextSha256 ($armorNonArmorAfter -join "`n")
+Assert-ArmorDirective ($nonArmorBeforeSha -eq $nonArmorAfterSha) 'non-armor slot content/order changed'
+$armorDirectiveSha = ((Get-FileHash -LiteralPath $armorDirectivePath -Algorithm SHA256).Hash).ToLowerInvariant()
+$armorAudit = [ordered]@{ directive_id = [string]$armorDirective.directive_id; directive_sha256 = $armorDirectiveSha; before_slots = $armorBeforeTotal; after_slots = $armorAfterTotal; removed_slots = $armorRemoved; groups = $armorGroupKeys.Count; frozen_exception_slots = $armorExceptions.Count; non_armor_slots = $armorNonArmorAfter.Count; non_armor_before_sha256 = $nonArmorBeforeSha; non_armor_after_sha256 = $nonArmorAfterSha; remaining_slot_order_unchanged = $true }
+
 $out = [ordered]@{
     schema = "hardcore.dpv2.user_loot_sheet_authority.v1"
     authority_id = "dpv2.user_loot_sheet.v1"
@@ -261,7 +411,9 @@ $out = [ordered]@{
         sheet_sha256 = $xlsxSha.ToLower()
         source_mode = $sourceMode
         overlay_input = "tools/loot_sheet_compiler/evidence/user_directive_overlay_slots.json"
-        overlay_source = "user_directive_20260922_九怪精英化与套装掉落"
+        overlay_source = [string]$overlayInput.source
+        armor_single_slot_directive = "tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json"
+        armor_single_slot_directive_sha256 = $armorDirectiveSha
         baseline_commit = "84ab22742eee1589ac105a8ff175da8623778f37"
         probability_contract = "sheet_E_is_final_per_slot_pre_rng_probability_no_spb_no_v5_no_denominator_policy_no_v80_no_v81_no_global_multiplier_no_gold_x5"
         gold_contract = "sheet_D_is_final_gold_amount"
@@ -272,6 +424,9 @@ $out = [ordered]@{
         new_equipment_slots = $stat.newSlots
         fate_blade_slots = $stat.fate
         user_directive_overlay_slots = $overlayApplied
+        armor_single_slot_removed_slots = $armorRemoved
+        armor_single_slot_groups = $armorGroupKeys.Count
+        total_effective_slots = $armorAfterTotal
         excluded_residue_rows = $stat.excludedResidue
         parser_excluded_residue_rows = $residueRows.Count
         residue_rows_source = "evidence/04_五张空表与七条残留.csv"
@@ -341,6 +496,8 @@ New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
 $JsonOut = $out | ConvertTo-Json -Depth 8
 [System.IO.File]::WriteAllText((Join-Path $OutputDir 'dpv2_user_loot_sheet_authority_v1.json'), $JsonOut, [System.Text.UTF8Encoding]::new($false))
 [System.IO.File]::WriteAllText((Join-Path $OutputDir 'compile_disambiguation.json'), ($disambiguated | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText((Join-Path $OutputDir 'armor_single_slot_audit.json'), ($armorAudit | ConvertTo-Json -Depth 4), [System.Text.UTF8Encoding]::new($false))
+Write-Output "ARMOR_SINGLE_SLOT_DIRECTIVE_PASS before=$armorBeforeTotal after=$armorAfterTotal removed=$armorRemoved groups=$($armorGroupKeys.Count) frozen=$($armorExceptions.Count) non_armor_unchanged=$($nonArmorBeforeSha -eq $nonArmorAfterSha)"
 Write-Output "source_mode=$sourceMode sheet_sha=$($xlsxSha.ToLower().Substring(0,16))..."
 Write-Output "disambiguated_uids=$($disambiguated.Count)"
 Write-Output "compiled: named=$($stat.named) slotRows=$($stat.compiled) newSlots=$($stat.newSlots) fate=$($stat.fate) overlay=$overlayApplied excluded=$($stat.excludedResidue) emptySheets=[$emptyNames] monsters=$($monstersOut.Count)"

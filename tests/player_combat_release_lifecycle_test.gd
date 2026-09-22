@@ -106,10 +106,17 @@ func _run() -> void:
 	player_d.current_mp = 100
 	_release_sink(player_d)
 	expect(player_d.request_skill("治愈术"), "D: 施法应被接受")
+	player_d.take_damage(1, true, {}, true)
+	expect(player_d.struck_reaction_snapshot().queued, "D: 释放前受击应排队")
 	remove_child(player_d)
 	add_child(player_d)
 	await get_tree().create_timer(1.2).timeout
 	expect(released_skills.is_empty(), "D: 离树再入树后旧动作不得释放（实际=%s）" % [",".join(released_skills)])
+	expect(not player_d.combat_action_snapshot().active, "D: 已失效动作不得永久占用pending槽")
+	expect(not player_d.struck_reaction_snapshot().queued, "D: 旧生命周期受击队列应清除")
+	player_d.take_damage(1, true, {}, true)
+	expect(player_d.struck_reaction_snapshot().reaction_lock_remaining > 0.0,
+		"D: 重入后的新命中应立即播放受击而非卡在失效动作后")
 	player_d.free()
 
 	# --- Scenario E: W5 multi-release contract still holds (same epoch) ---

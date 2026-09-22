@@ -1,0 +1,869 @@
+{
+  "baseline_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "method": "Same working-tree code, legacy/optimized each twice in reversed order; headless only.",
+  "source_hashes": {
+    "project.godot": "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92",
+    "scripts/enemy.gd": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+    "scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+    "scripts/world_background.gd": "a683896afe805564a864a213943b94444f56ce303a574dd1cd7c0466c8aede54",
+    "scripts/fire_wall_field_controller.gd": "ae9a23092c5d2bc334fb8098d74e035081c5b7ed65927ce2562275c14b8d34d3",
+    "scripts/caster_skill_animation_batch.gd": "e5f8f5199d0d959016915e5958c6a4d86a000ad02f05c6557f0c43ec76972695",
+    "tests/world_crowd_firewall_profile_test.gd": "431982de0ac29363569a665245d69ef325312ce4d038c9f9230deaa466a3997b"
+  },
+  "maps": [
+    {
+      "map_id": 913203,
+      "name": "黑暗地带",
+      "enemy_count": 62,
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "workload_match": "PASS",
+      "physical_environment_sprites": {
+        "legacy": 1022.0,
+        "optimized": 407.0,
+        "change_percent": -60.1761252446184
+      },
+      "enemy_cpu_ms": {
+        "legacy": 858.3154999999999,
+        "optimized": 908.9645,
+        "change_percent": 5.900976971754579
+      },
+      "enemy_cpu_usec_per_call": {
+        "legacy": 223.51966145833333,
+        "optimized": 222.78541666666666,
+        "change_percent": -0.3284922618780661
+      },
+      "headless_p95_ms": {
+        "legacy": 12.0315,
+        "optimized": 12.242,
+        "change_percent": 1.749574034825252,
+        "legacy_runs": [
+          11.959,
+          12.104
+        ],
+        "optimized_runs": [
+          12.181,
+          12.303
+        ]
+      },
+      "legacy_counts": {
+        "bridge_overlay_count": 20,
+        "logical_static": 343,
+        "logical_total": 1002,
+        "logical_y_sort": 659,
+        "static_chunk_count": 0,
+        "static_other_count": 18,
+        "static_sprite_count": 343,
+        "static_wall_shadow_count": 325,
+        "visible_bridge_overlay_count": 11,
+        "visible_dynamic_children": 313,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 12,
+        "visible_unique_texture_count": 151,
+        "visible_unique_wall_texture_count": 135,
+        "visible_wall_base_count": 158,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 155,
+        "visible_wall_shadow_count": 155,
+        "visible_wrappers": 158,
+        "wrapper_count": 334,
+        "wrapper_dynamic_children": 659
+      },
+      "optimized_counts": {
+        "bridge_overlay_count": 20,
+        "logical_static": 343,
+        "logical_total": 1002,
+        "logical_y_sort": 659,
+        "static_chunk_count": 35,
+        "static_other_count": 18,
+        "static_sprite_count": 18,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 11,
+        "visible_dynamic_children": 158,
+        "visible_static_chunk_count": 23,
+        "visible_static_other_count": 12,
+        "visible_unique_texture_count": 41,
+        "visible_unique_wall_texture_count": 4,
+        "visible_wall_base_count": 3,
+        "visible_wall_composite_count": 155,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 158,
+        "wrapper_count": 334,
+        "wrapper_dynamic_children": 334
+      },
+      "damage_application_counts": {
+        "legacy": [
+          53,
+          53
+        ],
+        "optimized": [
+          53,
+          53
+        ]
+      }
+    },
+    {
+      "map_id": 913207,
+      "name": "死亡棺材",
+      "enemy_count": 71,
+      "layout_sha256": "ed1ab91e8b4d30e3436b0aa185cb208e2d6b9b3c5afa252957f346f9412607cd",
+      "workload_match": "PASS",
+      "physical_environment_sprites": {
+        "legacy": 1018.0,
+        "optimized": 407.0,
+        "change_percent": -60.019646365422396
+      },
+      "enemy_cpu_ms": {
+        "legacy": 665.2560000000001,
+        "optimized": 680.0395000000001,
+        "change_percent": 2.2222272328246584
+      },
+      "enemy_cpu_usec_per_call": {
+        "legacy": 184.79333333333335,
+        "optimized": 188.8998611111111,
+        "change_percent": 2.222227232824636
+      },
+      "headless_p95_ms": {
+        "legacy": 10.799,
+        "optimized": 10.9175,
+        "change_percent": 1.0973238262802276,
+        "legacy_runs": [
+          10.708,
+          10.89
+        ],
+        "optimized_runs": [
+          10.857,
+          10.978
+        ]
+      },
+      "legacy_counts": {
+        "bridge_overlay_count": 19,
+        "logical_static": 342,
+        "logical_total": 999,
+        "logical_y_sort": 657,
+        "static_chunk_count": 0,
+        "static_other_count": 17,
+        "static_sprite_count": 342,
+        "static_wall_shadow_count": 325,
+        "visible_bridge_overlay_count": 10,
+        "visible_dynamic_children": 343,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 7,
+        "visible_unique_texture_count": 121,
+        "visible_unique_wall_texture_count": 108,
+        "visible_wall_base_count": 173,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 170,
+        "visible_wall_shadow_count": 170,
+        "visible_wrappers": 173,
+        "wrapper_count": 332,
+        "wrapper_dynamic_children": 657
+      },
+      "optimized_counts": {
+        "bridge_overlay_count": 19,
+        "logical_static": 342,
+        "logical_total": 999,
+        "logical_y_sort": 657,
+        "static_chunk_count": 39,
+        "static_other_count": 17,
+        "static_sprite_count": 17,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 10,
+        "visible_dynamic_children": 173,
+        "visible_static_chunk_count": 17,
+        "visible_static_other_count": 7,
+        "visible_unique_texture_count": 33,
+        "visible_unique_wall_texture_count": 4,
+        "visible_wall_base_count": 3,
+        "visible_wall_composite_count": 170,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 173,
+        "wrapper_count": 332,
+        "wrapper_dynamic_children": 332
+      },
+      "damage_application_counts": {
+        "legacy": [
+          43,
+          43
+        ],
+        "optimized": [
+          43,
+          43
+        ]
+      }
+    },
+    {
+      "map_id": 916003,
+      "name": "抉择之地",
+      "enemy_count": 54,
+      "layout_sha256": "1ee8bf3f1d2a0d31ee83b8c09e6183e440f0de41c9911ced55a56f813dba3d1c",
+      "workload_match": "PASS",
+      "physical_environment_sprites": {
+        "legacy": 469.0,
+        "optimized": 469.0,
+        "change_percent": 0.0
+      },
+      "enemy_cpu_ms": {
+        "legacy": 378.8325,
+        "optimized": 376.96799999999996,
+        "change_percent": -0.4921700223713743
+      },
+      "enemy_cpu_usec_per_call": {
+        "legacy": 157.846875,
+        "optimized": 157.07,
+        "change_percent": -0.4921700223713743
+      },
+      "headless_p95_ms": {
+        "legacy": 9.544,
+        "optimized": 9.4735,
+        "change_percent": -0.7386839899413356,
+        "legacy_runs": [
+          9.558,
+          9.53
+        ],
+        "optimized_runs": [
+          9.462,
+          9.485
+        ]
+      },
+      "legacy_counts": {
+        "bridge_overlay_count": 22,
+        "logical_static": 15,
+        "logical_total": 447,
+        "logical_y_sort": 432,
+        "static_chunk_count": 0,
+        "static_other_count": 15,
+        "static_sprite_count": 15,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 1,
+        "visible_dynamic_children": 97,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 6,
+        "visible_unique_texture_count": 34,
+        "visible_unique_wall_texture_count": 28,
+        "visible_wall_base_count": 97,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 97,
+        "wrapper_count": 432,
+        "wrapper_dynamic_children": 432
+      },
+      "optimized_counts": {
+        "bridge_overlay_count": 22,
+        "logical_static": 15,
+        "logical_total": 447,
+        "logical_y_sort": 432,
+        "static_chunk_count": 0,
+        "static_other_count": 15,
+        "static_sprite_count": 15,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 1,
+        "visible_dynamic_children": 97,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 6,
+        "visible_unique_texture_count": 9,
+        "visible_unique_wall_texture_count": 3,
+        "visible_wall_base_count": 5,
+        "visible_wall_composite_count": 92,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 97,
+        "wrapper_count": 432,
+        "wrapper_dynamic_children": 432
+      },
+      "damage_application_counts": {
+        "legacy": [
+          42,
+          42
+        ],
+        "optimized": [
+          42,
+          42
+        ]
+      }
+    }
+  ],
+  "runs": [
+    {
+      "label": "render_control_913203_legacy_1",
+      "input_sha256": "c3a903416cc69158d56200051407118c9d7cd7b06d4688e8bbd91c888018d333",
+      "frame_interval_ms": {
+        "max": 14.452,
+        "p50": 6.9,
+        "p95": 11.959,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 856.283,
+      "enemy_physics_calls": 3840,
+      "enemy_cpu_usec_per_call": 222.99036458333333,
+      "wall_object_counts": {
+        "bridge_overlay_count": 20,
+        "logical_static": 343,
+        "logical_total": 1002,
+        "logical_y_sort": 659,
+        "static_chunk_count": 0,
+        "static_other_count": 18,
+        "static_sprite_count": 343,
+        "static_wall_shadow_count": 325,
+        "visible_bridge_overlay_count": 11,
+        "visible_dynamic_children": 313,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 12,
+        "visible_unique_texture_count": 151,
+        "visible_unique_wall_texture_count": 135,
+        "visible_wall_base_count": 158,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 155,
+        "visible_wall_shadow_count": 155,
+        "visible_wrappers": 158,
+        "wrapper_count": 334,
+        "wrapper_dynamic_children": 659
+      },
+      "physical_environment_sprites": 1022,
+      "fire_wall_damage_applications": 53,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913203_legacy_2",
+      "input_sha256": "893107134e0f51d2f8957709e8bd0fe515642201b8aed205f45631070bf8e564",
+      "frame_interval_ms": {
+        "max": 14.878,
+        "p50": 6.902,
+        "p95": 12.104,
+        "samples": 577
+      },
+      "enemy_cpu_ms": 860.348,
+      "enemy_physics_calls": 3840,
+      "enemy_cpu_usec_per_call": 224.04895833333333,
+      "wall_object_counts": {
+        "bridge_overlay_count": 20,
+        "logical_static": 343,
+        "logical_total": 1002,
+        "logical_y_sort": 659,
+        "static_chunk_count": 0,
+        "static_other_count": 18,
+        "static_sprite_count": 343,
+        "static_wall_shadow_count": 325,
+        "visible_bridge_overlay_count": 11,
+        "visible_dynamic_children": 313,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 12,
+        "visible_unique_texture_count": 151,
+        "visible_unique_wall_texture_count": 135,
+        "visible_wall_base_count": 158,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 155,
+        "visible_wall_shadow_count": 155,
+        "visible_wrappers": 158,
+        "wrapper_count": 334,
+        "wrapper_dynamic_children": 659
+      },
+      "physical_environment_sprites": 1022,
+      "fire_wall_damage_applications": 53,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913203_optimized_1",
+      "input_sha256": "79c3450793bfbb4f4dc1998aad4513493a6bedf5fce930862faf753f7431ed7d",
+      "frame_interval_ms": {
+        "max": 14.687,
+        "p50": 6.902,
+        "p95": 12.181,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 901.036,
+      "enemy_physics_calls": 4080,
+      "enemy_cpu_usec_per_call": 220.8421568627451,
+      "wall_object_counts": {
+        "bridge_overlay_count": 20,
+        "logical_static": 343,
+        "logical_total": 1002,
+        "logical_y_sort": 659,
+        "static_chunk_count": 35,
+        "static_other_count": 18,
+        "static_sprite_count": 18,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 11,
+        "visible_dynamic_children": 158,
+        "visible_static_chunk_count": 23,
+        "visible_static_other_count": 12,
+        "visible_unique_texture_count": 41,
+        "visible_unique_wall_texture_count": 4,
+        "visible_wall_base_count": 3,
+        "visible_wall_composite_count": 155,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 158,
+        "wrapper_count": 334,
+        "wrapper_dynamic_children": 334
+      },
+      "physical_environment_sprites": 407,
+      "fire_wall_damage_applications": 53,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913203_optimized_2",
+      "input_sha256": "507cd43971882af85fc3e33aed98e8a3ddbe0c18f51dea15a718f2cdfb5d6228",
+      "frame_interval_ms": {
+        "max": 14.902,
+        "p50": 6.901,
+        "p95": 12.303,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 916.893,
+      "enemy_physics_calls": 4080,
+      "enemy_cpu_usec_per_call": 224.72867647058823,
+      "wall_object_counts": {
+        "bridge_overlay_count": 20,
+        "logical_static": 343,
+        "logical_total": 1002,
+        "logical_y_sort": 659,
+        "static_chunk_count": 35,
+        "static_other_count": 18,
+        "static_sprite_count": 18,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 11,
+        "visible_dynamic_children": 158,
+        "visible_static_chunk_count": 23,
+        "visible_static_other_count": 12,
+        "visible_unique_texture_count": 41,
+        "visible_unique_wall_texture_count": 4,
+        "visible_wall_base_count": 3,
+        "visible_wall_composite_count": 155,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 158,
+        "wrapper_count": 334,
+        "wrapper_dynamic_children": 334
+      },
+      "physical_environment_sprites": 407,
+      "fire_wall_damage_applications": 53,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913207_legacy_1",
+      "input_sha256": "7227d1c8f39995d29b0d244832972d5e0304fc06e69cb3cea82650c1767c81bb",
+      "frame_interval_ms": {
+        "max": 13.488,
+        "p50": 6.902,
+        "p95": 10.708,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 662.023,
+      "enemy_physics_calls": 3600,
+      "enemy_cpu_usec_per_call": 183.89527777777778,
+      "wall_object_counts": {
+        "bridge_overlay_count": 19,
+        "logical_static": 342,
+        "logical_total": 999,
+        "logical_y_sort": 657,
+        "static_chunk_count": 0,
+        "static_other_count": 17,
+        "static_sprite_count": 342,
+        "static_wall_shadow_count": 325,
+        "visible_bridge_overlay_count": 10,
+        "visible_dynamic_children": 343,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 7,
+        "visible_unique_texture_count": 121,
+        "visible_unique_wall_texture_count": 108,
+        "visible_wall_base_count": 173,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 170,
+        "visible_wall_shadow_count": 170,
+        "visible_wrappers": 173,
+        "wrapper_count": 332,
+        "wrapper_dynamic_children": 657
+      },
+      "physical_environment_sprites": 1018,
+      "fire_wall_damage_applications": 43,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913207_legacy_2",
+      "input_sha256": "d16e49bf4df3911e51e02eb1e86dbb92c7aeea45db0486fd96945143d35c823f",
+      "frame_interval_ms": {
+        "max": 13.374,
+        "p50": 6.9,
+        "p95": 10.89,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 668.489,
+      "enemy_physics_calls": 3600,
+      "enemy_cpu_usec_per_call": 185.6913888888889,
+      "wall_object_counts": {
+        "bridge_overlay_count": 19,
+        "logical_static": 342,
+        "logical_total": 999,
+        "logical_y_sort": 657,
+        "static_chunk_count": 0,
+        "static_other_count": 17,
+        "static_sprite_count": 342,
+        "static_wall_shadow_count": 325,
+        "visible_bridge_overlay_count": 10,
+        "visible_dynamic_children": 343,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 7,
+        "visible_unique_texture_count": 121,
+        "visible_unique_wall_texture_count": 108,
+        "visible_wall_base_count": 173,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 170,
+        "visible_wall_shadow_count": 170,
+        "visible_wrappers": 173,
+        "wrapper_count": 332,
+        "wrapper_dynamic_children": 657
+      },
+      "physical_environment_sprites": 1018,
+      "fire_wall_damage_applications": 43,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913207_optimized_1",
+      "input_sha256": "cab295b1e16aecabd3ff00bcb303bd9be5f69d40286cbf45bfe1c2bbb2e21fc6",
+      "frame_interval_ms": {
+        "max": 13.294,
+        "p50": 6.901,
+        "p95": 10.857,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 663.099,
+      "enemy_physics_calls": 3600,
+      "enemy_cpu_usec_per_call": 184.19416666666666,
+      "wall_object_counts": {
+        "bridge_overlay_count": 19,
+        "logical_static": 342,
+        "logical_total": 999,
+        "logical_y_sort": 657,
+        "static_chunk_count": 39,
+        "static_other_count": 17,
+        "static_sprite_count": 17,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 10,
+        "visible_dynamic_children": 173,
+        "visible_static_chunk_count": 17,
+        "visible_static_other_count": 7,
+        "visible_unique_texture_count": 33,
+        "visible_unique_wall_texture_count": 4,
+        "visible_wall_base_count": 3,
+        "visible_wall_composite_count": 170,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 173,
+        "wrapper_count": 332,
+        "wrapper_dynamic_children": 332
+      },
+      "physical_environment_sprites": 407,
+      "fire_wall_damage_applications": 43,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_913207_optimized_2",
+      "input_sha256": "106ab3a50087c1bc67b49b9ecf66cfd7587543161bd2869e1b03ce24ccd70d32",
+      "frame_interval_ms": {
+        "max": 16.01,
+        "p50": 6.901,
+        "p95": 10.978,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 696.98,
+      "enemy_physics_calls": 3600,
+      "enemy_cpu_usec_per_call": 193.60555555555555,
+      "wall_object_counts": {
+        "bridge_overlay_count": 19,
+        "logical_static": 342,
+        "logical_total": 999,
+        "logical_y_sort": 657,
+        "static_chunk_count": 39,
+        "static_other_count": 17,
+        "static_sprite_count": 17,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 10,
+        "visible_dynamic_children": 173,
+        "visible_static_chunk_count": 17,
+        "visible_static_other_count": 7,
+        "visible_unique_texture_count": 33,
+        "visible_unique_wall_texture_count": 4,
+        "visible_wall_base_count": 3,
+        "visible_wall_composite_count": 170,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 173,
+        "wrapper_count": 332,
+        "wrapper_dynamic_children": 332
+      },
+      "physical_environment_sprites": 407,
+      "fire_wall_damage_applications": 43,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_916003_legacy_1",
+      "input_sha256": "d7ae1663077f6ab1b8cbfe770f2f3ea7ba0a8b1331f930b705af60367596497c",
+      "frame_interval_ms": {
+        "max": 11.403,
+        "p50": 6.9,
+        "p95": 9.558,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 376.947,
+      "enemy_physics_calls": 2400,
+      "enemy_cpu_usec_per_call": 157.06125,
+      "wall_object_counts": {
+        "bridge_overlay_count": 22,
+        "logical_static": 15,
+        "logical_total": 447,
+        "logical_y_sort": 432,
+        "static_chunk_count": 0,
+        "static_other_count": 15,
+        "static_sprite_count": 15,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 1,
+        "visible_dynamic_children": 97,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 6,
+        "visible_unique_texture_count": 34,
+        "visible_unique_wall_texture_count": 28,
+        "visible_wall_base_count": 97,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 97,
+        "wrapper_count": 432,
+        "wrapper_dynamic_children": 432
+      },
+      "physical_environment_sprites": 469,
+      "fire_wall_damage_applications": 42,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_916003_legacy_2",
+      "input_sha256": "a9dde50b45c18647cbf6c912c0d562bdccb2f6b61159d40ab5d75b209bc995a4",
+      "frame_interval_ms": {
+        "max": 11.291,
+        "p50": 6.9,
+        "p95": 9.53,
+        "samples": 577
+      },
+      "enemy_cpu_ms": 380.718,
+      "enemy_physics_calls": 2400,
+      "enemy_cpu_usec_per_call": 158.6325,
+      "wall_object_counts": {
+        "bridge_overlay_count": 22,
+        "logical_static": 15,
+        "logical_total": 447,
+        "logical_y_sort": 432,
+        "static_chunk_count": 0,
+        "static_other_count": 15,
+        "static_sprite_count": 15,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 1,
+        "visible_dynamic_children": 97,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 6,
+        "visible_unique_texture_count": 34,
+        "visible_unique_wall_texture_count": 28,
+        "visible_wall_base_count": 97,
+        "visible_wall_composite_count": 0,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 97,
+        "wrapper_count": 432,
+        "wrapper_dynamic_children": 432
+      },
+      "physical_environment_sprites": 469,
+      "fire_wall_damage_applications": 42,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_916003_optimized_1",
+      "input_sha256": "6b2dcad267ddc7d287de530ceed73c539fec5ba103f2eafe7a8722ea6379da18",
+      "frame_interval_ms": {
+        "max": 11.2,
+        "p50": 6.902,
+        "p95": 9.462,
+        "samples": 579
+      },
+      "enemy_cpu_ms": 375.328,
+      "enemy_physics_calls": 2400,
+      "enemy_cpu_usec_per_call": 156.38666666666666,
+      "wall_object_counts": {
+        "bridge_overlay_count": 22,
+        "logical_static": 15,
+        "logical_total": 447,
+        "logical_y_sort": 432,
+        "static_chunk_count": 0,
+        "static_other_count": 15,
+        "static_sprite_count": 15,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 1,
+        "visible_dynamic_children": 97,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 6,
+        "visible_unique_texture_count": 9,
+        "visible_unique_wall_texture_count": 3,
+        "visible_wall_base_count": 5,
+        "visible_wall_composite_count": 92,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 97,
+        "wrapper_count": 432,
+        "wrapper_dynamic_children": 432
+      },
+      "physical_environment_sprites": 469,
+      "fire_wall_damage_applications": 42,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "label": "render_control_916003_optimized_2",
+      "input_sha256": "99effa6ed24fc33706e86add5cf4a299fd6ce4e5003494256da5aeee162284e4",
+      "frame_interval_ms": {
+        "max": 11.218,
+        "p50": 6.9,
+        "p95": 9.485,
+        "samples": 578
+      },
+      "enemy_cpu_ms": 378.608,
+      "enemy_physics_calls": 2400,
+      "enemy_cpu_usec_per_call": 157.75333333333333,
+      "wall_object_counts": {
+        "bridge_overlay_count": 22,
+        "logical_static": 15,
+        "logical_total": 447,
+        "logical_y_sort": 432,
+        "static_chunk_count": 0,
+        "static_other_count": 15,
+        "static_sprite_count": 15,
+        "static_wall_shadow_count": 0,
+        "visible_bridge_overlay_count": 1,
+        "visible_dynamic_children": 97,
+        "visible_static_chunk_count": 0,
+        "visible_static_other_count": 6,
+        "visible_unique_texture_count": 9,
+        "visible_unique_wall_texture_count": 3,
+        "visible_wall_base_count": 5,
+        "visible_wall_composite_count": 92,
+        "visible_wall_front_count": 0,
+        "visible_wall_shadow_count": 0,
+        "visible_wrappers": 97,
+        "wrapper_count": 432,
+        "wrapper_dynamic_children": 432
+      },
+      "physical_environment_sprites": 469,
+      "fire_wall_damage_applications": 42,
+      "fire_wall_ticks": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    }
+  ],
+  "device_test": "NOT_RUN",
+  "gpu_frame_time": "NOT_RUN",
+  "functional_control": "PASS"
+}

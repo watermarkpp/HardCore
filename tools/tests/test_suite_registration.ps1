@@ -899,6 +899,7 @@ $slpValidateSet = ($RunnerSource -match "skill_panel_layout_critical")
 # device_lab_critical verification (R14-A formal suite gate)
 $DeviceLabSuite = 'device_lab_critical'
 $DeviceLabExpected = @(
+    'tests/device_lab_local_capture_test.tscn',
     'tests/device_lab_runtime_test.tscn',
     'tests/device_lab_patch_bootstrap_test.tscn',
     'tests/perf_frame_diagnostics_test.tscn',

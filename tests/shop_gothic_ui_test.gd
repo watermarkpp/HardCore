@@ -84,7 +84,7 @@ func _run() -> void:
 	var repair_gold_before := PlayerState.gold
 	panel._repair_all()
 	assert(PlayerState.gold == repair_gold_before, "无需维修时错误扣除了金币")
-	assert(panel.repair_button.get_meta("gothic_feedback_state", "") == "busy", "维修忙碌反馈没有完整保留一个渲染帧")
+	assert(panel.repair_button.get_meta("gothic_feedback_state", "") == "failure", "同步维修结果没有立即呈现")
 	await get_tree().process_frame
 	assert(panel.repair_button.get_meta("gothic_feedback_state", "") == "failure", "无需维修时错误显示成功反馈")
 	assert(panel.size == Vector2(1080, 620), "商店没有使用横屏安全尺寸")
@@ -136,8 +136,12 @@ func _run() -> void:
 	assert(panel.item_detail_presenter.title_label.get_theme_font_size("font_size") == 20, "详情标题没有使用正式 20 号字体")
 	assert(panel.item_detail_presenter.detail_label.get_theme_font_size("normal_font_size") == 14, "详情正文没有使用正式 14 号字体")
 	var detail_text: String = str(panel.item_detail_presenter.detail_label.text)
-	for required_line: String in ["类别", "耐久", "攻击", "穿戴要求", "价格"]:
+	for required_line: String in ["类别", "耐久", "攻击", "穿戴要求"]:
 		assert(detail_text.contains(required_line), "匕首详情正文缺少 %s 行" % required_line)
+	# Price belongs to the merchant quote/card, not the shared equipment body.
+	var dagger_quote: Dictionary = panel._buy_quotes_by_index[0]
+	assert(int(dagger_quote.total_price) > 0)
+	assert(panel.goods_buttons[0].get_node("Price").text == "%d 金币" % int(dagger_quote.total_price), "匕首购买价未按正式报价显示")
 	# Every visible action BUTTON must sit inside the frame opening (ruling 14).
 	# The sell quantity row is a composite calibrated control whose frozen
 	# internal child contract is asserted in the sell section below; its own
@@ -197,9 +201,9 @@ func _run() -> void:
 	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买事务错误清除了购买页签选中")
 	var buy_result := PlayerState.buy_shop_item(buy_requests[-1], STOCK)
 	panel.apply_buy_result(buy_result)
-	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "busy", "购买结果在同一帧覆盖了忙碌反馈")
+	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "success", "正式购买结果没有立即替换等待反馈")
 	await get_tree().process_frame
-	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "success", "购买成功没有进入一秒成功反馈")
+	assert(panel.buy_button.get_meta("gothic_feedback_state", "") == "success", "购买成功反馈没有保留到下一帧")
 	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "购买完成错误清除了购买页签选中")
 	assert(PlayerState.gold == gold_before - int(buy_quote.get("unit_price", 0)) and PlayerState.has_item("匕首"), "商品卡购买闭环失败")
 	assert(panel._selected_buy_index == 0 and panel.item_list.get_selected_items() == PackedInt32Array([0]), "购买刷新报价后丢失当前商品选择")
@@ -217,27 +221,28 @@ func _run() -> void:
 	panel.open_for("药剂商", official_potion_stock, GameData.merchant_context("medicine"))
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(official_potion_stock))
 	panel._select_shop_item(0)
-	assert("持续恢复生命：" in panel.detail_label.text and "点/秒" in panel.detail_label.text, "药水详情没有显示玩法层实际持续恢复速度")
-	assert("生命总恢复：30点" in panel.detail_label.text and "攻击：" not in panel.detail_label.text, "药水详情没有显示主库恢复总量")
+	var potion_profile := GameData.potion_recovery_profile(PlayerState.level, 30, 0, "delayed_restore")
+	assert("持续恢复生命：每%.2f秒%d点" % [float(potion_profile.tick_interval_seconds), int(potion_profile.tick_amount)] in panel.detail_label.get_parsed_text(), "药水详情没有显示玩法层实际恢复节拍")
+	assert("生命总恢复：30点" in panel.detail_label.get_parsed_text() and "攻击：" not in panel.detail_label.get_parsed_text(), "药水详情没有显示主库恢复总量")
 	var official_weapon_stock := GameData.merchant_stock("starter_gear")
 	panel.open_for("铁匠", official_weapon_stock, GameData.merchant_context("starter_gear"))
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(official_weapon_stock))
 	for official_weapon_index in range(official_weapon_stock.size()):
 		panel._select_shop_item(official_weapon_index)
-		assert(
-			"类别：" in panel.detail_label.text
-			and "重量：" in panel.detail_label.text
-			and "耐久上限：" in panel.detail_label.text
-			and "攻击" in panel.detail_label.text
-			and "魔法" in panel.detail_label.text
-			and "道术" in panel.detail_label.text
-			and "防御" in panel.detail_label.text
-			and "魔防" in panel.detail_label.text
-			and "穿戴要求：" in panel.detail_label.text
-			and "equipment.attribute" not in panel.detail_label.text
-			and "confidence" not in panel.detail_label.text,
-			"正式武器详情没有完整解析玩家可读属性",
-		)
+		var item := GameData.get_item_record(str(official_weapon_stock[official_weapon_index].name))
+		var body := panel.detail_label.get_parsed_text()
+		assert("类别：" in body and "重量 %d" % int(item.weight) in body, "正式武器类别/重量未正确显示")
+		assert("耐久：%d/%d" % [int(item.maxDurability), int(item.maxDurability)] in body, "正式武器耐久未正确显示")
+		for stat: Array in [["攻击", "attackMin", "attackMax"], ["魔法", "magicMin", "magicMax"], ["道术", "taoMin", "taoMax"], ["防御", "defenseMin", "defenseMax"], ["魔防", "mdefMin", "mdefMax"]]:
+			var minimum := 0 if item.get(stat[1]) == null else int(item[stat[1]])
+			var maximum := 0 if item.get(stat[2]) == null else int(item[stat[2]])
+			if minimum != 0 or maximum != 0:
+				assert("%s %d-%d" % [stat[0], minimum, maximum] in body, "正式武器属性错误：%s" % stat[0])
+			else:
+				assert("%s 0-0" % stat[0] not in body, "紧凑详情不应显示零值属性")
+		var requirement: Dictionary = preload("res://scripts/equipment_rules.gd").requirement_for(item)
+		assert(("穿戴要求：" in body) == (int(requirement.get("value", 0)) > 0), "穿戴要求与正式属性不一致")
+		assert("equipment.attribute" not in body and "confidence" not in body, "武器详情泄露内部字段")
 	panel.open_for("测试商店", STOCK, GameData.merchant_context("general"))
 	panel.set_buy_quotes(PlayerState.shop_buy_quotes(STOCK))
 	PlayerState.inventory.insert(1, {})
@@ -245,7 +250,7 @@ func _run() -> void:
 	assert(panel.sell_tab_button.theme_type_variation == "GothicShopTradeTabSelectedGemButton", "出售页签没有保持持久选中")
 	assert(panel.buy_tab_button.theme_type_variation == "GothicShopTradeTabGemButton", "切到出售后购买页签仍保持高亮")
 	assert(panel.get_node_or_null("DetailPanel/SellOneButton") == null, "已退役 SellOneButton 仍存在")
-	assert("UI不会自行计算" not in panel.detail_label.text and "玩法层报价" not in panel.detail_label.text, "出售页仍显示无意义的内部报价备注")
+	assert("UI不会自行计算" not in panel.detail_label.get_parsed_text() and "玩法层报价" not in panel.detail_label.get_parsed_text(), "出售页仍显示无意义的内部报价备注")
 	assert(panel.sell_quantity_button.name == "SellQuantityButton" and panel.sell_quantity_button.text == "出售", "出售按钮文案或唯一稳定节点错误")
 	# Ruling 9: fixed 270x51 equality across modes was an implementation detail
 	# of the pre-R3.3 calibration; the R3.3 space planner legitimately varies
@@ -389,7 +394,9 @@ func _run() -> void:
 	assert(safe_indices.size() >= 2 and risky_index >= 0, "出售测试缺少两个普通物品和一个高风险物品")
 	panel._select_sell_item(risky_index)
 	assert(panel.goods_buttons.filter(func(card: Button) -> bool: return int(card.get_meta("inventory_index", -1)) == risky_index)[0].theme_type_variation == "GothicComponentSelectedShopCard", "装备商品卡选中后没有背包格高亮")
-	assert("攻击" in panel.detail_label.text and "防御" in panel.detail_label.text and "穿戴要求" in panel.detail_label.text, "出售装备详情没有展示玩家属性")
+	var ring_item := GameData.get_item_record("古铜戒指")
+	assert("攻击 %d-%d" % [int(ring_item.attackMin), int(ring_item.attackMax)] in panel.detail_label.get_parsed_text() and "穿戴要求" in panel.detail_label.get_parsed_text(), "出售装备详情没有展示正式攻击/穿戴要求")
+	assert("防御 0-0" not in panel.detail_label.get_parsed_text(), "出售详情不应重复展示零值防御")
 	panel._select_sell_item(risky_index)
 	var deselected_risky_card: Button = panel.goods_buttons.filter(func(card: Button) -> bool: return int(card.get_meta("inventory_index", -1)) == risky_index)[0]
 	assert(not deselected_risky_card.button_pressed, "取消选择后仍保留按钮按下状态")
@@ -519,7 +526,7 @@ func _run() -> void:
 	assert(int(amounts_by_index.get(safe_indices[1], 0)) == 1, "批量出售错误复用了其他物品数量")
 	panel.apply_sell_result({"success": true, "message": "批量全部完成", "quotes": quotes})
 	assert(panel._selected_sell_indices.is_empty() and panel.sell_quantity_button.disabled, "批量完成后选择状态没有清空")
-	assert("批量全部完成" in panel.detail_label.text, "最终成功消息被提交提示覆盖")
+	assert("批量全部完成" in panel.detail_label.get_parsed_text(), "最终成功消息被提交提示覆盖")
 
 	panel.set_sell_quotes(quotes)
 	panel._select_sell_item(safe_indices[0])
@@ -528,7 +535,7 @@ func _run() -> void:
 	panel._request_sell()
 	assert(sell_requests.size() == 1 and sell_requests[0].get("batch", null) is Array, "失败路径没有提交batch请求")
 	panel.apply_sell_result({"success": false, "message": "测试失败停止", "quotes": quotes})
-	assert(panel._selected_sell_indices.is_empty() and "测试失败停止" in panel.detail_label.text, "批量失败后状态或消息没有收口")
+	assert(panel._selected_sell_indices.is_empty() and "测试失败停止" in panel.detail_label.get_parsed_text(), "批量失败后状态或消息没有收口")
 
 	panel.set_sell_quotes(quotes)
 	panel._select_sell_item(safe_indices[0])

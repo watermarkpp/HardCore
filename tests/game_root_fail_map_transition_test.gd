@@ -31,10 +31,12 @@ func _ready() -> void:
 
 	# --- Case 1: pre-arrival policy keeps the old world playable ---
 	var before_gen := int(coord.generation)
+	var before_stage := str(coord.snapshot().get("stage", ""))
 	game._fail_map_transition(&"pre_arrival_keep_world")
+	var notice_text := str(game.hud.notice_presenter.current_notice().get("message", ""))
+	_check(notice_text == "地图切换失败，已保留当前区域，可稍后重试。", "map failure notice must not expose internal failure codes")
 	_check(
-		str(coord.snapshot().get("stage", "")) != "FAILED"
-		or true,  # stage untouched by the central fn when already READY
+		str(coord.snapshot().get("stage", "")) == before_stage,
 		"pre-arrival: coordinator stage must stay untouched by central fn",
 	)
 	_check(
@@ -68,20 +70,11 @@ func _ready() -> void:
 	# revival path and by case 2's settled-state clauses).
 	game.player.max_hp = 9999
 	game.player.current_hp = 9999
-	var hop2 := Time.get_ticks_msec() + 10000
 	if not game._begin_map_transition(op2, 913202):
-		print("P03_CASE2B travel refused - aborting case 2b")
+		_check(false, "case 2b transition refused")
 		_finish(before_gen)
 		return
-	while (
-		not bool(game._map_transition_in_progress)
-		and Time.get_ticks_msec() < hop2
-	):
-		await get_tree().create_timer(0.016, true).timeout
-	game.hud.loading_transition_covered.emit({
-		"contract_id": "ui.loading.transition.v1",
-		"transition_id": game._active_map_transition_id,
-	})
+	# Test-mode cover may finish synchronously; only wait for active work.
 	var settle2b := Time.get_ticks_msec() + 90000
 	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < settle2b:
 		await get_tree().create_timer(0.016, true).timeout
@@ -136,20 +129,11 @@ func _ready() -> void:
 	# safe-home recovery, no stranded locks or combat token.
 	var before_gen_case2 := int(coord.generation)
 	var op := Callable(game, "_travel_to_map_immediate").bind(913201)
-	var hop := Time.get_ticks_msec() + 10000
 	if not game._begin_map_transition(op, 913201):
-		print("P03_CASE2 travel refused - aborting case 2")
+		_check(false, "case 2 transition refused")
 		_finish(before_gen)
 		return
-	while (
-		not bool(game._map_transition_in_progress)
-		and Time.get_ticks_msec() < hop
-	):
-		await get_tree().create_timer(0.016, true).timeout
-	game.hud.loading_transition_covered.emit({
-		"contract_id": "ui.loading.transition.v1",
-		"transition_id": game._active_map_transition_id,
-	})
+	# Test-mode cover may finish synchronously; only wait for active work.
 	await get_tree().create_timer(0.016, true).timeout
 	var settle := Time.get_ticks_msec() + 90000
 	while bool(game._map_transition_in_progress) and Time.get_ticks_msec() < settle:

@@ -65,7 +65,7 @@
 		17,
 		25,
 		34,
-		41,
+		40,
 		49,
 		61,
 		70,
@@ -104,7 +104,7 @@
 		19,
 		27,
 		36,
-		44,
+		43,
 		52,
 		64,
 		73,
@@ -1842,7 +1842,7 @@
 				17,
 				25,
 				34,
-				41,
+				40,
 				49,
 				61,
 				70,
@@ -1916,10 +1916,10 @@
 				},
 				{
 					"command_indices": [
-						41
+						40
 					],
 					"group_key": "wall_part:inst_000084:43:1",
-					"representative_command_index": 41
+					"representative_command_index": 40
 				},
 				{
 					"command_indices": [
@@ -2060,7 +2060,7 @@
 				19,
 				27,
 				36,
-				44,
+				43,
 				52,
 				64,
 				73,
@@ -2134,10 +2134,10 @@
 				},
 				{
 					"command_indices": [
-						44
+						43
 					],
 					"group_key": "wall_part:inst_000084:43:2",
-					"representative_command_index": 44
+					"representative_command_index": 43
 				},
 				{
 					"command_indices": [
@@ -2514,9 +2514,9 @@
 	"legacy_command_indices": [
 		35,
 		38,
-		40,
+		41,
 		42,
-		43,
+		44,
 		46,
 		56,
 		62,
@@ -2539,7 +2539,7 @@
 	"shadow_chunk_command_indices": [],
 	"shadow_chunks": [],
 	"shadow_segments": [],
-	"source_commands_sha256": "1b951832e6bb9b3152cd1861486058ba03a5891120bc666c74168e955d550677",
+	"source_commands_sha256": "1d8b15548bbcdf839ae19da8cdc6ac41dcbe2609fb9ad8ea9b8641fd05d76ff3",
 	"source_image_sha256": {
 		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_00_wooma_temple_floor_match_v1_base.png": "bed5041c59148a698e962f14f13eea3d482f9146b8b76747ffcbf85548112faa",
 		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_01_wooma_temple_floor_match_v1_base.png": "b74dbb56da678ec14fabec4f24bf6633a35d8287a1eb158383fbbd72dbaf79bc",
@@ -2561,6 +2561,6 @@
 		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_02_wooma_temple_floor_match_v1_base.png": "59929d3692ae185461adcc0f98679968364f7caabd2b8665f17cdac6a86514e3",
 		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_03_wooma_temple_floor_match_v1_base.png": "4b0ecdb9763e53c869a236738233f2dfd862daecbc547d13a0e456c002cea3e1"
 	},
-	"source_runtime_json_sha256": "42898bba62a21e1a646bbb48ca5884c04acd766b482c87a85b8749795cb949c5",
+	"source_runtime_json_sha256": "2f2f3170f8be1d1860dadbceb5dad41333b65cff1f77da4c8294283f5c151daf",
 	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
 }

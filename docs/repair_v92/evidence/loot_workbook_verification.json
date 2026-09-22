@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "xlsx": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\repair_v92\\excel\\HardCore_当前地图怪物真实掉率_20260922.xlsx",
+  "size_bytes": 685903,
+  "sha256": "75c961cae7b6efa83e3d1be29242b39624f9f4d8b2aef3a43b949145b6e24637",
+  "source_sha256": "828423ef48d5639700f58b251e4b6996353549dc2c87b3137aa6203bf55904c0",
+  "sheets": 121,
+  "monster_sheets": 120,
+  "probability_text_cells": 10518,
+  "probability_types": "All are OOXML text and Excel number format @; zero date/numeric probability cells",
+  "probability_cells_by_kind": {
+    "actual": 4621,
+    "slot": 5897
+  },
+  "full_cell_comparison": "All output, slot, map, classification, and empty-table rows match the exact snapshot",
+  "render_count": 121,
+  "math_tests": {
+    "status": "PASS",
+    "exhaustive_cases": 76,
+    "explicit_cap_boundaries": 2
+  },
+  "summary": {
+    "monster_count": 120,
+    "output_rows": 4621,
+    "classification_counts": {
+      "普通": 61,
+      "精英": 27,
+      "特殊普通": 7,
+      "Boss": 17,
+      "特殊": 8
+    },
+    "empty_monster_ids": [
+      18,
+      30,
+      45,
+      96,
+      100
+    ],
+    "zero_actual_rows": 16,
+    "cap_affected_rows": 4211,
+    "max_probability_chars": 318,
+    "elapsed_seconds": 1.594
+  },
+  "snapshot_role": "historical_before_armor_single_slot_revision_5897_slots",
+  "superseded_by": "docs/repair_v92/evidence/loot_workbook_armor_single_slot_verification.json"
+}

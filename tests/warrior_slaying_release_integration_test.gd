@@ -16,9 +16,9 @@ class ObservedRoot extends RootScript:
 		modifier_records.append(modifiers.duplicate(true))
 		super._commit_warrior_melee_modifier_events(modifiers)
 
-	func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) -> bool:
+	func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0, ignore_ac := false) -> bool:
 		damage_records.append({"target": enemy.get_instance_id(), "damage": damage, "accuracy": accuracy_bonus})
-		return super._apply_physical_hit(enemy, damage, accuracy_bonus)
+		return super._apply_physical_hit(enemy, damage, accuracy_bonus, ignore_ac)
 
 func _ready() -> void:
 	_run.call_deferred()

@@ -1356,11 +1356,6 @@ func _clear_transaction_feedback() -> void:
 func _show_transaction_result_feedback(button: Button, success: bool, group: String) -> void:
 	_transaction_feedback_serial += 1
 	var serial := _transaction_feedback_serial
-	# Local repair and loopback buy/sell results may return in the same input
-	# frame.  Preserve one complete busy frame so every transaction follows the
-	# same visible sequence instead of collapsing directly into its result.
-	if is_inside_tree():
-		await get_tree().process_frame
 	if serial != _transaction_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
 		return
 	GothicUIThemeScript.set_button_feedback(
@@ -1370,7 +1365,7 @@ func _show_transaction_result_feedback(button: Button, success: bool, group: Str
 	)
 	if not is_inside_tree():
 		return
-	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS if success else GothicUIThemeScript.BUTTON_RESULT_FAILURE_SECONDS).timeout.connect(func() -> void:
 		if serial == _transaction_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

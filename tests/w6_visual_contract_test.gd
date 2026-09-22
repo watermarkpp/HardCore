@@ -170,8 +170,8 @@ func _test_loot_visual_authority_and_lifecycle() -> void:
 	assert(LootVisualEffectScript.affix_is_valid(affixed), "valid W7 affix was not accepted")
 	assert(LootVisualEffectScript.has_golden_beam_for_record(affixed), "affix unexpectedly changed tier beam authority")
 	assert(
-		LootVisualEffectScript.label_color_for_record(affixed, Color("112233")) == LootVisualEffectScript.AFFIX_LABEL_COLOR,
-		"Woma affix name must use the shared bright gold name color",
+		LootVisualEffectScript.label_color_for_record(affixed, Color("112233")) == UIItemNameStyle.describe({"item_id": 168}).color,
+		"Woma affix name must use the shared current tier palette",
 	)
 	assert(
 		LootVisualEffectScript.label_color_for_record(wooma, Color("112233")) == Color("ffd86b"),
@@ -265,7 +265,9 @@ func _wooma_identity(with_affix: bool) -> Dictionary:
 		if not instance_value is Dictionary:
 			continue
 		var affix_value: Variant = (instance_value as Dictionary).get("drop_affix", {})
-		var applied := affix_value is Dictionary and bool((affix_value as Dictionary).get("applied", false))
+		# Durability-only rolls remain valid gear, but the current name/highlight
+		# contract reserves jackpot presentation for actual stat modifiers.
+		var applied: bool = affix_value is Dictionary and bool((affix_value as Dictionary).get("applied", false)) and not instance_value.get("modifiers", []).is_empty()
 		if applied == with_affix:
 			return created
 	return {}

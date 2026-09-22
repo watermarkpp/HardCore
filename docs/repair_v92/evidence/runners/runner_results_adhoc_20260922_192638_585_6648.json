@@ -1,0 +1,56 @@
+{
+  "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "engine_log_errors": 7,
+  "total": 3,
+  "suite": "adhoc",
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "monster_empty_safe_zone_fast_path_test",
+      "test_path": "tests/monster_empty_safe_zone_fast_path_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "safe_zone_spatial_runtime_test",
+      "test_path": "tests/safe_zone_spatial_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_continuous_step_facing_test",
+      "test_path": "tests/monster_continuous_step_facing_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 6,
+      "engine_log_failure_count": 6,
+      "result": "FAIL",
+      "reason": "stderr_failures_6;engine_log_failures_6"
+    }
+  ],
+  "failed": 2,
+  "generated_at": "2026-09-22T19:26:38.5853804+08:00"
+}

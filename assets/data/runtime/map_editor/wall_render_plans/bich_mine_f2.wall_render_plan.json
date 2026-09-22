@@ -30,8 +30,8 @@
 		735,
 		772,
 		774,
+		813,
 		814,
-		815,
 		1001,
 		1002,
 		1037,
@@ -94,8 +94,8 @@
 		751,
 		753,
 		754,
-		800,
-		802,
+		799,
+		801,
 		829,
 		830,
 		1010,
@@ -126,8 +126,8 @@
 		670,
 		738,
 		739,
+		804,
 		805,
-		806,
 		853,
 		854,
 		913,
@@ -154,8 +154,8 @@
 		769,
 		773,
 		775,
+		816,
 		817,
-		818,
 		847,
 		848,
 		1019,
@@ -186,8 +186,8 @@
 		690,
 		756,
 		757,
+		819,
 		820,
-		821,
 		868,
 		869,
 		928,
@@ -210,10 +210,10 @@
 		396,
 		785,
 		787,
+		795,
 		796,
-		797,
-		801,
-		803,
+		800,
+		802,
 		832,
 		833,
 		862,
@@ -276,8 +276,8 @@
 		342,
 		502,
 		503,
+		792,
 		793,
-		794,
 		850,
 		851,
 		859,
@@ -312,10 +312,10 @@
 		168,
 		253,
 		254,
+		292,
 		293,
-		294,
+		301,
 		302,
-		303,
 		332,
 		333,
 		356,
@@ -366,14 +366,14 @@
 		257,
 		286,
 		287,
+		295,
 		296,
-		297,
 		365,
 		366,
 		517,
 		518,
+		810,
 		811,
-		812,
 		865,
 		866,
 		874,
@@ -408,8 +408,8 @@
 		178,
 		259,
 		260,
+		304,
 		305,
-		306,
 		314,
 		315,
 		353,
@@ -438,8 +438,8 @@
 		715,
 		741,
 		742,
+		807,
 		808,
-		809,
 		916,
 		917,
 		1004,
@@ -460,10 +460,10 @@
 		232,
 		262,
 		263,
+		298,
 		299,
-		300,
+		307,
 		308,
-		309,
 		389,
 		390,
 		532,
@@ -534,8 +534,8 @@
 		748,
 		759,
 		760,
+		822,
 		823,
-		824,
 		931,
 		932,
 		1013,
@@ -556,8 +556,8 @@
 		244,
 		271,
 		272,
+		310,
 		311,
-		312,
 		320,
 		321,
 		414,
@@ -670,8 +670,8 @@
 		631,
 		871,
 		872,
+		289,
 		290,
-		291,
 		463,
 		464,
 		466,
@@ -1431,8 +1431,8 @@
 		},
 		{
 			"command_indices": [
+				289,
 				290,
-				291,
 				463,
 				464,
 				466,
@@ -1462,11 +1462,11 @@
 			"group_mappings": [
 				{
 					"command_indices": [
-						290,
-						291
+						289,
+						290
 					],
 					"group_key": "wall_part:inst_000025:41:2",
-					"representative_command_index": 290
+					"representative_command_index": 289
 				},
 				{
 					"command_indices": [
@@ -1520,7 +1520,7 @@
 			"key": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l3_v03/part_02_base.png@(-64.0, -160.0)|assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l3_v03/part_02_front.png@(-64.0, -160.0)",
 			"layers": [
 				{
-					"command_index": 290,
+					"command_index": 289,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l3_v03/part_02_base.png",
 					"offset": [
 						-64.0,
@@ -1532,7 +1532,7 @@
 					]
 				},
 				{
-					"command_index": 291,
+					"command_index": 290,
 					"image_path": "assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l3_v03/part_02_front.png",
 					"offset": [
 						-64.0,
@@ -1568,10 +1568,10 @@
 				168,
 				253,
 				254,
+				292,
 				293,
-				294,
+				301,
 				302,
-				303,
 				332,
 				333,
 				356,
@@ -1686,19 +1686,19 @@
 				},
 				{
 					"command_indices": [
-						293,
-						294
+						292,
+						293
 					],
 					"group_key": "wall_part:inst_000080:96:0",
-					"representative_command_index": 293
+					"representative_command_index": 292
 				},
 				{
 					"command_indices": [
-						302,
-						303
+						301,
+						302
 					],
 					"group_key": "wall_part:inst_000026:42:0",
-					"representative_command_index": 302
+					"representative_command_index": 301
 				},
 				{
 					"command_indices": [
@@ -1904,8 +1904,8 @@
 				178,
 				259,
 				260,
+				304,
 				305,
-				306,
 				314,
 				315,
 				353,
@@ -1934,8 +1934,8 @@
 				715,
 				741,
 				742,
+				807,
 				808,
-				809,
 				916,
 				917,
 				1004,
@@ -2022,11 +2022,11 @@
 				},
 				{
 					"command_indices": [
-						305,
-						306
+						304,
+						305
 					],
 					"group_key": "wall_part:inst_000080:96:1",
-					"representative_command_index": 305
+					"representative_command_index": 304
 				},
 				{
 					"command_indices": [
@@ -2142,11 +2142,11 @@
 				},
 				{
 					"command_indices": [
-						808,
-						809
+						807,
+						808
 					],
 					"group_key": "wall_part:inst_000020:36:1",
-					"representative_command_index": 808
+					"representative_command_index": 807
 				},
 				{
 					"command_indices": [
@@ -2270,8 +2270,8 @@
 				748,
 				759,
 				760,
+				822,
 				823,
-				824,
 				931,
 				932,
 				1013,
@@ -2478,11 +2478,11 @@
 				},
 				{
 					"command_indices": [
-						823,
-						824
+						822,
+						823
 					],
 					"group_key": "wall_part:inst_000020:36:2",
-					"representative_command_index": 823
+					"representative_command_index": 822
 				},
 				{
 					"command_indices": [
@@ -3418,8 +3418,8 @@
 				670,
 				738,
 				739,
+				804,
 				805,
-				806,
 				853,
 				854,
 				913,
@@ -3554,11 +3554,11 @@
 				},
 				{
 					"command_indices": [
-						805,
-						806
+						804,
+						805
 					],
 					"group_key": "wall_part:inst_000107:121:1",
-					"representative_command_index": 805
+					"representative_command_index": 804
 				},
 				{
 					"command_indices": [
@@ -3666,8 +3666,8 @@
 				690,
 				756,
 				757,
+				819,
 				820,
-				821,
 				868,
 				869,
 				928,
@@ -3802,11 +3802,11 @@
 				},
 				{
 					"command_indices": [
-						820,
-						821
+						819,
+						820
 					],
 					"group_key": "wall_part:inst_000107:121:2",
-					"representative_command_index": 820
+					"representative_command_index": 819
 				},
 				{
 					"command_indices": [
@@ -5374,8 +5374,8 @@
 				342,
 				502,
 				503,
+				792,
 				793,
-				794,
 				850,
 				851,
 				859,
@@ -5504,11 +5504,11 @@
 				},
 				{
 					"command_indices": [
-						793,
-						794
+						792,
+						793
 					],
 					"group_key": "wall_part:inst_000033:49:0",
-					"representative_command_index": 793
+					"representative_command_index": 792
 				},
 				{
 					"command_indices": [
@@ -5660,14 +5660,14 @@
 				257,
 				286,
 				287,
+				295,
 				296,
-				297,
 				365,
 				366,
 				517,
 				518,
+				810,
 				811,
-				812,
 				865,
 				866,
 				874,
@@ -5772,11 +5772,11 @@
 				},
 				{
 					"command_indices": [
-						296,
-						297
+						295,
+						296
 					],
 					"group_key": "wall_part:inst_000062:78:1",
-					"representative_command_index": 296
+					"representative_command_index": 295
 				},
 				{
 					"command_indices": [
@@ -5796,11 +5796,11 @@
 				},
 				{
 					"command_indices": [
-						811,
-						812
+						810,
+						811
 					],
 					"group_key": "wall_part:inst_000033:49:1",
-					"representative_command_index": 811
+					"representative_command_index": 810
 				},
 				{
 					"command_indices": [
@@ -5950,10 +5950,10 @@
 				232,
 				262,
 				263,
+				298,
 				299,
-				300,
+				307,
 				308,
-				309,
 				389,
 				390,
 				532,
@@ -6056,19 +6056,19 @@
 				},
 				{
 					"command_indices": [
-						299,
-						300
+						298,
+						299
 					],
 					"group_key": "wall_part:inst_000024:40:2",
-					"representative_command_index": 299
+					"representative_command_index": 298
 				},
 				{
 					"command_indices": [
-						308,
-						309
+						307,
+						308
 					],
 					"group_key": "wall_part:inst_000062:78:2",
-					"representative_command_index": 308
+					"representative_command_index": 307
 				},
 				{
 					"command_indices": [
@@ -6242,8 +6242,8 @@
 				244,
 				271,
 				272,
+				310,
 				311,
-				312,
 				320,
 				321,
 				414,
@@ -6348,11 +6348,11 @@
 				},
 				{
 					"command_indices": [
-						311,
-						312
+						310,
+						311
 					],
 					"group_key": "wall_part:inst_000024:40:3",
-					"representative_command_index": 311
+					"representative_command_index": 310
 				},
 				{
 					"command_indices": [
@@ -6542,8 +6542,8 @@
 				735,
 				772,
 				774,
+				813,
 				814,
-				815,
 				1001,
 				1002,
 				1037,
@@ -6642,11 +6642,11 @@
 				},
 				{
 					"command_indices": [
-						814,
-						815
+						813,
+						814
 					],
 					"group_key": "wall_part:inst_000048:64:0",
-					"representative_command_index": 814
+					"representative_command_index": 813
 				},
 				{
 					"command_indices": [
@@ -6722,8 +6722,8 @@
 				751,
 				753,
 				754,
-				800,
-				802,
+				799,
+				801,
 				829,
 				830,
 				1010,
@@ -6816,11 +6816,11 @@
 				},
 				{
 					"command_indices": [
-						800,
-						802
+						799,
+						801
 					],
 					"group_key": "wall_part:inst_000088:102:1",
-					"representative_command_index": 800
+					"representative_command_index": 799
 				},
 				{
 					"command_indices": [
@@ -6904,8 +6904,8 @@
 				769,
 				773,
 				775,
+				816,
 				817,
-				818,
 				847,
 				848,
 				1019,
@@ -6998,11 +6998,11 @@
 				},
 				{
 					"command_indices": [
-						817,
-						818
+						816,
+						817
 					],
 					"group_key": "wall_part:inst_000088:102:2",
-					"representative_command_index": 817
+					"representative_command_index": 816
 				},
 				{
 					"command_indices": [
@@ -7082,10 +7082,10 @@
 				396,
 				785,
 				787,
+				795,
 				796,
-				797,
-				801,
-				803,
+				800,
+				802,
 				832,
 				833,
 				862,
@@ -7164,19 +7164,19 @@
 				},
 				{
 					"command_indices": [
-						796,
-						797
+						795,
+						796
 					],
 					"group_key": "wall_part:inst_000047:63:3",
-					"representative_command_index": 796
+					"representative_command_index": 795
 				},
 				{
 					"command_indices": [
-						801,
-						803
+						800,
+						802
 					],
 					"group_key": "wall_part:inst_000087:101:3",
-					"representative_command_index": 801
+					"representative_command_index": 800
 				},
 				{
 					"command_indices": [
@@ -7275,7 +7275,7 @@
 		156,
 		175,
 		251,
-		288,
+		312,
 		400,
 		431,
 		588,
@@ -7286,7 +7286,7 @@
 		674,
 		678,
 		697,
-		791,
+		824,
 		978,
 		1054
 	],
@@ -7387,14 +7387,14 @@
 		279,
 		282,
 		285,
-		289,
-		292,
-		295,
-		298,
-		301,
-		304,
-		307,
-		310,
+		288,
+		291,
+		294,
+		297,
+		300,
+		303,
+		306,
+		309,
 		313,
 		316,
 		319,
@@ -7551,17 +7551,17 @@
 		782,
 		783,
 		788,
-		792,
-		795,
+		791,
+		794,
+		797,
 		798,
-		799,
-		804,
-		807,
-		810,
-		813,
-		816,
-		819,
-		822,
+		803,
+		806,
+		809,
+		812,
+		815,
+		818,
+		821,
 		825,
 		828,
 		831,
@@ -7760,17 +7760,17 @@
 				-1
 			],
 			"insert_command_index": 252,
-			"path": "assets/data/runtime/map_editor/wall_render_store/5b3c87e986d13b814786b331241f75fbd8f7b70f58d0de07c44b336dfa2230f3.png",
-			"png_bytes": 1703,
+			"path": "assets/data/runtime/map_editor/wall_render_store/ad4ef1b04b9042e13d61ab5ace213231478f505c9f2c6f27f49609427d8a39b0.png",
+			"png_bytes": 1722,
 			"position_px": [
 				891.0,
 				-306.0
 			],
 			"segment_index": 2,
-			"sha256": "5b3c87e986d13b814786b331241f75fbd8f7b70f58d0de07c44b336dfa2230f3",
+			"sha256": "ad4ef1b04b9042e13d61ab5ace213231478f505c9f2c6f27f49609427d8a39b0",
 			"size_px": [
 				133,
-				82
+				86
 			]
 		},
 		{
@@ -7779,17 +7779,17 @@
 				-1
 			],
 			"insert_command_index": 252,
-			"path": "assets/data/runtime/map_editor/wall_render_store/98850a620cc31e87447c81f95b06f1363f133f4b450547ed78b718813ed418d3.png",
-			"png_bytes": 304,
+			"path": "assets/data/runtime/map_editor/wall_render_store/b4cb132b9e73f57d77cf6678ba51d6080f0e59166d5a347282d769fd4a190b8c.png",
+			"png_bytes": 1381,
 			"position_px": [
 				1024.0,
 				-247.0
 			],
 			"segment_index": 2,
-			"sha256": "98850a620cc31e87447c81f95b06f1363f133f4b450547ed78b718813ed418d3",
+			"sha256": "b4cb132b9e73f57d77cf6678ba51d6080f0e59166d5a347282d769fd4a190b8c",
 			"size_px": [
-				15,
-				23
+				79,
+				61
 			]
 		},
 		{
@@ -7798,17 +7798,17 @@
 				-1
 			],
 			"insert_command_index": 252,
-			"path": "assets/data/runtime/map_editor/wall_render_store/8e444018427df6019613dbdf8c2720bf70af82bb6186b2b8d89cc4223fbbcdd8.png",
-			"png_bytes": 684,
+			"path": "assets/data/runtime/map_editor/wall_render_store/b9607730477c99e41bb3e01dd5201ac10309300dd2c2d8910b8ca157bea634b9.png",
+			"png_bytes": 1457,
 			"position_px": [
-				-1060.0,
+				-1124.0,
 				-243.0
 			],
 			"segment_index": 2,
-			"sha256": "8e444018427df6019613dbdf8c2720bf70af82bb6186b2b8d89cc4223fbbcdd8",
+			"sha256": "b9607730477c99e41bb3e01dd5201ac10309300dd2c2d8910b8ca157bea634b9",
 			"size_px": [
-				36,
-				41
+				100,
+				73
 			]
 		},
 		{
@@ -7817,17 +7817,17 @@
 				-1
 			],
 			"insert_command_index": 252,
-			"path": "assets/data/runtime/map_editor/wall_render_store/27643af910cc12884d8410008561a4d1379dadf145f96a06180d6dce6b525547.png",
-			"png_bytes": 5387,
+			"path": "assets/data/runtime/map_editor/wall_render_store/e13c107e34b045a2bba7c77fb49af7c4df5d4c8993be69f216f377e297efc0a2.png",
+			"png_bytes": 8182,
 			"position_px": [
 				-1024.0,
 				-291.0
 			],
 			"segment_index": 2,
-			"sha256": "27643af910cc12884d8410008561a4d1379dadf145f96a06180d6dce6b525547",
+			"sha256": "e13c107e34b045a2bba7c77fb49af7c4df5d4c8993be69f216f377e297efc0a2",
 			"size_px": [
-				719,
-				89
+				783,
+				115
 			]
 		},
 		{
@@ -7835,18 +7835,18 @@
 				-1,
 				-1
 			],
-			"insert_command_index": 289,
-			"path": "assets/data/runtime/map_editor/wall_render_store/8bf95a710bf9b23d531bc63fd7c0d516c0501b73224e0d48cd90ca99ca1cd0f7.png",
-			"png_bytes": 11283,
+			"insert_command_index": 313,
+			"path": "assets/data/runtime/map_editor/wall_render_store/1bb09a103e4ade3c4064f7080a6b6a4ab38280da28ecf31dbb8c00c9b1694d5e.png",
+			"png_bytes": 8559,
 			"position_px": [
 				-804.0,
-				-242.0
+				-210.0
 			],
 			"segment_index": 3,
-			"sha256": "8bf95a710bf9b23d531bc63fd7c0d516c0501b73224e0d48cd90ca99ca1cd0f7",
+			"sha256": "1bb09a103e4ade3c4064f7080a6b6a4ab38280da28ecf31dbb8c00c9b1694d5e",
 			"size_px": [
 				723,
-				136
+				104
 			]
 		},
 		{
@@ -7854,18 +7854,18 @@
 				0,
 				-1
 			],
-			"insert_command_index": 289,
-			"path": "assets/data/runtime/map_editor/wall_render_store/9d9f254c3b42aee6e538a7dc9686ae921566f643bb5b7fabd767c291251ffa1f.png",
-			"png_bytes": 2116,
+			"insert_command_index": 313,
+			"path": "assets/data/runtime/map_editor/wall_render_store/3199bde06ea27ae25474eeb2ac46017e7efaf0ace325cfb7145a1d433cf98e2e.png",
+			"png_bytes": 1621,
 			"position_px": [
 				603.0,
-				-241.0
+				-194.0
 			],
 			"segment_index": 3,
-			"sha256": "9d9f254c3b42aee6e538a7dc9686ae921566f643bb5b7fabd767c291251ffa1f",
+			"sha256": "3199bde06ea27ae25474eeb2ac46017e7efaf0ace325cfb7145a1d433cf98e2e",
 			"size_px": [
-				421,
-				119
+				116,
+				72
 			]
 		},
 		{
@@ -7873,18 +7873,18 @@
 				1,
 				-1
 			],
-			"insert_command_index": 289,
-			"path": "assets/data/runtime/map_editor/wall_render_store/5bf5dcdc41f2c16e43fe8d1ec0356747139a1a891038ca138e5e0eec90ae8be2.png",
-			"png_bytes": 2464,
+			"insert_command_index": 313,
+			"path": "assets/data/runtime/map_editor/wall_render_store/58ec2eb14fdccf390bebe864e6dc064eb2c700e0f7f106305f4256994b2ef1d3.png",
+			"png_bytes": 2007,
 			"position_px": [
-				1024.0,
-				-242.0
+				1083.0,
+				-210.0
 			],
 			"segment_index": 3,
-			"sha256": "5bf5dcdc41f2c16e43fe8d1ec0356747139a1a891038ca138e5e0eec90ae8be2",
+			"sha256": "58ec2eb14fdccf390bebe864e6dc064eb2c700e0f7f106305f4256994b2ef1d3",
 			"size_px": [
-				207,
-				120
+				148,
+				88
 			]
 		},
 		{
@@ -7892,18 +7892,18 @@
 				-2,
 				-1
 			],
-			"insert_command_index": 289,
-			"path": "assets/data/runtime/map_editor/wall_render_store/4d6b0a5d0d3e4bd1a621b79f51b3b9e43dea13aac7584f123d02e823a71137ee.png",
-			"png_bytes": 4784,
+			"insert_command_index": 313,
+			"path": "assets/data/runtime/map_editor/wall_render_store/3532f0086022381141a24260dfc0807ccf2094f8bd696e8787e1c7cbbf3536f5.png",
+			"png_bytes": 3851,
 			"position_px": [
 				-1252.0,
-				-227.0
+				-195.0
 			],
 			"segment_index": 3,
-			"sha256": "4d6b0a5d0d3e4bd1a621b79f51b3b9e43dea13aac7584f123d02e823a71137ee",
+			"sha256": "3532f0086022381141a24260dfc0807ccf2094f8bd696e8787e1c7cbbf3536f5",
 			"size_px": [
-				211,
-				121
+				147,
+				89
 			]
 		},
 		{
@@ -8368,17 +8368,17 @@
 				0
 			],
 			"insert_command_index": 698,
-			"path": "assets/data/runtime/map_editor/wall_render_store/ed03399aa9135e6defcb5134bfdbd0a23e1961b851ca3593d903731c29878773.png",
-			"png_bytes": 4435,
+			"path": "assets/data/runtime/map_editor/wall_render_store/f5b8a76204d2f4179c9c27a0495255ab63e63e5fc3bdcb51dbd7a2990e05b2b7.png",
+			"png_bytes": 5478,
 			"position_px": [
 				-1349.0,
 				141.0
 			],
 			"segment_index": 11,
-			"sha256": "ed03399aa9135e6defcb5134bfdbd0a23e1961b851ca3593d903731c29878773",
+			"sha256": "f5b8a76204d2f4179c9c27a0495255ab63e63e5fc3bdcb51dbd7a2990e05b2b7",
 			"size_px": [
 				325,
-				89
+				121
 			]
 		},
 		{
@@ -8387,17 +8387,17 @@
 				0
 			],
 			"insert_command_index": 698,
-			"path": "assets/data/runtime/map_editor/wall_render_store/cfac68eac0e705bf1bcfa236074b8580a47d275a6e9f0eae74694c4746ded98c.png",
-			"png_bytes": 5129,
+			"path": "assets/data/runtime/map_editor/wall_render_store/15d9c05d5cc8e62cec6c6a7db02267350b9083ce14e7630db9942dd7f9ab25e3.png",
+			"png_bytes": 9324,
 			"position_px": [
 				-1024.0,
 				141.0
 			],
 			"segment_index": 11,
-			"sha256": "cfac68eac0e705bf1bcfa236074b8580a47d275a6e9f0eae74694c4746ded98c",
+			"sha256": "15d9c05d5cc8e62cec6c6a7db02267350b9083ce14e7630db9942dd7f9ab25e3",
 			"size_px": [
-				335,
-				89
+				1007,
+				121
 			]
 		},
 		{
@@ -8406,17 +8406,17 @@
 				0
 			],
 			"insert_command_index": 698,
-			"path": "assets/data/runtime/map_editor/wall_render_store/6822ce97954be8d4d7db2fe5f9f28808a7b4b7880b55e5375f399c1f87843814.png",
-			"png_bytes": 3745,
+			"path": "assets/data/runtime/map_editor/wall_render_store/23213d0217b231f1819945d0798e0011065da6bc1f58d836f46561acd6155bcd.png",
+			"png_bytes": 5111,
 			"position_px": [
 				251.0,
 				141.0
 			],
 			"segment_index": 11,
-			"sha256": "6822ce97954be8d4d7db2fe5f9f28808a7b4b7880b55e5375f399c1f87843814",
+			"sha256": "23213d0217b231f1819945d0798e0011065da6bc1f58d836f46561acd6155bcd",
 			"size_px": [
 				532,
-				73
+				105
 			]
 		},
 		{
@@ -8425,17 +8425,17 @@
 				0
 			],
 			"insert_command_index": 698,
-			"path": "assets/data/runtime/map_editor/wall_render_store/7ca67d6e48fb2d8ef62959c768fd415e1e27deeb85747010e036cd0c69aaa380.png",
-			"png_bytes": 2850,
+			"path": "assets/data/runtime/map_editor/wall_render_store/c92200882b12735497b7bfd6127a195902040dd11b7b8fb032e921650bd043a9.png",
+			"png_bytes": 4105,
 			"position_px": [
-				1244.0,
+				1180.0,
 				141.0
 			],
 			"segment_index": 11,
-			"sha256": "7ca67d6e48fb2d8ef62959c768fd415e1e27deeb85747010e036cd0c69aaa380",
+			"sha256": "c92200882b12735497b7bfd6127a195902040dd11b7b8fb032e921650bd043a9",
 			"size_px": [
-				115,
-				73
+				179,
+				105
 			]
 		},
 		{
@@ -8443,18 +8443,18 @@
 				-1,
 				0
 			],
-			"insert_command_index": 792,
-			"path": "assets/data/runtime/map_editor/wall_render_store/f9751269f0a141a5a27d6a007c2e2fc829c43c94fbe33540b5b94e0b65643261.png",
-			"png_bytes": 17671,
+			"insert_command_index": 825,
+			"path": "assets/data/runtime/map_editor/wall_render_store/36e5c562cad762347060fde10e5fa6d1fc44d0a65245626c6acef24c6ac85651.png",
+			"png_bytes": 14816,
 			"position_px": [
 				-1024.0,
-				189.0
+				221.0
 			],
 			"segment_index": 12,
-			"sha256": "f9751269f0a141a5a27d6a007c2e2fc829c43c94fbe33540b5b94e0b65643261",
+			"sha256": "36e5c562cad762347060fde10e5fa6d1fc44d0a65245626c6acef24c6ac85651",
 			"size_px": [
-				1007,
-				249
+				943,
+				217
 			]
 		},
 		{
@@ -8462,18 +8462,18 @@
 				0,
 				0
 			],
-			"insert_command_index": 792,
-			"path": "assets/data/runtime/map_editor/wall_render_store/56c1119a4594c3c8a5a4cdcc0d6441ef6bf571f6b84f779c5744dc29360cdd85.png",
-			"png_bytes": 10938,
+			"insert_command_index": 825,
+			"path": "assets/data/runtime/map_editor/wall_render_store/dab4604d86afbe379cb483803eeb0b747504d0883fac1191ca31d8234f72fe68.png",
+			"png_bytes": 9473,
 			"position_px": [
 				252.0,
-				189.0
+				221.0
 			],
 			"segment_index": 12,
-			"sha256": "56c1119a4594c3c8a5a4cdcc0d6441ef6bf571f6b84f779c5744dc29360cdd85",
+			"sha256": "dab4604d86afbe379cb483803eeb0b747504d0883fac1191ca31d8234f72fe68",
 			"size_px": [
 				772,
-				233
+				201
 			]
 		},
 		{
@@ -8481,18 +8481,18 @@
 				1,
 				0
 			],
-			"insert_command_index": 792,
-			"path": "assets/data/runtime/map_editor/wall_render_store/d11b2533ac447a1408b697c28a6560c33415e960765130d957df57836e143371.png",
-			"png_bytes": 3423,
+			"insert_command_index": 825,
+			"path": "assets/data/runtime/map_editor/wall_render_store/afbfd75a56f5779061744ec354849865b4d6d8a9e1663c7e5c5f8191f4f944e0.png",
+			"png_bytes": 2189,
 			"position_px": [
 				1024.0,
-				189.0
+				221.0
 			],
 			"segment_index": 12,
-			"sha256": "d11b2533ac447a1408b697c28a6560c33415e960765130d957df57836e143371",
+			"sha256": "afbfd75a56f5779061744ec354849865b4d6d8a9e1663c7e5c5f8191f4f944e0",
 			"size_px": [
-				239,
-				143
+				175,
+				111
 			]
 		},
 		{
@@ -8500,18 +8500,18 @@
 				-2,
 				0
 			],
-			"insert_command_index": 792,
-			"path": "assets/data/runtime/map_editor/wall_render_store/3826550fcd49e1966b5e11830c9558ed1243d8870a13e1d8565ba2bf465daa2c.png",
-			"png_bytes": 3294,
+			"insert_command_index": 825,
+			"path": "assets/data/runtime/map_editor/wall_render_store/a49bbfa097f5a03b4971de882aab9fe238fd986c1425497ce6ee2537f5e23603.png",
+			"png_bytes": 2170,
 			"position_px": [
-				-1221.0,
-				206.0
+				-1157.0,
+				238.0
 			],
 			"segment_index": 12,
-			"sha256": "3826550fcd49e1966b5e11830c9558ed1243d8870a13e1d8565ba2bf465daa2c",
+			"sha256": "a49bbfa097f5a03b4971de882aab9fe238fd986c1425497ce6ee2537f5e23603",
 			"size_px": [
-				197,
-				118
+				133,
+				86
 			]
 		},
 		{
@@ -8700,21 +8700,21 @@
 				276,
 				279,
 				282,
-				285
+				285,
+				288,
+				291,
+				294,
+				297,
+				300,
+				303,
+				306,
+				309
 			],
 			"insert_command_index": 252,
 			"segment_index": 2
 		},
 		{
 			"command_indices": [
-				289,
-				292,
-				295,
-				298,
-				301,
-				304,
-				307,
-				310,
 				313,
 				316,
 				319,
@@ -8745,7 +8745,7 @@
 				392,
 				397
 			],
-			"insert_command_index": 289,
+			"insert_command_index": 313,
 			"segment_index": 3
 		},
 		{
@@ -8918,24 +8918,24 @@
 				777,
 				782,
 				783,
-				788
+				788,
+				791,
+				794,
+				797,
+				798,
+				803,
+				806,
+				809,
+				812,
+				815,
+				818,
+				821
 			],
 			"insert_command_index": 698,
 			"segment_index": 11
 		},
 		{
 			"command_indices": [
-				792,
-				795,
-				798,
-				799,
-				804,
-				807,
-				810,
-				813,
-				816,
-				819,
-				822,
 				825,
 				828,
 				831,
@@ -8988,7 +8988,7 @@
 				972,
 				975
 			],
-			"insert_command_index": 792,
+			"insert_command_index": 825,
 			"segment_index": 12
 		},
 		{
@@ -9067,7 +9067,7 @@
 			"segment_index": 14
 		}
 	],
-	"source_commands_sha256": "74873f7ac00993760da29cc4a828e5b7243b825a9d18fc6f0918b15d74a24bde",
+	"source_commands_sha256": "b7b9435d09f572224d8f4fb191c4d21e63ce7f5a2403bfaee69b7e473449625a",
 	"source_image_sha256": {
 		"assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l1_v01/part_00_base.png": "af2545ef5007c5c0d70176aec9fe084a8ae70f27ad07327224c9e58fb2e806f1",
 		"assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_x_l1_v01/part_00_front.png": "2ca7455881b1a10f5b1b3ab465c5e7b68c1bc205dcafcd285b1c4ef41053618c",
@@ -9205,6 +9205,6 @@
 		"assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_front.png": "25ca65a2ba255b423e7168f5a779be12e63f9d2020d782992c7eb67a6548a676",
 		"assets/art/maps/_shared/walls/natural_cave/cave_granite_u0/cave_granite_straight_y_l4_v03/part_03_shadow.png": "8cfd67df4da2ef965efa9dedde7712c935631ebe45377ed376c1859c367ddfd8"
 	},
-	"source_runtime_json_sha256": "2582dfbae6eb7b06e956847b16ac0b9f662bbe1e7b9480b888ea2418b6fa492d",
+	"source_runtime_json_sha256": "52f99a7ce2a9779404a0b92b84490ea7a53ce455766ca250ee0aba85c66c0cf0",
 	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
 }

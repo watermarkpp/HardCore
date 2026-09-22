@@ -2329,6 +2329,18 @@ func _on_publish_runtime_pressed() -> void:
 		return
 	_last_build_candidate = {}
 	_update_runtime_state_label()
+	# A map-only publication changes the runtime SHA, invalidating its derived
+	# render plan even when only spawns changed. Refresh existing optimized
+	# maps through the same deterministic publisher as the packaging workflow.
+	var render_status := ""
+	var render_plan_path := "res://assets/data/runtime/map_editor/wall_render_plans/%s.wall_render_plan.json" % map_key
+	if FileAccess.file_exists(render_plan_path):
+		var publisher := preload("res://scripts/map_editor/map_editor_wall_render_publish_service.gd").new()
+		var render_result := publisher.publish_map(map_key)
+		if render_result.has("error"):
+			render_status = "\n地图已发布；优化渲染构建失败，请修复后重新构建再打包：%s" % str(render_result.error)
+		else:
+			render_status = "\n优化渲染已同步更新"
 	status_label.text = (
 		"已发布：map_id=%d key=%s\nhash=%s revision=%d formal_playable=%s"
 		% [
@@ -2338,7 +2350,7 @@ func _on_publish_runtime_pressed() -> void:
 			int(result.get("approval_revision", 0)),
 			str(bool(result.get("formal_playable", false))),
 		]
-	)
+	) + render_status
 
 
 func _on_bake_dirty_pressed() -> void:

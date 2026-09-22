@@ -1,0 +1,440 @@
+{
+  "status": "PASS",
+  "xlsx": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\repair_v92\\excel\\armor_single_slot\\HardCore_当前地图怪物真实掉率_20260922_衣服单槽修正版.xlsx",
+  "size_bytes": 680723,
+  "sha256": "0b3140886cdf24bc298663cf8f512b33110a0315aed4471f36d8dad2ac6f5826",
+  "source_sha256": "abb474e32d2d5f37bbbf1932be976208ead7d577b95863a18c325e08e2ba66d5",
+  "sheets": 121,
+  "monster_sheets": 120,
+  "probability_text_cells": 10423,
+  "probability_types": "All are OOXML text and Excel number format @; zero date/numeric probability cells",
+  "probability_cells_by_kind": {
+    "actual": 4621,
+    "slot": 5802
+  },
+  "full_cell_comparison": "All output, slot, map, classification, and empty-table rows match the exact snapshot",
+  "render_count": 121,
+  "math_tests": {
+    "status": "PASS",
+    "exhaustive_cases": 76,
+    "explicit_cap_boundaries": 2
+  },
+  "summary": {
+    "monster_count": 120,
+    "output_rows": 4621,
+    "classification_counts": {
+      "普通": 61,
+      "精英": 27,
+      "特殊普通": 7,
+      "Boss": 17,
+      "特殊": 8
+    },
+    "empty_monster_ids": [
+      18,
+      30,
+      45,
+      96,
+      100
+    ],
+    "zero_actual_rows": 16,
+    "cap_affected_rows": 4211,
+    "max_probability_chars": 318,
+    "elapsed_seconds": 1.391
+  },
+  "desktop_path": "C:\\Users\\Administrator\\Desktop\\HardCore_当前地图怪物真实掉率_20260922_衣服单槽修正版.xlsx",
+  "desktop_hash_match": true,
+  "snapshot_role": "armor_single_slot_revision_current_at_delivery_20260922",
+  "armor_revision": {
+    "status": "PASS",
+    "formal_authority_sha256": "9f6e27418c742c9338ce4b60d752202e50549b48bbc2e066d91c760e6ef43b56",
+    "recompiled_products": [
+      {
+        "path": "outputs\\repair_v92\\armor\\final_prepared_a\\dpv2_user_loot_sheet_authority_v1.json",
+        "sha256": "9f6e27418c742c9338ce4b60d752202e50549b48bbc2e066d91c760e6ef43b56"
+      },
+      {
+        "path": "outputs\\repair_v92\\armor\\source_only\\out\\dpv2_user_loot_sheet_authority_v1.json",
+        "sha256": "9f6e27418c742c9338ce4b60d752202e50549b48bbc2e066d91c760e6ef43b56"
+      }
+    ],
+    "source_sha256": "abb474e32d2d5f37bbbf1932be976208ead7d577b95863a18c325e08e2ba66d5",
+    "directive_file_sha256": "7d6630c87ef5616655fcdeb3a1c873bebd27bf9742c04c25a5ca032b52031a12",
+    "directive_authority_recorded_sha256": "7d6630c87ef5616655fcdeb3a1c873bebd27bf9742c04c25a5ca032b52031a12",
+    "hash_contract": "UTF-8 JSON ensure_ascii=false sort_keys=true compact separators; list order retained",
+    "authority_monsters": 126,
+    "authority_before_slots": 6144,
+    "authority_after_slots": 6042,
+    "directive_removed_slots": 102,
+    "directive_affected_monsters": 37,
+    "all_retained_slot_records_and_order_unchanged": true,
+    "retained_armor_original_probability_unchanged": true,
+    "nonarmor_slots_unchanged": 5791,
+    "nonarmor_before_sha256": "0a5169a9c1e0a3f2e82c29b54bc89915758691d8c19aa5f23582ef105e886609",
+    "nonarmor_after_sha256": "0a5169a9c1e0a3f2e82c29b54bc89915758691d8c19aa5f23582ef105e886609",
+    "overlay_slots_unchanged": 168,
+    "overlay_before_sha256": "935885e3732909b81424cfdc20b3ab2028388dda70fe3b6be80b2bff71c91acf",
+    "overlay_after_sha256": "935885e3732909b81424cfdc20b3ab2028388dda70fe3b6be80b2bff71c91acf",
+    "frozen_exceptions": [
+      {
+        "monster_id": 235,
+        "before_sha256": "759f2307077c2e196e51c39150077d736f091b073cd9aa6097fa318116019a10",
+        "after_sha256": "759f2307077c2e196e51c39150077d736f091b073cd9aa6097fa318116019a10",
+        "slots": [
+          {
+            "slot_uid": "dpv2.direct.m235.slot_054",
+            "final_numerator": 1,
+            "final_denominator": 30,
+            "overflow_priority": 2000,
+            "protected_drop": true,
+            "origin": "sheet_row",
+            "source_sheet_row": 20,
+            "canonical_item_id": 140
+          }
+        ]
+      },
+      {
+        "monster_id": 236,
+        "before_sha256": "74327c08b00e90d8276c2888bfcefbd32027efafa066d1935866723d009b72c9",
+        "after_sha256": "74327c08b00e90d8276c2888bfcefbd32027efafa066d1935866723d009b72c9",
+        "slots": [
+          {
+            "slot_uid": "dpv2.direct.m236.slot_054",
+            "final_numerator": 1,
+            "final_denominator": 30,
+            "overflow_priority": 2000,
+            "protected_drop": true,
+            "origin": "sheet_row",
+            "source_sheet_row": 20,
+            "canonical_item_id": 144
+          }
+        ]
+      },
+      {
+        "monster_id": 237,
+        "before_sha256": "8e42c43a26c3caa78418ec30c9a2fee65bf6d8a520116ae80d276e5fae452eea",
+        "after_sha256": "8e42c43a26c3caa78418ec30c9a2fee65bf6d8a520116ae80d276e5fae452eea",
+        "slots": [
+          {
+            "slot_uid": "dpv2.direct.m237.slot_054",
+            "final_numerator": 1,
+            "final_denominator": 30,
+            "overflow_priority": 2000,
+            "protected_drop": true,
+            "origin": "sheet_row",
+            "source_sheet_row": 20,
+            "canonical_item_id": 142
+          }
+        ]
+      },
+      {
+        "monster_id": 238,
+        "before_sha256": "6e81a9f509dc4fd2c9e6dd00571a96f14ae0b64f5fce9ed5bd7c72ba6b91b094",
+        "after_sha256": "6e81a9f509dc4fd2c9e6dd00571a96f14ae0b64f5fce9ed5bd7c72ba6b91b094",
+        "slots": [
+          {
+            "slot_uid": "dpv2.direct.m238.slot_054",
+            "final_numerator": 1,
+            "final_denominator": 30,
+            "overflow_priority": 2000,
+            "protected_drop": true,
+            "origin": "sheet_row",
+            "source_sheet_row": 20,
+            "canonical_item_id": 141
+          }
+        ]
+      },
+      {
+        "monster_id": 239,
+        "before_sha256": "a1e70f76c7e2926c2ed62f3346dc61e461a64b472ab6fc9bc8b7dac95f263512",
+        "after_sha256": "a1e70f76c7e2926c2ed62f3346dc61e461a64b472ab6fc9bc8b7dac95f263512",
+        "slots": [
+          {
+            "slot_uid": "dpv2.direct.m239.slot_054",
+            "final_numerator": 1,
+            "final_denominator": 30,
+            "overflow_priority": 2000,
+            "protected_drop": true,
+            "origin": "sheet_row",
+            "source_sheet_row": 20,
+            "canonical_item_id": 145
+          }
+        ]
+      },
+      {
+        "monster_id": 240,
+        "before_sha256": "ab6a3881c7a0cde816c38af48af94fa845b8a4da6c7c97e2338c3577805e9881",
+        "after_sha256": "ab6a3881c7a0cde816c38af48af94fa845b8a4da6c7c97e2338c3577805e9881",
+        "slots": [
+          {
+            "slot_uid": "dpv2.direct.m240.slot_054",
+            "final_numerator": 1,
+            "final_denominator": 30,
+            "overflow_priority": 2000,
+            "protected_drop": true,
+            "origin": "sheet_row",
+            "source_sheet_row": 20,
+            "canonical_item_id": 143
+          }
+        ]
+      }
+    ],
+    "live_removed_slots": 95,
+    "live_removed_slot_uids": [
+      "dpv2.direct.m19.slot_003",
+      "dpv2.direct.m36.slot_025",
+      "dpv2.direct.m39.slot_009",
+      "dpv2.direct.m39.slot_010",
+      "dpv2.direct.m39.slot_006",
+      "dpv2.direct.m50.slot_014",
+      "dpv2.direct.m56.slot_076",
+      "dpv2.direct.m57.slot_018",
+      "dpv2.direct.m57.slot_015",
+      "dpv2.direct.m57.slot_019",
+      "dpv2.direct.m57.slot_009",
+      "dpv2.direct.m57.slot_010",
+      "dpv2.direct.m57.slot_006",
+      "dpv2.direct.m70.slot_034",
+      "dpv2.direct.m74.slot_009",
+      "dpv2.direct.m74.slot_010",
+      "dpv2.direct.m74.slot_006",
+      "dpv2.direct.m76.v505_0085",
+      "dpv2.direct.m77.slot_009",
+      "dpv2.direct.m77.slot_010",
+      "dpv2.direct.m77.slot_006",
+      "dpv2.direct.m90.slot_009",
+      "dpv2.direct.m90.slot_010",
+      "dpv2.direct.m90.slot_006",
+      "dpv2.direct.m92.v505_0026",
+      "dpv2.direct.m94.v505_0027",
+      "dpv2.direct.m101.slot_023",
+      "dpv2.direct.m107.slot_034",
+      "dpv2.direct.m112.slot_046",
+      "dpv2.direct.m114.slot_044",
+      "dpv2.direct.m116.slot_042",
+      "dpv2.direct.m118.slot_043",
+      "dpv2.direct.m121.slot_018",
+      "dpv2.direct.m121.slot_015",
+      "dpv2.direct.m121.slot_019",
+      "dpv2.direct.m121.slot_009",
+      "dpv2.direct.m121.slot_010",
+      "dpv2.direct.m121.slot_006",
+      "dpv2.direct.m135.slot_064",
+      "dpv2.direct.m135.slot_062",
+      "dpv2.direct.m135.slot_066",
+      "dpv2.direct.m135.slot_079",
+      "dpv2.direct.m135.slot_081",
+      "dpv2.direct.m135.slot_077",
+      "dpv2.direct.m137.slot_009",
+      "dpv2.direct.m137.slot_010",
+      "dpv2.direct.m137.slot_006",
+      "dpv2.direct.m141.slot_070",
+      "dpv2.direct.m141.slot_069",
+      "dpv2.direct.m141.slot_073",
+      "dpv2.direct.m142.slot_009",
+      "dpv2.direct.m142.slot_010",
+      "dpv2.direct.m142.slot_006",
+      "dpv2.direct.m142.slot_018",
+      "dpv2.direct.m142.slot_015",
+      "dpv2.direct.m142.slot_019",
+      "dpv2.direct.m152.slot_037",
+      "dpv2.direct.m152.slot_036",
+      "dpv2.direct.m152.slot_040",
+      "dpv2.direct.m155.slot_037",
+      "dpv2.direct.m155.slot_036",
+      "dpv2.direct.m155.slot_040",
+      "dpv2.direct.m155.slot_030",
+      "dpv2.direct.m155.slot_033",
+      "dpv2.direct.m155.slot_029",
+      "dpv2.direct.m158.slot_039",
+      "dpv2.direct.m158.slot_038",
+      "dpv2.direct.m158.slot_042",
+      "dpv2.direct.m188.slot_067",
+      "dpv2.direct.m188.slot_066",
+      "dpv2.direct.m188.slot_070",
+      "dpv2.direct.m195.slot_072",
+      "dpv2.direct.m195.slot_071",
+      "dpv2.direct.m195.slot_075",
+      "dpv2.direct.m216.slot_016",
+      "dpv2.direct.m216.slot_015",
+      "dpv2.direct.m216.slot_019",
+      "dpv2.direct.m220.slot_016",
+      "dpv2.direct.m220.slot_019",
+      "dpv2.direct.m220.slot_044",
+      "dpv2.direct.m230.slot_041",
+      "dpv2.direct.m230.slot_040",
+      "dpv2.direct.m230.slot_044",
+      "dpv2.direct.m231.slot_024",
+      "dpv2.direct.m231.slot_022",
+      "dpv2.direct.m231.slot_026",
+      "dpv2.direct.m232.slot_072",
+      "dpv2.direct.m232.slot_071",
+      "dpv2.direct.m232.slot_075",
+      "dpv2.direct.m233.slot_067",
+      "dpv2.direct.m233.slot_066",
+      "dpv2.direct.m233.slot_070",
+      "dpv2.direct.m233.slot_078",
+      "dpv2.direct.m233.slot_081",
+      "dpv2.direct.m233.slot_077"
+    ],
+    "live_maps_and_classifications_unchanged": true,
+    "actual_probability_changed_rows": 1135,
+    "actual_probability_changed_nonarmor_rows": 1015,
+    "actual_probability_change_note": "Removing competing armor slots may change other output inclusion probabilities under the unchanged cap15; their per-slot probabilities and priorities are unchanged."
+  },
+  "visual_review": {
+    "status": "PASS",
+    "all_sheets_rendered": 121,
+    "all_sheets_visually_reviewed_in_montages": 121,
+    "montages": [
+      "montage_00.png",
+      "montage_01.png",
+      "montage_02.png",
+      "montage_03.png",
+      "montage_04.png",
+      "montage_05.png",
+      "montage_06.png",
+      "montage_07.png",
+      "montage_08.png",
+      "montage_09.png",
+      "montage_10.png"
+    ],
+    "additional_fullsize_review": [
+      "058_124.png"
+    ],
+    "scope": "Every sheet top-range preview; full content separately compared through OOXML"
+  },
+  "native_excel_application_test": "NOT_RUN",
+  "production_tests": {
+    "status": "PASS",
+    "executor": "parent integration controller; this workbook task did not launch Godot",
+    "tests": [
+      "armor_single_slot_authority",
+      "user_loot_sheet",
+      "rv15 provider counterexamples",
+      "SPB decoupling",
+      "live_map_export"
+    ]
+  },
+  "zero_actual_outputs": [
+    {
+      "monster_id": 76,
+      "monster_name": "沃玛教主",
+      "output": "金币 × 30000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 124,
+      "monster_name": "触龙神",
+      "output": "金币 × 70000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 141,
+      "monster_name": "邪恶毒蛇",
+      "output": "金币 × 27500",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 143,
+      "monster_name": "石墓尸王",
+      "output": "金币 × 70000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 159,
+      "monster_name": "祖玛卫士00",
+      "output": "金币 × 30000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 160,
+      "monster_name": "祖玛教主",
+      "output": "金币 × 150000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 180,
+      "monster_name": "赤月恶魔",
+      "output": "金币 × 120000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 191,
+      "monster_name": "虹魔蝎卫",
+      "output": "金币 × 20000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 195,
+      "monster_name": "千年树妖",
+      "output": "金币 × 7500",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 232,
+      "monster_name": "宝箱6",
+      "output": "金币 × 12500",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 235,
+      "monster_name": "暗之双头血魔",
+      "output": "金币 × 15000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 236,
+      "monster_name": "暗之双头金刚",
+      "output": "金币 × 15000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 237,
+      "monster_name": "暗之黄泉教主",
+      "output": "金币 × 15000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 238,
+      "monster_name": "暗之骷髅精灵",
+      "output": "金币 × 15000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 239,
+      "monster_name": "暗之沃玛教主",
+      "output": "金币 × 15000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    },
+    {
+      "monster_id": 240,
+      "monster_name": "暗之虹魔教主",
+      "output": "金币 × 15000",
+      "item_id": "金币",
+      "actual_probability": "0/1"
+    }
+  ],
+  "runtime_service_sha256_at_review": "e02c30d0886ff80e8dead2b407bb608bbd9b71646febf44b8cf70299610efc87",
+  "old_desktop_sha256": "75c961cae7b6efa83e3d1be29242b39624f9f4d8b2aef3a43b949145b6e24637",
+  "tool_sha256": {
+    "build_loot_workbook.mjs": "5a4685bdc2a3939fd55ae6fc7ac6f51e403b4d022a460f4a829b5418ec20ae4e",
+    "calculate_exact_loot.py": "fb99dc18ced5f63b9ad9050661c7c2af127936f7314d6e5de3f3bcda9f2594dc",
+    "verify_loot_workbook.py": "f58a76b2fe26cd2aed1280eea6a62f60060973f1c93e102b1346cd7713e0d990",
+    "verify_armor_revision.py": "ece0ee35470cdb234e1591091a66841932f1943fbb21696ffd90c33db4fa0df2"
+  }
+}

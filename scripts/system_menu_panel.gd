@@ -9,6 +9,7 @@ signal continue_requested
 signal return_to_character_select_requested
 signal save_and_exit_requested
 signal audio_setting_changed(request: Dictionary)
+signal performance_capture_requested(detail_mode: String)
 
 const ACTION_CONTRACT_ID := "ui.system_menu.action.v1"
 const AUDIO_CONTRACT_ID := "ui.audio.setting.v2"
@@ -193,6 +194,24 @@ func _build_settings_page() -> void:
 	settings_back_button.theme_type_variation = "GothicSystemSettingsBackGemButton"
 	settings_back_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_back_button.pressed.connect(show_main_page)
+	if OS.is_debug_build():
+		var modes := ["frame_only", "full"]
+		var captions := ["记录帧率30秒", "记录CPU30秒"]
+		for index in range(2):
+			var capture := _menu_button(settings_page, "PerformanceCapture%d" % index,
+				captions[index], 510, "system_menu.capture." + modes[index])
+			capture.position.x = 72 + index * 182
+			capture.size = Vector2(174, 36)
+			capture.add_theme_font_size_override("font_size", 13)
+			capture.pressed.connect(func() -> void: performance_capture_requested.emit(modes[index]))
+		var capture_note := Label.new()
+		capture_note.name = "PerformanceCaptureNote"
+		capture_note.text = "自动保存到本机；CPU记录会增加测量开销"
+		capture_note.position = Vector2(64, 551)
+		capture_note.size = Vector2(372, 22)
+		capture_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		capture_note.add_theme_font_size_override("font_size", 11)
+		settings_page.add_child(capture_note)
 
 
 func _title_bar(parent: Control, title_text: String, subtitle_text: String) -> Label:
@@ -392,7 +411,7 @@ func _show_menu_action_result(button: Button, success: bool, group: String) -> v
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
 		group,
 	)
-	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS if success else GothicUIThemeScript.BUTTON_RESULT_FAILURE_SECONDS).timeout.connect(func() -> void:
 		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

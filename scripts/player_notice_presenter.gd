@@ -96,6 +96,10 @@ func present(notice: Dictionary) -> void:
 		return
 	for index in range(_queue.size()):
 		if str(_queue[index]["dedupe_key"]) == key:
+			if _active.is_empty() or int(normalized["priority"]) >= int(_active["priority"]):
+				_queue.remove_at(index)
+				_show(normalized)
+				return
 			_queue[index] = normalized
 			return
 

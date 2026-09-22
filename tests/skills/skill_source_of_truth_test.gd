@@ -42,7 +42,7 @@ func _ready() -> void:
 	var test_manifest := SkillDataLoaderScript.package_test_manifest()
 	assert(test_manifest.global_tests.size() == 19)
 	assert(bool(test_manifest.get("project_overlay_valid", false)))
-	assert(test_manifest.get("project_overlay", {}).get("entry_count", 0) == 2)
+	assert(test_manifest.get("project_overlay", {}).get("entry_count", 0) == 3)
 	assert(test_manifest.skill_tests.size() == 152)
 	print("SKILL_SOURCE_OF_TRUTH_PASS: package hashes, 33/6-14-13, four ranks, aliases, legacy 132 adapter")
 	get_tree().quit()

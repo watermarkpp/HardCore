@@ -1,0 +1,515 @@
+{
+  "functional_status": "PASS",
+  "device_status": "NOT_RUN",
+  "policy": "Resting untargeted ordinary actors wake every 0.5 s; returning/active maintenance and shared target grid remain 0.25 s; damage wakes immediately.",
+  "limitations": "Headless desktop, separated runs, wall intervals include scheduling. This is not an Android CPU/GPU or FPS result. The previous retarget deadline already skipped some 0.25 s maintenance wakes.",
+  "enemy_sha256": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4",
+  "density": [
+    {
+      "distance": "near",
+      "before": {
+        "p95_ms": [
+          10.864,
+          10.39
+        ],
+        "background_calls": [
+          750,
+          750
+        ],
+        "background_usec": [
+          8216,
+          8074
+        ],
+        "actor_usec_per_physics_frame": [
+          2272.579166666667,
+          2260.8416666666667
+        ],
+        "enemy_sha256": "0cbe62cb453ab9ed3d220dffd39e6a295afab222c10b4f28c6dcb8ad80e7c5b5"
+      },
+      "after": {
+        "p95_ms": [
+          10.421,
+          10.512
+        ],
+        "background_calls": [
+          400,
+          400
+        ],
+        "background_usec": [
+          5796,
+          5785
+        ],
+        "actor_usec_per_physics_frame": [
+          2242.883333333333,
+          2325.7541666666666
+        ],
+        "enemy_sha256": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4"
+      },
+      "p95_ms_median_change_percent": -1.51030394278725,
+      "background_calls_median_change_percent": -46.666666666666664,
+      "background_usec_median_change_percent": -28.907305095150406
+    },
+    {
+      "distance": "far",
+      "before": {
+        "p95_ms": [
+          10.788,
+          10.431
+        ],
+        "background_calls": [
+          750,
+          750
+        ],
+        "background_usec": [
+          8099,
+          7936
+        ],
+        "actor_usec_per_physics_frame": [
+          2239.875,
+          2230.025
+        ],
+        "enemy_sha256": "0cbe62cb453ab9ed3d220dffd39e6a295afab222c10b4f28c6dcb8ad80e7c5b5"
+      },
+      "after": {
+        "p95_ms": [
+          10.484,
+          10.063
+        ],
+        "background_calls": [
+          400,
+          400
+        ],
+        "background_usec": [
+          5826,
+          5799
+        ],
+        "actor_usec_per_physics_frame": [
+          2283.3458333333333,
+          2229.8958333333335
+        ],
+        "enemy_sha256": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4"
+      },
+      "p95_ms_median_change_percent": -3.166972995899908,
+      "background_calls_median_change_percent": -46.666666666666664,
+      "background_usec_median_change_percent": -27.5023386342376
+    }
+  ],
+  "formal_black": [
+    {
+      "frame_interval_ms": {
+        "max": 14.284,
+        "p50": 6.9,
+        "p95": 11.075,
+        "samples": 578
+      },
+      "counts": {
+        "alive": 62,
+        "deep_sleep": 48,
+        "moving": 5,
+        "observed": 14,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 14,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 14,
+        "visual_processing": 62,
+        "within_2_gu": 4
+      },
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "background_calls": 378,
+      "background_usec": 7308,
+      "actor_usec": 688494
+    },
+    {
+      "frame_interval_ms": {
+        "max": 12.81,
+        "p50": 6.9,
+        "p95": 10.901,
+        "samples": 578
+      },
+      "counts": {
+        "alive": 62,
+        "deep_sleep": 48,
+        "moving": 7,
+        "observed": 14,
+        "offscreen_physics": 0,
+        "path_pending": 0,
+        "physics_processing": 14,
+        "resident": 62,
+        "sprite_in_viewport": 50,
+        "target_player": 14,
+        "visual_processing": 62,
+        "within_2_gu": 4
+      },
+      "layout_sha256": "88d003bf2e15a3876672c87faed1a3fd2d278cdfc6c5f73655ef310ab1c417fc",
+      "background_calls": 378,
+      "background_usec": 7105,
+      "actor_usec": 673399
+    }
+  ],
+  "runs": [
+    {
+      "raw": "density_idle_cadence_near_1.json",
+      "runner": "runner_results_adhoc_20260922_211019_200_11252.json",
+      "artifacts": [
+        {
+          "file": "density_idle_cadence_near_1.json",
+          "sha256": "d6ce49703ed684ff6c379b6ad4730ddddb24bf20f3307859b659e548a9b7fb83"
+        },
+        {
+          "file": "density_idle_cadence_near_1.console.log",
+          "sha256": "1b85630dbf5c534548008b789887f576b18f5fa6b5dcf824e8923c21ba7ded8a"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211019_200_11252.json",
+          "sha256": "db4542643d362ccee76955aff05ece609d9c94f413ecb7a4be3f1b65a3e6704f"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_cadence_near_2.json",
+      "runner": "runner_results_adhoc_20260922_211101_661_11252.json",
+      "artifacts": [
+        {
+          "file": "density_idle_cadence_near_2.json",
+          "sha256": "68730fbe429878f16fdaf3a481e7b3eac6fa299cc6c7025cbe87bcc7f70760b3"
+        },
+        {
+          "file": "density_idle_cadence_near_2.console.log",
+          "sha256": "9fb160c6bd02c1655519873ca9c86b64b72a10816f8c9ba465da199f70fe7836"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211101_661_11252.json",
+          "sha256": "32e3a6e1d5c3c3e8cf84552d35dd2b87bf3148c2a74a685d3d0dabb365501cfe"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_cadence_far_1.json",
+      "runner": "runner_results_adhoc_20260922_211033_272_11252.json",
+      "artifacts": [
+        {
+          "file": "density_idle_cadence_far_1.json",
+          "sha256": "321d8bcc9bfaf50bd5933e4f036afe31f7aa34a1d53f351f1b76214062a6d455"
+        },
+        {
+          "file": "density_idle_cadence_far_1.console.log",
+          "sha256": "e898ff9709a173329c34ba4e571bb4707e99b154ab4370627b2ed3871bf4caa6"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211033_272_11252.json",
+          "sha256": "f850981320fcd57c2e462a0007921ef3d00d79c00c0d1fd7709ba53e4b5e4012"
+        }
+      ]
+    },
+    {
+      "raw": "density_idle_cadence_far_2.json",
+      "runner": "runner_results_adhoc_20260922_211047_515_11252.json",
+      "artifacts": [
+        {
+          "file": "density_idle_cadence_far_2.json",
+          "sha256": "8cd22ef1829a28aef24e1046493c5c280c63c95e43046064553e223783406f10"
+        },
+        {
+          "file": "density_idle_cadence_far_2.console.log",
+          "sha256": "f66642bd7a7b84200e5dc2580eaa714e79ce6809ab916fda9532b4b9a0ab9fb6"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211047_515_11252.json",
+          "sha256": "79cc4cd07c5355532ce9d632bb44422723734c25c58e4a9176996a57955d2930"
+        }
+      ]
+    },
+    {
+      "raw": "world_idle_cadence_black_1.json",
+      "runner": "runner_results_adhoc_20260922_211219_222_22844.json",
+      "artifacts": [
+        {
+          "file": "world_idle_cadence_black_1.json",
+          "sha256": "bdc19baf24df2b63060a3673061e86c64aa481612f46413ce75506e7db419bd8"
+        },
+        {
+          "file": "idle_cadence_black_1.console.log",
+          "sha256": "a09740217892349878daa57ddb8ee1c98304f0c158bf89dd1125eec75b754919"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211219_222_22844.json",
+          "sha256": "114d01d0799b5754193fc41b517ff26f976a83b4fe3021196628ce62bd110efa"
+        }
+      ]
+    },
+    {
+      "raw": "world_idle_cadence_black_2.json",
+      "runner": "runner_results_adhoc_20260922_211238_570_22844.json",
+      "artifacts": [
+        {
+          "file": "world_idle_cadence_black_2.json",
+          "sha256": "dea7ef218b977c4b8366cd39b26fb58369caa5290d6ead345f9e72b257413e9e"
+        },
+        {
+          "file": "idle_cadence_black_2.console.log",
+          "sha256": "6f075cfdd7550b834c78c5814330049ed4413b4e7466a688527220f08e156f27"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211238_570_22844.json",
+          "sha256": "4a9d17568cca5fbb75b2318eff09ad3e80de140934184b26e6d6a1dd069d5636"
+        }
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "label": "idle_scan_cadence_red",
+      "results": {
+        "results": [
+          {
+            "test_name": "monster_idle_scan_cadence_test",
+            "test_path": "tests/monster_idle_scan_cadence_test.tscn",
+            "pass_marker_found": false,
+            "process_exited": false,
+            "wrapper_exit_code": -1,
+            "child_process_exit_state": "forced_termination",
+            "effective_exit_code": -1,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 1,
+            "engine_log_failure_count": 1,
+            "result": "FAIL",
+            "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+          }
+        ],
+        "suite": "adhoc",
+        "generated_at": "2026-09-22T21:01:32.1079612+08:00",
+        "failed": 1,
+        "engine_log_errors": 1,
+        "total": 1,
+        "passed": 0,
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad"
+      },
+      "artifacts": [
+        {
+          "file": "idle_scan_cadence_red.console.log",
+          "sha256": "060102d7ea625bb420223c8fbf767beddaeac3eeabd334374cbd102d4029e731"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_210132_107_2516.json",
+          "sha256": "992f7b8539eafdba1bb9eb225430c612284ce4ac8831fee17fd5921ff6f238db"
+        }
+      ]
+    },
+    {
+      "label": "idle_scan_cadence_green",
+      "results": {
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "total": 5,
+        "engine_log_errors": 0,
+        "failed": 0,
+        "passed": 5,
+        "results": [
+          {
+            "test_name": "monster_idle_scan_cadence_test",
+            "test_path": "tests/monster_idle_scan_cadence_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_idle_acquisition_budget_test",
+            "test_path": "tests/monster_idle_acquisition_budget_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_runtime_density_performance_test",
+            "test_path": "tests/monster_runtime_density_performance_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_crowd_performance_test",
+            "test_path": "tests/monster_crowd_performance_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_natural_regen_policy_test",
+            "test_path": "tests/monster_natural_regen_policy_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "suite": "adhoc",
+        "generated_at": "2026-09-22T21:03:03.8316158+08:00"
+      },
+      "artifacts": [
+        {
+          "file": "idle_scan_cadence_green.console.log",
+          "sha256": "82e3363427c1597cfeb3bfc2e78b99b6c7d935888a0435445db8ac156dce92ba"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_210303_831_19144.json",
+          "sha256": "42661bedec18faeaccd37ef7c20f66ca1e99dcf1c84add548095593da3d1980d"
+        }
+      ]
+    },
+    {
+      "label": "idle_scan_cadence_regression",
+      "results": {
+        "generated_at": "2026-09-22T21:09:44.9937157+08:00",
+        "suite": "adhoc",
+        "engine_log_errors": 0,
+        "total": 6,
+        "results": [
+          {
+            "test_name": "monster_target_acquisition_test",
+            "test_path": "tests/monster_target_acquisition_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_retarget_spatial_cache_test",
+            "test_path": "tests/monster_retarget_spatial_cache_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "monster_threat_animation_test",
+            "test_path": "tests/monster_threat_animation_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "safe_zone_spatial_runtime_test",
+            "test_path": "tests/safe_zone_spatial_runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "runtime_test",
+            "test_path": "tests/hc_monster_ai/runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          },
+          {
+            "test_name": "w1_special_delivery_runtime_test",
+            "test_path": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+            "pass_marker_found": true,
+            "process_exited": true,
+            "wrapper_exit_code": 0,
+            "child_process_exit_state": "exited",
+            "effective_exit_code": 0,
+            "timeout": false,
+            "stdout_failure_count": 0,
+            "stderr_failure_count": 0,
+            "engine_log_failure_count": 0,
+            "result": "PASS",
+            "reason": ""
+          }
+        ],
+        "failed": 0,
+        "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+        "passed": 6
+      },
+      "artifacts": [
+        {
+          "file": "idle_scan_cadence_regression.console.log",
+          "sha256": "03c531973c5e54060ddf76418d687e3b62fece58a5f0e81a6b6a44a6fb041f07"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_210944_993_20644.json",
+          "sha256": "7e5b2e3036afb7eae5958f76decba6f2d53f4e414da4557b7cb15b7bfdb75361"
+        }
+      ]
+    }
+  ]
+}

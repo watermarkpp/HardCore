@@ -5,6 +5,7 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const AcquisitionPolicy := preload("res://scripts/monster_target_acquisition_policy.gd")
 const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
+const PolygonGeometry := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
 const RuntimeBridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const PlayerCharacterScript := preload("res://scripts/player.gd")
 const SkillProjectileScript := preload("res://scripts/skill_projectile.gd")
@@ -539,7 +540,24 @@ func _test_all_released_terrain_contexts() -> void:
 		assert(str(context.build_sha256) == str(runtime.build_sha256))
 		var raw_size: Array = runtime.design.design_size
 		assert(context.design_size == Vector2i(int(raw_size[0]), int(raw_size[1])))
-		assert(int(context.blocked_count) == runtime.collision.blocked_tiles.size())
+		if PolygonGeometry.runtime_enabled(runtime):
+			# Formal polygon releases no longer use blocked_tiles as collision
+			# authority. Prove the actual index contains every published part.
+			assert(int(context.blocked_count) == 0 and context.blocked_cells.is_empty())
+			var index: RefCounted = context.poly_index
+			var published_parts: Array = runtime.collision.convex_parts_ground_gu
+			assert(index.ready and index.design_size == context.design_size)
+			assert(index.parts.size() == published_parts.size())
+			for part_index in range(published_parts.size()):
+				var points := PolygonGeometry.decode(published_parts[part_index])
+				assert(index.parts[part_index] == points)
+				var center := Vector2.ZERO
+				for point: Vector2 in points: center += point
+				center /= float(points.size())
+				assert(not TerrainPolicy.point_walkable(context, center, 0.0),
+					"published polygon interior must block: map=%d part=%d" % [runtime_map_id, part_index])
+		else:
+			assert(int(context.blocked_count) == runtime.collision.blocked_tiles.size())
 		assert(context.is_read_only())
 		assert((context.blocked_cells as Dictionary).is_read_only())
 		_checks += 6

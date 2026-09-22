@@ -14,6 +14,12 @@ var cell_index := -1
 var canonical_snapshot_id := ""
 var cell_ground_offset := Vector2.ZERO
 var cell_screen_offset_px := Vector2.ZERO
+var _controller_owned_lifetime := false
+
+
+func set_controller_owned_lifetime() -> void:
+	_controller_owned_lifetime = true
+	set_physics_process(false)
 
 
 func _ready() -> void:
@@ -21,6 +27,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _controller_owned_lifetime:
+		return
 	# Visual cells are pure presentation objects. All damage logic,
 	# enemy iteration, and tick claims live exclusively in
 	# FireWallFieldController.  Bypassing the parent's combat loop

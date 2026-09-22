@@ -1,0 +1,9 @@
+{
+  "baseline_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "snapshot_sha256": "c313ef82b9801c7c68e4346215b83a8551f323aae62704b9d8ee6dd86740a179",
+  "file_count": 15435,
+  "changed_since_start": [
+    "tests/canonical_monster_classification_closure_test.py"
+  ],
+  "note": "Godot production and selected scene inputs were held stable. Python classification expectation was corrected during this run; it is not invoked by the Godot suite."
+}

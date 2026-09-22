@@ -1,0 +1,63 @@
+{
+  "baseline_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "source_hashes": {
+    "project.godot": "030f44250ab8d487a5521e56ce3d77ef23dbad7d0290e6db1285d10589c36f92",
+    "scripts/enemy.gd": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+    "scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+    "scripts/world_background.gd": "a683896afe805564a864a213943b94444f56ce303a574dd1cd7c0466c8aede54",
+    "scripts/fire_wall_field_controller.gd": "ae9a23092c5d2bc334fb8098d74e035081c5b7ed65927ce2562275c14b8d34d3",
+    "scripts/caster_skill_animation_batch.gd": "e5f8f5199d0d959016915e5958c6a4d86a000ad02f05c6557f0c43ec76972695",
+    "tests/world_crowd_firewall_profile_test.gd": "431982de0ac29363569a665245d69ef325312ce4d038c9f9230deaa466a3997b"
+  },
+  "input_hashes": [
+    {
+      "label": "render_control_913203_legacy_1",
+      "sha256": "c3a903416cc69158d56200051407118c9d7cd7b06d4688e8bbd91c888018d333"
+    },
+    {
+      "label": "render_control_913203_legacy_2",
+      "sha256": "893107134e0f51d2f8957709e8bd0fe515642201b8aed205f45631070bf8e564"
+    },
+    {
+      "label": "render_control_913203_optimized_1",
+      "sha256": "79c3450793bfbb4f4dc1998aad4513493a6bedf5fce930862faf753f7431ed7d"
+    },
+    {
+      "label": "render_control_913203_optimized_2",
+      "sha256": "507cd43971882af85fc3e33aed98e8a3ddbe0c18f51dea15a718f2cdfb5d6228"
+    },
+    {
+      "label": "render_control_913207_legacy_1",
+      "sha256": "7227d1c8f39995d29b0d244832972d5e0304fc06e69cb3cea82650c1767c81bb"
+    },
+    {
+      "label": "render_control_913207_legacy_2",
+      "sha256": "d16e49bf4df3911e51e02eb1e86dbb92c7aeea45db0486fd96945143d35c823f"
+    },
+    {
+      "label": "render_control_913207_optimized_1",
+      "sha256": "cab295b1e16aecabd3ff00bcb303bd9be5f69d40286cbf45bfe1c2bbb2e21fc6"
+    },
+    {
+      "label": "render_control_913207_optimized_2",
+      "sha256": "106ab3a50087c1bc67b49b9ecf66cfd7587543161bd2869e1b03ce24ccd70d32"
+    },
+    {
+      "label": "render_control_916003_legacy_1",
+      "sha256": "d7ae1663077f6ab1b8cbfe770f2f3ea7ba0a8b1331f930b705af60367596497c"
+    },
+    {
+      "label": "render_control_916003_legacy_2",
+      "sha256": "a9dde50b45c18647cbf6c912c0d562bdccb2f6b61159d40ab5d75b209bc995a4"
+    },
+    {
+      "label": "render_control_916003_optimized_1",
+      "sha256": "6b2dcad267ddc7d287de530ceed73c539fec5ba103f2eafe7a8722ea6379da18"
+    },
+    {
+      "label": "render_control_916003_optimized_2",
+      "sha256": "99effa6ed24fc33706e86add5cf4a299fd6ce4e5003494256da5aeee162284e4"
+    }
+  ],
+  "note": "Captured from the completed comparison before the subsequent EnemyActor safe-zone entry repair. Regeneration must verify these exact raw-input hashes."
+}

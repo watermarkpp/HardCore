@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "total": 1,
+  "git_head": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "failed": 0,
+  "passed": 1,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-22T21:10:19.2008414+08:00",
+  "results": [
+    {
+      "test_name": "monster_background_density_profile_test",
+      "test_path": "tests/monster_background_density_profile_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

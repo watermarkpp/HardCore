@@ -1,11 +1,12 @@
 {
   "schema": "hardcore.loot.user_directive_overlay.v1",
-  "source": "user_directive_20260922_九怪精英化与套装掉落（用户当轮对话原文；概率分配方式经用户确认：每件独立槽同概率）",
+  "source": "user_directive_20260922_v92_赤月概率减半_祖玛概率减少25%",
   "approvals": [
     "七只血量600以上怪精英化（164/166/168/170/172/178/182）",
     "1200血组164/166/170/182：赤月首饰9件1/140 头盔3件1/170 祖玛首饰8件1/100 头盔1/120 武器3件1/150",
     "其他组168/172/178：赤月首饰9件1/180 头盔3件1/220 祖玛首饰8件1/140 头盔1/160 武器3件1/200",
-    "174/176生命500不调整：普通分类、无覆盖层槽"
+    "174/176生命500不调整：普通分类、无覆盖层槽",
+    "v92 用户最新指令：七精英赤月装备概率乘1/2，祖玛装备概率乘3/4；保留全部独立槽、物品ID、优先级及其他怪物。整数分数约分，祖玛不得近似为分母乘1.25。"
   ],
   "summary": {
     "user_directive_overlay_slots": 168
@@ -16,7 +17,7 @@
       "monster_id": 168,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -25,7 +26,7 @@
       "monster_id": 168,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -34,7 +35,7 @@
       "monster_id": 168,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -43,7 +44,7 @@
       "monster_id": 168,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -52,7 +53,7 @@
       "monster_id": 168,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -61,7 +62,7 @@
       "monster_id": 168,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -70,7 +71,7 @@
       "monster_id": 168,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -79,7 +80,7 @@
       "monster_id": 168,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -88,7 +89,7 @@
       "monster_id": 168,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -97,7 +98,7 @@
       "monster_id": 168,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -106,7 +107,7 @@
       "monster_id": 168,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -115,7 +116,7 @@
       "monster_id": 168,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -123,8 +124,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_001",
       "monster_id": 168,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -132,8 +133,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_002",
       "monster_id": 168,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -141,8 +142,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_003",
       "monster_id": 168,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -150,8 +151,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_004",
       "monster_id": 168,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -159,8 +160,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_005",
       "monster_id": 168,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -168,8 +169,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_006",
       "monster_id": 168,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -177,8 +178,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_007",
       "monster_id": 168,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -186,8 +187,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_ch_008",
       "monster_id": 168,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -195,8 +196,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_helm_001",
       "monster_id": 168,
       "canonical_item_id": 151,
-      "final_numerator": 1,
-      "final_denominator": 160,
+      "final_numerator": 3,
+      "final_denominator": 640,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -204,8 +205,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_weap_001",
       "monster_id": 168,
       "canonical_item_id": 105,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -213,8 +214,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_weap_002",
       "monster_id": 168,
       "canonical_item_id": 106,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -222,8 +223,8 @@
       "slot_uid": "dpv2.user.sheet.m168.set_zm_weap_003",
       "monster_id": 168,
       "canonical_item_id": 107,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -232,7 +233,7 @@
       "monster_id": 170,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -241,7 +242,7 @@
       "monster_id": 170,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -250,7 +251,7 @@
       "monster_id": 170,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -259,7 +260,7 @@
       "monster_id": 170,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -268,7 +269,7 @@
       "monster_id": 170,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -277,7 +278,7 @@
       "monster_id": 170,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -286,7 +287,7 @@
       "monster_id": 170,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -295,7 +296,7 @@
       "monster_id": 170,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -304,7 +305,7 @@
       "monster_id": 170,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -313,7 +314,7 @@
       "monster_id": 170,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -322,7 +323,7 @@
       "monster_id": 170,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -331,7 +332,7 @@
       "monster_id": 170,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -339,8 +340,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_001",
       "monster_id": 170,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -348,8 +349,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_002",
       "monster_id": 170,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -357,8 +358,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_003",
       "monster_id": 170,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -366,8 +367,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_004",
       "monster_id": 170,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -375,8 +376,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_005",
       "monster_id": 170,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -384,8 +385,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_006",
       "monster_id": 170,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -393,8 +394,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_007",
       "monster_id": 170,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -402,8 +403,8 @@
       "slot_uid": "dpv2.user.sheet.m170.set_zm_ch_008",
       "monster_id": 170,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -412,7 +413,7 @@
       "monster_id": 170,
       "canonical_item_id": 151,
       "final_numerator": 1,
-      "final_denominator": 120,
+      "final_denominator": 160,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -421,7 +422,7 @@
       "monster_id": 170,
       "canonical_item_id": 105,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -430,7 +431,7 @@
       "monster_id": 170,
       "canonical_item_id": 106,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -439,7 +440,7 @@
       "monster_id": 170,
       "canonical_item_id": 107,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -448,7 +449,7 @@
       "monster_id": 172,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -457,7 +458,7 @@
       "monster_id": 172,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -466,7 +467,7 @@
       "monster_id": 172,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -475,7 +476,7 @@
       "monster_id": 172,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -484,7 +485,7 @@
       "monster_id": 172,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -493,7 +494,7 @@
       "monster_id": 172,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -502,7 +503,7 @@
       "monster_id": 172,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -511,7 +512,7 @@
       "monster_id": 172,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -520,7 +521,7 @@
       "monster_id": 172,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -529,7 +530,7 @@
       "monster_id": 172,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -538,7 +539,7 @@
       "monster_id": 172,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -547,7 +548,7 @@
       "monster_id": 172,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -555,8 +556,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_001",
       "monster_id": 172,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -564,8 +565,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_002",
       "monster_id": 172,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -573,8 +574,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_003",
       "monster_id": 172,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -582,8 +583,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_004",
       "monster_id": 172,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -591,8 +592,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_005",
       "monster_id": 172,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -600,8 +601,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_006",
       "monster_id": 172,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -609,8 +610,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_007",
       "monster_id": 172,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -618,8 +619,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_ch_008",
       "monster_id": 172,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -627,8 +628,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_helm_001",
       "monster_id": 172,
       "canonical_item_id": 151,
-      "final_numerator": 1,
-      "final_denominator": 160,
+      "final_numerator": 3,
+      "final_denominator": 640,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -636,8 +637,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_weap_001",
       "monster_id": 172,
       "canonical_item_id": 105,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -645,8 +646,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_weap_002",
       "monster_id": 172,
       "canonical_item_id": 106,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -654,8 +655,8 @@
       "slot_uid": "dpv2.user.sheet.m172.set_zm_weap_003",
       "monster_id": 172,
       "canonical_item_id": 107,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -664,7 +665,7 @@
       "monster_id": 178,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -673,7 +674,7 @@
       "monster_id": 178,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -682,7 +683,7 @@
       "monster_id": 178,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -691,7 +692,7 @@
       "monster_id": 178,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -700,7 +701,7 @@
       "monster_id": 178,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -709,7 +710,7 @@
       "monster_id": 178,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -718,7 +719,7 @@
       "monster_id": 178,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -727,7 +728,7 @@
       "monster_id": 178,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -736,7 +737,7 @@
       "monster_id": 178,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 180,
+      "final_denominator": 360,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -745,7 +746,7 @@
       "monster_id": 178,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -754,7 +755,7 @@
       "monster_id": 178,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -763,7 +764,7 @@
       "monster_id": 178,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 220,
+      "final_denominator": 440,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -771,8 +772,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_001",
       "monster_id": 178,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -780,8 +781,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_002",
       "monster_id": 178,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -789,8 +790,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_003",
       "monster_id": 178,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -798,8 +799,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_004",
       "monster_id": 178,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -807,8 +808,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_005",
       "monster_id": 178,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -816,8 +817,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_006",
       "monster_id": 178,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -825,8 +826,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_007",
       "monster_id": 178,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -834,8 +835,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_ch_008",
       "monster_id": 178,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 140,
+      "final_numerator": 3,
+      "final_denominator": 560,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -843,8 +844,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_helm_001",
       "monster_id": 178,
       "canonical_item_id": 151,
-      "final_numerator": 1,
-      "final_denominator": 160,
+      "final_numerator": 3,
+      "final_denominator": 640,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -852,8 +853,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_weap_001",
       "monster_id": 178,
       "canonical_item_id": 105,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -861,8 +862,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_weap_002",
       "monster_id": 178,
       "canonical_item_id": 106,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -870,8 +871,8 @@
       "slot_uid": "dpv2.user.sheet.m178.set_zm_weap_003",
       "monster_id": 178,
       "canonical_item_id": 107,
-      "final_numerator": 1,
-      "final_denominator": 200,
+      "final_numerator": 3,
+      "final_denominator": 800,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -880,7 +881,7 @@
       "monster_id": 182,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -889,7 +890,7 @@
       "monster_id": 182,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -898,7 +899,7 @@
       "monster_id": 182,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -907,7 +908,7 @@
       "monster_id": 182,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -916,7 +917,7 @@
       "monster_id": 182,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -925,7 +926,7 @@
       "monster_id": 182,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -934,7 +935,7 @@
       "monster_id": 182,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -943,7 +944,7 @@
       "monster_id": 182,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -952,7 +953,7 @@
       "monster_id": 182,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -961,7 +962,7 @@
       "monster_id": 182,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -970,7 +971,7 @@
       "monster_id": 182,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -979,7 +980,7 @@
       "monster_id": 182,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -987,8 +988,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_001",
       "monster_id": 182,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -996,8 +997,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_002",
       "monster_id": 182,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1005,8 +1006,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_003",
       "monster_id": 182,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1014,8 +1015,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_004",
       "monster_id": 182,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1023,8 +1024,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_005",
       "monster_id": 182,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1032,8 +1033,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_006",
       "monster_id": 182,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1041,8 +1042,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_007",
       "monster_id": 182,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1050,8 +1051,8 @@
       "slot_uid": "dpv2.user.sheet.m182.set_zm_ch_008",
       "monster_id": 182,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1060,7 +1061,7 @@
       "monster_id": 182,
       "canonical_item_id": 151,
       "final_numerator": 1,
-      "final_denominator": 120,
+      "final_denominator": 160,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1069,7 +1070,7 @@
       "monster_id": 182,
       "canonical_item_id": 105,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1078,7 +1079,7 @@
       "monster_id": 182,
       "canonical_item_id": 106,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1087,7 +1088,7 @@
       "monster_id": 182,
       "canonical_item_id": 107,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1096,7 +1097,7 @@
       "monster_id": 164,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1105,7 +1106,7 @@
       "monster_id": 164,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1114,7 +1115,7 @@
       "monster_id": 164,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1123,7 +1124,7 @@
       "monster_id": 164,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1132,7 +1133,7 @@
       "monster_id": 164,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1141,7 +1142,7 @@
       "monster_id": 164,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1150,7 +1151,7 @@
       "monster_id": 164,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1159,7 +1160,7 @@
       "monster_id": 164,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1168,7 +1169,7 @@
       "monster_id": 164,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1177,7 +1178,7 @@
       "monster_id": 164,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1186,7 +1187,7 @@
       "monster_id": 164,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1195,7 +1196,7 @@
       "monster_id": 164,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1203,8 +1204,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_001",
       "monster_id": 164,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1212,8 +1213,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_002",
       "monster_id": 164,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1221,8 +1222,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_003",
       "monster_id": 164,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1230,8 +1231,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_004",
       "monster_id": 164,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1239,8 +1240,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_005",
       "monster_id": 164,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1248,8 +1249,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_006",
       "monster_id": 164,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1257,8 +1258,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_007",
       "monster_id": 164,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1266,8 +1267,8 @@
       "slot_uid": "dpv2.user.sheet.m164.set_zm_ch_008",
       "monster_id": 164,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1276,7 +1277,7 @@
       "monster_id": 164,
       "canonical_item_id": 151,
       "final_numerator": 1,
-      "final_denominator": 120,
+      "final_denominator": 160,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1285,7 +1286,7 @@
       "monster_id": 164,
       "canonical_item_id": 105,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1294,7 +1295,7 @@
       "monster_id": 164,
       "canonical_item_id": 106,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1303,7 +1304,7 @@
       "monster_id": 164,
       "canonical_item_id": 107,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1312,7 +1313,7 @@
       "monster_id": 166,
       "canonical_item_id": 233,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1321,7 +1322,7 @@
       "monster_id": 166,
       "canonical_item_id": 234,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1330,7 +1331,7 @@
       "monster_id": 166,
       "canonical_item_id": 235,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1339,7 +1340,7 @@
       "monster_id": 166,
       "canonical_item_id": 237,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1348,7 +1349,7 @@
       "monster_id": 166,
       "canonical_item_id": 238,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1357,7 +1358,7 @@
       "monster_id": 166,
       "canonical_item_id": 239,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1366,7 +1367,7 @@
       "monster_id": 166,
       "canonical_item_id": 241,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1375,7 +1376,7 @@
       "monster_id": 166,
       "canonical_item_id": 242,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1384,7 +1385,7 @@
       "monster_id": 166,
       "canonical_item_id": 243,
       "final_numerator": 1,
-      "final_denominator": 140,
+      "final_denominator": 280,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1393,7 +1394,7 @@
       "monster_id": 166,
       "canonical_item_id": 232,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1402,7 +1403,7 @@
       "monster_id": 166,
       "canonical_item_id": 236,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1411,7 +1412,7 @@
       "monster_id": 166,
       "canonical_item_id": 240,
       "final_numerator": 1,
-      "final_denominator": 170,
+      "final_denominator": 340,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1419,8 +1420,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_001",
       "monster_id": 166,
       "canonical_item_id": 171,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1428,8 +1429,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_002",
       "monster_id": 166,
       "canonical_item_id": 172,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1437,8 +1438,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_003",
       "monster_id": 166,
       "canonical_item_id": 173,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1446,8 +1447,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_004",
       "monster_id": 166,
       "canonical_item_id": 191,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1455,8 +1456,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_005",
       "monster_id": 166,
       "canonical_item_id": 193,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1464,8 +1465,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_006",
       "monster_id": 166,
       "canonical_item_id": 194,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1473,8 +1474,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_007",
       "monster_id": 166,
       "canonical_item_id": 212,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1482,8 +1483,8 @@
       "slot_uid": "dpv2.user.sheet.m166.set_zm_ch_008",
       "monster_id": 166,
       "canonical_item_id": 216,
-      "final_numerator": 1,
-      "final_denominator": 100,
+      "final_numerator": 3,
+      "final_denominator": 400,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1492,7 +1493,7 @@
       "monster_id": 166,
       "canonical_item_id": 151,
       "final_numerator": 1,
-      "final_denominator": 120,
+      "final_denominator": 160,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1501,7 +1502,7 @@
       "monster_id": 166,
       "canonical_item_id": 105,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1510,7 +1511,7 @@
       "monster_id": 166,
       "canonical_item_id": 106,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     },
@@ -1519,7 +1520,7 @@
       "monster_id": 166,
       "canonical_item_id": 107,
       "final_numerator": 1,
-      "final_denominator": 150,
+      "final_denominator": 200,
       "overflow_priority": 300,
       "protected_drop": false
     }

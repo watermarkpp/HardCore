@@ -2,6 +2,8 @@ class_name HUDResourceOrb
 extends Control
 
 const LIQUID_RADIUS_RATIO := 0.49
+const REFERENCE_DIAMETER := 93.0
+const REFERENCE_FONT_SIZE := 15
 
 @export var liquid_color := Color("9e1623"):
 	set(value):
@@ -21,8 +23,12 @@ func _ready() -> void:
 
 
 func set_values(current: int, maximum: int) -> void:
-	current_value = maxi(0, current)
-	maximum_value = maxi(1, maximum)
+	var next_current := maxi(0, current)
+	var next_maximum := maxi(1, maximum)
+	if current_value == next_current and maximum_value == next_maximum:
+		return
+	current_value = next_current
+	maximum_value = next_maximum
 	queue_redraw()
 
 
@@ -44,5 +50,7 @@ func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	var value_text := "%d/%d" % [current_value, maximum_value]
 	var label_text := "%s\n%s" % [resource_name, value_text]
-	draw_multiline_string(font, Vector2(1, center.y - 6), label_text, HORIZONTAL_ALIGNMENT_CENTER, size.x - 2.0, 15, -1, Color(0.02, 0.01, 0.01, 0.95))
-	draw_multiline_string(font, Vector2(0, center.y - 7), label_text, HORIZONTAL_ALIGNMENT_CENTER, size.x, 15, -1, Color("f4dfbf"))
+	var text_scale := minf(size.x, size.y) / REFERENCE_DIAMETER
+	var font_size := maxi(1, roundi(REFERENCE_FONT_SIZE * text_scale))
+	draw_multiline_string(font, Vector2(text_scale, center.y - 6 * text_scale), label_text, HORIZONTAL_ALIGNMENT_CENTER, size.x - 2.0 * text_scale, font_size, -1, Color(0.02, 0.01, 0.01, 0.95))
+	draw_multiline_string(font, Vector2(0, center.y - 7 * text_scale), label_text, HORIZONTAL_ALIGNMENT_CENTER, size.x, font_size, -1, Color("f4dfbf"))

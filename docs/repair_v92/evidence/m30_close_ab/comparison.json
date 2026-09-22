@@ -1,0 +1,781 @@
+{
+  "schema": "hardcore.v92.adjacent_m30_ab.v1",
+  "device": "NOT_RUN",
+  "rows": [
+    {
+      "mode": "crowd",
+      "scenario": "open_pursuit",
+      "p95_ms": [
+        16.217,
+        16.6405
+      ],
+      "p95_change_percent": 2.6114571129062236,
+      "raw_p95_ms": {
+        "baseline": [
+          16.472,
+          15.962
+        ],
+        "current": [
+          16.523,
+          16.758
+        ]
+      },
+      "cpu_usec_per_call": {
+        "baseline": [
+          277.89385416666664,
+          271.51885416666664
+        ],
+        "current": [
+          275.9746875,
+          288.160625
+        ]
+      },
+      "behavior": {
+        "baseline": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 1,
+            "total_attack_damage_applications": 1,
+            "total_motion_gu": 133.677872019005
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 1,
+            "total_attack_damage_applications": 1,
+            "total_motion_gu": 137.34680406253
+          }
+        ],
+        "current": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 1,
+            "total_attack_damage_applications": 1,
+            "total_motion_gu": 133.092553778435
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 1,
+            "total_attack_damage_applications": 1,
+            "total_motion_gu": 134.894610584888
+          }
+        ]
+      },
+      "probe_usec_per_call": {
+        "_advance_autonomous_step": {
+          "baseline": 117.10048301337775,
+          "current": 119.65784148859083
+        },
+        "_audio_observe_visual_state": {
+          "baseline": 0.6784895833333333,
+          "current": 0.7044270833333333
+        },
+        "_audio_try_enter_combat_session": {
+          "baseline": 0.8665104166666666,
+          "current": 0.8782291666666666
+        },
+        "_can_use_background_ai": {
+          "baseline": 12.092395833333333,
+          "current": 12.779583333333333
+        },
+        "_handle_safe_zone_target_return": {
+          "baseline": 9.354375000000001,
+          "current": 9.665885416666667
+        },
+        "_hc_access": {
+          "baseline": 18.129293689232448,
+          "current": 18.25479266513857
+        },
+        "_hc_frontline_at": {
+          "baseline": 18.166666666666664,
+          "current": 17.833333333333336
+        },
+        "_hc_motion_clear": {
+          "baseline": 18.381249968286923,
+          "current": 19.035910479323306
+        },
+        "_hc_neighbor": {
+          "baseline": 228.1055721227088,
+          "current": 230.33306225716092
+        },
+        "_hc_point_inside_safe_zone": {
+          "baseline": 7.3355449257405585,
+          "current": 7.379024989336608
+        },
+        "_hc_point_walkable": {
+          "baseline": 38.80337069336167,
+          "current": 39.85572467603439
+        },
+        "_hc_preferred": {
+          "baseline": 1.9432691316648314,
+          "current": 1.9794034319315155
+        },
+        "_hc_prepare_flank_batch": {
+          "baseline": 460.33576299398624,
+          "current": 462.45077587468893
+        },
+        "_hc_refresh_observation": {
+          "baseline": 3.134800231738707,
+          "current": 3.185371147579179
+        },
+        "_hc_standard_melee": {
+          "baseline": 1.2211065568638073,
+          "current": 1.2441001640491836
+        },
+        "_hc_static_query_scope": {
+          "baseline": 3.2649804970972425,
+          "current": 3.285775924516324
+        },
+        "_hc_target_usable": {
+          "baseline": 10.990773808324633,
+          "current": 11.087638269201705
+        },
+        "_hc_tick_melee": {
+          "baseline": 181.65557291666667,
+          "current": 186.33057291666665
+        },
+        "_hc_try_start": {
+          "baseline": 20.424167045740766,
+          "current": 20.585764902042516
+        },
+        "_hc_world_between": {
+          "baseline": 31.421118974562756,
+          "current": 32.38977609034763
+        },
+        "_spatial_index_update": {
+          "baseline": 6.015840677477726,
+          "current": 6.032965198947679
+        },
+        "_update_area_attack": {
+          "baseline": 0.9502604166666666,
+          "current": 0.9415104166666667
+        },
+        "_update_behavior_summon": {
+          "baseline": 0.7398958333333334,
+          "current": 0.7603645833333333
+        },
+        "_update_entrapment_state": {
+          "baseline": 0.9499479166666667,
+          "current": 0.9703645833333334
+        },
+        "_update_natural_regen": {
+          "baseline": 3.2194270833333336,
+          "current": 3.3397916666666667
+        },
+        "_update_pending_attack": {
+          "baseline": 0.6812499999999999,
+          "current": 0.693125
+        },
+        "_update_status_effects": {
+          "baseline": 2.0709375000000003,
+          "current": 2.0856770833333336
+        }
+      }
+    },
+    {
+      "mode": "crowd",
+      "scenario": "sustained_close_attacks",
+      "p95_ms": [
+        19.7385,
+        19.54
+      ],
+      "p95_change_percent": -1.005648858829189,
+      "raw_p95_ms": {
+        "baseline": [
+          19.551,
+          19.926
+        ],
+        "current": [
+          19.959,
+          19.121
+        ]
+      },
+      "cpu_usec_per_call": {
+        "baseline": [
+          305.33708333333334,
+          307.60072916666667
+        ],
+        "current": [
+          304.06395833333335,
+          310.76395833333333
+        ]
+      },
+      "behavior": {
+        "baseline": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.5156998600578
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.0834321310977
+          }
+        ],
+        "current": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.1596110457322
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.7302714275429
+          }
+        ]
+      },
+      "probe_usec_per_call": {
+        "_advance_autonomous_step": {
+          "baseline": 128.23562289481666,
+          "current": 130.74902813441713
+        },
+        "_audio_observe_visual_state": {
+          "baseline": 0.6826041666666667,
+          "current": 0.7036979166666667
+        },
+        "_audio_try_enter_combat_session": {
+          "baseline": 0.8541666666666667,
+          "current": 0.8557291666666667
+        },
+        "_can_use_background_ai": {
+          "baseline": 13.905,
+          "current": 14.339583333333334
+        },
+        "_handle_safe_zone_target_return": {
+          "baseline": 9.44625,
+          "current": 9.650677083333333
+        },
+        "_hc_access": {
+          "baseline": 38.720612582781456,
+          "current": 38.87393566698202
+        },
+        "_hc_frontline_at": {
+          "baseline": 39.623947051744885,
+          "current": 40.0770371153102
+        },
+        "_hc_motion_clear": {
+          "baseline": 25.370242576538544,
+          "current": 25.579802747254988
+        },
+        "_hc_neighbor": {
+          "baseline": 181.1748664707692,
+          "current": 179.78126557910923
+        },
+        "_hc_point_inside_safe_zone": {
+          "baseline": 7.178915221411961,
+          "current": 7.1639095852803605
+        },
+        "_hc_point_walkable": {
+          "baseline": 36.42520399298495,
+          "current": 35.95736924817221
+        },
+        "_hc_preferred": {
+          "baseline": 1.7757962313874764,
+          "current": 1.8046386051529617
+        },
+        "_hc_prepare_flank_batch": {
+          "baseline": 416.1619331803756,
+          "current": 398.1293101747741
+        },
+        "_hc_refresh_observation": {
+          "baseline": 2.660150924968372,
+          "current": 2.668701096192562
+        },
+        "_hc_standard_melee": {
+          "baseline": 1.2732473717881212,
+          "current": 1.2831541965327153
+        },
+        "_hc_static_query_scope": {
+          "baseline": 3.167055973257372,
+          "current": 3.1544764153403064
+        },
+        "_hc_target_usable": {
+          "baseline": 10.814037395174736,
+          "current": 10.825784020602576
+        },
+        "_hc_tick_melee": {
+          "baseline": 211.52302083333333,
+          "current": 211.25401041666666
+        },
+        "_hc_try_start": {
+          "baseline": 14.54797417800221,
+          "current": 14.516202596268675
+        },
+        "_hc_world_between": {
+          "baseline": 23.344166623717676,
+          "current": 23.50330016256433
+        },
+        "_spatial_index_update": {
+          "baseline": 3.394288985282365,
+          "current": 3.410602659526594
+        },
+        "_update_area_attack": {
+          "baseline": 0.9461979166666666,
+          "current": 0.9315625000000001
+        },
+        "_update_behavior_summon": {
+          "baseline": 0.7377083333333333,
+          "current": 0.74078125
+        },
+        "_update_entrapment_state": {
+          "baseline": 0.8998958333333333,
+          "current": 0.9094270833333333
+        },
+        "_update_natural_regen": {
+          "baseline": 3.21234375,
+          "current": 3.240104166666667
+        },
+        "_update_pending_attack": {
+          "baseline": 0.6810416666666667,
+          "current": 0.6865104166666667
+        },
+        "_update_status_effects": {
+          "baseline": 2.0540104166666664,
+          "current": 2.0538541666666665
+        }
+      }
+    },
+    {
+      "mode": "crowd",
+      "scenario": "dense_crowd",
+      "p95_ms": [
+        19.1055,
+        19.07
+      ],
+      "p95_change_percent": -0.18581036874197876,
+      "raw_p95_ms": {
+        "baseline": [
+          19.056,
+          19.155
+        ],
+        "current": [
+          19.169,
+          18.971
+        ]
+      },
+      "cpu_usec_per_call": {
+        "baseline": [
+          299.024375,
+          299.4167708333333
+        ],
+        "current": [
+          302.2134375,
+          301.00458333333336
+        ]
+      },
+      "behavior": {
+        "baseline": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 29,
+            "total_attack_damage_applications": 29,
+            "total_motion_gu": 33.7156068902696
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 29,
+            "total_attack_damage_applications": 29,
+            "total_motion_gu": 33.6021804301417
+          }
+        ],
+        "current": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 29,
+            "total_attack_damage_applications": 29,
+            "total_motion_gu": 33.6143007058417
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 29,
+            "total_attack_damage_applications": 29,
+            "total_motion_gu": 33.4200225818204
+          }
+        ]
+      },
+      "probe_usec_per_call": {
+        "_advance_autonomous_step": {
+          "baseline": 131.05115146792485,
+          "current": 132.95415994062301
+        },
+        "_audio_observe_visual_state": {
+          "baseline": 0.7,
+          "current": 0.7077604166666667
+        },
+        "_audio_try_enter_combat_session": {
+          "baseline": 0.8672395833333333,
+          "current": 0.86046875
+        },
+        "_can_use_background_ai": {
+          "baseline": 13.904739583333335,
+          "current": 14.321822916666667
+        },
+        "_handle_safe_zone_target_return": {
+          "baseline": 9.490885416666666,
+          "current": 9.7234375
+        },
+        "_hc_access": {
+          "baseline": 33.7841964610993,
+          "current": 33.794131346064276
+        },
+        "_hc_frontline_at": {
+          "baseline": 37.927035330261134,
+          "current": 38.03511360646682
+        },
+        "_hc_motion_clear": {
+          "baseline": 26.501371149511648,
+          "current": 26.71113609647334
+        },
+        "_hc_neighbor": {
+          "baseline": 180.15913671481357,
+          "current": 181.37538288330927
+        },
+        "_hc_point_inside_safe_zone": {
+          "baseline": 7.099421962171069,
+          "current": 7.099686600191478
+        },
+        "_hc_point_walkable": {
+          "baseline": 32.428355360277166,
+          "current": 33.26848893179402
+        },
+        "_hc_preferred": {
+          "baseline": 1.8091219472206774,
+          "current": 1.83989559785164
+        },
+        "_hc_prepare_flank_batch": {
+          "baseline": 386.836648913004,
+          "current": 397.6900290339073
+        },
+        "_hc_refresh_observation": {
+          "baseline": 2.673340450970415,
+          "current": 2.6994411902246824
+        },
+        "_hc_standard_melee": {
+          "baseline": 1.2741647630918886,
+          "current": 1.2869711916151974
+        },
+        "_hc_static_query_scope": {
+          "baseline": 3.199782984974793,
+          "current": 3.1880249987006484
+        },
+        "_hc_target_usable": {
+          "baseline": 10.942628957350271,
+          "current": 10.97493905215329
+        },
+        "_hc_tick_melee": {
+          "baseline": 203.97640625000003,
+          "current": 204.97020833333335
+        },
+        "_hc_try_start": {
+          "baseline": 16.38072894564759,
+          "current": 16.33519474260028
+        },
+        "_hc_world_between": {
+          "baseline": 25.204764330779263,
+          "current": 25.39591444156951
+        },
+        "_spatial_index_update": {
+          "baseline": 3.7251161630647043,
+          "current": 3.7295970547325252
+        },
+        "_update_area_attack": {
+          "baseline": 0.9443229166666667,
+          "current": 0.9325
+        },
+        "_update_behavior_summon": {
+          "baseline": 0.7375520833333333,
+          "current": 0.7432291666666666
+        },
+        "_update_entrapment_state": {
+          "baseline": 0.9168229166666667,
+          "current": 0.92734375
+        },
+        "_update_natural_regen": {
+          "baseline": 3.2294270833333334,
+          "current": 3.2760937500000002
+        },
+        "_update_pending_attack": {
+          "baseline": 0.6805208333333334,
+          "current": 0.6927604166666667
+        },
+        "_update_status_effects": {
+          "baseline": 2.0778125000000003,
+          "current": 2.0689583333333337
+        }
+      }
+    },
+    {
+      "mode": "aoe",
+      "scenario": "sustained_close_attacks",
+      "p95_ms": [
+        19.7935,
+        20.0775
+      ],
+      "p95_change_percent": 1.4348144592921885,
+      "raw_p95_ms": {
+        "baseline": [
+          19.243,
+          20.344
+        ],
+        "current": [
+          19.9,
+          20.255
+        ]
+      },
+      "cpu_usec_per_call": {
+        "baseline": [
+          308.1546875,
+          305.850625
+        ],
+        "current": [
+          307.116875,
+          313.6088541666667
+        ]
+      },
+      "behavior": {
+        "baseline": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.0827206134563
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.3157164979493
+          }
+        ],
+        "current": [
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.1994006786263
+          },
+          {
+            "sample_physics_ticks": 320,
+            "total_attack_starts": 36,
+            "total_attack_damage_applications": 36,
+            "total_motion_gu": 26.1262845093152
+          }
+        ]
+      },
+      "probe_usec_per_call": {
+        "_advance_autonomous_step": {
+          "baseline": 128.25436611336292,
+          "current": 130.8101464116374
+        },
+        "_audio_observe_visual_state": {
+          "baseline": 0.7129166666666666,
+          "current": 0.7068229166666666
+        },
+        "_audio_try_enter_combat_session": {
+          "baseline": 0.8507291666666666,
+          "current": 0.8744791666666667
+        },
+        "_can_use_background_ai": {
+          "baseline": 12.024270833333333,
+          "current": 12.583124999999999
+        },
+        "_handle_safe_zone_target_return": {
+          "baseline": 9.379999999999999,
+          "current": 9.73015625
+        },
+        "_hc_access": {
+          "baseline": 38.82737252124646,
+          "current": 39.398770109548884
+        },
+        "_hc_frontline_at": {
+          "baseline": 39.693766085076135,
+          "current": 40.406274821286736
+        },
+        "_hc_motion_clear": {
+          "baseline": 25.43219344534899,
+          "current": 25.795699894414717
+        },
+        "_hc_neighbor": {
+          "baseline": 179.95939348847628,
+          "current": 178.11043206034455
+        },
+        "_hc_point_inside_safe_zone": {
+          "baseline": 7.192413261441346,
+          "current": 7.205640286663767
+        },
+        "_hc_point_walkable": {
+          "baseline": 36.0789925608793,
+          "current": 34.71952232987606
+        },
+        "_hc_preferred": {
+          "baseline": 1.8006585902199463,
+          "current": 1.8324901565199405
+        },
+        "_hc_prepare_flank_batch": {
+          "baseline": 405.93387608377907,
+          "current": 380.3236291184227
+        },
+        "_hc_refresh_observation": {
+          "baseline": 2.76888375022513,
+          "current": 2.831070205779376
+        },
+        "_hc_standard_melee": {
+          "baseline": 1.2780303339645531,
+          "current": 1.297330033836629
+        },
+        "_hc_static_query_scope": {
+          "baseline": 3.1549834571771624,
+          "current": 3.1798477511285066
+        },
+        "_hc_target_usable": {
+          "baseline": 10.820394914553985,
+          "current": 10.943456690848391
+        },
+        "_hc_tick_melee": {
+          "baseline": 211.39348958333335,
+          "current": 211.66609375000002
+        },
+        "_hc_try_start": {
+          "baseline": 14.479597996819173,
+          "current": 14.575970633295022
+        },
+        "_hc_world_between": {
+          "baseline": 23.260676881399988,
+          "current": 23.602280770256286
+        },
+        "_spatial_index_update": {
+          "baseline": 3.390373793134275,
+          "current": 3.4263056306311594
+        },
+        "_update_area_attack": {
+          "baseline": 0.93609375,
+          "current": 0.9344270833333332
+        },
+        "_update_behavior_summon": {
+          "baseline": 0.74703125,
+          "current": 0.7746354166666667
+        },
+        "_update_entrapment_state": {
+          "baseline": 0.98578125,
+          "current": 0.9929166666666667
+        },
+        "_update_natural_regen": {
+          "baseline": 3.186197916666667,
+          "current": 3.302083333333333
+        },
+        "_update_pending_attack": {
+          "baseline": 0.6758854166666667,
+          "current": 0.7095833333333333
+        },
+        "_update_status_effects": {
+          "baseline": 2.0552083333333333,
+          "current": 2.09296875
+        }
+      }
+    }
+  ],
+  "failure": "aoe_current_1 completed sampling but native process exited 0xc0000005; retained FAIL, excluded from PASS-only medians. Unmodified retry current_3 passed.",
+  "runs": [
+    {
+      "label": "v92_close_ab_crowd_baseline_1",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "035cc3159534f3a6e5f2765c7b61f557e3cd74ed101bb3a752f7bef68a30cee8",
+      "runner": "runner_results_adhoc_20260922_195134_144_10308.json"
+    },
+    {
+      "label": "v92_close_ab_crowd_baseline_2",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "a87001dc4dc0a01589b4858f71f8924038a738a73774f2200a996c4d23f72fdf",
+      "runner": "runner_results_adhoc_20260922_195254_965_10308.json"
+    },
+    {
+      "label": "v92_close_ab_crowd_current_1",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "7eacf3e60d6bee273f5eb4c34831950440b1918a1d3729369239ece7016e4885",
+      "runner": "runner_results_adhoc_20260922_195201_087_10308.json"
+    },
+    {
+      "label": "v92_close_ab_crowd_current_2",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "18063be8ca8cd768d7c471ab84e8995c8cd7b4c8f9a030a55b36459f33d01cb8",
+      "runner": "runner_results_adhoc_20260922_195228_054_10308.json"
+    },
+    {
+      "label": "v92_close_ab_aoe_baseline_1",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "20e5608287e23b05415908c59b6c8fa80758bf95154c89dcd75614781acf819d",
+      "runner": "runner_results_adhoc_20260922_195309_401_10308.json"
+    },
+    {
+      "label": "v92_close_ab_aoe_baseline_2",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "0aa321b9ad9679d5339033ae8cf67200700aedcb300ea107e5b3c85f811b2682",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "e93f589040548e3aba879f592a8e7b9cf57e90fa1235a0d1f1c74c13e1312dbc",
+      "runner": "runner_results_adhoc_20260922_195548_248_15636.json"
+    },
+    {
+      "label": "v92_close_ab_aoe_current_3",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "65cd5c2d42640b3362de5c2bd702f27c23edf70c55d87b67ce0c970eb0ae9c29",
+      "runner": "runner_results_adhoc_20260922_195435_005_19056.json"
+    },
+    {
+      "label": "v92_close_ab_aoe_current_2",
+      "source_hashes": {
+        "res://scripts/enemy.gd": "4f66d3d2300b3a386162d30047928f586685bacf1032ca94e9b759f24d1bca99",
+        "res://scripts/monster_terrain_navigation_policy.gd": "e31dc0cd3ece24131de3a3573f92ee40a6d6b683f8858b83c9f5be80ecd22aed",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/runtime_combat_spatial_index.gd": "d7902176764033bde70bbc0de38807378d8af82b6ba8a09172bf28fde5a76497",
+        "res://tests/hc_monster_ai/m30_sampling_copy.gd": "b7350a05afeab07b2896d16280f8b88cd45040167ebf8a211359142e56cbd7d4"
+      },
+      "input_sha256": "70a12865cfef754b2a3715f62e96300296eac82c81af69afeba29233d136de66",
+      "runner": "runner_results_adhoc_20260922_195533_898_15636.json"
+    }
+  ]
+}

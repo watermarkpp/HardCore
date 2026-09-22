@@ -22,7 +22,7 @@ func _ready() -> void:
 	var manifest := Loader.package_test_manifest()
 	assert(manifest.global_tests.size() == 19)
 	assert(bool(manifest.get("project_overlay_valid", false)))
-	assert(manifest.get("project_overlay", {}).get("entry_count", 0) == 2)
+	assert(manifest.get("project_overlay", {}).get("entry_count", 0) == 3)
 	assert(manifest.skill_tests.size() == 152)
 	var global_status: Dictionary = {}
 	for entry_value: Variant in manifest.global_tests:

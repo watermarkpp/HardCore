@@ -422,7 +422,7 @@ func _test_canonical_context_and_summon_occupancy() -> void:
 	_skill_cast_target = _fixture[0]
 	magic_locked_target = _fixture[0]
 	var definition := {
-		"skill_id": "wizard.hellfire",
+		"skill_id": "wizard.repulsion_ring",
 		"class": "wizard",
 		"target": {"relation": "hostile", "mode": "single"},
 		"geometry": {"shape": "single", "maximum_range_gu": 12.0},
@@ -450,6 +450,16 @@ func _test_canonical_context_and_summon_occupancy() -> void:
 		context_ids == expected_context_ids,
 		"canonical hostile context target order differs from group authority",
 	)
+	# Hellfire resolves its exact line at release and does not consume this
+	# generic hostile list. Keep the ordering proof on its actual consumer.
+	definition["skill_id"] = "wizard.hellfire"
+	var unused_query_count_before := _combat_spatial_index.index_query_count
+	var hellfire_context := _canonical_target_context(
+		definition, player.global_position, Vector2.RIGHT, false, "r3x6:hellfire")
+	_expect(hellfire_context.get("targets", []).is_empty(),
+		"hellfire rebuilt an unconsumed generic hostile list")
+	_expect(_combat_spatial_index.index_query_count == unused_query_count_before,
+		"hellfire performed an unconsumed generic hostile query")
 	# R1-B: the occupancy broadphase now routes through the shared
 	# CombatTargetQueryService, whose record query increments the index
 	# query counter (the old node-query counter no longer applies).

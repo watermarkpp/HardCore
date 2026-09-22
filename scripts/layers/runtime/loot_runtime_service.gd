@@ -1,26 +1,6 @@
 extends Node
 
 const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
-const SMALL_MONSTER_CLASSIFICATION := "ordinary"
-const SMALL_MONSTER_EQUIPMENT_DENOMINATOR_MULTIPLIER := 3
-const SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER := 6
-const ELITE_BOSS_SOLAR_DENOMINATOR_MULTIPLIER := 2
-const ELITE_BOSS_CLASSIFICATIONS := {
-	"elite": true,
-	"boss": true,
-}
-const ELITE_BOSS_SOLAR_ITEM_IDS := {
-	920014: true,
-	920016: true,
-}
-const SMALL_MONSTER_SHENSHUI_ITEM_IDS := {
-	910001: true,
-	910002: true,
-	910003: true,
-	910004: true,
-	910005: true,
-	910006: true,
-}
 const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
 	117: "布衣(男)",
 	119: "轻型盔甲(男)",
@@ -39,14 +19,13 @@ const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
 # V5 trace is opt-in and debug-build-only. It never fabricates actor IDs.
 var _v5_trace_enabled := OS.has_feature("debug") and OS.get_environment("HARDCORE_DPV2_TRACE") == "1"
 var _v5_roll_sequence := 0
-var _user_balance := preload("res://scripts/drop/user_drop_balance.gd").new()
 var _user_additions := preload("res://scripts/drop/user_drop_additions_v81.gd").new()
 # User spreadsheet authority (v1): the compiled sheet is the sole production
 # probability source.  Its E column already contains every historical factor
 # (SPB, V5, denominator policy, v80/v81, global 1x, gold x5), so downstream
-# probability stages are retired for compiled monsters.  The v80/v81 helpers
-# stay loaded only for sealed-file history tests and the v81 fate-blade item
-# identity path.
+# probability stages are retired for compiled monsters. Historical probability
+# replay lives under tests/helpers; the retained v81 addition object owns only
+# the Fate Blade item identity and reward path here.
 var _sheet_authority := preload("res://scripts/drop/user_loot_sheet_provider.gd").new()
 var _overflow_telemetry_by_monster_id: Dictionary = {}
 var _lean_profile_by_monster_id: Dictionary = {}
@@ -526,128 +505,6 @@ func _stable_catalog_item_id(record: Dictionary) -> int:
 		if item_id >= 0:
 			return item_id
 	return -1
-
-
-func _apply_drop_probability_policy(
-	probability: Dictionary,
-	monster_classification: String,
-) -> Dictionary:
-	var multiplier := _drop_denominator_multiplier(
-		probability,
-		monster_classification,
-	)
-	if multiplier == 1:
-		return probability
-	var adjusted := _apply_denominator_multiplier(
-		probability,
-		multiplier,
-	)
-	if adjusted == probability:
-		return probability
-	if monster_classification == SMALL_MONSTER_CLASSIFICATION:
-		var reason := (
-			"small_monster_shenshui_denominator_x6"
-			if multiplier == SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER
-			else "small_monster_equipment_denominator_x3"
-		)
-		adjusted["pre_small_monster_numerator"] = int(
-			probability.get("final_numerator", 0)
-		)
-		adjusted["pre_small_monster_denominator"] = int(
-			probability.get("final_denominator", 0)
-		)
-		adjusted["small_monster_denominator_multiplier"] = multiplier
-		adjusted["small_monster_probability_policy"] = reason
-		adjusted["drop_denominator_policy"] = reason
-	else:
-		adjusted["elite_boss_solar_denominator_multiplier"] = multiplier
-		adjusted["elite_boss_solar_probability_policy"] = (
-			"elite_boss_solar_consumable_denominator_x2"
-		)
-		adjusted["drop_denominator_policy"] = (
-			"elite_boss_solar_consumable_denominator_x2"
-		)
-	adjusted["drop_denominator_multiplier"] = multiplier
-	return adjusted
-
-
-func _apply_small_monster_probability_policy(
-	probability: Dictionary,
-	monster_classification: String,
-) -> Dictionary:
-	var multiplier := _small_monster_denominator_multiplier(
-		probability,
-		monster_classification,
-	)
-	if multiplier == 1:
-		return probability
-	var adjusted := _apply_denominator_multiplier(probability, multiplier)
-	if adjusted == probability:
-		return probability
-	var reason := (
-		"small_monster_shenshui_denominator_x6"
-		if multiplier == SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER
-		else "small_monster_equipment_denominator_x3"
-	)
-	adjusted["pre_small_monster_numerator"] = int(
-		probability.get("final_numerator", 0)
-	)
-	adjusted["pre_small_monster_denominator"] = int(
-		probability.get("final_denominator", 0)
-	)
-	adjusted["small_monster_denominator_multiplier"] = multiplier
-	adjusted["small_monster_probability_policy"] = reason
-	return adjusted
-
-
-func _apply_denominator_multiplier(
-	probability: Dictionary,
-	multiplier: int,
-) -> Dictionary:
-	var numerator := int(probability.get("final_numerator", 0))
-	var denominator := int(probability.get("final_denominator", 0))
-	if numerator <= 0 or denominator <= 0 or multiplier <= 1:
-		return probability
-	var adjusted := probability.duplicate(true)
-	adjusted["final_denominator"] = denominator * multiplier
-	adjusted["probability_denominator"] = denominator * multiplier
-	adjusted["final_probability"] = (
-		float(numerator) / float(denominator * multiplier)
-	)
-	return adjusted
-
-
-func _drop_denominator_multiplier(
-	probability: Dictionary,
-	monster_classification: String,
-) -> int:
-	var small_monster_multiplier := _small_monster_denominator_multiplier(
-		probability,
-		monster_classification,
-	)
-	if small_monster_multiplier > 1:
-		return small_monster_multiplier
-	var item_id := int(probability.get("canonical_item_id", -1))
-	if (
-		ELITE_BOSS_CLASSIFICATIONS.has(monster_classification)
-		and ELITE_BOSS_SOLAR_ITEM_IDS.has(item_id)
-	):
-		return ELITE_BOSS_SOLAR_DENOMINATOR_MULTIPLIER
-	return 1
-
-
-func _small_monster_denominator_multiplier(
-	probability: Dictionary,
-	monster_classification: String,
-) -> int:
-	if monster_classification != SMALL_MONSTER_CLASSIFICATION:
-		return 1
-	var item_id := int(probability.get("canonical_item_id", -1))
-	if SMALL_MONSTER_SHENSHUI_ITEM_IDS.has(item_id):
-		return SMALL_MONSTER_SHENSHUI_DENOMINATOR_MULTIPLIER
-	if item_id > 0 and GameData.canonical_item_kind(item_id) == "equipment":
-		return SMALL_MONSTER_EQUIPMENT_DENOMINATOR_MULTIPLIER
-	return 1
 
 
 func _build_attempt(

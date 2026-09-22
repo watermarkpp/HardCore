@@ -81,6 +81,7 @@ const SkillFootprintDiagnosticLogScript := preload(
 	"res://scripts/layers/runtime/skill_footprint_diagnostic_log.gd"
 )
 const CasterSkillRuntimeScript := preload("res://scripts/caster_skill_runtime.gd")
+const SkillRuntimeClassificationScript := preload("res://scripts/skills/skill_runtime_classification.gd")
 const FireWallFieldControllerScript := preload(
 	"res://scripts/fire_wall_field_controller.gd"
 )
@@ -160,6 +161,9 @@ const SAFE_RING_TELEPORT_DISTANCES_GU := [
 	1.125,
 ]
 const RANDOM_TELEPORT_MAX_ATTEMPTS := 256
+const SKILL_TELEPORT_MAX_ATTEMPTS := 96
+const SKILL_TELEPORT_MIN_DISTANCE_GU := 3.0
+const SKILL_TELEPORT_MAX_DISTANCE_GU := 16.25
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
 const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
 const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
@@ -225,6 +229,8 @@ var current_zone := ""
 var current_map_id := -1
 var current_map_data: Dictionary = {}
 var _zone_generation := 0
+var _ready_world_map_id := -1
+var _ready_world_zone_generation := -1
 var _monster_terrain_navigation_context: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var locked_target: EnemyActor
@@ -690,7 +696,7 @@ func _target_spatial_query_aabb_into(
 		if bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
 			projection_rejection_reason = &"target_spatial_query_bounds_invalid"
 		return false
-	var service_ready := _service_envelope_into(bounds_ground_gu, output)
+	var service_ready := _service_envelope_into(bounds_ground_gu, output, stable_order)
 	var write_index := 0
 	for raw_enemy: Variant in output:
 		if not raw_enemy is EnemyActor:
@@ -1568,6 +1574,8 @@ func _ready() -> void:
 	_player_level_up_effect.set_meta("preview_only", false)
 	_player_level_up_effect.set_meta("gameplay_event_source", "PlayerState.levels_gained")
 	PlayerState.levels_gained.connect(_on_player_levels_gained)
+	PlayerState.skills_changed.connect(_synchronize_main_pet_skill_ranks)
+	PlayerState.equipment_changed.connect(_synchronize_main_pet_skill_ranks)
 	_loot_pickup_runtime_manager = LootPickupRuntimeManagerScript.new()
 	_loot_pickup_runtime_manager.name = "LootPickupRuntimeManager"
 	_loot_pickup_runtime_manager.configure_player(player)
@@ -1661,12 +1669,13 @@ func _ready() -> void:
 		)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	# Device Lab is intentionally a Debug-only child.  It exposes only the
-	# bounded ADB mailbox service; release builds never create the node.
+	# bounded ADB mailbox and opt-in local recording; release builds omit it.
 	if OS.is_debug_build():
 		_device_lab_runtime = DeviceLabRuntimeScript.new()
 		_device_lab_runtime.configure(self)
 		_device_lab_runtime.name = "DeviceLabRuntime"
 		add_child(_device_lab_runtime)
+		_device_lab_runtime.local_performance_capture_finished.connect(_on_local_performance_capture_finished)
 	_wire_item_quick_slots_hud()
 	player.resources_changed.connect(
 		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:
@@ -1706,6 +1715,10 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if PlayerState.skills_changed.is_connected(_synchronize_main_pet_skill_ranks):
+		PlayerState.skills_changed.disconnect(_synchronize_main_pet_skill_ranks)
+	if PlayerState.equipment_changed.is_connected(_synchronize_main_pet_skill_ranks):
+		PlayerState.equipment_changed.disconnect(_synchronize_main_pet_skill_ranks)
 	if not _prepared_loot_collection.is_empty():
 		_prepared_loot_collection.plan.writer.cancel()
 		_prepared_loot_collection.plan.writer.result(true)
@@ -2429,6 +2442,7 @@ func _build_system_menu() -> void:
 	_system_menu_panel.return_to_character_select_requested.connect(_return_to_character_select)
 	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
 	_system_menu_panel.audio_setting_changed.connect(_on_system_menu_audio_setting_changed)
+	_system_menu_panel.performance_capture_requested.connect(_on_local_performance_capture_requested)
 	_system_menu_layer.add_child(_system_menu_panel)
 	_system_menu_panel.set_audio_levels(
 		AudioPreferences.music_volume,
@@ -2445,6 +2459,20 @@ func _show_system_menu() -> void:
 	_system_menu_pause_owned = _system_menu_pause_owned or not get_tree().paused
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
+
+
+func _on_local_performance_capture_requested(detail_mode: String) -> void:
+	if not is_instance_valid(_device_lab_runtime):
+		return
+	var result := _device_lab_runtime.begin_local_performance_capture(detail_mode)
+	_hide_system_menu()
+	if is_instance_valid(hud):
+		hud.show_message("开始记录30秒，请复现卡顿" if bool(result.get("ok", false)) else "已有性能记录正在进行")
+
+
+func _on_local_performance_capture_finished(result: Dictionary) -> void:
+	if is_instance_valid(hud) and not is_queued_for_deletion():
+		hud.show_message("性能记录已保存在本机" if bool(result.get("ok", false)) else "性能记录保存失败")
 
 
 func _hide_system_menu() -> void:
@@ -3599,6 +3627,11 @@ func _run_map_transition(
 			hud.loading_transition_overlay.modulate.a = 1.0
 		_active_map_transition_id = ""
 		_map_transition_in_progress = false
+		# Same-map home/revival/teleport preserves this world and creates no
+		# new actor descriptors. Only a previously successful READY may certify
+		# that exact retained generation on a later transition.
+		_ready_world_map_id = current_map_id
+		_ready_world_zone_generation = _zone_generation
 		var bootstrap_profile := _world_bootstrap_coordinator.finish(
 			true, "map_transition_ready"
 		)
@@ -3693,11 +3726,11 @@ func _fail_map_transition(recovery_policy: StringName) -> void:
 	if is_instance_valid(hud):
 		hud.finish_loading_transition()
 		if recovery_policy == &"pre_arrival_keep_world":
-			hud.show_error_message("地图切换失败：%s，已保留当前区域，可稍后重试。" % reason, 4.0)
+			hud.show_error_message("地图切换失败，已保留当前区域，可稍后重试。", 4.0)
 		elif recovery_policy == &"post_arrival_safe_home":
-			hud.show_error_message("地图加载未完成：%s，正在送回安全点。" % reason, 4.0)
+			hud.show_error_message("地图加载未完成，正在送回安全点。", 4.0)
 		else:
-			hud.show_error_message("地图切换失败：%s" % reason, 4.0)
+			hud.show_error_message("地图切换失败，请稍后重试。", 4.0)
 	print("[MapTransition] FAILED reason=%s policy=%s" % [reason, str(recovery_policy)])
 	if recovery_policy == &"post_arrival_safe_home":
 		# A player killed during the failed arrival goes through the
@@ -3949,7 +3982,15 @@ func _check_world_ready_contract() -> bool:
 		or not (content.get("npcs", []) as Array).is_empty()
 		or not (content.get("portals", []) as Array).is_empty()
 	)
-	if declares_content and get_tree().get_nodes_in_group("zone_content").is_empty():
+	# The generation's actor plan accounts for live AND persisted respawn
+	# slots above. Boss-only maps are correctly empty until their deadline;
+	# scene-wide groups also include queued old-map nodes, making this gate
+	# intermittently reject the same valid save depending on load timing.
+	var retained_ready_world := (
+		_ready_world_map_id == current_map_id
+		and _ready_world_zone_generation == _zone_generation
+	)
+	if declares_content and int(summary.get("planned_actors", 0)) <= 0 and not retained_ready_world:
 		return false
 	return true
 
@@ -7218,6 +7259,10 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		melee_modifiers.get("flat_damage_bonus_after_body_formula", 0)
 	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
+	if PlayerState.is_skill_learned("精神力战法"):
+		accuracy_bonus += SkillRuntimeRouterScript.taoist_melee_accuracy_bonus(
+			PlayerState.effective_skill_level("精神力战法")
+		)
 	var hit_any := false
 	var primary_hit := false
 	var canonical_resolution := "rejected"
@@ -7721,6 +7766,9 @@ func _execute_canonical_skill(
 	if definition.is_empty():
 		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
+	if SkillRuntimeClassificationScript.profile(stable_skill_id).is_empty():
+		_skill_cast_target = null
+		return {"accepted": false, "effect_success": false, "reason": "unknown_runtime_classification"}
 	var rank := PlayerState.effective_skill_level(skill_name)
 	var release_context := (extra_target_context as Dictionary).duplicate(true)
 	var support_center_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -7913,6 +7961,13 @@ func _execute_canonical_skill(
 		}.merged(execution_overrides)
 	)
 	result["execution_result"] = execution_result
+	if stable_skill_id == "wizard.teleport" and apply_effects:
+		# Acceptance consumes the cast; successful movement is an applied result.
+		# Never report success merely because the immutable plan was accepted.
+		result["effect_success"] = false
+		for status: Dictionary in execution_result.get("status_results", []):
+			if str(status.get("type", "")) == "player_teleport":
+				result["effect_success"] = bool(status.get("applied", false))
 	result["plan_immutable"] = SkillExecutionPlanScript.verify_immutable(
 		plan,
 		plan_hash_before
@@ -8190,17 +8245,13 @@ func _execute_canonical_melee(
 						roundi(float(base_damage) * float(effect.get("multiplier", 1.0)))
 						+ post_body_damage_bonus
 					)
-					if mode == "thrust":
-						var physical_resolution := WarriorCombatMath.resolve_enemy_physical_damage(
-							resolved_damage,
-							target.defense,
-							WarriorCombatMath.thrust_segment_ignores_ac(int(effect.get("cell", 1))),
-						)
-						resolved_damage = int(physical_resolution.get("final_damage", 0))
 					var target_hit := _apply_physical_hit(
 						target,
 						resolved_damage,
-						accuracy_bonus
+						accuracy_bonus,
+						mode == "thrust" and WarriorCombatMath.thrust_segment_ignores_ac(
+							int(effect.get("cell", 1))
+						),
 					)
 					hit_any = target_hit or hit_any
 					if int(effect.get("cell", 1)) == 1:
@@ -8366,9 +8417,10 @@ func _canonical_target_context(
 		_canonical_snapshot_absolute_context(snapshot_origin_ground_gu)
 	)
 	if stable_skill_id == "wizard.teleport":
-		var destination := _find_valid_random_teleport_position(origin)
+		var destination := _find_valid_skill_teleport_position(origin)
 		context["destination_valid"] = destination != origin
 		context["destination_tile"] = _canonical_screen_px_to_grid_cell(destination)
+		context["destination_ground_gu"] = _canonical_screen_px_to_ground_gu(destination)
 	if target != null:
 		var monster_data: Dictionary = target.monster_data
 		var target_control_immunity := target.control_immunity_snapshot()
@@ -8403,6 +8455,12 @@ func _canonical_target_context(
 	# effect destination and footprint snapshot describe different ground
 	# positions.
 	context.merge(context_overrides, true)
+	if stable_skill_id == "wizard.teleport":
+		var teleport_ground: Vector2 = context.get("destination_ground_gu", Vector2.INF)
+		context["destination_valid"] = (
+			bool(context.get("destination_valid", false))
+			and _skill_teleport_destination_is_valid(origin, teleport_ground)
+		)
 	if stable_skill_id == "wizard.lightning":
 		context["line_of_sight"] = usable_target and _hc_lightning_clear(target, origin)
 	if stable_skill_id in [
@@ -8495,12 +8553,8 @@ func _canonical_target_context(
 			)
 		)
 	elif stable_skill_id == "wizard.teleport":
-		var teleport_destination_screen_px := _canonical_grid_cell_to_screen_px(
-			context.get("destination_tile", Vector2i.ZERO)
-		)
-		var teleport_destination_ground_gu := _canonical_screen_px_to_ground_gu(
-			teleport_destination_screen_px
-		)
+		var teleport_destination_ground_gu: Vector2 = context.get(
+			"destination_ground_gu", Vector2.INF)
 		context["skill_footprint_snapshot"] = (
 			SkillFootprintSnapshotScript.create_target_footprint(
 				stable_skill_id,
@@ -8529,7 +8583,10 @@ func _canonical_target_context(
 					adjacent_ring_cells.append(
 						caster_tile + Vector2i(ring_x, ring_y)
 					)
-	if not bool(context.get("hostile_targets_pre_resolved", false)):
+	if (
+		SkillRuntimeClassificationScript.needs_hostile_context_targets(stable_skill_id)
+		and not bool(context.get("hostile_targets_pre_resolved", false))
+	):
 		# The broadphase envelope is deliberately conservative; the exact
 		# snapshot/range/adjacent-ring checks below remain authoritative.
 		var target_query_bounds := Rect2(
@@ -8586,7 +8643,7 @@ func _canonical_target_context(
 					"level": node.level,
 					"is_boss": node.is_boss,
 					"immovable": node.is_boss,
-					"path_blocked": background.is_environment_point_blocked(
+					"path_blocked": SkillRuntimeClassificationScript.needs_push_path_probe(stable_skill_id) and background.is_environment_point_blocked(
 						_canonical_ground_gu_to_screen_px(
 							node_ground_gu + (
 								node_ground_gu - origin_ground_gu
@@ -8723,10 +8780,11 @@ func _apply_canonical_effects_from_plan(
 	var spawned_ground_effects: Array[int] = []
 	var spawned_summons: Array[int] = []
 	var created_visuals: Array[int] = []
+	var applied_status_results: Array[Dictionary] = []
 	for node: Node2D in spawned_nodes:
 		if node is SkillProjectile:
 			spawned_projectiles.append(node.get_instance_id())
-		elif node is GroundSkillEffect:
+		elif node is GroundSkillEffect or node is FireWallFieldControllerScript:
 			spawned_ground_effects.append(node.get_instance_id())
 		elif node is SummonActor:
 			spawned_summons.append(node.get_instance_id())
@@ -8891,13 +8949,10 @@ func _apply_canonical_effects_from_plan(
 					int(effect.get("amount", 1))
 				)
 			"server_random_teleport":
+				var teleport_applied := false
+				var destination_ground_gu: Vector2 = effect.get("destination_ground_gu", Vector2.INF)
 				if bool(effect.get("moved", false)):
-					var destination := _canonical_grid_cell_to_screen_px(
-						effect.get("destination", Vector2i.ZERO)
-					)
-					var destination_ground_gu := (
-						_canonical_screen_px_to_ground_gu(destination)
-					)
+					var destination := _canonical_ground_gu_to_screen_px(destination_ground_gu)
 					var snapshot_destination_ground_gu: Vector2 = (
 						skill_release_snapshot.get(
 							"target_center_ground_gu", Vector2.INF
@@ -8908,14 +8963,20 @@ func _apply_canonical_effects_from_plan(
 						and snapshot_destination_ground_gu.is_equal_approx(
 							destination_ground_gu
 						)
+						and _skill_teleport_destination_is_valid(origin, destination_ground_gu)
 						and _apply_canonical_player_teleport(destination)
 					):
+						teleport_applied = true
 						_spawn_canonical_teleport_arrival(
 							stable_skill_id,
 							destination,
 							direction,
 							skill_release_snapshot
 						)
+				applied_status_results.append({
+					"type": "player_teleport", "applied": teleport_applied,
+					"destination_ground_gu": destination_ground_gu,
+				})
 			"refreshable_damage_reduction_buff":
 				player.apply_magic_shield(
 					float(effect.get("duration_seconds", 1)),
@@ -9077,6 +9138,7 @@ func _apply_canonical_effects_from_plan(
 				)
 	return {
 		"spawned_projectile_ids": spawned_projectiles,
+		"status_results": applied_status_results,
 		"spawned_ground_effect_ids": spawned_ground_effects,
 		"spawned_summon_ids": spawned_summons,
 		"created_visual_ids": created_visuals,
@@ -9108,7 +9170,7 @@ func _spawn_canonical_cast_nodes_from_plan(
 		# cells; the field controller is the single damage/visual owner.
 		var ground_effect := _canonical_plan_ground_effect(plan)
 		if not ground_effect.is_empty():
-			_spawn_canonical_ground_field(
+			return _spawn_canonical_ground_field(
 				stable_skill_id,
 				plan.get("effective_geometry_cells", []),
 				target_position,
@@ -9953,7 +10015,7 @@ func _spawn_canonical_ground_field(
 	effect: Dictionary,
 	release_id := "",
 	skill_release_snapshot: Dictionary = {}
-) -> void:
+) -> Array[Node2D]:
 	var positions: Array[Vector2] = []
 	var coverage_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
@@ -9972,7 +10034,7 @@ func _spawn_canonical_ground_field(
 				_canonical_screen_px_to_ground_gu(fallback_position)
 			)
 		)
-		# Q2-C: the formal release owns exactly ONE canonical 2x2 union
+		# Q2-C: the formal release owns exactly ONE canonical 3x3 union
 		# snapshot. Legacy/test callers that omit one get a deterministic
 		# fallback built from the same coverage cells, so the controller never
 		# needs per-cell damage geometry.
@@ -10032,11 +10094,11 @@ func _spawn_canonical_ground_field(
 					field_snapshot_validation_context,
 					release_id
 				)
-				return
+				return [existing_field as FireWallFieldControllerScript]
 			if not _fire_wall_cap_allows_new_field(
 				effect, player, stable_skill_id
 			):
-				return
+				return []
 		var field_controller := FireWallFieldControllerScript.new()
 		field_controller.setup_fire_wall_field(
 			player,
@@ -10066,15 +10128,11 @@ func _spawn_canonical_ground_field(
 				)
 			)
 			_debug_validate_fire_wall_registry("cast_insert")
-		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
-			visual_cell.set_shared_anim_clock_ms(
-				Callable(field_controller, "fire_wall_anim_clock_ms")
-			)
 		# Q2-C: the controller owns the GroundSkillVisualCell presentation
 		# nodes (3x3 geometry => 9 cells today); no additional standalone
 		# GroundSkillEffect cells are spawned, so the base-class enemy-group
 		# scan can never run on this path.
-		return
+		return [field_controller]
 
 	# Generic persistent ground effects share one canonical validation context
 	# so the manager can run STRICT_V2 snapshot validation per tick.
@@ -10083,8 +10141,9 @@ func _spawn_canonical_ground_field(
 			_canonical_screen_px_to_ground_gu(fallback_position)
 		)
 	)
+	var spawned_effects: Array[Node2D] = []
 	for index: int in range(positions.size()):
-		_spawn_canonical_ground_effect(
+		spawned_effects.append(_spawn_canonical_ground_effect(
 			stable_skill_id,
 			positions[index],
 			effect,
@@ -10093,7 +10152,8 @@ func _spawn_canonical_ground_field(
 			release_id,
 			skill_release_snapshot,
 			generic_snapshot_validation_context
-		)
+		))
+	return spawned_effects
 
 
 ## SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
@@ -10335,7 +10395,7 @@ func _spawn_canonical_ground_effect(
 	release_id := "",
 	skill_release_snapshot: Dictionary = {},
 	snapshot_validation_context: Dictionary = {}
-) -> void:
+) -> GroundSkillEffect:
 	var ground_effect := GroundSkillEffect.new()
 	ground_effect.setup_ground_unit_effect(
 		position,
@@ -10387,6 +10447,7 @@ func _spawn_canonical_ground_effect(
 			skill_release_snapshot,
 			snapshot_validation_context
 		)
+	return ground_effect
 
 
 func _register_manager_ground_effect(
@@ -10537,7 +10598,7 @@ func _apply_canonical_displacement_screen_px(
 
 
 func _apply_canonical_player_teleport(destination: Vector2) -> bool:
-	if destination == Vector2.ZERO or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
+	if not destination.is_finite() or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
 		return false
 	_set_player_world_position(destination)
 	player.velocity = Vector2.ZERO
@@ -10603,6 +10664,19 @@ func _apply_canonical_temptation(target: EnemyActor, effect: Dictionary) -> void
 			target.apply_charm(float(effect.get("duration_seconds", float(effect.get("loyalty_duration_ms", 1000)) / 1000.0)))
 		"instant_kill":
 			_combat_runtime.apply_enemy_physical_damage(target, target.current_hp, player)
+
+
+func _synchronize_main_pet_skill_ranks() -> void:
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var summon := _canonical_main_pet(summon_id)
+		if summon != null:
+			_synchronize_pet_skill_rank(summon)
+
+
+func _synchronize_pet_skill_rank(summon: SummonActor) -> void:
+	var skill_name := ProfessionRules.skill_display_name(summon.skill_id)
+	if PlayerState.is_skill_learned(skill_name):
+		summon.synchronize_skill_rank(PlayerState.effective_skill_level(skill_name))
 
 
 func _canonical_main_pet(summon_id: String = "") -> SummonActor:
@@ -10721,6 +10795,7 @@ func _restore_persisted_taoist_main_pet_if_needed() -> bool:
 			summon.free()
 			PlayerState.clear_taoist_main_pet_runtime_state(summon_id)
 			continue
+		_synchronize_pet_skill_rank(summon)
 		summon.set_meta("taoist_main_pet", true)
 		summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v2")
 		summon.configure_runtime_map_projection(
@@ -11121,6 +11196,7 @@ func _apply_canonical_main_pet(
 		):
 			return
 		existing.global_position = spawn_screen_px
+		_synchronize_pet_skill_rank(existing)
 		existing.configure_spawn_release_footprint(release_id)
 		existing.set_meta(
 			"canonical_spawn_footprint_snapshot",
@@ -11373,6 +11449,9 @@ func _spawn_canonical_teleport_arrival(
 	var arrival_presentation := {
 		"success": true,
 		"skill_id": stable_skill_id,
+		"release_id": str(skill_release_snapshot.get("release_id", "")),
+		"canonical_geometry_contract": CasterSpellGeometryScript.CONTRACT_ID,
+		"ground_gu_to_screen_position_px": Callable(self, "_canonical_ground_gu_to_screen_px"),
 		"operation": "canonical_visual_only",
 		"visual": visual_profile,
 		"visual_duration": CasterSkillVisualRegistry.animation_duration(
@@ -12167,7 +12246,9 @@ func _is_primary_melee_candidate(
 	)
 
 
-func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) -> bool:
+func _apply_physical_hit(
+	enemy: EnemyActor, damage: int, accuracy_bonus := 0, ignore_ac := false
+) -> bool:
 	if (
 		enemy == null
 		or enemy.is_queued_for_deletion()
@@ -12203,9 +12284,12 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 				})
 			return false
 	var hp_before := enemy.current_hp
+	var physical_resolution := WarriorCombatMath.resolve_enemy_physical_damage(
+		damage, enemy.effective_physical_defense(), ignore_ac
+	)
 	if not _combat_runtime.apply_enemy_physical_damage(
 		enemy,
-		maxi(1, damage),
+		int(physical_resolution.get("final_damage", 0)),
 		player,
 		{
 			"damage_kind": "player_physical",
@@ -12719,7 +12803,9 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 		return false
 	_enemy_death_pipeline_running = true
 	var progressed := false
-	var slice_started_usec := RuntimeDiagnostics.timing_start()
+	# Scheduling is production behavior, independent of diagnostic sampling.
+	# Diagnostic timers return zero when disabled (the normal gameplay case).
+	var slice_started_usec := Time.get_ticks_usec()
 	var budget_usec := _death_drop_work_budget_usec()
 	var jobs_limit := _death_jobs_max_per_frame()
 	var nodes_limit := _drop_nodes_max_per_frame()
@@ -12753,7 +12839,7 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 			and (
 				force_synchronous
 				or jobs_processed == 0
-				or RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) < budget_usec
+				or Time.get_ticks_usec() - slice_started_usec < budget_usec
 			)
 		):
 			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
@@ -12764,7 +12850,7 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 		if (
 			not force_synchronous
 			and progressed
-			and RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) >= budget_usec
+			and Time.get_ticks_usec() - slice_started_usec >= budget_usec
 		):
 			break
 		var death: Dictionary = _pending_enemy_deaths[0]
@@ -13251,7 +13337,7 @@ func _materialize_enemy_death_nodes(
 		if (
 			not force_synchronous
 			and progressed
-			and RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) >= budget_usec
+			and Time.get_ticks_usec() - slice_started_usec >= budget_usec
 		):
 			break
 		if not _death_origin_matches_current(death):
@@ -13885,6 +13971,51 @@ func _report_repair_oil_result(result: Dictionary) -> void:
 		hud.show_error_message(
 			UIErrorFeedbackScript.from_result(result, "修复失败，请稍后重试。")
 		)
+
+
+func _skill_teleport_destination_is_valid(origin_screen_px: Vector2, destination_ground_gu: Vector2) -> bool:
+	if not destination_ground_gu.is_finite():
+		return false
+	var distance_gu := _canonical_screen_px_to_ground_gu(origin_screen_px).distance_to(destination_ground_gu)
+	if distance_gu < SKILL_TELEPORT_MIN_DISTANCE_GU or distance_gu > SKILL_TELEPORT_MAX_DISTANCE_GU:
+		return false
+	return _teleport_destination_is_clear(destination_ground_gu)
+
+
+func _teleport_destination_is_clear(candidate_ground_gu: Vector2) -> bool:
+	if not candidate_ground_gu.is_finite() or not _target_spatial_query_ready():
+		return false
+	var candidate_screen_px := _canonical_ground_gu_to_screen_px(candidate_ground_gu)
+	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+		background, candidate_screen_px, ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	):
+		return false
+	var player_radius_gu := WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX)
+	var query_radius_gu := player_radius_gu + RANDOM_TELEPORT_ACTOR_CLEARANCE_GU
+	if not _target_spatial_query_aabb_into(Rect2(
+		candidate_ground_gu - Vector2.ONE * query_radius_gu,
+		Vector2.ONE * query_radius_gu * 2.0), _target_spatial_query_scratch, false):
+		return false
+	for enemy: EnemyActor in _target_spatial_query_scratch:
+		if _canonical_screen_px_to_ground_gu(enemy.global_position).distance_to(candidate_ground_gu) < (
+			player_radius_gu + enemy.combat_radius_gu + RANDOM_TELEPORT_ACTOR_CLEARANCE_GU
+		):
+			return false
+	return true
+
+
+func _find_valid_skill_teleport_position(origin_screen_px: Vector2) -> Vector2:
+	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
+	if not origin_ground_gu.is_finite() or not _target_spatial_query_ready():
+		return origin_screen_px
+	for _attempt in range(SKILL_TELEPORT_MAX_ATTEMPTS):
+		var angle := _rng.randf_range(0.0, TAU)
+		var distance_gu := _rng.randf_range(SKILL_TELEPORT_MIN_DISTANCE_GU, SKILL_TELEPORT_MAX_DISTANCE_GU)
+		var candidate_ground_gu := origin_ground_gu + Vector2.RIGHT.rotated(angle) * distance_gu
+		if _teleport_destination_is_clear(candidate_ground_gu):
+			return _canonical_ground_gu_to_screen_px(candidate_ground_gu)
+	return origin_screen_px
 
 
 func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:

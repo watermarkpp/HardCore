@@ -1,0 +1,439 @@
+{
+  "apk": "D:\\HardCoreAudit\\HardCore-20260922-rv15-loot-overlay-85d37077-v91-debug.apk",
+  "apk_sha256": "71e841585d333706fe87b192285649c3bc8f443d1b83f452d24d5f837f0dcdcd",
+  "build_info": {
+    "git_head": "85d37077704c1083c85ee9d79f14081fff2c4dba",
+    "version_code": 91,
+    "build_timestamp_utc": "2026-09-22T04:57:02.3172681Z",
+    "git_short_head": "85d37077",
+    "build_type": "development",
+    "version_name": "hardcore 1.0 正式版",
+    "git_dirty": false,
+    "git_branch": "HEAD"
+  },
+  "plans": 60,
+  "matching": 0,
+  "mismatch": 60,
+  "rows": [
+    {
+      "map_key": "bich_corpse_king_hall",
+      "expected_runtime_sha256": "b1c2da75758d9cc223e1c61947bf1be1861f34a6dc21cdf304a2ca0afc3c413c",
+      "actual_apk_runtime_sha256": "fb7499c98c555a07efaec2bbb7536d661dae68ecd8b1346bc303edf73a4b9e10",
+      "match": false,
+      "plan_sha256": "3f7ddf1886dd749540fd7bc788b3b190972fa8077289d519abdb1bf120702948"
+    },
+    {
+      "map_key": "bich_mine_f1",
+      "expected_runtime_sha256": "1087d9f4d1a1044aa3268df84505e353d106bd060e72b875cf1b833427a9c938",
+      "actual_apk_runtime_sha256": "c5bee146ccb14416c8797f4630100aa8db2b7b7c9c354e8515b5d5f068d72f4b",
+      "match": false,
+      "plan_sha256": "2dbddd1ab4ad19397e7b66fa6f1e5a2f253406a1e53a4df51a0b50a0e56dabe1"
+    },
+    {
+      "map_key": "bich_mine_f2",
+      "expected_runtime_sha256": "2582dfbae6eb7b06e956847b16ac0b9f662bbe1e7b9480b888ea2418b6fa492d",
+      "actual_apk_runtime_sha256": "52f99a7ce2a9779404a0b92b84490ea7a53ce455766ca250ee0aba85c66c0cf0",
+      "match": false,
+      "plan_sha256": "14ffdc40e05232b2602e480ff74e767f3244e91ac7979e2219c506a429cbf852"
+    },
+    {
+      "map_key": "bich_orc_tomb_f1",
+      "expected_runtime_sha256": "42519ce0e70a805c382919e80d3bce7a33ae3a5968b359c9bfe76037a87b3b4d",
+      "actual_apk_runtime_sha256": "ab6b1aeba7e51a1b474a282b46edbaf9b1ef43591ee32cd6cb3dc101b29ff198",
+      "match": false,
+      "plan_sha256": "f0fc68f05283424c582de61c2e80599a88b109144d942105657d7db303dd8e6b"
+    },
+    {
+      "map_key": "bich_orc_tomb_f2",
+      "expected_runtime_sha256": "a17e181e1dc49710e365ab5110523bb532039c6e269163ea4b9874f50f68881a",
+      "actual_apk_runtime_sha256": "9a5bc1b7b3e230f1d7e8c347c07a9329fe50f8e8ff458b8a9ad215f22070b0a7",
+      "match": false,
+      "plan_sha256": "18564b1cf2f8db8f0cacf2b4c4320c7a81e0148e97e44fa30bcc120d501d2d6b"
+    },
+    {
+      "map_key": "bich_orc_tomb_f3",
+      "expected_runtime_sha256": "0b943ffc1e7faccb90e14c3882ff16a253b8188851e217137c5a6cdd52cfa128",
+      "actual_apk_runtime_sha256": "6bd2308717a0942295e9979383a82f79520f73cb0a8ad0e8380e6a09d5143db4",
+      "match": false,
+      "plan_sha256": "b69889a049a551469cab6290f7f73e05a10120d09d1e8d0a57ff954ce8df62e2"
+    },
+    {
+      "map_key": "cangyue_bone_cave_f1",
+      "expected_runtime_sha256": "3300c28ec429991666b0e91836c138182e663591df28a2aa438ed0ecdaaf44f2",
+      "actual_apk_runtime_sha256": "c67ca67fecb4d0b138427c5e2fc4bfb15f341ef7e6b11b58698a347ca5aa38d3",
+      "match": false,
+      "plan_sha256": "b992fb97af2bcab47611aa206b1d64ccc183ac97d66fcbd7fc40589bf0dd9d97"
+    },
+    {
+      "map_key": "cangyue_bone_cave_f2",
+      "expected_runtime_sha256": "04f9566067b17523e4ab94d2438cde5e5c49e6216b8ce706483cf0cdc2ed0292",
+      "actual_apk_runtime_sha256": "6ab05054f120b2e431b9a05f4ed95883c30587b3d349893c5bde9edb572b6045",
+      "match": false,
+      "plan_sha256": "48491ce4f08874e4eece0867ad9637b52f974ac8a045a51b9a10f495a4756634"
+    },
+    {
+      "map_key": "cangyue_bone_cave_f3",
+      "expected_runtime_sha256": "a7976fd79b7743d8c12d2c0018c21133a47c42224a3efbf5f3ca6679cffa69ed",
+      "actual_apk_runtime_sha256": "b35439f0e0f1e557c9841ddc4b822dc6651dd351ee9f37e5749ef4182102af4d",
+      "match": false,
+      "plan_sha256": "83773aa5b483e81b6c6f4483b9794504b1beecb7ccf79cb85b479f320229b29c"
+    },
+    {
+      "map_key": "cangyue_bone_cave_f4",
+      "expected_runtime_sha256": "000aa910c983221df03811e737a425477c1dd437a78bc77b7c6929881ab7ae1e",
+      "actual_apk_runtime_sha256": "2b295952809f7678824655082fa92fa7d857595833f8f595541e2add2e529031",
+      "match": false,
+      "plan_sha256": "168b1345eb4f0a6451a9f4c347332025681edec6ec677851634012fc76c6c5d4"
+    },
+    {
+      "map_key": "cangyue_bone_cave_f5",
+      "expected_runtime_sha256": "c8e9a896644e3f6b9d8234ac8798030d5ac4523ef246ea8a7c1f1660005f92b1",
+      "actual_apk_runtime_sha256": "2521c33afcfb445d56c790e9185efa77340d6b1e9c9013ae19fdedf08e2c7bf6",
+      "match": false,
+      "plan_sha256": "29fe777a8515b0ff0a9d71aad51972f41789d1e6c4e10481c3fd094f795cfc20"
+    },
+    {
+      "map_key": "cangyue_bull_temple_f1",
+      "expected_runtime_sha256": "f0ca8436c6dfe9d90940c152d1235d69172ac8f53b43ef81e971309dbce66b66",
+      "actual_apk_runtime_sha256": "811fa6baf92d04be5cf9721c6c413ed157a979f64c3821d6b7e1b3c22dc15491",
+      "match": false,
+      "plan_sha256": "e3ab258184b0289bfd98513e4393b30415c8e6c4d9cae07f2ec550f150b0d52a"
+    },
+    {
+      "map_key": "cangyue_bull_temple_f2",
+      "expected_runtime_sha256": "5aa9751adf57f2cb8497deb4d5a5368f2047f773a5a340278b74ee78321ebce7",
+      "actual_apk_runtime_sha256": "8aab5f6786d0519c8b481099a35c4265a30cc6e14e922cff4092b7a884960bde",
+      "match": false,
+      "plan_sha256": "c47981815aab157a54f1c27d991f3d4c0eabad5070e39ad1efbcfed8d65ae828"
+    },
+    {
+      "map_key": "cangyue_bull_temple_f3",
+      "expected_runtime_sha256": "d3b26203c396a65496933e9218ee7f427142bede204665c74889d8f074225251",
+      "actual_apk_runtime_sha256": "29c1131c453f7fef3d9d59992aa4430068cf21ee4c00e699311667404ed12cc7",
+      "match": false,
+      "plan_sha256": "1c22b7fd581f2f60051ecbc74dedfbc98a3e8b131c09492364d6e1371eae6e7c"
+    },
+    {
+      "map_key": "cangyue_bull_temple_f4",
+      "expected_runtime_sha256": "4941d4fe458d111079a7cf656388ca20722feb4e864fff0295c7addc1ec8b1fa",
+      "actual_apk_runtime_sha256": "786e62a233957bac69c3074b5dc34e1fd2dac6a4a16f4608258e1d7824ab69c1",
+      "match": false,
+      "plan_sha256": "9529cc9e0dd00b12d0670c7c8d1195e227f389e1709533220e607d14a31a32dd"
+    },
+    {
+      "map_key": "cangyue_bull_temple_hall",
+      "expected_runtime_sha256": "404b77b7a41e0d9e228c7e7f21e199ef755b1244078fa43fb95be21657dcbb56",
+      "actual_apk_runtime_sha256": "27e605f92e3692cac555d82efcac3436c034f72d763990d8097c760b30030a08",
+      "match": false,
+      "plan_sha256": "73912d86b67d9a5b4adc566cd72d02d925447ceaa57a20d3443163365084a7d6"
+    },
+    {
+      "map_key": "chiyue_choice_land",
+      "expected_runtime_sha256": "38016f108099c8a4f11af3b30f7df226f4deb9901e823e028a6c31e1569b5183",
+      "actual_apk_runtime_sha256": "de076c0bf2b91d7a6f634480a0a61155331da4bc7dc8bb4451e5956f15e4ccab",
+      "match": false,
+      "plan_sha256": "e95b1de860d921592cdffd04afc02daf5d735b421a9df1ba2da3688a970b32db"
+    },
+    {
+      "map_key": "chiyue_demon_altar",
+      "expected_runtime_sha256": "1e766907167972b1f6b8fedf9e7bab3a2bc041983c0b5088e656d141a0f408ae",
+      "actual_apk_runtime_sha256": "b007938d8363b03f3d290847bc33f108270acdb1bd45b2a876d887d66000f65b",
+      "match": false,
+      "plan_sha256": "2361805f9984ebdb6f37590e447b7e1d10fb3c8645ab78c75da96352c6cd6331"
+    },
+    {
+      "map_key": "chiyue_red_moon_lair",
+      "expected_runtime_sha256": "f7b3740d5111c8f9566b278bc4cb6ff7ff1cc3f91f0acf37aaf5a5e7054b77cf",
+      "actual_apk_runtime_sha256": "0e910bfb02464d067d4714f19d565ea01a2aca0a070f6f86366c322a7e4fcf38",
+      "match": false,
+      "plan_sha256": "11a4601cf1355e32dd78386535923b0e6a6b4f87ec3ca72e4e6701cc1739c47e"
+    },
+    {
+      "map_key": "chiyue_valley",
+      "expected_runtime_sha256": "fc5267cfe426bd75bde052902b0bd0164b47dcacc2d6a447f7c049dbf0321943",
+      "actual_apk_runtime_sha256": "cdfd8853b5d7859a0b2ac964d7fb10fcb4b403a6984958bc581859dd1f714785",
+      "match": false,
+      "plan_sha256": "6fb9412b2645f3ac7b438454afb2420db6730e693daee4551fb7124998e60cd2"
+    },
+    {
+      "map_key": "chiyue_valley_secret_passage_a",
+      "expected_runtime_sha256": "904ba19e3b2aaf23d802b90bf76347d15ffa6ea04b958f5848e7b3728e57c3ec",
+      "actual_apk_runtime_sha256": "31bd7344c0a0f940590cc9ed88fb0e7650422f8de192a2c7aa1adfaf39227041",
+      "match": false,
+      "plan_sha256": "b03d3d687b21cb178f44759f49b91a90b206ffdd8e93d8065e479fb7bd5efcfe"
+    },
+    {
+      "map_key": "chiyue_valley_secret_passage_b",
+      "expected_runtime_sha256": "1dfb04fed19406d8a74e7c1e54b280295e1de988b70a060b1d6cc2d36ca7202f",
+      "actual_apk_runtime_sha256": "69d05413fc4b270a63c012e670f8f5cc20e39f0461fd5889f4d8a86db68d541c",
+      "match": false,
+      "plan_sha256": "6a508352de35509485dfad8b9af968cfca9b0a6b69003fa8b2f5965f2f73a458"
+    },
+    {
+      "map_key": "chiyue_valley_square",
+      "expected_runtime_sha256": "fa60239d368ac90ca838af9b1d4425f53ee6d2b28acfdc413331ed7428bfa8d7",
+      "actual_apk_runtime_sha256": "ba4e6075cb2cd4d7e15475712322a8e3879faeb155473a64b7b69d9688244e79",
+      "match": false,
+      "plan_sha256": "8afc3271a222aa6b621ca767345717ae13a1deb4e416408c593b98f40de63528"
+    },
+    {
+      "map_key": "fengmo_bazhe_hall",
+      "expected_runtime_sha256": "c60825a3cf0c1c074363e538797258ebda3678db3e78adfa417e10dd5bb39037",
+      "actual_apk_runtime_sha256": "083c60c3cffe35a501fecb8baf22cfc26ba2057250cc97371b17322cbeb8a776",
+      "match": false,
+      "plan_sha256": "bd8ffe9b5553a151d337a1bbcd8101bb85012bec322e9ef59875a5c9b151d4cc"
+    },
+    {
+      "map_key": "fengmo_final_hall",
+      "expected_runtime_sha256": "8e82b24b18fd9973120a9a48013217b2569a388d427440fc7de9d05c1b06c0b5",
+      "actual_apk_runtime_sha256": "5af63e38067f20afb956660668b8e45278b80fa34c63485fc83599a0e64be140",
+      "match": false,
+      "plan_sha256": "0e771fdea44fd6654982e7b8c4316ded5a1f463c95870c12833077a93348689f"
+    },
+    {
+      "map_key": "fengmo_forked_path",
+      "expected_runtime_sha256": "18db9a3184f28298335a6d657a72b1743e0c77b4532e5c0135e85ceb2180c1ae",
+      "actual_apk_runtime_sha256": "926d6df92dd8846dcc8e9bda904078b8b5511c1b7a32a38cf9db8379a53df2f5",
+      "match": false,
+      "plan_sha256": "17534b2fb91e3815ed232dbb91a89523d0e0e2efcfbdf957d04a4ea07b890669"
+    },
+    {
+      "map_key": "fengmo_light_corridor",
+      "expected_runtime_sha256": "2293900a99429083a1ef2c2a123ecf51d383f8ed9f395ad0e43f24a5552e2763",
+      "actual_apk_runtime_sha256": "1217f14600c19692a8539985fce23c34aefbb51c4b4c45198f90c0d9685d4114",
+      "match": false,
+      "plan_sha256": "feb05691a422f916773e3380cd37a1d2121e2a9a4e8e0f23c13b265c0ce0acad"
+    },
+    {
+      "map_key": "fengmo_mohun_hall",
+      "expected_runtime_sha256": "2b9aadd924b53294c16050b70d58774e4ece62fd6d2f45067e64005020f13814",
+      "actual_apk_runtime_sha256": "606f06326d38ece394143e681fea938fae66c84e6e9fc23bc2ded313f0f0210b",
+      "match": false,
+      "plan_sha256": "5c4c84c7a8899fbfd83e8157cfafa112c48e2cc3dd3156d01af8c5f08a002317"
+    },
+    {
+      "map_key": "fengmo_purgatory_corridor",
+      "expected_runtime_sha256": "23585db104753644d9986ec0af5150627a460ba392b7d704a8b9782b50faa9d5",
+      "actual_apk_runtime_sha256": "63cac935be5865021cb95a6719bf29fb656b123736d68952aa91cb55c1698eac",
+      "match": false,
+      "plan_sha256": "4a87c9ea0dd6c5d4dd96d9bf209ebd13c97d997fe6572f3981d2032f8baf0ed4"
+    },
+    {
+      "map_key": "fengmo_thunder_road",
+      "expected_runtime_sha256": "6207db60d4a1343e5251be424d590938a53b241a2edbbdb09af6944a68c6fe9d",
+      "actual_apk_runtime_sha256": "766d9b51583771a0186c7365661c6044fb5ac5751f410d3ef1881234cd153b0e",
+      "match": false,
+      "plan_sha256": "df68883c818fb759479d893fbc5deeaaee1cfcf3db0726d5284c39d46d166868"
+    },
+    {
+      "map_key": "fengmo_zonghengdao",
+      "expected_runtime_sha256": "0407c6f289a38a6f84dbd6ee3ac79bf9fc162ad8c69b17f3e58eac8af0557a33",
+      "actual_apk_runtime_sha256": "657cd26a17c36b3c897210964a18a430e49b1bd2b6c2b8d6837d6d309e96064e",
+      "match": false,
+      "plan_sha256": "295902fed3e05134afb171eb99b68022d56acaf91fab11571a81a3238d2a0b8f"
+    },
+    {
+      "map_key": "hidden_abyss_domain",
+      "expected_runtime_sha256": "0eab9c6b9732afa0752002603390d9fe58fb11f4da246b4c3a536cd7259f222d",
+      "actual_apk_runtime_sha256": "d30c9859b15aa8734ffcf39ae4e93f082883be2b29d8725f08a72e30910520c1",
+      "match": false,
+      "plan_sha256": "266068f0c651ac6396db998056ee441c1f8dd60237e169a18363a928a635c8c3"
+    },
+    {
+      "map_key": "hidden_confusion_hall",
+      "expected_runtime_sha256": "b2c9ffcc3b439a89747d72a6f8e51d6f81993281df7e064b4e8f8fc6b494c74d",
+      "actual_apk_runtime_sha256": "e554fb960a74adaaa62526eb8dffbff903693921db6252cacce2cbfaf99a7b41",
+      "match": false,
+      "plan_sha256": "5e1173c5912f8a20750ed02eb13ac4f781301875cf12b14cf78aba812139c341"
+    },
+    {
+      "map_key": "hidden_death_temple",
+      "expected_runtime_sha256": "b545ec62ac3c18e9b3faed1468be2b6c7a485753cedf791ebb2ab10c28053104",
+      "actual_apk_runtime_sha256": "5b4053d29086f2fe463adcc091c2bdb9c755eea87f025f82b2a2374b19df58ea",
+      "match": false,
+      "plan_sha256": "1c4ba44297352d0cdd5c98d2c7e940b73d0e20944dddbf980b8ae5bc319bdfc8"
+    },
+    {
+      "map_key": "hidden_fallen_graveyard",
+      "expected_runtime_sha256": "6837523bc7f36ee48a5d2381d5df67dae9dd49772096eec286485d2ce3375ccb",
+      "actual_apk_runtime_sha256": "38bedaca5cdc3e8ad45d97230ae466537189470fb600a2a8ec97148f74b99174",
+      "match": false,
+      "plan_sha256": "c40f89b28ba71608995598fee76c8525d4bd323b87df482d09ec0d2ab5d38e82"
+    },
+    {
+      "map_key": "hidden_hellfire",
+      "expected_runtime_sha256": "dd181c029648b797f7a925647cba70108e115bec1813fd6c78e45ff1c2e41f17",
+      "actual_apk_runtime_sha256": "4c51a32e7cb57e8375fc3ed2aeea2eb817b46604598743275554b71380bca08a",
+      "match": false,
+      "plan_sha256": "1a20ac4b19b41d31794bf75a34332de0fb1de731c4ad6ca8f7bc95943a7f9f94"
+    },
+    {
+      "map_key": "hidden_pincer_nest",
+      "expected_runtime_sha256": "76f69c1e51deedac5469aa304d5e59826a623c718ff55e4bddfbf19d91df7ddc",
+      "actual_apk_runtime_sha256": "a09a5f31a0762d5efc1be0f13aa89dea4e9af95a10bf13989c9223112976a8bc",
+      "match": false,
+      "plan_sha256": "96fde82f1d050d68f8138d69d7b5af3485b8ce4eba6d5724b363ebf4912c7eaa"
+    },
+    {
+      "map_key": "mengzhong_between_life_and_death",
+      "expected_runtime_sha256": "02ba32005270240baa95ff0c568402a3051ff32b6fad93c01fdb623a7e8ecc28",
+      "actual_apk_runtime_sha256": "4cbcabc046ace48129399b2d48dea524a8e0522eec80c3276e9c394c8a14fbd0",
+      "match": false,
+      "plan_sha256": "8a0a96ba7c451fd0c660b802452d987c73badd04fd1a64d75cd8ef200ea5b974"
+    },
+    {
+      "map_key": "mengzhong_dark_area",
+      "expected_runtime_sha256": "f5a54b7c4dd341b273eaef5c2e920242a2b886026029da63e6367abf0b7461e6",
+      "actual_apk_runtime_sha256": "abae4a589ce343bf08c750746956672e6fecf448ed7660182152c3a405f0ef3a",
+      "match": false,
+      "plan_sha256": "b3d65242893b6ad9b0b08cf54e9903e9a7c21e248f67903b40526dac79f7de93"
+    },
+    {
+      "map_key": "mengzhong_death_coffin",
+      "expected_runtime_sha256": "736f4837c174bf224b062f841566d884573ebeb5f312bb5f280850caf41c6adf",
+      "actual_apk_runtime_sha256": "300695915b82e28c1b3a03ab9ac18b21abf441856cb386f7a87fe417ece181ee",
+      "match": false,
+      "plan_sha256": "10240a54db7ffe13a38c55d05446f8fefeed8aee1e32f3093d517179e7e88171"
+    },
+    {
+      "map_key": "mengzhong_death_valley_dungeon",
+      "expected_runtime_sha256": "986c32380efbead45cfe51513600ddac22b85135dc2df9c63e8e66fd45f60996",
+      "actual_apk_runtime_sha256": "1f8d3f64ddeaabcfda0bd56cd15207175709ca54b1984fdc8b70671cca53ba99",
+      "match": false,
+      "plan_sha256": "d23006d4328f1864d139b62967134ad74d4b5ad23aba422bd609719d59ae14f6"
+    },
+    {
+      "map_key": "mengzhong_stone_coffin_room",
+      "expected_runtime_sha256": "57be743581c5c1e4fed4d34ddf60759306c788efa19de951d093c3a00692dd90",
+      "actual_apk_runtime_sha256": "b888bcb138ee31100ece303e40deaeee1e5c79d6a03d07250bece94c8e50a2f2",
+      "match": false,
+      "plan_sha256": "5afbc0034fdd0f9aa952797a18abb4e8492691c45a840805e4aa2c9be36121a1"
+    },
+    {
+      "map_key": "mengzhong_stone_tomb_f1",
+      "expected_runtime_sha256": "f226abd6e319e5b65201c9255ee7d80dab831821ab2bbee787924fa58ab0ffd2",
+      "actual_apk_runtime_sha256": "babcb4244d328f80161eea0c8fefdbf49c94aa33bc39d20c7b9a40b9fdf50f31",
+      "match": false,
+      "plan_sha256": "21b124581b7328d47fbd3c5340cf7dec39f8d70ba086b0d82789bd8dff12d977"
+    },
+    {
+      "map_key": "mengzhong_stone_tomb_f2",
+      "expected_runtime_sha256": "c48efc116eb6fc1cddfc5b48e1f4b1aea981b28e97941d20a506f0f48737ed8d",
+      "actual_apk_runtime_sha256": "037d2dcc04171cf20f85106726f497370d19aee5ccdd55efa0c8da3282c0de6c",
+      "match": false,
+      "plan_sha256": "aa850763fe3f619c1709373e5c27a72aab2b02b40c4a291b39afb2e2eaa95ba4"
+    },
+    {
+      "map_key": "mengzhong_stone_tomb_f3",
+      "expected_runtime_sha256": "ea864539f90d1b4cc83e5eb5cfe79ba439342c065eb8f0994abaca342b79ddf3",
+      "actual_apk_runtime_sha256": "ca5f02368d4c3e352eae0222dfbe7cdfb31ee0689ef5b686aee384a0110ab852",
+      "match": false,
+      "plan_sha256": "5ae0bee54dcf1f0c316f5deec0eb3723d20a9dc6eb5879aea66230ed494ef544"
+    },
+    {
+      "map_key": "mengzhong_stone_tomb_f4",
+      "expected_runtime_sha256": "52580bf43bd21b65fd7a11c7473a5fa4425b3a9ed79d736bf40a4ba1c6fa0045",
+      "actual_apk_runtime_sha256": "91d6008e52e54b21b0e1e851a0b5000c651684bcf88e68a8d56c5997618e293a",
+      "match": false,
+      "plan_sha256": "ee44afd4565c1a2e05d49b02040c2ec5992477f361ed8b7b3bced3be3fb5e4e1"
+    },
+    {
+      "map_key": "mengzhong_terror_space",
+      "expected_runtime_sha256": "122cc61470eeaeafdaa6b9a2a9010f9b3170fcfbe1d06042de554cc5c77113a6",
+      "actual_apk_runtime_sha256": "285ca6462990b8c90f14446e6e98fff4597f0a74d2e56a178f7255ac6a0fc975",
+      "match": false,
+      "plan_sha256": "4ce6ae2ce7b8a7afe16e52ed5b566eb479054ed63c817f2348f44b8f1073af10"
+    },
+    {
+      "map_key": "mengzhong_thin_sky_passage",
+      "expected_runtime_sha256": "73a40f5e10788906beaebdd1dee7ab503ae5facd5707e1fa3dc2d1d3d5745365",
+      "actual_apk_runtime_sha256": "9f07b6ebbd703d68228879314009eed88065e1ec46745c70ee73cef62f9f0a77",
+      "match": false,
+      "plan_sha256": "e6443a4290ec8f8f9851ecaf42ca87ee8830d42dad71574dd66b7adab5670bef"
+    },
+    {
+      "map_key": "mengzhong_zuma_leader_home",
+      "expected_runtime_sha256": "683ce3dc57530a8e7e7537be10f1617fadd1f0a17d1338cd69bcf9707569a0b2",
+      "actual_apk_runtime_sha256": "0c0b08a0611895025705e386e793f61796b6836c1a54f2ca79175e9729377914",
+      "match": false,
+      "plan_sha256": "edeab8108e2a4510eeba2a11d1c40c532793d629c6c3ce4ec5339dfcdb9312a3"
+    },
+    {
+      "map_key": "mengzhong_zuma_pavilion",
+      "expected_runtime_sha256": "6f2eb0a81170aa669d1637cfce1b0fe6e552ae01c3927e556bdbc57bec5883ad",
+      "actual_apk_runtime_sha256": "1f8013097024b2cb1ca8b3fe7790b08ff0df93fb6c350f7156d37fd71ce5670f",
+      "match": false,
+      "plan_sha256": "092f795b2761130be38e2332d0cc8be24ae48d58c12eb4e14cc9ff71af192d1b"
+    },
+    {
+      "map_key": "mengzhong_zuma_temple_f1",
+      "expected_runtime_sha256": "f85db09c9d00e1f6237f113501e2b1df8148341309b4613a00c3f031b6ca452b",
+      "actual_apk_runtime_sha256": "850b542cf3596220ecf64cfc592df4a205f7aace01fcf6701fa89b55dd8ddd35",
+      "match": false,
+      "plan_sha256": "02945a5244aca7ac12aeb1e9e2bcc7c823179ea47137b917935ee05ea17d817b"
+    },
+    {
+      "map_key": "mengzhong_zuma_temple_f2",
+      "expected_runtime_sha256": "0e31587f990c1c66d909abac36928fdc6ffb08466a09e2576fc24807b8092667",
+      "actual_apk_runtime_sha256": "403ff8300c488791f17cd98a6e425c1e217a42f37dd30539b1db30912d6961bc",
+      "match": false,
+      "plan_sha256": "5f2b151ba4fd315b6aa420f090ac719e491ab784338b70f21880460ee6d7f7c3"
+    },
+    {
+      "map_key": "mengzhong_zuma_temple_f3",
+      "expected_runtime_sha256": "b97d1af6d1c7fae564eaafbda3c840b2b12539620fd606416912aa09ecba587a",
+      "actual_apk_runtime_sha256": "45a01140c6e6b4dacc9677dbd9f5193ae0177a0cf3566247584b589f729c8a84",
+      "match": false,
+      "plan_sha256": "c51944086f642599cb44feaa0feb86eb00565a29a3fcf631d55586fb118cb1d6"
+    },
+    {
+      "map_key": "mengzhong_zuma_temple_f4",
+      "expected_runtime_sha256": "5a7b4c8f01a54a590842312d8988c7adccdf739d529b816b0ab0666fbd6dcdaa",
+      "actual_apk_runtime_sha256": "a6b62c6839e62e281541d9cd93433222ce8e9e8ec2c2213a0abefa0f152a982d",
+      "match": false,
+      "plan_sha256": "6a8ca875f92cc747d49e212ba705f28df2e844cf1c2e731323d7495ded732052"
+    },
+    {
+      "map_key": "snake_mine_passage_1",
+      "expected_runtime_sha256": "ea607129ae54b4e9d46a35da9946dd2d27f798d59abaaaa729e1fa8d242114cb",
+      "actual_apk_runtime_sha256": "49ddae1c506e1dc126d7c05d0471333dffb73eb5ec69165f99ad415c964128d1",
+      "match": false,
+      "plan_sha256": "a3b811e0434d0bece0a50609b760912591e0c112509839fc961fd7a55136a9b1"
+    },
+    {
+      "map_key": "snake_mine_passage_2",
+      "expected_runtime_sha256": "1a811693baecb90736b51ee4aa3f7098ba56cd537e7288f2c7bf201b5765abf3",
+      "actual_apk_runtime_sha256": "4eede9f26e75c121534090bf51c0aba38dc779cdf864f9129a85bf29946b2484",
+      "match": false,
+      "plan_sha256": "f5ee9c4f957a52f3e244d9722f4e1b3b2116c076eaee2a40984787a318154a1f"
+    },
+    {
+      "map_key": "snake_unknown_dark_palace",
+      "expected_runtime_sha256": "1646c99913d966a0623659aa0a92f9c0545a1344e63e4cb86ff31b40e1731a30",
+      "actual_apk_runtime_sha256": "909c824d76688c53fddf80b42b11be52292ef9e9d75f3992619de34b160be1e1",
+      "match": false,
+      "plan_sha256": "5ba7d248a58d03ae18c15e203bad709cc608327c3641275e6c70f6bf91f345fc"
+    },
+    {
+      "map_key": "wooma_temple_boss_hall",
+      "expected_runtime_sha256": "17ac1fd501613285810434fdf6e3ebb148b5b0db6044f80450d67236e1fd14be",
+      "actual_apk_runtime_sha256": "9c07e25c45722573d7f6557260f25793a2f01dd15bd50e33528ad9b2b6ab3488",
+      "match": false,
+      "plan_sha256": "b883ede97f7cb54b19581f31705496725bc27e1ccf22be326e404ebd38e0d29f"
+    },
+    {
+      "map_key": "wooma_temple_f1",
+      "expected_runtime_sha256": "9b7e6e36666ab1b3674c97d43c7ce43909f528157a97f9187dc1d2712aa13bf1",
+      "actual_apk_runtime_sha256": "1625e8b0fe98ac24df7c730094b8c97571d8fb231d249903635a46eb75584763",
+      "match": false,
+      "plan_sha256": "d9e620b72c45df8a5d72a1ae35ede3cea7a6384af1c4b368fe4f744f324d40cc"
+    },
+    {
+      "map_key": "wooma_temple_f2",
+      "expected_runtime_sha256": "42898bba62a21e1a646bbb48ca5884c04acd766b482c87a85b8749795cb949c5",
+      "actual_apk_runtime_sha256": "2f2f3170f8be1d1860dadbceb5dad41333b65cff1f77da4c8294283f5c151daf",
+      "match": false,
+      "plan_sha256": "fe33d725380d68c5f178f776714df558c02ac4022e1de36f78b6209920396416"
+    }
+  ]
+}

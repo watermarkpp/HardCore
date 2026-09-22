@@ -96,6 +96,10 @@ var _last_bank_transfer_result: Dictionary = {}
 
 func _ready() -> void:
 	set_meta("calibration_retired_paths", [
+		# The docked presenter owns current title geometry/text. These old
+		# floating-presenter paths must not revive a second title or body.
+		"ItemDetailPresenter/Content/Title",
+		"ItemDetailPresenter/Content/Body",
 		"StashSection/StashSectionDecoration",
 		"StashSection/StashSectionDecoration/StashSectionFill",
 		"StashSection/StashSectionDecoration/StashSectionFrame",
@@ -1141,15 +1145,11 @@ func _sort_requested() -> void:
 
 
 func _show_transfer_result(button: Button, success: bool, group: String) -> void:
-	# Keep the initiating button's dark-red busy state for one rendered frame.
-	# A late authority result still invalidates every other transfer action.
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
 	for action_button: Button in [deposit_button, withdraw_button, sort_button, bank_deposit_button, bank_withdraw_button]:
 		if action_button != button:
 			GothicUIThemeScript.clear_button_feedback(action_button)
-	if is_inside_tree():
-		await get_tree().process_frame
 	if serial != _action_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
 		return
 	GothicUIThemeScript.set_button_feedback(
@@ -1157,7 +1157,7 @@ func _show_transfer_result(button: Button, success: bool, group: String) -> void
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
 		group,
 	)
-	get_tree().create_timer(1.0 if success else 0.45).timeout.connect(func() -> void:
+	get_tree().create_timer(GothicUIThemeScript.BUTTON_RESULT_SUCCESS_SECONDS if success else GothicUIThemeScript.BUTTON_RESULT_FAILURE_SECONDS).timeout.connect(func() -> void:
 		if serial == _action_feedback_serial and is_instance_valid(button) and button.is_inside_tree():
 			GothicUIThemeScript.clear_button_feedback(button)
 	)

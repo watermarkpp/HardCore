@@ -39,7 +39,7 @@ const ASSERTIONS_BY_SKILL := {
 		"exploding_flame_power_formula",
 	],
 	"wizard.fire_wall": [
-		"fire_wall_exact_2x2", "fire_wall_duration_scales",
+		"fire_wall_exact_3x3", "fire_wall_duration_scales",
 		"fire_wall_tick_once_per_caster", "fire_wall_refresh_not_stack",
 		"fire_wall_not_circle_or_cross",
 	],
@@ -212,11 +212,9 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.execute(skill_id, 3).geometry_cells.size() == 9
 		"exploding_flame_power_formula":
 			return _support.execute(skill_id, 3, {"primary_stat_roll": 10}).effects[0].raw_power == 24
-		"fire_wall_exact_2x2":
-			# Contract id retained for archived-manifest parity (the archived
-			# package is immutable); the 2026-09-13 user ruling replaced the
-			# old 2x2 project geometry with an exact centered 3x3 square
-			# (SOT width_tiles/height_tiles = 3, selected cell centered).
+		"fire_wall_exact_3x3":
+			# The project overlay binds the accepted 3x3 SOT to its matching
+			# assertion without rewriting the archived 2x2 package.
 			return _is_exact_centered_3x3(
 				_support.execute(skill_id, 3).geometry_cells, Vector2i(8, 8)
 			)
@@ -232,7 +230,7 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 		"fire_wall_not_circle_or_cross":
 			# A cross is 5 cells and a diamond/circle 4; the wall is the full
 			# 3x3 square centered on an arbitrary selected cell, verified at
-			# a different target tile than fire_wall_exact_2x2.
+			# a different target tile than fire_wall_exact_3x3.
 			return _is_exact_centered_3x3(
 				_support.execute(skill_id, 3, {"target_tile": Vector2i(12, 12)}).geometry_cells,
 				Vector2i(12, 12)

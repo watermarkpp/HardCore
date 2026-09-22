@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "baseline": "b961cedff8040c9fc81534e094241ad9fa2330ad",
+  "protected_paths": [
+    "map_editor_workspace",
+    "assets/art/maps",
+    "assets/maps",
+    "assets/data/equipment_attribute_master.json",
+    "assets/data/runtime/canonical_monster_catalog.json",
+    "assets/data/canonical_monster_classification_v1.json",
+    "assets/data/map_editor_monster_spawn_classification_v1.json",
+    "assets/ui",
+    "project.godot",
+    "export_presets.cfg"
+  ],
+  "protected_git_diff": [],
+  "preserved_initial_untracked_uid_files": [
+    "scripts/drop/user_loot_sheet_provider.gd.uid",
+    "tests/aoe_shape_edge_counterexample_test.gd.uid",
+    "tests/hc_monster_ai/scheduler_storm_test.gd.uid",
+    "tests/hc_polygon_counterexample_matrix_test.gd.uid",
+    "tests/hc_polygon_overlap_test.gd.uid",
+    "tests/hud_center_alignment_test.gd.uid",
+    "tests/loot_expiry_pending_guard_test.gd.uid",
+    "tests/map_publish_restart_recovery_test.gd.uid",
+    "tests/map_registry_restore_entry_test.gd.uid",
+    "tests/map_registry_restore_source_preserved_test.gd.uid",
+    "tests/map_release_identity_matrix_test.gd.uid",
+    "tests/player_cast_release_overwrite_test.gd.uid",
+    "tests/player_combat_release_lifecycle_test.gd.uid",
+    "tests/player_status_effect_lifecycle_test.gd.uid",
+    "tests/rv14_multi_map_publish_sibling_invariance_test.gd.uid",
+    "tests/rv14_registry_review_counterexamples.gd.uid",
+    "tests/rv14_release_reentry_test.gd.uid",
+    "tests/rv14_restore_injected_failures_test.gd.uid",
+    "tests/rv14_restore_rollback_injection_test.gd.uid",
+    "tests/rv15_provider_validation_counterexamples_test.gd.uid",
+    "tests/rv15_spb_ledger_decoupling_test.gd.uid",
+    "tests/user_loot_sheet_authority_test.gd.uid",
+    "tools/wall_render_manifest_probe.gd.uid"
+  ],
+  "raw_byte_note": "Ground manifest LF/CRLF alignment follows released per-file provenance via .gitattributes; Git blob and authored JSON remain unchanged."
+}

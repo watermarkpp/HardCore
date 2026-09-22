@@ -1,0 +1,152 @@
+{
+  "status": "PASS",
+  "scope": "Archive verification only; historical functional/comparability failures retained",
+  "artifacts": [
+    {
+      "file": "runner_results_adhoc_20260922_214304_569_11204.json",
+      "sha256": "41d2608b995a1294c9cc33636346c0f6cd85ed0dd292aa38da01ed195d265db0"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_214517_205_10296.json",
+      "sha256": "88cb65ddb805a12054e64d9985e6afcb478e439e7f97ffd421855715735824de"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_214726_169_18372.json",
+      "sha256": "5aa0ef1aefac98c7c36ca7366398cf46c54f8a760e049fc378caf631567a41da"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_215145_410_13384.json",
+      "sha256": "a12a5e4e9e844eb8eb988654ff743f2cf398b406ea4ce11f2a0c4c3264430e62"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_215828_772_2172.json",
+      "sha256": "82322d6f851d53e5d5b440fcce9299312df798f85036f5a2d99140190b579d98"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_215843_338_2172.json",
+      "sha256": "0ea587dcb54a068344cb33205df1f9613c80203c935298d26cd9a3b41988a272"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_215857_768_2172.json",
+      "sha256": "d92ba744e86b428addda181a60cc3e9c6ad4e777d01ab49f4f04007d556a4a46"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_215912_074_2172.json",
+      "sha256": "8ec993307e16ba8fc195c5afaf778f286e878facc609fdbc731e3ba1b9b5b9e6"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_220150_093_2732.json",
+      "sha256": "c19a192b5f073fe77b52c64db0bbf5f36aa20ca64531f7199f530eb19606332c"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_220425_892_19724.json",
+      "sha256": "42c153acccadd796d2cc47a2e3c6bb291b5c1cf6a80eb3e0d2f0c571be6f0b0e"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_221001_483_10312.json",
+      "sha256": "e70f8ceb8bf70ca9cc8a9ba65533a4dda6668429944b842a1d799c88b4b715d5"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_221301_489_3724.json",
+      "sha256": "2b46c4c5a7d56d404c8078b7b9df8644f09a0b2716bc2d414ebf98ce519a1726"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_221350_754_5248.json",
+      "sha256": "bb4608b5c893367ed436be4fe3ebb389002bfe2f8c39ac38e5f6c7e2050e6db0"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_221819_640_1460.json",
+      "sha256": "5edd211bbce55261ddcd4b370660e17b4261217e1c2dabe1130357fb57698fbb"
+    },
+    {
+      "file": "hc_query_lane_red.console.log",
+      "sha256": "6d4bbbd49651a808394483b5ecec2742c635a11430e9a1c94fafd4502d59a8d3"
+    },
+    {
+      "file": "hc_query_lane_green.console.log",
+      "sha256": "2d6c30a7a407d79cb37088686ae5d20fde916e497b6c32036834e98d4baee4f8"
+    },
+    {
+      "file": "hc_query_lane_scalar_green.console.log",
+      "sha256": "653d7eba9276ba5d26c416d9ae69182fc763d0e8e192c58018442ac19083646f"
+    },
+    {
+      "file": "player_growth_live.json",
+      "sha256": "ce32b888174281a85a9ae5f3816e4689ff7db0f620af78da3b2f56efd7f69ed6"
+    },
+    {
+      "file": "character_growth_audit.json",
+      "sha256": "6c995b936d96a7354cc6f1c2dd11ca4f46831e8e7aeb84a0bcb33772110dd814"
+    },
+    {
+      "file": "world_roaming_query_lane_black_fire_1.json",
+      "sha256": "ab5bf93f083dcefb0689164076ac292e78c32427021ad6afcdcf4d86b6fbc66f"
+    },
+    {
+      "file": "rev07_v92_clock_diagnostic_baseline_0.json",
+      "sha256": "580fa115cfbb6a2dc65f9b6bef119feee22e07911d249e54661d53c9a4088070"
+    },
+    {
+      "file": "rev07_v92_clock_diagnostic_baseline_100.json",
+      "sha256": "be4b8535340fa888bb192939129bf5526cc8ef8e965e09e511ea3907266bc84e"
+    },
+    {
+      "file": "rev07_v92_clock_diagnostic_current_0.json",
+      "sha256": "f204b4506ad81b988ad8327381b3d48005acaba5f86ed88abaeb65c2dbb00db8"
+    },
+    {
+      "file": "rev07_v92_clock_diagnostic_current_100.json",
+      "sha256": "e67a64290b230f86714c22b8ee27c7748b898c67ef8db4391a42c01724abb34f"
+    }
+  ],
+  "clock_diagnostic": [
+    {
+      "lane": "baseline",
+      "hitch_ms": 0,
+      "warmup_physics_ticks": 58,
+      "sample_ticks": 322,
+      "total_attacks": 29,
+      "actor13_attacks": 3,
+      "actor13_final": [
+        18.7833309173584,
+        21.4999980926514
+      ]
+    },
+    {
+      "lane": "baseline",
+      "hitch_ms": 100,
+      "warmup_physics_ticks": 65,
+      "sample_ticks": 321,
+      "total_attacks": 27,
+      "actor13_attacks": 0,
+      "actor13_final": [
+        18.7087020874023,
+        21.3956527709961
+      ]
+    },
+    {
+      "lane": "current",
+      "hitch_ms": 0,
+      "warmup_physics_ticks": 59,
+      "sample_ticks": 320,
+      "total_attacks": 29,
+      "actor13_attacks": 3,
+      "actor13_final": [
+        18.7833309173584,
+        21.4999980926514
+      ]
+    },
+    {
+      "lane": "current",
+      "hitch_ms": 100,
+      "warmup_physics_ticks": 65,
+      "sample_ticks": 320,
+      "total_attacks": 27,
+      "actor13_attacks": 0,
+      "actor13_final": [
+        18.7087020874023,
+        21.3956527709961
+      ]
+    }
+  ]
+}

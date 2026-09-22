@@ -1,0 +1,21 @@
+{
+  "status": "FAIL",
+  "repair_status": "NOT_RUN",
+  "classification": "Native GDScript shutdown lifetime defect; strong upstream candidate, no patched-engine proof",
+  "dump_sha256": "791a9d7d2cbd4f8e7c96d5017c3346c5e772d4737faa184d13761d9933d1bb9f",
+  "dump_published": false,
+  "artifacts": [
+    {
+      "file": "dbgeng_analysis.txt",
+      "sha256": "6d4cbb43f19238f67138ae2d9f836508f8fe210d61194d022acd4721bfb2d994"
+    },
+    {
+      "file": "dbgeng_function_strings.txt",
+      "sha256": "800a4efb863938043f6817402ec96265f01be55e4c61c2e602be605dd78fa07f"
+    },
+    {
+      "file": "fault_function_disassembly.txt",
+      "sha256": "b949473b02439b0a79855b2f5d2689edb8f93f4db9b827ff578a9c2ef191fc49"
+    }
+  ]
+}

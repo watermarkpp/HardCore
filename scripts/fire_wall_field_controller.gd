@@ -6,6 +6,7 @@ const GroundSkillVisualCellScript := preload(
 	"res://scripts/ground_skill_visual_cell.gd"
 )
 const GroundSkillEffectScript := preload("res://scripts/ground_effect.gd")
+const AnimationBatchScript := preload("res://scripts/caster_skill_animation_batch.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
@@ -71,8 +72,20 @@ var _rejection_reason := ""
 var expires_at_ticks_msec := -1
 var refresh_count := 0
 ## Shared animation clock (ms): one advancing source per field; the 9 visual
-## cells read the same value instead of each running an independent timer.
+## cells commit one batched frame without independent process callbacks.
 var _anim_clock_ms := 0.0
+var _animation_batch := AnimationBatchScript.new()
+
+
+func _ready() -> void:
+	for cell: GroundSkillVisualCellScript in visual_cells:
+		cell.set_controller_owned_lifetime()
+		if cell._sprite is CasterSkillAnimationPlayer:
+			_animation_batch.add_player(cell._sprite)
+
+
+func _process(_delta: float) -> void:
+	_animation_batch.synchronize(_anim_clock_ms)
 
 
 func setup_fire_wall_field(
@@ -235,10 +248,6 @@ func refresh_field(
 	refresh_count += 1
 
 
-func fire_wall_anim_clock_ms() -> float:
-	return _anim_clock_ms
-
-
 func _ignore_visual_tick(_target: EnemyActor, _raw_power: int) -> void:
 	pass
 
@@ -333,7 +342,7 @@ func _apply_field_tick() -> void:
 			or not enemy.can_receive_damage()
 		):
 			continue
-		# One canonical 2x2 Snapshot-V2 exact test per candidate per tick.
+		# One canonical 3x3 Snapshot-V2 exact test per candidate per tick.
 		controller_exact_test_count += 1
 		if not _canonical_target_is_inside(enemy):
 			continue
@@ -346,9 +355,8 @@ func _apply_field_tick() -> void:
 			claim_success_count += 1
 		damage_application_count += 1
 		runtime_tick_callback.call(enemy, raw_power)
-	for visual_cell: GroundSkillVisualCellScript in visual_cells:
-		if is_instance_valid(visual_cell):
-			visual_cell.queue_redraw()
+	# Sprite frames are submitted by the presentation batch. Tick damage does
+	# not invalidate the cells' empty fallback drawing commands.
 
 
 func _canonical_target_is_inside(enemy: EnemyActor) -> bool:
@@ -457,6 +465,7 @@ func fire_wall_controller_diagnostics() -> Dictionary:
 		"expires_at_ticks_msec": expires_at_ticks_msec,
 		"refresh_count": refresh_count,
 		"anim_clock_ms": _anim_clock_ms,
+		"animation_batch": _animation_batch.diagnostics(),
 		"expired": expired,
 		"cancelled": cancelled,
 		"rejection_reason": _rejection_reason,

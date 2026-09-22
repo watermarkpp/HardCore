@@ -1,0 +1,222 @@
+{
+  "functional_status": "PASS",
+  "device_status": "NOT_RUN",
+  "rows": [
+    {
+      "name": "black",
+      "map_id": 913203,
+      "enemy_count": 62,
+      "fire_wall_count": 0,
+      "actual_distance_gu": 11.1830358794259,
+      "active_min": 13,
+      "active_max": 16,
+      "pending_max": 0,
+      "actor_ms": {
+        "max": 5.513,
+        "p50": 2.462,
+        "p95": 3.667,
+        "samples": 240
+      },
+      "process_interval_ms": {
+        "max": 15.235,
+        "p50": 6.9,
+        "p95": 10.93,
+        "samples": 578
+      },
+      "scheduler": {
+        "available": false
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/player.gd": "b82b3abfe4431b13a51c70dae18075b752cfeda2463849a0e1baab2d1b2c55ac",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702",
+        "res://tests/world_roaming_monster_profile_test.gd": "e7913333701f9252f71469b842c54a3678c22c3f2dd7b8520378d44b56f637c0"
+      }
+    },
+    {
+      "name": "black_fire",
+      "map_id": 913203,
+      "enemy_count": 62,
+      "fire_wall_count": 8,
+      "actual_distance_gu": 12.0041928944033,
+      "active_min": 13,
+      "active_max": 16,
+      "pending_max": 0,
+      "actor_ms": {
+        "max": 5.406,
+        "p50": 2.594,
+        "p95": 3.594,
+        "samples": 240
+      },
+      "process_interval_ms": {
+        "max": 13.345,
+        "p50": 6.902,
+        "p95": 11.363,
+        "samples": 578
+      },
+      "scheduler": {
+        "available": false
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/player.gd": "b82b3abfe4431b13a51c70dae18075b752cfeda2463849a0e1baab2d1b2c55ac",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702",
+        "res://tests/world_roaming_monster_profile_test.gd": "e7913333701f9252f71469b842c54a3678c22c3f2dd7b8520378d44b56f637c0"
+      }
+    },
+    {
+      "name": "death",
+      "map_id": 913207,
+      "enemy_count": 71,
+      "fire_wall_count": 0,
+      "actual_distance_gu": 8.15267168323408,
+      "active_min": 13,
+      "active_max": 17,
+      "pending_max": 0,
+      "actor_ms": {
+        "max": 5.059,
+        "p50": 2.756,
+        "p95": 3.925,
+        "samples": 240
+      },
+      "process_interval_ms": {
+        "max": 13.223,
+        "p50": 6.901,
+        "p95": 11.631,
+        "samples": 578
+      },
+      "scheduler": {
+        "available": false
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/player.gd": "b82b3abfe4431b13a51c70dae18075b752cfeda2463849a0e1baab2d1b2c55ac",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702",
+        "res://tests/world_roaming_monster_profile_test.gd": "e7913333701f9252f71469b842c54a3678c22c3f2dd7b8520378d44b56f637c0"
+      }
+    },
+    {
+      "name": "red",
+      "map_id": 916003,
+      "enemy_count": 54,
+      "fire_wall_count": 0,
+      "actual_distance_gu": 13.3970069307834,
+      "active_min": 10,
+      "active_max": 10,
+      "pending_max": 0,
+      "actor_ms": {
+        "max": 4.397,
+        "p50": 1.64,
+        "p95": 2.74,
+        "samples": 240
+      },
+      "process_interval_ms": {
+        "max": 11.722,
+        "p50": 6.9,
+        "p95": 9.69,
+        "samples": 578
+      },
+      "scheduler": {
+        "available": false
+      },
+      "source_hashes": {
+        "res://scripts/enemy.gd": "c30bb568aaea85eff0613fc41674747708102ca5c07aad7c2196688ca53505d4",
+        "res://scripts/game_root.gd": "9e1abaa8dd417649eeceaf205843ee8174590c109d6cc0462aee9368df516ee0",
+        "res://scripts/monster_ai_package/path_scheduler.gd": "31292f43b52ecdfffa341821813383e7a97020acd5c5dd444563b06474ba0443",
+        "res://scripts/monster_ai_package/path_search.gd": "ee356e42ea0d241d3ae8abf5fbd9bcbeb4420a29b1ba4b888ce46cd5839f6ac4",
+        "res://scripts/monster_visual.gd": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+        "res://scripts/player.gd": "b82b3abfe4431b13a51c70dae18075b752cfeda2463849a0e1baab2d1b2c55ac",
+        "res://tests/world_crowd_firewall_profile_test.gd": "cec23b397f5baf38455d21b49d66b590ea9626eacaa90430702e874fc2c84702",
+        "res://tests/world_roaming_monster_profile_test.gd": "e7913333701f9252f71469b842c54a3678c22c3f2dd7b8520378d44b56f637c0"
+      }
+    }
+  ],
+  "runs": [
+    {
+      "raw": "world_roaming_black_1.json",
+      "runner": "runner_results_adhoc_20260922_211530_332_4652.json",
+      "artifacts": [
+        {
+          "file": "world_roaming_black_1.json",
+          "sha256": "66e94eb730f3c43d06f7a37f6b1b1b962cfc331df0d1677069497f2c69b18695"
+        },
+        {
+          "file": "roaming_black_1.console.log",
+          "sha256": "7f86cd974a0b0882012a2d62c1dceb74fc759280dc0b03dc95e317d9761fd149"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211530_332_4652.json",
+          "sha256": "6e2f91a6e66ecfef5b044af9a78532661a03e3c25cf5ded5ad1dcae3b03cbf6b"
+        }
+      ]
+    },
+    {
+      "raw": "world_roaming_black_fire_1.json",
+      "runner": "runner_results_adhoc_20260922_211818_704_20556.json",
+      "artifacts": [
+        {
+          "file": "world_roaming_black_fire_1.json",
+          "sha256": "8f825830f1c888df056dff93ee1a4465617c5257e36f67ac6b65b6652e7cd523"
+        },
+        {
+          "file": "roaming_black_fire_1.console.log",
+          "sha256": "286224acb897f56d7d8cbbfcb63797d5655b8b3dd4769633c5c34c30f9b35895"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211818_704_20556.json",
+          "sha256": "42b8e4c88b9d2f978e9d79700c9f920e030523eaa72f4520507d09c3028e8809"
+        }
+      ]
+    },
+    {
+      "raw": "world_roaming_death_1.json",
+      "runner": "runner_results_adhoc_20260922_211838_224_20556.json",
+      "artifacts": [
+        {
+          "file": "world_roaming_death_1.json",
+          "sha256": "13ad8d78651c623ec567e3eee2fbd5555bb8df0a78591bc1a0909ec53c6fb29e"
+        },
+        {
+          "file": "roaming_death_1.console.log",
+          "sha256": "ae0dbd8eb52688326c7888c9b3ade44ffebbc87a34655c32481e1a0fd848a02c"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211838_224_20556.json",
+          "sha256": "9660f75be3ed0dd40997e88e79fd19d710dfdc876233f285656e000be850afb2"
+        }
+      ]
+    },
+    {
+      "raw": "world_roaming_red_1.json",
+      "runner": "runner_results_adhoc_20260922_211858_165_20556.json",
+      "artifacts": [
+        {
+          "file": "world_roaming_red_1.json",
+          "sha256": "c74417d5417674ab9b46d74f8fa45cbd27d800b2b9025c692f6e78b066f1b157"
+        },
+        {
+          "file": "roaming_red_1.console.log",
+          "sha256": "c5f4fe7b2957f6d0f71a77df62e58e1cebeb0ff963a01fd39f240e48d7ec3e37"
+        },
+        {
+          "file": "runner_results_adhoc_20260922_211858_165_20556.json",
+          "sha256": "8478f52877cb9516cd5725319addc20d7c015bc80dc3f87cf6000679216c5adf"
+        }
+      ]
+    }
+  ],
+  "scope": "Real GameRoot movement input, player physics/collision, original spawn population, eight 0.5-second directional phases, 240 sampled physics frames.",
+  "limits": "Short local route, not all corridors or a long session. Diagnostic snapshot/census overhead is present. Cached Godot physics monitor values include pre-sample loading and must not be called instantaneous long frames. Actor counter deltas are direct CPU attribution; no GPU rendering is measured."
+}

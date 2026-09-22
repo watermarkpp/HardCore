@@ -108,6 +108,7 @@ var runtime_map_id: int = -1
 var runtime_ground_gu_to_screen_position_px := Callable()
 var runtime_screen_to_ground_position_px := Callable()
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+var _outgoing_magic_stats: Dictionary = {}
 var _rest_formation_moving := false
 ## FREEZE-P0.1: fail-closed projection diagnostics.
 var missing_projection_rejection_count := 0
@@ -812,14 +813,34 @@ func _release_pending_attack() -> void:
 		and _attack_hit_succeeds(target)
 	):
 		var hp_before := target.current_hp
-		target.take_damage(_rng.randi_range(attack_min, attack_max), self)
+		var damage := _outgoing_damage_after_defense(target)
+		if damage > 0:
+			target.take_damage(damage, self)
 		if hp_before > 0 and target.current_hp <= 0:
 			gain_growth_from_kill(int(target.monster_data.get("level", 0)))
 	_clear_pending_attack()
 
 
+func _outgoing_damage_after_defense(target: EnemyActor) -> int:
+	var raw_damage := _rng.randi_range(attack_min, attack_max)
+	if attack_type == "physical":
+		return int(WarriorCombatMathScript.resolve_enemy_physical_damage(
+			raw_damage, target.effective_physical_defense()
+		).get("final_damage", 0))
+	if attack_type == "fire":
+		# Primary TElfWarriorMonster/TSpitSpider uses its own accuracy roll and
+		# GetMagStruckDamage (MAC). It is not a player direct spell: do not add
+		# its anti-magic gate or RM_MAGSTRUCK movement delay to the pet's breath.
+		if not target.direct_spell_runtime_stats_into(_outgoing_magic_stats):
+			return 0
+		var minimum := int(_outgoing_magic_stats.get("magic_defense_min", 0))
+		var maximum := int(_outgoing_magic_stats.get("magic_defense_max", minimum))
+		return maxi(0, raw_damage - _rng.randi_range(minimum, maximum))
+	return 0
+
+
 func _attack_hit_succeeds(target: EnemyActor) -> bool:
-	if attack_type != "physical" or PlayerState.test_mode:
+	if PlayerState.test_mode:
 		return true
 	return WarriorCombatMathScript.roll_hit(accuracy, target.agility, _rng)
 
@@ -1033,10 +1054,26 @@ func spatial_contract_snapshot() -> Dictionary:
 	}
 
 
+func synchronize_skill_rank(rank: int) -> bool:
+	var new_rank := maxi(skill_level, TaoistCombatMath.clamp_skill_level(rank))
+	var new_cap := maxi(maximum_pet_level, TaoistCombatMath.maximum_summon_pet_level(new_rank))
+	if new_rank == skill_level and new_cap == maximum_pet_level:
+		return false
+	skill_level = new_rank
+	maximum_pet_level = new_cap
+	attack_interval = float(TaoistCombatMath.effective_summon_attack_interval_ms(
+		summon_id, new_rank
+	)) / 1000.0
+	move_speed_gu_per_sec = 1000.0 / float(maxi(1,
+		TaoistCombatMath.effective_summon_move_interval_ms(summon_id, new_rank)
+	))
+	return true
+
+
 func gain_growth_from_kill(killed_monster_level: int) -> bool:
 	if summon_exp_level >= maximum_pet_level:
 		return false
-	pet_growth_exp += maxi(0, killed_monster_level)
+	pet_growth_exp += TaoistCombatMath.summon_kill_growth_credit(killed_monster_level)
 	var threshold := TaoistCombatMath.summon_growth_threshold(
 		summon_id, summon_exp_level
 	)
@@ -1057,6 +1094,8 @@ func growth_contract_snapshot() -> Dictionary:
 		"pet_level": summon_exp_level,
 		"maximum_pet_level": maximum_pet_level,
 		"growth_exp": pet_growth_exp,
+		"growth_policy_id": TaoistCombatMath.SUMMON_GROWTH_POLICY_ID,
+		"kill_growth_multiplier": TaoistCombatMath.SUMMON_KILL_GROWTH_MULTIPLIER,
 		"next_threshold": TaoistCombatMath.summon_growth_threshold(
 			summon_id, summon_exp_level
 		),

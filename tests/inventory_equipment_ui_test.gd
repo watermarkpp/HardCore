@@ -2,6 +2,11 @@ extends Node
 
 const PreviewScript := preload("res://scripts/equipment_character_preview.gd")
 const ItemDetailPresenterScript := preload("res://scripts/item_detail_presenter.gd")
+var success_notices: Array[String] = []
+
+func show_success_message(message: String) -> void:
+	success_notices.append(message)
+
 const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 
 
@@ -139,7 +144,8 @@ func _run() -> void:
 	)
 	assert(PreviewScript.FOOT_STAGE_RADII.x > PreviewScript.FOOT_STAGE_RADII.y * 3.0, "人物脚下舞台没有使用正确的透视椭圆")
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")
-	assert(panel.equipment_stats_label is RichTextLabel and panel.equipment_stats_label.scroll_active, "人物属性超长时没有右侧滑块")
+	assert(panel.equipment_stats_label is RichTextLabel and not panel.equipment_stats_label.scroll_active, "已校准的完整属性块不应恢复旧滚动条")
+	assert(panel.equipment_stats_label.get_content_height() <= panel.equipment_stats_label.size.y, "人物属性块裁剪了正文")
 	assert(panel.detail_label.mouse_filter == Control.MOUSE_FILTER_STOP and panel.item_detail_presenter.mouse_filter == Control.MOUSE_FILTER_IGNORE, "共享物品属性浮窗缺少受控滚动或拦截了背包输入")
 	assert(not panel.item_detail_presenter.z_as_relative and panel.item_detail_presenter.z_index >= 2048, "共享物品属性浮窗没有置于运行时UI最高层")
 	assert(panel.item_detail_presenter.title_label.get_theme_font_size("font_size") == 20, "物品属性标题字号没有按校准要求缩小")
@@ -155,6 +161,13 @@ func _run() -> void:
 	]:
 		var saved_rect: Array = layout_contract["profiles"]["inventory"]["nodes"][saved_path]["logicalRect"]
 		var saved_control := panel.get_node(saved_path) as Control
+		if saved_path in ["AttributePanel/AttributeTitle", "AttributePanel/CharacterStats"]:
+			# The accepted complete attribute block is now centered by its live
+			# measured text width; revision 3 supersedes the old saved rectangle.
+			var frame := panel.get_node("AttributePanel/AttributePanelDecoration/AttributePanelFrame") as Control
+			var center_x: float = frame.position.x + frame.get_parent().position.x + frame.size.x * 0.5
+			assert(is_equal_approx(saved_control.position.x + saved_control.size.x * 0.5, center_x), "人物属性块未按当前装饰框居中")
+			continue
 		assert(
 			saved_control.position.is_equal_approx(Vector2(float(saved_rect[0]), float(saved_rect[1])))
 			and saved_control.size.is_equal_approx(Vector2(float(saved_rect[2]), float(saved_rect[3]))),
@@ -204,7 +217,7 @@ func _run() -> void:
 	assert(panel._selection_cell_update_count - selection_updates_before <= 2, "单次选择更新超过旧/新两个背包格")
 	assert(panel._bag_cell_update_count == cell_updates_before_selection, "单次选择触发了全背包格刷新")
 	assert(panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "点击背包物品没有显示物品属性")
-	assert("穿戴要求：" in panel.detail_label.text, "装备详情缺少玩家可读的穿戴要求")
+	assert("穿戴要求：" in panel.detail_label.get_parsed_text(), "装备详情缺少玩家可读的穿戴要求")
 	assert("（" not in panel.detail_label.text and "对比武器" not in panel.detail_label.text, "装备详情仍显示来源括号或无意义的武器对比")
 	for forbidden_source_word: String in ["equipment.attribute", "confidence", "source", "StdItems"]:
 		assert(forbidden_source_word not in panel.detail_label.text, "装备详情泄露程序来源字段：%s" % forbidden_source_word)
@@ -216,7 +229,9 @@ func _run() -> void:
 			"drop_affix": {"applied": true, "stat": "attack_max", "op": "add", "value": 1},
 		},
 	)
-	assert(formal_affix_text.count("攻击上限 +1") == 1, "正式 modifiers[]/drop_affix 属性没有准确显示或发生重复")
+	var dagger_record := GameData.get_item_record("匕首")
+	assert(formal_affix_text.count("攻击 %d-%d" % [int(dagger_record.attackMin), int(dagger_record.attackMax) + 1]) == 1, "正式 modifiers[] 必须合并进攻击范围，不能与兼容 drop_affix 重复相加")
+	assert("攻击上限 +1" not in formal_affix_text, "范围加成不应在追加属性中重复展示")
 	assert("无额外属性" not in formal_affix_text, "存在追加属性时仍输出无额外属性占位行")
 	var dagger_popup_size: Vector2 = panel.item_detail_presenter.size
 	panel._clear_inventory_selection_styles()
@@ -385,12 +400,14 @@ func _run() -> void:
 	double_click.pressed = true
 	double_click.double_click = true
 	double_click.position = sun_button.size * 0.5
+	var notices_before_potion := success_notices.size()
 	panel._inventory_input(double_click, sun_index, sun_button)
 	panel._select_inventory_item(sun_index) # Button.pressed follows gui_input.
 	await get_tree().process_frame
 	assert(PlayerState.item_count("太阳水") == 1, "双击消耗品应使用一次")
 	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "双击使用后的pressed不得再次切换选择")
-	assert("使用：太阳水" in panel.detail_label.text, "双击使用结果未显示")
+	assert(success_notices.size() == notices_before_potion, "瞬回药水不应产生全局提示")
+	assert("使用：太阳水" not in panel.detail_label.get_parsed_text(), "结果提示不应占用物品详情")
 	_assert_six_column_geometry(panel, "使用后")
 
 	sun_index = _inventory_index_of("太阳水")

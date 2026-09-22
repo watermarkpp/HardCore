@@ -12,6 +12,10 @@ const RULES_PATH := "res://assets/data/vanilla_176/profession_combat_rules.json"
 const SUMMON_BASELINE_PATH := "res://assets/data/vanilla_176/taoist_summon_baseline.json"
 ## Base data max rank; effective cast rank extends via skills.rank_extension.v1.
 const MAX_SKILL_LEVEL := 3
+## Project pacing overlay: preserve the verified source thresholds and the
+## existing saved XP unit; only future qualifying kills award twice the XP.
+const SUMMON_GROWTH_POLICY_ID := "skills.summon.growth.hardcore.v2"
+const SUMMON_KILL_GROWTH_MULTIPLIER := 2
 
 static var _rules_cache: Dictionary = {}
 static var _summon_baseline_cache: Dictionary = {}
@@ -177,6 +181,10 @@ static func summon_stats(summon_id: String, pet_level: int) -> Dictionary:
 		"accuracy": int(base.get("accuracy", 1)),
 		"agility": int(base.get("agility", 1)),
 	}
+
+
+static func summon_kill_growth_credit(killed_monster_level: int) -> int:
+	return maxi(0, killed_monster_level) * SUMMON_KILL_GROWTH_MULTIPLIER
 
 
 static func summon_growth_threshold(summon_id: String, current_pet_level: int) -> int:

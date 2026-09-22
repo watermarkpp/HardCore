@@ -22,7 +22,7 @@ func _ready() -> void:
 	_verify_divine_beast_directed_core()
 	print(
 		"SUMMON_RELEASE_FOOTPRINT_SNAPSHOT_PASS: summon destination, skeleton "
-		+ "contact and divine-beast directed core remain distinct release contracts"
+		+ "and divine-beast directed cores keep their 1.5/3 GU release contracts"
 	)
 	get_tree().quit(0)
 
@@ -59,15 +59,18 @@ func _verify_skeleton_release_contact() -> void:
 	_configure_summon_map(skeleton)
 	skeleton.combat_radius_gu = 0.30
 	skeleton.attack_range_gu = 1.00
-	var target := _target_at_ground_gu(Vector2(1.50, 0.0), 0.20)
+	var target := _target_at_ground_gu(Vector2(1.70, 0.0), 0.20)
 	var snapshot := skeleton.create_attack_release_footprint_snapshot(target)
 	assert(Snapshot.has_legacy_base_contract(snapshot))
-	assert(snapshot.shape_type == Snapshot.SHAPE_CIRCLE)
-	assert(skeleton.last_attack_relation == "release_contact")
-	assert(is_equal_approx(float(snapshot.radius_gu), 1.30))
+	# 7e8a34af established directed 1.5x1 GU for skeletons, independent
+	# of the legacy attack_range_gu field and the caster's body radius.
+	assert(snapshot.shape_type == Snapshot.SHAPE_DIRECTED_RECTANGLE)
+	assert(skeleton.last_attack_relation == "directed_ground_gu")
+	assert(is_equal_approx(float(snapshot.effect_length_gu), 1.50))
+	assert(is_equal_approx(float(snapshot.effect_width_gu), 1.00))
 	assert(skeleton.attack_release_snapshot_intersects_target(snapshot, target))
 	target.global_position = GroundUnit.ground_delta_gu_to_screen_delta_px(
-		Vector2(1.501, 0.0)
+		Vector2(1.701, 0.0)
 	)
 	assert(not skeleton.attack_release_snapshot_intersects_target(snapshot, target))
 	skeleton.free()
@@ -90,19 +93,19 @@ func _verify_divine_beast_directed_core() -> void:
 	divine.combat_radius_gu = 0.45
 	divine.attack_range_gu = 1.55
 	var direction_ground_gu := Vector2(0.6, 0.8).normalized()
-	var target := _target_at_ground_gu(direction_ground_gu * 2.20, 0.20)
+	var target := _target_at_ground_gu(direction_ground_gu * 3.20, 0.20)
 	var snapshot := divine.create_attack_release_footprint_snapshot(target)
 	assert(Snapshot.has_legacy_base_contract(snapshot))
 	assert(snapshot.shape_type == Snapshot.SHAPE_DIRECTED_RECTANGLE)
-	assert(divine.last_attack_relation == "directed_core")
-	assert(is_equal_approx(float(snapshot.effect_length_gu), 2.0))
-	assert(is_equal_approx(float(snapshot.effect_width_gu), 0.90))
+	assert(divine.last_attack_relation == "directed_ground_gu")
+	assert(is_equal_approx(float(snapshot.effect_length_gu), 3.0))
+	assert(is_equal_approx(float(snapshot.effect_width_gu), 1.00))
 	assert((snapshot.direction_ground_gu as Vector2).is_equal_approx(
 		direction_ground_gu
 	))
 	assert(divine.attack_release_snapshot_intersects_target(snapshot, target))
 	target.global_position = GroundUnit.ground_delta_gu_to_screen_delta_px(
-		direction_ground_gu * 2.201
+		direction_ground_gu * 3.201
 	)
 	assert(not divine.attack_release_snapshot_intersects_target(snapshot, target))
 	divine.free()

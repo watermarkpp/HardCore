@@ -1,0 +1,440 @@
+Opened log file 'C:\Users\Administrator\Documents\HardCore\outputs\repair_v92\native_exit\dbgeng_functions.txt'
+No .natvis files found at C:\Windows\System32\Visualizers.
+No .natvis files found at C:\Users\Administrator\AppData\Local\Dbg\Visualizers.
+
+Microsoft (R) Windows Debugger Version 10.0.26100.1 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Users\Administrator\AppData\Local\CrashDumps\Godot_v4.7-stable_win64.exe.3156.dmp]
+User Mini Dump File: Only registers, stack and portions of memory are available
+
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+Symbol search path is: C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+Executable search path is: 
+Windows 10 Version 26200 MP (12 procs) Free x64
+Product: WinNt, suite: SingleUserTS
+Edition build lab: 26100.1.amd64fre.ge_release.240331-1435
+Debug session time: Tue Sep 22 19:53:26.000 2026 (UTC + 8:00)
+System Uptime: 1 days 23:38:21.284
+Process Uptime: 0 days 0:00:17.000
+............................................
+Unable to add extension DLL: ntsdexts
+Unable to add extension DLL: uext
+Unable to add extension DLL: exts
+This dump file has an exception of interest stored in it.
+The stored exception information can be accessed via .ecxr.
+(c54.4a18): Access violation - code c0000005 (first/second chance not available)
+
++------------------------------------------------------------------------+
+| This target supports Hardware-enforced Stack Protection. A HW based    |
+| "Shadow Stack" may be available to assist in debugging and analysis.   |
+| See aka.ms/userhsp for more info.                                      |
+|                                                                        |
+| dps @ssp                                                               |
+|                                                                        |
++------------------------------------------------------------------------+
+
+For analysis of this file, run !analyze -v
+.ecxr
+rax=0000000000000001 rbx=0000000000000000 rcx=0000000000000002
+rdx=0000017743e50000 rsi=0000000000000000 rdi=00000177473ffbd0
+rip=00007ff671db72f6 rsp=00000059a25ff170 rbp=0000017751a43720
+ r8=000000050000004b  r9=0000000000000013 r10=0000000000042010
+r11=00000059a25feda0 r12=000001774f5fd700 r13=000001774f5ffdc8
+r14=0000000000000001 r15=0000017751a43700
+iopl=0         nv up ei pl nz na pe nc
+cs=0033  ss=002b  ds=002b  es=002b  fs=0053  gs=002b             efl=00010202
+Godot_v4_7_stable_win64!NoHotPatch+0x5446c6:
+00007ff6`71db72f6 4d8b6508        mov     r12,qword ptr [r13+8] ds:00000177`4f5ffdd0=????????????????
+.fnent @rip
+Debugger function entry 0000017d`759e3df0 for:
+(00007ff6`71872c30)   Godot_v4_7_stable_win64!NoHotPatch+0x5446c6   |  (00007ff6`77ec3000)   Godot_v4_7_stable_win64!AmdPowerXpressRequestHighPerformance
+
+BeginAddress      = 00000000`005472a0
+EndAddress        = 00000000`005476b3
+UnwindInfoAddress = 00000000`0a6fd8cc
+
+Unwind info at 00007ff6`7bf6d8cc, 16 bytes
+  version 1, flags 0, prolog 10, codes 9
+  00: offs 10, unwind op 2, op info a	UWOP_ALLOC_SMALL.
+  01: offs c, unwind op 0, op info 3	UWOP_PUSH_NONVOL reg: rbx.
+  02: offs b, unwind op 0, op info 6	UWOP_PUSH_NONVOL reg: rsi.
+  03: offs a, unwind op 0, op info 7	UWOP_PUSH_NONVOL reg: rdi.
+  04: offs 9, unwind op 0, op info 5	UWOP_PUSH_NONVOL reg: rbp.
+  05: offs 8, unwind op 0, op info c	UWOP_PUSH_NONVOL reg: r12.
+  06: offs 6, unwind op 0, op info d	UWOP_PUSH_NONVOL reg: r13.
+  07: offs 4, unwind op 0, op info e	UWOP_PUSH_NONVOL reg: r14.
+  08: offs 2, unwind op 0, op info f	UWOP_PUSH_NONVOL reg: r15.
+uf @rip
+Godot_v4_7_stable_win64!NoHotPatch+0x544670:
+00007ff6`71db72a0 4157            push    r15
+00007ff6`71db72a2 4156            push    r14
+00007ff6`71db72a4 4155            push    r13
+00007ff6`71db72a6 4154            push    r12
+00007ff6`71db72a8 55              push    rbp
+00007ff6`71db72a9 57              push    rdi
+00007ff6`71db72aa 56              push    rsi
+00007ff6`71db72ab 53              push    rbx
+00007ff6`71db72ac 4883ec58        sub     rsp,58h
+00007ff6`71db72b0 4889cf          mov     rdi,rcx
+00007ff6`71db72b3 80b92001000000  cmp     byte ptr [rcx+120h],0
+00007ff6`71db72ba 7414            je      Godot_v4_7_stable_win64!NoHotPatch+0x5446a0 (00007ff6`71db72d0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54468c:
+00007ff6`71db72bc 4883c458        add     rsp,58h
+00007ff6`71db72c0 5b              pop     rbx
+00007ff6`71db72c1 5e              pop     rsi
+00007ff6`71db72c2 5f              pop     rdi
+00007ff6`71db72c3 5d              pop     rbp
+00007ff6`71db72c4 415c            pop     r12
+00007ff6`71db72c6 415d            pop     r13
+00007ff6`71db72c8 415e            pop     r14
+00007ff6`71db72ca 415f            pop     r15
+00007ff6`71db72cc c3              ret
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5446a0:
+00007ff6`71db72d0 c6812001000001  mov     byte ptr [rcx+120h],1
+00007ff6`71db72d7 e8b4790500      call    Godot_v4_7_stable_win64!NoHotPatch+0x59c060 (00007ff6`71e0ec90)
+00007ff6`71db72dc 4c8bafd0010000  mov     r13,qword ptr [rdi+1D0h]
+00007ff6`71db72e3 488d442448      lea     rax,[rsp+48h]
+00007ff6`71db72e8 4889442430      mov     qword ptr [rsp+30h],rax
+00007ff6`71db72ed 4d85ed          test    r13,r13
+00007ff6`71db72f0 0f84ba020000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544980 (00007ff6`71db75b0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5446c6:
+00007ff6`71db72f6 4d8b6508        mov     r12,qword ptr [r13+8]
+00007ff6`71db72fa 4d85e4          test    r12,r12
+00007ff6`71db72fd 0f844d010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544820 (00007ff6`71db7450)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5446d3:
+00007ff6`71db7303 4c89e1          mov     rcx,r12
+00007ff6`71db7306 e8c5758d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e1bca0 (00007ff6`7568e8d0)
+00007ff6`71db730b 84c0            test    al,al
+00007ff6`71db730d 0f843d010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544820 (00007ff6`71db7450)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5446e3:
+00007ff6`71db7313 498bb42490020000 mov     rsi,qword ptr [r12+290h]
+00007ff6`71db731b 4885f6          test    rsi,rsi
+00007ff6`71db731e 0f84b9000000    je      Godot_v4_7_stable_win64!NoHotPatch+0x5447ad (00007ff6`71db73dd)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5446f4:
+00007ff6`71db7324 4c8b7e18        mov     r15,qword ptr [rsi+18h]
+00007ff6`71db7328 4531f6          xor     r14d,r14d
+00007ff6`71db732b 498b4720        mov     rax,qword ptr [r15+20h]
+00007ff6`71db732f 498d6f20        lea     rbp,[r15+20h]
+00007ff6`71db7333 4885c0          test    rax,rax
+00007ff6`71db7336 747b            je      Godot_v4_7_stable_win64!NoHotPatch+0x544783 (00007ff6`71db73b3)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544708:
+00007ff6`71db7338 4c3970f0        cmp     qword ptr [rax-10h],r14
+00007ff6`71db733c 7e75            jle     Godot_v4_7_stable_win64!NoHotPatch+0x544783 (00007ff6`71db73b3)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54470e:
+00007ff6`71db733e 488b40e0        mov     rax,qword ptr [rax-20h]
+00007ff6`71db7342 4883f801        cmp     rax,1
+00007ff6`71db7346 7431            je      Godot_v4_7_stable_win64!NoHotPatch+0x544749 (00007ff6`71db7379)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544718:
+00007ff6`71db7348 498b4720        mov     rax,qword ptr [r15+20h]
+00007ff6`71db734c 4885c0          test    rax,rax
+00007ff6`71db734f 0f84eb000000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544810 (00007ff6`71db7440)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544725:
+00007ff6`71db7355 4c8b40f0        mov     r8,qword ptr [rax-10h]
+00007ff6`71db7359 488b50e8        mov     rdx,qword ptr [rax-18h]
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54472d:
+00007ff6`71db735d 48c744242000000000 mov   qword ptr [rsp+20h],0
+00007ff6`71db7366 4531c9          xor     r9d,r9d
+00007ff6`71db7369 4889e9          mov     rcx,rbp
+00007ff6`71db736c e87fdbd804      call    Godot_v4_7_stable_win64!NoHotPatch+0x52d22c0 (00007ff6`76b44ef0)
+00007ff6`71db7371 85c0            test    eax,eax
+00007ff6`71db7373 0f85af010000    jne     Godot_v4_7_stable_win64!NoHotPatch+0x5448f8 (00007ff6`71db7528)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544749:
+00007ff6`71db7379 498b4720        mov     rax,qword ptr [r15+20h]
+00007ff6`71db737d 4b8d1c76        lea     rbx,[r14+r14*2]
+00007ff6`71db7381 48c1e304        shl     rbx,4
+00007ff6`71db7385 4801c3          add     rbx,rax
+00007ff6`71db7388 488b4b28        mov     rcx,qword ptr [rbx+28h]
+00007ff6`71db738c 4885c9          test    rcx,rcx
+00007ff6`71db738f 7419            je      Godot_v4_7_stable_win64!NoHotPatch+0x54477a (00007ff6`71db73aa)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544761:
+00007ff6`71db7391 e8ba728d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e1ba20 (00007ff6`7568e650)
+00007ff6`71db7396 84c0            test    al,al
+00007ff6`71db7398 0f8552010000    jne     Godot_v4_7_stable_win64!NoHotPatch+0x5448c0 (00007ff6`71db74f0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54476e:
+00007ff6`71db739e 48c7432800000000 mov     qword ptr [rbx+28h],0
+00007ff6`71db73a6 498b4720        mov     rax,qword ptr [r15+20h]
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54477a:
+00007ff6`71db73aa 4983c601        add     r14,1
+00007ff6`71db73ae 4885c0          test    rax,rax
+00007ff6`71db73b1 7585            jne     Godot_v4_7_stable_win64!NoHotPatch+0x544708 (00007ff6`71db7338)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544783:
+00007ff6`71db73b3 498b4f50        mov     rcx,qword ptr [r15+50h]
+00007ff6`71db73b7 4885c9          test    rcx,rcx
+00007ff6`71db73ba 7415            je      Godot_v4_7_stable_win64!NoHotPatch+0x5447a1 (00007ff6`71db73d1)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54478c:
+00007ff6`71db73bc e88f728d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e1ba20 (00007ff6`7568e650)
+00007ff6`71db73c1 84c0            test    al,al
+00007ff6`71db73c3 0f8597010000    jne     Godot_v4_7_stable_win64!NoHotPatch+0x544930 (00007ff6`71db7560)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544799:
+00007ff6`71db73c9 49c7475000000000 mov     qword ptr [r15+50h],0
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447a1:
+00007ff6`71db73d1 488b36          mov     rsi,qword ptr [rsi]
+00007ff6`71db73d4 4885f6          test    rsi,rsi
+00007ff6`71db73d7 0f8547ffffff    jne     Godot_v4_7_stable_win64!NoHotPatch+0x5446f4 (00007ff6`71db7324)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447ad:
+00007ff6`71db73dd 498b9c24e0010000 mov     rbx,qword ptr [r12+1E0h]
+00007ff6`71db73e5 4885db          test    rbx,rbx
+00007ff6`71db73e8 751a            jne     Godot_v4_7_stable_win64!NoHotPatch+0x5447d4 (00007ff6`71db7404)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447ba:
+00007ff6`71db73ea e9a1010000      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x544960 (00007ff6`71db7590)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447c0:
+00007ff6`71db73f0 48c7435800000000 mov     qword ptr [rbx+58h],0
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447c8:
+00007ff6`71db73f8 488b1b          mov     rbx,qword ptr [rbx]
+00007ff6`71db73fb 4885db          test    rbx,rbx
+00007ff6`71db73fe 0f848c010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544960 (00007ff6`71db7590)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447d4:
+00007ff6`71db7404 488b4b58        mov     rcx,qword ptr [rbx+58h]
+00007ff6`71db7408 4885c9          test    rcx,rcx
+00007ff6`71db740b 74eb            je      Godot_v4_7_stable_win64!NoHotPatch+0x5447c8 (00007ff6`71db73f8)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447dd:
+00007ff6`71db740d e83e728d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e1ba20 (00007ff6`7568e650)
+00007ff6`71db7412 84c0            test    al,al
+00007ff6`71db7414 74da            je      Godot_v4_7_stable_win64!NoHotPatch+0x5447c0 (00007ff6`71db73f0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447e6:
+00007ff6`71db7416 488b7358        mov     rsi,qword ptr [rbx+58h]
+00007ff6`71db741a 4889f1          mov     rcx,rsi
+00007ff6`71db741d e87e1b8c03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e06370 (00007ff6`75678fa0)
+00007ff6`71db7422 84c0            test    al,al
+00007ff6`71db7424 74ca            je      Godot_v4_7_stable_win64!NoHotPatch+0x5447c0 (00007ff6`71db73f0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5447f6:
+00007ff6`71db7426 488b06          mov     rax,qword ptr [rsi]
+00007ff6`71db7429 4889f1          mov     rcx,rsi
+00007ff6`71db742c ff9048010000    call    qword ptr [rax+148h]
+00007ff6`71db7432 31d2            xor     edx,edx
+00007ff6`71db7434 4889f1          mov     rcx,rsi
+00007ff6`71db7437 e8d41a3d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x39162e0 (00007ff6`75188f10)
+00007ff6`71db743c ebb2            jmp     Godot_v4_7_stable_win64!NoHotPatch+0x5447c0 (00007ff6`71db73f0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544810:
+00007ff6`71db7440 4531c0          xor     r8d,r8d
+00007ff6`71db7443 31d2            xor     edx,edx
+00007ff6`71db7445 e913ffffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x54472d (00007ff6`71db735d)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544820:
+00007ff6`71db7450 4531e4          xor     r12d,r12d
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544823:
+00007ff6`71db7453 4d8b6d10        mov     r13,qword ptr [r13+10h]
+00007ff6`71db7457 488b4c2430      mov     rcx,qword ptr [rsp+30h]
+00007ff6`71db745c 4c89642448      mov     qword ptr [rsp+48h],r12
+00007ff6`71db7461 e86a1cb304      call    Godot_v4_7_stable_win64!NoHotPatch+0x50764a0 (00007ff6`768e90d0)
+00007ff6`71db7466 4d85ed          test    r13,r13
+00007ff6`71db7469 0f8587feffff    jne     Godot_v4_7_stable_win64!NoHotPatch+0x5446c6 (00007ff6`71db72f6)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54483f:
+00007ff6`71db746f 488b87d0010000  mov     rax,qword ptr [rdi+1D0h]
+00007ff6`71db7476 488d9fd0010000  lea     rbx,[rdi+1D0h]
+00007ff6`71db747d 4885c0          test    rax,rax
+00007ff6`71db7480 0f842a010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544980 (00007ff6`71db75b0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544856:
+00007ff6`71db7486 660fefc0        pxor    xmm0,xmm0
+00007ff6`71db748a eb1b            jmp     Godot_v4_7_stable_win64!NoHotPatch+0x544877 (00007ff6`71db74a7)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544860:
+00007ff6`71db7490 48c70000000000  mov     qword ptr [rax],0
+00007ff6`71db7497 0f114010        movups  xmmword ptr [rax+10h],xmm0
+00007ff6`71db749b 4889d0          mov     rax,rdx
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54486e:
+00007ff6`71db749e 4885c0          test    rax,rax
+00007ff6`71db74a1 0f8409010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544980 (00007ff6`71db75b0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544877:
+00007ff6`71db74a7 483b18          cmp     rbx,qword ptr [rax]
+00007ff6`71db74aa 0f8583010000    jne     Godot_v4_7_stable_win64!NoHotPatch+0x544a03 (00007ff6`71db7633)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544880:
+00007ff6`71db74b0 488b5010        mov     rdx,qword ptr [rax+10h]
+00007ff6`71db74b4 4885d2          test    rdx,rdx
+00007ff6`71db74b7 7408            je      Godot_v4_7_stable_win64!NoHotPatch+0x544891 (00007ff6`71db74c1)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544889:
+00007ff6`71db74b9 488b4818        mov     rcx,qword ptr [rax+18h]
+00007ff6`71db74bd 48894a18        mov     qword ptr [rdx+18h],rcx
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544891:
+00007ff6`71db74c1 488b4818        mov     rcx,qword ptr [rax+18h]
+00007ff6`71db74c5 4885c9          test    rcx,rcx
+00007ff6`71db74c8 7408            je      Godot_v4_7_stable_win64!NoHotPatch+0x5448a2 (00007ff6`71db74d2)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54489a:
+00007ff6`71db74ca 48895110        mov     qword ptr [rcx+10h],rdx
+00007ff6`71db74ce 488b5010        mov     rdx,qword ptr [rax+10h]
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5448a2:
+00007ff6`71db74d2 488997d0010000  mov     qword ptr [rdi+1D0h],rdx
+00007ff6`71db74d9 483987d8010000  cmp     qword ptr [rdi+1D8h],rax
+00007ff6`71db74e0 75ae            jne     Godot_v4_7_stable_win64!NoHotPatch+0x544860 (00007ff6`71db7490)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5448b2:
+00007ff6`71db74e2 48898fd8010000  mov     qword ptr [rdi+1D8h],rcx
+00007ff6`71db74e9 eba5            jmp     Godot_v4_7_stable_win64!NoHotPatch+0x544860 (00007ff6`71db7490)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5448c0:
+00007ff6`71db74f0 488b4b28        mov     rcx,qword ptr [rbx+28h]
+00007ff6`71db74f4 48894c2438      mov     qword ptr [rsp+38h],rcx
+00007ff6`71db74f9 e8a21a8c03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e06370 (00007ff6`75678fa0)
+00007ff6`71db74fe 84c0            test    al,al
+00007ff6`71db7500 0f8498feffff    je      Godot_v4_7_stable_win64!NoHotPatch+0x54476e (00007ff6`71db739e)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5448d6:
+00007ff6`71db7506 488b4c2438      mov     rcx,qword ptr [rsp+38h]
+00007ff6`71db750b 488b01          mov     rax,qword ptr [rcx]
+00007ff6`71db750e ff9048010000    call    qword ptr [rax+148h]
+00007ff6`71db7514 488b4c2438      mov     rcx,qword ptr [rsp+38h]
+00007ff6`71db7519 31d2            xor     edx,edx
+00007ff6`71db751b e8f0193d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x39162e0 (00007ff6`75188f10)
+00007ff6`71db7520 e979feffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x54476e (00007ff6`71db739e)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5448f8:
+00007ff6`71db7528 c744242800000000 mov     dword ptr [rsp+28h],0
+00007ff6`71db7530 4c8d0d31398406  lea     r9,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x737e64 (00007ff6`785fae68)]
+00007ff6`71db7537 41b8a6000000    mov     r8d,0A6h
+00007ff6`71db753d 488d1514288406  lea     rdx,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x736d54 (00007ff6`785f9d58)]
+00007ff6`71db7544 c744242000000000 mov     dword ptr [rsp+20h],0
+00007ff6`71db754c 488d0d42398406  lea     rcx,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x737e91 (00007ff6`785fae95)]
+00007ff6`71db7553 e838159703      call    Godot_v4_7_stable_win64!NoHotPatch+0x3eb5e60 (00007ff6`75728a90)
+00007ff6`71db7558 e853139703      call    Godot_v4_7_stable_win64!NoHotPatch+0x3eb5c80 (00007ff6`757288b0)
+00007ff6`71db755d 0f0b            ud2
+00007ff6`71db755f 90              nop
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544930:
+00007ff6`71db7560 498b5f50        mov     rbx,qword ptr [r15+50h]
+00007ff6`71db7564 4889d9          mov     rcx,rbx
+00007ff6`71db7567 e8341a8c03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e06370 (00007ff6`75678fa0)
+00007ff6`71db756c 84c0            test    al,al
+00007ff6`71db756e 0f8455feffff    je      Godot_v4_7_stable_win64!NoHotPatch+0x544799 (00007ff6`71db73c9)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544944:
+00007ff6`71db7574 488b03          mov     rax,qword ptr [rbx]
+00007ff6`71db7577 4889d9          mov     rcx,rbx
+00007ff6`71db757a ff9048010000    call    qword ptr [rax+148h]
+00007ff6`71db7580 31d2            xor     edx,edx
+00007ff6`71db7582 4889d9          mov     rcx,rbx
+00007ff6`71db7585 e886193d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x39162e0 (00007ff6`75188f10)
+00007ff6`71db758a e93afeffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x544799 (00007ff6`71db73c9)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544960:
+00007ff6`71db7590 4180bc24a905000000 cmp   byte ptr [r12+5A9h],0
+00007ff6`71db7599 0f85b4feffff    jne     Godot_v4_7_stable_win64!NoHotPatch+0x544823 (00007ff6`71db7453)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x54496f:
+00007ff6`71db759f 4c89e1          mov     rcx,r12
+00007ff6`71db75a2 e839f7ffff      call    Godot_v4_7_stable_win64!NoHotPatch+0x5440b0 (00007ff6`71db6ce0)
+00007ff6`71db75a7 e9a7feffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x544823 (00007ff6`71db7453)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544980:
+00007ff6`71db75b0 488b87e0010000  mov     rax,qword ptr [rdi+1E0h]
+00007ff6`71db75b7 488d9fe0010000  lea     rbx,[rdi+1E0h]
+00007ff6`71db75be 660fefc0        pxor    xmm0,xmm0
+00007ff6`71db75c2 4885c0          test    rax,rax
+00007ff6`71db75c5 751c            jne     Godot_v4_7_stable_win64!NoHotPatch+0x5449b3 (00007ff6`71db75e3)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544997:
+00007ff6`71db75c7 eb5e            jmp     Godot_v4_7_stable_win64!NoHotPatch+0x5449f7 (00007ff6`71db7627)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449a0:
+00007ff6`71db75d0 48c70000000000  mov     qword ptr [rax],0
+00007ff6`71db75d7 0f114010        movups  xmmword ptr [rax+10h],xmm0
+00007ff6`71db75db 4889d0          mov     rax,rdx
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449ae:
+00007ff6`71db75de 4885c0          test    rax,rax
+00007ff6`71db75e1 7444            je      Godot_v4_7_stable_win64!NoHotPatch+0x5449f7 (00007ff6`71db7627)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449b3:
+00007ff6`71db75e3 483b18          cmp     rbx,qword ptr [rax]
+00007ff6`71db75e6 0f8587000000    jne     Godot_v4_7_stable_win64!NoHotPatch+0x544a43 (00007ff6`71db7673)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449bc:
+00007ff6`71db75ec 488b5010        mov     rdx,qword ptr [rax+10h]
+00007ff6`71db75f0 4885d2          test    rdx,rdx
+00007ff6`71db75f3 7408            je      Godot_v4_7_stable_win64!NoHotPatch+0x5449cd (00007ff6`71db75fd)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449c5:
+00007ff6`71db75f5 488b4818        mov     rcx,qword ptr [rax+18h]
+00007ff6`71db75f9 48894a18        mov     qword ptr [rdx+18h],rcx
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449cd:
+00007ff6`71db75fd 488b4818        mov     rcx,qword ptr [rax+18h]
+00007ff6`71db7601 4885c9          test    rcx,rcx
+00007ff6`71db7604 7408            je      Godot_v4_7_stable_win64!NoHotPatch+0x5449de (00007ff6`71db760e)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449d6:
+00007ff6`71db7606 48895110        mov     qword ptr [rcx+10h],rdx
+00007ff6`71db760a 488b5010        mov     rdx,qword ptr [rax+10h]
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449de:
+00007ff6`71db760e 488997e0010000  mov     qword ptr [rdi+1E0h],rdx
+00007ff6`71db7615 483b87e8010000  cmp     rax,qword ptr [rdi+1E8h]
+00007ff6`71db761c 75b2            jne     Godot_v4_7_stable_win64!NoHotPatch+0x5449a0 (00007ff6`71db75d0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449ee:
+00007ff6`71db761e 48898fe8010000  mov     qword ptr [rdi+1E8h],rcx
+00007ff6`71db7625 eba9            jmp     Godot_v4_7_stable_win64!NoHotPatch+0x5449a0 (00007ff6`71db75d0)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x5449f7:
+00007ff6`71db7627 c6872001000000  mov     byte ptr [rdi+120h],0
+00007ff6`71db762e e989fcffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x54468c (00007ff6`71db72bc)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544a03:
+00007ff6`71db7633 c744242800000000 mov     dword ptr [rsp+28h],0
+00007ff6`71db763b 4c8d0d6e2f8406  lea     r9,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x7375ac (00007ff6`785fa5b0)]
+00007ff6`71db7642 41b850000000    mov     r8d,50h
+00007ff6`71db7648 488d15e42d8406  lea     rdx,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x73742f (00007ff6`785fa433)]
+00007ff6`71db764f c744242000000000 mov     dword ptr [rsp+20h],0
+00007ff6`71db7657 488d0d7d2f8406  lea     rcx,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x7375d7 (00007ff6`785fa5db)]
+00007ff6`71db765e e82d149703      call    Godot_v4_7_stable_win64!NoHotPatch+0x3eb5e60 (00007ff6`75728a90)
+00007ff6`71db7663 488b87d0010000  mov     rax,qword ptr [rdi+1D0h]
+00007ff6`71db766a 660fefc0        pxor    xmm0,xmm0
+00007ff6`71db766e e92bfeffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x54486e (00007ff6`71db749e)
+
+Godot_v4_7_stable_win64!NoHotPatch+0x544a43:
+00007ff6`71db7673 c744242800000000 mov     dword ptr [rsp+28h],0
+00007ff6`71db767b 4c8d0d2e2f8406  lea     r9,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x7375ac (00007ff6`785fa5b0)]
+00007ff6`71db7682 41b850000000    mov     r8d,50h
+00007ff6`71db7688 488d15a42d8406  lea     rdx,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x73742f (00007ff6`785fa433)]
+00007ff6`71db768f c744242000000000 mov     dword ptr [rsp+20h],0
+00007ff6`71db7697 488d0d3d2f8406  lea     rcx,[Godot_v4_7_stable_win64!NvOptimusEnablement+0x7375d7 (00007ff6`785fa5db)]
+00007ff6`71db769e e8ed139703      call    Godot_v4_7_stable_win64!NoHotPatch+0x3eb5e60 (00007ff6`75728a90)
+00007ff6`71db76a3 488b87e0010000  mov     rax,qword ptr [rdi+1E0h]
+00007ff6`71db76aa 660fefc0        pxor    xmm0,xmm0
+00007ff6`71db76ae e92bffffff      jmp     Godot_v4_7_stable_win64!NoHotPatch+0x5449ae (00007ff6`71db75de)

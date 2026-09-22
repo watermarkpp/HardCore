@@ -174,14 +174,16 @@ func _run() -> void:
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 3, "零耐久非武器仍贡献luck/curse")
 	PlayerState.damage_equipment_durability("武器", int(weapon.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 0 and int(weapon.get("weapon_luck", 0)) == 4, "零耐久未禁用幸运或错误清除实例幸运")
-	# 命运之刃当前没有可追溯的主库价格，维修必须fail-closed，不能免费修复；
-	# 有正式价格的古铜戒指仍应在同一次操作中恢复并重新参与幸运结算。
+	# 当前正式价格权威已经包含命运之刃；付费维修后武器与戒指都应
+	# 恢复贡献，但持久幸运/诅咒数值不得重掷。
 	var blacksmith_context := GameData.merchant_context("starter_gear")
 	PlayerState.gold = PlayerState.repair_cost(blacksmith_context)
+	assert(PlayerState.gold > 0, "正式维修报价必须大于零")
 	PlayerState.repair_all_equipment(blacksmith_context)
-	assert(int(PlayerState.equipment["武器"].get("durability", -1)) == 0, "缺少主库价格的武器被免费修复")
+	assert(PlayerState.gold == 0, "维修未按报价准确扣费")
+	assert(int(PlayerState.equipment["武器"].get("durability", -1)) == int(PlayerState.equipment["武器"].get("max_durability", 0)), "正式报价的武器没有修复")
 	assert(int(PlayerState.equipment["左戒指"].get("durability", -1)) == int(PlayerState.equipment["左戒指"].get("max_durability", 0)), "有正式报价的戒指没有完成维修")
-	assert(int(PlayerState.computed_stats.get("luck", 0)) == 1, "维修后有报价装备的幸运/诅咒没有恢复参与结算")
+	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "维修后武器与戒指的幸运/诅咒没有恢复参与结算")
 
 	PlayerState.profile_directory = TEST_DIRECTORY
 	PlayerState.profile_index_path = TEST_INDEX

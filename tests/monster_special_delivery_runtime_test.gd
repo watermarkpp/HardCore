@@ -2,6 +2,25 @@ extends Node2D
 
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
+class DeterministicMagicPlayer:
+	extends PlayerCharacter
+
+	var incoming_magic_roll := 9
+
+	func take_direct_spell_damage(
+		skill_id: String,
+		raw_damage: int,
+		anti_magic_roll := -1,
+		magic_defense_roll := -1,
+		causes_struck := true
+	) -> Dictionary:
+		# Keep the real player evasion/MAC/HP pipeline, fixing only its random
+		# input so delivery assertions cannot fail on a valid 10% evasion.
+		return super.take_direct_spell_damage(
+			skill_id, raw_damage,
+			anti_magic_roll if anti_magic_roll >= 0 else incoming_magic_roll,
+			magic_defense_roll, causes_struck)
+
 class MagicTarget:
 	extends Node2D
 
@@ -63,8 +82,14 @@ func _assert_flame_wooma_magic_melee() -> void:
 	assert(player.current_hp == hp_before, "70 magic melee crossed a world blocker")
 
 	_blocked_ground_gu = Vector2.INF
+	player.incoming_magic_roll = 0
 	attacker._deal_special_magic_melee_hit(player, 20)
-	assert(player.current_hp < hp_before, "70 adjacent magic melee did not resolve immediately")
+	assert(player.current_hp == hp_before, "70 bypassed the player's valid magic evasion")
+	assert(bool(attacker.last_magic_attack_resolution.get("magic_evaded", false)),
+		str(attacker.last_magic_attack_resolution))
+	player.incoming_magic_roll = 9
+	attacker._deal_special_magic_melee_hit(player, 20)
+	assert(player.current_hp < hp_before, "70 adjacent magic melee did not resolve immediately: %s" % attacker.last_magic_attack_resolution)
 	assert(str(attacker.last_magic_attack_resolution.get("damage_channel", "")) == "magic_defense")
 	assert(str(attacker.last_magic_attack_resolution.get("delivery_kind", "")) == "special_melee")
 	assert(is_equal_approx(float(attacker.last_magic_attack_resolution.get("presentation_delay_seconds", 0.0)), 0.3))
@@ -126,8 +151,8 @@ func _assert_touch_dragon_frozen_area_magic() -> void:
 	await get_tree().process_frame
 
 
-func _make_player(ground_gu: Vector2) -> PlayerCharacter:
-	var player := PlayerCharacter.new()
+func _make_player(ground_gu: Vector2) -> DeterministicMagicPlayer:
+	var player := DeterministicMagicPlayer.new()
 	player.global_position = _ground_to_screen(ground_gu)
 	player.process_mode = Node.PROCESS_MODE_DISABLED
 	player.set_physics_process(false)

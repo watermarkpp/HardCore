@@ -1,0 +1,143 @@
+Opened log file 'C:\Users\Administrator\Documents\HardCore\outputs\repair_v92\native_exit\dbgeng_analysis.txt'
+No .natvis files found at C:\Windows\System32\Visualizers.
+No .natvis files found at C:\Users\Administrator\AppData\Local\Dbg\Visualizers.
+
+Microsoft (R) Windows Debugger Version 10.0.26100.1 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Users\Administrator\AppData\Local\CrashDumps\Godot_v4.7-stable_win64.exe.3156.dmp]
+User Mini Dump File: Only registers, stack and portions of memory are available
+
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+OK                                             C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+Symbol search path is: C:\Users\Administrator\Documents\HardCore\tools\godot-4.7
+Executable search path is: 
+Windows 10 Version 26200 MP (12 procs) Free x64
+Product: WinNt, suite: SingleUserTS
+Edition build lab: 26100.1.amd64fre.ge_release.240331-1435
+Debug session time: Tue Sep 22 19:53:26.000 2026 (UTC + 8:00)
+System Uptime: 1 days 23:38:21.284
+Process Uptime: 0 days 0:00:17.000
+............................................
+Unable to add extension DLL: ntsdexts
+Unable to add extension DLL: uext
+Unable to add extension DLL: exts
+This dump file has an exception of interest stored in it.
+The stored exception information can be accessed via .ecxr.
+(c54.4a18): Access violation - code c0000005 (first/second chance not available)
+
++------------------------------------------------------------------------+
+| This target supports Hardware-enforced Stack Protection. A HW based    |
+| "Shadow Stack" may be available to assist in debugging and analysis.   |
+| See aka.ms/userhsp for more info.                                      |
+|                                                                        |
+| dps @ssp                                                               |
+|                                                                        |
++------------------------------------------------------------------------+
+
+For analysis of this file, run !analyze -v
+.ecxr
+rax=0000000000000001 rbx=0000000000000000 rcx=0000000000000002
+rdx=0000017743e50000 rsi=0000000000000000 rdi=00000177473ffbd0
+rip=00007ff671db72f6 rsp=00000059a25ff170 rbp=0000017751a43720
+ r8=000000050000004b  r9=0000000000000013 r10=0000000000042010
+r11=00000059a25feda0 r12=000001774f5fd700 r13=000001774f5ffdc8
+r14=0000000000000001 r15=0000017751a43700
+iopl=0         nv up ei pl nz na pe nc
+cs=0033  ss=002b  ds=002b  es=002b  fs=0053  gs=002b             efl=00010202
+Godot_v4_7_stable_win64!NoHotPatch+0x5446c6:
+00007ff6`71db72f6 4d8b6508        mov     r12,qword ptr [r13+8] ds:00000177`4f5ffdd0=????????????????
+k 30
+Child-SP          RetAddr               Call Site
+00000059`a25ff170 00007ff6`7569d108     Godot_v4_7_stable_win64!NoHotPatch+0x5446c6
+00000059`a25ff210 00007ff6`718cfed1     Godot_v4_7_stable_win64!NoHotPatch+0x3e2a4d8
+00000059`a25ff2e0 00007ff6`718c249f     Godot_v4_7_stable_win64!NoHotPatch+0x5d2a1
+00000059`a25ff370 00007ff6`718c253e     Godot_v4_7_stable_win64!NoHotPatch+0x4f86f
+00000059`a25ff750 00007ff6`718710c9     Godot_v4_7_stable_win64!NoHotPatch+0x4f90e
+00000059`a25ff7a0 00007ff6`718713f6     Godot_v4_7_stable_win64+0x10c9
+00000059`a25ff840 00007fff`62ddcd87     Godot_v4_7_stable_win64+0x13f6
+00000059`a25ff870 00007fff`63d4caec     kernel32!BaseThreadInitThunk+0x17
+00000059`a25ff8a0 00000000`00000000     ntdll!RtlUserThreadStart+0x2c
+u @rip-20 @rip+40
+Godot_v4_7_stable_win64!NoHotPatch+0x5446a6:
+00007ff6`71db72d6 01e8            add     eax,ebp
+00007ff6`71db72d8 b479            mov     ah,79h
+00007ff6`71db72da 05004c8baf      add     eax,0AF8B4C00h
+00007ff6`71db72df d001            rol     byte ptr [rcx],1
+00007ff6`71db72e1 0000            add     byte ptr [rax],al
+00007ff6`71db72e3 488d442448      lea     rax,[rsp+48h]
+00007ff6`71db72e8 4889442430      mov     qword ptr [rsp+30h],rax
+00007ff6`71db72ed 4d85ed          test    r13,r13
+00007ff6`71db72f0 0f84ba020000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544980 (00007ff6`71db75b0)
+00007ff6`71db72f6 4d8b6508        mov     r12,qword ptr [r13+8]
+00007ff6`71db72fa 4d85e4          test    r12,r12
+00007ff6`71db72fd 0f844d010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544820 (00007ff6`71db7450)
+00007ff6`71db7303 4c89e1          mov     rcx,r12
+00007ff6`71db7306 e8c5758d03      call    Godot_v4_7_stable_win64!NoHotPatch+0x3e1bca0 (00007ff6`7568e8d0)
+00007ff6`71db730b 84c0            test    al,al
+00007ff6`71db730d 0f843d010000    je      Godot_v4_7_stable_win64!NoHotPatch+0x544820 (00007ff6`71db7450)
+00007ff6`71db7313 498bb42490020000 mov     rsi,qword ptr [r12+290h]
+00007ff6`71db731b 4885f6          test    rsi,rsi
+00007ff6`71db731e 0f84b9000000    je      Godot_v4_7_stable_win64!NoHotPatch+0x5447ad (00007ff6`71db73dd)
+00007ff6`71db7324 4c8b7e18        mov     r15,qword ptr [rsi+18h]
+00007ff6`71db7328 4531f6          xor     r14d,r14d
+00007ff6`71db732b 498b4720        mov     rax,qword ptr [r15+20h]
+00007ff6`71db732f 498d6f20        lea     rbp,[r15+20h]
+00007ff6`71db7333 4885c0          test    rax,rax
+00007ff6`71db7336 747b            je      Godot_v4_7_stable_win64!NoHotPatch+0x544783 (00007ff6`71db73b3)
+lm
+start             end                 module name
+00007ff6`71870000 00007ff6`7c485000   Godot_v4_7_stable_win64   (export symbols)       Godot_v4.7-stable_win64.exe
+00007fff`43b70000 00007fff`43f90000   uiautomationcore   (deferred)             
+00007fff`44690000 00007fff`446db000   dinput8    (deferred)             
+00007fff`498a0000 00007fff`49a83000   inputhost   (deferred)             
+00007fff`51a40000 00007fff`51a4a000   wsock32    (deferred)             
+00007fff`55a00000 00007fff`55c4c000   dbghelp    (deferred)             
+00007fff`56ee0000 00007fff`56f16000   winmm      (deferred)             
+00007fff`5af40000 00007fff`5af4b000   avrt       (deferred)             
+00007fff`5c750000 00007fff`5c9ba000   DWrite     (deferred)             
+00007fff`5d8f0000 00007fff`5da1b000   CoreMessaging   (deferred)             
+00007fff`5df40000 00007fff`5dfe8000   uxtheme    (deferred)             
+00007fff`5e0b0000 00007fff`5e1eb000   dxgi       (deferred)             
+00007fff`5e210000 00007fff`5e23f000   dwmapi     (deferred)             
+00007fff`5f1a0000 00007fff`5f1af000   hid        (deferred)             
+00007fff`5f4e0000 00007fff`5f513000   IPHLPAPI   (deferred)             
+00007fff`5fb30000 00007fff`5fb4b000   kernel_appcore   (deferred)             
+00007fff`60330000 00007fff`6033c000   CRYPTBASE   (deferred)             
+00007fff`60560000 00007fff`60573000   msasn1     (deferred)             
+00007fff`60b20000 00007fff`60b35000   umpdc      (deferred)             
+00007fff`60b40000 00007fff`60b9e000   powrprof   (deferred)             
+00007fff`60d90000 00007fff`60dba000   bcrypt     (deferred)             
+00007fff`60ea0000 00007fff`60fc9000   gdi32full   (deferred)             
+00007fff`61090000 00007fff`610b7000   win32u     (deferred)             
+00007fff`610c0000 00007fff`6123e000   crypt32    (deferred)             
+00007fff`61250000 00007fff`61652000   KERNELBASE   (deferred)             
+00007fff`616f0000 00007fff`6183c000   ucrtbase   (deferred)             
+00007fff`61850000 00007fff`618f3000   msvcp_win   (deferred)             
+00007fff`61900000 00007fff`619ac000   bcryptPrimitives   (deferred)             
+00007fff`619c0000 00007fff`61a69000   msvcrt     (deferred)             
+00007fff`61aa0000 00007fff`61e25000   combase    (deferred)             
+00007fff`62060000 00007fff`627f8000   shell32    (deferred)             
+00007fff`62800000 00007fff`62918000   rpcrt4     (deferred)             
+00007fff`629e0000 00007fff`62adb000   SHCore     (deferred)             
+00007fff`62af0000 00007fff`62bac000   advapi32   (deferred)             
+00007fff`62c80000 00007fff`62d29000   sechost    (deferred)             
+00007fff`62db0000 00007fff`62e7b000   kernel32   (export symbols)       kernel32.dll
+00007fff`62e80000 00007fff`62f59000   oleaut32   (deferred)             
+00007fff`62f80000 00007fff`63000000   ws2_32     (deferred)             
+00007fff`63120000 00007fff`632ba000   ole32      (deferred)             
+00007fff`63350000 00007fff`6351f000   user32     (deferred)             
+00007fff`63530000 00007fff`63596000   shlwapi    (deferred)             
+00007fff`63600000 00007fff`6362b000   gdi32      (deferred)             
+00007fff`63790000 00007fff`637c1000   imm32      (deferred)             
+00007fff`63ca0000 00007fff`63f07000   ntdll      (export symbols)       ntdll.dll
+!analyze -v
+No export analyze found
+Closing open log file C:\Users\Administrator\Documents\HardCore\outputs\repair_v92\native_exit\dbgeng_analysis.txt

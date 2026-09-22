@@ -55,7 +55,10 @@ func _settle_camera(camera: Camera2D) -> void:
 	## snaps 2D transforms to device pixels (G2 rendering stability), so
 	## the rendered center carries a <=1px quantization residue that never
 	## converges away; 1px is the practical settled threshold.
-	for _frame in 150:
+	# Headless process frames are not fixed at 60 Hz; bound actual elapsed
+	# time without changing the 1px convergence condition.
+	var deadline := Time.get_ticks_msec() + 2500
+	while Time.get_ticks_msec() < deadline:
 		if camera.get_screen_center_position().distance_to(
 			camera.global_position
 		) <= 1.0:

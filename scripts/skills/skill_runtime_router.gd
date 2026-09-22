@@ -212,6 +212,22 @@ static func _canonical_rejection_plan(
 	}
 
 
+static func taoist_melee_accuracy_bonus(rank: int) -> int:
+	var definition := SkillDataLoaderScript.skill("taoist.spiritual_warfare")
+	var plan := TaoistRuntimeScript.execute(
+		definition, {"rank": rank}, SkillRngScript.new(0)
+	)
+	var bonus := 0
+	for effect: Dictionary in plan.get("effects", []):
+		if (
+			str(effect.get("type", "")) == "passive_stat_modifier"
+			and str(effect.get("stat", "")) == "accuracy"
+			and "physical_melee_hit_checks" in effect.get("affects", [])
+		):
+			bonus += int(effect.get("value", 0))
+	return bonus
+
+
 static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 	var valid_melee_swing := bool(request.get("valid_melee_swing", false))
 	var body_mode := str(request.get("body_mode", "normal"))

@@ -197,7 +197,7 @@ func _run() -> void:
 	assert(panel.selected_bag_indices.size() == 2 and not panel.deposit_button.disabled, "切换仓库页错误清除了人物背包批次")
 	var refresh_before_deposit := panel._refresh_execution_count
 	panel._deposit()
-	assert(panel.deposit_button.get_meta("gothic_feedback_state", "") == "busy", "批量存入没有保留一帧暗红忙碌态")
+	assert(panel.deposit_button.get_meta("gothic_feedback_state", "") == "success", "同步批量存入结果没有立即呈现")
 	assert(panel._refresh_execution_count == refresh_before_deposit + 1, "批量存仓没有恰好执行一次 UI 刷新")
 	assert(panel._last_transfer_batch_result == {"operation": "deposit", "requested": 2, "transferred": 2, "remaining": 0, "complete": true, "failure_message": ""}, "批量存入结果合同错误")
 	await get_tree().process_frame
@@ -218,7 +218,7 @@ func _run() -> void:
 	assert(panel.deposit_button.disabled and not panel.withdraw_button.disabled, "选择仓库物品后取出按钮状态错误")
 	var refresh_before_withdraw := panel._refresh_execution_count
 	panel._withdraw()
-	assert(panel.withdraw_button.get_meta("gothic_feedback_state", "") == "busy", "批量取出没有保留一帧暗红忙碌态")
+	assert(panel.withdraw_button.get_meta("gothic_feedback_state", "") == "success", "同步批量取出结果没有立即呈现")
 	assert(panel._refresh_execution_count == refresh_before_withdraw + 1, "批量取仓没有恰好执行一次 UI 刷新")
 	assert(panel._last_transfer_batch_result == {"operation": "withdraw", "requested": 2, "transferred": 2, "remaining": 0, "complete": true, "failure_message": ""}, "批量取出结果合同错误")
 	await get_tree().process_frame
@@ -339,6 +339,8 @@ func _run_bank_transfer_ui_checks(panel: WarehousePanel) -> void:
 	panel._on_bank_transfer_pressed(true)
 	assert(panel._bank_transaction_serial == serial_before_duplicate, "pending 状态允许快速重复生成事务 ID")
 	assert(panel._last_bank_transfer_request == first_request, "快速重复点击改写了 pending 请求")
+	assert(PlayerState.gold == first_gold, "异步持久化完成前不应预先入账")
+	await _wait_bank_transfer(panel)
 	assert(PlayerState.gold == first_gold - amount, "共享金币存入没有按 100000 扣除身上金币")
 	assert(int(PlayerState.next_shared_gold_transaction_sequence()) == first_sequence + 1, "共享金币成功事务没有推进序列")
 	await get_tree().process_frame
@@ -359,8 +361,7 @@ func _run_bank_transfer_ui_checks(panel: WarehousePanel) -> void:
 	var stale_gold := PlayerState.gold
 	var stale_shared := PlayerState.shared_gold_balance()
 	panel._submit_bank_transfer(false, "warehouse-bank-stale-%d" % stale_sequence, stale_sequence)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _wait_bank_transfer(panel)
 	assert(str(panel._last_bank_transfer_result.get("reason", "")) == "stale_transaction_sequence", "stale_sequence 没有保留明确失败原因")
 	assert(PlayerState.gold == stale_gold and PlayerState.shared_gold_balance() == stale_shared, "stale_sequence 错误重放或改变了金币")
 	assert("金币：100000" in panel.bank_balance_label.text and "共享：200000" in panel.bank_balance_label.text, "stale_sequence 失败后没有刷新权威余额")
@@ -368,8 +369,7 @@ func _run_bank_transfer_ui_checks(panel: WarehousePanel) -> void:
 	assert(high_water_after_stale == stale_sequence - 1, "stale_sequence 失败后错误推进了事务序列")
 
 	panel._on_bank_transfer_pressed(false)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _wait_bank_transfer(panel)
 	assert(bool(panel._last_bank_transfer_result.get("success", false)), "stale_sequence 后正常新点击不可操作")
 	assert(PlayerState.gold == 200000 and PlayerState.shared_gold_balance() == amount, "共享金币取出后金币/余额错误")
 
@@ -406,18 +406,23 @@ func _run_bank_transfer_ui_checks(panel: WarehousePanel) -> void:
 	var failed_shared := PlayerState.shared_gold_balance()
 	PlayerState._test_fail_profile_write = true
 	panel._on_bank_transfer_pressed(true)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _wait_bank_transfer(panel)
 	PlayerState._test_fail_profile_write = false
 	assert(not bool(panel._last_bank_transfer_result.get("success", false)), "共享金币存档失败错误报告成功")
 	assert(str(panel._last_bank_transfer_result.get("reason", "")) == "save_failed", "共享金币存档失败原因未结构化保留")
 	assert(not panel._bank_transfer_pending and PlayerState.gold == failed_gold and PlayerState.shared_gold_balance() == failed_shared, "共享金币存档失败没有回滚或释放 pending")
 	assert(not panel.bank_deposit_button.disabled, "共享金币失败后存入按钮没有恢复可操作")
 	panel._on_bank_transfer_pressed(true)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _wait_bank_transfer(panel)
 	assert(bool(panel._last_bank_transfer_result.get("success", false)), "共享金币失败后重试不可操作")
 	assert(PlayerState.gold == failed_gold - amount and PlayerState.shared_gold_balance() == amount, "共享金币失败后重试结果错误")
+
+
+func _wait_bank_transfer(panel: WarehousePanel) -> void:
+	var deadline := Time.get_ticks_msec() + 3000
+	while panel._bank_transfer_pending and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	assert(not panel._bank_transfer_pending, "共享金币异步事务未能完成")
 
 
 func _prepare_bank_fixture() -> void:

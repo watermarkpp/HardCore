@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/hud_script_prefetch_exit_test.gd" id="1"]
+
+[node name="HUDScriptPrefetchExitTest" type="Node"]
+script = ExtResource("1")

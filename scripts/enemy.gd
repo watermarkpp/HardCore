@@ -93,6 +93,10 @@ const BOSS_TARGET_REEVALUATION_MAX_SECONDS := 0.35
 const BOSS_TARGET_REEVALUATION_STAGGER_SECONDS := 0.013
 const SUMMON_INTERCEPT_CONTACT_EPSILON_GU := 0.25
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
+## At-rest actors with no target/threat need only two local acquisition wakes
+## per second. Keep return/other maintenance and the shared target index at
+## their existing cadence; damage still wakes through the event path.
+const IDLE_ACQUISITION_INTERVAL_SECONDS := 0.5
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
 const BACKGROUND_WAKE_PHASE_SLOTS := 15
 ## The acquisition broadphase is screen-space only.  The exact phase below
@@ -510,7 +514,11 @@ var _terrain_has_failed_cell := false
 var _terrain_failed_cell_until_ms := 0
 
 
+var _last_damaging_pet: WeakRef
+
+
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	_last_damaging_pet = null
 	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
 	_hc_m30_attack_move_cutoff = INF
 	_hc_m30_attack_pose_remaining = 0.0
@@ -1098,6 +1106,16 @@ func _compile_direct_spell_runtime_stats(canonical_entry: Dictionary) -> void:
 	remove_meta("direct_spell_stats_rejection_reason")
 
 
+func effective_physical_defense() -> int:
+	var poison_value: Variant = get_meta("canonical_red_poison", {})
+	if not poison_value is Dictionary or poison_value.is_empty():
+		return maxi(0, defense)
+	if Time.get_ticks_msec() >= int(poison_value.get("expires_at_ms", 0)):
+		remove_meta("canonical_red_poison")
+		return maxi(0, defense)
+	return maxi(0, defense - maxi(0, int(poison_value.get("flat_ac_reduction", 0))))
+
+
 func direct_spell_runtime_stats_into(output: Dictionary) -> bool:
 	output.clear()
 	_record_performance_counter(&"direct_spell_stats_snapshot_count")
@@ -1639,10 +1657,13 @@ func _begin_autonomous_step_without_cadence(
 	if not bool(step.get("valid", false)):
 		return false
 	var target_ground_gu: Vector2 = step.get("target_ground_gu", Vector2.INF)
+	var continuous_endpoint := false
 	if _hc_polygon_step_override.is_finite():
 		target_ground_gu = _hc_polygon_step_override
+		continuous_endpoint = true
 	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and _hc_step_override.is_finite():
 		target_ground_gu = _hc_step_override
+		continuous_endpoint = true
 	if _hc_owned_movement_call and _hc_standard_melee():
 		_hc_motion_window = 0.0
 		_hc_window_remaining = INF
@@ -1665,8 +1686,12 @@ func _begin_autonomous_step_without_cadence(
 	_movement_step_epoch += 1
 	_movement_step_active = true
 	var step_direction_ground := (
-		MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
+		target_ground_gu - current_ground_gu if continuous_endpoint
+		else MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
 	)
+	# Continuous polygon pursuit can cross a cell boundary in a different
+	# direction from its displacement. Pose follows the committed displacement;
+	# cell-based movement retains its eight-neighbour facing contract.
 	movement_facing = _screen_facing_for_ground_direction(step_direction_ground)
 	facing = movement_facing
 	return true
@@ -2687,16 +2712,31 @@ func _enter_background_deep_sleep(initial_phase: bool) -> void:
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
 	_background_last_wakeup_msec = Time.get_ticks_msec()
-	var delay_seconds := BACKGROUND_AI_INTERVAL_SECONDS
+	var wake_interval := _background_wakeup_interval_seconds()
+	var delay_seconds := wake_interval
 	if initial_phase:
 		var phase_slot := _background_wakeup_phase_slot()
 		delay_seconds = (
-			BACKGROUND_AI_INTERVAL_SECONDS
+			wake_interval
 			* float(phase_slot + 1)
 			/ float(BACKGROUND_WAKE_PHASE_SLOTS)
 		)
+		if wake_interval == IDLE_ACQUISITION_INTERVAL_SECONDS:
+			# The timer already supplies the initial phase. A second independent
+			# retarget delay must not skip the first 0.5-second acquisition wake.
+			_retarget_timer = 0.0
 	_background_ai_timer = delay_seconds
 	_background_wakeup_timer.start(delay_seconds)
+
+
+func _background_wakeup_interval_seconds() -> float:
+	if is_instance_valid(target) or not _threat_table.is_empty() or _hc_damage_dirty or _movement_step_active:
+		return BACKGROUND_AI_INTERVAL_SECONDS
+	var spawn_position: Vector2 = get_meta("spawn_position", global_position)
+	var return_offset := _ground_delta_gu_between_screen_positions(global_position, spawn_position)
+	if return_offset.length_squared() > SPAWN_RETURN_EPSILON_GU * SPAWN_RETURN_EPSILON_GU:
+		return BACKGROUND_AI_INTERVAL_SECONDS
+	return IDLE_ACQUISITION_INTERVAL_SECONDS
 
 
 func _background_wakeup_phase_slot() -> int:
@@ -2722,7 +2762,7 @@ func _on_background_wakeup_timeout() -> void:
 	var elapsed_seconds := clampf(
 		float(maxi(1, now_msec - _background_last_wakeup_msec)) / 1000.0,
 		1.0 / 120.0,
-		BACKGROUND_AI_INTERVAL_SECONDS * 2.0,
+		maxf(BACKGROUND_AI_INTERVAL_SECONDS, _background_ai_timer) * 2.0,
 	)
 	_background_last_wakeup_msec = now_msec
 	if _death_pending or current_hp <= 0:
@@ -2758,9 +2798,9 @@ func _on_background_wakeup_timeout() -> void:
 		background_started_usec,
 	)
 	if _can_use_background_ai():
-		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+		_background_ai_timer = _background_wakeup_interval_seconds()
 		_background_last_wakeup_msec = Time.get_ticks_msec()
-		_background_wakeup_timer.start(BACKGROUND_AI_INTERVAL_SECONDS)
+		_background_wakeup_timer.start(_background_ai_timer)
 	else:
 		_leave_background_deep_sleep()
 
@@ -3058,8 +3098,23 @@ static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVec
 	return result
 
 
-func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
-	if _hc_standard_melee():
+func _point_inside_safe_zone(point_screen_px: Vector2, known_hc_cache := false) -> bool:
+	# Dungeon contexts often contain no safe zones. Their answer is independent
+	# of position, projection or physics tick: avoid building a point-cache scope
+	# on every target, movement and narrow-phase query. Read live authority each
+	# time so even a same-tick edit or invalidation remains observable.
+	# A scalar sentinel avoids allocating a default Dictionary per query;
+	# null is not a silent missing-metadata default in Godot.
+	var context: Variant = get_meta("safe_zone_context", false)
+	if context is Dictionary and not context.is_empty():
+		if not bool(context.get("valid", false)):
+			return true
+		var zones: Variant = context.get("zones", null)
+		if zones is Array and zones.is_empty():
+			return false
+	# HC callers already selected this lane. Reusing that decision avoids a
+	# duplicate policy lookup while keeping the same live authority and cache.
+	if known_hc_cache or _hc_standard_melee():
 		return _hc_point_inside_safe_zone(point_screen_px)
 	return _point_inside_safe_zone_uncached(point_screen_px)
 
@@ -3070,11 +3125,11 @@ func _point_inside_safe_zone_uncached(point_screen_px: Vector2) -> bool:
 	var zones: Array = []
 	var uses_compiled_context := false
 	var context_valid := true
-	var context: Variant = get_meta("safe_zone_context", {})
+	var context: Variant = get_meta("safe_zone_context", false)
 	if context is Dictionary and not (context as Dictionary).is_empty():
 		uses_compiled_context = true
 		context_valid = bool((context as Dictionary).get("valid", false))
-		var context_zones: Variant = (context as Dictionary).get("zones", [])
+		var context_zones: Variant = (context as Dictionary).get("zones", false)
 		if context_zones is Array:
 			zones = context_zones as Array
 	else:
@@ -3091,7 +3146,7 @@ func _point_inside_safe_zone_uncached(point_screen_px: Vector2) -> bool:
 					runtime_parent.call("_safe_zone_context_is_valid")
 				)
 		else:
-			var legacy_zones: Variant = get_meta("safe_zones", [])
+			var legacy_zones: Variant = get_meta("safe_zones", false)
 			if legacy_zones is Array:
 				zones = legacy_zones as Array
 	if not context_valid:
@@ -6225,6 +6280,13 @@ func _apply_damage_core(
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
 	var actual_damage := hp_before_damage - current_hp
+	if (
+		actual_damage > 0 and attacker is SummonActor
+		and (attacker as SummonActor).owner_player == primary_target
+	):
+		# Remember only actual pet damage, not target acquisition or a missed
+		# swing. Player damage does not replace the last participating pet.
+		_last_damaging_pet = weakref(attacker)
 	if actual_damage > 0 and is_instance_valid(attacker):
 		_wake_dormant_from_received_damage(attacker, actual_damage)
 		_hc_received_damage(attacker, float(actual_damage))
@@ -6314,7 +6376,26 @@ func apply_source_direct_magic_walk_delay(random_0_to_999 := -1) -> void:
 ## delay. Reuses the shared core with causes_struck=false and a shared empty
 ## context (no per-tick Dictionary allocation).
 func _apply_poison_tick_damage() -> void:
+	var alive_before := current_hp > 0 and not _death_pending and not _dying
 	_apply_damage_core(poison_damage, null, EMPTY_DAMAGE_CONTEXT, false)
+	if not alive_before or current_hp > 0 or _last_damaging_pet == null:
+		return
+	var participant: Object = _last_damaging_pet.get_ref()
+	_last_damaging_pet = null
+	if not participant is SummonActor or not is_instance_valid(participant):
+		return
+	var pet := participant as SummonActor
+	if (
+		pet.is_queued_for_deletion() or pet.current_hp <= 0
+		or pet.state in [SummonActor.SummonState.DEAD, SummonActor.SummonState.EXPIRED]
+		or pet.runtime_map_id != runtime_map_id
+		or not is_instance_valid(pet.owner_player)
+		or pet.owner_player != primary_target or pet.owner_player.current_hp <= 0
+	):
+		return
+	# User rule: poison is not an owner last hit. Only the last living pet
+	# that damaged this monster receives credit; never fall back to another.
+	pet.gain_growth_from_kill(level)
 
 
 func can_receive_damage() -> bool:
@@ -6721,7 +6802,8 @@ func _retarget_internal(delta := 0.0) -> void:
 	)
 	if charm_time > 0.0:
 		return
-	_decay_threat(delta)
+	if not _threat_table.is_empty():
+		_decay_threat(delta)
 	_retarget_timer = maxf(0.0, _retarget_timer - delta)
 	# Release invalid, protected, or disengaged targets before the cadence gate.
 	# They can remain valid Godot Objects during a death presentation, and a
@@ -6758,6 +6840,8 @@ func _retarget_internal(delta := 0.0) -> void:
 		if _retarget_timer > 0.0 and delta > 0.0:
 			return
 	var acquiring_without_current_target := not is_instance_valid(target)
+	var has_threat_candidates := not _threat_table.is_empty()
+	var idle_acquisition := acquiring_without_current_target and not has_threat_candidates
 	var reevaluating_player_pursuit := (
 		is_instance_valid(target) and target is PlayerCharacter
 	)
@@ -6782,7 +6866,6 @@ func _retarget_internal(delta := 0.0) -> void:
 			intercepting_summon = current_summon
 			intercepting_summon_distance_gu = current_summon_distance_gu
 	var chose_threat_candidate := false
-	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var leash_radius_gu := aggro_radius_gu * _leash_multiplier
 	var candidates:Array=[]
 	if is_instance_valid(primary_target):candidates.append(primary_target)
@@ -6809,25 +6892,41 @@ func _retarget_internal(delta := 0.0) -> void:
 	# target moved or spawned after the last shared cache refresh.  This preserves
 	# immediate threat handoff and prevents a stale broadphase from clearing it.
 	_append_live_target_candidate(candidates, target)
-	for raw_record: Variant in _threat_table.values():
-		if not raw_record is Dictionary:
-			continue
-		var record: Dictionary = raw_record
-		var raw_ref: Variant = record.get("node")
-		if raw_ref is WeakRef:
-			_append_live_target_candidate(candidates, raw_ref.get_ref())
+	if has_threat_candidates:
+		for raw_record: Variant in _threat_table.values():
+			if not raw_record is Dictionary:
+				continue
+			var record: Dictionary = raw_record
+			var raw_ref: Variant = record.get("node")
+			if raw_ref is WeakRef:
+				_append_live_target_candidate(candidates, raw_ref.get_ref())
 	for node:Node2D in candidates:
+		if not is_instance_valid(node) or node.is_queued_for_deletion():
+			continue
+		var candidate_delta_ground_gu := _ground_delta_gu_between_screen_positions(
+			global_position, node.global_position,
+		)
+		# A genuinely idle actor only needs its exact acquisition rectangle.
+		# Range rejection precedes candidate safety/threat/LOS work; damage
+		# threat and retained pursuit keep their existing, wider contracts.
+		if idle_acquisition and not _initial_acquisition_contains_ground_delta_gu(candidate_delta_ground_gu):
+			continue
 		if not _target_candidate_is_live(node):continue
 		if _point_inside_safe_zone(node.global_position):continue
-		var distance_gu := _ground_delta_gu_between_screen_positions(
-			global_position,
-			node.global_position,
-		).length()
-		var spawn_distance_gu := _ground_delta_gu_between_screen_positions(
-			spawn_position,
-			node.global_position,
-		).length()
-		var threat:=_threat_for(node)
+		var threat := _threat_for(node) if has_threat_candidates else 0.0
+		if acquiring_without_current_target and threat <= 0.0:
+			if not idle_acquisition and not _initial_acquisition_contains_ground_delta_gu(candidate_delta_ground_gu):
+				continue
+			if not _initial_acquisition_static_los_clear(node):
+				continue
+			# Initial acquisition is centered on the current actor, independent
+			# of spawn/leash. Preserve first-seen Manhattan-distance ordering.
+			var manhattan_gu := absf(candidate_delta_ground_gu.x) + absf(candidate_delta_ground_gu.y)
+			if not chose_threat_candidate and manhattan_gu < best_initial_manhattan_gu:
+				best_initial_manhattan_gu = manhattan_gu
+				chosen = node
+			continue
+		var distance_gu := candidate_delta_ground_gu.length()
 		if (
 			reevaluating_player_pursuit
 			and node is SummonActor
@@ -6847,43 +6946,17 @@ func _retarget_internal(delta := 0.0) -> void:
 		# existing leash-sized combat engagement envelope.
 		if threat > 0.0 and not retaining_current_target and distance_gu > leash_radius_gu:
 			continue
-		if threat <= 0.0:
-			if acquiring_without_current_target:
-				var acquisition_delta_ground_gu := (
-					_ground_delta_gu_between_screen_positions(
-						global_position,
-						node.global_position,
-					)
-				)
-				if not _initial_acquisition_contains_ground_delta_gu(
-					acquisition_delta_ground_gu
-				):
-					continue
-				if not _initial_acquisition_static_los_clear(node):
-					continue
-				# M02A first acquisition is centered on the actor's current cell.
-				# Spawn return/leash does not narrow this exact ViewRange branch.
-				# Preserve stable first-seen ordering for equal Manhattan distance.
-				var manhattan_gu := (
-					absf(acquisition_delta_ground_gu.x)
-					+ absf(acquisition_delta_ground_gu.y)
-				)
-				if (
-					not chose_threat_candidate
-					and manhattan_gu < best_initial_manhattan_gu
-				):
-					best_initial_manhattan_gu = manhattan_gu
-					chosen = node
-				continue
-			elif not retaining_current_target and distance_gu > aggro_radius_gu:
-				continue
+		if threat <= 0.0 and not retaining_current_target and distance_gu > aggro_radius_gu:
+			continue
 		# First acquisition is centered on the actor's current cell.  A stale
 		# spawn position must not narrow the exact per-monster ViewRange; the
 		# leash resumes once a target or threat already exists.
 		if (
 			not acquiring_without_current_target
 			and not retaining_current_target
-			and spawn_distance_gu > leash_radius_gu
+			and _ground_delta_gu_between_screen_positions(
+				get_meta("spawn_position", global_position), node.global_position,
+			).length() > leash_radius_gu
 		):
 			continue
 		var distance_score := (
@@ -7604,12 +7677,14 @@ func _hc_preferred(hit_target: Node2D) -> float:
 	return HCPolicy.preferred(_contact_distance_gu_to_target(hit_target))
 
 func _hc_target_usable(hit_target: Node2D) -> bool:
+	if not _target_candidate_is_live(hit_target):
+		return false
+	var standard_melee := _hc_standard_melee()
 	return (
-		_target_candidate_is_live(hit_target)
-		# Standard melee's player gate already delegates to the cached point
-		# query below. Special/ranged actors retain their uncached player gate.
-		and (_hc_standard_melee() or not _target_is_safe_player(hit_target))
-		and not _hc_point_inside_safe_zone(hit_target.global_position)
+		# Use the shared entry so compiled empty/invalid contexts resolve before
+		# point-cache scope construction. Special actors retain their player gate.
+		(standard_melee or not _target_is_safe_player(hit_target))
+		and not _point_inside_safe_zone(hit_target.global_position, standard_melee)
 		and not _dying and not _death_pending and current_hp > 0
 		and not is_queued_for_deletion() and is_inside_tree()
 	)
@@ -8018,8 +8093,10 @@ func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
 	var safe_owner_id := 0
 	var safe_context_revision := -1
 	if include_safe_zone_owner:
-		var local_context: Variant = get_meta("safe_zone_context", {})
-		var legacy_context: Variant = get_meta("safe_zones", [])
+		# Missing metadata is only type-tested below. Scalar sentinels avoid
+		# allocating two empty containers on every cache-scope validation.
+		var local_context: Variant = get_meta("safe_zone_context", false)
+		var legacy_context: Variant = get_meta("safe_zones", false)
 		if local_context is Dictionary and not (local_context as Dictionary).is_empty():
 			safe_context_revision = int((local_context as Dictionary).get("revision", -1))
 		safe_owner_id = (
@@ -8212,7 +8289,7 @@ func _hc_point_walkable_uncached(p: Vector2) -> bool:
 	if not MonsterTerrainNavigationPolicyScript.point_walkable(_terrain_navigation_context, p, combat_radius_gu):
 		return false
 	var px := _ground_gu_to_screen_position_px(p)
-	return px.is_finite() and not _hc_point_inside_safe_zone(px) and not WorldSpatialRulesScript.environment_blocks_actor_screen_px(environment_blocker, px, collision_radius_px)
+	return px.is_finite() and not _point_inside_safe_zone(px, true) and not WorldSpatialRulesScript.environment_blocks_actor_screen_px(environment_blocker, px, collision_radius_px)
 
 func _hc_goal_points(anchor: Vector2, preferred_tier: bool) -> Dictionary:
 	var cache_key := _hc_goal_cache_key(anchor, preferred_tier)

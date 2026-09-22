@@ -174,7 +174,8 @@ func _run() -> void:
 		{"name": "B", "count": 1},
 	]
 	_hud.warehouse_sort_requested.emit()
-	assert(PlayerState.warehouse_inventory.size() == 3)
+	assert(PlayerState.warehouse_inventory.size() == 4, "按页整理必须保留空槽和后续页的绝对索引")
+	assert(PlayerState.warehouse_inventory[3].is_empty())
 	assert(str(PlayerState.warehouse_inventory[0].get("name", "")) == "A")
 	assert(str(PlayerState.warehouse_inventory[1].get("name", "")) == "B")
 	assert(str(PlayerState.warehouse_inventory[2].get("name", "")) == "C")

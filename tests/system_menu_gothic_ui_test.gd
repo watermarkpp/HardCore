@@ -64,13 +64,15 @@ func _run() -> void:
 	assert(sfx_slider.get_meta("setting_id", "") == "audio.sfx.volume", "游戏音效稳定设置 ID 错误")
 	assert(music_slider.step == 1.0 and not music_slider.scrollable and not sfx_slider.scrollable, "音量滑条步进/滚轮行为错误")
 	# 旧断言：MusicFrame/SFXFrame 大按钮背景 + 标题/状态/开关都收在框内、状态文字对齐。
-	# 新断言：滑条行容器 MusicVolume/SFXVolume 同一布局（行距 112）、Caption/Percent/Slider
+	# v81 已接受三行设置布局（4f4462ad）：音量行距 82，为物品过滤保留第三行。
+	# 滑条行容器 MusicVolume/SFXVolume 同一布局、Caption/Percent/Slider
 	# 都收在行内安全区、百分比文字 x 对齐、保存提示存在。
-	# 依据：设置页滑条行布局（calibration_layout_revision 5）。
+	# 依据：现有 v81 设置布局；本轮只修反馈时序，不改人工布局。
 	var music_row: Control = menu.settings_page.get_node("MusicVolume")
 	var sfx_row: Control = menu.settings_page.get_node("SFXVolume")
 	assert(music_row.size == sfx_row.size and music_row.size == Vector2(356, 76), "两行声音设置没有使用同一布局")
-	assert(music_row.position == sfx_row.position - Vector2(0, 112), "两行声音设置行距不一致")
+	assert(music_row.position == Vector2(72, 148) and sfx_row.position == Vector2(72, 230), "已接受音量行位置变化")
+	assert(menu.settings_page.get_node("LootFilter").position == Vector2(72, 312), "第三行物品过滤位置变化")
 	var music_caption: Label = menu.settings_page.get_node("MusicVolume/Caption")
 	var sfx_caption: Label = menu.settings_page.get_node("SFXVolume/Caption")
 	assert(music_caption.text == "游戏音乐" and sfx_caption.text == "游戏音效", "声音标题错误")

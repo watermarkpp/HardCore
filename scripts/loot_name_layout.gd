@@ -148,7 +148,7 @@ static func _nearest_free_offset(
 			var center := home_center + direction * (float(ring) * RING_STEP)
 			var origin := center - plate_size * 0.5
 			var overlap := _overlap_area(
-				origin, plate_size, placed_index, icon_index, owner_id)
+				origin, plate_size, placed_index, icon_index, owner_id, best_overlap)
 			if overlap <= 0.0:
 				return center - home_center
 			if overlap < best_overlap:
@@ -168,6 +168,7 @@ static func _overlap_area(
 	placed_index: Dictionary,
 	icon_index: Dictionary,
 	owner_id: int,
+	stop_at := INF,
 ) -> float:
 	var plate_query := Rect2(origin, plate_size).grow(GAP * 0.5)
 	var icon_query := Rect2(origin, plate_size)
@@ -177,6 +178,11 @@ static func _overlap_area(
 			var other: Rect2 = (entry as Array)[0]
 			if plate_query.intersects(other):
 				total += plate_query.intersection(other).get_area()
+				# Areas are nonnegative. Once this candidate cannot beat the best
+				# preceding candidate, its remaining intersections cannot affect
+				# either the winner or the deterministic tie order.
+				if total >= stop_at:
+					return total
 		for entry: Variant in icon_index.get(cell, []):
 			var packed: Array = entry
 			if int(packed[1]) == owner_id:
@@ -184,6 +190,8 @@ static func _overlap_area(
 			var other: Rect2 = packed[0]
 			if icon_query.intersects(other):
 				total += icon_query.intersection(other).get_area()
+				if total >= stop_at:
+					return total
 	return total
 
 

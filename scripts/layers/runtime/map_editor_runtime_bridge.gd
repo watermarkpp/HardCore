@@ -731,6 +731,13 @@ static func _combat_spawn(
 		# the frozen special_normal tier.
 		respawn_policy_id = MonsterRespawnPolicyScript.SPECIAL_NORMAL
 		respawn_seconds = MonsterRespawnPolicyScript.SPECIAL_NORMAL_SECONDS
+	elif classification in [MonsterRespawnPolicyScript.ELITE, MonsterRespawnPolicyScript.BOSS]:
+		# Elite/Boss cadence belongs to the canonical monster, not the map's
+		# historical ordinary-slot policy. Classification migrations keep the
+		# authored positions; project their new authority at this boundary just
+		# as for special_normal, without rewriting or republishing user maps.
+		respawn_policy_id = classification
+		respawn_seconds = MonsterRespawnPolicyScript.seconds_for(classification)
 	if respawn_override > 0.0:
 		respawn_seconds = respawn_override
 	return {

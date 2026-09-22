@@ -149,8 +149,18 @@ func _run() -> void:
 	assert(not enemy._can_use_background_ai(), "damage threat did not wake the actor")
 	var foreground_before := int(background_metrics.foreground_ai_ticks)
 	enemy._physics_process(1.0 / 60.0)
+	var projections_before := int(EnemyActor.performance_diagnostics().enemy_projection_calls)
 	var projection_probe := enemy._screen_position_px_to_ground_position_gu(enemy.global_position)
-	assert(projection_probe.is_finite())
+	assert(projection_probe.is_equal_approx(_screen_to_ground(enemy.global_position)))
+	assert(int(EnemyActor.performance_diagnostics().enemy_projection_calls) == projections_before,
+		"self-position must reuse the valid spatial projection snapshot")
+	# R14 deliberately removed repeated projection of this exact actor position.
+	# Exercise real cache misses to verify the timing probe, without requiring
+	# the optimized self-position read to manufacture work for the counter.
+	for sample in range(32):
+		var point := enemy.global_position + Vector2(0.5 + sample * 0.125, 3.25)
+		var projected := enemy._screen_position_px_to_ground_position_gu(point)
+		assert(projected.is_equal_approx(_screen_to_ground(point)))
 	var wake_metrics := EnemyActor.performance_diagnostics()
 	assert(
 		int(wake_metrics.foreground_ai_ticks) == foreground_before + 1,
@@ -158,7 +168,7 @@ func _run() -> void:
 	)
 	assert(int(wake_metrics.enemy_physics_calls) == 1)
 	assert(int(wake_metrics.enemy_physics_usec) > 0)
-	assert(int(wake_metrics.enemy_projection_calls) > 0)
+	assert(int(wake_metrics.enemy_projection_calls) == projections_before + 32)
 	assert(int(wake_metrics.enemy_projection_usec) > 0)
 	enemy._threat_table.clear()
 	enemy.target = null

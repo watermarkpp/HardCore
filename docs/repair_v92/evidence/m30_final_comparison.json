@@ -1,0 +1,1107 @@
+{
+  "schema": "hardcore.v92.m30_comparison.v1",
+  "device_test": "NOT_RUN",
+  "notes": [
+    "Headless process intervals are not phone FPS.",
+    "Physics sample boundaries may include extra ticks; normalize enemy CPU by calls.",
+    "Attack cadence uses wall time; report actual behavior counts without claiming exact equality."
+  ],
+  "comparisons": [
+    {
+      "fixture": "crowd",
+      "inputs": [
+        {
+          "path": "outputs/hc_monster_ai_package/rev07_v92_baseline_crowd.json",
+          "sha256": "4ada136d193a07eb108d6f607f26d7998b9f54c33b9debf9d71dba9b55689ec8"
+        },
+        {
+          "path": "outputs/hc_monster_ai_package/rev07_v92_final_crowd.json",
+          "sha256": "88809bfe414840526ac12f8364b156f9c6335e93a01b0017989131b313804e9d"
+        }
+      ],
+      "matching_metadata": {
+        "fixture_contract": "hardcore.rev07.real_actor_world_scenarios.v1",
+        "counts": [
+          30
+        ],
+        "layout_seed": 20260909,
+        "map_id": 1,
+        "monster_id": 64,
+        "sample_boundary": "physics_frame_then_process_frame",
+        "sample_frames": 320,
+        "warmup_frames": 45,
+        "scenarios": [
+          "open_pursuit",
+          "sustained_close_attacks",
+          "dense_crowd"
+        ]
+      },
+      "rows": [
+        {
+          "scenario": "open_pursuit",
+          "monster_count": 30,
+          "actual_actor_count": 30,
+          "layout_signature": "354fb37b78484f78705e8ed272e1d0a9952d83104f5c459fdbd572798ec7ca5a",
+          "fire_wall_fields": 0,
+          "blocked_cell_count": 0,
+          "world_body_count": 0,
+          "process_interval_ms": {
+            "before": {
+              "max": 20.431,
+              "min": 0.012,
+              "p50": 5.731,
+              "p95": 15.983,
+              "p99": 18.734,
+              "samples": 772
+            },
+            "after": {
+              "max": 20.856,
+              "min": 0.012,
+              "p50": 5.251,
+              "p95": 16.357,
+              "p99": 19.228,
+              "samples": 772
+            }
+          },
+          "p95_change_percent": 2.33998623537508,
+          "enemy_physics_usec_per_call": [
+            264.88354166666664,
+            276.99333333333334
+          ],
+          "behavior": {
+            "sample_physics_ticks": [
+              320,
+              320
+            ],
+            "total_attack_starts": [
+              1,
+              1
+            ],
+            "total_attack_damage_applications": [
+              1,
+              1
+            ],
+            "total_motion_frames": [
+              7966,
+              8105
+            ],
+            "total_motion_gu": [
+              132.445354101132,
+              134.772644156896
+            ]
+          },
+          "probe_usec_per_call": {
+            "_advance_autonomous_step": [
+              111.1877428249154,
+              117.6662155511811
+            ],
+            "_audio_observe_visual_state": [
+              0.6703125,
+              0.6814583333333334
+            ],
+            "_audio_try_enter_combat_session": [
+              0.8459375,
+              0.8580208333333333
+            ],
+            "_can_use_background_ai": [
+              11.8915625,
+              12.365729166666666
+            ],
+            "_handle_safe_zone_target_return": [
+              9.0353125,
+              9.522916666666667
+            ],
+            "_hc_access": [
+              17.477599499895813,
+              18.102532041262894
+            ],
+            "_hc_frontline_at": [
+              18.0,
+              20.0
+            ],
+            "_hc_motion_clear": [
+              18.607618651124064,
+              18.386602771121993
+            ],
+            "_hc_neighbor": [
+              216.621853898097,
+              226.40176750509858
+            ],
+            "_hc_point_inside_safe_zone": [
+              6.89636467092369,
+              7.300136030430511
+            ],
+            "_hc_point_walkable": [
+              37.090685672155324,
+              39.015429635541366
+            ],
+            "_hc_preferred": [
+              1.871368926001599,
+              1.9594521535411786
+            ],
+            "_hc_prepare_flank_batch": [
+              446.01311475409835,
+              456.0839160839161
+            ],
+            "_hc_refresh_observation": [
+              2.950684273709484,
+              3.1163747217652182
+            ],
+            "_hc_standard_melee": [
+              1.2062462609452331,
+              1.2323244592907514
+            ],
+            "_hc_static_query_scope": [
+              3.2486874956249854,
+              3.243072930062899
+            ],
+            "_hc_target_usable": [
+              10.636086238807463,
+              11.014758855313188
+            ],
+            "_hc_tick_melee": [
+              176.39625,
+              183.17072916666666
+            ],
+            "_hc_try_start": [
+              19.640475197999166,
+              20.396039603960396
+            ],
+            "_hc_world_between": [
+              29.6890625,
+              31.120957580848383
+            ],
+            "_spatial_index_update": [
+              5.725703288617196,
+              5.997135314272875
+            ],
+            "_update_area_attack": [
+              0.8944791666666667,
+              0.9313541666666667
+            ],
+            "_update_behavior_summon": [
+              0.70125,
+              0.7320833333333333
+            ],
+            "_update_entrapment_state": [
+              0.9271875,
+              0.9447916666666667
+            ],
+            "_update_natural_regen": [
+              3.230729166666667,
+              3.21625
+            ],
+            "_update_pending_attack": [
+              0.646875,
+              0.6759375
+            ],
+            "_update_status_effects": [
+              2.0852083333333336,
+              2.0839583333333334
+            ]
+          },
+          "fire_wall_diagnostics": [
+            [],
+            []
+          ]
+        },
+        {
+          "scenario": "sustained_close_attacks",
+          "monster_count": 30,
+          "actual_actor_count": 30,
+          "layout_signature": "d8aa2e3a683f2ffd4eb01cf06a37e345d7abd707a88e8cb51ce594703b72f48c",
+          "fire_wall_fields": 0,
+          "blocked_cell_count": 0,
+          "world_body_count": 0,
+          "process_interval_ms": {
+            "before": {
+              "max": 24.238,
+              "min": 0.017,
+              "p50": 5.313,
+              "p95": 18.851,
+              "p99": 22.875,
+              "samples": 759
+            },
+            "after": {
+              "max": 23.813,
+              "min": 0.017,
+              "p50": 4.766,
+              "p95": 19.398,
+              "p99": 22.946,
+              "samples": 765
+            }
+          },
+          "p95_change_percent": 2.9017028274362033,
+          "enemy_physics_usec_per_call": [
+            295.9242708333333,
+            306.8016666666667
+          ],
+          "behavior": {
+            "sample_physics_ticks": [
+              320,
+              320
+            ],
+            "total_attack_starts": [
+              36,
+              36
+            ],
+            "total_attack_damage_applications": [
+              36,
+              36
+            ],
+            "total_motion_frames": [
+              1596,
+              1574
+            ],
+            "total_motion_gu": [
+              26.5156998600578,
+              26.1334647597978
+            ]
+          },
+          "probe_usec_per_call": {
+            "_advance_autonomous_step": [
+              124.2531328320802,
+              129.505082592122
+            ],
+            "_audio_observe_visual_state": [
+              0.7007291666666666,
+              0.6944791666666666
+            ],
+            "_audio_try_enter_combat_session": [
+              0.8314583333333333,
+              0.8507291666666666
+            ],
+            "_can_use_background_ai": [
+              13.800208333333334,
+              14.143958333333334
+            ],
+            "_handle_safe_zone_target_return": [
+              9.145833333333334,
+              9.679479166666667
+            ],
+            "_hc_access": [
+              38.02447965941344,
+              38.589522232734154
+            ],
+            "_hc_frontline_at": [
+              40.468849840255594,
+              39.02163461538461
+            ],
+            "_hc_motion_clear": [
+              25.420646766169153,
+              25.332916770807298
+            ],
+            "_hc_neighbor": [
+              173.9635319677219,
+              179.8769446172993
+            ],
+            "_hc_point_inside_safe_zone": [
+              6.871573564732316,
+              7.149195982232678
+            ],
+            "_hc_point_walkable": [
+              33.62810029980921,
+              36.152009358656755
+            ],
+            "_hc_preferred": [
+              1.6934205311137536,
+              1.8126818302036498
+            ],
+            "_hc_prepare_flank_batch": [
+              388.044703595724,
+              411.0424481737414
+            ],
+            "_hc_refresh_observation": [
+              2.53486561783022,
+              2.6400459166939982
+            ],
+            "_hc_standard_melee": [
+              1.2604793774001977,
+              1.2830737512502808
+            ],
+            "_hc_static_query_scope": [
+              3.185059176548016,
+              3.1351559620732403
+            ],
+            "_hc_target_usable": [
+              10.534801249139893,
+              10.853542306470402
+            ],
+            "_hc_tick_melee": [
+              205.15708333333333,
+              210.97375
+            ],
+            "_hc_try_start": [
+              14.042229560692485,
+              14.500100060036022
+            ],
+            "_hc_world_between": [
+              21.837006515906477,
+              23.26135051943055
+            ],
+            "_spatial_index_update": [
+              3.3469496967534784,
+              3.39544235924933
+            ],
+            "_update_area_attack": [
+              0.8782291666666666,
+              0.92875
+            ],
+            "_update_behavior_summon": [
+              0.7220833333333333,
+              0.7426041666666666
+            ],
+            "_update_entrapment_state": [
+              0.8646875,
+              0.91125
+            ],
+            "_update_natural_regen": [
+              3.26625,
+              3.18125
+            ],
+            "_update_pending_attack": [
+              0.6580208333333334,
+              0.6679166666666667
+            ],
+            "_update_status_effects": [
+              2.082708333333333,
+              2.065625
+            ]
+          },
+          "fire_wall_diagnostics": [
+            [],
+            []
+          ]
+        },
+        {
+          "scenario": "dense_crowd",
+          "monster_count": 30,
+          "actual_actor_count": 30,
+          "layout_signature": "fbc5d4a3c4b80553c6c829a36c35f20c0a762223ac94a003eae8a3b1a540385e",
+          "fire_wall_fields": 0,
+          "blocked_cell_count": 0,
+          "world_body_count": 0,
+          "process_interval_ms": {
+            "before": {
+              "max": 22.42,
+              "min": 0.016,
+              "p50": 5.681,
+              "p95": 18.961,
+              "p99": 21.444,
+              "samples": 769
+            },
+            "after": {
+              "max": 22.438,
+              "min": 0.041,
+              "p50": 5.212,
+              "p95": 18.927,
+              "p99": 20.722,
+              "samples": 773
+            }
+          },
+          "p95_change_percent": -0.17931543694952312,
+          "enemy_physics_usec_per_call": [
+            285.0864583333333,
+            298.8853125
+          ],
+          "behavior": {
+            "sample_physics_ticks": [
+              320,
+              320
+            ],
+            "total_attack_starts": [
+              29,
+              29
+            ],
+            "total_attack_damage_applications": [
+              29,
+              29
+            ],
+            "total_motion_frames": [
+              2020,
+              2010
+            ],
+            "total_motion_gu": [
+              33.5717637985363,
+              33.4196623616153
+            ]
+          },
+          "probe_usec_per_call": {
+            "_advance_autonomous_step": [
+              124.75592885375494,
+              131.4175769612711
+            ],
+            "_audio_observe_visual_state": [
+              0.6776041666666667,
+              0.69625
+            ],
+            "_audio_try_enter_combat_session": [
+              0.8404166666666667,
+              0.8444791666666667
+            ],
+            "_can_use_background_ai": [
+              13.438854166666667,
+              14.041458333333333
+            ],
+            "_handle_safe_zone_target_return": [
+              9.070625,
+              9.708645833333334
+            ],
+            "_hc_access": [
+              32.63179965055329,
+              33.555659059152305
+            ],
+            "_hc_frontline_at": [
+              38.147750511247445,
+              37.62820512820513
+            ],
+            "_hc_motion_clear": [
+              26.402979469203807,
+              26.3430115635998
+            ],
+            "_hc_neighbor": [
+              171.52280348759223,
+              179.66846179737462
+            ],
+            "_hc_point_inside_safe_zone": [
+              6.665004985044866,
+              7.059365420226258
+            ],
+            "_hc_point_walkable": [
+              30.160953800298063,
+              33.02650097319958
+            ],
+            "_hc_preferred": [
+              1.7303751995742416,
+              1.8322563453467458
+            ],
+            "_hc_prepare_flank_batch": [
+              367.1781115879828,
+              393.7011866235167
+            ],
+            "_hc_refresh_observation": [
+              2.5319175360158965,
+              2.6729502423664915
+            ],
+            "_hc_standard_melee": [
+              1.249997526735984,
+              1.2813330424780867
+            ],
+            "_hc_static_query_scope": [
+              3.1595445859139364,
+              3.1606655535724566
+            ],
+            "_hc_target_usable": [
+              10.502393099458265,
+              10.967085546032914
+            ],
+            "_hc_tick_melee": [
+              194.945,
+              203.10260416666668
+            ],
+            "_hc_try_start": [
+              15.787178414557625,
+              16.273363997491114
+            ],
+            "_hc_world_between": [
+              23.383509833585478,
+              25.045099739809192
+            ],
+            "_spatial_index_update": [
+              3.600446812167039,
+              3.6918644650842793
+            ],
+            "_update_area_attack": [
+              0.8757291666666667,
+              0.9340625
+            ],
+            "_update_behavior_summon": [
+              0.7027083333333334,
+              0.7489583333333333
+            ],
+            "_update_entrapment_state": [
+              0.883125,
+              0.9282291666666667
+            ],
+            "_update_natural_regen": [
+              3.2113541666666667,
+              3.2291666666666665
+            ],
+            "_update_pending_attack": [
+              0.6411458333333333,
+              0.675
+            ],
+            "_update_status_effects": [
+              2.0876041666666665,
+              2.0752083333333333
+            ]
+          },
+          "fire_wall_diagnostics": [
+            [],
+            []
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "aoe",
+      "inputs": [
+        {
+          "path": "outputs/hc_monster_ai_package/rev07_v92_baseline_aoe.json",
+          "sha256": "9d3a81234548f68ff3acbabc72b51696ef4881e94240e2027c7625bbb86d2c9f"
+        },
+        {
+          "path": "outputs/hc_monster_ai_package/rev07_v92_final_aoe.json",
+          "sha256": "f8f463cc8374f3c617a6e13d991265f93d6930b6f501e63d3882dcf920264b96"
+        }
+      ],
+      "matching_metadata": {
+        "fixture_contract": "hardcore.rev07.real_actor_world_scenarios.v1",
+        "counts": [
+          30
+        ],
+        "layout_seed": 20260909,
+        "map_id": 1,
+        "monster_id": 64,
+        "sample_boundary": "physics_frame_then_process_frame",
+        "sample_frames": 320,
+        "warmup_frames": 45,
+        "scenarios": [
+          "sustained_close_attacks"
+        ]
+      },
+      "rows": [
+        {
+          "scenario": "sustained_close_attacks",
+          "monster_count": 30,
+          "actual_actor_count": 30,
+          "layout_signature": "d8aa2e3a683f2ffd4eb01cf06a37e345d7abd707a88e8cb51ce594703b72f48c",
+          "fire_wall_fields": 6,
+          "blocked_cell_count": 0,
+          "world_body_count": 0,
+          "process_interval_ms": {
+            "before": {
+              "max": 26.792,
+              "min": 0.108,
+              "p50": 5.446,
+              "p95": 18.867,
+              "p99": 25.393,
+              "samples": 750
+            },
+            "after": {
+              "max": 26.337,
+              "min": 0.167,
+              "p50": 4.893,
+              "p95": 20.249,
+              "p99": 24.087,
+              "samples": 754
+            }
+          },
+          "p95_change_percent": 7.3249589229872125,
+          "enemy_physics_usec_per_call": [
+            294.7997929606625,
+            308.39428868120456
+          ],
+          "behavior": {
+            "sample_physics_ticks": [
+              322,
+              321
+            ],
+            "total_attack_starts": [
+              36,
+              36
+            ],
+            "total_attack_damage_applications": [
+              36,
+              36
+            ],
+            "total_motion_frames": [
+              1599,
+              1588
+            ],
+            "total_motion_gu": [
+              26.5657033942407,
+              26.4099671592703
+            ]
+          },
+          "probe_usec_per_call": {
+            "_advance_autonomous_step": [
+              121.29106808244848,
+              129.32662051604783
+            ],
+            "_audio_observe_visual_state": [
+              0.6579710144927536,
+              0.6980269989615784
+            ],
+            "_audio_try_enter_combat_session": [
+              0.8419254658385094,
+              0.838006230529595
+            ],
+            "_can_use_background_ai": [
+              11.861180124223603,
+              12.344444444444445
+            ],
+            "_handle_safe_zone_target_return": [
+              9.09616977225673,
+              9.59802699896158
+            ],
+            "_hc_access": [
+              37.7508212106992,
+              38.83478465521299
+            ],
+            "_hc_frontline_at": [
+              39.96140212682158,
+              39.71835443037975
+            ],
+            "_hc_motion_clear": [
+              25.383222468588322,
+              25.378050291093768
+            ],
+            "_hc_neighbor": [
+              171.4738376553629,
+              178.61752004935227
+            ],
+            "_hc_point_inside_safe_zone": [
+              6.801396263215739,
+              7.140672782874618
+            ],
+            "_hc_point_walkable": [
+              32.595360997519606,
+              34.82942673452987
+            ],
+            "_hc_preferred": [
+              1.6856092919482906,
+              1.8095112633381636
+            ],
+            "_hc_prepare_flank_batch": [
+              368.9142857142857,
+              385.3655303030303
+            ],
+            "_hc_refresh_observation": [
+              2.6671542931447845,
+              2.7849918433931484
+            ],
+            "_hc_standard_melee": [
+              1.262609909846101,
+              1.2842845276444013
+            ],
+            "_hc_static_query_scope": [
+              3.158834231955446,
+              3.138928591213783
+            ],
+            "_hc_target_usable": [
+              10.457222193115733,
+              10.82149802890933
+            ],
+            "_hc_tick_melee": [
+              203.09824016563147,
+              211.31858774662513
+            ],
+            "_hc_try_start": [
+              13.927292619852794,
+              14.483333333333333
+            ],
+            "_hc_world_between": [
+              21.851600753295667,
+              23.14824619457313
+            ],
+            "_spatial_index_update": [
+              3.311962401347876,
+              3.3655866120705005
+            ],
+            "_update_area_attack": [
+              0.8977225672877847,
+              0.9236760124610592
+            ],
+            "_update_behavior_summon": [
+              0.7467908902691511,
+              0.7440290758047767
+            ],
+            "_update_entrapment_state": [
+              0.9519668737060042,
+              0.9741433021806853
+            ],
+            "_update_natural_regen": [
+              3.2632505175983435,
+              3.255347871235722
+            ],
+            "_update_pending_attack": [
+              0.741407867494824,
+              0.678816199376947
+            ],
+            "_update_status_effects": [
+              2.0182194616977225,
+              2.0371754932502597
+            ]
+          },
+          "fire_wall_diagnostics": [
+            [
+              {
+                "anim_clock_ms": 5366.66666666668,
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 84,
+                "claim_attempt_count": 51,
+                "claim_success_count": 51,
+                "controller_exact_test_count": 84,
+                "controller_runtime_id": 156581759252,
+                "damage_application_count": 51,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66905,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 14,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:132154131992:0",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5366.66666666668,
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 180,
+                "claim_attempt_count": 55,
+                "claim_success_count": 22,
+                "controller_exact_test_count": 180,
+                "controller_runtime_id": 157420620084,
+                "damage_application_count": 22,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66935,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 30,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:132154131992:1",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5366.66666666668,
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 96,
+                "claim_attempt_count": 52,
+                "claim_success_count": 29,
+                "controller_exact_test_count": 96,
+                "controller_runtime_id": 157907159377,
+                "damage_application_count": 29,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66937,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 16,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:132154131992:2",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5366.66666666668,
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 84,
+                "claim_attempt_count": 48,
+                "claim_success_count": 24,
+                "controller_exact_test_count": 84,
+                "controller_runtime_id": 158393698670,
+                "damage_application_count": 24,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66940,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 14,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:132154131992:3",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5366.66666666668,
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 180,
+                "claim_attempt_count": 42,
+                "claim_success_count": 12,
+                "controller_exact_test_count": 180,
+                "controller_runtime_id": 158880237963,
+                "damage_application_count": 12,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66942,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 30,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:132154131992:4",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5366.66666666668,
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 96,
+                "claim_attempt_count": 52,
+                "claim_success_count": 18,
+                "controller_exact_test_count": 96,
+                "controller_runtime_id": 159366777256,
+                "damage_application_count": 18,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66944,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 16,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:132154131992:5",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              }
+            ],
+            [
+              {
+                "anim_clock_ms": 5350.00000000001,
+                "animation_batch": {
+                  "frame_dispatches": 134,
+                  "pending_players": 0,
+                  "player_commits": 1206,
+                  "players": 9
+                },
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 84,
+                "claim_attempt_count": 51,
+                "claim_success_count": 51,
+                "controller_exact_test_count": 84,
+                "controller_runtime_id": 157823273234,
+                "damage_application_count": 51,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66839,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 14,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:133395645973:0",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5350.00000000001,
+                "animation_batch": {
+                  "frame_dispatches": 134,
+                  "pending_players": 0,
+                  "player_commits": 1206,
+                  "players": 9
+                },
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 180,
+                "claim_attempt_count": 55,
+                "claim_success_count": 22,
+                "controller_exact_test_count": 180,
+                "controller_runtime_id": 158678911283,
+                "damage_application_count": 22,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66854,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 30,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:133395645973:1",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5350.00000000001,
+                "animation_batch": {
+                  "frame_dispatches": 134,
+                  "pending_players": 0,
+                  "player_commits": 1206,
+                  "players": 9
+                },
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 96,
+                "claim_attempt_count": 51,
+                "claim_success_count": 28,
+                "controller_exact_test_count": 96,
+                "controller_runtime_id": 159182227793,
+                "damage_application_count": 28,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66856,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 16,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:133395645973:2",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5350.00000000001,
+                "animation_batch": {
+                  "frame_dispatches": 134,
+                  "pending_players": 0,
+                  "player_commits": 1206,
+                  "players": 9
+                },
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 84,
+                "claim_attempt_count": 48,
+                "claim_success_count": 24,
+                "controller_exact_test_count": 84,
+                "controller_runtime_id": 159685544303,
+                "damage_application_count": 24,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66859,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 14,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:133395645973:3",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5350.00000000001,
+                "animation_batch": {
+                  "frame_dispatches": 134,
+                  "pending_players": 0,
+                  "player_commits": 1206,
+                  "players": 9
+                },
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 180,
+                "claim_attempt_count": 42,
+                "claim_success_count": 12,
+                "controller_exact_test_count": 180,
+                "controller_runtime_id": 160188860813,
+                "damage_application_count": 12,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66862,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 30,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:133395645973:4",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              },
+              {
+                "anim_clock_ms": 5350.00000000001,
+                "animation_batch": {
+                  "frame_dispatches": 134,
+                  "pending_players": 0,
+                  "player_commits": 1206,
+                  "players": 9
+                },
+                "broadphase_query_count": 6,
+                "cancelled": false,
+                "candidate_count": 96,
+                "claim_attempt_count": 51,
+                "claim_success_count": 18,
+                "controller_exact_test_count": 96,
+                "controller_runtime_id": 160692177323,
+                "damage_application_count": 18,
+                "duplicate_damage_count": 0,
+                "expired": false,
+                "expires_at_ticks_msec": 66864,
+                "group_nodes_examined": 0,
+                "group_scan_count": 0,
+                "max_candidate_count": 16,
+                "missing_projection_rejection_count": 0,
+                "refresh_count": 0,
+                "rejection_reason": "",
+                "runtime_map_id": 1,
+                "snapshot_id": "wizard.fire_wall:v82:field:133395645973:5",
+                "snapshot_rebuild_count": 0,
+                "spatial_index_unavailable_count": 0,
+                "tick_count": 6,
+                "visual_cell_count": 9,
+                "visual_cell_exact_test_count": 0
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
