@@ -495,7 +495,12 @@ $Suites.map_runtime_release_transaction_critical = @(
     # RV14-R2 review: multi-map backup comparison and recovery counterexamples.
     'tests/rv14_registry_review_counterexamples.tscn',
     'tests/rv14_restore_rollback_injection_test.tscn',
-    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn'
+    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn',
+    # RV14-R2 review item 7: deterministic promote/rollback failure injection.
+    'tests/rv14_restore_injected_failures_test.tscn',
+    # RV15 joint review: sheet validation counterexamples and SPB decoupling.
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 
 $Suites.player_visual_contract_critical = @(
@@ -530,7 +535,10 @@ $Suites.audit_upgrade_critical = @(
     'tests/player_status_effect_lifecycle_test.tscn',
     # RV14-R2 review: synchronous reentry epoch boundary for both spells and
     # plain attacks, with death/transition/exit-tree lifecycle coverage.
-    'tests/rv14_release_reentry_test.tscn'
+    'tests/rv14_release_reentry_test.tscn',
+    # RV15 joint review: sheet validation counterexamples and SPB decoupling.
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 
 $Suites.critical = @(

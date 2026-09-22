@@ -776,7 +776,10 @@ $TransactionExpected = @(
     'tests/mse_publish_entry_wired_test.tscn',
     'tests/rv14_registry_review_counterexamples.tscn',
     'tests/rv14_restore_rollback_injection_test.tscn',
-    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn'
+    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn',
+    'tests/rv14_restore_injected_failures_test.tscn',
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 
 $rtMissing = @()
@@ -970,7 +973,9 @@ $auditExpected = @(
     'tests/audit_39fe_regressions.tscn',
     'tests/player_cast_release_overwrite_test.tscn',
     'tests/player_status_effect_lifecycle_test.tscn',
-    'tests/rv14_release_reentry_test.tscn'
+    'tests/rv14_release_reentry_test.tscn',
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 $auditBlock = [regex]::Match($RunnerSource, '(?ms)^\$Suites\.audit_upgrade_critical\s*=\s*@\((.*?)^\)')
 $auditEntries = @([regex]::Matches($auditBlock.Groups[1].Value, "'([^']+\.tscn)'") | ForEach-Object { $_.Groups[1].Value })
