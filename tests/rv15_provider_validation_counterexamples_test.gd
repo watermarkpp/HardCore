@@ -84,6 +84,7 @@ func base_document(monsters: Array, slot_rows_compiled: int = 0) -> Dictionary:
 			"slot_rows_compiled": slot_rows_compiled,
 			"new_equipment_slots": 0,
 			"fate_blade_slots": 0,
+			"user_directive_overlay_slots": 0,
 			"empty_sheets": [],
 		},
 		"monsters": monsters,
@@ -102,8 +103,11 @@ func refuse(name: String, document: Dictionary, expected_fragment: String) -> vo
 func _run() -> void:
 	# 0. The real production authority still validates (baseline sanity).
 	var real: Variant = ProviderScript.new()
-	expect(bool(real.valid), "real authority must stay valid")
-	expect(int(real.slot_count) == 5976, "real authority keeps 5976 slots")
+	expect(
+		bool(real.valid), "real authority must stay valid"
+	)
+	expect(int(real.slot_count) == 6120, "real authority keeps 6120 slots after the overlay")
+	expect(int(real.overlay_slot_count) == 144, "real authority keeps 144 overlay slots")
 	real = null
 
 	# 1. Same-monster duplicate UID: refused, not merged, not re-indexed.

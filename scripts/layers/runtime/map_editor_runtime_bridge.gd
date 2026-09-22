@@ -13,8 +13,11 @@ const MapAssetCatalogServiceScript := preload(
 )
 const BICH_MAP_ID := 910001
 # Elite monsters that keep authored ordinary-layer spawn points after the
-# user loot sheet classification migration (218 牛魔将军 / 222 牛魔祭司).
-const ELITE_ORDINARY_SPAWN_IDS := [218, 222]
+# user loot sheet classification migration (218 牛魔将军 / 222 牛魔祭司) and
+# the RV15 user-directive elite migration (164 血巨人 / 166 血僵尸 /
+# 168 月魔蜘蛛 / 170 黑锷蜘蛛 / 172 钢牙蜘蛛 / 178 花吻蜘蛛 / 182 幻影蜘蛛).
+# The 500-hp pair (174 暴牙蜘蛛 / 176 天狼蜘蛛) stays ordinary by directive.
+const ELITE_ORDINARY_SPAWN_IDS := [218, 222, 164, 166, 168, 170, 172, 178, 182]
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
 const BOSS_RESPAWN_OVERRIDES := {

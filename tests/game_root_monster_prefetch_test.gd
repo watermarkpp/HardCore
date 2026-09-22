@@ -9,19 +9,24 @@ func _ready() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	# RV15-J4 explicit whitelist cases: the production ordinary-layer elite
-	# whitelist is exactly the two niumo elites, and both classify elite in
-	# the canonical catalog. Non-whitelisted elites are covered by the
-	# per-spawn assertion in the loop below, which fails on any ordinary
-	# layer entry whose elite id is outside {218, 222}.
+	# whitelist is exactly the nine production elites (RV15 user-directive
+	# migration: 164/166/168/170/172/178/182 join 218/222), and each
+	# classifies elite in the canonical catalog. Non-whitelisted elites are
+	# covered by the per-spawn assertion in the loop below, which fails on
+	# any ordinary layer entry whose elite id is outside that set.
 	assert(
-		BridgeScript.ELITE_ORDINARY_SPAWN_IDS == [218, 222],
-		"the ordinary-layer elite whitelist drifted from {218, 222}"
+		BridgeScript.ELITE_ORDINARY_SPAWN_IDS == [218, 222, 164, 166, 168, 170, 172, 178, 182],
+		"the ordinary-layer elite whitelist drifted from the 9-id production set"
 	)
-	for whitelisted_id: int in [218, 222]:
+	for whitelisted_id: int in [218, 222, 164, 166, 168, 170, 172, 178, 182]:
 		assert(
 			GameData.canonical_monster_classification(whitelisted_id) == "elite",
-			"whitelisted niumo elite %d must classify elite" % whitelisted_id
+			"whitelisted ordinary-layer elite %d must classify elite" % whitelisted_id
 		)
+	# The 500-hp pair (174 暴牙蜘蛛 / 176 天狼蜘蛛) stays ordinary by the
+	# user directive: no reclassification and no overlay loot.
+	assert(GameData.canonical_monster_classification(174) == "ordinary")
+	assert(GameData.canonical_monster_classification(176) == "ordinary")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
@@ -168,8 +173,8 @@ func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> in
 		# the production bridge (ELITE_ORDINARY_SPAWN_IDS); every other elite
 		# and all bosses are rejected there.
 		assert(
-			classification != "elite" or monster_id in [218, 222],
-			"ordinary-layer elite %d is not in the production whitelist {218, 222}"
+			classification != "elite" or monster_id in [218, 222, 164, 166, 168, 170, 172, 178, 182],
+			"ordinary-layer elite %d is not in the production whitelist {218, 222, 164, 166, 168, 170, 172, 178, 182}"
 			% monster_id
 		)
 		assert(classification != "boss")

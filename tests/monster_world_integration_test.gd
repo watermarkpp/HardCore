@@ -330,8 +330,8 @@ func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> vo
 		# the production bridge (ELITE_ORDINARY_SPAWN_IDS); every other elite
 		# and all bosses are rejected there.
 		assert(
-			classification != "elite" or monster_id in [218, 222],
-			"ordinary-layer elite %d is not in the production whitelist {218, 222}"
+			classification != "elite" or monster_id in [218, 222, 164, 166, 168, 170, 172, 178, 182],
+			"ordinary-layer elite %d is not in the production whitelist {218, 222, 164, 166, 168, 170, 172, 178, 182}"
 			% monster_id
 		)
 		assert(classification != "boss")

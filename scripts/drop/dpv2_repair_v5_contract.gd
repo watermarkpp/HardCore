@@ -8,13 +8,22 @@ const BASELINE_SHA256 := "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B
 const MAX_RATIONAL := 2147483647
 
 # The classification authority migrated 218/222 to elite together with the
-# user loot sheet activation. This sealed contract froze its ledger
-# verification while those identities were still ordinary, so the historical
-# classification stays pinned here: the sealed ledger keeps validating the
-# exact inputs it was sealed with, while gameplay reads the live catalog.
+# user loot sheet activation, and 164/166/168/170/172/178/182 to elite with
+# the RV15 user-directive elite migration. This sealed contract froze its
+# ledger verification while those identities were still ordinary, so the
+# historical classification stays pinned here: the sealed ledger keeps
+# validating the exact inputs it was sealed with, while gameplay reads the
+# live catalog.
 const HISTORICAL_CLASSIFICATION_BY_MONSTER_ID := {
 	218: "ordinary",
 	222: "ordinary",
+	164: "ordinary",
+	166: "ordinary",
+	168: "ordinary",
+	170: "ordinary",
+	172: "ordinary",
+	178: "ordinary",
+	182: "ordinary",
 }
 
 

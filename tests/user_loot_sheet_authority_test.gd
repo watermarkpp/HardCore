@@ -12,8 +12,9 @@ const LootRuntimeScript := preload(
 const ProviderScript := preload("res://scripts/drop/user_loot_sheet_provider.gd")
 
 const EXPECTED_MONSTERS := 126
-const EXPECTED_SLOTS := 5976
+const EXPECTED_SLOTS := 6120
 const EXPECTED_NEW_SLOTS := 41
+const EXPECTED_OVERLAY := 144
 const EXPECTED_EMPTY := 5
 
 
@@ -43,6 +44,7 @@ func _test_provider_load_contract() -> void:
 	assert(provider.monster_count == EXPECTED_MONSTERS)
 	assert(provider.slot_count == EXPECTED_SLOTS)
 	assert(provider.new_slot_count == EXPECTED_NEW_SLOTS)
+	assert(provider.overlay_slot_count == EXPECTED_OVERLAY)
 	assert(provider.empty_profile_ids.size() == EXPECTED_EMPTY)
 	assert(provider.authority_id == "dpv2.user_loot_sheet.v1")
 	assert(not str(provider.sheet_sha256).is_empty())
@@ -67,6 +69,32 @@ func _test_probability_direct_read() -> void:
 	assert(bool(gold.get("ok", false)), str(gold))
 	assert(int(gold.get("final_numerator", -1)) == 1)
 	assert(int(gold.get("final_denominator", -1)) == 10)
+	# RV15 user-directive overlay slots: hp-1200 quartet (164/166/170/182)
+	# gets chiyue jewelry 1/140, chiyue helm 1/170, zuma jewelry 1/100,
+	# zuma helm 1/120, zuma weapon 1/150; the 850/800 pair (168/172) gets
+	# 1/180, 1/220, 1/140, 1/160, 1/200. The 500-hp pair stays untouched.
+	var overlay_cy_ch: Dictionary = provider.probability(164, "dpv2.user.sheet.m164.set_cy_ch_001")
+	assert(bool(overlay_cy_ch.get("ok", false)), str(overlay_cy_ch))
+	assert(int(overlay_cy_ch.get("final_numerator", -1)) == 1)
+	assert(int(overlay_cy_ch.get("final_denominator", -1)) == 140)
+	assert(int(overlay_cy_ch.get("canonical_item_id", -1)) == 233)
+	var overlay_zm_weap: Dictionary = provider.probability(164, "dpv2.user.sheet.m164.set_zm_weap_001")
+	assert(bool(overlay_zm_weap.get("ok", false)), str(overlay_zm_weap))
+	assert(int(overlay_zm_weap.get("final_denominator", -1)) == 150)
+	assert(int(overlay_zm_weap.get("canonical_item_id", -1)) == 105)
+	var overlay_low_ch: Dictionary = provider.probability(168, "dpv2.user.sheet.m168.set_cy_ch_001")
+	assert(bool(overlay_low_ch.get("ok", false)), str(overlay_low_ch))
+	assert(int(overlay_low_ch.get("final_denominator", -1)) == 180)
+	var overlay_low_weap3: Dictionary = provider.probability(168, "dpv2.user.sheet.m168.set_zm_weap_003")
+	assert(bool(overlay_low_weap3.get("ok", false)), str(overlay_low_weap3))
+	assert(int(overlay_low_weap3.get("final_denominator", -1)) == 200)
+	assert(int(overlay_low_weap3.get("canonical_item_id", -1)) == 107)
+	var overlay_helm: Dictionary = provider.probability(170, "dpv2.user.sheet.m170.set_zm_helm_001")
+	assert(bool(overlay_helm.get("ok", false)), str(overlay_helm))
+	assert(int(overlay_helm.get("final_denominator", -1)) == 120)
+	assert(int(overlay_helm.get("canonical_item_id", -1)) == 151)
+	assert(not provider.owns(174, "dpv2.user.sheet.m174.set_cy_ch_001"))
+	assert(not provider.owns(176, "dpv2.user.sheet.m176.set_cy_ch_001"))
 	assert(int(gold.get("final_gold_amount", -1)) == 20000)
 	# Equipment slot keeps the baseline identity and takes the sheet fraction.
 	var equip: Dictionary = provider.probability(218, "dpv2.direct.m218.slot_002")
