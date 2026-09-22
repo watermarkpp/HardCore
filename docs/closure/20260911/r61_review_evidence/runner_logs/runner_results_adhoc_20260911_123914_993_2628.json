@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "git_head": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+  "failed": 1,
+  "engine_log_errors": 8,
+  "results": [
+    {
+      "test_name": "real_panel_matrix_shop_sell",
+      "test_path": "tests/r6_1_review/real_panel_matrix_shop_sell.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 8,
+      "engine_log_failure_count": 8,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_8;engine_log_failures_8"
+    }
+  ],
+  "generated_at": "2026-09-11T12:39:14.9936970+08:00",
+  "total": 1,
+  "passed": 0
+}

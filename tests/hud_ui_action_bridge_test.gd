@@ -1,16 +1,55 @@
 extends Node
 
+const MODAL_PANEL_SCRIPT_PATHS := [
+	"res://scripts/inventory_panel.gd",
+	"res://scripts/shop_panel.gd",
+	"res://scripts/skill_panel.gd",
+	"res://scripts/quest_panel.gd",
+	"res://scripts/map_panel.gd",
+	"res://scripts/warehouse_panel.gd",
+]
+
 
 func _ready() -> void:
 	_run.call_deferred()
 
 
 func _run() -> void:
+	var hud_source := FileAccess.get_file_as_string("res://scripts/hud.gd")
+	var hud_dependencies := _dependency_paths(
+		ResourceLoader.get_dependencies("res://scripts/hud.gd")
+	)
+	var main_dependencies := _dependency_paths(
+		ResourceLoader.get_dependencies("res://scenes/main.tscn")
+	)
+	for panel_path: String in MODAL_PANEL_SCRIPT_PATHS:
+		var panel_class := str(
+			FileAccess.get_file_as_string(panel_path).get_slice("\n", 0)
+		).strip_edges().trim_prefix("class_name ").strip_edges()
+		assert(
+			not hud_source.contains("var %s: %s" % [panel_class.to_snake_case(), panel_class]),
+			"HUD retained a typed modal member for %s" % panel_class
+		)
+		assert(
+			not hud_source.contains("%s.new()" % panel_class),
+			"HUD retained a hard class constructor for %s" % panel_class
+		)
+		assert(not hud_dependencies.has(panel_path), "hud.gd eagerly depends on %s" % panel_path)
+		assert(not main_dependencies.has(panel_path), "main.tscn eagerly depends on %s" % panel_path)
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var hud := GameHUD.new()
 	add_child(hud)
 	await get_tree().process_frame
+	for member_name: String in [
+		"inventory_panel",
+		"shop_panel",
+		"skill_panel",
+		"quest_panel",
+		"map_panel",
+		"warehouse_panel",
+	]:
+		assert(hud.get(member_name) == null, "%s instantiated before first access" % member_name)
 
 	for signal_name: StringName in [
 		&"shop_sell_quotes_requested",
@@ -60,5 +99,18 @@ func _run() -> void:
 	hud.apply_warehouse_sort_result({"success": true, "message": "仓库已整理"})
 	assert(hud.warehouse_panel.transfer_detail_label.text == "仓库已整理", "HUD 没有回填仓库整理结果")
 
+	print(
+		"HUD_LAZY_DEPENDENCY_METRICS "
+		+ "hud_dependency_count=%d " % hud_dependencies.size()
+		+ "main_dependency_count=%d " % main_dependencies.size()
+		+ "modal_eager_count=0"
+	)
 	print("HUD_UI_ACTION_BRIDGE_PASS：出售、任务放弃与仓库整理请求/结果桥接均正常")
 	get_tree().quit(0)
+
+
+func _dependency_paths(raw_dependencies: PackedStringArray) -> Array[String]:
+	var result: Array[String] = []
+	for raw_dependency: String in raw_dependencies:
+		result.append(raw_dependency.split("::", false, 1)[0])
+	return result

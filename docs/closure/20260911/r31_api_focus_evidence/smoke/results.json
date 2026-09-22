@@ -1,0 +1,28 @@
+[
+  {
+    "scene": "res://tests/r6_3_1/style_bounds_smoke.tscn",
+    "engine": "4.7.stable.official.5b4e0cb0f",
+    "command": [
+      "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\r3-1-api-focus-fix\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "--headless",
+      "--path",
+      "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\r3-1-api-focus-fix",
+      "--log-file",
+      "C:\\Users\\Administrator\\Documents\\HardCore-r31-evidence\\06_core_smoke\\style_bounds_smoke.engine.log",
+      "res://tests/r6_3_1/style_bounds_smoke.tscn"
+    ],
+    "returncode": 1,
+    "elapsed_seconds": 8.828000000001339,
+    "timeout": false,
+    "pass_marker": false,
+    "error_patterns": [
+      "SCRIPT ERROR:",
+      "SCRIPT ERROR:",
+      "SCRIPT ERROR:",
+      "SCRIPT ERROR:",
+      "SCRIPT ERROR:",
+      "SCRIPT ERROR:"
+    ],
+    "status": "FAIL"
+  }
+]

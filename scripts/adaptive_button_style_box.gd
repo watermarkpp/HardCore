@@ -21,6 +21,7 @@ var feedback_inset := 0.0
 var feedback_layered := false
 var feedback_background_styles: Dictionary = {}
 var feedback_frame_styles: Dictionary = {}
+var _feedback_clone_cache: Dictionary = {}
 
 
 func configure(c: Texture2D, s: Texture2D, w: Texture2D, margins := Vector4(36, 0, 36, 0)) -> AdaptiveButtonStyleBox:
@@ -86,6 +87,7 @@ func set_feedback(
 	border_width := 1,
 	layered := false,
 ) -> AdaptiveButtonStyleBox:
+	_feedback_clone_cache.clear()
 	feedback_style = StyleBoxFlat.new()
 	feedback_style.bg_color = fill
 	feedback_style.border_color = border
@@ -158,6 +160,20 @@ func has_feedback() -> bool:
 
 
 func clone_with_feedback(fill: Color, border: Color, shadow: Color, shadow_size := 5.0, inset := 10.0, border_width := 1) -> AdaptiveButtonStyleBox:
+	var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [
+		str(fill),
+		str(border),
+		str(shadow),
+		shadow_size,
+		inset,
+		border_width,
+		content_margin_left,
+		content_margin_top,
+		content_margin_right,
+		content_margin_bottom,
+	]
+	if _feedback_clone_cache.has(cache_key):
+		return _feedback_clone_cache[cache_key] as AdaptiveButtonStyleBox
 	var copy := AdaptiveButtonStyleBox.new()
 	copy.compact = compact
 	copy.standard = standard
@@ -171,6 +187,13 @@ func clone_with_feedback(fill: Color, border: Color, shadow: Color, shadow_size 
 	copy.square_alpha_safe_inset = square_alpha_safe_inset
 	copy.force_square = force_square
 	copy.force_widesmall = force_widesmall
+	# Button uses the active StyleBox content margins to place its text.  Every
+	# feedback frame must retain the exact same content rectangle or the label
+	# visibly jumps when normal/pressed/result states are exchanged.
+	copy.content_margin_left = content_margin_left
+	copy.content_margin_top = content_margin_top
+	copy.content_margin_right = content_margin_right
+	copy.content_margin_bottom = content_margin_bottom
 	if feedback_layered and not feedback_background_styles.is_empty():
 		copy.set_feedback(fill, Color.TRANSPARENT, shadow, shadow_size, inset, border_width, false)
 		copy.feedback_layered = true
@@ -189,10 +212,12 @@ func clone_with_feedback(fill: Color, border: Color, shadow: Color, shadow_size 
 			copy.feedback_frame_styles[key] = frame
 	else:
 		copy.set_feedback(fill, border, shadow, shadow_size, inset, border_width, feedback_layered)
+	_feedback_clone_cache[cache_key] = copy
 	return copy
 
 
 func _clear_feedback() -> void:
+	_feedback_clone_cache.clear()
 	feedback_style = null
 	feedback_inset = 0.0
 	feedback_layered = false

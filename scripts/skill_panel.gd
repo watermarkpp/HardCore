@@ -23,6 +23,8 @@ const SECTION_VERTICAL_SHIFT := 24.0
 const LONG_PRESS_SECONDS := 0.48
 const ATTACK_SLOT_COUNT := 1
 const ATTACK_RING_SLOT_COUNT := 6
+const SKILL_CARD_TEXT_X_OFFSET := 4.0
+const SKILL_CONFIG_TEXT_X_OFFSET := 2.0
 
 var trainer_title: Label
 var trainer_context_label: Label
@@ -53,6 +55,9 @@ var skill_button_assignments: Dictionary = {}
 var skill_button_modes: Dictionary = {}
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _refresh_scheduled := false
+var _layout_initialized := false
+var _layout_apply_count := 0
 var _formal_skill_rules: Dictionary = {}
 var _action_feedback_serial := 0
 
@@ -241,7 +246,7 @@ func _build_assignment_section() -> void:
 	attack_slot.position = Vector2(18, 80)
 	attack_slot.size = Vector2(230, 82)
 	attack_slot.text = ""
-	attack_slot.theme_type_variation = "GothicSkillConfigCompactButton"
+	attack_slot.theme_type_variation = "GothicSkillPrimaryPlainButton"
 	attack_slot.pressed.connect(_assign_selected_to_target.bind("attack", 0))
 	attack_slot.set_meta("slot_group", "attack")
 	attack_slot.set_meta("slot_index", 0)
@@ -251,14 +256,17 @@ func _build_assignment_section() -> void:
 	assignment_buttons.append(attack_slot)
 	var clear_attack := Button.new()
 	clear_attack.name = "ClearAttackSkillSlot"
-	clear_attack.text = "恢复\n普通攻击"
+	clear_attack.text = ""
 	clear_attack.position = Vector2(252, 80)
 	clear_attack.size = Vector2(104, 82)
-	clear_attack.theme_type_variation = "GothicSkillConfigCompactButton"
+	clear_attack.theme_type_variation = "GothicSkillRestorePlainButton"
+	clear_attack.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	clear_attack.set_meta("calibration_runtime_text", true)
 	clear_attack.pressed.connect(_request_clear_target.bind("attack", 0))
 	clear_attack.set_meta("stable_slot_id", "hud.attack.primary")
 	clear_attack.set_meta("assignment_action", "clear")
 	panel.add_child(clear_attack)
+	_add_centered_button_label(clear_attack, "恢复\n普通攻击", 15, SKILL_CONFIG_TEXT_X_OFFSET)
 	var ring_title := Label.new()
 	ring_title.name = "AttackRingSlotsTitle"
 	ring_title.text = "攻击环技能槽 1–6"
@@ -274,7 +282,7 @@ func _build_assignment_section() -> void:
 		button.position = Vector2(18 + (slot_index % 3) * 118, 208 + floori(float(slot_index) / 3.0) * 112)
 		button.size = Vector2(108, 60)
 		button.text = ""
-		button.theme_type_variation = "GothicSkillConfigCompactButton"
+		button.theme_type_variation = "GothicSkillRingPlainButton"
 		button.pressed.connect(_assign_selected_to_target.bind("attack_ring", slot_index))
 		button.set_meta("slot_group", "attack_ring")
 		button.set_meta("slot_index", slot_index)
@@ -284,14 +292,17 @@ func _build_assignment_section() -> void:
 		assignment_buttons.append(button)
 		var clear_button := Button.new()
 		clear_button.name = "ClearAttackRingSkillSlot_%d" % (slot_index + 1)
-		clear_button.text = "清空 %d" % (slot_index + 1)
+		clear_button.text = ""
 		clear_button.position = button.position + Vector2(0, 64)
 		clear_button.size = Vector2(108, 40)
-		clear_button.theme_type_variation = "GothicSkillConfigCompactButton"
+		clear_button.theme_type_variation = "GothicSkillClearPlainButton"
+		clear_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		clear_button.set_meta("calibration_runtime_text", true)
 		clear_button.pressed.connect(_request_clear_target.bind("attack_ring", slot_index))
 		clear_button.set_meta("stable_slot_id", "hud.attack_ring_skill.%d" % (slot_index + 1))
 		clear_button.set_meta("assignment_action", "clear")
 		panel.add_child(clear_button)
+		_add_centered_button_label(clear_button, "清空 %d" % (slot_index + 1), 15, SKILL_CONFIG_TEXT_X_OFFSET)
 	var hint := Label.new()
 	hint.name = "AssignmentHint"
 	hint.text = "主动技能可配置到攻击主键或六个环形技能位\n被动技能仅在技能列表中展示"
@@ -443,14 +454,18 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 	skill_button_assignments = assignments.duplicate(true)
 	skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
 	if skill_list != null:
-		refresh()
+		_on_panel_data_changed()
 
 
 func _on_panel_data_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_refresh_pending = true
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
 
 
 func _on_visibility_changed() -> void:
@@ -462,6 +477,7 @@ func refresh() -> void:
 	if skill_list == null:
 		return
 	_refresh_pending = false
+	_refresh_scheduled = false
 	_refresh_execution_count += 1
 	skill_list.clear()
 	for entry: Variant in skill_entries:
@@ -480,8 +496,17 @@ func refresh() -> void:
 		_show_skill_detail(selected_skill_index)
 	else:
 		_clear_skill_detail()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
-	call_deferred("_ensure_skill_list_bottom_clearance")
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "skill")
+		call_deferred("_ensure_skill_list_bottom_clearance")
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if visible and _refresh_pending:
+		refresh()
 
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
@@ -512,9 +537,11 @@ func _ensure_skill_list_bottom_clearance() -> void:
 
 
 func _rebuild_skill_cards() -> void:
-	for child: Node in skill_list_container.get_children():
-		child.free()
-	skill_buttons.clear()
+	# Slots keep their controls, calibrated geometry and input bindings across
+	# refreshes. Only the current profession's excess tail is retired.
+	while skill_buttons.size() > skill_entries.size():
+		var retired: Button = skill_buttons.pop_back()
+		retired.free()
 	for index in range(skill_entries.size()):
 		var entry: Dictionary = skill_entries[index]
 		var skill_name := str(entry.get("skillName", "技能"))
@@ -522,24 +549,51 @@ func _rebuild_skill_cards() -> void:
 		var has_book := PlayerState.has_item(skill_name)
 		var level := int(PlayerState.learned_skills.get(skill_name, 0))
 		var interaction_label := _skill_presentation_label(skill_name)
-		var status := "已学会" if learned else ("未学会" if has_book else "未学会")
+		var status := "已学会" if learned else "未学会"
 		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
-		var button := Button.new()
-		button.name = "SkillCard_%d" % index
-		button.custom_minimum_size = Vector2(266, 64)
-		button.toggle_mode = true
-		button.text = "%s（%s）\n%s" % [skill_name, status, detail_status]
-		button.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		button.add_theme_font_size_override("font_size", 15)
+		var card_text := "%s（%s）\n%s" % [skill_name, status, detail_status]
+		var button: Button
+		if index < skill_buttons.size():
+			button = skill_buttons[index]
+		else:
+			button = Button.new()
+			button.name = "SkillCard_%d" % index
+			button.set_meta("calibration_layout_revision", 1)
+			button.custom_minimum_size = Vector2(266, 80)
+			button.toggle_mode = true
+			button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+			button.add_theme_font_size_override("font_size", 15)
+			button.set_meta("calibration_runtime_text", true)
+			button.pressed.connect(_on_skill_selected.bind(index))
+			button.gui_input.connect(_skill_card_input.bind(index))
+			skill_list_container.add_child(button)
+			_add_centered_button_label(button, card_text, 15, SKILL_CARD_TEXT_X_OFFSET)
+			skill_buttons.append(button)
 		button.set_pressed_no_signal(index == selected_skill_index)
-		button.theme_type_variation = "GothicComponentSelectedButton" if index == selected_skill_index else "GothicComponentButton"
-		button.pressed.connect(_on_skill_selected.bind(index))
-		button.gui_input.connect(_skill_card_input.bind(index))
+		var variation: StringName = &"GothicSkillListSelectedGemButton" if index == selected_skill_index else &"GothicSkillListGemButton"
+		if button.theme_type_variation != variation:
+			button.theme_type_variation = variation
+		(button.get_node("CenteredText") as Label).text = card_text
 		button.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
 		button.set_meta("learned", learned)
 		button.set_meta("assignment_eligible", _skill_interaction_mode(skill_name) != "passive")
-		skill_list_container.add_child(button)
-		skill_buttons.append(button)
+
+
+func _add_centered_button_label(button: Button, text_value: String, font_size: int, horizontal_offset: float) -> void:
+	var label := Label.new()
+	label.name = "CenteredText"
+	label.text = text_value
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", font_size)
+	button.add_child(label)
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# Move the full label rect, not the text margins, so its accepted vertical
+	# center and wrapping width stay unchanged while each frame family receives
+	# its measured optical horizontal correction.
+	label.offset_left = horizontal_offset
+	label.offset_right = horizontal_offset
 
 
 func _on_skill_selected(index: int) -> void:
@@ -553,7 +607,7 @@ func _on_skill_selected(index: int) -> void:
 		var button := skill_buttons[button_index]
 		var selected := button_index == index
 		button.set_pressed_no_signal(selected)
-		button.theme_type_variation = "GothicComponentSelectedButton" if selected else "GothicComponentButton"
+		button.theme_type_variation = "GothicSkillListSelectedGemButton" if selected else "GothicSkillListGemButton"
 	_show_skill_detail(index)
 
 
@@ -594,15 +648,16 @@ func _show_skill_detail(index: int) -> void:
 
 func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> String:
 	var parts: Array[String] = []
+	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
 	var base := str(row.get("description", "暂无说明")).strip_edges()
 	if not base.is_empty():
 		parts.append(base)
 	var effect := str(row.get("effect", "")).strip_edges()
-	if not effect.is_empty() and effect != "-":
+	if not effect.is_empty() and effect != "-" and stable_id != "warrior.slaying_swordsmanship":
 		parts.append("效果：%s" % effect)
 	# Only explicit player-facing fields are rendered; internal formula strings are ignored.
 	var probability: Variant = combat.get("probability", combat.get("chance", null))
-	if probability is float or probability is int:
+	if (probability is float or probability is int) and stable_id != "warrior.slaying_swordsmanship":
 		var probability_value := float(probability)
 		parts.append("触发概率：%.1f%%" % (probability_value * 100.0 if probability_value <= 1.0 else probability_value))
 	var cooldown := float(combat.get("cooldown", row.get("delay", 0.0)))
@@ -617,7 +672,6 @@ func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> Strin
 	var range_gu := float(combat.get("maximum_range_gu", 0.0))
 	if range_gu > 0.0:
 		parts.append("作用范围：%.1f GU" % range_gu)
-	var stable_id := str(row.get("skill_id", ProfessionRules.skill_id(str(row.get("skillName", "")))))
 	var formal: Dictionary = _formal_skill_rules.get(stable_id, {})
 	if not formal.is_empty():
 		var group := str(formal.get("formula_group", ""))
@@ -649,7 +703,7 @@ func _player_mechanics_description(row: Dictionary, combat: Dictionary) -> Strin
 		var level := int(combat.get("skill_level", 0))
 		match stable_id:
 			"warrior.fire_sword": parts.append("烈火伤害：基础物理伤害×%.1f倍（当前等级%d）" % [WarriorCombatMath.fire_sword_multiplier(level), level])
-			"warrior.slaying_swordsmanship": parts.append("攻杀：基础物理伤害+%d点；触发概率约%.1f百分比（每%d次攻击一次）" % [WarriorCombatMath.slaying_flat_damage_bonus(level), 100.0 / float(WarriorCombatMath.slaying_proc_cycle(level)), WarriorCombatMath.slaying_proc_cycle(level)])
+			"warrior.slaying_swordsmanship": parts.append("被动提高准确%d点。有效近战攻击有1/%d概率追加%d点伤害，同样作用于刺杀、半月、烈火；多目标共用同次触发，与其他剑法共同生效时不额外叠加攻杀动画。" % [WarriorCombatMath.slaying_accuracy_bonus(level), WarriorCombatMath.slaying_proc_cycle(level), WarriorCombatMath.slaying_flat_damage_bonus(level)])
 			"warrior.thrusting": parts.append("刺杀：第二目标伤害＝基础伤害×(技能等级+2)/(训练等级+2)，并按%d百分比折算" % [WarriorCombatMath.SWORD_LONG_POWER_RATE])
 			"warrior.half_moon": parts.append("半月：扇形副目标伤害＝基础伤害×(技能等级+2)/(训练等级+10)")
 			"warrior.basic_swordsmanship": parts.append("基本剑术：每级准确+3（当前准确+%d），直接用于命中判定" % [WarriorCombatMath.basic_sword_accuracy_bonus(level)])
@@ -753,7 +807,25 @@ func _assignment_value_skill_name(value: Variant) -> String:
 func _set_assignment_button_content(button: Button, slot_label_text: String, skill_name: String) -> void:
 	var old_content := button.get_node_or_null("Content")
 	if old_content != null:
-		old_content.free()
+		# The saved skill profile owns the calibrated geometry of these children.
+		# Rebuilding them after the profile has been applied restores the original
+		# unscaled code offsets, which makes phone refreshes shift every child left
+		# while the calibration workbench still looks correct.  Keep the calibrated
+		# nodes alive and update only their runtime-owned content.
+		var old_icon := old_content.get_node_or_null("SkillIcon") as TextureRect
+		if old_icon != null:
+			old_icon.texture = _skill_texture(skill_name)
+			old_icon.set_meta("skill_icon_id", HUDSkillIconCatalogScript.source_id_for(skill_name))
+			old_icon.set_meta("skill_icon_path", HUDSkillIconCatalogScript.source_path_for(skill_name))
+		var old_slot_label := old_content.get_node_or_null("SlotLabel") as Label
+		if old_slot_label != null:
+			old_slot_label.text = slot_label_text
+		var old_name_label := old_content.get_node_or_null("SkillName") as Label
+		if old_name_label != null:
+			old_name_label.text = skill_name if not skill_name.is_empty() else "空"
+		button.set_meta("skill_name", skill_name)
+		button.set_meta("interaction_mode", _skill_interaction_mode(skill_name))
+		return
 	var content := Control.new()
 	content.name = "Content"
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE

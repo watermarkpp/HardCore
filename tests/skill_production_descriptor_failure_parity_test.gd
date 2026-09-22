@@ -6,6 +6,8 @@ extends Node
 ## intact (frozen pre-migration semantics).
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
+const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 var _game: Node
 var _caster: PlayerCharacter
@@ -29,7 +31,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	_caster = _game.player
 	_caster.current_mp = 500
-	_target = _make_enemy(_game, _caster, _caster.global_position + Vector2(40, 0))
+	_target = await FormalFixture.prepare_target(
+		self,
+		_game,
+		_caster,
+		FIXTURE_MONSTER_ID,
+		"skill_production_descriptor_failure_parity",
+	)
 	await get_tree().process_frame
 
 	_projectile_failure_case()
@@ -160,21 +168,3 @@ func _summon_failure_case() -> void:
 		Plan.sentinel_diagnostics().resource_commit_count == 1,
 		"summon failure must not roll back committed resources"
 	)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "descriptor_failure_target",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	return enemy

@@ -16,30 +16,55 @@ func _ready() -> void:
 	queue_redraw()
 
 
+func _exit_tree() -> void:
+	cancel_input()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		cancel_input()
+	elif what == NOTIFICATION_VISIBILITY_CHANGED and not is_visible_in_tree():
+		cancel_input()
+
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
-		if event.pressed and _pointer_id == -1:
+		if event.canceled:
+			if event.index == _pointer_id:
+				cancel_input()
+		elif event.pressed and _pointer_id == -1:
 			_pointer_id = event.index
 			_update_value(event.position)
 		elif not event.pressed and event.index == _pointer_id:
-			_pointer_id = -1
-			_value = Vector2.ZERO
-			vector_changed.emit(_value)
-			queue_redraw()
+			cancel_input()
 	elif event is InputEventScreenDrag and event.index == _pointer_id:
 		_update_value(event.position)
 	elif event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.device != InputEvent.DEVICE_ID_EMULATION:
+			if event.pressed and _pointer_id == -1:
 				_pointer_id = -2
 				_update_value(event.position)
-			elif _pointer_id == -2:
-				_pointer_id = -1
-				_value = Vector2.ZERO
-				vector_changed.emit(_value)
-				queue_redraw()
+			elif not event.pressed and _pointer_id == -2:
+				cancel_input()
 	elif event is InputEventMouseMotion and _pointer_id == -2:
-		_update_value(event.position)
+		if event.device != InputEvent.DEVICE_ID_EMULATION:
+			_update_value(event.position)
+
+
+func _input(event: InputEvent) -> void:
+	# Starts remain GUI-owned. This release-only safety net prevents a pointer
+	# released outside the joystick from surviving pause or hit-test changes.
+	if event is InputEventScreenTouch:
+		if (event.canceled or not event.pressed) and event.index == _pointer_id:
+			cancel_input()
+	elif event is InputEventMouseButton:
+		if (
+			event.button_index == MOUSE_BUTTON_LEFT
+			and event.device != InputEvent.DEVICE_ID_EMULATION
+			and not event.pressed
+			and _pointer_id == -2
+		):
+			cancel_input()
 
 
 func _update_value(local_position: Vector2) -> void:
@@ -47,6 +72,22 @@ func _update_value(local_position: Vector2) -> void:
 	_value = ((local_position - center) / radius).limit_length(1.0)
 	vector_changed.emit(_value)
 	queue_redraw()
+
+
+func cancel_input() -> void:
+	# Idempotent lifecycle boundary: a lost release must never keep ownership or
+	# a non-zero vector alive across a map transition.
+	_pointer_id = -1
+	_value = Vector2.ZERO
+	vector_changed.emit(Vector2.ZERO)
+	queue_redraw()
+
+
+func input_state_snapshot() -> Dictionary:
+	return {
+		"pointer_id": _pointer_id,
+		"value": _value,
+	}
 
 
 func _draw() -> void:

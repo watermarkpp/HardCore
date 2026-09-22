@@ -2,6 +2,8 @@ extends Node
 
 const TargetingSystem := preload("res://scripts/targeting_system.gd")
 const DirectionSpace := preload("res://scripts/skills/combat_direction_space.gd")
+const TerrainPolicy := preload("res://scripts/monster_terrain_navigation_policy.gd")
+const NeighborPolicy := preload("res://scripts/monster_neighbor_step_policy.gd")
 
 
 func _ready() -> void:
@@ -30,10 +32,18 @@ func _run() -> void:
 		enemy.max_hp = 9999
 		enemy.current_hp = 9999
 	for index in range(4, enemies.size()):
-		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
+		_move_enemy(
+			enemies[index] as EnemyActor,
+			Vector2(3000 + index * 80, 3000)
+		)
 
-	var player_tile: Vector2i = game._canonical_screen_px_to_grid_cell(game.player.global_position)
-	game.player.global_position = game._canonical_grid_cell_to_screen_px(player_tile)
+	var player_tile: Vector2i = _find_formal_targeting_origin(
+		game,
+		[first, second, side, behind],
+	)
+	game.player.global_position = game._canonical_ground_gu_to_screen_px(
+		Vector2(player_tile) + Vector2(0.5, 0.5)
+	)
 	game.player.velocity = Vector2.ZERO
 	game.player.facing = Vector2.RIGHT
 	_place_at_tile_offset(game, first, player_tile, Vector2i(2, 0))
@@ -74,8 +84,25 @@ func _run() -> void:
 	_place_at_tile_offset(game, first, player_tile, Vector2i(3, 3))
 	game.player._attack_timer = 0.0
 	game.player._attack_action_timer = 0.0
-	game._mobile_attack_held = true
+	# live_owner_no_debt.v2: hold is derived from live pointer ownership on both
+	# ledgers, so the fixture registers a real touch on the button and the root
+	# instead of injecting the derived `_mobile_attack_held` bool directly.
+	var hold_token := 9001
+	game.hud.attack_button._active_inputs[3] = {
+		"press_token": hold_token,
+		"touch_id": 3,
+		"source": &"touch",
+	}
+	var pointer_down_before := _count_diagnostics(game, "pointer_down")
+	var fresh_down_before := _count_diagnostics(game, "attack_action_started:fresh_down")
+	var live_hold_before := _count_diagnostics(game, "attack_action_started:live_hold")
+	var sequence_before_hold: int = game.player._combat_action_sequence
+	game._on_mobile_attack_input_started(hold_token, 3, &"touch")
 	game._process(0.0)
+	assert(
+		game.player._combat_action_sequence == sequence_before_hold + 1,
+		"按住后的第一刀没有把普通攻击动作序号+1"
+	)
 	assert(
 		game.locked_target == first
 		and ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
@@ -83,33 +110,76 @@ func _run() -> void:
 		),
 		"按住攻击的重复输入没有保持锁定并持续转向目标"
 	)
-	game._on_mobile_attack_released()
+	# Exactly one DOWN was delivered above. After the target moves, the frame
+	# loop alone must start the next swing once the cooldown AND the action
+	# lock have expired, and the new swing must face the moved live target.
+	_place_at_tile_offset(game, first, player_tile, Vector2i(-4, -2))
+	var second_swing_started := false
+	for _frame in range(150):
+		game.player._physics_process(1.0 / 60.0)
+		game._process(1.0 / 60.0)
+		if game.player._combat_action_sequence >= sequence_before_hold + 2:
+			second_swing_started = true
+			break
+	assert(
+		second_swing_started
+		and game.player._combat_action_sequence == sequence_before_hold + 2,
+		"冷却和动作结束后帧循环没有恰好续出第二刀"
+	)
+	assert(
+		ArtSpec.direction_index(game.player.facing) == ArtSpec.direction_index(
+			_expected_melee_facing(game.player, first)
+		),
+		"第二刀没有转向移动后的攻击锁定"
+	)
+	assert(
+		_count_diagnostics(game, "pointer_down") == pointer_down_before + 1,
+		"持续按住期间出现了额外DOWN（续攻不得依赖新DOWN）"
+	)
+	assert(
+		_count_diagnostics(game, "attack_action_started:live_hold") == live_hold_before + 1
+		and _count_diagnostics(game, "attack_action_started:fresh_down") == fresh_down_before + 1,
+		"首刀与续攻的发起来源不符合fresh_down+live_hold各一次的记录"
+	)
+	game.hud.attack_button._active_inputs.erase(3)
+	game._on_mobile_attack_input_ended(hold_token, 3, &"touch")
+	var sequence_after_release: int = game.player._combat_action_sequence
+	for _frame in range(200):
+		game.player._physics_process(1.0 / 60.0)
+		game._process(1.0 / 60.0)
+	assert(
+		game.player._combat_action_sequence == sequence_after_release,
+		"松手后的多个合法攻击窗口内仍新开了普通攻击"
+	)
+	assert(
+		game.player._attack_action_timer == 0.0,
+		"松手后已经开始的一刀没有自然收尾"
+	)
 
 	game._on_mobile_attack_pressed()
 	game._on_mobile_attack_released()
 	game._on_mobile_attack_pressed()
 	game._on_mobile_attack_released()
-	assert(game._queued_mobile_attacks == 2, "快速点击发生在攻击动作中时没有逐次登记")
+	assert(game._queued_mobile_attacks == 0, "快速点击发生在攻击动作中时不得排队积欠（无历史债务）")
 	game.player._attack_timer = 0.0
 	game.player._attack_action_timer = 0.0
 	game._process(0.0)
 	assert(
-		game._queued_mobile_attacks == 1 and game.player._attack_action_timer > 0.0,
-		"第一笔快速点击没有在人物可攻击时完成一次攻击"
+		game._queued_mobile_attacks == 0 and game.player._attack_action_timer == 0.0,
+		"无按住且无新输入时不得自行开刀（历史欠账不得复燃）"
 	)
-	game.player._attack_timer = 0.0
-	game.player._attack_action_timer = 0.0
-	game._process(0.0)
+	game._on_mobile_attack_pressed()
 	assert(
 		game._queued_mobile_attacks == 0 and game.player._attack_action_timer > 0.0,
-		"第二笔快速点击没有独立完成一次攻击"
+		"可攻击时的全新点击没有立即完成一次攻击"
 	)
-	var repeated_press_token := 9001
+	game._on_mobile_attack_released()
+	var repeated_press_token := 9002
 	game._on_mobile_attack_input_started(repeated_press_token, 17, &"touch")
 	game._on_mobile_attack_input_started(repeated_press_token, 17, &"touch")
 	assert(
-		game._queued_mobile_attacks == 1,
-		"repeated DOWN for one physical touch created more than one attack ticket"
+		game._active_mobile_attack_tokens.size() == 1 and game._queued_mobile_attacks == 0,
+		"repeated DOWN for one physical touch must keep one live owner and no debt"
 	)
 	game._on_mobile_attack_input_cancelled(
 		repeated_press_token,
@@ -121,6 +191,23 @@ func _run() -> void:
 		game._queued_mobile_attacks == 0 and not game._mobile_attack_held,
 		"touch cancel left a ghost attack ticket or held-repeat state"
 	)
+	for index in range(enemies.size()):
+		_move_enemy(
+			enemies[index] as EnemyActor,
+			Vector2(3000 + index * 80, 3000)
+		)
+	game.player.global_position = _find_open_rightward_movement_origin(game)
+	game.player.velocity = Vector2.ZERO
+	await get_tree().physics_frame
+	assert(
+		not game.player._dead
+		and game.player._attack_action_timer > 0.0
+		and game.player._movement_visual_lock_timer <= 0.0
+		and game.player._struck_lock_remaining <= 0.0
+		and game.player._struck_reaction_lock_remaining <= 0.0
+		and game.player.control_time <= 0.0,
+		"movement fixture did not isolate the active attack-action lock"
+	)
 	var movement_position_before: Vector2 = game.player.global_position
 	game.player.set_touch_vector(Vector2.RIGHT)
 	game.player._physics_process(game.player._attack_action_timer + 0.01)
@@ -131,7 +218,14 @@ func _run() -> void:
 		"松开攻击后没有在动作完成时恢复摇杆方向并继续移动"
 	)
 	game.player.set_touch_vector(Vector2.ZERO)
-	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
+	player_tile = _find_formal_targeting_origin(
+		game,
+		[first, second, side, behind],
+	)
+	game.player.global_position = game._canonical_ground_gu_to_screen_px(
+		Vector2(player_tile) + Vector2(0.5, 0.5)
+	)
+	game.player.velocity = Vector2.ZERO
 	assert(game.ATTACK_LOCK_CONTRACT == "combat.attack_lock.euclidean_gu.v2")
 	assert(is_equal_approx(game.ATTACK_LOCK_RANGE_GU, 10.0))
 	_place_at_tile_offset(game, first, player_tile, Vector2i(8, 8))
@@ -186,8 +280,18 @@ func _run() -> void:
 	await _assert_boss_faces_player(game, enemies)
 
 	for index in range(enemies.size()):
-		(enemies[index] as EnemyActor).global_position = Vector2(3000 + index * 80, 3000)
-	player_tile = game._canonical_screen_px_to_grid_cell(game.player.global_position)
+		_move_enemy(
+			enemies[index] as EnemyActor,
+			Vector2(3000 + index * 80, 3000)
+		)
+	player_tile = _find_formal_targeting_origin(
+		game,
+		[first, second, side, behind],
+	)
+	game.player.global_position = game._canonical_ground_gu_to_screen_px(
+		Vector2(player_tile) + Vector2(0.5, 0.5)
+	)
+	game.player.velocity = Vector2.ZERO
 	_place_at_tile_offset(game, second, player_tile, Vector2i(-2, -2))
 	game._cancel_target()
 	game.player.facing = Vector2.DOWN
@@ -199,7 +303,13 @@ func _run() -> void:
 	assert(game._skill_needs_target("projectile") and game._skill_needs_target("area"), "攻击技能目标规则错误")
 	assert(not game._skill_needs_target("heal") and not game._skill_needs_target("summon"), "增益或召唤不应抢夺目标方向")
 	var flying := EnemyActor.new()
-	flying.setup(GameData.get_monster("山洞蝙蝠"), game.player, false)
+	var cave_bat: Dictionary = GameData.get_monster_by_id(43)
+	assert(
+		int(cave_bat.get("monster_id", -1)) == 43
+		and str(cave_bat.get("canonical_name", "")) == "山洞蝙蝠",
+		"飞行怪夹具未取得canonical ID43"
+	)
+	flying.setup(cave_bat, game.player, false)
 	game.add_child(flying)
 	await get_tree().process_frame
 	assert(flying.collision_layer == 0 and flying.collision_mask == 1, "飞行怪仍阻挡人物移动")
@@ -226,14 +336,22 @@ func _assert_attack_ticket_contract_for_all_professions(game: Node) -> void:
 		game._on_mobile_attack_input_started(first_token, 1, &"touch")
 		game._on_mobile_attack_input_started(second_token, 2, &"touch")
 		assert(
-			game._queued_mobile_attacks == 2,
-			"%s attack input did not keep one ticket per unique physical touch" % profession_name
+			game._queued_mobile_attacks == 0,
+			"%s busy taps must not queue future attack debt" % profession_name
+		)
+		assert(
+			game._active_mobile_attack_tokens.size() == 2 and game._mobile_attack_held,
+			"%s attack input did not keep one live owner per unique physical touch" % profession_name
 		)
 		game._on_mobile_attack_input_ended(first_token, 1, &"touch")
+		assert(
+			game._mobile_attack_held and game._queued_mobile_attacks == 0,
+			"%s one finger release must preserve the other live owner without debt" % profession_name
+		)
 		game._on_mobile_attack_input_ended(second_token, 2, &"touch")
 		assert(
-			not game._mobile_attack_held and game._queued_mobile_attacks == 2,
-			"%s release did not stop held repeat or lost legitimate buffered taps" % profession_name
+			not game._mobile_attack_held and game._queued_mobile_attacks == 0,
+			"%s release of every live owner must leave no attack debt" % profession_name
 		)
 		game._cancel_all_mobile_attack_inputs(true)
 	PlayerState.select_profession(original_profession)
@@ -246,7 +364,107 @@ func _place_at_tile_offset(
 	origin_tile: Vector2i,
 	offset: Vector2i
 ) -> void:
-	enemy.global_position = game._canonical_grid_cell_to_screen_px(origin_tile + offset)
+	_move_enemy(
+		enemy,
+		game._canonical_ground_gu_to_screen_px(
+			Vector2(origin_tile + offset) + Vector2(0.5, 0.5)
+		)
+	)
+
+
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"mobile_targeting_fixture_move")
+
+
+func _find_formal_targeting_origin(game: Node, enemies: Array[EnemyActor]) -> Vector2i:
+	assert(game.current_map_id == 910001, "移动选敌夹具必须运行在正式runtime map 910001")
+	var context: Dictionary = game._monster_terrain_navigation_context
+	var design_size: Vector2i = context.get("design_size", Vector2i.ZERO)
+	var player_radius_gu := WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
+	var maximum_enemy_radius_gu := 0.0
+	var maximum_enemy_radius_px := 0.0
+	for enemy: EnemyActor in enemies:
+		maximum_enemy_radius_gu = maxf(maximum_enemy_radius_gu, enemy.combat_radius_gu)
+		maximum_enemy_radius_px = maxf(maximum_enemy_radius_px, enemy.collision_radius_px)
+	var offsets: Array[Vector2i] = [
+		Vector2i(2, 0), Vector2i(-3, 0), Vector2i(0, 4), Vector2i(-5, -5),
+		Vector2i(5, 0), Vector2i(1, 0), Vector2i(-4, -2), Vector2i(3, 3),
+		Vector2i(8, 8), Vector2i(7, 7), Vector2i(11, 0), Vector2i(-2, 0),
+		Vector2i(0, 3), Vector2i(4, 4), Vector2i(-2, -2),
+	]
+	for y in range(12, design_size.y - 12):
+		for x in range(12, design_size.x - 12):
+			var cell := Vector2i(x, y)
+			if not TerrainPolicy.cell_walkable(context, cell, player_radius_gu):
+				continue
+			var player_ground := Vector2(cell) + Vector2(0.5, 0.5)
+			var player_screen: Vector2 = game._canonical_ground_gu_to_screen_px(player_ground)
+			if WorldSpatialRules.environment_blocks_actor_screen_px(game.background, player_screen, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
+				continue
+			var valid := true
+			for offset: Vector2i in offsets:
+				var target_cell := cell + offset
+				var target_ground := Vector2(target_cell) + Vector2(0.5, 0.5)
+				var target_screen: Vector2 = game._canonical_ground_gu_to_screen_px(target_ground)
+				if (
+					not TerrainPolicy.cell_walkable(context, target_cell, maximum_enemy_radius_gu)
+					or WorldSpatialRules.environment_blocks_actor_screen_px(game.background, target_screen, maximum_enemy_radius_px)
+					or game.background.is_environment_segment_blocked_ground(player_ground, target_ground, 0.125)
+					or not _world_ray_clear(game, player_screen, target_screen)
+				):
+					valid = false
+					break
+			if valid:
+				return cell
+	assert(false, "map910001找不到覆盖移动选敌所有偏移的正式开放夹具")
+	return Vector2i.ZERO
+
+
+func _find_open_rightward_movement_origin(game: Node) -> Vector2:
+	const CLEAR_DISTANCE_PX := 64
+	const SAMPLE_STEP_PX := 4
+	var center_tile: Vector2i = game._canonical_screen_px_to_grid_cell(
+		game.player.global_position
+	)
+	for y in range(-24, 25):
+		for x in range(-24, 25):
+			var candidate: Vector2 = game._canonical_grid_cell_to_screen_px(
+				center_tile + Vector2i(x, y)
+			)
+			var clear: bool = true
+			for distance_px: int in range(
+				0, CLEAR_DISTANCE_PX + SAMPLE_STEP_PX, SAMPLE_STEP_PX
+			):
+				if WorldSpatialRules.environment_blocks_actor_screen_px(
+					game.background,
+					candidate + Vector2.RIGHT * float(distance_px),
+					ArtSpec.PLAYER_COLLISION_RADIUS_PX
+				):
+					clear = false
+					break
+			if clear:
+				return candidate
+	assert(false, "找不到向右移动开放夹具")
+	return Vector2.ZERO
+
+
+func _count_diagnostics(game: Node, kind_key: String) -> int:
+	# kind_key is either a bare kind ("pointer_down") or
+	# "attack_action_started:<origin>" for the recorded start reason.
+	var count := 0
+	for entry: Variant in game._attack_action_diagnostic_events:
+		var record: Dictionary = entry
+		var kind := str(record.get("kind", ""))
+		if kind_key.begins_with("attack_action_started:"):
+			if kind != "attack_action_started":
+				continue
+			if str(record.get("reason", "")) == kind_key.get_slice(":", 1):
+				count += 1
+		elif kind == kind_key:
+			count += 1
+	return count
 
 
 func _expected_melee_facing(actor: Node2D, target: Node2D) -> Vector2:
@@ -284,11 +502,14 @@ func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: E
 	# inside that circle are intentionally expelled by GameRoot every frame.
 	var arena_origin: Vector2 = game._bich_home_screen_position_px() + Vector2(600, 0)
 	for enemy: EnemyActor in [second, side, behind]:
-		enemy.global_position = arena_origin + Vector2(700, 300) + Vector2(enemy.get_instance_id() % 100, 0)
+		_move_enemy(
+			enemy,
+			arena_origin + Vector2(700, 300) + Vector2(enemy.get_instance_id() % 100, 0)
+		)
 	game.player.global_position = arena_origin
 	game.player.velocity = Vector2.ZERO
 	game.player.facing = Vector2.RIGHT
-	blocker.global_position = arena_origin + Vector2(72, 0)
+	_move_enemy(blocker, arena_origin + Vector2(72, 0))
 	blocker.velocity = Vector2.ZERO
 	blocker.control_time = 0.0
 	blocker.apply_control(30.0)
@@ -301,22 +522,204 @@ func _assert_player_cannot_push_enemy(game: Node, blocker: EnemyActor, second: E
 	assert(game.player.global_position.distance_to(blocker.global_position) >= ArtSpec.PLAYER_COLLISION_RADIUS_PX + blocker.collision_radius_px - 1.0, "人物移动穿进了怪物碰撞体")
 
 
-func _assert_boss_faces_player(game: Node, _enemies: Array) -> void:
+func _world_ray_clear(game: Node, from_screen_px: Vector2, to_screen_px: Vector2) -> bool:
+	var query := PhysicsRayQueryParameters2D.create(
+		from_screen_px,
+		to_screen_px,
+		WorldSpatialRules.WORLD_MASK,
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	return game.get_world_2d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _find_formal_boss_facing_fixture(game: Node, boss: EnemyActor) -> Dictionary:
+	assert(game.current_map_id == 910001, "Boss朝向夹具必须运行在正式runtime map 910001")
+	var context: Dictionary = game._monster_terrain_navigation_context
+	assert(TerrainPolicy.context_valid(context, 910001), "map910001 terrain context无效")
+	var design_size: Vector2i = context.get("design_size", Vector2i.ZERO)
+	var player_radius_gu := WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(
+		ArtSpec.PLAYER_COLLISION_RADIUS_PX
+	)
+	var center_ground: Vector2 = game._canonical_screen_px_to_ground_gu(
+		game.player.global_position
+	)
+	var center_cell := Vector2i(center_ground.floor())
+	var offsets: Array[Vector2i] = [
+		Vector2i(5, 0), Vector2i(-5, 0), Vector2i(0, 5), Vector2i(0, -5),
+		Vector2i(4, 3), Vector2i(-4, 3), Vector2i(4, -3), Vector2i(-4, -3),
+	]
+	for radius in range(0, 33):
+		for y in range(-radius, radius + 1):
+			for x in range(-radius, radius + 1):
+				if radius > 0 and abs(x) != radius and abs(y) != radius:
+					continue
+				var player_cell := center_cell + Vector2i(x, y)
+				if player_cell.x < 1 or player_cell.y < 1 or player_cell.x >= design_size.x - 1 or player_cell.y >= design_size.y - 1:
+					continue
+				for offset: Vector2i in offsets:
+					var boss_cell := player_cell + offset
+					if boss_cell.x < 1 or boss_cell.y < 1 or boss_cell.x >= design_size.x - 1 or boss_cell.y >= design_size.y - 1:
+						continue
+					if not TerrainPolicy.cell_walkable(context, player_cell, player_radius_gu):
+						continue
+					if not TerrainPolicy.cell_walkable(context, boss_cell, boss.combat_radius_gu):
+						continue
+					var player_ground := Vector2(player_cell) + Vector2(0.5, 0.5)
+					var boss_ground := Vector2(boss_cell) + Vector2(0.5, 0.5)
+					var player_screen: Vector2 = game._canonical_ground_gu_to_screen_px(player_ground)
+					var boss_screen: Vector2 = game._canonical_ground_gu_to_screen_px(boss_ground)
+					if not player_screen.is_finite() or not boss_screen.is_finite():
+						continue
+					if WorldSpatialRules.environment_blocks_actor_screen_px(game.background, player_screen, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
+						continue
+					if WorldSpatialRules.environment_blocks_actor_screen_px(game.background, boss_screen, boss.collision_radius_px):
+						continue
+					if game.background.is_environment_segment_blocked_ground(player_ground, boss_ground, 0.125):
+						continue
+					if not _world_ray_clear(game, player_screen, boss_screen):
+						continue
+					return {
+						"player_ground": player_ground,
+						"boss_ground": boss_ground,
+						"player_screen": player_screen,
+						"boss_screen": boss_screen,
+						"player_radius_gu": player_radius_gu,
+					}
+	assert(false, "map910001找不到正式可行走、双WORLD LOS开放的Boss朝向夹具")
+	return {}
+
+
+func _make_world_los_barrier(from_screen_px: Vector2, to_screen_px: Vector2) -> StaticBody2D:
+	var direction := (to_screen_px - from_screen_px).normalized()
+	var wall := StaticBody2D.new()
+	wall.name = "MobileBossWorldLosBarrier"
+	wall.collision_layer = WorldSpatialRules.WORLD_LAYER
+	wall.collision_mask = 0
+	wall.global_position = from_screen_px.lerp(to_screen_px, 0.5)
+	wall.rotation = direction.angle()
+	var collision := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = Vector2(10.0, 160.0)
+	collision.shape = shape
+	wall.add_child(collision)
+	return wall
+
+
+func _assert_boss_faces_player(game: Node, enemies: Array) -> void:
 	# 使用隔离 Boss，避免默认地图中已有 Boss 的仇恨表影响朝向断言。
+	for index in range(enemies.size()):
+		_move_enemy(enemies[index] as EnemyActor, Vector2(5000 + index * 96, 5000))
 	var boss := EnemyActor.new()
 	boss.setup(
-		{"name": "测试Boss", "hp": 9999, "attackMin": 1, "attackMax": 1},
+		{"monster_id": 76, "name": "沃玛教主", "hp": 9999, "attackMin": 1, "attackMax": 1},
 		game.player,
-		true
+		false
+	)
+	# The canonical setup owns identity and stats; this is only the local
+	# high-HP movement fixture override used by the facing assertion.
+	boss.max_hp = 9999
+	boss.current_hp = 9999
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	var fixture := _find_formal_boss_facing_fixture(game, boss)
+	var player_ground: Vector2 = fixture.player_ground
+	var boss_ground: Vector2 = fixture.boss_ground
+	var boss_position: Vector2 = fixture.boss_screen
+	game.player.global_position = fixture.player_screen
+	game.player.velocity = Vector2.ZERO
+	boss.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	boss.configure_terrain_navigation_context(
+		game._monster_terrain_navigation_context
+	)
+	boss.environment_blocker = game.background
+	boss.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	boss.set_meta("spawn_serial", spawn_serial)
+	boss.set_meta("zone_generation", int(game._zone_generation))
+	boss.set_meta("safe_zones", game._active_safe_zones)
+	boss.set_combat_position(boss_position, &"mobile_targeting_fixture_boss_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(boss_position),
+		boss.combat_radius_gu,
+		spawn_serial,
+		boss,
+		Callable(boss, "spatial_index_position"),
 	)
 	game.add_child(boss)
 	await get_tree().process_frame
+	assert(
+		boss.monster_id == 76
+		and boss.is_boss
+		and str(boss.monster_data.get("classification", "")) == "boss"
+		and int(boss.boss_rule.get("monsterId", -1)) == 76
+		and bool(boss.get_meta("caller_boss_ignored", false)),
+		"隔离Boss夹具必须由canonical ID76派生Boss身份"
+	)
 	boss.control_time = 0.0
-	boss.global_position = game.player.global_position + Vector2(-180, -40)
+	boss.set_physics_process(false)
+	_move_enemy(boss, boss_position)
 	boss.velocity = Vector2.ZERO
 	boss.target = game.player
+	boss.primary_target = game.player
+	boss._clear_attack_los_cache()
+	assert(boss._attack_world_path_is_clear_for_target(game.player), "map910001开放夹具未同时通过地图segment与WORLD physics ray")
+	var open_expected := boss.global_position.direction_to(game.player.global_position)
+	boss.facing = -open_expected
+	boss._hc_finalize_boss_facing()
+	assert(boss.facing.dot(open_expected) > 0.995, "Boss在合法开放WORLD路径没有面对玩家")
+	var wall := _make_world_los_barrier(boss.global_position, game.player.global_position)
+	game.add_child(wall)
+	await get_tree().physics_frame
+	boss._clear_attack_los_cache()
+	var blocked_sentinel := -open_expected
+	boss.facing = blocked_sentinel
+	assert(not boss._attack_world_path_is_clear_for_target(game.player), "动态WORLD墙未阻断Boss到玩家的physics ray")
+	boss._hc_finalize_boss_facing()
+	assert(boss.facing.dot(blocked_sentinel) > 0.995, "Boss隔墙追踪并更新了玩家朝向")
+	wall.queue_free()
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	boss._clear_attack_los_cache()
+	assert(boss._attack_world_path_is_clear_for_target(game.player), "移除动态WORLD墙后合法路径未恢复")
+	boss.set_physics_process(true)
 	for _frame in range(5):
 		await get_tree().physics_frame
+	var moved_ground: Vector2 = game._canonical_screen_px_to_ground_gu(boss.global_position)
+	var moved_gu := moved_ground.distance_to(boss_ground)
+	print(
+		"MOBILE_BOSS_DIAG map_id=", game.current_map_id,
+		" runtime_map_id=", boss.runtime_map_id,
+		" area_map_id=", boss._runtime_map_id_for_area_target(game.player),
+		" terrain_valid=", boss.terrain_navigation_context_ready(),
+		" safe_player=", boss._target_is_safe_player(game.player),
+		" target_usable=", boss._hc_target_usable(game.player),
+		" los_clear=", boss._attack_world_path_is_clear_for_target(game.player),
+		" hc_reason=", boss._hc_last_reason,
+		" observed=", boss._hc_observed,
+		" step_active=", boss._movement_step_active,
+		" target_linked=", boss.target == game.player,
+		" pending=", boss._pending_attack_time,
+		" facing=", boss.facing,
+		" movement_facing=", boss.movement_facing,
+		" moved_gu=", moved_gu,
+		" player_radius_gu=", fixture.player_radius_gu,
+		" boss_radius_gu=", boss.combat_radius_gu,
+		" map_segment_clear=", not game.background.is_environment_segment_blocked_ground(player_ground, boss_ground, 0.125),
+		" world_ray_clear=", _world_ray_clear(game, boss.global_position, game.player.global_position),
+		" boss_ground=", boss._screen_position_px_to_ground_position_gu(boss.global_position),
+		" player_ground=", boss._screen_position_px_to_ground_position_gu(game.player.global_position),
+		" boss_cell=", NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(boss.global_position)),
+		" player_cell=", NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(game.player.global_position)),
+		" boss_cell_walkable=", TerrainPolicy.cell_walkable(game._monster_terrain_navigation_context, NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(boss.global_position)), boss.combat_radius_gu),
+		" player_cell_walkable=", TerrainPolicy.cell_walkable(game._monster_terrain_navigation_context, NeighborPolicy.temporary_cell(boss._screen_position_px_to_ground_position_gu(game.player.global_position)), float(fixture.player_radius_gu)),
+	)
 	var expected := boss.global_position.direction_to(game.player.global_position)
 	assert(boss.facing.dot(expected) > 0.995, "Boss追击时没有持续面对玩家")
+	game._combat_spatial_index.unregister(spawn_serial)
 	boss.queue_free()

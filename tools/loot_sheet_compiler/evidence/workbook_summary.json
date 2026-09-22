@@ -1,0 +1,35 @@
+{
+  "source_file": "HardCore_怪物爆率分表.xlsx",
+  "source_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
+  "sheet_count": 127,
+  "monster_sheet_count": 126,
+  "named_reward_rows": 4876,
+  "exact_formula_reward_rows": 4809,
+  "numeric_literal_reward_rows": 67,
+  "shared_formula_follower_reward_rows": 3138,
+  "new_rows_missing_B_C_H": 41,
+  "multi_slot_rows": 320,
+  "provisional_expanded_slot_count": 5976,
+  "orphan_probability_only_rows": 7,
+  "empty_monster_sheet_ids": [
+    30,
+    45,
+    18,
+    96,
+    100
+  ],
+  "empty_monster_sheet_names": [
+    "食人花",
+    "蝎子",
+    "毒蜘蛛",
+    "羊",
+    "狼"
+  ],
+  "directory_count_mismatch_sheets": 75,
+  "literal_or_fixed_F_formulas": 8,
+  "has_external_links_or_vba": false,
+  "raw_cached_percent_mismatch": 0,
+  "named_zero_probability_rows": 0,
+  "nonempty_probability_out_of_range": 0,
+  "note": "Full workbook structural inspection; not a verified 5976-UID production manifest, nor proof of live spawn coverage."
+}

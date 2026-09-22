@@ -1,0 +1,56 @@
+{
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "world_ready_gating_test",
+      "test_path": "tests/world_ready_gating_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "brand_intro_test",
+      "test_path": "tests/brand_intro_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "melee_lock_fallback_test",
+      "test_path": "tests/melee_lock_fallback_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-05T17:19:12.5979094+08:00",
+  "total": 3,
+  "suite": "adhoc",
+  "passed": 3,
+  "failed": 0,
+  "git_head": "52ae0565856c2d99a28639b2bf0c6278186e0858"
+}

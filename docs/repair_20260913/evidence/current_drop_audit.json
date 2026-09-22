@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "scope": "Full static data, exact rational and preservation audit; not device acceptance",
+  "counts": {
+    "profiles": 156,
+    "runtime_allowed": 153,
+    "enabled": 144,
+    "slots": 7611,
+    "effective_records": 7611,
+    "provenance_records": 7611,
+    "classes": 233,
+    "elite_boss_potion_slots": 1289
+  },
+  "rule_counts": {
+    "NONE": 7131,
+    "BOOK_ELITE_BOSS": 325,
+    "BOOK_ORDINARY": 149,
+    "ARMOR_BASE_1_OVER_60": 6
+  },
+  "errors": [],
+  "notes": [
+    "The inactive overflow seed retains cap=9; production GameData reads cap=15 from direct_baseline. Semantic source_accounting retains pre-V505 6809 while migrated baseline has 7611. Both require production-path interpretation, not data replacement."
+  ],
+  "hashes": [
+    {
+      "path": "assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json",
+      "actual": "FA7C860CEFCF3AC07AF58DA21D842530500EB8D2E9F2A402BA72CC92FA4AFA4C",
+      "expected": "FA7C860CEFCF3AC07AF58DA21D842530500EB8D2E9F2A402BA72CC92FA4AFA4C"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_monster_mapping_v1.json",
+      "actual": "499714F9B61CC56E5CE7550AB69B4E74883343017B3AD07B78EAC5F4630903E7",
+      "expected": "499714F9B61CC56E5CE7550AB69B4E74883343017B3AD07B78EAC5F4630903E7"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+      "actual": "EA7CBCB43C9077AF46D2953FB4D1C993A35F693053001F32942CEA1408E6D021",
+      "expected": "EA7CBCB43C9077AF46D2953FB4D1C993A35F693053001F32942CEA1408E6D021"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_overflow_authority_v1.json",
+      "actual": "8EE86C24F290C02FA2630A553CBEF54F365B10DF0A3761622A60D9E1F4D5A053",
+      "expected": "8EE86C24F290C02FA2630A553CBEF54F365B10DF0A3761622A60D9E1F4D5A053"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_source_provenance_v1.json",
+      "actual": "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01",
+      "expected": "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01"
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "actual": "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7",
+      "expected": "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_source_corrections_v1.json",
+      "actual": "F4490B54332B672053840A7E4F12251979E148A0F7F6DB8FFE68EE30345BA5A7",
+      "expected": "F4490B54332B672053840A7E4F12251979E148A0F7F6DB8FFE68EE30345BA5A7"
+    },
+    {
+      "path": "assets/data/source_priority_policy.json",
+      "actual": "BF6DB3F60F35019C68196F6D95A6DE44D2EBC33B585BC0E63CF62E4AA4C47EDF",
+      "expected": "BF6DB3F60F35019C68196F6D95A6DE44D2EBC33B585BC0E63CF62E4AA4C47EDF"
+    },
+    {
+      "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+      "actual": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0",
+      "expected": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+      "actual": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515",
+      "expected": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515"
+    }
+  ],
+  "preservation": [
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "unchanged_except": "probability_policy.post_rng_ground_slot_limit",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_drop_runtime_authority_v1.json",
+      "unchanged_except": "ground_overflow_policy.maximum_ground_slots",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_drop_boost_v1.json",
+      "unchanged_except": "source_bindings.direct_baseline_sha256_raw",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_effective_probability_v1.json",
+      "unchanged_except": "source_bindings.direct_baseline_sha256_raw",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_manifest_v2.json",
+      "unchanged_except": "artifacts.direct_baseline_authority.sha256",
+      "equal": true
+    }
+  ],
+  "full_report": "outputs/test_logs/current_drop_static_audit.json",
+  "reproduce": "py -3.12 tools/audit_current_drop_tables.py --report outputs/test_logs/current_drop_static_audit.json",
+  "runtime_runner": "outputs/test_logs/runner_results_adhoc_20260913_102553_869_17344.json",
+  "runtime_result": "PASS: 7611 real slot RNG, lean/audit parity, solar denominator policy, cap=15, all-success armor retention"
+}

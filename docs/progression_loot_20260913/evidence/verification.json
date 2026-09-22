@@ -1,0 +1,19 @@
+{
+  "source_commit": "fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393",
+  "baseline": "1d02d8145d6e1dd427e0d41edb435f6ce4e4c6a2",
+  "final_source_smoke": "runner_results_adhoc_20260914_005922_488_23732.json",
+  "final_source_smoke_status": "PASS",
+  "distinct_completed_scenes": 26,
+  "tracked_dirty_preserved": [
+    "AGENTS.md"
+  ],
+  "frozen_layout_sha256": "0EA858C9FE5867B8B7057DFC16FF32FB06DF68A7A6862992A702E45D470CBF10",
+  "old_drop_audit": "PASS",
+  "new_drop_generator": "PASS",
+  "legacy_v505_builder": "BLOCKED: historical full-catalog input guard, current catalog unchanged from task baseline",
+  "apk": "PASS",
+  "device": "NOT_RUN",
+  "apk_sha256": "D8B9E5FF0C395F354997A0F0ED8E7E4F996C1433191D07C04CA5C7F76746F52D",
+  "apk_identity_layout_payload": "PASS",
+  "production_import_export_errors": 0
+}

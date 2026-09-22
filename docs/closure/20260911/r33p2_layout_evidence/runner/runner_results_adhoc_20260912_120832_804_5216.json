@@ -1,0 +1,26 @@
+{
+  "engine_log_errors": 0,
+  "failed": 0,
+  "total": 1,
+  "passed": 1,
+  "generated_at": "2026-09-12T12:08:32.8044387+08:00",
+  "suite": "adhoc",
+  "git_head": "1b56c5821e4021de2fca978cdeaffd2157865af7",
+  "results": [
+    {
+      "test_name": "hud_background_prewarm_test",
+      "test_path": "tests/hud_background_prewarm_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

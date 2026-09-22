@@ -9,8 +9,8 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	_expect(GameData.service_home_map_id(false) == 0, "默认出生地图未读取服务端HomeMap")
-	_expect(GameData.service_home_runtime_map_id(false) == 4, "服务端HomeMap=0没有映射到比奇运行地图4")
-	_expect(int(GameData.get_service_map_by_id(0).get("mapId", -1)) == 4, "服务端地图0别名无法读取比奇省资料")
+	_expect(GameData.service_home_runtime_map_id(false) == 910001, "服务端HomeMap=0没有映射到正式比奇运行地图910001")
+	_expect(int(GameData.get_service_map_by_id(0).get("mapId", -1)) == 910001, "服务端地图0别名无法读取正式比奇省资料")
 	_expect(GameData.service_home_point(false) == Vector2i(289, 618), "默认出生坐标未读取服务端HomeX/HomeY")
 	_expect(GameData.service_home_map_id(true) == 3, "红名回城地图未读取服务端RedHomeMap")
 	_expect(GameData.service_home_point(true) == Vector2i(845, 674), "红名回城坐标未读取服务端RedHomeX/RedHomeY")

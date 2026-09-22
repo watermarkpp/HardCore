@@ -5,6 +5,8 @@ extends Node
 ## fallback must never leak into production maps.
 
 const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
+const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 
 func _ready() -> void:
@@ -26,9 +28,17 @@ func _run() -> void:
 		game.current_map_id >= 0,
 		"booted world must carry a real runtime map id"
 	)
-	game.player.current_mp = 500
-	var target := _make_enemy(game, game.player, game.player.global_position + Vector2(40, 0))
+	var caster: PlayerCharacter = game.player
+	caster.current_mp = 500
+	var target: EnemyActor = await FormalFixture.prepare_target(
+		self,
+		game,
+		caster,
+		FIXTURE_MONSTER_ID,
+		"skill_runtime_mapped_world_strict_snapshot",
+	)
 	game._set_magic_locked_target(target, true)
+	assert(game.magic_locked_target == target, "mapped snapshot target was rejected by the formal WORLD gate")
 	game._skill_cast_target = target
 	await get_tree().process_frame
 	var result: Dictionary = game._execute_canonical_skill(
@@ -63,21 +73,3 @@ func _run() -> void:
 	await get_tree().process_frame
 	print("SKILL_RUNTIME_MAPPED_WORLD_STRICT_SNAPSHOT_PASS")
 	get_tree().quit(0)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "strict_snapshot_target",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	return enemy

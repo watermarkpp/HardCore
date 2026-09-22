@@ -4,6 +4,12 @@ extends CasterSkillVisualEffect
 const SKY_STRIKE_DEFAULT_WARNING_SECONDS := 0.0
 const SKY_STRIKE_DEFAULT_IMPACT_SECONDS := 0.0
 const SKY_STRIKE_DEFAULT_DURATION_SECONDS := 0.5
+const WORLD_FOOTPOINT_RENDER_CONTRACT := "skills.sky_strike.world_footpoint_y_sort.actor_visible.v1"
+## Node2D in the pinned Godot 4.7 runtime exposes y_sort_enabled, but not a
+## per-item y_sort_origin property.  Keep the parent as a real world Y-sort
+## item and use a sub-pixel proxy offset to put a same-footpoint actor after
+## the effect; the drawable child is compensated by the same amount.
+const WORLD_FOOTPOINT_SORT_EPSILON_PX := 0.01
 
 var _visual_profile: Dictionary = {}
 var _anchor_type := ""
@@ -17,6 +23,11 @@ var _scale_policy := ""
 var _impact_started := false
 var _lifecycle_clock := 0.0
 var _debug_metadata: Dictionary = {}
+
+
+func _uses_shared_world_sort() -> bool:
+	# SkyStrike already compensates its dedicated tracked-footpoint sort proxy.
+	return false
 
 
 func setup(
@@ -46,6 +57,7 @@ func setup(
 		sanitized_visual_geometry_context
 	)
 	_apply_sky_strike_profile_context(sanitized_visual_geometry_context)
+	_configure_world_footpoint_render_lane()
 	# Sky-strike visuals can arrive with non-actor attachment policies that clear
 	# `target_node` during base initialization. Capture a deterministic target
 	# anchor early so `world_target_footpoint` remains stable through
@@ -70,6 +82,7 @@ func _ready() -> void:
 	var saved_target := target_node
 	super._ready()
 	target_node = saved_target
+	_configure_world_footpoint_render_lane()
 	# Calling set_process(false) before an AnimationPlayer enters the tree does
 	# not survive Godot's automatic activation of its `_process` callback.  The
 	# lightning sprite therefore completed all six frames while still hidden by
@@ -141,6 +154,14 @@ func _install_single() -> void:
 	_apply_line_decoration_policy(sprite)
 	sprite.visible = false
 	sprite.set_process(false)
+	if _uses_world_footpoint_render_lane():
+		# The parent owns the root z=0/Y-sort key.  The drawable remains in the
+		# same z lane; `_apply_profile_anchor` supplies the tiny sort proxy and
+		# exact child compensation needed for body visibility.
+		sprite.z_as_relative = true
+		sprite.z_index = 0
+		sprite.show_behind_parent = false
+		sprite.set_meta("sky_strike_body_visibility_z_lane", "same_z_subpixel_sort_proxy")
 	add_child(sprite)
 	_sprites.append(sprite)
 
@@ -155,12 +176,32 @@ func _apply_profile_anchor() -> void:
 				anchor_position_px = target_node.global_position
 	else:
 		anchor_position_px = _release_anchor_screen_px
-	global_position = anchor_position_px.round()
+	if _uses_world_footpoint_render_lane():
+		# The effect's Node2D position is the target's actual world footpoint.
+		# Visual scale/offset is kept on the child sprite, so y-sort never uses a
+		# guessed top/crown coordinate.  Keep the unrounded value in diagnostics;
+		# the existing pixel-snap contract still owns the visible child position.
+		set_meta("sky_strike_world_footpoint_sort_y", anchor_position_px.y)
+		set_meta("sky_strike_world_footpoint_sort_position", anchor_position_px)
+	var snapped_anchor := anchor_position_px.round()
+	var sort_position := snapped_anchor
+	var child_compensation := Vector2.ZERO
+	if _uses_world_footpoint_render_lane():
+		# Godot's y-sort compares the Node2D origin and has no y_sort_origin
+		# override on this runtime.  A tiny negative proxy key keeps an actor at
+		# the same visible footpoint on top while preserving normal wall ordering;
+		# the child moves down by the exact epsilon, so the image anchor is stable.
+		sort_position.y -= WORLD_FOOTPOINT_SORT_EPSILON_PX
+		child_compensation.y = WORLD_FOOTPOINT_SORT_EPSILON_PX
+		set_meta("sky_strike_world_footpoint_render_y", snapped_anchor.y)
+		set_meta("sky_strike_world_footpoint_sort_key_y", sort_position.y)
+		set_meta("sky_strike_world_footpoint_child_compensation_y", child_compensation.y)
+	global_position = sort_position
 	for node in _sprites:
 		if not node is CasterSkillAnimationPlayer:
 			continue
 		var sprite: CasterSkillAnimationPlayer = node
-		sprite.position = Vector2.ZERO
+		sprite.position = child_compensation
 
 
 func _apply_sky_strike_profile_context(
@@ -234,7 +275,15 @@ func _refresh_sky_strike_debug_metadata() -> void:
 		"warning": _lifecycle_warning_seconds,
 		"impact": _lifecycle_impact_seconds,
 		"duration": _lifecycle_duration_seconds,
+		"render_lane": "world_y_sort",
+		"world_footpoint_y_sort": _uses_world_footpoint_render_lane(),
+		"same_footpoint_body_visibility": _uses_world_footpoint_render_lane(),
+		"six_frame_gate_preserved": skill_id == "wizard.lightning",
 	}
+	if _uses_world_footpoint_render_lane():
+		_debug_metadata["world_footpoint_sort_origin"] = "node_origin_minus_epsilon"
+		_debug_metadata["world_footpoint_sort_epsilon_px"] = WORLD_FOOTPOINT_SORT_EPSILON_PX
+		_debug_metadata["world_footpoint_sort_contract"] = WORLD_FOOTPOINT_RENDER_CONTRACT
 	set_meta("sky_strike_visual_debug_metadata", _debug_metadata.duplicate(true))
 
 
@@ -248,6 +297,26 @@ func sky_strike_lifecycle_profile() -> Dictionary:
 		"impact": _lifecycle_impact_seconds,
 		"duration": _lifecycle_duration_seconds,
 	}
+
+
+func _uses_world_footpoint_render_lane() -> bool:
+	return skill_id == "wizard.lightning" and _anchor_type == "world_target_footpoint"
+
+
+func _configure_world_footpoint_render_lane() -> void:
+	if not _uses_world_footpoint_render_lane():
+		return
+	# Lightning retains its independently verified target-footpoint proxy.
+	# Generic visuals now share the world plane through WorldEffectRenderOrder.
+	# `_apply_profile_anchor` keeps the drawable child at the exact snapped
+	# footpoint and gives the parent a sub-pixel proxy key on the pinned runtime.
+	z_as_relative = true
+	z_index = 0
+	set_meta("sky_strike_render_contract", WORLD_FOOTPOINT_RENDER_CONTRACT)
+	set_meta("sky_strike_world_footpoint_y_sort", true)
+	set_meta("sky_strike_world_footpoint_sort_origin", "node_origin_minus_epsilon")
+	set_meta("sky_strike_world_footpoint_sort_epsilon_px", WORLD_FOOTPOINT_SORT_EPSILON_PX)
+	set_meta("sky_strike_actor_visibility_preserved", true)
 
 
 func _apply_fixed_source_profile_scale(sprite: CasterSkillAnimationPlayer) -> void:

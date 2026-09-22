@@ -95,6 +95,16 @@ static func new_map_from_blank_template(template_id: String) -> Dictionary:
 		str(template.get("map_id", "")), str(template.get("map_type", "dungeon_floor")),
 		int(template.get("runtime_map_id", 0)), str(template.get("display_name", ""))
 	)
+	# The template's own design_size is the user-confirmed authoring size
+	# (size_decision_source). The template's catalog key may predate the
+	# identity migration and no longer match the current catalog, so the
+	# catalog-recommended size must never override the template size.
+	var template_size: Array = template.get("design_size", [])
+	if template_size.size() == 2:
+		document.design["design_size"] = [int(template_size[0]), int(template_size[1])]
+	for design_key: String in ["strategy", "size_status", "size_decision_source", "source_usage", "pre_scale_design_size", "scale_factor", "scale_rounding"]:
+		if template.has(design_key):
+			document.design[design_key] = template[design_key]
 	document.editor_meta["blank_template_id"] = template_id
 	document.editor_meta["template_kind"] = "empty_map"
 	document.editor_meta["content_policy"] = "empty_layers"

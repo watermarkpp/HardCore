@@ -122,7 +122,9 @@ $MonsterStreamingExpected = @(
     'tests/monster_streaming_no_visual_queue_test.tscn',
     'tests/monster_streaming_no_sync_load_test.tscn',
     'tests/monster_streaming_spatial_index_non_regression_test.tscn',
-    'tests/monster_streaming_scaling_test.tscn'
+    'tests/monster_streaming_scaling_test.tscn',
+    'tests/monster_streaming_lifecycle_test.tscn',
+    'tests/monster_streaming_active_lease_test.tscn'
 )
 
 $SkillPlanSuite = 'skill_execution_plan_critical'
@@ -384,11 +386,12 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
         }
     }
 }
-# Monster Streaming is intentionally excluded from default critical while
-# PROJECT_CURRENT_STATUS marks it HOLD. The direct suite remains registered.
+# 2026-09-21 RV14-04 (O07): Monster Streaming returned to the default critical
+# suite, and the runner must refuse any streaming run below a 30s budget.
 $msIncluded = ($RunnerSource -match '\$Suites\.monster_streaming_critical\s*\+')
-$msExcludedFromDefaultCritical = -not $msIncluded
+$msIncludedInDefaultCritical = $msIncluded
 $msValidateSet = ($RunnerSource -match "monster_streaming_critical")
+$msBudgetGuard = ($RunnerSource -match 'MonsterStreamingBudgetFloor')
 
 # skill_execution_plan_critical verification
 $spMissing = @()
@@ -702,12 +705,29 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $pfIncluded = ($RunnerSource -match '\$Suites\.formal_map_projection_critical\s*\+')
 $pfValidateSet = ($RunnerSource -match "formal_map_projection_critical")
 
-# map_runtime_release_critical verification (FREEZE-P0.3)
+# map_runtime_release_critical verification (FREEZE-P0.3 + HC-POLY-R2 suite
+# extension: the nine polygon production regression scenes were registered
+# into this suite when R3.1 polygon precision landed on integration).
 $ReleaseSuite = 'map_runtime_release_critical'
 $ReleaseExpected = @(
+    'tests/hc_polygon_geometry_test.tscn',
+    'tests/hc_polygon_navigation_test.tscn',
+    'tests/hc_polygon_physics_test.tscn',
+    'tests/hc_polygon_precision_test.tscn',
+    'tests/hc_polygon_editor_input_test.tscn',
+    'tests/hc_polygon_release_alignment_test.tscn',
+    'tests/hc_polygon_numerics_test.tscn',
+    'tests/hc_polygon_reset_test.tscn',
+    'tests/hc_polygon_reset_release_test.tscn',
+    'tests/map_editor_save_path_isolation_test.tscn',
     'tests/map_runtime_release_registry_contract_test.tscn',
+    'tests/map_ui_presentation_projection_test.tscn',
+    'tests/map_persistent_boss_spawn_identity_test.tscn',
     'tests/release_registry_current_maps_test.tscn',
-    'tests/map_runtime_release_gate_test.tscn'
+    'tests/map_runtime_release_gate_test.tscn',
+    'tests/map_release_identity_matrix_test.tscn',
+    'tests/hc_polygon_counterexample_matrix_test.tscn',
+    'tests/aoe_shape_edge_counterexample_test.tscn'
 )
 
 $rlMissing = @()
@@ -750,9 +770,16 @@ $TransactionExpected = @(
     'tests/build_candidate_does_not_mutate_release_test.tscn',
     'tests/publish_promotes_candidate_test.tscn',
     'tests/publish_failure_rollback_test.tscn',
+    'tests/map_publish_restart_recovery_test.tscn',
     'tests/release_registry_consumer_validation_test.tscn',
     'tests/future_map_build_publish_no_code_edit_test.tscn',
-    'tests/mse_publish_entry_wired_test.tscn'
+    'tests/mse_publish_entry_wired_test.tscn',
+    'tests/rv14_registry_review_counterexamples.tscn',
+    'tests/rv14_restore_rollback_injection_test.tscn',
+    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn',
+    'tests/rv14_restore_injected_failures_test.tscn',
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 
 $rtMissing = @()
@@ -869,13 +896,56 @@ foreach ($line in ($RunnerSource -split "`r?`n")) {
 $slpIncluded = ($RunnerSource -match '\$Suites\.skill_panel_layout_critical\s*\+')
 $slpValidateSet = ($RunnerSource -match "skill_panel_layout_critical")
 
+# device_lab_critical verification (R14-A formal suite gate)
+$DeviceLabSuite = 'device_lab_critical'
+$DeviceLabExpected = @(
+    'tests/device_lab_runtime_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/perf_frame_diagnostics_test.tscn',
+    'tests/r14_diagnostic_mode_test.tscn'
+)
+
+$dlMissing = @()
+$dlDuplicates = @()
+$dlGitTracked = @()
+foreach ($path in $DeviceLabExpected) {
+    if (-not (Test-Path -LiteralPath (Join-Path $ProjectRoot ($path -replace '/', '\')))) {
+        $dlMissing += $path
+    }
+    $tracked = (& git ls-files -- $path 2>$null | Out-String).Trim()
+    if ($tracked -ne $path) {
+        $dlGitTracked += $path
+    }
+}
+$dlDuplicates = @($DeviceLabExpected | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })
+$dlBlock = $false
+$dlFound = $false
+$dlEntries = @()
+foreach ($line in ($RunnerSource -split "`r?`n")) {
+    if ($line -match '^\$Suites\.device_lab_critical\s*=') {
+        $dlBlock = $true
+        $dlFound = $true
+        continue
+    }
+    if ($dlBlock) {
+        if ($line -match "^\s*'([^']+\.tscn)'") {
+            $dlEntries += $Matches[1]
+        } elseif ($line -match '^\s*\)') {
+            $dlBlock = $false
+            break
+        }
+    }
+}
+$dlIncluded = ($RunnerSource -match '\$Suites\.device_lab_critical\s*\+')
+$dlValidateSet = ($RunnerSource -match "device_lab_critical")
+
 $ok = $suiteFound -and (Test-StringSetEqual $Expected $suiteEntries) -and ($missing.Count -eq 0) -and ($duplicates.Count -eq 0) -and ($gitTracked.Count -eq 0) -and $includedInDefaultCritical -and $validateSetHasSuite
 $ok = $ok -and $prodFound -and (Test-StringSetEqual $ProductionExpected $prodEntries) -and ($prodMissing.Count -eq 0) -and ($prodDuplicates.Count -eq 0) -and ($prodGitTracked.Count -eq 0) -and $prodIncluded -and $prodValidateSet
 $ok = $ok -and $projFound -and (Test-StringSetEqual $ProjectileExpected $projEntries) -and ($projMissing.Count -eq 0) -and ($projDuplicates.Count -eq 0) -and ($projGitTracked.Count -eq 0) -and $projIncluded -and $projValidateSet
 $ok = $ok -and $slFound -and (Test-StringSetEqual $SafeLogoutExpected $slEntries) -and ($slMissing.Count -eq 0) -and ($slDuplicates.Count -eq 0) -and ($slGitTracked.Count -eq 0) -and $slIncluded -and $slValidateSet
 $ok = $ok -and $pgFound -and (Test-StringSetEqual $PersistentExpected $pgEntries) -and ($pgMissing.Count -eq 0) -and ($pgDuplicates.Count -eq 0) -and ($pgGitTracked.Count -eq 0) -and $pgIncluded -and $pgValidateSet
 $ok = $ok -and $fwFound -and (Test-StringSetEqual $FireWallExpected $fwEntries) -and ($fwMissing.Count -eq 0) -and ($fwDuplicates.Count -eq 0) -and ($fwGitTracked.Count -eq 0) -and $fwIncluded -and $fwValidateSet
-$ok = $ok -and $msFound -and (Test-StringSetEqual $MonsterStreamingExpected $msEntries) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msExcludedFromDefaultCritical -and $msValidateSet
+$ok = $ok -and $msFound -and (Test-StringSetEqual $MonsterStreamingExpected $msEntries) -and ($msMissing.Count -eq 0) -and ($msDuplicates.Count -eq 0) -and ($msGitTracked.Count -eq 0) -and $msIncludedInDefaultCritical -and $msBudgetGuard -and $msValidateSet
 $ok = $ok -and $spFound -and (Test-StringSetEqual $SkillPlanExpected $spEntries) -and ($spMissing.Count -eq 0) -and ($spDuplicates.Count -eq 0) -and ($spGitTracked.Count -eq 0) -and $spIncluded -and $spValidateSet
 $ok = $ok -and $pmFound -and (Test-StringSetEqual $ProductionMigrationExpected $pmEntries) -and ($pmMissing.Count -eq 0) -and ($pmDuplicates.Count -eq 0) -and ($pmGitTracked.Count -eq 0) -and $pmIncluded -and $pmValidateSet
 $ok = $ok -and $clFound -and (Test-StringSetEqual $CleanupExpected $clEntries) -and ($clMissing.Count -eq 0) -and ($clDuplicates.Count -eq 0) -and ($clGitTracked.Count -eq 0) -and $clIncluded -and $clValidateSet
@@ -887,6 +957,79 @@ $ok = $ok -and $rlFound -and (Test-StringSetEqual $ReleaseExpected $rlEntries) -
 $ok = $ok -and $rtFound -and (Test-StringSetEqual $TransactionExpected $rtEntries) -and ($rtMissing.Count -eq 0) -and ($rtDuplicates.Count -eq 0) -and ($rtGitTracked.Count -eq 0) -and $rtIncluded -and $rtValidateSet
 $ok = $ok -and $pvFound -and (Test-StringSetEqual $PlayerVisualExpected $pvEntries) -and ($pvMissing.Count -eq 0) -and ($pvDuplicates.Count -eq 0) -and ($pvGitTracked.Count -eq 0) -and $pvIncluded -and $pvValidateSet
 $ok = $ok -and $slpFound -and (Test-StringSetEqual $SkillPanelExpected $slpEntries) -and ($slpMissing.Count -eq 0) -and ($slpDuplicates.Count -eq 0) -and ($slpGitTracked.Count -eq 0) -and $slpIncluded -and $slpValidateSet
+$ok = $ok -and $dlFound -and (Test-StringSetEqual $DeviceLabExpected $dlEntries) -and ($dlMissing.Count -eq 0) -and ($dlDuplicates.Count -eq 0) -and ($dlGitTracked.Count -eq 0) -and $dlIncluded -and $dlValidateSet
+$auditExpected = @(
+    'tests/profile_business_validation_recovery_test.tscn',
+    'tests/persistence_business_transactions_test.tscn',
+    'tests/shared_warehouse_transaction_test.tscn',
+    'tests/shared_warehouse_migration_test.tscn',
+    'tests/map_editor_workspace_delete_safety_test.tscn',
+    'tests/startup_loading_failure_recovery_test.tscn',
+    'tests/brand_intro_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/lootclock/loot_retry_clock_test.tscn',
+    'tests/lootclock/loot_visual_clock_test.tscn',
+    'tests/runtime_loot_spatial_index_order_test.tscn',
+    'tests/audit_39fe_regressions.tscn',
+    'tests/player_cast_release_overwrite_test.tscn',
+    'tests/player_status_effect_lifecycle_test.tscn',
+    'tests/rv14_release_reentry_test.tscn',
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
+)
+$auditBlock = [regex]::Match($RunnerSource, '(?ms)^\$Suites\.audit_upgrade_critical\s*=\s*@\((.*?)^\)')
+$auditEntries = @([regex]::Matches($auditBlock.Groups[1].Value, "'([^']+\.tscn)'") | ForEach-Object { $_.Groups[1].Value })
+$auditMissing = @($auditExpected | Where-Object {
+    -not (Test-Path -LiteralPath (Join-Path $ProjectRoot $_)) -or
+    ((& git -C $ProjectRoot ls-files -- $_ | Out-String).Trim() -ne $_)
+})
+$auditOk = $auditBlock.Success -and
+    (Test-StringSetEqual $auditExpected $auditEntries) -and
+    $auditEntries.Count -eq $auditExpected.Count -and
+    $auditMissing.Count -eq 0 -and
+    $RunnerSource.Contains("'audit_upgrade_critical'") -and
+    ($RunnerSource -match '\$Suites\.audit_upgrade_critical\s*\+')
+$ok = $ok -and $auditOk
+
+# RV14-R2 review: the runner's default entry point must be a real
+# parameter default of exactly 30 seconds (parsed via the PowerShell AST,
+# not a sentinel string), and the default critical suite must still carry
+# the monster streaming suite with its sub-30-second rejection guard.
+$runnerTokens = $null
+$runnerParseErrors = $null
+$runnerAst = [System.Management.Automation.Language.Parser]::ParseInput(
+    $RunnerSource, [ref]$runnerTokens, [ref]$runnerParseErrors
+)
+$runnerParseOk = $runnerParseErrors.Count -eq 0
+if (-not $runnerParseOk) {
+    throw 'Runner PowerShell parse failed'
+}
+$timeoutParams = @($runnerAst.ParamBlock.Parameters | Where-Object {
+    $_.Name.VariablePath.UserPath -eq 'TimeoutSeconds'
+})
+$timeoutUnique = $timeoutParams.Count -eq 1
+$timeoutDefault = $timeoutParams[0].DefaultValue
+$timeoutDefaultValue = 0
+if ($null -ne $timeoutDefault) {
+    $timeoutDefaultValue = [int]($timeoutDefault.SafeGetValue())
+}
+$timeoutDefaultIs30 = $timeoutDefaultValue -eq 30
+$timeoutRangeFloorIs1 = $true
+$rangeAttr = @($timeoutParams[0].Attributes | Where-Object {
+    $_.TypeName.Name -eq 'ValidateRange'
+})[0]
+if ($null -ne $rangeAttr -and $rangeAttr.MinRange) {
+    $timeoutRangeFloorIs1 = [int]($rangeAttr.MinRange.SafeGetValue()) -eq 1
+}
+$streamingInDefaultCritical = (
+    $RunnerSource -match '\$Suites\.critical\s*=\s*@\(.*\)\s*\+\s*@\(?\s*\$Suites\.monster_streaming_critical' -or
+    $RunnerSource -match '\$Suites\.critical\s*\+\s*=\s*\$Suites\.monster_streaming_critical' -or
+    ($RunnerSource -match '\$Suites\.monster_streaming_critical' -and $RunnerSource -match '\$Suites\.critical\s*=')
+)
+$streamingBudgetFloorGuard = $RunnerSource -match '30'
+$runnerDefaultsOk = $runnerParseOk -and $timeoutUnique -and $timeoutDefaultIs30 -and $timeoutRangeFloorIs1
+$ok = $ok -and $runnerDefaultsOk
+
 $result = 'PASS'
 if (-not $ok) {
     $result = 'FAIL'
@@ -947,8 +1090,8 @@ $report = [ordered]@{
     monster_streaming_missing = $msMissing
     monster_streaming_duplicates = $msDuplicates
     monster_streaming_not_git_tracked = $msGitTracked
-    monster_streaming_included_in_default_critical = $msIncluded
-    monster_streaming_excluded_from_default_critical_while_hold = $msExcludedFromDefaultCritical
+    monster_streaming_included_in_default_critical = $msIncludedInDefaultCritical
+    monster_streaming_budget_guard_present = $msBudgetGuard
     monster_streaming_validate_set = $msValidateSet
     skill_execution_plan_suite = $SkillPlanSuite
     skill_execution_plan_expected_count = $SkillPlanExpected.Count
@@ -1038,6 +1181,25 @@ $report = [ordered]@{
     skill_panel_layout_not_git_tracked = $slpGitTracked
     skill_panel_layout_included_in_default_critical = $slpIncluded
     skill_panel_layout_validate_set = $slpValidateSet
+    device_lab_suite = $DeviceLabSuite
+    device_lab_expected_count = $DeviceLabExpected.Count
+    device_lab_actual_count = $dlEntries.Count
+    device_lab_missing = $dlMissing
+    device_lab_duplicates = $dlDuplicates
+    device_lab_not_git_tracked = $dlGitTracked
+    device_lab_included_in_default_critical = $dlIncluded
+    device_lab_validate_set = $dlValidateSet
+    audit_upgrade_expected_count = $auditExpected.Count
+    audit_upgrade_actual_count = $auditEntries.Count
+    audit_upgrade_missing_or_untracked = $auditMissing
+    audit_upgrade_registration_pass = $auditOk
+    runner_parse_ok = $runnerParseOk
+    runner_timeout_seconds_unique = $timeoutUnique
+    runner_timeout_default_value = $timeoutDefaultValue
+    runner_timeout_default_is_30 = $timeoutDefaultIs30
+    runner_timeout_range_floor_is_1 = $timeoutRangeFloorIs1
+    runner_streaming_in_default_critical = $streamingInDefaultCritical
+    runner_registration_pass = $runnerDefaultsOk
     result = $result
 }
 $report | ConvertTo-Json -Depth 4

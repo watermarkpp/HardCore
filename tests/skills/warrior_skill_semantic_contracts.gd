@@ -13,9 +13,12 @@ const ASSERTIONS_BY_SKILL := {
 		"slaying_proc_table_exact",
 		"slaying_dc_bonus_exact",
 		"slaying_accuracy_bonus_exact",
+		"slaying_scope_all_body_modes",
 		"slaying_training_only_on_proc",
 	],
 	"warrior.thrusting": [
+		## Preserve the archived contract ID while asserting the project 3 GU
+		## override; the manifest key is a stable compatibility identifier.
 		"thrusting_two_cell_line",
 		"thrusting_second_cell_multiplier",
 		"thrusting_second_cell_ignores_ac",
@@ -39,6 +42,7 @@ const ASSERTIONS_BY_SKILL := {
 	"warrior.fire_sword": [
 		"fire_sword_never_auto_casts",
 		"fire_sword_multiplier_exact",
+		"fire_sword_requires_target_before_action",
 		"fire_sword_charge_expires",
 		"fire_sword_consumed_once",
 		"fire_sword_cooldown_independent_from_charge_lifetime",
@@ -79,13 +83,23 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _support.rank_effect_values(skill_id, "flat_damage_bonus") == [2, 4, 6, 8]
 		"slaying_accuracy_bonus_exact":
 			return _support.rank_effect_values(skill_id, "flat_accuracy_bonus") == [0, 1, 2, 3]
+		"slaying_scope_all_body_modes":
+			var slaying_mechanics: Dictionary = _support.definition(skill_id).get("mechanics", {})
+			return (
+				str(slaying_mechanics.get("project_runtime_scope", ""))
+				== "all_valid_warrior_melee_actions_with_body_damage; wild_rush_has_no_body_damage_and_is_not_applicable"
+				and str(slaying_mechanics.get("skill_effect_policy", ""))
+				== "post_body_damage_only_no_extra_slaying_animation_for_skill_body_modes"
+			)
 		"slaying_training_only_on_proc":
 			var success := _support.execute(skill_id, 3, {"force_proc": true})
 			var failure := _support.execute(skill_id, 3, {"force_proc": false, "force_no_proc": true})
 			return success.proficiency_event.is_empty() and failure.proficiency_event.is_empty()
 		"thrusting_two_cell_line":
 			var thrust := _support.execute(skill_id, 3)
-			return thrust.geometry_cells == [Vector2i(1, 0), Vector2i(2, 0)]
+			return thrust.geometry_cells == [
+				Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)
+			]
 		"thrusting_second_cell_multiplier":
 			var values: Array = []
 			for rank in range(4):
@@ -168,6 +182,15 @@ func _validate(skill_id: String, assertion_id: String) -> bool:
 			return _floats_equal(
 				_support.rank_effect_values(skill_id, "damage_multiplier"),
 				[1.4, 1.8, 2.2, 2.6]
+			)
+		"fire_sword_requires_target_before_action":
+			var fire_geometry: Dictionary = _support.definition(skill_id).get("geometry", {})
+			return (
+				is_equal_approx(float(fire_geometry.get("runtime_melee_reach_gu", 0.0)), 2.0)
+				and is_equal_approx(float(fire_geometry.get("range_bonus_cap_gu", -1.0)), 0.0)
+				and bool(fire_geometry.get("requires_valid_target_at_input", false))
+				and str(fire_geometry.get("empty_swing_policy", ""))
+				== "reject_without_valid_target_at_input"
 			)
 		"fire_sword_charge_expires":
 			var charge := _support.execute(skill_id, 3, {"charge_consumed": false})

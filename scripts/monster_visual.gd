@@ -1,8 +1,13 @@
 class_name MonsterVisual
 extends Node2D
 
+const SourceFrames := preload("res://scripts/monster_source_frames.gd")
+const AttackOverlay := preload("res://scripts/monster_attack_source_overlay.gd")
+const ProjectileVisual := preload("res://scripts/monster_ranged_projectile_effect.gd")
+
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
+const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
 const OVERHEAD_ANCHOR_DATA_PATH := "res://assets/data/runtime/monster_overhead_anchors.json"
 const GROUND_CONTACT_DATA_PATH := "res://assets/data/runtime/monster_ground_contacts.json"
 const MANUAL_ALIGNMENT_DATA_PATH := (
@@ -23,12 +28,19 @@ const MANUAL_ALIGNMENT_SPAWN_GAP := 14.0
 const CLIENT_ACTOR_GROUND_OFFSET := Vector2i(32, 28)
 const HEALTH_BAR_BODY_GAP := 8.0
 const CLIENT_RESOURCE_CACHE_CAPACITY := 12
-const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := 64 * 1024 * 1024
+## Compatibility name retained for callers; this is decoded RGBA8 residency
+## (four bytes per pixel across all five action atlases), not ETC2 bytes.
+const CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES := 64 * 1024 * 1024
+const CLIENT_RESOURCE_CACHE_BUDGET_BYTES := CLIENT_RESOURCE_CACHE_BUDGET_DECODED_RGBA8_BYTES
 const RESOURCE_RESIDENCY_CONTRACT_ID := "monster.visual.resource_residency.screen_px.v1"
-const VISUAL_ACTIVATION_DISTANCE_PX := 1600.0
-const VISUAL_RELEASE_DISTANCE_PX := 2000.0
+## Viewport-space guard margins. They include the largest reviewed monster
+## footprint plus more than half a second of camera travel, while avoiding the
+## old 1600/2000 world-radius lease around every off-screen spawn.
+const VISUAL_ACTIVATION_DISTANCE_PX := 320.0
+const VISUAL_RELEASE_DISTANCE_PX := 640.0
 const RESOURCE_RESIDENCY_CHECK_SECONDS := 0.12
 const MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC := 5.0 / 32.0
+const DEATH_ANIMATION_FPS := 12.0
 const MAX_CONCURRENT_PROFILE_LOADS := 2
 const ACTOR_Y_SORT_RENDER_DOMAIN := "actor_y_sort"
 const ACTOR_Y_SORT_RENDER_CONTRACT := "monster.actor_y_sort.v1"
@@ -73,13 +85,67 @@ var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
 var _hit_remaining := 0.0
+# R1.2 vanilla presentation FIFO (review closure): struck and attack
+# presentation events queue in strict arrival order - exactly the original
+# client model where the next action message is consumed only after the
+# current action finishes (`while m_nCurrentAction = 0 and GetMessage(@Msg)`).
+# Fixed capacity, preallocated packed arrays, O(1) enqueue/dequeue, no
+# per-hit Timer/Node/Dictionary allocation. Gameplay authority (_attack_timer,
+# pending release records, WalkTick, damage) is untouched by this queue.
+const PRESENTATION_QUEUE_CAPACITY := 16
+
+enum PresentationAction {
+	STRUCK,
+	ATTACK,
+}
+
+var _presentation_kind := PackedByteArray()
+var _presentation_duration := PackedFloat32Array()
+# R1.3: per-entry movement-step barrier. A struck enqueued WHILE an autonomous
+# step is active records that step's observation epoch; it may only start once
+# that exact step is over (epoch moved on / step no longer active). Later
+# pursuit steps never delay it - matching the vanilla queue where the struck
+# message is consumed right after the walk it arrived during. -1 = no barrier.
+var _presentation_step_barrier := PackedInt32Array()
+var _presentation_head := 0
+var _presentation_tail := 0
+var _presentation_count := 0
+# R1.3 canonical hit-frame metadata (review closure): the ActStruck frame
+# count is appearance metadata from the monster animation catalog, NOT a
+# texture-residency state. Cached once at _ready so a struck enqueued during
+# cold activation / async streaming / released residency still gets the exact
+# vanilla duration (e.g. monster 241 = 6 frames, never the 2-frame fallback).
+var _canonical_struck_frame_count := 2
+# Acceleration/diagnostic counter only: the number of struck events WAITING
+# in the queue (the playing struck is dequeued first). It drives the vanilla
+# backlog 1.5x playback speed; it NEVER decides the action order anymore.
+var _pending_struck_count := 0
 var _death_remaining := 0.0
+var _death_pose_held := false
 var _action_duration := 0.0
+var _hc_m30_attack_duration: float = 0.46
+var _hc_m30_hit_duration: float = 0.22
+var _hc_m30_death_duration: float = 0.62
+var _hc_m30_last_geometry_origin: Vector2 = Vector2.INF
+var _hc_m30_last_geometry_radius: float = -1.0
+var _hc_m30_last_geometry_radius_px: float = -1.0
 var _fixed_health_bar_y := 0.0
 var _render_state_update_count := 0
 var _resource_residency_timer := 0.0
+var _residency_wakeup_timer: Timer
+var _inactive_action_last_tick_msec := 0
+var _streaming_resource_key := ""
+var _streaming_world_generation := -1
 var _last_ground_contact_position := Vector2.INF
 var _last_ground_indicator_radii := Vector2.INF
+
+
+func _init() -> void:
+	# Preallocate the presentation FIFO once per visual (16 bytes + 16 floats
+	# + 16 ints for the movement-step barriers).
+	_presentation_kind.resize(PRESENTATION_QUEUE_CAPACITY)
+	_presentation_duration.resize(PRESENTATION_QUEUE_CAPACITY)
+	_presentation_step_barrier.resize(PRESENTATION_QUEUE_CAPACITY)
 
 
 static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
@@ -101,6 +167,8 @@ func setup(owner_actor: EnemyActor) -> void:
 func _ready() -> void:
 	configure_actor_y_sort_item(self, "visual_root")
 	_has_authored_client_art = not _client_mapping_for(actor.monster_data).is_empty()
+	# Canonical struck frame count is resolved once from appearance metadata.
+	_canonical_struck_frame_count = _load_canonical_struck_frame_count(actor.monster_id)
 	# 普通怪下沉4px，Boss下沉6px，使脚底与阴影中心实际重叠。
 	position = _runtime_visual_origin()
 	visible = false
@@ -118,15 +186,29 @@ func _ready() -> void:
 	_fixed_health_bar_y = position.y + sprite.position.y
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
+	# Production residency is scheduled centrally by the streaming coordinator.
+	# Isolated visual fixtures retain one local fallback timer.
+	if _streaming_coordinator == null or not is_instance_valid(_streaming_coordinator):
+		_residency_wakeup_timer = Timer.new()
+		_residency_wakeup_timer.name = "ResidencyWakeupTimer"
+		_residency_wakeup_timer.wait_time = RESOURCE_RESIDENCY_CHECK_SECONDS
+		_residency_wakeup_timer.one_shot = true
+		_residency_wakeup_timer.timeout.connect(_on_residency_wakeup_timeout)
+		add_child(_residency_wakeup_timer)
 	_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
+	# Registration is the R state only. Declare an actual W demand from
+	# _activate_resources after this subscription exists, so a near visual
+	# cannot miss its first protection window.
+	_register_with_streaming_coordinator()
 	if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
 		_activate_resources()
-	_register_with_streaming_coordinator()
+	_sync_process_tier()
 
 
 func _exit_tree() -> void:
 	var coordinator = _streaming_coordinator
 	if coordinator != null and is_instance_valid(coordinator):
+		coordinator.release_visual_resource(get_instance_id(), _streaming_resource_key)
 		coordinator.unregister_visual(get_instance_id())
 
 
@@ -136,6 +218,19 @@ func _register_with_streaming_coordinator() -> void:
 		return
 	var mapping := _client_mapping_for(actor.monster_data)
 	if mapping.is_empty():
+		# Keep the lifecycle in R even for a procedural/unmapped visual. It has no
+		# resource key and therefore cannot become a waiter, but it still needs a
+		# generation-safe unregister on teardown.
+		coordinator.register_visual(
+			self,
+			actor.monster_id,
+			actor.runtime_map_id,
+			coordinator.current_world_generation(),
+			"",
+			{},
+			int(actor.get_meta("spawn_serial", actor.get_instance_id()))
+		)
+		_streaming_world_generation = coordinator.current_world_generation()
 		return
 	coordinator.register_visual(
 		self,
@@ -146,6 +241,8 @@ func _register_with_streaming_coordinator() -> void:
 		_client_resource_paths(mapping),
 		int(actor.get_meta("spawn_serial", actor.get_instance_id()))
 	)
+	_streaming_resource_key = _client_resource_cache_key(mapping)
+	_streaming_world_generation = coordinator.current_world_generation()
 
 
 static func set_streaming_coordinator(
@@ -239,29 +336,58 @@ func ground_shadow_layout_snapshot() -> Dictionary:
 func _process(delta: float) -> void:
 	if not is_instance_valid(actor):
 		return
-	_attack_remaining = maxf(0.0, _attack_remaining - delta)
-	_hit_remaining = maxf(0.0, _hit_remaining - delta)
-	_death_remaining = maxf(0.0, _death_remaining - delta)
-	_resource_residency_timer -= delta
-	if _resource_residency_timer <= 0.0:
-		_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
-		if active_resources.is_empty():
-			if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
-				_activate_resources()
-		elif not _inside_visual_distance_px(VISUAL_RELEASE_DISTANCE_PX):
-			_release_resources()
+	_advance_action_timers(delta)
+	if _streaming_coordinator == null or not is_instance_valid(_streaming_coordinator):
+		_resource_residency_timer -= delta
+		if _resource_residency_timer <= 0.0:
+			_resource_residency_timer = RESOURCE_RESIDENCY_CHECK_SECONDS
+			_update_resource_residency()
 	if active_resources.is_empty() or not visible:
 		return
-	if _death_remaining > 0.0:
+	RuntimeDiagnostics.increment_performance_counter(&"visual_animation_updates")
+	_update_animation_frame(delta)
+
+
+func _advance_action_timers(delta: float) -> void:
+	var death_was_playing := _death_remaining > 0.0
+	_attack_remaining = maxf(0.0, _attack_remaining - delta)
+	# Only a struck that already STARTED counts down. With a backlog (>= 2)
+	# pending presentation events the original client plays frame time at 2/3
+	# speed, i.e. the countdown runs at 1.5x until the backlog drains
+	# (MonsterStruckPolicy; Actor.pas m_boMsgMuch watches the WHOLE message
+	# list, so the vanilla-faithful counter is the full FIFO depth).
+	_hit_remaining = maxf(
+		0.0,
+		_hit_remaining
+		- delta * MonsterStruckPolicyScript.struck_speed_multiplier(
+			_presentation_count
+		)
+	)
+	_death_remaining = maxf(0.0, _death_remaining - delta)
+	_try_start_next_presentation()
+	if death_was_playing and _death_remaining <= 0.0 and actor._dying:
+		# Keep the final frame continuously. The owner timer later extends this as
+		# the corpse hold; there must never be a one-frame idle flash in between.
+		_death_pose_held = true
+
+
+func _update_resource_residency() -> void:
+	if active_resources.is_empty():
+		if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
+			_activate_resources()
+	elif not _inside_visual_distance_px(VISUAL_RELEASE_DISTANCE_PX):
+		_release_resources()
+
+
+func _update_animation_frame(delta: float) -> void:
+	_hc_m30_last_visual_process_frame = Engine.get_process_frames()
+	if _death_remaining > 0.0 or _death_pose_held:
 		current_state = "death"
 	elif _attack_remaining > 0.0:
 		current_state = "attack"
 	elif _hit_remaining > 0.0:
 		current_state = "hit"
-	elif (
-		actor.ground_velocity_gu_per_sec().length_squared()
-		> MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC * MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC
-	):
+	elif _hc_m30_is_walking():
 		current_state = "walk"
 	else:
 		current_state = "idle"
@@ -271,12 +397,19 @@ func _process(delta: float) -> void:
 		_elapsed = 0.0
 		_last_state = current_state
 	_elapsed += delta
-	var frame_count := MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state))
-	if current_state in ["attack", "hit", "death"]:
-		var progress := clampf(_elapsed / maxf(_action_duration, 0.001), 0.0, 0.999)
-		current_frame = mini(frame_count - 1, int(floor(progress * frame_count)))
+	var frame_count: int = maxi(1, MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state)))
+	if _death_pose_held and current_state == "death":
+		current_frame = frame_count - 1
+	elif current_state == "attack":
+		current_frame = HCM30WalkPhaseScript.action_frame_index(_attack_remaining, _hc_m30_attack_duration, frame_count)
+	elif current_state == "hit":
+		current_frame = HCM30WalkPhaseScript.action_frame_index(_hit_remaining, _hc_m30_hit_duration, frame_count)
+	elif current_state == "death":
+		current_frame = HCM30WalkPhaseScript.action_frame_index(_death_remaining, _hc_m30_death_duration, frame_count)
+	elif current_state == "walk" and _hc_m30_melee_tick == Engine.get_physics_frames():
+		current_frame = _hc_m30_walk.frame_index(frame_count)
 	else:
-		var fps := MonsterAnimationPolicy.loop_fps(StringName(current_state))
+		var fps: float = MonsterAnimationPolicy.loop_fps(StringName(current_state))
 		current_frame = int(floor(_elapsed * fps)) % frame_count
 	var next_region := Rect2(current_frame * frame_size.x, current_direction * frame_size.y, frame_size.x, frame_size.y)
 	if sprite.texture != active_resources[current_state] or sprite.region_rect != next_region:
@@ -284,18 +417,78 @@ func _process(delta: float) -> void:
 
 
 func _inside_visual_distance_px(distance_px: float) -> bool:
-	if not is_instance_valid(actor) or not is_instance_valid(actor.primary_target):
+	if not is_instance_valid(actor):
 		return true
-	# This is intentionally a rendering-residency threshold, not combat/AI
-	# geometry. Screen PX is therefore correct here and is explicitly named so
-	# it cannot be mistaken for a gameplay range.
-	return (
-		actor.global_position.distance_squared_to(actor.primary_target.global_position)
-		<= distance_px * distance_px
+	var viewport := get_viewport()
+	if viewport == null or not actor.is_inside_tree():
+		return true
+	# Rendering residency follows the actual camera/canvas rectangle. A grown
+	# viewport retains every on-screen or soon-to-enter monster irrespective of
+	# device aspect ratio; it is deliberately unrelated to combat Ground GU.
+	var actor_viewport_position := actor.get_global_transform_with_canvas().origin
+	return viewport.get_visible_rect().grow(maxf(0.0, distance_px)).has_point(
+		actor_viewport_position
 	)
 
 
+func _on_residency_wakeup_timeout() -> void:
+	streaming_residency_poll(Time.get_ticks_msec())
+	if (
+		_residency_wakeup_timer != null
+		and not is_processing()
+		and _residency_wakeup_timer.is_stopped()
+	):
+		_residency_wakeup_timer.start(RESOURCE_RESIDENCY_CHECK_SECONDS)
+
+
+func streaming_residency_poll(now_msec: int) -> void:
+	if not is_instance_valid(actor):
+		return
+	if not is_processing():
+		var elapsed_seconds := RESOURCE_RESIDENCY_CHECK_SECONDS
+		if _inactive_action_last_tick_msec > 0:
+			elapsed_seconds = clampf(
+				float(maxi(1, now_msec - _inactive_action_last_tick_msec)) / 1000.0,
+				1.0 / 120.0,
+				2.0,
+			)
+		_advance_action_timers(elapsed_seconds)
+		_inactive_action_last_tick_msec = now_msec
+	_update_resource_residency()
+
+
+func _sync_process_tier() -> void:
+	var needs_frame_process := (
+		not _has_authored_client_art
+		or not active_resources.is_empty()
+	)
+	set_process(needs_frame_process)
+	if needs_frame_process:
+		_inactive_action_last_tick_msec = 0
+		if _residency_wakeup_timer != null:
+			_residency_wakeup_timer.stop()
+	else:
+		_inactive_action_last_tick_msec = Time.get_ticks_msec()
+		if _residency_wakeup_timer != null:
+			var phase_slot := posmod(
+				int(actor.get_meta("spawn_serial", get_instance_id())) * 7
+				+ actor.monster_id * 11,
+				15,
+			)
+			var stagger := (
+				RESOURCE_RESIDENCY_CHECK_SECONDS
+				* float(phase_slot + 1)
+				/ 15.0
+			)
+			_residency_wakeup_timer.start(stagger)
+
+
 func _activate_resources() -> void:
+	var effect_profile := SourceFrames.profile_for_id(actor.monster_id)
+	var effect_direction := 0 if int(effect_profile.get("direction_count", 8)) == 1 else _direction_row(actor.facing)
+	if int(effect_profile.get("direction_count", 8)) == 16: effect_direction *= 2
+	SourceFrames.request_profile(effect_profile, effect_direction)
+	ProjectileVisual.prewarm_for_monster_id(actor.monster_id)
 	if not active_resources.is_empty():
 		return
 	var resources := _resources_for(actor.monster_data)
@@ -314,6 +507,19 @@ func _activate_resources() -> void:
 	visible = not actor._burrowed
 	_last_state = ""
 	_apply_render_state(active_resources["idle"], Rect2(Vector2.ZERO, frame_size))
+	# The coordinator only receives L after the complete profile has been
+	# applied. Until this point the explicit W demand remains the eviction guard.
+	var coordinator = _streaming_coordinator
+	if (
+		coordinator != null
+		and is_instance_valid(coordinator)
+		and not _streaming_resource_key.is_empty()
+	):
+		coordinator.notify_visual_applied(
+			get_instance_id(),
+			_streaming_resource_key,
+			_streaming_world_generation
+		)
 	# A cold runtime profile reaches this method after the EnemyActor has already
 	# created its overhead. Apply the real texture before asking the actor for its
 	# anchor: health_bar_anchor_y() deliberately uses the procedural fallback
@@ -321,9 +527,22 @@ func _activate_resources() -> void:
 	# left every asynchronously activated monster permanently at that fallback.
 	actor.refresh_name_label_position()
 	_refresh_actor_ground_indicator()
+	_sync_process_tier()
 
 
 func _release_resources() -> void:
+	var coordinator = _streaming_coordinator
+	if (
+		coordinator != null
+		and is_instance_valid(coordinator)
+		and not _streaming_resource_key.is_empty()
+	):
+		coordinator.release_visual_resource(
+			get_instance_id(),
+			_streaming_resource_key
+		)
+	_streaming_resource_key = ""
+	_streaming_world_generation = -1
 	if active_resources.is_empty():
 		return
 	visible = false
@@ -332,6 +551,7 @@ func _release_resources() -> void:
 	ground_contact_profile = {}
 	position = _runtime_visual_origin()
 	_refresh_actor_ground_indicator()
+	_sync_process_tier()
 
 
 func _resources_for(monster_data: Dictionary) -> Dictionary:
@@ -536,6 +756,7 @@ func _refresh_actor_ground_indicator() -> void:
 	# Resource activation/release changes whether the procedural ground shadow
 	# is legal even for an unselected actor, so every transition must invalidate
 	# that cached list.
+	RuntimeDiagnostics.increment_performance_counter(&"actor_redraw_requests")
 	actor.queue_redraw()
 	queue_redraw()
 
@@ -602,22 +823,33 @@ func _client_resources(client_mapping: Dictionary) -> Dictionary:
 	var cache_key := _client_resource_cache_key(client_mapping)
 	var coordinator = _streaming_coordinator
 	if coordinator != null and is_instance_valid(coordinator):
-		var cached = coordinator.client_resources(cache_key)
-		if cached is Dictionary and not cached.is_empty():
-			coordinator.notify_visual_applied(cache_key)
-			return cached
+		# The visual must explicitly enter W before reading the cache. R alone is
+		# not a permanent waiter, so far-away actors cannot pin every atlas.
+		var request_async := not PlayerState.test_mode or not _synchronous_loading_for_tests
+		var requested = coordinator.request_visual_resources(
+			self,
+			client_mapping,
+			actor.monster_id if is_instance_valid(actor) else -1,
+			request_async
+		)
+		if requested is Dictionary and not requested.is_empty():
+			_streaming_resource_key = cache_key
+			_streaming_world_generation = coordinator.current_world_generation()
+			return requested
+		# A stale subscription is fenced and must never fall through to a
+		# synchronous load that could apply a new-map profile to an old actor.
+		if not coordinator.visual_subscription_is_current(get_instance_id(), cache_key):
+			return {}
 		# Unit/asset tests retain their deterministic immediate-load fixture.
 		# Runtime activation never enters the sync branch: it queues the five
-		# atlases on the threaded loader via the coordinator and keeps the cheap
-		# procedural fallback until ready.
+		# atlases on the threaded loader and keeps the fallback until ready.
 		if not PlayerState.test_mode or not _synchronous_loading_for_tests:
-			coordinator.request_client_profile(
-				client_mapping,
-				actor.monster_id if is_instance_valid(actor) else -1
-			)
 			return {}
 	elif not PlayerState.test_mode or not _synchronous_loading_for_tests:
 		return {}
+	_streaming_resource_key = cache_key
+	if coordinator != null and is_instance_valid(coordinator):
+		_streaming_world_generation = coordinator.current_world_generation()
 	return _load_client_profile_synchronously(client_mapping)
 
 
@@ -682,16 +914,29 @@ func _load_client_profile_synchronously(client_mapping: Dictionary) -> Dictionar
 
 
 func _apply_render_state(texture: Texture2D, region: Rect2) -> void:
-	var changed := false
-	if sprite.texture != texture:
+	var texture_changed: bool = sprite.texture != texture
+	var changed: bool = texture_changed or sprite.region_rect != region
+	var radius: float = actor.combat_radius_gu if is_instance_valid(actor) else -1.0
+	var radius_px: float = actor.collision_radius_px if is_instance_valid(actor) else -1.0
+	var geometry_changed: bool = (
+		position != _hc_m30_last_geometry_origin
+		or radius != _hc_m30_last_geometry_radius
+		or radius_px != _hc_m30_last_geometry_radius_px
+	)
+	if texture_changed:
 		sprite.texture = texture
-		changed = true
 	if sprite.region_rect != region:
 		sprite.region_rect = region
-		changed = true
 	if changed:
 		_render_state_update_count += 1
+		RuntimeDiagnostics.increment_performance_counter(&"visual_render_state_changes")
+	# Frame/row changes do not alter the reviewed footprint. Preserve resource
+	# transitions AND legitimate actor radius/visual-origin edits.
+	if texture_changed or geometry_changed:
 		_refresh_actor_ground_indicator()
+		_hc_m30_last_geometry_origin = position
+		_hc_m30_last_geometry_radius = radius
+		_hc_m30_last_geometry_radius_px = radius_px
 
 
 func render_state_update_count() -> int:
@@ -733,28 +978,224 @@ func _load_client_texture(path: String, expected_size: Vector2i) -> Texture2D:
 	return ImageTexture.create_from_image(image) if image != null and not image.is_empty() else null
 
 
+## R1.2 attack presentation entry (vanilla action FIFO). While any action is
+## playing or queued the request is appended in arrival order - multiple
+## attack requests stay separate events and are never merged or overwritten.
+## Only when nothing is playing does the attack start immediately (the
+## historical play_attack behaviour). Presentation-only waiting: gameplay
+## attack authority is untouched.
 func play_attack(duration := 0.46) -> void:
-	if _death_remaining > 0.0:
+	if _death_remaining > 0.0 or _death_pose_held:
 		return
+	if _hit_remaining > 0.0 or _attack_remaining > 0.0 or _presentation_count > 0:
+		_enqueue_presentation(PresentationAction.ATTACK, duration)
+		return
+	_start_attack_visual(duration)
+
+
+func _start_attack_visual(duration: float) -> void:
+	_hc_m30_walk.interrupt_pose()
+	if visible and not SourceFrames.profile_for_id(actor.monster_id).is_empty() and actor.monster_id != 224:
+		var overlay := AttackOverlay.new()
+		var direction8 := _direction_row(actor.facing)
+		var direction16 := direction8 * 2
+		if is_instance_valid(actor.target):
+			direction16 = ProjectileVisual._direction16_for_line(actor.global_position, actor.target.global_position)
+		var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"attack"))
+		overlay.setup(actor.monster_id, direction8, direction16, duration / float(count), Vector2(actor_ground_offset))
+		add_child(overlay)
 	_attack_remaining = duration
+	_hc_m30_attack_duration = float(duration)
 	_action_duration = duration
 	_elapsed = 0.0
 
 
+## O(1) FIFO append. On overflow (fixed capacity exhausted) the NEWEST event
+## is dropped and counted - the actions already queued keep their order.
+func _enqueue_presentation(kind: PresentationAction, duration: float, step_barrier := -1) -> void:
+	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_presentation_queue_overflow"
+		)
+		return
+	_presentation_kind[_presentation_tail] = kind
+	_presentation_duration[_presentation_tail] = duration
+	_presentation_step_barrier[_presentation_tail] = step_barrier
+	_presentation_tail = (_presentation_tail + 1) % PRESENTATION_QUEUE_CAPACITY
+	_presentation_count += 1
+	if kind == PresentationAction.STRUCK:
+		_pending_struck_count += 1
+
+
+## Dequeues and starts the next presentation event in strict arrival order.
+## A struck only waits for the EXACT movement step that was committed when it
+## arrived (recorded observation epoch): once that cell is done, the struck
+## starts even if the monster is already pursuing the next cell - the vanilla
+## queue consumes the struck message right after its current walk finishes,
+## and gameplay movement is never penalized. An attack behind a blocked
+## struck waits too - head-of-line blocking IS the vanilla action queue.
+func _try_start_next_presentation() -> void:
+	if _presentation_count <= 0:
+		return
+	if _hit_remaining > 0.0 or _attack_remaining > 0.0:
+		return
+	if _death_remaining > 0.0 or _death_pose_held:
+		return
+	var kind: int = _presentation_kind[_presentation_head]
+	if kind == PresentationAction.STRUCK:
+		var barrier := _presentation_step_barrier[_presentation_head]
+		if (
+			barrier >= 0
+			and is_instance_valid(actor)
+			and actor._movement_step_active
+			and actor._movement_step_epoch == barrier
+		):
+			return
+	var duration := _presentation_duration[_presentation_head]
+	_presentation_head = (_presentation_head + 1) % PRESENTATION_QUEUE_CAPACITY
+	_presentation_count -= 1
+	if kind == PresentationAction.STRUCK:
+		_pending_struck_count -= 1
+		_start_struck_visual(duration)
+	else:
+		_start_attack_visual(duration)
+
+
+## Vanilla R1 entry for monster struck visuals: enqueue one struck event in
+## arrival order. O(1): three packed-array writes, no per-hit Timer/Node/
+## Dictionary allocation. Duration is resolved from the CANONICAL ActStruck
+## frame count (appearance metadata cached at _ready - residency independent)
+## and struck_frame_ms(level).
+func queue_struck(monster_level := -1) -> void:
+	if _death_remaining > 0.0 or _death_pose_held:
+		return
+	if not is_instance_valid(actor):
+		return
+	RuntimeDiagnostics.increment_performance_counter(
+		&"monster_struck_event_count"
+	)
+	var struck_level := (
+		monster_level
+		if monster_level > 0
+		else maxi(1, actor.level)
+	)
+	# Vanilla duration = ActStruck frames x max(80, 200 - level * 5) ms.
+	# No per-monster-name switch and no global 0.22s constant.
+	var duration := float(
+		_canonical_struck_frame_count
+		* MonsterStruckPolicyScript.struck_frame_ms(struck_level)
+	) / 1000.0
+	# Record which committed movement step this struck must outlive: only that
+	# exact cell delays the presentation, never the later pursuit steps.
+	var step_barrier := (
+		actor._movement_step_epoch
+		if actor._movement_step_active
+		else -1
+	)
+	_enqueue_presentation(PresentationAction.STRUCK, duration, step_barrier)
+	RuntimeDiagnostics.record_performance_max(
+		&"monster_struck_visual_pending_max",
+		float(_pending_struck_count)
+	)
+
+
+func pending_struck_count() -> int:
+	return _pending_struck_count
+
+
+func _start_struck_visual(duration: float) -> void:
+	_hc_m30_walk.interrupt_pose()
+	_hit_remaining = duration
+	_hc_m30_hit_duration = duration
+	_action_duration = duration
+	_elapsed = 0.0
+
+
+## Canonical ActStruck frame count from the monster identity boundary (read
+## once at _ready). Evidence note (R1.3): the runtime authority is
+## canonical_monster_catalog.json - every one of the 156 entries resolves
+## through appearance_profile_id to appearance_profiles[].actions.hit
+## .framesPerDirection (109 profiles = 2 frames, monster 241's shared profile
+## = 6 frames). This is appearance metadata, not texture-residency state, so
+## a struck enqueued during cold activation / async streaming still gets the
+## exact vanilla duration. appearance_profile() is cached by MonsterIdentity;
+## this stays a one-shot read per visual.
+func _load_canonical_struck_frame_count(monster_id: int) -> int:
+	var actions: Variant = MonsterIdentityScript.appearance_profile(monster_id).get("actions", {})
+	if actions is Dictionary:
+		var hit: Variant = actions.get("hit", {})
+		if hit is Dictionary:
+			var count := int(hit.get("framesPerDirection", 2))
+			if count > 0:
+				return count
+	return 2
+
+
+## Legacy direct-start primitive (test/compatibility callers only). The
+## production damage path must go through queue_struck so a struck during an
+## attack or committed movement step waits instead of silently burning away.
 func play_hit(duration := 0.22) -> void:
+	_hc_m30_walk.interrupt_pose()
 	if _death_remaining > 0.0:
 		return
 	_hit_remaining = duration
-	_action_duration = duration
-	_elapsed = 0.0
+	_hc_m30_hit_duration = float(duration)
+	# A hit cannot reset a higher-priority attack clock/fallback lunge.
+	if _attack_remaining <= 0.0:
+		_action_duration = duration
+		_elapsed = 0.0
 
 
-func play_death(duration := 0.62) -> void:
-	_death_remaining = duration
+func death_animation_duration() -> float:
+	var frame_count := MonsterAnimationPolicy.frame_count(
+		active_resources,
+		&"death"
+	)
+	return maxf(0.62, float(maxi(1, frame_count)) / DEATH_ANIMATION_FPS)
+
+
+func play_death(duration := -1.0) -> float:
+	_hc_m30_walk.interrupt_pose()
+	var resolved_duration := (
+		death_animation_duration()
+		if duration <= 0.0
+		else float(duration)
+	)
+	_death_pose_held = false
+	_death_remaining = resolved_duration
+	_hc_m30_death_duration = resolved_duration
 	_hit_remaining = 0.0
 	_attack_remaining = 0.0
-	_action_duration = duration
+	# Death is the highest priority action: the whole presentation FIFO must
+	# not outlive the monster or play on the corpse.
+	_presentation_head = 0
+	_presentation_tail = 0
+	_presentation_count = 0
+	_pending_struck_count = 0
+	_action_duration = resolved_duration
 	_elapsed = 0.0
+	return resolved_duration
+
+
+func hold_death_pose() -> void:
+	if active_resources.is_empty() or not visible:
+		return
+	_death_remaining = 0.0
+	_death_pose_held = true
+	current_state = "death"
+	_last_state = "death"
+	var frame_count := MonsterAnimationPolicy.frame_count(
+		active_resources,
+		&"death"
+	)
+	current_frame = maxi(0, frame_count - 1)
+	var next_region := Rect2(
+		current_frame * frame_size.x,
+		current_direction * frame_size.y,
+		frame_size.x,
+		frame_size.y
+	)
+	_apply_render_state(active_resources["death"], next_region)
 
 
 func uses_final_art() -> bool:
@@ -797,3 +1238,58 @@ func fallback_attack_angle(direction_px: Vector2) -> float:
 	if not is_fallback_attacking():return 0.0
 	var side:=signf(direction_px.x) if absf(direction_px.x)>0.05 else 1.0
 	return side*sin(fallback_attack_progress()*TAU)*0.12
+
+# HCM30-R4: authoritative physical movement feeds a presentation-only phase.
+const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
+var _hc_m30_walk: HCM30WalkPhase = HCM30WalkPhaseScript.new()
+var _hc_m30_melee_tick: int = -1
+var _hc_m30_last_visual_process_frame: int = -1
+var _hc_m30_stride_configured: bool = false
+
+func hc_m30_begin_melee_tick() -> void:
+	_hc_m30_melee_tick = Engine.get_physics_frames()
+
+func hc_m30_accept_ground_motion(distance_gu: float) -> void:
+	if not is_finite(distance_gu) or distance_gu <= 0.000001:
+		return
+	if _death_remaining > 0.0 or _death_pose_held:
+		return
+	if not _hc_m30_stride_configured and not active_resources.is_empty() and is_instance_valid(actor):
+		var count: int = MonsterAnimationPolicy.frame_count(active_resources, &"walk")
+		var fps: float = MonsterAnimationPolicy.loop_fps(&"walk")
+		var nominal_speed: float = actor.move_speed_gu_per_sec
+		if count > 0 and fps > 0.0 and nominal_speed > 0.000001:
+			# At normal full speed this exactly preserves the existing walk FPS.
+			# Slow/blocked/short actual movement advances only its travelled fraction.
+			_hc_m30_walk.configure_cycle(nominal_speed * float(count) / fps)
+			_hc_m30_stride_configured = true
+	_hc_m30_walk.accept_distance(distance_gu, Engine.get_physics_frames())
+	# The existing physics path already forbids movement during pending impact.
+	# Cancel ONLY the settled attack's visual tail; do not change hit/cooldown.
+	if is_instance_valid(actor) and actor._pending_attack_time < 0.0:
+		_attack_remaining = 0.0
+
+func _hc_m30_is_walking() -> bool:
+	if _hc_m30_melee_tick == Engine.get_physics_frames():
+		return _hc_m30_walk.moving_on(Engine.get_physics_frames())
+	# Charmed/special/legacy movement did not enter the new ordinary-melee tick.
+	# Preserve its existing presentation instead of accidentally showing idle.
+	return actor.ground_velocity_gu_per_sec().length_squared() > MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC * MOVEMENT_ANIMATION_MIN_SPEED_GU_PER_SEC
+
+func hc_m30_motion_snapshot() -> Dictionary:
+	# On-demand diagnostics only; do not JSON-log every actor every frame.
+	return {
+		"visual_process_frame": _hc_m30_last_visual_process_frame,
+		"attack_duration": _hc_m30_attack_duration,
+		"hit_duration": _hc_m30_hit_duration,
+		"pose_remaining": actor._hc_m30_attack_pose_remaining if is_instance_valid(actor) else 0.0,
+		"physics_tick": Engine.get_physics_frames(),
+		"melee_tick": _hc_m30_melee_tick,
+		"last_motion_tick": _hc_m30_walk.last_motion_tick,
+		"walk_phase": _hc_m30_walk.phase,
+		"reference_cycle_gu": _hc_m30_walk.cycle_gu,
+		"actual_distance_gu": _hc_m30_walk.total_ground_distance_gu,
+		"state": current_state, "frame": current_frame,
+		"attack_visual_remaining": _attack_remaining,
+		"pending_impact": actor._pending_attack_time if is_instance_valid(actor) else -1.0,
+	}

@@ -24,7 +24,8 @@ func _run() -> void:
 	assert(player.collision_layer == 2 and player.collision_mask == 5, "玩家碰撞层未隔离为player/world+enemy")
 
 	var enemies: Array[EnemyActor] = []
-	var data := GameData.get_monster("稻草人")
+	var data := GameData.get_monster_by_id(21)
+	assert(not data.is_empty(), "稻草人 canonical monster_id=21 缺失")
 	for index in range(8):
 		var enemy := EnemyActor.new()
 		enemy.setup(data, player, false)
@@ -38,7 +39,11 @@ func _run() -> void:
 		await get_tree().physics_frame
 
 	for enemy: EnemyActor in enemies:
-		assert(enemy.collision_layer == 4 and enemy.collision_mask == 3, "怪物必须保留world/player硬碰撞并关闭enemy互撞")
+		assert(
+			enemy.collision_layer == WorldSpatialRulesScript.ENEMY_LAYER
+			and enemy.collision_mask == WorldSpatialRulesScript.ENEMY_MASK,
+			"怪物必须对WORLD、玩家/召唤物和其他地面怪物保持硬碰撞",
+		)
 		var player_offset_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			player.global_position - enemy.global_position
 		)

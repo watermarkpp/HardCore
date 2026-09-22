@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "generated_at": "2026-09-09T19:35:04.8486753+08:00",
+  "results": [
+    {
+      "test_name": "device_lab_patch_bootstrap_test",
+      "test_path": "tests/device_lab_patch_bootstrap_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "git_head": "ff5c728601806e6bbfa171f14466bb79606b3330",
+  "passed": 0,
+  "total": 1,
+  "engine_log_errors": 1,
+  "failed": 1
+}

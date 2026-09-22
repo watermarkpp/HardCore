@@ -5,6 +5,7 @@ signal profile_loaded(loaded_profile_id: String)
 
 const GothicModalLayoutScript := preload("res://scripts/gothic_modal_layout.gd")
 const OUTPUT_PATH := "res://outputs/ui_calibration/manual_layout_overrides.json"
+const TRACKED_CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
 
 var target: Control
 var profile_id := ""
@@ -1063,9 +1064,16 @@ func _load_selected_override() -> void:
 
 
 func _read_output() -> Dictionary:
-	if not FileAccess.file_exists(OUTPUT_PATH):
+	# Authority chain: the calibration workbench output is an optional
+	# machine-local override; the tracked contract is the baseline authority.
+	# Fresh worktrees and clean machines have no workbench output, so loading
+	# must fall back to the tracked contract instead of reporting "no data".
+	var path := OUTPUT_PATH
+	if not FileAccess.file_exists(path):
+		path = TRACKED_CONTRACT_PATH
+	if not FileAccess.file_exists(path):
 		return {}
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(OUTPUT_PATH))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	return parsed if parsed is Dictionary else {}
 
 

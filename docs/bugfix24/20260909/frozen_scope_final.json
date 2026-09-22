@@ -1,0 +1,39 @@
+{
+  "checked_at": "2026-09-09T19:26:00.9775362+08:00",
+  "code_head": "0247b8d0536debb19fe5b6f2478d0f507f41923c",
+  "baseline_head": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+  "checked_count": 7031,
+  "unchanged_count": 7026,
+  "differences": [
+    {
+      "path": "assets/data/item_runtime_authority_v1.json",
+      "baseline_sha256": "FB0D6813F7443A5069392284F8C005CD8ED8C2A3EAF49B27934417AF429E91D2",
+      "current_sha256": "37D809D6C894B61D91D99CB25B535DA1E8DE0E88DB2DAA1BD37A02545D386E8C",
+      "note": "Authorized exact item 910008 art binding and source-missing provenance only; prior semantic review accepted."
+    },
+    {
+      "path": "assets/data/monster_attack_range_policy_v1.json",
+      "baseline_sha256": "80ADCF3A0238C0E25A35FBD063E246A022F4CFED642C1AFBADB9651B6B579D5C",
+      "current_sha256": "FCB9A120F91230606C98DFC16C56AF3AB7FD4CEF652A973F6ADB352F616A9F9D",
+      "note": "Authorized W1 exact-ID attack delivery and source provenance/hash cascade; prior semantic review preserved non-attack fields and drop policy."
+    },
+    {
+      "path": "assets/data/monster_behavior_profiles.json",
+      "baseline_sha256": "A0149682E87BD9FEC1FCEF0FFA2ACA66C052738A00FC481225B40C099525BFB0",
+      "current_sha256": "9316F4F74AD6E4CEF49DD4F98D779D26115DB8D97DC41C6D239075BA19D5B4B7",
+      "note": "Authorized W1 exact-ID attack delivery and source provenance/hash cascade; prior semantic review preserved non-attack fields and drop policy."
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "baseline_sha256": "C743623DBDD7E6BE8DD4F6D228865CAA48F6E03651E6177C16147D531DE93566",
+      "current_sha256": "E801FC9DFE9BFA920376872F6AC4FF735073A27A8B5EB05CC922E4ECB19D3099",
+      "note": "Authorized W1 exact-ID attack delivery and source provenance/hash cascade; prior semantic review preserved non-attack fields and drop policy."
+    },
+    {
+      "path": "tests/death_drop_budget_queue_test.gd",
+      "baseline_sha256": "FA03969AC92415A9F0A5B33082AFF2F9E6CFD0493B87A2247128A487C988F8A3",
+      "current_sha256": "1AEF1D16CBD55B89677B968E0AFA7822C1F6B46324014696D2FAF488DD6FD767",
+      "note": "Authorized queue-only fixture identity placement; production WORLD is covered separately."
+    }
+  ]
+}

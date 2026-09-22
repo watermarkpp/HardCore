@@ -1,0 +1,26 @@
+{
+  "git_head": "b3296528d7f85c7dff2c78adafaa0f5e4ec33c16",
+  "suite": "adhoc",
+  "passed": 0,
+  "total": 1,
+  "generated_at": "2026-09-11T11:58:31.5222219+08:00",
+  "engine_log_errors": 63,
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "shop_selection_identity_test",
+      "test_path": "tests/r6_1_review/shop_selection_identity_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 63,
+      "engine_log_failure_count": 63,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_63;engine_log_failures_63"
+    }
+  ]
+}

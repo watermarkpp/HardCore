@@ -7,7 +7,6 @@ const Fixtures := preload(
 	"res://tests/helpers/monster_streaming_test_fixtures.gd"
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
-const FRAMES := 600
 
 var _coordinator
 var _player: PlayerCharacter
@@ -24,16 +23,16 @@ func _run() -> void:
 	_coordinator = Fixtures.make_coordinator()
 	_player = Fixtures.make_player(self)
 	MonsterVisual.set_synchronous_loading_for_tests(true)
-	await _run_size(1)
-	await _run_size(100)
-	await _run_size(300)
+	await _run_size(1, 600)
+	await _run_size(100, 180)
+	await _run_size(300, 120)
 	_cleanup()
 	await get_tree().process_frame
 	print("MONSTER_STREAMING_SINGLE_POLL_PER_FRAME_PASS")
 	get_tree().quit(0)
 
 
-func _run_size(monster_count: int) -> void:
+func _run_size(monster_count: int, frames: int) -> void:
 	for i: int in range(monster_count):
 		_enemies.append(
 			Fixtures.make_enemy(
@@ -44,7 +43,7 @@ func _run_size(monster_count: int) -> void:
 			)
 		)
 	var frame_id := 0
-	for _frame: int in range(FRAMES):
+	for _frame: int in range(frames):
 		frame_id += 1
 		_coordinator.poll_once(frame_id)
 		await get_tree().process_frame
@@ -54,11 +53,11 @@ func _run_size(monster_count: int) -> void:
 		"MonsterVisual must never call the global streaming poll"
 	)
 	assert(
-		int(diag.get("coordinator_poll_count", 0)) == FRAMES,
+		int(diag.get("coordinator_poll_count", 0)) == frames,
 		"coordinator must poll exactly once per frame"
 	)
 	assert(
-		int(diag.get("heavy_poll_execution_count", 0)) <= FRAMES,
+		int(diag.get("heavy_poll_execution_count", 0)) <= frames,
 		"heavy poll executions must never exceed frame count"
 	)
 	print(

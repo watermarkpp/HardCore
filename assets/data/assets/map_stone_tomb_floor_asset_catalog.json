@@ -1,0 +1,610 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "mse_stone_tomb_floor_6_v1",
+  "package_version": 1,
+  "source_count": 1,
+  "asset_count": 6,
+  "classification": "洞穴与地下城/地板/石墓石板",
+  "projection": "orthographic_isometric_2_to_1",
+  "processing_pipeline": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+  "source_distribution": "user_provided_primary",
+  "source_path_hint": "ChatGPT Image 2026年8月15日 16_11_19.png",
+  "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+  "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+  "assets": [
+    {
+      "asset_id": "mse.ground.stone_tomb_floor.01",
+      "display_name": "石墓石板 01",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "cave_dungeon",
+      "image": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_01.png",
+      "thumbnail": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_01.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地板/石墓石板",
+      "source_distribution": "user_provided_primary",
+      "source_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_source_v1.png",
+      "mask_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_keyed_v1.png",
+      "source_crop_box": [
+        39,
+        217,
+        468,
+        492
+      ],
+      "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+      "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+      "output_sha256": "1479d87b27ff91d29d52228c10fc1b2a58fd6059085540a5d4a0d5210c6df7b9",
+      "thumbnail_source_sha256": "1479d87b27ff91d29d52228c10fc1b2a58fd6059085540a5d4a0d5210c6df7b9",
+      "processing": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "stone_tomb_cracked_slab",
+      "variation_group_id": "mse.ground.stone_tomb_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.ground.stone_tomb_floor.02",
+      "display_name": "石墓石板 02",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "cave_dungeon",
+      "image": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_02.png",
+      "thumbnail": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_02.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地板/石墓石板",
+      "source_distribution": "user_provided_primary",
+      "source_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_source_v1.png",
+      "mask_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_keyed_v1.png",
+      "source_crop_box": [
+        512,
+        217,
+        941,
+        492
+      ],
+      "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+      "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+      "output_sha256": "c9dcdf34764614d1316f604ff91a9109f3984b0ba9b796126d46431d1263fe0a",
+      "thumbnail_source_sha256": "c9dcdf34764614d1316f604ff91a9109f3984b0ba9b796126d46431d1263fe0a",
+      "processing": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "stone_tomb_cracked_slab",
+      "variation_group_id": "mse.ground.stone_tomb_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.ground.stone_tomb_floor.03",
+      "display_name": "石墓石板 03",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "cave_dungeon",
+      "image": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_03.png",
+      "thumbnail": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_03.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地板/石墓石板",
+      "source_distribution": "user_provided_primary",
+      "source_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_source_v1.png",
+      "mask_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_keyed_v1.png",
+      "source_crop_box": [
+        985,
+        217,
+        1412,
+        492
+      ],
+      "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+      "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+      "output_sha256": "5169a6535057a87cb47d01b9e5131c08b316bbab4fca3519b7ce5f251b477bf7",
+      "thumbnail_source_sha256": "5169a6535057a87cb47d01b9e5131c08b316bbab4fca3519b7ce5f251b477bf7",
+      "processing": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "stone_tomb_cracked_slab",
+      "variation_group_id": "mse.ground.stone_tomb_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.ground.stone_tomb_floor.04",
+      "display_name": "石墓石板 04",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "cave_dungeon",
+      "image": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_04.png",
+      "thumbnail": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_04.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地板/石墓石板",
+      "source_distribution": "user_provided_primary",
+      "source_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_source_v1.png",
+      "mask_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_keyed_v1.png",
+      "source_crop_box": [
+        39,
+        580,
+        468,
+        857
+      ],
+      "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+      "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+      "output_sha256": "76f45a815fb1b8f6f7cea4c916c6cfac171c025c0552dd72f9aa55b2eb3dae29",
+      "thumbnail_source_sha256": "76f45a815fb1b8f6f7cea4c916c6cfac171c025c0552dd72f9aa55b2eb3dae29",
+      "processing": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "stone_tomb_cracked_slab",
+      "variation_group_id": "mse.ground.stone_tomb_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.ground.stone_tomb_floor.05",
+      "display_name": "石墓石板 05",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "cave_dungeon",
+      "image": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_05.png",
+      "thumbnail": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_05.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地板/石墓石板",
+      "source_distribution": "user_provided_primary",
+      "source_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_source_v1.png",
+      "mask_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_keyed_v1.png",
+      "source_crop_box": [
+        512,
+        581,
+        941,
+        856
+      ],
+      "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+      "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+      "output_sha256": "35bc2fe25b5016c6862a196976ef55e7d9961b8bb8287da5b3414d2048a54549",
+      "thumbnail_source_sha256": "35bc2fe25b5016c6862a196976ef55e7d9961b8bb8287da5b3414d2048a54549",
+      "processing": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "stone_tomb_cracked_slab",
+      "variation_group_id": "mse.ground.stone_tomb_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0
+    },
+    {
+      "asset_id": "mse.ground.stone_tomb_floor.06",
+      "display_name": "石墓石板 06",
+      "asset_type": "ground_brush",
+      "category": "ground",
+      "object_class": "ground",
+      "theme": "cave_dungeon",
+      "image": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_06.png",
+      "thumbnail": "assets/art/maps/stone_tomb/floor/stone_tomb_floor_06.png",
+      "canvas_size": [
+        64,
+        32
+      ],
+      "image_size": [
+        64,
+        32
+      ],
+      "logical_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "visible_bounds_px": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchor_px": [
+        32,
+        16
+      ],
+      "placement_anchor_px": [
+        32,
+        16
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "tile_center",
+      "footprint_tiles": [
+        1,
+        1
+      ],
+      "visual_footprint_tiles": [
+        1,
+        1
+      ],
+      "occupancy_footprint_tiles": [
+        1,
+        1
+      ],
+      "base_footprint_tiles": [
+        1,
+        1
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "default_layer": "ground_base",
+      "default_object_role": "decoration",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "occlusion": false,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "palette_path": "洞穴与地下城/地板/石墓石板",
+      "source_distribution": "user_provided_primary",
+      "source_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_source_v1.png",
+      "mask_path": "assets/raw_import/map_assets/ground_sources/stone_tomb_floor_v1/stone_tomb_floor_keyed_v1.png",
+      "source_crop_box": [
+        985,
+        581,
+        1412,
+        856
+      ],
+      "source_sha256": "a68ed8d5c9978fc94045c8a190f3af89e41fd0ef7bd45fc78e049b66ec1c5104",
+      "mask_sha256": "5276e9be01aa2b5a2f6f23c4db19421a73344ba17ba39b0b69913038002041b3",
+      "output_sha256": "3781332e5fdcde99c4f6459ea5dff9dd1799170182494dd48f1aa72f34615b71",
+      "thumbnail_source_sha256": "3781332e5fdcde99c4f6459ea5dff9dd1799170182494dd48f1aa72f34615b71",
+      "processing": "imagegen_chroma_mask_original_rgb_premultiplied_resize_64x32_v1",
+      "ground_brush_role": "base_tile",
+      "terrain_type": "stone_tomb_cracked_slab",
+      "variation_group_id": "mse.ground.stone_tomb_floor.v1",
+      "paintable": true,
+      "normalization": "canonical_64x32_one_cell_diamond_v1",
+      "diamond_inner_coverage": 1.0
+    }
+  ]
+}

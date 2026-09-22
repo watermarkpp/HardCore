@@ -2,19 +2,15 @@ extends Node
 
 
 func _ready() -> void:
+	# MAP-SAFETY-R1: blank.wooma_forest now resolves to the formal identity
+	# key world_wooma_forest (runtime 910004). The legacy map_editor_workspace/
+	# wooma_forest/ directory is no longer consumed by this test.
 	var template := MapDesignCatalogService.find_blank_template(
 		"blank.wooma_forest"
 	)
 	assert(not template.is_empty())
-	assert(str(template.map_id) == "wooma_forest")
-	assert(int(template.runtime_map_id) == 268)
+	assert(str(template.map_id) == "world_wooma_forest")
 	assert(template.design_size == [56.0, 56.0])
-	assert(str(template.workspace_status) == "ready")
-	assert(str(template.template_version_id) == "wooma_forest_blank_v1")
-	assert(
-		str(template.template_kind)
-		== "existing_map_or_empty_template"
-	)
 	var blank := MapEditorTypes.new_map_from_blank_template(
 		"blank.wooma_forest"
 	)
@@ -26,31 +22,27 @@ func _ready() -> void:
 		)
 
 	var loaded := MapEditorLoadService.load_document(
-		"res://map_editor_workspace/wooma_forest/wooma_forest.editor.json"
+		"res://map_editor_workspace/world_wooma_forest/world_wooma_forest.editor.json"
 	)
 	assert(loaded.ok, str(loaded.get("errors", [])))
 	var document: Dictionary = loaded.document
-	assert(str(document.map_id) == "wooma_forest")
-	assert(int(document.runtime_map_id) == 268)
+	assert(str(document.map_id) == "world_wooma_forest")
+	assert(int(document.runtime_map_id) == 910004)
 	assert(document.design.design_size == [56.0, 56.0])
 	assert(
-		str(document.editor_meta.template_version_id)
-		== "wooma_forest_blank_v1"
+		str(document.editor_meta.collision_authority)
+		== "hc_polygon_v1"
 	)
 	assert(
 		str(document.ground.coordinate_contract_id)
 		== MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
 	)
-	assert(str(document.ground.blank_fill_asset_id).is_empty())
-	assert(bool(document.editor_meta.runtime_approved))
-	assert(
-		str(document.editor_meta.official_version_id)
-		== "wooma_forest_user_official_v1"
-	)
-	assert(document.layers.object_base.size() == 56)
-	assert(document.layers.monster_spawn.size() == 36)
-	assert(document.layers.map_entrance_points.size() == 1)
-	assert(document.layers.map_exit_points.size() == 3)
+	# Structure contract: user-editable content counts are not frozen here;
+	# the document must validate and carry real content.
+	assert(MapEditorTypes.validate_document(document).is_empty())
+	assert(not (document.layers.object_base as Array).is_empty())
+	assert(not (document.layers.monster_spawn as Array).is_empty())
+	assert(not (document.layers.map_exit_points as Array).is_empty())
 	for instance: Dictionary in MapEditorInstanceService.all_instances(
 		document
 	):
@@ -66,7 +58,6 @@ func _ready() -> void:
 
 	var initialized := MapEditorGroundService.initialize(document)
 	assert(initialized.ok, str(initialized.get("errors", [])))
-	assert(str(initialized.manifest.default_fill_asset_id).is_empty())
 	assert(
 		str(initialized.manifest.blank_chunk_policy)
 		== "transparent_until_painted"
@@ -97,7 +88,7 @@ func _ready() -> void:
 	var menu_text := editor.map_template_option.get_item_text(
 		editor.map_template_option.selected
 	)
-	assert("沃玛森林（当前地图）" in menu_text)
+	assert("沃玛森林" in menu_text)
 	assert("56×56" in menu_text)
 	var started := Time.get_ticks_msec()
 	assert(editor._open_template_by_id("blank.wooma_forest"))
@@ -106,13 +97,13 @@ func _ready() -> void:
 		Time.get_ticks_msec() - started < 3000,
 		"沃玛森林模板打开超过3秒"
 	)
-	assert(str(editor.current_document.map_id) == "wooma_forest")
+	assert(str(editor.current_document.map_id) == "world_wooma_forest")
 	assert(editor.current_document.design.design_size == [56.0, 56.0])
 	assert(str(editor.current_document.ground.blank_fill_asset_id).is_empty())
-	assert(editor.current_document.layers.object_base.size() == 56)
+	assert(not (editor.current_document.layers.object_base as Array).is_empty())
 	editor.queue_free()
 	print(
 		"WOOMA_FOREST_EDITOR_TEMPLATE_PASS "
-		+ "template=blank.wooma_forest current=official size=56x56 runtime=268"
+		+ "template=blank.wooma_forest current=world_wooma_forest size=56x56 runtime=910004"
 	)
 	get_tree().quit(0)

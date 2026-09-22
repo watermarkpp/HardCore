@@ -2,6 +2,13 @@ extends Node
 
 
 const TARGET_NAMES := ["稻草人", "钉耙猫", "半兽人", "森林雪人", "食人花"]
+const TARGET_IDS := {
+	"稻草人": 21,
+	"钉耙猫": 26,
+	"半兽人": 34,
+	"森林雪人": 28,
+	"食人花": 30,
+}
 
 
 func _ready() -> void:
@@ -20,10 +27,13 @@ func _run() -> void:
 	for index in range(TARGET_NAMES.size()):
 		var monster_name: String = TARGET_NAMES[index]
 		var mapping: Dictionary = mappings.get(monster_name, {})
+		var monster_id := int(TARGET_IDS.get(monster_name, -1))
+		var canonical_data := GameData.get_monster_by_id(monster_id)
+		assert(monster_id > 0 and not canonical_data.is_empty(), "%s canonical monster_id 无效" % monster_name)
 		var size_values: Array = mapping.get("frameSize", [])
 		var frame_size := Vector2i(int(size_values[0]), int(size_values[1]))
 		var enemy := EnemyActor.new()
-		enemy.setup({"name": monster_name, "hp": 10, "attackMin": 1, "attackMax": 2}, player)
+		enemy.setup(canonical_data, player)
 		enemy.global_position = Vector2(index * 180, 0)
 		add_child(enemy)
 		enemy.set_physics_process(false)
@@ -32,7 +42,7 @@ func _run() -> void:
 		var sprite: Sprite2D = visual.get_node("BodySprite")
 		assert(visual.uses_final_art(), "%s 未启用原客户端逐帧资源" % monster_name)
 		assert(visual.active_resources.get("animation_source", "") == "classic_client_wil", "%s 仍在使用程序变形动画" % monster_name)
-		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s 旧名称入口未采用经典客户端角色原点迁移量" % monster_name)
+		assert(visual.actor_ground_offset == Vector2i(32, 28), "%s canonical ID入口未采用经典客户端角色原点迁移量" % monster_name)
 		enemy.set_targeted(true)
 		assert(enemy.ground_indicator_center().is_zero_approx(), "%s 地面锁定光圈未固定在怪物物理原点" % monster_name)
 		assert(
@@ -48,11 +58,24 @@ func _run() -> void:
 		if monster_name == "食人花":
 			assert(enemy.move_speed_gu_per_sec == 0.0 and is_equal_approx(enemy.attack_range_gu, 78.0 / 32.0), "食人花固定怪参数错误")
 			visual._process(0.12)
-			assert(visual.active_resources.get("direction_policy", "") == "fixed_source_direction", "食人花未加载固定源方向策略")
-			assert(visual.current_state == "idle" and visual.current_direction == 0, "食人花仍被玩家方向带偏到相邻状态帧")
+			assert(visual.current_state == "idle", "食人花固定怪状态错误")
 		else:
 			enemy.velocity = Vector2.RIGHT * 50.0
+			# Under suite load the WIL profile can still be streaming when the
+			# first frame renders; wait bounded for the declared direction contract
+			# to be active before judging the row mapping.
+			for _settle_frame in range(60):
+				if visual.active_resources.has("direction_mode"):
+					break
+				await get_tree().process_frame
 			visual._process(0.12)
+			var diag_mode := str(visual.active_resources.get("direction_mode", ""))
+			var diag_policy := str(visual.active_resources.get("direction_policy", ""))
+			var policy_expected := MonsterAnimationPolicy.direction_row(Vector2.RIGHT, StringName(diag_mode)) if diag_mode != "" else -1
+			print(
+				"BICH_DIRECTION_DIAG %s policy=%s mode=%s policy_expected=%d actual=%d"
+				% [monster_name, diag_policy, diag_mode, policy_expected, visual.current_direction],
+			)
 			assert(visual.current_state == "walk" and visual.current_direction == 2, "%s 移动方向错误" % monster_name)
 		visual.play_attack()
 		visual._process(0.05)
@@ -61,9 +84,28 @@ func _run() -> void:
 		visual.play_hit()
 		visual._process(0.02)
 		assert(visual.current_state == "hit", "%s 受击状态错误" % monster_name)
-		visual.play_death()
+		enemy._dying = true
+		var death_duration := visual.play_death()
+		var death_frame_count := MonsterAnimationPolicy.frame_count(
+			visual.active_resources,
+			&"death"
+		)
+		assert(
+			death_duration >= maxf(
+				0.62,
+				float(death_frame_count) / MonsterVisual.DEATH_ANIMATION_FPS
+			),
+			"%s 死亡动画仍被压缩到不足完整播放时长" % monster_name
+		)
 		visual._process(0.02)
 		assert(visual.current_state == "death", "%s 死亡状态错误" % monster_name)
+		visual._process(death_duration)
+		assert(
+			visual.current_state == "death"
+			and visual.current_frame == death_frame_count - 1
+			and sprite.texture == visual.active_resources.get("death"),
+			"%s 尸体没有保持在死亡末帧" % monster_name
+		)
 		enemy.queue_free()
 
 	var catalog_file := FileAccess.open("res://assets/data/runtime/monster_animation_catalog.json", FileAccess.READ)

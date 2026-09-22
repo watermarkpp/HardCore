@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/rv14_restore_injected_failures_test.gd" id="1"]
+
+[node name="RV14RestoreInjectedFailuresTest" type="Node"]
+script = ExtResource("1")

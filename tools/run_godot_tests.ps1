@@ -1,12 +1,28 @@
 param(
-    [ValidateSet('critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
+    [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
     [string]$Suite = 'critical',
     [ValidateRange(1, 60)]
-    [int]$TimeoutSeconds = 8,
+    [int]$TimeoutSeconds = 30,
     [string[]]$TestPaths = @()
 )
 
 $ErrorActionPreference = 'Stop'
+# A single worktree owns one import cache, userdata directory and log namespace.
+# Reject overlapping runners before either can overwrite evidence or terminate
+# a peer's child process during cleanup. The OS also releases abandoned locks.
+$RunnerHashAlgorithm = [Security.Cryptography.SHA256]::Create()
+$RunnerMutexKey = [BitConverter]::ToString($RunnerHashAlgorithm.ComputeHash(
+    [Text.Encoding]::UTF8.GetBytes([IO.Path]::GetFullPath($PSScriptRoot).ToUpperInvariant())
+)).Replace('-', '')
+$RunnerHashAlgorithm.Dispose()
+$RunnerMutex = New-Object Threading.Mutex($false, "Local\HardCoreGodotRunner_$RunnerMutexKey")
+$RunnerLockHeld = $false
+try {
+    try { $RunnerLockHeld = $RunnerMutex.WaitOne(0) }
+    catch [Threading.AbandonedMutexException] { $RunnerLockHeld = $true }
+    if (-not $RunnerLockHeld) {
+        throw 'Another Godot test runner owns this worktree. Wait for its explicit handoff before retrying.'
+    }
 # Some Codex desktop shells inherit both `Path` and `PATH`. PowerShell's
 # Start-Process treats environment keys case-insensitively and aborts when both
 # spellings are present, so normalize the process copy before launching Godot.
@@ -16,8 +32,8 @@ $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $GodotDirectory = Split-Path -Parent $Godot
-$LogRoot = Join-Path $ProjectRoot 'outputs\test_logs'
-$RuntimeAppData = Join-Path $ProjectRoot '.godot\runtime_appdata'
+$LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
+$RuntimeAppData = if ($env:HARDCORE_AUDIT_RUNTIME_APPDATA) { $env:HARDCORE_AUDIT_RUNTIME_APPDATA } else { Join-Path $ProjectRoot '.godot\runtime_appdata' }
 
 $EffectiveSuite = $Suite
 if ($TestPaths.Count -gt 0) {
@@ -65,7 +81,10 @@ New-Item -ItemType Directory -Path $RuntimeAppData -Force | Out-Null
 
 $Suites = @{
     monster = @(
+        # HC-POLY-R2: registered production regression scenes
+        'tests/hc_polygon_navigation_test.tscn',
 		'tests/canonical_monster_catalog_test.tscn',
+		'tests/monster_drop_authoring_overlay_contract_test.tscn',
 		'tests/monster_id_contract_test.tscn',
 		'tests/all_monster_loading_test.tscn',
 		'tests/monster_world_integration_test.tscn',
@@ -83,6 +102,32 @@ $Suites = @{
 		'tests/monster_unit_adapter_test.tscn',
 		'tests/monster_ground_unit_runtime_test.tscn',
 		'tests/monster_melee_contact_geometry_test.tscn',
+		'tests/monster_accuracy_runtime_test.tscn',
+		'tests/monster_anti_stealth_runtime_test.tscn',
+		'tests/monster_mfc1_attribute_timing_audit_test.tscn',
+		'tests/monster_movement_cadence_test.tscn',
+		'tests/monster_struck_policy_test.tscn',
+		'tests/monster_struck_visual_queue_test.tscn',
+		'tests/monster_struck_runtime_test.tscn',
+		'tests/monster_dormant_damage_wake_test.tscn',
+		'tests/monster_neighbor_step_policy_test.tscn',
+		'tests/monster_cadence_runtime_integration_test.tscn',
+		'tests/monster_cadence_blocked_step_test.tscn',
+		'tests/monster_forced_relocation_during_step_test.tscn',
+		'tests/monster_density_diagnostics_window_test.tscn',
+		'tests/safe_zone_spatial_runtime_test.tscn',
+		'tests/monster_parent_redraw_gate_test.tscn',
+		'tests/monster_physical_projectile_visual_source_test.tscn',
+		'tests/monster_target_magic_primary_visual_test.tscn',
+		'tests/monster_special_delivery_contract_test.tscn',
+		'tests/monster_special_delivery_runtime_test.tscn',
+		'tests/direct_spell_compiled_stats_parity_test.tscn',
+		'tests/multi_target_damage_transaction_test.tscn',
+		'tests/game_root_combat_resolution_integration_test.tscn',
+		'tests/game_root_r3x6_targeting_broadphase_test.tscn',
+		'tests/enemy_mass_death_batch_pipeline_test.tscn',
+		'tests/death_drop_budget_queue_test.tscn',
+		'tests/death_queue_lifecycle_rework_test.tscn',
 		'tests/placeholder_attack_animation_test.tscn'
 	)
     warrior = @(
@@ -153,7 +198,10 @@ $Suites = @{
 		'tests/pricing_authority_test.tscn',
 		'tests/inventory_weight_authority_test.tscn',
 		'tests/loot_pickup_ground_unit_test.tscn',
+		'tests/loot_pickup_runtime_manager_test.tscn',
+		'tests/loot_expiry_pending_guard_test.tscn',
 		'tests/hud_authority_integration_test.tscn',
+		'tests/hud_background_prewarm_test.tscn',
 		'tests/complete_item_system_test.tscn',
 		'tests/inventory_equipment_ui_test.tscn',
 		'tests/multi_character_save_test.tscn',
@@ -195,7 +243,10 @@ $Suites.caster_visual_critical = @(
     "tests/gameplay_input_gate_test.tscn",
     "tests/input_release_cleanup_test.tscn",
     "tests/initial_world_input_lock_test.tscn",
-    "tests/map_transition_input_lock_test.tscn"
+    "tests/map_transition_input_lock_test.tscn",
+    'tests/caster_skill_workset_lease_test.tscn',
+    'tests/r14_caster_sequence_lease_test.tscn',
+    'tests/r14_caster_production_caller_lease_test.tscn'
 )
 
 $Suites.taoist_critical = @(
@@ -322,7 +373,9 @@ $Suites.monster_streaming_critical = @(
     'tests/monster_streaming_no_visual_queue_test.tscn',
     'tests/monster_streaming_no_sync_load_test.tscn',
     'tests/monster_streaming_spatial_index_non_regression_test.tscn',
-    'tests/monster_streaming_scaling_test.tscn'
+    'tests/monster_streaming_scaling_test.tscn',
+    'tests/monster_streaming_lifecycle_test.tscn',
+    'tests/monster_streaming_active_lease_test.tscn'
 )
 
 $Suites.skill_execution_plan_critical = @(
@@ -400,18 +453,54 @@ $Suites.formal_map_projection_critical = @(
 )
 
 $Suites.map_runtime_release_critical = @(
+
+    # HC-POLY-R2: registered production regression scenes
+
+    'tests/hc_polygon_geometry_test.tscn',
+
+    'tests/hc_polygon_navigation_test.tscn',
+
+    'tests/hc_polygon_physics_test.tscn',
+
+    'tests/hc_polygon_precision_test.tscn',
+
+    'tests/hc_polygon_editor_input_test.tscn',
+
+    'tests/hc_polygon_release_alignment_test.tscn',
+
+    'tests/hc_polygon_numerics_test.tscn',
+
+    'tests/hc_polygon_reset_test.tscn',
+
+    'tests/hc_polygon_reset_release_test.tscn',
     'tests/map_runtime_release_registry_contract_test.tscn',
+    'tests/map_ui_presentation_projection_test.tscn',
+    'tests/map_persistent_boss_spawn_identity_test.tscn',
     'tests/release_registry_current_maps_test.tscn',
-    'tests/map_runtime_release_gate_test.tscn'
+    'tests/map_runtime_release_gate_test.tscn',
+    'tests/map_editor_save_path_isolation_test.tscn',
+    'tests/map_release_identity_matrix_test.tscn',
+    'tests/hc_polygon_counterexample_matrix_test.tscn',
+    'tests/aoe_shape_edge_counterexample_test.tscn'
 )
 
 $Suites.map_runtime_release_transaction_critical = @(
     'tests/build_candidate_does_not_mutate_release_test.tscn',
     'tests/publish_promotes_candidate_test.tscn',
     'tests/publish_failure_rollback_test.tscn',
+    'tests/map_publish_restart_recovery_test.tscn',
     'tests/release_registry_consumer_validation_test.tscn',
     'tests/future_map_build_publish_no_code_edit_test.tscn',
-    'tests/mse_publish_entry_wired_test.tscn'
+    'tests/mse_publish_entry_wired_test.tscn',
+    # RV14-R2 review: multi-map backup comparison and recovery counterexamples.
+    'tests/rv14_registry_review_counterexamples.tscn',
+    'tests/rv14_restore_rollback_injection_test.tscn',
+    'tests/rv14_multi_map_publish_sibling_invariance_test.tscn',
+    # RV14-R2 review item 7: deterministic promote/rollback failure injection.
+    'tests/rv14_restore_injected_failures_test.tscn',
+    # RV15 joint review: sheet validation counterexamples and SPB decoupling.
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 
 $Suites.player_visual_contract_critical = @(
@@ -424,11 +513,39 @@ $Suites.skill_panel_layout_critical = @(
 
 $Suites.device_lab_critical = @(
     'tests/device_lab_runtime_test.tscn',
-    'tests/device_lab_patch_bootstrap_test.tscn'
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/perf_frame_diagnostics_test.tscn',
+    'tests/r14_diagnostic_mode_test.tscn'
+)
+
+$Suites.audit_upgrade_critical = @(
+    'tests/profile_business_validation_recovery_test.tscn',
+    'tests/persistence_business_transactions_test.tscn',
+    'tests/shared_warehouse_transaction_test.tscn',
+    'tests/shared_warehouse_migration_test.tscn',
+    'tests/map_editor_workspace_delete_safety_test.tscn',
+    'tests/startup_loading_failure_recovery_test.tscn',
+    'tests/brand_intro_test.tscn',
+    'tests/device_lab_patch_bootstrap_test.tscn',
+    'tests/lootclock/loot_retry_clock_test.tscn',
+    'tests/lootclock/loot_visual_clock_test.tscn',
+    'tests/runtime_loot_spatial_index_order_test.tscn',
+    'tests/audit_39fe_regressions.tscn',
+    'tests/player_cast_release_overwrite_test.tscn',
+    'tests/player_status_effect_lifecycle_test.tscn',
+    # RV14-R2 review: synchronous reentry epoch boundary for both spells and
+    # plain attacks, with death/transition/exit-tree lifecycle coverage.
+    'tests/rv14_release_reentry_test.tscn',
+    # RV15 joint review: sheet validation counterexamples and SPB decoupling.
+    'tests/rv15_provider_validation_counterexamples_test.tscn',
+    'tests/rv15_spb_ledger_decoupling_test.tscn'
 )
 
 $Suites.critical = @(
-    'tests/combat_unit_runtime_static_audit_test.tscn'
+    'tests/combat_unit_runtime_static_audit_test.tscn',
+    'tests/android_attack_action_lifecycle_test.tscn',
+    'tests/virtual_joystick_lifecycle_test.tscn',
+    'tests/circular_touch_button_lifecycle_test.tscn'
 ) + @(
     $Suites.caster_visual_critical +
     $Suites.taoist_critical +
@@ -438,8 +555,11 @@ $Suites.critical = @(
     $Suites.safe_logout_critical +
     $Suites.persistent_ground_effect_critical +
     $Suites.fire_wall_controller_critical +
-    # Monster Streaming is intentionally excluded from default critical while
-    # PROJECT_CURRENT_STATUS marks it HOLD. Its direct suite remains callable.
+    # 2026-09-21 RV14-04 (O07): Monster Streaming returns to the default
+    # critical suite (HOLD lifted for the streaming runtime). These scenes
+    # need the elevated per-test budget; the runner refuses to start any run
+    # that includes them below 30 seconds.
+    $Suites.monster_streaming_critical +
     $Suites.skill_execution_plan_critical +
     $Suites.skill_production_migration_critical +
     $Suites.skill_runtime_cleanup_critical +
@@ -452,9 +572,111 @@ $Suites.critical = @(
     $Suites.player_visual_contract_critical +
     $Suites.skill_panel_layout_critical +
     $Suites.device_lab_critical +
+    $Suites.audit_upgrade_critical +
     $Suites.warrior + $Suites.bich + $Suites.equipment + $Suites.monster |
         Select-Object -Unique
 )
+
+# 2026-09-06 gameplay/audio integration regressions. Keep these production
+# boundaries in the formal suite instead of relying on one-off adhoc evidence.
+$Suites.critical = @($Suites.critical + @(
+    'tests/random_teleport_map_extent_test.tscn',
+    'tests/loot_stable_identity_save_test.tscn',
+    'tests/loot_inventory_transaction_batch_test.tscn',
+    'tests/loot_runtime_item_policy_test.tscn',
+    'tests/combat_unit_source_priority_test.tscn',
+    'tests/skill_book_rank_upgrade_integration_test.tscn',
+    'tests/skill_progression_save_integration_test.tscn',
+    'tests/player_level_up_effect_runtime_test.tscn',
+    'tests/town_music_controller_test.tscn',
+    'tests/audio_runtime_service_test.tscn',
+    'tests/player_core_audio_hook_test.tscn',
+    'tests/skills/warrior_thrust_defense_runtime_test.tscn',
+    'tests/skills/warrior_melee_entry_runtime_test.tscn',
+    'tests/skills/summon_owner_teleport_runtime_test.tscn',
+    'tests/skills/summon_incoming_damage_runtime_test.tscn',
+    'tests/skills/summon_audio_hook_test.tscn',
+    'tests/monster_audio_hook_test.tscn',
+    'tests/projectile_audio_lifecycle_test.tscn',
+    'tests/player_item_audio_event_test.tscn',
+    'tests/skills/skill_contract_manifest_test.tscn',
+    'tests/skills/skill_source_of_truth_test.tscn',
+    'tests/skills/skill_semantic_contracts_test.tscn'
+) | Select-Object -Unique)
+
+# September 9 closure: persist the new integration boundaries in critical.
+# Performance probes stay explicit because their sampling needs a controlled
+# machine window; they are not correctness gates for every ordinary test run.
+$Suites.critical = @($Suites.critical + @(
+    'tests/game_root_loading_transition_test.tscn',
+    'tests/r3_gold_cap_entrypoints_test.tscn',
+    'tests/w1_exact_ranged_delivery_test.tscn',
+    'tests/monster_mixed_damage_atomic_test.tscn',
+    'tests/monster_source_status_test.tscn',
+    'tests/headless_prefetch_compatibility_test.tscn',
+    'tests/hc_monster_ai/geometry_test.tscn',
+    'tests/hc_monster_ai/w1_delivery_geometry_test.tscn',
+    'tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn',
+    'tests/hc_monster_ai/inventory_test.tscn',
+    'tests/hc_monster_ai/lightning_test.tscn',
+    'tests/hc_monster_ai/path_test.tscn',
+    'tests/hc_monster_ai/scheduler_storm_test.tscn',
+    'tests/hc_monster_ai/runtime_test.tscn',
+    'tests/hc_monster_ai/world_obstacle_runtime_test.tscn',
+    'tests/hc_monster_ai/combat_epoch_delivery_test.tscn',
+    'tests/w6_visual_contract_test.tscn',
+    'tests/equipment_inventory_slot_swap_test.tscn',
+    'tests/combat_environment_request_integration_test.tscn',
+    'tests/loot_world_placement_integration_test.tscn',
+    'tests/item_drop_instance_rules_test.tscn',
+    'tests/item_drop_instance_persistence_test.tscn',
+    'tests/warrior_slaying_release_integration_test.tscn',
+    'tests/audio_w4_actor_service_test.tscn',
+    'tests/audio_w4_contract_test.tscn',
+    'tests/inventory_equipment_ui_test.tscn',
+    'tests/warehouse_gothic_ui_test.tscn',
+    'tests/shop_gothic_ui_test.tscn',
+    'tests/shared_warehouse_transaction_test.tscn',
+    'tests/shared_warehouse_migration_test.tscn'
+) | Select-Object -Unique)
+
+# September 18 R1.1 closure: the error-feedback boundary and the player
+# overhead status-marker presentation are permanent regression gates. The R1
+# versions of these tests existed but were never registered here; they are
+# registered now together with the corrected marker-row tests.
+$Suites.critical = @($Suites.critical + @(
+    'tests/ui_error_feedback_scope_guard_test.tscn',
+    'tests/ui_error_machine_reason_leak_test.tscn',
+    'tests/ui_error_feedback_overlay_test.tscn',
+    'tests/repair_20260913/inventory_error_feedback_real_input_test.tscn',
+    'tests/player_poison_presentation_test.tscn',
+    'tests/player_health_bar_status_marker_test.tscn'
+) | Select-Object -Unique)
+
+# September 18 UNIFIED-PLAYER-NOTICE R2: the unified central notice layer is a
+# permanent regression gate. The overlay/contract tests run in critical; the
+# real-input notice tests also join the equipment lane (§38).
+$Suites.critical = @($Suites.critical + @(
+    'tests/player_notice_overlay_test.tscn',
+    'tests/player_notice_item_style_test.tscn',
+    'tests/player_notice_dedupe_priority_test.tscn',
+    'tests/player_notice_action_result_contract_test.tscn',
+    'tests/equipment_success_notice_real_input_test.tscn',
+    'tests/skill_learning_notice_real_input_test.tscn'
+) | Select-Object -Unique)
+
+# September 22 user loot sheet authority: the compiled spreadsheet is the sole
+# production drop probability source. The sheet contract and the retired-chain
+# production gate are permanent regression gates.
+$Suites.critical = @($Suites.critical + @(
+    'tests/user_loot_sheet_authority_test.tscn',
+    'tests/dpv2_drop_runtime_policy_test.tscn'
+) | Select-Object -Unique)
+
+$Suites.equipment = @($Suites.equipment + @(
+    'tests/player_notice_item_style_test.tscn',
+    'tests/equipment_success_notice_real_input_test.tscn'
+) | Select-Object -Unique)
 
 # ── Q0-A: final judgement contract ──
 # PASS is granted only when every gate below is satisfied. A PASS marker never
@@ -581,6 +803,19 @@ function Get-NewGodotProcesses {
 }
 
 $SelectedTests = if ($TestPaths.Count -gt 0) { $TestPaths } else { $Suites[$Suite] }
+# 2026-09-21 RV14-04 (O07): Monster Streaming scenes stream chunks with real
+# generation windows and exceed the 8-second default budget. Refuse before
+# launching anything when the selected set includes them below 30 seconds so
+# a run cannot masquerade as a timeout regression.
+$MonsterStreamingBudgetFloor = 30
+$MonsterStreamingMembers = $Suites.monster_streaming_critical
+$SelectedIncludesStreaming = @($SelectedTests | Where-Object { $MonsterStreamingMembers -contains $_ }).Count -gt 0
+if ($SelectedIncludesStreaming -and $TimeoutSeconds -lt $MonsterStreamingBudgetFloor) {
+    throw (
+        'Monster Streaming tests require -TimeoutSeconds {0} or higher ' +
+        '(got {1}). Re-run with -TimeoutSeconds 30.' -f $MonsterStreamingBudgetFloor, $TimeoutSeconds
+    )
+}
 $StructuredResults = @()
 foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
@@ -724,11 +959,11 @@ $engineLogErrorTotal = 0
 foreach ($resultEntry in $StructuredResults) {
     $engineLogErrorTotal += [int]$resultEntry.engine_log_failure_count
 }
-$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss'))
+$resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss_fff'), $PID)
 @{
     suite = $EffectiveSuite
     generated_at = (Get-Date -Format o)
-    git_head = (git rev-parse HEAD 2>$null | Out-String).Trim()
+    git_head = (& git -C $ProjectRoot rev-parse HEAD 2>$null | Out-String).Trim()
     total = $StructuredResults.Count
     passed = $passedCount
     failed = $failedCount
@@ -744,3 +979,7 @@ if ($failedCount -gt 0) {
     exit 1
 }
 exit 0
+} finally {
+    if ($RunnerLockHeld) { $RunnerMutex.ReleaseMutex() }
+    $RunnerMutex.Dispose()
+}

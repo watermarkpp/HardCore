@@ -1,6 +1,8 @@
 class_name InventoryPanel
 extends Panel
 
+const UIActivationOnceScript := preload("res://scripts/ui_activation_once.gd")
+
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PreviewScript = preload("res://scripts/equipment_character_preview.gd")
 const GothicUIThemeScript = preload("res://scripts/gothic_ui_theme.gd")
@@ -8,6 +10,13 @@ const GothicFrameFactoryScript = preload("res://scripts/gothic_frame_factory.gd"
 const UIItemTextureCacheScript = preload("res://scripts/ui_item_texture_cache.gd")
 const TouchScrollSupportScript = preload("res://scripts/touch_scroll_support.gd")
 const UIRuntimeLayoutOverridesScript = preload("res://scripts/ui_runtime_layout_overrides.gd")
+const ItemDetailPresenterScript = preload("res://scripts/item_detail_docked_presenter.gd")
+
+const UIItemDetailDockScript := preload("res://scripts/ui_item_detail_dock.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
+const UIItemSelectionVisualScript := preload("res://scripts/ui_item_selection_visual.gd")
+const UISelectionDismissGuardScript := preload("res://scripts/ui_selection_dismiss_guard.gd")
 
 signal closed
 
@@ -19,8 +28,10 @@ const BAG_COLUMNS := 6
 ## Six columns x five 64px rows (with 4px separation) fit the 340px viewport.
 const BAG_VISIBLE_CAPACITY := 30
 const BAG_CAPACITY := 100
+const BAG_BACKGROUND_CELL_BATCH := 10
 const EQUIPMENT_SLOT_LAYOUT_REVISION := 1
 const ITEM_DETAIL_LAYOUT_REVISION := 1
+const CHARACTER_STATS_FONT_SIZE := 16
 const BAG_CELL_SIZE := Vector2(56, 64)
 const BAG_HORIZONTAL_SEPARATION := 1
 const BAG_VERTICAL_SEPARATION := 4
@@ -31,6 +42,8 @@ const BAG_VIEWPORT_CONTENT_INSET := Vector2(14, 10)
 const RETIRED_CALIBRATION_PATHS := [
 	"BagPanel/InventoryGridFrame",
 	"BagPanel/InventoryGridFrame/InventoryGridFrameDecoration",
+	"AttributePanel/ItemDetailTitle",
+	"AttributePanel/ItemDetail",
 ]
 const LONG_PRESS_SECONDS := 0.48
 const CONTEXT_MENU_POLICY_ID := "ui.inventory.context_menu_policy.v1"
@@ -39,6 +52,9 @@ const CONTEXT_MENU_ENABLED := false
 var item_grid: GridContainer
 var detail_label: RichTextLabel
 var equipment_stats_label: RichTextLabel
+var character_attribute_help: Node
+var character_identity_label: RichTextLabel
+var character_identity_help: Node
 var bag_summary_label: Label
 var character_preview: Control
 var equipment_buttons: Dictionary = {}
@@ -46,6 +62,13 @@ var equipment_slot_labels: Dictionary = {}
 var selected_inventory_index := -1
 var selected_inventory_indices: Dictionary = {}
 var selected_equipment_slot := ""
+# Semantic selection mirrors the visible indices.  An instance id is preferred
+# whenever the authority supplies one; stackables fall back to slot+revision.
+var selected_inventory_refs: Array[Dictionary] = []
+var selected_inventory_ref: Dictionary = {}
+var selected_equipment_ref: Dictionary = {}
+var _selection_revision := 0
+var item_detail_presenter
 var _suppress_next_pressed_index := -1
 var auto_sort_button: Button
 var discard_button: Button
@@ -66,6 +89,15 @@ var _press_origin := Vector2.ZERO
 var _long_press_opened := false
 var _refresh_pending := false
 var _refresh_execution_count := 0
+var _refresh_scheduled := false
+var _layout_initialized := false
+var _layout_apply_count := 0
+var _bag_cells: Array[Control] = []
+var _bag_cell_creation_count := 0
+var _bag_cell_update_count := 0
+var _bag_cells_ready := false
+var _bag_cell_initialization_running := false
+var _selection_cell_update_count := 0
 var _action_feedback_serial := 0
 # Production policy: the long-press context menu is intentionally suppressed.
 # The PopupMenu builder/action helpers remain for special items enabled later
@@ -102,8 +134,11 @@ func _ready() -> void:
 	PlayerState.inventory_changed.connect(_on_inventory_data_changed)
 	PlayerState.equipment_changed.connect(_on_equipment_data_changed)
 	PlayerState.profile_changed.connect(_refresh_character_stats)
+	_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
 	refresh()
-	_refresh_bag_grid.call_deferred()
+	_continue_bag_cell_initialization.call_deferred()
+	UISelectionDismissGuardScript.attach(self)
+	preload("res://scripts/ui_item_selection_lifecycle.gd").attach(self)
 
 
 func _build_modal_surface() -> void:
@@ -143,22 +178,52 @@ func _build_attribute_panel() -> void:
 	var panel := _section_panel("AttributePanel", Vector2(32, 72), Vector2(250, 566))
 	var title := _section_title("人物属性", 250)
 	title.name = "AttributeTitle"
+	title.set_meta("calibration_layout_revision", 2)
 	panel.add_child(title)
+	character_identity_label = RichTextLabel.new()
+	character_identity_label.name = "CharacterIdentity"
+	character_identity_label.set_meta("calibration_runtime_text", true)
+	character_identity_label.set_meta("ui_dismiss_protected", true)
+	character_identity_label.fit_content = false
+	character_identity_label.scroll_active = false
+	character_identity_label.bbcode_enabled = true
+	character_identity_label.theme_type_variation = "GothicDetailText"
+	character_identity_label.add_theme_font_size_override("normal_font_size", 16)
+	character_identity_label.add_theme_color_override("font_color", Color("ddc9a9"))
+	panel.add_child(character_identity_label)
+	character_identity_help = preload("res://scripts/item_attribute_help.gd").attach(panel, character_identity_label)
+	character_identity_help.explanation_resolver = _character_attribute_explanation
 	equipment_stats_label = RichTextLabel.new()
 	equipment_stats_label.name = "CharacterStats"
 	equipment_stats_label.set_meta("calibration_runtime_text", true)
-	equipment_stats_label.position = Vector2(16, 44)
-	equipment_stats_label.size = Vector2(218, 220)
+	equipment_stats_label.set_meta("calibration_layout_revision", 3)
+	equipment_stats_label.set_meta("ui_dismiss_protected", true)
+	equipment_stats_label.position = Vector2(16, 16)
+	equipment_stats_label.size = Vector2(218, 534)
 	equipment_stats_label.fit_content = false
-	equipment_stats_label.scroll_active = true
-	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	equipment_stats_label.scroll_active = false
+	equipment_stats_label.bbcode_enabled = true
+	equipment_stats_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	equipment_stats_label.theme_type_variation = "GothicDetailText"
 	equipment_stats_label.add_theme_font_size_override("normal_font_size", 16)
 	equipment_stats_label.add_theme_color_override("font_color", Color("ddc9a9"))
 	panel.add_child(equipment_stats_label)
+	character_attribute_help = preload("res://scripts/item_attribute_help.gd").attach(panel, equipment_stats_label)
+	character_attribute_help.explanation_resolver = _character_attribute_explanation
+	character_identity_label.meta_clicked.connect(func(_meta: Variant) -> void: character_attribute_help.dismiss())
+	equipment_stats_label.meta_clicked.connect(func(_meta: Variant) -> void: character_identity_help.dismiss())
+	# The visible second-level frame has its own calibrated bounds. Follow that
+	# frame instead of centering against the invisible section's old rectangle.
+	var decoration := panel.get_node("AttributePanelDecoration") as Control
+	var frame := decoration.get_node("AttributePanelFrame") as Control
+	decoration.item_rect_changed.connect(_layout_character_attributes)
+	frame.item_rect_changed.connect(_layout_character_attributes)
+	_layout_character_attributes()
 	var divider := HSeparator.new()
 	divider.position = Vector2(16, 270)
 	divider.size = Vector2(218, 8)
+	divider.visible = false
+	divider.set_meta("calibration_retired", true)
 	panel.add_child(divider)
 	var item_title := Label.new()
 	item_title.name = "ItemDetailTitle"
@@ -167,18 +232,30 @@ func _build_attribute_panel() -> void:
 	item_title.size = Vector2(218, 30)
 	item_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	item_title.theme_type_variation = "GothicSectionTitle"
+	item_title.visible = false
+	item_title.set_meta("calibration_retired", true)
 	panel.add_child(item_title)
-	detail_label = RichTextLabel.new()
-	detail_label.name = "ItemDetail"
-	detail_label.set_meta("calibration_runtime_text", true)
-	detail_label.set_meta("calibration_layout_revision", ITEM_DETAIL_LAYOUT_REVISION)
-	detail_label.position = Vector2(16, 312)
-	detail_label.size = Vector2(218, 204)
-	detail_label.bbcode_enabled = true
-	detail_label.fit_content = false
-	detail_label.scroll_active = true
-	detail_label.theme_type_variation = "GothicDetailText"
-	panel.add_child(detail_label)
+	# Keep the old path as a hidden compatibility anchor for existing calibration
+	# readers.  The live detail surface is the single shared presenter below.
+	var legacy_detail := RichTextLabel.new()
+	legacy_detail.name = "ItemDetail"
+	legacy_detail.set_meta("calibration_runtime_text", true)
+	legacy_detail.set_meta("calibration_layout_revision", ITEM_DETAIL_LAYOUT_REVISION)
+	legacy_detail.position = Vector2(16, 312)
+	legacy_detail.size = Vector2(218, 204)
+	legacy_detail.visible = false
+	legacy_detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(legacy_detail)
+	item_detail_presenter = ItemDetailPresenterScript.new()
+	item_detail_presenter.position = Vector2(316, 110)
+	item_detail_presenter.size = Vector2.ZERO
+	item_detail_presenter.z_as_relative = false
+	item_detail_presenter.z_index = 4095
+	item_detail_presenter.set_meta("calibration_runtime_text", true)
+	add_child(item_detail_presenter)
+	# Existing tests and accessibility helpers use detail_label as the text sink;
+	# alias it to the presenter body so no second visible detail is maintained.
+	detail_label = item_detail_presenter.detail_label
 
 
 func _build_equipment_panel() -> void:
@@ -187,6 +264,7 @@ func _build_equipment_panel() -> void:
 	title.name = "EquipmentTitle"
 	panel.add_child(title)
 	character_preview = PreviewScript.new()
+	character_preview.equipment_updates_owned_by_parent = true
 	character_preview.name = "CharacterPreview"
 	character_preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Every paper-doll layer is placed relative to the manifest foot anchor;
@@ -296,18 +374,18 @@ func _build_bag_panel() -> void:
 	auto_sort_button = Button.new()
 	auto_sort_button.name = "AutoSortButton"
 	auto_sort_button.text = "自动整理"
-	auto_sort_button.position = Vector2(0, 0)
-	auto_sort_button.size = Vector2(215, 48)
+	auto_sort_button.position = Vector2(47, 4)
+	auto_sort_button.size = Vector2(179, 51)
 	auto_sort_button.pressed.connect(_on_auto_sort_pressed)
-	auto_sort_button.theme_type_variation = "GothicComponentButton"
+	auto_sort_button.theme_type_variation = "GothicInventoryActionGemButton"
 	actions.add_child(auto_sort_button)
 	discard_button = Button.new()
 	discard_button.name = "DiscardButton"
 	discard_button.text = "丢弃"
-	discard_button.position = Vector2(225, 0)
-	discard_button.size = Vector2(215, 48)
+	discard_button.position = Vector2(246, 4)
+	discard_button.size = Vector2(179, 51)
 	discard_button.pressed.connect(_on_discard_pressed)
-	discard_button.theme_type_variation = "GothicComponentButton"
+	discard_button.theme_type_variation = "GothicInventoryActionGemButton"
 	actions.add_child(discard_button)
 
 
@@ -340,7 +418,7 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	button.toggle_mode = true
 	button.tooltip_text = "%s：空" % slot
 	button.theme_type_variation = "GothicEquipmentSlotButton"
-	button.pressed.connect(_select_equipment_slot.bind(slot))
+	UIActivationOnceScript.attach(button, _select_equipment_slot.bind(slot))
 	button.gui_input.connect(_equipment_input.bind(slot, button))
 	holder.add_child(button)
 	var caption_plate := Panel.new()
@@ -366,17 +444,16 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 
 
 func _on_inventory_data_changed() -> void:
-	# PlayerState emits inventory_changed without an index remap contract.  A
-	# removal/sort can therefore make the previous numeric selection refer to a
-	# different item.  Drop it before rebuilding so details never describe the
-	# wrong stack; callers that intentionally select/equip will set the new
-	# semantic selection after their mutation completes.
-	selected_inventory_index = -1
-	selected_inventory_indices.clear()
+	# The authority does not promise stable numeric indices.  Keep semantic refs
+	# alive until the deferred refresh can re-resolve instance ids; this lets a
+	# successful equip/unequip follow the same object without showing a stale
+	# frame during the transaction callback.
+	_selection_revision += 1
+	_refresh_inventory_action_states()
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_queue_refresh()
 
 
 func _on_equipment_data_changed() -> void:
@@ -388,34 +465,65 @@ func _on_equipment_data_changed() -> void:
 	if not visible:
 		_refresh_pending = true
 		return
-	refresh()
+	_selection_revision += 1
+	_queue_refresh()
 
 
 func _on_visibility_changed() -> void:
-	if not visible:
+	var session := get_node_or_null("R3SelectionLifecycle")
+	if session != null:
+		session.call("sync_visibility")
+	if not is_visible_in_tree():
+		_ui_dismiss_selection()
 		return
+	# The background builder normally finishes before the first interaction. If
+	# the player opens the panel immediately after READY, preserve the visible
+	# 100-slot contract rather than exposing a partially constructed grid.
+	if not _bag_cells_ready:
+		_initialize_bag_cells(BAG_CAPACITY)
+		_refresh_pending = true
 	if _refresh_pending:
 		refresh()
 	# A panel can be kept alive while HUD toggles it.  Action feedback (for
 	# example, "丢弃 1 个物品格") is intentionally transient; a later open must
 	# not expose that result as if it were the currently selected item detail.
 	if selected_inventory_index < 0 and selected_inventory_indices.is_empty() and selected_equipment_slot.is_empty():
-		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
+		_hide_item_detail()
 
 
 func refresh() -> void:
 	if item_grid == null:
 		return
 	_refresh_pending = false
+	_refresh_scheduled = false
 	_refresh_execution_count += 1
+	_reconcile_selection()
 	_refresh_equipment_slots()
 	_refresh_character_stats()
 	_refresh_bag_grid()
 	if character_preview != null:
 		character_preview.refresh()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "inventory")
 	_stabilize_bag_layout()
-	call_deferred("_stabilize_bag_layout")
+	_refresh_inventory_action_states()
+
+
+func _queue_refresh() -> void:
+	_refresh_pending = true
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if not _refresh_pending or not visible:
+		return
+	refresh()
 
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
@@ -458,25 +566,70 @@ func _refresh_equipment_slots() -> void:
 		button.text = ""
 		button.tooltip_text = "%s：空" % slot
 		if not name.is_empty():
-			_set_button_texture(button, _item_texture(GameData.get_item_record(name), "inventoryIcon"))
+			var item_ref: Variant = record if record is Dictionary else name
+			_set_button_texture(button, _item_texture(GameData.get_item_record(item_ref), "inventoryIcon"))
 			button.tooltip_text = _equipment_tooltip(slot, record)
 		else:
 			_set_button_texture(button, null)
-		button.set_pressed_no_signal(slot == selected_equipment_slot)
-		button.theme_type_variation = "GothicSelectedEquipmentSlotButton" if slot == selected_equipment_slot else "GothicEquipmentSlotButton"
+		UIItemSelectionVisualScript.apply(button, slot == selected_equipment_slot, &"GothicEquipmentSlotButton", &"GothicSelectedEquipmentSlotButton")
 		compatibility_lines.append(_compatibility_equipment_text(slot, record))
 	equipment_label.text = "　".join(compatibility_lines)
+	_ui_sync_empty_destinations()
 
 
 func _refresh_character_stats() -> void:
 	if equipment_stats_label == null:
 		return
+	if character_attribute_help != null:
+		character_attribute_help.dismiss()
+	if character_identity_help != null:
+		character_identity_help.dismiss()
+	var font_size := CHARACTER_STATS_FONT_SIZE
+	character_identity_label.text = "[center][font_size=%d]%s[/font_size]\n\n[font_size=%d]%s    [url=attribute:等级][color=#8dbce8][u]等级：%d[/u][/color][/url][/font_size][/center]" % [
+		font_size + 3, PlayerState.character_name.replace("[", "[lb]"),
+		font_size + 1, PlayerState.profession.replace("[", "[lb]"), PlayerState.level,
+	]
 	equipment_stats_label.text = _character_stats_text(PlayerState.computed_stats)
+	_layout_character_attributes()
+
+
+func _layout_character_attributes() -> void:
+	if equipment_stats_label == null or character_identity_label == null:
+		return
+	var panel := get_node("AttributePanel") as Control
+	var decoration := panel.get_node("AttributePanelDecoration") as Control
+	var frame := decoration.get_node("AttributePanelFrame") as Control
+	var frame_rect := Rect2(decoration.position + frame.position, frame.size)
+	var center_x := frame_rect.get_center().x
+	var title := panel.get_node("AttributeTitle") as Label
+	title.position = Vector2(center_x - 125.0, frame_rect.position.y)
+	title.size = Vector2(250.0, 30.0)
+	# At the reference 2664x1200 device, 30 logical units are 50 device pixels.
+	# The reviewed candidate moved the old name down 100 px; the user's final
+	# adjustment raises all content below the title by 50 px together.
+	character_identity_label.position = Vector2(center_x - 109.0, 46.0)
+	character_identity_label.size = Vector2(218.0, 88.0)
+	# One width for the complete block, shaped from its longest complete row.
+	# Values may widen/recenter the block, but cannot wrap pairs onto new rows.
+	var body_width := 0.0
+	var font := equipment_stats_label.get_theme_font("normal_font")
+	var lines := equipment_stats_label.get_parsed_text().split("\n")
+	var font_size := CHARACTER_STATS_FONT_SIZE
+	var style := equipment_stats_label.get_theme_stylebox("normal")
+	var margins := style.get_margin(SIDE_LEFT) + style.get_margin(SIDE_RIGHT)
+	for line: String in lines:
+		body_width = maxf(body_width, font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x)
+	# The approved range is zero through three digits. Keep the reviewed font
+	# size while changing only the complete block's width and horizontal offset.
+	equipment_stats_label.add_theme_font_size_override("normal_font_size", font_size)
+	body_width = ceilf(body_width + margins)
+	equipment_stats_label.position = Vector2(center_x - body_width * 0.5, 142.0)
+	equipment_stats_label.size = Vector2(body_width, maxf(1.0, frame_rect.end.y - 158.0))
 
 
 func _character_stats_text(stats: Dictionary) -> String:
-	return "%s　等级 %d\n生命 %d　魔法 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d　幸运 %d\n魔法躲避 %d%%　攻击速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
-		PlayerState.profession, PlayerState.level,
+	var help := preload("res://scripts/item_attribute_help.gd")
+	var body := "生命 %d　魔法值 %d\n攻击 %d-%d\n魔法 %d-%d　道术 %d-%d\n防御 %d-%d　魔防 %d-%d\n准确 %d　敏捷 %d\n幸运 %d\n远程与魔法躲避 %d%%\n速度 %+d\n暴击 %.1f%%\n穿戴重量 %d/%d" % [
 		int(stats.get("max_hp", 0)), int(stats.get("max_mp", 0)),
 		int(stats.get("attack_min", 0)), int(stats.get("attack_max", 0)),
 		int(stats.get("magic_min", 0)), int(stats.get("magic_max", 0)),
@@ -488,32 +641,60 @@ func _character_stats_text(stats: Dictionary) -> String:
 		float(stats.get("critical_chance", 0.0)) * 100.0,
 		int(stats.get("wear_weight", 0)), int(stats.get("max_wear_weight", 0)),
 	]
+	return help.decorate(body)
+
+
+func _character_attribute_explanation(term: String) -> String:
+	if term == "等级":
+		return "%d/%d" % [PlayerState.experience, PlayerState.experience_to_next_level()]
+	return ""
 
 
 func _refresh_bag_grid() -> void:
-	for child: Node in item_grid.get_children():
-		# Rebuild synchronously so stable cell names never collide with queued old nodes.
-		child.free()
-	if selected_inventory_index >= PlayerState.inventory.size():
-		selected_inventory_index = -1
-	var stale_selection_indices: Array = []
-	for selected_index: Variant in selected_inventory_indices.keys():
-		if int(selected_index) >= PlayerState.inventory.size():
-			stale_selection_indices.append(selected_index)
-	for selected_index: Variant in stale_selection_indices:
-		selected_inventory_indices.erase(selected_index)
-	for inventory_index in range(PlayerState.inventory.size()):
-		var stack: Variant = PlayerState.inventory[inventory_index]
-		if stack is Dictionary:
-			item_grid.add_child(_create_bag_cell(inventory_index, stack))
-	for empty_index in range(PlayerState.inventory.size(), BAG_CAPACITY):
-		item_grid.add_child(_create_empty_bag_cell(empty_index))
+	if _bag_cells.is_empty():
+		_initialize_bag_cells(BAG_VISIBLE_CAPACITY)
+	for inventory_index in range(_bag_cells.size()):
+		_update_bag_cell(inventory_index, _inventory_record(inventory_index))
 	_stabilize_bag_layout()
-	bag_summary_label.text = "金币 %d　%d/%d格" % [PlayerState.gold, PlayerState.inventory.size(), BAG_CAPACITY]
+	bag_summary_label.text = "金币 %d　负重 %d/%d" % [PlayerState.gold, PlayerState.inventory_weight(), PlayerState.max_inventory_weight()]
+	if item_detail_presenter != null and item_detail_presenter.is_message_active():
+		return
 	if selected_inventory_index >= 0:
 		_show_inventory_detail(selected_inventory_index)
 	elif selected_equipment_slot.is_empty():
-		detail_label.text = "[color=#d9c09a]单击物品查看属性，双击使用或装备。[/color]"
+		_hide_item_detail()
+
+
+func _initialize_bag_cells(target_count := BAG_CAPACITY) -> void:
+	var bounded_target := mini(BAG_CAPACITY, maxi(0, target_count))
+	for index in range(_bag_cells.size(), bounded_target):
+		var cell := _create_bag_cell(index, {})
+		item_grid.add_child(cell)
+		_bag_cells.append(cell)
+		_bag_cell_creation_count += 1
+	_bag_cells_ready = _bag_cells.size() >= BAG_CAPACITY
+
+
+func _continue_bag_cell_initialization() -> void:
+	if _bag_cells_ready or _bag_cell_initialization_running:
+		return
+	_bag_cell_initialization_running = true
+	while is_inside_tree() and _bag_cells.size() < BAG_CAPACITY:
+		var first_new_index := _bag_cells.size()
+		_initialize_bag_cells(first_new_index + BAG_BACKGROUND_CELL_BATCH)
+		for index in range(first_new_index, _bag_cells.size()):
+			_update_bag_cell(index, _inventory_record(index))
+		item_grid.queue_sort()
+		await get_tree().process_frame
+	_bag_cells_ready = _bag_cells.size() >= BAG_CAPACITY
+	_bag_cell_initialization_running = false
+
+
+func wait_until_runtime_ready() -> void:
+	if not _bag_cells_ready:
+		_continue_bag_cell_initialization()
+	while is_inside_tree() and not _bag_cells_ready:
+		await get_tree().process_frame
 
 
 func _create_bag_cell(index: int, stack: Dictionary) -> Control:
@@ -521,125 +702,448 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 	cell.name = "InventoryCell_%03d" % index
 	cell.custom_minimum_size = BAG_CELL_SIZE
 	var button := Button.new()
-	button.name = "ItemButton"
+	button.name = "EmptySlotBackground"
 	button.position = Vector2.ZERO
 	button.size = BAG_CELL_SIZE
-	button.tooltip_text = str(stack.get("name", "未知物品"))
-	button.theme_type_variation = "GothicComponentSelectedSlotButton" if selected_inventory_indices.has(index) else "GothicComponentSlotButton"
-	button.pressed.connect(_select_inventory_item.bind(index))
+	button.tooltip_text = "空物品格"
+	button.disabled = true
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.theme_type_variation = "GothicComponentSlotButton"
+	UIActivationOnceScript.attach(button, _select_inventory_item.bind(index))
 	button.gui_input.connect(_inventory_input.bind(index, button))
 	cell.add_child(button)
-	_set_button_texture(button, _item_texture(GameData.get_item_record(str(stack.get("name", ""))), "inventoryIcon"))
+	var count_label := Label.new()
+	count_label.name = "StackCount"
+	count_label.position = Vector2(BAG_CELL_SIZE.x - 34, BAG_CELL_SIZE.y - 23)
+	count_label.size = Vector2(30, 20)
+	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count_label.add_theme_font_size_override("font_size", 14)
+	count_label.add_theme_color_override("font_color", Color.WHITE)
+	count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	count_label.add_theme_constant_override("shadow_offset_x", 2)
+	count_label.add_theme_constant_override("shadow_offset_y", 2)
+	count_label.hide()
+	cell.add_child(count_label)
+	var durability_label := Label.new()
+	durability_label.name = "Durability"
+	durability_label.position = Vector2(3, BAG_CELL_SIZE.y - 19)
+	durability_label.size = Vector2(BAG_CELL_SIZE.x - 6, 16)
+	durability_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	durability_label.add_theme_font_size_override("font_size", 10)
+	durability_label.add_theme_color_override("font_color", Color(0.96, 0.83, 0.52))
+	durability_label.hide()
+	cell.add_child(durability_label)
+	return cell
+
+
+func _update_bag_cell(index: int, stack: Dictionary) -> void:
+	if index < 0 or index >= _bag_cells.size():
+		return
+	_bag_cell_update_count += 1
+	var cell := _bag_cells[index]
+	var button := cell.get_child(0) as Button
+	var occupied := not stack.is_empty()
+	var can_receive_unequip := not occupied and _can_receive_unequip_to_index(index)
+	button.name = "ItemButton" if occupied else "EmptySlotBackground"
+	button.disabled = not occupied and not can_receive_unequip
+	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
+	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
+	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
+	_set_button_texture(button, UIItemTextureCacheScript.texture_for_item(stack) if occupied else null)
+	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
-	if count > 1:
-		var count_label := Label.new()
-		count_label.name = "StackCount"
-		count_label.text = str(count)
-		count_label.position = Vector2(BAG_CELL_SIZE.x - 34, BAG_CELL_SIZE.y - 23)
-		count_label.size = Vector2(30, 20)
-		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		count_label.add_theme_font_size_override("font_size", 14)
-		count_label.add_theme_color_override("font_color", Color.WHITE)
-		count_label.add_theme_color_override("font_shadow_color", Color.BLACK)
-		count_label.add_theme_constant_override("shadow_offset_x", 2)
-		count_label.add_theme_constant_override("shadow_offset_y", 2)
-		cell.add_child(count_label)
-	if stack.has("durability"):
-		var durability_label := Label.new()
-		durability_label.name = "Durability"
-		durability_label.text = "%d/%d" % [int(stack.get("durability", 0)), int(stack.get("max_durability", 1))]
-		durability_label.position = Vector2(3, BAG_CELL_SIZE.y - 19)
-		durability_label.size = Vector2(BAG_CELL_SIZE.x - 6, 16)
-		durability_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		durability_label.add_theme_font_size_override("font_size", 10)
-		durability_label.add_theme_color_override("font_color", Color(0.96, 0.83, 0.52))
-		cell.add_child(durability_label)
-	return cell
+	count_label.text = str(count)
+	count_label.visible = occupied and count > 1
+	var durability_label := cell.get_node("Durability") as Label
+	durability_label.text = "%d/%d" % [int(stack.get("durability", 0)), int(stack.get("max_durability", 1))]
+	durability_label.visible = occupied and stack.has("durability")
 
 
-func _create_empty_bag_cell(index: int) -> Control:
-	var cell := Control.new()
-	cell.name = "InventoryCell_%03d" % index
-	cell.custom_minimum_size = BAG_CELL_SIZE
-	var background := Button.new()
-	background.name = "EmptySlotBackground"
-	background.position = Vector2.ZERO
-	background.size = BAG_CELL_SIZE
-	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background.theme_type_variation = "GothicComponentSlotButton"
-	background.disabled = true
-	cell.add_child(background)
-	return cell
+func _inventory_record(index: int) -> Dictionary:
+	if index < 0 or index >= PlayerState.inventory.size():
+		return {}
+	var record: Variant = PlayerState.inventory[index]
+	return record if record is Dictionary and not (record as Dictionary).is_empty() else {}
+
+
+func _inventory_selection_ref(index: int, record: Dictionary) -> Dictionary:
+	var instance_id := str(record.get("instance_id", ""))
+	return {
+		"container": "inventory",
+		"slot": index,
+		"index": index,
+		"instance_id": instance_id,
+		"revision": _selection_revision,
+	}
+
+
+func _equipment_selection_ref(slot: String, record: Dictionary) -> Dictionary:
+	return {
+		"container": "equipment",
+		"slot": slot,
+		"instance_id": str(record.get("instance_id", "")),
+		"revision": _selection_revision,
+	}
+
+
+func _same_selection_ref(left: Dictionary, right: Dictionary) -> bool:
+	if left.is_empty() or right.is_empty() or str(left.get("container", "")) != str(right.get("container", "")):
+		return false
+	var left_instance := str(left.get("instance_id", ""))
+	var right_instance := str(right.get("instance_id", ""))
+	if not left_instance.is_empty() or not right_instance.is_empty():
+		return not left_instance.is_empty() and left_instance == right_instance
+	return int(left.get("slot", -1)) == int(right.get("slot", -1)) and int(left.get("revision", -1)) == int(right.get("revision", -1))
+
+
+func _find_inventory_index_for_ref(selection_ref: Dictionary) -> int:
+	if selection_ref.is_empty() or str(selection_ref.get("container", "")) != "inventory":
+		return -1
+	var instance_id := str(selection_ref.get("instance_id", ""))
+	if not instance_id.is_empty():
+		for index in range(PlayerState.inventory.size()):
+			var record := _inventory_record(index)
+			if str(record.get("instance_id", "")) == instance_id:
+				return index
+	var index := int(selection_ref.get("slot", selection_ref.get("index", -1)))
+	if index < 0 or index >= PlayerState.inventory.size() or _inventory_record(index).is_empty():
+		return -1
+	# A stackable without an opaque identity is safe only until the data revision
+	# changes; otherwise a sort could silently retarget another stack.
+	return index if int(selection_ref.get("revision", _selection_revision)) == _selection_revision else -1
+
+
+func _reconcile_selection() -> void:
+	var rebound: Array[Dictionary] = []
+	var rebound_indices: Dictionary = {}
+	for selection_ref: Dictionary in selected_inventory_refs:
+		var index := _find_inventory_index_for_ref(selection_ref)
+		if index < 0:
+			continue
+		var refreshed_ref := _inventory_selection_ref(index, _inventory_record(index))
+		refreshed_ref["revision"] = _selection_revision
+		rebound.append(refreshed_ref)
+		rebound_indices[index] = true
+	selected_inventory_refs = rebound
+	selected_inventory_indices = rebound_indices
+	selected_inventory_ref = rebound.back() if not rebound.is_empty() else {}
+	selected_inventory_index = _find_inventory_index_for_ref(selected_inventory_ref)
+	if not selected_equipment_slot.is_empty():
+		var equipped: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+		if equipped is Dictionary and not equipped.is_empty():
+			selected_equipment_ref = _equipment_selection_ref(selected_equipment_slot, equipped)
+		else:
+			selected_equipment_slot = ""
+			selected_equipment_ref.clear()
+
+
+func _selection_control_context(_control: Control, extra: Dictionary = {}) -> Dictionary:
+	var context := {"presentation_zone": "inventory"}
+	context.merge(extra, true)
+	return context
+
+
+func _empty_bag_region_candidates() -> Array[Rect2]:
+	# Compatibility only. R5 never places details on empty item cells.
+	return []
+
+
+func _hide_item_detail() -> void:
+	if item_detail_presenter != null:
+		item_detail_presenter.hide_detail()
+
+
+func _show_presented_item(item: Dictionary, instance: Dictionary, anchor: Control, context_extra: Dictionary = {}) -> void:
+	if item_detail_presenter == null:
+		return
+	var context := _selection_control_context(anchor, context_extra)
+	item_detail_presenter.show_item(item, instance, context)
+	detail_label = item_detail_presenter.detail_label
 
 
 func _select_inventory_item(index: int) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
-	if index < 0 or index >= PlayerState.inventory.size():
+	if _inventory_record(index).is_empty():
+		if _can_receive_unequip_to_index(index):
+			_unequip_to_inventory_slot(index)
+		else:
+			_ui_dismiss_selection()
 		return
+	if not selected_equipment_slot.is_empty() and _first_empty_inventory_slot() < 0:
+		# An unequip attempt cannot proceed while the bag has no empty cell;
+		# surface the failure instead of silently swallowing the intent.
+		_show_error_message("背包已满，没有空位可以卸下装备。")
 	if _suppress_next_pressed_index == index:
 		_suppress_next_pressed_index = -1
 		return
-	if selected_inventory_indices.has(index):
+	var old_selected_index := selected_inventory_index
+	var selection_ref := _inventory_selection_ref(index, _inventory_record(index))
+	var existing_position := -1
+	for ref_index in range(selected_inventory_refs.size()):
+		if _same_selection_ref(selected_inventory_refs[ref_index], selection_ref):
+			existing_position = ref_index
+			break
+	if existing_position >= 0:
+		selected_inventory_refs.remove_at(existing_position)
 		selected_inventory_indices.erase(index)
 	else:
+		selected_inventory_refs.append(selection_ref)
 		selected_inventory_indices[index] = true
-	selected_inventory_index = index if selected_inventory_indices.has(index) else (-1 if selected_inventory_indices.is_empty() else int(selected_inventory_indices.keys().back()))
+	selected_inventory_ref = selected_inventory_refs.back() if not selected_inventory_refs.is_empty() else {}
+	selected_inventory_index = _find_inventory_index_for_ref(selected_inventory_ref)
 	selected_equipment_slot = ""
-	_show_inventory_detail(index)
+	selected_equipment_ref.clear()
+	if selected_inventory_index >= 0:
+		# Multi-select remains a batch operation for actions, while the shared
+		# presenter always follows the latest selected instance.  This keeps the
+		# attribute view useful without enabling equipment actions for a batch.
+		_show_inventory_detail(selected_inventory_index)
+	else:
+		_hide_item_detail()
 	_refresh_equipment_slots()
-	_refresh_bag_grid.call_deferred()
+	for cell_index: int in [old_selected_index, index]:
+		_refresh_bag_cell_selection(cell_index)
+	_refresh_inventory_action_states()
+
+
+func _refresh_bag_cell_selection(index: int) -> void:
+	if index < 0 or index >= _bag_cells.size():
+		return
+	_selection_cell_update_count += 1
+	var button := _bag_cells[index].get_child(0) as Button
+	UIItemSelectionVisualScript.apply(button, selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
+
+
+func _clear_inventory_selection_styles() -> void:
+	var changed_indices: Array = selected_inventory_indices.keys()
+	if selected_inventory_index >= 0 and not changed_indices.has(selected_inventory_index):
+		changed_indices.append(selected_inventory_index)
+	selected_inventory_index = -1
+	selected_inventory_indices.clear()
+	selected_inventory_refs.clear()
+	selected_inventory_ref.clear()
+	for raw_index: Variant in changed_indices:
+		_refresh_bag_cell_selection(int(raw_index))
+	_refresh_inventory_action_states()
+
+
+func _refresh_inventory_action_states() -> void:
+	if discard_button == null:
+		return
+	# Discard is a selection-scoped transaction.  An empty selection must use
+	# the shared unavailable (grey) state and must not accept pointer input.
+	discard_button.disabled = selected_inventory_indices.is_empty()
+
+
+## Center-screen timed toast via the owning HUD — the same channel as the
+## spell prompts (e.g. "目标被遮挡或已失效"). The HUD instantiates and owns
+## this panel (hud._ensure_inventory_panel), so the parent is the GameHUD.
+## Unified player-error exit for every equipment/inventory rejection. Routed to
+## the HUD's dedicated error channel (above all modal panels); the item detail
+## region keeps presenting item name/attributes/requirements only.
+func _show_error_message(message: String, seconds := 2.0) -> void:
+	var hud_node := get_parent()
+	if hud_node != null and hud_node.has_method("show_error_message"):
+		hud_node.show_error_message(message, seconds)
+
+
+## Central success lane (UNIFIED-PLAYER-NOTICE R2): item-use and auto-sort
+## successes surface through the unified overlay instead of the detail
+## presenter, so one player action owns exactly one global result notice.
+func _show_success_message(message: String) -> void:
+	var hud_node := get_parent()
+	if hud_node != null and hud_node.has_method("show_success_message"):
+		hud_node.show_success_message(message)
+
+
+## Item notice with the authoritative item name style: only the item name
+## carries its official color/outline inside the central overlay.
+func _show_item_notice(
+	prefix: String,
+	item: Dictionary,
+	instance: Dictionary,
+	suffix := "",
+	kind := "success",
+	dedupe_key := ""
+) -> void:
+	var hud_node := get_parent()
+	if hud_node != null and hud_node.has_method("show_item_notice"):
+		hud_node.show_item_notice(prefix, item, instance, suffix, kind, 2.0, dedupe_key)
 
 
 func _select_equipment_slot(slot: String) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
-	if selected_inventory_index >= 0 and selected_inventory_index < PlayerState.inventory.size():
-		var item := GameData.get_item_record(str(PlayerState.inventory[selected_inventory_index].get("name", "")))
+	if selected_inventory_refs.size() > 1:
+		# A multi-selection is a batch operation only; never silently choose the
+		# last item when the player taps an equipment slot.
+		return
+	if selected_inventory_index >= 0 and not _inventory_record(selected_inventory_index).is_empty():
+		var item := GameData.get_item_record(_inventory_record(selected_inventory_index))
 		if str(item.get("kind", "")) == "equipment":
 			var allowed: Array = _slots_for_category(str(item.get("category", "")))
 			if not allowed.has(slot):
-				detail_label.text = "[color=#d96f5f]该装备不能放入此槽位。[/color]"
+				# A rejected slot click must leave both the source selection and its
+				# attribute view intact; the authority was never called.
+				_show_inventory_detail(selected_inventory_index)
+				_show_error_message(
+					"%s不能装备到%s位置。" % [
+						str(item.get("name", "该装备")),
+						slot,
+					]
+				)
 				return
-			var result := PlayerState.equip_inventory_index(selected_inventory_index, slot)
-			selected_equipment_slot = slot
-			selected_inventory_index = -1
-			selected_inventory_indices.clear()
-			refresh()
-			detail_label.text = "[color=#e8c277]%s[/color]" % result
+			var source_index := selected_inventory_index
+			var expected_instance_id := str(selected_inventory_ref.get("instance_id", ""))
+			var result: Dictionary = PlayerState.equip_inventory_index_result(source_index, slot, expected_instance_id)
+			if bool(result.get("success", false)):
+				_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
+				selected_inventory_index = -1
+				selected_inventory_indices.clear()
+				selected_inventory_refs.clear()
+				selected_inventory_ref.clear()
+				selected_equipment_slot = str(result.get("destination", {}).get("slot", slot))
+				var equipped: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+				selected_equipment_ref = _equipment_selection_ref(selected_equipment_slot, equipped) if equipped is Dictionary else {}
+				refresh()
+				_show_equipment_detail(selected_equipment_slot)
+				# Committed equipment surfaces once through the central overlay,
+				# using the post-commit instance so ★ names stay correct (R2).
+				if equipped is Dictionary and not (equipped as Dictionary).is_empty():
+					_show_item_notice(
+						"已装备 ",
+						GameData.get_item_record(equipped),
+						equipped,
+						"",
+						"success",
+						"equipment.equip"
+					)
+			else:
+				# Rejected transactions leave the original source selection and
+				# detail intact; the failure surfaces through the dedicated
+				# center-screen error channel, never as a machine reason.
+				_show_inventory_detail(source_index)
+				_show_error_message(
+					UIErrorFeedbackScript.from_result(result, "无法装备该装备。"),
+					2.0
+				)
 			return
+	if selected_equipment_slot == slot:
+		_clear_equipment_selection()
+		return
 	selected_equipment_slot = slot
-	selected_inventory_index = -1
-	selected_inventory_indices.clear()
+	selected_equipment_ref.clear()
+	_clear_inventory_selection_styles()
 	var equipped: Variant = PlayerState.equipment.get(slot, {})
 	if equipped is Dictionary and not equipped.is_empty():
-		detail_label.text = _equipment_detail(slot, equipped)
+		selected_equipment_ref = _equipment_selection_ref(slot, equipped)
+		_show_equipment_detail(slot)
 	else:
-		detail_label.text = "[color=#e0bd83][font_size=18]%s[/font_size][/color]\n当前为空。按住背包中的对应装备可选择穿戴位置。" % slot
+		item_detail_presenter.show_message("[color=#e0bd83][font_size=18]%s[/font_size][/color]\n当前为空。按住背包中的对应装备可选择穿戴位置。" % slot, _selection_control_context(equipment_buttons.get(slot), {"presentation_zone": "equipment", "slot": slot}))
 	_refresh_equipment_slots()
-	_refresh_bag_grid.call_deferred()
+
+
+func _clear_equipment_selection() -> void:
+	selected_equipment_slot = ""
+	selected_equipment_ref.clear()
+	_hide_item_detail()
+	_refresh_equipment_slots()
+	_refresh_inventory_action_states()
+
+
+func _show_equipment_detail(slot: String) -> void:
+	var equipped: Variant = PlayerState.equipment.get(slot, {})
+	if not equipped is Dictionary or (equipped as Dictionary).is_empty():
+		return
+	var record: Dictionary = equipped
+	var item := GameData.get_item_record(record)
+	if item.is_empty():
+		item_detail_presenter.show_message(
+			"物品目录缺少此记录。",
+			_selection_control_context(equipment_buttons.get(slot), {"presentation_zone": "equipment", "slot": slot}),
+		)
+		return
+	_show_presented_item(item, record, equipment_buttons.get(slot), {"slot": slot, "presentation_zone": "equipment"})
+
+
+func _can_receive_unequip_to_index(index: int) -> bool:
+	if selected_equipment_slot.is_empty() or selected_equipment_ref.is_empty():
+		return false
+	if index < 0 or index >= BAG_CAPACITY or index >= _bag_cells.size():
+		return false
+	return _inventory_record(index).is_empty()
+
+
+func _unequip_to_inventory_slot(index: int) -> void:
+	if not _can_receive_unequip_to_index(index):
+		return
+	var slot := selected_equipment_slot
+	var expected_instance_id := str(selected_equipment_ref.get("instance_id", ""))
+	var result: Dictionary = PlayerState.unequip_to_inventory_slot(slot, index, expected_instance_id)
+	if not bool(result.get("success", false)):
+		# Keep the source slot selected after any rejection (stale, occupied,
+		# overweight, capacity or save failure). The rejection itself surfaces
+		# through the dedicated error channel.
+		_show_equipment_detail(slot)
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(result, "无法卸下该装备，请重新操作。"),
+			2.0
+		)
+		return
+	_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
+	selected_equipment_slot = ""
+	selected_equipment_ref.clear()
+	selected_inventory_indices.clear()
+	selected_inventory_refs.clear()
+	var destination: Dictionary = result.get("destination", {})
+	var destination_index := int(destination.get("slot", index))
+	var destination_record := _inventory_record(destination_index)
+	if not destination_record.is_empty():
+		selected_inventory_index = destination_index
+		selected_inventory_indices[destination_index] = true
+		selected_inventory_ref = _inventory_selection_ref(destination_index, destination_record)
+		selected_inventory_refs.append(selected_inventory_ref.duplicate(true))
+	else:
+		selected_inventory_index = -1
+	refresh()
+	if selected_inventory_index >= 0:
+		_show_inventory_detail(selected_inventory_index)
+	else:
+		_hide_item_detail()
 
 
 func _show_inventory_detail(index: int) -> void:
-	if index < 0 or index >= PlayerState.inventory.size():
+	var stack := _inventory_record(index)
+	if stack.is_empty():
+		_hide_item_detail()
 		return
-	var stack: Dictionary = PlayerState.inventory[index]
-	var item := GameData.get_item_record(str(stack.get("name", "")))
+	var item := GameData.get_item_record(stack)
 	if item.is_empty():
-		detail_label.text = "[color=#f2c783]%s[/color]\n物品目录缺少此记录。" % stack.get("name", "未知物品")
+		item_detail_presenter.show_message("[color=#f2c783]%s[/color]\n物品目录缺少此记录。" % stack.get("name", "未知物品"), _selection_control_context(_bag_cells[index].get_child(0) as Control if index < _bag_cells.size() else null))
 		return
-	if str(item.get("kind", "")) == "equipment":
-		detail_label.text = _item_equipment_detail(stack, item)
-	else:
-		detail_label.text = "[color=#f2c783][font_size=18]%s[/font_size][/color]\n类别：%s\n数量：%d\n%s" % [stack.get("name", ""), _kind_label(str(item.get("kind", ""))), int(stack.get("count", 1)), str(item.get("description", ""))]
+	var anchor: Control = _bag_cells[index].get_child(0) as Control if index < _bag_cells.size() else self
+	_show_presented_item(item, stack, anchor, {"count": int(stack.get("count", 1))})
 
 
 func _inventory_input(event: InputEvent, index: int, button: Button) -> void:
+	var stack := _inventory_record(index)
+	if stack.is_empty():
+		# A populated equipment selection turns an empty cell into an explicit
+		# unequip destination. Do not execute on DOWN: pressed will execute ONCE.
+		if event is InputEventScreenTouch and event.pressed:
+			_press_cancelled = false
+		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_press_cancelled = false
+		return
 	if _is_double_activation_event(event):
+		UIActivationOnceScript.suppress_for(button)
 		_cancel_long_press()
-		selected_inventory_indices.clear()
-		var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
+		_press_cancelled = false
+		_clear_inventory_selection_styles()
+		var item := GameData.get_item_record(stack)
 		if str(item.get("kind", "")) == "equipment":
 			_select_inventory_item(index)
 			# Button.pressed follows gui_input for the same physical gesture.  Keep
@@ -730,8 +1234,8 @@ func _context_menu_allowed() -> bool:
 		var item_name := ""
 		if str(_press_context.get("source", "")) == "inventory":
 			var index := int(_press_context.get("index", -1))
-			if index >= 0 and index < PlayerState.inventory.size():
-				item_name = str(PlayerState.inventory[index].get("name", ""))
+			if not _inventory_record(index).is_empty():
+				item_name = str(_inventory_record(index).get("name", ""))
 		elif str(_press_context.get("source", "")) == "equipment":
 			var slot := str(_press_context.get("slot", ""))
 			var equipped: Variant = PlayerState.equipment.get(slot, {})
@@ -754,7 +1258,7 @@ func _open_long_press_menu() -> void:
 			_add_context_action("卸下", {"action": "unequip", "slot": slot})
 	else:
 		var index := int(_press_context.get("index", -1))
-		if index >= 0 and index < PlayerState.inventory.size():
+		if not _inventory_record(index).is_empty():
 			_add_inventory_context_actions(index)
 	if context_menu.item_count == 0:
 		_add_context_action("无可用操作", {"action": "none"}, true)
@@ -764,8 +1268,10 @@ func _open_long_press_menu() -> void:
 
 
 func _add_inventory_context_actions(index: int) -> void:
-	var stack: Dictionary = PlayerState.inventory[index]
-	var item := GameData.get_item_record(str(stack.get("name", "")))
+	var stack := _inventory_record(index)
+	if stack.is_empty():
+		return
+	var item := GameData.get_item_record(stack)
 	var kind := str(item.get("kind", ""))
 	if kind == "equipment":
 		var slots := _slots_for_category(str(item.get("category", "")))
@@ -787,26 +1293,108 @@ func _add_context_action(label: String, action: Dictionary, disabled := false) -
 
 func _on_context_action(id: int) -> void:
 	var action: Dictionary = _context_actions.get(id, {})
-	var result := ""
+	var result: Dictionary = {}
+	var use_result: Dictionary = {}
+	var use_item_record: Dictionary = {}
+	var unequip_record: Dictionary = {}
 	match str(action.get("action", "none")):
 		"equip":
-			result = PlayerState.equip_inventory_index(int(action.get("index", -1)), str(action.get("slot", "")))
+			var equip_index := int(action.get("index", -1))
+			var equip_record := _inventory_record(equip_index)
+			result = PlayerState.equip_inventory_index_result(equip_index, str(action.get("slot", "")), str(equip_record.get("instance_id", "")))
 		"unequip":
-			result = PlayerState.unequip_slot(str(action.get("slot", "")))
+			var target_slot := _first_empty_inventory_slot()
+			if target_slot < 0:
+				var occupied_slot := str(action.get("slot", ""))
+				_show_equipment_detail(occupied_slot)
+				_show_error_message("背包已满，没有空位可以卸下装备。")
+				return
+			var equipped: Variant = PlayerState.equipment.get(str(action.get("slot", "")), {})
+			if equipped is Dictionary:
+				unequip_record = equipped
+			result = PlayerState.unequip_to_inventory_slot(str(action.get("slot", "")), target_slot, str(equipped.get("instance_id", "")) if equipped is Dictionary else "")
 		"use":
-			result = PlayerState.use_inventory_index(int(action.get("index", -1)))
+			var use_index := int(action.get("index", -1))
+			use_item_record = GameData.get_item_record(_inventory_record(use_index))
+			use_result = PlayerState.use_inventory_index_result(use_index)
 		_:
 			return
-	selected_inventory_index = -1
-	selected_inventory_indices.clear()
-	selected_equipment_slot = ""
-	refresh()
-	detail_label.text = "[color=#e8c277]%s[/color]" % result
+	if not use_result.is_empty():
+		if bool(use_result.get("success", false)):
+			_clear_inventory_selection_styles()
+			_clear_equipment_selection()
+			refresh()
+			# One player action owns one global result notice (R2): only the
+			# contract-approved uses report; instant potions stay silent.
+			if UIPlayerNoticeScript.should_report_item_use(use_item_record):
+				_show_success_message(str(use_result.get("message", "")))
+		else:
+			# A failed use keeps the prior selection and presenter; the
+			# authoritative failure message surfaces via the dedicated error
+			# channel as player-readable Chinese.
+			if not selected_inventory_ref.is_empty():
+				_show_inventory_detail(selected_inventory_index)
+			elif not selected_equipment_slot.is_empty():
+				_show_equipment_detail(selected_equipment_slot)
+			_show_error_message(
+				UIErrorFeedbackScript.from_result(use_result, "使用失败，请稍后重试。"),
+				2.0
+			)
+		return
+	if bool(result.get("success", false)):
+		_clear_inventory_selection_styles()
+		selected_equipment_slot = str(result.get("destination", {}).get("slot", "")) if str(result.get("destination", {}).get("container", "")) == "equipment" else ""
+		if selected_equipment_slot.is_empty():
+			selected_equipment_ref = {}
+		else:
+			var equipped_after: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+			selected_equipment_ref = _equipment_selection_ref(selected_equipment_slot, equipped_after) if equipped_after is Dictionary else {}
+		refresh()
+		if not selected_equipment_slot.is_empty():
+			_show_equipment_detail(selected_equipment_slot)
+			# Committed equip reports once through the central overlay with
+			# the post-commit instance (R2).
+			var committed: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+			if committed is Dictionary and not (committed as Dictionary).is_empty():
+				_show_item_notice(
+					"已装备 ",
+					GameData.get_item_record(committed),
+					committed,
+					"",
+					"success",
+					"equipment.equip"
+				)
+		else:
+			# A replace commit lands in the bag: the single player action is
+			# an UNEQUIP from the old slot (R2: one notice, never two).
+			var destination: Variant = result.get("destination", {})
+			if destination is Dictionary and not unequip_record.is_empty():
+				_show_item_notice(
+					"已卸下 ",
+					GameData.get_item_record(unequip_record),
+					unequip_record,
+					"",
+					"success",
+					"equipment.unequip"
+				)
+			_hide_item_detail()
+	else:
+		# Failed transaction keeps the prior selection and presenter; no prose
+		# substring is used to infer the authority result. The authoritative
+		# failure message surfaces via the dedicated error channel.
+		if not selected_inventory_ref.is_empty():
+			_show_inventory_detail(selected_inventory_index)
+		elif not selected_equipment_slot.is_empty():
+			_show_equipment_detail(selected_equipment_slot)
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(result, "操作未能完成，请重新操作。"),
+			2.0
+		)
 
 
 # Direct action helpers remain available for automated tests and accessibility.
 func _activate_selected_item(preferred_slot := "") -> void:
-	if selected_inventory_index < 0 or selected_inventory_index >= PlayerState.inventory.size():
+	if _inventory_record(selected_inventory_index).is_empty():
 		return
 	_activate_inventory_index(selected_inventory_index, preferred_slot)
 
@@ -814,13 +1402,18 @@ func _activate_selected_item(preferred_slot := "") -> void:
 func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	# preferred_slot stays empty for direct double-click activation: PlayerState
 	# is the authoritative equipment-slot resolver, so the UI never hardcodes a side.
-	if index < 0 or index >= PlayerState.inventory.size():
+	var stack := _inventory_record(index)
+	if stack.is_empty():
 		return
 	_cancel_long_press()
 	selected_inventory_index = index
 	selected_inventory_indices.clear()
+	selected_inventory_indices[index] = true
+	selected_inventory_ref = _inventory_selection_ref(index, stack)
+	selected_inventory_refs = [selected_inventory_ref.duplicate(true)]
 	selected_equipment_slot = ""
-	var item := GameData.get_item_record(str(PlayerState.inventory[index].get("name", "")))
+	selected_equipment_ref.clear()
+	var item := GameData.get_item_record(stack)
 	var is_equipment := str(item.get("kind", "")) == "equipment"
 	# use_inventory_index emits inventory_changed synchronously.  Clear the
 	# selection before that signal so a consumed stack removal cannot make the
@@ -828,10 +1421,50 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 	if not is_equipment:
 		selected_inventory_index = -1
 		selected_inventory_indices.clear()
-	var result := PlayerState.equip_inventory_index(index, preferred_slot) if is_equipment else PlayerState.use_inventory_index(index)
-	selected_inventory_index = -1
+	if is_equipment:
+		var result: Dictionary = PlayerState.equip_inventory_index_result(index, preferred_slot, str(selected_inventory_ref.get("instance_id", "")))
+		if bool(result.get("success", false)):
+			_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
+			_clear_inventory_selection_styles()
+			selected_equipment_slot = str(result.get("destination", {}).get("slot", preferred_slot))
+			var equipped: Variant = PlayerState.equipment.get(selected_equipment_slot, {})
+			selected_equipment_ref = _equipment_selection_ref(selected_equipment_slot, equipped) if equipped is Dictionary else {}
+			refresh()
+			_show_equipment_detail(selected_equipment_slot)
+			# Committed equipment surfaces once through the central overlay,
+			# using the post-commit instance so ★ names stay correct (R2).
+			if equipped is Dictionary and not (equipped as Dictionary).is_empty():
+				_show_item_notice(
+					"已装备 ",
+					GameData.get_item_record(equipped),
+					equipped,
+					"",
+					"success",
+					"equipment.equip"
+				)
+		else:
+			_show_inventory_detail(index)
+			_show_error_message(
+				UIErrorFeedbackScript.from_result(result, "无法装备该装备。"),
+				2.0
+			)
+		return
+	var use_result := PlayerState.use_inventory_index_result(index)
+	_clear_inventory_selection_styles()
 	refresh()
-	detail_label.text = "[color=#e8c277]%s[/color]" % result
+	if bool(use_result.get("success", false)):
+		# One player action owns one global result notice (R2). Only the
+		# contract-approved uses report (skill books, oils, timed 神水);
+		# instant potions stay silent by design.
+		if UIPlayerNoticeScript.should_report_item_use(item):
+			_show_success_message(str(use_result.get("message", "")))
+	else:
+		# A failed use is an operation failure: dedicated error channel with a
+		# player-readable Chinese message, never the raw authority string.
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(use_result, "使用失败，请稍后重试。"),
+			2.0
+		)
 
 
 func _clear_pressed_suppression(index: int) -> void:
@@ -839,32 +1472,62 @@ func _clear_pressed_suppression(index: int) -> void:
 		_suppress_next_pressed_index = -1
 
 
+func _first_empty_inventory_slot() -> int:
+	for index in range(BAG_CAPACITY):
+		if _inventory_record(index).is_empty():
+			return index
+	return -1
+
+
 func _on_auto_sort_pressed() -> void:
 	_clear_inventory_action_feedback()
 	GothicUIThemeScript.set_button_feedback(auto_sort_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.sort")
 	var result: Dictionary = PlayerState.sort_inventory_deterministic()
-	selected_inventory_indices.clear()
-	selected_inventory_index = -1
+	_clear_inventory_selection_styles()
+	_clear_equipment_selection()
 	refresh()
-	detail_label.text = "[color=#e8c277]自动整理%s[/color]" % ("完成" if bool(result.get("success", false)) else "失败")
+	if bool(result.get("success", false)):
+		# Auto-sort success moves into the unified central overlay (R2).
+		_show_success_message("自动整理完成")
+	else:
+		# A rejected sort is an operation failure: dedicated error channel,
+		# while the success notice stays in the original presenter lane.
+		_show_error_message("自动整理失败，物品顺序未改变。")
 	_show_inventory_action_result(auto_sort_button, bool(result.get("success", false)), "inventory.sort")
 
 
 func _on_discard_pressed() -> void:
+	if discard_button == null or discard_button.disabled or selected_inventory_indices.is_empty():
+		return
 	var indices: Array = selected_inventory_indices.keys()
 	_clear_inventory_action_feedback()
-	GothicUIThemeScript.set_button_feedback(discard_button, GothicUIThemeScript.BUTTON_FEEDBACK_BUSY, "inventory.discard")
 	var result: Dictionary = PlayerState.destroy_inventory_indices(indices)
-	selected_inventory_indices.clear()
-	selected_inventory_index = -1
+	var destroyed := int(result.get("destroyed", 0))
+	var complete := bool(result.get("success", false)) and destroyed == indices.size()
+	_ui_dismiss_selection()
 	refresh()
-	detail_label.text = "[color=#e8c277]丢弃 %d 个物品格[/color]" % int(result.get("destroyed", 0))
-	_show_inventory_action_result(discard_button, int(result.get("destroyed", 0)) > 0, "inventory.discard")
+	if complete:
+		# This is the deliberately removed success toast. No transient "丢弃N格",
+		# no selected source/destination, no green action flash after completion.
+		# The paired, minimal destroy_inventory_indices patch only returns
+		# success after persistence succeeds; the UI never performs another save.
+		return
+	var message := str(result.get("message", ""))
+	if message.is_empty():
+		message = "部分物品未能丢弃，请重新选择后重试。" if destroyed > 0 else "物品状态已变化，未能丢弃，请重新选择。"
+	# A failed discard is an operation failure: dedicated error channel.
+	_show_error_message(UIErrorFeedbackScript.from_result(result, message))
 
 
 func _show_inventory_action_result(button: Button, success: bool, group: String) -> void:
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	# Synchronous inventory mutations can finish in the same input frame.  Keep
+	# the busy cue on screen for one rendered frame before presenting the result.
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
@@ -885,10 +1548,33 @@ func _clear_inventory_action_feedback() -> void:
 func _unequip_selected() -> void:
 	if selected_equipment_slot.is_empty():
 		return
-	var result := PlayerState.unequip_slot(selected_equipment_slot)
+	var target_slot := _first_empty_inventory_slot()
+	if target_slot < 0:
+		_show_equipment_detail(selected_equipment_slot)
+		_show_error_message("背包已满，没有空位可以卸下装备。")
+		return
+	var slot := selected_equipment_slot
+	var result: Dictionary = PlayerState.unequip_to_inventory_slot(slot, target_slot, str(selected_equipment_ref.get("instance_id", "")))
+	if not bool(result.get("success", false)):
+		_show_equipment_detail(slot)
+		_show_error_message(
+			UIErrorFeedbackScript.from_result(result, "无法卸下该装备，请重新操作。"),
+			2.0
+		)
+		return
+	_selection_revision = maxi(_selection_revision, int(result.get("revision", _selection_revision)))
 	selected_equipment_slot = ""
+	selected_equipment_ref.clear()
 	refresh()
-	detail_label.text = "[color=#e8c277]%s[/color]" % result
+	var destination_index := int(result.get("destination", {}).get("slot", target_slot))
+	if not _inventory_record(destination_index).is_empty():
+		selected_inventory_index = destination_index
+		selected_inventory_indices[destination_index] = true
+		selected_inventory_ref = _inventory_selection_ref(destination_index, _inventory_record(destination_index))
+		selected_inventory_refs = [selected_inventory_ref.duplicate(true)]
+		_show_inventory_detail(destination_index)
+	else:
+		_hide_item_detail()
 
 
 func _item_equipment_detail(stack: Dictionary, item: Dictionary) -> String:
@@ -914,7 +1600,7 @@ func _player_requirement_label(item: Dictionary) -> String:
 
 
 func _equipment_detail(slot: String, record: Dictionary) -> String:
-	var item := GameData.get_item_record(str(record.get("name", "")))
+	var item := GameData.get_item_record(record)
 	var durability := int(record.get("durability", 0))
 	var maximum := int(record.get("max_durability", 1))
 	var state_parts: Array[String] = []
@@ -942,7 +1628,7 @@ func _advanced_stat_line(item: Dictionary) -> String:
 		if item.get(pair[0], null) != null and float(item.get(pair[0], 0)) != 0.0:
 			parts.append("%s %+d" % [pair[1], int(item.get(pair[0], 0))])
 	if item.get("magicEvasionPercent", null) != null and int(item.get("magicEvasionPercent", 0)) != 0:
-		parts.append("魔法躲避 %+d%%" % int(item.get("magicEvasionPercent", 0)))
+		parts.append("远程与魔法躲避 %+d%%" % int(item.get("magicEvasionPercent", 0)))
 	if item.get("attackSpeedTier", null) != null and int(item.get("attackSpeedTier", 0)) != 0:
 		parts.append("攻击速度 %+d" % int(item.get("attackSpeedTier", 0)))
 	var modifiers: Variant = item.get("modifiers", {})
@@ -1005,11 +1691,12 @@ func _item_texture(record: Dictionary, field: String) -> Texture2D:
 
 
 func _set_button_texture(button: Button, texture: Texture2D) -> void:
-	var old_icon := button.get_node_or_null("CenteredPixelIcon")
-	if old_icon != null:
-		old_icon.free()
 	button.icon = null
+	var icon_rect := button.get_node_or_null("CenteredPixelIcon") as TextureRect
 	if texture == null:
+		if icon_rect != null:
+			icon_rect.texture = null
+			icon_rect.hide()
 		return
 	var source_size := texture.get_size()
 	if source_size.x <= 0.0 or source_size.y <= 0.0:
@@ -1017,16 +1704,18 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	# The original client inventory art stays at its native 1:1 pixel size.
 	# Only its position changes; scaling it to fill the slot makes it look soft.
 	var display_size := source_size
-	var icon_rect := TextureRect.new()
-	icon_rect.name = "CenteredPixelIcon"
+	if icon_rect == null:
+		icon_rect = TextureRect.new()
+		icon_rect.name = "CenteredPixelIcon"
+		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(icon_rect)
 	icon_rect.texture = texture
 	icon_rect.position = (button.size - display_size) * 0.5
 	icon_rect.size = display_size
-	icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(icon_rect)
+	icon_rect.show()
 
 
 func _value(value: Variant) -> String:
@@ -1049,8 +1738,47 @@ func _section_title(text_value: String, section_width: float) -> Label:
 
 
 func _close() -> void:
+	_ui_dismiss_selection()
 	_clear_inventory_action_feedback()
 	_cancel_long_press()
 	context_menu.hide()
 	hide()
 	closed.emit()
+
+
+func _ui_detail_region(context: Dictionary) -> Dictionary:
+	if str(context.get("presentation_zone", "inventory")) == "equipment":
+		return UIItemDetailDockScript.equipment_region(self, equipment_buttons)
+	return UIItemDetailDockScript.side_region(self, get_node_or_null("BagPanel/InventoryScroll") as Control, "right")
+
+func _ui_selection_token() -> Array:
+	return [selected_inventory_refs.duplicate(true), selected_inventory_indices.duplicate(), selected_equipment_slot, selected_equipment_ref.duplicate(true), _selection_revision, item_detail_presenter.content_epoch() if item_detail_presenter != null else -1]
+
+func _ui_dismiss_selection() -> void:
+	_clear_inventory_action_feedback()
+	if _press_timer != null:
+		_cancel_long_press()
+	_press_cancelled = false
+	_suppress_next_pressed_index = -1
+	if context_menu != null:
+		context_menu.hide()
+	selected_equipment_slot = ""
+	selected_equipment_ref.clear()
+	_clear_inventory_selection_styles()
+	_hide_item_detail()
+	if not equipment_buttons.is_empty():
+		_refresh_equipment_slots()
+
+func _ui_sync_empty_destinations() -> void:
+	# A no-selection empty cell is passive; an unequip destination is functional.
+	# Refresh these flags immediately on equipment selection, not on a later
+	# inventory_changed signal, so the first empty-cell click already works.
+	for index in range(_bag_cells.size()):
+		if not _inventory_record(index).is_empty():
+			continue
+		var button := _bag_cells[index].get_child(0) as Button
+		var functional := _can_receive_unequip_to_index(index)
+		button.disabled = not functional
+		button.mouse_filter = Control.MOUSE_FILTER_STOP if functional else Control.MOUSE_FILTER_IGNORE
+		button.tooltip_text = "卸下到此格" if functional else ""
+		UIItemSelectionVisualScript.apply(button, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")

@@ -23,6 +23,10 @@ const CLIENT_EFFECTS := {
 }
 const CLIENT_EFFECT_ACTOR_OFFSET := Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR)
 const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
+## Keep the legacy local player silent: audited cues are dispatched to the
+## shared AudioRuntimeService pool so simultaneous actors do not restart one
+## another and source identity remains event-ID based.
+const SKILL_AUDIO_ENABLED := false
 
 var actor: PlayerCharacter
 var sprite: Sprite2D
@@ -71,6 +75,7 @@ var _weapon_frame_size := ArtSpec.WARRIOR_FRAME
 var _weapon_source_anchor := ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR
 var _weapon_attack_source_frames: Array = []
 var _equipment_layer_direction := -1
+var _equipment_layer_behind := false
 var _formal_base_loaded := false
 var _helmet_item_id := -1
 var _helmet_player_visual_id := "player.male.cloth_002"
@@ -78,6 +83,14 @@ var _helmet_player_visual_id := "player.male.cloth_002"
 
 func setup(owner_actor: PlayerCharacter) -> void:
 	actor = owner_actor
+
+
+func approved_ground_footpoint_in_actor_px() -> Vector2:
+	# This is the exact user-approved result from the original 2026-07-30
+	# alignment draft. The visual composite was moved to (7.5, 12.5), then the
+	# manually picked shoe point received (-7.5, -12.5), resolving to (0, 0).
+	# Use the stable formal values instead of a transient sprite frame transform.
+	return position + ArtSpec.PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT
 
 
 func _ready() -> void:
@@ -169,14 +182,24 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	_action_remaining = maxf(0.0, _action_remaining - delta)
-	current_state = "action" if _action_remaining > 0.0 else ("walk" if actor.velocity.length_squared() > 25.0 else "idle")
-	# 移动时以实际速度为最高优先级，避免自动目标/战斗朝向覆盖行走动画方向。
+	var moving := actor.velocity.length_squared() > 0.01
+	var locomotion := str(actor.get("locomotion_state"))
+	if locomotion != "walk" and locomotion != "run":
+		locomotion = "run" if actor.velocity.length_squared() > 25.0 else "walk"
+	# Preserve direct presentation-test/manual pose injection, where velocity is
+	# assigned without the gameplay movement flag. Runtime movement always uses
+	# the authoritative locomotion state above.
+	if not bool(actor.get("movement_input_active")) and actor.velocity.length_squared() > 25.0:
+		locomotion = "run"
+	current_state = "action" if _action_remaining > 0.0 else (locomotion if moving else "idle")
+	# 当前移动速度就是跑步速度；移动时以实际速度为最高优先级，避免
+	# 自动目标/战斗朝向覆盖跑步动画方向。
 	current_direction = _resolved_direction_row()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state
 	_elapsed += delta
-	var fps := 12.0 if current_state == "action" else (10.0 if current_state == "walk" else 6.0)
+	var fps := 12.0 if current_state == "action" else (10.0 if current_state == "run" else 6.0)
 	var action_key := _visual_action_key()
 	var frame_count := _frame_count_for_action(action_key)
 	if current_state == "action":
@@ -283,6 +306,10 @@ func _process(delta: float) -> void:
 
 
 func play_action(animation_name: String, duration: float) -> void:
+	var starts_reaction_action := (
+		animation_name in ["hit", "death"]
+		and not (_action_name == animation_name and _action_remaining > 0.0)
+	)
 	if _action_name == "death" and _action_remaining > 0.0 and animation_name != "death":
 		return
 	_action_name = animation_name
@@ -294,6 +321,8 @@ func play_action(animation_name: String, duration: float) -> void:
 		_action_duration = maxf(_action_duration, duration)
 	_elapsed = 0.0
 	_action_audio_played = false
+	if starts_reaction_action:
+		_dispatch_player_reaction_action_start_audio(animation_name)
 
 
 func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
@@ -305,9 +334,9 @@ func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
 
 
 func _resolved_direction_row() -> int:
-	# Walking must use real screen displacement. Actions use the combat-facing
+	# Locomotion must use real screen displacement. Actions use the combat-facing
 	# vector captured from the selected target at action start.
-	var direction := actor.actual_motion_facing if current_state == "walk" else actor.facing
+	var direction := actor.actual_motion_facing if current_state in ["walk", "run"] else actor.facing
 	return ArtSpec.mir2_client_direction_row(direction)
 
 
@@ -436,6 +465,8 @@ func _is_warrior_attack_action(animation_name: String) -> bool:
 
 
 func _visual_action_key() -> String:
+	if current_state == "run":
+		return "run"
 	if current_state == "walk":
 		return "walk"
 	if current_state == "action" and _action_name == "hit":
@@ -454,6 +485,9 @@ func _default_body_texture(action_key: String) -> Texture2D:
 	if formal != null:
 		return formal
 	match action_key:
+		# There is no legacy placeholder for running. If the formal male run
+		# atlas is missing, fail closed instead of silently reusing another action.
+		"run": return null
 		"walk": return PresentationAssets.player_texture("walk")
 		"attack": return PresentationAssets.player_texture("attack")
 		"cast": return PresentationAssets.player_texture("idle")
@@ -463,7 +497,9 @@ func _default_body_texture(action_key: String) -> Texture2D:
 
 
 func _current_frame_count() -> int:
-	return _frame_count_for_action("walk" if current_state == "walk" else "idle")
+	return _frame_count_for_action(
+		"run" if current_state == "run" else ("walk" if current_state == "walk" else "idle")
+	)
 
 
 func _frame_count_for_action(action_key: String) -> int:
@@ -754,6 +790,9 @@ func _refresh_equipment_visuals() -> void:
 func _update_equipment_layers() -> void:
 	if weapon_accent == null:
 		return
+	var behind_body := EquipmentRules.weapon_draws_behind_actor(
+		current_direction, _visual_action_key(), current_frame, PlayerState.gender
+	)
 	var direction := actor.facing.normalized()
 	if direction.length_squared() < 0.001:
 		direction = Vector2.DOWN
@@ -766,7 +805,7 @@ func _update_equipment_layers() -> void:
 		and worn_helmet_back_sprite != null
 		and worn_helmet_sprite != null
 		and head_occlusion_mask_sprite != null
-		and _equipment_layer_direction != current_direction
+		and (_equipment_layer_direction != current_direction or _equipment_layer_behind != behind_body)
 	):
 		# All appearance children must remain on the actor/wall Z=0 plane. Classic
 		# front/back overlap is expressed only by sibling order, otherwise a positive
@@ -780,7 +819,7 @@ func _update_equipment_layers() -> void:
 			&"head_occlusion_mask": head_occlusion_mask_sprite,
 		}
 		var layer_order: Array[StringName]
-		if EquipmentRules.weapon_draws_behind_actor(current_direction):
+		if behind_body:
 			layer_order = [
 				EquipmentRules.ACTOR_VISUAL_WEAPON_LAYER,
 				&"helmet_back",
@@ -801,13 +840,14 @@ func _update_equipment_layers() -> void:
 		for layer_index: int in range(layer_order.size()):
 			move_child(layers[layer_order[layer_index]], layer_index)
 		_equipment_layer_direction = current_direction
+		_equipment_layer_behind = behind_body
 	# Helmet and body use the same 192x160 directional atlas grid.  Its region
 	# is updated with the body each frame, so it stays on the actual head rather
 	# than becoming an independent icon beside the health bar.
 
 
 func weapon_draws_behind(direction_row: int) -> bool:
-	return EquipmentRules.weapon_draws_behind_actor(direction_row)
+	return EquipmentRules.weapon_draws_behind_actor(direction_row, _visual_action_key(), current_frame, PlayerState.gender)
 
 
 func _on_database_reloaded() -> void:
@@ -918,7 +958,131 @@ func _update_action_audio() -> void:
 		return
 	_action_audio_played = true
 	weapon_audio.stream = _weapon_swing_stream()
-	weapon_audio.play()
+	_dispatch_audited_action_audio()
+	if SKILL_AUDIO_ENABLED:
+		weapon_audio.play()
+	else:
+		# Keep the selected stream observable for existing visual contracts, but
+		# never start playback until the temporary gate is explicitly reopened.
+		weapon_audio.stop()
+
+
+func _dispatch_player_reaction_action_start_audio(animation_name: String) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	var service := tree.get_first_node_in_group("audio_runtime_service")
+	if service == null or not service.has_method("play_event"):
+		return
+	var context := {
+		"gender": PlayerState.gender,
+		"action_name": animation_name,
+		"source": "player_visual.reaction_action_start",
+	}
+	match animation_name:
+		"hit":
+			# Current PvE has non-human attackers. Primary Actor.pas keeps its
+			# initialized body-longstick contact and then plays the sex voice.
+			service.call("play_event", "player.hurt.pve.body", context)
+			service.call("play_event", "player.hurt.voice", context)
+		"death":
+			# Do not start source game-over music: the user-authorized town BGM
+			# survives map/death transitions and has precedence in HardCore.
+			service.call("play_event", "player.death.voice", context)
+
+
+func _dispatch_audited_action_audio() -> void:
+	# MirClient's rush action has no dedicated weapon/skill PlaySound call.
+	# Do not borrow the adjacent attack samples merely because this visual uses
+	# the shared attack atlas.
+	if _action_name in ["野蛮冲撞", "烈火蓄力"]:
+		return
+	var tree := get_tree()
+	if tree == null:
+		return
+	var service := tree.get_first_node_in_group("audio_runtime_service")
+	if service == null or not service.has_method("play_event"):
+		return
+	var context := {
+		"gender": PlayerState.gender,
+		"action_name": _action_name,
+		"source": "player_visual.client_effect_frame",
+	}
+	var weapon_event_id := _weapon_audio_event_id()
+	if not weapon_event_id.is_empty():
+		service.call("play_event", weapon_event_id, context)
+	var skill_event_id := str({
+		"攻杀剑术": "player.skill.slaying",
+		"刺杀剑术": "player.skill.thrusting",
+		"半月弯刀": "player.skill.half_moon",
+		"烈火剑法": "player.skill.fire_sword",
+	}.get(_action_name, ""))
+	if not skill_event_id.is_empty():
+		service.call("play_event", skill_event_id, context)
+
+
+func audio_classic_weapon_shape() -> int:
+	var weapon := _equipped_record("武器")
+	if weapon.is_empty():
+		return 0
+	return _audio_classic_weapon_shape_for_record(weapon)
+
+
+func _audio_classic_weapon_shape_for_record(weapon: Dictionary) -> int:
+	var stable_item_id := _audio_stable_equipped_item_id(weapon)
+	if stable_item_id < 0:
+		return -1
+	var formal_items: Variant = GameData.equipment_visual_catalog.get("itemsById", {})
+	if not formal_items is Dictionary:
+		return -1
+	var formal_item: Variant = formal_items.get(str(stable_item_id), {})
+	if not formal_item is Dictionary:
+		return -1
+	var world_wear: Variant = formal_item.get("worldWear", {})
+	if not world_wear is Dictionary or not world_wear.has("shape"):
+		return -1
+	return int(world_wear.get("shape", -1))
+
+
+func _weapon_audio_event_id() -> String:
+	var weapon := _equipped_record("武器")
+	if weapon.is_empty():
+		return "player.weapon.fist.swing"
+	# MirClient selects the attack sample from (m_btWeapon div 2), not from
+	# the item display name. Resolve the current stable item ID to the formal
+	# classic weapon shape already used by world-wear rendering; an old
+	# name-only/unknown equipped record stays silent instead of guessing.
+	var classic_shape := _audio_classic_weapon_shape_for_record(weapon)
+	if classic_shape < 0:
+		return ""
+	if classic_shape in [6, 20]:
+		return "player.weapon.short.swing"
+	if classic_shape == 1:
+		return "player.weapon.wood.swing"
+	if classic_shape in [2, 5, 9, 13, 14, 22]:
+		return "player.weapon.sword.swing"
+	if classic_shape in [4, 10, 15, 16, 17, 23]:
+		return "player.weapon.blade.swing"
+	if classic_shape in [3, 7, 11]:
+		return "player.weapon.axe.swing"
+	if classic_shape == 24:
+		return "player.weapon.club.swing"
+	if classic_shape in [8, 12, 18, 21]:
+		return "player.weapon.long.swing"
+	return ""
+
+
+func _audio_stable_equipped_item_id(record: Dictionary) -> int:
+	for field_name: String in ["item_id", "itemId"]:
+		var raw_id: Variant = record.get(field_name, null)
+		if raw_id is int or raw_id is float:
+			var numeric_id := int(raw_id)
+			if numeric_id >= 0:
+				return numeric_id
+		var text_id := str(raw_id)
+		if text_id.is_valid_int() and text_id.to_int() >= 0:
+			return text_id.to_int()
+	return -1
 
 
 func _weapon_swing_stream() -> AudioStream:

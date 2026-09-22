@@ -1,0 +1,17 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.43,"start_ms":247.464},"build_bottom_chassis":{"duration_ms":199.778,"start_ms":38.555},"build_combat_controls":{"duration_ms":8.49,"start_ms":238.333},"build_hidden_compatibility_info":{"duration_ms":7.2,"start_ms":26.677},"build_item_quick_slot_menu":{"duration_ms":0.641,"start_ms":246.823},"build_loading_transition":{"duration_ms":1.275,"start_ms":247.894},"build_loot_feedback":{"duration_ms":0.756,"start_ms":34.457},"build_right_utility_stack":{"duration_ms":3.342,"start_ms":35.213},"build_target_bar":{"duration_ms":0.58,"start_ms":33.877},"initial_state_sync":{"duration_ms":0.421,"start_ms":249.18},"root_and_theme":{"duration_ms":26.654,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.023,"start_ms":26.654},"wire_player_state_signals":{"duration_ms":0.011,"start_ms":249.169}},"total_ms":249.603}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.008,"init_to_enter_tree":0.05},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.048,"start_ms":0.679},"bootstrap_dispatch":{"duration_ms":0.055,"start_ms":747.862},"camera_construct_and_attach":{"duration_ms":0.041,"start_ms":61.33},"hud_attach_and_ready":{"duration_ms":624.419,"start_ms":61.442},"hud_construct":{"duration_ms":0.033,"start_ms":61.371},"hud_post_ready_setup":{"duration_ms":10.909,"start_ms":685.861},"hud_signal_wiring":{"duration_ms":0.038,"start_ms":61.404},"player_construct_wire_attach_restore":{"duration_ms":60.603,"start_ms":0.727},"pre_background_setup":{"duration_ms":0.621,"start_ms":0.058},"system_menu_build":{"duration_ms":51.092,"start_ms":696.77}},"total_ms":747.918}
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_prefetch (res://scripts/world_bootstrap_coordinator.gd:645)
+       [1] poll_threaded_prefetch_blocking (res://scripts/world_bootstrap_coordinator.gd:668)
+       [2] _run_world_build_pipeline (res://scripts/game_root.gd:2815)
+       [3] _run_map_transition (res://scripts/game_root.gd:2680)
+       [4] _begin_map_transition (res://scripts/game_root.gd:2614)
+       [5] travel_to_service_home (res://scripts/game_root.gd:2236)
+       [6] _begin_initial_world_bootstrap (res://scripts/game_root.gd:2556)
+[WorldBootstrapProfile] {"actor_max_item_ms":441.846,"actor_max_slice_ms":441.852,"actor_slices":44,"actor_total_ms":849.875,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":441.852,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":401.504,"BUILD_MAP":398.571,"COLLECT_REQUIREMENTS":28.873,"FINALIZE":1271.85,"REQUEST_RESOURCES":338.397,"SHOW_LOADING":0.044,"SPAWN_ACTORS":403.619,"WAIT_RESOURCES":338.831},"total_ms":1280.538}
+GAME_ROOT_MONSTER_PREFETCH_PASS: map ids are unique and Loading covers bounded async streaming before zone spawn

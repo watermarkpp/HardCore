@@ -14,13 +14,13 @@ func _ready() -> void:
 	assert(not low.accepted and low.outcome == "level_requirement")
 	assert(not service.is_learned("wizard.fireball"))
 
-	# First book learns at base rank 0.
+	# First book learns at base rank 1.
 	var first := service.learn("wizard.fireball", 40)
-	assert(first.accepted and first.outcome == "learned" and first.base_rank == 0)
-	assert(service.state("火球术") == {"base_rank": 0, "rank": 0})
+	assert(first.accepted and first.outcome == "learned" and first.base_rank == 1)
+	assert(service.state("火球术") == {"base_rank": 1, "rank": 1})
 
 	# Same-name books upgrade 1 -> 2 -> 3.
-	for expected: int in [1, 2, 3]:
+	for expected: int in [2, 3]:
 		var upgrade := service.learn("wizard.fireball", 40)
 		assert(
 			upgrade.accepted
@@ -94,11 +94,11 @@ func _ready() -> void:
 	var equipped := Progression.new()
 	assert(equipped.effective_rank("wizard.fireball", 1000) == 0)
 	assert(equipped.learn("wizard.fireball", 40).accepted)
-	assert(equipped.effective_rank("wizard.fireball", 1000) == 1000)
-	assert(equipped.effective_rank("wizard.fireball", -3) == 0)
+	assert(equipped.effective_rank("wizard.fireball", 1000) == 1001)
+	assert(equipped.effective_rank("wizard.fireball", -3) == 1)
 
 	print(
-		"SKILL_PROGRESSION_SERVICE_PASS: book 0->1->2->3, max reject, "
+		"SKILL_PROGRESSION_SERVICE_PASS: book 1->2->3, max reject, "
 		+ "level gates, v1->v2 migration, proficiency disabled, "
 		+ "equipment-on-unlearned rejected"
 	)

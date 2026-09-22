@@ -1,0 +1,63 @@
+{
+  "schema": "hardcore.dpv2.v505.author_ruling.v1",
+  "version": "V5.0.5",
+  "migration_base_sha": "342891ab884150c0e81084c932df8205484e6388",
+  "original_gameplay_base_sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590",
+  "review_branch": "codex/dpv2-glm52-flash-v5-0-3-20260908",
+  "decision": "ADOPT_FROZEN_21CQ_FULL_PROFILE_FOR_EXACT_VERIFIED_IDENTITIES",
+  "terminology": {
+    "adopted_name": "project_21cq_reference_baseline",
+    "official_original_claim": false,
+    "note": "The user explicitly selected 21CQ as the reference. This migration does not claim current 21CQ is proven official Mir server truth."
+  },
+  "profile_policy": {
+    "FULL_21CQ_VERIFIED": {
+      "count": 141,
+      "action": "replace the full exact-ID runtime drop profile structurally from the frozen current 21CQ page: reward identity, duplicate multiplicity, gold amount, and probability"
+    },
+    "LEGACY_PRESERVED_EXTERNAL_EMPTY": {
+      "ids": [75, 123],
+      "action": "preserve exact-ID legacy profile; do not source-gate skill-book boost; never inherit suffix neighbor"
+    },
+    "PROJECT_EXTENSION": {
+      "ids": [225],
+      "action": "preserve project profile; Woma-reference equipment K remains explicitly user-authorized, source-gated book boost remains disabled"
+    },
+    "EXPLICIT_NON_LOOT": {"count": 9, "action": "unchanged"},
+    "RUNTIME_DISABLED": {"count": 3, "action": "unchanged"}
+  },
+  "stable_slot_migration": {
+    "preserve_uid_when_same_reward_identity": true,
+    "exact_probability_reuse_first": true,
+    "remaining_same_reward_pairing": "stable old UID order to frozen 21CQ page order",
+    "source_extra_occurrence": "create deterministic dpv2.direct.m<ID>.v505_<page_row> UID",
+    "legacy_surplus_occurrence": "remove from new compiled profile and record in migration ledger",
+    "cross_monster_or_cross_reward_matching": false
+  },
+  "balance_after_source_migration": {
+    "skill_books": {
+      "FULL_21CQ_VERIFIED_only": true,
+      "ordinary_multiplier": 5,
+      "ordinary_cap": "1/100",
+      "elite_boss_multiplier": 25,
+      "elite_boss_cap": "1/20",
+      "exclude_monster_ids": [75, 123, 225, 235, 236, 237, 238, 239, 240],
+      "max_one_book_per_kill": false
+    },
+    "boss_equipment_k": {
+      "only_monster_ids": [76, 198, 199, 225],
+      "target_woma_final_no_equipment": "7/20",
+      "approved_item_scope": "derive item IDs and multiplicities only from existing V5 policy boss_allowlist; never add a new item ID",
+      "if_corrected_woma_already_at_or_below_target": "K=1, no nerf, no extra boost",
+      "recalculate_after_structural_source_migration": true
+    },
+    "new_clothes": {
+      "monster_ids": [235, 236, 237, 238, 239, 240],
+      "resolve_target_by": "exact monster ID + exact target canonical item ID",
+      "final_probability": "1/60",
+      "pity": false,
+      "must_survive_selector_given_hit": true
+    },
+    "selector": "keep current 9-ground-slot protected/priority selector"
+  }
+}

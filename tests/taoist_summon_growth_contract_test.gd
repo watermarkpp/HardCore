@@ -39,7 +39,7 @@ func _ready() -> void:
 	assert(TaoistCombatMath.summon_growth_threshold("skeleton", 0) == 325)
 	assert(TaoistCombatMath.summon_growth_threshold("divine_beast", 0) == 580)
 	assert(TaoistCombatMath.effective_summon_attack_interval_ms("skeleton", 3) == 1200)
-	assert(TaoistCombatMath.effective_summon_move_interval_ms("skeleton", 3) == 450)
+	assert(TaoistCombatMath.effective_summon_move_interval_ms("skeleton", 3) == 350)
 	assert(TaoistCombatMath.effective_summon_attack_interval_ms("divine_beast", 3) == 1200)
 	assert(TaoistCombatMath.effective_summon_move_interval_ms("divine_beast", 3) == 350)
 

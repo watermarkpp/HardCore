@@ -1,0 +1,20 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _has_property (res://scripts/monster_display_formatter.gd:182)
+       [1] rank_for_actor (res://scripts/monster_display_formatter.gd:62)
+       [2] _refresh_rank_visuals (res://scripts/monster_overhead.gd:55)
+       [3] _ready (res://scripts/monster_overhead.gd:50)
+       [4] _ready (res://scripts/enemy.gd:2240)
+       [5] _spawn_enemy (res://scripts/game_root.gd:4051)
+       [6] _spawn_staged_actor_descriptor (res://scripts/game_root.gd:3755)
+       [7] _process_staged_queue_slice (res://scripts/world_bootstrap_coordinator.gd:570)
+       [8] process_actor_queue_blocking (res://scripts/world_bootstrap_coordinator.gd:535)
+       [9] _run_map_transition (res://scripts/game_root.gd:2729)
+       [10] _begin_map_transition (res://scripts/game_root.gd:2652)
+       [11] travel_to_service_home (res://scripts/game_root.gd:2263)
+       [12] _begin_initial_world_bootstrap (res://scripts/game_root.gd:2585)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

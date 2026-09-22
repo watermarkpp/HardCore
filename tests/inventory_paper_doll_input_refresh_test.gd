@@ -23,7 +23,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	var inventory_button := hud.find_child("InventoryButton", true, false) as Button
 	assert(inventory_button != null, "正式 HUD 缺少背包入口")
-	assert(not hud.inventory_panel.visible, "正式 HUD 背包初始状态必须隐藏")
+	assert(hud.inventory_panel == null, "正式 HUD 背包必须保持首开惰性")
 	inventory_button.pressed.emit()
 	await get_tree().process_frame
 	var panel: InventoryPanel = hud.inventory_panel
@@ -41,6 +41,16 @@ func _run() -> void:
 	assert(preview._body_texture != null, "正式 HUD 背包纸娃娃缺少衣服层")
 	assert(preview._weapon_texture != null, "正式 HUD 背包纸娃娃缺少武器层")
 	assert(preview._helmet_texture != null, "正式 HUD 背包纸娃娃缺少用户头盔层")
+	PreviewScript.clear_classic_head_mask_cache_for_tests()
+	preview.refresh()
+	var first_masked_texture := preview._base_texture
+	var first_masked_pixels := first_masked_texture.get_image().get_data()
+	var cache_after_miss := PreviewScript.classic_head_mask_cache_debug_snapshot()
+	preview.refresh()
+	var cache_after_hit := PreviewScript.classic_head_mask_cache_debug_snapshot()
+	assert(int(cache_after_miss.get("misses", 0)) == 1 and int(cache_after_miss.get("entries", 0)) == 1, "头盔遮罩首次合成没有写入缓存")
+	assert(int(cache_after_hit.get("hits", 0)) == 1 and preview._base_texture == first_masked_texture, "相同装备刷新没有命中头盔像素合成缓存")
+	assert(preview._base_texture.get_image().get_data() == first_masked_pixels, "头盔缓存改变了像素合成结果")
 	assert(preview.get_meta("paper_doll_render_contract", "") == PreviewScript.PRESENTATION_MODES_CONTRACT_ID)
 	preview.configure_presentation_mode("legacyFullPanel")
 	assert(preview.presentation_mode == "classic_avatar", "Player UI accepted the forbidden legacyFullPanel mode")
@@ -58,13 +68,35 @@ func _run() -> void:
 	PlayerState.equipment[weapon_slot] = {}
 	PlayerState.equipment[str(PreviewScript.PAPER_LAYER_SLOTS[2])] = {}
 	PlayerState.equipment_changed.emit()
-	assert(preview.render_revision() > revision_before, "Equipment change did not refresh the paper doll")
+	# UI-L1 contract: equipment data refresh is deferred and coalesced; the
+	# paper doll re-render settles within a few process frames.
+	var revision_settled := false
+	for _frame in range(3):
+		await get_tree().process_frame
+		if preview.render_revision() > revision_before:
+			revision_settled = true
+			break
+	assert(revision_settled, "Equipment change did not refresh the paper doll")
 	assert(preview.paper_layer_source_index(dress_slot) == 62)
 	assert(preview.original_stage_draw_commands().is_empty(), "Player inventory drew a complete Prguse background or slot frame")
 	assert(preview._body_texture != null, "Equipment refresh did not retain the dress layer")
 	assert(preview._paper_layers.size() == 1, "Paper doll did not retain the transparent base/dress composition")
 
-	(panel.equipment_buttons[dress_slot] as Button).pressed.emit()
+	# UI-L1 input contract: equipment slots arm through gui_input DOWN/UP
+	# (UIActivationOnce) and commit exactly once on pressed. A bare pressed
+	# emission is an un-armed duplicate and must stay inert.
+	var slot_button: Button = panel.equipment_buttons[dress_slot] as Button
+	var down_event := InputEventMouseButton.new()
+	down_event.button_index = MOUSE_BUTTON_LEFT
+	down_event.pressed = true
+	down_event.position = slot_button.size * 0.5
+	slot_button.gui_input.emit(down_event)
+	var up_event := InputEventMouseButton.new()
+	up_event.button_index = MOUSE_BUTTON_LEFT
+	up_event.pressed = false
+	up_event.position = slot_button.size * 0.5
+	slot_button.gui_input.emit(up_event)
+	slot_button.pressed.emit()
 	assert(panel.selected_equipment_slot == dress_slot, "Visual preview blocked equipment-slot selection")
 	hud.queue_free()
 

@@ -26,9 +26,6 @@ const GLOBALLY_FORBIDDEN_TOKENS := [
 	"maximum_range_tiles",
 	"length_tiles",
 	"width_tiles",
-	"origin_world",
-	"direction_world",
-	"geometry_world",
 	"WorldSpatialRulesScript.environment_blocks_actor(",
 	"WorldSpatialRules.environment_blocks_actor(",
 	"WorldSpatialRulesScript.actor_footprint_polygon(",
@@ -36,6 +33,12 @@ const GLOBALLY_FORBIDDEN_TOKENS := [
 	"MapEditorRuntimeBridgeScript.tile_to_world(",
 	"MapEditorRuntimeBridgeScript.world_to_tile(",
 	"MapEditorRuntimeBridgeScript.cell_to_world(",
+]
+
+const GLOBALLY_FORBIDDEN_AMBIGUOUS_UNIT_STEMS := [
+	"origin_world",
+	"direction_world",
+	"geometry_world",
 ]
 
 const FILE_SPECIFIC_FORBIDDEN := {
@@ -77,6 +80,11 @@ const FILE_SPECIFIC_FORBIDDEN := {
 
 
 func _ready() -> void:
+	for stem: String in GLOBALLY_FORBIDDEN_AMBIGUOUS_UNIT_STEMS:
+		assert(_contains_ambiguous_unit_stem(stem, stem))
+		assert(not _contains_ambiguous_unit_stem("%s_px" % stem, stem))
+		assert(not _contains_ambiguous_unit_stem("target_actor_%s_px" % stem, stem))
+		assert(_contains_ambiguous_unit_stem("%s_px_extra" % stem, stem))
 	for path: String in FORMAL_RUNTIME_FILES:
 		assert(FileAccess.file_exists(path), "missing formal runtime source: %s" % path)
 		var source := FileAccess.get_file_as_string(path)
@@ -86,6 +94,12 @@ func _ready() -> void:
 				not source.contains(token),
 				"formal runtime still contains forbidden unit token %s in %s" % [token, path]
 			)
+		for stem: String in GLOBALLY_FORBIDDEN_AMBIGUOUS_UNIT_STEMS:
+			assert(
+				not _contains_ambiguous_unit_stem(source, stem),
+				"formal runtime still contains ambiguous unit stem %s in %s"
+				% [stem, path]
+			)
 		for token: String in FILE_SPECIFIC_FORBIDDEN.get(path, []):
 			assert(
 				not source.contains(token),
@@ -93,3 +107,12 @@ func _ready() -> void:
 			)
 	print("COMBAT_UNIT_RUNTIME_STATIC_AUDIT_PASS: formal runtime exposes GU/GS/PX units and legacy names remain adapter-only")
 	get_tree().quit(0)
+
+
+func _contains_ambiguous_unit_stem(source: String, stem: String) -> bool:
+	var matcher := RegEx.new()
+	var compile_error := matcher.compile(
+		"%s(?!_px(?:[^A-Za-z0-9_]|$))" % stem
+	)
+	assert(compile_error == OK, "invalid static unit-gate regex for %s" % stem)
+	return matcher.search(source) != null

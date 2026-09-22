@@ -125,10 +125,9 @@ func _run() -> void:
 		and int(PlayerState.computed_stats.attack_speed_tier) == 0,
 		"PlayerState基础AntiMagic或攻速tier契约错误"
 	)
-	var wood_sword := GameData.get_item("木剑")
-	var previous_modifiers: Variant = wood_sword.get("modifiers", null)
-	wood_sword["modifiers"] = {"antiMagicPoints": 3, "attackSpeedTier": 2}
-	PlayerState.equipment["武器"] = {"name": "木剑", "durability": 1}
+	# Runtime consumes the exact-ID rule snapshot. Exercise the supported legacy
+	# instance-modifier layer instead of mutating the name catalog behind it.
+	PlayerState.equipment["武器"] = {"name": "木剑", "durability": 1, "modifiers": {"antiMagicPoints": 3, "attackSpeedTier": 2}}
 	PlayerState.recalculate_stats()
 	assert(
 		int(PlayerState.computed_stats.anti_magic_points) == 4
@@ -136,10 +135,6 @@ func _run() -> void:
 		and int(PlayerState.computed_stats.attack_speed_tier) == 2,
 		"装备稳定字段未聚合到PlayerState战斗属性"
 	)
-	if previous_modifiers == null:
-		wood_sword.erase("modifiers")
-	else:
-		wood_sword["modifiers"] = previous_modifiers
 	PlayerState.reset_progress()
 
 	var white_tiger_tooth := GameData.get_item("白色虎齿项链")
@@ -152,10 +147,8 @@ func _run() -> void:
 		"gale_necklace": _snapshot_item_combat_fields(gale_necklace),
 		"gale_ring": _snapshot_item_combat_fields(gale_ring),
 	}
-	white_tiger_tooth.merge({"magicEvasionPoints": 2, "magicEvasionPercent": 20}, true)
-	lantern_necklace.merge({"magicEvasionPoints": 1, "magicEvasionPercent": 10}, true)
-	gale_necklace["attackSpeedTier"] = 2
-	gale_ring["attackSpeedTier"] = 1
+	assert(int(white_tiger_tooth.magicEvasionPoints)==2 and int(lantern_necklace.magicEvasionPoints)==1)
+	assert(int(gale_necklace.attackSpeedTier)==2 and int(gale_ring.attackSpeedTier)==1)
 	# Synthetic multi-record loadout: it verifies recalculate_stats aggregation only,
 	# independently from inventory slot validation.
 	PlayerState.equipment.merge({
@@ -294,8 +287,8 @@ func _run() -> void:
 	var fireball_profile := ProfessionRules.skill_combat_profile("火球术", 0)
 	assert(wizard.request_skill("火球术"), "攻速隔离测试无法施放火球")
 	assert(
-		is_equal_approx(wizard._attack_timer, float(fireball_profile.cooldown)),
-		"攻速tier错误缩短施法或技能冷却"
+		is_equal_approx(wizard._attack_timer, float(fireball_profile.cooldown) * CombatResolutionRules.equipment_spell_time_scale(15)),
+		"用户新规则：装备速度必须按比例缩短施法间隔，并保留极限速度边界"
 	)
 
 	print("COMBAT_RESOLUTION_CONTRACT_PASS：物理严格命中、AntiMagic/AntiPoison隔离与攻速tier边界统一")

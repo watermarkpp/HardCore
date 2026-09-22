@@ -6,6 +6,7 @@ param(
     [string]$BaselineApkPath = "",
     [int]$ExpectedVersionCode = 0,
     [string]$ExpectedVersionName = "",
+    [int]$VersionCode = 0,
     [switch]$PreflightOnly,
     [switch]$KeepStage
 )
@@ -141,10 +142,16 @@ if (-not $VersionCodeMatch.Success) {
     throw "Build commit export preset has no readable version/code."
 }
 $PresetVersionCode = [int]$VersionCodeMatch.Groups[1].Value
+# QA override (remote review 2026-09-16): each device QA APK carries a
+# monotonic versionCode (83, 84, ...), injected into the disposable stage
+# only - the tracked export preset stays untouched.
+if ($VersionCode -gt 0) {
+    $ExpectedVersionCode = $VersionCode
+}
 if ($ExpectedVersionCode -le 0) {
     $ExpectedVersionCode = $PresetVersionCode
 }
-elseif ($PresetVersionCode -ne $ExpectedVersionCode) {
+elseif ($VersionCode -le 0 -and $PresetVersionCode -ne $ExpectedVersionCode) {
     throw "Build commit export preset contains version/code=$PresetVersionCode, expected $ExpectedVersionCode."
 }
 $VersionNameMatch = [regex]::Match($ExportPresetText, '(?m)^version/name="([^"]+)"\r?$')
@@ -285,12 +292,32 @@ try {
         if (-not (Test-Path -LiteralPath $BuildInfoScript -PathType Leaf)) {
             throw "Staged project has no build-info generator: $BuildInfoScript"
         }
-        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -IgnoreAndroidBuildTemplate
+        & powershell -ExecutionPolicy Bypass -File $BuildInfoScript -StageRoot $StageProjectPath -IgnoreAndroidBuildTemplate -VersionCodeOverride $VersionCode
         $BuildInfoExitCode = $LASTEXITCODE
         if ($BuildInfoExitCode -ne 0) {
             throw "Build-info generation failed with exit code $BuildInfoExitCode."
         }
         Write-Output "build_info.json generated in staged project"
+
+        # QA versionCode override (remote review 2026-09-16): inject the QA
+        # code into the staged export preset AFTER build-info generation
+        # (the generator records the same code via -VersionCodeOverride and
+        # still runs on the pure commit content, keeping git_dirty=false for
+        # the verify contract). The tracked preset is untouched.
+        if ($VersionCode -gt 0) {
+            $StagePresetPath = Join-Path $StageProjectPath "export_presets.cfg"
+            $StagePresetText = [System.IO.File]::ReadAllText($StagePresetPath)
+            if (-not $StagePresetText -match '(?m)^version/code=\d+\r?$') {
+                throw "Staged export preset has no readable version/code to override."
+            }
+            $Utf8NoBomPreset = New-Object System.Text.UTF8Encoding($false)
+            [System.IO.File]::WriteAllText(
+                $StagePresetPath,
+                [regex]::Replace($StagePresetText, '(?m)^version/code=\d+', "version/code=$VersionCode"),
+                $Utf8NoBomPreset
+            )
+            Write-Output "VERSION_CODE_OVERRIDE=$VersionCode"
+        }
 
         & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
         $ImportExitCode = $LASTEXITCODE

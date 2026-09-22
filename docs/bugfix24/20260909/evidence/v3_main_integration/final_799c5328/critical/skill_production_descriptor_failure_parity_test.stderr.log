@@ -1,0 +1,10 @@
+SCRIPT ERROR: Assertion failed: fireball release rejected
+   at: _projectile_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] _projectile_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:55)
+       [1] _run (res://tests/skill_production_descriptor_failure_parity_test.gd:36)
+SCRIPT ERROR: Assertion failed: lightning release rejected
+   at: _visual_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:98)
+   GDScript backtrace (most recent call first):
+       [0] _visual_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:98)
+       [1] _run (res://tests/skill_production_descriptor_failure_parity_test.gd:37)

@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "test_name": "inventory_equipment_ui_test",
+      "test_path": "tests/inventory_equipment_ui_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "equipment_luck_test",
+      "test_path": "tests/equipment_luck_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-09T13:17:14.2299022+08:00",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "total": 2,
+  "git_head": "dd919c21f3e7e512994f9e35ebffb4a3c1079f10",
+  "failed": 0,
+  "passed": 2
+}

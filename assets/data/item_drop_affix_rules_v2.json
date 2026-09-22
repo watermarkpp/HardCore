@@ -1,0 +1,5286 @@
+{
+  "schema_version": 2,
+  "contract_id": "item.drop.affix.rules.v2",
+  "scope": "ordinary primary combat maxima; independent per-stat binomial increments",
+  "original_outer_gate": {
+    "numerator": 1,
+    "denominator": 10
+  },
+  "single_player_outer_gate": {
+    "numerator": 1,
+    "denominator": 2
+  },
+  "single_player_authorization": "2026-09-13 user request 4; five times original entry chance, inner rates unchanged",
+  "source_policy": {
+    "lane": "server_rules",
+    "tier": "primary",
+    "distribution": "source.original_gameofmir.server_suite"
+  },
+  "sources": [
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/ItmUnit.pas",
+      "sha256": "ce0f5233e5f1e1d995bc0ca64764bf86017b4cf881a4dd8ea1821c2ebbae6b6c"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/UsrEngn.pas",
+      "sha256": "e9e1735511ce0aec8f90e52d38f504fd7430df1aa490d6e82b29d62d7c6e84d3"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/M2Share.pas",
+      "sha256": "9e1505be616d55a362151150ba92712b9c8439f0a32e35b13c666ae07a33c085"
+    }
+  ],
+  "record_count": 175,
+  "records": [
+    {
+      "item_id": 80,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 81,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 82,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 83,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 84,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 85,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 86,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 87,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 88,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 89,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 92,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 93,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 94,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 97,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 98,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 99,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 102,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 105,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 108,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 110,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 111,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 112,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 113,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 223,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 90,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 95,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 100,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 103,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 106,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 109,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 114,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 91,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 96,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 101,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 104,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 107,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 115,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 12,
+          "trial_denominator": 15,
+          "gate_denominator": 15
+        }
+      ]
+    },
+    {
+      "item_id": 116,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 118,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 120,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 122,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 128,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 140,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 124,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 130,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 142,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 126,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 132,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 144,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 117,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 119,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 121,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 123,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 125,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 127,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 129,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 131,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 133,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 141,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 143,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 145,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 15,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        }
+      ]
+    },
+    {
+      "item_id": 146,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 147,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 148,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 149,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 150,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 151,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 152,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 153,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 154,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 155,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 156,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 157,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 158,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 159,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 160,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 161,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 162,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 163,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 164,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 165,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 166,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 167,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 168,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 169,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 170,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 171,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 172,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 173,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 174,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 175,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 176,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 177,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 178,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 179,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 180,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 181,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 182,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 183,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 184,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 185,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 186,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 187,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 188,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 189,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 190,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 191,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 192,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 193,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 194,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 195,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 196,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 197,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 198,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 199,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 200,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 201,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 202,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 203,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 204,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 205,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 206,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 207,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 208,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 209,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 210,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 211,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 212,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 213,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 214,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 215,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 216,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 217,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 218,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 219,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 220,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 221,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 222,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 224,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 225,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 226,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 227,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 228,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 229,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 230,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 231,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 232,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 233,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 234,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 235,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 236,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 237,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 238,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 239,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 240,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 40
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 241,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 242,
+      "rolls": [
+        {
+          "source_stat": "mac",
+          "stat": "magic_defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "ac",
+          "stat": "defense_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 20
+        },
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 243,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 244,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 245,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 246,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 247,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 248,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 249,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 250,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 251,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 252,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 253,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 254,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 255,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 256,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 257,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 258,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 259,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    },
+    {
+      "item_id": 260,
+      "rolls": [
+        {
+          "source_stat": "dc",
+          "stat": "attack_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "mc",
+          "stat": "magic_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        },
+        {
+          "source_stat": "sc",
+          "stat": "tao_max",
+          "trials": 6,
+          "trial_denominator": 20,
+          "gate_denominator": 30
+        }
+      ]
+    }
+  ]
+}

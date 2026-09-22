@@ -9,9 +9,14 @@ const NORMAL_RESPAWN_SECONDS := 60
 const ELITE_RESPAWN_SECONDS := 900
 const BOSS_RESPAWN_SECONDS := 1800
 const SPECIAL_RESPAWN_SECONDS := 60
+const SPECIAL_NORMAL_RESPAWN_SECONDS := 900
 
 static var _source_parse_counts: Dictionary = {}
 static var _canonical_cache: Dictionary = {}
+
+const MONSTER_BROWSE_KINDS := [
+	"monster_spawn", "boss_spawn", "special_monster", "unresolved_monster",
+]
 
 
 static func reset_source_parse_counts() -> void:
@@ -26,13 +31,12 @@ static func source_parse_counts() -> Dictionary:
 static func entries(kind: String, preferred_map_id := 4) -> Array[Dictionary]:
 	if kind == "npc":
 		return _npc_entries(preferred_map_id)
-	if kind not in ["monster_spawn", "boss_spawn", "special_monster"]:
+	if kind not in MONSTER_BROWSE_KINDS:
 		return []
 	var source := _canonical_source()
 	var result: Array[Dictionary] = []
 	for record: Dictionary in source.get("entries", []):
-		var classification := str(record.get("classification", ""))
-		var catalog_kind := _catalog_kind_for_classification(classification)
+		var catalog_kind := _catalog_kind_for_record(record)
 		if catalog_kind != kind:
 			continue
 		var entry := _canonical_entry(record, source, catalog_kind)
@@ -51,10 +55,20 @@ static func find(kind: String, content_id: String) -> Dictionary:
 
 
 static func find_by_monster_id(kind: String, monster_id: int) -> Dictionary:
-	if kind not in ["monster_spawn", "boss_spawn", "special_monster"] or monster_id <= 0:
+	if kind not in MONSTER_BROWSE_KINDS or monster_id <= 0:
 		return {}
 	for entry: Dictionary in entries(kind, 4):
 		if int(entry.get("monster_id", -1)) == monster_id:
+			return entry
+	return {}
+
+
+static func find_any_monster(monster_id: int) -> Dictionary:
+	if monster_id <= 0:
+		return {}
+	for kind: String in MONSTER_BROWSE_KINDS:
+		var entry := find_by_monster_id(kind, monster_id)
+		if not entry.is_empty():
 			return entry
 	return {}
 
@@ -97,7 +111,18 @@ static func _catalog_kind_for_classification(classification: String) -> String:
 			return "boss_spawn"
 		"special", "version_difference", "non_hostile":
 			return "special_monster"
-	return ""
+		"unresolved":
+			return "unresolved_monster"
+	return "unresolved_monster"
+
+
+static func _catalog_kind_for_record(record: Dictionary) -> String:
+	# special_normal is an orthogonal spawn classification. It intentionally
+	# keeps the combat classification/DPV2 role intact while placing the exact
+	# frozen variants in the reusable special-map authoring category.
+	if str(record.get("spawn_classification", "")) == "special_normal":
+		return "special_monster"
+	return _catalog_kind_for_classification(str(record.get("classification", "")))
 
 
 static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kind: String) -> Dictionary:
@@ -105,6 +130,7 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	if numeric_id <= 0:
 		return {}
 	var classification := str(record.get("classification", ""))
+	var spawn_classification := str(record.get("spawn_classification", ""))
 	var placement: Dictionary = record.get("editor_placement", {})
 	var placement_kind := str(placement.get("placement_kind", ""))
 	if placement_kind not in ["monster_spawn", "boss_spawn"]:
@@ -120,19 +146,27 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 	var combat: Dictionary = record.get("combat", {})
 	var stats: Dictionary = combat.get("stats", {})
 	var ai: Dictionary = combat.get("ai", {})
-	var reasons: Array[String] = []
-	if not bool(placement.get("allowed", false)):
-		reasons.append("编辑器策略禁止放置")
+	# Presence in the final active canonical catalog is the authoring contract.
+	# Runtime closure is an independent publish-time gate.
+	var authoring_allowed := numeric_id > 0
+	var runtime_reasons: Array[String] = []
 	if not bool(record.get("runtime_allowed", false)):
-		reasons.append("运行时未允许")
+		runtime_reasons.append("运行时未允许")
 	if appearance_status != "formal":
-		reasons.append("正式贴图未闭环")
-	if bool(drop_policy.get("hostile_requires_non_empty", false)) and drop_count <= 0:
-		reasons.append("主源掉落为空")
-	var record_status := str(record.get("status", ""))
-	if record_status not in ["formal", ""]:
-		reasons.append("canonical状态：%s" % record_status)
-	var placement_allowed := reasons.is_empty()
+		runtime_reasons.append("正式战斗美术未闭环")
+	var exemption_value: Variant = drop_policy.get("exemption", null)
+	var exemption_valid := (
+		exemption_value is Dictionary
+		and bool(exemption_value.get("allowed", false))
+		and not str(exemption_value.get("reason", "")).is_empty()
+	)
+	if (
+		bool(drop_policy.get("hostile_requires_non_empty", false))
+		and not exemption_valid
+		and drop_count <= 0
+	):
+		runtime_reasons.append("主源掉落为空")
+	var runtime_ready := runtime_reasons.is_empty()
 	var source_drop: Dictionary = _first_drop_source(drop_profile)
 	var attrs_verified := _combat_attributes_verified(record)
 	var display_name := str(record.get("canonical_name", numeric_id))
@@ -151,10 +185,12 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"numeric_id": numeric_id,
 		"monster_id": numeric_id,
 		"classification": classification,
+		"spawn_classification": spawn_classification,
 		"editor_catalog_kind": catalog_kind,
 		"placement_kind": placement_kind,
-		"placement_allowed": placement_allowed,
-		"placement_rejection_reason": ";".join(reasons),
+		"authoring_allowed": authoring_allowed,
+		"runtime_ready": runtime_ready,
+		"runtime_rejection_reason": ";".join(runtime_reasons),
 		"source_status": str(record.get("status", "")),
 		"runtime_allowed": bool(record.get("runtime_allowed", false)),
 		"attributes_verified": attrs_verified,
@@ -182,7 +218,13 @@ static func _canonical_entry(record: Dictionary, source: Dictionary, catalog_kin
 		"location_summary": ", ".join(map_codes),
 		"map_codes": map_codes,
 		"spawn_contexts": record.get("spawn_contexts", []),
-		"default_respawn_seconds": _default_respawn_seconds(classification),
+		"spawn_authority": record.get("spawn_authority", {}),
+		"default_respawn_seconds": _default_respawn_seconds(
+			classification, spawn_classification
+		),
+		"default_respawn_policy_id": (
+			"special_normal" if spawn_classification == "special_normal" else ""
+		),
 		"boss_class": classification,
 		"source_evidence": record.get("source_evidence", {}),
 	}
@@ -206,7 +248,12 @@ static func _first_drop_source(drop_profile: Dictionary) -> Dictionary:
 	return {}
 
 
-static func _default_respawn_seconds(classification: String) -> int:
+static func _default_respawn_seconds(
+	classification: String,
+	spawn_classification := ""
+) -> int:
+	if spawn_classification == "special_normal":
+		return SPECIAL_NORMAL_RESPAWN_SECONDS
 	match classification:
 		"ordinary": return NORMAL_RESPAWN_SECONDS
 		"elite": return ELITE_RESPAWN_SECONDS

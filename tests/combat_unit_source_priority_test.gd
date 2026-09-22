@@ -19,9 +19,19 @@ func _ready() -> void:
 	assert(str(primary.rootPrefix) == "assets/data/combat_unit_contract_v1.json")
 	assert(str(contract.contractId) == str(primary.contractId))
 	assert(str(contract.authority.evidenceSha256) == str(primary.evidenceSha256))
-	assert(FileAccess.get_sha256(DOCUMENT_PATH).to_upper() == str(primary.evidenceSha256))
-	assert(float(contract.rangesGu.normalMelee) == 1.5)
-	assert(float(contract.rangesGu.thrust) == 2.5)
+	# The pinned evidence hash is the LF-normalized document content (the pin
+	# was authored over LF bytes). Windows checkouts may materialize CRLF via
+	# core.autocrlf, so hash the normalized content to keep the identity check
+	# checkout-independent while still failing on any real content change.
+	var document_normalized := FileAccess.get_file_as_string(DOCUMENT_PATH).replace("\r\n", "\n")
+	var hasher := HashingContext.new()
+	hasher.start(HashingContext.HASH_SHA256)
+	hasher.update(document_normalized.to_utf8_buffer())
+	assert(hasher.finish().hex_encode().to_upper() == str(primary.evidenceSha256))
+	assert(float(contract.rangesGu.normalMelee) == 2.0)
+	assert(float(contract.rangesGu.fireSword) == 2.0)
+	assert(float(contract.rangesGu.halfMoon) == 2.0)
+	assert(float(contract.rangesGu.thrust) == 3.0)
 	assert(float(contract.rangesGu.hellfire) == 5.0)
 	assert(float(contract.rangesGu.laser) == 8.0)
 	assert(float(contract.rangesGu.attackLock) == 10.0)

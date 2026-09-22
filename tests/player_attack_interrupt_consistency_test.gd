@@ -48,7 +48,7 @@ func _run() -> void:
 	assert(bool(player.combat_action_snapshot().committed), "伤害发出时事务必须同步提交")
 	await get_tree().create_timer(0.32).timeout
 	assert(str(player.visual._action_name) == "hit", "攻击动作结束后必须播放排队的受击表现")
-	await get_tree().create_timer(0.26).timeout
+	await get_tree().create_timer(0.43).timeout
 
 	# 命中帧后事务已经提交；随后受击同样排队，不能撤销或重复该次伤害。
 	player._struck_lock_remaining = 0.0

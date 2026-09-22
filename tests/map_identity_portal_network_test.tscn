@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/map_identity_portal_network_test.gd" type="Script" id="1"]
+
+[node name="MapIdentityPortalNetworkTest" type="Node"]
+script = ExtResource("1")

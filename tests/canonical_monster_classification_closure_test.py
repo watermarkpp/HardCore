@@ -1,11 +1,3 @@
-"""Lock the 217-identity classification closure contract.
-
-Every stable monster_id carries one of the six canonical classifications
-(unresolved == 0).  Runtime enablement is no longer frozen at a fixed count:
-runtime_allowed is expanded by the separate runtime-closure contract, so this
-test asserts classification and drop invariants only.
-"""
-
 from __future__ import annotations
 
 import json
@@ -13,58 +5,92 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CATALOG_PATH = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
-DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
-EXPECTED_DROP_SHA256 = "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013"
-
+CATALOG = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
+SOURCE = ROOT / "assets/data/canonical_monster_classification_v1.json"
 
 def main() -> None:
-    catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
-    entries = catalog.get("entries", [])
-    assert len(entries) == 217, len(entries)
+    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    source = json.loads(SOURCE.read_text(encoding="utf-8"))
 
-    ids = [int(e.get("monster_id", -1)) for e in entries]
-    assert len(set(ids)) == 217, "duplicate or missing monster_id"
+    entries = catalog["entries"]
+    # P3C active runtime universe = 156.
+    assert len(entries) == 156
 
-    counts = Counter(str(e.get("classification", "")) for e in entries)
-    assert counts.get("unresolved", 0) == 0, dict(counts)
-    assert counts.get("ordinary", 0) == 135, dict(counts)
-    assert counts.get("elite", 0) == 30, dict(counts)
-    assert counts.get("boss", 0) == 20, dict(counts)
-    assert counts.get("special", 0) == 19, dict(counts)
-    assert counts.get("version_difference", 0) == 12, dict(counts)
-    assert counts.get("non_hostile", 0) == 1, dict(counts)
+    ids = [int(e["monster_id"]) for e in entries]
+    assert len(set(ids)) == 156, "duplicate monster_id in active catalog"
+    # Retired IDs 14/16/17 must not enter the active catalog.
+    assert 14 not in ids
+    assert 16 not in ids
+    assert 17 not in ids
 
-    runtime_allowed = int(catalog.get("summary", {}).get("runtime_allowed_count", -1))
-    assert runtime_allowed >= 37, f"runtime_allowed regressed: {runtime_allowed}"
-    assert runtime_allowed <= 217, f"runtime_allowed overflow: {runtime_allowed}"
+    counts = Counter(str(e["classification"]) for e in entries)
 
-    by_id = {int(e.get("monster_id", -1)): e for e in entries}
+    assert counts["ordinary"] == 75, counts
+    assert counts["elite"] == 29, counts
+    assert counts["boss"] == 20, counts
+    assert counts["special"] == 25, counts
+    assert counts["version_difference"] == 6, counts
+    assert counts["non_hostile"] == 1, counts
+    assert counts["unresolved"] == 0, counts
 
-    anchor_41 = by_id.get(41, {})
-    assert anchor_41.get("classification") == "elite", anchor_41.get("classification")
-    assert not bool(anchor_41.get("editor_placement", {}).get("allowed", True)), "ID41 must not be placeable"
+    assert catalog["summary"]["runtime_allowed_count"] == 153
 
-    assert by_id.get(103, {}).get("classification") == "ordinary"
+    by_id = {int(e["monster_id"]): e for e in entries}
 
-    anchor_240 = by_id.get(240, {})
-    assert anchor_240.get("classification") == "boss", anchor_240.get("classification")
-    assert not bool(anchor_240.get("editor_placement", {}).get("allowed", True)), "ID240 must not be placeable"
-    assert int(anchor_240.get("drop_policy", {}).get("entry_count", 0)) == 54
+    assert by_id[41]["classification"] == "elite"
+    assert by_id[41]["editor_placement"]["allowed"] is True
 
-    assert by_id.get(241, {}).get("classification") == "special"
+    assert by_id[239]["classification"] == "boss"
+    assert by_id[239]["editor_placement"]["allowed"] is True
 
-    # 9590 drop source unchanged.
-    import hashlib
-    sha = hashlib.sha256(DROP_SOURCE_PATH.read_bytes()).hexdigest().upper()
-    assert sha == EXPECTED_DROP_SHA256, sha
+    assert by_id[240]["classification"] == "boss"
+    assert by_id[240]["editor_placement"]["allowed"] is True
+
+    assert by_id[241]["classification"] == "special"
+    assert by_id[241]["editor_placement"]["allowed"] is True
+
+    # Explicit current dispositions are the narrow placement policy.  The
+    # historical placement_allowed=false values on other exact-ID rows are
+    # retained as audit input and must not re-close the active editor pool.
+    for monster_id in (59, 78, 161):
+        source_row = source["exact_id_overrides"][str(monster_id)]
+        entry = by_id[monster_id]
+        assert source_row["disposition"] == "quarantine"
+        assert isinstance(source_row.get("evidence"), dict) and source_row["evidence"]
+        assert entry["disposition"] == "quarantine"
+        assert entry["editor_placement"]["allowed"] is False
+        assert entry["runtime_allowed"] is True
+        assert entry["disposition_evidence"] == source_row["evidence"]
+
+    source_157 = source["exact_id_overrides"]["157"]
+    entry_157 = by_id[157]
+    assert source_157["classification"] == "ordinary"
+    assert source_157["disposition"] == "internal_subtype"
+    assert isinstance(source_157.get("evidence"), dict) and source_157["evidence"]
+    assert source_157["evidence"]["elite"] is False
+    assert source_157["evidence"]["independent_map_monster"] is False
+    assert entry_157["classification"] == "ordinary"
+    assert entry_157["disposition"] == "internal_subtype"
+    assert entry_157["editor_placement"]["allowed"] is False
+    assert entry_157["runtime_allowed"] is True
+
+    # The two neighboring Zuma Guard elite variants retain their elite
+    # identity and remain in the formal editor pool.
+    for monster_id in (158, 159):
+        assert by_id[monster_id]["classification"] == "elite"
+        assert by_id[monster_id]["editor_placement"]["allowed"] is True
+        assert by_id[monster_id]["runtime_allowed"] is True
+
+    assert "239" not in source["exact_id_overrides"]
+    # Source classification attachment retains its own record count; this is
+    # the persisted user-adjudicated policy table, not the active runtime.
+    assert len(source["exact_id_overrides"]) == 216
 
     print(
-        "CANONICAL_MONSTER_CLASSIFICATION_CLOSURE_PASS: "
-        "total=217 unresolved=0 ordinary=135 elite=30 boss=20 special=19 "
-        "version_difference=12 non_hostile=1 runtime_allowed=%d" % runtime_allowed
+        "CANONICAL_MONSTER_CLASSIFICATION_CLOSURE_PASS "
+        "total=156 unresolved=0 ordinary=75 elite=29 boss=20 "
+        "special=25 version_difference=6 non_hostile=1 runtime_allowed=153"
     )
-
 
 if __name__ == "__main__":
     main()

@@ -16,13 +16,20 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	# 2026-09-13 user request 5 moved the canonical fire_wall footprint from
+	# 2x2 to 3x3 (manifest conflict_note; SOT geometry width_tiles/height_tiles
+	# 3, status project_canonical). The fixture freezes the canonical 3x3.
+	var frozen_cells: Array[Vector2i] = []
+	for offset_x: int in range(3):
+		for offset_y: int in range(3):
+			frozen_cells.append(Vector2i(offset_x, offset_y))
 	var snapshot := Fixtures.cell_union_snapshot(
 		self,
 		"wizard.fire_wall",
 		"q3a:snapshot:1",
 		1,
 		Vector2(0, 0),
-		[Vector2i.ZERO, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.ONE]
+		frozen_cells
 	)
 	var request := Fixtures.make_request(
 		"wizard.fire_wall",
@@ -56,8 +63,8 @@ func _run() -> void:
 	)
 	var cells_a: Array = plan_a.get("geometry_cells", [])
 	assert(
-		cells_a.size() == 4,
-		"canonical plan must carry the frozen 2x2 cells exactly once"
+		cells_a.size() == 9,
+		"canonical plan must carry the frozen 3x3 cells exactly once"
 	)
 	var plan_hash_before := str(plan_a.get("plan_hash", ""))
 	var verify: Dictionary = Plan.verify_immutable(plan_a, plan_hash_before)
@@ -67,7 +74,7 @@ func _run() -> void:
 	)
 	await get_tree().process_frame
 	print(
-		"SKILL_PLAN_SINGLE_SNAPSHOT_BUILD_PASS snapshot=%s cells=4"
+		"SKILL_PLAN_SINGLE_SNAPSHOT_BUILD_PASS snapshot=%s cells=9"
 		% str(plan_a.get("snapshot_id", ""))
 	)
 	get_tree().quit(0)

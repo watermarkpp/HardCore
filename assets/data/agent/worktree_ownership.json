@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "codex/integration": {
+    "rule_file": "docs/agent_rules/integration.md",
+    "owns": ["project.godot", "AGENTS.md", "scripts/game_root.gd", "scripts/game_data.gd", "scripts/region_content.gd", "global runtime registration", "save formats", "cross-system test entrypoints"]
+  },
+  "codex/ui-art": {
+    "rule_file": "docs/agent_rules/ui-art.md",
+    "owns": ["assets/ui/**", "scripts/hud.gd", "scripts/*_panel.gd", "scripts/equipment_character_preview.gd"]
+  },
+  "codex/maps": {
+    "rule_file": "docs/agent_rules/maps.md",
+    "owns": ["assets/art/maps/**", "assets/maps/**", "map_editor_workspace/**", "scripts/map_*.gd", "scripts/map_assets/**", "scripts/map_editor/**"]
+  },
+  "codex/monsters": {
+    "rule_file": "docs/agent_rules/monsters.md",
+    "owns": ["assets/art/monsters/**", "monster and Boss data", "scripts/enemy.gd", "scripts/monster_visual.gd", "monster behavior tests"]
+  },
+  "codex/equipment": {
+    "rule_file": "docs/agent_rules/equipment.md",
+    "owns": ["assets/art/items/**", "item and equipment data", "scripts/equipment_rules.gd", "equipment tests"]
+  },
+  "codex/professions-skills": {
+    "rule_file": "docs/agent_rules/professions-skills.md",
+    "owns": ["profession growth", "player skills", "player projectiles", "summons", "profession formulas", "profession skill tests"]
+  }
+}

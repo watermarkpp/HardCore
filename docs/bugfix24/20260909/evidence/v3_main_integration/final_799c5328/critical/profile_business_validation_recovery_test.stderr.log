@@ -1,0 +1,10 @@
+SCRIPT ERROR: Assertion failed: { "contract_id": "player_state.save_result.v1", "success": false, "reason": "shared_warehouse_unavailable", "path": "user://profile_business_validation_recovery_5665314/profile_matrix/characters/matrix_profile.json", "quarantine_path": "user://profile_business_validation_recovery_5665314/profile_matrix/characters/matrix_profile.json.quarantine.5684824" }
+   at: _test_profile_primary_backup_matrix (res://tests/profile_business_validation_recovery_test.gd:41)
+   GDScript backtrace (most recent call first):
+       [0] _test_profile_primary_backup_matrix (res://tests/profile_business_validation_recovery_test.gd:41)
+       [1] _run (res://tests/profile_business_validation_recovery_test.gd:17)
+SCRIPT ERROR: Assertion failed: { "contract_id": "player_state.save_result.v1", "success": false, "reason": "shared_warehouse_unavailable", "path": "user://profile_business_validation_recovery_5665314/profile_index_preservation/characters/normal_profile.json" }
+   at: _test_profile_index_update_preserves_unloadable_entries (res://tests/profile_business_validation_recovery_test.gd:213)
+   GDScript backtrace (most recent call first):
+       [0] _test_profile_index_update_preserves_unloadable_entries (res://tests/profile_business_validation_recovery_test.gd:213)
+       [1] _run (res://tests/profile_business_validation_recovery_test.gd:20)

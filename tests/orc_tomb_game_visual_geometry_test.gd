@@ -6,7 +6,7 @@ const GeometryService := preload(
 const RuntimeBridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
-const MAP_IDS := [217, 218, 221]
+const MAP_IDS := [911001, 911002, 911003]
 
 
 func _ready() -> void:

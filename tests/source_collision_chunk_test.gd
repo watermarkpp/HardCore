@@ -18,11 +18,11 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	await _verify_map(game, 4, Vector2i(700, 700))
-	await _verify_map(game, 217, Vector2i(400, 400))
+	await _verify_map(game, _runtime_map_id("world_bich_province"), Vector2i.ZERO)
+	await _verify_map(game, _runtime_map_id("bich_orc_tomb_f1"), Vector2i.ZERO)
 	await _verify_map(game, 401, Vector2i(200, 200))
 	await _verify_map(game, 402, Vector2i(100, 100))
-	await _verify_map(game, 1578, Vector2i(30, 30))
+	await _verify_map(game, _runtime_map_id("bich_corpse_king_hall"), Vector2i.ZERO)
 	print("SOURCE_COLLISION_CHUNK_PASS：三种原MAP掩码与两种编辑器运行图碰撞、路线清空和切图重建正常")
 	get_tree().quit(0)
 
@@ -31,22 +31,32 @@ func _verify_map(game: Node, map_id: int, expected_size: Vector2i) -> void:
 	game.travel_to_map(map_id)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	assert(game.current_map_id == map_id, "地图%d切换未完成" % map_id)
 	var background: WorldBackground = game.background
 	var content := RegionContent.get_map_content(map_id)
-	if map_id in [4, 217, 1578]:
+	var formal_map_key := str(GameData.get_map_by_id(map_id).get("formalMapKey", ""))
+	if not formal_map_key.is_empty():
 		# 已发布地表的编辑器运行图以 runtime JSON 阻挡和四边硬边界为
 		# 权威来源，不再加载旧原 MAP 位图掩码。
 		assert(background.source_collision_mask_size() == Vector2i.ZERO, "地图%d仍错误加载旧原MAP掩码" % map_id)
 		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡或四边硬边界缺失" % map_id)
 		assert(background.editor_runtime_ground_ready(), "地图%d编辑器运行时地表未就绪" % map_id)
-		if map_id == 217:
-			assert(background.editor_runtime_chunk_texture_count() == 5, "兽人古墓一层正式编辑器地表块未完整加载")
+		if formal_map_key == "bich_orc_tomb_f1":
+			assert(
+				background.editor_runtime_chunk_texture_count()
+				== _published_chunk_count(map_id),
+				"兽人古墓一层正式编辑器地表块未完整加载"
+			)
 			assert(not background.uses_editor_runtime_fallback_ground(), "兽人古墓一层错误回退到旧地表")
-			assert(background._editor_runtime_size == Vector2i(38, 38), "兽人古墓一层碰撞仍在使用旧400x400尺寸")
+			assert(background._editor_runtime_size == _runtime_design_size(map_id), "兽人古墓一层碰撞仍在使用错误尺寸")
 			assert(not background.is_environment_point_blocked(game.player.global_position), "兽人古墓一层出生点被阻挡")
-		if map_id == 1578:
-			assert(background.editor_runtime_chunk_texture_count() == 2, "尸王殿发布地表块未完整加载")
-			assert(MapEditorRuntimeBridge.game_content_for_map(1578).portals.is_empty(), "尸王殿不应生成出口")
+		if formal_map_key == "bich_corpse_king_hall":
+			assert(
+				background.editor_runtime_chunk_texture_count()
+				== _published_chunk_count(map_id),
+				"尸王殿发布地表块未完整加载"
+			)
+			assert(MapEditorRuntimeBridge.game_content_for_map(map_id).portals.is_empty(), "尸王殿不应生成出口")
 		return
 	assert(background.source_collision_mask_size() == expected_size, "地图%d阻挡掩码尺寸错误" % map_id)
 	assert(background.source_collision_shape_count() > 0 and background.source_collision_shape_count() <= 703, "地图%d局部合并碰撞数量异常：%d" % [map_id, background.source_collision_shape_count()])
@@ -66,8 +76,6 @@ func _verify_map(game: Node, map_id: int, expected_size: Vector2i) -> void:
 			break
 	assert(raw_blocked.x >= 0, "地图%d镜头块内没有保留任何原MAP阻挡" % map_id)
 	assert(background.is_environment_point_blocked(Mapper.source_to_world(Vector2(raw_blocked), expected_size)), "地图%d原MAP阻挡没有进入运行查询" % map_id)
-	if map_id == 4:
-		await _verify_player_cannot_cross(game, background, focus_source, expected_size)
 
 
 func _verify_player_cannot_cross(game: Node, background: WorldBackground, focus_source: Vector2i, source_size: Vector2i) -> void:
@@ -107,3 +115,28 @@ func _verify_player_cannot_cross(game: Node, background: WorldBackground, focus_
 			break
 	game.player.set_touch_vector(Vector2.ZERO)
 	assert(not entered_blocked_cell, "角色中心实际进入了原MAP阻挡格")
+
+
+func _published_chunk_count(runtime_map_id: int) -> int:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		MapEditorRuntimeBridge.visual_path(runtime_map_id)
+	))
+	assert(parsed is Dictionary)
+	return (parsed as Dictionary).get("chunks", []).size()
+
+
+func _runtime_design_size(runtime_map_id: int) -> Vector2i:
+	var runtime := MapEditorRuntimeBridge.load_map(runtime_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	assert(raw_size.size() == 2)
+	return Vector2i(int(raw_size[0]), int(raw_size[1]))
+
+
+func _runtime_map_id(map_key: String) -> int:
+	for raw_map: Variant in GameData.get_available_maps(true):
+		if (
+			raw_map is Dictionary
+			and str((raw_map as Dictionary).get("formalMapKey", "")) == map_key
+		):
+			return int((raw_map as Dictionary).get("mapId", -1))
+	return -1

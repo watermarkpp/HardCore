@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "kind": "desktop headless CPU, not device or GPU",
+  "cases": [
+    {
+      "scenario": "open_pursuit",
+      "count": 10,
+      "before_p95_ms": 11.566,
+      "after_p95_ms": 9.944,
+      "change_percent": -14.02,
+      "status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "count": 20,
+      "before_p95_ms": 17.025,
+      "after_p95_ms": 14.706,
+      "change_percent": -13.62,
+      "status": "PASS"
+    },
+    {
+      "scenario": "open_pursuit",
+      "count": 30,
+      "before_p95_ms": 21.047,
+      "after_p95_ms": 16.047,
+      "change_percent": -23.76,
+      "status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "count": 10,
+      "before_p95_ms": 11.955,
+      "after_p95_ms": 9.777,
+      "change_percent": -18.22,
+      "status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "count": 20,
+      "before_p95_ms": 24.497,
+      "after_p95_ms": 14.982,
+      "change_percent": -38.84,
+      "status": "PASS"
+    },
+    {
+      "scenario": "sustained_close_attacks",
+      "count": 30,
+      "before_p95_ms": 24.908,
+      "after_p95_ms": 19.92,
+      "change_percent": -20.03,
+      "status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "count": 10,
+      "before_p95_ms": 10.678,
+      "after_p95_ms": 9.736,
+      "change_percent": -8.82,
+      "status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "count": 20,
+      "before_p95_ms": 12.426,
+      "after_p95_ms": 11.328,
+      "change_percent": -8.84,
+      "status": "PASS"
+    },
+    {
+      "scenario": "world_obstacles",
+      "count": 30,
+      "before_p95_ms": 19.278,
+      "after_p95_ms": 13.822,
+      "change_percent": -28.3,
+      "status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "count": 10,
+      "before_p95_ms": 12.215,
+      "after_p95_ms": 10.043,
+      "change_percent": -17.78,
+      "status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "count": 20,
+      "before_p95_ms": 18.896,
+      "after_p95_ms": 15.082,
+      "change_percent": -20.18,
+      "status": "PASS"
+    },
+    {
+      "scenario": "dense_crowd",
+      "count": 30,
+      "before_p95_ms": 107.981,
+      "after_p95_ms": 19.266,
+      "change_percent": -82.16,
+      "status": "PASS"
+    }
+  ]
+}

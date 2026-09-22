@@ -14,7 +14,7 @@ func _ready() -> void:
 	_verify_release_snapshot_is_reused_by_validation()
 	print(
 		"WARRIOR_THRUST_SNAPPED_DAMAGE_AXIS_PASS: eight long_hit visual axes "
-		+ "own the immutable 2.5x1 GU damage snapshot"
+			+ "own the immutable 3x1 GU damage snapshot"
 	)
 	get_tree().quit(0)
 
@@ -57,7 +57,7 @@ func _verify_all_eight_visual_axes_are_exactly_snapped() -> void:
 		assert((snapshot.direction_ground_gu as Vector2).is_equal_approx(
 			canonical_axis_ground_gu
 		))
-		assert(is_equal_approx(float(snapshot.effect_length_gu), 2.5))
+		assert(is_equal_approx(float(snapshot.effect_length_gu), 3.0))
 		assert(is_equal_approx(float(snapshot.effect_width_gu), 1.0))
 
 
@@ -91,7 +91,7 @@ func _verify_inclusive_range_and_width_thresholds() -> void:
 			TARGET_RADIUS_GU,
 			plan
 		) == 0)
-		for forward_center_gu: float in [2.749, 2.750]:
+		for forward_center_gu: float in [2.999, 3.0]:
 			assert(Geometry.thrust_footprint_slot_for_axis_plan_gu(
 				origin_ground_gu,
 				origin_ground_gu + axis_ground_gu * forward_center_gu,
@@ -100,7 +100,7 @@ func _verify_inclusive_range_and_width_thresholds() -> void:
 			) == 2)
 		assert(Geometry.thrust_footprint_slot_for_axis_plan_gu(
 			origin_ground_gu,
-			origin_ground_gu + axis_ground_gu * 2.751,
+			origin_ground_gu + axis_ground_gu * 3.251,
 			TARGET_RADIUS_GU,
 			plan
 		) == 0)

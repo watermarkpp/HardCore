@@ -1,6 +1,7 @@
 extends Node
 
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const WarriorMeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
 
 func _ready() -> void:
@@ -30,7 +31,9 @@ func _run() -> void:
 	player._attack_action_timer = 0.45
 	game._handle_toggle_skill_input("半月弯刀")
 	assert(player.half_moon_enabled, "半月首次开关被通用施法预检错误拒绝")
-	assert(game.hud.loot_label.text == "半月弯刀：开启", "半月首次开关仍显示错误失败提示")
+	# UNIFIED-PLAYER-NOTICE R2: global toggle notices moved from the retired
+	# loot_label lane to the central overlay (prefix label = error_label alias).
+	assert(game.hud.error_label.text == "半月弯刀：开启", "半月首次开关仍显示错误失败提示")
 	assert(player.current_mp == 0, "半月开关不得消耗MP")
 	assert(is_equal_approx(player._attack_timer, 0.75), "半月开关不得修改攻击间隔")
 	assert(is_equal_approx(player._attack_action_timer, 0.45), "半月开关不得修改攻击动作计时")
@@ -38,7 +41,7 @@ func _run() -> void:
 	assert(not player.half_moon_enabled, "半月第二次开关没有正常关闭")
 	game._handle_toggle_skill_input("烈火剑法")
 	assert(player.fire_sword_enabled, "烈火首次开关被通用施法预检错误拒绝")
-	assert(game.hud.loot_label.text == "烈火剑法：开启", "烈火首次开关仍显示错误失败提示")
+	assert(game.hud.error_label.text == "烈火剑法：开启", "烈火首次开关仍显示错误失败提示")
 	assert(player.current_mp == 0, "烈火开关不得消耗MP")
 	assert(is_equal_approx(player._attack_timer, 0.75), "烈火开关不得修改攻击间隔")
 	assert(is_equal_approx(player._attack_action_timer, 0.45), "烈火开关不得修改攻击动作计时")
@@ -87,9 +90,12 @@ func _run() -> void:
 	player.current_mp = mp_before_half
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
-			existing.global_position = Vector2(3000, 3000) + Vector2(
-				existing.get_instance_id() % 200,
-				0
+			_move_enemy(
+				existing as EnemyActor,
+				Vector2(3000, 3000) + Vector2(
+					existing.get_instance_id() % 200,
+					0
+				)
 			)
 	var no_target_half_mp := player.current_mp
 	for _attack_index in range(6):
@@ -156,7 +162,10 @@ func _run() -> void:
 	player.facing = Vector2.RIGHT
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
-			existing.global_position = Vector2(3000, 3000) + Vector2(existing.get_instance_id() % 200, 0)
+			_move_enemy(
+				existing as EnemyActor,
+				Vector2(3000, 3000) + Vector2(existing.get_instance_id() % 200, 0)
+			)
 	var attack_direction_gu := (
 		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(Vector2.RIGHT)
 		.normalized()
@@ -197,20 +206,38 @@ func _run() -> void:
 	assert(unrelated.current_hp == unrelated_hp, "刺杀错误命中背后目标")
 
 	primary.current_hp = primary.max_hp
-	# Facing screen-E maps to canonical tile step (1,-1). The three classic
-	# secondary sectors are NE, SE and S, each exactly one logical tile away.
+	# Half Moon is a symmetric 120-degree fan in formal Euclidean GU.  Probe
+	# the center and +/-45-degree secondary sectors at the same 1.2 GU reach
+	# used by the release-geometry contract.
+	var half_moon_direction_index := (
+		WarriorMeleeGeometry.direction_index_for_ground_delta_gu(attack_direction_gu)
+	)
+	for outside_angle: float in [-61.0, 61.0]:
+		assert(
+			WarriorMeleeGeometry.half_moon_footprint_relative_sector_gu(
+				Vector2.ZERO,
+				attack_direction_gu.rotated(deg_to_rad(outside_angle)) * 1.2,
+				0.0,
+				half_moon_direction_index,
+			) == -1,
+			"半月±61°点目标必须在正式120°扇区外",
+		)
 	var half_a := _make_enemy(
 		game,
 		player,
 		"半月左前",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(0.0, -1.0)),
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu.rotated(deg_to_rad(-45.0)) * 1.2
+		),
 		1
 	)
 	var half_b := _make_enemy(
 		game,
 		player,
 		"半月右前",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(Vector2(1.0, 0.0)),
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu * 1.2
+		),
 		1
 	)
 	var half_c := _make_enemy(
@@ -218,33 +245,82 @@ func _run() -> void:
 		player,
 		"半月右侧",
 		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-			Vector2(1.0, 1.0).normalized()
+			attack_direction_gu.rotated(deg_to_rad(45.0)) * 1.2
 		),
 		1
 	)
+	# Zero-radius probes isolate the exact angular contract: a footprint with
+	# positive radius may straddle a sector boundary and is covered by the
+	# dedicated footprint tests.  These two probes remain within 2 GU but are
+	# strictly outside the formal +/-60-degree fan.
+	var half_outside_left := _make_enemy(
+		game,
+		player,
+		"半月左侧拒绝",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu.rotated(deg_to_rad(-61.0)) * 1.2
+		),
+		1
+	)
+	var half_outside_right := _make_enemy(
+		game,
+		player,
+		"半月右侧拒绝",
+		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+			attack_direction_gu.rotated(deg_to_rad(61.0)) * 1.2
+		),
+		1
+	)
+	half_outside_left.combat_radius_gu = 0.0
+	half_outside_right.combat_radius_gu = 0.0
 	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
 	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)
-	for secondary: EnemyActor in [half_a, half_b, half_c]:
-		assert(secondary.current_hp == secondary.max_hp - 50, "半月三个源码方向没有按5/13伤害结算")
+	for secondary: EnemyActor in [half_a, half_c]:
+		assert(secondary.current_hp == secondary.max_hp - 50, "半月±45°侧向没有按5/13伤害结算")
+	assert(half_b.current_hp == half_b.max_hp - 130, "半月中心没有按主扇区伤害结算")
+	for outside: EnemyActor in [half_outside_left, half_outside_right]:
+		assert(outside.current_hp == outside.max_hp, "半月±61°越界目标不应命中")
 
-	for enemy: EnemyActor in [primary, second, unrelated, half_a, half_b, half_c]:
-		enemy.global_position = Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0)
-	var rush_step := Vector2i(1, -1)
-	var rush_direction_ground_gu := Vector2(rush_step).normalized()
-	player.global_position = _find_open_rush_origin(game, rush_step)
-	var player_rush_tile: Vector2 = game._canonical_screen_px_to_ground_gu(player.global_position)
-	var player_rush_origin := player.global_position
+	for enemy: EnemyActor in [
+		primary, second, unrelated, half_a, half_b, half_c,
+		half_outside_left, half_outside_right,
+	]:
+		_move_enemy(enemy, Vector2(3000, 3000) + Vector2(enemy.get_instance_id() % 200, 0))
+	var rush_step: Vector2i = Vector2i(1, -1)
+	var rush_direction_ground_gu: Vector2 = Vector2(rush_step).normalized()
 	var rush_target := _make_enemy(
 		game,
 		player,
 		"低级冲撞目标",
-		game._canonical_ground_gu_to_screen_px(player_rush_tile + Vector2(rush_step)),
+		Vector2(3300, 3000),
 		1
 	)
-	var rush_origin := rush_target.global_position
-	var rush_hp := rush_target.current_hp
+	player.global_position = _find_open_rush_origin(
+		game, rush_step, rush_target.collision_radius_px
+	)
+	var player_rush_tile: Vector2 = game._canonical_screen_px_to_ground_gu(player.global_position)
+	var player_rush_origin: Vector2 = player.global_position
+	_move_enemy(
+		rush_target,
+		game._canonical_ground_gu_to_screen_px(
+			player_rush_tile + Vector2(rush_step)
+		)
+	)
+	var rush_origin: Vector2 = rush_target.global_position
+	var rush_hp: int = rush_target.current_hp
 	game.locked_target = rush_target
+	var fixture_rush_plan: Dictionary = game._build_wild_rush_path_plan(rush_target)
+	assert(
+		is_equal_approx(float(fixture_rush_plan.get("resolved_push_distance_gu", 0.0)), 3.0),
+		"rush fixture invalid: eligible=%s dynamic=%s static=%.2f resolved=%.2f"
+		% [
+			str(fixture_rush_plan.get("eligible", false)),
+			str(fixture_rush_plan.get("dynamic_blocker_in_corridor", false)),
+			float(fixture_rush_plan.get("static_clear_distance_gu", 0.0)),
+			float(fixture_rush_plan.get("resolved_push_distance_gu", 0.0)),
+		]
+	)
 	assert(game._execute_wild_rush(Vector2.LEFT, 0), "野蛮在开阔地没有移动")
 	assert(
 		game._canonical_screen_px_to_ground_gu(player.global_position).is_equal_approx(
@@ -264,7 +340,7 @@ func _run() -> void:
 	# Any second monster inside the complete three-tile corridor cancels the
 	# whole coupled displacement; neither actor may move partially.
 	player.global_position = player_rush_origin
-	rush_target.global_position = rush_origin
+	_move_enemy(rush_target, rush_origin)
 	var blocker := _make_enemy(
 		game,
 		player,
@@ -283,11 +359,14 @@ func _run() -> void:
 		and rush_target.global_position.is_equal_approx(blocked_target_origin),
 		"怪物阻挡没有原子取消人物与目标的全部位移"
 	)
-	blocker.global_position = Vector2(3000, 3000)
+	_move_enemy(blocker, Vector2(3000, 3000))
 	# A live lock remains authoritative: an out-of-reach locked monster must not
 	# redirect Wild Rush onto another eligible adjacent monster.
-	rush_target.global_position = game._canonical_ground_gu_to_screen_px(
-		player_rush_tile + Vector2(rush_step) * 2.0
+	_move_enemy(
+		rush_target,
+		game._canonical_ground_gu_to_screen_px(
+			player_rush_tile + Vector2(rush_step) * 2.0
+		)
 	)
 	var adjacent_fallback := _make_enemy(
 		game,
@@ -298,8 +377,8 @@ func _run() -> void:
 	)
 	game.locked_target = rush_target
 	assert(game._select_wild_rush_target() == null, "野蛮冲撞错误偷换了超距锁定目标")
-	adjacent_fallback.global_position = Vector2(3050, 3000)
-	rush_target.global_position = Vector2(3100, 3000)
+	_move_enemy(adjacent_fallback, Vector2(3050, 3000))
+	_move_enemy(rush_target, Vector2(3100, 3000))
 	var equal_level_target := _make_enemy(
 		game,
 		player,
@@ -309,7 +388,7 @@ func _run() -> void:
 	)
 	game.locked_target = equal_level_target
 	assert(game._select_wild_rush_target() == null, "野蛮错误选择了同级目标")
-	equal_level_target.global_position = Vector2(3200, 3000)
+	_move_enemy(equal_level_target, Vector2(3200, 3000))
 	var boss_target := _make_enemy(
 		game,
 		player,
@@ -334,34 +413,103 @@ func _make_enemy(
 	is_boss := false
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
+	var canonical_monster_id := 76 if is_boss else 19
+	var expected_classification := "boss" if is_boss else "ordinary"
 	enemy.setup(
-		{"name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
+		{"monster_id": canonical_monster_id, "name": display_name, "hp": 9999, "attackMin": 1, "attackMax": 1, "level": enemy_level},
 		player,
-		is_boss
+		false
 	)
-	enemy.global_position = position
+	# Keep this fixture canonical-ID valid while preserving its local level/name
+	# and high-HP isolation for the state-machine assertions. Boss identity must
+	# come from the selected canonical catalog entry, never this test argument.
+	enemy.display_name = display_name
+	enemy.level = enemy_level
+	enemy.monster_data["level"] = enemy_level
+	enemy.max_hp = 9999
+	enemy.current_hp = 9999
+	game._runtime_spawn_serial += 1
+	var spawn_serial := int(game._runtime_spawn_serial)
+	enemy.configure_runtime_map_projection(
+		game.current_map_id,
+		Callable(game, "_canonical_ground_gu_to_screen_px"),
+		Callable(game, "_canonical_screen_px_to_ground_gu"),
+	)
+	enemy.configure_spatial_index(game._combat_spatial_index, spawn_serial)
+	enemy.set_meta("spawn_serial", spawn_serial)
+	enemy.set_meta("zone_generation", int(game._zone_generation))
+	enemy.set_combat_position(position, &"warrior_fixture_spawn")
+	game._combat_spatial_index.register(
+		spawn_serial,
+		game.current_map_id,
+		game._canonical_screen_px_to_ground_gu(position),
+		enemy.combat_radius_gu,
+		spawn_serial,
+		enemy,
+		Callable(enemy, "spatial_index_position"),
+	)
 	game.add_child(enemy)
 	# EnemyActor._ready() initializes its runtime control state. Freeze the
 	# fixture after it enters the tree so hit-frame assertions use the intended
 	# fixed geometry.
 	enemy.control_time = 60.0
+	assert(
+		enemy.monster_id == canonical_monster_id
+		and enemy.is_boss == is_boss
+		and str(enemy.monster_data.get("classification", "")) == expected_classification
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"战士夹具未从canonical ID派生有效%s身份" % expected_classification
+	)
 	return enemy
 
 
-func _find_open_rush_origin(game: Node, direction_step: Vector2i) -> Vector2:
+func _move_enemy(enemy: EnemyActor, position: Vector2) -> void:
+	enemy.set_combat_position(position, &"warrior_fixture_move")
+
+
+func _find_open_rush_origin(
+	game: Node,
+	direction_step: Vector2i,
+	target_collision_radius_px: float
+) -> Vector2:
+	const RUSH_DISTANCE_GU := 3.0
+	const SAMPLE_STEP_GU := 0.25
 	var center_tile: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
+	var direction_ground_gu: Vector2 = Vector2(direction_step).normalized()
 	for y in range(-24, 25):
 		for x in range(-24, 25):
-			var origin_tile := center_tile + Vector2(x, y)
-			var clear := true
-			for distance in range(5):
-				var sample: Vector2 = game._canonical_ground_gu_to_screen_px(
-					origin_tile + Vector2(direction_step) * float(distance)
+			var origin_tile: Vector2 = center_tile + Vector2(x, y)
+			var target_origin_tile: Vector2 = origin_tile + Vector2(direction_step)
+			var clear: bool = true
+			var sample_count: int = ceili(RUSH_DISTANCE_GU / SAMPLE_STEP_GU)
+			for sample_index: int in range(sample_count + 1):
+				var distance_gu: float = minf(
+					float(sample_index) * SAMPLE_STEP_GU,
+					RUSH_DISTANCE_GU
 				)
-				if game.background.is_environment_point_blocked(sample):
+				var motion_ground_gu: Vector2 = direction_ground_gu * distance_gu
+				var player_sample: Vector2 = game._canonical_ground_gu_to_screen_px(
+					origin_tile + motion_ground_gu
+				)
+				var target_sample: Vector2 = game._canonical_ground_gu_to_screen_px(
+					target_origin_tile + motion_ground_gu
+				)
+				if (
+					WorldSpatialRules.environment_blocks_actor_screen_px(
+						game.background,
+						player_sample,
+						ArtSpec.PLAYER_COLLISION_RADIUS_PX
+					)
+					or WorldSpatialRules.environment_blocks_actor_screen_px(
+						game.background,
+						target_sample,
+						target_collision_radius_px
+					)
+				):
 					clear = false
 					break
 			if clear:
 				return game._canonical_ground_gu_to_screen_px(origin_tile)
-	assert(false, "测试地图中找不到野蛮冲撞开阔夹具")
+	assert(false, "找不到双足迹完整3GU冲撞走廊")
 	return Vector2.ZERO

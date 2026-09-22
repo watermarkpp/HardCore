@@ -1,0 +1,30 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.459,"start_ms":248.555},"build_bottom_chassis":{"duration_ms":201.779,"start_ms":38.074},"build_combat_controls":{"duration_ms":8.127,"start_ms":239.853},"build_hidden_compatibility_info":{"duration_ms":7.611,"start_ms":25.595},"build_item_quick_slot_menu":{"duration_ms":0.575,"start_ms":247.98},"build_loading_transition":{"duration_ms":1.351,"start_ms":249.014},"build_loot_feedback":{"duration_ms":1.074,"start_ms":33.809},"build_right_utility_stack":{"duration_ms":3.191,"start_ms":34.883},"build_target_bar":{"duration_ms":0.603,"start_ms":33.206},"initial_state_sync":{"duration_ms":0.545,"start_ms":250.375},"root_and_theme":{"duration_ms":25.563,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.032,"start_ms":25.563},"wire_player_state_signals":{"duration_ms":0.01,"start_ms":250.365}},"total_ms":250.922}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.009,"init_to_enter_tree":0.056},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.051,"start_ms":0.787},"bootstrap_dispatch":{"duration_ms":0.074,"start_ms":806.411},"camera_construct_and_attach":{"duration_ms":0.037,"start_ms":62.715},"hud_attach_and_ready":{"duration_ms":681.324,"start_ms":62.81},"hud_construct":{"duration_ms":0.03,"start_ms":62.752},"hud_post_ready_setup":{"duration_ms":11.885,"start_ms":744.134},"hud_signal_wiring":{"duration_ms":0.028,"start_ms":62.782},"player_construct_wire_attach_restore":{"duration_ms":61.877,"start_ms":0.838},"pre_background_setup":{"duration_ms":0.722,"start_ms":0.065},"system_menu_build":{"duration_ms":50.392,"start_ms":756.019}},"total_ms":806.487}
+[WorldBootstrapProfile] {"actor_max_item_ms":290.62,"actor_max_slice_ms":290.627,"actor_slices":84,"actor_total_ms":837.589,"collision_slices":9,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":290.627,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":526.657,"BUILD_MAP":523.867,"COLLECT_REQUIREMENTS":51.824,"FINALIZE":1702.971,"REQUEST_RESOURCES":373.852,"SHOW_LOADING":0.043,"SPAWN_ACTORS":528.769,"WAIT_RESOURCES":523.767},"total_ms":1711.809}
+SCRIPT ERROR: Assertion failed: wizard.lightning must carry a snapshot id
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: wizard.fire_wall must be accepted
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: wizard.fireball must carry a snapshot id
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:231)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: taoist.poison must be accepted
+   at: _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+   GDScript backtrace (most recent call first):
+       [0] _matrix_case (res://tests/skill_production_profession_matrix_test.gd:232)
+       [1] _run (res://tests/skill_production_profession_matrix_test.gd:144)
+SCRIPT ERROR: Assertion failed: profession matrix parity differences: wizard.lightning.mp_change legacy=15 canonical=0; wizard.lightning.mp_vs_definition legacy=15 canonical=0; wizard.lightning.accepted legacy=false canonical=true; wizard.lightning.reason legacy=world_los_blocked canonical=accepted; wizard.lightning.mp legacy=0 canonical=15; wizard.fire_wall.mp_change legacy=45 canonical=0; wizard.fire_wall.mp_vs_definition legacy=45 canonical=0; wizard.fire_wall.accepted legacy=false canonical=true; wizard.fire_wall.reason legacy=invalid_target canonical=accepted; wizard.fire_wall.mp legacy=0 canonical=45; wizard.fireball.mp_change legacy=9 canonical=0; wizard.fireball.mp_vs_definition legacy=9 canonical=0; wizard.fireball.accepted legacy=false canonical=true; wizard.fireball.reason legacy=invalid_target canonical=accepted; wizard.fireball.mp legacy=0 canonical=9; taoist.poison.mp_change legacy=10 canonical=0; taoist.poison.mp_vs_definition legacy=10 canonical=0; taoist.poison.accepted legacy=false canonical=true; taoist.poison.reason legacy=invalid_target canonical=accepted; taoist.poison.mp legacy=0 canonical=10
+   at: _run (res://tests/skill_production_profession_matrix_test.gd:145)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/skill_production_profession_matrix_test.gd:145)

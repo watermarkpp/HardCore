@@ -76,6 +76,8 @@ static func anti_magic_points_from_context(context: Dictionary) -> int:
 static func anti_magic_points_from_target_stats(target_stats: Dictionary) -> int:
 	if target_stats.has("anti_magic_points"):
 		return clampi(int(target_stats.anti_magic_points), 0, ANTI_MAGIC_ROLL_SIDES)
+	if target_stats.has("antiMagicPoints"):
+		return clampi(int(target_stats.antiMagicPoints), 0, ANTI_MAGIC_ROLL_SIDES)
 	if target_stats.has("magicEvasionPoints"):
 		return clampi(int(target_stats.magicEvasionPoints), 0, ANTI_MAGIC_ROLL_SIDES)
 	if target_stats.has("antiMagic"):
@@ -95,15 +97,16 @@ static func resolve_magic_damage(
 	skill_id: String,
 	raw_damage: int,
 	target_anti_magic_points: int,
-	random_0_to_9: int
+	random_0_to_9: int,
+	all_incoming_magic := false
 ) -> Dictionary:
-	var eligible := anti_magic_eligible(skill_id)
+	var eligible := all_incoming_magic or anti_magic_eligible(skill_id)
 	var points := clampi(target_anti_magic_points, 0, ANTI_MAGIC_ROLL_SIDES)
 	var checked_roll := clampi(random_0_to_9, 0, ANTI_MAGIC_ROLL_SIDES - 1)
 	var evaded := eligible and checked_roll < points
 	var safe_damage := maxi(0, raw_damage)
 	return {
-		"contract_id": MAGIC_EVASION_POLICY_ID,
+		"contract_id": "player.ranged_and_magic_evasion.v1" if all_incoming_magic else MAGIC_EVASION_POLICY_ID,
 		"evasion_channel": "anti_magic" if eligible else "none",
 		"anti_magic_eligible": eligible,
 		"anti_magic_checked": eligible,
@@ -120,13 +123,15 @@ static func resolve_magic_damage_for_target_stats(
 	skill_id: String,
 	raw_damage: int,
 	target_stats: Dictionary,
-	random_0_to_9: int
+	random_0_to_9: int,
+	all_incoming_magic := false
 ) -> Dictionary:
 	return resolve_magic_damage(
 		skill_id,
 		raw_damage,
 		anti_magic_points_from_target_stats(target_stats),
-		random_0_to_9
+		random_0_to_9,
+		all_incoming_magic
 	)
 
 
@@ -135,13 +140,15 @@ static func resolve_direct_spell_damage(
 	raw_damage: int,
 	target_stats: Dictionary,
 	random_0_to_9: int,
-	magic_defense_resolver := Callable()
+	magic_defense_resolver := Callable(),
+	all_incoming_magic := false
 ) -> Dictionary:
 	var result := resolve_magic_damage_for_target_stats(
 		skill_id,
 		raw_damage,
 		target_stats,
-		random_0_to_9
+		random_0_to_9,
+		all_incoming_magic
 	)
 	result["stage_order"] = ["anti_magic", "magic_defense", "take_damage"]
 	result["magic_defense_checked"] = false
@@ -163,3 +170,10 @@ static func physical_attack_interval_ms(attack_speed_tier: int) -> int:
 
 static func physical_attack_interval_seconds(attack_speed_tier: int) -> float:
 	return float(physical_attack_interval_ms(attack_speed_tier)) / 1000.0
+
+
+static func equipment_spell_time_scale(attack_speed_tier: int) -> float:
+	# User single-player override 2026-09-13: equipment speed also affects spells
+	# by the same interval ratio as melee (+1: 900ms -> 840ms). Keep authored
+	# skill timing ratios; reuse existing cast-speed limits for extreme tiers.
+	return clampf(float(physical_attack_interval_ms(attack_speed_tier)) / BASE_PHYSICAL_ATTACK_INTERVAL_MS, 1.0 / 6.0, 5.0)

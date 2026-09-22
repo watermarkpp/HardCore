@@ -27,7 +27,7 @@ func _verify_melee_release_shapes_in_all_directions() -> void:
 				mode
 			)
 			_assert_snapshot(snapshot, Snapshot.SHAPE_SECTOR_ARC)
-			assert(is_equal_approx(float(snapshot.radius_gu), 1.5))
+			assert(is_equal_approx(float(snapshot.radius_gu), 2.0))
 			assert(is_equal_approx(float(snapshot.half_angle_radians), PI / 8.0))
 			assert(
 				(snapshot.direction_ground_gu as Vector2).is_equal_approx(
@@ -43,13 +43,11 @@ func _verify_melee_release_shapes_in_all_directions() -> void:
 			Geometry.SKILL_HALF_MOON
 		)
 		_assert_snapshot(half_moon, Snapshot.SHAPE_SECTOR_ARC)
-		assert(is_equal_approx(float(half_moon.radius_gu), 1.5))
-		assert(is_equal_approx(float(half_moon.half_angle_radians), PI / 2.0))
+		assert(is_equal_approx(float(half_moon.radius_gu), 2.0))
+		assert(is_equal_approx(float(half_moon.half_angle_radians), PI / 3.0))
 		assert(
 			(half_moon.direction_ground_gu as Vector2).is_equal_approx(
-				Geometry.canonical_ground_direction_gu(direction_index).rotated(
-					PI / 8.0
-				)
+				Geometry.canonical_ground_direction_gu(direction_index)
 			)
 		)
 
@@ -61,7 +59,7 @@ func _verify_melee_release_shapes_in_all_directions() -> void:
 			Geometry.SKILL_THRUST
 		)
 		_assert_snapshot(thrust, Snapshot.SHAPE_DIRECTED_RECTANGLE)
-		assert(is_equal_approx(float(thrust.effect_length_gu), 2.5))
+		assert(is_equal_approx(float(thrust.effect_length_gu), 3.0))
 		assert(is_equal_approx(float(thrust.effect_width_gu), 1.0))
 		var plan := Geometry.thrust_damage_axis_plan_ground_gu(
 			direction_index,
@@ -89,12 +87,12 @@ func _verify_target_footprint_boundary_contact() -> void:
 		)
 		assert(Geometry.release_snapshot_intersects_target_footprint_ground_gu(
 			normal,
-			direction_ground_gu * (1.5 + target_radius_gu),
+			direction_ground_gu * (2.0 + target_radius_gu),
 			target_radius_gu
 		))
 		assert(not Geometry.release_snapshot_intersects_target_footprint_ground_gu(
 			normal,
-			direction_ground_gu * (1.5 + target_radius_gu + 0.001),
+			direction_ground_gu * (2.0 + target_radius_gu + 0.001),
 			target_radius_gu
 		))
 

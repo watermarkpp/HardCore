@@ -43,6 +43,9 @@ ACTIONS = {
     "cast": {"start": 392, "frames": 6},
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
+    # Client/Actor.pas ActRun is a distinct movement lane.  It is appended so
+    # the existing six-action JSON remains byte-reviewable and minimally diffed.
+    "run": {"start": 128, "frames": 6},
 }
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
@@ -151,7 +154,7 @@ def decode_feature_action(
         raise AssertionError(
             f"{path} is not an exact actor-origin/Hot reconstruction of Hum.wil"
         )
-    return {
+    result = {
         "path": path,
         "cell": list(CELL),
         "actorOrigin": list(ACTOR_ORIGIN),
@@ -163,9 +166,16 @@ def decode_feature_action(
         "transparentEmptyFrames": transparent_empty_frames,
         "pixelActionConfidence": "A",
         "atlasRgbaSha256": image_sha256(exported),
-        "sourceFrames": source_frames,
         "libraryImageCount": int(info["image_count"]),
     }
+    if action == "run":
+        result["sourceStart"] = int(ACTIONS[action]["start"])
+        result["sourceIndexRule"] = (
+            "feature*600 + sourceStart + direction*8 + frame"
+        )
+    else:
+        result["sourceFrames"] = source_frames
+    return result
 
 
 def build_feature_family(feature: int, library: tuple) -> dict:
@@ -391,14 +401,12 @@ def main() -> None:
         "itemsById": items_by_id,
         "runtimeMappingsByItemId": runtime_by_item_id,
     }
-    OUTPUT.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    with OUTPUT.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
     print(
         "EQUIPMENT_MALE_DRESS_WORLD_WEAR_PASS "
         f"items={len(items_by_id)} features={len(feature_families)} "
-        "actions=6 directions=8 missing=0"
+        f"actions={len(ACTIONS)} directions=8 missing=0"
     )
 
 

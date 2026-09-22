@@ -10,9 +10,14 @@ const LABEL_FONT_SIZE := 10
 # glyphs. Three logical pixels close the measured device crop gap at the current
 # 1598->2664 scale without moving the metric layout edge or bar/group geometry.
 const LABEL_OPTICAL_NUDGE_Y := 3.0
+const PlayerStatusMarkerStripScript := preload("res://scripts/player_status_marker_strip.gd")
+# The status marker row sits directly below the health bar using the same
+# geometry idiom as the monster overhead dots (enemy.gd): bar bottom + 5 px.
+const STATUS_MARKER_ROW_GAP := 5.0
 
 var current_hp := 1
 var max_hp := 1
+var status_marker_strip: PlayerStatusMarkerStrip
 var _level_label := "Lv1"
 var _label_width := 0.0
 var _label_font: Font
@@ -31,6 +36,14 @@ func _ready() -> void:
 	if not PlayerState.profile_changed.is_connected(_on_player_profile_changed):
 		PlayerState.profile_changed.connect(_on_player_profile_changed)
 	_refresh_level_label()
+	if status_marker_strip == null:
+		status_marker_strip = PlayerStatusMarkerStripScript.new()
+		status_marker_strip.name = "PlayerStatusMarkerStrip"
+		status_marker_strip.position = Vector2(0.0, BAR_SIZE.y + STATUS_MARKER_ROW_GAP)
+		add_child(status_marker_strip)
+	var owner_actor := get_parent()
+	if owner_actor != null and owner_actor.has_method("poison_status_remaining"):
+		status_marker_strip.bind_status_source(owner_actor)
 
 
 func _on_player_profile_changed() -> void:
@@ -85,6 +98,7 @@ func layout_snapshot() -> Dictionary:
 		"bar_size": BAR_SIZE,
 		"background_color": BACKGROUND,
 		"health_color": HEALTH,
+		"status_marker_strip_position": Vector2(0.0, BAR_SIZE.y + STATUS_MARKER_ROW_GAP),
 	}
 
 

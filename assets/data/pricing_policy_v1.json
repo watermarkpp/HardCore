@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractId": "gameplay.pricing.authority.v1",
-  "policyVersion": "2026-08-14.3",
+  "policyVersion": "2026-09-20.4",
   "currencyId": "gold",
   "source": {
     "distribution": "server.crystal.cjlaaa",
@@ -18,7 +18,19 @@
   "modifiers": {
     "globalBps": 10000,
     "categoryBps": {},
-    "itemBps": {}
+    "itemBps": {
+      "service:493": 17520
+    },
+    "itemBpsEvidence": {
+      "service:493": {
+        "authority": "user_pricing_ruling",
+        "rulingDate": "2026-09-20",
+        "reason": "思贝儿手镯出售价 8760 = 17520/2。用户裁决覆盖 cjlaaa StdItem.Price 10000 与 21cq 1.76 页面出售价格 10000（View.aspx?id=190）。itemBps 相对 cjlaaa 原值 10000 即 ×17520bps。",
+        "cjlaaaDatabasePrice": 10000,
+        "effectiveDatabasePrice": 17520,
+        "sellPrice": 8760
+      }
+    }
   },
   "sell": {
     "rateBps": 5000,

@@ -168,8 +168,9 @@ func _revival_button(node_name: String, text_value: String, y: float, stable_id:
 	button.text = text_value
 	button.position = Vector2(70, y)
 	button.size = Vector2(440, 64)
-	button.theme_type_variation = "GothicComponentButton"
-	button.add_theme_font_size_override("font_size", 18)
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.theme_type_variation = "GothicDeathRevivalGemButton"
+	button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	button.set_meta("stable_id", stable_id)
 	modal.add_child(button)
 	return button
@@ -307,8 +308,10 @@ func _show_revival_result_feedback(success: bool) -> void:
 	var button := town_button
 	if special_button.has_meta(GothicUIThemeScript.BUTTON_FEEDBACK_META_STATE):
 		button = special_button
-	GothicUIThemeScript.clear_button_feedback(town_button)
-	GothicUIThemeScript.clear_button_feedback(special_button)
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _revival_feedback_serial or not is_instance_valid(button) or not button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,

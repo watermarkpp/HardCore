@@ -1,0 +1,27 @@
+{
+  "reviewed_remote_commit": "84ab22742eee1589ac105a8ff175da8623778f37",
+  "reviewed_branch": "codex/audit-bugfix-performance-20260921",
+  "integration_ref_observed": "e388e159e437b5aeb9dafddb14d1acf4cefac50c",
+  "repository": "watermarkpp/HardCore",
+  "source_workbook_sha256": "bc234fca54286547b07f64731c9d0e3674aa19a703863c393c356caf97005251",
+  "source_plan_sha256": "b8093594c71d9810acfb0a917f657549ae396591b8d8866fd14f3ea70a77784a",
+  "verified_remote_git_blobs": {
+    "scripts/layers/runtime/loot_runtime_service.gd": "809be2146117a16c1eda32a24574ffb5f8bfd700",
+    "scripts/drop/user_drop_balance.gd": "7ef4bf635c795aa93ad6323d2dbe11ea7cd7d48b",
+    "scripts/drop/user_drop_additions_v81.gd": "7ae41392ebd10cea372366c6fcb480a9b7740943",
+    "assets/data/drop/single_player_balance_v80.json": "847db7785b2708314ad617490e82fcf210b8989e",
+    "scripts/drop/dpv2_repair_v5_contract.gd": "4c0f49ac9fc8481cbbd8c4745398ae153216c1d2",
+    "assets/data/drop/dpv2_21cq_item_mapping_v1.json": "91b2fa0c1f7abebdb9c933fc7c0eac2bd8941797"
+  },
+  "scope": "上传方案与全工作簿结构/单元格审查 + 上述远端关键生产路径核对；不是全仓库审计。",
+  "not_performed": [
+    "未修改游戏代码或数据",
+    "未生成可激活的生产掉落权威",
+    "未独立解析全部原槽UID归组",
+    "未在Godot运行新链",
+    "未运行Android实测",
+    "未核对全部正式地图实时刷新怪物覆盖集",
+    "未验证41条新增物品的全部权威ID"
+  ],
+  "numeric_candidates": "逐格候选分数的float与工作簿存储值全部相同；这不是原始Excel公式存在的证明。"
+}

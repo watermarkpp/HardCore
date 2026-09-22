@@ -61,6 +61,13 @@ ACTIONS = {
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
 }
+# Run is intentionally a male-only extension for this preparation stage.  The
+# classic six-action table remains unchanged for female and helmet records so
+# this builder cannot create or rewrite female/helmet run assets.
+MALE_ACTIONS = {
+    **ACTIONS,
+    "run": {"start": 128, "frames": 6},
+}
 
 # Hum.wil contains exactly 18 HUMANFRAME blocks: Shape 0..8, interleaved
 # male/female. StateItem 85..90 and the canonical six-armour order establish
@@ -184,9 +191,10 @@ def build_action(
     action: str,
     target: Path,
     appearance_type: str,
+    action_specs: dict[str, dict] | None = None,
 ) -> dict:
     data, palette, offsets, info = decoded_library
-    spec = ACTIONS[action]
+    spec = (action_specs if action_specs is not None else ACTIONS)[action]
     frame_count = int(spec["frames"])
     layout = LAYOUTS[appearance_type]
     cell = layout["cell"]
@@ -265,14 +273,16 @@ def build_appearance(
     shape: int,
     gender: str,
     decoded_library: tuple,
-    cache: dict[tuple[str, int], dict],
+    cache: dict[tuple[str, int, tuple[str, ...]], dict],
+    actions: dict[str, dict] | None = None,
 ) -> dict:
     feature = shape * 2 + (1 if gender == "女" else 0)
-    cache_key = (appearance_type, feature)
+    selected_actions = actions if actions is not None else ACTIONS
+    cache_key = (appearance_type, feature, tuple(selected_actions))
     if cache_key not in cache:
         prefix = "weapon" if appearance_type == "weaponAppearance" else "dress"
         actions: dict[str, dict] = {}
-        for action in ACTIONS:
+        for action in selected_actions:
             target = (
                 OUTPUT
                 / prefix
@@ -280,7 +290,12 @@ def build_appearance(
                 / f"{prefix}_{feature:03d}_{action}.png"
             )
             actions[action] = build_action(
-                decoded_library, feature, action, target, appearance_type
+                decoded_library,
+                feature,
+                action,
+                target,
+                appearance_type,
+                selected_actions,
             )
         cache[cache_key] = actions
     return {
@@ -310,7 +325,145 @@ def paper_overlay(item: dict, icon_mapping: dict) -> dict:
     }
 
 
+def build_male_run_only() -> None:
+    """Add only the male ActRun lane to the existing visual catalog.
+
+    The complete catalog builder also refreshes the strict primary weapon
+    compatibility contract.  That contract is an independent, already
+    audited input for this preparation stage and currently has a pre-existing
+    taxonomy assertion outside the run lane.  Keep this command narrow: read
+    the accepted catalog, generate the new male run atlases, and update only
+    male body/weapon action records.  Female records and all helmet records
+    are deliberately never traversed or rewritten.
+    """
+    for source in (
+        MANIFEST,
+        CLIENT_DATA / "Hum.wil",
+        CLIENT_DATA / "Weapon.wil",
+    ):
+        if not source.exists():
+            raise FileNotFoundError(f"missing male run input: {source}")
+
+    payload = load_json(MANIFEST)
+    libraries = {
+        "dressAppearance": read_library(CLIENT_DATA / "Hum.wil"),
+        "weaponAppearance": read_library(CLIENT_DATA / "Weapon.wil"),
+    }
+    atlas_cache: dict[tuple[str, int], dict] = {}
+    newly_generated = 0
+
+    def run_record(appearance_type: str, feature: int) -> dict:
+        nonlocal newly_generated
+        key = (appearance_type, int(feature))
+        if key in atlas_cache:
+            return atlas_cache[key]
+        prefix = (
+            "weapon" if appearance_type == "weaponAppearance" else "dress"
+        )
+        target = (
+            OUTPUT
+            / prefix
+            / "male"
+            / f"{prefix}_{int(feature):03d}_run.png"
+        )
+        was_present = target.exists()
+        record = build_action(
+            libraries[appearance_type],
+            int(feature),
+            "run",
+            target,
+            appearance_type,
+            MALE_ACTIONS,
+        )
+        if not was_present:
+            newly_generated += 1
+        atlas_cache[key] = record
+        return record
+
+    def add_male_run(appearance: dict, appearance_type: str) -> None:
+        feature = int(appearance.get("feature", -1))
+        if feature < 0:
+            raise ValueError(f"male appearance has invalid feature: {appearance}")
+        appearance.setdefault("actions", {})["run"] = run_record(
+            appearance_type, feature
+        )
+
+    # The shared Hum feature-0 base is used by every profession.  Updating the
+    # three male manifests keeps the base/run action identity explicit while
+    # preserving the six-action female manifests exactly as they are.
+    professions = payload.get("professionManifests", {})
+    for manifest in professions.values():
+        male_base = manifest.get("worldBaseByGender", {}).get("男")
+        if not isinstance(male_base, dict):
+            raise ValueError("profession manifest lacks male world base")
+        add_male_run(male_base, "dressAppearance")
+
+    entries = payload.get("itemsById", {})
+    runtime_mappings = payload.get("runtimeMappings", {})
+    for entry in entries.values():
+        category = str(entry.get("category", ""))
+        appearance_type = {
+            "盔甲": "dressAppearance",
+            "武器": "weaponAppearance",
+        }.get(category)
+        if appearance_type is None:
+            # Accessory and helmet records remain outside this male run lane.
+            continue
+        male = (
+            entry.get("worldWear", {})
+            .get("appearancesByGender", {})
+            .get("男")
+        )
+        if not isinstance(male, dict):
+            # This is the unresolved_no_placeholder lane (item 111 is the
+            # current weapon example) or a non-male record.  Do not invent a
+            # feature or placeholder atlas.
+            continue
+        add_male_run(male, appearance_type)
+        name = str(entry.get("itemName", ""))
+        runtime = runtime_mappings.get(name, {}).get(appearance_type)
+        if not isinstance(runtime, dict):
+            raise ValueError(
+                f"male runtime mapping missing for {entry.get('itemId')} {name}"
+            )
+        runtime["actions"]["run"] = male["actions"]["run"]
+
+    actor_template = payload.setdefault("actorTemplate", {})
+    actor_template["maleActions"] = MALE_ACTIONS
+    payload["maleRunPreparation"] = {
+        "sourceAction": "run",
+        "sourceStart": int(MALE_ACTIONS["run"]["start"]),
+        "framesPerDirection": int(MALE_ACTIONS["run"]["frames"]),
+        "directions": 8,
+        "directionOrder": ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+        "maleOnly": True,
+        "femaleAssetsGenerated": 0,
+        "helmetRunGenerated": 0,
+        "newAtlases": newly_generated,
+    }
+    payload["generatedAtlases"] = int(payload.get("generatedAtlases", 0)) + newly_generated
+    with MANIFEST.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+
+    # Keep the item-id-first authorities synchronized with the now-extended
+    # male catalog.  Both builders are male-only and retain item 111 as
+    # unresolved_no_placeholder.
+    from build_male_dress_world_wear_contract import main as build_male_dress
+    from build_male_weapon_world_wear_contract import main as build_male_weapon
+
+    build_male_dress()
+    build_male_weapon()
+    print(
+        "EQUIPMENT_VISUAL_CATALOG_MALE_RUN_PASS "
+        f"new_atlases={newly_generated} total_atlases={payload['generatedAtlases']} "
+        "male_actions=7 female_assets=0 helmet_run=0 unresolved=111"
+    )
+
+
 def main() -> None:
+    if "--male-run-only" in sys.argv[1:]:
+        build_male_run_only()
+        return
     from build_primary_weapon_compatibility import (
         main as build_primary_weapon_compatibility,
     )
@@ -366,7 +519,7 @@ def main() -> None:
         appearance_type: len(decoded[2]) // 600
         for appearance_type, decoded in libraries.items()
     }
-    atlas_cache: dict[tuple[str, int], dict] = {}
+    atlas_cache: dict[tuple[str, int, tuple[str, ...]], dict] = {}
     world_base_by_gender = {
         gender: build_appearance(
             "dressAppearance",
@@ -374,6 +527,7 @@ def main() -> None:
             gender,
             libraries["dressAppearance"],
             atlas_cache,
+            MALE_ACTIONS if gender == "男" else ACTIONS,
         )
         for gender in GENDERS
     }
@@ -608,6 +762,7 @@ def main() -> None:
                         gender,
                         libraries[appearance_type],
                         atlas_cache,
+                        MALE_ACTIONS if gender == "男" else ACTIONS,
                     )
                     coverage[
                         "exactFemaleWorldWear"
@@ -775,6 +930,7 @@ def main() -> None:
             "contractId": "player.visual.classic_eight_direction.v1",
             "rule": "all three professions reuse the accepted warrior foot anchor, eight directions, action-state interface and equipment front/back sorting",
             "actions": ACTIONS,
+            "maleActions": MALE_ACTIONS,
             "blockFrames": 600,
             "dressLayout": {
                 "cell": list(BODY_CELL),
@@ -792,12 +948,10 @@ def main() -> None:
         "itemsById": entries,
         "runtimeMappings": runtime_mappings,
         "loadoutVisualContracts": loadout_contracts,
-        "generatedAtlases": len(atlas_cache) * len(ACTIONS),
+        "generatedAtlases": sum(len(actions) for actions in atlas_cache.values()),
     }
-    MANIFEST.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    with MANIFEST.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
     # Keep the item-id-first male dress contract synchronized with the
     # existing name-keyed runtime catalog. The contract revalidates every
     # atlas against Hum.wil and records every source-frame Hot coordinate.

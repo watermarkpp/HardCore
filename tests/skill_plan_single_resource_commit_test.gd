@@ -9,6 +9,10 @@ const Fixtures := preload(
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
 const DataLoader := preload("res://scripts/skills/skill_data_loader.gd")
+const FIXTURE_MONSTER_ID := 19
+## The central outdoor authored spawn avoids the Home polygon and map edge.
+const FIXTURE_GROUND_POSITION := Vector2(40.5, 13.5)
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 
 func _ready() -> void:
@@ -26,19 +30,76 @@ func _run() -> void:
 	add_child(game)
 	for _i: int in range(5):
 		await get_tree().process_frame
-	game.player.current_mp = 500
-	var target := EnemyActor.new()
-	target.setup(
-		{"name": "q3a_mp", "hp": 9999, "attackMin": 1, "attackMax": 1, "level": 1},
-		game.player,
-		false
+	await _wait_for_formal_world(game)
+	var caster: PlayerCharacter = game.player
+	caster.current_mp = 500
+	var caster_ground: Vector2 = FIXTURE_GROUND_POSITION - Vector2(2.0, 0.0)
+	var caster_position: Vector2 = game._canonical_ground_gu_to_screen_px(caster_ground)
+	assert(caster_position.is_finite(), "resource commit fixture needs a finite map projection")
+	game._set_player_world_position(caster_position)
+	assert(
+		not WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			caster_ground,
+			game._active_safe_zones,
+		),
+		"resource commit caster fixture must be outside the authored safe area",
 	)
-	target.global_position = game.player.global_position + Vector2(18, 0)
-	game.add_child(target)
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if value is EnemyActor:
+			(value as EnemyActor).set_combat_position(
+				caster.global_position + Vector2(3000.0, 3000.0),
+				&"test_fixture_clear",
+			)
+	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(FIXTURE_GROUND_POSITION)
+	assert(target_position.is_finite(), "resource commit fixture needs a finite target projection")
+	assert(
+		not WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			FIXTURE_GROUND_POSITION,
+			game._active_safe_zones,
+		),
+		"resource commit target fixture must be outside the authored safe area",
+	)
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"resource commit fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
+	)
+	var target: EnemyActor = game._spawn_enemy(
+		canonical_data,
+		target_position,
+		false,
+		-1.0,
+		{
+			"respawn_enabled": false,
+			"spawn_slot_id": "test:skill_plan_resource_commit:%d" % FIXTURE_MONSTER_ID,
+		},
+	)
+	assert(
+		target != null
+			and target.monster_id == FIXTURE_MONSTER_ID
+			and not target.is_boss
+			and target.runtime_map_id == int(game.get("current_map_id"))
+			and target.projection_ready()
+			and target.spatial_actor_runtime_id > 0,
+		"resource commit fixture must use the formal exact-ID mapped spawn",
+	)
+	target.max_hp = 9999
+	target.current_hp = target.max_hp
+	assert(
+		is_instance_valid(target)
+		and not target.is_queued_for_deletion()
+		and target.can_receive_damage(),
+		"resource commit fixture target must survive exact-ID admission"
+	)
 	target.set_physics_process(false)
 	target.apply_control(10.0)
 	await get_tree().process_frame
+	assert(
+		game._combat_target_world_clear(target, caster.global_position, true),
+		"resource commit target must have a clear WORLD path",
+	)
 	game._set_magic_locked_target(target, true)
+	assert(game.magic_locked_target == target, "resource commit target was rejected by the formal WORLD gate")
 	game._skill_cast_target = target
 	await get_tree().process_frame
 
@@ -102,5 +163,21 @@ func _cleanup(game: Node, target: EnemyActor) -> void:
 
 func _ground_to_screen(value: Vector2) -> Vector2:
 	return GroundUnit.ground_delta_gu_to_screen_delta_px(value)
+
+
+func _wait_for_formal_world(game: Node) -> void:
+	var deadline_ms: int = Time.get_ticks_msec() + 5000
+	while Time.get_ticks_msec() < deadline_ms:
+		var current_map_id: int = int(game.get("current_map_id"))
+		var input_enabled: bool = bool(game.call("gameplay_input_is_enabled"))
+		if current_map_id >= 0 and input_enabled:
+			break
+		await get_tree().process_frame
+	assert(
+		int(game.get("current_map_id")) == GameData.service_runtime_map_id(0),
+		"resource commit fixture must wait for the formal mapped world",
+	)
+	assert(game.gameplay_input_is_enabled(), "resource commit fixture must wait for READY input")
+	assert(not game._active_safe_zones.is_empty(), "resource commit fixture needs the formal safe-zone context")
 
 const Router := preload("res://scripts/skills/skill_runtime_router.gd")

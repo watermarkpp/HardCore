@@ -14,6 +14,14 @@ func _run() -> void:
 	add_child(panel)
 	await get_tree().process_frame
 	panel.open_for("技能导师")
+	var refresh_before_burst := panel._refresh_execution_count
+	for _burst_index in range(4):
+		PlayerState.skills_changed.emit()
+		PlayerState.inventory_changed.emit()
+	assert(panel._refresh_execution_count == refresh_before_burst, "技能/背包信号 burst 在同帧重复刷新")
+	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_burst + 1, "技能/背包信号 burst 未合并为一次刷新")
+	assert(panel._layout_apply_count == 1, "技能面板重复打开/刷新重复应用布局")
 
 	var skill_id := "warrior.thrusting"
 	var selected_index := -1

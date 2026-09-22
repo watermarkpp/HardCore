@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "kind": "hotfix_patch_followup_evidence",
+  "generatedAtUtc": "2026-09-05T15:55:57.447439+00:00",
+  "inputs": {
+    "baselinePatch": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-xp-town-minimal.pck",
+    "baselinePatchSha256": "1643D8D05276D4DF45A823697645173C6D27A654C37B60238F024086BA501434",
+    "sourcePatch": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-final-export.pck",
+    "sourcePatchSha256": "ABC46001CB541ACAC9FA0CF80F7ACA5492DAE9951C412BF6FA31E582B2F17D5E",
+    "sourceCommit": "571db0bc265a35a267dfcc18015bcc4a1e2a33d8",
+    "baseCommit": "52ae0565856c2d99a28639b2bf0c6278186e0858"
+  },
+  "output": {
+    "pack": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-revival-visual-final.pck",
+    "manifest": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-revival-visual-final.json",
+    "bytes": 1445316,
+    "sha256": "26C3EE418AC877B279C7D4D47DB372A6BB676FA6B09A0CB7B409A1E8153500F1",
+    "entries": 13,
+    "flags": {
+      "encrypted": 0,
+      "removal": 0,
+      "delta": 0
+    },
+    "paths": [
+      ".godot/global_script_class_cache.cfg",
+      ".godot/imported/main_city_bgm.ogg-0266bce75d6e2d820dbb960ab2ff9c87.oggvorbisstr",
+      "assets/audio/town/main_city_bgm.ogg.import",
+      "assets/audio/town/main_city_bgm.source.json",
+      "scripts/device_lab_runtime.gdc",
+      "scripts/game_root.gdc",
+      "scripts/hud.gdc",
+      "scripts/player_state.gdc",
+      "scripts/player_visual.gdc",
+      "scripts/town_music_controller.gd.remap",
+      "scripts/town_music_controller.gdc",
+      "scripts/ui_level_up_preview.gd.remap",
+      "scripts/ui_level_up_preview.gdc"
+    ]
+  },
+  "replacedCompiledScripts": [
+    "scripts/game_root.gdc",
+    "scripts/player_state.gdc",
+    "scripts/town_music_controller.gdc",
+    "scripts/device_lab_runtime.gdc"
+  ],
+  "resourceLoader": {
+    "baseLoaded": true,
+    "basePath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-xp-town-minimal.pck",
+    "classCache": {
+      "baselinePreservedPolicy": true,
+      "classCount": 182,
+      "expectedClassCount": 182,
+      "hasDeviceLabRuntime": true,
+      "hasTownMusicController": true,
+      "hasUILevelUpPreview": true,
+      "loaded": true
+    },
+    "deathPenalty": {
+      "expectedLoss": 12,
+      "expectedLossConstant": 12,
+      "expectedThreshold": 120,
+      "highAfter": 488,
+      "highBefore": 500,
+      "highLost": 12,
+      "level": 7,
+      "lowAfter": 8,
+      "lowBefore": 20,
+      "lowLost": 12,
+      "noNegativeProof": true,
+      "sameThresholdLossProof": true,
+      "threshold": 120,
+      "verified": true,
+      "zeroAfter": 0,
+      "zeroLost": 0
+    },
+    "effect": {
+      "constantVerified": true,
+      "expectedFlameSizeScale": 0.75,
+      "flameSizeScale": 0.75
+    },
+    "method": "fresh_main_pack_base_then_followup_active_patch_cache_mode_ignore",
+    "music": {
+      "defaultVolumeLinear": 0.7,
+      "expectedLengthSeconds": 48.181406,
+      "expectedVolumeLinear": 0.7,
+      "lengthSeconds": 48.1814041137695,
+      "lengthVerified": true,
+      "sourceRecordDurationSeconds": 48.181406,
+      "sourceRecordLoaded": true,
+      "streamLoaded": true,
+      "volumeVerified": true
+    },
+    "ok": true,
+    "patchLoaded": true,
+    "patchPath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\followup_pack_work_1y0vxmmn\\hotfix-20260905-revival-visual-final.pck",
+    "resources": {
+      "remaps": {
+        "res://scripts/town_music_controller.gd.remap": true,
+        "res://scripts/ui_level_up_preview.gd.remap": true
+      },
+      "scriptFailures": [],
+      "scripts": {
+        "res://scripts/device_lab_runtime.gd": true,
+        "res://scripts/game_root.gd": true,
+        "res://scripts/hud.gd": true,
+        "res://scripts/player_state.gd": true,
+        "res://scripts/player_visual.gd": true,
+        "res://scripts/town_music_controller.gd": true,
+        "res://scripts/ui_level_up_preview.gd": true
+      }
+    },
+    "sameMapGuardPresent": true,
+    "sfx": {
+      "representativeBaseStreamLoaded": true,
+      "representativePath": "res://assets/audio/warrior/51.wav",
+      "skillAudioEnabled": false,
+      "skillAudioGateVerifiedFalse": true
+    },
+    "sourceFallback": {
+      "cacheMode": "CACHE_MODE_IGNORE",
+      "sourceGuardDir": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\followup_pack_work_1y0vxmmn\\source_guard",
+      "sourceScriptsAbsentOnDisk": true
+    },
+    "xp": {
+      "expectedGameplayThresholdLevel1": 10,
+      "expectedSourceLevel1": 100,
+      "gameplayThresholdLevel1": 10,
+      "minimumConstantProof": true,
+      "scaleConstantProof": true,
+      "scaledThresholdProof": true,
+      "serviceTableUnchangedProof": true,
+      "sourceLevel1": 100,
+      "thresholdMinimum": 1,
+      "thresholdScale": 0.1
+    }
+  },
+  "safety": {
+    "safeForInstall": true,
+    "baselineShaUnchanged": true,
+    "noRemovalEntries": true,
+    "noDeltaEntries": true,
+    "noEncryptedEntries": true,
+    "exactFollowupClosure": true,
+    "under64MiB": true
+  }
+}

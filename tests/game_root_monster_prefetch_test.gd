@@ -1,23 +1,60 @@
 extends Node
 
+const BridgeScript := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+
 
 func _ready() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	# RV15-J4 explicit whitelist cases: the production ordinary-layer elite
+	# whitelist is exactly the nine production elites (RV15 user-directive
+	# migration: 164/166/168/170/172/178/182 join 218/222), and each
+	# classifies elite in the canonical catalog. Non-whitelisted elites are
+	# covered by the per-spawn assertion in the loop below, which fails on
+	# any ordinary layer entry whose elite id is outside that set.
+	assert(
+		BridgeScript.ELITE_ORDINARY_SPAWN_IDS == [218, 222, 164, 166, 168, 170, 172, 178, 182],
+		"the ordinary-layer elite whitelist drifted from the 9-id production set"
+	)
+	for whitelisted_id: int in [218, 222, 164, 166, 168, 170, 172, 178, 182]:
+		assert(
+			GameData.canonical_monster_classification(whitelisted_id) == "elite",
+			"whitelisted ordinary-layer elite %d must classify elite" % whitelisted_id
+		)
+	# The 500-hp pair (174 暴牙蜘蛛 / 176 天狼蜘蛛) stays ordinary by the
+	# user directive: no reclassification and no overlay loot.
+	assert(GameData.canonical_monster_classification(174) == "ordinary")
+	assert(GameData.canonical_monster_classification(176) == "ordinary")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
-	var formal_spawn_total := 0
-	for map_id: int in MapEditorRuntimeBridge.released_map_ids():
+	var authored_slot_total := 0
+	var projected_spawn_total := 0
+	var formal_maps := _formal_authored_maps()
+	assert(not formal_maps.is_empty(), "formal release registry has no playable maps")
+	for authored_map: Dictionary in formal_maps:
+		var map_id := int(authored_map.runtime_map_id)
+		var runtime: Dictionary = authored_map.runtime
 		var content := MapEditorRuntimeBridge.game_content_for_map(map_id)
 		var expected_set := {}
-		for layer_name: String in ["spawns", "bosses"]:
-			for raw_entry: Variant in content.get(layer_name, []):
-				assert(raw_entry is Dictionary)
-				var expected_id := int((raw_entry as Dictionary).get("monster_id", -1))
-				assert(expected_id > 0)
+		for source_layer: String in ["monster_spawn", "boss_spawn"]:
+			for raw_entry: Variant in runtime.get("semantics", {}).get(source_layer, []):
+				var expected_id := _assert_valid_authored_slot(raw_entry, source_layer)
 				expected_set[expected_id] = true
-				formal_spawn_total += 1
+				authored_slot_total += 1
+		projected_spawn_total += (
+			content.get("spawns", []).size() + content.get("bosses", []).size()
+		)
+		assert(
+			content.get("spawns", []).size()
+			== runtime.get("semantics", {}).get("monster_spawn", []).size()
+		)
+		assert(
+			content.get("bosses", []).size()
+			== runtime.get("semantics", {}).get("boss_spawn", []).size()
+		)
 		var monster_ids: Array[int] = game._monster_ids_for_map(map_id)
 		var expected_ids: Array[int] = []
 		for raw_id: Variant in expected_set.keys():
@@ -31,13 +68,33 @@ func _ready() -> void:
 			assert(monster_id > 0 and not seen.has(monster_id))
 			assert(not GameData.get_monster_by_id(monster_id).is_empty())
 			seen[monster_id] = true
-	assert(formal_spawn_total == 107, "formal canonical spawn total drifted")
+	assert(authored_slot_total > 0, "formal authored spawn slots are empty")
+	assert(
+		projected_spawn_total == authored_slot_total,
+		"runtime spawn projection diverged from independently-read authored slots"
+	)
 	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
-	var covered_index := source.find("hud.loading_transition_covered")
-	var prefetch_index := source.find("_streaming_coordinator.begin_map_prefetch")
-	var load_index := source.find("\n\toperation.call()", prefetch_index)
-	assert(covered_index >= 0 and prefetch_index > covered_index)
+	var transition_index := source.find("func _run_map_transition(")
+	assert(transition_index >= 0, "map transition function missing")
+	var transition_end_index := source.find("\nfunc ", transition_index + 1)
+	assert(transition_end_index > transition_index, "map transition function boundary missing")
+	var transition_source := source.substr(
+		transition_index,
+		transition_end_index - transition_index,
+	)
+	var covered_index := transition_source.find("await hud.loading_transition_covered")
+	assert(covered_index >= 0, "loading coverage await missing from map transition")
+	var prefetch_index := transition_source.find(
+		"_begin_monster_transition_prefetch(target_map_id)",
+		covered_index,
+	)
+	assert(prefetch_index > covered_index, "monster prefetch missing after loading coverage")
+	var load_index := transition_source.find("\n\toperation.call()", prefetch_index)
 	assert(load_index > prefetch_index, "map loaded before monster prefetch")
+	assert(
+		"_streaming_coordinator.begin_map_prefetch" in source,
+		"map prefetch helper no longer delegates to the streaming coordinator"
+	)
 	assert("_streaming_coordinator.poll_once" in source)
 	assert(
 		"_streaming_coordinator.poll_once(Engine.get_process_frames())" in source,
@@ -48,3 +105,77 @@ func _ready() -> void:
 		+ "covers bounded async streaming before zone spawn"
 	)
 	get_tree().quit(0)
+
+
+func _formal_authored_maps() -> Array[Dictionary]:
+	assert(bool(MapEditorRuntimeBridge.registry_load_state().get("valid", false)))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		MapEditorRuntimeBridge.RELEASE_REGISTRY_PATH
+	))
+	assert(parsed is Dictionary)
+	var registry := parsed as Dictionary
+	assert(int(registry.get("schema_version", 0)) == 1)
+	assert(str(registry.get("registry_contract_id", "")) == "mse.map.runtime.release.v1")
+	var result: Array[Dictionary] = []
+	for raw_entry: Variant in registry.get("maps", []):
+		assert(raw_entry is Dictionary)
+		var entry := raw_entry as Dictionary
+		if str(entry.get("release_state", "")) != "implemented_playable":
+			continue
+		var runtime_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+			str(entry.get("runtime_path", ""))
+		))
+		assert(runtime_value is Dictionary)
+		var runtime := runtime_value as Dictionary
+		assert(str(runtime.get("build_sha256", "")) == str(entry.get("approved_build_sha256", "")))
+		assert(str(runtime.get("source", {}).get("map_id", "")) == str(entry.get("map_key", "")))
+		assert(int(runtime.get("source", {}).get("runtime_map_id", -1)) == int(entry.get("runtime_map_id", -1)))
+		result.append({
+			"runtime_map_id": int(entry.get("runtime_map_id", -1)),
+			"runtime": runtime,
+		})
+	return result
+
+
+func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> int:
+	assert(raw_entry is Dictionary)
+	var entry := raw_entry as Dictionary
+	var raw_id: Variant = entry.get("monster_id", null)
+	assert(
+		raw_id is int
+		or (
+			raw_id is float
+			and is_finite(float(raw_id))
+			and float(raw_id) == floorf(float(raw_id))
+		)
+	)
+	var monster_id := int(raw_id)
+	var runtime_monster := GameData.get_canonical_monster_entry(monster_id, "runtime")
+	var editor_monster := GameData.get_canonical_monster_entry(monster_id, "editor")
+	assert(not runtime_monster.is_empty() and not editor_monster.is_empty())
+	var classification := GameData.canonical_monster_classification(monster_id)
+	var spawn_classification := str(
+		runtime_monster.get("spawn_classification", "")
+	)
+	var canonical_placement := str(
+		editor_monster.get("editor_placement", {}).get("placement_kind", "")
+	)
+	assert(
+		canonical_placement.is_empty() or canonical_placement == source_layer
+	)
+	if spawn_classification == "special_normal":
+		assert(source_layer == "monster_spawn")
+	elif source_layer == "boss_spawn":
+		assert(classification in ["elite", "boss"])
+	else:
+		# Ordinary layers: the original legal classification, or one of the
+		# two niumo elites (218/222) whitelisted for ordinary-layer spawns by
+		# the production bridge (ELITE_ORDINARY_SPAWN_IDS); every other elite
+		# and all bosses are rejected there.
+		assert(
+			classification != "elite" or monster_id in [218, 222, 164, 166, 168, 170, 172, 178, 182],
+			"ordinary-layer elite %d is not in the production whitelist {218, 222, 164, 166, 168, 170, 172, 178, 182}"
+			% monster_id
+		)
+		assert(classification != "boss")
+	return monster_id

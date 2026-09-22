@@ -24,7 +24,13 @@ func _run() -> void:
 	_coordinator = Fixtures.make_coordinator()
 	_player = Fixtures.make_player(self)
 	MonsterVisual.set_synchronous_loading_for_tests(true)
-	var catalog := Fixtures.catalog_ids()
+	var catalog: Array[int] = []
+	for monster_id: int in Fixtures.catalog_ids():
+		if MonsterIdentity.is_runtime_allowed(monster_id):
+			catalog.append(monster_id)
+		if catalog.size() == 10:
+			break
+	assert(catalog.size() == 10, "fixture needs 10 runtime-allowed monsters")
 	for i: int in range(10):
 		_enemies.append(
 			Fixtures.make_enemy(self, _player, catalog[i], i + 1)
@@ -107,6 +113,40 @@ func _run() -> void:
 	assert(
 		_coordinator.registered_visual_count() == 0,
 		"load-destroyed subscriber must be cleaned"
+	)
+	# A leaked caller that cannot run MonsterVisual._exit_tree is still reclaimed,
+	# but cleanup work is fixed per poll rather than one full subscription walk.
+	var stale_count: int = (
+		int(_coordinator.MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL) * 3
+	)
+	for index in range(stale_count):
+		var stale_visual := Node.new()
+		add_child(stale_visual)
+		_coordinator.register_visual(
+			stale_visual,
+			1000 + index,
+			1,
+			_coordinator.current_world_generation(),
+			"",
+			{},
+			1000 + index,
+		)
+		stale_visual.queue_free()
+	await get_tree().process_frame
+	var cleanup_polls := 0
+	while _coordinator.registered_visual_count() > 0 and cleanup_polls < 6:
+		_coordinator.poll_once(Engine.get_process_frames())
+		cleanup_polls += 1
+		await get_tree().process_frame
+	var cleanup_diag: Dictionary = _coordinator.monster_streaming_diagnostics()
+	assert(
+		_coordinator.registered_visual_count() == 0,
+		"bounded cleanup leaked invalid subscriptions: %s" % cleanup_diag,
+	)
+	assert(
+		int(cleanup_diag.subscriber_cleanup_max_visits_per_poll)
+			<= _coordinator.MAX_SUBSCRIBER_CLEANUP_VISITS_PER_POLL,
+		"cleanup exceeded its per-poll visit ceiling: %s" % cleanup_diag,
 	)
 	_cleanup()
 	await get_tree().process_frame

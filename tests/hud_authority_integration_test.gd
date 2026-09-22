@@ -53,14 +53,21 @@ func _run() -> void:
 	assert(PlayerState.equipment == state_before_prewarm.equipment)
 	assert(PlayerState.warehouse_inventory == state_before_prewarm.warehouse)
 	assert(PlayerState.quest_states == state_before_prewarm.quests)
-	var inventory_instance_id := _hud.inventory_panel.get_instance_id()
-	var skill_instance_id := _hud.skill_panel.get_instance_id()
+	var inventory_instance_id: int = _hud.inventory_panel.get_instance_id()
+	var skill_instance_id: int = _hud.skill_panel.get_instance_id()
 	await _hud.prewarm_all_panels(_game._system_menu_panel)
 	assert(_hud.inventory_panel.get_instance_id() == inventory_instance_id)
 	assert(_hud.skill_panel.get_instance_id() == skill_instance_id)
+	var inventory_refresh_before_open: int = _hud.inventory_panel._refresh_execution_count
 	_hud._toggle_inventory()
 	assert(_hud.inventory_panel.visible)
 	assert(_hud.inventory_panel.get_instance_id() == inventory_instance_id)
+	assert(_hud.inventory_panel._refresh_execution_count == inventory_refresh_before_open, "首次 toggle 重复刷新已预热背包")
+	_hud._toggle_inventory()
+	PlayerState.inventory_changed.emit()
+	assert(_hud.inventory_panel._refresh_pending and _hud.inventory_panel._refresh_execution_count == inventory_refresh_before_open, "隐藏背包没有延迟刷新")
+	_hud._toggle_inventory()
+	assert(_hud.inventory_panel._refresh_execution_count == inventory_refresh_before_open + 1, "隐藏 pending 打开未恰好刷新一次")
 	_hud._toggle_inventory()
 	_hud._toggle_skill_book()
 	assert(_hud.skill_panel.visible)
@@ -75,7 +82,9 @@ func _run() -> void:
 		"inventory:0", {}
 	)
 	assert(bool(quote.get("sellable", false)), "authority did not quote item")
-	assert(int(quote.get("unit_price", 0)) == 28, "主库50金币木剑未按商店110%后半价报价")
+	# 出售契约按原版 GetSellItemPrice 收敛：报价 = 主库价 ÷ 2，商人 stockMarkup
+	# 不再进入出售基准（2026-09 用户裁决：神水 5000 / 思贝儿手镯 8760）。
+	assert(int(quote.get("unit_price", 0)) == 25, "木剑出售报价必须是主库价50的一半(25)")
 
 	# The quote is bound to the authoritative merchant. Replaying it through a
 	# different merchant must fail without mutating either side of the sale.
@@ -131,7 +140,7 @@ func _run() -> void:
 	var equipment_quote: Dictionary = _hud.shop_panel._sell_quotes.get(equipment_key, {})
 	assert(bool(equipment_quote.get("sellable", false)), "数量1的装备没有获得可出售报价")
 	assert(int(equipment_quote.get("max_quantity", 0)) == 1, "非堆叠装备的最大出售数量不是1")
-	assert(int(equipment_quote.get("unit_price", 0)) == 28, "木剑没有使用主库50、商店110%再半价的规则")
+	assert(int(equipment_quote.get("unit_price", 0)) == 25, "木剑出售报价必须是主库价50的一半(25)")
 	assert(PlayerState._shop_sell_base_price("木剑", {}) == 50, "报价入口不能在目录索引缺价时即时读取正式服务价格")
 	var saved_wooden_sword: Dictionary = GameData._catalog_by_name.get("木剑", {}).duplicate(true)
 	var unpriced_wooden_sword := saved_wooden_sword.duplicate(true)

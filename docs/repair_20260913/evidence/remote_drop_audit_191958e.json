@@ -1,0 +1,2092 @@
+{
+  "status": "PASS",
+  "scope": "Full static data, exact rational and preservation audit; not device acceptance",
+  "counts": {
+    "profiles": 156,
+    "runtime_allowed": 153,
+    "enabled": 144,
+    "slots": 7611,
+    "effective_records": 7611,
+    "provenance_records": 7611,
+    "classes": 233,
+    "elite_boss_potion_slots": 1289
+  },
+  "rule_counts": {
+    "NONE": 7131,
+    "BOOK_ELITE_BOSS": 325,
+    "BOOK_ORDINARY": 149,
+    "ARMOR_BASE_1_OVER_60": 6
+  },
+  "errors": [],
+  "notes": [
+    "The inactive overflow seed retains cap=9; production GameData reads cap=15 from direct_baseline. Semantic source_accounting retains pre-V505 6809 while migrated baseline has 7611. Both require production-path interpretation, not data replacement."
+  ],
+  "hashes": [
+    {
+      "path": "assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json",
+      "actual": "FA7C860CEFCF3AC07AF58DA21D842530500EB8D2E9F2A402BA72CC92FA4AFA4C",
+      "expected": "FA7C860CEFCF3AC07AF58DA21D842530500EB8D2E9F2A402BA72CC92FA4AFA4C"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_monster_mapping_v1.json",
+      "actual": "499714F9B61CC56E5CE7550AB69B4E74883343017B3AD07B78EAC5F4630903E7",
+      "expected": "499714F9B61CC56E5CE7550AB69B4E74883343017B3AD07B78EAC5F4630903E7"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+      "actual": "EA7CBCB43C9077AF46D2953FB4D1C993A35F693053001F32942CEA1408E6D021",
+      "expected": "EA7CBCB43C9077AF46D2953FB4D1C993A35F693053001F32942CEA1408E6D021"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_overflow_authority_v1.json",
+      "actual": "8EE86C24F290C02FA2630A553CBEF54F365B10DF0A3761622A60D9E1F4D5A053",
+      "expected": "8EE86C24F290C02FA2630A553CBEF54F365B10DF0A3761622A60D9E1F4D5A053"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_source_provenance_v1.json",
+      "actual": "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01",
+      "expected": "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01"
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "actual": "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7",
+      "expected": "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_source_corrections_v1.json",
+      "actual": "F4490B54332B672053840A7E4F12251979E148A0F7F6DB8FFE68EE30345BA5A7",
+      "expected": "F4490B54332B672053840A7E4F12251979E148A0F7F6DB8FFE68EE30345BA5A7"
+    },
+    {
+      "path": "assets/data/source_priority_policy.json",
+      "actual": "BF6DB3F60F35019C68196F6D95A6DE44D2EBC33B585BC0E63CF62E4AA4C47EDF",
+      "expected": "BF6DB3F60F35019C68196F6D95A6DE44D2EBC33B585BC0E63CF62E4AA4C47EDF"
+    },
+    {
+      "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+      "actual": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0",
+      "expected": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0"
+    },
+    {
+      "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+      "actual": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515",
+      "expected": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515"
+    }
+  ],
+  "preservation": [
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "unchanged_except": "probability_policy.post_rng_ground_slot_limit",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_drop_runtime_authority_v1.json",
+      "unchanged_except": "ground_overflow_policy.maximum_ground_slots",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_drop_boost_v1.json",
+      "unchanged_except": "source_bindings.direct_baseline_sha256_raw",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_single_player_effective_probability_v1.json",
+      "unchanged_except": "source_bindings.direct_baseline_sha256_raw",
+      "equal": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_direct_baseline_manifest_v2.json",
+      "unchanged_except": "artifacts.direct_baseline_authority.sha256",
+      "equal": true
+    }
+  ],
+  "raw_git_representation_errors": [
+    {
+      "code": "logical_source_hash",
+      "evidence": "assets/data/canonical_monster_drop_source_v2.json"
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 18
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 19
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 21
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 24
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 26
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 28
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 30
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 31
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 32
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 34
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 36
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 38
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 39
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 41
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 42
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 43
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 45
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 46
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 47
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 50
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 52
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 54
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 55
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 56
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 57
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 60
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 62
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 64
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 66
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 68
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 70
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 73
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 74
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 75
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 76
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 77
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 79
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 81
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 83
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 85
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 87
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 89
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 90
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 91
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 92
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 94
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 96
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 97
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 100
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 101
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 103
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 104
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 105
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 107
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 110
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 112
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 114
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 116
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 118
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 120
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 121
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 122
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 123
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 124
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 126
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 127
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 128
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 129
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 131
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 132
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 133
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 134
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 135
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 136
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 137
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 138
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 140
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 141
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 142
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 143
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 144
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 148
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 150
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 152
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 153
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 155
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 156
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 157
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 158
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 159
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 160
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 162
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 163
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 164
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 166
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 168
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 170
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 172
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 174
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 176
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 178
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 180
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 182
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 185
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 188
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 189
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 190
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 191
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 192
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 193
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 195
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 196
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 198
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 199
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 200
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 202
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 204
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 206
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 208
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 209
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 210
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 212
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 214
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 216
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 218
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 220
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 222
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 224
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 226
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 227
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 228
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 229
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 230
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 231
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 232
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 233
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 234
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 235
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 236
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 237
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 238
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 239
+    },
+    {
+      "code": "source_capture_hash",
+      "evidence": 240
+    }
+  ],
+  "checkout_byte_restorations": [
+    {
+      "path": "assets/data/canonical_monster_drop_source_v2.json",
+      "git_blob_sha256": "1A0BE3AFB28628F14E2C7F30EA08856301BB5D9E152B62CE6D1AEF47D9AB1BD5",
+      "checkout_sha256": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+      "expected": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_18.bin",
+      "git_blob_sha256": "3F0558C98002F47B8A25B05C131E5B2ADF8862B8805602205E58B1BD7B7D89F6",
+      "checkout_sha256": "0BE721CB30DEA74BDBDF4A5EC18E8B882CC7B36963BF32E2BEEBFD4115EEAE8B",
+      "expected": "0BE721CB30DEA74BDBDF4A5EC18E8B882CC7B36963BF32E2BEEBFD4115EEAE8B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_19.bin",
+      "git_blob_sha256": "C8C06BE5EA9AE2BA97A2F35D81856A8375AB78EF1E1C3EC5BA7E43BDD8B66128",
+      "checkout_sha256": "D54F4098FF4095B5222407EFF3D3CFB67B888B7B87BB8D6FA8E1CB45743186F1",
+      "expected": "D54F4098FF4095B5222407EFF3D3CFB67B888B7B87BB8D6FA8E1CB45743186F1",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_21.bin",
+      "git_blob_sha256": "5FBEA30485F499C175CFA900798349987991214B3D3F50D00DE15F5ADDE1FF47",
+      "checkout_sha256": "4192EE0253597EA2A5A7D7C3CE316DFB20D973937A716AD0928B937F1FF81F17",
+      "expected": "4192EE0253597EA2A5A7D7C3CE316DFB20D973937A716AD0928B937F1FF81F17",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_24.bin",
+      "git_blob_sha256": "1BA0435EBA2F24422BF75D88A6483EE4AE15121CF9C91018A58438DD039A185F",
+      "checkout_sha256": "BAF47028177BF8C22FF6269E5F6C79FD9C3712CC446798289F0E2F96F7084002",
+      "expected": "BAF47028177BF8C22FF6269E5F6C79FD9C3712CC446798289F0E2F96F7084002",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_26.bin",
+      "git_blob_sha256": "94254A807BB3433C7CB1D14EF8B1D8518B7075ECF16D4DE736E9F99D5171695C",
+      "checkout_sha256": "18B05E4311397A10650B205D93AD8D54BB36E627B83266415200C717A8DFA8FD",
+      "expected": "18B05E4311397A10650B205D93AD8D54BB36E627B83266415200C717A8DFA8FD",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_28.bin",
+      "git_blob_sha256": "56CBF48272F2E46652346837D57BF5CE9D59127A1D703E6CCE000C90AAD0D62F",
+      "checkout_sha256": "26D0C718D41AC403E08B408F5B9387A3D9E087FC3ECCAE2267EB7D19982F4290",
+      "expected": "26D0C718D41AC403E08B408F5B9387A3D9E087FC3ECCAE2267EB7D19982F4290",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_30.bin",
+      "git_blob_sha256": "3C3C6EFB0F41BD5FDBD510ABFAB9AE25F21DCC2845EF601023EF875FD51584DD",
+      "checkout_sha256": "734EC45F44FEF8053125B07855F7D88C5BA9FDEF33719CD0D2272721F8C5BC58",
+      "expected": "734EC45F44FEF8053125B07855F7D88C5BA9FDEF33719CD0D2272721F8C5BC58",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_31.bin",
+      "git_blob_sha256": "86347838DECA3EA93A4C7FB8D170E6E27CE60B8A5926BBD8A57C923FC434E143",
+      "checkout_sha256": "FF15E3DDCF54892B57D5FF7C8BC33F54878F2B17A2174377E009FDF2741EBA85",
+      "expected": "FF15E3DDCF54892B57D5FF7C8BC33F54878F2B17A2174377E009FDF2741EBA85",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_32.bin",
+      "git_blob_sha256": "20A1E5747F0BA6224A7840C28B561551E3FC0E66878A6BC00969AD0C3102DFD5",
+      "checkout_sha256": "EB37B9CDF58C2F4926DE0566054E06F4321602982C7480B64F72E4644B2703F4",
+      "expected": "EB37B9CDF58C2F4926DE0566054E06F4321602982C7480B64F72E4644B2703F4",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_34.bin",
+      "git_blob_sha256": "1363D2276346434FBA9E153A585A49D6B4880B6563C7CA0F21F57D0B04AB9575",
+      "checkout_sha256": "D2F55BC05A0B03BD987D0BD5EF0F3BBBAE9259EFDC10C650A14CFAE6D48229E7",
+      "expected": "D2F55BC05A0B03BD987D0BD5EF0F3BBBAE9259EFDC10C650A14CFAE6D48229E7",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_36.bin",
+      "git_blob_sha256": "4FC16899796F8F19A80E991B57F624CA2E23DED0A4F75E18E73F8467E6CB2DB2",
+      "checkout_sha256": "EB5B4D3A5672BD75689A30BA67930AB289796893B7C0EAED489C2130BB8ED3F3",
+      "expected": "EB5B4D3A5672BD75689A30BA67930AB289796893B7C0EAED489C2130BB8ED3F3",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_38.bin",
+      "git_blob_sha256": "36D4DB890438B5BAF9C258C336939C53C2C6384E130A58A5472EB16A247722C7",
+      "checkout_sha256": "FCA74FA3AB2D6862E8D62A315307068765041C6135A1B030EABDF0704E8F1B9D",
+      "expected": "FCA74FA3AB2D6862E8D62A315307068765041C6135A1B030EABDF0704E8F1B9D",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_39.bin",
+      "git_blob_sha256": "B750746355CC650A6059155670FAFD095C9CE3B6EF094F99AC76CA8C5216DFC0",
+      "checkout_sha256": "BD106057F2AC2578C9988D0264015EBB3D481A8F2E6678962103522EB2A6F99A",
+      "expected": "BD106057F2AC2578C9988D0264015EBB3D481A8F2E6678962103522EB2A6F99A",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_41.bin",
+      "git_blob_sha256": "136BCCCB47BF93C0E4FF10DEB1902BC13C27938292EE07312AAC007D79825273",
+      "checkout_sha256": "9B9792EADCA64092E12EAC183871E1F19A5EB673F144F03954E65FD87554AEBF",
+      "expected": "9B9792EADCA64092E12EAC183871E1F19A5EB673F144F03954E65FD87554AEBF",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_42.bin",
+      "git_blob_sha256": "FE5156356B9338B2D4688C4ACCC6FE755D9F06CEEF565F6B6A5B6763E43DEE97",
+      "checkout_sha256": "783293BAE96407E4F7B343CA19EE8A9E3079C75E9A41CE5242EE9B6396C1CBAA",
+      "expected": "783293BAE96407E4F7B343CA19EE8A9E3079C75E9A41CE5242EE9B6396C1CBAA",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_43.bin",
+      "git_blob_sha256": "A1AEE7BDC2ACB126298A78CCC328F672E008CDE0C7E314DF2B33923B27A6C66C",
+      "checkout_sha256": "BAEC3D09FDB7D264FE6499312E9FBAAC3E87FC3430CD9CE2B63FE7C18BF24613",
+      "expected": "BAEC3D09FDB7D264FE6499312E9FBAAC3E87FC3430CD9CE2B63FE7C18BF24613",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_45.bin",
+      "git_blob_sha256": "25B520840BD47862B8F7D3777AAC5FBC9B6EA4872E4A80AF34A01763EEDFA931",
+      "checkout_sha256": "9F8502D4A5E1C10E4A4ADD762DA07DED2F40DB8A0633863BC3653DFCFF1D830B",
+      "expected": "9F8502D4A5E1C10E4A4ADD762DA07DED2F40DB8A0633863BC3653DFCFF1D830B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_46.bin",
+      "git_blob_sha256": "0CA62679BC3574F3E8087DDF397FEC9FF15070295E55677C4973459B4E94017B",
+      "checkout_sha256": "6E3E8E6B226745E17147F79A82E66686274C45D0922E2693EAC47EC5A2A03FE0",
+      "expected": "6E3E8E6B226745E17147F79A82E66686274C45D0922E2693EAC47EC5A2A03FE0",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_47.bin",
+      "git_blob_sha256": "164AF611585255223118FACFA6D7ADB2C28B1910ED40C56E201FA1EE89BE7804",
+      "checkout_sha256": "10597DCF953377750B7F20D1D1FDBA493DD6F69F448892A7B4D6E59E8F09133B",
+      "expected": "10597DCF953377750B7F20D1D1FDBA493DD6F69F448892A7B4D6E59E8F09133B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_50.bin",
+      "git_blob_sha256": "4DDFD439FE5D3C928A1470258DD9E6707CC90246A7086E6A7360B421890BC309",
+      "checkout_sha256": "85BE1CB79E1593DF22E83C9927A7E1D009D973E5F6FD4551164E344ECB9F97E8",
+      "expected": "85BE1CB79E1593DF22E83C9927A7E1D009D973E5F6FD4551164E344ECB9F97E8",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_52.bin",
+      "git_blob_sha256": "76941086BC981032E48CE68EAA1DE76ADE1B191977B5995064D95978994154B6",
+      "checkout_sha256": "189057A99404010304F108BBAF69E11338FC9B9825052E5384D5DB2B3B626FD5",
+      "expected": "189057A99404010304F108BBAF69E11338FC9B9825052E5384D5DB2B3B626FD5",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_54.bin",
+      "git_blob_sha256": "6A46AFEC1991CAE28D02636D051D6E8E992BAC73D78B86020720F76E6D5B9A73",
+      "checkout_sha256": "3931904B5CA429A3DC1027BE28B4C06BB3BE72E7252C6FE2D8968CABF4435F72",
+      "expected": "3931904B5CA429A3DC1027BE28B4C06BB3BE72E7252C6FE2D8968CABF4435F72",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_55.bin",
+      "git_blob_sha256": "901D3864804A921454CE439E83DF6B71A5B17EEC02B63D46DC5A4C8BCE7DD4D0",
+      "checkout_sha256": "7C58E4C67ABCC7BDCF6F5791BFB2C39A067B31C264D253E921797025F5CB78A9",
+      "expected": "7C58E4C67ABCC7BDCF6F5791BFB2C39A067B31C264D253E921797025F5CB78A9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_56.bin",
+      "git_blob_sha256": "EED826964473C811940126B1E73F4504C0C604AA7C1CD6220A4F65FF9F9C9BC4",
+      "checkout_sha256": "06F5AEB2DC239944C45388266671FAB75307FC722120484E1B1A5F090776DE3F",
+      "expected": "06F5AEB2DC239944C45388266671FAB75307FC722120484E1B1A5F090776DE3F",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_57.bin",
+      "git_blob_sha256": "A4C7C8BD3256B80D84E1BA536872962027E6B6A2DBB380D7012DBB37009F078A",
+      "checkout_sha256": "E78BBD84FDADA01DBBB266EA90ED26871B2E02ED556C20DAAF62545FF6A8DDAA",
+      "expected": "E78BBD84FDADA01DBBB266EA90ED26871B2E02ED556C20DAAF62545FF6A8DDAA",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_60.bin",
+      "git_blob_sha256": "426BA6CAFAB776B2937B86692103440070C3785944E32A178F3C9C6064D89435",
+      "checkout_sha256": "CB7022EFC08526ABD7B31242E95AE7DE91BB0CC5A9E8BC66DA5AAA8D90B0E721",
+      "expected": "CB7022EFC08526ABD7B31242E95AE7DE91BB0CC5A9E8BC66DA5AAA8D90B0E721",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_62.bin",
+      "git_blob_sha256": "BD6394100AA88517F0385C194E5F9815D08B3169EEC8520F96521CC5882C09EF",
+      "checkout_sha256": "D4ADD183AF33867675081D75F09EB108F147FA21068AAAD5263C6FB3D1B73C3C",
+      "expected": "D4ADD183AF33867675081D75F09EB108F147FA21068AAAD5263C6FB3D1B73C3C",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_64.bin",
+      "git_blob_sha256": "84B42003EA46475F23F88EC7B7AE7DE25A74697CC672B2A5366B8B3663BC39BA",
+      "checkout_sha256": "61A1C6E0CAD4AF76E666340B11AFEE9C7414CBF5C3F1668F642C22B29B57DBB6",
+      "expected": "61A1C6E0CAD4AF76E666340B11AFEE9C7414CBF5C3F1668F642C22B29B57DBB6",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_66.bin",
+      "git_blob_sha256": "AEBF769F97AE8E2F08DE9B0523F843310A77CD9E1C0E4D0C09A1C755DD42F60D",
+      "checkout_sha256": "8C806BB080F17CC9B02ADC005B07B4EE383597ED3ADDDE0C21A98E80265163F3",
+      "expected": "8C806BB080F17CC9B02ADC005B07B4EE383597ED3ADDDE0C21A98E80265163F3",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_68.bin",
+      "git_blob_sha256": "CA473F8E23F52521D943DFD6E338D156C18C37A6E015AC19B9BCF71A05FFF00C",
+      "checkout_sha256": "A24FEAB41DF33CF700F72B4F59BFCE8759CC6DA5E1B215E8C0FFCBE998DC8738",
+      "expected": "A24FEAB41DF33CF700F72B4F59BFCE8759CC6DA5E1B215E8C0FFCBE998DC8738",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_70.bin",
+      "git_blob_sha256": "70ABCA9D113A19EF9705E46783A73741D3F9D9390AE7F289CA29239DE9C170E9",
+      "checkout_sha256": "BF031A4221DA24E43B66E2CECD01B99A10521B1A9189D8F4A5CED383428460A1",
+      "expected": "BF031A4221DA24E43B66E2CECD01B99A10521B1A9189D8F4A5CED383428460A1",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_73.bin",
+      "git_blob_sha256": "97C3071C9BF0E2AA66A56C4B489BA32C55E1C01AB647E4F2627D6921CF148CB5",
+      "checkout_sha256": "24462D74014896446A3DAC44EDE352F3AB4646969F62D6EFE078DB7D98514A43",
+      "expected": "24462D74014896446A3DAC44EDE352F3AB4646969F62D6EFE078DB7D98514A43",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_74.bin",
+      "git_blob_sha256": "989B19921930DC1F0D782B15BFD9DBCDD251B8819E9343EF40B760E846E3AE50",
+      "checkout_sha256": "14233801B2920223B2B957EA501EB42EA3DA0B5206525EED8FCBC8593DF3A034",
+      "expected": "14233801B2920223B2B957EA501EB42EA3DA0B5206525EED8FCBC8593DF3A034",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_75.bin",
+      "git_blob_sha256": "EAA35F7C0A6B1E70AA5FEC39D5A9E6FB0B412F74AAEA39077F91131FB4EF23A1",
+      "checkout_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+      "expected": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_76.bin",
+      "git_blob_sha256": "D255472E7632378E7FE824FEFA97FF2122429BA3FFE472A9F6A1B4C6B7579C63",
+      "checkout_sha256": "EA1172A833CE1745F023C9B535BE6AC95154D0C141E800547634FAED0272DFCE",
+      "expected": "EA1172A833CE1745F023C9B535BE6AC95154D0C141E800547634FAED0272DFCE",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_77.bin",
+      "git_blob_sha256": "BAA719C89CEA40C5E12886D4EA42008FAC148923A84A2864851C543E39DF82A7",
+      "checkout_sha256": "6840D54CB554BE626A5B434F903728CDBD62646205F045D0C796E7703BD60C9B",
+      "expected": "6840D54CB554BE626A5B434F903728CDBD62646205F045D0C796E7703BD60C9B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_79.bin",
+      "git_blob_sha256": "7B91CFD2A6C34544AA3786E04FE9B2360213D44A05961AEAFC0FD9384E4514B8",
+      "checkout_sha256": "B9E565D86DF64F8D4F2BF95B3C299B2B2A8DFC8AFFFE998A415D9F59E4E9B22F",
+      "expected": "B9E565D86DF64F8D4F2BF95B3C299B2B2A8DFC8AFFFE998A415D9F59E4E9B22F",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_81.bin",
+      "git_blob_sha256": "3BBC78181E5FB3CBA8AF4BA39939C2319F44736A201FF206F00373EDA5271D90",
+      "checkout_sha256": "C30DAEE928710273F37E70A2395C9A2D0C800230CABE25EF60EC79CF59C6E873",
+      "expected": "C30DAEE928710273F37E70A2395C9A2D0C800230CABE25EF60EC79CF59C6E873",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_83.bin",
+      "git_blob_sha256": "2C85327C4E8BA05FC1B1B15A19EA208B3EDE88B1FD074F159157F4BA9039A34D",
+      "checkout_sha256": "FB16440882F71E64E2FD3D6360E30045B292D9AB1550D598994953670BC29529",
+      "expected": "FB16440882F71E64E2FD3D6360E30045B292D9AB1550D598994953670BC29529",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_85.bin",
+      "git_blob_sha256": "BD597DFA08AEC1EBF8BEE03689131DC1A65B2BCD8AADEF386708206D2A2A3F06",
+      "checkout_sha256": "F7F54904BDF05BAEB8928E10FC18E507DDC19FE32BF4389F9E6D90CC6D1F3014",
+      "expected": "F7F54904BDF05BAEB8928E10FC18E507DDC19FE32BF4389F9E6D90CC6D1F3014",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_87.bin",
+      "git_blob_sha256": "2799614A4F656BE9AE8403A5EA8358A85CD32ADF6D107966ABCF1361F7D0E368",
+      "checkout_sha256": "4CEA73F8050C2CEFD0976B179E25137FADFA5895B63A6EA595C684565FD279E7",
+      "expected": "4CEA73F8050C2CEFD0976B179E25137FADFA5895B63A6EA595C684565FD279E7",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_89.bin",
+      "git_blob_sha256": "2BE58EEF3FBFBBB34C529E47EE609F9AD3F042AACFC37625C70C0F235FE33526",
+      "checkout_sha256": "1F1BCFC876B5034FFA47D424983B2AC86855E7293AFA9F965D4F2FBB9ADAA238",
+      "expected": "1F1BCFC876B5034FFA47D424983B2AC86855E7293AFA9F965D4F2FBB9ADAA238",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_90.bin",
+      "git_blob_sha256": "576394BB69294A8B63334BEECED7F3A1BE52C21F23B7F70A896AE56E1126D1D8",
+      "checkout_sha256": "06C29A4C51B75D7FBAC649AE71764750A55B6A534EC5154746E8730DEEA8B073",
+      "expected": "06C29A4C51B75D7FBAC649AE71764750A55B6A534EC5154746E8730DEEA8B073",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_91.bin",
+      "git_blob_sha256": "92E05DE18A80386A66E13DCCA9E95A7E658322FE599C91CB12A1D95EEBBD3F2E",
+      "checkout_sha256": "09B2CE397A6FB7EC22FCDEE06345D7F5F39C2DD7D8E4D0DBD70F4ED3D37ECFA4",
+      "expected": "09B2CE397A6FB7EC22FCDEE06345D7F5F39C2DD7D8E4D0DBD70F4ED3D37ECFA4",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_92.bin",
+      "git_blob_sha256": "E3339BAE11FB4353AEB79A4E8084D677ACF21E6BB6C3EA69A387AE5CEC0B10B5",
+      "checkout_sha256": "38EA3E38259E71E118E1FCF72D656C8B6157F7CBF4FBAC67724DCA42AA733172",
+      "expected": "38EA3E38259E71E118E1FCF72D656C8B6157F7CBF4FBAC67724DCA42AA733172",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_94.bin",
+      "git_blob_sha256": "DC2C5E8F6D920C6001310D6165060124F0BADF94C841480CC870E17E14CD7513",
+      "checkout_sha256": "6831274E194F1C7A27A835366EB63366AA776F2589A473D779269A472D0C706D",
+      "expected": "6831274E194F1C7A27A835366EB63366AA776F2589A473D779269A472D0C706D",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_96.bin",
+      "git_blob_sha256": "EE3C7393569D277379639CE4255CA1FBC4CE6B9EE8A95B82638C599D49C9A973",
+      "checkout_sha256": "2DFDE5A8B94AEBAF65CA023E9E89AAFBD3A8E8B9A0A717E1D92494265BB17C01",
+      "expected": "2DFDE5A8B94AEBAF65CA023E9E89AAFBD3A8E8B9A0A717E1D92494265BB17C01",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_97.bin",
+      "git_blob_sha256": "9F2FC003EBF019ADFE727A5E2F2B01F95F8497D2F76AF94205A6A7663FD61380",
+      "checkout_sha256": "7E56571966DEF2D66B97F2491E9ABB57F76E68AA0F3A96E139FA57B6E6585AAC",
+      "expected": "7E56571966DEF2D66B97F2491E9ABB57F76E68AA0F3A96E139FA57B6E6585AAC",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_100.bin",
+      "git_blob_sha256": "AB905971FD46724DE5F0443736D61A76F0915AEE819385B44C10E4DF5C9C42A8",
+      "checkout_sha256": "186AC2754D1566F97EC122032FCA5D1E21E70D991A2073A813A35597FE1CF87A",
+      "expected": "186AC2754D1566F97EC122032FCA5D1E21E70D991A2073A813A35597FE1CF87A",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_101.bin",
+      "git_blob_sha256": "3188813C5E1507405FBB6D2E6D09408A40BB397C29DB81301ED18A54F5E10233",
+      "checkout_sha256": "F32C479F32B2E7B970C55F5CBA6D4E427B66390C8E675AC00BEA58EB111DD748",
+      "expected": "F32C479F32B2E7B970C55F5CBA6D4E427B66390C8E675AC00BEA58EB111DD748",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_103.bin",
+      "git_blob_sha256": "042CB8793E9C7EA2077F897D55F3623941A93EE7CDBD3A7B7803DE31E242228D",
+      "checkout_sha256": "1792F20D99A3BD87149C787097A374345039885A3D2474A01D2D91D275AEA3A0",
+      "expected": "1792F20D99A3BD87149C787097A374345039885A3D2474A01D2D91D275AEA3A0",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_104.bin",
+      "git_blob_sha256": "D42D9C118436D1529B6EC705F5753F61BC7BCABA9262A4C176EE90B3083786F7",
+      "checkout_sha256": "8A1AEFE8B6682863FCCACA25E7479BE54057C3FA51E282FD9AB6E1FE96716D05",
+      "expected": "8A1AEFE8B6682863FCCACA25E7479BE54057C3FA51E282FD9AB6E1FE96716D05",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_105.bin",
+      "git_blob_sha256": "509989303535EAFFBB0D2A0D26792DAC37AFA0A254D9EAC873FDE89557587CCE",
+      "checkout_sha256": "87C4B7DBD4EC37FB12EFC406ACFC67FE777F32890C1181518B75BBADC6042CEB",
+      "expected": "87C4B7DBD4EC37FB12EFC406ACFC67FE777F32890C1181518B75BBADC6042CEB",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_107.bin",
+      "git_blob_sha256": "FBADB3D551BA6C1BB7D32FC5E7E776D8B9D14607BACC9AB0BDE0A52D0B9DE103",
+      "checkout_sha256": "558FA031E96914EE43BB0D89FC6615EE394001E8D7AB16F1E1E106C974053842",
+      "expected": "558FA031E96914EE43BB0D89FC6615EE394001E8D7AB16F1E1E106C974053842",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_110.bin",
+      "git_blob_sha256": "FF057BBC562FA0F63E523D80BB8F553A98D910F1C1E738009CD926B2B5C08E5E",
+      "checkout_sha256": "6F1CF6DB46D6C14F7AA60BA8FECB43416EEC320E069A8AC6B4C1293200032E01",
+      "expected": "6F1CF6DB46D6C14F7AA60BA8FECB43416EEC320E069A8AC6B4C1293200032E01",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_112.bin",
+      "git_blob_sha256": "E2EA467A11C614471BEDCA12236CEFF778ADFC0DD399E9FEC654D346744DD5A0",
+      "checkout_sha256": "F58CB28E05D94C92CEBC3EC9CC1B6848710F514D64C4583B5F5A27C89F58648D",
+      "expected": "F58CB28E05D94C92CEBC3EC9CC1B6848710F514D64C4583B5F5A27C89F58648D",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_114.bin",
+      "git_blob_sha256": "AB2EFCB95E18878A2A6E71097329ED42C710AD7C9626CC05CE66FBDF7292D8E6",
+      "checkout_sha256": "F61E238BF4D5EF5329A92AD739985256EDC147BE5E85726B77E7859D1F26444B",
+      "expected": "F61E238BF4D5EF5329A92AD739985256EDC147BE5E85726B77E7859D1F26444B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_116.bin",
+      "git_blob_sha256": "A3E1AFDB6995CDF0E85E7E74F2C74B3AAA53EFE3EC58781D98AE61EF3EB01666",
+      "checkout_sha256": "F8D5A088992AF4A3B26481F0BB47174DC2EEAEE7395C548E37D0FC848A23AD01",
+      "expected": "F8D5A088992AF4A3B26481F0BB47174DC2EEAEE7395C548E37D0FC848A23AD01",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_118.bin",
+      "git_blob_sha256": "4A04385A09203A9DC07C66E905DBCFA9F2D02B790FD999D4DFEE003DE4AB3AAF",
+      "checkout_sha256": "97FD84F800B0B7997CE613C0ECE3466E99D326062AD8D793CE78BC94E52AAEFA",
+      "expected": "97FD84F800B0B7997CE613C0ECE3466E99D326062AD8D793CE78BC94E52AAEFA",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_120.bin",
+      "git_blob_sha256": "A66D4CC47AE05C30B0BC5D12DC57DAF97C08A4FCEA049FE0BD0DF1A941159CDF",
+      "checkout_sha256": "7ABB504DE247FCE3B4D1B61DDE7B3718DE3153C17AD0F8D0C76EA8BF5BC75F65",
+      "expected": "7ABB504DE247FCE3B4D1B61DDE7B3718DE3153C17AD0F8D0C76EA8BF5BC75F65",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_121.bin",
+      "git_blob_sha256": "6E76401932A3429BEEAD4C1CB64243E4B1F5A486658E445C89B0A15553ACE8A5",
+      "checkout_sha256": "F1E1EF3D7A5227B44779DD5C0D6CCFE59A62B0D4136B8272C05454B79873AC00",
+      "expected": "F1E1EF3D7A5227B44779DD5C0D6CCFE59A62B0D4136B8272C05454B79873AC00",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_122.bin",
+      "git_blob_sha256": "A63FF82FB41F008097A08583DEDE2251CB1B7ACCBA22AACBE869D9915B64D953",
+      "checkout_sha256": "6028D9543ACA6368BF6E92CD2180F46C4999304399F7187FA4B27456FE86084D",
+      "expected": "6028D9543ACA6368BF6E92CD2180F46C4999304399F7187FA4B27456FE86084D",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_123.bin",
+      "git_blob_sha256": "300228FE2B68FC46749F788A1F1D83B9EEB01F3806E9A9832FE1BB69601DAB35",
+      "checkout_sha256": "D4A96B6179D25CEF2F47A3E0955ED3643430E4A9EC09E4716682078D0757F676",
+      "expected": "D4A96B6179D25CEF2F47A3E0955ED3643430E4A9EC09E4716682078D0757F676",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_124.bin",
+      "git_blob_sha256": "71FB93908FADF440EAFE4859C6DC62334CD258AC2FC3E0F88CA16174A99BE16B",
+      "checkout_sha256": "F9B0DF2F737C1424B6530CA1092D3B71F6FBCE3867873E532B8269C6C34BA07A",
+      "expected": "F9B0DF2F737C1424B6530CA1092D3B71F6FBCE3867873E532B8269C6C34BA07A",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_126.bin",
+      "git_blob_sha256": "35160807EF2D68D32EB11CF4AEFDCAE9FE04AD777D536013E87AA48F574642E1",
+      "checkout_sha256": "375FAA1DE5A11BECDB3EEC0048574A81515050333E388CE463516F0D0B33C3C9",
+      "expected": "375FAA1DE5A11BECDB3EEC0048574A81515050333E388CE463516F0D0B33C3C9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_127.bin",
+      "git_blob_sha256": "642C258BFF75D050DF9F371BE725ED63F753DBBD9AD5C9090C18FE5046C53F58",
+      "checkout_sha256": "00C26A46F8539AE9F71E5321CD347FCE057542EE207C495A957021916644F245",
+      "expected": "00C26A46F8539AE9F71E5321CD347FCE057542EE207C495A957021916644F245",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_128.bin",
+      "git_blob_sha256": "F4B1B609A781BB911E6D795FA7EFA7153F7AF99C18F170A6FF72154399EC34F8",
+      "checkout_sha256": "4DA39C9A21C224F90FFFF60A80AE97D69ECAF67AF66B033C51841A1CCA2D5765",
+      "expected": "4DA39C9A21C224F90FFFF60A80AE97D69ECAF67AF66B033C51841A1CCA2D5765",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_129.bin",
+      "git_blob_sha256": "9186A3231FC64BDE67B0927F4D7D5BABDE84478A6A4BF589DC11F2AD7BB48F83",
+      "checkout_sha256": "7818FE930E3DC2FFD0628C797773B4A4A6F8398B3CCD423CEB3440B2B472486E",
+      "expected": "7818FE930E3DC2FFD0628C797773B4A4A6F8398B3CCD423CEB3440B2B472486E",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_131.bin",
+      "git_blob_sha256": "2A0C1D98699C9941CA0402D43E07F72B3071E3C81BB29F8398ACF32A8DB704FF",
+      "checkout_sha256": "AD6F8B586A10F94D6746C6292ED0D983FE2500AB729390B292F4F0EDABECA312",
+      "expected": "AD6F8B586A10F94D6746C6292ED0D983FE2500AB729390B292F4F0EDABECA312",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_132.bin",
+      "git_blob_sha256": "0B9C0A3CF01F250AF7F1317EDC045FFE1216EB8F05D570DDDF7C3EA97988DC2A",
+      "checkout_sha256": "2A8CCDEC6C69E4EFDD6120C2C4B0EAB31F21CA503521C4717F62D6648253F257",
+      "expected": "2A8CCDEC6C69E4EFDD6120C2C4B0EAB31F21CA503521C4717F62D6648253F257",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_133.bin",
+      "git_blob_sha256": "1AC9A29055CC6BE6AC47D0D01C771949EE97D6B72C7864E1A85211B8BC472399",
+      "checkout_sha256": "6B0BA5967E1C67D8FFFFA0124BEA4C2BA4E9F3A7F39B37728D3FB6D0FE8252E2",
+      "expected": "6B0BA5967E1C67D8FFFFA0124BEA4C2BA4E9F3A7F39B37728D3FB6D0FE8252E2",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_134.bin",
+      "git_blob_sha256": "070E8B571A1B8BE65ECCCE48635B50C4B3C1FAC4F219A3BCEF7AC237D5B345C1",
+      "checkout_sha256": "2C432BBE7CC8EC36FD2C9774459688BAE5117CD183F4AAFA430C47D2AF0B228B",
+      "expected": "2C432BBE7CC8EC36FD2C9774459688BAE5117CD183F4AAFA430C47D2AF0B228B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_135.bin",
+      "git_blob_sha256": "BB93CCAF2F47362C9963B70A9B01699C2EE507E3A7DB1DDB34C072666EA36D30",
+      "checkout_sha256": "99D14E446B8A64327634567D7330265CEE0FC4A8C6083075B6C6A958D27D129E",
+      "expected": "99D14E446B8A64327634567D7330265CEE0FC4A8C6083075B6C6A958D27D129E",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_136.bin",
+      "git_blob_sha256": "D8C843D564AE6B95BC3C7E31E4680C825B5E2C10EF7E646C015A57D73225F7C8",
+      "checkout_sha256": "7D81C2E7F0EF697FD7853C19445756402C7DBF3E2CD5375AE05123E509472C62",
+      "expected": "7D81C2E7F0EF697FD7853C19445756402C7DBF3E2CD5375AE05123E509472C62",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_137.bin",
+      "git_blob_sha256": "F3A40C0803BBD101E234DEC59C8B26EA0DBB3DB91A1BAF52040D81A57ADAA493",
+      "checkout_sha256": "6E5083D9E77879209EEA7A4AB8D71CD07699278E58562AB9C540D5B7D20E9F3F",
+      "expected": "6E5083D9E77879209EEA7A4AB8D71CD07699278E58562AB9C540D5B7D20E9F3F",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_138.bin",
+      "git_blob_sha256": "762BAF652C898E7D3C547C81793F56AE50540405523D3B2F94D3409E128D7680",
+      "checkout_sha256": "1FA7152B719853759418771D4A624AC89F0FF23D98861F0C584A6707EB63B325",
+      "expected": "1FA7152B719853759418771D4A624AC89F0FF23D98861F0C584A6707EB63B325",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_140.bin",
+      "git_blob_sha256": "B74F509E70B4BCD1268A4CFB0760F709039EF0CC6DB35CFAD310CC441C9258CE",
+      "checkout_sha256": "316FBA406D279700BD79CBEF593D1E96774A16AE1A118D34D5AF448610179F23",
+      "expected": "316FBA406D279700BD79CBEF593D1E96774A16AE1A118D34D5AF448610179F23",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_141.bin",
+      "git_blob_sha256": "877E3599B90DBBBB9DDD8F0828ECD8D45CA3C5527A8821E8D38C064C27911080",
+      "checkout_sha256": "EB30988519952BCA874545C1F614996CA720EA470ABE563DFED234A87E76C355",
+      "expected": "EB30988519952BCA874545C1F614996CA720EA470ABE563DFED234A87E76C355",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_142.bin",
+      "git_blob_sha256": "79A99FDDDD6D63BCB3E0A5F2FB52359290F2E79E49ED933B336FE0862895B298",
+      "checkout_sha256": "EA4A15C1C272E079DD4FF78BF2698497324A0D450A5342BB9B6A0293E821594B",
+      "expected": "EA4A15C1C272E079DD4FF78BF2698497324A0D450A5342BB9B6A0293E821594B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_143.bin",
+      "git_blob_sha256": "C2BE49D76EA7543F17A6B4FD7834E0D678A21D152252181B104E51D733E50593",
+      "checkout_sha256": "51D72FB6CBD194C404F9444B944EFEB34345ED5DC344A11CFF09A821D8C4F2CB",
+      "expected": "51D72FB6CBD194C404F9444B944EFEB34345ED5DC344A11CFF09A821D8C4F2CB",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_144.bin",
+      "git_blob_sha256": "823740C0BF169F64914F1095D7B2FE81678EE0BA02A9E8201AC7493F4F385988",
+      "checkout_sha256": "D9718B2DFC07E82EECD0FDA7CF01E368494BDF9E4224DE15523C94741C0705A5",
+      "expected": "D9718B2DFC07E82EECD0FDA7CF01E368494BDF9E4224DE15523C94741C0705A5",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_148.bin",
+      "git_blob_sha256": "4AACEF68E103DA6991B7A43F38AEA6025AA19CD7D0A14B41804BF2DA91EAC985",
+      "checkout_sha256": "A2367A6EEBEEEE1372D33C61EA309D16C94D9B0213D3FCBA8A24F6682EFA0C47",
+      "expected": "A2367A6EEBEEEE1372D33C61EA309D16C94D9B0213D3FCBA8A24F6682EFA0C47",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_150.bin",
+      "git_blob_sha256": "939352CFCFD4EE024DB07253A042912957E2A074E472B170B4CABF79EF70D472",
+      "checkout_sha256": "BA42D5CDDA1F06A019D94E7BC8E9BAF1A1D78C27054C73A589FB2AD2431201E9",
+      "expected": "BA42D5CDDA1F06A019D94E7BC8E9BAF1A1D78C27054C73A589FB2AD2431201E9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_152.bin",
+      "git_blob_sha256": "76D174F6F607D8F974A74BFC6373CBFE7DCD32092F0B88BFD6E7223F429FB730",
+      "checkout_sha256": "FB9BCB4FEF942F9CDE10CAEBFDBE867D138DC352C9786BC7DBA5DCA5497FAC84",
+      "expected": "FB9BCB4FEF942F9CDE10CAEBFDBE867D138DC352C9786BC7DBA5DCA5497FAC84",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_153.bin",
+      "git_blob_sha256": "00EFC7245E504BF3A512674F4DF88539B3A34477961EF56576453967B7F77670",
+      "checkout_sha256": "6C72FBD98D06F3F34744D32547C2C0A54E019CDC39D18CCD69B247A7FD648D2C",
+      "expected": "6C72FBD98D06F3F34744D32547C2C0A54E019CDC39D18CCD69B247A7FD648D2C",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_155.bin",
+      "git_blob_sha256": "E86798D965CA39FFFCFFAD20D4F035DC948CFE1BBDE01A4445E0716D234F66FF",
+      "checkout_sha256": "42AA2E97E137A0FF6B34B50727AF272C5B785C56066E5D66EF5B13802AEBFB73",
+      "expected": "42AA2E97E137A0FF6B34B50727AF272C5B785C56066E5D66EF5B13802AEBFB73",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_156.bin",
+      "git_blob_sha256": "ADD3A5CE313AABC4D11FC13545C75B1D7D4B467C062A87C66507D4EEA6039EF0",
+      "checkout_sha256": "7A4CD0B39A42BEFED06EBA415E247D66B4186234257FE3D1A59F37575CF9DD85",
+      "expected": "7A4CD0B39A42BEFED06EBA415E247D66B4186234257FE3D1A59F37575CF9DD85",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_157.bin",
+      "git_blob_sha256": "92EC770270FB0A68CE8C7F9EDAEDBB2F8F248F4028C2E7AA8E4C8AE62B20A1A7",
+      "checkout_sha256": "E0B92FF6CB61AC75BF7D64C5496D49181CFA6613917DCAD711187349AABE1EC9",
+      "expected": "E0B92FF6CB61AC75BF7D64C5496D49181CFA6613917DCAD711187349AABE1EC9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_158.bin",
+      "git_blob_sha256": "41F6811BF4BDC9FB78FF8C93454B912D5B7BB63D48A9C74C0647B8DEBBF0CACF",
+      "checkout_sha256": "7E7EE82394031EB51C396E7FD50523F1B23CF387CA1F4A3EBDC40E595D5118A8",
+      "expected": "7E7EE82394031EB51C396E7FD50523F1B23CF387CA1F4A3EBDC40E595D5118A8",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_159.bin",
+      "git_blob_sha256": "C17AB1165D4EAF9B8293FEC09657AA9138B6629826B883780CD1057FBC3894C3",
+      "checkout_sha256": "7DDDBE239609AAD139C0B3A4CF65E234CC2012E6C8739AE71D76C129757B3200",
+      "expected": "7DDDBE239609AAD139C0B3A4CF65E234CC2012E6C8739AE71D76C129757B3200",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_160.bin",
+      "git_blob_sha256": "CAA4C021F3965A849945F89880D0BE51C8BDC0B42504371888CE2A01E360ED91",
+      "checkout_sha256": "4AB21180629E921C1E7F0B8083EA3E49F9ECE100CC5F64A7BDB2BF161993D6B0",
+      "expected": "4AB21180629E921C1E7F0B8083EA3E49F9ECE100CC5F64A7BDB2BF161993D6B0",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_162.bin",
+      "git_blob_sha256": "1F2D14B0C3946F8FB257A12C6779A4D5EC7523441E50AC3DD5A1E06DB546CA48",
+      "checkout_sha256": "A49343CC93CB4A5963A23E53C220AD51B936D60458CE69AC62247231EA2D6BB6",
+      "expected": "A49343CC93CB4A5963A23E53C220AD51B936D60458CE69AC62247231EA2D6BB6",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_163.bin",
+      "git_blob_sha256": "3C70531B5CA0E8AC9BDCD620D011C8C45A67AB11F013D2066AC72181078E9158",
+      "checkout_sha256": "BC9613C1963A9CF8604A616D3DCD2A4885A9EB7DC27A55E913641557B5B00AB9",
+      "expected": "BC9613C1963A9CF8604A616D3DCD2A4885A9EB7DC27A55E913641557B5B00AB9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_164.bin",
+      "git_blob_sha256": "B70A57F29B7448C22240F6649AD07C4D52B8E97FBA582A84EFE937E84D1BE845",
+      "checkout_sha256": "EFE0A45CA06B5F8EECF1E354A5C34B961D6CB6A514DE23996852A9343B6F9039",
+      "expected": "EFE0A45CA06B5F8EECF1E354A5C34B961D6CB6A514DE23996852A9343B6F9039",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_166.bin",
+      "git_blob_sha256": "BAFCB8EEAE68C820F8ABD7BBF322099E51D73175CF7015271E90FC163D1DFE3D",
+      "checkout_sha256": "0CCFE4170EE3F6C6C20D2684003610DB06E190CB7F8AB2B66A928DE909265F7B",
+      "expected": "0CCFE4170EE3F6C6C20D2684003610DB06E190CB7F8AB2B66A928DE909265F7B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_168.bin",
+      "git_blob_sha256": "FB8238AACCD6E288168085CFADB8D42A42A64BF61BFE998D0D07BCC4DDF1634A",
+      "checkout_sha256": "14FAEBE47A818C6660D2E1140CF3DC22D8C577E720962FF9EEEC059F73F47BA5",
+      "expected": "14FAEBE47A818C6660D2E1140CF3DC22D8C577E720962FF9EEEC059F73F47BA5",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_170.bin",
+      "git_blob_sha256": "CD28AD3022E7432AFC856CFC67045065F8DD1B2C09B1557B02B11136BBC49944",
+      "checkout_sha256": "E8B2FBD7E0C892544185DC287F3775FA00126FCCAB204224AE661A8B57D5EBCB",
+      "expected": "E8B2FBD7E0C892544185DC287F3775FA00126FCCAB204224AE661A8B57D5EBCB",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_172.bin",
+      "git_blob_sha256": "86FAAE4E98B25714BD2698BA8B02E199A11D5287443BFB4090A7C29F789E3A0F",
+      "checkout_sha256": "1CF983BED463DA9DFEA181E594EF74F2BDCD9CC09BF8EE165557C3F5F4F5739D",
+      "expected": "1CF983BED463DA9DFEA181E594EF74F2BDCD9CC09BF8EE165557C3F5F4F5739D",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_174.bin",
+      "git_blob_sha256": "3836772EBB7BA6A5D9229296DBA632D3FE2863556A66EAF6432EDDFEB117D8F1",
+      "checkout_sha256": "4EBF9E2475BBC74C5E8F143AEF5E12AAFC018ED50CBA50DCB0D1736CAB980B61",
+      "expected": "4EBF9E2475BBC74C5E8F143AEF5E12AAFC018ED50CBA50DCB0D1736CAB980B61",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_176.bin",
+      "git_blob_sha256": "BA7168FC0CC248FEE851688AB5D0CA4626B7ED0CB63E70F8B1346F83A5D2C50A",
+      "checkout_sha256": "B753BC3CC6F0E026433AF9BB473ABF6CE92A7A9ABCF27D27FFEFB63FD8481FA4",
+      "expected": "B753BC3CC6F0E026433AF9BB473ABF6CE92A7A9ABCF27D27FFEFB63FD8481FA4",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_178.bin",
+      "git_blob_sha256": "EC6C7D008BE1066CF1AD3F4604CCD4E345B2F06E76D7E32B41660BF3C90BA302",
+      "checkout_sha256": "48C83BE2996A62DD038A3D6CEE2E7B8887BCA3749101F12058355673F99855DA",
+      "expected": "48C83BE2996A62DD038A3D6CEE2E7B8887BCA3749101F12058355673F99855DA",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_180.bin",
+      "git_blob_sha256": "DD8B27BB71AC82B385DE299726D48F95083B50D272A040859DF6FCE99376D804",
+      "checkout_sha256": "F32982C6C131040FF06D50D705946329021EDB307BD196A667735AF7E5DD8501",
+      "expected": "F32982C6C131040FF06D50D705946329021EDB307BD196A667735AF7E5DD8501",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_182.bin",
+      "git_blob_sha256": "A4E97D67928442C75697B634ED82D59E984E6F94C1A8634441E005D004F425AE",
+      "checkout_sha256": "9A5EBB58DB83BE0E3EF53088810AB327B4E3457B4DB552A0AFE5C54D0779B9D1",
+      "expected": "9A5EBB58DB83BE0E3EF53088810AB327B4E3457B4DB552A0AFE5C54D0779B9D1",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_185.bin",
+      "git_blob_sha256": "4DEDA651D0B816733834CE1D943F446106C7D5CD7BDFBD618099DC610A562D2A",
+      "checkout_sha256": "B2A339A9A8E3AE5E1F80D36D85D905157E67230C503CB58CE0B2BCF444A8A7C8",
+      "expected": "B2A339A9A8E3AE5E1F80D36D85D905157E67230C503CB58CE0B2BCF444A8A7C8",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_188.bin",
+      "git_blob_sha256": "4EF5584804FCA75CDB12A663A9660127E591B56B0D446B5867649DDEFFC73511",
+      "checkout_sha256": "BFECC2D497360D145968C534D25C870D0DFACB6A88A8616312E2D82603CBEE35",
+      "expected": "BFECC2D497360D145968C534D25C870D0DFACB6A88A8616312E2D82603CBEE35",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_189.bin",
+      "git_blob_sha256": "D8A4700C6FBE516CC7265287425C803CF475301FDBF07C47E9B7937F9FAFEF62",
+      "checkout_sha256": "B191949504DA91BC9C3757F8E4CD82A8A3C0A6791C60CC0C14BC0FFF0123D990",
+      "expected": "B191949504DA91BC9C3757F8E4CD82A8A3C0A6791C60CC0C14BC0FFF0123D990",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_190.bin",
+      "git_blob_sha256": "0A12AFB00F2C1901A62F499B80F5EC8E5CBD69EE9680F3D9291D1DA638436DD0",
+      "checkout_sha256": "C3E107C026F471827BA264D7D5850F751EB9B9C68176822874FC8B22733B1BE2",
+      "expected": "C3E107C026F471827BA264D7D5850F751EB9B9C68176822874FC8B22733B1BE2",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_191.bin",
+      "git_blob_sha256": "801FF425FF33B843A821DAA52D1459D3C4137A7D0840EACA2B61FC80D0698089",
+      "checkout_sha256": "5B6D654433658ACF66662F796DF78909BBE485FB12859426470F4F85857D87FA",
+      "expected": "5B6D654433658ACF66662F796DF78909BBE485FB12859426470F4F85857D87FA",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_192.bin",
+      "git_blob_sha256": "7139EB5C67616DD3042B53E450D3D52D88C11D2518D1EBEB77B76348039BF9A4",
+      "checkout_sha256": "D33D206A0638CCE26E3E0949F64256D7B04578DF4804D5D7F5D5C0D13E43DAC2",
+      "expected": "D33D206A0638CCE26E3E0949F64256D7B04578DF4804D5D7F5D5C0D13E43DAC2",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_193.bin",
+      "git_blob_sha256": "63992F8C167ED693EBBE4235DD4130B7DCAABFEB267219A0003D6FC7710D0826",
+      "checkout_sha256": "3E049F7BD487DE539278D89FDB33EEF6312D8ED204E8E658322631A3A5DE6AC3",
+      "expected": "3E049F7BD487DE539278D89FDB33EEF6312D8ED204E8E658322631A3A5DE6AC3",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_195.bin",
+      "git_blob_sha256": "F7238065EC5311DEEF8EE15055F20CEA9D5B63FF22B011ED32E88C4EC8242D70",
+      "checkout_sha256": "945A97088D9B1F28B46C64DE13BBD015DF5A5758FC28A47C278E95DD83C0456B",
+      "expected": "945A97088D9B1F28B46C64DE13BBD015DF5A5758FC28A47C278E95DD83C0456B",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_196.bin",
+      "git_blob_sha256": "7AA1A212AE9DB2DF42D8A5EC7B0C8935B5E8121907A242BFE731A56E82130705",
+      "checkout_sha256": "5549F4FEDC206C76CA7AB2F907A931737B71160312F3B18E678C6460291F1F2F",
+      "expected": "5549F4FEDC206C76CA7AB2F907A931737B71160312F3B18E678C6460291F1F2F",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_198.bin",
+      "git_blob_sha256": "F9B032E17E7197FF2BE788A78DB34C22211C0DDF44F64823401D663754810726",
+      "checkout_sha256": "B05FAEB84176293956827E3B8BEFBEBAAF7053E954225FABDF365E7607B298F2",
+      "expected": "B05FAEB84176293956827E3B8BEFBEBAAF7053E954225FABDF365E7607B298F2",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_199.bin",
+      "git_blob_sha256": "F8D39B90E5C67BD18BE68D04A4C4E95A6349B9C9C8D20E703889DEF41119B523",
+      "checkout_sha256": "FFE0CACF843837883B5BBAD6141FF45E5F71BFCA1901E90AA362D7C71AD3CAB3",
+      "expected": "FFE0CACF843837883B5BBAD6141FF45E5F71BFCA1901E90AA362D7C71AD3CAB3",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_200.bin",
+      "git_blob_sha256": "4C1AEA867929ABC4789209CC6BAB0119CD9FAFD9FB4B5D03F845A95A364B25FF",
+      "checkout_sha256": "3CCD3012A21ACA2A71EBE2D94349E247E3CBC7566B61CD50DDC1DA16891C6A9C",
+      "expected": "3CCD3012A21ACA2A71EBE2D94349E247E3CBC7566B61CD50DDC1DA16891C6A9C",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_202.bin",
+      "git_blob_sha256": "0A43810CE8BDB2C6D25522D6E82F1FFA0A598F2C4AAE0091BAD785B60E56E09F",
+      "checkout_sha256": "A58D38AC157CCA4260E1738152BE32FB1CA7886C1B72AEF7303124F75DA3F9B2",
+      "expected": "A58D38AC157CCA4260E1738152BE32FB1CA7886C1B72AEF7303124F75DA3F9B2",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_204.bin",
+      "git_blob_sha256": "DB8A0D392A398A7AFB5505B600D0FF6A1EC520FF58C2746D19B8A333544420C6",
+      "checkout_sha256": "7E33CB8CBCEE3F46ED4AB1EB123B40BF0FF813728A125831B2ED09CF034A05F9",
+      "expected": "7E33CB8CBCEE3F46ED4AB1EB123B40BF0FF813728A125831B2ED09CF034A05F9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_206.bin",
+      "git_blob_sha256": "4FB583A514D6A2F2F44FC62388547E0CC62CC8A1F585566AF1F1E1CE622C19C7",
+      "checkout_sha256": "A8D3BD1BA9DE98A6294C551FD7CAA67120C671E27EEFEA42A54BF894DB4E12E7",
+      "expected": "A8D3BD1BA9DE98A6294C551FD7CAA67120C671E27EEFEA42A54BF894DB4E12E7",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_208.bin",
+      "git_blob_sha256": "D95B098EB130EFE6E6020F1E2851B5B6ADCE8A59DC329D6D9CE740D80D7BDFD0",
+      "checkout_sha256": "B991586A7D02E98A8B30493A4E7F69B2B2AEE6DC8E7694990E8CE875C3FC1BD6",
+      "expected": "B991586A7D02E98A8B30493A4E7F69B2B2AEE6DC8E7694990E8CE875C3FC1BD6",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_209.bin",
+      "git_blob_sha256": "57DAAD31F95B787775C73DAAF0D05105C568614CF32EDC1CAE6E6E57B57AFF9D",
+      "checkout_sha256": "485032D752413004717748A623294147EAEB0B3DDF8C0F2CF59C5EDA61CA5E95",
+      "expected": "485032D752413004717748A623294147EAEB0B3DDF8C0F2CF59C5EDA61CA5E95",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_210.bin",
+      "git_blob_sha256": "7F6DFEB83209BE8E8E89562B0D5170F4CC0CD8711640C61356BB90EF8FF406D6",
+      "checkout_sha256": "2753BE02FD75A2E1951FC49E9CAB9E38DCABFB98507D7F0E536404CF45C96819",
+      "expected": "2753BE02FD75A2E1951FC49E9CAB9E38DCABFB98507D7F0E536404CF45C96819",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_212.bin",
+      "git_blob_sha256": "524D225D14406E3567F49B0A1E693572320011692B6A0690311407F09163AF86",
+      "checkout_sha256": "4FB1D239928BC4D829392C63AB3097FF51E46EC381593B9BA626912AB98AC14E",
+      "expected": "4FB1D239928BC4D829392C63AB3097FF51E46EC381593B9BA626912AB98AC14E",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_214.bin",
+      "git_blob_sha256": "FE4C53FBA61534D7ADA0CC72C5CFF7A4267B78D3788D9BBC71A709642803FC45",
+      "checkout_sha256": "2CDE518C09B5DD8C77DC508EBE5410FC712B35AD5C27619D63678A35F1E8C12F",
+      "expected": "2CDE518C09B5DD8C77DC508EBE5410FC712B35AD5C27619D63678A35F1E8C12F",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_216.bin",
+      "git_blob_sha256": "DB6707CA76B3721C92C08A020F7733649A89FEADE57498BF1A2D18C904746BFF",
+      "checkout_sha256": "4E3958E44CAB638CD50DA2E2139AA0631E883256F26D6954B1C777A64B17FBAE",
+      "expected": "4E3958E44CAB638CD50DA2E2139AA0631E883256F26D6954B1C777A64B17FBAE",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_218.bin",
+      "git_blob_sha256": "B46664B09639875879136A01089EFF7ACD7953B4E5059F5FBDF0D8CDFB60A26F",
+      "checkout_sha256": "6BF74DED436501F8541C34428AD52C0C23B1D10A018EB16653CFB1A8F25318D5",
+      "expected": "6BF74DED436501F8541C34428AD52C0C23B1D10A018EB16653CFB1A8F25318D5",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_220.bin",
+      "git_blob_sha256": "010BCD4A36F6F67E904986D5CBD7153F85A59A1BBB116C66387294ED2F240146",
+      "checkout_sha256": "817D79EB51F0913F41A16872AC12D5ED82B4636BAE401C42BD04087477F40FE9",
+      "expected": "817D79EB51F0913F41A16872AC12D5ED82B4636BAE401C42BD04087477F40FE9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_222.bin",
+      "git_blob_sha256": "471B21CEDD34E143CD07BED13ED379138FD14CD7251A2EBB7F43510A0A4735EB",
+      "checkout_sha256": "9F033E6729A6AF9849E500F04C927C7593094992E313EC0F34A309FD661B122A",
+      "expected": "9F033E6729A6AF9849E500F04C927C7593094992E313EC0F34A309FD661B122A",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_224.bin",
+      "git_blob_sha256": "A0846ACD88989843D24B4CEA3F5C181876F9CB91F28B2AFF22523785C17F5F4D",
+      "checkout_sha256": "32C1659999392D55443FAED1EFD1730D1FF8EAABB3F66A9000859C1FCD1539D8",
+      "expected": "32C1659999392D55443FAED1EFD1730D1FF8EAABB3F66A9000859C1FCD1539D8",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_226.bin",
+      "git_blob_sha256": "3D105D74D1B3B4AE803AF4FD6549EB70284672DBB0C2225D4C1E9D06F76CCFCD",
+      "checkout_sha256": "B1D687221578667548B62CB336657CDB8F8D9587C596BCEED0E4C638B2407560",
+      "expected": "B1D687221578667548B62CB336657CDB8F8D9587C596BCEED0E4C638B2407560",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_227.bin",
+      "git_blob_sha256": "79414F0F7725D88FB55756703CE18BD128E461377BE17E32D00BE7C675A12B9F",
+      "checkout_sha256": "7AF5CAC30B377B5727D60BDACB485EC4C930810F392F6548D13403FA3FC1C58E",
+      "expected": "7AF5CAC30B377B5727D60BDACB485EC4C930810F392F6548D13403FA3FC1C58E",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_228.bin",
+      "git_blob_sha256": "DB65C59DC36B49BC6CF4C4A2560198A01EBEEDF3215EE9DD5E7CCA14D41C8B4D",
+      "checkout_sha256": "394E776871A6C03E4C63D4E870EC6829242CB6AF6E35139FA8868CB10D0E4151",
+      "expected": "394E776871A6C03E4C63D4E870EC6829242CB6AF6E35139FA8868CB10D0E4151",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_229.bin",
+      "git_blob_sha256": "FA1DCD118AFAC87E636ADE01ADE3F84863B5865220EC2D7FD12CCAFFAA3239C5",
+      "checkout_sha256": "008F32FD353AEF8D78871DB686707EBE5AF39B680E71DD69A8A8F6FB4F0C8001",
+      "expected": "008F32FD353AEF8D78871DB686707EBE5AF39B680E71DD69A8A8F6FB4F0C8001",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_230.bin",
+      "git_blob_sha256": "2F78CADC4A15E6379E9B021E24E79058CF5003ABD14D5510848FBE54E5502F68",
+      "checkout_sha256": "26509580698F06009F14B99AB15D3E843B2BF91FE7DE7F64223B96548AF3C71D",
+      "expected": "26509580698F06009F14B99AB15D3E843B2BF91FE7DE7F64223B96548AF3C71D",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_231.bin",
+      "git_blob_sha256": "8A586807F2737D8965D6F12C791DB60D6CAEB760B63F275BE9FF79223681B9E3",
+      "checkout_sha256": "E8069083344967A3DF7A72D7F8A1DE9619D2DB9C2B690781554F36E0E5CBB399",
+      "expected": "E8069083344967A3DF7A72D7F8A1DE9619D2DB9C2B690781554F36E0E5CBB399",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_232.bin",
+      "git_blob_sha256": "92B1B7972FB9930CF9D38BA71B39CB3D4460A369E3BBB5180F68A0970D1DB8CB",
+      "checkout_sha256": "C9AB13759811E4751484DECBA6CF774C3EC8C15102350B8D887CBA23F740A002",
+      "expected": "C9AB13759811E4751484DECBA6CF774C3EC8C15102350B8D887CBA23F740A002",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_233.bin",
+      "git_blob_sha256": "84DE3B5E6D828582C77FE2C48937F684952A37DABFCAAABF2C838A95994E887B",
+      "checkout_sha256": "5B5A5893CF1567512986BB73766694792E5F62FA5D3B48FB10FB8F66382688C9",
+      "expected": "5B5A5893CF1567512986BB73766694792E5F62FA5D3B48FB10FB8F66382688C9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_234.bin",
+      "git_blob_sha256": "C2B72C7A1C0E0478D3A98A50961C096196B85BA3ADFBEC9E70FE632A9474070D",
+      "checkout_sha256": "DDB4CC118C4332F1B61964C9B46F9DFBB227F4B09F6E6798AA4CEC3061ABB0CA",
+      "expected": "DDB4CC118C4332F1B61964C9B46F9DFBB227F4B09F6E6798AA4CEC3061ABB0CA",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_235.bin",
+      "git_blob_sha256": "CBC0342812319C9C174B4F8B56DDB79B01162F966C67FDEE945C12B99887AE41",
+      "checkout_sha256": "CFFA8401590699441453D819E4E9AA016A492195567C6EB14019610C790A0BE2",
+      "expected": "CFFA8401590699441453D819E4E9AA016A492195567C6EB14019610C790A0BE2",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_236.bin",
+      "git_blob_sha256": "FD24DE697184A5FBE48BC1D91A8600A09D166769491EBB5A94802881E139A711",
+      "checkout_sha256": "52DC07C780FA6E342ABF43B20A0B5E082085099FCB36AECE7EDDD82006F3658E",
+      "expected": "52DC07C780FA6E342ABF43B20A0B5E082085099FCB36AECE7EDDD82006F3658E",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_237.bin",
+      "git_blob_sha256": "812A9C8328692D468EDD4D8F46C4D672D6CDD5D117AE47C7D97137E18BA2E779",
+      "checkout_sha256": "41268D7CBEAE8A7F2E22D77E08F76963B24AB6E1130C9EFBFE01A97FE721A7E9",
+      "expected": "41268D7CBEAE8A7F2E22D77E08F76963B24AB6E1130C9EFBFE01A97FE721A7E9",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_238.bin",
+      "git_blob_sha256": "87907EEC43807880D31E4FEA2590D37F7F0D58CF51F6EE48CB8ACAE698E07BFD",
+      "checkout_sha256": "84FACF3F02D164BD7E61153AFB4DC8FE3A839D6BC1E61A08B3095E3F2AC60DB7",
+      "expected": "84FACF3F02D164BD7E61153AFB4DC8FE3A839D6BC1E61A08B3095E3F2AC60DB7",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_239.bin",
+      "git_blob_sha256": "F7790765F4BD8D2189AFE5CF02C134511A1E3CB0F75CB75B7800508A3F1439C8",
+      "checkout_sha256": "6F46863CD7143C8F3BD097EC21607BB4A80D627CE3D3F8D3A2DA28DE2D69A295",
+      "expected": "6F46863CD7143C8F3BD097EC21607BB4A80D627CE3D3F8D3A2DA28DE2D69A295",
+      "operation": "LF to CRLF; complete raw SHA match"
+    },
+    {
+      "path": "docs/drop/v5/source/monster_240.bin",
+      "git_blob_sha256": "087F66E71ABBCC3448000B994E50DEA8C695111EBCFF2DFF31DD3EC4AE66A699",
+      "checkout_sha256": "8022BFFEDF3EE0A96E43772E81554261E7C128EE13B341DCA5BFDBBF3DF8B7A5",
+      "expected": "8022BFFEDF3EE0A96E43772E81554261E7C128EE13B341DCA5BFDBBF3DF8B7A5",
+      "operation": "LF to CRLF; complete raw SHA match"
+    }
+  ],
+  "solar_examples": [
+    {
+      "uid": "dpv2.direct.m31.slot_002",
+      "monster_id": 31,
+      "monster": "多钩猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m31.slot_003",
+      "monster_id": 31,
+      "monster": "多钩猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m31.slot_004",
+      "monster_id": 31,
+      "monster": "多钩猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m31.slot_005",
+      "monster_id": 31,
+      "monster": "多钩猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m32.slot_002",
+      "monster_id": 32,
+      "monster": "钉耙猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m32.slot_003",
+      "monster_id": 32,
+      "monster": "钉耙猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m32.slot_004",
+      "monster_id": 32,
+      "monster": "钉耙猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m32.slot_005",
+      "monster_id": 32,
+      "monster": "钉耙猫王",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_012",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920016,
+      "item": "强效太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_013",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920016,
+      "item": "强效太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_024",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920016,
+      "item": "强效太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_025",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920016,
+      "item": "强效太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_026",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920016,
+      "item": "强效太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_007",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_008",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_009",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_010",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_011",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1",
+      "effective": "1",
+      "runtime_draw": "1/2",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_019",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_020",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_021",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_022",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m38.slot_023",
+      "monster_id": 38,
+      "monster": "半兽勇士",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/2",
+      "effective": "1/2",
+      "runtime_draw": "1/4",
+      "priority": 200,
+      "protected": false
+    },
+    {
+      "uid": "dpv2.direct.m41.slot_002",
+      "monster_id": 41,
+      "monster": "半兽勇士9",
+      "item_id": 920014,
+      "item": "太阳水",
+      "base": "1/40",
+      "effective": "1/40",
+      "runtime_draw": "1/80",
+      "priority": 200,
+      "protected": false
+    }
+  ],
+  "profile_sample": [
+    {
+      "id": 18,
+      "name": "毒蜘蛛",
+      "class": "ordinary",
+      "slots": 1,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 19,
+      "name": "蛤蟆",
+      "class": "ordinary",
+      "slots": 13,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 21,
+      "name": "稻草人",
+      "class": "ordinary",
+      "slots": 15,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 24,
+      "name": "多钩猫",
+      "class": "ordinary",
+      "slots": 14,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 26,
+      "name": "钉耙猫",
+      "class": "ordinary",
+      "slots": 13,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 28,
+      "name": "森林雪人",
+      "class": "ordinary",
+      "slots": 25,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 30,
+      "name": "食人花",
+      "class": "ordinary",
+      "slots": 2,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 31,
+      "name": "多钩猫王",
+      "class": "elite",
+      "slots": 42,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 32,
+      "name": "钉耙猫王",
+      "class": "elite",
+      "slots": 42,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 33,
+      "name": "雪人王",
+      "class": "elite",
+      "slots": 0,
+      "enabled": false,
+      "runtime_allowed": false
+    },
+    {
+      "id": 34,
+      "name": "半兽人",
+      "class": "ordinary",
+      "slots": 23,
+      "enabled": true,
+      "runtime_allowed": true
+    },
+    {
+      "id": 36,
+      "name": "半兽战士",
+      "class": "ordinary",
+      "slots": 28,
+      "enabled": true,
+      "runtime_allowed": true
+    }
+  ],
+  "remote_proof": {
+    "repository": "watermarkpp/HardCore",
+    "commit": "191958eaa194639b1072149cd23e34a389d8a7e4",
+    "transport": "HTTPS raw.githubusercontent.com",
+    "cached_remote_files": 174,
+    "source_captures_checked": 143,
+    "all_checks_read_remote_bytes": true,
+    "auditor_sha256": "3777550efc6084c50999ad197fa49d5617da2db862a9b1c94bfb849cd99ee62b",
+    "historical_refs": [
+      "342891ab884150c0e81084c932df8205484e6388",
+      "e38215978c481b988df3203410bb1dda6b5b0968"
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "base_color": "#17130f",
+  "chunk_store": {
+    "contract_id": "mse.map.runtime.ground_chunk_store.sha256.v1",
+    "deduplication": "sha256",
+    "root": "assets/data/runtime/map_editor/formal_ground_chunks/sha256"
+  },
+  "chunks": [
+    {
+      "chunk_id": "c_0_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/375c8c1dd6fb1d3bf05bf9f65a79d1f3ab1a05bff37c26d2d7050ab22d2690e6.png",
+      "rect_px": [
+        0.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "375c8c1dd6fb1d3bf05bf9f65a79d1f3ab1a05bff37c26d2d7050ab22d2690e6"
+    },
+    {
+      "chunk_id": "c_1_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/3530a98c3e00e97c9fc3011bf3072120e70ca31c4f5e9f36b063199e26dc3d28.png",
+      "rect_px": [
+        1024.0,
+        0.0,
+        1024.0,
+        1024.0
+      ],
+      "sha256": "3530a98c3e00e97c9fc3011bf3072120e70ca31c4f5e9f36b063199e26dc3d28"
+    },
+    {
+      "chunk_id": "c_2_0",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/8dbd70e4eefc2d3d123df1d8d65aed11d23893469c24e2898034cffc209a8d16.png",
+      "rect_px": [
+        2048.0,
+        0.0,
+        768.0,
+        1024.0
+      ],
+      "sha256": "8dbd70e4eefc2d3d123df1d8d65aed11d23893469c24e2898034cffc209a8d16"
+    },
+    {
+      "chunk_id": "c_0_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/0f313b71013e50def6a34e05d717fcddd0fe25a75e104d3912cb6b18cba87f76.png",
+      "rect_px": [
+        0.0,
+        1024.0,
+        1024.0,
+        384.0
+      ],
+      "sha256": "0f313b71013e50def6a34e05d717fcddd0fe25a75e104d3912cb6b18cba87f76"
+    },
+    {
+      "chunk_id": "c_1_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/b4faa5eee87d4691db469c4f15228f021a98cfe5cf9668d6315d6dbe6baffc4f.png",
+      "rect_px": [
+        1024.0,
+        1024.0,
+        1024.0,
+        384.0
+      ],
+      "sha256": "b4faa5eee87d4691db469c4f15228f021a98cfe5cf9668d6315d6dbe6baffc4f"
+    },
+    {
+      "chunk_id": "c_2_1",
+      "image": "assets/data/runtime/map_editor/formal_ground_chunks/sha256/17e31a015be18ebdf40c76c4f3219e86f354653a89857cc0f5234965998847a4.png",
+      "rect_px": [
+        2048.0,
+        1024.0,
+        768.0,
+        384.0
+      ],
+      "sha256": "17e31a015be18ebdf40c76c4f3219e86f354653a89857cc0f5234965998847a4"
+    }
+  ],
+  "coverage": {
+    "complete": true,
+    "packaged_chunk_count": 6,
+    "required_chunk_count": 6,
+    "source_chunk_count": 6
+  },
+  "design_size": [
+    44,
+    44
+  ],
+  "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+  "ground_pixel_center": [
+    1408.0,
+    688.0
+  ],
+  "ground_pixel_size": [
+    2816,
+    1408
+  ],
+  "guard_band_px": 512.0,
+  "map_id": "wooma_temple_boss_hall",
+  "render_mode": "batched_canvas_draw",
+  "runtime_map_id": 915003,
+  "schema_version": 1,
+  "source_authority": "user_authored_baked_ground",
+  "source_editor_document_sha256": "b00200d55697f0edc3e624bd9844608ec5868a16f1a31041d258cd86d32f7436",
+  "source_ground_manifest_sha256": "4a6f0399ec2643d529f18115da636a25bf989616eda4d79893b4934ba9271699",
+  "source_ground_state_sha256": "596aee203bd329f12aa455a113692d5c7d4d674078ee52e941df9abb1c0e0d7a",
+  "visual_contract_id": "mse.map.runtime.visual.v1"
+}

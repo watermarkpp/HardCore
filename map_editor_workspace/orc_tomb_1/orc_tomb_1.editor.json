@@ -555,6 +555,70 @@
         },
         "shape": "rect",
         "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000029",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1,
+            23,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000030",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            1,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000031",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            2,
+            25,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "manual_000032",
+        "content_layer": "personal_expansion",
+        "data": {
+          "rect": [
+            2,
+            14,
+            1,
+            1
+          ]
+        },
+        "shape": "rect",
+        "source": "manual"
       }
     ],
     "collision_erase": [
@@ -588,14 +652,6 @@
         "tile": [
           28.0,
           18.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          31.0,
-          0.0
         ]
       },
       {
@@ -675,14 +731,6 @@
         "source": "single_cell_erase",
         "tile": [
           2.0,
-          24.0
-        ]
-      },
-      {
-        "content_layer": "personal_expansion",
-        "source": "single_cell_erase",
-        "tile": [
-          2.0,
           16.0
         ]
       },
@@ -730,8 +778,40 @@
         "content_layer": "personal_expansion",
         "source": "single_cell_erase",
         "tile": [
-          2.0,
-          15.0
+          29.0,
+          19.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          24.0,
+          3.0
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          2,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          3,
+          3
+        ]
+      },
+      {
+        "content_layer": "personal_expansion",
+        "source": "single_cell_erase",
+        "tile": [
+          4,
+          3
         ]
       }
     ],
@@ -892,11 +972,11 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          13.0,
+          12.0,
           12.0
         ],
         "tile_anchor": [
-          13.0,
+          12.0,
           12.0
         ]
       },
@@ -1099,7 +1179,7 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          34.0,
+          35.0,
           37.0
         ],
         "tile_anchor": [
@@ -1238,11 +1318,11 @@
         "selection_locked": false,
         "tile": [
           37.0,
-          1.0
+          2.0
         ],
         "tile_anchor": [
-          32.0,
-          3.0
+          37.0,
+          2.0
         ]
       },
       {
@@ -1307,11 +1387,11 @@
         "selection_locked": false,
         "tile": [
           37.0,
-          34.0
+          35.0
         ],
         "tile_anchor": [
-          25.0,
-          30.0
+          37.0,
+          35.0
         ]
       },
       {
@@ -1445,218 +1525,11 @@
         "selection_locked": false,
         "tile": [
           0.0,
-          35.0
+          36.0
         ],
         "tile_anchor": [
           0.0,
           36.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          80.0,
-          144.0
-        ],
-        "asset_id": "orc_tomb_wall_outer_nw_v01",
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "cave_tomb_manual_collision_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000078",
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "default",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          80.0,
-          144.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "terrain_boundary",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          37.0,
-          37.0
-        ],
-        "tile_anchor": [
-          37.0,
-          37.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          48.0,
-          128.0
-        ],
-        "asset_id": "orc_tomb_wall_straight_y_l1_v01",
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "cave_tomb_manual_collision_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000082",
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "default",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          48.0,
-          128.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "terrain_boundary",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          37.0,
-          0.0
-        ],
-        "tile_anchor": [
-          37.0,
-          0.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
-          80.0,
-          144.0
-        ],
-        "asset_id": "orc_tomb_wall_inner_nw_v01",
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "cave_tomb_manual_collision_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000083",
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "default",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          80.0,
-          144.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "terrain_boundary",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          0.0,
-          37.0
-        ],
-        "tile_anchor": [
-          0.0,
-          37.0
         ]
       },
       {
@@ -1731,75 +1604,6 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          80.0,
-          144.0
-        ],
-        "asset_id": "orc_tomb_wall_inner_nw_v01",
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "cave_tomb_manual_collision_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000085",
-        "layer": "object_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "default",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          80.0,
-          144.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "terrain_boundary",
-        "selectable": true,
-        "selection_locked": false,
-        "tile": [
-          12.0,
-          24.0
-        ],
-        "tile_anchor": [
-          12.0,
-          24.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
           48.0,
           128.0
         ],
@@ -1862,7 +1666,7 @@
           12.0
         ],
         "tile_anchor": [
-          21.0,
+          20.0,
           12.0
         ]
       },
@@ -2212,11 +2016,11 @@
         "selectable": true,
         "selection_locked": false,
         "tile": [
-          5.0,
+          6.0,
           37.0
         ],
         "tile_anchor": [
-          5.0,
+          6.0,
           37.0
         ]
       },
@@ -2440,7 +2244,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           115.0,
-          121.99999237060548
+          121.99999237060547
         ],
         "asset_id": "user.ce9bec6d5f1b337e",
         "collision_authority": "asset",
@@ -2486,7 +2290,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           115.0,
-          121.99999237060548
+          121.99999237060547
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -2516,7 +2320,7 @@
         "anchor_mode": "foot_tile",
         "anchor_px": [
           115.0,
-          116.00000762939452
+          116.00000762939453
         ],
         "asset_id": "user.432c5bad20dae8de",
         "collision_authority": "asset",
@@ -2562,7 +2366,7 @@
         "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
         "placement_anchor_px": [
           115.0,
-          116.00000762939452
+          116.00000762939453
         ],
         "placement_rule": "inside_map",
         "position_mode": "tile_anchor",
@@ -3473,78 +3277,6 @@
       {
         "anchor_mode": "foot_tile",
         "anchor_px": [
-          80.0,
-          144.0
-        ],
-        "asset_id": "orc_tomb_wall_inner_nw_v01",
-        "collision_authority": "manual_by_user",
-        "collision_cells": [],
-        "collision_footprint_tiles": [
-          0.0,
-          0.0
-        ],
-        "collision_policy": "none",
-        "collision_policy_id": "cave_tomb_manual_collision_v1",
-        "collision_profile_id": "none_visual",
-        "content_layer": "personal_expansion",
-        "flip_x": false,
-        "flip_y": false,
-        "footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "gameplay_role": "navigation_blocker",
-        "generated_by": "build_orc_tomb_1_hui_ring.gd",
-        "instance_base_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "instance_base_scale": 1.0,
-        "instance_id": "inst_000038",
-        "layer": "terrain_base",
-        "manual_collision_expected": true,
-        "map_collision_override": "disabled",
-        "movable": true,
-        "navigation_policy": "ignore",
-        "object_role": "terrain",
-        "occlusion": true,
-        "occupancy_footprint_tiles": [
-          1.0,
-          1.0
-        ],
-        "offset_px": [
-          0.0,
-          0.0
-        ],
-        "placement_anchor_px": [
-          80.0,
-          144.0
-        ],
-        "placement_rule": "non_overlapping",
-        "position_mode": "tile_anchor",
-        "rotation_deg": 0.0,
-        "runtime_export": true,
-        "scale": [
-          1.0,
-          1.0
-        ],
-        "scene_intent": "dungeon_wall_visual_structure",
-        "selectable": true,
-        "selection_locked": false,
-        "structure_id": "orc_tomb_1.hui_ring.v1",
-        "structure_role": "inner_ring",
-        "tile": [
-          12.0,
-          12.0
-        ],
-        "tile_anchor": [
-          12.0,
-          12.0
-        ]
-      },
-      {
-        "anchor_mode": "foot_tile",
-        "anchor_px": [
           144.0,
           112.0
         ],
@@ -3756,11 +3488,11 @@
         "structure_id": "orc_tomb_1.hui_ring.v1",
         "structure_role": "inner_ring",
         "tile": [
-          16.0,
+          15.0,
           12.0
         ],
         "tile_anchor": [
-          13.0,
+          15.0,
           12.0
         ]
       },
@@ -3904,7 +3636,7 @@
           12.0
         ],
         "tile_anchor": [
-          16.0,
+          19.0,
           12.0
         ]
       },
@@ -4260,12 +3992,12 @@
         "structure_id": "orc_tomb_1.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
-          18.0,
+          19.0,
           37.0
         ],
         "tile_anchor": [
-          28.0,
-          3.0
+          19.0,
+          37.0
         ]
       },
       {
@@ -4621,11 +4353,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          4.0
+          5.0
         ],
         "tile_anchor": [
-          34.0,
-          4.0
+          37.0,
+          5.0
         ]
       },
       {
@@ -4909,11 +4641,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          8.0
+          9.0
         ],
         "tile_anchor": [
-          34.0,
-          8.0
+          37.0,
+          9.0
         ]
       },
       {
@@ -5197,11 +4929,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          12.0
+          13.0
         ],
         "tile_anchor": [
-          34.0,
-          12.0
+          37.0,
+          13.0
         ]
       },
       {
@@ -5341,11 +5073,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          16.0
+          17.0
         ],
         "tile_anchor": [
-          34.0,
-          16.0
+          37.0,
+          17.0
         ]
       },
       {
@@ -5413,11 +5145,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          20.0
+          21.0
         ],
         "tile_anchor": [
-          34.0,
-          20.0
+          37.0,
+          21.0
         ]
       },
       {
@@ -5484,12 +5216,12 @@
         "structure_id": "orc_tomb_1.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
-          21.0,
+          22.0,
           37.0
         ],
         "tile_anchor": [
-          21.0,
-          34.0
+          22.0,
+          37.0
         ]
       },
       {
@@ -5556,12 +5288,12 @@
         "structure_id": "orc_tomb_1.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
-          25.0,
+          26.0,
           37.0
         ],
         "tile_anchor": [
-          25.0,
-          34.0
+          26.0,
+          37.0
         ]
       },
       {
@@ -5629,11 +5361,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          24.0
+          25.0
         ],
         "tile_anchor": [
-          34.0,
-          24.0
+          37.0,
+          25.0
         ]
       },
       {
@@ -5700,12 +5432,12 @@
         "structure_id": "orc_tomb_1.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
-          31.0,
+          32.0,
           37.0
         ],
         "tile_anchor": [
-          28.0,
-          34.0
+          32.0,
+          37.0
         ]
       },
       {
@@ -5773,11 +5505,11 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          31.0
+          32.0
         ],
         "tile_anchor": [
-          34.0,
-          28.0
+          37.0,
+          32.0
         ]
       },
       {
@@ -5844,12 +5576,12 @@
         "structure_id": "orc_tomb_1.hui_ring.v1",
         "structure_role": "outer_ring",
         "tile": [
-          28.0,
+          29.0,
           37.0
         ],
         "tile_anchor": [
-          31.0,
-          34.0
+          29.0,
+          37.0
         ]
       },
       {
@@ -5917,11 +5649,295 @@
         "structure_role": "outer_ring",
         "tile": [
           37.0,
-          28.0
+          29.0
         ],
         "tile_anchor": [
-          34.0,
-          31.0
+          37.0,
+          29.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          48.0,
+          128.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l1_v01",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "cave_tomb_manual_collision_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000107",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          48.0,
+          128.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          0.0,
+          37.0
+        ],
+        "tile_anchor": [
+          0.0,
+          37.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          112.0,
+          128.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_y_l3_v03",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "cave_tomb_manual_collision_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000108",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          112.0,
+          128.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          37.0,
+          0.0
+        ],
+        "tile_anchor": [
+          37.0,
+          0.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          48.0,
+          128.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l1_v01",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "cave_tomb_manual_collision_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000109",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          48.0,
+          128.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          18.0,
+          12.0
+        ],
+        "tile_anchor": [
+          18.0,
+          12.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          48.0,
+          128.0
+        ],
+        "asset_id": "orc_tomb_wall_straight_x_l1_v01",
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "cave_tomb_manual_collision_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000110",
+        "layer": "terrain_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "default",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "",
+        "placement_anchor_px": [
+          48.0,
+          128.0
+        ],
+        "placement_rule": "non_overlapping",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          12.0,
+          24.0
+        ],
+        "tile_anchor": [
+          12.0,
+          24.0
         ]
       }
     ],

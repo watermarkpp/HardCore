@@ -4,7 +4,7 @@ extends RefCounted
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 const CONTRACT_ID := "combat.spell_lock.euclidean_gu.v2"
-const LOCK_RANGE_GU := 12.0
+const LOCK_RANGE_GU := 10.0
 
 
 static func distance_gu(origin_ground_gu: Vector2, target_ground_gu: Vector2) -> float:

@@ -8,10 +8,18 @@ func _ready() -> void:
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	var test_character_name := "死耐%d" % (Time.get_ticks_usec() % 1000000)
+	var creation_result := PlayerState.create_character(test_character_name, "战士", "男")
+	assert(creation_result.is_empty(), "死亡耐久回归测试角色创建失败：%s" % creation_result)
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var bootstrap_deadline := Time.get_ticks_msec() + 30000
+	while (
+		(not game.gameplay_input_is_enabled() or int(game.current_map_id) < 0)
+		and Time.get_ticks_msec() < bootstrap_deadline
+	):
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "死亡耐久回归测试等待初始世界就绪超时")
 	var player: PlayerCharacter = game.player
 	player.set_touch_vector(Vector2(1.0, 0.08))
 	await get_tree().physics_frame
@@ -23,13 +31,26 @@ func _run() -> void:
 	player.visual._process(0.05)
 	assert(player.visual.current_direction == 2, "行走动画没有优先使用实际移动方向")
 	player.set_touch_vector(Vector2.ZERO)
-	game.travel_to_map(217)
-	await get_tree().process_frame
+	var death_map_id := int(game.current_map_id)
 	player.global_position = Vector2(900, 700)
 	player.defense_min = 0
 	player.defense_max = 0
+	var armor_before := int(PlayerState.equipment.get("衣服", {}).get("durability_raw", 0))
+	var death_signal_count: Array[int] = [0]
+	var on_death := func() -> void: death_signal_count[0] += 1
+	player.death_requested.connect(on_death)
 	player.take_damage(999999)
-	assert(player._dead and player.global_position == Vector2(900, 700), "死亡动作期间人物被传送到未知世界原点")
+	assert(
+		armor_before > 0
+		and int(PlayerState.equipment.get("衣服", {}).get("durability_raw", 0)) < armor_before,
+		"致死物理伤害没有先触发布衣耐久变更"
+	)
+	assert(
+		player._dead and player.current_hp == 0 and player.global_position == Vector2(900, 700),
+		"致死耐久变更期间 HP 被 profile_changed 错误恢复或人物被传送"
+	)
+	player.restore_health(999999)
+	assert(player._dead and player.current_hp == 0, "死亡期间普通治疗不得原地复活")
 	var gold_after_first_death := PlayerState.gold
 	assert(not player.can_start_attack(), "死亡期间普通攻击预检必须关闭")
 	assert(not player.request_attack(), "死亡期间普通攻击请求必须拒绝")
@@ -45,7 +66,8 @@ func _run() -> void:
 	)
 	await get_tree().create_timer(0.9).timeout
 	assert(game.hud.death_revival_panel.visible, "死亡动作结束后没有显示死亡复活界面")
-	assert(game.current_map_id == 217, "玩家未选择复活方式时提前回城")
+	assert(death_signal_count[0] == 1, "一次死亡必须只发出一次 death_requested，实际=%d" % death_signal_count[0])
+	assert(game.current_map_id == death_map_id, "玩家未选择复活方式时提前回城")
 	assert(player.current_hp == 0 and player._dead, "死亡界面显示时人物被提前复活")
 	game.hud.death_revival_panel.town_button.pressed.emit()
 	var revival_deadline := Time.get_ticks_msec() + 3000

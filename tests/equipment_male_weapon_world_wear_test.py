@@ -31,13 +31,17 @@ REQUIRED_PRIMARY_APPEARANCES = {
     109: (54, "staff"),
     110: (58, "sword"),
 }
-ACTION_FRAMES = {
+COMPATIBILITY_ACTION_FRAMES = {
     "idle": 4,
     "walk": 6,
     "attack": 6,
     "cast": 6,
     "hit": 3,
     "death": 4,
+}
+ACTION_FRAMES = {
+    **COMPATIBILITY_ACTION_FRAMES,
+    "run": 6,
 }
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
@@ -175,7 +179,9 @@ def main() -> None:
     assert int(dragon_coverage["decodedFrames"]) == 232
     assert int(dragon_coverage["missingFrames"]) == 0
     assert int(dragon_coverage["transparentEmptyFrames"]) == 0
-    assert set(dragon_coverage["actions"]) == set(ACTION_FRAMES)
+    assert set(dragon_coverage["actions"]) == set(
+        COMPATIBILITY_ACTION_FRAMES
+    )
     destiny = compatibility["itemsById"]["110"]
     assert destiny["status"] == "resolved_primary_pixels"
     assert destiny["mappingType"] == (
@@ -219,7 +225,8 @@ def main() -> None:
         "hiddenByClassicRule": 0,
         "unresolved": 1,
         "maleWeaponFeatureFamilies": 34,
-        "actionsPerFeature": 6,
+        "actionsPerMappedFeature": 7,
+        "unmappedFeatureZeroActions": 6,
         "directionsPerAction": 8,
         "missingFrames": 0,
         "transparentEmptyFrames": 232,
@@ -342,7 +349,13 @@ def main() -> None:
         assert feature["cell"] == [224, 224]
         assert feature["actorOrigin"] == [80, 116]
         assert feature["footPoint"] == [80, 116]
-        for action, frame_count in ACTION_FRAMES.items():
+        expected_actions = (
+            COMPATIBILITY_ACTION_FRAMES
+            if feature_id == 0
+            else ACTION_FRAMES
+        )
+        assert set(feature["actions"]) == set(expected_actions)
+        for action, frame_count in expected_actions.items():
             record = feature["actions"][action]
             assert record["directions"] == 8
             assert record["framesPerDirection"] == frame_count
@@ -352,7 +365,6 @@ def main() -> None:
             assert "prior frames" in record["transparentFramePolicy"]
             assert record["actorOrigin"] == [80, 116]
             assert record["footPoint"] == [80, 116]
-            assert len(record["sourceFramesPacked"]) == 8 * frame_count
             assert "/weapon/male/" in record["path"]
             assert "/female/" not in record["path"]
 
@@ -361,8 +373,25 @@ def main() -> None:
             assert rgba_sha256(atlas) == record["atlasRgbaSha256"]
             rebuilt = Image.new("RGBA", atlas.size, (0, 0, 0, 0))
             transparent_indices: list[int] = []
-            for packed in record["sourceFramesPacked"]:
-                frame = unpack_frame(packed)
+            if action == "run":
+                assert "sourceFramesPacked" not in record
+                assert int(record["sourceStart"]) == 128
+                frames = [
+                    {
+                        "sourceIndex": feature_id * 600 + 128 + direction * 8 + frame,
+                        "direction": direction,
+                        "frame": frame,
+                    }
+                    for direction in range(8)
+                    for frame in range(frame_count)
+                ]
+            else:
+                assert len(record["sourceFramesPacked"]) == 8 * frame_count
+                frames = [
+                    unpack_frame(packed)
+                    for packed in record["sourceFramesPacked"]
+                ]
+            for frame in frames:
                 expected_index = (
                     feature_id * 600
                     + int(action_specs[action]["start"])
@@ -376,20 +405,24 @@ def main() -> None:
                     palette,
                 )
                 image = image.convert("RGBA")
-                assert [int(metadata["x"]), int(metadata["y"])] == [
-                    frame["hotX"],
-                    frame["hotY"],
-                ]
-                assert [image.width, image.height] == [
-                    frame["width"],
-                    frame["height"],
-                ]
-                assert rgba_sha256(image) == frame["rgbaSha256"]
+                hot_x = int(metadata["x"])
+                hot_y = int(metadata["y"])
                 opaque_pixels = sum(
                     alpha != 0 for alpha in image.getchannel("A").tobytes()
                 )
-                assert opaque_pixels == frame["sourceOpaquePixelCount"]
-                if frame["transparentEmpty"]:
+                if action == "run":
+                    assert opaque_pixels > 0
+                    transparent_empty = False
+                else:
+                    assert [hot_x, hot_y] == [frame["hotX"], frame["hotY"]]
+                    assert [image.width, image.height] == [
+                        frame["width"],
+                        frame["height"],
+                    ]
+                    assert rgba_sha256(image) == frame["rgbaSha256"]
+                    assert opaque_pixels == frame["sourceOpaquePixelCount"]
+                    transparent_empty = frame["transparentEmpty"]
+                if transparent_empty:
                     assert feature_id == 0
                     assert [image.width, image.height] == [4, 1]
                     assert [frame["hotX"], frame["hotY"]] == [7, -44]
@@ -403,8 +436,8 @@ def main() -> None:
                 rebuilt.alpha_composite(
                     image,
                     (
-                        frame["frame"] * 224 + 80 + frame["hotX"],
-                        frame["direction"] * 224 + 116 + frame["hotY"],
+                        frame["frame"] * 224 + 80 + hot_x,
+                        frame["direction"] * 224 + 116 + hot_y,
                     ),
                 )
             assert transparent_indices == record["transparentEmptyFrames"]
@@ -416,7 +449,7 @@ def main() -> None:
     print(
         "EQUIPMENT_MALE_WEAPON_WORLD_WEAR_TEST_PASS "
         "items=37 visible=36 hidden=0 unresolved=1 "
-        "features=34 actions=6 directions=8"
+        "features=34 mapped_actions=7 directions=8"
     )
 
 

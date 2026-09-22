@@ -96,7 +96,7 @@ func _install_single() -> void:
     _apply_beam_width_scale(sprite)
     sprite.self_modulate = Color(1.0, 1.0, 1.0, 1.0)  # Beam: full opacity; formal core polygon handles low-alpha overlay
     sprite.set_process(true)
-    add_child(sprite)
+    _add_world_visual(sprite)
     _sprites.append(sprite)
 
 

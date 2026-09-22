@@ -180,7 +180,9 @@ func _run() -> void:
 	var future_enemy: EnemyActor = _game._spawn_enemy(
 		GameData.get_monster_by_id(21),
 		Vector2(0.0, 80.0),
-		false
+		false,
+		-1.0,
+		{"respawn_enabled": false}
 	)
 	assert(
 		future_enemy != null,

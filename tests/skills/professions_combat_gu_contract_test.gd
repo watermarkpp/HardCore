@@ -98,10 +98,10 @@ func _test_d_melee_gu_ranges_and_tangency() -> void:
 	for direction_index: int in range(8):
 		var forward_gu := Melee.canonical_ground_direction_gu(direction_index)
 		assert(Melee.thrust_slot_gu(
-			Vector2.ZERO, forward_gu * 2.5, direction_index
+			Vector2.ZERO, forward_gu * 3.0, direction_index
 		) == 2)
 		assert(Melee.thrust_slot_gu(
-			Vector2.ZERO, forward_gu * 2.5002, direction_index
+			Vector2.ZERO, forward_gu * 3.0002, direction_index
 		) == 0)
 		var side_gu := Vector2(-forward_gu.y, forward_gu.x)
 		assert(Melee.thrust_slot_gu(

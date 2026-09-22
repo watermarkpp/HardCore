@@ -1,16 +1,25 @@
 class_name EnemyActor
 extends CharacterBody2D
 
+const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
+const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
+var _hc_m30_attack_move_cutoff: float = INF # R4 compatibility diagnostic only
+var _hc_m30_attack_pose_remaining: float = 0.0
+
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
 const MonsterGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/monster_ground_runtime_diagnostic_overlay.gd"
 )
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const MonsterUnitAdapterScript := preload("res://scripts/monster_unit_adapter.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
+)
+const MonsterDeliveryGeometryScript := preload(
+	"res://scripts/monster_ai_package/delivery_geometry.gd"
 )
 const EntrapmentBoundaryControllerScript := preload(
 	"res://scripts/entrapment_boundary_controller.gd"
@@ -19,6 +28,47 @@ const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const MonsterRangedProjectileEffectScript := preload(
+	"res://scripts/monster_ranged_projectile_effect.gd"
+)
+const MonsterTargetMagicEffectScript := preload(
+	"res://scripts/monster_target_magic_effect.gd"
+)
+const MonsterMovementCadenceScript := preload(
+	"res://scripts/monster_movement_cadence.gd"
+)
+const MonsterStruckPolicyScript := preload(
+	"res://scripts/monster_struck_policy.gd"
+)
+## Shared read-only empty damage context so DOT/poison ticks never allocate a
+## per-tick Dictionary on the damage core path.
+const EMPTY_DAMAGE_CONTEXT: Dictionary = {}
+const MonsterNaturalRegenPolicyScript := preload(
+	"res://scripts/monster_natural_regen_policy.gd"
+)
+const MonsterNeighborStepPolicyScript := preload(
+	"res://scripts/monster_neighbor_step_policy.gd"
+)
+const MonsterTargetAcquisitionPolicyScript := preload(
+	"res://scripts/monster_target_acquisition_policy.gd"
+)
+const MonsterTerrainNavigationPolicyScript := preload(
+	"res://scripts/monster_terrain_navigation_policy.gd"
+)
+const PlayerCharacterScript := preload("res://scripts/player.gd")
+const MONSTER_RUNTIME_AUTHORITY_PATH := (
+	"res://assets/data/monster_runtime_authority_v1.json"
+)
+const MONSTER_ATTACK_RANGE_POLICY_PATH := (
+	"res://assets/data/monster_attack_range_policy_v1.json"
+)
+const MONSTER_MAGIC_MELEE_EFFECT_ID := "monster.flame_wooma.magic_melee.v1"
+const MONSTER_AREA_MAGIC_EFFECT_ID := "monster.touch_dragon.area_magic.v1"
+const RETIRED_SOURCE_ONLY_MONSTER_IDS := [71]
+const FIXED_AREA_GROUND_SPIKE_EFFECT_ID := (
+	"monster.fixed_area_ground_spike.v1"
+)
+const FIXED_AREA_GROUND_SPIKE_MONSTER_IDS := [180, 195]
 const CROWD_GRID_CELL_SIZE_GU := 3.0
 const CROWD_GRID_REFRESH_FRAMES := 3
 const CROWD_STEERING_INTERVAL_SECONDS := 0.10
@@ -26,10 +76,38 @@ const FAR_RETARGET_MIN_SECONDS := 0.28
 const FAR_RETARGET_STAGGER_SECONDS := 0.017
 const NEAR_RETARGET_MIN_SECONDS := 0.18
 const NEAR_RETARGET_STAGGER_SECONDS := 0.011
+## Damage contributes to the shared threat competition, but one hit must never
+## rewrite the current target. A challenger may win only after the current
+## target has remained stable briefly and the challenger's accumulated threat
+## exceeds both an absolute and relative hysteresis margin. Physical summon
+## interception remains an explicit override below.
+const TARGET_SWITCH_MIN_STABLE_SECONDS := 0.45
+const TARGET_SWITCH_MIN_THREAT_ADVANTAGE := 100.0
+const TARGET_SWITCH_THREAT_ADVANTAGE_RATIO := 0.20
+## Source targetSearch values describe the legacy service loop, where a Boss
+## could retain one valid target for up to eight seconds.  Runtime movement is
+## continuous now, so target *re-evaluation* is capped separately without
+## changing source-authoritative attack or movement intervals.  The per-instance
+## phase keeps a room of bosses from evaluating on one physics frame.
+const BOSS_TARGET_REEVALUATION_MAX_SECONDS := 0.35
+const BOSS_TARGET_REEVALUATION_STAGGER_SECONDS := 0.013
+const SUMMON_INTERCEPT_CONTACT_EPSILON_GU := 0.25
 const BACKGROUND_AI_INTERVAL_SECONDS := 0.25
 const BACKGROUND_AI_MIN_DISTANCE_GU := 37.5
+const BACKGROUND_WAKE_PHASE_SLOTS := 15
+## The acquisition broadphase is screen-space only.  The exact phase below
+## still evaluates canonical Ground GU deltas, so this rectangle can only add
+## candidates; it must never decide whether a target is in range.
+const TARGET_GRID_CELL_SIZE_PX := Vector2(128.0, 64.0)
+## Keep the broadphase rectangle deliberately conservative around the formal
+## iso projection.  Exact Ground-GU checks remain authoritative below.
+const TARGET_GRID_HALF_EXTENTS_PER_GU := Vector2(128.0, 64.0)
+## Secondary combat targets may be newly spawned between shared refreshes.  A
+## 250 ms window matches the existing background decision cadence; the known
+## primary player remains a live direct candidate and is never delayed here.
+const TARGET_GRID_REFRESH_SECONDS := BACKGROUND_AI_INTERVAL_SECONDS
 const ENVIRONMENT_GUARD_INTERVAL_SECONDS := 0.10
-const ENEMY_MOTION_MASK := WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER
+const ENEMY_MOTION_MASK := WorldSpatialRulesScript.ENEMY_MASK
 const POISON_INDICATOR_STYLE := "overhead_green_red_dot_row"
 const POISON_INDICATOR_DOT_RADIUS := 3.0
 const POISON_INDICATOR_DOT_CENTER_OFFSET_X := 5.0
@@ -38,6 +116,7 @@ const NAME_LABEL_HEALTH_BAR_GAP := MonsterOverheadScript.NAME_LABEL_HEALTH_BAR_G
 const TARGET_RING_FOOTPRINT_SCALE := 1.25
 const PLAYER_MELEE_CONTACT_CONTRACT_ID := "monster.melee_player_contact.ground_gu.v2"
 const BOSS_WARNING_PROJECTION_CONTRACT_ID := "monster.boss.warning.ground_projection.v1"
+const BOSS_PHASE_GROUND_RING_VISIBLE := false
 const SAFE_ZONE_REFERENCE_CONTRACT_ID := "monster.safe_zone.relative_ground_reference.v1"
 const ATTACK_FOOTPRINT_CONTRACT_ID := (
 	"monster.attack.release_footpoint_projection.v1"
@@ -56,23 +135,111 @@ const SPAWN_RETURN_EPSILON_GU := 0.1875
 const SAFE_ZONE_RETURN_EPSILON_GU := 0.125
 const CONTACT_RETREAT_EPSILON_GU := 0.09375
 const CROWD_SEPARATION_GAP_GU := 0.375
+const CROWD_NEIGHBOR_QUERY_RADIUS_GU := 2.0
 const LAST_SAFE_REFRESH_DISTANCE_GU := 2.0
+const PROJECTILE_OBSTACLE_SAMPLE_STEP_GU := 0.25
+const ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU := PROJECTILE_OBSTACLE_SAMPLE_STEP_GU
+const CORPSE_HOLD_SECONDS := 2.0
+const HC_SHARED_GOAL_CACHE_LIMIT := 64
+const SPECIAL_DELIVERY_SETTLEMENT_LIMIT := 512
+const MONSTER_SPECIAL_CELL_DELIVERY_KINDS := [
+	"directional_spit_map",
+	"gas_adjacent",
+	"line_magic",
+	"mixed_target_tile",
+	"guard_direct_projectile",
+]
 
-static var _crowd_grid_physics_frame := -1
-static var _crowd_grid: Dictionary = {}
-static var _crowd_grid_build_count := 0
-static var _crowd_grid_actor_scan_count := 0
 static var _crowd_query_candidate_count := 0
 static var _crowd_steering_evaluation_count := 0
 static var _retarget_full_scan_count := 0
+static var _retarget_decision_count := 0
+static var _target_grid_last_refresh_msec := -1
+static var _target_grid: Dictionary = {}
+static var _target_grid_node_ids: Dictionary = {}
+static var _target_grid_group_scan_count := 0
+static var _target_grid_candidate_count := 0
 static var _background_ai_evaluation_count := 0
+static var _background_fast_path_skip_count := 0
+static var _foreground_ai_tick_count := 0
+static var _background_deep_sleep_entry_count := 0
+static var _background_deep_sleep_wakeup_count := 0
 static var _physics_move_count := 0
 static var _environment_guard_check_count := 0
+static var _runtime_map_id_property_list_scan_count := 0
+static var _hc_shared_goal_cache: Dictionary = {}
+static var _hc_shared_goal_cache_order: Array = []
+
+static func reset_runtime_map_id_diagnostics() -> void:
+	_runtime_map_id_property_list_scan_count = 0
+
+static func runtime_map_id_diagnostics() -> Dictionary:
+	return {
+		"property_list_scans": _runtime_map_id_property_list_scan_count,
+	}
+
+static func _record_performance_counter(field: StringName, amount := 1) -> void:
+	RuntimeDiagnostics.increment_performance_counter(field, amount)
+	match field:
+		&"crowd_query_candidates":
+			_crowd_query_candidate_count += amount
+		&"crowd_steering_evaluations":
+			_crowd_steering_evaluation_count += amount
+		&"retarget_full_scans":
+			_retarget_full_scan_count += amount
+		&"retarget_decisions":
+			_retarget_decision_count += amount
+		&"retarget_target_group_scans":
+			_target_grid_group_scan_count += amount
+		&"retarget_target_candidates":
+			_target_grid_candidate_count += amount
+		&"background_ai_evaluations":
+			_background_ai_evaluation_count += amount
+		&"background_fast_path_skips":
+			_background_fast_path_skip_count += amount
+		&"foreground_ai_ticks":
+			_foreground_ai_tick_count += amount
+		&"background_deep_sleep_entries":
+			_background_deep_sleep_entry_count += amount
+		&"background_deep_sleep_wakeups":
+			_background_deep_sleep_wakeup_count += amount
+		&"physics_moves":
+			_physics_move_count += amount
+		&"environment_guard_checks":
+			_environment_guard_check_count += amount
+
+static var _movement_authority_loaded := false
+static var _movement_authority_load_failed := false
+static var _movement_authority_by_id: Dictionary = {}
+static var _attack_range_policy_loaded := false
+static var _attack_range_policy_load_failed := false
+static var _attack_range_policy_by_id: Dictionary = {}
+## Monster SFX is an observer of the existing actor/visual lifecycle.  Keep a
+## shared lifecycle-aware service lookup; per-actor group scans in the physics
+## hot path would turn a presentation hook into a scaling cost.
+static var _audio_runtime_service: Node
+const AUDIO_SERVICE_NEGATIVE_CACHE_MSEC := 1000
+static var _audio_service_retry_after_msec := 0
+static var _audio_service_lookup_count := 0
+static var _audio_service_now_override_msec := -1
 
 signal died(enemy: EnemyActor, monster_data: Dictionary)
 signal target_requested(enemy: EnemyActor)
 signal summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int)
 signal relocation_requested(enemy: EnemyActor, radius_gu: float)
+## Pure presentation hook emitted once per frozen fixed-area victim at release.
+## The descriptor carries the same immutable snapshot for every victim of one
+## area release; consumers must never use this signal as a second damage path.
+signal fixed_area_ground_spike_requested(descriptor: Dictionary)
+## Telemetry/presentation hook emitted once for every accepted physical ranged
+## release. EnemyActor also creates the visual locally; listeners are observers
+## and must never submit a second damage transaction.
+signal ranged_projectile_requested(descriptor: Dictionary)
+signal target_magic_requested(descriptor: Dictionary)
+## Presentation-only observer for source-backed monster cell attacks. Damage
+## remains owned and settled by this actor against the exact same frozen V2
+## snapshot; listeners must never schedule or submit damage.
+signal monster_special_delivery_requested(descriptor: Dictionary)
 
 var monster_data: Dictionary = {}
 var monster_id := -1
@@ -81,13 +248,44 @@ var max_hp := 20
 var current_hp := 20
 var attack_min := 1
 var attack_max := 2
+var defense := 0
+var magic_defense := 0
+## Direct-spell target data is compiled once from the accepted canonical entry.
+## Keep this small, primitive cache separate from monster_data: direct spell
+## resolution must not clone the actor's full canonical payload per target.
+var direct_spell_stats_valid := false
+var direct_spell_anti_magic_points := 0
+var direct_spell_magic_defense_min := 0
+var direct_spell_magic_defense_max := 0
 var agility := WarriorCombatMath.BASE_AGILITY
+var accuracy := WarriorCombatMath.BASE_HIT
+var life_type := ""
+var undead := false
+var anti_stealth := false
 var anti_poison := 0
 var level := 1
 var move_speed_gu_per_sec := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(55.0)
 var aggro_radius_gu := 12.0
 var attack_range_gu := MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(38.0)
-var target: Node2D
+var target: Node2D:
+	set(value):
+		var changed := target != value
+		target = value
+		if changed:
+			_clear_attack_los_cache()
+			_reset_terrain_navigation_state()
+			_target_stable_remaining_seconds = (
+				TARGET_SWITCH_MIN_STABLE_SECONDS
+				if is_instance_valid(target)
+				else 0.0
+			)
+		if not is_instance_valid(target):
+			_target_focus_tick_ms = 0
+		elif changed:
+			_refresh_target_focus()
+			if not _background_maintenance_running:
+				_leave_background_deep_sleep()
+			_audio_target_changed(target)
 var primary_target: PlayerCharacter
 var is_boss := false
 var runtime_map_id: int = -1
@@ -106,11 +304,18 @@ var control_time := 0.0:
 	set(value):
 		if value > 0.0 and control_time <= 0.0:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
+			if _movement_step_active:
+				_cancel_autonomous_step(true)
 		control_time = value
-var charm_time := 0.0
+var charm_time := 0.0:
+	set(value):
+		if value > 0.0 and charm_time <= 0.0 and _movement_step_active:
+			_cancel_autonomous_step(true)
+		charm_time = value
 var dormant := false
 var life_steal_ratio := 0.0
 var control_on_hit_seconds := 0.0
+var control_chance_denominator_base := 0
 var is_targeted := false
 var facing := Vector2.DOWN
 var movement_facing := Vector2.DOWN
@@ -124,13 +329,16 @@ var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_r
 var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
 var environment_blocker: Node
 var _dying := false
+var _death_pending := false
 var boss_rule: Dictionary = {}
 var behavior_profile: Dictionary = {}
+var combat_enabled := true
 var service_ai_code := -1
 var service_move_interval_ms := 0
 var stationary := false
 var area_attack_rule: Dictionary = {}
 var summon_rule: Dictionary = {}
+var attack_delivery_rule: Dictionary = {}
 
 var _attack_timer := 0.0
 var _attack_interval := 1.55
@@ -139,10 +347,22 @@ var _attack_hit_delay := 0.0
 var _pending_attack_time := -1.0
 var _pending_attack_damage := 0
 var _pending_attack_target: Node2D
+var _pending_attack_release_record: Dictionary = {}
+var last_magic_attack_resolution: Dictionary = {}
+var last_physical_hit_resolution: Dictionary = {}
+var last_special_delivery_accuracy_resolution: Dictionary = {}
 var _retarget_timer := 0.0
+var _target_stable_remaining_seconds := 0.0
 var _crowd_steering_timer := 0.0
 var _cached_crowd_separation := Vector2.ZERO
+var _crowd_neighbor_scratch: Array[Node] = []
+var _safe_zone_candidate_stamp := 0
 var _background_ai_timer := 0.0
+var _background_wakeup_timer: Timer
+var _background_deep_sleeping := false
+var _background_last_wakeup_msec := 0
+var _background_maintenance_running := false
+var _background_accumulated_delta := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
 var _boss_phase_two := false
@@ -157,6 +377,37 @@ var _boss_base_move_speed_gu_per_sec := 0.0
 var _boss_base_attack_interval := 0.0
 var _burrowed := false
 var _rng := RandomNumberGenerator.new()
+## Presentation-only RNG. It is retained for deterministic audio fixtures and
+## never aliases gameplay, spawn-facing, loot or status randomness.
+var _audio_rng := RandomNumberGenerator.new()
+var _audio_rng_initialized := false
+var _audio_appear_emitted := false
+var _audio_death_emitted := false
+var _audio_combat_session_active := false
+## This is the gameplay-entry latch, not a playback-success flag. Once the
+## actor has crossed the real target edge, an audio rejection is still a
+## completed entry attempt; retry only after a real disengagement.
+var _audio_combat_entry_seen := false
+var _audio_combat_session_serial := 0
+var _audio_owner_key := ""
+var _audio_attack_sequence := 0
+var _audio_attack_frame_sequence := -1
+var _audio_attack_frame_ready := false
+var _audio_attack_start_accepted := false
+var _audio_combat_epoch_target_instance_id := 0
+var _audio_combat_epoch_method_available := false
+var _audio_combat_epoch_property_available := false
+var _audio_combat_epoch_probe_complete := false
+var _audio_combat_epoch_property_probe_count := 0
+var _audio_previous_visual_state := ""
+var _audio_previous_visual_frame := -1
+var _audio_previous_facing := Vector2.INF
+## Spawn presentation uses an instance-local RNG so the one-time direction
+## choice cannot advance combat, loot, summon, or status-effect randomness.
+var _spawn_facing_rng := RandomNumberGenerator.new()
+var _spawn_facing_seed_override := 0
+var _spawn_facing_seed_override_active := false
+var _spawn_facing_initialized := false
 var _threat_table := {}
 var _threat_decay_per_second := 4.0
 var _leash_multiplier := 1.5
@@ -166,17 +417,122 @@ var _entrapment_last_end_reason := ""
 var _area_attack_cooldown := 0.0
 var _area_attack_warning := 0.0
 var _area_attack_footprint_snapshot: Dictionary = {}
+var _area_attack_release_records: Array[Dictionary] = []
+var _area_magic_warning := 0.0
+var _area_magic_footprint_snapshot: Dictionary = {}
+var _area_magic_release_records: Array[Dictionary] = []
 var _last_attack_footprint_snapshot: Dictionary = {}
 var _spatial_release_serial := 0
+var _special_delivery_settled_targets: Dictionary = {}
+var _special_delivery_settlement_order: Array[Dictionary] = []
+var _special_delivery_settlement_floor_serial := 0
 var _summon_cooldown := 0.0
 var _summon_warning := 0.0
 var _environment_guard_timer := 0.0
 var _last_environment_safe_position_px := Vector2.INF
+var _attack_los_cache: Dictionary = {
+	"target_instance_id": 0,
+	"runtime_map_id": -1,
+	"source_world_px": Vector2.INF,
+	"target_world_px": Vector2.INF,
+	"environment_provider_instance_id": 0,
+	"environment_collision_revision": -1,
+	"result": false,
+	"valid": false,
+}
+## The combat index already owns a live-position provider for narrow phase.
+## Re-submit only actual position changes; static/background actors otherwise
+## performed an identical projection + dictionary update on every physics tick.
+var _last_spatial_index_screen_position_px := Vector2.INF
+var _last_spatial_index_ground_position_gu := Vector2.INF
+var _last_spatial_index_runtime_map_id := -1
+var _last_spatial_index_zone_generation := -1
+var _last_spatial_index_environment_revision := -1
+var _last_spatial_index_projection := Callable()
+## R14-B3: single physics-frame cache for the current target's ground
+## position. Keyed by physics frame + target instance id + target screen
+## position + map + zone generation + projection Callable. Only ever used for
+## the current target's own screen position; arbitrary points always project.
+var _target_ground_cache_physics_frame := -1
+var _target_ground_cache_target_instance_id := 0
+var _target_ground_cache_target_screen_position_px := Vector2.INF
+var _target_ground_cache_ground_position_gu := Vector2.INF
+var _target_ground_cache_runtime_map_id := -1
+var _target_ground_cache_zone_generation := -1
+var _target_ground_cache_projection := Callable()
+## R14-B4: actor-owned retarget scratch. Reused across retarget passes to
+## avoid per-candidate {node, order} Dictionary allocation; ordering rules are
+## unchanged (records reference the shared grid's existing record objects).
+var _target_grid_candidate_scratch: Array[Dictionary] = []
+var _target_grid_candidate_seen: Dictionary = {}
 var actual_ground_motion_gu := Vector2.ZERO
+
+var _movement_cadence
+var _natural_regen := MonsterNaturalRegenPolicyScript.new()
+var _target_acquisition_policy: MonsterTargetAcquisitionPolicyScript
+var _target_acquisition_authority_failed_closed := true
+var _target_focus_timeout_ms := 0
+var _target_disengage_axis_cells := 0
+var _target_focus_tick_ms := 0
+var _movement_authority_failed_closed := false
+var _movement_step_active := false
+## R1.3 pure observation counter (review closure): incremented every time a
+## NEW autonomous step actually begins. It lets the presentation FIFO record
+## "which movement step a struck is waiting for" without adding any gameplay
+## hard-stun: once the observed epoch differs, that step is over and the
+## struck presentation may start even if the monster is already walking the
+## next cell. Never read for gameplay decisions.
+var _movement_step_epoch := 0
+var _movement_step_start_ground_gu := Vector2.INF
+var _movement_step_start_screen_px := Vector2.INF
+var _movement_step_target_ground_gu := Vector2.INF
+var _movement_step_distance_gu := 0.0
+var _movement_step_neighbor := Vector2i.ZERO
+var _movement_step_engagement_target_instance_id := 0
+## Retain the existing caller scale as part of the step state for diagnostics
+## and call-site compatibility. Runtime GU speed owns interpolation; this is
+## the sole behavior multiplier applied by return/retreat paths.
+var _movement_step_speed_scale := 1.0
+var _movement_step_reason: StringName = &""
+## A cadence grant creates a high-level pursuit intent. Once granted, the
+## actor may chain neighbor cells at its runtime speed; cell completion reads
+## only the already-selected live target and never calls retarget/broadphase.
+var _continuous_pursuit_active := false
+var _continuous_pursuit_speed_scale := 1.0
+var _terrain_navigation_context: Dictionary = {}
+var _terrain_path_waypoints: Array[Vector2i] = []
+var _terrain_path_target_instance_id := 0
+var _terrain_path_target_cell := Vector2i.ZERO
+var _terrain_path_has_target_cell := false
+var _terrain_no_path_until_ms := 0
+var _terrain_failed_cell := Vector2i.ZERO
+var _terrain_has_failed_cell := false
+var _terrain_failed_cell_until_ms := 0
 
 
 func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := false) -> void:
+	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
+	_hc_m30_attack_move_cutoff = INF
+	_hc_m30_attack_pose_remaining = 0.0
+	_summon_warning = 0.0
+	_summon_cooldown = 0.0
+	set_meta("m30_summon_warning_life", -1)
+	set_meta("m30_summon_release_serial", 0)
+	set_meta("m30_last_queued_release", Vector2i(-1, -1))
+	_special_delivery_settled_targets.clear()
+	_special_delivery_settlement_order.clear()
+	_special_delivery_settlement_floor_serial = _spatial_release_serial
+	_hc_close_session = false
+	_hc_cancel_path()
+	_reset_monster_audio_observer()
+	_reset_direct_spell_runtime_stats()
 	var requested_id := MonsterIdentityScript.monster_id(data)
+	if requested_id in RETIRED_SOURCE_ONLY_MONSTER_IDS:
+		monster_data = {"monster_id": requested_id}
+		monster_id = -1
+		set_meta("retired_source_only", true)
+		set_meta("canonical_rejected", true)
+		return
 	var canonical_entry := MonsterIdentityScript.require_catalog_entry(requested_id, "runtime")
 	if canonical_entry.is_empty():
 		monster_data = {"monster_id": requested_id}
@@ -189,14 +545,15 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	# into later combat/death consumers.
 	monster_data = {
 		"monster_id": requested_id,
-		"monsterId": requested_id,
 		"canonical_name": str(canonical_entry.get("canonical_name", "")),
 		"classification": classification,
 		"appearance_profile_id": str(canonical_entry.get("appearance_profile_id", "")),
 		"drop_profile_id": str(canonical_entry.get("drop_profile_id", "")),
 	}
 	monster_id = requested_id
-	target = player_target
+	# M02A: primary_target is the searchable player reference. A current combat
+	# target exists only after the exact monster-id acquisition policy accepts it.
+	target = null
 	primary_target = player_target
 	is_boss = classification == "boss"
 	set_meta("caller_boss_ignored", bool(caller_boss) != is_boss)
@@ -206,25 +563,603 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	var runtime_projection: Dictionary = combat.get("runtime_projection", {})
 	max_hp = maxi(1, int(stats.get("hp", 0)))
 	current_hp = max_hp
+	_natural_regen = MonsterNaturalRegenPolicyScript.new()
+	defense = maxi(0, int(stats.get("defense", 0)))
+	magic_defense = maxi(0, int(stats.get("magic_defense", 0)))
+	_compile_direct_spell_runtime_stats(canonical_entry)
 	attack_min = maxi(1, int(stats.get("attack_min", 0)))
 	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
 	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
+	accuracy = maxi(0, int(runtime_projection.get("accuracy", WarriorCombatMath.BASE_HIT)))
+	life_type = str(runtime_projection.get("life_type", ""))
+	undead = bool(runtime_projection.get("undead", life_type == "不死系"))
+	anti_stealth = bool(runtime_projection.get("anti_stealth", false))
 	anti_poison = maxi(0, int(runtime_projection.get("anti_poison", 0)))
 	level = maxi(1, int(stats.get("level", 0)))
+	# Keep the existing canonical payload boundary while exposing only the
+	# detail flags needed by current skill/runtime consumers.  Caller-provided
+	# combat fields still never enter this dictionary.
+	monster_data["level"] = level
+	monster_data["accuracy"] = accuracy
+	monster_data["life_type"] = life_type
+	monster_data["undead"] = undead
+	monster_data["anti_stealth"] = anti_stealth
 	move_speed_gu_per_sec = MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(
 		40.0 if is_boss else 58.0
 	)
 	behavior_profile = MonsterIdentityScript.behavior_profile(monster_data)
 	_apply_behavior_profile()
+	_apply_attack_range_policy()
+	_apply_source_locked_special_delivery_override()
 	if is_boss:
 		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
+		# The generated canonical catalog is rebuilt by integration. Until that
+		# rebuild lands, the exact ID-keyed service rule remains the authoritative
+		# runtime override for this newly split special delivery.
+		if monster_id == 124:
+			var configured_rules: Variant = GameData.boss_service_rules.get(
+				"runtimeRulesByMonsterId",
+				{},
+			)
+			if configured_rules is Dictionary:
+				var configured_rule: Variant = (configured_rules as Dictionary).get("124", {})
+				if configured_rule is Dictionary and not (configured_rule as Dictionary).is_empty():
+					boss_rule = (configured_rule as Dictionary).duplicate(true)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:
 		move_speed_gu_per_sec = 0.0
+	_configure_target_acquisition()
+	_configure_movement_cadence()
+
+
+func _reset_monster_audio_observer() -> void:
+	_audio_appear_emitted = false
+	_audio_death_emitted = false
+	_audio_combat_session_active = false
+	_audio_combat_entry_seen = false
+	_audio_combat_session_serial = 0
+	_audio_owner_key = ""
+	_audio_attack_sequence = 0
+	_audio_attack_frame_sequence = -1
+	_audio_attack_frame_ready = false
+	_audio_attack_start_accepted = false
+	_audio_combat_epoch_target_instance_id = 0
+	_audio_combat_epoch_method_available = false
+	_audio_combat_epoch_property_available = false
+	_audio_combat_epoch_probe_complete = false
+	_audio_combat_epoch_property_probe_count = 0
+	_audio_previous_visual_state = ""
+	_audio_previous_visual_frame = -1
+	_audio_previous_facing = Vector2.INF
+
+
+## Test-only deterministic control for the presentation RNG.  Production
+## callers never need this; importantly it never aliases `_rng`.
+func set_audio_seed_for_test(seed_value: int) -> void:
+	_audio_rng.seed = seed_value
+	_audio_rng_initialized = true
+
+
+## The service is resolved only when a semantic event is ready.  Successful
+## lookups are shared by all EnemyActor instances. A miss installs one shared
+## one-second negative cache so thousands of actors cannot group-scan every
+## frame, while a later service (or a replacement after world teardown) is
+## still discovered without a production reset hook.
+func _audio_service() -> Node:
+	if not is_inside_tree():
+		return null
+	if (
+		is_instance_valid(_audio_runtime_service)
+		and _audio_runtime_service.is_inside_tree()
+		and _audio_runtime_service.get_tree() == get_tree()
+	):
+		return _audio_runtime_service
+	_audio_runtime_service = null
+	var now_msec := _audio_service_cache_now_msec()
+	if now_msec < _audio_service_retry_after_msec:
+		return null
+	_audio_service_retry_after_msec = now_msec + AUDIO_SERVICE_NEGATIVE_CACHE_MSEC
+	_audio_service_lookup_count += 1
+	for candidate: Node in get_tree().get_nodes_in_group(&"audio_runtime_service"):
+		if (
+			is_instance_valid(candidate)
+			and candidate.is_inside_tree()
+			and candidate.has_method("play_monster_event")
+		):
+			_audio_runtime_service = candidate
+			_audio_service_retry_after_msec = 0
+			return candidate
+	return null
+
+
+static func _audio_service_cache_now_msec() -> int:
+	return (
+		_audio_service_now_override_msec
+		if _audio_service_now_override_msec >= 0
+		else Time.get_ticks_msec()
+	)
+
+
+static func set_audio_service_cache_clock_for_test(now_msec: int) -> void:
+	_audio_service_now_override_msec = now_msec
+
+
+static func audio_service_lookup_count_for_test() -> int:
+	return _audio_service_lookup_count
+
+
+func _audio_owner_key_for_actor() -> String:
+	if _audio_owner_key.is_empty():
+		_audio_owner_key = "monster:%d:%d" % [monster_id, get_instance_id()]
+	return _audio_owner_key
+
+
+func _audio_target_changed(next_target: Node2D) -> void:
+	if not is_instance_valid(next_target):
+		return
+	# Target assignment is only an intent edge. The actual prompt is retried
+	# from the actor tick when the service is present and the actor is audible.
+	_audio_try_enter_combat_session()
+
+
+func _audio_player_target() -> Node:
+	if is_instance_valid(primary_target):
+		return primary_target
+	if target is PlayerCharacter and is_instance_valid(target):
+		return target
+	return null
+
+
+func _audio_combat_transition_is_active() -> bool:
+	# W3 adds this optional player contract after the audio branch baseline. The
+	# has_method guard keeps this branch compatible with the current checkout and
+	# rejects audio before service admission once the method is present.
+	var player_target := _audio_player_target()
+	if player_target == null or not player_target.has_method("combat_transition_is_active"):
+		return false
+	var active: Variant = player_target.call("combat_transition_is_active")
+	return active is bool and bool(active)
+
+
+func _audio_combat_epoch() -> int:
+	var player_target := _audio_player_target()
+	if player_target == null:
+		return -1
+	var target_instance_id := player_target.get_instance_id()
+	if (
+		not _audio_combat_epoch_probe_complete
+		or _audio_combat_epoch_target_instance_id != target_instance_id
+	):
+		_audio_combat_epoch_target_instance_id = target_instance_id
+		_audio_combat_epoch_method_available = player_target.has_method("combat_epoch")
+		_audio_combat_epoch_property_available = false
+		_audio_combat_epoch_probe_complete = true
+		if not _audio_combat_epoch_method_available:
+			_audio_combat_epoch_property_probe_count += 1
+			for property_info: Dictionary in player_target.get_property_list():
+				if str(property_info.get("name", "")) == "combat_epoch":
+					_audio_combat_epoch_property_available = true
+					break
+	var epoch: Variant = null
+	if _audio_combat_epoch_method_available:
+		epoch = player_target.call("combat_epoch")
+	elif _audio_combat_epoch_property_available:
+		epoch = player_target.get("combat_epoch")
+	return int(epoch) if epoch is int or epoch is float else -1
+
+
+func audio_combat_epoch_property_probe_count_for_test() -> int:
+	return _audio_combat_epoch_property_probe_count
+
+
+func _audio_is_listenable(allow_death := false) -> bool:
+	if not is_inside_tree() or process_mode == Node.PROCESS_MODE_DISABLED:
+		return false
+	if _audio_combat_transition_is_active():
+		return false
+	if not allow_death and not is_physics_processing():
+		return false
+	if not visible or not is_visible_in_tree() or _background_deep_sleeping:
+		return false
+	if _burrowed and not allow_death:
+		return false
+	if not allow_death and (_dying or _death_pending or current_hp <= 0):
+		return false
+	var viewport := get_viewport()
+	if viewport == null:
+		return false
+	# The viewport is the existing client listener/audibility boundary.  Do not
+	# invent a second gameplay distance or wake off-screen actors for SFX.
+	return viewport.get_visible_rect().has_point(
+		get_global_transform_with_canvas().origin
+	)
+
+
+func _audio_context(semantic_event: String) -> Dictionary:
+	var context := {
+		"source": "enemy_actor",
+		"monster_id": monster_id,
+		"runtime_map_id": runtime_map_id,
+		"semantic_event": semantic_event,
+		"audio_owner_key": _audio_owner_key_for_actor(),
+	}
+	var combat_epoch := _audio_combat_epoch()
+	if combat_epoch >= 0:
+		context["combat_epoch"] = combat_epoch
+	if semantic_event in ["attack_start", "attack_frame"]:
+		context["release_id"] = "attack:%d" % _audio_attack_sequence
+	if semantic_event == "combat_prompt":
+		context["session_id"] = "combat:%d" % _audio_combat_session_serial
+	return context
+
+
+func _emit_monster_audio(
+	semantic_event: String,
+	allow_death := false,
+	context_overrides: Dictionary = {},
+) -> bool:
+	if not combat_enabled and semantic_event in ["combat_prompt", "attack_start", "attack_frame"]:
+		return false
+	if monster_id <= 0 or not _audio_is_listenable(allow_death):
+		return false
+	var service := _audio_service()
+	if service == null:
+		return false
+	# The service owns exact ID mapping, resource availability, voice pooling
+	# and fail-closed status.  EnemyActor never resolves names/appearances.
+	var context := _audio_context(semantic_event)
+	context.merge(context_overrides, true)
+	var result: Variant = service.call(
+		"play_monster_event",
+		monster_id,
+		semantic_event,
+		context,
+	)
+	return result is Dictionary and str((result as Dictionary).get("status", "")) == "played"
+
+
+func _emit_player_physical_contact(attacker: Node2D, damage_context: Dictionary) -> bool:
+	if (
+		str(damage_context.get("damage_kind", "")) != "player_physical"
+		or not bool(damage_context.get("confirmed_hit", false))
+		or not attacker is PlayerCharacter
+		or not _audio_is_listenable()
+	):
+		return false
+	var player_attacker := attacker as PlayerCharacter
+	if (
+		player_attacker.visual == null
+		or not is_instance_valid(player_attacker.visual)
+		or not player_attacker.visual.has_method("audio_classic_weapon_shape")
+	):
+		return false
+	var classic_shape := int(player_attacker.visual.call("audio_classic_weapon_shape"))
+	if classic_shape < 0:
+		return false
+	var service := _audio_service()
+	if service == null or not service.has_method("play_player_physical_contact"):
+		return false
+	var context := _audio_context("player_physical_contact")
+	context.merge(damage_context, true)
+	context["classic_weapon_shape"] = classic_shape
+	var result: Variant = service.call(
+		"play_player_physical_contact",
+		classic_shape,
+		context,
+	)
+	return result is Dictionary and str((result as Dictionary).get("status", "")) == "played"
+
+
+func _audio_try_emit_appear() -> void:
+	# Compatibility shim for old test fixtures. Spawn/appear is intentionally
+	# silent in the W4 production whitelist.
+	return
+
+
+func _audio_try_enter_combat_session() -> bool:
+	if not combat_enabled or _audio_combat_entry_seen or not is_instance_valid(target):
+		return false
+	# A loading/cross-map transition is not the real combat edge. Wait for the
+	# optional W3 transition contract to settle, then latch the edge before any
+	# audibility, service or resource decision. A rejected sound must not turn
+	# into a per-physics retry loop.
+	if _audio_combat_transition_is_active():
+		return false
+	_audio_combat_entry_seen = true
+	_audio_combat_session_active = true
+	_audio_combat_session_serial += 1
+	if monster_id <= 0 or not _audio_is_listenable():
+		return false
+	var service := _audio_service()
+	if service == null or not service.has_method("play_monster_combat_prompt"):
+		return false
+	var result: Variant = service.call(
+		"play_monster_combat_prompt",
+		monster_id,
+		_audio_owner_key_for_actor(),
+		_audio_context("combat_prompt"),
+	)
+	if result is Dictionary and str((result as Dictionary).get("status", "")) == "played":
+		_audio_combat_session_active = true
+		return true
+	return false
+
+
+func _audio_end_combat_session(reason := "explicit_disengage") -> void:
+	if not _audio_combat_session_active:
+		return
+	var service := _audio_service()
+	if service != null and service.has_method("end_monster_combat_session"):
+		service.call("end_monster_combat_session", _audio_owner_key_for_actor(), reason)
+	_audio_combat_session_active = false
+	_audio_combat_entry_seen = false
+
+
+func _audio_attack_started() -> void:
+	if not combat_enabled:
+		return
+	_audio_attack_sequence += 1
+	_audio_attack_frame_sequence = -1
+	_audio_attack_frame_ready = false
+	_audio_attack_start_accepted = false
+	# Attack start is emitted only by accepted actions below, never by target
+	# acquisition or an AI preview.
+	_audio_attack_start_accepted = _emit_monster_audio("attack_start")
+
+
+func _play_attack_animation(duration: float) -> void:
+	if not combat_enabled:
+		return
+	if visual != null:
+		visual.play_attack(duration)
+	_audio_attack_started()
+
+
+func _audio_observe_visual_state() -> void:
+	# R14-B5: only observe MonsterVisual while this attack sequence's frame
+	# audio is still pending. Once the frame sound has settled (or no accepted
+	# attack is running), return immediately without touching the visual node.
+	if (
+		_audio_attack_sequence <= 0
+		or not _audio_attack_start_accepted
+		or _audio_attack_frame_sequence == _audio_attack_sequence
+	):
+		return
+	if visual == null or not is_instance_valid(visual):
+		return
+	var state := str(visual.current_state)
+	var frame := int(visual.current_frame)
+	if (
+		_audio_attack_start_accepted
+		and _audio_attack_sequence > 0
+		and state == "attack"
+		and frame <= 1
+	):
+		_audio_attack_frame_ready = true
+	if (
+		_audio_attack_start_accepted
+		and _audio_attack_sequence > 0
+		and _audio_attack_frame_ready
+		and state == "attack"
+		and frame >= 2
+		and _audio_attack_frame_sequence != _audio_attack_sequence
+	):
+		# MonsterVisual uses zero-based atlas frames; >=2 also survives a
+		# render/physics tick that advances across frame 3 without replaying it.
+		_audio_attack_frame_sequence = _audio_attack_sequence
+		_emit_monster_audio("attack_frame")
+	_audio_previous_visual_state = state
+	_audio_previous_visual_frame = frame
+	_audio_previous_facing = facing
+
+
+func _reset_direct_spell_runtime_stats() -> void:
+	direct_spell_stats_valid = false
+	direct_spell_anti_magic_points = 0
+	direct_spell_magic_defense_min = 0
+	direct_spell_magic_defense_max = 0
+	remove_meta("direct_spell_stats_rejection_reason")
+
+
+func _direct_spell_integer(value: Variant) -> int:
+	if value is bool:
+		return -1
+	if value is int:
+		return int(value)
+	if value is float:
+		var numeric_value := float(value)
+		if is_finite(numeric_value) and numeric_value == floorf(numeric_value):
+			return int(numeric_value)
+	return -1
+
+
+func _direct_spell_integer_value_valid(value: Variant) -> bool:
+	if value is int:
+		return true
+	if value is float:
+		var numeric_value := float(value)
+		return is_finite(numeric_value) and numeric_value == floorf(numeric_value)
+	return false
+
+
+func _direct_spell_alias_value(
+	source: Dictionary,
+	keys: Array[String],
+) -> Dictionary:
+	for key: String in keys:
+		if source.has(key):
+			return {"found": true, "value": source.get(key)}
+	return {"found": false}
+
+
+func _compile_direct_spell_runtime_stats(canonical_entry: Dictionary) -> void:
+	_reset_direct_spell_runtime_stats()
+	var runtime_allowed: Variant = canonical_entry.get("runtime_allowed", null)
+	var status: Variant = canonical_entry.get("status", null)
+	if (
+		canonical_entry.is_empty()
+		or not runtime_allowed is bool
+		or not bool(runtime_allowed)
+		or not status is String
+		or status != "formal"
+	):
+		set_meta("direct_spell_stats_rejection_reason", "canonical_entry_disabled_or_nonformal")
+		return
+	var capability_value: Variant = canonical_entry.get("runtime_capability", {})
+	if not capability_value is Dictionary:
+		set_meta("direct_spell_stats_rejection_reason", "canonical_runtime_capability_rejected")
+		return
+	var capability := capability_value as Dictionary
+	var capability_allowed: Variant = capability.get("allowed", null)
+	if not capability_allowed is bool or not bool(capability_allowed):
+		set_meta("direct_spell_stats_rejection_reason", "canonical_runtime_capability_rejected")
+		return
+	var combat_value: Variant = canonical_entry.get("combat", {})
+	if not combat_value is Dictionary:
+		set_meta("direct_spell_stats_rejection_reason", "canonical_combat_missing")
+		return
+	var combat := combat_value as Dictionary
+	var stats_value: Variant = combat.get("stats", {})
+	if not stats_value is Dictionary:
+		set_meta("direct_spell_stats_rejection_reason", "canonical_combat_stats_missing")
+		return
+	var stats := stats_value as Dictionary
+	var defense_min := -1
+	var defense_max := -1
+	var scalar_value := _direct_spell_alias_value(stats, ["magic_defense"])
+	if bool(scalar_value.get("found", false)):
+		var scalar_raw: Variant = scalar_value.get("value")
+		if not _direct_spell_integer_value_valid(scalar_raw):
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_malformed")
+			return
+		var scalar := _direct_spell_integer(scalar_raw)
+		defense_min = maxi(0, scalar)
+		defense_max = defense_min
+	else:
+		var min_value := _direct_spell_alias_value(
+			stats,
+			["magic_defense_min", "mdefMin", "MinMAC"],
+		)
+		var max_value := _direct_spell_alias_value(
+			stats,
+			["magic_defense_max", "mdefMax", "MaxMAC"],
+		)
+		if not bool(min_value.get("found", false)) or not bool(max_value.get("found", false)):
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_missing")
+			return
+		defense_min = _direct_spell_integer(min_value.get("value"))
+		defense_max = _direct_spell_integer(max_value.get("value"))
+		if defense_min < 0 or defense_max < 0:
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_malformed")
+			return
+		defense_min = maxi(0, defense_min)
+		if defense_max < defense_min:
+			set_meta("direct_spell_stats_rejection_reason", "canonical_magic_defense_reversed")
+			return
+	var anti_magic_points := 0
+	var anti_magic_source := _direct_spell_alias_value(
+		stats,
+		[
+			"anti_magic_points",
+			"magicEvasionPoints",
+			"antiMagicPoints",
+			"antiMagic",
+		],
+	)
+	if not bool(anti_magic_source.get("found", false)):
+		anti_magic_source = _direct_spell_alias_value(
+			stats,
+			["magic_evasion_percent", "magicEvasionPercent"],
+		)
+		if bool(anti_magic_source.get("found", false)):
+			var display_percent := _direct_spell_integer(anti_magic_source.get("value"))
+			if display_percent < 0:
+				set_meta("direct_spell_stats_rejection_reason", "canonical_anti_magic_malformed")
+				return
+			anti_magic_points = CombatResolutionRules.anti_magic_points_from_display_percent(
+				display_percent
+			)
+		else:
+			anti_magic_points = 0
+	else:
+		anti_magic_points = _direct_spell_integer(anti_magic_source.get("value"))
+		if anti_magic_points < 0:
+			set_meta("direct_spell_stats_rejection_reason", "canonical_anti_magic_malformed")
+			return
+	direct_spell_anti_magic_points = clampi(
+		anti_magic_points,
+		0,
+		CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES,
+	)
+	direct_spell_magic_defense_min = defense_min
+	direct_spell_magic_defense_max = defense_max
+	direct_spell_stats_valid = true
+	remove_meta("direct_spell_stats_rejection_reason")
+
+
+func direct_spell_runtime_stats_into(output: Dictionary) -> bool:
+	output.clear()
+	_record_performance_counter(&"direct_spell_stats_snapshot_count")
+	if not direct_spell_stats_valid:
+		return false
+	output["anti_magic_points"] = direct_spell_anti_magic_points
+	output["magicEvasionPoints"] = direct_spell_anti_magic_points
+	output["antiMagicPoints"] = direct_spell_anti_magic_points
+	output["antiMagic"] = direct_spell_anti_magic_points
+	output["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(
+		direct_spell_anti_magic_points
+	)
+	output["magicEvasionPercent"] = output["magic_evasion_percent"]
+	output["magic_defense_min"] = direct_spell_magic_defense_min
+	output["magic_defense_max"] = direct_spell_magic_defense_max
+	output["mdefMin"] = direct_spell_magic_defense_min
+	output["mdefMax"] = direct_spell_magic_defense_max
+	output["MinMAC"] = direct_spell_magic_defense_min
+	output["MaxMAC"] = direct_spell_magic_defense_max
+	var red_poison_value: Variant = get_meta("canonical_red_poison", {})
+	if not red_poison_value is Dictionary:
+		return true
+	var red_poison := red_poison_value as Dictionary
+	if Time.get_ticks_msec() >= int(red_poison.get("expires_at_ms", 0)):
+		remove_meta("canonical_red_poison")
+		return true
+	var flat_ac_reduction := maxi(0, int(red_poison.get("flat_ac_reduction", 0)))
+	var flat_mac_reduction := 0
+	if red_poison.has("flat_mac_reduction"):
+		flat_mac_reduction = maxi(0, int(red_poison.get("flat_mac_reduction", 0)))
+	elif bool(red_poison.get("legacy_metadata_fallback", false)):
+		flat_mac_reduction = maxi(0, int(red_poison.get("flat_reduction", 0)))
+	output["flat_ac_reduction"] = flat_ac_reduction
+	output["flat_mac_reduction"] = flat_mac_reduction
+	output["magic_defense_min"] = maxi(
+		0,
+		direct_spell_magic_defense_min - flat_mac_reduction,
+	)
+	output["magic_defense_max"] = maxi(
+		output["magic_defense_min"],
+		direct_spell_magic_defense_max - flat_mac_reduction,
+	)
+	output["mdefMin"] = output["magic_defense_min"]
+	output["mdefMax"] = output["magic_defense_max"]
+	output["MinMAC"] = output["magic_defense_min"]
+	output["MaxMAC"] = output["magic_defense_max"]
+	output["runtime_buff_contract"] = str(
+		red_poison.get("contract_id", "buff.taoist.red_poison.v1")
+	)
+	return true
 
 
 func _apply_behavior_profile() -> void:
+	var combat_enabled_value: Variant = behavior_profile.get("combatEnabled", true)
+	# The canonical contract is an explicit Boolean. Missing retains legacy
+	# behavior; a malformed present value fails closed instead of enabling an
+	# entity whose combat authority could not be established.
+	combat_enabled = (
+		bool(combat_enabled_value)
+		if combat_enabled_value is bool
+		else not behavior_profile.has("combatEnabled")
+	)
 	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
 		behavior_profile,
 		move_speed_gu_per_sec,
@@ -241,6 +1176,7 @@ func _apply_behavior_profile() -> void:
 	service_ai_code = int(behavior_profile.get("serviceBehavior", {}).get("aiCode", -1))
 	stationary = bool(behavior_profile.get("movement", {}).get("stationary", false))
 	area_attack_rule = behavior_profile.get("areaAttack", {}).duplicate(true)
+	attack_delivery_rule = behavior_profile.get("attackDelivery", {}).duplicate(true)
 	_area_attack_cooldown = float(area_attack_rule.get("initialCooldownSeconds", 0.0))
 	summon_rule = behavior_profile.get("summonRule", {}).duplicate(true)
 	_summon_cooldown = float(summon_rule.get("initialCooldownSeconds", 0.0))
@@ -250,6 +1186,970 @@ func _apply_behavior_profile() -> void:
 	dormant = bool(behavior_profile.get("dormant", dormant))
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})
 	control_on_hit_seconds = float(on_hit.get("controlSeconds", control_on_hit_seconds))
+	control_chance_denominator_base = maxi(
+		0,
+		int(on_hit.get("controlChanceDenominatorBase", control_chance_denominator_base)),
+	)
+
+
+func _hold_combat_disabled() -> void:
+	# This canonical action gate does not alter life, collision or death/drop
+	# ownership. It only discards autonomous combat work and freezes motion.
+	if _movement_step_active:
+		_cancel_autonomous_step(true)
+	if _hc_path_pending:
+		_hc_cancel_path()
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_pending_attack_time = -1.0
+	_pending_attack_target = null
+	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	_area_attack_warning = 0.0
+	_area_attack_footprint_snapshot = {}
+	_area_attack_release_records.clear()
+	_area_magic_warning = 0.0
+	_area_magic_footprint_snapshot = {}
+	_area_magic_release_records.clear()
+	_boss_warning = 0.0
+	_boss_skill_footprint_snapshot = {}
+	_summon_warning = 0.0
+	_audio_attack_start_accepted = false
+	_audio_attack_frame_ready = false
+
+
+func _apply_attack_range_policy() -> void:
+	var policy := _attack_range_policy_record_for_id(monster_id)
+	if policy.is_empty():
+		return
+	var range_gu_value: Variant = policy.get("attackRangeGu", null)
+	if range_gu_value is bool or not (range_gu_value is int or range_gu_value is float):
+		set_meta("attack_range_policy_rejected", "attackRangeGu_not_numeric")
+		return
+	var range_gu := float(range_gu_value)
+	if not is_finite(range_gu) or range_gu <= 0.0:
+		set_meta("attack_range_policy_rejected", "attackRangeGu_not_positive_finite")
+		return
+	attack_range_gu = range_gu
+	var delivery_kind := str(policy.get("deliveryKind", ""))
+	if delivery_kind == str(attack_delivery_rule.get("kind", "")):
+		# Special delivery gates consume their formal range from this overlay;
+		# legacy rangePixels remains source evidence only.
+		attack_delivery_rule["range_gu"] = range_gu
+	set_meta("attack_range_policy_id", monster_id)
+	set_meta("attack_range_policy_distance_metric", str(policy.get("distanceMetric", "")))
+	set_meta("attack_range_policy_shape", str(policy.get("rangeShape", "")))
+
+
+static func _load_attack_range_policy_once() -> void:
+	if _attack_range_policy_loaded or _attack_range_policy_load_failed:
+		return
+	var file := FileAccess.open(MONSTER_ATTACK_RANGE_POLICY_PATH, FileAccess.READ)
+	if file == null:
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: cannot open attack range policy: ", MONSTER_ATTACK_RANGE_POLICY_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if parsed == null or not (parsed is Dictionary):
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: invalid JSON in attack range policy")
+		return
+	var root := parsed as Dictionary
+	if str(root.get("contractId", "")) != "monster.attack_range_policy.v1":
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: attack range policy contract mismatch")
+		return
+	var records: Variant = root.get("records", null)
+	if records == null or not (records is Array):
+		_attack_range_policy_load_failed = true
+		push_error("EnemyActor: missing records array in attack range policy")
+		return
+	var seen_ids: Dictionary = {}
+	for record_variant: Variant in (records as Array):
+		if not (record_variant is Dictionary):
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: malformed attack range policy record")
+			return
+		var record := record_variant as Dictionary
+		var monster_id_value := int(record.get("monsterId", -1))
+		var range_gu_value: Variant = record.get("attackRangeGu", null)
+		if monster_id_value <= 0 or seen_ids.has(monster_id_value):
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: invalid or duplicate attack range policy monsterId: ", monster_id_value)
+			return
+		if range_gu_value is bool or not (range_gu_value is int or range_gu_value is float):
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: non-numeric attackRangeGu for monsterId: ", monster_id_value)
+			return
+		var range_gu := float(range_gu_value)
+		if not is_finite(range_gu) or range_gu <= 0.0:
+			_attack_range_policy_load_failed = true
+			push_error("EnemyActor: invalid attackRangeGu for monsterId: ", monster_id_value)
+			return
+		seen_ids[monster_id_value] = true
+		_attack_range_policy_by_id[monster_id_value] = record.duplicate(true)
+	_attack_range_policy_loaded = true
+	_attack_range_policy_load_failed = false
+
+
+static func _attack_range_policy_record_for_id(requested_monster_id: int) -> Dictionary:
+	_load_attack_range_policy_once()
+	if _attack_range_policy_load_failed:
+		return {}
+	var raw: Variant = _attack_range_policy_by_id.get(requested_monster_id, null)
+	if raw == null or not (raw is Dictionary):
+		return {}
+	return (raw as Dictionary).duplicate(true)
+
+
+func _apply_source_locked_special_delivery_override() -> void:
+	# Keep the exact ID contract live even while integration is rebuilding the
+	# generated canonical catalog from the edited source profiles.
+	if monster_id != 70:
+		return
+	attack_range_gu = 1.0
+	attack_delivery_rule = {
+		"kind": "special_melee",
+		"effectId": MONSTER_MAGIC_MELEE_EFFECT_ID,
+		"damageChannel": "magic_defense",
+		"bodyOnly": true,
+		"rangeShape": "chebyshev_square",
+		"rangeTiles": 1,
+		"range_gu": 1.0,
+		"hitDelaySeconds": 0.0,
+		"presentationDelaySeconds": 0.3,
+		"obstaclePolicy": "environment_adjacent_only",
+	}
+
+
+static func _load_movement_authority_once() -> void:
+	if _movement_authority_loaded or _movement_authority_load_failed:
+		return
+	var file := FileAccess.open(MONSTER_RUNTIME_AUTHORITY_PATH, FileAccess.READ)
+	if file == null:
+		_movement_authority_load_failed = true
+		push_error("EnemyActor: cannot open movement authority: ", MONSTER_RUNTIME_AUTHORITY_PATH)
+		return
+	var json_text := file.get_as_text()
+	file.close()
+	var parsed: Variant = JSON.parse_string(json_text)
+	if parsed == null or not (parsed is Dictionary):
+		_movement_authority_load_failed = true
+		push_error("EnemyActor: invalid JSON in movement authority")
+		return
+	var root: Dictionary = parsed
+	var records: Variant = root.get("records", null)
+	if records == null or not (records is Array):
+		_movement_authority_load_failed = true
+		push_error("EnemyActor: missing records array in movement authority")
+		return
+	var seen_ids: Dictionary = {}
+	for record_variant: Variant in (records as Array):
+		if not (record_variant is Dictionary):
+			continue
+		var record: Dictionary = record_variant
+		var raw_id: Variant = record.get("monster_id", null)
+		if raw_id == null:
+			continue
+		var monster_id_value := int(raw_id)
+		if monster_id_value <= 0:
+			continue
+		if seen_ids.has(monster_id_value):
+			_movement_authority_load_failed = true
+			push_error("EnemyActor: duplicate monster_id in movement authority: ", monster_id_value)
+			return
+		seen_ids[monster_id_value] = true
+		_movement_authority_by_id[monster_id_value] = record
+	_movement_authority_loaded = true
+	_movement_authority_load_failed = false
+
+
+static func _movement_authority_record_for_id(
+	requested_monster_id: int
+) -> Dictionary:
+	_load_movement_authority_once()
+	if _movement_authority_load_failed:
+		return {}
+	var raw: Variant = _movement_authority_by_id.get(requested_monster_id, null)
+	if raw == null or not (raw is Dictionary):
+		return {}
+	return (raw as Dictionary).duplicate(true)
+
+
+func _configure_target_acquisition() -> bool:
+	_target_acquisition_policy = MonsterTargetAcquisitionPolicyScript.new()
+	var authority_record := _movement_authority_record_for_id(monster_id)
+	var ok := _target_acquisition_policy.configure(authority_record, monster_id)
+	var targeting: Dictionary = authority_record.get("targeting", {})
+	_target_focus_timeout_ms = int(targeting.get("focus_timeout_ms", 0))
+	_target_disengage_axis_cells = int(targeting.get("disengage_axis_cells", 0))
+	ok = (
+		ok
+		and _target_focus_timeout_ms > 0
+		and _target_disengage_axis_cells > 0
+	)
+	_target_acquisition_authority_failed_closed = not ok
+	if not ok:
+		set_meta("target_acquisition_authority_rejected", true)
+		set_meta(
+			"target_acquisition_authority_rejection_reason",
+			(
+				_target_acquisition_policy.rejection_reason
+				if _target_acquisition_policy.failed_closed
+				else "invalid_target_retention_authority"
+			),
+		)
+		return false
+	remove_meta("target_acquisition_authority_rejected")
+	remove_meta("target_acquisition_authority_rejection_reason")
+	return true
+
+
+func _initial_acquisition_contains_ground_delta_gu(delta_ground_gu: Vector2) -> bool:
+	return (
+		not _target_acquisition_authority_failed_closed
+		and _target_acquisition_policy != null
+		and _target_acquisition_policy.contains_ground_delta_gu(delta_ground_gu)
+	)
+
+
+func _refresh_target_focus(now_ms_override := -1) -> void:
+	_target_focus_tick_ms = (
+		now_ms_override
+		if now_ms_override >= 0
+		else Time.get_ticks_msec()
+	)
+
+
+func _target_should_disengage(
+	candidate: Node2D,
+	now_ms_override := -1,
+) -> bool:
+	if not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+		return true
+	if _target_focus_timeout_ms <= 0 or _target_disengage_axis_cells <= 0:
+		return true
+	var now_ms := (
+		now_ms_override
+		if now_ms_override >= 0
+		else Time.get_ticks_msec()
+	)
+	if _target_focus_tick_ms <= 0:
+		_refresh_target_focus(now_ms)
+	elif now_ms - _target_focus_tick_ms > _target_focus_timeout_ms:
+		if _hc_standard_melee():
+			_hc_forget(candidate)
+		return true
+	var origin_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		candidate.global_position
+	)
+	if not origin_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return true
+	var origin_cell := Vector2i(
+		floori(origin_ground_gu.x),
+		floori(origin_ground_gu.y),
+	)
+	var target_cell := Vector2i(
+		floori(target_ground_gu.x),
+		floori(target_ground_gu.y),
+	)
+	var axis_delta := (target_cell - origin_cell).abs()
+	return (
+		axis_delta.x > _target_disengage_axis_cells
+		or axis_delta.y > _target_disengage_axis_cells
+	)
+
+
+func _configure_movement_cadence() -> bool:
+	if monster_id <= 0:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		return false
+	var authority_record := _movement_authority_record_for_id(monster_id)
+	if authority_record.is_empty():
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		return false
+	var new_cadence := MonsterMovementCadenceScript.new()
+	var now_ms := Time.get_ticks_msec()
+	var ok: bool = new_cadence.configure(authority_record, now_ms)
+	if not ok:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		return false
+	var movement: Dictionary = authority_record.get("movement", {})
+	var raw_speed: Variant = movement.get("base_move_speed_gu_per_sec", null)
+	if raw_speed == null or typeof(raw_speed) not in [TYPE_INT, TYPE_FLOAT]:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "missing_base_move_speed_gu_per_sec")
+		return false
+	var authority_speed := float(raw_speed)
+	if not is_finite(authority_speed) or authority_speed < 0.0:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "invalid_base_move_speed_gu_per_sec")
+		return false
+	var authority_movement_enabled := bool(movement.get("movement_enabled", false))
+	var authority_stationary := bool(movement.get("stationary", false))
+	if (not authority_movement_enabled or authority_stationary) and not is_zero_approx(authority_speed):
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "stationary_speed_must_be_zero")
+		return false
+	if authority_movement_enabled and not authority_stationary and authority_speed <= 0.0:
+		_movement_authority_failed_closed = true
+		set_meta("movement_authority_rejected", true)
+		set_meta("movement_authority_rejection_reason", "active_speed_must_be_positive")
+		return false
+	_movement_cadence = new_cadence
+	# The effective interval is the source of the actual continuous motor
+	# speed.  Bind it once at setup; behavior/boss compatibility projections may
+	# still describe historical data, but cannot replace this formal value.
+	move_speed_gu_per_sec = authority_speed
+	stationary = authority_stationary
+	service_move_interval_ms = int(movement.get("walk_interval_ms", 0))
+	if is_boss:
+		# _apply_boss_rule() runs before this method and may have captured a
+		# compatibility speed. Re-anchor all temporary boss multipliers to the
+		# formal per-monster base after the final authority is bound.
+		_boss_base_move_speed_gu_per_sec = move_speed_gu_per_sec
+	_movement_authority_failed_closed = false
+	remove_meta("movement_authority_rejected")
+	remove_meta("movement_authority_rejection_reason")
+	return true
+
+
+func _request_autonomous_step(
+	desired_direction_ground_gu: Vector2,
+	speed_scale: float,
+	use_crowd_steering: bool,
+	reason: StringName,
+	now_ms_override := -1,
+	engagement_target: Node2D = null
+) -> bool:
+	if _movement_step_active:
+		return false
+	if _movement_authority_failed_closed:
+		return false
+	if _movement_cadence == null:
+		return false
+	if stationary:
+		return false
+	if dormant:
+		return false
+	if control_time > 0.0:
+		return false
+	if charm_time > 0.0:
+		return false
+	if not desired_direction_ground_gu.is_finite():
+		return false
+	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
+		return false
+	var now_ms := now_ms_override
+	if now_ms < 0:
+		now_ms = Time.get_ticks_msec()
+	var cadence_result: Dictionary = _movement_cadence.evaluate(now_ms)
+	if cadence_result.authority_contract_violation:
+		_movement_authority_failed_closed = true
+		velocity = Vector2.ZERO
+		return false
+	if not cadence_result.granted:
+		return false
+	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and engagement_target == target:
+		# A granted pursuit session survives a queued path and attack cooldown.
+		_hc_close_session = true
+	var creates_continuous_pursuit := (
+		reason == &"pursuit"
+		and is_instance_valid(engagement_target)
+		and engagement_target == target
+	)
+	if creates_continuous_pursuit:
+		_continuous_pursuit_active = true
+		_continuous_pursuit_speed_scale = maxf(0.0, speed_scale)
+	else:
+		_clear_continuous_pursuit_intent()
+	var started := _begin_autonomous_step_without_cadence(
+		desired_direction_ground_gu,
+		speed_scale,
+		use_crowd_steering,
+		reason,
+		engagement_target,
+	)
+	if not started:
+		_clear_continuous_pursuit_intent()
+	return started
+
+
+func _begin_autonomous_step_without_cadence(
+	desired_direction_ground_gu: Vector2,
+	speed_scale: float,
+	use_crowd_steering: bool,
+	reason: StringName,
+	engagement_target: Node2D = null,
+) -> bool:
+	# HC-POLY-R2
+	_hc_polygon_step_override = Vector2.INF
+	if _movement_step_active:
+		return false
+	if _movement_authority_failed_closed or stationary or dormant:
+		return false
+	if control_time > 0.0 or charm_time > 0.0:
+		return false
+	if not desired_direction_ground_gu.is_finite():
+		return false
+	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
+		return false
+	if _hc_owned_movement_call and _hc_standard_melee():
+		_hc_step_override = Vector2.INF
+	var pursuit_ground := desired_direction_ground_gu.normalized()
+	var steering_ground := pursuit_ground
+	if use_crowd_steering:
+		# The timer is advanced once from _physics_process. Step creation only
+		# consumes the cached result, so several actors/step retries cannot bypass
+		# the established 10 Hz per-actor steering ceiling.
+		var separation_ground := _crowd_separation_for_motion(0.0)
+		steering_ground = pursuit_ground + separation_ground * 0.72
+		if steering_ground.dot(pursuit_ground) < 0.12:
+			steering_ground += pursuit_ground * (
+				0.12 - steering_ground.dot(pursuit_ground)
+			)
+	var neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
+		steering_ground
+	)
+	if neighbor == Vector2i.ZERO:
+		return false
+	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not current_ground_gu.is_finite():
+		return false
+	if reason == &"pursuit" and is_instance_valid(engagement_target):
+		neighbor = _terrain_neighbor_for_pursuit(
+			current_ground_gu,
+			engagement_target,
+			neighbor,
+		)
+		if neighbor == Vector2i.ZERO:
+			return false
+	var step := MonsterNeighborStepPolicyScript.build_neighbor_step(
+		current_ground_gu,
+		neighbor
+	)
+	if not bool(step.get("valid", false)):
+		return false
+	var target_ground_gu: Vector2 = step.get("target_ground_gu", Vector2.INF)
+	if _hc_polygon_step_override.is_finite():
+		target_ground_gu = _hc_polygon_step_override
+	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and _hc_step_override.is_finite():
+		target_ground_gu = _hc_step_override
+	if _hc_owned_movement_call and _hc_standard_melee():
+		_hc_motion_window = 0.0
+		_hc_window_remaining = INF
+	if not target_ground_gu.is_finite():
+		return false
+	_movement_step_start_ground_gu = current_ground_gu
+	_movement_step_start_screen_px = global_position
+	_movement_step_target_ground_gu = target_ground_gu
+	_movement_step_distance_gu = current_ground_gu.distance_to(target_ground_gu)
+	_movement_step_neighbor = neighbor
+	_movement_step_speed_scale = maxf(0.0, speed_scale)
+	_movement_step_reason = reason
+	_movement_step_engagement_target_instance_id = (
+		engagement_target.get_instance_id()
+		if is_instance_valid(engagement_target)
+		else 0
+	)
+	# R1.3: a genuinely new committed step begins here (single production
+	# assignment point of _movement_step_active). Pure observation order.
+	_movement_step_epoch += 1
+	_movement_step_active = true
+	var step_direction_ground := (
+		MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
+	)
+	movement_facing = _screen_facing_for_ground_direction(step_direction_ground)
+	facing = movement_facing
+	return true
+
+
+func _terrain_neighbor_for_pursuit(
+	current_ground_gu: Vector2,
+	engagement_target: Node2D,
+	direct_neighbor: Vector2i,
+) -> Vector2i:
+	if _hc_owned_movement_call and _hc_standard_melee():
+		return _hc_neighbor(current_ground_gu, engagement_target, direct_neighbor)
+	if _terrain_navigation_context.has("poly_index"):
+		return _hc_polygon_nonhc_neighbor(current_ground_gu, engagement_target)
+	if runtime_map_id < 0:
+		return direct_neighbor
+	if not MonsterTerrainNavigationPolicyScript.context_valid(
+		_terrain_navigation_context,
+		runtime_map_id,
+	):
+		# A formal map without its exact release collision context must not start
+		# a blind pursuit that can only be corrected by repeated physics rollback.
+		return Vector2i.ZERO
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		engagement_target.global_position
+	)
+	if not target_ground_gu.is_finite():
+		return Vector2i.ZERO
+	var current_cell := MonsterNeighborStepPolicyScript.temporary_cell(current_ground_gu)
+	var goal_cell := MonsterNeighborStepPolicyScript.temporary_cell(target_ground_gu)
+	var target_instance_id := engagement_target.get_instance_id()
+	if (
+		_terrain_path_target_instance_id != target_instance_id
+		or not _terrain_path_has_target_cell
+		or _terrain_path_target_cell != goal_cell
+	):
+		_clear_terrain_route_cache()
+		_terrain_path_target_instance_id = target_instance_id
+		_terrain_path_target_cell = goal_cell
+		_terrain_path_has_target_cell = true
+	var now_ms := Time.get_ticks_msec()
+	if _terrain_has_failed_cell and now_ms >= _terrain_failed_cell_until_ms:
+		_terrain_has_failed_cell = false
+	var direct_cell := current_cell + direct_neighbor
+	var direct_is_recent_physics_failure := (
+		_terrain_has_failed_cell and direct_cell == _terrain_failed_cell
+	)
+	while not _terrain_path_waypoints.is_empty() and _terrain_path_waypoints[0] == current_cell:
+		_terrain_path_waypoints.pop_front()
+	if not _terrain_path_waypoints.is_empty():
+		var direct_los_clear := MonsterTerrainNavigationPolicyScript.static_line_of_sight_clear(
+			_terrain_navigation_context,
+			current_ground_gu,
+			target_ground_gu,
+		)
+		if (
+			direct_los_clear
+			and not direct_is_recent_physics_failure
+			and MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+				_terrain_navigation_context,
+				current_cell,
+				direct_cell,
+				combat_radius_gu,
+			)
+		):
+			_terrain_path_waypoints.clear()
+			return direct_neighbor
+		var cached_cell := _terrain_path_waypoints[0]
+		if MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+			_terrain_navigation_context,
+			current_cell,
+			cached_cell,
+			combat_radius_gu,
+			_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
+		):
+			_terrain_path_waypoints.pop_front()
+			return cached_cell - current_cell
+		_terrain_path_waypoints.clear()
+	if (
+		not direct_is_recent_physics_failure
+		and MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+			_terrain_navigation_context,
+			current_cell,
+			direct_cell,
+			combat_radius_gu,
+		)
+	):
+		# The overwhelming open-ground case remains the existing O(1) neighbor
+		# selection. A* is strictly a wall-detour fallback.
+		return direct_neighbor
+	if now_ms < _terrain_no_path_until_ms:
+		return Vector2i.ZERO
+	var terrain_path_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_terrain_path_calls"
+	)
+	var path_result := MonsterTerrainNavigationPolicyScript.find_bounded_path(
+		_terrain_navigation_context,
+		current_cell,
+		goal_cell,
+		combat_radius_gu,
+		_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
+	)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_terrain_path_usec",
+		terrain_path_started_usec,
+	)
+	if terrain_path_started_usec > 0:
+		if bool(path_result.get("accepted", false)):
+			RuntimeDiagnostics.increment_performance_counter(
+				&"enemy_terrain_path_accepted"
+			)
+		elif str(path_result.get("reason", "")) == "frame_budget_exhausted":
+			RuntimeDiagnostics.increment_performance_counter(
+				&"enemy_terrain_path_budget_rejections"
+			)
+		if path_result.has("expansions"):
+			var expansions := int(path_result.get("expansions", 0))
+			if expansions > 0:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"enemy_terrain_path_expansions",
+					expansions,
+				)
+			RuntimeDiagnostics.record_performance_max(
+				&"enemy_terrain_path_expansions_max",
+				float(expansions),
+			)
+	if not bool(path_result.get("accepted", false)):
+		# Frame budget exhaustion is not a path failure. Another actor gets the
+		# next frame; no animation starts while this actor waits.
+		return Vector2i.ZERO
+	if not bool(path_result.get("found", false)):
+		_terrain_no_path_until_ms = (
+			now_ms + MonsterTerrainNavigationPolicyScript.NO_PATH_COOLDOWN_MS
+			+ int(posmod(get_instance_id(), 7)) * 17
+		)
+		return Vector2i.ZERO
+	var raw_waypoints: Variant = path_result.get("waypoints", [])
+	if raw_waypoints is Array:
+		for raw_cell: Variant in raw_waypoints:
+			if raw_cell is Vector2i:
+				_terrain_path_waypoints.append(raw_cell)
+	if _terrain_path_waypoints.is_empty():
+		return Vector2i.ZERO
+	var next_cell: Vector2i = _terrain_path_waypoints.pop_front()
+	if not MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(
+		_terrain_navigation_context,
+		current_cell,
+		next_cell,
+		combat_radius_gu,
+		_terrain_failed_cell if _terrain_has_failed_cell else Vector2i(-2147483648, -2147483648),
+	):
+		_terrain_path_waypoints.clear()
+		return Vector2i.ZERO
+	return next_cell - current_cell
+
+
+func _clear_terrain_route_cache() -> void:
+	_terrain_path_waypoints.clear()
+	_terrain_path_target_instance_id = 0
+	_terrain_path_target_cell = Vector2i.ZERO
+	_terrain_path_has_target_cell = false
+
+
+func _reset_terrain_navigation_state() -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_pursuit):
+		_hc_polygon_pursuit.reset()
+	_hc_close_debt = false
+	_hc_cancel_path()
+	_clear_terrain_route_cache()
+	_terrain_no_path_until_ms = 0
+	_terrain_failed_cell = Vector2i.ZERO
+	_terrain_has_failed_cell = false
+	_terrain_failed_cell_until_ms = 0
+
+
+func _clear_continuous_pursuit_intent() -> void:
+	_continuous_pursuit_active = false
+	_continuous_pursuit_speed_scale = 1.0
+	_clear_terrain_route_cache()
+
+
+func _live_continuous_pursuit_target() -> Node2D:
+	if not _continuous_pursuit_active:
+		return null
+	if not is_instance_valid(target) or target.is_queued_for_deletion():
+		return null
+	if target is PlayerCharacter and target.current_hp <= 0:
+		return null
+	if target is EnemyActor and (target._dying or target.current_hp <= 0):
+		return null
+	if target is SummonActor and target.current_hp <= 0:
+		return null
+	return target
+
+
+func _continue_continuous_pursuit_from_current_target() -> void:
+	if _hc_owned_movement_call and _hc_standard_melee():
+		# Outer physics owns the only post-arrival decision and movement budget.
+		return
+	var live_target := _live_continuous_pursuit_target()
+	if live_target == null:
+		_clear_continuous_pursuit_intent()
+		return
+	if _target_is_safe_player(live_target) or _point_inside_safe_zone(live_target.global_position):
+		_clear_continuous_pursuit_intent()
+		return
+	var desired_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		live_target.global_position,
+	)
+	if (
+		not desired_ground_gu.is_finite()
+		or _movement_step_engagement_ready()
+	):
+		_clear_continuous_pursuit_intent()
+		return
+	# Cell continuation deliberately omits crowd/target-grid evaluation. The
+	# current target reference is the only actor read on this hot path.
+	if not _begin_autonomous_step_without_cadence(
+		desired_ground_gu,
+		_continuous_pursuit_speed_scale,
+		false,
+		&"pursuit",
+		live_target,
+	):
+		_clear_continuous_pursuit_intent()
+
+
+func _clear_autonomous_step_state() -> void:
+	_movement_step_active = false
+	_movement_step_start_ground_gu = Vector2.INF
+	_movement_step_start_screen_px = Vector2.INF
+	_movement_step_target_ground_gu = Vector2.INF
+	_movement_step_distance_gu = 0.0
+	_movement_step_neighbor = Vector2i.ZERO
+	_movement_step_engagement_target_instance_id = 0
+	_movement_step_speed_scale = 1.0
+	_movement_step_reason = &""
+
+
+func _cancel_autonomous_step(preserve_current_position := true) -> void:
+	_hc_close_session = false
+	_hc_m30_attack_pose_remaining = 0.0
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_clear_autonomous_step_state()
+	_clear_continuous_pursuit_intent()
+	_reset_terrain_navigation_state()
+
+
+func _movement_step_engagement_target() -> Node2D:
+	if _continuous_pursuit_active:
+		return _live_continuous_pursuit_target()
+	if _movement_step_engagement_target_instance_id <= 0:
+		return null
+	var candidate: Object = instance_from_id(
+		_movement_step_engagement_target_instance_id
+	)
+	if not (candidate is Node2D):
+		return null
+	var target_node := candidate as Node2D
+	if (
+		not is_instance_valid(target_node)
+		or target_node.is_queued_for_deletion()
+	):
+		return null
+	return target_node
+
+
+func _movement_step_engagement_ready() -> bool:
+	if _hc_owned_movement_call and _hc_standard_melee() and _movement_step_reason == &"pursuit":
+		return _hc_step_can_end()
+	var hit_target := _movement_step_engagement_target()
+	if hit_target == null:
+		return false
+	if _target_is_safe_player(hit_target):
+		return false
+	var offset_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		hit_target.global_position,
+	)
+	var distance_gu := offset_ground_gu.length()
+	var contact_distance_gu := _contact_distance_gu_to_target(hit_target)
+	var engagement_distance_gu := maxf(
+		attack_range_gu,
+		contact_distance_gu,
+	)
+	return _attack_engagement_ready(
+		hit_target,
+		offset_ground_gu,
+		distance_gu,
+		contact_distance_gu,
+		engagement_distance_gu,
+	)
+
+
+func _fail_autonomous_step_blocked() -> void:
+	if _hc_owned_movement_call and _hc_standard_melee():
+		_hc_fail_step()
+		return
+	var failed_reason := _movement_step_reason
+	var failed_target_ground_gu := _movement_step_target_ground_gu
+	if _movement_step_start_screen_px.is_finite() and _movement_step_start_screen_px != Vector2.INF:
+		set_combat_position(
+			_movement_step_start_screen_px,
+			&"autonomous_step_rollback"
+		)
+		_last_environment_safe_position_px = _movement_step_start_screen_px
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_clear_autonomous_step_state()
+	_clear_continuous_pursuit_intent()
+	if failed_reason == &"pursuit" and failed_target_ground_gu.is_finite():
+		var now_ms := Time.get_ticks_msec()
+		_terrain_failed_cell = MonsterNeighborStepPolicyScript.temporary_cell(
+			failed_target_ground_gu
+		)
+		_terrain_has_failed_cell = true
+		_terrain_failed_cell_until_ms = (
+			now_ms + MonsterTerrainNavigationPolicyScript.NO_PATH_COOLDOWN_MS
+			+ 250 + int(posmod(get_instance_id(), 7)) * 17
+		)
+		_terrain_no_path_until_ms = (
+			now_ms + MonsterTerrainNavigationPolicyScript.NO_PATH_COOLDOWN_MS
+			+ int(posmod(get_instance_id(), 7)) * 17
+		)
+
+
+func _advance_autonomous_step(delta: float) -> void:
+	var movement_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_movement_strategy_calls"
+	)
+	_advance_autonomous_step_internal(delta)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_movement_strategy_usec",
+		movement_started_usec,
+	)
+
+
+## Inclusive movement-strategy body. The move and environment probes inside it
+## are nested in this segment and in the actor physics total.
+func _advance_autonomous_step_internal(delta: float) -> void:
+	if not _movement_step_active:
+		return
+	if stationary:
+		_cancel_autonomous_step(true)
+		return
+	if dormant:
+		_cancel_autonomous_step(true)
+		return
+	if control_time > 0.0:
+		_cancel_autonomous_step(true)
+		return
+	if charm_time > 0.0:
+		_cancel_autonomous_step(true)
+		return
+	var current_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not current_ground_gu.is_finite():
+		_cancel_autonomous_step(true)
+		return
+	if _continuous_pursuit_active:
+		var live_target := _live_continuous_pursuit_target()
+		if live_target == null:
+			_cancel_autonomous_step(true)
+			return
+		var live_offset_ground_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			live_target.global_position,
+		)
+		if (
+			_target_is_safe_player(live_target)
+			or _point_inside_safe_zone(live_target.global_position)
+			or not live_offset_ground_gu.is_finite()
+		):
+			_cancel_autonomous_step(true)
+			return
+	# A pursuit step is allowed to finish early when the already-selected
+	# combat target becomes attack-ready. This preserves the existing attack
+	# geometry and prevents a full-cell attempt from colliding with the target
+	# and rolling back outside melee/ranged engagement distance.
+	if _movement_step_engagement_ready():
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
+		_clear_autonomous_step_state()
+		_clear_continuous_pursuit_intent()
+		return
+	var remaining := _movement_step_target_ground_gu - current_ground_gu
+	if remaining.length_squared() <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		var target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
+		if target_screen.is_finite():
+			set_combat_position(target_screen, &"autonomous_step_arrival")
+		velocity = Vector2.ZERO
+		_clear_autonomous_step_state()
+		_continue_continuous_pursuit_from_current_target()
+		return
+	# Runtime movement speed is a true Ground-GU/s scalar.  Every neighbor uses
+	# the same scalar; a diagonal neighbor therefore travels sqrt(2) GU and
+	# takes sqrt(2) times as long as an axis neighbor instead of gaining a hidden
+	# diagonal speed multiplier.
+	var presentation_speed := (
+		move_speed_gu_per_sec
+		* _movement_step_speed_scale
+		if move_speed_gu_per_sec > 0.0 and _movement_step_speed_scale > 0.0
+		else 0.0
+	)
+	if presentation_speed <= 0.0:
+		_cancel_autonomous_step(true)
+		return
+	var remaining_distance := remaining.length()
+	var very_small := 0.0001
+	var max_frame_distance := presentation_speed * maxf(delta, 0.0)
+	var frame_speed := minf(presentation_speed, remaining_distance / maxf(delta, very_small))
+	var frame_direction := remaining.normalized()
+	var frame_start_ground := current_ground_gu
+	var frame_start_screen := global_position
+	velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+		frame_direction,
+		frame_speed,
+	)
+	if _hc_owned_movement_call and _hc_standard_melee() and _movement_step_reason == &"pursuit":
+		var predicted := current_ground_gu + frame_direction * frame_speed * maxf(delta, 0.0)
+		if not _hc_motion_clear(current_ground_gu, predicted):
+			velocity = Vector2.ZERO
+			_clear_autonomous_step_state()
+			_hc_last_reason = "FRONTLINE_BLOCKED"
+			return
+	_move_with_spatial_rules(delta)
+	var after_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	# The step target itself remains immutable, but an autonomous pursuit may
+	# stop before that center once the frozen combat target becomes attack-ready.
+	# This is a successful movement event, not a blocked-step rollback.
+	if after_ground_gu.is_finite() and _movement_step_engagement_ready():
+		velocity = Vector2.ZERO
+		_clear_autonomous_step_state()
+		_clear_continuous_pursuit_intent()
+		return
+	var blocked := false
+	if _hc_owned_movement_call and _hc_standard_melee():
+		blocked = not after_ground_gu.is_finite()
+		if not blocked:
+			var actual_step := after_ground_gu.distance_to(frame_start_ground)
+			blocked = actual_step <= GroundUnitSpace.EPSILON_GU
+			if not blocked:
+				blocked = _hc_track_motion(delta, remaining_distance, after_ground_gu.distance_to(_movement_step_target_ground_gu))
+	else:
+		if get_slide_collision_count() > 0:
+			blocked = true
+		elif not after_ground_gu.is_finite():
+			blocked = true
+		else:
+			var motion_ground_gu := after_ground_gu - frame_start_ground
+			if motion_ground_gu.length() > GroundUnitSpace.EPSILON_GU:
+				var forward_dot := motion_ground_gu.normalized().dot(frame_direction)
+				if forward_dot < -0.5:
+					blocked = true
+				elif forward_dot < 0.5:
+					var side_dot := motion_ground_gu.normalized().dot(
+						Vector2(-frame_direction.y, frame_direction.x)
+					)
+					if absf(side_dot) > 0.8:
+						blocked = true
+			else:
+				blocked = true
+	if blocked:
+		# A live summon that physically intercepts pursuit is a combat decision,
+		# not terrain.  Consume only the slide-collision set already produced by
+		# move_and_slide(); never add a combat-target group scan to this hot path.
+		var intercepting_summon := _slide_collision_intercepting_summon()
+		_fail_autonomous_step_blocked()
+		if intercepting_summon != null:
+			target = intercepting_summon
+			_retarget_timer = 0.0
+			_refresh_target_focus()
+		return
+	if after_ground_gu.distance_squared_to(_movement_step_target_ground_gu) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		var exact_target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
+		if exact_target_screen.is_finite():
+			set_combat_position(exact_target_screen, &"autonomous_step_arrival")
+		velocity = Vector2.ZERO
+		_clear_autonomous_step_state()
+		_continue_continuous_pursuit_from_current_target()
+		return
 
 
 func _apply_boss_rule() -> void:
@@ -266,6 +2166,9 @@ func _apply_boss_rule() -> void:
 	_attack_interval = float(timing.get("attackIntervalMs", 1550)) / 1000.0
 	_attack_animation_duration = float(timing.get("attackAnimationMs", 460)) / 1000.0
 	_attack_hit_delay = float(timing.get("hitDelayMs", 0)) / 1000.0
+	var configured_delivery: Variant = boss_rule.get("attackDelivery", {})
+	if configured_delivery is Dictionary and not (configured_delivery as Dictionary).is_empty():
+		attack_delivery_rule = (configured_delivery as Dictionary).duplicate(true)
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	_boss_skill_enabled = bool(special.get("enabled", false))
 	_boss_skill_cooldown = float(special.get("initialCooldownSeconds", _boss_skill_cooldown))
@@ -282,6 +2185,43 @@ func _apply_boss_rule() -> void:
 	_boss_base_attack_interval = _attack_interval
 
 
+static func legal_spawn_facing_directions() -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	for neighbor: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
+		result.append(
+			_screen_facing_for_ground_direction(
+				MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
+			)
+		)
+	return result
+
+
+func set_spawn_facing_seed_for_test(seed_value: int) -> void:
+	if _spawn_facing_initialized or is_node_ready():
+		return
+	_spawn_facing_seed_override = seed_value
+	_spawn_facing_seed_override_active = true
+
+
+func _initialize_spawn_facing_once() -> void:
+	if _spawn_facing_initialized:
+		return
+	_spawn_facing_initialized = true
+	if _spawn_facing_seed_override_active:
+		_spawn_facing_rng.seed = _spawn_facing_seed_override
+	else:
+		_spawn_facing_rng.randomize()
+	var neighbors := MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS
+	var selected_neighbor: Vector2i = neighbors[
+		_spawn_facing_rng.randi_range(0, neighbors.size() - 1)
+	]
+	var selected_facing := _screen_facing_for_ground_direction(
+		MonsterNeighborStepPolicyScript.desired_ground_direction(selected_neighbor)
+	)
+	facing = selected_facing
+	movement_facing = selected_facing
+
+
 func _ready() -> void:
 	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
 		queue_free()
@@ -290,10 +2230,9 @@ func _ready() -> void:
 	add_to_group("enemies")
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
-	# The crowd grid/separation policy is authoritative for monster-to-monster
-	# spacing. Keeping ENEMY_LAYER in this mask makes the physics server solve the
-	# same dense crowd again for every moving actor, which scales disastrously.
-	# World and player remain hard physics collisions.
+	# Crowd steering still chooses routes and reduces contention, while the
+	# physics mask is the final hard occupancy authority. Ground monsters must
+	# not tunnel through WORLD, players, summons (PLAYER_LAYER), or one another.
 	collision_mask = ENEMY_MOTION_MASK
 	if not bool(behavior_profile.get("worldCollision", true)):
 		# 飞行怪参与攻击和选取，但不作为人物移动的实体墙。
@@ -303,6 +2242,10 @@ func _ready() -> void:
 	safe_margin = 0.35
 	max_slides = 6
 	_rng.randomize()
+	if not _audio_rng_initialized:
+		_audio_rng.randomize()
+		_audio_rng_initialized = true
+	_initialize_spawn_facing_once()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
 	combat_radius_gu = (
@@ -320,6 +2263,13 @@ func _ready() -> void:
 	)
 	collision.shape = WorldSpatialRules.actor_footprint_shape_px(collision_radius_px)
 	add_child(collision)
+	if not is_boss:
+		_background_wakeup_timer = Timer.new()
+		_background_wakeup_timer.name = "BackgroundAIWakeupTimer"
+		_background_wakeup_timer.one_shot = true
+		_background_wakeup_timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
+		_background_wakeup_timer.timeout.connect(_on_background_wakeup_timeout)
+		add_child(_background_wakeup_timer)
 	_resolve_invalid_spawn_overlap()
 	_last_environment_safe_position_px = global_position
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS * float(posmod(get_instance_id(), 11)) / 11.0
@@ -349,6 +2299,9 @@ func _ready() -> void:
 		_retarget_timer = FAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 11))
 		_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS * float(posmod(get_instance_id(), 7)) / 7.0
 		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS * float(posmod(get_instance_id(), 13)) / 13.0
+		if _can_use_background_ai():
+			_enter_background_deep_sleep(true)
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -378,6 +2331,7 @@ func _resolve_invalid_spawn_overlap() -> void:
 
 func set_targeted(value: bool) -> void:
 	is_targeted = value
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 	if visual != null:
 		visual.refresh_target_ring()
@@ -390,37 +2344,121 @@ func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 		target_requested.emit(self)
 
 
-func _physics_process(delta: float) -> void:
-	if _dying:
+func _update_natural_regen(delta: float) -> void:
+	var regen_result: Dictionary = _natural_regen.advance(delta, current_hp, max_hp)
+	if int(regen_result.get("healed", 0)) <= 0:
 		return
-	_spatial_index_update()
-	_attack_timer = maxf(0.0, _attack_timer - delta)
-	_update_status_effects(delta)
-	_update_entrapment_state(delta)
-	_update_pending_attack(delta)
-	if _can_use_background_ai():
+	current_hp = int(regen_result.get("hp", current_hp))
+	_refresh_overhead_health()
+
+
+func _physics_process(delta: float) -> void:
+	_audio_try_enter_combat_session()
+	_audio_observe_visual_state()
+	var physics_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_physics_calls"
+	)
+	_physics_process_internal(delta)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_physics_usec",
+		physics_started_usec,
+	)
+
+
+## Inclusive actor physics body. The outer wrapper above deliberately measures
+## every early return, including death and background fast paths.
+func _physics_process_internal(delta: float) -> void:
+	if _dying:
+		_record_performance_counter(&"death_physics_process_calls_after_begin")
+		return
+	_record_performance_counter(&"active_enemy_physics_count")
+	# Match the original server's object-cycle boundary: damage may reduce HP to
+	# zero during a multi-target release, but death teardown must not interrupt
+	# that release's remaining targets. Resolve the queued death on the next
+	# actor tick instead.
+	if _death_pending or current_hp <= 0:
+		_begin_death()
+		return
+	# actual_ground_motion_gu describes this physics tick only. A monster that
+	# does not move this tick must never retain the previous tick's motion.
+	actual_ground_motion_gu = Vector2.ZERO
+	var physics_delta := delta
+	var use_background_ai := _can_use_background_ai()
+	if use_background_ai:
+		if _background_wakeup_timer != null:
+			_record_performance_counter(&"background_fast_path_skips")
+			_enter_background_deep_sleep(false)
+			return
+		# Lightweight fixtures that intentionally override _ready() have no wake
+		# timer. Preserve the first-pass cadence path for those isolated actors.
 		_background_ai_timer -= delta
-		if _background_ai_timer <= 0.0:
-			_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
-			_background_ai_evaluation_count += 1
-			_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
-			if not is_instance_valid(target):
-				_return_to_spawn()
+		_background_accumulated_delta += delta
+		if _background_ai_timer > 0.0:
+			_record_performance_counter(&"background_fast_path_skips")
+			return
+		delta = _background_accumulated_delta
+		_background_accumulated_delta = 0.0
+	else:
+		delta += _background_accumulated_delta
+		_background_accumulated_delta = 0.0
+	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - delta)
+	_spatial_index_update()
+	# Vanilla m_dwHitTick is an absolute deadline: an already-overdue attack
+	# stays overdue (negative). Clamping at 0 would fabricate extra wait when
+	# a struck adds its small delay to an expired deadline (R1 policy).
+	_attack_timer -= delta
+	_hc_m30_attack_pose_remaining = maxf(0.0, _hc_m30_attack_pose_remaining - delta)
+	_update_status_effects(delta)
+	# Poison/status damage and natural regeneration are independent. Resolve
+	# status first, but never allow a lethal status tick to be resurrected by
+	# a natural-regeneration tick in the same physics frame.
+	if _dying or _death_pending:
+		return
+	_update_natural_regen(delta)
+	_update_entrapment_state(delta)
+	if not combat_enabled:
+		_hold_combat_disabled()
+		return
+	_update_pending_attack(delta)
+	if use_background_ai:
+		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+		_record_performance_counter(&"background_ai_evaluations")
+		var background_started_usec := RuntimeDiagnostics.begin_timed_segment(
+			&"enemy_background_tick_calls"
+		)
+		_retarget(BACKGROUND_AI_INTERVAL_SECONDS)
+		if not is_instance_valid(target):
+			_return_to_spawn(physics_delta)
+		RuntimeDiagnostics.end_timed_segment(
+			&"enemy_background_tick_usec",
+			background_started_usec,
+		)
 		return
 	_background_ai_timer = 0.0
+	_record_performance_counter(&"foreground_ai_ticks")
+	if is_instance_valid(target):
+		_record_performance_counter(&"engaged_enemy_count")
+	if _handle_safe_zone_target_return(physics_delta):
+		return
 	_retarget(delta)
 	if _update_area_attack(delta):
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	if _update_behavior_summon(delta):
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	# Keep the established retarget/attack/summon timing, but immobilization must
 	# win over the no-target return path after an actor is relocated beyond its
 	# authored spawn leash.
 	if control_time > 0.0 or charm_time > 0.0:
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 		if _control_anchor_ground_gu == Vector2.INF:
 			_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
 		else:
@@ -429,28 +2467,11 @@ func _physics_process(delta: float) -> void:
 				&"control_anchor"
 			)
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	_control_anchor_ground_gu = Vector2.INF
 	if not is_instance_valid(target):
-		_return_to_spawn()
-		return
-	if target is PlayerCharacter and _point_inside_safe_zone(target.global_position):
-		_pending_attack_time = -1.0
-		_pending_attack_target = null
-		velocity = Vector2.ZERO
-		var spawn_position:Vector2=get_meta("spawn_position",global_position)
-		var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
-			global_position,
-			spawn_position,
-		)
-		if _point_inside_safe_zone(global_position) and spawn_delta_ground_gu.length() > SAFE_ZONE_RETURN_EPSILON_GU:
-			velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
-				spawn_delta_ground_gu,
-				move_speed_gu_per_sec,
-			)
-			_move_with_spatial_rules(delta)
-		queue_redraw()
+		_return_to_spawn(physics_delta)
 		return
 	var offset_px := target.global_position - global_position
 	var offset_ground_gu := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(offset_px)
@@ -476,14 +2497,29 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			return
+	if _hc_standard_melee():
+		_hc_tick_melee(delta, physics_delta)
+		_hc_finalize_boss_facing()
+		_request_actor_redraw_if_dynamic()
+		return
+	if _movement_step_active:
+		_advance_autonomous_step(physics_delta)
+		_request_actor_redraw_if_dynamic()
+		return
 	var contact_distance_gu := _contact_distance_gu_to_target(target)
 	var engagement_distance_gu := maxf(attack_range_gu, contact_distance_gu)
-	var engagement_ready := distance_gu <= engagement_distance_gu + GroundUnitSpace.EPSILON_GU
+	var engagement_ready := _attack_engagement_ready(
+		target,
+		offset_ground_gu,
+		distance_gu,
+		contact_distance_gu,
+		engagement_distance_gu,
+	)
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
-		queue_redraw()
+		_request_actor_redraw_if_dynamic()
 		return
 	if dormant:
 		var wake_range_gu := MonsterUnitAdapterScript.range_gu(
@@ -503,14 +2539,21 @@ func _physics_process(delta: float) -> void:
 			dormant = false
 		else:
 			velocity = Vector2.ZERO
-			queue_redraw()
+			_request_actor_redraw_if_dynamic()
 			return
 	if (
 		target.has_method("is_stealthed")
 		and target.is_stealthed()
+		and not anti_stealth
 		and distance_gu > MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
 	):
 		velocity = Vector2.ZERO
+		return
+	if _uses_area_magic_delivery():
+		_update_area_magic_delivery(delta)
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
+		_request_actor_redraw_if_dynamic()
 		return
 	if is_boss and _boss_skill_enabled:
 		_update_boss_skill(delta, distance_gu)
@@ -521,61 +2564,67 @@ func _physics_process(delta: float) -> void:
 		and not target is PlayerCharacter
 	):
 		# 怪物和召唤物重叠时可以自行分离；玩家普通移动不能迫使怪物后退。
-		velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
+		var started := _request_autonomous_step(
 			-offset_ground_gu,
-			move_speed_gu_per_sec * 0.72,
+			0.72,
+			false,
+			&"overlap_retreat"
 		)
+		if started:
+			_advance_autonomous_step(physics_delta)
+		else:
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
 	elif engagement_ready:
 		velocity = Vector2.ZERO
 		if _attack_timer <= 0.0:
 			_attack_timer = _current_attack_interval()
-			if visual != null:
-				visual.play_attack(maxf(_attack_animation_duration,0.62))
+			_refresh_target_focus()
+			_play_attack_animation(maxf(_attack_animation_duration, 0.62))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
-			if _attack_hit_delay > 0.0:
+			if _uses_special_magic_melee_delivery():
+				_deal_special_magic_melee_hit(target, dealt_damage)
+			elif _uses_monster_special_cell_delivery():
+				_launch_monster_special_cell_delivery(target, dealt_damage)
+			elif _uses_physical_projectile_delivery():
+				_launch_physical_projectile(target, dealt_damage)
+			elif (
+				_uses_target_magic_delivery()
+				and _target_magic_condition_met(offset_ground_gu)
+			):
+				_launch_target_magic(target, dealt_damage)
+			elif str(attack_delivery_rule.get("kind", "")) in MONSTER_SPECIAL_CELL_DELIVERY_KINDS:
+				# A named canonical delivery that fails its exact contract is not
+				# ordinary contact. Keep the actor alive and mobile while preventing
+				# a malformed profile from dealing damage.
+				pass
+			elif _attack_hit_delay > 0.0:
 				_pending_attack_time = _attack_hit_delay
 				_pending_attack_target = target
 				_pending_attack_damage = dealt_damage
+				_pending_attack_release_record = {
+					"kind": "generic_melee",
+					"target_instance_id": target.get_instance_id(),
+					"target_combat_epoch": _typed_player_combat_epoch(target),
+					"runtime_map_id": runtime_map_id,
+				}
 			else:
 				_deal_melee_hit(target, dealt_damage)
-	elif distance_gu <= aggro_radius_gu:
+	else:
 		var pursuit_ground := offset_ground_gu.normalized()
-		var steering_ground := pursuit_ground + _crowd_separation_for_motion(delta) * 0.72
-		# Separation may move sideways but must never reverse a pursuing monster.
-		# Removing the negative forward component eliminates visible rollback.
-		if steering_ground.dot(pursuit_ground) < 0.12:
-			steering_ground += pursuit_ground * (
-				0.12 - steering_ground.dot(pursuit_ground)
-			)
-		var desired_velocity_px_per_sec := GroundUnitSpace.desired_screen_velocity_px_per_sec(
-			steering_ground,
-			move_speed_gu_per_sec,
+		var started := _request_autonomous_step(
+			pursuit_ground,
+			1.0,
+			true,
+			&"pursuit",
+			-1,
+			target
 		)
-		velocity = velocity.lerp(
-			desired_velocity_px_per_sec,
-			clampf(delta * 10.0, 0.0, 1.0),
-		)
-	else:
-		var current_ground_velocity_gu_per_sec := (
-			GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity)
-		)
-		current_ground_velocity_gu_per_sec = current_ground_velocity_gu_per_sec.move_toward(
-			Vector2.ZERO,
-			move_speed_gu_per_sec * 3.0 * delta,
-		)
-		velocity = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
-			current_ground_velocity_gu_per_sec
-		)
-	# 零速度时不做碰撞恢复，避免玩家压住碰撞边缘时把怪物挤走。
-	if (
-		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity).length_squared()
-		> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
-	):
-		_move_with_spatial_rules(delta)
-		if actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-			movement_facing = _screen_facing_for_ground_direction(actual_ground_motion_gu)
-	else:
-		actual_ground_motion_gu = Vector2.ZERO
+		if started:
+			_advance_autonomous_step(physics_delta)
+		else:
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
 	if is_boss and is_instance_valid(target):
 		var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
 			global_position,
@@ -584,7 +2633,136 @@ func _physics_process(delta: float) -> void:
 		if fresh_offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 			facing = _screen_facing_for_ground_direction(fresh_offset_ground_gu)
 	if visual != null and visual.is_fallback_attacking():
-		queue_redraw()
+		_request_actor_redraw_if_dynamic()
+
+
+func _handle_safe_zone_target_return(physics_delta: float) -> bool:
+	if not (
+		is_instance_valid(target)
+		and target is PlayerCharacter
+		and _point_inside_safe_zone(target.global_position)
+	):
+		return false
+	_audio_end_combat_session("safe_zone")
+	_pending_attack_time = -1.0
+	_pending_attack_target = null
+	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	if _movement_step_active:
+		_cancel_autonomous_step(true)
+	velocity = Vector2.ZERO
+	var spawn_position: Vector2 = get_meta("spawn_position", global_position)
+	var spawn_delta_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		spawn_position,
+	)
+	if (
+		_point_inside_safe_zone(global_position)
+		and spawn_delta_ground_gu.length() > SAFE_ZONE_RETURN_EPSILON_GU
+	):
+		var started := _request_autonomous_step(
+			spawn_delta_ground_gu,
+			1.0,
+			false,
+			&"safe_zone_return"
+		)
+		if started:
+			_advance_autonomous_step(physics_delta)
+		else:
+			velocity = Vector2.ZERO
+			actual_ground_motion_gu = Vector2.ZERO
+	# Returning from a protected area is a stateful one-shot parent redraw path;
+	# keep it explicit even for formal textured actors.
+	_request_actor_redraw()
+	return true
+
+
+func _enter_background_deep_sleep(initial_phase: bool) -> void:
+	if is_boss or _background_wakeup_timer == null:
+		return
+	if not _background_deep_sleeping:
+		_background_deep_sleeping = true
+		_record_performance_counter(&"background_deep_sleep_entries")
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_background_last_wakeup_msec = Time.get_ticks_msec()
+	var delay_seconds := BACKGROUND_AI_INTERVAL_SECONDS
+	if initial_phase:
+		var phase_slot := _background_wakeup_phase_slot()
+		delay_seconds = (
+			BACKGROUND_AI_INTERVAL_SECONDS
+			* float(phase_slot + 1)
+			/ float(BACKGROUND_WAKE_PHASE_SLOTS)
+		)
+	_background_ai_timer = delay_seconds
+	_background_wakeup_timer.start(delay_seconds)
+
+
+func _background_wakeup_phase_slot() -> int:
+	var stable_serial := int(get_meta("spawn_serial", get_instance_id()))
+	return posmod(stable_serial * 7 + monster_id * 11, BACKGROUND_WAKE_PHASE_SLOTS)
+
+
+func _leave_background_deep_sleep() -> void:
+	if not _background_deep_sleeping:
+		return
+	_background_deep_sleeping = false
+	_background_ai_timer = 0.0
+	if _background_wakeup_timer != null:
+		_background_wakeup_timer.stop()
+	set_physics_process(true)
+
+
+func _on_background_wakeup_timeout() -> void:
+	if not _background_deep_sleeping or _dying:
+		return
+	_record_performance_counter(&"background_deep_sleep_wakeups")
+	var now_msec := Time.get_ticks_msec()
+	var elapsed_seconds := clampf(
+		float(maxi(1, now_msec - _background_last_wakeup_msec)) / 1000.0,
+		1.0 / 120.0,
+		BACKGROUND_AI_INTERVAL_SECONDS * 2.0,
+	)
+	_background_last_wakeup_msec = now_msec
+	if _death_pending or current_hp <= 0:
+		_leave_background_deep_sleep()
+		return
+	if not _can_use_background_ai():
+		_leave_background_deep_sleep()
+		return
+	_crowd_steering_timer = maxf(0.0, _crowd_steering_timer - elapsed_seconds)
+	_spatial_index_update()
+	# Same negative-allowed deadline as the foreground tick: an overdue attack
+	# must stay overdue across background wakeups (R1 policy).
+	_attack_timer -= elapsed_seconds
+	_hc_m30_attack_pose_remaining = maxf(0.0, _hc_m30_attack_pose_remaining - elapsed_seconds)
+	_update_status_effects(elapsed_seconds)
+	if _dying or _death_pending:
+		_leave_background_deep_sleep()
+		return
+	_update_natural_regen(elapsed_seconds)
+	_update_entrapment_state(elapsed_seconds)
+	_update_pending_attack(elapsed_seconds)
+	_record_performance_counter(&"background_ai_evaluations")
+	var background_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_background_tick_calls"
+	)
+	_background_maintenance_running = true
+	_retarget(elapsed_seconds)
+	_background_maintenance_running = false
+	if not is_instance_valid(target):
+		_return_to_spawn(1.0 / 60.0)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_background_tick_usec",
+		background_started_usec,
+	)
+	if _can_use_background_ai():
+		_background_ai_timer = BACKGROUND_AI_INTERVAL_SECONDS
+		_background_last_wakeup_msec = Time.get_ticks_msec()
+		_background_wakeup_timer.start(BACKGROUND_AI_INTERVAL_SECONDS)
+	else:
+		_leave_background_deep_sleep()
 
 
 func _spatial_index_update() -> void:
@@ -594,13 +2772,44 @@ func _spatial_index_update() -> void:
 		or spatial_actor_runtime_id <= 0
 	):
 		return
+	if _spatial_index_projection_cache_matches():
+		return
+	var ground_position_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
 	combat_spatial_index.update_actor(
 		spatial_actor_runtime_id,
-		_screen_position_px_to_ground_position_gu(global_position)
+		ground_position_gu
+	)
+	_last_spatial_index_screen_position_px = global_position
+	_last_spatial_index_ground_position_gu = ground_position_gu
+	_last_spatial_index_runtime_map_id = runtime_map_id
+	_last_spatial_index_zone_generation = int(get_meta("zone_generation", -1))
+	_last_spatial_index_environment_revision = _hc_environment_revision()
+	_last_spatial_index_projection = runtime_screen_to_ground_position_px
+
+
+func _spatial_index_projection_cache_matches() -> bool:
+	return (
+		runtime_screen_to_ground_position_px.is_valid()
+		and _last_spatial_index_screen_position_px == global_position
+		and _last_spatial_index_runtime_map_id == runtime_map_id
+		and _last_spatial_index_zone_generation
+			== int(get_meta("zone_generation", -1))
+		and _last_spatial_index_environment_revision
+			== _hc_environment_revision()
+		and _last_spatial_index_projection
+			== runtime_screen_to_ground_position_px
 	)
 
 
 func spatial_index_position() -> Vector2:
+	# The spatial-index transaction above already projected this exact screen
+	# position. Reuse that immutable value for dynamic narrow phases instead of
+	# re-running the map projection once per nearby candidate. Any position write
+	# invalidates this equality and falls through to a fresh projection.
+	if _spatial_index_projection_cache_matches():
+		return _last_spatial_index_ground_position_gu
 	return _screen_position_px_to_ground_position_gu(global_position)
 
 
@@ -612,6 +2821,16 @@ func set_combat_position(
 	position_px: Vector2,
 	reason: StringName = &""
 ) -> void:
+	if _movement_step_active:
+		var internal_reasons: Array[StringName] = [
+			&"autonomous_step_arrival",
+			&"autonomous_step_rollback",
+			&"entrapment_boundary_revert",
+			&"safe_zone_revert",
+			&"environment_revert",
+		]
+		if not internal_reasons.has(reason):
+			_cancel_autonomous_step(true)
 	global_position = position_px
 	_spatial_index_update()
 
@@ -656,7 +2875,105 @@ func projection_ready() -> bool:
 	return runtime_screen_to_ground_position_px.is_valid()
 
 
+## R14-B1/B2/B3: Enemy hot-path ground projection.
+## B1: allocation-free Vector2 projection (no projection_result Dictionary).
+## B2: exact self-position reuse of the proven spatial-index snapshot.
+## B3: single physics-frame cache for the current target's own position.
 func _screen_position_px_to_ground_position_gu(screen_position_px: Vector2) -> Vector2:
+	if (
+		screen_position_px == global_position
+		and _spatial_index_projection_cache_matches()
+	):
+		# R14-B2: the spatial-index transaction already projected this exact
+		# screen position under the same authority; reuse the immutable result
+		# instead of re-running the map projection once per physics tick.
+		return _last_spatial_index_ground_position_gu
+	if _target_ground_projection_cache_matches(screen_position_px):
+		# R14-B3: same physics frame, same target identity/position, same map,
+		# same zone generation, same projection Callable.
+		return _target_ground_cache_ground_position_gu
+	var projection_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_projection_calls"
+	)
+	var ground_position_gu := _screen_position_px_to_ground_position_gu_vector2(
+		screen_position_px
+	)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_projection_usec",
+		projection_started_usec,
+	)
+	_write_target_ground_projection_cache_if_current_target(
+		screen_position_px,
+		ground_position_gu,
+	)
+	return ground_position_gu
+
+
+## R14-B1: allocation-free fail-closed projection. Keeps the exact authority
+## and rejection contract of try_screen_position_px_to_ground_position_gu()
+## without building a Dictionary for every hot-path call.
+func _screen_position_px_to_ground_position_gu_vector2(
+	screen_position_px: Vector2
+) -> Vector2:
+	if runtime_screen_to_ground_position_px.is_valid():
+		var ground_position_gu: Variant = (
+			runtime_screen_to_ground_position_px.call(screen_position_px)
+		)
+		if ground_position_gu is Vector2:
+			return ground_position_gu
+	if runtime_map_id < 0:
+		return GroundUnitSpace.screen_delta_px_to_ground_delta_gu(
+			screen_position_px
+		)
+	missing_projection_rejection_count += 1
+	projection_rejection_reason = (
+		GroundUnitSpace.REASON_MISSING_SCREEN_TO_GROUND_PROJECTION
+	)
+	return Vector2.INF
+
+
+func _target_ground_projection_cache_matches(
+	screen_position_px: Vector2
+) -> bool:
+	if not is_instance_valid(target):
+		return false
+	return (
+		_target_ground_cache_physics_frame == Engine.get_physics_frames()
+		and _target_ground_cache_target_instance_id == target.get_instance_id()
+		and _target_ground_cache_target_screen_position_px == screen_position_px
+		and _target_ground_cache_runtime_map_id == runtime_map_id
+		and _target_ground_cache_zone_generation
+			== int(get_meta("zone_generation", -1))
+		and _target_ground_cache_projection
+			== runtime_screen_to_ground_position_px
+	)
+
+
+## R14-B3: record the projection result only when the requested screen
+## position is exactly the current target's own position. Never caches
+## arbitrary points; approximate/quantized/tile caches are forbidden.
+func _write_target_ground_projection_cache_if_current_target(
+	screen_position_px: Vector2,
+	ground_position_gu: Vector2,
+) -> void:
+	if not is_instance_valid(target):
+		return
+	if screen_position_px != target.global_position:
+		return
+	_target_ground_cache_physics_frame = Engine.get_physics_frames()
+	_target_ground_cache_target_instance_id = target.get_instance_id()
+	_target_ground_cache_target_screen_position_px = screen_position_px
+	_target_ground_cache_ground_position_gu = ground_position_gu
+	_target_ground_cache_runtime_map_id = runtime_map_id
+	_target_ground_cache_zone_generation = int(get_meta("zone_generation", -1))
+	_target_ground_cache_projection = runtime_screen_to_ground_position_px
+
+
+## Preserve the fail-closed projection result while the public helper above
+## supplies one inclusive projection probe for enemy runtime diagnosis.
+func _screen_position_px_to_ground_position_gu_internal(
+	screen_position_px: Vector2
+) -> Vector2:
 	var result := try_screen_position_px_to_ground_position_gu(screen_position_px)
 	if bool(result.get("success", false)):
 		return result.get("value", Vector2.ZERO)
@@ -742,7 +3059,66 @@ static func _packed_vector2_array_from_variant(raw_points: Variant) -> PackedVec
 
 
 func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
-	var zones: Array = get_meta("safe_zones", [])
+	if _hc_standard_melee():
+		return _hc_point_inside_safe_zone(point_screen_px)
+	return _point_inside_safe_zone_uncached(point_screen_px)
+
+
+func _point_inside_safe_zone_uncached(point_screen_px: Vector2) -> bool:
+	var safe_zone_started_usec := RuntimeDiagnostics.timing_start()
+	RuntimeDiagnostics.increment_performance_counter(&"safe_zone_queries")
+	var zones: Array = []
+	var uses_compiled_context := false
+	var context_valid := true
+	var context: Variant = get_meta("safe_zone_context", {})
+	if context is Dictionary and not (context as Dictionary).is_empty():
+		uses_compiled_context = true
+		context_valid = bool((context as Dictionary).get("valid", false))
+		var context_zones: Variant = (context as Dictionary).get("zones", [])
+		if context_zones is Array:
+			zones = context_zones as Array
+	else:
+		var runtime_parent := get_parent()
+		if runtime_parent != null and runtime_parent.has_method("_safe_zone_runtime_zones"):
+			var runtime_zones: Variant = runtime_parent.call(
+				"_safe_zone_runtime_zones"
+			)
+			if runtime_zones is Array:
+				zones = runtime_zones as Array
+			uses_compiled_context = true
+			if runtime_parent.has_method("_safe_zone_context_is_valid"):
+				context_valid = bool(
+					runtime_parent.call("_safe_zone_context_is_valid")
+				)
+		else:
+			var legacy_zones: Variant = get_meta("safe_zones", [])
+			if legacy_zones is Array:
+				zones = legacy_zones as Array
+	if not context_valid:
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return true
+	if zones.is_empty():
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return false
+	if uses_compiled_context:
+		var point_ground_gu := _screen_position_px_to_ground_position_gu(
+			point_screen_px
+		)
+		if not point_ground_gu.is_finite():
+			RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+			return true
+		for zone_variant: Variant in zones:
+			if (
+				zone_variant is Dictionary
+				and WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(
+					point_ground_gu,
+					zone_variant as Dictionary,
+				)
+			):
+				RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+				return true
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return false
 	for zone_variant: Variant in zones:
 		if not zone_variant is Dictionary:
 			continue
@@ -753,31 +3129,47 @@ func _point_inside_safe_zone(point_screen_px: Vector2) -> bool:
 		)
 		var has_formal_shape := zone.has("radius_gu")
 		if str(zone.get("shape", "circle")) == "polygon":
+			var polygon_variant: Variant = zone.get("polygon_ground_gu", [])
 			has_formal_shape = (
-				_packed_vector2_array_from_variant(zone.get("polygon_ground_gu", [])).size()
-				>= 3
+				(
+					polygon_variant is PackedVector2Array
+					and (polygon_variant as PackedVector2Array).size() >= 3
+				)
+				or (
+					polygon_variant is Array
+					and (polygon_variant as Array).size() >= 3
+				)
 			)
 		if point_ground_gu == Vector2.INF or not has_formal_shape:
 			continue
-		var formal_zone := zone
-		if str(zone.get("shape", "circle")) == "polygon":
-			formal_zone = zone.duplicate(false)
-			formal_zone["polygon_ground_gu"] = _packed_vector2_array_from_variant(
-				zone.get("polygon_ground_gu", [])
-			)
-		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(point_ground_gu, formal_zone):
+		if WorldSpatialRulesScript.point_inside_safe_zone_ground_gu(
+			point_ground_gu,
+			zone,
+		):
+			RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 			return true
+	RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
 	return false
 
 
 func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
+	var move_started_usec := RuntimeDiagnostics.timing_start()
 	move_and_slide()
+	# Keep the shared bucket authoritative before any same-frame projectile or
+	# crowd query can run after normal physics movement.
+	_spatial_index_update()
+	RuntimeDiagnostics.record_timing_usec(&"move_and_slide_usec", move_started_usec)
 	actual_ground_motion_gu = GroundUnitSpace.actual_ground_motion_gu_from_screen_positions(
 		position_before_move,
 		global_position,
 	)
-	_physics_move_count += 1
+	_record_performance_counter(&"physics_moves")
+	if (
+		actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU
+		or velocity.length_squared() > GroundUnitSpace.EPSILON_GU
+	):
+		_record_performance_counter(&"moving_enemy_count")
 	if entrapment_active():
 		var before_ground_gu := _screen_position_px_to_ground_position_gu(
 			position_before_move
@@ -822,12 +3214,20 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	if _environment_guard_timer > 0.0:
 		return
 	_environment_guard_timer = ENVIRONMENT_GUARD_INTERVAL_SECONDS
-	_environment_guard_check_count += 1
-	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+	var environment_guard_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_environment_guard_calls"
+	)
+	_record_performance_counter(&"environment_guard_checks")
+	var environment_blocks := WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 		environment_blocker,
 		global_position,
 		collision_radius_px,
-	):
+	)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_environment_guard_usec",
+		environment_guard_started_usec,
+	)
+	if environment_blocks:
 		set_combat_position(
 			_last_environment_safe_position_px,
 			&"environment_revert"
@@ -841,6 +3241,394 @@ func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 		_last_environment_safe_position_px = global_position
 
 
+func _attack_engagement_ready(
+	hit_target: Node2D,
+	offset_ground_gu: Vector2,
+	distance_gu: float,
+	contact_distance_gu: float,
+	default_engagement_distance_gu: float,
+) -> bool:
+	if not combat_enabled:
+		return false
+	if not _player_combat_is_available(hit_target):
+		return false
+	if _uses_special_magic_melee_delivery():
+		return (
+			is_instance_valid(hit_target)
+			and _special_magic_melee_condition_met(offset_ground_gu)
+			and _attack_world_path_is_clear_for_target(hit_target)
+		)
+	if _uses_area_magic_delivery():
+		# The area delivery owns its target snapshot and release cycle. It must
+		# never fall through to the ordinary single-target attack branch.
+		return false
+	if _uses_target_magic_delivery():
+		return (
+			is_instance_valid(hit_target)
+			and _attack_world_path_is_clear_for_target(hit_target)
+			and (
+				_target_magic_condition_met(offset_ground_gu)
+				or distance_gu
+				<= contact_distance_gu + GroundUnitSpace.EPSILON_GU
+			)
+		)
+	return (
+		is_instance_valid(hit_target)
+		and distance_gu
+		<= default_engagement_distance_gu + GroundUnitSpace.EPSILON_GU
+		and _attack_world_path_is_clear_for_target(hit_target)
+	)
+
+
+func _attack_world_path_is_clear_for_target(hit_target: Node2D) -> bool:
+	_record_performance_counter(&"attack_los_requests")
+	if not is_instance_valid(hit_target):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	return _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		hit_target.global_position,
+		true,
+		hit_target.get_instance_id(),
+		false,
+	)
+
+
+func _world_attack_path_is_clear(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	source_world_px: Vector2 = Vector2.INF,
+	target_world_px: Vector2 = Vector2.INF,
+	allow_cache := true,
+	target_instance_id := 0,
+	record_request := true,
+) -> bool:
+	if record_request:
+		_record_performance_counter(&"attack_los_requests")
+	var cache_context := {}
+	var cacheable_endpoints := (
+		source_world_px.is_finite()
+		and target_world_px.is_finite()
+	)
+	if allow_cache and target_instance_id > 0 and cacheable_endpoints:
+		cache_context = _attack_los_cache_context()
+		if cache_context.is_empty():
+			_clear_attack_los_cache()
+		elif _attack_los_cache_matches(
+			cache_context,
+			target_instance_id,
+			source_world_px,
+			target_world_px,
+		):
+			_record_performance_counter(&"attack_los_cache_hits")
+			return bool(_attack_los_cache.get("result", false))
+	var result := _world_attack_path_is_clear_uncached(
+		source_ground_gu,
+		target_ground_gu,
+		source_world_px,
+		target_world_px,
+	)
+	if allow_cache and target_instance_id > 0 and cacheable_endpoints and not cache_context.is_empty():
+		_attack_los_cache = {
+			"target_instance_id": target_instance_id,
+			"runtime_map_id": runtime_map_id,
+			"source_world_px": source_world_px,
+			"target_world_px": target_world_px,
+			"environment_provider_instance_id": int(cache_context.get("provider_instance_id", 0)),
+			"environment_collision_revision": int(cache_context.get("revision", -1)),
+			"result": result,
+			"valid": true,
+		}
+	return result
+
+
+func _world_attack_path_is_clear_uncached(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	source_world_px: Vector2 = Vector2.INF,
+	target_world_px: Vector2 = Vector2.INF,
+) -> bool:
+	_record_performance_counter(&"attack_los_evaluations")
+	var los_started_usec := RuntimeDiagnostics.timing_start()
+	if not source_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return _finish_attack_los_diagnostic(los_started_usec, false)
+	var has_map_segment_query := (
+		is_instance_valid(environment_blocker)
+		and environment_blocker.has_method(
+			"is_environment_segment_blocked_ground"
+		)
+	)
+	var has_map_query := (
+		has_map_segment_query
+		or (
+			is_instance_valid(environment_blocker)
+			and environment_blocker.has_method("is_environment_point_blocked")
+		)
+	)
+	var physics_space := _world_direct_space_state()
+	# A missing map provider is only acceptable when the physics server can
+	# provide the second, authoritative WORLD-layer path check. Never turn a
+	# missing environment hookup into an open attack corridor.
+	if not has_map_query and physics_space == null:
+		return _finish_attack_los_diagnostic(los_started_usec, false)
+	if has_map_segment_query:
+		var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+		var sample_count := maxi(
+			1,
+			int(ceil(distance_gu / ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU)),
+		)
+		_record_performance_counter(
+			&"attack_los_map_samples",
+			sample_count + 1,
+		)
+		if bool(environment_blocker.call(
+			"is_environment_segment_blocked_ground",
+			source_ground_gu,
+			target_ground_gu,
+			ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU,
+		)):
+			return _finish_attack_los_diagnostic(los_started_usec, false)
+	elif has_map_query:
+		var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+		var sample_count := maxi(
+			1,
+			int(ceil(distance_gu / ATTACK_PATH_OBSTACLE_SAMPLE_STEP_GU)),
+		)
+		for sample_index: int in range(sample_count + 1):
+			var progress := float(sample_index) / float(sample_count)
+			var sample_world_px := _ground_gu_to_screen_position_px(
+				source_ground_gu.lerp(target_ground_gu, progress)
+			)
+			if not sample_world_px.is_finite():
+				return _finish_attack_los_diagnostic(los_started_usec, false)
+			_record_performance_counter(&"attack_los_map_samples")
+			if bool(environment_blocker.call(
+				"is_environment_point_blocked",
+				sample_world_px,
+			)):
+				return _finish_attack_los_diagnostic(los_started_usec, false)
+	if physics_space == null:
+		return _finish_attack_los_diagnostic(los_started_usec, true)
+	var ray_source_px := source_world_px
+	var ray_target_px := target_world_px
+	if not ray_source_px.is_finite():
+		ray_source_px = _ground_gu_to_screen_position_px(source_ground_gu)
+	if not ray_target_px.is_finite():
+		ray_target_px = _ground_gu_to_screen_position_px(target_ground_gu)
+	if not ray_source_px.is_finite() or not ray_target_px.is_finite():
+		return _finish_attack_los_diagnostic(los_started_usec, false)
+	var query := PhysicsRayQueryParameters2D.create(
+		ray_source_px,
+		ray_target_px,
+		WorldSpatialRulesScript.WORLD_MASK,
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	_record_performance_counter(&"attack_los_physics_rays")
+	return _finish_attack_los_diagnostic(
+		los_started_usec,
+		physics_space.intersect_ray(query).is_empty(),
+	)
+
+
+func _finish_attack_los_diagnostic(started_usec: int, result: bool) -> bool:
+	RuntimeDiagnostics.record_timing_usec(&"attack_los_usec", started_usec)
+	return result
+
+
+func _clear_attack_los_cache() -> void:
+	if not bool(_attack_los_cache.get("valid", false)):
+		return
+	_attack_los_cache = {
+		"target_instance_id": 0,
+		"runtime_map_id": -1,
+		"source_world_px": Vector2.INF,
+		"target_world_px": Vector2.INF,
+		"environment_provider_instance_id": 0,
+		"environment_collision_revision": -1,
+		"result": false,
+		"valid": false,
+	}
+
+
+func _attack_los_cache_context() -> Dictionary:
+	if (
+		not is_instance_valid(environment_blocker)
+		or not environment_blocker.has_method("environment_collision_revision")
+	):
+		return {}
+	var raw_revision: Variant = environment_blocker.call(
+		"environment_collision_revision"
+	)
+	if not raw_revision is int or int(raw_revision) < 0:
+		return {}
+	return {
+		"provider_instance_id": environment_blocker.get_instance_id(),
+		"revision": int(raw_revision),
+	}
+
+
+func _attack_los_cache_matches(
+	cache_context: Dictionary,
+	target_instance_id: int,
+	source_world_px: Vector2,
+	target_world_px: Vector2,
+) -> bool:
+	if not bool(_attack_los_cache.get("valid", false)):
+		return false
+	return (
+		int(_attack_los_cache.get("target_instance_id", 0)) == target_instance_id
+		and int(_attack_los_cache.get("runtime_map_id", -1)) == runtime_map_id
+		and _attack_los_cache.get("source_world_px", Vector2.INF) == source_world_px
+		and _attack_los_cache.get("target_world_px", Vector2.INF) == target_world_px
+		and int(_attack_los_cache.get("environment_provider_instance_id", 0))
+		== int(cache_context.get("provider_instance_id", 0))
+		and int(_attack_los_cache.get("environment_collision_revision", -1))
+		== int(cache_context.get("revision", -1))
+	)
+
+
+func _world_direct_space_state() -> PhysicsDirectSpaceState2D:
+	var world := get_world_2d()
+	if world == null:
+		return null
+	return world.direct_space_state
+
+
+func _world_attack_path_is_clear_for_release(
+	release_record: Dictionary,
+) -> bool:
+	_record_performance_counter(&"attack_los_requests")
+	var source_ground_value: Variant = release_record.get(
+		"source_ground_gu",
+		Vector2.INF,
+	)
+	var target_ground_value: Variant = release_record.get(
+		"target_ground_gu",
+		Vector2.INF,
+	)
+	if not source_ground_value is Vector2 or not target_ground_value is Vector2:
+		return false
+	var source_world_value: Variant = release_record.get(
+		"origin_world_px",
+		Vector2.INF,
+	)
+	var target_world_value: Variant = release_record.get(
+		"target_world_px",
+		Vector2.INF,
+	)
+	var source_world_px: Vector2 = Vector2.INF
+	if source_world_value is Vector2:
+		source_world_px = source_world_value
+	var target_world_px: Vector2 = Vector2.INF
+	if target_world_value is Vector2:
+		target_world_px = target_world_value
+	var source_ground_gu: Vector2 = source_ground_value
+	var target_ground_gu: Vector2 = target_ground_value
+	return _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		source_world_px,
+		target_world_px,
+		false,
+		0,
+		false,
+	)
+
+
+func _uses_target_magic_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "target_magic"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MonsterTargetMagicEffectScript.EFFECT_ID
+		and str(attack_delivery_rule.get("damageChannel", ""))
+		== "magic_defense"
+	)
+
+
+func _uses_special_magic_melee_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "special_melee"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MONSTER_MAGIC_MELEE_EFFECT_ID
+		and str(attack_delivery_rule.get("damageChannel", ""))
+		== "magic_defense"
+		and bool(attack_delivery_rule.get("bodyOnly", false))
+	)
+
+
+func _uses_area_magic_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "area_magic"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MONSTER_AREA_MAGIC_EFFECT_ID
+		and str(attack_delivery_rule.get("damageChannel", ""))
+		== "magic_defense"
+		and bool(attack_delivery_rule.get("bodyOnly", false))
+	)
+
+
+func _special_magic_melee_condition_met(offset_ground_gu: Vector2) -> bool:
+	if not _uses_special_magic_melee_delivery():
+		return false
+	if str(attack_delivery_rule.get("rangeShape", "")) != "chebyshev_square":
+		return false
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		attack_delivery_rule,
+		"range_gu",
+		"rangePixels",
+		1.0,
+	)
+	return (
+		absf(offset_ground_gu.x) <= range_gu + GroundUnitSpace.EPSILON_GU
+		and absf(offset_ground_gu.y) <= range_gu + GroundUnitSpace.EPSILON_GU
+	)
+
+
+func _target_magic_condition_met(offset_ground_gu: Vector2) -> bool:
+	if not _uses_target_magic_delivery():
+		return false
+	if str(attack_delivery_rule.get("rangeShape", "")) != "chebyshev_square":
+		return false
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		attack_delivery_rule,
+		"range_gu",
+		"rangePixels",
+		0.0,
+	)
+	var abs_x := absf(offset_ground_gu.x)
+	var abs_y := absf(offset_ground_gu.y)
+	if (
+		abs_x > range_gu + GroundUnitSpace.EPSILON_GU
+		or abs_y > range_gu + GroundUnitSpace.EPSILON_GU
+	):
+		return false
+	var activation: Dictionary = attack_delivery_rule.get("activation", {})
+	var low_health := (
+		max_hp > 0
+		and float(current_hp) / float(max_hp)
+		< float(activation.get("hpBelowRatio", 0.5))
+	)
+	var boundary_gu := maxf(
+		0.0,
+		float(activation.get("orAxisBoundaryTiles", range_gu)),
+	)
+	var on_axis_boundary := (
+		abs_x >= boundary_gu - GroundUnitSpace.EPSILON_GU
+		or abs_y >= boundary_gu - GroundUnitSpace.EPSILON_GU
+	)
+	return low_health or on_axis_boundary
+
+
 func _current_attack_interval() -> float:
 	if not boss_rule.is_empty():
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
@@ -849,6 +3637,9 @@ func _current_attack_interval() -> float:
 
 
 func _update_pending_attack(delta: float) -> void:
+	if not combat_enabled:
+		_hold_combat_disabled()
+		return
 	if _pending_attack_time < 0.0:
 		return
 	_pending_attack_time -= delta
@@ -856,10 +3647,26 @@ func _update_pending_attack(delta: float) -> void:
 		return
 	var hit_target := _pending_attack_target
 	var damage := _pending_attack_damage
+	var release_record := _pending_attack_release_record
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	if str(release_record.get("kind", "")) == "hc_standard_melee":
+		_hc_settle(release_record)
+		return
+	if str(release_record.get("kind", "")) == "physical_projectile":
+		_settle_physical_projectile_release(release_record)
+		return
+	if str(release_record.get("kind", "")) == "target_magic":
+		_settle_target_magic_release(release_record)
+		return
+	if str(release_record.get("kind", "")) == "line_magic":
+		_settle_monster_special_cell_release(release_record)
+		return
 	if not is_instance_valid(hit_target):
+		return
+	if not _release_player_combat_epoch_is_current(hit_target, release_record):
 		return
 	if _target_is_safe_player(hit_target):
 		return
@@ -875,20 +3682,1199 @@ func _update_pending_attack(delta: float) -> void:
 		return
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
-	_deal_melee_hit(hit_target, damage, DELAYED_HIT_TOLERANCE_GU)
+	_deal_melee_hit(
+		hit_target,
+		damage,
+		DELAYED_HIT_TOLERANCE_GU,
+		true,
+	)
+
+
+func _uses_physical_projectile_delivery() -> bool:
+	return (
+		str(attack_delivery_rule.get("kind", "")) == "physical_projectile"
+		and str(attack_delivery_rule.get("effectId", ""))
+		== MonsterRangedProjectileEffectScript.EFFECT_ID
+	)
+
+
+func _uses_monster_special_cell_delivery() -> bool:
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	if kind not in MONSTER_SPECIAL_CELL_DELIVERY_KINDS:
+		return false
+	if not attack_delivery_rule.get("bodyOnly", null) is bool:
+		return false
+	if (
+		kind != "guard_direct_projectile"
+		and not attack_delivery_rule.get("presentationDelaySeconds", null) is float
+	):
+		return false
+	match kind:
+		"directional_spit_map":
+			return _valid_directional_spit_rule()
+		"gas_adjacent":
+			return _valid_gas_rule()
+		"line_magic":
+			return _valid_line_magic_rule()
+		"mixed_target_tile":
+			return _valid_mixed_target_tile_rule()
+		"guard_direct_projectile":
+			return _valid_guard_direct_projectile_rule()
+	return false
+
+
+func _valid_directional_spit_rule() -> bool:
+	if (
+		str(attack_delivery_rule.get("footprintPattern", ""))
+		!= "source_spit_map_5x5"
+		or not _valid_special_integer_number(
+			attack_delivery_rule.get("cellSteps", null), 2, 2
+		)
+		or str(attack_delivery_rule.get("damageChannel", "")) != "magic_defense"
+		or attack_delivery_rule.get("useAccuracy", null) != true
+		or not attack_delivery_rule.get("poisonEnabled", false) is bool
+	):
+		return false
+	if not bool(attack_delivery_rule.get("poisonEnabled", false)):
+		return true
+	return _valid_special_status_rule("decrease_health", "attacker")
+
+
+func _valid_gas_rule() -> bool:
+	return (
+		str(attack_delivery_rule.get("footprintPattern", "")) == "adjacent_target"
+		and _valid_special_integer_number(
+			attack_delivery_rule.get("cellSteps", null), 1, 1
+		)
+		and str(attack_delivery_rule.get("damageChannel", "")) == "magic_defense"
+		and attack_delivery_rule.get("useAccuracy", null) == true
+		and _valid_special_status_rule("stone", "target")
+		and (
+			_valid_special_integer_number(
+				attack_delivery_rule.get("hiddenRevealChanceDenominator", 0), 0
+			)
+		)
+	)
+
+
+func _valid_line_magic_rule() -> bool:
+	var trigger_value: Variant = attack_delivery_rule.get("trigger", null)
+	return (
+		str(attack_delivery_rule.get("footprintPattern", ""))
+		== "directional_line_cells"
+		and _valid_special_integer_number(
+			attack_delivery_rule.get("cellSteps", null), 9, 9
+		)
+		and str(attack_delivery_rule.get("damageChannel", "")) == "magic_defense"
+		and attack_delivery_rule.get("hitDelaySeconds", null) is float
+		and float(attack_delivery_rule.get("hitDelaySeconds", 0.0)) > 0.0
+		and attack_delivery_rule.get("undeadMultiplier", null) is float
+		and float(attack_delivery_rule.get("undeadMultiplier", 0.0)) >= 1.0
+		and trigger_value is Dictionary
+		and (trigger_value as Dictionary).get("axisExclusiveGu", null) is float
+		and float((trigger_value as Dictionary).get("axisExclusiveGu", 0.0)) > 0.0
+	)
+
+
+func _valid_mixed_target_tile_rule() -> bool:
+	var physical_ratio: Variant = attack_delivery_rule.get("physicalRatio", null)
+	var magic_ratio: Variant = attack_delivery_rule.get("magicRatio", null)
+	return (
+		str(attack_delivery_rule.get("footprintPattern", "")) == "target_cell"
+		and str(attack_delivery_rule.get("damageChannel", "")) == "mixed_defense"
+		and physical_ratio is float
+		and magic_ratio is float
+		and float(physical_ratio) >= 0.0
+		and float(magic_ratio) >= 0.0
+		and float(physical_ratio) + float(magic_ratio) > 0.0
+	)
+
+
+func _valid_guard_direct_projectile_rule() -> bool:
+	var delay_value: Variant = attack_delivery_rule.get("presentationDelay", null)
+	return (
+		str(attack_delivery_rule.get("footprintPattern", "")) == "target_cell"
+		and str(attack_delivery_rule.get("damageChannel", "")) == "physical_defense"
+		and str(attack_delivery_rule.get("damageTiming", "")) == "immediate"
+		and str(attack_delivery_rule.get("obstaclePolicy", ""))
+		== "world_fresh_override"
+		and str(attack_delivery_rule.get("presentationKind", ""))
+		== "generic_projectile_observer"
+		and str(attack_delivery_rule.get("rangeMetric", "")) == "manhattan"
+		and attack_delivery_rule.get("viewRangeGu", null) is float
+		and float(attack_delivery_rule.get("viewRangeGu", 0.0)) > 0.0
+		and attack_delivery_rule.get("useAccuracy", null) is bool
+		and delay_value is Dictionary
+		and (delay_value as Dictionary).get("baseSeconds", null) is float
+		and float((delay_value as Dictionary).get("baseSeconds", 0.0)) > 0.0
+		and (delay_value as Dictionary).get("perChebyshevGuSeconds", null) is float
+		and float((delay_value as Dictionary).get("perChebyshevGuSeconds", -1.0)) >= 0.0
+	)
+
+
+func _valid_special_status_rule(
+	expected_kind: String,
+	expected_denominator_owner: String,
+) -> bool:
+	var status_value: Variant = attack_delivery_rule.get("status", null)
+	if not status_value is Dictionary:
+		return false
+	var status := status_value as Dictionary
+	if (
+		str(status.get("poisonKind", "")) != expected_kind
+		or str(status.get("chanceDenominatorStatOwner", ""))
+		!= expected_denominator_owner
+		or not status.get("durationSeconds", null) is float
+		or float(status.get("durationSeconds", 0.0)) <= 0.0
+		or not _valid_special_integer_number(
+			status.get("chanceDenominatorOffset", null), 1
+		)
+	):
+		return false
+	if expected_kind == "decrease_health":
+		return (
+			_valid_special_integer_number(status.get("point", null), 0)
+			and _valid_special_integer_number(status.get("tickDamage", null), 1)
+			and int(status.get("tickDamage", 0))
+			== int(status.get("point", -1)) + 1
+			and status.get("intervalSeconds", null) is float
+			and float(status.get("intervalSeconds", 0.0)) > 0.0
+		)
+	return _valid_special_integer_number(status.get("point", null), 0, 0)
+
+
+func _valid_special_integer_number(
+	value: Variant,
+	minimum: int,
+	maximum := 2147483647,
+) -> bool:
+	if not (value is int or value is float):
+		return false
+	var numeric := float(value)
+	return (
+		is_finite(numeric)
+		and numeric == floorf(numeric)
+		and numeric >= float(minimum)
+		and numeric <= float(maximum)
+	)
+
+
+func _launch_monster_special_cell_delivery(
+	hit_target: Node2D,
+	rolled_damage: int,
+) -> bool:
+	if (
+		not combat_enabled
+		or not _uses_monster_special_cell_delivery()
+		or not _special_delivery_target_is_live(hit_target)
+	):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if not source_ground_gu.is_finite() or not target_ground_gu.is_finite():
+		return false
+	var delta_ground_gu := target_ground_gu - source_ground_gu
+	if not _special_delivery_release_condition_met(delta_ground_gu):
+		return false
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	var release_id := _next_spatial_release_id(kind)
+	var release_serial := _spatial_release_serial
+	var delivery_contract := _freeze_monster_special_delivery_contract(kind)
+	if delivery_contract.is_empty():
+		return false
+	var snapshot := _create_monster_special_cell_snapshot(
+		kind,
+		release_id,
+		source_ground_gu,
+		target_ground_gu,
+	)
+	if snapshot.is_empty() or not _snapshot_strict_ok(snapshot):
+		return false
+	var victims := _monster_special_delivery_targets(snapshot, hit_target)
+	var victim_records := _freeze_monster_special_delivery_records(
+		kind,
+		victims,
+		snapshot,
+		rolled_damage,
+		release_serial,
+		delivery_contract,
+	)
+	if victim_records.is_empty():
+		return false
+	var release_record := {
+		"kind": kind,
+		"release_id": release_id,
+		"release_serial": release_serial,
+		"source_instance_id": get_instance_id(),
+		"source_life": _hc_life(self),
+		"runtime_map_id": runtime_map_id,
+		"generation": int(get_meta("zone_generation", -1)),
+		"source_ground_gu": source_ground_gu,
+		"origin_world_px": global_position,
+		"footprint_snapshot": snapshot,
+		"delivery_contract": delivery_contract,
+		"victims": victim_records,
+		"presentation_delay_seconds": _monster_special_presentation_delay_seconds(
+			kind,
+			source_ground_gu,
+			target_ground_gu,
+		),
+	}
+	release_record.make_read_only()
+	_last_attack_footprint_snapshot = snapshot
+	_emit_monster_special_delivery_descriptor(release_record)
+	if kind == "line_magic":
+		_pending_attack_time = float(attack_delivery_rule.get("hitDelaySeconds", 0.0))
+		_pending_attack_target = hit_target
+		_pending_attack_damage = maxi(0, rolled_damage)
+		_pending_attack_release_record = release_record
+	else:
+		_settle_monster_special_cell_release(release_record)
+	return true
+
+
+func _freeze_monster_special_delivery_contract(kind: String) -> Dictionary:
+	var contract := {
+		"kind": kind,
+		"physical_ratio": float(attack_delivery_rule.get("physicalRatio", 0.0)),
+		"magic_ratio": float(attack_delivery_rule.get("magicRatio", 0.0)),
+		"undead_multiplier": float(attack_delivery_rule.get("undeadMultiplier", 1.0)),
+		"use_accuracy": bool(attack_delivery_rule.get("useAccuracy", false)),
+		"source_accuracy": accuracy,
+		"source_anti_poison": anti_poison,
+		"poison_enabled": bool(attack_delivery_rule.get("poisonEnabled", false)),
+		"hidden_reveal_chance_denominator": int(
+			attack_delivery_rule.get("hiddenRevealChanceDenominator", 0)
+		),
+	}
+	var status_value: Variant = attack_delivery_rule.get("status", null)
+	if status_value is Dictionary:
+		var raw_status := status_value as Dictionary
+		var status := {
+			"poison_kind": str(raw_status.get("poisonKind", "")),
+			"duration_seconds": float(raw_status.get("durationSeconds", 0.0)),
+			"chance_denominator_offset": int(
+				raw_status.get("chanceDenominatorOffset", 0)
+			),
+			"chance_denominator_stat_owner": str(
+				raw_status.get("chanceDenominatorStatOwner", "")
+			),
+			"point": int(raw_status.get("point", -1)),
+			"damage_per_tick": int(raw_status.get("tickDamage", 0)),
+			"interval_seconds": float(raw_status.get("intervalSeconds", 0.0)),
+		}
+		status.make_read_only()
+		contract["status"] = status
+	contract.make_read_only()
+	return contract
+
+
+func _special_delivery_release_condition_met(delta_ground_gu: Vector2) -> bool:
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	if kind == "line_magic":
+		var trigger: Dictionary = attack_delivery_rule.get("trigger", {})
+		var axis_exclusive_gu := float(trigger.get("axisExclusiveGu", 0.0))
+		return (
+			absf(delta_ground_gu.x) < axis_exclusive_gu
+			and absf(delta_ground_gu.y) < axis_exclusive_gu
+		)
+	if kind in ["directional_spit_map", "gas_adjacent"]:
+		var step_limit := int(attack_delivery_rule.get("cellSteps", 0))
+		return (
+			absf(delta_ground_gu.x) <= float(step_limit) + GroundUnitSpace.EPSILON_GU
+			and absf(delta_ground_gu.y) <= float(step_limit) + GroundUnitSpace.EPSILON_GU
+		)
+	if kind == "guard_direct_projectile":
+		return absf(delta_ground_gu.x) + absf(delta_ground_gu.y) <= (
+			float(attack_delivery_rule.get("viewRangeGu", 0.0))
+			+ GroundUnitSpace.EPSILON_GU
+		)
+	return delta_ground_gu.length() <= attack_range_gu + GroundUnitSpace.EPSILON_GU
+
+
+func _monster_special_presentation_delay_seconds(
+	kind: String,
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+) -> float:
+	if kind != "guard_direct_projectile":
+		return maxf(
+			0.0,
+			float(attack_delivery_rule.get("presentationDelaySeconds", 0.0)),
+		)
+	var delay: Dictionary = attack_delivery_rule.get("presentationDelay", {})
+	var delta := (target_ground_gu - source_ground_gu).abs()
+	return maxf(
+		0.001,
+		float(delay.get("baseSeconds", 0.0))
+		+ maxf(delta.x, delta.y)
+		* float(delay.get("perChebyshevGuSeconds", 0.0)),
+	)
+
+
+func _create_monster_special_cell_snapshot(
+	kind: String,
+	release_id: String,
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+) -> Dictionary:
+	var snapshot: Dictionary
+	if kind in ["directional_spit_map", "line_magic"]:
+		snapshot = MonsterDeliveryGeometryScript.create_directional_cell_snapshot(
+			_monster_attack_id(kind),
+			release_id,
+			source_ground_gu,
+			target_ground_gu - source_ground_gu,
+			int(attack_delivery_rule.get("cellSteps", 0)),
+			_snapshot_coordinate_context(),
+		)
+	else:
+		snapshot = MonsterDeliveryGeometryScript.create_target_cell_snapshot(
+			_monster_attack_id(kind),
+			release_id,
+			source_ground_gu,
+			target_ground_gu,
+			_snapshot_coordinate_context(),
+		)
+	if snapshot.is_empty():
+		return {}
+	var decorated := _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		null,
+		attack_range_gu,
+	)
+	var result := decorated.duplicate(true)
+	result["delivery_kind"] = kind
+	result["source_ground_gu"] = source_ground_gu
+	result["target_ground_gu"] = target_ground_gu
+	result["world_obstacle_policy"] = "fresh_per_victim_at_settlement"
+	result.make_read_only()
+	return result
+
+
+func _monster_special_delivery_targets(
+	snapshot: Dictionary,
+	selected_target: Node2D,
+) -> Array[Node2D]:
+	var candidates: Array[Node2D] = []
+	_append_special_delivery_candidate(candidates, selected_target)
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	# Source spit/line and mixed HitMagAttackTarget enumerate the proper objects
+	# in their footprint cells. Gas and guard each take one explicit BaseObject
+	# target even though that target cell is frozen for geometry.
+	if kind in ["directional_spit_map", "line_magic", "mixed_target_tile"]:
+		_append_special_delivery_candidate(candidates, primary_target)
+		_ensure_target_grid(false)
+		for candidate: Node2D in _target_grid_candidates(12.0):
+			_append_special_delivery_candidate(candidates, candidate)
+	var victims: Array[Node2D] = []
+	for candidate: Node2D in candidates:
+		if (
+			_special_delivery_target_is_live(candidate)
+			and _snapshot_intersects_target(snapshot, candidate)
+		):
+			victims.append(candidate)
+	victims.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
+	return victims
+
+
+func _append_special_delivery_candidate(
+	candidates: Array[Node2D],
+	raw_candidate: Variant,
+) -> void:
+	if (
+		is_instance_valid(raw_candidate)
+		and raw_candidate is Node2D
+		and not candidates.has(raw_candidate)
+	):
+		candidates.append(raw_candidate as Node2D)
+
+
+func _special_delivery_target_is_live(victim: Node2D) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not _player_combat_is_available(victim)
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+	):
+		return false
+	var kind := str(attack_delivery_rule.get("kind", ""))
+	if kind in ["directional_spit_map", "gas_adjacent", "line_magic"]:
+		if not victim.has_method("take_direct_spell_damage"):
+			return false
+	elif kind == "mixed_target_tile":
+		if not victim.has_method("take_monster_mixed_damage"):
+			return false
+	elif not victim.has_method("take_damage"):
+		return false
+	return _target_candidate_is_live(victim)
+
+
+func _freeze_monster_special_delivery_records(
+	kind: String,
+	victims: Array[Node2D],
+	snapshot: Dictionary,
+	rolled_damage: int,
+	release_serial: int,
+	delivery_contract: Dictionary,
+) -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	var release_id := str(snapshot.get("release_id", ""))
+	var source_ground_gu: Vector2 = snapshot.get("source_ground_gu", Vector2.INF)
+	for victim: Node2D in victims:
+		if not _special_delivery_target_is_live(victim):
+			continue
+		var target_ground_gu := _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+		if not target_ground_gu.is_finite():
+			continue
+		var target_id := victim.get_instance_id()
+		var record := {
+			"kind": kind,
+			"release_id": release_id,
+			"release_serial": release_serial,
+			"release_target_id": "%s:target:%d" % [release_id, target_id],
+			"source_instance_id": get_instance_id(),
+			"source_life": _hc_life(self),
+			"source_ground_gu": source_ground_gu,
+			"origin_world_px": global_position,
+			"target_instance_id": target_id,
+			"target_life": _hc_life(victim),
+			"target_combat_epoch": _typed_player_combat_epoch(victim),
+			"target_generation": int(victim.get_meta("zone_generation", -1)),
+			"runtime_map_id": runtime_map_id,
+			"generation": int(get_meta("zone_generation", -1)),
+			"target_ground_gu": target_ground_gu,
+			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
+			"damage": maxi(0, rolled_damage),
+			"footprint_snapshot": snapshot,
+			"delivery_contract": delivery_contract,
+		}
+		record.make_read_only()
+		records.append(record)
+	records.make_read_only()
+	return records
+
+
+func _settle_monster_special_cell_release(release_record: Dictionary) -> void:
+	if (
+		not combat_enabled
+		or int(release_record.get("source_instance_id", 0)) != get_instance_id()
+		or int(release_record.get("source_life", -1)) != _hc_life(self)
+		or int(release_record.get("runtime_map_id", -1)) != runtime_map_id
+		or int(release_record.get("generation", -1))
+		!= int(get_meta("zone_generation", -1))
+		or _dying
+		or current_hp <= 0
+	):
+		return
+	var victims_value: Variant = release_record.get("victims", null)
+	if not victims_value is Array:
+		return
+	for raw_record: Variant in victims_value:
+		if not raw_record is Dictionary:
+			continue
+		var victim_record := raw_record as Dictionary
+		var target_instance_id := int(victim_record.get("target_instance_id", 0))
+		var release_serial := int(victim_record.get("release_serial", 0))
+		if (
+			target_instance_id <= 0
+			or release_serial <= 0
+			or not _claim_special_delivery_settlement(
+				target_instance_id,
+				release_serial,
+			)
+		):
+			continue
+		var raw_victim: Object = instance_from_id(target_instance_id)
+		if not raw_victim is Node2D:
+			continue
+		var victim := raw_victim as Node2D
+		if not _monster_special_release_target_is_valid(victim, victim_record):
+			continue
+		_settle_monster_special_victim(victim, victim_record)
+
+
+func _claim_special_delivery_settlement(
+	target_instance_id: int,
+	release_serial: int,
+) -> bool:
+	if release_serial <= _special_delivery_settlement_floor_serial:
+		return false
+	var last_serial := int(
+		_special_delivery_settled_targets.get(target_instance_id, 0)
+	)
+	if release_serial <= last_serial:
+		return false
+	_special_delivery_settled_targets[target_instance_id] = release_serial
+	_special_delivery_settlement_order.append({
+		"target_instance_id": target_instance_id,
+		"release_serial": release_serial,
+	})
+	while _special_delivery_settlement_order.size() > SPECIAL_DELIVERY_SETTLEMENT_LIMIT:
+		var expired: Dictionary = _special_delivery_settlement_order.pop_front()
+		var expired_target_id := int(expired.get("target_instance_id", 0))
+		var expired_serial := int(expired.get("release_serial", 0))
+		_special_delivery_settlement_floor_serial = maxi(
+			_special_delivery_settlement_floor_serial,
+			expired_serial,
+		)
+		if int(_special_delivery_settled_targets.get(expired_target_id, 0)) == expired_serial:
+			_special_delivery_settled_targets.erase(expired_target_id)
+	return true
+
+
+func _monster_special_release_target_is_valid(
+	victim: Node2D,
+	record: Dictionary,
+) -> bool:
+	return (
+		_special_delivery_release_target_is_live(
+			victim,
+			str(record.get("kind", "")),
+		)
+		and int(record.get("source_instance_id", 0)) == get_instance_id()
+		and int(record.get("source_life", -1)) == _hc_life(self)
+		and int(record.get("target_life", -1)) == _hc_life(victim)
+		and int(record.get("runtime_map_id", -1)) == runtime_map_id
+		and int(record.get("generation", -1))
+		== int(get_meta("zone_generation", -1))
+		and int(record.get("target_generation", -1))
+		== int(victim.get_meta("zone_generation", -1))
+		and _release_player_combat_epoch_is_current(victim, record)
+		and _world_attack_path_is_clear_for_release(record)
+	)
+
+
+func _special_delivery_release_target_is_live(
+	victim: Node2D,
+	kind: String,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not _player_combat_is_available(victim)
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+		or not _target_candidate_is_live(victim)
+	):
+		return false
+	if kind in ["directional_spit_map", "gas_adjacent", "line_magic"]:
+		return victim.has_method("take_direct_spell_damage")
+	if kind == "mixed_target_tile":
+		return victim.has_method("take_monster_mixed_damage")
+	return kind == "guard_direct_projectile" and victim.has_method("take_damage")
+
+
+func _settle_monster_special_victim(
+	victim: Node2D,
+	record: Dictionary,
+) -> void:
+	var kind := str(record.get("kind", ""))
+	var raw_damage := maxi(0, int(record.get("damage", 0)))
+	var delivery_contract_value: Variant = record.get("delivery_contract", null)
+	if not delivery_contract_value is Dictionary:
+		return
+	var delivery_contract := delivery_contract_value as Dictionary
+	if str(delivery_contract.get("kind", "")) != kind:
+		return
+	if (
+		bool(delivery_contract.get("use_accuracy", false))
+		and not _monster_special_accuracy_succeeds(victim, delivery_contract)
+	):
+		return
+	if kind == "mixed_target_tile":
+		var physical_damage := int(floor(
+			float(raw_damage) * float(delivery_contract.get("physical_ratio", 0.0))
+		))
+		var magic_damage := int(floor(
+			float(raw_damage) * float(delivery_contract.get("magic_ratio", 0.0))
+		))
+		var mixed_context := {
+			"source_monster_id": monster_id,
+			"source_instance_id": get_instance_id(),
+			"release_id": str(record.get("release_id", "")),
+			"damage_owner": "enemy.monster_special_cell_release",
+		}
+		mixed_context.make_read_only()
+		var resolution_value: Variant = victim.call(
+			"take_monster_mixed_damage",
+			physical_damage,
+			magic_damage,
+			mixed_context,
+		)
+		if resolution_value is Dictionary:
+			last_magic_attack_resolution = (
+				resolution_value as Dictionary
+			).duplicate(true)
+			last_magic_attack_resolution["source_monster_id"] = monster_id
+			last_magic_attack_resolution["damage_channel"] = "mixed_defense"
+			last_magic_attack_resolution["delivery_kind"] = kind
+			last_magic_attack_resolution["success"] = true
+			apply_life_steal(int(
+				last_magic_attack_resolution.get("applied_damage", 0)
+			))
+		return
+	if kind == "guard_direct_projectile":
+		_apply_attack_damage(
+			victim,
+			raw_damage,
+			bool(delivery_contract.get("use_accuracy", false)),
+			-1, false, -1, true,
+		)
+		return
+	var magic_damage := raw_damage
+	if kind == "line_magic" and _special_delivery_target_is_undead(victim):
+		magic_damage = int(floor(
+			float(magic_damage)
+			* float(delivery_contract.get("undead_multiplier", 1.0))
+		))
+	if not _apply_monster_special_magic_damage(victim, magic_damage, kind):
+		return
+	if kind in ["directional_spit_map", "gas_adjacent"]:
+		_apply_monster_special_status(victim, kind, delivery_contract)
+
+
+func _apply_monster_special_magic_damage(
+	victim: Node2D,
+	raw_damage: int,
+	kind: String,
+) -> bool:
+	var raw_resolution: Variant = victim.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, raw_damage),
+		-1,
+	)
+	if not raw_resolution is Dictionary:
+		return false
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["delivery_kind"] = kind
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+	# Source SpitAttack/gas status gates on GetMagStruckDamage > 0. The
+	# downstream shield may absorb every HP point, so applied_damage is not the
+	# poison gate; final_damage is the post-MAC amount presented to that shield.
+	return int(last_magic_attack_resolution.get("final_damage", 0)) > 0
+
+
+func _monster_special_accuracy_succeeds(
+	victim: Node2D,
+	delivery_contract: Dictionary,
+) -> bool:
+	var target_speed_point := _target_agility_for_monster_hit(victim)
+	var source_hit_point := maxi(0, int(delivery_contract.get("source_accuracy", 0)))
+	var random_roll: Variant = null
+	var success := true
+	if not PlayerState.test_mode:
+		random_roll = _rng.randi_range(0, target_speed_point - 1)
+		success = int(random_roll) < source_hit_point
+	last_special_delivery_accuracy_resolution = {
+		"policy_id": "monster.special_delivery.speed_point_hit_point.strict_lt.v1",
+		"source_hit_point": source_hit_point,
+		"target_speed_point": target_speed_point,
+		"random_roll": random_roll,
+		"success": success,
+		"test_mode_bypass": PlayerState.test_mode,
+	}
+	return success
+
+
+func _apply_monster_special_status(
+	victim: Node2D,
+	kind: String,
+	delivery_contract: Dictionary,
+) -> void:
+	if kind == "directional_spit_map" and not bool(
+		delivery_contract.get("poison_enabled", false)
+	):
+		return
+	var status: Dictionary = delivery_contract.get("status", {})
+	var denominator_stat := (
+		int(delivery_contract.get("source_anti_poison", 0))
+		if str(status.get("chance_denominator_stat_owner", "")) == "attacker"
+		else _target_anti_poison_for_control(victim)
+	)
+	var denominator := denominator_stat + int(
+		status.get("chance_denominator_offset", 0)
+	)
+	if denominator > 0 and _rng.randi_range(0, denominator - 1) == 0:
+		var poison_kind := str(status.get("poison_kind", ""))
+		var duration_seconds := float(status.get("duration_seconds", 0.0))
+		if poison_kind == "decrease_health" and victim.has_method("apply_monster_poison"):
+			victim.call(
+				"apply_monster_poison",
+				int(status.get("damage_per_tick", 0)),
+				duration_seconds,
+				float(status.get("interval_seconds", 0.0)),
+			)
+		elif poison_kind == "stone" and victim.has_method("apply_control"):
+			victim.call("apply_control", duration_seconds)
+	if kind != "gas_adjacent":
+		return
+	var reveal_denominator := int(
+		delivery_contract.get("hidden_reveal_chance_denominator", 0)
+	)
+	if (
+		reveal_denominator > 0
+		and victim.has_method("is_stealthed")
+		and bool(victim.call("is_stealthed"))
+		and _rng.randi_range(0, reveal_denominator - 1) == 0
+		and victim.has_method("break_stealth")
+	):
+		victim.call("break_stealth")
+
+
+func _special_delivery_target_is_undead(victim: Node2D) -> bool:
+	return victim is EnemyActor and (victim as EnemyActor).undead
+
+
+func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> void:
+	var descriptor := {
+		"contract_id": MonsterDeliveryGeometryScript.CONTRACT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"delivery_kind": str(release_record.get("kind", "")),
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"runtime_map_id": runtime_map_id,
+		"presentation_delay_seconds": float(
+			release_record.get("presentation_delay_seconds", 0.0)
+		),
+		"presentation_kind": str(
+			attack_delivery_rule.get("presentationKind", "body_attack")
+		),
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage_owner": "enemy.monster_special_cell_release",
+	}
+	descriptor.make_read_only()
+	monster_special_delivery_requested.emit(descriptor)
+	if str(release_record.get("kind", "")) != "guard_direct_projectile":
+		return
+	var victim_records_value: Variant = release_record.get("victims", null)
+	if not victim_records_value is Array or (victim_records_value as Array).is_empty():
+		return
+	var first_record_value: Variant = (victim_records_value as Array)[0]
+	if not first_record_value is Dictionary:
+		return
+	var first_record := first_record_value as Dictionary
+	var projectile_descriptor := {
+		"effect_id": MonsterRangedProjectileEffectScript.EFFECT_ID,
+		"source_monster_id": monster_id,
+		"release_id": str(release_record.get("release_id", "")),
+		"origin_world_px": release_record.get("origin_world_px", Vector2.INF),
+		"target_world_px": first_record.get("target_world_px", Vector2.INF),
+		"duration_seconds": maxf(
+			0.001,
+			float(release_record.get("presentation_delay_seconds", 0.0)),
+		),
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage_owner": "enemy.monster_special_cell_release",
+		"presentation_only": true,
+	}
+	projectile_descriptor.make_read_only()
+	var host := get_parent()
+	if not is_instance_valid(host):
+		return
+	var effect: Node2D = MonsterRangedProjectileEffectScript.create_visual(
+		projectile_descriptor
+	)
+	host.add_child(effect)
+
+
+func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
+	if (
+		not combat_enabled
+		or not _uses_physical_projectile_delivery()
+		or not is_instance_valid(hit_target)
+		or not _player_combat_is_available(hit_target)
+		or not hit_target.has_method("take_damage")
+		or _target_is_safe_player(hit_target)
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+	):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	var release_distance_gu := source_ground_gu.distance_to(target_ground_gu)
+	if release_distance_gu > attack_range_gu + GroundUnitSpace.EPSILON_GU:
+		return false
+	if not _physical_projectile_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		hit_target.global_position,
+		hit_target.get_instance_id(),
+	):
+		return false
+	var release_id := _next_spatial_release_id("physical_projectile")
+	var snapshot := SkillFootprintSnapshotScript.create_swept_capsule_path(
+		_monster_attack_id("physical_projectile"),
+		release_id,
+		source_ground_gu,
+		target_ground_gu,
+		0.0,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS / 2,
+		"",
+		-1,
+		_snapshot_coordinate_context(),
+	)
+	snapshot = _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_PROJECTILE_SWEEP,
+		hit_target,
+		attack_range_gu,
+	)
+	if not _snapshot_strict_ok(snapshot):
+		return false
+	var delay_rule: Dictionary = attack_delivery_rule.get("impactDelay", {})
+	var chebyshev_distance_gu := maxf(
+		absf(target_ground_gu.x - source_ground_gu.x),
+		absf(target_ground_gu.y - source_ground_gu.y),
+	)
+	var duration_seconds := maxf(
+		0.001,
+		float(delay_rule.get("baseSeconds", 0.6))
+		+ chebyshev_distance_gu
+		* float(delay_rule.get("perChebyshevGuSeconds", 0.05)),
+	)
+	var target_world_px := _target_approved_ground_footpoint_world_px(hit_target)
+	var release_record := {
+		"kind": "physical_projectile",
+		"release_id": release_id,
+		"source_instance_id": get_instance_id(),
+		"source_monster_id": monster_id,
+		"target_instance_id": hit_target.get_instance_id(),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
+		"runtime_map_id": runtime_map_id,
+		"source_ground_gu": source_ground_gu,
+		"target_ground_gu": target_ground_gu,
+		"origin_world_px": global_position,
+		"target_world_px": target_world_px,
+		"duration_seconds": duration_seconds,
+		"damage": maxi(0, dealt_damage),
+		"footprint_snapshot": snapshot,
+	}
+	release_record.make_read_only()
+	_pending_attack_time = duration_seconds
+	_pending_attack_target = hit_target
+	_pending_attack_damage = maxi(0, dealt_damage)
+	_pending_attack_release_record = release_record
+	_last_attack_footprint_snapshot = snapshot
+	_emit_physical_projectile_descriptor(release_record)
+	return true
+
+
+func _physical_projectile_path_is_clear(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	target_world_px: Vector2 = Vector2.INF,
+	target_instance_id := 0,
+) -> bool:
+	if str(attack_delivery_rule.get("obstaclePolicy", "")) != "environment_can_fly_line":
+		return false
+	return _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		target_world_px,
+		true,
+		target_instance_id,
+	)
+
+
+func _settle_physical_projectile_release(release_record: Dictionary) -> void:
+	if not combat_enabled:
+		return
+	var target_instance_id := int(release_record.get("target_instance_id", 0))
+	if target_instance_id <= 0:
+		return
+	var candidate: Object = instance_from_id(target_instance_id)
+	if not (candidate is Node2D):
+		return
+	var hit_target := candidate as Node2D
+	if not _physical_projectile_release_target_is_valid(hit_target, release_record):
+		return
+	if not _world_attack_path_is_clear_for_release(release_record):
+		return
+	_apply_attack_damage(hit_target, int(release_record.get("damage", 0)), true, -1, false, -1, true)
+
+
+func _physical_projectile_release_target_is_valid(
+	hit_target: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(hit_target)
+		or hit_target.is_queued_for_deletion()
+		or not hit_target.has_method("take_damage")
+		or int(release_record.get("runtime_map_id", -1)) != runtime_map_id
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+		or _target_is_safe_player(hit_target)
+		or not _release_player_combat_epoch_is_current(hit_target, release_record)
+	):
+		return false
+	var dying_value: Variant = hit_target.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = hit_target.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = hit_target.get("current_hp")
+	return current_hp_value == null or int(current_hp_value) > 0
+
+
+func _emit_physical_projectile_descriptor(release_record: Dictionary) -> void:
+	var descriptor := {
+		"effect_id": MonsterRangedProjectileEffectScript.EFFECT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"target_instance_id": int(release_record.get("target_instance_id", 0)),
+		"target_combat_epoch": int(release_record.get("target_combat_epoch", -1)),
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
+		"origin_world_px": release_record.get("origin_world_px", global_position),
+		"target_world_px": release_record.get("target_world_px", global_position),
+		"duration_seconds": float(release_record.get("duration_seconds", 0.6)),
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage": maxi(0, int(release_record.get("damage", 0))),
+		"damage_owner": "enemy.physical_projectile_release",
+	}
+	descriptor.make_read_only()
+	ranged_projectile_requested.emit(descriptor)
+	var host := get_parent()
+	if not is_instance_valid(host):
+		return
+	var effect: Node2D = MonsterRangedProjectileEffectScript.create_visual(descriptor)
+	host.add_child(effect)
+
+
+func _launch_target_magic(hit_target: Node2D, raw_damage: int) -> bool:
+	if (
+		not combat_enabled
+		or not _uses_target_magic_delivery()
+		or not is_instance_valid(hit_target)
+		or not _player_combat_is_available(hit_target)
+		or not hit_target.has_method("take_direct_spell_damage")
+		or _target_is_safe_player(hit_target)
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+	):
+		return false
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	if not _target_magic_condition_met(target_ground_gu - source_ground_gu):
+		return false
+	if not _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		hit_target.global_position,
+		true,
+		hit_target.get_instance_id(),
+	):
+		return false
+	var release_id := _next_spatial_release_id("target_magic")
+	var snapshot := SkillFootprintSnapshotScript.create_circle(
+		_monster_attack_id("target_magic"),
+		release_id,
+		target_ground_gu,
+		0.0,
+		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+		_snapshot_coordinate_context(),
+	)
+	snapshot = _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		hit_target,
+		0.0,
+	)
+	if not _snapshot_strict_ok(snapshot):
+		return false
+	var release_record := {
+		"kind": "target_magic",
+		"release_id": release_id,
+		"source_instance_id": get_instance_id(),
+		"source_monster_id": monster_id,
+		"target_instance_id": hit_target.get_instance_id(),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
+		"runtime_map_id": runtime_map_id,
+		"source_ground_gu": source_ground_gu,
+		"target_ground_gu": target_ground_gu,
+		"origin_world_px": global_position,
+		"target_world_px": _target_approved_ground_footpoint_world_px(hit_target),
+		"duration_seconds": maxf(
+			0.001,
+			float(attack_delivery_rule.get("hitDelaySeconds", 0.2)),
+		),
+		"damage": maxi(0, raw_damage),
+		"damage_channel": "magic_defense",
+		"footprint_snapshot": snapshot,
+	}
+	release_record.make_read_only()
+	_pending_attack_time = float(release_record.get("duration_seconds", 0.2))
+	_pending_attack_target = hit_target
+	_pending_attack_damage = maxi(0, raw_damage)
+	_pending_attack_release_record = release_record
+	_last_attack_footprint_snapshot = snapshot
+	_emit_target_magic_descriptor(release_record)
+	return true
+
+
+func _settle_target_magic_release(release_record: Dictionary) -> void:
+	if not combat_enabled:
+		return
+	var target_instance_id := int(release_record.get("target_instance_id", 0))
+	if target_instance_id <= 0:
+		return
+	var candidate: Object = instance_from_id(target_instance_id)
+	if not (candidate is Node2D):
+		return
+	var hit_target := candidate as Node2D
+	if (
+		not _physical_projectile_release_target_is_valid(hit_target, release_record)
+		or not hit_target.has_method("take_direct_spell_damage")
+	):
+		return
+	if not _world_attack_path_is_clear_for_release(release_record):
+		return
+	var raw_resolution: Variant = hit_target.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, int(release_record.get("damage", 0))),
+	)
+	if not raw_resolution is Dictionary:
+		last_magic_attack_resolution = {
+			"success": false,
+			"failure_reason": "invalid_magic_damage_resolution",
+		}
+		return
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["release_id"] = str(
+		release_record.get("release_id", "")
+	)
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+
+
+func _emit_target_magic_descriptor(release_record: Dictionary) -> void:
+	var descriptor := {
+		"effect_id": MonsterTargetMagicEffectScript.EFFECT_ID,
+		"release_id": str(release_record.get("release_id", "")),
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"target_instance_id": int(release_record.get("target_instance_id", 0)),
+		"target_combat_epoch": int(release_record.get("target_combat_epoch", -1)),
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
+		"target_ground_gu": release_record.get("target_ground_gu", Vector2.INF),
+		"target_world_px": release_record.get("target_world_px", Vector2.INF),
+		"duration_seconds": float(release_record.get("duration_seconds", 0.2)),
+		"damage": maxi(0, int(release_record.get("damage", 0))),
+		"damage_channel": "magic_defense",
+		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
+		"damage_owner": "enemy.target_magic_release",
+	}
+	descriptor.make_read_only()
+	target_magic_requested.emit(descriptor)
+	var host := get_parent()
+	if not is_instance_valid(host):
+		return
+	var effect: Node2D = MonsterTargetMagicEffectScript.create_visual(descriptor)
+	host.add_child(effect)
+
+
+func _deal_special_magic_melee_hit(
+	hit_target: Node2D,
+	dealt_damage: int,
+) -> void:
+	# TMagCowMonster applies its magic-defense damage immediately. The source
+	# RM_STRUCK message is a 300ms body presentation notification, not a delayed
+	# damage transaction and not an independent projectile/effect.
+	if (
+		not combat_enabled
+		or not _uses_special_magic_melee_delivery()
+		or not is_instance_valid(hit_target)
+		or not hit_target.has_method("take_direct_spell_damage")
+		or _target_is_safe_player(hit_target)
+		or _runtime_map_id_for_area_target(hit_target) != runtime_map_id
+	):
+		return
+	var offset_ground_gu := _ground_delta_gu_between_screen_positions(
+		global_position,
+		hit_target.global_position,
+	)
+	if not _special_magic_melee_condition_met(offset_ground_gu):
+		return
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		hit_target.global_position
+	)
+	if (
+		source_ground_gu == Vector2.INF
+		or target_ground_gu == Vector2.INF
+		or not _world_attack_path_is_clear(
+			source_ground_gu,
+			target_ground_gu,
+			global_position,
+			hit_target.global_position,
+			true,
+			hit_target.get_instance_id(),
+		)
+	):
+		return
+	var raw_resolution: Variant = hit_target.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, dealt_damage),
+	)
+	if not raw_resolution is Dictionary:
+		last_magic_attack_resolution = {
+			"success": false,
+			"failure_reason": "invalid_magic_damage_resolution",
+			"source_monster_id": monster_id,
+			"damage_channel": "magic_defense",
+		}
+		return
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["delivery_kind"] = "special_melee"
+	last_magic_attack_resolution["presentation_delay_seconds"] = float(
+		attack_delivery_rule.get("presentationDelaySeconds", 0.3)
+	)
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
 
 
 func _deal_melee_hit(
 	hit_target: Node2D,
 	dealt_damage: int,
 	center_tolerance_gu := 0.0,
+	force_los_recheck := false,
 ) -> void:
-	if not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
+	if not combat_enabled or not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
 	var target_radius_gu := _target_combat_radius_gu(hit_target)
-	var center_reach_gu := maxf(
-		attack_range_gu,
-		_contact_distance_gu_to_target(hit_target),
+	var center_reach_gu := (
+		HCPolicy.START_GU if _hc_standard_melee()
+		else maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
 	)
 	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	var target_ground_gu := _screen_position_px_to_ground_position_gu(
@@ -901,6 +4887,15 @@ func _deal_melee_hit(
 			+ maxf(0.0, center_tolerance_gu)
 			+ GroundUnitSpace.EPSILON_GU
 		)
+	):
+		return
+	if not _world_attack_path_is_clear(
+		source_ground_gu,
+		target_ground_gu,
+		global_position,
+		hit_target.global_position,
+		not force_los_recheck,
+		hit_target.get_instance_id(),
 	):
 		return
 	var snapshot: Dictionary
@@ -933,13 +4928,14 @@ func _deal_melee_hit(
 		# when the attack projection is intersected with the target footprint.
 		var contact_projection_radius_gu := maxf(
 			0.0,
-			center_reach_gu
-			+ maxf(0.0, center_tolerance_gu)
-			- target_radius_gu,
+			center_reach_gu + maxf(0.0, center_tolerance_gu)
+			- (0.0 if _hc_standard_melee() else target_radius_gu),
 		)
+		# Ordinary centre distance above remains the strict gate. The shared
+		# snapshot is not allowed to extend that gate by the target radius.
 		snapshot = SkillFootprintSnapshotScript.create_circle(
 			_monster_attack_id("release_contact"),
-			_next_spatial_release_id("release_contact"),
+			_hc_release_id(),
 			source_ground_gu,
 			contact_projection_radius_gu,
 			SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
@@ -958,15 +4954,101 @@ func _deal_melee_hit(
 	_apply_attack_damage(hit_target, dealt_damage)
 
 
-func _apply_attack_damage(hit_target: Node2D, dealt_damage: int) -> void:
-	hit_target.take_damage(dealt_damage)
+func _target_agility_for_monster_hit(hit_target: Node2D) -> int:
+	var target_agility_value: Variant = hit_target.get("agility")
+	if target_agility_value != null:
+		return maxi(1, int(target_agility_value))
+	if hit_target is PlayerCharacter:
+		return maxi(1, int(PlayerState.computed_stats.get("agility", WarriorCombatMath.BASE_AGILITY)))
+	return WarriorCombatMath.BASE_AGILITY
+
+
+func _monster_physical_hit_succeeds(hit_target: Node2D, forced_roll := -1) -> bool:
+	var target_agility := _target_agility_for_monster_hit(hit_target)
+	var random_roll := int(forced_roll)
+	if random_roll < 0:
+		# Existing test mode is a deterministic presentation harness used by the
+		# geometry suites.  Production still follows the primary strict-< rule.
+		if PlayerState.test_mode:
+			last_physical_hit_resolution = {
+				"policy_id": WarriorCombatMath.PHYSICAL_HIT_POLICY_ID,
+				"accuracy": accuracy,
+				"target_agility": target_agility,
+				"random_roll": null,
+				"success": true,
+				"test_mode_bypass": true,
+			}
+			return true
+		random_roll = _rng.randi_range(0, target_agility - 1)
+	var success := WarriorCombatMath.hit_succeeds(accuracy, target_agility, random_roll)
+	last_physical_hit_resolution = {
+		"policy_id": WarriorCombatMath.PHYSICAL_HIT_POLICY_ID,
+		"accuracy": accuracy,
+		"target_agility": target_agility,
+		"random_roll": random_roll,
+		"success": success,
+		"test_mode_bypass": false,
+	}
+	return success
+
+
+func _apply_attack_damage(
+	hit_target: Node2D,
+	dealt_damage: int,
+	use_accuracy := true,
+	forced_roll := -1,
+	force_struck_reaction := false,
+	forced_control_roll := -1,
+	ranged := false,
+) -> void:
+	if not combat_enabled:
+		return
+	if use_accuracy and not _monster_physical_hit_succeeds(hit_target, forced_roll):
+		# A miss consumes the existing attack event/timer and damage roll but
+		# submits no damage or on-hit side effects.
+		return
+	if ranged and hit_target is PlayerCharacter:
+		var result := (hit_target as PlayerCharacter).take_ranged_damage(dealt_damage, true, force_struck_reaction)
+		if not bool(result.get("success", false)) or bool(result.get("magic_evaded", false)):
+			return
+	elif force_struck_reaction and hit_target is PlayerCharacter:
+		(hit_target as PlayerCharacter).take_damage(dealt_damage, true, {}, true)
+	else:
+		hit_target.take_damage(dealt_damage)
 	apply_life_steal(dealt_damage)
-	if control_on_hit_seconds > 0.0 and hit_target.has_method("apply_control"):
-		hit_target.apply_control(control_on_hit_seconds)
+	_apply_on_hit_control(hit_target, forced_control_roll)
 	var on_hit: Dictionary = behavior_profile.get("onHit", {})
 	var poison_damage_value := int(on_hit.get("poisonDamage", 0))
 	if poison_damage_value > 0 and hit_target.has_method("apply_poison"):
 		hit_target.apply_poison(poison_damage_value, float(on_hit.get("poisonSeconds", 0.0)))
+
+
+func _apply_on_hit_control(hit_target: Node2D, forced_control_roll := -1) -> void:
+	if control_on_hit_seconds <= 0.0 or not hit_target.has_method("apply_control"):
+		return
+	var denominator := control_chance_denominator_base
+	if denominator > 0:
+		denominator += _target_anti_poison_for_control(hit_target)
+		var roll := (
+			clampi(forced_control_roll, 0, denominator - 1)
+			if forced_control_roll >= 0
+			else _rng.randi_range(0, denominator - 1)
+		)
+		if roll != 0:
+			return
+	hit_target.apply_control(control_on_hit_seconds)
+
+
+func _target_anti_poison_for_control(hit_target: Node2D) -> int:
+	if hit_target is PlayerCharacter:
+		# The original server reads the struck target's m_btAntiPoison here.
+		# Validated accessory affixes add the original raw points to this stat;
+		# an unequipped character retains the original base 0.
+		return maxi(0, int(PlayerState.computed_stats.get("anti_poison", 0)))
+	for property: Dictionary in hit_target.get_property_list():
+		if str(property.get("name", "")) == "anti_poison":
+			return maxi(0, int(hit_target.get("anti_poison")))
+	return 0
 
 
 func configure_runtime_map_projection(
@@ -974,6 +5056,7 @@ func configure_runtime_map_projection(
 	ground_gu_to_screen_position_px: Callable,
 	screen_position_px_to_ground_gu: Callable = Callable()
 ) -> void:
+	_clear_attack_los_cache()
 	runtime_map_id = int(map_id)
 	runtime_ground_gu_to_screen_position_px = (
 		ground_gu_to_screen_position_px
@@ -987,15 +5070,58 @@ func configure_runtime_map_projection(
 	)
 
 
+func configure_terrain_navigation_context(context: Dictionary) -> void:
+	_terrain_navigation_context = context
+	_reset_terrain_navigation_state()
+
+
+func terrain_navigation_context_ready() -> bool:
+	if runtime_map_id < 0:
+		return true
+	return MonsterTerrainNavigationPolicyScript.context_valid(
+		_terrain_navigation_context,
+		runtime_map_id,
+	)
+
+
+func _initial_acquisition_static_los_clear(candidate: Node2D) -> bool:
+	if runtime_map_id < 0:
+		return true
+	if not terrain_navigation_context_ready() or not is_instance_valid(candidate):
+		return false
+	var start_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	var end_ground_gu := _screen_position_px_to_ground_position_gu(candidate.global_position)
+	return MonsterTerrainNavigationPolicyScript.static_line_of_sight_clear(
+		_terrain_navigation_context,
+		start_ground_gu,
+		end_ground_gu,
+	)
+
+
 func configure_spatial_index(
 	index: RuntimeCombatSpatialIndexScript,
 	actor_runtime_id: int
 ) -> void:
 	combat_spatial_index = index
 	spatial_actor_runtime_id = actor_runtime_id
+	_last_spatial_index_screen_position_px = Vector2.INF
+	_last_spatial_index_ground_position_gu = Vector2.INF
+	_last_spatial_index_runtime_map_id = -1
+	_last_spatial_index_zone_generation = -1
+	_last_spatial_index_environment_revision = -1
+	_last_spatial_index_projection = Callable()
+	_target_ground_cache_physics_frame = -1
+	_target_ground_cache_target_instance_id = 0
+	_target_ground_cache_target_screen_position_px = Vector2.INF
+	_target_ground_cache_ground_position_gu = Vector2.INF
+	_target_ground_cache_runtime_map_id = -1
+	_target_ground_cache_zone_generation = -1
+	_target_ground_cache_projection = Callable()
 
 
 func _exit_tree() -> void:
+	_clear_attack_los_cache()
+	_cancel_autonomous_step(true)
 	clear_entrapment("exit_tree")
 	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
 		combat_spatial_index.unregister(spatial_actor_runtime_id)
@@ -1082,27 +5208,343 @@ func _target_is_safe_player(hit_target: Node2D) -> bool:
 	return hit_target is PlayerCharacter and _point_inside_safe_zone(hit_target.global_position)
 
 
+func _player_combat_is_available(hit_target: Node2D) -> bool:
+	return (
+		not hit_target is PlayerCharacter
+		or not (hit_target as PlayerCharacter).combat_transition_is_active()
+	)
+
+
+func _typed_player_combat_epoch(hit_target: Node2D) -> int:
+	return (
+		(hit_target as PlayerCharacter).combat_epoch
+		if hit_target is PlayerCharacter
+		else -1
+	)
+
+
+func _release_player_combat_epoch_is_current(
+	hit_target: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if not hit_target is PlayerCharacter:
+		return true
+	var player_target := hit_target as PlayerCharacter
+	return (
+		release_record.has("target_combat_epoch")
+		and release_record.get("target_combat_epoch") is int
+		and int(release_record.get("target_combat_epoch", -1)) == player_target.combat_epoch
+		and not player_target.combat_transition_is_active()
+	)
+
+
+func _update_area_magic_delivery(delta: float) -> void:
+	if not combat_enabled or not _uses_area_magic_delivery():
+		return
+	if _area_magic_warning > 0.0:
+		_area_magic_warning = maxf(0.0, _area_magic_warning - delta)
+		if _area_magic_warning <= 0.0:
+			_settle_area_magic_release_records()
+			_last_attack_footprint_snapshot = _area_magic_footprint_snapshot
+			_area_magic_footprint_snapshot = {}
+			_area_magic_release_records.clear()
+		return
+	if _attack_timer > 0.0:
+		return
+	var candidate_snapshot := _create_area_magic_footprint_snapshot()
+	var candidate_targets := _area_magic_targets(candidate_snapshot)
+	if candidate_targets.is_empty():
+		return
+	_area_magic_footprint_snapshot = candidate_snapshot
+	_area_magic_release_records = _freeze_area_magic_release_records(
+		candidate_targets,
+		candidate_snapshot,
+	)
+	if _area_magic_release_records.is_empty():
+		_area_magic_footprint_snapshot = {}
+		return
+	# The Monster.DB ATTACK_SPD is the complete cycle interval. Freeze the
+	# target set at release and do not enter the normal single-target branch.
+	_attack_timer = _current_attack_interval()
+	_area_magic_warning = maxf(
+		0.001,
+		float(attack_delivery_rule.get("hitDelaySeconds", 0.6)),
+	)
+	# Only the authored monster body attack is presented. There is no
+	# unproven client warning circle or independent projectile/effect.
+	_play_attack_animation(maxf(_attack_animation_duration, _area_magic_warning))
+
+
+func _create_area_magic_footprint_snapshot() -> Dictionary:
+	var range_gu := MonsterUnitAdapterScript.range_gu(
+		attack_delivery_rule,
+		"range_gu",
+		"rangePixels",
+		6.0,
+	)
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if source_ground_gu == Vector2.INF or range_gu <= 0.0:
+		return {}
+	var snapshot := SkillFootprintSnapshotScript.create_directed_rectangle(
+		_monster_attack_id("area_magic"),
+		_next_spatial_release_id("area_magic"),
+		source_ground_gu - Vector2(range_gu, 0.0),
+		Vector2.RIGHT,
+		range_gu * 2.0,
+		range_gu * 2.0,
+		0.0,
+		0.0,
+		0.0,
+		"",
+		_snapshot_coordinate_context(),
+	)
+	var decorated := _decorate_attack_footprint_snapshot(
+		snapshot,
+		PROJECTION_RELATIONSHIP_GROUND_EXACT,
+		null,
+		range_gu,
+	)
+	var square_snapshot := decorated.duplicate(true)
+	square_snapshot["range_shape"] = "chebyshev_axis_aligned_square_exclusive"
+	square_snapshot["range_gu"] = range_gu
+	square_snapshot["attack_source_ground_gu"] = source_ground_gu
+	square_snapshot["obstacle_policy"] = "none_no_los"
+	square_snapshot.make_read_only()
+	return square_snapshot
+
+
+func _area_magic_targets(snapshot: Dictionary) -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	if snapshot.is_empty() or not _snapshot_strict_ok(snapshot):
+		return result
+	var candidates: Array[Node] = []
+	var seen_instance_ids: Dictionary = {}
+	if is_instance_valid(primary_target):
+		candidates.append(primary_target)
+		seen_instance_ids[primary_target.get_instance_id()] = true
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if not is_instance_valid(node):
+			continue
+		var instance_id := node.get_instance_id()
+		if seen_instance_ids.has(instance_id):
+			continue
+		seen_instance_ids[instance_id] = true
+		candidates.append(node)
+	for node: Node in candidates:
+		if node is Node2D and _area_magic_victim_is_valid(node, snapshot):
+			result.append(node)
+	result.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
+	return result
+
+
+func _area_magic_victim_is_valid(victim: Node2D, snapshot: Dictionary) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_direct_spell_damage")
+		or not _player_combat_is_available(victim)
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+	):
+		return false
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	if current_hp_value != null and int(current_hp_value) <= 0:
+		return false
+	var source_ground_gu: Vector2 = snapshot.get(
+		"attack_source_ground_gu",
+		_screen_position_px_to_ground_position_gu(global_position),
+	)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		victim.global_position
+	)
+	if source_ground_gu == Vector2.INF or target_ground_gu == Vector2.INF:
+		return false
+	var range_gu := maxf(0.0, float(snapshot.get("range_gu", 0.0)))
+	var delta_ground_gu := target_ground_gu - source_ground_gu
+	# ObjMon2's strict source comparison is abs(x) < 6 && abs(y) < 6;
+	# equality on either edge is outside the frozen target set.
+	return absf(delta_ground_gu.x) < range_gu and absf(delta_ground_gu.y) < range_gu
+
+
+func _freeze_area_magic_release_records(
+	victims: Array[Node2D],
+	footprint_snapshot: Dictionary,
+) -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	var release_id := str(footprint_snapshot.get("release_id", ""))
+	for victim: Node2D in victims:
+		if not _area_magic_victim_is_valid(victim, footprint_snapshot):
+			continue
+		var target_ground_gu := _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+		if target_ground_gu == Vector2.INF:
+			continue
+		var record := {
+			"release_id": release_id,
+			"release_target_id": "%s:target:%d" % [
+				release_id,
+				victim.get_instance_id(),
+			],
+			"target_instance_id": victim.get_instance_id(),
+			"target_combat_epoch": _typed_player_combat_epoch(victim),
+			"runtime_map_id": _runtime_map_id_for_area_target(victim),
+			"target_ground_gu": target_ground_gu,
+			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
+			"damage": _rng.randi_range(attack_min, attack_max),
+			"damage_channel": "magic_defense",
+		}
+		record.make_read_only()
+		records.append(record)
+	return records
+
+
+func _settle_area_magic_release_records() -> void:
+	if not combat_enabled:
+		return
+	for release_record: Dictionary in _area_magic_release_records:
+		var target_instance_id := int(release_record.get("target_instance_id", 0))
+		if target_instance_id <= 0:
+			continue
+		var candidate: Object = instance_from_id(target_instance_id)
+		if not (candidate is Node2D):
+			continue
+		var victim := candidate as Node2D
+		if not _area_magic_release_target_is_valid(victim, release_record):
+			continue
+		_deal_area_magic_damage(victim, int(release_record.get("damage", 0)))
+
+
+func _area_magic_release_target_is_valid(
+	victim: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_direct_spell_damage")
+		or runtime_map_id != int(release_record.get("runtime_map_id", -1))
+		or _runtime_map_id_for_area_target(victim) != runtime_map_id
+		or _target_is_safe_player(victim)
+		or _point_inside_safe_zone(victim.global_position)
+		or not _release_player_combat_epoch_is_current(victim, release_record)
+	):
+		return false
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	return current_hp_value == null or int(current_hp_value) > 0
+
+
+func _deal_area_magic_damage(victim: Node2D, dealt_damage: int) -> void:
+	if not combat_enabled:
+		return
+	var raw_resolution: Variant = victim.call(
+		"take_direct_spell_damage",
+		"",
+		maxi(0, dealt_damage),
+	)
+	if not raw_resolution is Dictionary:
+		return
+	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
+	last_magic_attack_resolution["source_monster_id"] = monster_id
+	last_magic_attack_resolution["damage_channel"] = "magic_defense"
+	last_magic_attack_resolution["delivery_kind"] = "area_magic"
+	last_magic_attack_resolution["success"] = true
+	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+	if not bool(last_magic_attack_resolution.get("magic_evaded", false)):
+		_apply_area_magic_status(victim)
+
+
+func _apply_area_magic_status(victim: Node2D) -> void:
+	var status_value: Variant = attack_delivery_rule.get("status", {})
+	if not status_value is Dictionary:
+		return
+	var status := status_value as Dictionary
+	if _rng.randf() >= float(status.get("statusChance", 0.25)):
+		return
+	var poison_weight := maxi(0, int(status.get("poisonWeight", 2)))
+	var control_weight := maxi(0, int(status.get("controlWeight", 1)))
+	if poison_weight + control_weight <= 0:
+		return
+	if _rng.randi_range(1, poison_weight + control_weight) <= poison_weight:
+		if victim.has_method("apply_poison"):
+			victim.apply_poison(
+				int(status.get("poisonDamage", 4)),
+				float(status.get("poisonSeconds", 8.0)),
+			)
+	elif victim.has_method("apply_control"):
+		victim.apply_control(float(status.get("controlSeconds", 1.2)))
+
+
 func _update_area_attack(delta: float) -> bool:
-	if not bool(area_attack_rule.get("enabled", false)):
+	if not combat_enabled or not bool(area_attack_rule.get("enabled", false)):
 		return false
 	if _area_attack_warning > 0.0:
 		_area_attack_warning -= delta
 		if _area_attack_warning <= 0.0:
-			for victim: Node2D in _area_attack_targets(_area_attack_footprint_snapshot):
-				_apply_attack_damage(victim, _rng.randi_range(attack_min, attack_max))
+			_area_attack_warning = 0.0
+			_settle_area_attack_release_records()
 			_last_attack_footprint_snapshot = _area_attack_footprint_snapshot
 			_area_attack_footprint_snapshot = {}
+			_area_attack_release_records.clear()
 			_area_attack_cooldown = _attack_interval
 	elif _area_attack_cooldown > 0.0:
 		_area_attack_cooldown = maxf(0.0, _area_attack_cooldown - delta)
 	else:
 		var candidate_snapshot := _create_area_attack_footprint_snapshot()
-		if not _area_attack_targets(candidate_snapshot).is_empty():
+		var candidate_targets := _area_attack_targets(candidate_snapshot)
+		if not candidate_targets.is_empty():
 			_area_attack_footprint_snapshot = candidate_snapshot
+			_area_attack_release_records = _freeze_area_attack_release_records(
+				candidate_targets,
+				candidate_snapshot,
+			)
+			for release_record: Dictionary in _area_attack_release_records:
+				_emit_fixed_area_ground_spike_descriptor(
+					release_record,
+					candidate_snapshot,
+				)
 			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
-			if visual != null:
-				visual.play_attack(maxf(_attack_animation_duration, _area_attack_warning))
+			_play_attack_animation(maxf(
+				_area_attack_visual_duration(),
+				_area_attack_warning,
+			))
 	return true
+
+
+func _area_attack_visual_duration() -> float:
+	# Fixed-body full-area attackers have no populated boss timing rule. Their
+	# exact client action still carries the authored frame cadence, so do not
+	# collapse six 120 ms frames into the generic 460 ms fallback.
+	var appearance := MonsterIdentityScript.appearance_profile(monster_id)
+	var actions: Variant = appearance.get("actions", {})
+	if not actions is Dictionary:
+		return _attack_animation_duration
+	var attack: Variant = (actions as Dictionary).get("attack", {})
+	if not attack is Dictionary:
+		return _attack_animation_duration
+	var frame_count := int((attack as Dictionary).get("framesPerDirection", 0))
+	var frame_ms := int((attack as Dictionary).get("frameMs", 0))
+	if frame_count <= 0 or frame_ms <= 0:
+		return _attack_animation_duration
+	return maxf(
+		_attack_animation_duration,
+		float(frame_count * frame_ms) / 1000.0,
+	)
 
 
 func _create_area_attack_footprint_snapshot() -> Dictionary:
@@ -1112,66 +5554,344 @@ func _create_area_attack_footprint_snapshot() -> Dictionary:
 		"rangePixels",
 		attack_range_gu,
 	)
-	var snapshot := SkillFootprintSnapshotScript.create_circle(
-		_monster_attack_id("area_circle"),
-		_next_spatial_release_id("area_circle"),
-		_screen_position_px_to_ground_position_gu(global_position),
-		range_gu,
-		SkillFootprintSnapshotScript.DEFAULT_CURVE_SEGMENTS,
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(
+		global_position
+	)
+	# TBigHeartMonster compares X and Y independently. The resulting footprint
+	# is the Chebyshev square [source-range, source+range], not a radial circle.
+	var snapshot := SkillFootprintSnapshotScript.create_directed_rectangle(
+		_monster_attack_id("area_square"),
+		_next_spatial_release_id("area_square"),
+		source_ground_gu - Vector2(range_gu, 0.0),
+		Vector2.RIGHT,
+		range_gu * 2.0,
+		range_gu * 2.0,
+		0.0,
+		0.0,
+		0.0,
+		"",
 		_snapshot_coordinate_context(),
 	)
-	return _decorate_attack_footprint_snapshot(
+	var decorated := _decorate_attack_footprint_snapshot(
 		snapshot,
 		PROJECTION_RELATIONSHIP_GROUND_EXACT,
 		null,
 		range_gu,
 	)
+	var square_snapshot := decorated.duplicate(true)
+	square_snapshot["range_shape"] = "chebyshev_axis_aligned_square"
+	square_snapshot["range_gu"] = range_gu
+	square_snapshot["attack_source_ground_gu"] = source_ground_gu
+	square_snapshot.make_read_only()
+	return square_snapshot
 
 
 func _area_attack_targets(snapshot := {}) -> Array[Node2D]:
 	var result: Array[Node2D] = []
 	var resolved_snapshot: Dictionary = snapshot
-	if not _snapshot_strict_ok(resolved_snapshot):
+	if resolved_snapshot.is_empty():
 		resolved_snapshot = _create_area_attack_footprint_snapshot()
+	if not _snapshot_strict_ok(resolved_snapshot):
+		# A supplied release snapshot is authoritative. Never replace an
+		# invalid/non-projectable release with a guessed footprint, otherwise a
+		# fixed-area attack could damage without a valid visual geometry source.
+		return result
+	var target_mode := str(area_attack_rule.get("targetMode", ""))
+	var scope := str(area_attack_rule.get("scope", ""))
+	if scope not in ["visible_actors", "current_map"]:
+		return result
 	var candidates: Array[Node] = []
-	if is_instance_valid(primary_target):
-		candidates.append(primary_target)
-	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
-		if not candidates.has(node):
+	var seen_instance_ids: Dictionary = {}
+	if target_mode == "all_combat_targets":
+		if is_instance_valid(primary_target):
+			candidates.append(primary_target)
+			seen_instance_ids[primary_target.get_instance_id()] = true
+		for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+			if not is_instance_valid(node):
+				continue
+			var instance_id := node.get_instance_id()
+			if seen_instance_ids.has(instance_id):
+				continue
+			seen_instance_ids[instance_id] = true
 			candidates.append(node)
+	elif target_mode == "current_target":
+		if is_instance_valid(target):
+			candidates.append(target)
+	else:
+		return result
 	for node: Node in candidates:
 		if (
 			node is Node2D
-			and node.has_method("take_damage")
-			and not _point_inside_safe_zone(node.global_position)
-			and _snapshot_intersects_target(resolved_snapshot, node)
+			and _area_attack_victim_is_valid(node, resolved_snapshot)
 		):
 			result.append(node)
+	result.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
 	return result
 
 
-func _update_behavior_summon(delta: float) -> bool:
-	if not bool(summon_rule.get("enabled", false)):
+func _area_attack_victim_is_valid(
+	victim: Node2D,
+	snapshot: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_damage")
+		or not _player_combat_is_available(victim)
+	):
 		return false
+	# Enemy death is guarded by _dying; PlayerCharacter uses _dead. The HP
+	# check also covers SummonActor and test fixtures without relying on a
+	# class-specific branch.
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	if current_hp_value != null and int(current_hp_value) <= 0:
+		return false
+	if _point_inside_safe_zone(victim.global_position):
+		return false
+	if _runtime_map_id_for_area_target(victim) != runtime_map_id:
+		return false
+	var source_ground_gu: Vector2 = snapshot.get(
+		"attack_source_ground_gu",
+		_screen_position_px_to_ground_position_gu(global_position),
+	)
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(
+		victim.global_position
+	)
+	if target_ground_gu == Vector2.INF:
+		return false
+	var range_gu := maxf(0.0, float(snapshot.get("range_gu", 0.0)))
+	var delta_ground_gu := target_ground_gu - source_ground_gu
+	return (
+		absf(delta_ground_gu.x) <= range_gu + GroundUnitSpace.EPSILON_GU
+		and absf(delta_ground_gu.y) <= range_gu + GroundUnitSpace.EPSILON_GU
+	)
+
+
+func _freeze_area_attack_release_records(
+	victims: Array[Node2D],
+	footprint_snapshot: Dictionary,
+) -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	var release_id := str(footprint_snapshot.get("release_id", ""))
+	for victim: Node2D in victims:
+		if not _area_attack_victim_is_valid(victim, footprint_snapshot):
+			continue
+		var target_ground_gu := _screen_position_px_to_ground_position_gu(
+			victim.global_position
+		)
+		if target_ground_gu == Vector2.INF:
+			continue
+		var target_instance_id := victim.get_instance_id()
+		var record := {
+			"release_id": release_id,
+			"release_target_id": "%s:target:%d" % [
+				release_id,
+				target_instance_id,
+			],
+			"target_instance_id": target_instance_id,
+			"target_combat_epoch": _typed_player_combat_epoch(victim),
+			"runtime_map_id": _runtime_map_id_for_area_target(victim),
+			"target_ground_gu": target_ground_gu,
+			"target_world_px": _target_approved_ground_footpoint_world_px(victim),
+			"target_actor_origin_world_px": victim.global_position,
+			"damage": _rng.randi_range(attack_min, attack_max),
+		}
+		record.make_read_only()
+		records.append(record)
+	return records
+
+
+func _settle_area_attack_release_records() -> void:
+	if not combat_enabled:
+		return
+	for release_record: Dictionary in _area_attack_release_records:
+		var target_instance_id := int(release_record.get("target_instance_id", 0))
+		if target_instance_id <= 0:
+			continue
+		var candidate: Object = instance_from_id(target_instance_id)
+		if not (candidate is Node2D):
+			continue
+		var victim := candidate as Node2D
+		if not _area_attack_release_target_is_valid(victim, release_record):
+			continue
+		# Fixed-area magic is a separate delivery path; preserve its existing
+		# damage semantics and do not apply physical accuracy to it.
+		_apply_attack_damage(
+			victim,
+			int(release_record.get("damage", 0)),
+			false,
+			-1,
+			_uses_fixed_area_ground_spike_effect(),
+		)
+
+
+func _area_attack_release_target_is_valid(
+	victim: Node2D,
+	release_record: Dictionary,
+) -> bool:
+	if (
+		not is_instance_valid(victim)
+		or victim.is_queued_for_deletion()
+		or not victim.has_method("take_damage")
+	):
+		return false
+	if runtime_map_id != int(release_record.get("runtime_map_id", -1)):
+		return false
+	if _runtime_map_id_for_area_target(victim) != runtime_map_id:
+		return false
+	if not _release_player_combat_epoch_is_current(victim, release_record):
+		return false
+	var dying_value: Variant = victim.get("_dying")
+	if dying_value != null and bool(dying_value):
+		return false
+	var dead_value: Variant = victim.get("_dead")
+	if dead_value != null and bool(dead_value):
+		return false
+	var current_hp_value: Variant = victim.get("current_hp")
+	if current_hp_value != null and int(current_hp_value) <= 0:
+		return false
+	return not _point_inside_safe_zone(victim.global_position)
+
+
+func _runtime_map_id_for_area_target(victim: Node2D) -> int:
+	if victim.has_meta("runtime_map_id"):
+		return int(victim.get_meta("runtime_map_id", runtime_map_id))
+	if victim is EnemyActor:
+		var enemy_map_id := (victim as EnemyActor).runtime_map_id
+		return enemy_map_id if enemy_map_id >= 0 else runtime_map_id
+	if victim is SummonActor:
+		var summon_map_id := (victim as SummonActor).runtime_map_id
+		return summon_map_id if summon_map_id >= 0 else runtime_map_id
+	# PlayerCharacter has no declared runtime_map_id. Its production map identity
+	# is the attacker's current map unless an explicit metadata override exists.
+	# Compare the exact script so a custom PlayerCharacter subclass with a typed
+	# or dynamic runtime_map_id still retains the generic compatibility fallback.
+	if victim.get_script() == PlayerCharacterScript:
+		return runtime_map_id
+	_runtime_map_id_property_list_scan_count += 1
+	for property: Dictionary in victim.get_property_list():
+		if str(property.get("name", "")) != "runtime_map_id":
+			continue
+		var target_map_id := int(victim.get("runtime_map_id"))
+		return target_map_id if target_map_id >= 0 else runtime_map_id
+	return runtime_map_id
+
+
+func _uses_fixed_area_ground_spike_effect() -> bool:
+	return monster_id in FIXED_AREA_GROUND_SPIKE_MONSTER_IDS
+
+
+func _target_approved_ground_footpoint_world_px(victim: Node2D) -> Vector2:
+	# Area geometry and damage remain bound to victim.global_position. Only the
+	# presentation descriptor follows the original user-approved ground point.
+	if victim.has_method("approved_ground_footpoint_world_px"):
+		var point: Variant = victim.call("approved_ground_footpoint_world_px")
+		if point is Vector2 and point.is_finite():
+			return point
+	return victim.global_position
+
+
+func _emit_fixed_area_ground_spike_descriptor(
+	release_record: Dictionary,
+	footprint_snapshot: Dictionary,
+) -> void:
+	if not _uses_fixed_area_ground_spike_effect():
+		return
+	var target_ground_gu: Vector2 = release_record.get(
+		"target_ground_gu",
+		Vector2.INF,
+	)
+	if target_ground_gu == Vector2.INF:
+		return
+	var target_world_px: Vector2 = release_record.get(
+		"target_world_px",
+		Vector2.INF,
+	)
+	if target_world_px == Vector2.INF:
+		return
+	var target_instance_id := int(release_record.get("target_instance_id", 0))
+	if target_instance_id <= 0:
+		return
+	var source := {
+		"monster_id": monster_id,
+		"instance_id": get_instance_id(),
+	}
+	var target := {
+		"instance_id": target_instance_id,
+		"ground_gu": target_ground_gu,
+		"world_px": target_world_px,
+		"actor_origin_world_px": release_record.get(
+			"target_actor_origin_world_px",
+			target_world_px,
+		),
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
+	}
+	var descriptor := {
+		"effect_id": FIXED_AREA_GROUND_SPIKE_EFFECT_ID,
+		"release_id": str(footprint_snapshot.get("release_id", "")),
+		"release_target_id": str(release_record.get("release_target_id", "")),
+		"source": source,
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"target": target,
+		"target_instance_id": target_instance_id,
+		"runtime_map_id": int(release_record.get("runtime_map_id", -1)),
+		"target_ground_gu": target_ground_gu,
+		"target_world_px": target_world_px,
+		"target_actor_origin_world_px": release_record.get(
+			"target_actor_origin_world_px",
+			target_world_px,
+		),
+		"damage": maxi(0, int(release_record.get("damage", 0))),
+		# The release snapshot is already read-only at construction. Do not
+		# duplicate or rebuild it per victim: all descriptors for one release
+		# must point at the same immutable geometry object.
+		"footprint_snapshot": footprint_snapshot,
+	}
+	source.make_read_only()
+	target.make_read_only()
+	descriptor.make_read_only()
+	fixed_area_ground_spike_requested.emit(descriptor)
+
+
+func _update_behavior_summon(delta: float) -> bool:
+	if not combat_enabled or not bool(summon_rule.get("enabled", false)):
+		return false
+	# Cancelling the warning prevents a stale pre-control/pre-death release.
+	if _dying or _death_pending or current_hp <= 0 or is_queued_for_deletion() or control_time > 0.0 or charm_time > 0.0 or dormant or _burrowed:
+		if _summon_warning > 0.0:
+			_summon_cooldown = maxf(_summon_cooldown, _attack_interval)
+		_summon_warning = 0.0
+		return true
 	if _summon_warning > 0.0:
 		_summon_warning -= delta
 		if _summon_warning <= 0.0:
+			_summon_warning = 0.0
+			# Reserve cooldown and release identity BEFORE arbitrary signal callbacks.
+			_summon_cooldown = _attack_interval
+			if int(get_meta("m30_summon_warning_life", -1)) != _hc_life(self) or not _hc_target_usable(target):
+				return true
 			var ids: Array = summon_rule.get("monsterIds", []).duplicate()
 			if not ids.is_empty():
-				summon_requested.emit(
-					self,
-					ids,
-					maxi(1, int(summon_rule.get("count", 1))),
-					maxi(1, int(summon_rule.get("maxActive", 15)))
-				)
-			_summon_cooldown = _attack_interval
+				set_meta("m30_summon_release_serial", int(get_meta("m30_summon_release_serial", 0)) + 1)
+				summon_requested.emit(self, ids, maxi(1, int(summon_rule.get("count", 1))), maxi(1, int(summon_rule.get("maxActive", 15))))
 	elif _summon_cooldown > 0.0:
 		_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
-	elif is_instance_valid(target):
+	elif _hc_target_usable(target):
+		set_meta("m30_summon_warning_life", _hc_life(self))
 		_summon_warning = maxf(0.001, float(summon_rule.get("delaySeconds", 0.5)))
 		if visual != null:
 			visual.play_attack(maxf(_attack_animation_duration, _summon_warning))
 	return true
+
 
 
 func _target_combat_radius_gu(target_node: Node2D) -> float:
@@ -1203,39 +5923,49 @@ func _uses_player_melee_contact_contract(target_node: Node2D) -> bool:
 
 
 func _crowd_separation() -> Vector2:
-	_ensure_crowd_grid()
 	var separation_ground := Vector2.ZERO
-	var center_cell := _crowd_grid_cell(global_position)
-	for offset_y in range(-1, 2):
-		for offset_x in range(-1, 2):
-			var bucket: Array = _crowd_grid.get(center_cell + Vector2i(offset_x, offset_y), [])
-			for value: Variant in bucket:
-				_crowd_query_candidate_count += 1
-				if not is_instance_valid(value):
-					continue
-				var node := value as Node
-				if node == self or not node is EnemyActor or node.is_queued_for_deletion():
-					continue
-				var other := node as EnemyActor
-				var away_ground_gu := _ground_delta_gu_between_screen_positions(
-					other.global_position,
-					global_position,
-				)
-				var desired_gu := (
-					combat_radius_gu
-					+ other.combat_radius_gu
-					+ CROWD_SEPARATION_GAP_GU
-				)
-				var distance_gu := away_ground_gu.length()
-				if distance_gu >= desired_gu:
-					continue
-				if distance_gu < GroundUnitSpace.EPSILON_GU:
-					var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
-					away_ground_gu = Vector2.from_angle(angle)
-					distance_gu = GroundUnitSpace.EPSILON_GU
-				separation_ground += away_ground_gu.normalized() * (
-					1.0 - distance_gu / desired_gu
-				)
+	if (
+		combat_spatial_index == null
+		or not is_instance_valid(combat_spatial_index)
+		or runtime_map_id < 0
+	):
+		return separation_ground
+	var center_ground_gu := spatial_index_position()
+	if not center_ground_gu.is_finite():
+		return separation_ground
+	combat_spatial_index.query_neighbor_enemy_nodes_into(
+		runtime_map_id,
+		center_ground_gu,
+		CROWD_NEIGHBOR_QUERY_RADIUS_GU,
+		_crowd_neighbor_scratch,
+	)
+	for value: Variant in _crowd_neighbor_scratch:
+		_record_performance_counter(&"crowd_query_candidates")
+		_record_performance_counter(&"crowd_index_candidates")
+		if not is_instance_valid(value) or not value is EnemyActor:
+			continue
+		var other := value as EnemyActor
+		if other == self or other.is_queued_for_deletion():
+			continue
+		var away_ground_gu := _ground_delta_gu_between_screen_positions(
+			other.global_position,
+			global_position,
+		)
+		var desired_gu := (
+			combat_radius_gu
+			+ other.combat_radius_gu
+			+ CROWD_SEPARATION_GAP_GU
+		)
+		var distance_gu := away_ground_gu.length()
+		if distance_gu >= desired_gu:
+			continue
+		if distance_gu < GroundUnitSpace.EPSILON_GU:
+			var angle := float(posmod(get_instance_id(), 16)) / 16.0 * TAU
+			away_ground_gu = Vector2.from_angle(angle)
+			distance_gu = GroundUnitSpace.EPSILON_GU
+		separation_ground += away_ground_gu.normalized() * (
+			1.0 - distance_gu / desired_gu
+		)
 	return separation_ground.limit_length(1.0)
 
 
@@ -1244,72 +5974,184 @@ func _crowd_separation_for_motion(delta: float) -> Vector2:
 	if _crowd_steering_timer > 0.0:
 		return _cached_crowd_separation
 	_crowd_steering_timer = CROWD_STEERING_INTERVAL_SECONDS
-	_crowd_steering_evaluation_count += 1
+	_record_performance_counter(&"crowd_steering_evaluations")
+	_record_performance_counter(&"crowd_queries")
+	var crowd_started_usec := RuntimeDiagnostics.timing_start()
 	_cached_crowd_separation = _crowd_separation()
+	RuntimeDiagnostics.record_timing_usec(&"crowd_usec", crowd_started_usec)
 	return _cached_crowd_separation
 
 
-func _ensure_crowd_grid() -> void:
-	var physics_frame := Engine.get_physics_frames()
-	if _crowd_grid_physics_frame >= 0 and physics_frame - _crowd_grid_physics_frame < CROWD_GRID_REFRESH_FRAMES:
+func _ensure_target_grid(force_refresh := false) -> void:
+	if not is_inside_tree():
 		return
-	_crowd_grid_physics_frame = physics_frame
-	_crowd_grid.clear()
-	_crowd_grid_build_count += 1
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		_crowd_grid_actor_scan_count += 1
-		var enemy := node as EnemyActor
-		var cell := _crowd_grid_cell(enemy.global_position)
-		var bucket: Array = _crowd_grid.get(cell, [])
-		bucket.append(enemy)
-		_crowd_grid[cell] = bucket
+	var now_msec := Time.get_ticks_msec()
+	if (
+		not force_refresh
+		and _target_grid_last_refresh_msec >= 0
+		and now_msec - _target_grid_last_refresh_msec
+			< int(TARGET_GRID_REFRESH_SECONDS * 1000.0)
+	):
+		return
+	_target_grid_last_refresh_msec = now_msec
+	_target_grid.clear()
+	_target_grid_node_ids.clear()
+	# Keep the established diagnostic name, but count actual group walks now;
+	# per-actor candidate decisions are no longer misreported as full scans.
+	_record_performance_counter(&"retarget_full_scans")
+	_record_performance_counter(&"retarget_target_group_scans")
+	# One shared group walk per 250 ms window replaces one group walk per
+	# retargeting actor.  Group order is retained in each record because equal
+	# Manhattan-distance first acquisitions are order-stable by contract.
+	var group_order := 0
+	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
+		if node is Node2D and is_instance_valid(node) and not node.is_queued_for_deletion():
+			var target_node := node as Node2D
+			if target_node.global_position.is_finite():
+				var cell := _target_grid_cell(target_node.global_position)
+				var bucket: Array = _target_grid.get(cell, [])
+				bucket.append({"node": target_node, "order": group_order})
+				_target_grid[cell] = bucket
+				_target_grid_node_ids[target_node.get_instance_id()] = true
+				_record_performance_counter(&"retarget_target_candidates")
+		group_order += 1
 
 
-func _crowd_grid_cell(world_position: Vector2) -> Vector2i:
-	var ground_position_gu := _screen_position_px_to_ground_position_gu(world_position)
+static func _target_grid_cell(screen_position_px: Vector2) -> Vector2i:
 	return Vector2i(
-		floori(ground_position_gu.x / CROWD_GRID_CELL_SIZE_GU),
-		floori(ground_position_gu.y / CROWD_GRID_CELL_SIZE_GU),
+		floori(screen_position_px.x / TARGET_GRID_CELL_SIZE_PX.x),
+		floori(screen_position_px.y / TARGET_GRID_CELL_SIZE_PX.y),
 	)
 
 
+func _target_grid_candidates(max_range_gu: float) -> Array[Node2D]:
+	var result: Array[Node2D] = []
+	if not is_finite(max_range_gu) or max_range_gu <= 0.0:
+		return result
+	var half_extents := TARGET_GRID_HALF_EXTENTS_PER_GU * max_range_gu
+	var min_cell := _target_grid_cell(global_position - half_extents)
+	var max_cell := _target_grid_cell(global_position + half_extents)
+	# R14-B4: reuse actor-owned scratch instead of allocating a fresh
+	# {node, order} Dictionary per candidate. Records reference the shared
+	# grid's existing record objects; ordering rules are unchanged.
+	_target_grid_candidate_scratch.clear()
+	_target_grid_candidate_seen.clear()
+	for cell_y in range(min_cell.y, max_cell.y + 1):
+		for cell_x in range(min_cell.x, max_cell.x + 1):
+			var bucket: Array = _target_grid.get(Vector2i(cell_x, cell_y), [])
+			for raw_record: Variant in bucket:
+				if not raw_record is Dictionary:
+					continue
+				var record: Dictionary = raw_record
+				var raw_node: Variant = record.get("node")
+				if not is_instance_valid(raw_node) or not raw_node is Node2D:
+					continue
+				var node := raw_node as Node2D
+				if node.is_queued_for_deletion():
+					continue
+				var instance_id := node.get_instance_id()
+				if _target_grid_candidate_seen.has(instance_id):
+					continue
+				_target_grid_candidate_seen[instance_id] = true
+				_target_grid_candidate_scratch.append(record)
+	_target_grid_candidate_scratch.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			return int(a.get("order", 0)) < int(b.get("order", 0))
+	)
+	for record: Dictionary in _target_grid_candidate_scratch:
+		var raw_node: Variant = record.get("node")
+		if is_instance_valid(raw_node) and raw_node is Node2D:
+			var node := raw_node as Node2D
+			if node.is_queued_for_deletion():
+				continue
+			result.append(node)
+	return result
+
+
+func _append_live_target_candidate(candidates: Array, raw_candidate: Variant) -> void:
+	if not is_instance_valid(raw_candidate) or not raw_candidate is Node2D:
+		return
+	var candidate := raw_candidate as Node2D
+	if candidate.is_queued_for_deletion() or candidates.has(candidate):
+		return
+	candidates.append(candidate)
+
+
 static func reset_performance_diagnostics() -> void:
-	_crowd_grid_physics_frame = -1
-	_crowd_grid.clear()
-	_crowd_grid_build_count = 0
-	_crowd_grid_actor_scan_count = 0
+	_target_grid_last_refresh_msec = -1
+	_target_grid.clear()
+	_target_grid_node_ids.clear()
 	_crowd_query_candidate_count = 0
 	_crowd_steering_evaluation_count = 0
 	_retarget_full_scan_count = 0
+	_retarget_decision_count = 0
+	_target_grid_group_scan_count = 0
+	_target_grid_candidate_count = 0
 	_background_ai_evaluation_count = 0
+	_background_fast_path_skip_count = 0
+	_foreground_ai_tick_count = 0
+	_background_deep_sleep_entry_count = 0
+	_background_deep_sleep_wakeup_count = 0
 	_physics_move_count = 0
 	_environment_guard_check_count = 0
+	RuntimeDiagnostics.reset_performance_window()
 
 
 static func performance_diagnostics() -> Dictionary:
-	return {
-		"crowd_grid_builds": _crowd_grid_build_count,
-		"crowd_grid_actor_scans": _crowd_grid_actor_scan_count,
+	var result := {
+		"crowd_grid_builds": 0,
+		"crowd_grid_actor_scans": 0,
 		"crowd_query_candidates": _crowd_query_candidate_count,
 		"crowd_steering_evaluations": _crowd_steering_evaluation_count,
 		"retarget_full_scans": _retarget_full_scan_count,
+		"retarget_decisions": _retarget_decision_count,
+		"retarget_target_group_scans": _target_grid_group_scan_count,
+		"retarget_target_candidates": _target_grid_candidate_count,
 		"background_ai_evaluations": _background_ai_evaluation_count,
+		"background_fast_path_skips": _background_fast_path_skip_count,
+		"foreground_ai_ticks": _foreground_ai_tick_count,
+		"background_deep_sleep_entries": _background_deep_sleep_entry_count,
+		"background_deep_sleep_wakeups": _background_deep_sleep_wakeup_count,
 		"physics_moves": _physics_move_count,
 		"environment_guard_checks": _environment_guard_check_count,
 	}
+	if RuntimeDiagnostics.performance_enabled():
+		var merged_counters := RuntimeDiagnostics.performance_counters()
+		for field: String in RuntimeDiagnostics.PERFORMANCE_FIELDS:
+			if merged_counters.has(field):
+				result[field] = merged_counters[field]
+	return result
 
 
 func _can_use_background_ai() -> bool:
+	if _hc_damage_dirty or _hc_path_pending:
+		return false
 	if is_boss or not is_instance_valid(primary_target):
+		return false
+	if (
+		is_instance_valid(target)
+		and target is PlayerCharacter
+		and _point_inside_safe_zone(target.global_position)
+	):
+		return false
+	# Movement/collision must continue at physics rate. Only truly idle actors
+	# may use the low-frequency background maintenance path.
+	if _movement_step_active:
 		return false
 	if target != primary_target and is_instance_valid(target):
 		return false
 	if not _threat_table.is_empty() or poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0:
 		return false
-	if _pending_attack_time >= 0.0 or _area_attack_warning > 0.0 or _summon_warning > 0.0:
+	if (
+		_pending_attack_time >= 0.0
+		or _area_attack_warning > 0.0
+		or _area_magic_warning > 0.0
+		or _summon_warning > 0.0
+		or entrapment_active()
+	):
 		return false
+	if not is_instance_valid(target):
+		return true
 	var activation_distance_gu := maxf(
 		BACKGROUND_AI_MIN_DISTANCE_GU,
 		aggro_radius_gu + MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(256.0),
@@ -1330,17 +6172,82 @@ func apply_life_steal(dealt_damage: int) -> void:
 	_refresh_overhead_health()
 
 
-func take_damage(amount: int, attacker: Node2D = null) -> void:
-	if _dying:
+func take_damage(
+	amount: int,
+	attacker: Node2D = null,
+	damage_context: Dictionary = {},
+) -> void:
+	_apply_damage_core(amount, attacker, damage_context, true)
+
+
+## Proximity is not the only authored wake condition for static dormant
+## monsters: an actually received HP loss from a live attacker must wake them
+## too, otherwise a ranged hit only builds threat while the actor stays
+## frozen until the player walks into the wake range. Damage already populated
+## the threat table before this helper runs, so it never assigns a target
+## directly; the existing threat/retarget policy keeps choosing the target.
+## Burrow/ambush is a separate authored mechanic: monster 124 (触龙神) must
+## stay underground until its own emergeRange contract wakes it.
+func _wake_dormant_from_received_damage(
+	attacker: Node2D,
+	actual_damage: int,
+) -> void:
+	if actual_damage <= 0:
 		return
+	if current_hp <= 0:
+		return
+	if not dormant:
+		return
+	if _burrowed:
+		return
+	if not _target_candidate_is_live(attacker):
+		return
+	dormant = false
+	_retarget_timer = 0.0
+
+
+## Shared damage core. `causes_struck` separates the vanilla ordinary STRUCK
+## channel (RM_STRUCK, sent only for positive direct damage) from DOT/poison
+## (DamageHealth only, never RM_STRUCK). Poison must keep dealing HP without
+## a struck visual, an attack deadline penalty or a walk delay.
+func _apply_damage_core(
+	amount: int,
+	attacker: Node2D,
+	damage_context: Dictionary,
+	causes_struck: bool,
+) -> void:
+	if _dying or _death_pending:
+		return
+	_record_performance_counter(&"take_damage_calls")
+	_leave_background_deep_sleep()
+	var hp_before_damage := current_hp
 	if is_instance_valid(attacker):
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
+	var actual_damage := hp_before_damage - current_hp
+	if actual_damage > 0 and is_instance_valid(attacker):
+		_wake_dormant_from_received_damage(attacker, actual_damage)
+		_hc_received_damage(attacker, float(actual_damage))
 	_refresh_overhead_health()
 	if is_boss and not boss_rule.is_empty():
 		_apply_health_stage_mechanics()
-	if visual != null and current_hp > 0:
-		visual.play_hit()
+	if causes_struck and amount > 0 and current_hp > 0:
+		# Vanilla ordinary STRUCK (nDamage > 0, no MaxHP-percentage threshold):
+		# the NEXT attack deadline slips slightly and a struck visual event is
+		# queued. It never cancels a committed attack, never locks movement and
+		# never touches the walk cadence (the vanilla WalkTime struck line is
+		# commented out in all three verifiable source chains).
+		_apply_source_struck_attack_delay()
+		if visual != null:
+			visual.queue_struck(level)
+		if hp_before_damage - current_hp > 0:
+			_emit_player_physical_contact(attacker, damage_context)
+	elif not causes_struck and amount > 0:
+		# DOT tick: HP change only. Counted for R1 diagnostics so a poisoned
+		# pack provably stays free of struck recoil.
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_dot_no_struck_count"
+		)
 	if is_boss and _boss_phase_enabled and not _boss_phase_two and current_hp <= max_hp / 2:
 		_boss_phase_two = true
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
@@ -1352,35 +6259,188 @@ func take_damage(amount: int, attacker: Node2D = null) -> void:
 			attack_range_gu,
 		)
 		_boss_skill_cooldown = minf(_boss_skill_cooldown, float(phase.get("skillCooldownSeconds", _boss_skill_cooldown)))
+	if current_hp == 0:
+		_record_performance_counter(&"lethal_damage_count")
+	# R1.1 review fix: a DOT/poison tick deals HP damage but never requests a
+	# hit animation, so the legacy counter must not count it.
+	if causes_struck and visual != null and current_hp > 0:
+		_record_performance_counter(&"hit_animation_requests")
+	_record_performance_counter(&"actor_redraw_requests")
+	_record_performance_counter(&"actor_redraw_requests_from_damage")
 	queue_redraw()
 	if current_hp == 0:
-		_begin_death()
+		_mark_death_pending()
 
 
-func _begin_death() -> void:
-	clear_entrapment("death")
-	_dying = true
-	velocity = Vector2.ZERO
-	_pending_attack_time = -1.0
-	_pending_attack_target = null
+## Vanilla ordinary struck attack-tick penalty:
+## m_dwHitTick += 150 - min(130, Level * 4). Applied to the NEXT attack
+## deadline only; a committed attack release settles untouched.
+func _apply_source_struck_attack_delay() -> void:
+	_attack_timer += float(
+		MonsterStruckPolicyScript.attack_delay_ms(level)
+	) / 1000.0
+
+
+## Direct magic (RM_MAGSTRUCK) that passed the anti-magic stage: postpone the
+## next autonomous walk by 800 + Random(1000) ms through the movement
+## cadence. Never cancels a committed step, never clears a path session and
+## never freezes attacks (that would be control_time, which the vanilla code
+## does not do here). Fire-wall / ground-mine ticks (RM_MAGSTRUCK_MINE) must
+## never reach this method.
+## The roll comes from this actor's own RNG stream by default (the vanilla
+## server draws Random(1000) from the shared server stream, never from a
+## per-spell resolution stream - consuming the caller's spell RNG here would
+## shift the validated direct-spell RNG continuation, see
+## direct_spell_compiled_stats_parity_test). Callers may still pass an
+## explicit deterministic roll for tests.
+func apply_source_direct_magic_walk_delay(random_0_to_999 := -1) -> void:
+	if _dying or _death_pending:
+		return
+	if _movement_cadence == null:
+		return
+	var roll := random_0_to_999
+	if roll < 0:
+		roll = _rng.randi_range(0, 999)
+	if _movement_cadence.postpone_walk_tick_ms(
+		MonsterStruckPolicyScript.direct_magic_walk_delay_ms(roll)
+	):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_direct_magic_walk_delay_count"
+		)
+
+
+## Vanilla green poison ticks damage health directly and never send
+## RM_STRUCK: HP only, no struck visual, no attack deadline penalty, no walk
+## delay. Reuses the shared core with causes_struck=false and a shared empty
+## context (no per-tick Dictionary allocation).
+func _apply_poison_tick_damage() -> void:
+	_apply_damage_core(poison_damage, null, EMPTY_DAMAGE_CONTEXT, false)
+
+
+func can_receive_damage() -> bool:
+	return (
+		current_hp > 0
+		and not _death_pending
+		and not _dying
+		and not is_queued_for_deletion()
+	)
+
+
+func _mark_death_pending() -> void:
+	if _dying or _death_pending:
+		return
+	_record_performance_counter(&"death_pending_marks")
+	# Freeze the actor's runtime identity at the lethal boundary.  The death
+	# signal is emitted after the deferred death-art handoff, so reading the
+	# owning GameRoot's current map there would attribute an old corpse to a
+	# newly loaded zone.  Keep this metadata deliberately small; the canonical
+	# monster snapshot itself is already owned by the actor.
+	var origin_map_id := runtime_map_id
+	var origin_generation := int(get_meta("zone_generation", -1))
+	var raw_spawn_position: Variant = get_meta("spawn_position", global_position)
+	var spawn_position := (
+		raw_spawn_position as Vector2
+		if raw_spawn_position is Vector2
+		else global_position
+	)
+	var raw_spawn_context: Variant = get_meta("spawn_context", {})
+	var spawn_context: Dictionary = (
+		raw_spawn_context.duplicate(true)
+		if raw_spawn_context is Dictionary
+		else {}
+	)
+	var death_origin := {
+		"captured": true,
+		"map_id": origin_map_id,
+		"generation": origin_generation,
+		"death_position": global_position,
+		"spawn_position": spawn_position,
+		"spawn_context": spawn_context,
+	}
+	set_meta("death_origin", death_origin)
+	set_meta("death_runtime_map_id", origin_map_id)
+	set_meta("death_zone_generation", origin_generation)
+	set_meta("death_world_position", global_position)
+	var raw_snapshot: Variant = get_meta("death_runtime_snapshot", {})
+	if raw_snapshot is Dictionary and not (raw_snapshot as Dictionary).is_empty():
+		var frozen_snapshot: Dictionary = (raw_snapshot as Dictionary).duplicate(true)
+		frozen_snapshot["death_runtime_map_id"] = origin_map_id
+		frozen_snapshot["death_zone_generation"] = origin_generation
+		frozen_snapshot["death_world_position"] = global_position
+		set_meta("death_runtime_snapshot", frozen_snapshot)
+	_death_pending = true
+	set_meta("hc_combat_life_epoch", int(get_meta("hc_combat_life_epoch", 0)) + 1)
+	_hc_cancel_path()
+	# The heavyweight death signal/persistence/drop work is deferred, but a
+	# zero-HP actor must stop participating in collision and target queries now.
+	# Otherwise a second projectile in the same frame can be consumed by this
+	# already-dead actor before its next physics tick.
 	input_pickable = false
 	collision_layer = 0
 	collision_mask = 0
 	remove_from_group("enemies")
+	add_to_group("death_pending")
+	if combat_spatial_index != null and is_instance_valid(combat_spatial_index):
+		_record_performance_counter(&"death_same_release_unregistrations")
+		combat_spatial_index.unregister(spatial_actor_runtime_id)
+	# Tests, paused actors and temporarily disabled physics processing must still
+	# commit death after the current damage/AOE call stack has fully unwound.
+	call_deferred("_begin_death")
+
+
+func _begin_death() -> void:
+	if _dying:
+		return
+	_record_performance_counter(&"death_begin_calls")
+	_death_pending = false
+	if current_hp > 0:
+		return
+	clear_entrapment("death")
+	_dying = true
+	_audio_end_combat_session("target_dead")
+	# Do not synthesize death_secondary: the source contract permits it only
+	# for appearance-80 guard records, and EnemyActor has no proven source guard
+	# at this boundary.  The shared service therefore remains fail-closed.
+	# A corpse is a presentation/persistence job, not an active physics actor.
+	# Disable the callback at the formal death boundary so a long corpse hold
+	# cannot keep entering _physics_process every frame.
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	_cancel_autonomous_step(true)
+	_pending_attack_time = -1.0
+	_pending_attack_target = null
+	_pending_attack_damage = 0
+	_pending_attack_release_record = {}
+	_area_attack_warning = 0.0
+	_area_attack_footprint_snapshot = {}
+	_area_attack_release_records.clear()
+	_area_magic_warning = 0.0
+	_area_magic_footprint_snapshot = {}
+	_area_magic_release_records.clear()
+	input_pickable = false
+	collision_layer = 0
+	collision_mask = 0
+	remove_from_group("enemies")
+	remove_from_group("death_pending")
 	if overhead != null:
 		overhead.visible = false
 	var has_death_art := visual != null and visual.uses_final_art()
+	var death_animation_seconds := 0.0
 	if has_death_art:
-		visual.play_death()
+		death_animation_seconds = visual.play_death()
 	died.emit(self, monster_data)
 	if has_death_art:
-		_finish_death_after_animation()
+		_finish_death_after_animation(death_animation_seconds)
 	else:
 		queue_free()
 
 
-func _finish_death_after_animation() -> void:
-	await get_tree().create_timer(0.64).timeout
+func _finish_death_after_animation(animation_seconds: float) -> void:
+	await get_tree().create_timer(maxf(0.01, animation_seconds)).timeout
+	if not is_instance_valid(self):
+		return
+	visual.hold_death_pose()
+	await get_tree().create_timer(CORPSE_HOLD_SECONDS).timeout
 	if is_instance_valid(self):
 		queue_free()
 
@@ -1390,13 +6450,17 @@ func apply_poison(
 	seconds: float,
 	interval_seconds := 1.0
 ) -> void:
+	_leave_background_deep_sleep()
 	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
 	poison_time = maxf(poison_time, seconds)
 	poison_tick_interval_seconds = maxf(0.01, float(interval_seconds))
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
 func apply_control(seconds: float) -> void:
+	if seconds > 0.0:
+		_leave_background_deep_sleep()
 	# Re-applying control after a scripted relocation must pin the new position,
 	# not an obsolete anchor captured before teleport/knockback resolution.
 	if seconds > 0.0:
@@ -1404,8 +6468,10 @@ func apply_control(seconds: float) -> void:
 		_pending_attack_time = -1.0
 		_pending_attack_target = null
 		_pending_attack_damage = 0
+		_pending_attack_release_record = {}
 		velocity = Vector2.ZERO
 	control_time = maxf(control_time, seconds)
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -1414,6 +6480,7 @@ func apply_entrapment(
 	boundary_snapshot: Dictionary,
 	caster_actor: Node2D
 ) -> Dictionary:
+	_leave_background_deep_sleep()
 	var immunity := control_immunity_snapshot()
 	if bool(immunity.get("immune", false)):
 		_entrapment_last_end_reason = "target_control_immune"
@@ -1554,7 +6621,10 @@ func _update_entrapment_state(delta: float) -> void:
 
 
 func apply_charm(seconds: float) -> void:
+	if seconds > 0.0:
+		_leave_background_deep_sleep()
 	charm_time = maxf(charm_time, seconds)
+	_record_performance_counter(&"actor_redraw_requests")
 	queue_redraw()
 
 
@@ -1587,16 +6657,18 @@ func _update_status_effects(delta: float) -> void:
 			0.0,
 			poison_tick_elapsed_seconds - poison_tick_interval_seconds
 		)
-		take_damage(poison_damage)
+		_apply_poison_tick_damage()
 	if poison_time <= 0.0:
 		poison_damage = 0
 		poison_tick_interval_seconds = 1.0
 		poison_tick_elapsed_seconds = 0.0
 	var has_visible_status := poison_time > 0.0 or control_time > 0.0 or charm_time > 0.0
 	if had_visible_status != has_visible_status:
+		_record_performance_counter(&"actor_redraw_requests")
 		queue_redraw()
 	if has_meta("canonical_red_poison") and not canonical_red_poison_active():
 		remove_meta("canonical_red_poison")
+		_record_performance_counter(&"actor_redraw_requests")
 		queue_redraw()
 
 
@@ -1625,33 +6697,127 @@ func _apply_health_stage_mechanics() -> void:
 
 
 func _retarget(delta := 0.0) -> void:
+	var retarget_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_retarget_calls"
+	)
+	_retarget_internal(delta)
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_retarget_usec",
+		retarget_started_usec,
+	)
+
+
+## Inclusive target maintenance/selection body. Its duration is nested in the
+## actor physics or background-tick total when called from those paths.
+func _retarget_internal(delta := 0.0) -> void:
+	if _hc_standard_melee():
+		_hc_refresh_observation()
+		if _hc_damage_dirty:
+			_retarget_timer = 0.0
+		_hc_damage_dirty = false
+	_target_stable_remaining_seconds = maxf(
+		0.0,
+		_target_stable_remaining_seconds - delta,
+	)
 	if charm_time > 0.0:
 		return
 	_decay_threat(delta)
 	_retarget_timer = maxf(0.0, _retarget_timer - delta)
+	# Release invalid, protected, or disengaged targets before the cadence gate.
+	# They can remain valid Godot Objects during a death presentation, and a
+	# Boss timer must never pin combat to an unusable target for several seconds.
+	if is_instance_valid(target) and (
+		not _target_candidate_is_live(target)
+		or _point_inside_safe_zone(target.global_position)
+		or _target_should_disengage(target)
+	):
+		var target_is_live := _target_candidate_is_live(target)
+		var target_is_safe := target_is_live and _point_inside_safe_zone(target.global_position)
+		var target_is_disengaged := target_is_live and _target_should_disengage(target)
+		var disengage_reason := "target_invalid"
+		if target_is_safe:
+			disengage_reason = "safe_zone"
+		elif target_is_disengaged:
+			disengage_reason = "leash_expired"
+		_audio_end_combat_session(disengage_reason)
+		target = null
+		_retarget_timer = 0.0
+		if _movement_step_active:
+			_cancel_autonomous_step(true)
 	if not boss_rule.is_empty():
 		if is_instance_valid(target) and _retarget_timer > 0.0:
 			return
 	else:
 		# Ordinary monsters keep their current target between decision ticks.
-		# Damage threat still switches immediately in _add_threat(), so scanning
-		# the target set every physics frame adds CPU cost without improving
-		# reaction latency.
+		# Damage threat still switches immediately in _add_threat(), so rebuilding
+		# the target set for every actor decision adds CPU cost without improving
+		# reaction latency; the shared broadphase refreshes within 250 ms instead.
 		# delta == 0 is the explicit decision API used when the target set changes
 		# immediately (for example, a newly summoned combat target). Physics calls
 		# always pass delta and remain rate-limited.
 		if _retarget_timer > 0.0 and delta > 0.0:
 			return
-	_retarget_full_scan_count += 1
+	var acquiring_without_current_target := not is_instance_valid(target)
+	var reevaluating_player_pursuit := (
+		is_instance_valid(target) and target is PlayerCharacter
+	)
 	var chosen: Node2D
 	var best_score := -INF
+	var best_initial_manhattan_gu := INF
+	var intercepting_summon: SummonActor
+	var intercepting_summon_distance_gu := INF
+	# Once a real blocker has taken over pursuit, retain it only while it remains
+	# inside the same live/contact contract. This prevents a high player threat
+	# from flipping the target back every decision tick.
+	if target is SummonActor:
+		var current_summon := target as SummonActor
+		var current_summon_distance_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			current_summon.global_position,
+		).length()
+		if _summon_intercepts_current_pursuit(
+			current_summon,
+			current_summon_distance_gu,
+		):
+			intercepting_summon = current_summon
+			intercepting_summon_distance_gu = current_summon_distance_gu
+	var chose_threat_candidate := false
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var leash_radius_gu := aggro_radius_gu * _leash_multiplier
 	var candidates:Array=[]
 	if is_instance_valid(primary_target):candidates.append(primary_target)
-	for node: Node in get_tree().get_nodes_in_group("combat_targets"):
-		if node is Node2D and is_instance_valid(node) and not candidates.has(node):candidates.append(node)
+	_ensure_target_grid(delta == 0.0)
+	var candidate_range_gu := aggro_radius_gu
+	if acquiring_without_current_target:
+		candidate_range_gu = float(
+			_target_acquisition_policy.view_range_cells
+			if _target_acquisition_policy != null
+			else 0
+		)
+	elif not _threat_table.is_empty():
+		candidate_range_gu = leash_radius_gu
+	var target_grid_has_only_primary := (
+		_target_grid_node_ids.size() == 1
+		and is_instance_valid(primary_target)
+		and _target_grid_node_ids.has(primary_target.get_instance_id())
+	)
+	if not target_grid_has_only_primary:
+		for node: Node2D in _target_grid_candidates(candidate_range_gu):
+			if not candidates.has(node):
+				candidates.append(node)
+	# The current target and live threat entries are always retained even when a
+	# target moved or spawned after the last shared cache refresh.  This preserves
+	# immediate threat handoff and prevents a stale broadphase from clearing it.
+	_append_live_target_candidate(candidates, target)
+	for raw_record: Variant in _threat_table.values():
+		if not raw_record is Dictionary:
+			continue
+		var record: Dictionary = raw_record
+		var raw_ref: Variant = record.get("node")
+		if raw_ref is WeakRef:
+			_append_live_target_candidate(candidates, raw_ref.get_ref())
 	for node:Node2D in candidates:
+		if not _target_candidate_is_live(node):continue
 		if _point_inside_safe_zone(node.global_position):continue
 		var distance_gu := _ground_delta_gu_between_screen_positions(
 			global_position,
@@ -1662,18 +6828,105 @@ func _retarget(delta := 0.0) -> void:
 			node.global_position,
 		).length()
 		var threat:=_threat_for(node)
-		if distance_gu > aggro_radius_gu and threat <= 0.0:continue
-		if spawn_distance_gu > leash_radius_gu:continue
+		if (
+			reevaluating_player_pursuit
+			and node is SummonActor
+			and _summon_intercepts_current_pursuit(node, distance_gu)
+			and distance_gu < intercepting_summon_distance_gu
+		):
+			intercepting_summon = node
+			intercepting_summon_distance_gu = distance_gu
+		var retaining_current_target := (
+			not acquiring_without_current_target
+			and is_instance_valid(target)
+			and node == target
+		)
+		# A damage record keeps an attacker in the candidate set between shared
+		# grid refreshes, but it does not grant unlimited pursuit. Ranged summons
+		# participate without body contact only while they remain inside the
+		# existing leash-sized combat engagement envelope.
+		if threat > 0.0 and not retaining_current_target and distance_gu > leash_radius_gu:
+			continue
+		if threat <= 0.0:
+			if acquiring_without_current_target:
+				var acquisition_delta_ground_gu := (
+					_ground_delta_gu_between_screen_positions(
+						global_position,
+						node.global_position,
+					)
+				)
+				if not _initial_acquisition_contains_ground_delta_gu(
+					acquisition_delta_ground_gu
+				):
+					continue
+				if not _initial_acquisition_static_los_clear(node):
+					continue
+				# M02A first acquisition is centered on the actor's current cell.
+				# Spawn return/leash does not narrow this exact ViewRange branch.
+				# Preserve stable first-seen ordering for equal Manhattan distance.
+				var manhattan_gu := (
+					absf(acquisition_delta_ground_gu.x)
+					+ absf(acquisition_delta_ground_gu.y)
+				)
+				if (
+					not chose_threat_candidate
+					and manhattan_gu < best_initial_manhattan_gu
+				):
+					best_initial_manhattan_gu = manhattan_gu
+					chosen = node
+				continue
+			elif not retaining_current_target and distance_gu > aggro_radius_gu:
+				continue
+		# First acquisition is centered on the actor's current cell.  A stale
+		# spawn position must not narrow the exact per-monster ViewRange; the
+		# leash resumes once a target or threat already exists.
+		if (
+			not acquiring_without_current_target
+			and not retaining_current_target
+			and spawn_distance_gu > leash_radius_gu
+		):
+			continue
 		var distance_score := (
 			maxf(0.0, 1.0 - distance_gu / maxf(aggro_radius_gu, GroundUnitSpace.EPSILON_GU))
 			* 100.0
 		)
 		var score:=threat+distance_score
-		if score>best_score:best_score=score;chosen=node
+		if score>best_score:
+			best_score=score
+			chosen=node
+			if acquiring_without_current_target and threat > 0.0:
+				chose_threat_candidate = true
+	# Threat remains authoritative at ordinary distances, with target stability
+	# and a score-independent threat margin preventing alternating hits from
+	# ping-ponging the actor. Only a live summon already inside the monster's
+	# physical contact envelope may bypass that hysteresis and intercept pursuit.
+	if intercepting_summon != null:
+		chosen = intercepting_summon
+	elif (
+		is_instance_valid(target)
+		and chosen != target
+		and not _target_switch_challenge_wins(target, chosen)
+	):
+		chosen = target
 	target = chosen
+	_record_performance_counter(&"retarget_decisions")
 	if not boss_rule.is_empty():
 		var search: Dictionary = boss_rule.get("targetSearch", {})
-		_retarget_timer = float(search.get("withTargetMs" if is_instance_valid(target) else "withoutTargetMs", 1000)) / 1000.0
+		var authored_interval_seconds := (
+			float(search.get(
+				"withTargetMs" if is_instance_valid(target) else "withoutTargetMs",
+				1000,
+			)) / 1000.0
+		)
+		_retarget_timer = (
+			clampf(
+				authored_interval_seconds,
+				NEAR_RETARGET_MIN_SECONDS,
+				BOSS_TARGET_REEVALUATION_MAX_SECONDS,
+			)
+			+ BOSS_TARGET_REEVALUATION_STAGGER_SECONDS
+			* float(posmod(get_instance_id(), 11))
+		)
 	elif is_instance_valid(target):
 		_retarget_timer = NEAR_RETARGET_MIN_SECONDS + NEAR_RETARGET_STAGGER_SECONDS * float(posmod(get_instance_id(), 7))
 	else:
@@ -1681,9 +6934,95 @@ func _retarget(delta := 0.0) -> void:
 
 
 func _add_threat(source:Node2D,amount:float)->void:
+	if not _target_candidate_is_live(source):
+		return
+	_leave_background_deep_sleep()
 	var key:=source.get_instance_id()
 	_threat_table[key]={"node":weakref(source),"score":float(_threat_table.get(key,{}).get("score",0.0))+maxf(0.0,amount)}
-	target=source
+	# Damage records participation only. Target changes are resolved by the
+	# existing bounded retarget cadence so one low hit cannot steal focus.
+	if source == target:
+		_refresh_target_focus()
+
+
+func _target_switch_challenge_wins(
+	current_target: Node2D,
+	challenger: Node2D,
+) -> bool:
+	if (
+		not _target_candidate_is_live(current_target)
+		or not _target_candidate_is_live(challenger)
+	):
+		return true
+	if _target_stable_remaining_seconds > 0.0:
+		return false
+	var current_threat := maxf(0.0, _threat_for(current_target))
+	var challenger_threat := maxf(0.0, _threat_for(challenger))
+	var required_advantage := maxf(
+		TARGET_SWITCH_MIN_THREAT_ADVANTAGE,
+		current_threat * TARGET_SWITCH_THREAT_ADVANTAGE_RATIO,
+	)
+	return challenger_threat >= current_threat + required_advantage
+
+
+func _target_candidate_is_live(candidate: Node2D) -> bool:
+	if not is_instance_valid(candidate) or candidate.is_queued_for_deletion():
+		return false
+	# Production combat targets have explicit typed life-state contracts. Avoid
+	# Object.get() probes for optional properties: generic test/runtime target
+	# nodes are valid candidates and missing-property probes emit engine errors.
+	if candidate is PlayerCharacter:
+		if candidate._dead or candidate.current_hp <= 0 or candidate.combat_transition_is_active():
+			return false
+	if candidate is EnemyActor and (candidate._dying or candidate.current_hp <= 0):
+		return false
+	if candidate is SummonActor and (
+		candidate.current_hp <= 0
+		or candidate.state in [SummonActor.SummonState.DEAD, SummonActor.SummonState.EXPIRED]
+	):
+		return false
+	return _runtime_map_id_for_area_target(candidate) == runtime_map_id
+
+
+func _summon_intercepts_current_pursuit(
+	candidate: SummonActor,
+	distance_gu: float,
+) -> bool:
+	return (
+		_target_candidate_is_live(candidate)
+		and candidate.is_in_group("combat_targets")
+		and candidate.has_method("take_damage")
+		and not _point_inside_safe_zone(candidate.global_position)
+		and distance_gu
+			<= _contact_distance_gu_to_target(candidate)
+			+ SUMMON_INTERCEPT_CONTACT_EPSILON_GU
+	)
+
+
+func _slide_collision_intercepting_summon() -> SummonActor:
+	if _movement_step_reason != &"pursuit" or not target is PlayerCharacter:
+		return null
+	var closest: SummonActor
+	var closest_distance_gu := INF
+	for collision_index in range(get_slide_collision_count()):
+		var collision := get_slide_collision(collision_index)
+		if collision == null:
+			continue
+		var raw_collider: Variant = collision.get_collider()
+		if not raw_collider is SummonActor:
+			continue
+		var candidate := raw_collider as SummonActor
+		var distance_gu := _ground_delta_gu_between_screen_positions(
+			global_position,
+			candidate.global_position,
+		).length()
+		if (
+			_summon_intercepts_current_pursuit(candidate, distance_gu)
+			and distance_gu < closest_distance_gu
+		):
+			closest = candidate
+			closest_distance_gu = distance_gu
+	return closest
 
 
 func _threat_for(source:Node2D)->float:
@@ -1701,31 +7040,36 @@ func _decay_threat(delta:float)->void:
 		else:_threat_table[key]=record
 
 
-func _return_to_spawn()->void:
+func _return_to_spawn(
+	delta := 1.0 / 60.0
+) -> void:
 	var spawn_position:Vector2=get_meta("spawn_position",global_position)
 	var return_direction_ground_gu := _ground_delta_gu_between_screen_positions(
 		global_position,
 		spawn_position,
 	)
+	if _movement_step_active:
+		_advance_autonomous_step(delta)
+		return
 	if return_direction_ground_gu.length() <= SPAWN_RETURN_EPSILON_GU:
 		velocity = Vector2.ZERO
 		actual_ground_motion_gu = Vector2.ZERO
 		return
-	velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
-		return_direction_ground_gu,
-		move_speed_gu_per_sec * 0.75,
-	)
 	var return_facing_px := _screen_facing_for_ground_direction(return_direction_ground_gu)
-	# Walk animation reads movement_facing, not combat facing. Update both before
-	# moving so a monster never spends a frame playing its stale pursuit row and
-	# visibly backing toward its spawn point.
 	facing = return_facing_px
 	movement_facing = return_facing_px
-	_move_with_spatial_rules()
-	if actual_ground_motion_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-		facing = _screen_facing_for_ground_direction(actual_ground_motion_gu)
-		movement_facing=facing
-	queue_redraw()
+	var started := _request_autonomous_step(
+		return_direction_ground_gu,
+		0.75,
+		false,
+		&"return_to_spawn"
+	)
+	if started:
+		_advance_autonomous_step(delta)
+	else:
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
+	_request_actor_redraw_if_dynamic()
 
 
 func _draw() -> void:
@@ -1761,8 +7105,17 @@ func _draw() -> void:
 			var progress:=visual.fallback_attack_progress();var tip_px:=body_center_px+facing.normalized()*(radius_px+6.0+sin(progress*PI)*10.0)
 			draw_arc(tip_px, radius_px + 8.0, strike_angle - 0.82, strike_angle + 0.82, 12, Color(1.0, 0.78, 0.26, 0.90), 4.0)
 			draw_circle(tip_px,4.0+sin(progress*PI)*3.0,Color(1.0,0.9,0.5,0.82))
-	if is_boss and _boss_phase_two:
-		draw_circle(Vector2(0, -5), radius_px + 7.0, Color(0.90, 0.15, 0.05, 0.22), false, 4.0)
+	# Phase two remains fully active for stats, skills and AI. Its former
+	# persistent red ground outline is controlled independently and permanently
+	# disabled; temporary attack telegraphs and the selected-target ring remain.
+	if BOSS_PHASE_GROUND_RING_VISIBLE and is_boss and _boss_phase_two:
+		draw_circle(
+			Vector2(0, -5),
+			radius_px + 7.0,
+			Color(0.90, 0.15, 0.05, 0.22),
+			false,
+			4.0,
+		)
 	if poison_time > 0.0:
 		# One compact green dot denotes the damage-over-time poison. Keeping it
 		# below the HP bar avoids both the former three-diamond cluster and any
@@ -1782,8 +7135,9 @@ func _draw() -> void:
 		)
 	if control_time > 0.0 or charm_time > 0.0:
 		draw_circle(Vector2(0, -5), radius_px + 8.0, Color(0.35, 0.65, 1.0, 0.55), false, 3.0)
-	if dormant:
-		draw_circle(Vector2(0, -5), radius_px + 3.0, Color(0.52, 0.50, 0.46, 0.72))
+	# No dormant ground marker: dormancy is an AI state only. The former gray
+	# translucent disc was never an authored affordance and duplicated the
+	# normal contact shadow under every sleeping monster.
 	if _boss_warning > 0.0:
 		_draw_boss_warning_ground_projection()
 	if draw_procedural_fallback:
@@ -1815,6 +7169,8 @@ func _draw_boss_warning_ground_projection() -> void:
 
 
 func boss_warning_polygon_px(special: Dictionary) -> PackedVector2Array:
+	if not bool(special.get("enabled", false)):
+		return PackedVector2Array()
 	var snapshot := _boss_skill_footprint_snapshot
 	if not _snapshot_strict_ok(snapshot):
 		snapshot = _create_boss_skill_footprint_snapshot(
@@ -1887,8 +7243,41 @@ func refresh_name_label_position() -> void:
 
 
 func _refresh_overhead_health() -> void:
+	_record_performance_counter(&"overhead_health_refreshes")
 	if overhead != null:
 		overhead.set_health(current_hp, max_hp)
+
+
+func _request_actor_redraw() -> void:
+	_record_performance_counter(&"actor_redraw_requests")
+	queue_redraw()
+
+
+## Parent CanvasItem redraw is only needed when this actor owns procedural
+## fallback geometry. Final textured actors keep their Sprite2D/MonsterVisual
+## redraw ownership; stateful one-shot callers above still use the explicit
+## _request_actor_redraw() path.
+func _request_actor_redraw_if_dynamic() -> void:
+	var visual_started_usec := RuntimeDiagnostics.begin_timed_segment(
+		&"enemy_visual_update_calls"
+	)
+	_request_actor_redraw_if_dynamic_internal()
+	RuntimeDiagnostics.end_timed_segment(
+		&"enemy_visual_update_usec",
+		visual_started_usec,
+	)
+
+
+## Enemy-owned visual invalidation gate. MonsterVisual's separate `_process`
+## remains outside this file; this probe covers only redraw work requested by
+## EnemyActor physics/state transitions.
+func _request_actor_redraw_if_dynamic_internal() -> void:
+	var has_formal_visual := visual != null and visual.uses_final_art()
+	var draws_procedural_fallback := should_draw_synthetic_ground_shadow()
+	var fallback_attack_active := visual != null and visual.is_fallback_attacking()
+	if has_formal_visual or (not draws_procedural_fallback and not fallback_attack_active):
+		return
+	_request_actor_redraw()
 
 
 func poison_indicator_anchor_y() -> float:
@@ -1970,6 +7359,8 @@ func draw_ellipse_shadow(radius_px: float, center_px := Vector2.ZERO) -> void:
 
 
 func _update_boss_skill(delta: float, distance_gu: float) -> void:
+	if not combat_enabled:
+		return
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	var phase: Dictionary = boss_rule.get("phaseTwo", {})
 	var skill_radius_gu := MonsterUnitAdapterScript.range_gu(
@@ -1982,6 +7373,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 	if _boss_phase_two:
 		damage_multiplier = int(phase.get("skillDamageMultiplier", damage_multiplier))
 	if _boss_warning > 0.0:
+		_record_performance_counter(&"actor_redraw_requests")
 		queue_redraw()
 		_boss_warning -= delta
 		if _boss_warning <= 0.0:
@@ -2039,8 +7431,7 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 			_next_spatial_release_id("boss_special"),
 		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
-		if visual != null:
-			visual.play_attack(float(special.get("animationSeconds", _attack_animation_duration)))
+		_play_attack_animation(float(special.get("animationSeconds", _attack_animation_duration)))
 
 
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
@@ -2100,3 +7491,1075 @@ func request_surrounded_relocation(blocking_neighbor_count: int) -> bool:
 		MonsterUnitAdapterScript.relocation_radius_gu(relocation, 4.0),
 	)
 	return true
+
+# --- HC-MELEE-AI-PACKAGE V3: bounded user override, not source statistics ---
+const HCPolicy := preload("res://scripts/monster_ai_package/policy.gd")
+const HCSearch := preload("res://scripts/monster_ai_package/path_search.gd")
+const HCScheduler := preload("res://scripts/monster_ai_package/path_scheduler.gd")
+var _hc_last_start_tick := -1
+var _hc_release_seq := 0
+var _hc_settled_seq := 0
+var _hc_active_release_id := ""
+var _hc_attack_scratch: Array = []
+var _hc_motion_scratch: Array = []
+var _hc_last_reason := "IDLE"
+var _hc_blocker_id := 0
+var _hc_starts := 0
+var _hc_settlements := 0
+var _hc_legal_slides := 0
+var _hc_damage_dirty := false
+var _hc_damage_observations: Dictionary = {}
+var _hc_known_target_id := 0
+var _hc_known_ground := Vector2.INF
+var _hc_observed := false
+var _hc_investigation_arrived := false
+var _hc_next_observation_ms := 0
+var _hc_close_session := false
+var _hc_close_debt := false
+var _hc_step_override := Vector2.INF
+var _hc_route := PackedVector2Array()
+var _hc_route_index := 0
+var _hc_path_token := 0
+var _hc_path_pending := false
+var _hc_path_status := "IDLE"
+var _hc_path_tier := 0
+var _hc_path_anchor := Vector2.INF
+var _hc_path_retry_ms := 0
+var _hc_path_context: Dictionary = {}
+var _hc_path_map := -1
+var _hc_path_generation := -1
+var _hc_path_revision := -1
+var _hc_failed_edges: Dictionary = {}
+var _hc_scheduler: HCScheduler
+var _hc_motion_window := 0.0
+var _hc_window_remaining := INF
+var _hc_next_side_retry_ms := 0
+var _hc_owned_movement_call := false
+var _hc_world_collision_count := 0
+static var _hc_shared_static_query_tick := -1
+static var _hc_shared_safe_zone_tick_cache: Dictionary = {}
+static var _hc_shared_world_tick_cache: Dictionary = {}
+var _hc_world_scope: Array = []
+var _hc_safe_scope: Array = []
+var _hc_local_world_scope: Array = []
+var _hc_local_safe_scope: Array = []
+var _hc_local_world_tick := -1
+var _hc_local_safe_tick := -1
+var _hc_local_world_cache: Dictionary = {}
+var _hc_local_safe_cache: Dictionary = {}
+static var _hc_shared_walkable_tick_cache: Dictionary = {}
+var _hc_local_walkable_scope: Array = []
+var _hc_local_walkable_context: Dictionary = {}
+var _hc_local_walkable_radius := NAN
+var _hc_local_walkable_radius_px := NAN
+var _hc_local_walkable_tick := -1
+var _hc_local_walkable_cache: Dictionary = {}
+
+func _hc_standard_melee() -> bool:
+	# Empty delivery kind is the existing ordinary physical contact channel.
+	# Keep every named/special delivery and pre-existing longer reach unchanged.
+	return (
+		combat_enabled
+		and str(attack_delivery_rule.get("kind", "")).is_empty()
+		and not bool(area_attack_rule.get("enabled", false))
+		and not bool(summon_rule.get("enabled", false))
+		and not _uses_ranged_projectile_sweep_contract()
+		and attack_range_gu <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+	)
+
+func _hc_exclusion_reason() -> String:
+	if not str(attack_delivery_rule.get("kind", "")).is_empty():
+		return "NAMED_DELIVERY_PRESERVED"
+	if bool(area_attack_rule.get("enabled", false)):
+		return "AREA_ATTACK_PRESERVED"
+	if bool(summon_rule.get("enabled", false)):
+		return "SUMMON_ACTION_PRESERVED"
+	if _uses_ranged_projectile_sweep_contract():
+		return "RANGED_SWEEP_PRESERVED"
+	if attack_range_gu > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
+		return "EXISTING_LONG_REACH_PRESERVED"
+	return ""
+
+func hc_package_policy_snapshot() -> Dictionary:
+	return {
+		"monster_id": monster_id, "delivery_kind": str(attack_delivery_rule.get("kind", "")),
+		"ordinary_override": _hc_standard_melee(), "source_range_gu": attack_range_gu,
+		"start_gu": HCPolicy.START_GU if _hc_standard_melee() else attack_range_gu,
+		"preferred_base_gu": HCPolicy.PREFERRED_GU,
+		"stationary": stationary, "target_id": target.get_instance_id() if is_instance_valid(target) else 0,
+		"reason": _hc_last_reason, "blocker_id": _hc_blocker_id,
+		"starts": _hc_starts, "settlements": _hc_settlements,
+		"path_pending": _hc_path_pending, "path_token": _hc_path_token,
+		"path_status": _hc_path_status,
+		"route_remaining": maxi(0, _hc_route.size() - _hc_route_index),
+		"known_ground_gu": [ _hc_known_ground.x, _hc_known_ground.y ] if _hc_known_ground.is_finite() else [], "legal_slides": _hc_legal_slides,
+		"world_collision_count": _hc_world_collision_count,
+		"exclusion_reason": _hc_exclusion_reason(),
+		"effective_preferred_gu": _hc_preferred(target) if is_instance_valid(target) else HCPolicy.PREFERRED_GU,
+		"pending_delay_gu": HCPolicy.DELAY_TOLERANCE_GU if _attack_hit_delay > 0.0 else 0.0,
+	}
+
+func _hc_preferred(hit_target: Node2D) -> float:
+	# The existing contact gap is retained. It is NOT added to attack reach.
+	return HCPolicy.preferred(_contact_distance_gu_to_target(hit_target))
+
+func _hc_target_usable(hit_target: Node2D) -> bool:
+	return (
+		_target_candidate_is_live(hit_target)
+		# Standard melee's player gate already delegates to the cached point
+		# query below. Special/ranged actors retain their uncached player gate.
+		and (_hc_standard_melee() or not _target_is_safe_player(hit_target))
+		and not _hc_point_inside_safe_zone(hit_target.global_position)
+		and not _dying and not _death_pending and current_hp > 0
+		and not is_queued_for_deletion() and is_inside_tree()
+	)
+
+func _hc_access(hit_target: Node2D, tolerance := 0.0, fresh_world := false) -> String:
+	_hc_blocker_id = 0
+	if not HCPolicy.valid():
+		return "POLICY_UNAVAILABLE"
+	if not is_finite(tolerance) or tolerance < 0.0 or tolerance > HCPolicy.DELAY_TOLERANCE_GU:
+		return "INVALID_IMPACT_TOLERANCE"
+	if not _hc_target_usable(hit_target):
+		return "INVALID_TARGET"
+	if hit_target is PlayerCharacter and (hit_target as PlayerCharacter).combat_transition_is_active():
+		return "ACTION_LOCKED"
+	if control_time > 0.0 or charm_time > 0.0 or dormant or _burrowed:
+		return "ACTION_LOCKED"
+	var a := spatial_index_position()
+	var b := _screen_position_px_to_ground_position_gu(hit_target.global_position)
+	if not a.is_finite() or not b.is_finite() or runtime_map_id < 0:
+		return "PROJECTION_UNAVAILABLE"
+	if not HCPolicy.within(a, b, HCPolicy.START_GU + tolerance):
+		return "OUT_OF_RANGE"
+	if (
+		hit_target.has_method("is_stealthed") and bool(hit_target.call("is_stealthed"))
+		and not anti_stealth and a.distance_to(b) > MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
+	):
+		return "TARGET_HIDDEN"
+	if not (
+		_world_attack_path_is_clear(a, b, global_position, hit_target.global_position, false)
+		if fresh_world
+		else _hc_world_between(a, b)
+	):
+		return "WORLD_BLOCKED"
+	if combat_spatial_index == null or spatial_actor_runtime_id <= 0:
+		return "SPATIAL_INDEX_UNAVAILABLE"
+	_hc_blocker_id = _hc_frontline_at(a, b, hit_target)
+	if _hc_blocker_id != 0:
+		return "FRONTLINE_BLOCKED"
+	return "CLEAR"
+
+func _hc_frontline_at(a: Vector2, b: Vector2, hit_target: Node2D) -> int:
+	if combat_spatial_index == null:
+		return -1
+	# Blocking is an existence query. Candidate order cannot change the result,
+	# so avoid the stable insertion sort retained by damage/selection consumers.
+	combat_spatial_index.query_enemy_nodes_segment_unsorted_into(
+		runtime_map_id,
+		a,
+		b,
+		HCPolicy.LANE_GU,
+		_hc_attack_scratch,
+	)
+	var target_radius: float = _target_combat_radius_gu(hit_target)
+	for raw: Variant in _hc_attack_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == hit_target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := other.spatial_index_position()
+		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, target_radius, other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
+			return other.get_instance_id()
+	return 0
+
+func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
+	if combat_spatial_index == null or runtime_map_id < 0:
+		return false
+	# Motion needs any crossed hard body, never a stable victim order.
+	combat_spatial_index.query_enemy_nodes_segment_unsorted_into(
+		runtime_map_id,
+		a,
+		b,
+		combat_radius_gu,
+		_hc_motion_scratch,
+	)
+	for raw: Variant in _hc_motion_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := other.spatial_index_position()
+		if HCPolicy.core_crossed(a, b, c, combat_radius_gu, other.combat_radius_gu):
+			return false
+	return true
+
+func _hc_life(node: Node) -> int:
+	if node is PlayerCharacter and is_instance_valid(node):
+		return (node as PlayerCharacter).combat_epoch
+	return int(node.get_meta("hc_combat_life_epoch", 0)) if is_instance_valid(node) else -1
+
+func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
+	if not combat_enabled:
+		return false
+	var tick := Engine.get_physics_frames()
+	if _hc_last_start_tick == tick or _attack_timer > 0.0 or _pending_attack_time >= 0.0:
+		return false
+	_hc_last_reason = _hc_access(hit_target)
+	if _hc_last_reason != "CLEAR":
+		return false
+	var start_distance := _ground_delta_gu_between_screen_positions(global_position, hit_target.global_position).length()
+	if _hc_close_debt and not after_motion_attempt and not stationary and start_distance > _hc_preferred(hit_target) + GroundUnitSpace.EPSILON_GU:
+		_hc_last_reason = "CLOSE_AFTER_PREVIOUS_ATTACK"
+		return false
+	# Reserve before callbacks (animation/audio may emit signals).
+	_hc_last_start_tick = tick
+	_hc_release_seq += 1
+	_hc_starts += 1
+	_hc_close_debt = not stationary and start_distance > _hc_preferred(hit_target) + GroundUnitSpace.EPSILON_GU
+	var record := {
+		"kind": "hc_standard_melee", "seq": _hc_release_seq,
+		"release_id": _next_spatial_release_id("ordinary_2gu"),
+		"target": weakref(hit_target), "target_id": hit_target.get_instance_id(),
+		"target_life": _hc_life(hit_target), "source_life": _hc_life(self),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
+		"target_generation": int(hit_target.get_meta("zone_generation", -1)),
+		"target_parent_id": hit_target.get_parent().get_instance_id() if hit_target.get_parent() != null else 0,
+		"map_id": runtime_map_id, "generation": int(get_meta("zone_generation", -1)),
+		"parent_id": get_parent().get_instance_id() if get_parent() != null else 0,
+		"tolerance": DELAYED_HIT_TOLERANCE_GU if _attack_hit_delay > 0.0 else 0.0,
+		"damage": _rng.randi_range(attack_min, attack_max),
+	}
+	_clear_autonomous_step_state()
+	# Keep the path/session. Only this local motion step is interrupted.
+	velocity = Vector2.ZERO
+	_attack_timer = _current_attack_interval()
+	_refresh_target_focus()
+	var direction := _ground_delta_gu_between_screen_positions(global_position, hit_target.global_position)
+	if direction.length_squared() > GroundUnitSpace.EPSILON_GU:
+		facing = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(direction).normalized()
+	if _attack_hit_delay > 0.0:
+		_pending_attack_time = _attack_hit_delay
+		_pending_attack_target = hit_target
+		_pending_attack_damage = int(record.damage)
+		_pending_attack_release_record = record
+	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, _attack_hit_delay)
+	_hc_m30_attack_move_cutoff = maxf(0.0, _attack_timer - m30_clip)
+	_hc_m30_attack_pose_remaining = m30_clip
+	_play_attack_animation(m30_clip)
+	if _attack_hit_delay <= 0.0:
+		_hc_settle(record)
+	return true
+
+func _hc_settle(record: Dictionary) -> void:
+	if not combat_enabled:
+		return
+	var seq := int(record.get("seq", 0))
+	if seq <= _hc_settled_seq:
+		return
+	_hc_settled_seq = seq
+	var ref: WeakRef = record.get("target")
+	var victim: Node2D = ref.get_ref() as Node2D if ref != null else null
+	if not _hc_target_usable(victim) or get_parent() == null:
+		return
+	if (
+		int(record.map_id) != runtime_map_id
+		or int(record.generation) != int(get_meta("zone_generation", -1))
+		or int(record.parent_id) != get_parent().get_instance_id()
+		or int(record.source_life) != _hc_life(self)
+		or int(record.target_life) != _hc_life(victim)
+		or not _release_player_combat_epoch_is_current(victim, record)
+		or int(record.target_generation) != int(victim.get_meta("zone_generation", -1))
+		or victim.get_parent() == null or int(record.target_parent_id) != victim.get_parent().get_instance_id()
+	):
+		_hc_last_reason = "RELEASE_LIFECYCLE_REJECTED"
+		return
+	# Release settlement always rechecks WORLD without the navigation cache.
+	_hc_last_reason = _hc_access(victim, float(record.tolerance), true)
+	if _hc_last_reason != "CLEAR":
+		return
+	_hc_settlements += 1
+	_hc_active_release_id = str(record.release_id)
+	_deal_melee_hit(victim, int(record.damage), float(record.tolerance), true)
+	_hc_active_release_id = ""
+
+func _hc_release_id() -> String:
+	return _hc_active_release_id if not _hc_active_release_id.is_empty() else _next_spatial_release_id("release_contact")
+
+func _hc_finalize_boss_facing() -> void:
+	# Movement owns movement_facing. This function only maintains combat facing.
+	if (
+		not is_boss
+		or _pending_attack_time >= 0.0
+		or _hc_last_start_tick == Engine.get_physics_frames()
+		or control_time > 0.0
+		or charm_time > 0.0
+		or dormant
+		or _burrowed
+	):
+		return
+
+	var aim_target: Node2D = target
+	if not _hc_target_usable(aim_target):
+		return
+	if (
+		runtime_map_id < 0
+		or _runtime_map_id_for_area_target(aim_target) != runtime_map_id
+	):
+		return
+
+	var aim_delta: Vector2 = _ground_delta_gu_between_screen_positions(
+		global_position,
+		aim_target.global_position,
+	)
+	if (
+		not aim_delta.is_finite()
+		or aim_delta.length_squared()
+			<= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+	):
+		return
+
+	# A target reference is not permission to track hidden movement.
+	if (
+		aim_target.has_method("is_stealthed")
+		and bool(aim_target.call("is_stealthed"))
+		and not anti_stealth
+		and aim_delta.length()
+			> MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(35.0)
+	):
+		return
+	# Use the existing WORLD-only path check/cache, not the 2-GU attack gate.
+	# A pursuing Boss may face a visible target farther than its melee reach.
+	if not _attack_world_path_is_clear_for_target(aim_target):
+		return
+
+	facing = _screen_facing_for_ground_direction(aim_delta)
+
+
+func _hc_tick_melee(delta: float, physics_delta: float) -> void:
+	if visual != null:
+		visual.hc_m30_begin_melee_tick()
+	if not HCPolicy.valid() or not _hc_target_usable(target):
+		velocity = Vector2.ZERO
+		return
+	if _pending_attack_time >= 0.0:
+		velocity = Vector2.ZERO
+
+		var pending_target: Node2D = _pending_attack_target
+		if (
+			is_instance_valid(pending_target)
+			and not pending_target.is_queued_for_deletion()
+		):
+			var pending_offset_ground_gu: Vector2 = (
+				_ground_delta_gu_between_screen_positions(
+					global_position,
+					pending_target.global_position
+				)
+			)
+			if (
+				pending_offset_ground_gu.is_finite()
+				and pending_offset_ground_gu.length_squared()
+				> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+			):
+				facing = _screen_facing_for_ground_direction(
+					pending_offset_ground_gu
+				)
+
+		return
+	var offset := _ground_delta_gu_between_screen_positions(global_position, target.global_position)
+	var distance := offset.length()
+	if dormant:
+		var wake := MonsterUnitAdapterScript.range_gu(behavior_profile, "wake_range_gu", "wakeRange", MonsterUnitAdapterScript.legacy_screen_scalar_px_to_gu(190.0))
+		wake = MonsterUnitAdapterScript.range_gu(boss_rule.get("mechanics", {}).get("stoneWake", {}), "wake_range_gu", "wakeRange", wake)
+		if distance > wake:
+			velocity = Vector2.ZERO
+			return
+		dormant = false
+	if is_boss and _boss_skill_enabled:
+		_update_boss_skill(delta, distance)
+	# The range comparison uses the already-projected offset. Avoid rebuilding
+	# the same target/safe-zone/projection gate twice for an obviously distant
+	# target; a post-movement endpoint still runs the complete access check.
+	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and (_attack_timer > 0.0 and _hc_m30_attack_pose_remaining > 0.000001):
+		velocity = Vector2.ZERO
+		_hc_last_reason = "ATTACK_POSE_COMMIT"
+		return
+	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and _hc_try_start(target):
+		return
+	_hc_refresh_observation()
+	var current := spatial_index_position()
+	var desired_target := _hc_known_ground
+	if not current.is_finite() or not desired_target.is_finite():
+		_hc_last_reason = "NO_RELIABLE_POSITION"
+		velocity = Vector2.ZERO
+		return
+	var access := (
+		_hc_access(target)
+		if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+		else "OUT_OF_RANGE"
+	)
+	var preferred := _hc_preferred(target)
+	if preferred > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
+		_hc_last_reason = "BODY_REQUIRES_EXPLICIT_EXCEPTION"
+		velocity = Vector2.ZERO
+		return
+	if access == "CLEAR" and not HCPolicy.should_close(distance, preferred):
+		_clear_autonomous_step_state()
+		velocity = Vector2.ZERO
+		_hc_last_reason = "PREFERRED_COOLDOWN_WAIT"
+		return
+	if stationary:
+		velocity = Vector2.ZERO
+		return
+	if not _hc_observed and (
+		_hc_investigation_arrived
+		or (current.distance_to(desired_target) <= preferred and _hc_world_between(current, desired_target))
+	):
+		_clear_autonomous_step_state()
+		velocity = Vector2.ZERO
+		_hc_last_reason = "INVESTIGATE_WAIT"
+		return
+	# A reversal can cancel only a local open-ground segment, not a wall detour.
+	if _movement_step_active and _hc_observed and _hc_route.is_empty():
+		var leg := _movement_step_target_ground_gu - current
+		if leg.dot(desired_target - current) < 0.0 and _hc_world_between(current, desired_target):
+			_clear_autonomous_step_state()
+	if not _movement_step_active:
+		var started := false
+		if _hc_close_session:
+			_hc_owned_movement_call = true
+			started = _begin_autonomous_step_without_cadence(desired_target - current, 1.0, false, &"pursuit", target)
+			_hc_owned_movement_call = false
+		else:
+			_hc_owned_movement_call = true
+			started = _request_autonomous_step(desired_target - current, 1.0, true, &"pursuit", -1, target)
+			_hc_owned_movement_call = false
+			if started:
+				_hc_close_session = true
+		if not started:
+			velocity = Vector2.ZERO
+			# A physically unavailable closer position is a legitimate outer
+			# attack position, not a reason to stop all attacks indefinitely.
+			_hc_try_start(target, true)
+			return
+	_hc_owned_movement_call = true
+	_advance_autonomous_step(physics_delta)
+	_hc_owned_movement_call = false
+	var after := _screen_position_px_to_ground_position_gu(global_position)
+	if current.is_finite() and after.is_finite() and visual != null:
+		visual.hc_m30_accept_ground_motion(current.distance_to(after))
+	if after.is_finite() and after.distance_to(desired_target) < current.distance_to(desired_target) - GroundUnitSpace.EPSILON_GU:
+		_hc_close_debt = false
+	# Actual, post-movement endpoints; no extra movement budget in this tick.
+	_hc_try_start(target, true)
+
+func _hc_step_can_end() -> bool:
+	if not _hc_standard_melee() or not is_instance_valid(target) or target.is_queued_for_deletion():
+		return false
+	# Pure geometry first; distant moves cannot end through the 2-GU gate.
+	var offset: Vector2 = _ground_delta_gu_between_screen_positions(global_position, target.global_position)
+	if not offset.is_finite():
+		return false
+	var reach: float = HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+	var distance_sq: float = offset.length_squared()
+	if distance_sq > reach * reach:
+		return false
+	var preferred: float = _hc_preferred(target) + GroundUnitSpace.EPSILON_GU
+	var arrived: bool = distance_sq <= preferred * preferred
+	var may_attack: bool = _attack_timer <= 0.0 and _pending_attack_time < 0.0 and not _hc_close_debt and _hc_last_start_tick != Engine.get_physics_frames()
+	if not arrived and not may_attack:
+		return false
+	# Full live target, WORLD and frontline checks still own any accepted end.
+	return _hc_access(target) == "CLEAR"
+
+
+func _hc_world_between(a: Vector2, b: Vector2) -> bool:
+	_hc_refresh_static_query_cache()
+	var scope := _hc_static_query_scope(false)
+	if _hc_local_world_tick != _hc_shared_static_query_tick or not is_same(scope, _hc_local_world_scope):
+		_hc_local_world_tick = _hc_shared_static_query_tick
+		_hc_local_world_scope = scope
+		if not _hc_shared_world_tick_cache.has(scope):
+			_hc_shared_world_tick_cache[scope] = {}
+		_hc_local_world_cache = _hc_shared_world_tick_cache[scope]
+	var cache := _hc_local_world_cache
+	var key := Vector4(a.x, a.y, b.x, b.y)
+	if cache.has(key):
+		return bool(cache[key])
+	var result := _world_attack_path_is_clear(
+		a,
+		b,
+		_ground_gu_to_screen_position_px(a),
+		_ground_gu_to_screen_position_px(b),
+		false,
+	)
+	cache[key] = result
+	return result
+
+func _hc_refresh_static_query_cache() -> void:
+	var tick := Engine.get_physics_frames()
+	if tick == _hc_shared_static_query_tick:
+		return
+	_hc_shared_static_query_tick = tick
+	_hc_shared_safe_zone_tick_cache.clear()
+	_hc_shared_world_tick_cache.clear()
+	_hc_shared_walkable_tick_cache.clear()
+
+func _hc_static_query_scope(include_safe_zone_owner: bool) -> Array:
+	var environment_id := environment_blocker.get_instance_id() if is_instance_valid(environment_blocker) else 0
+	var generation := int(get_meta("zone_generation", -1))
+	var environment_revision := _hc_environment_revision()
+	var safe_owner_id := 0
+	var safe_context_revision := -1
+	if include_safe_zone_owner:
+		var local_context: Variant = get_meta("safe_zone_context", {})
+		var legacy_context: Variant = get_meta("safe_zones", [])
+		if local_context is Dictionary and not (local_context as Dictionary).is_empty():
+			safe_context_revision = int((local_context as Dictionary).get("revision", -1))
+		safe_owner_id = (
+			get_instance_id()
+			if (local_context is Dictionary and not (local_context as Dictionary).is_empty())
+				or (legacy_context is Array and not (legacy_context as Array).is_empty())
+			else (get_parent().get_instance_id() if get_parent() != null else 0)
+		)
+	# Recheck every authority field on every call, including same-tick changes.
+	# Reuse the immutable key while those exact fields match. Local references
+	# then avoid repeatedly hashing the same eleven-field shared-cache key.
+	var prior := _hc_safe_scope if include_safe_zone_owner else _hc_world_scope
+	if prior.size() == 11 and (
+		prior[0] == runtime_map_id and prior[1] == generation
+		and prior[2] == environment_id and prior[3] == environment_revision
+		and prior[4] == runtime_ground_gu_to_screen_position_px
+		and prior[5] == runtime_screen_to_ground_position_px
+		and prior[9] == safe_owner_id and prior[10] == safe_context_revision
+	):
+		return prior
+	# Keys retain full Callable equality, never a lossy hash-only identity.
+	var scope := [
+		runtime_map_id,
+		generation,
+		environment_id,
+		environment_revision,
+		runtime_ground_gu_to_screen_position_px,
+		runtime_screen_to_ground_position_px,
+		WorldSpatialRulesScript.WORLD_MASK,
+		true,
+		true,
+		safe_owner_id,
+		safe_context_revision,
+	]
+	scope.make_read_only()
+	if include_safe_zone_owner:
+		_hc_safe_scope = scope
+	else:
+		_hc_world_scope = scope
+	return scope
+
+func _hc_point_inside_safe_zone(point_screen_px: Vector2) -> bool:
+	_hc_refresh_static_query_cache()
+	var scope := _hc_static_query_scope(true)
+	if _hc_local_safe_tick != _hc_shared_static_query_tick or not is_same(scope, _hc_local_safe_scope):
+		_hc_local_safe_tick = _hc_shared_static_query_tick
+		_hc_local_safe_scope = scope
+		if not _hc_shared_safe_zone_tick_cache.has(scope):
+			_hc_shared_safe_zone_tick_cache[scope] = {}
+		_hc_local_safe_cache = _hc_shared_safe_zone_tick_cache[scope]
+	var cache := _hc_local_safe_cache
+	if cache.has(point_screen_px):
+		return bool(cache[point_screen_px])
+	var result := _point_inside_safe_zone_uncached(point_screen_px)
+	cache[point_screen_px] = result
+	return result
+
+func _hc_refresh_observation() -> void:
+	if not is_instance_valid(target):
+		return
+	var now := Time.get_ticks_msec()
+	var tid := target.get_instance_id()
+	if tid == _hc_known_target_id and now < _hc_next_observation_ms and not _hc_damage_dirty:
+		return
+	if not _hc_target_usable(target):
+		return
+	if tid != _hc_known_target_id:
+		_hc_known_target_id = tid
+		_hc_known_ground = Vector2.INF
+		_hc_observed = false
+		_hc_investigation_arrived = false
+		_hc_next_observation_ms = 0
+		_hc_close_session = false
+		_hc_close_debt = false
+		_hc_cancel_path()
+		var event_position: Variant = _hc_damage_observations.get(tid)
+		if event_position is Vector2:
+			_hc_known_ground = event_position
+	_hc_next_observation_ms = now + 180 + int(posmod(get_instance_id(), 5)) * 7
+	var a := spatial_index_position()
+	var b := _screen_position_px_to_ground_position_gu(target.global_position)
+	var hidden := target.has_method("is_stealthed") and bool(target.call("is_stealthed")) and not anti_stealth
+	_hc_observed = not hidden and a.is_finite() and b.is_finite() and _hc_world_between(a, b)
+	if _hc_observed:
+		_hc_investigation_arrived = false
+		# Keep a useful prefix for small target motion; cancel a stale whole job
+		# only after a substantial move. No live tracking while LOS is blocked.
+		if _hc_path_anchor.is_finite() and b.distance_to(_hc_path_anchor) > 2.0:
+			_hc_cancel_path()
+		_hc_known_ground = b
+		_refresh_target_focus(now)
+
+func _hc_received_damage(source: Node2D, amount: float) -> void:
+	if not _hc_standard_melee() or amount <= 0.0 or not _target_candidate_is_live(source):
+		return
+	# One observation at event time, not a live locator from subsequent DOT.
+	var p := _screen_position_px_to_ground_position_gu(source.global_position)
+	if p.is_finite():
+		if _hc_damage_observations.size() >= 16 and not _hc_damage_observations.has(source.get_instance_id()):
+			_hc_damage_observations.erase(_hc_damage_observations.keys()[0])
+		_hc_damage_observations[source.get_instance_id()] = p
+		if source == target:
+			_hc_known_ground = p
+	_hc_damage_dirty = true
+	_hc_investigation_arrived = false
+	_retarget_timer = 0.0
+	_leave_background_deep_sleep()
+
+func _hc_forget(candidate: Node2D) -> void:
+	if is_instance_valid(candidate):
+		_threat_table.erase(candidate.get_instance_id())
+		_hc_damage_observations.erase(candidate.get_instance_id())
+	_hc_known_ground = Vector2.INF
+	_hc_last_reason = "FOCUS_EXPIRED"
+	_hc_cancel_path()
+
+func _hc_cancel_path() -> void:
+	_hc_path_token += 1
+	_hc_path_pending = false
+	_hc_route.clear()
+	_hc_route_index = 0
+	_hc_path_retry_ms = 0
+	_hc_path_anchor = Vector2.INF
+	if is_instance_valid(_hc_scheduler):
+		_hc_scheduler.cancel(get_instance_id())
+
+func _hc_environment_revision() -> int:
+	if not is_instance_valid(environment_blocker) or not environment_blocker.has_method("environment_collision_revision"):
+		return -1
+	return int(environment_blocker.call("environment_collision_revision"))
+
+func _hc_sync_navigation() -> void:
+	var revision := _hc_environment_revision()
+	var generation := int(get_meta("zone_generation", -1))
+	if _hc_path_map != runtime_map_id or _hc_path_generation != generation or _hc_path_revision != revision or not is_same(_hc_path_context, _terrain_navigation_context):
+		_hc_cancel_path()
+		_hc_path_context = _terrain_navigation_context
+		_hc_path_map = runtime_map_id
+		_hc_path_generation = generation
+		_hc_path_revision = revision
+		_hc_failed_edges.clear()
+
+func _hc_edge_key(a: Vector2i, b: Vector2i) -> String:
+	return "%d,%d>%d,%d" % [a.x, a.y, b.x, b.y]
+
+func _hc_edge_blocked(a: Vector2i, b: Vector2i) -> bool:
+	if _hc_failed_edges.is_empty():
+		return false
+	return int(_hc_failed_edges.get(_hc_edge_key(a, b), 0)) > Time.get_ticks_msec()
+
+func _hc_point_walkable(p: Vector2) -> bool:
+	if not p.is_finite():
+		return false
+	var blocked: Variant = _terrain_navigation_context.get("blocked_cells")
+	if (
+		not _terrain_navigation_context.is_read_only()
+		or not blocked is Dictionary or not (blocked as Dictionary).is_read_only()
+		or not is_finite(combat_radius_gu) or not is_finite(collision_radius_px)
+		or (is_instance_valid(environment_blocker) and not environment_blocker.has_method("environment_collision_revision"))
+	):
+		return _hc_point_walkable_uncached(p)
+	_hc_refresh_static_query_cache()
+	var scope := _hc_static_query_scope(true)
+	if (
+		_hc_local_walkable_tick != _hc_shared_static_query_tick
+		or not is_same(scope, _hc_local_walkable_scope)
+		or not is_same(_terrain_navigation_context, _hc_local_walkable_context)
+		or combat_radius_gu != _hc_local_walkable_radius
+		or collision_radius_px != _hc_local_walkable_radius_px
+	):
+		_hc_local_walkable_tick = _hc_shared_static_query_tick
+		_hc_local_walkable_scope = scope
+		_hc_local_walkable_context = _terrain_navigation_context
+		_hc_local_walkable_radius = combat_radius_gu
+		_hc_local_walkable_radius_px = collision_radius_px
+		# Keep radii as float Variants: packing them in Vector4 rounds to float32.
+		var key := [scope, HCM30ContextTokenScript.token(_terrain_navigation_context), combat_radius_gu, collision_radius_px]
+		if not _hc_shared_walkable_tick_cache.has(key):
+			_hc_shared_walkable_tick_cache[key] = {}
+		_hc_local_walkable_cache = _hc_shared_walkable_tick_cache[key]
+	# Exact point and both footprint radii; never cache live actor blocking.
+	var cached: Variant = _hc_local_walkable_cache.get(p)
+	if cached is bool:
+		return cached
+	var result := _hc_point_walkable_uncached(p)
+	_hc_local_walkable_cache[p] = result
+	return result
+
+func _hc_point_walkable_uncached(p: Vector2) -> bool:
+	if not MonsterTerrainNavigationPolicyScript.point_walkable(_terrain_navigation_context, p, combat_radius_gu):
+		return false
+	var px := _ground_gu_to_screen_position_px(p)
+	return px.is_finite() and not _hc_point_inside_safe_zone(px) and not WorldSpatialRulesScript.environment_blocks_actor_screen_px(environment_blocker, px, collision_radius_px)
+
+func _hc_goal_points(anchor: Vector2, preferred_tier: bool) -> Dictionary:
+	var cache_key := _hc_goal_cache_key(anchor, preferred_tier)
+	if not cache_key.is_empty() and _hc_shared_goal_cache.has(cache_key):
+		return _hc_shared_goal_cache[cache_key]
+	var goals: Dictionary = {}
+	var reach := _hc_preferred(target) if preferred_tier else HCPolicy.START_GU
+	var floor_distance := combat_radius_gu + _target_combat_radius_gu(target)
+	var base := MonsterNeighborStepPolicyScript.temporary_cell(anchor)
+	var n := ceili(reach) + 1
+	for y in range(-n, n + 1):
+		for x in range(-n, n + 1):
+			var cell := base + Vector2i(x, y)
+			var p := Vector2(cell) + Vector2(0.5, 0.5)
+			if HCPolicy.within(p, anchor, reach) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+				goals[cell] = p
+	# Bounded continuous end-point samples. They never extend the attack reach.
+	for index in range(16):
+		var p := anchor + Vector2.from_angle(TAU * float(index) / 16.0) * reach
+		var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
+		if not goals.has(cell) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+			goals[cell] = p
+	if not cache_key.is_empty():
+		goals.make_read_only()
+		if _hc_shared_goal_cache_order.size() >= HC_SHARED_GOAL_CACHE_LIMIT:
+			_hc_shared_goal_cache.erase(_hc_shared_goal_cache_order.pop_front())
+		_hc_shared_goal_cache_order.append(cache_key)
+		_hc_shared_goal_cache[cache_key] = goals
+	return goals
+
+func _hc_goal_cache_key(anchor: Vector2, preferred_tier: bool) -> Array:
+	var blocked: Variant = _terrain_navigation_context.get("blocked_cells")
+	if (
+		not _terrain_navigation_context.is_read_only()
+		or not blocked is Dictionary
+		or not (blocked as Dictionary).is_read_only()
+	):
+		return []
+	return [
+		_hc_static_query_scope(true),
+		HCM30ContextTokenScript.token(_terrain_navigation_context),
+		anchor,
+		preferred_tier,
+		combat_radius_gu,
+		_target_combat_radius_gu(target),
+	]
+
+func _hc_submit_path(anchor: Vector2, tier: int) -> void:
+	_hc_sync_navigation()
+	if not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
+		_hc_last_reason = "CONTEXT_UNAVAILABLE"
+		return
+	if not is_instance_valid(_hc_scheduler):
+		_hc_scheduler = HCScheduler.for_tree(get_tree())
+	if not is_instance_valid(_hc_scheduler):
+		return
+	var current := _screen_position_px_to_ground_position_gu(global_position)
+	_hc_path_token += 1
+	_hc_path_tier = tier
+	_hc_path_anchor = anchor
+	var search := HCSearch.new()
+	search.set_polygon_origin(current)
+	# Goal sampling/LOS belongs to the same budgeted service as path expansion.
+	# A hidden target uses this captured last-known anchor, never its live cell.
+	var failed_edge_filter := Callable(self, "_hc_edge_blocked") if not _hc_failed_edges.is_empty() else Callable()
+	search.configure_deferred(
+		_terrain_navigation_context,
+		MonsterNeighborStepPolicyScript.temporary_cell(current),
+		Callable(self, "_hc_goal_points").bind(anchor, tier == 0),
+		combat_radius_gu,
+		failed_edge_filter,
+		_hc_static_query_scope(false),
+	)
+	_hc_path_pending = true
+	_hc_path_status = "REPATH_PENDING"
+	_hc_last_reason = "REPATH_PENDING"
+	_hc_scheduler.submit(self, _hc_path_token, search)
+
+func _hc_path_job_current(token: int) -> bool:
+	# An old scheduler callback must never clear a newer request.
+	if token != _hc_path_token or not _hc_path_pending:
+		return false
+	var current := (
+		is_inside_tree()
+		and _hc_target_usable(target)
+		and _hc_known_target_id == target.get_instance_id()
+		and runtime_map_id == _hc_path_map
+		and int(get_meta("zone_generation", -1)) == _hc_path_generation
+		and _hc_environment_revision() == _hc_path_revision
+		and is_same(_hc_path_context, _terrain_navigation_context)
+	)
+	if not current:
+		# Scheduler detaches/discards the job after a false return. The owner
+		# must release pending too, otherwise the next request cannot be queued.
+		_hc_path_pending = false
+	return current
+
+
+func _hc_path_completed(token: int, status: String, route: PackedVector2Array) -> void:
+	if not _hc_path_job_current(token):
+		return
+	_hc_path_pending = false
+	_hc_path_status = status
+	_hc_last_reason = status
+	if status == "FOUND":
+		_hc_route = route
+		_hc_route_index = 0
+		return
+	if _hc_path_tier == 0 and status in ["NO_VALID_GOAL_IN_CURRENT_SAMPLE", "NO_ROUTE_FOR_CURRENT_GRAPH"]:
+		_hc_submit_path(_hc_path_anchor, 1)
+		return
+	_hc_path_retry_ms = Time.get_ticks_msec() + 500 + int(posmod(get_instance_id(), 7)) * 17
+
+func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vector2i:
+	_hc_step_override = Vector2.INF
+	_hc_sync_navigation()
+	_hc_refresh_observation()
+	if not _hc_known_ground.is_finite() or not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
+		_hc_last_reason = "CONTEXT_UNAVAILABLE"
+		return Vector2i.ZERO
+	var anchor := _hc_known_ground
+	var cell := MonsterNeighborStepPolicyScript.temporary_cell(current)
+	var preferred := _hc_preferred(hit_target)
+	if _hc_observed and _hc_world_between(current, anchor):
+		var intended := Vector2(cell + direct) + Vector2(0.5, 0.5)
+		if _terrain_navigation_context.has("poly_index"):
+			var hc_direction := anchor - current
+			intended = current + hc_direction.normalized() * minf(1.0, hc_direction.length())
+		if current.distance_to(anchor) <= preferred + 1.0:
+			intended = anchor + (current - anchor).normalized() * preferred
+		var next := MonsterNeighborStepPolicyScript.temporary_cell(intended)
+		var neighbor := next - cell
+		if neighbor == Vector2i.ZERO:
+			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(intended - current)
+		var legal_neighbor := _hc_polygon_neighbor_clear(current, intended, cell, next)
+		var r6_direct_static_clear := legal_neighbor and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended)
+		var r6_motion_checked := false
+		var r6_motion_clear := false
+		if r6_direct_static_clear:
+			r6_motion_clear = _hc_motion_clear(current, intended)
+			r6_motion_checked = true
+		if r6_direct_static_clear and r6_motion_clear:
+			_hc_step_override = intended
+			_hc_route.clear()
+			_hc_route_index = 0
+			return neighbor
+		# A live-body block is NOT a static terrain failure. Try bounded flanks.
+		if not r6_motion_checked:
+			r6_motion_clear = _hc_motion_clear(current, intended)
+		if not r6_motion_clear or _hc_frontline_at(current, anchor, hit_target) > 0:
+			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
+				return Vector2i.ZERO
+			_hc_next_side_retry_ms = Time.get_ticks_msec() + 100
+			var best := Vector2i.ZERO
+			var best_cost := INF
+			var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
+			# Query the exact sixteen bucket envelopes once. Preserve option order,
+			# static legality, live narrow phases and the original cost tie-break.
+			var batched := _hc_prepare_flank_batch(current, anchor, cell)
+			for option_index in range(MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS.size()):
+				var option: Vector2i = MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS[option_index]
+				var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
+				var query_offset := _hc_flank_option_offsets[option_index] if batched else -1
+				if batched:
+					if query_offset < 0:
+						continue
+				elif not _hc_polygon_neighbor_clear(current, endpoint, cell, cell + option) or not _hc_point_walkable(endpoint):
+					continue
+				var motion_clear := (
+					_hc_motion_candidates(current, endpoint, _hc_flank_outputs[query_offset])
+					if batched else _hc_motion_clear(current, endpoint)
+				)
+				if not motion_clear:
+					continue
+				var cost := endpoint.distance_to(anchor) + (0.05 if Vector2(option).cross(anchor - current) * preferred_sign < 0.0 else 0.0)
+				var blocked := (
+					_hc_frontline_candidates(endpoint, anchor, hit_target, _hc_flank_outputs[query_offset + 1]) != 0
+					if batched else _hc_frontline_at(endpoint, anchor, hit_target) != 0
+				)
+				if blocked:
+					cost += 2.0
+				if cost < best_cost:
+					best = option
+					best_cost = cost
+			_hc_last_reason = "FRONTLINE_BLOCKED"
+			if best != Vector2i.ZERO:
+				_hc_step_override = Vector2(cell + best) + Vector2(0.5, 0.5)
+			return best
+	while _hc_route_index < _hc_route.size() and current.distance_to(_hc_route[_hc_route_index]) <= (0.005 if _terrain_navigation_context.has("poly_index") else 0.08):
+		_hc_route_index += 1
+	if not _hc_observed and not _hc_route.is_empty() and _hc_route_index >= _hc_route.size():
+		_hc_investigation_arrived = true
+		_hc_last_reason = "INVESTIGATE_WAIT"
+		return Vector2i.ZERO
+	if _hc_route_index < _hc_route.size():
+		var point := _hc_route[_hc_route_index]
+		if _terrain_navigation_context.has("poly_index"):
+			var hc_delta := point - current
+			point = current + hc_delta.normalized() * minf(1.0, hc_delta.length())
+		var next := MonsterNeighborStepPolicyScript.temporary_cell(point)
+		var neighbor := next - cell
+		if next == cell:
+			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(point - current)
+		var adjacent := _hc_polygon_neighbor_clear(current, point, cell, next)
+		if adjacent and _hc_point_walkable(point) and not _hc_edge_blocked(cell, next):
+			if not _hc_motion_clear(current, point):
+				# Keep the static route while a live body temporarily occupies it.
+				_hc_last_reason = "FRONTLINE_BLOCKED"
+				return Vector2i.ZERO
+			_hc_step_override = point
+			return neighbor
+		_hc_cancel_path()
+	if _hc_path_pending:
+		return Vector2i.ZERO
+	if Time.get_ticks_msec() >= _hc_path_retry_ms:
+		_hc_submit_path(anchor, 0)
+	return Vector2i.ZERO
+
+func _hc_fail_step() -> void:
+	var from := MonsterNeighborStepPolicyScript.temporary_cell(_screen_position_px_to_ground_position_gu(global_position))
+	var to := MonsterNeighborStepPolicyScript.temporary_cell(_movement_step_target_ground_gu)
+	var world_collision := false
+	for index in range(get_slide_collision_count()):
+		var collider: Object = get_slide_collision(index).get_collider()
+		if collider is CollisionObject2D and ((collider as CollisionObject2D).collision_layer & WorldSpatialRulesScript.WORLD_MASK) != 0:
+			world_collision = true
+	if world_collision:
+		_hc_world_collision_count += 1
+		if _hc_failed_edges.size() >= 64:
+			_hc_failed_edges.erase(_hc_failed_edges.keys()[0])
+		_hc_failed_edges[_hc_edge_key(from, to)] = Time.get_ticks_msec() + 750
+		_hc_last_reason = "WORLD_BLOCKED"
+	else:
+		_hc_last_reason = "MOTION_BLOCKED"
+	velocity = Vector2.ZERO
+	_clear_autonomous_step_state()
+	_hc_cancel_path()
+	# Do not rewind legal motion; the original environment/safe-zone guards
+	# already reverted any invalid position through set_combat_position().
+
+func _hc_track_motion(delta: float, remaining_before: float, remaining_after: float) -> bool:
+	_hc_motion_window += maxf(0.0, delta)
+	if _hc_window_remaining == INF:
+		_hc_window_remaining = remaining_before
+	if get_slide_collision_count() > 0 and remaining_after < remaining_before:
+		_hc_legal_slides += 1
+	if _hc_motion_window < 0.4:
+		return false
+	var expected := move_speed_gu_per_sec * _hc_motion_window
+	var stalled := _hc_window_remaining - remaining_after < minf(0.02, expected * 0.05)
+	_hc_motion_window = 0.0
+	_hc_window_remaining = remaining_after
+	return stalled
+
+
+var _hc_flank_starts := PackedVector2Array()
+var _hc_flank_ends := PackedVector2Array()
+var _hc_flank_expansions := PackedFloat64Array()
+var _hc_flank_option_offsets := PackedInt32Array()
+var _hc_flank_outputs: Array = []
+var _hc_flank_scratch: Array = []
+
+
+## HC-M30-R6: exact existing narrow phases, with caller-supplied live candidates.
+## No callbacks/await, attack decisions, delays, cached hits or position writes.
+func _hc_frontline_candidates(a: Vector2, b: Vector2, hit_target: Node2D, candidates: Array) -> int:
+	var target_radius: float = _target_combat_radius_gu(hit_target)
+	for raw: Variant in candidates:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == hit_target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := other.spatial_index_position()
+		if HCPolicy.frontline_blocks(a, b, c, combat_radius_gu, target_radius, other.combat_radius_gu, spatial_actor_runtime_id, other.spatial_actor_runtime_id):
+			return other.get_instance_id()
+	return 0
+
+func _hc_motion_candidates(a: Vector2, b: Vector2, candidates: Array) -> bool:
+	for raw: Variant in candidates:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other := raw as EnemyActor
+		if other == self or other == target or not other.can_receive_damage():
+			continue
+		if other.runtime_map_id != runtime_map_id or not bool(other.behavior_profile.get("worldCollision", true)):
+			continue
+		var c := other.spatial_index_position()
+		if HCPolicy.core_crossed(a, b, c, combat_radius_gu, other.combat_radius_gu):
+			return false
+	return true
+
+func _hc_prepare_flank_batch(current: Vector2, anchor: Vector2, cell: Vector2i) -> bool:
+	if combat_spatial_index == null or runtime_map_id < 0:
+		return false
+	_hc_flank_starts.clear()
+	_hc_flank_ends.clear()
+	_hc_flank_expansions.clear()
+	_hc_flank_option_offsets.clear()
+	# Static predicates are read-only. Pre-filter first so an all-wall flank
+	# evaluates ZERO broadphase queries, not one unnecessary union query.
+	for option: Vector2i in MonsterNeighborStepPolicyScript.NEIGHBOR_DELTAS:
+		var endpoint := Vector2(cell + option) + Vector2(0.5, 0.5)
+		if not _hc_polygon_neighbor_clear(current, endpoint, cell, cell + option) or not _hc_point_walkable(endpoint):
+			_hc_flank_option_offsets.append(-1)
+			continue
+		_hc_flank_option_offsets.append(_hc_flank_starts.size())
+		_hc_flank_starts.append(current)
+		_hc_flank_ends.append(endpoint)
+		_hc_flank_expansions.append(combat_radius_gu)
+		_hc_flank_starts.append(endpoint)
+		_hc_flank_ends.append(anchor)
+		_hc_flank_expansions.append(HCPolicy.LANE_GU)
+	if _hc_flank_starts.is_empty():
+		return true
+	return combat_spatial_index.query_enemy_nodes_segment_batch_into(
+		runtime_map_id, _hc_flank_starts, _hc_flank_ends, _hc_flank_expansions,
+		_hc_flank_outputs, _hc_flank_scratch,
+	)
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
+const HCPPolyPursuit := preload("res://scripts/map_editor/polygon/poly_pursuit_driver.gd")
+var _hc_polygon_step_override := Vector2.INF
+var _hc_polygon_pursuit: HCPPolyPursuit
+
+func _hc_polygon_neighbor_clear(a: Vector2, b: Vector2, from_cell: Vector2i, to_cell: Vector2i) -> bool:
+	if _terrain_navigation_context.has("poly_index"):
+		return HCPPolyRuntime.segment_walkable(_terrain_navigation_context, a, b, combat_radius_gu)
+	return to_cell == from_cell or MonsterTerrainNavigationPolicyScript.can_traverse_neighbor(_terrain_navigation_context, from_cell, to_cell, combat_radius_gu)
+
+func _hc_polygon_nonhc_neighbor(current_ground_gu: Vector2, engagement_target: Node2D) -> Vector2i:
+	if not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
+		return Vector2i.ZERO
+	var target_ground_gu := _screen_position_px_to_ground_position_gu(engagement_target.global_position)
+	if not target_ground_gu.is_finite():
+		return Vector2i.ZERO
+	if not is_instance_valid(_hc_polygon_pursuit):
+		_hc_polygon_pursuit = HCPPolyPursuit.new()
+		_hc_polygon_pursuit.name = "PolygonPursuitBudgetAdapter"
+		add_child(_hc_polygon_pursuit)
+		_hc_polygon_pursuit.setup(self)
+	var point := _hc_polygon_pursuit.choose(_terrain_navigation_context, current_ground_gu, target_ground_gu, engagement_target, combat_radius_gu)
+	if not point.is_finite():
+		return Vector2i.ZERO
+	_hc_polygon_step_override = point
+	return MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(point - current_ground_gu)

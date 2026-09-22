@@ -18,6 +18,12 @@ const RuntimeBridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
 const JsonCodec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
+const MapUIPresentationProjectionScript := preload(
+	"res://scripts/map_editor/map_ui_presentation_projection.gd"
+)
+const SpawnIdentityService := preload(
+	"res://scripts/map_editor/map_editor_spawn_identity_service.gd"
+)
 
 const LEGACY_RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.LEGACY_RUNTIME_SCHEMA_VERSION
 const RUNTIME_SCHEMA_VERSION := UnitLegacyAdapter.RUNTIME_SCHEMA_VERSION
@@ -76,6 +82,16 @@ static func publish_runtime_release(
 	var map_key := str(runtime.get("source", {}).get("map_id", ""))
 	if map_key.is_empty():
 		return {"success": false, "reason": "runtime_map_key_missing"}
+	var spawn_identity_errors := SpawnIdentityService.validate_runtime(
+		runtime,
+		SpawnIdentityService.requires_formal_semantic_ids(map_key)
+	)
+	if not spawn_identity_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "runtime_spawn_identity_invalid",
+			"errors": spawn_identity_errors,
+		}
 	var binding_check := _validate_candidate_binding(
 		runtime,
 		runtime_map_id,
@@ -92,6 +108,17 @@ static func publish_runtime_release(
 	var approved_hash := str(runtime.get("build_sha256", ""))
 	if approved_hash.is_empty():
 		return {"success": false, "reason": "runtime_build_hash_missing"}
+	var ui_presentation := MapUIPresentationProjectionScript.from_runtime(runtime)
+	var ui_presentation_errors := MapUIPresentationProjectionScript.validate(
+		ui_presentation,
+		approved_hash
+	)
+	if not ui_presentation_errors.is_empty():
+		return {
+			"success": false,
+			"reason": "map_ui_projection_invalid",
+			"errors": ui_presentation_errors,
+		}
 	var registry_read := _read_registry(registry_path)
 	if not registry_read.ok:
 		return {
@@ -131,7 +158,8 @@ static func publish_runtime_release(
 				release_display_name,
 				approved_hash,
 				formal_path,
-				previous_revision
+				previous_revision,
+				ui_presentation
 			)
 			updated = true
 			break
@@ -148,7 +176,8 @@ static func publish_runtime_release(
 				authored_display_name,
 				approved_hash,
 				formal_path,
-				0
+				0,
+				ui_presentation
 			)
 		)
 	registry["maps"] = maps
@@ -169,10 +198,26 @@ static func publish_runtime_release(
 		}
 	var backup_path := str(promote.get("backup_path", ""))
 	# Commit the registry; on failure roll back the formal artifact.
-	if test_fail_registry_commit or not _write_registry_atomic(
-		registry_path, registry
-	):
-		_restore_runtime(formal_path, backup_path)
+	var registry_write_ok := false
+	if not test_fail_registry_commit:
+		if map_key_override.is_empty():
+			registry_write_ok = _write_registry_atomic(registry_path, registry)
+		else:
+			registry_write_ok = _write_registry_atomic_preserving_existing_entries(
+				registry_path,
+				old_registry_bytes,
+				registry,
+				map_key_override,
+				runtime_map_id
+			)
+	if not registry_write_ok:
+		var runtime_restored := _restore_runtime(formal_path, backup_path)
+		if not bool(runtime_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "registry_write_failed_and_runtime_restore_failed",
+				"errors": [str(runtime_restored.get("reason", "unknown"))],
+			}
 		return {"success": false, "reason": "registry_write_failed"}
 	# Cache invalidate then post-publish verification. Publish never returns
 	# success unless the published build is actually formal playable.
@@ -185,15 +230,22 @@ static func publish_runtime_release(
 		) == approved_hash
 	)
 	if not post_ok:
-		_restore_runtime(formal_path, backup_path)
+		var runtime_restored := _restore_runtime(formal_path, backup_path)
 		var registry_restored := _restore_registry_bytes(
 			registry_path, old_registry_bytes
 		)
 		RuntimeBridge.invalidate_release_registry()
-		if not registry_restored:
+		if not bool(registry_restored.get("ok", false)):
 			return {
 				"success": false,
 				"reason": "post_publish_rollback_failed",
+				"errors": [str(registry_restored.get("reason", "unknown"))],
+			}
+		if not bool(runtime_restored.get("ok", false)):
+			return {
+				"success": false,
+				"reason": "post_publish_runtime_rollback_failed",
+				"errors": [str(runtime_restored.get("reason", "unknown"))],
 			}
 		return {"success": false, "reason": "post_publish_verify_failed"}
 	if (
@@ -218,7 +270,8 @@ static func _release_entry(
 	display_name: String,
 	approved_hash: String,
 	runtime_path: String,
-	previous_revision: int
+	previous_revision: int,
+	ui_presentation: Dictionary
 ) -> Dictionary:
 	return {
 		"runtime_map_id": runtime_map_id,
@@ -229,6 +282,7 @@ static func _release_entry(
 		"approved_build_sha256": approved_hash,
 		"approval_source": "published_via_publish_runtime_release",
 		"approval_revision": previous_revision + 1,
+		"ui_presentation": ui_presentation.duplicate(true),
 	}
 
 
@@ -267,7 +321,22 @@ static func _promote_runtime(
 			"errors": ["formal_temp_validation_failed", str(verify.errors)],
 		}
 	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
+		if FileAccess.file_exists(absolute_formal):
+			DirAccess.remove_absolute(backup)
+		else:
+			# R2-W1: a backup without its formal artifact is a crashed previous
+			# promote. Recover the old complete release before any new write so
+			# a failing retry can never destroy the last playable version.
+			var recovery_error := DirAccess.rename_absolute(
+				backup, absolute_formal
+			)
+			if recovery_error != OK:
+				return {
+					"ok": false,
+					"errors": [
+						"formal_backup_recovery_failed:%d" % recovery_error
+					],
+				}
 	if FileAccess.file_exists(absolute_formal):
 		var backup_error := DirAccess.rename_absolute(
 			absolute_formal, backup
@@ -302,17 +371,30 @@ static func _promote_runtime(
 	}
 
 
-static func _restore_runtime(formal_path: String, backup_path: String) -> void:
+static func _restore_runtime(formal_path: String, backup_path: String) -> Dictionary:
+	## RV14-02: removal/rename results are reported so the publish caller can
+	## distinguish "publish failed and recovered" from "recovery failed".
+	## RV14-R2 review: an empty backup_path means there was NO prior formal
+	## artifact (first-publish rollback); a non-empty backup_path means there
+	## WAS one, so a missing backup file must fail instead of silently turning
+	## into first-publish cleanup that deletes the formal artifact.
 	var absolute_formal := _absolute_path(formal_path)
-	if (
-		not backup_path.is_empty()
-		and FileAccess.file_exists(backup_path)
-	):
+	if not backup_path.is_empty():
+		var absolute_backup := _absolute_path(backup_path)
+		if absolute_backup == absolute_formal:
+			return {"ok": false, "reason": "backup_path_equals_formal"}
+		if not FileAccess.file_exists(absolute_backup):
+			return {"ok": false, "reason": "expected_runtime_backup_missing"}
 		if FileAccess.file_exists(absolute_formal):
-			DirAccess.remove_absolute(absolute_formal)
-		DirAccess.rename_absolute(backup_path, absolute_formal)
-	elif FileAccess.file_exists(absolute_formal):
-		DirAccess.remove_absolute(absolute_formal)
+			if DirAccess.remove_absolute(absolute_formal) != OK:
+				return {"ok": false, "reason": "formal_remove_failed"}
+		if DirAccess.rename_absolute(absolute_backup, absolute_formal) != OK:
+			return {"ok": false, "reason": "backup_rename_failed"}
+		return {"ok": true, "reason": ""}
+	if FileAccess.file_exists(absolute_formal):
+		if DirAccess.remove_absolute(absolute_formal) != OK:
+			return {"ok": false, "reason": "formal_remove_failed"}
+	return {"ok": true, "reason": ""}
 
 
 static func _absolute_path(path: String) -> String:
@@ -325,7 +407,94 @@ static func _absolute_path(path: String) -> String:
 
 static func _read_registry(registry_path: String) -> Dictionary:
 	if not FileAccess.file_exists(registry_path):
-		return {"ok": false, "reason": "release_registry_missing"}
+		# R2-W1: a missing registry next to an atomic-write backup is a
+		# crashed previous registry commit. RV14-02: the recovery entry must
+		# recognize BOTH real backup protocols — ".bak" from the whole-registry
+		# atomic writer and ".restore_bak" from the single-map preserving
+		# writer (a crashed single-map publish leaves exactly that state:
+		# main renamed away, temp never promoted). Candidates are validated
+		# before any restore; two valid but conflicting candidates need
+		# reliable transaction/approval-version evidence, otherwise the
+		# publish fails closed with both backups preserved.
+		var absolute_bak := _absolute_path(registry_path) + ".bak"
+		var absolute_restore_bak := _absolute_path(registry_path) + ".restore_bak"
+		var candidates: Array = []
+		for candidate_path: String in [absolute_bak, absolute_restore_bak]:
+			if not FileAccess.file_exists(candidate_path):
+				continue
+			var candidate_file := FileAccess.open(candidate_path, FileAccess.READ)
+			if candidate_file == null:
+				continue
+			var candidate_bytes := candidate_file.get_buffer(
+				candidate_file.get_length()
+			)
+			candidate_file.close()
+			var candidate_parser := JSON.new()
+			if candidate_parser.parse(
+				candidate_bytes.get_string_from_utf8()
+			) != OK or not candidate_parser.data is Dictionary:
+				continue
+			var candidate_registry: Dictionary = candidate_parser.data
+			if not candidate_registry.get("maps", null) is Array:
+				continue
+			if not RuntimeBridge.validate_release_registry(
+				candidate_registry
+			).is_empty():
+				continue
+			candidates.append({
+				"path": candidate_path,
+				"bytes": candidate_bytes,
+				"registry": candidate_registry,
+			})
+		if candidates.size() == 1:
+			var restore := _restore_registry_bytes(
+				registry_path, candidates[0].bytes, candidates[0].path
+			)
+			if not bool(restore.get("ok", false)):
+				var single_restore_errors: Array[String] = [
+					str(restore.get("reason", "unknown"))
+				]
+				for single_rollback_error: String in restore.get(
+					"rollback_errors", []
+				):
+					single_restore_errors.append(single_rollback_error)
+				return {
+					"ok": false,
+					"reason": "release_registry_restore_failed",
+					"errors": single_restore_errors,
+				}
+		elif candidates.size() == 2:
+			var chosen: Dictionary = {}
+			if candidates[0].bytes == candidates[1].bytes:
+				chosen = candidates[0]
+			else:
+				chosen = _select_registry_backup_by_approval_evidence(
+					candidates[0], candidates[1]
+				)
+			if chosen.is_empty():
+				return {
+					"ok": false,
+					"reason": "release_registry_backup_conflict",
+					"errors": ["backup_backups_conflict_no_reliable_evidence"],
+				}
+			var restore := _restore_registry_bytes(
+				registry_path, chosen.bytes, chosen.path
+			)
+			if not bool(restore.get("ok", false)):
+				var restore_errors: Array[String] = [
+					str(restore.get("reason", "unknown"))
+				]
+				for rollback_error: String in restore.get(
+					"rollback_errors", []
+				):
+					restore_errors.append(rollback_error)
+				return {
+					"ok": false,
+					"reason": "release_registry_restore_failed",
+					"errors": restore_errors,
+				}
+		if not FileAccess.file_exists(registry_path):
+			return {"ok": false, "reason": "release_registry_missing"}
 	var file := FileAccess.open(registry_path, FileAccess.READ)
 	if file == null:
 		return {"ok": false, "reason": "release_registry_open_failed"}
@@ -359,43 +528,262 @@ static func _read_registry(registry_path: String) -> Dictionary:
 	}
 
 
+## RV14-R2 review: resolve two valid but byte-different backups with an
+## all-entries consistent / single-direction version-lead rule. A missing,
+## added or re-identified map is not proven safe by another map's approval
+## revision; unversioned top-level metadata must agree; equal revisions must
+## carry identical payloads. Any tie, crossing lead or evidence gap is a
+## conflict -> return empty (caller fails closed and preserves both backups).
+## Never decide by file name or mtime; never merge or re-serialize.
+static func _select_registry_backup_by_approval_evidence(
+	first: Dictionary,
+	second: Dictionary
+) -> Dictionary:
+	var first_raw: Variant = first.get("registry", null)
+	var second_raw: Variant = second.get("registry", null)
+	if not first_raw is Dictionary or not second_raw is Dictionary:
+		return {}
+	var first_registry: Dictionary = first_raw
+	var second_registry: Dictionary = second_raw
+	var first_checked := _rv14_backup_entry_table(first_registry)
+	var second_checked := _rv14_backup_entry_table(second_registry)
+	if not bool(first_checked.get("valid", false)) or not bool(second_checked.get("valid", false)):
+		return {}
+	var first_entries: Dictionary = first_checked.entries
+	var second_entries: Dictionary = second_checked.entries
+	# A missing/added/reidentified map is not proven safe by another map's
+	# approval revision. An explicit migration/transaction proof is required.
+	if first_entries.size() != second_entries.size():
+		return {}
+	for map_key: String in first_entries:
+		if not second_entries.has(map_key):
+			return {}
+	# Unversioned top-level metadata must agree. Do not infer an ordering.
+	var first_header := first_registry.duplicate(false)
+	var second_header := second_registry.duplicate(false)
+	first_header.erase("maps")
+	second_header.erase("maps")
+	if first_header != second_header:
+		return {}
+	var direction := 0 # +1 first dominates; -1 second dominates.
+	for map_key: String in first_entries:
+		var a: Dictionary = first_entries[map_key]
+		var b: Dictionary = second_entries[map_key]
+		if (
+			_rv14_positive_exact_integer(a.runtime_map_id) != _rv14_positive_exact_integer(b.runtime_map_id)
+			or a.runtime_path != b.runtime_path
+		):
+			return {}
+		var a_revision := _rv14_positive_exact_integer(a.approval_revision)
+		var b_revision := _rv14_positive_exact_integer(b.approval_revision)
+		if a_revision == b_revision:
+			# Identical, unchanged siblings are normal during single-map publish.
+			# Equal revision but different payload is a true conflict.
+			if a != b:
+				return {}
+			continue
+		var next_direction := 1 if a_revision > b_revision else -1
+		if direction != 0 and direction != next_direction:
+			return {}
+		direction = next_direction
+	if direction == 1:
+		return first
+	if direction == -1:
+		return second
+	# All revisions equal: byte-equality belongs to the caller; no guess here.
+	return {}
+
+
+static func _rv14_positive_exact_integer(value: Variant) -> int:
+	# JSON.parse can produce float for integral JSON numbers. Reject bool,
+	# numeric strings, fractions, missing values and integers unsafe in JSON.
+	if not value is int and not value is float:
+		return -1
+	var numeric := float(value)
+	if not is_finite(numeric) or numeric < 1.0 or numeric > 9007199254740991.0 or numeric != floorf(numeric):
+		return -1
+	return int(value)
+
+
+static func _rv14_backup_entry_table(registry: Dictionary) -> Dictionary:
+	if _rv14_positive_exact_integer(registry.get("schema_version", null)) != 1:
+		return {"valid": false}
+	if registry.get("registry_contract_id", null) != "mse.map.runtime.release.v1":
+		return {"valid": false}
+	var rows: Variant = registry.get("maps", null)
+	if not rows is Array:
+		return {"valid": false}
+	var entries: Dictionary = {}
+	var ids: Dictionary = {}
+	for raw: Variant in rows:
+		if not raw is Dictionary:
+			return {"valid": false}
+		var entry: Dictionary = raw
+		var key: Variant = entry.get("map_key", null)
+		var path: Variant = entry.get("runtime_path", null)
+		var mid := _rv14_positive_exact_integer(entry.get("runtime_map_id", null))
+		var revision := _rv14_positive_exact_integer(entry.get("approval_revision", null))
+		if not key is String or not path is String:
+			return {"valid": false}
+		if str(key).is_empty() or str(path).is_empty() or mid < 1 or revision < 1:
+			return {"valid": false}
+		if entries.has(key) or ids.has(mid):
+			return {"valid": false}
+		entries[key] = entry
+		ids[mid] = true
+	# Keep the existing official schema validator as an additional gate.
+	if not RuntimeBridge.validate_release_registry(registry).is_empty():
+		return {"valid": false}
+	return {"valid": true, "entries": entries}
+
+
+## RV14-R2 deterministic failure injection for the restore/promote path.
+## Production always uses real IO (every budget defaults to 0). A test may
+## point a fail-from counter at N so the Nth and every subsequent matching
+## operation inside _restore_registry_bytes fails deterministically,
+## proving the failure-branch control flow without relying on OS lock
+## behaviour. Tests must reset all counters to 0 afterwards.
+static var test_rename_fail_from_call := 0
+static var test_remove_fail_from_call := 0
+static var test_restored_open_fail_from_call := 0
+static var _test_rename_call_count := 0
+static var _test_remove_call_count := 0
+static var _test_restored_open_call_count := 0
+
+
+static func _injected_rename_absolute(from: String, to: String) -> int:
+	_test_rename_call_count += 1
+	if (
+		test_rename_fail_from_call > 0
+		and _test_rename_call_count >= test_rename_fail_from_call
+	):
+		return ERR_FILE_CANT_WRITE
+	return DirAccess.rename_absolute(from, to)
+
+
+static func _injected_remove_absolute(path: String) -> int:
+	_test_remove_call_count += 1
+	if (
+		test_remove_fail_from_call > 0
+		and _test_remove_call_count >= test_remove_fail_from_call
+	):
+		return ERR_FILE_CANT_WRITE
+	return DirAccess.remove_absolute(path)
+
+
+static func _injected_restored_open(path: String) -> FileAccess:
+	_test_restored_open_call_count += 1
+	if (
+		test_restored_open_fail_from_call > 0
+		and _test_restored_open_call_count >= test_restored_open_fail_from_call
+	):
+		return null
+	return FileAccess.open(path, FileAccess.READ)
+
+
+static func _reset_injection_counters() -> void:
+	_test_rename_call_count = 0
+	_test_remove_call_count = 0
+	_test_restored_open_call_count = 0
+
+
 static func _restore_registry_bytes(
 	registry_path: String,
-	raw_bytes: PackedByteArray
-) -> bool:
+	raw_bytes: PackedByteArray,
+	preserve_source_absolute := ""
+) -> Dictionary:
+	## RV14-02: restore a validated backup over a missing/corrupt registry.
+	## Every removal/copy/rename/verify result is checked and reported. When
+	## preserve_source_absolute points at the backup this restore reads from,
+	## that source is never removed: it survives until the restored
+	## destination bytes are verified, and a failed restore keeps it for
+	## diagnosis. Returns {"ok": bool, "reason": String}.
 	var absolute_dst := _absolute_path(registry_path)
 	var absolute_tmp := absolute_dst + ".restore_tmp"
 	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
 	if file == null:
-		return false
+		return {"ok": false, "reason": "tmp_write_failed"}
 	file.store_buffer(raw_bytes)
 	file.flush()
 	file.close()
 	var verify := FileAccess.open(absolute_tmp, FileAccess.READ)
 	if verify == null:
-		DirAccess.remove_absolute(absolute_tmp)
-		return false
+		_injected_remove_absolute(absolute_tmp)
+		return {"ok": false, "reason": "tmp_verify_open_failed"}
 	var verified_bytes := verify.get_buffer(verify.get_length())
 	verify.close()
 	if verified_bytes != raw_bytes:
-		DirAccess.remove_absolute(absolute_tmp)
-		return false
+		_injected_remove_absolute(absolute_tmp)
+		return {"ok": false, "reason": "tmp_verify_mismatch"}
 	var backup := absolute_dst + ".restore_bak"
-	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
+	var staged_old_main := false
+	# RV14-R2 review: the caller may pass the preserved source in either
+	# res://-style or absolute form; normalize before comparing so a relative
+	# spelling can never bypass the source-slot collision guard.
+	var normalized_preserve := _absolute_path(preserve_source_absolute)
 	if FileAccess.file_exists(absolute_dst):
-		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
-		if backup_error != OK:
-			DirAccess.remove_absolute(absolute_tmp)
-			return false
-	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
-	if promote_error != OK:
+		if backup == normalized_preserve:
+			# The staging slot collides with the preserved source; refuse
+			# rather than delete the source.
+			_injected_remove_absolute(absolute_tmp)
+			return {"ok": false, "reason": "source_slot_collision"}
 		if FileAccess.file_exists(backup):
-			DirAccess.rename_absolute(backup, absolute_dst)
-		return false
-	if FileAccess.file_exists(backup):
-		DirAccess.remove_absolute(backup)
-	return true
+			if _injected_remove_absolute(backup) != OK:
+				_injected_remove_absolute(absolute_tmp)
+				return {"ok": false, "reason": "old_backup_remove_failed"}
+		var backup_error := _injected_rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			_injected_remove_absolute(absolute_tmp)
+			return {"ok": false, "reason": "staging_rename_failed"}
+		staged_old_main = true
+	var promote_error := _injected_rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		# RV14-R2 review: the rollback attempt is reported separately from the
+		# primary error so a caller can distinguish "failed and recovered"
+		# from "failed and the staged copy is still in the backup slot".
+		var rollback_errors: Array[String] = []
+		if staged_old_main:
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
+				rollback_errors.append("rollback_rename_failed")
+		_injected_remove_absolute(absolute_tmp)
+		var promote_result := {"ok": false, "reason": "promote_failed"}
+		if not rollback_errors.is_empty():
+			promote_result["rollback_errors"] = rollback_errors
+		return promote_result
+	# Final destination verification against the source bytes.
+	var restored := _injected_restored_open(absolute_dst)
+	if restored == null:
+		# The promoted artifact cannot be opened; the staged old main is the
+		# only recoverable copy. Attempt the rollback and report it.
+		var open_rollback_errors: Array[String] = []
+		if staged_old_main and FileAccess.file_exists(backup):
+			if _injected_remove_absolute(absolute_dst) != OK:
+				open_rollback_errors.append("rollback_remove_failed")
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
+				open_rollback_errors.append("rollback_rename_failed")
+		var open_result := {"ok": false, "reason": "restored_open_failed"}
+		if not open_rollback_errors.is_empty():
+			open_result["rollback_errors"] = open_rollback_errors
+		return open_result
+	var restored_bytes := restored.get_buffer(restored.get_length())
+	restored.close()
+	if restored_bytes != raw_bytes:
+		var verify_rollback_errors: Array[String] = []
+		if staged_old_main and FileAccess.file_exists(backup):
+			if _injected_remove_absolute(absolute_dst) != OK:
+				verify_rollback_errors.append("rollback_remove_failed")
+			if _injected_rename_absolute(backup, absolute_dst) != OK:
+				verify_rollback_errors.append("rollback_rename_failed")
+		var verify_result := {"ok": false, "reason": "restored_verify_mismatch"}
+		if not verify_rollback_errors.is_empty():
+			verify_result["rollback_errors"] = verify_rollback_errors
+		return verify_result
+	# Success. The preserved source (recovery scenario) is intentionally kept;
+	# the staging backup of an old main (rollback scenario) is consumed only
+	# when it is not the preserved source.
+	if staged_old_main and backup != normalized_preserve:
+		_injected_remove_absolute(backup)
+	return {"ok": true, "reason": ""}
 
 
 static func _write_registry_atomic(
@@ -431,7 +819,161 @@ static func _write_registry_atomic(
 		return false
 	var backup := absolute_dst + ".bak"
 	if FileAccess.file_exists(backup):
+		if FileAccess.file_exists(absolute_dst):
+			DirAccess.remove_absolute(backup)
+		else:
+			# R2-W1: same crash-recovery rule as the runtime promote — recover
+			# the old complete registry before any new write.
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				return false
+	if FileAccess.file_exists(absolute_dst):
+		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
+		if backup_error != OK:
+			DirAccess.remove_absolute(absolute_tmp)
+			return false
+	var promote_error := DirAccess.rename_absolute(absolute_tmp, absolute_dst)
+	if promote_error != OK:
+		if FileAccess.file_exists(backup):
+			DirAccess.rename_absolute(backup, absolute_dst)
+		return false
+	if FileAccess.file_exists(backup):
 		DirAccess.remove_absolute(backup)
+	return true
+
+
+static func _write_registry_atomic_preserving_existing_entries(
+	registry_path: String,
+	old_registry_bytes: PackedByteArray,
+	registry: Dictionary,
+	map_key: String,
+	runtime_map_id: int
+) -> bool:
+	if old_registry_bytes.is_empty():
+		return _write_registry_atomic(registry_path, registry)
+	var old_text := old_registry_bytes.get_string_from_utf8()
+	if old_text.to_utf8_buffer() != old_registry_bytes:
+		return false # Invalid UTF-8 must not be silently rewritten.
+	var target: Dictionary = {}
+	var matches := 0
+	for raw_entry: Variant in registry.get("maps", []):
+		if raw_entry is Dictionary and str(raw_entry.get("map_key", "")) == map_key and int(raw_entry.get("runtime_map_id", -1)) == runtime_map_id:
+			target = raw_entry
+			matches += 1
+	if matches != 1:
+		return false
+	var splice: Dictionary = preload("res://scripts/map_editor/map_registry_entry_splice.gd").replace_entry(
+		old_text, registry, map_key, runtime_map_id, JsonCodec.encode(target)
+	)
+	if not bool(splice.get("valid", false)):
+		push_error("Single-map registry splice rejected: %s" % str(splice.get("reason", "unknown")))
+		return false
+	var preserved_text := str(splice.get("text", ""))
+	var parsed: Variant = JSON.parse_string(preserved_text)
+	if not parsed is Dictionary:
+		return false
+	if not RuntimeBridge.validate_release_registry(parsed).is_empty():
+		return false
+	return _write_registry_text_atomic(registry_path, preserved_text)
+
+
+
+static func _replace_json_scalar(
+	text: String,
+	marker: String,
+	replacement: String
+) -> String:
+	var marker_index := text.find(marker)
+	if marker_index < 0:
+		return ""
+	var value_start := marker_index + marker.length()
+	while value_start < text.length() and text[value_start] in [" ", "\t"]:
+		value_start += 1
+	if value_start >= text.length():
+		return ""
+	var value_end := value_start
+	if text[value_start] == '"':
+		value_end += 1
+		var escaped := false
+		while value_end < text.length():
+			var character := text[value_end]
+			if character == '"' and not escaped:
+				value_end += 1
+				break
+			if character == "\\" and not escaped:
+				escaped = true
+			else:
+				escaped = false
+			value_end += 1
+	else:
+		while value_end < text.length() and text[value_end] not in [",", "}", "\n", "\r"]:
+			value_end += 1
+		while value_end > value_start and text[value_end - 1] in [" ", "\t"]:
+			value_end -= 1
+	if value_end <= value_start:
+		return ""
+	return text.substr(0, value_start) + replacement + text.substr(value_end)
+
+
+static func _matching_json_object_end(text: String, start: int) -> int:
+	if start < 0 or start >= text.length() or text[start] != "{":
+		return -1
+	var depth := 0
+	var in_string := false
+	var escaped := false
+	for index in range(start, text.length()):
+		var character := text[index]
+		if in_string:
+			if character == '"' and not escaped:
+				in_string = false
+			elif character == "\\" and not escaped:
+				escaped = true
+			else:
+				escaped = false
+			continue
+		if character == '"':
+			in_string = true
+		elif character == "{":
+			depth += 1
+		elif character == "}":
+			depth -= 1
+			if depth == 0:
+				return index
+	return -1
+
+
+static func _write_registry_text_atomic(registry_path: String, text: String) -> bool:
+	var absolute_dst := (
+		ProjectSettings.globalize_path(registry_path)
+		if registry_path.begins_with("res://") or registry_path.begins_with("user://")
+		else registry_path
+	)
+	var mkdir_error := DirAccess.make_dir_recursive_absolute(absolute_dst.get_base_dir())
+	if mkdir_error != OK:
+		return false
+	var absolute_tmp := absolute_dst + ".tmp"
+	var file := FileAccess.open(absolute_tmp, FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(text)
+	file.flush()
+	file.close()
+	var verify_file := FileAccess.open(absolute_tmp, FileAccess.READ)
+	if verify_file == null or verify_file.get_as_text() != text:
+		if verify_file != null:
+			verify_file.close()
+		DirAccess.remove_absolute(absolute_tmp)
+		return false
+	verify_file.close()
+	var backup := absolute_dst + ".restore_bak"
+	if FileAccess.file_exists(backup):
+		if FileAccess.file_exists(absolute_dst):
+			DirAccess.remove_absolute(backup)
+		else:
+			# R2-W1: same crash-recovery rule — recover the old complete
+			# registry before any new write.
+			if DirAccess.rename_absolute(backup, absolute_dst) != OK:
+				DirAccess.remove_absolute(absolute_tmp)
+				return false
 	if FileAccess.file_exists(absolute_dst):
 		var backup_error := DirAccess.rename_absolute(absolute_dst, backup)
 		if backup_error != OK:
@@ -449,6 +991,12 @@ static func _write_registry_atomic(
 
 static func validate_for_runtime(document: Dictionary) -> Dictionary:
 	var errors := MapEditorTypes.validate_document(document)
+	errors.append_array(
+		SpawnIdentityService.validate_document(
+			document,
+			SpawnIdentityService.requires_formal_semantic_ids(document)
+		)
+	)
 	var warnings: Array[String] = []
 	var initialized := MapEditorGroundService.initialize(document)
 	if not initialized.ok:
@@ -471,6 +1019,22 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 			errors.append("door_target_map_required:%s" % semantic_id)
 		if str(entry.get("kind", "")) == "map_exit" and str(entry.get("target_map_id", "")).strip_edges().is_empty():
 			errors.append("map_exit_target_map_required:%s" % semantic_id)
+		var entry_kind := str(entry.get("kind", ""))
+		if entry_kind in ["monster_spawn", "boss_spawn"]:
+			var monster_id := int(entry.get("monster_id", -1))
+			if monster_id <= 0:
+				errors.append("monster_id_missing_or_invalid:%s" % semantic_id)
+			else:
+				var catalog_entry := MapEditorContentCatalogService.find_any_monster(monster_id)
+				if catalog_entry.is_empty():
+					errors.append("monster_missing_from_catalog:%d" % monster_id)
+				elif not bool(catalog_entry.get("runtime_ready", false)):
+					errors.append(
+					"monster_not_runtime_ready:%d:%s" % [
+						monster_id,
+						str(catalog_entry.get("runtime_rejection_reason", "runtime待闭环")),
+					]
+				)
 	errors.append_array(
 		ConnectionPolicyService.validate_document(document)
 	)
@@ -479,7 +1043,14 @@ static func validate_for_runtime(document: Dictionary) -> Dictionary:
 		errors.append("map_has_no_walkable_tile")
 	if MapEditorInstanceService.all_instances(document).filter(func(instance: Dictionary) -> bool: return not bool(instance.get("runtime_export", true))).size() > 0:
 		warnings.append("non_runtime_instances_excluded")
-	return {"ok": errors.is_empty(), "errors": errors, "warnings": warnings, "walkability": walkability}
+	# HC-POLY-R2: bake only after all existing authoring validators succeed.
+	var hc_polygon_build: Dictionary = {}
+	if HCPPolyGeo.enabled(document):
+		errors.append_array(walkability.get("errors", []))
+		if errors.is_empty():
+			hc_polygon_build = HCPPolyBuild.build(document)
+			errors.append_array(hc_polygon_build.get("errors", []))
+	return {"ok": errors.is_empty(), "errors": errors, "warnings": warnings, "walkability": walkability, "polygon_build": hc_polygon_build}
 
 
 static func document_binding(document: Dictionary) -> Dictionary:
@@ -602,6 +1173,8 @@ static func build_candidate(document: Dictionary) -> Dictionary:
 		return validation
 	var binding := document_binding(document)
 	var runtime := _compile_runtime_with_hash(document, validation, binding)
+	if runtime.is_empty():
+		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
 	var map_key := str(document.get("map_id", "unknown"))
 	var build_hash := str(runtime.get("build_sha256", ""))
 	var candidate_path := CANDIDATE_ROOT + map_key + "/" + build_hash + ".runtime.json"
@@ -634,6 +1207,8 @@ static func build(document: Dictionary, output_path := "") -> Dictionary:
 	var runtime := _compile_runtime_with_hash(
 		document, validation, document_binding(document)
 	)
+	if runtime.is_empty():
+		return {"ok": false, "errors": ["polygon_runtime_compile_failed"]}
 	var write := _write_atomic(output_path, runtime)
 	if not write.ok:
 		return write
@@ -646,6 +1221,20 @@ static func _compile_runtime_with_hash(
 	binding: Dictionary
 ) -> Dictionary:
 	var runtime := _compile(document, validation.walkability, binding)
+	# Freeze the catalog geometry used for this exact build, before the hash.
+	var hc_visual := HCPVisualSnapshot.capture(runtime.get("instances", []))
+	if not bool(hc_visual.get("ok", false)):
+		push_error("HC-POLY-R2: material snapshot failed: %s" % hc_visual.get("errors", []))
+		return {}
+	runtime["precision_contract_id"] = HCPVisualSnapshot.PRECISION_CONTRACT
+	runtime["visual_asset_snapshot"] = hc_visual.snapshot
+	# HC-POLY-R2: replace the ENTIRE legacy collision payload before hashing.
+	if HCPPolyGeo.enabled(document):
+		var hc_build: Dictionary = validation.get("polygon_build", {})
+		if not bool(hc_build.get("ok", false)) or not hc_build.has("collision"):
+			push_error("HC-POLY-R2: missing validated polygon build")
+			return {}
+		runtime["collision"] = hc_build.collision.duplicate(true)
 	var normalized: Variant = JSON.parse_string(MapEditorJsonCodec.encode(runtime))
 	if normalized is Dictionary:
 		runtime = normalized
@@ -685,7 +1274,9 @@ static func _compile(
 	var instances: Array = []
 	for instance: Dictionary in MapEditorInstanceService.all_instances(document):
 		if bool(instance.get("runtime_export", true)):
-			instances.append(instance.duplicate(true))
+			var runtime_instance := instance.duplicate(true)
+			runtime_instance.erase(MapEditorInstanceService.MAP_PORTAL_NOTE_FIELD)
+			instances.append(runtime_instance)
 	var blocked: Array = walkability.get("blocked_tiles", {}).keys()
 	blocked.sort()
 	var output := {
@@ -761,3 +1352,12 @@ static func _file_sha256(path: String) -> String:
 	hashing.update(file.get_buffer(file.get_length()))
 	file.close()
 	return hashing.finish().hex_encode()
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+const HCPPolyBuild := preload("res://scripts/map_editor/polygon/poly_build.gd")
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPVisualSnapshot := preload("res://scripts/map_editor/polygon/poly_visual_snapshot.gd")

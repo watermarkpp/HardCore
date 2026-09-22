@@ -1,0 +1,56 @@
+{
+  "passed": 3,
+  "results": [
+    {
+      "test_name": "name_color_pipeline_test",
+      "test_path": "tests/milestone_1_0/name_color_pipeline_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "shop_selection_identity_test",
+      "test_path": "tests/r6_1_review/shop_selection_identity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ui_detail_contract_test",
+      "test_path": "tests/repair_20260913/ui_detail_contract_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 3,
+  "failed": 0,
+  "suite": "adhoc",
+  "git_head": "db9010209128f82969211cfd9b01a1046ac257b6",
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-13T15:38:21.8876908+08:00"
+}

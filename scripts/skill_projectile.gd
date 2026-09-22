@@ -14,6 +14,9 @@ const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const CombatRuntimeServiceScript := preload(
+	"res://scripts/layers/runtime/combat_runtime_service.gd"
+)
 
 const FOOTPRINT_HIT_CONTRACT_ID := (
 	"skills.projectile.ground_gu_swept_footprint_contact.v2"
@@ -70,6 +73,8 @@ var _combat_spatial_index: RuntimeCombatSpatialIndexScript
 var resolution_skill_id := ""
 var source_actor: Node2D
 var magic_defense_adapter := Callable()
+var _combat_runtime: Node
+var _direct_spell_target_stats_scratch: Dictionary = {}
 var anti_magic_roll_override := -1
 var anti_poison_roll_override := -1
 var last_resolution: Dictionary = {}
@@ -79,6 +84,9 @@ var _projectile_role_valid := false
 var _physics_segment_index := 0
 var _canonical_release_snapshot_bound := false
 var _release_snapshot_build_count := 0
+var _audio_service: Node
+var _audio_launch_emitted := false
+var _audio_impact_emitted := false
 
 var _broadphase_physics_step_count := 0
 var _broadphase_snapshot_build_count := 0
@@ -282,6 +290,12 @@ func _ready() -> void:
 	add_to_group("zone_content")
 	_install_visual()
 	queue_redraw()
+	if (
+		_projectile_role_valid
+		and visual_rejection_reason.is_empty()
+		and projection_rejection_reason.is_empty()
+	):
+		_emit_projectile_audio_phase("launch", "ready_success")
 
 
 func _install_visual() -> void:
@@ -449,7 +463,11 @@ func _physics_process(delta: float) -> void:
 			if not candidate_node is EnemyActor:
 				continue
 			var node := candidate_node as EnemyActor
-			if node.is_queued_for_deletion() or not is_instance_valid(node):
+			if (
+				not is_instance_valid(node)
+				or node.is_queued_for_deletion()
+				or not node.can_receive_damage()
+			):
 				_broadphase_stale_candidate_count += 1
 				continue
 			_broadphase_exact_test_count += 1
@@ -461,13 +479,48 @@ func _physics_process(delta: float) -> void:
 				continue
 			_broadphase_hit_count += 1
 			_apply_hit(node)
+			_emit_projectile_audio_phase("impact", "target_contact")
 			queue_free()
 			return
 	if (
 		remaining_travel_distance_gu >= 0.0
 		and remaining_travel_distance_gu <= GroundUnitSpaceScript.EPSILON_GU
 	):
+		_emit_projectile_audio_phase("impact", "path_terminal")
 		queue_free()
+
+
+func _emit_projectile_audio_phase(phase: String, terminal_reason: String) -> void:
+	if skill_id.is_empty():
+		return
+	if phase == "launch":
+		if _audio_launch_emitted:
+			return
+		_audio_launch_emitted = true
+	elif phase == "impact":
+		if _audio_impact_emitted:
+			return
+		_audio_impact_emitted = true
+	else:
+		return
+	var service := _audio_runtime_service()
+	if service == null or not service.has_method("play_event"):
+		return
+	service.call("play_event", "skill.%s.%s" % [skill_id, phase], {
+		"source": "skill_projectile",
+		"release_id": release_id,
+		"runtime_map_id": runtime_map_id,
+		"terminal_reason": terminal_reason,
+	})
+
+
+func _audio_runtime_service() -> Node:
+	if _audio_service != null and is_instance_valid(_audio_service):
+		return _audio_service
+	if not is_inside_tree():
+		return null
+	_audio_service = get_tree().get_first_node_in_group("audio_runtime_service")
+	return _audio_service
 
 
 func _intersects_enemy_footprint(enemy: EnemyActor) -> bool:
@@ -638,17 +691,21 @@ func _apply_hit(enemy: EnemyActor) -> void:
 			return
 	elif effect == "damage" and CombatResolutionRules.anti_magic_eligible(resolution_skill_id):
 		var anti_magic_roll := anti_magic_roll_override if anti_magic_roll_override >= 0 else randi_range(0, CombatResolutionRules.ANTI_MAGIC_ROLL_SIDES - 1)
-		last_resolution = CombatResolutionRules.resolve_direct_spell_damage(
+		if _combat_runtime == null or not is_instance_valid(_combat_runtime):
+			_combat_runtime = CombatRuntimeServiceScript.new()
+			add_child(_combat_runtime)
+		last_resolution = _combat_runtime.apply_enemy_direct_spell_damage(
+			enemy,
 			resolution_skill_id,
 			damage,
-			enemy.monster_data,
+			source_actor,
+			null,
+			magic_defense_adapter,
 			anti_magic_roll,
-			magic_defense_adapter
+			_direct_spell_target_stats_scratch,
 		)
-		var resolved_damage := int(last_resolution.final_damage)
-		if resolved_damage <= 0:
+		if int(last_resolution.get("final_damage", 0)) <= 0:
 			return
-		enemy.take_damage(resolved_damage, source_actor)
 	elif damage > 0:
 		enemy.take_damage(damage, source_actor)
 	if not is_instance_valid(enemy):

@@ -25,13 +25,15 @@
     {"id": "weapon", "node": "ClientWeaponLayer", "zIndex": 0},
     {"id": "helmet", "node": "ClientHelmetLayer", "zIndex": 0}
   ],
+  "frameOrderAuthority": "res://assets/data/equipment_weapon_frame_order.json",
+  "siblingOrderScope": "idle frame zero; full runtime follows primary action/direction/frame WORDER",
   "siblingOrderByDirection": [
     {
-      "directionRows": [7, 0, 1],
+      "directionRows": [0, 4, 5, 6, 7],
       "backToFront": ["weapon", "body_and_dress", "hair", "helmet"]
     },
     {
-      "directionRows": [2, 3, 4, 5, 6],
+      "directionRows": [1, 2, 3],
       "backToFront": ["body_and_dress", "hair", "weapon", "helmet"]
     }
   ],

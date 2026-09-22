@@ -6,35 +6,53 @@ const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const GothicUIThemeScript := preload("res://scripts/gothic_ui_theme.gd")
 const HUDResourceOrbScript := preload("res://scripts/hud_resource_orb.gd")
 const HUDSkillIconCatalogScript := preload("res://scripts/hud_skill_icon_catalog.gd")
-const HUDAssetSanitizerScript := preload("res://scripts/hud_asset_sanitizer.gd")
 const CircularTouchButtonScript := preload("res://scripts/circular_touch_button.gd")
 const TouchScrollSupportScript := preload("res://scripts/touch_scroll_support.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const UIRuntimeLayoutOverridesScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const ChassisDesignsScript := preload("res://scripts/hud_chassis_designs.gd")
 const DeathRevivalPanelScript := preload("res://scripts/death_revival_panel.gd")
 const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
+const INVENTORY_PANEL_SCRIPT_PATH := "res://scripts/inventory_panel.gd"
+const MonsterDisplayFormatterScript := preload("res://scripts/monster_display_formatter.gd")
+const SHOP_PANEL_SCRIPT_PATH := "res://scripts/shop_panel.gd"
+const SKILL_PANEL_SCRIPT_PATH := "res://scripts/skill_panel.gd"
+const QUEST_PANEL_SCRIPT_PATH := "res://scripts/quest_panel.gd"
+const MAP_PANEL_SCRIPT_PATH := "res://scripts/map_panel.gd"
+const WAREHOUSE_PANEL_SCRIPT_PATH := "res://scripts/warehouse_panel.gd"
 const HUDTargetBarTexture := preload("res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png")
 const HUDUtilityStackTexture := preload("res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png")
 const HUDJoystickTexture := preload("res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png")
-const HUDChassisTexture := preload("res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png")
 const HUDRoundActionFrameTexture := preload("res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png")
 const HUDCircularIconMaskShader := preload("res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader")
 const TaoistDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/defense.png")
 const TaoistMagicDefenseBuffTexture := preload("res://assets/art/characters/taoist/skill_icons/magic_defense.png")
-const HUD_CHASSIS_SIZE := Vector2(820, 273)
-const HUD_CHASSIS_CENTER_PEAK_SOURCE := Vector2(505, 115)
+## 2026-09-20 user order: chassis shrunk 20% from 820x273 (keep in sync with
+## HUDChassisDesigns.DISPLAY_SIZE).
+const HUD_CHASSIS_SIZE := Vector2(656, 218.4)
 const HUD_CHASSIS_STATE_LABEL_GAP := 8.0
-const HUD_RESOURCE_ORB_SIZE := Vector2(110, 110)
 const TAOIST_BUFF_ICON_SIZE := Vector2(26, 26)
 const TAOIST_BUFF_STRIP_SIZE := Vector2(58, 26)
 const TAOIST_BUFF_STRIP_ITEM_BAR_GAP := 6.0
 const TAOIST_BUFF_STRIP_STABLE_ID := "hud.taoist_buff.status_strip.safe_area.v1"
-const HUD_ITEM_SLOT_FILL_SIZE := Vector2(72, 72)
 const HUD_EXPERIENCE_SEGMENT_COUNT := 10
 const HUD_EXPERIENCE_BAR_STABLE_ID := "ui.hud.experience_bar.10_segments.v1"
-const HUD_EXPERIENCE_BAR_SIZE := Vector2(180, 10)
+## The width is retained as a calibration reference for the current formal
+## chassis source. Runtime construction uses the actual ItemSlot1..4 outer
+## union below, so a future source-pixel calibration cannot silently drift the
+## bar away from the visible quick-item frame.
+const HUD_EXPERIENCE_BAR_SIZE := Vector2(325.90625, 10)
+const HUD_EXPERIENCE_BAR_HEIGHT := 10.0
 const HUD_EXPERIENCE_BOTTOM_GAP := 7.0
+const HUD_EXPERIENCE_SEGMENT_GAP := 3.0
+const HUD_EXPERIENCE_EMPTY_COLOR := Color("241a16")
+const HUD_EXPERIENCE_FILL_COLOR := Color("b77a31")
+## Backing behind the experience bar when the active chassis design provides a
+## dedicated alpha-hole experience slot: the hole would otherwise show the
+## world between segments.
+const HUD_EXPERIENCE_BACKDROP_COLOR := Color("120d0a")
 const ITEM_QUICK_SLOT_COUNT := 4
 const ITEM_QUICK_SLOT_LONG_PRESS_SECONDS := 0.5
 const ITEM_QUICK_SLOT_CANCEL_DISTANCE := 12.0
@@ -44,14 +62,6 @@ const ITEM_QUICK_SLOT_PICKER_PADDING := 8.0
 const ITEM_QUICK_SLOT_PICKER_MAX_HEIGHT := 320.0
 const ITEM_QUICK_SLOT_ASSIGNMENT_CONTRACT_ID := "ui.item.quick_slot.assignment.v1"
 const ITEM_QUICK_SLOT_USE_CONTRACT_ID := "ui.item.quick_slot.use.v1"
-const HUD_HEALTH_ORB_SOURCE_CENTER := Vector2(223.5, 230.5)
-const HUD_MANA_ORB_SOURCE_CENTER := Vector2(785.5, 230.5)
-const HUD_ITEM_SLOT_SOURCE_CENTERS: Array[Vector2] = [
-	Vector2(349.5, 235.0),
-	Vector2(452.0, 234.5),
-	Vector2(558.5, 234.5),
-	Vector2(662.0, 234.5),
-]
 const HUD_ATTACK_CENTER := Vector2(-185, -110)
 const HUD_ATTACK_RING_COUNT := 6
 const HUD_ATTACK_RING_RADIUS := 125.0
@@ -126,26 +136,41 @@ var data_label: Label
 var profile_label: Label
 var quest_tracker_label: Label
 var loot_label: Label
+## Unified central notice layer (UNIFIED-PLAYER-NOTICE R2). One presenter
+## owns every transient global notice: same geometry the former error channel
+## used, priority preemption, dedupe and a bounded queue. `error_label` stays
+## as a compatibility alias to the presenter's primary text label so existing
+## error-channel tests and call sites keep working.
+const PlayerNoticePresenterScript := preload("res://scripts/player_notice_presenter.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
+var notice_presenter: PlayerNoticePresenter
+var error_label: Label
 var target_label: Label
 var target_health_fill: ColorRect
 var auto_target_button: Button
 var special_action_button: Button
 var attack_button: Button
 var warrior_state_label: Label
-var inventory_panel: InventoryPanel
-var shop_panel: ShopPanel
-var skill_panel: SkillPanel
-var quest_panel: QuestPanel
-var map_panel: MapPanel
-var warehouse_panel: WarehousePanel
+## Modal panels stay untyped here on purpose. Referencing their class_name in a
+## member declaration makes Godot pull every panel script into the main scene's
+## script dependency graph even though the panels are only opened on demand.
+var inventory_panel
+var shop_panel
+var skill_panel
+var quest_panel
+var map_panel
+var warehouse_panel
 var death_revival_panel
 var loot_feedback_layer
 var loading_transition_overlay
+var movement_joystick: TouchJoystick
 var quick_buttons: Array[Button] = []
 var health_orb: Control
 var mana_orb: Control
 var taoist_buff_hint_label: Label
 var taoist_buff_icon_strip: Control
+var _status_buff_icons: Dictionary = {}
+var _status_buff_first_seen: Dictionary = {}
 var taoist_ac_buff_icon: TextureRect
 var taoist_ac_buff_seconds: Label
 var taoist_mac_buff_icon: TextureRect
@@ -162,6 +187,7 @@ var _item_quick_slot_menu_slot := -1
 var _item_quick_slot_menu_candidates: Dictionary = {}
 var _item_quick_slot_menu_scroll: ScrollContainer
 var _item_quick_slot_menu_list: Control
+var _touch_scroll_support: Node
 var _item_slot_press_index := -1
 var _item_slot_press_origin := Vector2.ZERO
 var _item_slot_press_touch_index := -1
@@ -181,7 +207,6 @@ var _last_hp := 120
 var _last_max_hp := 120
 var _last_mp := 40
 var _last_max_mp := 40
-var _loot_message_timer := 0.0
 var _warrior_snapshot: Dictionary = {}
 var _special_actions: Array[String] = []
 var _special_action_index := 0
@@ -191,32 +216,167 @@ var _skill_button_modes: Dictionary = {}
 var _panel_prewarm_in_progress := false
 var _all_panels_prewarmed := false
 var _panel_prewarm_diagnostic: Dictionary = {}
+var _background_prewarm_requested := false
+var _catalog_icon_prewarm_in_progress := false
+var _catalog_icon_prewarm_complete := false
+var _panel_prewarm_user_interaction := false
+# Safe-area viewport binding owned by this HUD instance. The connection target
+# is a static-script Callable, so Godot's duplicate-connect check cannot tell
+# two worlds apart; the exact callable is stored so world teardown can release
+# it and re-entry never stacks a dead binding onto the shared viewport.
+var _safe_area_size_changed_callable := Callable()
+## Controls exempted from safe-area horizontal centering (2026-09-20 user
+## order): they must sit on the true screen midline, not the safe-area one.
+var _center_exempt_controls: Array[Control] = []
+var _panel_script_warm_refs: Array[Script] = []
 
 
 func _ready() -> void:
 	_build_approved_hud()
 
 
+func _exit_tree() -> void:
+	if not _safe_area_size_changed_callable.is_valid():
+		return
+	var viewport := get_viewport()
+	if (
+		viewport != null
+		and is_instance_valid(viewport)
+		and viewport.size_changed.is_connected(_safe_area_size_changed_callable)
+	):
+		viewport.size_changed.disconnect(_safe_area_size_changed_callable)
+	_safe_area_size_changed_callable = Callable()
+
+
+func _hud_loading_profile_mark(
+	profile: Dictionary,
+	stage_name: String,
+	stage_started_usec: int,
+	profile_started_usec: int,
+) -> int:
+	var ended_usec := Time.get_ticks_usec()
+	profile["stages_ms"][stage_name] = {
+		"start_ms": float(stage_started_usec - profile_started_usec) / 1000.0,
+		"duration_ms": float(ended_usec - stage_started_usec) / 1000.0,
+	}
+	return ended_usec
+
+
 func _build_approved_hud() -> void:
+	var loading_profile_enabled := OS.is_debug_build()
+	var profile_started_usec := 0
+	if loading_profile_enabled:
+		profile_started_usec = Time.get_ticks_usec()
+	var loading_profile: Dictionary = {}
+	if loading_profile_enabled:
+		loading_profile = {
+			"origin": "GameHUD._ready",
+			"pre_ready_boundary": (
+				"GameHUD_static_script_preloads_before_ready_not_instrumented"
+			),
+			"stages_ms": {},
+		}
+	var stage_started_usec := profile_started_usec
 	var root := Control.new()
 	root.name = "MobileSafeRoot"
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = GothicUIThemeScript.build()
 	add_child(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"root_and_theme",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	MobileLayoutRules.apply_display_safe_area(root, get_viewport())
-	get_viewport().size_changed.connect(MobileLayoutRules.apply_display_safe_area.bind(root, get_viewport()))
+	_safe_area_size_changed_callable = (
+		_on_safe_area_size_changed
+		.bind(root, get_viewport())
+	)
+	get_viewport().size_changed.connect(_safe_area_size_changed_callable)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"safe_area_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	_build_hidden_compatibility_info(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_hidden_compatibility_info",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_target_bar(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_target_bar",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_loot_feedback(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_loot_feedback",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_right_utility_stack(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_right_utility_stack",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_bottom_chassis(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_bottom_chassis",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_combat_controls(root)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_combat_controls",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_item_quick_slot_menu()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_item_quick_slot_menu",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	# P1-C: panels are now lazy-loaded on first open
-	TouchScrollSupportScript.attach_tree(self)
+	_touch_scroll_support = TouchScrollSupportScript.attach_tree(self)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"attach_touch_scroll_support",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_build_loading_transition()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"build_loading_transition",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	PlayerState.profile_changed.connect(update_profile)
 	PlayerState.profile_changed.connect(update_experience_bar)
@@ -224,6 +384,13 @@ func _build_approved_hud() -> void:
 	PlayerState.profile_changed.connect(update_special_actions)
 	PlayerState.skills_changed.connect(update_quick_slots)
 	PlayerState.inventory_changed.connect(update_item_quick_slots)
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"wire_player_state_signals",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	update_profile()
 	update_experience_bar()
 	update_quest_tracker()
@@ -231,6 +398,65 @@ func _build_approved_hud() -> void:
 	update_quick_slots()
 	update_item_quick_slots()
 	update_resources(_last_hp, _last_max_hp, _last_mp, _last_max_mp)
+	_apply_center_alignment()
+	if loading_profile_enabled:
+		stage_started_usec = _hud_loading_profile_mark(
+			loading_profile,
+			"initial_state_sync",
+			stage_started_usec,
+			profile_started_usec,
+		)
+		loading_profile["total_ms"] = (
+			float(Time.get_ticks_usec() - profile_started_usec) / 1000.0
+		)
+		print("[InitialHUDProfile] ", JSON.stringify(loading_profile))
+
+
+## 2026-09-20 user order: the dragon chassis and the top enemy bar must sit
+## on the TRUE screen midline (the vertical line through the camera-centered
+## character), not on the safe-area center. Devices with asymmetric left/right
+## safe insets push the safe-area center sideways; these controls get a
+## horizontal exemption of (right - left) / 2 so their center lands exactly on
+## the viewport center. Desktop insets are 0 -> delta 0, behavior unchanged.
+func _register_center_exempt(control: Control) -> void:
+	if control.has_meta("center_exempt_base_offset_left"):
+		return
+	control.set_meta("center_exempt_base_offset_left", control.offset_left)
+	control.set_meta("center_exempt_base_offset_right", control.offset_right)
+	_center_exempt_controls.append(control)
+
+
+func _apply_center_alignment_delta(delta: float) -> void:
+	for control: Control in _center_exempt_controls:
+		if not is_instance_valid(control):
+			continue
+		control.offset_left = (
+			float(control.get_meta("center_exempt_base_offset_left")) + delta
+		)
+		control.offset_right = (
+			float(control.get_meta("center_exempt_base_offset_right")) + delta
+		)
+
+
+func _center_alignment_delta() -> float:
+	var viewport := get_viewport()
+	if viewport == null:
+		return 0.0
+	var margins := MobileLayoutRules.safe_margins(
+		Vector2(DisplayServer.window_get_size()),
+		Rect2(DisplayServer.get_display_safe_area()),
+		viewport.get_visible_rect().size,
+	)
+	return (margins.z - margins.x) * 0.5
+
+
+func _apply_center_alignment() -> void:
+	_apply_center_alignment_delta(_center_alignment_delta())
+
+
+func _on_safe_area_size_changed(root: Control, viewport: Viewport) -> void:
+	MobileLayoutRules.apply_display_safe_area(root, viewport)
+	_apply_center_alignment()
 
 
 func _build_hidden_compatibility_info(root: Control) -> void:
@@ -263,6 +489,15 @@ func _build_hidden_compatibility_info(root: Control) -> void:
 	loot_label.add_theme_color_override("font_color", Color("ffd06f"))
 	root.add_child(loot_label)
 
+	# Unified central notice overlay copies the former error-channel geometry
+	# and lives on the same absolute layer above every modal panel, including
+	# the docked ItemDetailPresenter at z=4095. All global notices (success,
+	# error, warning, info, item results) render through this single layer.
+	notice_presenter = PlayerNoticePresenterScript.new()
+	notice_presenter.name = "PlayerNoticeOverlay"
+	root.add_child(notice_presenter)
+	error_label = notice_presenter.prefix_label
+
 
 func _build_target_bar(root: Control) -> void:
 	var target_panel := Control.new()
@@ -275,6 +510,7 @@ func _build_target_bar(root: Control) -> void:
 	target_panel.offset_bottom = 93
 	target_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(target_panel)
+	_register_center_exempt(target_panel)
 	target_health_fill = ColorRect.new()
 	target_health_fill.name = "TargetHealthFill"
 	target_health_fill.position = Vector2(60, 24)
@@ -377,20 +613,33 @@ func _build_bottom_chassis(root: Control) -> void:
 	chassis_root.anchor_top = 1.0
 	chassis_root.anchor_right = 0.5
 	chassis_root.anchor_bottom = 1.0
-	chassis_root.offset_left = -410
-	chassis_root.offset_top = -273
-	chassis_root.offset_right = 410
-	chassis_root.offset_bottom = 0
+	# 2026-09-20 user order: 20% shrink anchored at the bottom spike tip
+	# (alpha-measured source (1085, 705)). The tip keeps its pre-shrink global
+	# position: top = -(273 - 265.84 + 212.67), bottom = top + 218.4, so the
+	# frame bottom stays ~1.4px above the screen edge exactly as the anchor
+	# demands. Horizontal centering is finished by the center-exemption
+	# alignment (true screen midline, not safe-area midline).
+	chassis_root.offset_left = -328
+	chassis_root.offset_top = -219.83
+	chassis_root.offset_right = 328
+	chassis_root.offset_bottom = -1.43
 	chassis_root.custom_minimum_size = HUD_CHASSIS_SIZE
 	chassis_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chassis_root.set_meta("contents", ["health_orb", "four_item_slots", "mana_orb"])
 	chassis_root.set_meta("geometry_policy", "source_pixel_to_display_fit.v1")
 	root.add_child(chassis_root)
+	_register_center_exempt(chassis_root)
 
+	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
+	var orb_display_size: float = chassis_design["orb_display_size"]
+	var orb_size := Vector2(orb_display_size, orb_display_size)
+	chassis_root.set_meta("active_design", ChassisDesignsScript.ACTIVE_DESIGN_ID)
 	health_orb = HUDResourceOrbScript.new()
 	health_orb.name = "HealthOrb"
-	health_orb.position = _chassis_source_to_local(HUD_HEALTH_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
-	health_orb.size = HUD_RESOURCE_ORB_SIZE
+	health_orb.position = (
+		_chassis_source_to_local(chassis_design["health_orb_center_source"]) - orb_size * 0.5
+	)
+	health_orb.size = orb_size
 	health_orb.resource_name = "生命"
 	health_orb.liquid_color = Color("a51422")
 	chassis_root.add_child(health_orb)
@@ -422,12 +671,13 @@ func _build_bottom_chassis(root: Control) -> void:
 		Vector2(TAOIST_BUFF_ICON_SIZE.x + 6.0, 0.0)
 	)
 	taoist_mac_buff_seconds = taoist_mac_buff_icon.get_node("Seconds") as Label
+	_status_buff_icons = {"ac":taoist_ac_buff_icon, "mac":taoist_mac_buff_icon}
 
 	taoist_buff_hint_label = Label.new()
 	taoist_buff_hint_label.name = "TaoistBuffHint"
 	taoist_buff_hint_label.position = (
 		health_orb.position
-		+ Vector2(10, HUD_RESOURCE_ORB_SIZE.y - 30)
+		+ Vector2(10, orb_size.y - 30)
 	)
 	taoist_buff_hint_label.size = Vector2(96, 28)
 	taoist_buff_hint_label.add_theme_font_size_override("font_size", 11)
@@ -443,46 +693,48 @@ func _build_bottom_chassis(root: Control) -> void:
 
 	mana_orb = HUDResourceOrbScript.new()
 	mana_orb.name = "ManaOrb"
-	mana_orb.position = _chassis_source_to_local(HUD_MANA_ORB_SOURCE_CENTER) - HUD_RESOURCE_ORB_SIZE * 0.5
-	mana_orb.size = HUD_RESOURCE_ORB_SIZE
+	mana_orb.position = (
+		_chassis_source_to_local(chassis_design["mana_orb_center_source"]) - orb_size * 0.5
+	)
+	mana_orb.size = orb_size
 	mana_orb.resource_name = "魔法"
 	mana_orb.liquid_color = Color("174eaa")
 	chassis_root.add_child(mana_orb)
 
-	for index in range(HUD_ITEM_SLOT_SOURCE_CENTERS.size()):
+	var item_slot_centers: Array = chassis_design["item_slot_centers_source"]
+	var slot_fill_size: Vector2 = chassis_design["item_slot_fill_display_size"]
+	# The fill well is drawn under the frame art and oversized so the opaque
+	# rim masks the anti-aliased well edge; the visible shape is the well.
+	var slot_render_size: Vector2 = chassis_design.get("item_slot_fill_render_size", slot_fill_size)
+	for index in range(item_slot_centers.size()):
 		var item_fill := Panel.new()
 		item_fill.name = "ItemSlotFill%d" % (index + 1)
 		item_fill.theme_type_variation = "GothicArtItemFill"
-		item_fill.size = HUD_ITEM_SLOT_FILL_SIZE
-		item_fill.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_fill.size * 0.5
+		item_fill.size = slot_render_size
+		item_fill.position = _chassis_source_to_local(item_slot_centers[index]) - slot_render_size * 0.5
 		item_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		item_fill.set_meta("stable_id", "ui.hud.item_slot.metal_mask_fill.%d" % (index + 1))
 		item_fill.set_meta("geometry_policy", "source_pixel_center_metal_mask.v1")
 		chassis_root.add_child(item_fill)
 
-	var cleaned_chassis := HUDAssetSanitizerScript.without_alpha_component(
-		HUDChassisTexture,
-		Vector2i(1008, 260),
-	)
-	cleaned_chassis = HUDAssetSanitizerScript.without_chassis_legacy_skill_art(cleaned_chassis)
 	var chassis := TextureRect.new()
 	chassis.name = "DemonChassisArt"
 	chassis.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	chassis.texture = cleaned_chassis
+	# The adopted chassis art ships clean with pre-cut alpha slot wells; no
+	# legacy mask applies and the measured hole geometry lives in the registry.
+	chassis.texture = ChassisDesignsScript.load_texture(chassis_design)
 	chassis.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	chassis.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	chassis.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chassis.set_meta("stable_id", "ui.hud.gothic.v2.bottom_chassis")
-	chassis.set_meta("source_artifact_removed", "right_edge_alpha_component_1008_260")
-	chassis.set_meta("legacy_skill_art_mask", HUDAssetSanitizerScript.CHASSIS_LEGACY_SKILL_MASK_ID)
+	chassis.set_meta("stable_id", chassis_design["chassis_stable_id"])
 	chassis_root.add_child(chassis)
 
 	for index in range(4):
 		var item_button := Button.new()
 		item_button.name = "ItemSlot%d" % (index + 1)
 		item_button.theme_type_variation = "GothicHUDItemHitButton"
-		item_button.size = HUD_ITEM_SLOT_FILL_SIZE
-		item_button.position = _chassis_source_to_local(HUD_ITEM_SLOT_SOURCE_CENTERS[index]) - item_button.size * 0.5
+		item_button.size = slot_fill_size
+		item_button.position = _chassis_source_to_local(item_slot_centers[index]) - item_button.size * 0.5
 		item_button.text = str(index + 1)
 		item_button.tooltip_text = "快捷物品 %d" % (index + 1)
 		item_button.add_theme_font_size_override("font_size", 15)
@@ -506,11 +758,27 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_quick_slot_icons.append(quick_icon)
 		var quick_count := Label.new()
 		quick_count.name = "ItemQuickSlotCount"
-		quick_count.position = Vector2(item_button.size.x - 34, item_button.size.y - 20)
-		quick_count.size = Vector2(30, 16)
 		quick_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		quick_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		quick_count.add_theme_font_size_override("font_size", 13)
+		# Bottom-right corner badge. Anchor-driven so the badge stays flush with
+		# the slot corner for any font metrics: the v3 candidate slots are only
+		# ~50px wide, the legacy v2 slots 72px, and the label's minimum line
+		# height varies with the theme font.
+		var badge_font_size := 13
+		if item_button.size.x < 64.0:
+			badge_font_size = 11
+		quick_count.add_theme_font_size_override("font_size", badge_font_size)
+		var badge_minimum := quick_count.get_combined_minimum_size()
+		quick_count.anchor_left = 1.0
+		quick_count.anchor_top = 1.0
+		quick_count.anchor_right = 1.0
+		quick_count.anchor_bottom = 1.0
+		quick_count.offset_left = -badge_minimum.x - 2.0
+		quick_count.offset_top = -badge_minimum.y
+		quick_count.offset_right = -2.0
+		quick_count.offset_bottom = 0.0
+		quick_count.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+		quick_count.grow_vertical = Control.GROW_DIRECTION_BEGIN
 		quick_count.add_theme_color_override("font_color", Color("f2c783"))
 		quick_count.add_theme_color_override("font_shadow_color", Color.BLACK)
 		quick_count.add_theme_constant_override("shadow_offset_x", 1)
@@ -519,38 +787,87 @@ func _build_bottom_chassis(root: Control) -> void:
 		item_button.add_child(quick_count)
 		item_quick_slot_count_labels.append(quick_count)
 	_build_experience_bar(chassis_root)
+	if chassis_design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		# The frame art must sit above the oversized bar so the pointed well
+		# shape masks it; interactive buttons keep their higher sibling index.
+		chassis_root.move_child(experience_bar, 0)
 	_anchor_taoist_buff_strip_above_item_quick_slots(root)
 
 
 func _build_experience_bar(chassis_root: Control) -> void:
+	var chassis_design: Dictionary = ChassisDesignsScript.active_design()
+	var experience_size: Vector2
+	var experience_position: Vector2
+	var geometry_policy: String
+	var outer_frame_source: String
+	if chassis_design["experience_bar_policy"] == "chassis_design_xp_slot.v1":
+		# The design art provides a dedicated experience slot: a wide thin alpha
+		# hole inside the bottom plaque. The bar is drawn UNDER the frame art
+		# and oversized so the opaque frame masks its edges; the pointed well
+		# shape is what stays visible.
+		var slot_rect: Rect2 = ChassisDesignsScript.source_rect_to_local(
+			chassis_design,
+			chassis_design["experience_slot_source_rect"],
+		)
+		var render_bleed: Vector2 = chassis_design.get("experience_slot_render_bleed", Vector2.ZERO)
+		experience_size = slot_rect.size + render_bleed
+		experience_position = slot_rect.position - render_bleed * 0.5
+		geometry_policy = "chassis_design_xp_slot.v1"
+		outer_frame_source = chassis_design["chassis_stable_id"]
+	else:
+		var item_slot_bounds := _item_quick_slot_outer_bounds()
+		experience_size = Vector2(
+			item_slot_bounds.size.x if item_slot_bounds.size.x > 0.0 else HUD_EXPERIENCE_BAR_SIZE.x,
+			HUD_EXPERIENCE_BAR_HEIGHT,
+		)
+		experience_position = Vector2(
+			item_slot_bounds.position.x
+				if item_slot_bounds.size.x > 0.0
+				else (HUD_CHASSIS_SIZE.x - experience_size.x) * 0.5,
+			HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_size.y,
+		)
+		geometry_policy = "item_quick_slot_outer_frame_union.v1"
+		outer_frame_source = "ItemSlot1.left_to_ItemSlot4.right"
 	experience_bar = Control.new()
 	experience_bar.name = "ExperienceBar"
-	experience_bar.size = HUD_EXPERIENCE_BAR_SIZE
-	experience_bar.position = Vector2(
-		(HUD_CHASSIS_SIZE.x - experience_bar.size.x) * 0.5,
-		HUD_CHASSIS_SIZE.y - HUD_EXPERIENCE_BOTTOM_GAP - experience_bar.size.y,
-	)
+	experience_bar.size = experience_size
+	experience_bar.position = experience_position
 	experience_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	experience_bar.set_meta("stable_id", HUD_EXPERIENCE_BAR_STABLE_ID)
 	experience_bar.set_meta("segment_count", HUD_EXPERIENCE_SEGMENT_COUNT)
+	experience_bar.set_meta("geometry_policy", geometry_policy)
+	experience_bar.set_meta("outer_frame_source", outer_frame_source)
+	experience_bar.set_meta("calibrated_height", experience_size.y)
 	experience_bar.set_meta("data_source", "PlayerState.experience / experience_to_next_level()")
 	chassis_root.add_child(experience_bar)
+	if geometry_policy == "chassis_design_xp_slot.v1":
+		var backdrop := ColorRect.new()
+		backdrop.name = "Backdrop"
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		backdrop.color = HUD_EXPERIENCE_BACKDROP_COLOR
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		backdrop.set_meta("stable_id", "%s.backdrop" % HUD_EXPERIENCE_BAR_STABLE_ID)
+		experience_bar.add_child(backdrop)
 	experience_segments.clear()
-	var gap := 3.0
-	var segment_width := (HUD_EXPERIENCE_BAR_SIZE.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
+	var gap := HUD_EXPERIENCE_SEGMENT_GAP
+	var segment_width := (experience_bar.size.x - gap * (HUD_EXPERIENCE_SEGMENT_COUNT - 1)) / HUD_EXPERIENCE_SEGMENT_COUNT
 	for index in range(HUD_EXPERIENCE_SEGMENT_COUNT):
 		var segment := ColorRect.new()
 		segment.name = "Segment%02d" % (index + 1)
 		segment.position = Vector2(index * (segment_width + gap), 0)
-		segment.size = Vector2(segment_width, HUD_EXPERIENCE_BAR_SIZE.y)
-		segment.color = Color("241a16")
+		# 2026-09-20 user order: the visible segments must FILL the reserved
+		# experience slot. Height follows the bar control (slot rect + bleed)
+		# instead of the legacy fixed 10px constant; the legacy policy branch
+		# still derives size.y = HUD_EXPERIENCE_BAR_HEIGHT, so it is unchanged.
+		segment.size = Vector2(segment_width, experience_bar.size.y)
+		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
 		segment.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		segment.set_meta("stable_id", "%s.segment.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
 		var fill := ColorRect.new()
 		fill.name = "Fill"
 		fill.position = Vector2.ZERO
 		fill.size = Vector2.ZERO
-		fill.color = Color("b77a31")
+		fill.color = HUD_EXPERIENCE_FILL_COLOR
 		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		fill.set_meta("stable_id", "%s.fill.%02d" % [HUD_EXPERIENCE_BAR_STABLE_ID, index + 1])
 		segment.add_child(fill)
@@ -558,15 +875,29 @@ func _build_experience_bar(chassis_root: Control) -> void:
 		experience_segments.append(segment)
 
 
+func _item_quick_slot_outer_bounds() -> Rect2:
+	if hud_item_buttons.is_empty():
+		return Rect2()
+	var bounds := Rect2(hud_item_buttons[0].position, hud_item_buttons[0].size)
+	for index in range(1, hud_item_buttons.size()):
+		bounds = bounds.merge(Rect2(hud_item_buttons[index].position, hud_item_buttons[index].size))
+	return bounds
+
+
+static func experience_progress_ratio(experience_value: int, required_value: int) -> float:
+	var required := maxi(1, required_value)
+	return clampf(float(experience_value) / float(required), 0.0, 1.0)
+
+
 func update_experience_bar() -> void:
 	if experience_segments.is_empty():
 		return
 	var required := maxi(1, int(PlayerState.experience_to_next_level()))
-	var progress := clampf(float(PlayerState.experience) / float(required), 0.0, 1.0)
+	var progress := experience_progress_ratio(PlayerState.experience, required)
 	for index in range(experience_segments.size()):
 		var segment_progress := clampf(progress * HUD_EXPERIENCE_SEGMENT_COUNT - index, 0.0, 1.0)
 		var segment := experience_segments[index]
-		segment.color = Color("241a16")
+		segment.color = HUD_EXPERIENCE_EMPTY_COLOR
 		var fill := segment.get_node("Fill") as ColorRect
 		fill.size = Vector2(segment.size.x * segment_progress, segment.size.y)
 		segment.set_meta("fill_ratio", segment_progress)
@@ -586,8 +917,8 @@ func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
 			hud_item_buttons[index].get_global_rect()
 		)
 	var safe_root_global_rect := root.get_global_rect()
-	var center_offset_x := (
-		item_bar_global_rect.get_center().x
+	var left_offset_x := (
+		hud_item_buttons[0].get_global_rect().position.x
 		- safe_root_global_rect.get_center().x
 	)
 	var item_bar_top_offset_from_safe_bottom := (
@@ -595,7 +926,7 @@ func _anchor_taoist_buff_strip_above_item_quick_slots(root: Control) -> void:
 		- safe_root_global_rect.end.y
 	)
 	taoist_buff_icon_strip.offset_left = (
-		center_offset_x - TAOIST_BUFF_STRIP_SIZE.x * 0.5
+		left_offset_x
 	)
 	taoist_buff_icon_strip.offset_right = (
 		taoist_buff_icon_strip.offset_left + TAOIST_BUFF_STRIP_SIZE.x
@@ -615,7 +946,8 @@ func _anchor_warrior_state_label(root: Control) -> void:
 		return
 	var root_inverse := root.get_global_transform().affine_inverse()
 	var chassis_global := chassis_root.get_global_rect()
-	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
+	var peak_source: Vector2 = ChassisDesignsScript.active_design()["center_peak_source"]
+	var peak_global_y: float = (chassis_root.get_global_transform() * _chassis_source_to_local(peak_source)).y
 	var label_width := minf(500.0, chassis_global.size.x)
 	warrior_state_label.position.x = (root_inverse * chassis_global.get_center()).x
 	warrior_state_label.position.x -= Vector2(label_width * 0.5, 0.0).x
@@ -677,6 +1009,7 @@ func _build_item_quick_slot_menu() -> void:
 	picker_style.shadow_size = 4
 	picker_style.shadow_offset = Vector2.ZERO
 	item_quick_slot_menu.add_theme_stylebox_override("panel", picker_style)
+	item_quick_slot_menu.window_input.connect(_on_item_quick_slot_popup_input)
 	add_child(item_quick_slot_menu)
 	_item_quick_slot_menu_scroll = ScrollContainer.new()
 	_item_quick_slot_menu_scroll.name = "ItemQuickSlotScroll"
@@ -802,7 +1135,9 @@ func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_i
 		return
 	var item_name := _item_slot_bound_name(slot_index)
 	if item_name.is_empty():
-		show_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
+		# Tapping an empty quick slot is a failed action: it belongs to the
+		# dedicated error channel, not the general notice lane.
+		show_error_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
 		return
 	item_quick_slot_use_requested.emit(slot_index, item_name)
 
@@ -865,11 +1200,30 @@ func _is_quick_slot_candidate(record: Dictionary) -> bool:
 
 
 func _on_item_quick_slot_menu_pressed(id: int) -> void:
+	if TouchScrollSupportScript.is_drag_active(get_tree()):
+		return
 	var item_name := str(_item_quick_slot_menu_candidates.get(id, ""))
 	if item_name.is_empty():
 		return
 	item_quick_slot_menu.hide()
 	_assign_item_quick_slot(_item_quick_slot_menu_slot, item_name)
+
+
+func _on_item_quick_slot_popup_input(event: InputEvent) -> void:
+	# PopupPanel owns a separate viewport, so its touch stream does not reach the
+	# SceneTree-root support node automatically. Window input positions are local
+	# to that popup; translate them to screen coordinates before forwarding into
+	# the shared policy. Taps still continue to the candidate Buttons.
+	if (
+		_touch_scroll_support != null
+		and (event is InputEventScreenTouch or event is InputEventScreenDrag)
+	):
+		var screen_event := event.duplicate() as InputEvent
+		if screen_event is InputEventScreenTouch:
+			(screen_event as InputEventScreenTouch).position += Vector2(item_quick_slot_menu.position)
+		else:
+			(screen_event as InputEventScreenDrag).position += Vector2(item_quick_slot_menu.position)
+		_touch_scroll_support.call("_input", screen_event)
 
 
 func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2) -> void:
@@ -1040,7 +1394,8 @@ func _build_combat_controls(root: Control) -> void:
 	joystick_art.set_meta("stable_id", "ui.hud.gothic.v2.joystick")
 	root.add_child(joystick_art)
 
-	var joystick := TouchJoystick.new()
+	movement_joystick = TouchJoystick.new()
+	var joystick := movement_joystick
 	joystick.name = "TouchJoystick"
 	joystick.radius = 58.0
 	joystick.knob_radius = 24.0
@@ -1345,7 +1700,12 @@ func _on_skill_input_cancelled(
 func _ensure_inventory_panel() -> void:
 	if is_instance_valid(inventory_panel):
 		return
-	inventory_panel = InventoryPanel.new()
+	var panel_script := load(INVENTORY_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	inventory_panel = panel_script.new()
+	if inventory_panel == null:
+		return
 	inventory_panel.hide()
 	add_child(inventory_panel)
 
@@ -1353,7 +1713,12 @@ func _ensure_inventory_panel() -> void:
 func _ensure_shop_panel() -> void:
 	if is_instance_valid(shop_panel):
 		return
-	shop_panel = ShopPanel.new()
+	var panel_script := load(SHOP_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	shop_panel = panel_script.new()
+	if shop_panel == null:
+		return
 	shop_panel.hide()
 	shop_panel.buy_quotes_requested.connect(
 		func(stock: Array) -> void: shop_buy_quotes_requested.emit(stock)
@@ -1373,7 +1738,12 @@ func _ensure_shop_panel() -> void:
 func _ensure_skill_panel() -> void:
 	if is_instance_valid(skill_panel):
 		return
-	skill_panel = SkillPanel.new()
+	var panel_script := load(SKILL_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	skill_panel = panel_script.new()
+	if skill_panel == null:
+		return
 	skill_panel.hide()
 	skill_panel.quick_slot_assignment_requested.connect(
 		func(request: Dictionary) -> void: skill_quick_slot_assignment_requested.emit(request)
@@ -1384,30 +1754,113 @@ func _ensure_skill_panel() -> void:
 	add_child(skill_panel)
 
 
+func start_budgeted_panel_prewarm(system_menu_panel: Control = null) -> void:
+	if _background_prewarm_requested or _all_panels_prewarmed:
+		return
+	_background_prewarm_requested = true
+	_run_panel_prewarm.call_deferred(system_menu_panel, true)
+
+
 func prewarm_all_panels(system_menu_panel: Control = null) -> void:
+	await _run_panel_prewarm(system_menu_panel, false)
+
+
+func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool = false) -> void:
 	if _all_panels_prewarmed:
 		return
 	if _panel_prewarm_in_progress:
+		# Explicit load-time callers must not wait behind an optional UI idle gate.
+		if not background_mode:
+			_ui_l1_finish_explicit_prewarm = true
 		while _panel_prewarm_in_progress and is_inside_tree():
 			await get_tree().process_frame
+		if not background_mode:
+			_ui_l1_finish_explicit_prewarm = false
 		return
 	_panel_prewarm_in_progress = true
 	var prewarm_started_usec := Time.get_ticks_usec()
 	_panel_prewarm_diagnostic = {
 		"started_at_usec": prewarm_started_usec,
 		"completed": false,
+		"construction_ms_by_panel": {},
+		"background_mode": background_mode,
 	}
+	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts()
+	_start_catalog_icon_prewarm.call_deferred(background_mode)
+	var panel_started_usec := 0
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_inventory_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["inventory"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_shop_panel()
-	_ensure_skill_panel()
-	_ensure_quest_panel()
-	_ensure_map_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["shop"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_warehouse_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["warehouse"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_map_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["map"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_skill_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["skill"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_quest_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["quest"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
 	_ensure_death_revival_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["death_revival"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
 	# SkillPanel intentionally refreshes only when opened. Run the same public
 	# refresh once while hidden so its dynamic cards, icons and saved profile are
-	# part of the Loading-phase warm-up as well.
+	# ready before the first interaction as well.
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
 	skill_panel.refresh()
+	if inventory_panel.has_method("wait_until_runtime_ready"):
+		await inventory_panel.wait_until_runtime_ready()
+	if warehouse_panel.has_method("wait_until_runtime_ready"):
+		await warehouse_panel.wait_until_runtime_ready()
 	_panel_prewarm_diagnostic["construction_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
@@ -1422,8 +1875,9 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	]
 	if is_instance_valid(system_menu_panel):
 		panels.append(system_menu_panel)
-	for panel: Control in panels:
-		panel.hide()
+	if not background_mode:
+		for panel: Control in panels:
+			panel.hide()
 	# Each layout profile runs multiple frame-separated passes. Keep every
 	# reusable panel hidden until its initial contract has reached the final
 	# geometry pass, so first-open can only expose the finished frame.
@@ -1445,12 +1899,20 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	)
 	# The shop owns two independent saved layouts. Warm the sell layout without
 	# requesting quotes or changing its business state, then restore buy.
-	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_sell")
-	var shop_sell_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
-	UIRuntimeLayoutOverridesScript.apply_profile(shop_panel, "shop_buy")
-	var shop_buy_wait_frames := await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
+	var shop_sell_wait_frames := 0
+	var shop_buy_wait_frames := 0
+	var may_warm_alternate_shop: bool = (
+		not background_mode
+		or (not _panel_prewarm_user_interaction and not shop_panel.visible)
+	)
+	if may_warm_alternate_shop:
+		shop_panel.call("_apply_layout_profile_once", "shop_sell")
+		shop_sell_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_sell"]])
+		shop_panel.call("_apply_layout_profile_once", "shop_buy")
+		shop_buy_wait_frames = await _wait_for_layout_profiles([[shop_panel, "shop_buy"]])
 	_panel_prewarm_diagnostic["shop_sell_wait_frames"] = shop_sell_wait_frames
 	_panel_prewarm_diagnostic["shop_buy_wait_frames"] = shop_buy_wait_frames
+	_panel_prewarm_diagnostic["shop_alternate_profile_warmed"] = may_warm_alternate_shop
 	_panel_prewarm_diagnostic["shop_profiles_elapsed_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
@@ -1464,18 +1926,110 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	_panel_prewarm_diagnostic["confirmation_wait_frames"] = confirmation_wait_frames
 	# Flush deferred grid/list stabilizers once more while hidden.
 	await get_tree().process_frame
-	for panel: Control in panels:
-		panel.hide()
-	_all_panels_prewarmed = _profiles_are_ready(
-		initial_profiles
-		+ [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
-		+ confirmation_profiles
-	)
+	if not background_mode:
+		for panel: Control in panels:
+			panel.hide()
+	var readiness_profiles := initial_profiles + confirmation_profiles
+	if may_warm_alternate_shop:
+		readiness_profiles += [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
+	_all_panels_prewarmed = _profiles_are_ready(readiness_profiles)
 	_panel_prewarm_diagnostic["completed"] = _all_panels_prewarmed
+	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
+	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
 	_panel_prewarm_diagnostic["total_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
 	_panel_prewarm_in_progress = false
+	if OS.is_debug_build():
+		print("[UIPanelPrewarmProfile] ", JSON.stringify(_panel_prewarm_diagnostic))
+
+
+func _prefetch_panel_scripts() -> Dictionary:
+	var paths: Array[String] = [
+		INVENTORY_PANEL_SCRIPT_PATH,
+		MAP_PANEL_SCRIPT_PATH,
+		SKILL_PANEL_SCRIPT_PATH,
+		QUEST_PANEL_SCRIPT_PATH,
+		WAREHOUSE_PANEL_SCRIPT_PATH,
+		SHOP_PANEL_SCRIPT_PATH,
+	]
+	var pending: Dictionary = {}
+	var request_failures: Array[String] = []
+	for path: String in paths:
+		var error := ResourceLoader.load_threaded_request(path)
+		if error == OK:
+			pending[path] = true
+		elif ResourceLoader.load_threaded_get_status(path) == ResourceLoader.THREAD_LOAD_LOADED:
+			pending[path] = true
+		else:
+			request_failures.append("%s:%d" % [path, error])
+	var waited_frames := 0
+	while not pending.is_empty() and waited_frames < 120 and is_inside_tree():
+		for path: String in pending.keys().duplicate():
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				var panel_script := ResourceLoader.load_threaded_get(path) as Script
+				if panel_script != null:
+					_panel_script_warm_refs.append(panel_script)
+				else:
+					request_failures.append("%s:null" % path)
+				pending.erase(path)
+			elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+				request_failures.append("%s:%d" % [path, status])
+				pending.erase(path)
+		if not pending.is_empty():
+			await get_tree().process_frame
+			waited_frames += 1
+	return {
+		"requested": paths.size(),
+		"loaded": _panel_script_warm_refs.size(),
+		"pending": pending.keys(),
+		"failures": request_failures,
+		"waited_frames": waited_frames,
+	}
+
+
+func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
+	if _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
+		return
+	_catalog_icon_prewarm_in_progress = true
+	var paths: Array[String] = []
+	var seen: Dictionary = {}
+	for raw_record: Variant in GameData.item_catalog:
+		if not raw_record is Dictionary:
+			continue
+		var art: Variant = (raw_record as Dictionary).get("art", {})
+		if not art is Dictionary:
+			continue
+		var raw_icon: Variant = (art as Dictionary).get("inventoryIcon", {})
+		var path := str(raw_icon.get("path", "")) if raw_icon is Dictionary else str(raw_icon)
+		if path.is_empty() or seen.has(path):
+			continue
+		seen[path] = true
+		paths.append(path)
+	const REQUEST_BATCH := 12
+	for start_index in range(0, paths.size(), REQUEST_BATCH):
+		if not await _ui_l1_wait_for_background_slot(background_mode):
+			_catalog_icon_prewarm_in_progress = false
+			return
+		var batch: Array[String] = []
+		for path_index in range(start_index, mini(start_index + REQUEST_BATCH, paths.size())):
+			batch.append(paths[path_index])
+		UIItemTextureCacheScript.request_threaded_paths(batch)
+		UIItemTextureCacheScript.poll_threaded_paths()
+		await get_tree().process_frame
+	for _frame in 120:
+		if not await _ui_l1_wait_for_background_slot(background_mode):
+			_catalog_icon_prewarm_in_progress = false
+			return
+		UIItemTextureCacheScript.poll_threaded_paths()
+		if UIItemTextureCacheScript.threaded_pending_count() == 0:
+			break
+		await get_tree().process_frame
+	_catalog_icon_prewarm_complete = UIItemTextureCacheScript.threaded_pending_count() == 0
+	_catalog_icon_prewarm_in_progress = false
+	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
+	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
 
 
 func _wait_for_layout_profiles(profiles: Array) -> int:
@@ -1507,7 +2061,12 @@ func panel_prewarm_diagnostic() -> Dictionary:
 func _ensure_quest_panel() -> void:
 	if is_instance_valid(quest_panel):
 		return
-	quest_panel = QuestPanel.new()
+	var panel_script := load(QUEST_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	quest_panel = panel_script.new()
+	if quest_panel == null:
+		return
 	quest_panel.hide()
 	quest_panel.abandon_requested.connect(
 		func(quest_id: String) -> void: quest_abandon_requested.emit(quest_id)
@@ -1518,7 +2077,12 @@ func _ensure_quest_panel() -> void:
 func _ensure_map_panel() -> void:
 	if is_instance_valid(map_panel):
 		return
-	map_panel = MapPanel.new()
+	var panel_script := load(MAP_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	map_panel = panel_script.new()
+	if map_panel == null:
+		return
 	map_panel.hide()
 	map_panel.map_selected.connect(func(map_id: int) -> void: map_travel_requested.emit(map_id))
 	map_panel.teleport_requested.connect(func(request: Dictionary) -> void: map_teleport_requested.emit(request))
@@ -1531,7 +2095,12 @@ func _ensure_map_panel() -> void:
 func _ensure_warehouse_panel() -> void:
 	if is_instance_valid(warehouse_panel):
 		return
-	warehouse_panel = WarehousePanel.new()
+	var panel_script := load(WAREHOUSE_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	warehouse_panel = panel_script.new()
+	if warehouse_panel == null:
+		return
 	warehouse_panel.hide()
 	warehouse_panel.warehouse_sort_requested.connect(
 		func() -> void: warehouse_sort_requested.emit()
@@ -1551,11 +2120,7 @@ func _ensure_death_revival_panel() -> void:
 
 
 func _chassis_source_to_local(source_point: Vector2) -> Vector2:
-	var source_size := Vector2(HUDChassisTexture.get_width(), HUDChassisTexture.get_height())
-	var scale := minf(HUD_CHASSIS_SIZE.x / source_size.x, HUD_CHASSIS_SIZE.y / source_size.y)
-	var render_size := source_size * scale
-	var render_origin := (HUD_CHASSIS_SIZE - render_size) * 0.5
-	return render_origin + source_point * scale
+	return ChassisDesignsScript.source_to_local(ChassisDesignsScript.active_design(), source_point)
 
 
 func _apply_control_rect(control: Control, rect: Rect2) -> void:
@@ -1667,6 +2232,7 @@ func _request_system_menu() -> void:
 
 
 func _toggle_skill_book() -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_skill_panel()
 	if skill_panel.visible:
 		skill_panel.hide()
@@ -1675,10 +2241,9 @@ func _toggle_skill_book() -> void:
 		skill_panel.open_for("技能导师")
 
 
-func _process(delta: float) -> void:
-	_loot_message_timer = maxf(0.0, _loot_message_timer - delta)
-	if _loot_message_timer == 0.0 and loot_label != null:
-		loot_label.text = ""
+## Notice timing moved into PlayerNoticePresenter (R2); the HUD itself no
+## longer runs a per-frame callback. The loot label is kept for layout
+## compatibility; global notices no longer write it.
 
 
 func update_hp(current_hp: int, max_hp: int) -> void:
@@ -1723,6 +2288,41 @@ func update_taoist_buff_hints(entries: Array, defence_snapshot := {}) -> void:
 		float(snapshot.get("mac_remaining_seconds", 0.0))
 	)
 
+func update_status_buffs(entries: Array) -> void:
+	if taoist_buff_icon_strip == null: return
+	taoist_buff_hint_label.hide()
+	for icon: TextureRect in _status_buff_icons.values(): icon.hide()
+	var ordered := entries.duplicate(true)
+	var active: Dictionary = {}
+	for entry: Dictionary in ordered:
+		active[entry.id] = true
+		if not _status_buff_first_seen.has(entry.id): _status_buff_first_seen[entry.id] = Time.get_ticks_usec()
+		if int(entry.started_at) <= 0: entry.started_at = _status_buff_first_seen[entry.id]
+	for id: String in _status_buff_first_seen.keys():
+		if not active.has(id): _status_buff_first_seen.erase(id)
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if int(a.started_at) != int(b.started_at): return int(a.started_at) < int(b.started_at)
+		return str(a.id) < str(b.id))
+	var index := 0
+	for entry: Dictionary in ordered:
+		var id := str(entry.id)
+		var icon: TextureRect = _status_buff_icons.get(id)
+		if icon == null:
+			icon = _build_taoist_defence_buff_icon(taoist_buff_icon_strip, "StatusBuff_%d" % _status_buff_icons.size(), "hud.buff." + id, null, Vector2.ZERO)
+			_status_buff_icons[id] = icon
+		var item_id := int(entry.get("item_id", -1))
+		if item_id > 0:
+			if int(icon.get_meta("item_id", -1)) != item_id:
+				icon.texture = UIItemTextureCacheScript.texture_at_path(GameData.get_item_art_path({"item_id":item_id}))
+				icon.set_meta("item_id", item_id)
+		elif entry.has("skill"):
+			icon.texture = HUDSkillIconCatalogScript.SKILL_TEXTURES.get(str(entry.skill))
+		icon.position = Vector2(index * (TAOIST_BUFF_ICON_SIZE.x + 6.0), 0)
+		icon.show()
+		var seconds := icon.get_node("Seconds") as Label
+		seconds.text = str(ceili(float(entry.remaining))) if float(entry.remaining) > 0.0 else ""
+		index += 1
+
 
 func _update_taoist_defence_buff_icon(
 	icon: TextureRect,
@@ -1736,15 +2336,22 @@ func _update_taoist_defence_buff_icon(
 	seconds_label.text = str(maxi(0, int(ceil(remaining_seconds))))
 
 
-func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true) -> void:
+func update_target(target_name := "", current_hp := 0, max_hp := 0, manual_lock := false, auto_enabled := true, monster_id := -1) -> void:
 	if target_label == null:
 		return
+	# This is the player-facing boundary.  Internal target identity remains the
+	# exact monster name/ID; only confirmed catalog variant suffixes are removed
+	# for the label shown here.
+	var display_target_name := MonsterDisplayFormatterScript.display_name(
+		str(target_name),
+		int(monster_id),
+	)
 	if target_health_fill != null:
-		target_health_fill.visible = not target_name.is_empty() and max_hp > 0
+		target_health_fill.visible = not display_target_name.is_empty() and max_hp > 0
 		target_health_fill.size.x = 320.0 * clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0)
 	var next_text := "目标：自动选敌待命" if auto_enabled else "目标：手动模式待选择"
-	if not target_name.is_empty():
-		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", target_name, current_hp, max_hp]
+	if not display_target_name.is_empty():
+		next_text = "目标［%s］：%s　%d/%d" % ["自动" if auto_enabled else "手动", display_target_name, current_hp, max_hp]
 	if next_text == _last_target_text:
 		return
 	_last_target_text = next_text
@@ -1759,13 +2366,25 @@ func set_auto_target_enabled(enabled: bool) -> void:
 
 
 func show_loot(item_name: String) -> void:
-	show_loot_feedback({
-		"event_type": "pickup_success",
-		"item_name": item_name,
-		"count": 1,
-		"item_kind": GameData.get_item_kind(item_name),
-		"emphasis": "normal",
-	})
+	show_loot_batch([item_name])
+
+
+func show_loot_batch(item_names: Array) -> void:
+	if loot_feedback_layer == null:
+		return
+	var events: Array = []
+	for raw_name: Variant in item_names:
+		var identity: Dictionary = raw_name if raw_name is Dictionary else GameData.get_item_record(str(raw_name))
+		var item_name := str(raw_name.get("item_name", "")) if raw_name is Dictionary else str(raw_name)
+		events.append({
+			"event_type": "pickup_success",
+			"item_name": item_name,
+			"item_id": preload("res://scripts/ui_item_name_style.gd").canonical_id(identity),
+			"count": 1,
+			"item_kind": GameData.get_item_kind(item_name),
+			"emphasis": "normal",
+		})
+	loot_feedback_layer.show_feedback_batch(events)
 
 
 func show_loot_feedback(event: Dictionary) -> void:
@@ -1776,6 +2395,13 @@ func show_loot_feedback(event: Dictionary) -> void:
 func begin_loading_transition(transition_id := "") -> void:
 	if loading_transition_overlay != null:
 		loading_transition_overlay.begin_loading(transition_id)
+
+
+func cancel_movement_input() -> void:
+	if movement_joystick != null and is_instance_valid(movement_joystick):
+		movement_joystick.cancel_input()
+	else:
+		movement_changed.emit(Vector2.ZERO)
 
 
 func finish_loading_transition() -> void:
@@ -1833,16 +2459,17 @@ func _on_special_action_button() -> void:
 
 
 func _toggle_inventory() -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_inventory_panel()
 	if inventory_panel.visible:
 		inventory_panel.hide()
 	else:
 		_close_modal_panels()
-		inventory_panel.refresh()
 		inventory_panel.show()
 
 
 func _toggle_map_panel() -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_map_panel()
 	if map_panel.visible:
 		map_panel.hide()
@@ -1868,6 +2495,7 @@ func set_zone_name(zone_name: String) -> void:
 
 
 func open_shop(display_name: String, stock: Array, merchant_context: Dictionary = {}) -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_shop_panel()
 	shop_panel.open_for(display_name, stock, merchant_context)
@@ -1894,6 +2522,7 @@ func apply_shop_sell_result(result: Dictionary) -> void:
 
 
 func open_skill_trainer(display_name: String) -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_skill_panel()
 	skill_panel.open_for(display_name)
@@ -1908,6 +2537,7 @@ func set_skill_button_assignments(assignments: Dictionary, interaction_modes := 
 
 
 func show_death_screen(context := {}) -> void:
+	_panel_prewarm_user_interaction = true
 	_ensure_death_revival_panel()
 	_close_modal_panels()
 	if death_revival_panel != null:
@@ -1939,6 +2569,7 @@ func close_death_screen() -> void:
 
 
 func open_quest(display_name: String) -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_quest_panel()
 	quest_panel.open_for(display_name)
@@ -1950,6 +2581,7 @@ func apply_quest_abandon_result(result: Dictionary) -> void:
 
 
 func open_warehouse() -> void:
+	_panel_prewarm_user_interaction = true
 	_close_modal_panels()
 	_ensure_warehouse_panel()
 	warehouse_panel.open_panel()
@@ -1960,10 +2592,68 @@ func apply_warehouse_sort_result(result: Dictionary) -> void:
 	warehouse_panel.apply_sort_result(result)
 
 
+## Unified player-notice entry (UNIFIED-PLAYER-NOTICE R2). Every transient
+## global notice -- success, error, warning, info, item results -- goes
+## through exactly this layer. Business layers report what happened; the
+## presenter decides rendering, priorities, dedupe and queueing.
+func show_notice(notice: Dictionary) -> void:
+	if notice_presenter != null:
+		notice_presenter.present(notice)
+
+
+## Dedicated item notice: renders "prefix + authoritative item name + suffix"
+## as one line where only the item name carries its official UIItemNameStyle
+## color/outline (e.g. "已装备 裁决之杖", "已卸下 井中月").
+func show_item_notice(
+	prefix: String,
+	item: Dictionary,
+	instance: Dictionary = {},
+	suffix := "",
+	kind := "success",
+	seconds := 2.0,
+	dedupe_key := ""
+) -> void:
+	show_notice({
+		"kind": kind,
+		"duration": seconds,
+		"dedupe_key": dedupe_key,
+		"segments": [
+			UIPlayerNoticeScript.text_segment(prefix),
+			UIPlayerNoticeScript.item_segment(item, instance),
+			UIPlayerNoticeScript.text_segment(suffix),
+		],
+	})
+
+
+## ActionResult contract for future player-action services (forge, synth,
+## reinforce...). Services never touch the HUD; the calling layer forwards
+## the authoritative result dictionary here.
+func present_action_result(result: Dictionary) -> void:
+	show_notice(UIPlayerNoticeScript.from_action_result(result))
+
+
+func show_success_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "success", "message": message, "duration": seconds})
+
+
+func show_warning_message(message: String, seconds := 2.0) -> void:
+	show_notice({"kind": "warning", "message": message, "duration": seconds})
+
+
+## General notice lane. Routes into the unified central overlay; the
+## loot_label below stays reserved for layout compatibility only.
 func show_message(message: String, seconds := 2.0) -> void:
-	if loot_label != null:
-		loot_label.text = message
-		_loot_message_timer = seconds
+	show_notice({"kind": "info", "message": message, "duration": seconds})
+
+
+## Player-error channel. Machine reasons passed by mistake are replaced by
+## generic Chinese prose at this boundary; raw reasons stay in logs only.
+## Errors carry the highest notice priority and preempt success/info.
+func show_error_message(message: String, seconds := 2.0) -> void:
+	var visible_message := UIErrorFeedbackScript.user_message(message)
+	if visible_message.is_empty():
+		return
+	show_notice({"kind": "error", "message": visible_message, "duration": seconds})
 
 
 func update_quick_slots() -> void:
@@ -2160,3 +2850,27 @@ func _close_modal_panels() -> void:
 		map_panel.hide()
 	if warehouse_panel != null:
 		warehouse_panel.hide()
+
+# UI-L1 SUPPLEMENT BEGIN -- controlled extra members
+
+# UI-L1: optional background preparation yields to active UI and held input.
+# This is NOT a timer/debounce on a user's action. _ensure_* on demand is unchanged.
+var _ui_l1_finish_explicit_prewarm := false
+
+func _ui_l1_background_blocked() -> bool:
+	if not is_inside_tree():
+		return true
+	if get_tree().paused or Input.is_anything_pressed():
+		return true
+	for panel: Variant in [inventory_panel, shop_panel, warehouse_panel, map_panel, skill_panel, quest_panel, death_revival_panel]:
+		if is_instance_valid(panel) and panel is CanvasItem and panel.is_visible_in_tree():
+			return true
+	return false
+
+func _ui_l1_wait_for_background_slot(background_mode: bool) -> bool:
+	if not background_mode:
+		return is_inside_tree()
+	while is_inside_tree() and not _ui_l1_finish_explicit_prewarm and _ui_l1_background_blocked():
+		await get_tree().process_frame
+	return is_inside_tree()
+# UI-L1 SUPPLEMENT END

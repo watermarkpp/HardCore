@@ -1,0 +1,96 @@
+"""Compile the user's 2026-09-13 balance stage without rewriting frozen 21CQ data."""
+import argparse
+import hashlib
+import json
+from fractions import Fraction
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+POLICY = 'assets/data/drop/single_player_balance_v80_policy.json'
+LEDGER = 'assets/data/drop/single_player_balance_v80.json'
+SEAL = 'scripts/generated/drop_balance_v80_seal.gd'
+INPUTS = ['assets/data/drop/dpv2_direct_baseline_v2.json',
+          'assets/data/drop/dpv2_single_player_effective_probability_v1.json',
+          'assets/data/drop/dpv2_single_player_item_boost_classification_v1.json',
+          'assets/data/runtime/canonical_monster_catalog.json']
+
+def read(path):
+    return json.loads((ROOT / path).read_text(encoding='utf-8-sig'))
+
+def sha(path):
+    return hashlib.sha256((ROOT / path).read_text(encoding='utf-8-sig').replace('\r\n', '\n').encode()).hexdigest()
+
+def build():
+    policy = read(POLICY)
+    baseline, effective, classification, catalog = [read(p) for p in INPUTS]
+    classes = {r['monster_id']: r['classification'] for r in catalog['entries']}
+    assert classes[158] == classes[159] == 'elite'
+    profiles = {p['canonical_monster_id']: p for p in baseline['profiles']}
+    equipment = {r['canonical_item_id'] for r in classification['records'] if r['classification'] == 'EQUIPMENT'}
+    by_uid = {r['slot_uid']: r for r in effective['records']}
+    books = set(effective['repair_v5_contract']['book_item_ids'])
+    eligible = set(policy['elite_boss_item_ids'])
+    rows = {}
+    def probability(row):
+        mid, item = row['canonical_monster_id'], row.get('canonical_item_id')
+        modifier = 1
+        if classes[mid] == 'ordinary':
+            modifier = 3 if item in equipment else (6 if item in range(910001, 910007) else 1)
+        elif classes[mid] in ['elite', 'boss'] and item in [920014, 920016]:
+            modifier = 2
+        return Fraction(row['effective_numerator'], row['effective_denominator'] * modifier)
+    for uid, row in by_uid.items():
+        mid, item = row['canonical_monster_id'], row.get('canonical_item_id')
+        factor, reason = Fraction(1), ''
+        if mid in policy['zombie_ids'] and item in books:
+            assert classes[mid] == 'ordinary' and profiles[mid]['drop_enabled']
+            factor, reason = Fraction(5), 'CURRENT_ZOMBIE_BOOK_X5'
+        elif classes[mid] in ['elite', 'boss'] and item in eligible:
+            factor, reason = Fraction(4), 'CURRENT_ELITE_BOSS_EQUIPMENT_RARE_X4'
+        if factor != 1:
+            old = probability(row)
+            final = min(Fraction(1), old * factor)
+            rows[uid] = dict(monster_id=mid, item_id=item, source_uid=uid, source_monster_id=mid,
+                             multiplier=[factor.numerator, factor.denominator], before=[old.numerator, old.denominator],
+                             after=[final.numerator, final.denominator], reason=reason)
+    copies = []
+    target_items = {s.get('canonical_item_id') for s in profiles[159]['slots']}
+    for source in profiles[158]['slots']:
+        item = source.get('canonical_item_id')
+        if item not in policy['zuma_item_ids']:
+            continue
+        assert item not in target_items, f'COPY_REQUIRES_EXPLICIT_DUPLICATE_DECISION:{item}'
+        source_uid = source['slot_uid']
+        uid = 'dpv2.user.v80.m159.from.' + source_uid
+        copy = dict(source, slot_uid=uid, user_balance_source_uid=source_uid)
+        copies.append(copy)
+        old = probability(by_uid[source_uid])
+        preceding = rows.get(source_uid, {}).get('multiplier', [1, 1])
+        factor = Fraction(*preceding) * Fraction(13, 10)
+        final = min(Fraction(1), min(Fraction(1), old * Fraction(*preceding)) * Fraction(13, 10))
+        rows[uid] = dict(monster_id=159, item_id=item, source_uid=source_uid, source_monster_id=158,
+                         multiplier=[factor.numerator, factor.denominator], before=[old.numerator, old.denominator],
+                         after=[final.numerator, final.denominator], reason='COPY_M158_AFTER_BALANCE_X1_3')
+    assert len(copies) == 17 and sum(r['reason'] == 'CURRENT_ZOMBIE_BOOK_X5' for r in rows.values()) == 115
+    for row in rows.values():
+        assert 0 < row['after'][0] <= row['after'][1] <= 2147483647
+    return dict(contract_id='drop.user_balance.v80', stage='after_v505_and_runtime_denominator_before_rng',
+                source_bindings={p: sha(p) for p in [POLICY] + INPUTS}, records=rows, copied_slots=copies,
+                summary={'modified_existing_slots': len(rows)-len(copies), 'copied_slots': len(copies),
+                         'production_slots': len(by_uid)+len(copies), 'ground_limit': 15})
+
+def main():
+    parser=argparse.ArgumentParser(); parser.add_argument('--check', action='store_true'); args=parser.parse_args()
+    result=build(); text=json.dumps(result, ensure_ascii=False, indent=2)+'\n'
+    digest=hashlib.sha256(text.encode()).hexdigest()
+    seal='extends RefCounted\n# Generated by tools/build_drop_balance_v80.py.\nconst SHA256 := "'+digest+'"\n'
+    for path, expected in [(LEDGER,text),(SEAL,seal)]:
+        if args.check:
+            assert (ROOT/path).read_text(encoding='utf-8') == expected, 'GENERATED_DRIFT:'+path
+        else:
+            (ROOT/path).parent.mkdir(parents=True,exist_ok=True)
+            (ROOT/path).write_text(expected,encoding='utf-8',newline='\n')
+    print('DROP_BALANCE_V80_PASS', result['summary'])
+
+if __name__ == '__main__':
+    main()

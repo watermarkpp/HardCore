@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "source_commit": "4f4462ad027714acf657c7a2ac28fa4f15a6e293",
+  "build_info": {
+    "git_head": "4f4462ad027714acf657c7a2ac28fa4f15a6e293",
+    "version_code": 81,
+    "build_timestamp_utc": "2026-09-14T05:18:24.0991483Z",
+    "git_short_head": "4f4462ad",
+    "build_type": "development",
+    "version_name": "hardcore 1.0 正式版",
+    "git_dirty": false,
+    "git_branch": "HEAD"
+  },
+  "baseline_commit": "fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393",
+  "apk": "C:/Users/Administrator/Desktop/HardCore-1.0-v81-release.apk",
+  "size_bytes": 466010045,
+  "sha256": "6af911a381aa5d567b6086d698ec4480fac9316192d4e6baee50b96e4705d89e",
+  "changed_scripts": [
+    "assets/scripts/drop/user_drop_additions_v81.gdc",
+    "assets/scripts/game_root.gdc",
+    "assets/scripts/hud.gdc",
+    "assets/scripts/item_detail_docked_presenter.gdc",
+    "assets/scripts/item_drop_instance_rules.gdc",
+    "assets/scripts/layers/runtime/loot_runtime_service.gdc",
+    "assets/scripts/loot_name_layout.gdc",
+    "assets/scripts/loot_pickup.gdc",
+    "assets/scripts/loot_pickup_runtime_manager.gdc",
+    "assets/scripts/loot_preferences.gdc",
+    "assets/scripts/player.gdc",
+    "assets/scripts/player_state.gdc",
+    "assets/scripts/system_menu_panel.gdc"
+  ],
+  "new_scripts": [
+    "assets/scripts/drop/user_drop_additions_v81.gdc",
+    "assets/scripts/loot_name_layout.gdc"
+  ],
+  "changed_data": [
+    "assets/assets/data/drop/user_additions_v81.json",
+    "assets/assets/data/ui/item_name_rarity_policy_v2.json",
+    "assets/assets/data/ui/item_name_rarity_v1.json"
+  ],
+  "unchanged_scripts": 228,
+  "unchanged_asset_entries": 8983,
+  "device": "NOT_RUN"
+}

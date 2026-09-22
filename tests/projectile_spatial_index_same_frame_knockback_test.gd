@@ -4,6 +4,7 @@ const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 const SpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
+const FIXTURE_MONSTER_ID := 19
 
 var _index: SpatialIndexScript
 var _enemies: Array[EnemyActor] = []
@@ -68,11 +69,18 @@ func _query_near(center_ground_gu: Vector2) -> Array[Dictionary]:
 
 func _make_enemy(center_ground_gu: Vector2, serial: int) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "knock_%d" % serial, "hp": 100, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"knockback fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, null, false)
+	assert(
+		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
+		"knockback fixture must remain an ordinary exact-ID target"
+	)
+	enemy.max_hp = 100
+	enemy.current_hp = enemy.max_hp
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen")
@@ -83,6 +91,12 @@ func _make_enemy(center_ground_gu: Vector2, serial: int) -> EnemyActor:
 	)
 	enemy.combat_radius_gu = 0.25
 	add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"knockback fixture target must survive exact-ID admission"
+	)
 	_index.register(
 		serial,
 		1,

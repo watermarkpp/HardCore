@@ -17,6 +17,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from monster_drop_authoring_overlay import (
+    load_overlay as load_drop_authoring_overlay,
+    runtime_rows_for_monster,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
@@ -28,19 +33,71 @@ ANIMATION_PATH = ROOT / "assets/data/runtime/monster_animation_catalog.json"
 CLASSIFICATION_PATH = ROOT / "assets/data/map_editor_monster_spawn_classification_v1.json"
 CLASSIFICATION_ID_PATH = ROOT / "assets/data/canonical_monster_classification_v1.json"
 POLICY_PATH = ROOT / "assets/data/canonical_monster_catalog_policy_v1.json"
+SPECIAL_NORMAL_AUTHORITY_PATH = ROOT / "assets/data/special_normal_monster_spawn_authority_v1.json"
 DROP_SOURCE_PATH = ROOT / "assets/data/canonical_monster_drop_source_v2.json"
+DROP_AUTHORING_OVERLAY_PATH = (
+    ROOT
+    / "assets/data/canonical_monster_drop_authoring_overrides_v1.json"
+)
+COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
+DETAIL_SOURCE_PATH = ROOT / "assets/data/monster_21cq_detail_source_v1.json"
 # Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
 # is no longer read by the generator and is intentionally absent from
 # source_files/generator_input below.
 DROP_OVERRIDE_PATH = ROOT / "assets/data/canonical_monster_drop_overrides_v1.json"
 ART_PATHS = [
     ROOT / "assets/data/bich_common_client_art_sources.json",
+    ROOT / "assets/data/bich_undead_client_art_sources.json",
     ROOT / "assets/data/complete_monster_client_art_sources.json",
     ROOT / "assets/data/classic_boss_client_art_sources.json",
 ]
 
 REQUIRED_ACTIONS = ("idle", "walk", "attack", "hit", "death")
-APPROVED_COMBAT_SEMANTICS = {"enemy_actor", "special_map_enemy"}
+RUNTIME_CAPABLE_CLASSIFICATIONS = frozenset({
+    "ordinary",
+    "elite",
+    "boss",
+    "special",
+    "non_hostile",
+    "version_difference",
+})
+
+# P3C keeps the historical placement fields in the exact-ID attachment for
+# auditability, but those fields are not themselves a current editor gate.
+# Only an explicit disposition is allowed to narrow the formal editor pool;
+# this prevents re-opening the old broad placement=false defaults by accident.
+EDITOR_PLACEMENT_DISPOSITIONS = frozenset({
+    "quarantine",
+    "internal_subtype",
+})
+
+# P3B: version_difference 只是 classification/metadata 提醒，不再自动
+# 排除 runtime。排除集合保持为空结构，等待未来明确的排除裁决。
+INTENTIONAL_EXCLUSION_CLASSIFICATIONS = frozenset()
+
+# R4C: Monster.DB exact-ID core combat authority. Only these 6 IDs may be
+# overridden with the SHA-verified Monster.DB core stats. All other IDs keep
+# the P3C vanilla exact-ID read. Special/event entities and the 12 IDs without
+# a Monster.DB exact binding are explicitly excluded from override.
+MONSTER_DB_CORE_OVERRIDE_IDS = frozenset({
+    39,
+    107,
+    162,
+    163,
+    168,
+    193,
+})
+MONSTER_DB_CORE_EXCLUDED_SPECIAL_IDS = frozenset({
+    146,
+    226,
+    234,
+})
+MONSTER_DB_CORE_STATS_FIELDS = ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")
+# Race 200 is the primary-source identity bridge for the active cow mage and
+# priest. Their Crystal service rows are explicitly unresolved fallbacks, while
+# the SHA-pinned Monster.DB rows bind exact IDs 220/222 to ai_code=200 and the
+# original server maps Race 200 to TElectronicScolpionMon.
+MONSTER_DB_RACE_200_RUNTIME_IDS = frozenset({220, 222})
 TEXT_HASH_SUFFIXES = {".json"}
 WOOMA_EQUIVALENCE_IDS = {68, 69}
 EXCLUDED_PRIVATE_DROP_TOKENS = {"LongBow", "SilverBow"}
@@ -61,6 +118,30 @@ WOOma_SLUG_BY_ID = {
     239: "dark_wooma_taurus",
 }
 
+SPECIAL_NORMAL_IDS = frozenset({39, 57, 74, 77, 90, 121, 137, 142})
+# Elite monsters that keep authored ordinary-layer spawn points after the
+# user loot sheet classification migration (218 牛魔将军 / 222 牛魔祭司).
+ELITE_ORDINARY_SPAWN_PLACEMENT_IDS = frozenset({218, 222})
+SPECIAL_NORMAL_AUTHORITY_SCHEMA = "hardcore.monster_special_normal_spawn_authority.v1"
+SPECIAL_NORMAL_AUTHORITY_STATUS = "FORMAL_SPAWN_AUTHORITY_ACTIVE"
+SPECIAL_NORMAL_DEFAULTS = {
+    "spawn_classification": "special_normal",
+    "placement_kind": "monster_spawn",
+    "respawn_policy_id": "special_normal",
+    "respawn_seconds": 900,
+    "random_seconds": 0,
+    "count": 1,
+    "max_alive": 1,
+}
+SPECIAL_NORMAL_DROP_PROBABILITY_POLICY = {
+    "authority": "external_direct_baseline",
+    "authority_id": "dpv2.direct_baseline.v2",
+    "source_path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+    "identity_key": "canonical_monster_id",
+    "resolution": "direct_baseline_by_canonical_monster_id",
+    "production_rng_input": False,
+}
+
 # The old runtime payload sometimes carried agility/anti-poison fields, but
 # those values have no authoritative monster-service evidence in this lane.
 # Keep the projection explicit and fail-safe: consumers receive the project
@@ -68,6 +149,36 @@ WOOma_SLUG_BY_ID = {
 RUNTIME_PROJECTION_DEFAULTS = {
     "agility": 15,
     "anti_poison": 0,
+}
+
+DETAIL_REQUIRED_FIELDS = (
+    "level",
+    "exp",
+    "hp",
+    "defense",
+    "magic_defense",
+    "attack_min",
+    "attack_max",
+    "agility",
+    "accuracy",
+    "attack_interval_ms",
+    "move_interval_ms",
+    "life_type",
+    "undead",
+    "anti_stealth",
+)
+DETAIL_CORE_FIELD_MAP = {
+    "level": "level",
+    "exp": "exp",
+    "hp": "hp",
+    "defense": "defense",
+    "magic_defense": "magic_defense",
+    "attack_min": "attack_min",
+    "attack_max": "attack_max",
+}
+DETAIL_TIMING_FIELD_MAP = {
+    "attack_interval_ms": "attack_interval_ms",
+    "move_interval_ms": "move_interval_ms",
 }
 
 
@@ -104,6 +215,197 @@ def load_json(path: Path) -> Any:
         raise RuntimeError(f"cannot parse {path}: {exc}") from exc
 
 
+def validate_21cq_detail_source(payload: dict[str, Any]) -> dict[int, dict[str, Any]]:
+    """Validate the complete user-authoritative 21CQ detail snapshot.
+
+    The snapshot is intentionally separate from the Crystal ``server_data``
+    lane.  It contains only attribute/timing/life-flag fields; spawn and drop
+    tables are excluded by the fetch/parser contract and are rejected here if
+    they appear as record keys.
+    """
+    if payload.get("authority") != "user_authoritative_override":
+        raise RuntimeError("21CQ detail source authority mismatch")
+    if payload.get("authority_scope") != [
+        "monster_attributes",
+        "monster_timing",
+        "monster_life_flags",
+    ]:
+        raise RuntimeError("21CQ detail source authority scope mismatch")
+    if payload.get("distribution") != "user.21cq.com.mir.monster_detail":
+        raise RuntimeError("21CQ detail source distribution mismatch")
+    records = payload.get("records")
+    if not isinstance(records, list) or len(records) != 217:
+        raise RuntimeError("21CQ detail source must contain exactly 217 records")
+    by_id: dict[int, dict[str, Any]] = {}
+    excluded_keys = {
+        "spawn",
+        "spawn_table",
+        "spawn_quantity",
+        "respawn",
+        "respawn_time",
+        "drop",
+        "drop_tables",
+        "drop_probability",
+        "map",
+    }
+    for row in records:
+        if not isinstance(row, dict):
+            raise RuntimeError("21CQ detail source record is not an object")
+        monster_id = row.get("monster_id")
+        if isinstance(monster_id, bool) or not isinstance(monster_id, int) or monster_id <= 0:
+            raise RuntimeError(f"21CQ detail source invalid monster_id={monster_id!r}")
+        if monster_id in by_id:
+            raise RuntimeError(f"21CQ detail source duplicate monster_id={monster_id}")
+        missing = [field for field in DETAIL_REQUIRED_FIELDS if field not in row]
+        if missing:
+            raise RuntimeError(f"21CQ monster_id={monster_id} missing detail fields {missing}")
+        if any(str(key).lower() in excluded_keys for key in row):
+            raise RuntimeError(f"21CQ monster_id={monster_id} contains excluded spawn/drop field")
+        for field in (
+            "level",
+            "exp",
+            "hp",
+            "defense",
+            "magic_defense",
+            "attack_min",
+            "attack_max",
+            "agility",
+            "accuracy",
+            "attack_interval_ms",
+            "move_interval_ms",
+        ):
+            value = row[field]
+            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                raise RuntimeError(f"21CQ monster_id={monster_id} invalid {field}={value!r}")
+        if row["life_type"] not in ("生物系", "不死系"):
+            raise RuntimeError(f"21CQ monster_id={monster_id} invalid life_type={row['life_type']!r}")
+        if row["undead"] != (row["life_type"] == "不死系"):
+            raise RuntimeError(f"21CQ monster_id={monster_id} undead/life_type mismatch")
+        if row.get("http_status") != 200 or not str(row.get("source_url", "")).endswith(
+            f"Mob.Aspx?ID={monster_id}"
+        ):
+            raise RuntimeError(f"21CQ monster_id={monster_id} URL/HTTP evidence invalid")
+        raw_hash = str(row.get("raw_html_sha256", ""))
+        if len(raw_hash) != 64 or any(char not in "0123456789ABCDEF" for char in raw_hash):
+            raise RuntimeError(f"21CQ monster_id={monster_id} raw HTML hash invalid")
+        by_id[monster_id] = row
+    vanilla_payload = load_json(VANILLA_PATH)
+    expected_ids = sorted(
+        int(record["monsterId"])
+        for record in vanilla_payload.get("records", [])
+        if isinstance(record, dict) and int(record.get("monsterId", -1)) > 0
+    )
+    if sorted(by_id) != expected_ids or len(by_id) != 217:
+        raise RuntimeError("21CQ detail source IDs are not complete")
+    return by_id
+
+
+def validate_special_normal_authority(
+    authority: dict[str, Any],
+    vanilla: dict[str, Any],
+) -> dict[int, dict[str, Any]]:
+    """Validate the exact-ID special_normal overlay before catalog generation.
+
+    ``special_normal`` is a spawn classification overlay. Drop probability is
+    owned by the external direct baseline and is intentionally not duplicated
+    in this spawn authority or the canonical catalog.
+    """
+
+    def require(condition: bool, message: str) -> None:
+        if not condition:
+            raise RuntimeError(f"special_normal authority: {message}")
+
+    require(authority.get("schema") == SPECIAL_NORMAL_AUTHORITY_SCHEMA, "schema mismatch")
+    require(authority.get("status") == SPECIAL_NORMAL_AUTHORITY_STATUS, "status mismatch")
+    scope = authority.get("scope", {})
+    require(isinstance(scope, dict), "scope must be a dictionary")
+    require(scope.get("identity_key") == "monster_id", "identity key must be monster_id")
+    require(scope.get("selection") == "explicit_exact_monster_id_set", "selection is not exact-ID")
+    require(scope.get("classification_field") == "spawn_classification", "spawn classification field drift")
+    require(scope.get("combat_classification_is_independent") is True, "combat classification is not independent")
+    require(scope.get("name_or_suffix_resolution_forbidden") is True, "name/suffix resolution guard missing")
+    expected_ids = sorted(SPECIAL_NORMAL_IDS)
+    actual_scope_ids = sorted(int(value) for value in scope.get("canonical_monster_ids", []))
+    require(actual_scope_ids == expected_ids, f"scope IDs={actual_scope_ids} expected {expected_ids}")
+
+    defaults = authority.get("defaults", {})
+    require(defaults == SPECIAL_NORMAL_DEFAULTS, f"defaults={defaults!r} expected {SPECIAL_NORMAL_DEFAULTS!r}")
+
+    expected_authority_keys = {
+        "schema",
+        "authority_id",
+        "status",
+        "scope",
+        "authority",
+        "defaults",
+        "spawn_activation",
+        "drop_probability",
+        "records",
+    }
+    require(set(authority) == expected_authority_keys, "authority contains non-spawn fields")
+    drop_probability = authority.get("drop_probability", {})
+    require(
+        drop_probability == SPECIAL_NORMAL_DROP_PROBABILITY_POLICY,
+        "drop probability must use the external direct baseline",
+    )
+    require(
+        authority.get("spawn_activation")
+        == {
+            "production_active": True,
+            "runtime_consumers": [
+                "scripts/layers/runtime/map_editor_runtime_bridge.gd",
+                "scripts/monster_respawn_policy.gd",
+                "scripts/game_root.gd",
+            ],
+            "map_data_mutated": False,
+        },
+        "spawn activation contract drift",
+    )
+
+    expected_sources = {
+        "assets/data/vanilla_176/monsters.json": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
+        "assets/data/canonical_monster_classification_v1.json": "BD7DD9DE8ED9995220BE94C9A095A2FB1FE2A8862FAA31EDE976A53173FCAF76",
+    }
+    source_rows = authority.get("authority", {}).get("sources", [])
+    source_by_path = {
+        str(row.get("path")): row
+        for row in source_rows
+        if isinstance(row, dict)
+    }
+    for relative_path, expected_hash in expected_sources.items():
+        source = source_by_path.get(relative_path, {})
+        require(source.get("sha256", "").upper() == expected_hash, f"source hash mismatch for {relative_path}")
+        source_path = ROOT / relative_path
+        require(source_path.is_file(), f"missing source {relative_path}")
+        require(sha256_file(source_path) == expected_hash, f"checked-in source drift for {relative_path}")
+    vanilla_by_id = {
+        int(record.get("monsterId", -1)): record
+        for record in vanilla.get("records", [])
+        if isinstance(record, dict) and record.get("recordStatus") != "retired"
+    }
+    records = authority.get("records", [])
+    require(isinstance(records, list) and len(records) == len(expected_ids), "record count is not eight")
+    by_id: dict[int, dict[str, Any]] = {}
+    for row in records:
+        require(isinstance(row, dict), "record is not a dictionary")
+        monster_id = row.get("monster_id")
+        require(isinstance(monster_id, int) and not isinstance(monster_id, bool), f"invalid monster_id={monster_id!r}")
+        require(monster_id in SPECIAL_NORMAL_IDS, f"unexpected monster_id={monster_id}")
+        require(monster_id not in by_id, f"duplicate monster_id={monster_id}")
+        by_id[monster_id] = row
+        canonical = vanilla_by_id.get(monster_id)
+        require(isinstance(canonical, dict), f"monster_id={monster_id} is not an active canonical identity")
+        require(row.get("canonical_name") == canonical.get("name"), f"monster_id={monster_id} canonical name drift")
+        spawn = row.get("spawn")
+        require(spawn == SPECIAL_NORMAL_DEFAULTS, f"monster_id={monster_id} spawn policy drift")
+        require(
+            set(row) == {"monster_id", "canonical_name", "combat_classification", "spawn"},
+            f"monster_id={monster_id} record contains non-spawn fields",
+        )
+    require(sorted(by_id) == expected_ids, f"records IDs={sorted(by_id)} expected {expected_ids}")
+    return by_id
+
+
 def source_ref(
     path: Path,
     *,
@@ -126,6 +428,177 @@ def source_ref(
     if evidence:
         item["evidence"] = evidence
     return item
+
+
+def detail_source_ref(
+    detail_source: dict[str, Any],
+    detail_row: dict[str, Any],
+    *,
+    field: str,
+    superseded_conflicts: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Build a compact field-level reference to the full 21CQ snapshot.
+
+    The complete URL/status/raw-page evidence lives once per ID in
+    ``monster_21cq_detail_source_v1.json``.  Canonical entries retain only
+    the stable snapshot hash, exact page hash/URL, authority and compact old
+    candidate conflict values so the runtime catalog remains reviewable.
+    """
+    item: dict[str, Any] = {
+        "source": DETAIL_SOURCE_PATH.relative_to(ROOT).as_posix(),
+        "sha256": sha256_file(DETAIL_SOURCE_PATH),
+        "authority": "user_authoritative_override",
+        "role": "monster_21cq_detail_user_authoritative_override",
+        "field": field,
+        "raw_html_sha256": str(detail_row.get("raw_html_sha256", "")),
+    }
+    if superseded_conflicts:
+        item["superseded_conflicts"] = superseded_conflicts
+    return item
+
+
+def superseded_candidate(
+    *,
+    distribution: str,
+    tier: str,
+    original_path: str,
+    sha256_value: str,
+    field: str,
+    value: Any,
+    detail_value: Any,
+    role: str,
+    evidence: str,
+) -> dict[str, Any]:
+    return {
+        "source": distribution,
+        "distribution": distribution,
+        "tier": tier,
+        "original_path": original_path,
+        "sha256": sha256_value,
+        "field": field,
+        "role": role,
+        "value": value,
+        "evidence": evidence,
+        "resolution": "corroborating_non_authoritative" if value == detail_value else "superseded_by_21cq_user_override",
+    }
+
+
+def detail_conflicts_for_field(
+    monster_id: int,
+    field: str,
+    detail_value: Any,
+    vanilla_record: dict[str, Any],
+    combat_source: dict[str, Any],
+    combat_entry: dict[str, Any],
+    service_row: dict[str, Any],
+    policy_wooma: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Preserve the old candidate values without allowing them to win."""
+    conflicts: list[dict[str, Any]] = []
+    vanilla_key = VANILLA_COMBAT_FIELD_MAP.get(field)
+    if vanilla_key is not None and vanilla_key in vanilla_record:
+        conflicts.append(
+            superseded_candidate(
+                distribution="source.vanilla_176",
+                tier="primary",
+                original_path=VANILLA_PATH.relative_to(ROOT).as_posix(),
+                sha256_value=sha256_file(VANILLA_PATH),
+                field=field,
+                value=vanilla_record[vanilla_key],
+                detail_value=detail_value,
+                role="superseded_vanilla_exact_id_candidate",
+                evidence=f"vanilla_176 exact monster_id={monster_id} record.{vanilla_key}",
+            )
+        )
+    if field in combat_entry:
+        conflicts.append(
+            superseded_candidate(
+                distribution=str(combat_source.get("distribution", "source.original_gameofmir.monster_db_176")),
+                tier=str(combat_source.get("tier", "primary")),
+                original_path=str(combat_source.get("source", COMBAT_SOURCE_PATH.relative_to(ROOT).as_posix())),
+                sha256_value=str(combat_source.get("source_sha256", sha256_file(COMBAT_SOURCE_PATH))),
+                field=field,
+                value=combat_entry[field],
+                detail_value=detail_value,
+                role="superseded_monster_db_exact_id_candidate",
+                evidence=f"canonical_monster_combat_source_v1 records_by_monster_id[{monster_id}].{field}",
+            )
+        )
+    if field == "accuracy" and "hit" in combat_entry:
+        conflicts.append(
+            superseded_candidate(
+                distribution=str(combat_source.get("distribution", "source.original_gameofmir.monster_db_176")),
+                tier=str(combat_source.get("tier", "primary")),
+                original_path=str(combat_source.get("source", COMBAT_SOURCE_PATH.relative_to(ROOT).as_posix())),
+                sha256_value=str(combat_source.get("source_sha256", sha256_file(COMBAT_SOURCE_PATH))),
+                field=field,
+                value=combat_entry["hit"],
+                detail_value=detail_value,
+                role="superseded_monster_db_hit_candidate",
+                evidence=f"Monster.DB HIT field mapped as an old accuracy candidate for monster_id={monster_id}",
+            )
+        )
+    if field in DETAIL_TIMING_FIELD_MAP:
+        behavior = service_row.get("behaviorProfile", {}) if isinstance(service_row, dict) else {}
+        timing = behavior.get("timing", {}) if isinstance(behavior, dict) else {}
+        service_key = "attackIntervalMs" if field == "attack_interval_ms" else "moveIntervalMs"
+        if service_key in timing:
+            conflicts.append(
+                superseded_candidate(
+                    distribution="server.crystal.cjlaaa",
+                    tier="primary",
+                    original_path=SERVICE_PATH.relative_to(ROOT).as_posix(),
+                    sha256_value=sha256_file(SERVICE_PATH),
+                    field=field,
+                    value=timing[service_key],
+                    detail_value=detail_value,
+                    role="superseded_crystal_timing_candidate",
+                    evidence=f"service_monster_runtime_catalog runtimeByMonsterId[{monster_id}].behaviorProfile.timing.{service_key}",
+                )
+            )
+    if field in ("undead", "life_type", "anti_stealth"):
+        behavior = service_row.get("behaviorProfile", {}) if isinstance(service_row, dict) else {}
+        service_behavior = behavior.get("serviceBehavior", {}) if isinstance(behavior, dict) else {}
+        if field == "undead" and "undead" in service_behavior:
+            value = bool(service_behavior["undead"])
+            conflicts.append(
+                superseded_candidate(
+                    distribution="server.crystal.cjlaaa",
+                    tier="primary",
+                    original_path=SERVICE_PATH.relative_to(ROOT).as_posix(),
+                    sha256_value=sha256_file(SERVICE_PATH),
+                    field=field,
+                    value=value,
+                    detail_value=detail_value,
+                    role="superseded_crystal_life_flag_candidate",
+                    evidence=f"service_monster_runtime_catalog runtimeByMonsterId[{monster_id}].behaviorProfile.serviceBehavior.undead",
+                )
+            )
+    if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
+        override = policy_wooma["combat_override"]
+        if field in override:
+            aux = policy_wooma.get("auxiliary_source", {})
+            conflicts.append(
+                superseded_candidate(
+                    distribution=str(aux.get("distribution", "source.angelk727.mir2_server_databases")),
+                    tier=str(aux.get("tier", "auxiliary_1")),
+                    original_path=str(aux.get("original_path", "")),
+                    sha256_value=str(aux.get("sha256", "")),
+                    field=field,
+                    value=override[field],
+                    detail_value=detail_value,
+                    role="superseded_wooma_auxiliary_candidate",
+                    evidence=f"canonical policy Wooma combat_override for monster_id={monster_id}",
+                )
+            )
+    # Canonical needs only the actual losing values; equal candidates remain
+    # available in their original source snapshots and would otherwise bloat
+    # every entry without adding conflict evidence.
+    return [
+        candidate
+        for candidate in conflicts
+        if candidate.get("resolution") == "superseded_by_21cq_user_override"
+    ]
 
 
 def deep_merge(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, Any]:
@@ -177,20 +650,26 @@ def art_profiles() -> tuple[dict[int, str], dict[str, dict[str, Any]], dict[int,
     The first matching source is intentional: the Wooma common-client
     manifest is the explicit source for 64..75, then complete client art, and
     finally the classic boss manifest.  No names or suffixes participate.
+
+    Only ``runtimeMappingsByMonsterId`` (exact-ID authority) is consumed.
+    Name-keyed ``runtimeMappings`` entries are resolved when an ID-keyed
+    value is a string reference, but no automatic name-based fallback is
+    performed — every monster must have an explicit ID entry.
     """
 
     id_to_mapping: dict[int, tuple[str, dict[str, Any], Path]] = {}
     for manifest_path in ART_PATHS:
         manifest = load_json(manifest_path)
         by_id = manifest.get("runtimeMappingsByMonsterId", {})
-        if isinstance(by_id, dict):
+        if isinstance(by_id, dict) and by_id:
+            by_name = manifest.get("runtimeMappings", {})
             for raw_id, value in by_id.items():
                 monster_id = int(raw_id)
                 if monster_id in id_to_mapping:
                     continue
                 mapping: dict[str, Any]
                 if isinstance(value, str):
-                    candidate = manifest.get("runtimeMappings", {}).get(value, {})
+                    candidate = by_name.get(value, {})
                     mapping = candidate if isinstance(candidate, dict) else {}
                 elif isinstance(value, dict):
                     mapping = value
@@ -284,6 +763,20 @@ def classification_for(
         override = {}
     if not isinstance(policy_override, dict):
         policy_override = {}
+    disposition_value = override.get(
+        "disposition",
+        policy_override.get("disposition", ""),
+    )
+    disposition = str(disposition_value).strip()
+    disposition_evidence_value = override.get(
+        "evidence",
+        policy_override.get("evidence", {}),
+    )
+    disposition_evidence = (
+        copy.deepcopy(disposition_evidence_value)
+        if isinstance(disposition_evidence_value, dict)
+        else {}
+    )
     classification_name = str(
         policy_override.get("classification", override.get("classification", ""))
     )
@@ -299,13 +792,21 @@ def classification_for(
         placement_allowed = bool(policy_override["placement_allowed"])
     if classification_name in ("unresolved", "version_difference"):
         placement_allowed = False
+    if disposition:
+        # An explicit disposition is the only current placement restriction.
+        # Unknown values fail closed here and are reported by validate_catalog.
+        placement_allowed = False
     placement_kind = str(override.get("placement_kind", ""))
     if placement_kind == "":
-        placement_kind = (
-            "monster_spawn"
-            if classification_name in ("ordinary", "special", "non_hostile", "version_difference")
-            else policy_table.get("placement_kind", "")
-        )
+        if classification_name in ("ordinary", "special", "non_hostile", "version_difference"):
+            placement_kind = "monster_spawn"
+        elif monster_id in ELITE_ORDINARY_SPAWN_PLACEMENT_IDS:
+            # 218/222 migrated to elite together with the user loot sheet
+            # activation while keeping their ordinary-layer spawn points, so
+            # the elite combat classification must not clear the placement.
+            placement_kind = "monster_spawn"
+        else:
+            placement_kind = policy_table.get("placement_kind", "")
     if policy_override.get("placement_semantics") == "ordinary_spawn":
         placement_kind = "monster_spawn"
     map_codes: list[str] = []
@@ -335,6 +836,9 @@ def classification_for(
             "allowed": True,
             "reason": str(exemption.get("reason")),
         }
+    if disposition:
+        evidence["disposition"] = disposition
+        evidence["disposition_evidence"] = disposition_evidence
     return classification_name, placement_allowed, placement_kind, map_codes, evidence
 
 
@@ -641,30 +1145,51 @@ def drop_for(
     }
 
 
-def _combat_stats_ok(stats: dict[str, Any], require_attack: bool) -> bool:
-    """Complete exact-ID combat stats with valid value domains.
+VANILLA_COMBAT_FIELD_MAP: dict[str, str] = {
+    "level": "level",
+    "exp": "exp",
+    "hp": "hp",
+    "defense": "defense",
+    "magic_defense": "magicDefense",
+    "attack_min": "attackMin",
+    "attack_max": "attackMax",
+}
 
-    Zero is a legal value for several stats (defense/magic_defense/exp), so
-    presence is judged by the required-domain rules below rather than a
-    blanket non-zero check.
+
+def read_vanilla_core_combat_exact_id(
+    record: dict[str, Any],
+) -> tuple[dict[str, int], dict[str, bool], bool]:
+    """Read core combat stats from a vanilla exact-ID record with strict validation.
+
+    Returns (stats, field_validity, all_fields_valid).
+    - stats: parsed int values (0 for invalid/missing fields)
+    - field_validity: per-field bool indicating legal value
+    - all_fields_valid: True only if every required field is present, int, non-bool, non-negative
     """
-    if int(stats.get("level", 0)) <= 0:
-        return False
-    if int(stats.get("hp", 0)) <= 0:
-        return False
-    if int(stats.get("defense", 0)) < 0:
-        return False
-    if int(stats.get("magic_defense", 0)) < 0:
-        return False
-    if int(stats.get("exp", 0)) < 0:
-        return False
-    attack_min = int(stats.get("attack_min", 0))
-    attack_max = int(stats.get("attack_max", 0))
-    if attack_min > attack_max:
-        return False
-    if require_attack and attack_max <= 0:
-        return False
-    return True
+    stats: dict[str, int] = {}
+    field_validity: dict[str, bool] = {}
+    for stat_field, vanilla_key in VANILLA_COMBAT_FIELD_MAP.items():
+        if vanilla_key not in record:
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        raw = record[vanilla_key]
+        if isinstance(raw, bool):
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        if not isinstance(raw, int):
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        if raw < 0:
+            stats[stat_field] = 0
+            field_validity[stat_field] = False
+            continue
+        stats[stat_field] = raw
+        field_validity[stat_field] = True
+    all_fields_valid = all(field_validity.values())
+    return stats, field_validity, all_fields_valid
 
 
 def build_catalog() -> dict[str, Any]:
@@ -672,9 +1197,18 @@ def build_catalog() -> dict[str, Any]:
     service = load_json(SERVICE_PATH)
     behavior = load_json(BEHAVIOR_PATH)
     boss_rules = load_json(BOSS_RULE_PATH)
+    detail_source = load_json(DETAIL_SOURCE_PATH)
+    detail_by_id = validate_21cq_detail_source(detail_source)
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
     policy = load_json(POLICY_PATH)
+    special_normal_authority = load_json(SPECIAL_NORMAL_AUTHORITY_PATH)
+    special_normal_by_id = validate_special_normal_authority(
+        special_normal_authority,
+        vanilla,
+    )
     drop_source = load_json(DROP_SOURCE_PATH)
+    combat_source = load_json(COMBAT_SOURCE_PATH)
+    combat_source_by_id = combat_source.get("records_by_monster_id", {})
     drop_source_by_id = {
         str(item.get("stable_monster_id")): item
         for item in drop_source.get("records", [])
@@ -686,11 +1220,47 @@ def build_catalog() -> dict[str, Any]:
     drop_overrides: dict[str, Any] = {}
     id_to_art, appearance_profiles, art_evidence = art_profiles()
     records = vanilla.get("records", [])
+    if not isinstance(records, list):
+        raise RuntimeError("vanilla records must be a list")
+
+    active_monster_ids = {
+        int(record.get("monsterId", -1))
+        for record in records
+        if (
+            isinstance(record, dict)
+            and record.get("recordStatus") != "retired"
+            and int(record.get("monsterId", -1)) > 0
+        )
+    }
+    drop_authoring_source_label = (
+        DROP_AUTHORING_OVERLAY_PATH.relative_to(ROOT).as_posix()
+    )
+    drop_authoring_overlay = load_drop_authoring_overlay(
+        DROP_AUTHORING_OVERLAY_PATH,
+        active_monster_ids,
+        drop_authoring_source_label,
+    )
+    drop_authoring_source_evidence = source_ref(
+        DROP_AUTHORING_OVERLAY_PATH,
+        role="drop_profile_authoring_overlay",
+        distribution="source.user_drop_authoring_overlay",
+        tier="user_authoritative",
+        evidence=(
+            "Exact entry_key authoring rows; global rows project to every "
+            "active canonical profile, monster rows join by monster_id only"
+        ),
+    )
+
     entries: list[dict[str, Any]] = []
     drop_profiles: dict[str, dict[str, Any]] = {}
     entries_by_id: dict[str, dict[str, Any]] = {}
+    base_drop_row_count = 0
+    global_authoring_expanded_row_count = 0
+    monster_authoring_added_row_count = 0
     for record in sorted(records, key=lambda item: int(item.get("monsterId", -1))):
         monster_id = int(record.get("monsterId", -1))
+        if record.get("recordStatus") == "retired":
+            continue
         policy_wooma = policy.get("wooma_matrix", {}).get(str(monster_id), {})
         if not isinstance(policy_wooma, dict):
             policy_wooma = {}
@@ -705,45 +1275,49 @@ def build_catalog() -> dict[str, Any]:
             and service_row_for_identity.get("resolutionStatus") == "exact_service_name"
             and isinstance(service_record_for_identity, dict)
         )
-        canonical_name_override = policy_wooma.get("canonical_name_override", {})
-        if service_exact_for_identity:
-            canonical_name = str(service_record_for_identity.get("serviceName", ""))
-            canonical_name_evidence = source_ref(
-                SERVICE_PATH,
-                role="canonical_name_primary_service",
-                distribution="server.crystal.cjlaaa",
-                tier="primary",
-                field="serviceRecord.serviceName",
-                evidence=f"runtimeByMonsterId[{monster_id}].serviceRecord.serviceName",
-            )
-            identity_resolution = "exact_service_name"
-        elif isinstance(canonical_name_override, dict) and canonical_name_override.get("value"):
-            canonical_name = str(canonical_name_override.get("value"))
-            aux = policy_wooma.get("auxiliary_source", {})
-            canonical_name_evidence = {
-                "distribution": str(aux.get("distribution", "")),
-                "tier": str(aux.get("tier", "auxiliary_1")),
-                "original_path": str(aux.get("original_path", "")),
-                "sha256": str(aux.get("sha256", "")),
-                "role": "canonical_name_auxiliary_override",
-                "field": str(canonical_name_override.get("field", "MonsterName")),
-                "evidence": f"primary exact missing; explicit auxiliary name row for monster_id={monster_id}",
-            }
-            identity_resolution = "auxiliary_1_exact_name"
-        else:
-            canonical_name = str(record.get("name", ""))
-            canonical_name_evidence = source_ref(
-                VANILLA_PATH,
-                role="stable_identity_namespace_display_name",
-                distribution="source.vanilla_176",
-                tier="identity_namespace",
-                field="canonical_name",
-                evidence=f"records[{monster_id}].name; no exact service name, display only",
-            )
-            identity_resolution = "unresolved_service_name"
+        # canonical_name: always vanilla exact-ID record.name.
+        # policy canonical_name_override is no longer consumed for production identity.
+        canonical_name = str(record.get("name", ""))
+        canonical_name_evidence = source_ref(
+            VANILLA_PATH,
+            role="canonical_name_vanilla_exact_id",
+            distribution="source.vanilla_176",
+            tier="primary",
+            field="canonical_name",
+            evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.name",
+        )
+        identity_resolution = "vanilla_exact_id"
         classification_name, placement_allowed, placement_kind, map_codes, class_evidence = classification_for(
             monster_id, classification_ids, policy
         )
+        classification_disposition = str(
+            class_evidence.get("disposition", "")
+        ).strip()
+        disposition_evidence = class_evidence.get(
+            "disposition_evidence",
+            {},
+        )
+        special_normal_row = special_normal_by_id.get(monster_id)
+        spawn_classification: str | None = None
+        spawn_authority: dict[str, Any] | None = None
+        placement_source_scope = "classification_and_drop_closure"
+        if special_normal_row is not None:
+            if classification_name != str(special_normal_row.get("combat_classification", "")):
+                raise RuntimeError(
+                    f"special_normal authority combat classification mismatch for monster_id={monster_id}: "
+                    f"catalog={classification_name!r} authority={special_normal_row.get('combat_classification')!r}"
+                )
+            spawn = copy.deepcopy(special_normal_row["spawn"])
+            spawn_classification = str(spawn["spawn_classification"])
+            placement_kind = str(spawn["placement_kind"])
+            placement_allowed = True
+            placement_source_scope = "special_normal_spawn_authority_v1"
+            spawn_authority = {
+                "authority_id": str(special_normal_authority["authority_id"]),
+                "authority_path": SPECIAL_NORMAL_AUTHORITY_PATH.relative_to(ROOT).as_posix(),
+                "record_key": f"monster_id={monster_id}",
+                **spawn,
+            }
         art_profile_id = id_to_art.get(monster_id, f"appearance.unresolved.{monster_id}")
         if monster_id not in id_to_art:
             appearance_profiles.setdefault(
@@ -765,60 +1339,71 @@ def build_catalog() -> dict[str, Any]:
             and service_row.get("resolutionStatus") == "exact_service_name"
             and isinstance(service_record, dict)
         )
-        if service_exact:
-            service_stats = service_record.get("stats", {})
-            stats = {
-                "level": int(service_record.get("level", 0)),
-                "exp": int(service_record.get("experience", 0)),
-                "hp": int(service_stats.get("12", 0)),
-                "defense": int(service_stats.get("0", 0)),
-                "magic_defense": int(service_stats.get("2", 0)),
-                "attack_min": int(service_stats.get("4", 0)),
-                "attack_max": int(service_stats.get("5", 0)),
-            }
-            service_field_paths = {
-                "level": "level",
-                "exp": "experience",
-                "hp": "stats.12",
-                "defense": "stats.0",
-                "magic_defense": "stats.2",
-                "attack_min": "stats.4",
-                "attack_max": "stats.5",
-            }
-            stats_source = {
-                field: source_ref(
-                    SERVICE_PATH,
-                    role="combat_stats_primary_service",
-                    distribution="server.crystal.cjlaaa",
-                    tier="primary",
-                    field=field,
-                    evidence=f"runtimeByMonsterId[{monster_id}].serviceRecord.{service_field_paths[field]}",
+        # Start with the historical exact-ID candidates so their values can
+        # remain visible in superseded conflict evidence.  The 21CQ user
+        # override below is the final authority for all covered attributes.
+        stats, field_validity, all_fields_valid = read_vanilla_core_combat_exact_id(record)
+        stats_source = {
+            field: source_ref(
+                VANILLA_PATH,
+                role="core_combat_stats_vanilla_exact_id",
+                distribution="source.vanilla_176",
+                tier="primary",
+                field=field,
+                evidence=f"vanilla_176/monsters.json exact monster_id={monster_id} record.{VANILLA_COMBAT_FIELD_MAP[field]}",
+            )
+            for field in stats
+        }
+        # Preserve the historical Monster.DB exact-ID candidate in the
+        # intermediate value path.  It is intentionally superseded by the
+        # user-authoritative 21CQ row below; retaining this block makes the old
+        # evidence available for audit without letting it win.
+        if monster_id in MONSTER_DB_CORE_OVERRIDE_IDS:
+            db_entry = combat_source_by_id.get(str(monster_id))
+            if not isinstance(db_entry, dict):
+                raise RuntimeError(
+                    f"monster_id={monster_id} is in MONSTER_DB_CORE_OVERRIDE_IDS "
+                    "but has no records_by_monster_id entry; fail closed"
                 )
-                for field in stats
-            }
-        else:
-            # The vanilla project table is an identity namespace only.  A
-            # missing/non-exact service row cannot silently supply combat
-            # numbers; unresolved records carry zeroed values and remain
-            # fail-closed until a tiered stat source is attached.
-            stats = {field: 0 for field in ("level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max")}
-            stats_source = {
-                field: source_ref(
-                    SERVICE_PATH,
-                    role="combat_stats_primary_service",
-                    distribution="server.crystal.cjlaaa",
-                    tier="primary",
-                    field=field,
-                    evidence=f"runtimeByMonsterId[{monster_id}] exact_service_name row missing; unresolved",
+            missing_fields = [f for f in MONSTER_DB_CORE_STATS_FIELDS if f not in db_entry]
+            if missing_fields:
+                raise RuntimeError(
+                    f"monster_id={monster_id} Monster.DB entry missing fields {missing_fields}"
                 )
-                for field in stats
-            }
+            for field in MONSTER_DB_CORE_STATS_FIELDS:
+                value = db_entry[field]
+                if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                    raise RuntimeError(
+                        f"monster_id={monster_id} Monster.DB field {field}={value!r} invalid"
+                    )
+                stats[field] = value
+                stats_source[field] = {
+                    "distribution": str(combat_source.get("distribution", "")),
+                    "tier": str(combat_source.get("tier", "")),
+                    "original_path": str(combat_source.get("source", "")),
+                    "sha256": str(combat_source.get("source_sha256", "")),
+                    "hash_normalization": "raw_bytes",
+                    "role": "combat_stats_monster_db_exact_id",
+                    "field": field,
+                    "evidence": (
+                        f"canonical_monster_combat_source_v1.json "
+                        f"records_by_monster_id[{monster_id}].{field} "
+                        f"binding={db_entry.get('binding', '')} "
+                        f"cross_verified_21cq={db_entry.get('cross_verified_21cq', False)}"
+                    ),
+                }
         auxiliary_combat_evidence: dict[str, Any] = {}
+        override_invalid_field = False
         if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
             override = policy_wooma["combat_override"]
             for field, value in override.items():
-                if field in stats:
-                    stats[field] = int(value)
+                if field not in stats:
+                    continue
+                # Strict validation: must be int, not bool, not float, >= 0
+                if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                    override_invalid_field = True
+                    continue
+                stats[field] = value
             aux = policy_wooma.get("auxiliary_source", {})
             for field in aux.get("fields", []):
                 evidence = {
@@ -833,25 +1418,118 @@ def build_catalog() -> dict[str, Any]:
                 auxiliary_combat_evidence[field] = evidence
                 if field in stats:
                     stats_source[field] = evidence
+        detail_row = detail_by_id.get(monster_id)
+        if not isinstance(detail_row, dict):
+            raise RuntimeError(f"21CQ detail source missing active monster_id={monster_id}")
+        detail_combat_entry = combat_source_by_id.get(str(monster_id), {})
+        if not isinstance(detail_combat_entry, dict):
+            detail_combat_entry = {}
+        for field, detail_key in DETAIL_CORE_FIELD_MAP.items():
+            detail_value = detail_row[detail_key]
+            stats[field] = int(detail_value)
+            stats_source[field] = detail_source_ref(
+                detail_source,
+                detail_row,
+                field=field,
+                superseded_conflicts=detail_conflicts_for_field(
+                    monster_id,
+                    field,
+                    detail_value,
+                    record,
+                    combat_source,
+                    detail_combat_entry,
+                    service_row_for_identity,
+                    policy_wooma,
+                ),
+            )
+        # The complete 21CQ row is validated above, so the final core stats
+        # validity is independent of any malformed historical candidate.
+        all_fields_valid = all(
+            isinstance(stats[field], int) and not isinstance(stats[field], bool) and stats[field] >= 0
+            for field in MONSTER_DB_CORE_STATS_FIELDS
+        )
         merged_behavior, ai, timing, behavior_extra = behavior_for(monster_id, service, behavior, boss_rules)
+        if monster_id in MONSTER_DB_RACE_200_RUNTIME_IDS:
+            db_entry = combat_source_by_id.get(str(monster_id))
+            if not isinstance(db_entry, dict) or int(db_entry.get("ai_code", -1)) != 200:
+                raise RuntimeError(
+                    f"monster_id={monster_id} Race 200 primary binding missing or invalid"
+                )
+            ai = {
+                "ai_code": 200,
+                "view_range": int(db_entry.get("view_range", 0)),
+                "image": int(db_entry.get("image", -1)),
+                "resolution_status": "primary_monster_db_exact_id",
+                "source_distribution": str(combat_source.get("distribution", "")),
+            }
+            timing = {
+                "attack_interval_ms": int(db_entry.get("attack_interval_ms", 0)),
+                "move_interval_ms": int(db_entry.get("move_interval_ms", 0)),
+                "confidence": "A",
+                "resolution_status": "primary_monster_db_exact_id",
+            }
+            merged_behavior["serviceBehavior"] = {
+                "aiCode": 200,
+                "image": ai["image"],
+                "viewRange": ai["view_range"],
+                "confidence": "A",
+                "resolutionStatus": "primary_monster_db_exact_id",
+                "sourceDistribution": ai["source_distribution"],
+            }
+            merged_behavior["timing"] = {
+                "attackIntervalMs": timing["attack_interval_ms"],
+                "moveIntervalMs": timing["move_interval_ms"],
+                "confidence": "A",
+                "resolutionStatus": "primary_monster_db_exact_id",
+            }
+            behavior_extra["evidence"]["service"] = {
+                "distribution": str(combat_source.get("distribution", "")),
+                "tier": str(combat_source.get("tier", "primary")),
+                "original_path": str(combat_source.get("source", "")),
+                "sha256": str(combat_source.get("source_sha256", "")),
+                "hash_normalization": "raw_bytes",
+                "role": "race_200_ai_timing_monster_db_exact_id",
+                "evidence": (
+                    f"records_by_monster_id[{monster_id}] exact binding "
+                    "ai_code=200; original UsrEngn.pas Race 200 class mapping"
+                ),
+            }
         runtime_projection = {
-            "agility": int(RUNTIME_PROJECTION_DEFAULTS["agility"]),
+            "agility": int(detail_row["agility"]),
+            "accuracy": int(detail_row["accuracy"]),
+            "life_type": str(detail_row["life_type"]),
+            "undead": bool(detail_row["undead"]),
+            "anti_stealth": bool(detail_row["anti_stealth"]),
             "anti_poison": int(RUNTIME_PROJECTION_DEFAULTS["anti_poison"]),
             "source_evidence": {
-                field: source_ref(
-                    POLICY_PATH,
-                    role="runtime_projection_safe_default",
-                    distribution="project.monster_runtime_contract",
-                    tier="project_rule",
+                field: detail_source_ref(
+                    detail_source,
+                    detail_row,
                     field=field,
-                    evidence=(
-                        "No authoritative monster-service field; canonical runtime uses the safe project default "
-                        "and ignores legacy caller payload values"
+                    superseded_conflicts=detail_conflicts_for_field(
+                        monster_id,
+                        field,
+                        detail_row[field],
+                        record,
+                        combat_source,
+                        detail_combat_entry,
+                        service_row_for_identity,
+                        policy_wooma,
                     ),
                 )
-                for field in RUNTIME_PROJECTION_DEFAULTS
+                for field in ("agility", "accuracy", "life_type", "undead", "anti_stealth")
             },
         }
+        runtime_projection["source_evidence"]["anti_poison"] = source_ref(
+            POLICY_PATH,
+            role="runtime_projection_safe_default",
+            distribution="project.monster_runtime_contract",
+            tier="project_rule",
+            field="anti_poison",
+            evidence=(
+                "No authoritative 21CQ anti-poison field; canonical runtime keeps the safe project default"
+            ),
+        )
         # The phase-1 Wooma matrix supplies a complete auxiliary row for 68/69.
         # Do not copy serviceIndex or label a service fallback as auxiliary
         # evidence: every overridden field carries the candidate CSV hash.
@@ -890,10 +1568,119 @@ def build_catalog() -> dict[str, Any]:
                     "resolutionStatus": "auxiliary_1_exact_row",
                     "sourceDistribution": "source.angelk727.mir2_server_databases",
                 }
+        # 21CQ owns the detail timing and life flags for every active exact ID.
+        # Keep the existing service AI code/image/range and Boss rule intact;
+        # only the requested attack/move cadence and life flags are replaced.
+        timing["attack_interval_ms"] = int(detail_row["attack_interval_ms"])
+        timing["move_interval_ms"] = int(detail_row["move_interval_ms"])
+        timing["confidence"] = "user_authoritative_21cq"
+        timing["resolution_status"] = "user_authoritative_21cq"
+        merged_behavior["timing"] = {
+            "attackIntervalMs": timing["attack_interval_ms"],
+            "moveIntervalMs": timing["move_interval_ms"],
+            "confidence": "user_authoritative_21cq",
+            "resolutionStatus": "user_authoritative_21cq",
+        }
+        service_behavior = merged_behavior.setdefault("serviceBehavior", {})
+        if not isinstance(service_behavior, dict):
+            service_behavior = {}
+            merged_behavior["serviceBehavior"] = service_behavior
+        service_behavior["undead"] = bool(detail_row["undead"])
+        service_behavior["lifeType"] = str(detail_row["life_type"])
+        service_behavior["antiStealth"] = bool(detail_row["anti_stealth"])
+        behavior_extra["evidence"]["detail"] = {
+            "source": DETAIL_SOURCE_PATH.relative_to(ROOT).as_posix(),
+            "source_sha256": sha256_file(DETAIL_SOURCE_PATH),
+            "distribution": str(detail_source.get("distribution", "")),
+            "authority": "user_authoritative_override",
+            "role": "monster_21cq_detail_timing_and_life_flags",
+            "field_page_sha256": {
+                field: str(detail_row.get("raw_html_sha256", ""))
+                for field in ("attack_interval_ms", "move_interval_ms", "life_type", "undead", "anti_stealth")
+            },
+        }
         drop_profile_id, drop_profile = drop_for(monster_id, drop_source_by_id, drop_overrides)
+
+        base_entries_value = drop_profile.get("entries", [])
+        if not isinstance(base_entries_value, list):
+            raise RuntimeError(
+                f"monster_id={monster_id} drop entries must be a list"
+            )
+        base_entry_count = len(base_entries_value)
+        base_drop_row_count += base_entry_count
+
+        global_entry_count = len(
+            drop_authoring_overlay["enabled_global_additions"]
+        )
+        monster_entry_count = len(
+            drop_authoring_overlay[
+                "enabled_monster_additions_by_id"
+            ].get(monster_id, [])
+        )
+        authoring_rows = runtime_rows_for_monster(
+            monster_id,
+            drop_authoring_overlay,
+        )
+        if len(authoring_rows) != (
+            global_entry_count + monster_entry_count
+        ):
+            raise RuntimeError(
+                f"monster_id={monster_id} authoring projection count mismatch"
+            )
+
+        global_authoring_expanded_row_count += global_entry_count
+        monster_authoring_added_row_count += monster_entry_count
+
+        if authoring_rows:
+            final_entries = [
+                *copy.deepcopy(base_entries_value),
+                *authoring_rows,
+            ]
+            drop_profile["entries"] = final_entries
+            drop_profile["entry_count"] = len(final_entries)
+
+            if str(drop_profile.get("status", "")) == "missing_for_hostile":
+                drop_profile["base_status"] = "missing_for_hostile"
+                drop_profile["status"] = "authoring_overlay_only"
+
+            entry_keys = [
+                str(row.get("authoring_entry_key", ""))
+                for row in authoring_rows
+            ]
+            drop_profile["authoring_overlay"] = {
+                "entry_count": len(authoring_rows),
+                "global_entry_count": global_entry_count,
+                "monster_entry_count": monster_entry_count,
+                "entry_keys": entry_keys,
+            }
+
+            evidence_container = drop_profile.setdefault(
+                "source_evidence",
+                {},
+            )
+            if not isinstance(evidence_container, dict):
+                raise RuntimeError(
+                    f"monster_id={monster_id} source_evidence must be a dictionary"
+                )
+            evidence_sources = evidence_container.setdefault(
+                "sources",
+                [],
+            )
+            if not isinstance(evidence_sources, list):
+                raise RuntimeError(
+                    f"monster_id={monster_id} source evidence sources must be a list"
+                )
+            authoring_evidence = copy.deepcopy(
+                drop_authoring_source_evidence
+            )
+            authoring_evidence["row_count"] = len(authoring_rows)
+            authoring_evidence["entry_keys"] = entry_keys
+            evidence_sources.append(authoring_evidence)
+
         drop_profiles[drop_profile_id] = drop_profile
         appearance = appearance_profiles[art_profile_id]
         art_ok = appearance.get("status") == "formal"
+        classification_ok = classification_name != "unresolved" and placement_allowed
         class_id_override = classification_ids.get("exact_id_overrides", {}).get(str(monster_id), {})
         drop_exception = (
             policy_wooma.get("drop_exemption", {})
@@ -912,87 +1699,142 @@ def build_catalog() -> dict[str, Any]:
         # A hostile spawn cannot be placed or run without a non-empty,
         # source-evidenced drop table.  The drop profile itself remains in the
         # catalog as missing_for_hostile for later source-priority repair.
-        combat_identity_ok = bool(service_exact_for_identity or auxiliary_combat_evidence)
+        # Combat identity: proven by vanilla exact-ID record existence.
+        # Service exact match is decoupled — it no longer gates identity.
+        core_combat_identity_ok = True  # active vanilla record always exists
+        # core_combat_stats_ok: ALL 7 required fields must be valid.
+        core_combat_stats_ok = all_fields_valid and not override_invalid_field
+        # AI authority: by resolution provenance, not numeric value.
+        ai_resolution = str(ai.get("resolution_status", ""))
+        ai_authority_ok = ai_resolution in ("exact_service_name", "auxiliary_1_exact_row")
+        # Timing authority: by resolution provenance.
+        timing_resolution = str(timing.get("confidence", ""))
+        timing_authority_ok = (
+            timing_resolution in ("auxiliary_1", "user_authoritative_21cq")
+            or service_exact_for_identity
+        )
+        combat_identity_ok = core_combat_identity_ok and core_combat_stats_ok
 
-        # Full runtime closure: identity presence alone is not enough.  Stats
-        # must be complete with valid domains, AI must carry a formal exact-ID
-        # resolution, timing must be formal for standard combat actors, and
-        # special monsters must carry an approved runtime semantics.  The
-        # authority ``placement_allowed`` is the *requested* policy; the
-        # emitted editor_placement.allowed is the final closure result.
-        classification_placement_requested = placement_allowed
-        classification_ok = classification_name not in ("unresolved", "version_difference")
-        runtime_semantics = str(class_id_override.get("runtime_semantics", "")) if isinstance(class_id_override, dict) else ""
-        runtime_semantics_ok = (
-            True
-            if classification_name != "special"
-            else runtime_semantics in APPROVED_COMBAT_SEMANTICS
+        intentional_exclusion = (
+            classification_name in INTENTIONAL_EXCLUSION_CLASSIFICATIONS
         )
-        authority_blocked = str(class_id_override.get("runtime_blocked_reason", "")) if isinstance(class_id_override, dict) else ""
-        standard_combat = (
-            classification_name in ("ordinary", "elite", "boss")
-            or runtime_semantics in APPROVED_COMBAT_SEMANTICS
+
+        runtime_classification_ok = (
+            classification_name in RUNTIME_CAPABLE_CLASSIFICATIONS
         )
-        combat_stats_ok = _combat_stats_ok(stats, hostile_classification and standard_combat)
-        ai_ok = (
-            int(ai.get("ai_code", -1)) >= 0
-            and str(ai.get("resolution_status", "")) not in ("", "unresolved", "unresolved_project_fallback")
-        )
-        timing_ok = True
-        if standard_combat:
-            timing_ok = (
-                int(timing.get("attack_interval_ms", 0)) > 0
-                and int(timing.get("move_interval_ms", 0)) > 0
-                and bool(str(timing.get("confidence", "")).strip())
-            )
-        full_closure = (
-            classification_placement_requested
-            and classification_ok
-            and combat_identity_ok
-            and combat_stats_ok
-            and ai_ok
-            and timing_ok
+
+        runtime_blockers: list[str] = []
+
+        if not runtime_classification_ok and not intentional_exclusion:
+            runtime_blockers.append("classification_not_runtime_capable")
+
+        if not art_ok:
+            runtime_blockers.append("art_not_formal")
+
+        if not drop_ok:
+            runtime_blockers.append("drop_policy_not_closed")
+
+        if not combat_identity_ok:
+            runtime_blockers.append("combat_identity_not_closed")
+
+        # IMPORTANT:
+        #
+        # runtime capability 和 editor placement policy 是两个独立概念。
+        #
+        # 一个怪物可以：
+        #   runtime_allowed=true
+        #   placement_allowed=false
+        #
+        # 例如内部变体/不希望用户摆放的正式运行实体。
+        #
+        # 禁止再次让 placement_allowed 参与 runtime_allowed 的计算。
+
+        runtime_allowed = bool(
+            runtime_classification_ok
+            and not intentional_exclusion
             and art_ok
             and drop_ok
-            and runtime_semantics_ok
-            and not authority_blocked
+            and combat_identity_ok
         )
-        placement_allowed = full_closure
-        runtime_allowed = full_closure
+
+        # P3B/P3C: historical placement_allowed=false values are retained as
+        # source evidence, but do not re-close the current editor pool.  A
+        # current restriction must be an explicit, machine-checkable
+        # disposition so quarantine/internal-subtype decisions stay narrow.
+        placement_allowed = not bool(classification_disposition)
+
+        classification_ok = runtime_classification_ok
+
         service_image = ai.get("image", -1)
         art_appearance = appearance.get("atlas", {}).get("appearance", 0)
+
         appearance_translation = None
+
         if art_appearance and service_image != art_appearance:
+            exact_id_art_evidence = art_evidence.get(monster_id, {})
+            exact_id_art_ok = bool(
+                exact_id_art_evidence
+                and art_ok
+            )
+
             appearance_translation = {
                 "required": True,
-                "provided": service_image >= 0,
+                "provided": exact_id_art_ok,
+                "service_image": service_image,
+                "client_appearance": art_appearance,
                 "reason": (
-                    "service image and client appearance differ; ID-keyed client mapping evidence is explicit"
-                    if service_image >= 0
-                    else "service image evidence is missing; client appearance cannot be translated safely"
+                    "exact monster_id client-art authority provides the "
+                    "service-to-client appearance translation; service image "
+                    "is diagnostic metadata and is not the client rendering identity"
+                    if exact_id_art_ok
+                    else
+                    "exact monster_id client-art authority is missing"
                 ),
-                "source": art_evidence[monster_id],
+                "source": exact_id_art_evidence,
             }
-        if appearance_translation is not None and not appearance_translation["provided"]:
-            placement_allowed = False
-            runtime_allowed = False
-        if not art_ok:
-            placement_allowed = False
-        status = "formal" if runtime_allowed else (
-            "version_difference" if classification_name == "version_difference" else "unresolved"
-        )
+
+            if not exact_id_art_ok:
+                if "appearance_translation_missing" not in runtime_blockers:
+                    runtime_blockers.append(
+                        "appearance_translation_missing"
+                    )
+                runtime_allowed = False
+
+        if runtime_allowed:
+            status = "formal"
+        elif classification_name == "version_difference":
+            status = "version_difference"
+        else:
+            status = "unresolved"
+        editor_placement = {
+            "allowed": placement_allowed,
+            "placement_kind": placement_kind,
+            "map_codes": map_codes,
+            "source_scope": placement_source_scope,
+        }
+        if classification_disposition:
+            editor_placement["disposition"] = classification_disposition
+            editor_placement["disposition_evidence"] = copy.deepcopy(
+                disposition_evidence
+            )
         entry = {
             "monster_id": monster_id,
             "canonical_name": canonical_name,
             "variant_code": str(record.get("variantCode", "")),
             "classification": classification_name,
-            "editor_placement": {
-                "allowed": placement_allowed,
-                "placement_kind": placement_kind,
-                "map_codes": map_codes,
-                "source_scope": "classification_and_drop_closure",
-            },
+            "spawn_classification": spawn_classification,
+            "editor_placement": editor_placement,
+            "spawn_authority": spawn_authority,
             "runtime_allowed": runtime_allowed,
+            "runtime_capability": {
+                "allowed": runtime_allowed,
+                "classification_ok": runtime_classification_ok,
+                "art_ok": art_ok,
+                "drop_ok": drop_ok,
+                "combat_identity_ok": combat_identity_ok,
+                "intentional_exclusion": intentional_exclusion,
+                "blockers": runtime_blockers,
+            },
             "status": status,
             "drop_policy": {
                 "hostile_requires_non_empty": hostile_classification,
@@ -1022,6 +1864,21 @@ def build_catalog() -> dict[str, Any]:
                 "canonical_name": canonical_name_evidence,
                 "identity_resolution": identity_resolution,
                 "classification": class_evidence,
+                "spawn_classification": (
+                    source_ref(
+                        SPECIAL_NORMAL_AUTHORITY_PATH,
+                        role="special_normal_spawn_classification",
+                        distribution="source.user_authoritative_special_normal",
+                        tier="user_authoritative",
+                        field="spawn_classification",
+                        evidence=(
+                            f"Explicit special_normal authority record for exact monster_id={monster_id}; "
+                            "combat classification is preserved and drop probability remains external"
+                        ),
+                    )
+                    if special_normal_row is not None
+                    else None
+                ),
                 "combat_stats": stats_source,
                 "combat_ai_timing": behavior_extra["evidence"],
                 "combat_auxiliary": auxiliary_combat_evidence,
@@ -1032,14 +1889,11 @@ def build_catalog() -> dict[str, Any]:
                     "art_status": appearance.get("status", ""),
                     "classification_status": classification_name,
                     "identity_resolution": identity_resolution,
+                    "core_combat_identity_ok": core_combat_identity_ok,
+                    "core_combat_stats_ok": core_combat_stats_ok,
+                    "ai_authority_ok": ai_authority_ok,
+                    "timing_authority_ok": timing_authority_ok,
                     "combat_identity_ok": combat_identity_ok,
-                    "combat_stats_ok": combat_stats_ok,
-                    "ai_ok": ai_ok,
-                    "ai_resolution_status": str(ai.get("resolution_status", "")),
-                    "timing_ok": timing_ok,
-                    "runtime_semantics": runtime_semantics,
-                    "runtime_semantics_ok": runtime_semantics_ok,
-                    "runtime_blocked_reason": authority_blocked,
                     "drop_status": drop_profile.get("status", ""),
                     "drop_entry_count": int(drop_profile.get("entry_count", 0)),
                     "drop_exemption": drop_exception if has_drop_exemption else None,
@@ -1047,8 +1901,48 @@ def build_catalog() -> dict[str, Any]:
                 },
             },
         }
+        if classification_disposition:
+            entry["disposition"] = classification_disposition
+            entry["disposition_evidence"] = copy.deepcopy(
+                disposition_evidence
+            )
         entries.append(entry)
         entries_by_id[str(monster_id)] = entry
+    expected_global_expansion = (
+        len(drop_authoring_overlay["enabled_global_additions"])
+        * len(entries)
+    )
+    if global_authoring_expanded_row_count != expected_global_expansion:
+        raise RuntimeError(
+            "global authoring expansion mismatch: "
+            f"actual={global_authoring_expanded_row_count} "
+            f"expected={expected_global_expansion}"
+        )
+
+    expected_monster_additions = int(
+        drop_authoring_overlay[
+            "enabled_monster_addition_count"
+        ]
+    )
+    if monster_authoring_added_row_count != expected_monster_additions:
+        raise RuntimeError(
+            "monster authoring addition mismatch: "
+            f"actual={monster_authoring_added_row_count} "
+            f"expected={expected_monster_additions}"
+        )
+
+    final_drop_row_count = sum(
+        int(profile.get("entry_count", 0))
+        for profile in drop_profiles.values()
+    )
+    if final_drop_row_count != (
+        base_drop_row_count
+        + global_authoring_expanded_row_count
+        + monster_authoring_added_row_count
+    ):
+        raise RuntimeError(
+            "final drop row count invariant failed"
+        )
     source_files = [
         VANILLA_PATH,
         SERVICE_PATH,
@@ -1058,7 +1952,11 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_PATH,
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
+        SPECIAL_NORMAL_AUTHORITY_PATH,
         DROP_SOURCE_PATH,
+        DROP_AUTHORING_OVERLAY_PATH,
+        COMBAT_SOURCE_PATH,
+        DETAIL_SOURCE_PATH,
         *ART_PATHS,
     ]
     catalog: dict[str, Any] = {
@@ -1072,6 +1970,14 @@ def build_catalog() -> dict[str, Any]:
             "name_fallback": False,
             "trim_suffix_fallback": False,
             "alias_fallback": False,
+            "user_authoritative_overrides": [
+                {
+                    "source": DETAIL_SOURCE_PATH.relative_to(ROOT).as_posix(),
+                    "authority": "user_authoritative_override",
+                    "scope": ["monster_attributes", "monster_timing", "monster_life_flags"],
+                    "excludes": ["drops", "drop_probability", "spawn", "respawn", "map"],
+                }
+            ],
         },
         "sources": {
             path.relative_to(ROOT).as_posix(): {
@@ -1089,6 +1995,35 @@ def build_catalog() -> dict[str, Any]:
             "version_difference_count": sum(x["status"] == "version_difference" for x in entries),
             "appearance_profile_count": len(appearance_profiles),
             "drop_profile_count": len(drop_profiles),
+            "drop_base_row_count": base_drop_row_count,
+            "drop_authoring_enabled_global_count": len(
+                drop_authoring_overlay["enabled_global_additions"]
+            ),
+            "drop_authoring_global_expanded_row_count": (
+                global_authoring_expanded_row_count
+            ),
+            "drop_authoring_enabled_monster_count": (
+                expected_monster_additions
+            ),
+            "drop_authoring_monster_added_row_count": (
+                monster_authoring_added_row_count
+            ),
+            "drop_final_row_count": final_drop_row_count,
+            "special_normal_spawn_count": sum(
+                x.get("spawn_classification") == "special_normal"
+                for x in entries
+            ),
+        },
+        "special_normal_spawn_authority": {
+            "schema": special_normal_authority["schema"],
+            "authority_id": special_normal_authority["authority_id"],
+            "path": SPECIAL_NORMAL_AUTHORITY_PATH.relative_to(ROOT).as_posix(),
+            "sha256": sha256_file(SPECIAL_NORMAL_AUTHORITY_PATH),
+            "canonical_monster_ids": sorted(SPECIAL_NORMAL_IDS),
+            "production_active": True,
+            "drop_probability": copy.deepcopy(
+                special_normal_authority["drop_probability"]
+            ),
         },
         "appearance_profiles": appearance_profiles,
         "drop_profiles": drop_profiles,
@@ -1100,6 +2035,24 @@ def build_catalog() -> dict[str, Any]:
 
 def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    combat_source = load_json(COMBAT_SOURCE_PATH)
+    combat_source_by_id = combat_source.get("records_by_monster_id", {})
+    try:
+        detail_source = load_json(DETAIL_SOURCE_PATH)
+        detail_by_id = validate_21cq_detail_source(detail_source)
+    except (RuntimeError, ValueError, TypeError) as exc:
+        errors.append(str(exc))
+        detail_source = {}
+        detail_by_id = {}
+    special_normal_authority = load_json(SPECIAL_NORMAL_AUTHORITY_PATH)
+    try:
+        special_normal_by_id = validate_special_normal_authority(
+            special_normal_authority,
+            load_json(VANILLA_PATH),
+        )
+    except (RuntimeError, ValueError, TypeError) as exc:
+        errors.append(str(exc))
+        special_normal_by_id = {}
 
     def reject_replacement_paths(value: Any, context: str) -> None:
         if isinstance(value, dict):
@@ -1116,8 +2069,8 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     reject_replacement_paths(catalog.get("drop_profiles", {}), "drop_profiles")
     reject_replacement_paths(catalog.get("entries", []), "entries")
     entries = catalog.get("entries", [])
-    if len(entries) != 217:
-        errors.append(f"identity_count={len(entries)} expected 217")
+    if len(entries) != 156:
+        errors.append(f"identity_count={len(entries)} expected 156")
     source_index = catalog.get("sources", {})
     if not isinstance(source_index, dict):
         errors.append("sources index is not a dictionary")
@@ -1139,36 +2092,173 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
     by_id = catalog.get("entries_by_id", {})
     profiles = catalog.get("appearance_profiles", {})
     drops = catalog.get("drop_profiles", {})
+
+    summary = catalog.get("summary", {})
+    if not isinstance(summary, dict):
+        errors.append("summary is not a dictionary")
+        summary = {}
+
+    base_rows = int(summary.get("drop_base_row_count", -1))
+    global_enabled = int(
+        summary.get("drop_authoring_enabled_global_count", -1)
+    )
+    global_expanded = int(
+        summary.get("drop_authoring_global_expanded_row_count", -1)
+    )
+    monster_enabled = int(
+        summary.get("drop_authoring_enabled_monster_count", -1)
+    )
+    monster_added = int(
+        summary.get("drop_authoring_monster_added_row_count", -1)
+    )
+    final_rows = int(summary.get("drop_final_row_count", -1))
+
+    if global_expanded != global_enabled * len(drops):
+        errors.append("drop authoring global expansion invariant failed")
+    if monster_added != monster_enabled:
+        errors.append("drop authoring monster addition invariant failed")
+    if final_rows != base_rows + global_expanded + monster_added:
+        errors.append("drop authoring final row invariant failed")
+
+    observed_final_rows = sum(
+        len(profile.get("entries", []))
+        for profile in drops.values()
+        if isinstance(profile, dict)
+    )
+    if observed_final_rows != final_rows:
+        errors.append(
+            "drop authoring observed final row count mismatch"
+        )
     for entry in entries:
         if not isinstance(entry, dict):
             errors.append("non-dictionary entry")
             continue
         monster_id = int(entry.get("monster_id", -1))
-        required = ("canonical_name", "classification", "editor_placement", "runtime_allowed", "status", "drop_policy", "combat", "appearance_profile_id", "drop_profile_id", "spawn_contexts", "source_evidence")
+        required = ("canonical_name", "classification", "spawn_classification", "editor_placement", "spawn_authority", "runtime_allowed", "status", "drop_policy", "combat", "appearance_profile_id", "drop_profile_id", "spawn_contexts", "source_evidence")
         for field in required:
             if field not in entry:
                 errors.append(f"monster_id={monster_id} missing {field}")
+        special_normal_row = special_normal_by_id.get(monster_id)
+        if special_normal_row is None:
+            if entry.get("spawn_classification") is not None:
+                errors.append(f"monster_id={monster_id} has an unexpected spawn_classification")
+            if entry.get("spawn_authority") is not None:
+                errors.append(f"monster_id={monster_id} has an unexpected spawn_authority")
+        else:
+            if entry.get("spawn_classification") != "special_normal":
+                errors.append(f"monster_id={monster_id} spawn_classification is not special_normal")
+            placement = entry.get("editor_placement", {})
+            if placement.get("placement_kind") != "monster_spawn":
+                errors.append(f"monster_id={monster_id} special_normal placement is not monster_spawn")
+            if placement.get("source_scope") != "special_normal_spawn_authority_v1":
+                errors.append(f"monster_id={monster_id} special_normal placement source scope drift")
+            spawn_authority = entry.get("spawn_authority")
+            if not isinstance(spawn_authority, dict):
+                errors.append(f"monster_id={monster_id} missing special_normal spawn_authority")
+            else:
+                for key, expected in SPECIAL_NORMAL_DEFAULTS.items():
+                    if spawn_authority.get(key) != expected:
+                        errors.append(f"monster_id={monster_id} spawn_authority.{key}={spawn_authority.get(key)!r} expected {expected!r}")
+                expected_spawn_keys = {
+                    "authority_id",
+                    "authority_path",
+                    "record_key",
+                    *SPECIAL_NORMAL_DEFAULTS.keys(),
+                }
+                if set(spawn_authority) != expected_spawn_keys:
+                    errors.append(
+                        f"monster_id={monster_id} spawn_authority contains non-spawn fields"
+                    )
+
         combat_value = entry.get("combat", {})
         projection = combat_value.get("runtime_projection", {}) if isinstance(combat_value, dict) else {}
+        detail_row = detail_by_id.get(monster_id, {})
         if not isinstance(projection, dict):
             errors.append(f"monster_id={monster_id} runtime_projection missing")
         else:
-            if int(projection.get("agility", -1)) != int(RUNTIME_PROJECTION_DEFAULTS["agility"]):
-                errors.append(f"monster_id={monster_id} unsafe agility projection")
+            for field in ("agility", "accuracy", "life_type", "undead", "anti_stealth"):
+                if field in detail_row and projection.get(field) != detail_row[field]:
+                    errors.append(
+                        f"monster_id={monster_id} runtime_projection.{field}={projection.get(field)!r} "
+                        f"expected 21CQ={detail_row[field]!r}"
+                    )
             if int(projection.get("anti_poison", -1)) != int(RUNTIME_PROJECTION_DEFAULTS["anti_poison"]):
                 errors.append(f"monster_id={monster_id} unsafe anti_poison projection")
             projection_evidence = projection.get("source_evidence", {})
-            for projection_field in RUNTIME_PROJECTION_DEFAULTS:
+            for projection_field in ("agility", "accuracy", "life_type", "undead", "anti_stealth"):
+                evidence = projection_evidence.get(projection_field, {}) if isinstance(projection_evidence, dict) else {}
+                if not isinstance(evidence, dict) or evidence.get("authority") != "user_authoritative_override":
+                    errors.append(f"monster_id={monster_id} {projection_field} missing 21CQ authority evidence")
+            anti_poison_evidence = projection_evidence.get("anti_poison", {}) if isinstance(projection_evidence, dict) else {}
+            if not isinstance(anti_poison_evidence, dict) or anti_poison_evidence.get("tier") != "project_rule":
+                errors.append(f"monster_id={monster_id} anti_poison missing project_rule evidence")
+        timing = combat_value.get("timing", {}) if isinstance(combat_value, dict) else {}
+        if isinstance(detail_row, dict) and detail_row:
+            if timing.get("attack_interval_ms") != detail_row.get("attack_interval_ms"):
+                errors.append(f"monster_id={monster_id} attack timing is not 21CQ")
+            if timing.get("move_interval_ms") != detail_row.get("move_interval_ms"):
+                errors.append(f"monster_id={monster_id} move timing is not 21CQ")
+            if timing.get("confidence") != "user_authoritative_21cq":
+                errors.append(f"monster_id={monster_id} timing authority is not 21CQ")
+            behavior_timing = combat_value.get("behavior_profile", {}).get("timing", {}) if isinstance(combat_value.get("behavior_profile", {}), dict) else {}
+            if behavior_timing.get("attackIntervalMs") != detail_row.get("attack_interval_ms") or behavior_timing.get("moveIntervalMs") != detail_row.get("move_interval_ms"):
+                errors.append(f"monster_id={monster_id} behavior_profile timing is not 21CQ")
+            service_behavior = combat_value.get("behavior_profile", {}).get("serviceBehavior", {}) if isinstance(combat_value.get("behavior_profile", {}), dict) else {}
+            if service_behavior.get("undead") != detail_row.get("undead") or service_behavior.get("lifeType") != detail_row.get("life_type") or service_behavior.get("antiStealth") != detail_row.get("anti_stealth"):
+                errors.append(f"monster_id={monster_id} behavior_profile life flags are not 21CQ")
+        if isinstance(projection, dict):
+            for projection_field in ("anti_poison",):
                 evidence = projection_evidence.get(projection_field, {}) if isinstance(projection_evidence, dict) else {}
                 if not isinstance(evidence, dict) or evidence.get("tier") != "project_rule":
                     errors.append(f"monster_id={monster_id} {projection_field} missing project_rule evidence")
         if by_id.get(str(monster_id)) != entry:
             errors.append(f"monster_id={monster_id} entries_by_id closure")
+        placement = entry.get("editor_placement", {})
+        disposition = str(entry.get("disposition", "")).strip()
+        placement_disposition = str(
+            placement.get("disposition", "")
+        ).strip() if isinstance(placement, dict) else ""
+        disposition_evidence = entry.get("disposition_evidence", {})
+        source_evidence = entry.get("source_evidence", {})
+        classification_evidence = (
+            source_evidence.get("classification", {})
+            if isinstance(source_evidence, dict)
+            else {}
+        )
+        if disposition:
+            if disposition not in EDITOR_PLACEMENT_DISPOSITIONS:
+                errors.append(
+                    f"monster_id={monster_id} unsupported disposition={disposition}"
+                )
+            if not isinstance(placement, dict) or bool(placement.get("allowed", True)):
+                errors.append(
+                    f"monster_id={monster_id} disposition requires editor placement=false"
+                )
+            if placement_disposition != disposition:
+                errors.append(
+                    f"monster_id={monster_id} editor disposition mismatch"
+                )
+            if not isinstance(disposition_evidence, dict) or not disposition_evidence:
+                errors.append(
+                    f"monster_id={monster_id} disposition evidence missing"
+                )
+            if not isinstance(classification_evidence, dict) or (
+                classification_evidence.get("disposition") != disposition
+                or classification_evidence.get("disposition_evidence")
+                != disposition_evidence
+            ):
+                errors.append(
+                    f"monster_id={monster_id} classification disposition evidence mismatch"
+                )
+        elif placement_disposition:
+            errors.append(
+                f"monster_id={monster_id} editor disposition has no entry disposition"
+            )
         appearance_id = str(entry.get("appearance_profile_id", ""))
         profile = profiles.get(appearance_id)
         if not isinstance(profile, dict):
             errors.append(f"monster_id={monster_id} missing appearance profile {appearance_id}")
-        elif entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed"):
+        elif entry.get("runtime_allowed"):
             if profile.get("status") != "formal":
                 errors.append(f"monster_id={monster_id} allowed with non-formal appearance")
             for action in REQUIRED_ACTIONS:
@@ -1182,14 +2272,14 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         else:
             entry_count = int(drop_profile.get("entry_count", len(drop_profile.get("entries", []))))
             hostile = str(entry.get("classification", "")) in ("ordinary", "elite", "boss", "special")
-            if (entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed")) and hostile and entry_count <= 0:
-                errors.append(f"monster_id={monster_id} hostile allowed without non-empty drop profile")
+            if entry.get("runtime_allowed") and hostile and entry_count <= 0:
+                exemption = entry.get("drop_policy", {}).get("exemption")
+                if not isinstance(exemption, dict) or not exemption.get("allowed"):
+                    errors.append(f"monster_id={monster_id} hostile allowed without non-empty drop profile")
             sources = drop_profile.get("source_evidence", {}).get("sources", [])
             if not isinstance(sources, list) or not sources:
                 errors.append(f"monster_id={monster_id} drop profile lacks source evidence")
-            if drop_profile.get("status") == "missing_for_hostile" and hostile and (
-                entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed")
-            ):
+            if drop_profile.get("status") == "missing_for_hostile" and hostile and entry.get("runtime_allowed"):
                 errors.append(f"monster_id={monster_id} missing hostile drop marked allowed")
         if entry.get("classification") == "non_hostile":
             exemption = entry.get("drop_policy", {}).get("exemption")
@@ -1199,12 +2289,58 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         for field in ("canonical_name", "classification", "combat_stats", "combat_ai_timing", "appearance", "drops", "status"):
             if field not in evidence:
                 errors.append(f"monster_id={monster_id} missing source evidence {field}")
+    catalog_special_normal = catalog.get("special_normal_spawn_authority", {})
+    if not isinstance(catalog_special_normal, dict):
+        errors.append("catalog special_normal spawn authority is not a dictionary")
+    else:
+        expected_catalog_keys = {
+            "schema",
+            "authority_id",
+            "path",
+            "sha256",
+            "canonical_monster_ids",
+            "production_active",
+            "drop_probability",
+        }
+        if set(catalog_special_normal) != expected_catalog_keys:
+            errors.append("catalog special_normal authority contains non-spawn fields")
+        elif catalog_special_normal.get("drop_probability") != SPECIAL_NORMAL_DROP_PROBABILITY_POLICY:
+            errors.append("catalog special_normal drop probability routing drift")
     matrix = catalog.get("entries_by_id", {})
-    for monster_id in WOOma_IDS:
-        entry = matrix.get(str(monster_id))
-        if not isinstance(entry, dict):
-            errors.append(f"Wooma monster_id={monster_id} missing")
-            continue
+
+    # P3C: historical WOOma_IDS 保留为审计证据；生产校验只覆盖 active
+    # Wooma 成员，retired 成员（65/67/69/71）不得出现在 catalog。
+    EXPECTED_ACTIVE_WOOMA_IDS = {
+        64, 66, 68, 70, 73, 74, 75, 76, 77, 78, 239,
+    }
+    EXPECTED_RETIRED_WOOMA_IDS = {
+        65, 67, 69, 71,
+    }
+    actual_active_wooma_ids = {
+        monster_id
+        for monster_id in WOOma_IDS
+        if str(monster_id) in matrix
+    }
+    if actual_active_wooma_ids != EXPECTED_ACTIVE_WOOMA_IDS:
+        errors.append(
+            "P3C active Wooma universe mismatch: "
+            f"expected={sorted(EXPECTED_ACTIVE_WOOMA_IDS)} "
+            f"actual={sorted(actual_active_wooma_ids)}"
+        )
+    for monster_id in EXPECTED_RETIRED_WOOMA_IDS:
+        if str(monster_id) in matrix:
+            errors.append(
+                f"P3C retired Wooma monster_id={monster_id} "
+                "must not appear in canonical catalog"
+            )
+
+    active_wooma_ids = [
+        monster_id
+        for monster_id in WOOma_IDS
+        if str(monster_id) in matrix
+    ]
+    for monster_id in active_wooma_ids:
+        entry = matrix[str(monster_id)]
         expected = {
             64: "ordinary", 65: "ordinary", 66: "ordinary", 67: "ordinary", 68: "ordinary", 69: "ordinary", 70: "ordinary", 71: "ordinary", 73: "elite", 74: "elite", 75: "elite", 76: "boss", 77: "special", 78: "version_difference", 239: "boss",
         }[monster_id]
@@ -1213,44 +2349,142 @@ def validate_catalog(catalog: dict[str, Any]) -> list[str]:
         if monster_id in WOOma_SLUG_BY_ID:
             if WOOma_SLUG_BY_ID[monster_id] not in str(entry.get("appearance_profile_id", "")):
                 errors.append(f"Wooma monster_id={monster_id} appearance profile is not explicit {WOOma_SLUG_BY_ID[monster_id]}")
-        elif entry.get("runtime_allowed") or entry.get("editor_placement", {}).get("allowed"):
-            errors.append(f"Wooma monster_id={monster_id} unresolved art/placement unexpectedly allowed")
-    for monster_id in (68, 69):
-        stats = matrix[str(monster_id)]["combat"]["stats"]
-        if stats.get("attack_min") != 16 or stats.get("attack_max") != 28 or stats.get("exp") != 310:
-            errors.append(f"Wooma monster_id={monster_id} aux1 stats override missing")
-        evidence = matrix[str(monster_id)].get("source_evidence", {}).get("combat_auxiliary", {})
+        # P3B: no placement fail-closed for any active identity. Appearance
+        # exact-ID closure is enforced globally for runtime_allowed entries
+        # and by tests/canonical_monster_exact_animation_closure_test.py.
+    active_equivalence_ids = {
+        monster_id
+        for monster_id in WOOMA_EQUIVALENCE_IDS
+        if str(monster_id) in matrix
+    }
+    if active_equivalence_ids != {68}:
+        errors.append(
+            "P3C active Wooma equivalence universe mismatch: "
+            f"expected={{68}} actual={sorted(active_equivalence_ids)}"
+        )
+    for monster_id in sorted(active_equivalence_ids):
+        entry = matrix[str(monster_id)]
+        stats = entry["combat"]["stats"]
+        expected_detail = detail_by_id.get(monster_id, {})
+        if (
+            stats.get("attack_min") != expected_detail.get("attack_min")
+            or stats.get("attack_max") != expected_detail.get("attack_max")
+            or stats.get("exp") != expected_detail.get("exp")
+        ):
+            errors.append(f"Wooma monster_id={monster_id} 21CQ stats override missing")
+        evidence = entry.get("source_evidence", {}).get("combat_auxiliary", {})
         if not all(field in evidence for field in ("level", "hp", "defense", "magic_defense", "attack_min", "attack_max", "exp", "ai_code", "attack_interval_ms", "move_interval_ms", "view_range", "image")):
             errors.append(f"Wooma monster_id={monster_id} auxiliary fields lack per-field evidence")
         expected_drop_count = 58 if monster_id == 68 else 62
-        drop = catalog.get("drop_profiles", {}).get(str(matrix[str(monster_id)].get("drop_profile_id", "")), {})
+        drop = catalog.get("drop_profiles", {}).get(str(entry.get("drop_profile_id", "")), {})
         # The Excel source is now the canonical drop authority, so the Wooma
         # cross-distribution equivalence is retired; only require a non-empty
         # audited table for these hostile ordinary variants.
         if int(drop.get("entry_count", 0)) <= 0:
             errors.append(f"Wooma monster_id={monster_id} canonical drop table is empty")
-    exact_service_expectations = {
-        64: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 16, "attack_max": 28},
-        66: {"level": 30, "exp": 340, "hp": 285, "defense": 3, "magic_defense": 2, "attack_min": 15, "attack_max": 28},
-        73: {"level": 50, "exp": 2400, "hp": 1000, "defense": 8, "magic_defense": 8, "attack_min": 22, "attack_max": 42},
-        76: {"level": 60, "exp": 6000, "hp": 3000, "defense": 25, "magic_defense": 40, "attack_min": 35, "attack_max": 90},
+    # 21CQ user-authoritative detail rows now win over all historical
+    # candidates.  Vanilla remains the primary identity baseline and is
+    # checked below only where no explicit 21CQ conflict existed.
+    vanilla_records = load_json(VANILLA_PATH).get("records", [])
+    vanilla_by_id = {int(r.get("monsterId", -1)): r for r in vanilla_records if isinstance(r, dict)}
+    vanilla_combat_expectations = {
+        mid: {
+            "level": int(rec.get("level", 0)),
+            "exp": int(rec.get("exp", 0)),
+            "hp": int(rec.get("hp", 0)),
+            "defense": int(rec.get("defense", 0)),
+            "magic_defense": int(rec.get("magicDefense", 0)),
+            "attack_min": int(rec.get("attackMin", 0)),
+            "attack_max": int(rec.get("attackMax", 0)),
+        }
+        for mid, rec in vanilla_by_id.items()
+        if rec.get("recordStatus") != "retired"
     }
-    for monster_id, expected_stats in exact_service_expectations.items():
-        actual_stats = matrix[str(monster_id)].get("combat", {}).get("stats", {})
+    for monster_id, expected_stats in vanilla_combat_expectations.items():
+        entry = matrix.get(str(monster_id))
+        if not isinstance(entry, dict):
+            continue
+        actual_stats = entry.get("combat", {}).get("stats", {})
+        # Skip IDs with explicit policy combat_override (e.g. 68/69)
+        policy_wooma = load_json(POLICY_PATH).get("wooma_matrix", {}).get(str(monster_id), {})
+        if isinstance(policy_wooma, dict) and isinstance(policy_wooma.get("combat_override"), dict):
+            continue
+        # Skip the fixed R4C Monster.DB core override IDs: their stats are
+        # validated against the combat source instead of vanilla below.
+        if monster_id in MONSTER_DB_CORE_OVERRIDE_IDS:
+            continue
         for field, expected in expected_stats.items():
             if actual_stats.get(field) != expected:
                 errors.append(
-                    f"monster_id={monster_id} primary service {field}={actual_stats.get(field)} expected {expected}"
+                    f"monster_id={monster_id} vanilla {field}={actual_stats.get(field)} expected {expected}"
                 )
-        service_record = load_json(SERVICE_PATH).get("runtimeByMonsterId", {}).get(str(monster_id), {}).get("serviceRecord", {})
-        if matrix[str(monster_id)].get("canonical_name") != service_record.get("serviceName"):
-            errors.append(f"monster_id={monster_id} canonical_name is not exact service name")
-        name_evidence = matrix[str(monster_id)].get("source_evidence", {}).get("canonical_name", {})
-        if name_evidence.get("tier") != "primary" or name_evidence.get("distribution") != "server.crystal.cjlaaa":
-            errors.append(f"monster_id={monster_id} canonical_name source is not primary service")
-    for monster_id in (68, 69):
-        if matrix[str(monster_id)].get("source_evidence", {}).get("identity_resolution") != "auxiliary_1_exact_name":
-            errors.append(f"Wooma monster_id={monster_id} canonical_name auxiliary resolution missing")
+    # The six historical Monster.DB override IDs must now match 21CQ exactly,
+    # while preserving the old Monster.DB value as superseded conflict
+    # evidence on every changed field.
+    for monster_id in sorted(MONSTER_DB_CORE_OVERRIDE_IDS):
+        entry = matrix.get(str(monster_id))
+        if not isinstance(entry, dict):
+            errors.append(f"monster_id={monster_id} missing in catalog for Monster.DB override")
+            continue
+        db_entry = combat_source_by_id.get(str(monster_id), {})
+        detail_entry = detail_by_id.get(monster_id, {})
+        actual_stats = entry.get("combat", {}).get("stats", {})
+        for field in MONSTER_DB_CORE_STATS_FIELDS:
+            if actual_stats.get(field) != detail_entry.get(field):
+                errors.append(
+                    f"monster_id={monster_id} 21CQ {field}={actual_stats.get(field)} "
+                    f"expected {detail_entry.get(field)}"
+                )
+            field_evidence = entry.get("source_evidence", {}).get("combat_stats", {}).get(field, {})
+            if field_evidence.get("role") != "monster_21cq_detail_user_authoritative_override":
+                errors.append(f"monster_id={monster_id} {field} evidence role is not 21CQ override")
+            if db_entry.get(field) != detail_entry.get(field):
+                conflicts = field_evidence.get("superseded_conflicts", [])
+                if not any(
+                    isinstance(candidate, dict)
+                    and candidate.get("role") == "superseded_monster_db_exact_id_candidate"
+                    and candidate.get("value") == db_entry.get(field)
+                    for candidate in conflicts
+                ):
+                    errors.append(f"monster_id={monster_id} {field} missing superseded Monster.DB conflict evidence")
+    for monster_id in sorted(MONSTER_DB_RACE_200_RUNTIME_IDS):
+        entry = matrix.get(str(monster_id), {})
+        combat = entry.get("combat", {}) if isinstance(entry, dict) else {}
+        ai = combat.get("ai", {}) if isinstance(combat, dict) else {}
+        timing = combat.get("timing", {}) if isinstance(combat, dict) else {}
+        behavior = combat.get("behavior_profile", {}) if isinstance(combat, dict) else {}
+        evidence = (
+            entry.get("source_evidence", {})
+            .get("combat_ai_timing", {})
+            .get("service", {})
+            if isinstance(entry, dict)
+            else {}
+        )
+        if int(ai.get("ai_code", -1)) != 200:
+            errors.append(f"monster_id={monster_id} lost primary Race 200 ai_code")
+        if str(ai.get("resolution_status", "")) != "primary_monster_db_exact_id":
+            errors.append(f"monster_id={monster_id} Race 200 AI is not primary exact-ID")
+        if int(timing.get("attack_interval_ms", 0)) != 2000 or int(timing.get("move_interval_ms", 0)) != 1200:
+            errors.append(f"monster_id={monster_id} Race 200 timing mismatch")
+        if int(behavior.get("serviceClass", {}).get("race", -1)) != 200:
+            errors.append(f"monster_id={monster_id} behavior profile lost Race 200 class")
+        if evidence.get("role") != "race_200_ai_timing_monster_db_exact_id":
+            errors.append(f"monster_id={monster_id} Race 200 evidence role mismatch")
+        if evidence.get("sha256") != combat_source.get("source_sha256"):
+            errors.append(f"monster_id={monster_id} Race 200 evidence sha256 mismatch")
+    # Canonical name must come from vanilla exact-ID record.name for ALL active.
+    for monster_id, rec in vanilla_by_id.items():
+        if rec.get("recordStatus") == "retired":
+            continue
+        entry = matrix.get(str(monster_id))
+        if not isinstance(entry, dict):
+            continue
+        expected_name = str(rec.get("name", ""))
+        if entry.get("canonical_name") != expected_name:
+            errors.append(f"monster_id={monster_id} canonical_name={entry.get('canonical_name')} expected vanilla={expected_name}")
+        name_evidence = entry.get("source_evidence", {}).get("canonical_name", {})
+        if name_evidence.get("tier") != "primary" or name_evidence.get("distribution") != "source.vanilla_176":
+            errors.append(f"monster_id={monster_id} canonical_name source is not primary vanilla")
     if matrix["239"].get("monster_id") == matrix["76"].get("monster_id"):
         errors.append("Wooma 239 identity collapsed into 76")
     return errors
@@ -1296,11 +2530,11 @@ def main() -> int:
             if current != rendered:
                 print(f"ERROR: {args.output} differs from generated catalog", file=sys.stderr)
                 return 1
-            print(f"CANONICAL_MONSTER_CATALOG_CHECK_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']}")
+            print(f"CANONICAL_MONSTER_CATALOG_CHECK_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']} drop_rows={catalog['summary']['drop_final_row_count']} authoring_rows={catalog['summary']['drop_final_row_count'] - catalog['summary']['drop_base_row_count']}")
             return 0
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8", newline="\n")
-        print(f"CANONICAL_MONSTER_CATALOG_BUILD_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']}")
+        print(f"CANONICAL_MONSTER_CATALOG_BUILD_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']} drop_rows={catalog['summary']['drop_final_row_count']} authoring_rows={catalog['summary']['drop_final_row_count'] - catalog['summary']['drop_base_row_count']}")
         return 0
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

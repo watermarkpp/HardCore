@@ -1,0 +1,2639 @@
+{
+	"accounting": {
+		"atlas_commands": 183,
+		"legacy_commands": 25,
+		"shadow_chunk_commands": 0,
+		"total_commands": 208
+	},
+	"atlas_command_indices": [
+		1,
+		93,
+		2,
+		199,
+		3,
+		97,
+		4,
+		201,
+		5,
+		99,
+		6,
+		203,
+		7,
+		101,
+		8,
+		15,
+		24,
+		32,
+		43,
+		53,
+		65,
+		74,
+		83,
+		92,
+		104,
+		113,
+		124,
+		135,
+		150,
+		160,
+		166,
+		175,
+		183,
+		191,
+		9,
+		204,
+		10,
+		19,
+		27,
+		33,
+		44,
+		54,
+		56,
+		68,
+		77,
+		87,
+		107,
+		117,
+		121,
+		130,
+		136,
+		137,
+		167,
+		173,
+		182,
+		190,
+		198,
+		11,
+		18,
+		26,
+		35,
+		45,
+		55,
+		67,
+		76,
+		85,
+		95,
+		106,
+		116,
+		127,
+		139,
+		153,
+		162,
+		168,
+		177,
+		185,
+		193,
+		12,
+		21,
+		29,
+		36,
+		47,
+		57,
+		59,
+		71,
+		80,
+		89,
+		109,
+		119,
+		125,
+		134,
+		140,
+		141,
+		169,
+		176,
+		184,
+		192,
+		200,
+		13,
+		20,
+		28,
+		37,
+		48,
+		58,
+		69,
+		78,
+		88,
+		98,
+		108,
+		118,
+		129,
+		143,
+		155,
+		163,
+		170,
+		179,
+		187,
+		195,
+		14,
+		23,
+		31,
+		40,
+		50,
+		60,
+		63,
+		73,
+		82,
+		91,
+		111,
+		122,
+		128,
+		138,
+		144,
+		145,
+		171,
+		178,
+		186,
+		194,
+		202,
+		16,
+		22,
+		30,
+		41,
+		51,
+		61,
+		72,
+		81,
+		90,
+		100,
+		110,
+		120,
+		133,
+		146,
+		157,
+		164,
+		172,
+		181,
+		189,
+		197,
+		17,
+		25,
+		34,
+		42,
+		52,
+		64,
+		66,
+		75,
+		84,
+		94,
+		114,
+		126,
+		131,
+		142,
+		148,
+		149,
+		174,
+		180,
+		188,
+		196,
+		205,
+		102,
+		105,
+		147
+	],
+	"atlas_entries": [
+		{
+			"command_indices": [
+				102
+			],
+			"composite_size": [
+				128,
+				240
+			],
+			"group_keys": [
+				"wall_part:inst_000060:25:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						102
+					],
+					"group_key": "wall_part:inst_000060:25:0",
+					"representative_command_index": 102
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_00_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 102,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_00_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						128,
+						240
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				272,
+				128,
+				240
+			]
+		},
+		{
+			"command_indices": [
+				105
+			],
+			"composite_size": [
+				128,
+				240
+			],
+			"group_keys": [
+				"wall_part:inst_000060:25:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						105
+					],
+					"group_key": "wall_part:inst_000060:25:1",
+					"representative_command_index": 105
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_01_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 105,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_01_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						128,
+						240
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1280,
+				272,
+				128,
+				240
+			]
+		},
+		{
+			"command_indices": [
+				1,
+				93
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000065:30:0",
+				"wall_part:inst_000066:31:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						1
+					],
+					"group_key": "wall_part:inst_000065:30:0",
+					"representative_command_index": 1
+				},
+				{
+					"command_indices": [
+						93
+					],
+					"group_key": "wall_part:inst_000066:31:0",
+					"representative_command_index": 93
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_00_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 1,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_00_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				3,
+				97
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000065:30:1",
+				"wall_part:inst_000066:31:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						3
+					],
+					"group_key": "wall_part:inst_000065:30:1",
+					"representative_command_index": 3
+				},
+				{
+					"command_indices": [
+						97
+					],
+					"group_key": "wall_part:inst_000066:31:1",
+					"representative_command_index": 97
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_01_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 3,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_01_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				5,
+				99
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000065:30:2",
+				"wall_part:inst_000066:31:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						5
+					],
+					"group_key": "wall_part:inst_000065:30:2",
+					"representative_command_index": 5
+				},
+				{
+					"command_indices": [
+						99
+					],
+					"group_key": "wall_part:inst_000066:31:2",
+					"representative_command_index": 99
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_02_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 5,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_02_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				7,
+				101
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000065:30:3",
+				"wall_part:inst_000066:31:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						7
+					],
+					"group_key": "wall_part:inst_000065:30:3",
+					"representative_command_index": 7
+				},
+				{
+					"command_indices": [
+						101
+					],
+					"group_key": "wall_part:inst_000066:31:3",
+					"representative_command_index": 101
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_03_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 7,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_03_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				10,
+				19,
+				27,
+				33,
+				44,
+				54,
+				56,
+				68,
+				77,
+				87,
+				107,
+				117,
+				121,
+				130,
+				136,
+				137,
+				167,
+				173,
+				182,
+				190,
+				198
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000089:51:0",
+				"wall_part:inst_000090:52:0",
+				"wall_part:inst_000091:53:0",
+				"wall_part:inst_000130:71:0",
+				"wall_part:inst_000129:70:0",
+				"wall_part:inst_000093:54:0",
+				"wall_part:inst_000094:55:0",
+				"wall_part:inst_000095:56:0",
+				"wall_part:inst_000096:57:0",
+				"wall_part:inst_000097:58:0",
+				"wall_part:inst_000079:41:0",
+				"wall_part:inst_000062:27:0",
+				"wall_part:inst_000078:40:0",
+				"wall_part:inst_000061:26:0",
+				"wall_part:inst_000076:38:0",
+				"wall_part:inst_000077:39:0",
+				"wall_part:inst_000116:69:0",
+				"wall_part:inst_000074:37:0",
+				"wall_part:inst_000072:36:0",
+				"wall_part:inst_000071:35:0",
+				"wall_part:inst_000069:34:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						10
+					],
+					"group_key": "wall_part:inst_000089:51:0",
+					"representative_command_index": 10
+				},
+				{
+					"command_indices": [
+						19
+					],
+					"group_key": "wall_part:inst_000090:52:0",
+					"representative_command_index": 19
+				},
+				{
+					"command_indices": [
+						27
+					],
+					"group_key": "wall_part:inst_000091:53:0",
+					"representative_command_index": 27
+				},
+				{
+					"command_indices": [
+						33
+					],
+					"group_key": "wall_part:inst_000130:71:0",
+					"representative_command_index": 33
+				},
+				{
+					"command_indices": [
+						44
+					],
+					"group_key": "wall_part:inst_000129:70:0",
+					"representative_command_index": 44
+				},
+				{
+					"command_indices": [
+						54
+					],
+					"group_key": "wall_part:inst_000093:54:0",
+					"representative_command_index": 54
+				},
+				{
+					"command_indices": [
+						56
+					],
+					"group_key": "wall_part:inst_000094:55:0",
+					"representative_command_index": 56
+				},
+				{
+					"command_indices": [
+						68
+					],
+					"group_key": "wall_part:inst_000095:56:0",
+					"representative_command_index": 68
+				},
+				{
+					"command_indices": [
+						77
+					],
+					"group_key": "wall_part:inst_000096:57:0",
+					"representative_command_index": 77
+				},
+				{
+					"command_indices": [
+						87
+					],
+					"group_key": "wall_part:inst_000097:58:0",
+					"representative_command_index": 87
+				},
+				{
+					"command_indices": [
+						107
+					],
+					"group_key": "wall_part:inst_000079:41:0",
+					"representative_command_index": 107
+				},
+				{
+					"command_indices": [
+						117
+					],
+					"group_key": "wall_part:inst_000062:27:0",
+					"representative_command_index": 117
+				},
+				{
+					"command_indices": [
+						121
+					],
+					"group_key": "wall_part:inst_000078:40:0",
+					"representative_command_index": 121
+				},
+				{
+					"command_indices": [
+						130
+					],
+					"group_key": "wall_part:inst_000061:26:0",
+					"representative_command_index": 130
+				},
+				{
+					"command_indices": [
+						136
+					],
+					"group_key": "wall_part:inst_000076:38:0",
+					"representative_command_index": 136
+				},
+				{
+					"command_indices": [
+						137
+					],
+					"group_key": "wall_part:inst_000077:39:0",
+					"representative_command_index": 137
+				},
+				{
+					"command_indices": [
+						167
+					],
+					"group_key": "wall_part:inst_000116:69:0",
+					"representative_command_index": 167
+				},
+				{
+					"command_indices": [
+						173
+					],
+					"group_key": "wall_part:inst_000074:37:0",
+					"representative_command_index": 173
+				},
+				{
+					"command_indices": [
+						182
+					],
+					"group_key": "wall_part:inst_000072:36:0",
+					"representative_command_index": 182
+				},
+				{
+					"command_indices": [
+						190
+					],
+					"group_key": "wall_part:inst_000071:35:0",
+					"representative_command_index": 190
+				},
+				{
+					"command_indices": [
+						198
+					],
+					"group_key": "wall_part:inst_000069:34:0",
+					"representative_command_index": 198
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_00_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 10,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_00_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				12,
+				21,
+				29,
+				36,
+				47,
+				57,
+				59,
+				71,
+				80,
+				89,
+				109,
+				119,
+				125,
+				134,
+				140,
+				141,
+				169,
+				176,
+				184,
+				192,
+				200
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000089:51:1",
+				"wall_part:inst_000090:52:1",
+				"wall_part:inst_000091:53:1",
+				"wall_part:inst_000130:71:1",
+				"wall_part:inst_000129:70:1",
+				"wall_part:inst_000093:54:1",
+				"wall_part:inst_000094:55:1",
+				"wall_part:inst_000095:56:1",
+				"wall_part:inst_000096:57:1",
+				"wall_part:inst_000097:58:1",
+				"wall_part:inst_000079:41:1",
+				"wall_part:inst_000062:27:1",
+				"wall_part:inst_000078:40:1",
+				"wall_part:inst_000061:26:1",
+				"wall_part:inst_000076:38:1",
+				"wall_part:inst_000077:39:1",
+				"wall_part:inst_000116:69:1",
+				"wall_part:inst_000074:37:1",
+				"wall_part:inst_000072:36:1",
+				"wall_part:inst_000071:35:1",
+				"wall_part:inst_000069:34:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						12
+					],
+					"group_key": "wall_part:inst_000089:51:1",
+					"representative_command_index": 12
+				},
+				{
+					"command_indices": [
+						21
+					],
+					"group_key": "wall_part:inst_000090:52:1",
+					"representative_command_index": 21
+				},
+				{
+					"command_indices": [
+						29
+					],
+					"group_key": "wall_part:inst_000091:53:1",
+					"representative_command_index": 29
+				},
+				{
+					"command_indices": [
+						36
+					],
+					"group_key": "wall_part:inst_000130:71:1",
+					"representative_command_index": 36
+				},
+				{
+					"command_indices": [
+						47
+					],
+					"group_key": "wall_part:inst_000129:70:1",
+					"representative_command_index": 47
+				},
+				{
+					"command_indices": [
+						57
+					],
+					"group_key": "wall_part:inst_000093:54:1",
+					"representative_command_index": 57
+				},
+				{
+					"command_indices": [
+						59
+					],
+					"group_key": "wall_part:inst_000094:55:1",
+					"representative_command_index": 59
+				},
+				{
+					"command_indices": [
+						71
+					],
+					"group_key": "wall_part:inst_000095:56:1",
+					"representative_command_index": 71
+				},
+				{
+					"command_indices": [
+						80
+					],
+					"group_key": "wall_part:inst_000096:57:1",
+					"representative_command_index": 80
+				},
+				{
+					"command_indices": [
+						89
+					],
+					"group_key": "wall_part:inst_000097:58:1",
+					"representative_command_index": 89
+				},
+				{
+					"command_indices": [
+						109
+					],
+					"group_key": "wall_part:inst_000079:41:1",
+					"representative_command_index": 109
+				},
+				{
+					"command_indices": [
+						119
+					],
+					"group_key": "wall_part:inst_000062:27:1",
+					"representative_command_index": 119
+				},
+				{
+					"command_indices": [
+						125
+					],
+					"group_key": "wall_part:inst_000078:40:1",
+					"representative_command_index": 125
+				},
+				{
+					"command_indices": [
+						134
+					],
+					"group_key": "wall_part:inst_000061:26:1",
+					"representative_command_index": 134
+				},
+				{
+					"command_indices": [
+						140
+					],
+					"group_key": "wall_part:inst_000076:38:1",
+					"representative_command_index": 140
+				},
+				{
+					"command_indices": [
+						141
+					],
+					"group_key": "wall_part:inst_000077:39:1",
+					"representative_command_index": 141
+				},
+				{
+					"command_indices": [
+						169
+					],
+					"group_key": "wall_part:inst_000116:69:1",
+					"representative_command_index": 169
+				},
+				{
+					"command_indices": [
+						176
+					],
+					"group_key": "wall_part:inst_000074:37:1",
+					"representative_command_index": 176
+				},
+				{
+					"command_indices": [
+						184
+					],
+					"group_key": "wall_part:inst_000072:36:1",
+					"representative_command_index": 184
+				},
+				{
+					"command_indices": [
+						192
+					],
+					"group_key": "wall_part:inst_000071:35:1",
+					"representative_command_index": 192
+				},
+				{
+					"command_indices": [
+						200
+					],
+					"group_key": "wall_part:inst_000069:34:1",
+					"representative_command_index": 200
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_01_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 12,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_01_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				14,
+				23,
+				31,
+				40,
+				50,
+				60,
+				63,
+				73,
+				82,
+				91,
+				111,
+				122,
+				128,
+				138,
+				144,
+				145,
+				171,
+				178,
+				186,
+				194,
+				202
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000089:51:2",
+				"wall_part:inst_000090:52:2",
+				"wall_part:inst_000091:53:2",
+				"wall_part:inst_000130:71:2",
+				"wall_part:inst_000129:70:2",
+				"wall_part:inst_000093:54:2",
+				"wall_part:inst_000094:55:2",
+				"wall_part:inst_000095:56:2",
+				"wall_part:inst_000096:57:2",
+				"wall_part:inst_000097:58:2",
+				"wall_part:inst_000079:41:2",
+				"wall_part:inst_000062:27:2",
+				"wall_part:inst_000078:40:2",
+				"wall_part:inst_000061:26:2",
+				"wall_part:inst_000076:38:2",
+				"wall_part:inst_000077:39:2",
+				"wall_part:inst_000116:69:2",
+				"wall_part:inst_000074:37:2",
+				"wall_part:inst_000072:36:2",
+				"wall_part:inst_000071:35:2",
+				"wall_part:inst_000069:34:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						14
+					],
+					"group_key": "wall_part:inst_000089:51:2",
+					"representative_command_index": 14
+				},
+				{
+					"command_indices": [
+						23
+					],
+					"group_key": "wall_part:inst_000090:52:2",
+					"representative_command_index": 23
+				},
+				{
+					"command_indices": [
+						31
+					],
+					"group_key": "wall_part:inst_000091:53:2",
+					"representative_command_index": 31
+				},
+				{
+					"command_indices": [
+						40
+					],
+					"group_key": "wall_part:inst_000130:71:2",
+					"representative_command_index": 40
+				},
+				{
+					"command_indices": [
+						50
+					],
+					"group_key": "wall_part:inst_000129:70:2",
+					"representative_command_index": 50
+				},
+				{
+					"command_indices": [
+						60
+					],
+					"group_key": "wall_part:inst_000093:54:2",
+					"representative_command_index": 60
+				},
+				{
+					"command_indices": [
+						63
+					],
+					"group_key": "wall_part:inst_000094:55:2",
+					"representative_command_index": 63
+				},
+				{
+					"command_indices": [
+						73
+					],
+					"group_key": "wall_part:inst_000095:56:2",
+					"representative_command_index": 73
+				},
+				{
+					"command_indices": [
+						82
+					],
+					"group_key": "wall_part:inst_000096:57:2",
+					"representative_command_index": 82
+				},
+				{
+					"command_indices": [
+						91
+					],
+					"group_key": "wall_part:inst_000097:58:2",
+					"representative_command_index": 91
+				},
+				{
+					"command_indices": [
+						111
+					],
+					"group_key": "wall_part:inst_000079:41:2",
+					"representative_command_index": 111
+				},
+				{
+					"command_indices": [
+						122
+					],
+					"group_key": "wall_part:inst_000062:27:2",
+					"representative_command_index": 122
+				},
+				{
+					"command_indices": [
+						128
+					],
+					"group_key": "wall_part:inst_000078:40:2",
+					"representative_command_index": 128
+				},
+				{
+					"command_indices": [
+						138
+					],
+					"group_key": "wall_part:inst_000061:26:2",
+					"representative_command_index": 138
+				},
+				{
+					"command_indices": [
+						144
+					],
+					"group_key": "wall_part:inst_000076:38:2",
+					"representative_command_index": 144
+				},
+				{
+					"command_indices": [
+						145
+					],
+					"group_key": "wall_part:inst_000077:39:2",
+					"representative_command_index": 145
+				},
+				{
+					"command_indices": [
+						171
+					],
+					"group_key": "wall_part:inst_000116:69:2",
+					"representative_command_index": 171
+				},
+				{
+					"command_indices": [
+						178
+					],
+					"group_key": "wall_part:inst_000074:37:2",
+					"representative_command_index": 178
+				},
+				{
+					"command_indices": [
+						186
+					],
+					"group_key": "wall_part:inst_000072:36:2",
+					"representative_command_index": 186
+				},
+				{
+					"command_indices": [
+						194
+					],
+					"group_key": "wall_part:inst_000071:35:2",
+					"representative_command_index": 194
+				},
+				{
+					"command_indices": [
+						202
+					],
+					"group_key": "wall_part:inst_000069:34:2",
+					"representative_command_index": 202
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_02_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 14,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_02_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1152,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				17,
+				25,
+				34,
+				42,
+				52,
+				64,
+				66,
+				75,
+				84,
+				94,
+				114,
+				126,
+				131,
+				142,
+				148,
+				149,
+				174,
+				180,
+				188,
+				196,
+				205
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000089:51:3",
+				"wall_part:inst_000090:52:3",
+				"wall_part:inst_000091:53:3",
+				"wall_part:inst_000130:71:3",
+				"wall_part:inst_000129:70:3",
+				"wall_part:inst_000093:54:3",
+				"wall_part:inst_000094:55:3",
+				"wall_part:inst_000095:56:3",
+				"wall_part:inst_000096:57:3",
+				"wall_part:inst_000097:58:3",
+				"wall_part:inst_000079:41:3",
+				"wall_part:inst_000062:27:3",
+				"wall_part:inst_000078:40:3",
+				"wall_part:inst_000061:26:3",
+				"wall_part:inst_000076:38:3",
+				"wall_part:inst_000077:39:3",
+				"wall_part:inst_000116:69:3",
+				"wall_part:inst_000074:37:3",
+				"wall_part:inst_000072:36:3",
+				"wall_part:inst_000071:35:3",
+				"wall_part:inst_000069:34:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						17
+					],
+					"group_key": "wall_part:inst_000089:51:3",
+					"representative_command_index": 17
+				},
+				{
+					"command_indices": [
+						25
+					],
+					"group_key": "wall_part:inst_000090:52:3",
+					"representative_command_index": 25
+				},
+				{
+					"command_indices": [
+						34
+					],
+					"group_key": "wall_part:inst_000091:53:3",
+					"representative_command_index": 34
+				},
+				{
+					"command_indices": [
+						42
+					],
+					"group_key": "wall_part:inst_000130:71:3",
+					"representative_command_index": 42
+				},
+				{
+					"command_indices": [
+						52
+					],
+					"group_key": "wall_part:inst_000129:70:3",
+					"representative_command_index": 52
+				},
+				{
+					"command_indices": [
+						64
+					],
+					"group_key": "wall_part:inst_000093:54:3",
+					"representative_command_index": 64
+				},
+				{
+					"command_indices": [
+						66
+					],
+					"group_key": "wall_part:inst_000094:55:3",
+					"representative_command_index": 66
+				},
+				{
+					"command_indices": [
+						75
+					],
+					"group_key": "wall_part:inst_000095:56:3",
+					"representative_command_index": 75
+				},
+				{
+					"command_indices": [
+						84
+					],
+					"group_key": "wall_part:inst_000096:57:3",
+					"representative_command_index": 84
+				},
+				{
+					"command_indices": [
+						94
+					],
+					"group_key": "wall_part:inst_000097:58:3",
+					"representative_command_index": 94
+				},
+				{
+					"command_indices": [
+						114
+					],
+					"group_key": "wall_part:inst_000079:41:3",
+					"representative_command_index": 114
+				},
+				{
+					"command_indices": [
+						126
+					],
+					"group_key": "wall_part:inst_000062:27:3",
+					"representative_command_index": 126
+				},
+				{
+					"command_indices": [
+						131
+					],
+					"group_key": "wall_part:inst_000078:40:3",
+					"representative_command_index": 131
+				},
+				{
+					"command_indices": [
+						142
+					],
+					"group_key": "wall_part:inst_000061:26:3",
+					"representative_command_index": 142
+				},
+				{
+					"command_indices": [
+						148
+					],
+					"group_key": "wall_part:inst_000076:38:3",
+					"representative_command_index": 148
+				},
+				{
+					"command_indices": [
+						149
+					],
+					"group_key": "wall_part:inst_000077:39:3",
+					"representative_command_index": 149
+				},
+				{
+					"command_indices": [
+						174
+					],
+					"group_key": "wall_part:inst_000116:69:3",
+					"representative_command_index": 174
+				},
+				{
+					"command_indices": [
+						180
+					],
+					"group_key": "wall_part:inst_000074:37:3",
+					"representative_command_index": 180
+				},
+				{
+					"command_indices": [
+						188
+					],
+					"group_key": "wall_part:inst_000072:36:3",
+					"representative_command_index": 188
+				},
+				{
+					"command_indices": [
+						196
+					],
+					"group_key": "wall_part:inst_000071:35:3",
+					"representative_command_index": 196
+				},
+				{
+					"command_indices": [
+						205
+					],
+					"group_key": "wall_part:inst_000069:34:3",
+					"representative_command_index": 205
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_03_wooma_temple_floor_match_v1_base.png@(-64.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 17,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_03_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-64.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-64.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1344,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				147
+			],
+			"composite_size": [
+				96,
+				224
+			],
+			"group_keys": [
+				"wall_part:inst_000107:68:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						147
+					],
+					"group_key": "wall_part:inst_000107:68:0",
+					"representative_command_index": 147
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l1_v01/part_00_wooma_temple_floor_match_v1_base.png@(-32.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 147,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l1_v01/part_00_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-32.0,
+						-184.0
+					],
+					"size": [
+						96,
+						224
+					]
+				}
+			],
+			"min_offset": [
+				-32.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1408,
+				272,
+				96,
+				224
+			]
+		},
+		{
+			"command_indices": [
+				2,
+				199
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000064:29:0",
+				"wall_part:inst_000068:33:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						2
+					],
+					"group_key": "wall_part:inst_000064:29:0",
+					"representative_command_index": 2
+				},
+				{
+					"command_indices": [
+						199
+					],
+					"group_key": "wall_part:inst_000068:33:0",
+					"representative_command_index": 199
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_00_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 2,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_00_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1536,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				4,
+				201
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000064:29:1",
+				"wall_part:inst_000068:33:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						4
+					],
+					"group_key": "wall_part:inst_000064:29:1",
+					"representative_command_index": 4
+				},
+				{
+					"command_indices": [
+						201
+					],
+					"group_key": "wall_part:inst_000068:33:1",
+					"representative_command_index": 201
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_01_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 4,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_01_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				1728,
+				0,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				6,
+				203
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000064:29:2",
+				"wall_part:inst_000068:33:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						6
+					],
+					"group_key": "wall_part:inst_000064:29:2",
+					"representative_command_index": 6
+				},
+				{
+					"command_indices": [
+						203
+					],
+					"group_key": "wall_part:inst_000068:33:2",
+					"representative_command_index": 203
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_02_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 6,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_02_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				0,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				9,
+				204
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000064:29:3",
+				"wall_part:inst_000068:33:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						9
+					],
+					"group_key": "wall_part:inst_000064:29:3",
+					"representative_command_index": 9
+				},
+				{
+					"command_indices": [
+						204
+					],
+					"group_key": "wall_part:inst_000068:33:3",
+					"representative_command_index": 204
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_03_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 9,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_03_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				192,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				8,
+				15,
+				24,
+				32,
+				43,
+				53,
+				65,
+				74,
+				83,
+				92,
+				104,
+				113,
+				124,
+				135,
+				150,
+				160,
+				166,
+				175,
+				183,
+				191
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000088:50:0",
+				"wall_part:inst_000087:49:0",
+				"wall_part:inst_000086:48:0",
+				"wall_part:inst_000085:47:0",
+				"wall_part:inst_000084:46:0",
+				"wall_part:inst_000083:45:0",
+				"wall_part:inst_000082:44:0",
+				"wall_part:inst_000081:43:0",
+				"wall_part:inst_000080:42:0",
+				"wall_part:inst_000063:28:0",
+				"wall_part:inst_000067:32:0",
+				"wall_part:inst_000106:67:0",
+				"wall_part:inst_000105:66:0",
+				"wall_part:inst_000104:65:0",
+				"wall_part:inst_000103:64:0",
+				"wall_part:inst_000102:63:0",
+				"wall_part:inst_000101:62:0",
+				"wall_part:inst_000100:61:0",
+				"wall_part:inst_000099:60:0",
+				"wall_part:inst_000098:59:0"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						8
+					],
+					"group_key": "wall_part:inst_000088:50:0",
+					"representative_command_index": 8
+				},
+				{
+					"command_indices": [
+						15
+					],
+					"group_key": "wall_part:inst_000087:49:0",
+					"representative_command_index": 15
+				},
+				{
+					"command_indices": [
+						24
+					],
+					"group_key": "wall_part:inst_000086:48:0",
+					"representative_command_index": 24
+				},
+				{
+					"command_indices": [
+						32
+					],
+					"group_key": "wall_part:inst_000085:47:0",
+					"representative_command_index": 32
+				},
+				{
+					"command_indices": [
+						43
+					],
+					"group_key": "wall_part:inst_000084:46:0",
+					"representative_command_index": 43
+				},
+				{
+					"command_indices": [
+						53
+					],
+					"group_key": "wall_part:inst_000083:45:0",
+					"representative_command_index": 53
+				},
+				{
+					"command_indices": [
+						65
+					],
+					"group_key": "wall_part:inst_000082:44:0",
+					"representative_command_index": 65
+				},
+				{
+					"command_indices": [
+						74
+					],
+					"group_key": "wall_part:inst_000081:43:0",
+					"representative_command_index": 74
+				},
+				{
+					"command_indices": [
+						83
+					],
+					"group_key": "wall_part:inst_000080:42:0",
+					"representative_command_index": 83
+				},
+				{
+					"command_indices": [
+						92
+					],
+					"group_key": "wall_part:inst_000063:28:0",
+					"representative_command_index": 92
+				},
+				{
+					"command_indices": [
+						104
+					],
+					"group_key": "wall_part:inst_000067:32:0",
+					"representative_command_index": 104
+				},
+				{
+					"command_indices": [
+						113
+					],
+					"group_key": "wall_part:inst_000106:67:0",
+					"representative_command_index": 113
+				},
+				{
+					"command_indices": [
+						124
+					],
+					"group_key": "wall_part:inst_000105:66:0",
+					"representative_command_index": 124
+				},
+				{
+					"command_indices": [
+						135
+					],
+					"group_key": "wall_part:inst_000104:65:0",
+					"representative_command_index": 135
+				},
+				{
+					"command_indices": [
+						150
+					],
+					"group_key": "wall_part:inst_000103:64:0",
+					"representative_command_index": 150
+				},
+				{
+					"command_indices": [
+						160
+					],
+					"group_key": "wall_part:inst_000102:63:0",
+					"representative_command_index": 160
+				},
+				{
+					"command_indices": [
+						166
+					],
+					"group_key": "wall_part:inst_000101:62:0",
+					"representative_command_index": 166
+				},
+				{
+					"command_indices": [
+						175
+					],
+					"group_key": "wall_part:inst_000100:61:0",
+					"representative_command_index": 175
+				},
+				{
+					"command_indices": [
+						183
+					],
+					"group_key": "wall_part:inst_000099:60:0",
+					"representative_command_index": 183
+				},
+				{
+					"command_indices": [
+						191
+					],
+					"group_key": "wall_part:inst_000098:59:0",
+					"representative_command_index": 191
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_00_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 8,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_00_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				384,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				11,
+				18,
+				26,
+				35,
+				45,
+				55,
+				67,
+				76,
+				85,
+				95,
+				106,
+				116,
+				127,
+				139,
+				153,
+				162,
+				168,
+				177,
+				185,
+				193
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000088:50:1",
+				"wall_part:inst_000087:49:1",
+				"wall_part:inst_000086:48:1",
+				"wall_part:inst_000085:47:1",
+				"wall_part:inst_000084:46:1",
+				"wall_part:inst_000083:45:1",
+				"wall_part:inst_000082:44:1",
+				"wall_part:inst_000081:43:1",
+				"wall_part:inst_000080:42:1",
+				"wall_part:inst_000063:28:1",
+				"wall_part:inst_000067:32:1",
+				"wall_part:inst_000106:67:1",
+				"wall_part:inst_000105:66:1",
+				"wall_part:inst_000104:65:1",
+				"wall_part:inst_000103:64:1",
+				"wall_part:inst_000102:63:1",
+				"wall_part:inst_000101:62:1",
+				"wall_part:inst_000100:61:1",
+				"wall_part:inst_000099:60:1",
+				"wall_part:inst_000098:59:1"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						11
+					],
+					"group_key": "wall_part:inst_000088:50:1",
+					"representative_command_index": 11
+				},
+				{
+					"command_indices": [
+						18
+					],
+					"group_key": "wall_part:inst_000087:49:1",
+					"representative_command_index": 18
+				},
+				{
+					"command_indices": [
+						26
+					],
+					"group_key": "wall_part:inst_000086:48:1",
+					"representative_command_index": 26
+				},
+				{
+					"command_indices": [
+						35
+					],
+					"group_key": "wall_part:inst_000085:47:1",
+					"representative_command_index": 35
+				},
+				{
+					"command_indices": [
+						45
+					],
+					"group_key": "wall_part:inst_000084:46:1",
+					"representative_command_index": 45
+				},
+				{
+					"command_indices": [
+						55
+					],
+					"group_key": "wall_part:inst_000083:45:1",
+					"representative_command_index": 55
+				},
+				{
+					"command_indices": [
+						67
+					],
+					"group_key": "wall_part:inst_000082:44:1",
+					"representative_command_index": 67
+				},
+				{
+					"command_indices": [
+						76
+					],
+					"group_key": "wall_part:inst_000081:43:1",
+					"representative_command_index": 76
+				},
+				{
+					"command_indices": [
+						85
+					],
+					"group_key": "wall_part:inst_000080:42:1",
+					"representative_command_index": 85
+				},
+				{
+					"command_indices": [
+						95
+					],
+					"group_key": "wall_part:inst_000063:28:1",
+					"representative_command_index": 95
+				},
+				{
+					"command_indices": [
+						106
+					],
+					"group_key": "wall_part:inst_000067:32:1",
+					"representative_command_index": 106
+				},
+				{
+					"command_indices": [
+						116
+					],
+					"group_key": "wall_part:inst_000106:67:1",
+					"representative_command_index": 116
+				},
+				{
+					"command_indices": [
+						127
+					],
+					"group_key": "wall_part:inst_000105:66:1",
+					"representative_command_index": 127
+				},
+				{
+					"command_indices": [
+						139
+					],
+					"group_key": "wall_part:inst_000104:65:1",
+					"representative_command_index": 139
+				},
+				{
+					"command_indices": [
+						153
+					],
+					"group_key": "wall_part:inst_000103:64:1",
+					"representative_command_index": 153
+				},
+				{
+					"command_indices": [
+						162
+					],
+					"group_key": "wall_part:inst_000102:63:1",
+					"representative_command_index": 162
+				},
+				{
+					"command_indices": [
+						168
+					],
+					"group_key": "wall_part:inst_000101:62:1",
+					"representative_command_index": 168
+				},
+				{
+					"command_indices": [
+						177
+					],
+					"group_key": "wall_part:inst_000100:61:1",
+					"representative_command_index": 177
+				},
+				{
+					"command_indices": [
+						185
+					],
+					"group_key": "wall_part:inst_000099:60:1",
+					"representative_command_index": 185
+				},
+				{
+					"command_indices": [
+						193
+					],
+					"group_key": "wall_part:inst_000098:59:1",
+					"representative_command_index": 193
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_01_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 11,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_01_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				576,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				13,
+				20,
+				28,
+				37,
+				48,
+				58,
+				69,
+				78,
+				88,
+				98,
+				108,
+				118,
+				129,
+				143,
+				155,
+				163,
+				170,
+				179,
+				187,
+				195
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000088:50:2",
+				"wall_part:inst_000087:49:2",
+				"wall_part:inst_000086:48:2",
+				"wall_part:inst_000085:47:2",
+				"wall_part:inst_000084:46:2",
+				"wall_part:inst_000083:45:2",
+				"wall_part:inst_000082:44:2",
+				"wall_part:inst_000081:43:2",
+				"wall_part:inst_000080:42:2",
+				"wall_part:inst_000063:28:2",
+				"wall_part:inst_000067:32:2",
+				"wall_part:inst_000106:67:2",
+				"wall_part:inst_000105:66:2",
+				"wall_part:inst_000104:65:2",
+				"wall_part:inst_000103:64:2",
+				"wall_part:inst_000102:63:2",
+				"wall_part:inst_000101:62:2",
+				"wall_part:inst_000100:61:2",
+				"wall_part:inst_000099:60:2",
+				"wall_part:inst_000098:59:2"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						13
+					],
+					"group_key": "wall_part:inst_000088:50:2",
+					"representative_command_index": 13
+				},
+				{
+					"command_indices": [
+						20
+					],
+					"group_key": "wall_part:inst_000087:49:2",
+					"representative_command_index": 20
+				},
+				{
+					"command_indices": [
+						28
+					],
+					"group_key": "wall_part:inst_000086:48:2",
+					"representative_command_index": 28
+				},
+				{
+					"command_indices": [
+						37
+					],
+					"group_key": "wall_part:inst_000085:47:2",
+					"representative_command_index": 37
+				},
+				{
+					"command_indices": [
+						48
+					],
+					"group_key": "wall_part:inst_000084:46:2",
+					"representative_command_index": 48
+				},
+				{
+					"command_indices": [
+						58
+					],
+					"group_key": "wall_part:inst_000083:45:2",
+					"representative_command_index": 58
+				},
+				{
+					"command_indices": [
+						69
+					],
+					"group_key": "wall_part:inst_000082:44:2",
+					"representative_command_index": 69
+				},
+				{
+					"command_indices": [
+						78
+					],
+					"group_key": "wall_part:inst_000081:43:2",
+					"representative_command_index": 78
+				},
+				{
+					"command_indices": [
+						88
+					],
+					"group_key": "wall_part:inst_000080:42:2",
+					"representative_command_index": 88
+				},
+				{
+					"command_indices": [
+						98
+					],
+					"group_key": "wall_part:inst_000063:28:2",
+					"representative_command_index": 98
+				},
+				{
+					"command_indices": [
+						108
+					],
+					"group_key": "wall_part:inst_000067:32:2",
+					"representative_command_index": 108
+				},
+				{
+					"command_indices": [
+						118
+					],
+					"group_key": "wall_part:inst_000106:67:2",
+					"representative_command_index": 118
+				},
+				{
+					"command_indices": [
+						129
+					],
+					"group_key": "wall_part:inst_000105:66:2",
+					"representative_command_index": 129
+				},
+				{
+					"command_indices": [
+						143
+					],
+					"group_key": "wall_part:inst_000104:65:2",
+					"representative_command_index": 143
+				},
+				{
+					"command_indices": [
+						155
+					],
+					"group_key": "wall_part:inst_000103:64:2",
+					"representative_command_index": 155
+				},
+				{
+					"command_indices": [
+						163
+					],
+					"group_key": "wall_part:inst_000102:63:2",
+					"representative_command_index": 163
+				},
+				{
+					"command_indices": [
+						170
+					],
+					"group_key": "wall_part:inst_000101:62:2",
+					"representative_command_index": 170
+				},
+				{
+					"command_indices": [
+						179
+					],
+					"group_key": "wall_part:inst_000100:61:2",
+					"representative_command_index": 179
+				},
+				{
+					"command_indices": [
+						187
+					],
+					"group_key": "wall_part:inst_000099:60:2",
+					"representative_command_index": 187
+				},
+				{
+					"command_indices": [
+						195
+					],
+					"group_key": "wall_part:inst_000098:59:2",
+					"representative_command_index": 195
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_02_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 13,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_02_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				768,
+				272,
+				192,
+				272
+			]
+		},
+		{
+			"command_indices": [
+				16,
+				22,
+				30,
+				41,
+				51,
+				61,
+				72,
+				81,
+				90,
+				100,
+				110,
+				120,
+				133,
+				146,
+				157,
+				164,
+				172,
+				181,
+				189,
+				197
+			],
+			"composite_size": [
+				192,
+				272
+			],
+			"group_keys": [
+				"wall_part:inst_000088:50:3",
+				"wall_part:inst_000087:49:3",
+				"wall_part:inst_000086:48:3",
+				"wall_part:inst_000085:47:3",
+				"wall_part:inst_000084:46:3",
+				"wall_part:inst_000083:45:3",
+				"wall_part:inst_000082:44:3",
+				"wall_part:inst_000081:43:3",
+				"wall_part:inst_000080:42:3",
+				"wall_part:inst_000063:28:3",
+				"wall_part:inst_000067:32:3",
+				"wall_part:inst_000106:67:3",
+				"wall_part:inst_000105:66:3",
+				"wall_part:inst_000104:65:3",
+				"wall_part:inst_000103:64:3",
+				"wall_part:inst_000102:63:3",
+				"wall_part:inst_000101:62:3",
+				"wall_part:inst_000100:61:3",
+				"wall_part:inst_000099:60:3",
+				"wall_part:inst_000098:59:3"
+			],
+			"group_mappings": [
+				{
+					"command_indices": [
+						16
+					],
+					"group_key": "wall_part:inst_000088:50:3",
+					"representative_command_index": 16
+				},
+				{
+					"command_indices": [
+						22
+					],
+					"group_key": "wall_part:inst_000087:49:3",
+					"representative_command_index": 22
+				},
+				{
+					"command_indices": [
+						30
+					],
+					"group_key": "wall_part:inst_000086:48:3",
+					"representative_command_index": 30
+				},
+				{
+					"command_indices": [
+						41
+					],
+					"group_key": "wall_part:inst_000085:47:3",
+					"representative_command_index": 41
+				},
+				{
+					"command_indices": [
+						51
+					],
+					"group_key": "wall_part:inst_000084:46:3",
+					"representative_command_index": 51
+				},
+				{
+					"command_indices": [
+						61
+					],
+					"group_key": "wall_part:inst_000083:45:3",
+					"representative_command_index": 61
+				},
+				{
+					"command_indices": [
+						72
+					],
+					"group_key": "wall_part:inst_000082:44:3",
+					"representative_command_index": 72
+				},
+				{
+					"command_indices": [
+						81
+					],
+					"group_key": "wall_part:inst_000081:43:3",
+					"representative_command_index": 81
+				},
+				{
+					"command_indices": [
+						90
+					],
+					"group_key": "wall_part:inst_000080:42:3",
+					"representative_command_index": 90
+				},
+				{
+					"command_indices": [
+						100
+					],
+					"group_key": "wall_part:inst_000063:28:3",
+					"representative_command_index": 100
+				},
+				{
+					"command_indices": [
+						110
+					],
+					"group_key": "wall_part:inst_000067:32:3",
+					"representative_command_index": 110
+				},
+				{
+					"command_indices": [
+						120
+					],
+					"group_key": "wall_part:inst_000106:67:3",
+					"representative_command_index": 120
+				},
+				{
+					"command_indices": [
+						133
+					],
+					"group_key": "wall_part:inst_000105:66:3",
+					"representative_command_index": 133
+				},
+				{
+					"command_indices": [
+						146
+					],
+					"group_key": "wall_part:inst_000104:65:3",
+					"representative_command_index": 146
+				},
+				{
+					"command_indices": [
+						157
+					],
+					"group_key": "wall_part:inst_000103:64:3",
+					"representative_command_index": 157
+				},
+				{
+					"command_indices": [
+						164
+					],
+					"group_key": "wall_part:inst_000102:63:3",
+					"representative_command_index": 164
+				},
+				{
+					"command_indices": [
+						172
+					],
+					"group_key": "wall_part:inst_000101:62:3",
+					"representative_command_index": 172
+				},
+				{
+					"command_indices": [
+						181
+					],
+					"group_key": "wall_part:inst_000100:61:3",
+					"representative_command_index": 181
+				},
+				{
+					"command_indices": [
+						189
+					],
+					"group_key": "wall_part:inst_000099:60:3",
+					"representative_command_index": 189
+				},
+				{
+					"command_indices": [
+						197
+					],
+					"group_key": "wall_part:inst_000098:59:3",
+					"representative_command_index": 197
+				}
+			],
+			"key": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_03_wooma_temple_floor_match_v1_base.png@(-128.0, -184.0)",
+			"layers": [
+				{
+					"command_index": 16,
+					"image_path": "assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_03_wooma_temple_floor_match_v1_base.png",
+					"offset": [
+						-128.0,
+						-184.0
+					],
+					"size": [
+						192,
+						272
+					]
+				}
+			],
+			"min_offset": [
+				-128.0,
+				-184.0
+			],
+			"page": 0,
+			"region": [
+				960,
+				272,
+				192,
+				272
+			]
+		}
+	],
+	"atlas_page_heights": [
+		544
+	],
+	"atlas_pages": [
+		{
+			"height": 544,
+			"page_index": 0,
+			"path": "assets/data/runtime/map_editor/wall_render_store/6ab4c3037dc9e0826cf2010c74b808a065f4d5d23628269fc155b307f0e2dfc0.png",
+			"png_bytes": 321992,
+			"sha256": "6ab4c3037dc9e0826cf2010c74b808a065f4d5d23628269fc155b307f0e2dfc0",
+			"width": 2048
+		}
+	],
+	"compiler_version": 2,
+	"contract_id": "hardcore.wall_render_plan.v1",
+	"design_size": [
+		44,
+		44
+	],
+	"ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
+	"legacy_command_indices": [
+		0,
+		38,
+		39,
+		46,
+		49,
+		62,
+		70,
+		79,
+		86,
+		96,
+		103,
+		112,
+		115,
+		123,
+		132,
+		151,
+		152,
+		154,
+		156,
+		158,
+		159,
+		161,
+		165,
+		206,
+		207
+	],
+	"map_key": "wooma_temple_boss_hall",
+	"shadow_chunk_command_indices": [],
+	"shadow_chunks": [],
+	"shadow_segments": [],
+	"source_commands_sha256": "4b4e0af1a15ae734cfdbead905773e0347083c83d8d95162ef7b73cb55d55f3d",
+	"source_image_sha256": {
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_00_wooma_temple_floor_match_v1_base.png": "bed5041c59148a698e962f14f13eea3d482f9146b8b76747ffcbf85548112faa",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l2_v01/part_01_wooma_temple_floor_match_v1_base.png": "b74dbb56da678ec14fabec4f24bf6633a35d8287a1eb158383fbbd72dbaf79bc",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_00_wooma_temple_floor_match_v1_base.png": "da9e70ea38529525289124e0a8181e9a6e3e919565882ceb1ebc3eb20b1c6670",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_01_wooma_temple_floor_match_v1_base.png": "84ab0163608aa3f3b66619f0a572da3ca1cf56dc63158edef2618542c8974982",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_02_wooma_temple_floor_match_v1_base.png": "4f3d87f8d2acb985ede6a9e192c5a1acc8cefb4afb83f5e8022963a1df121087",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v02/part_03_wooma_temple_floor_match_v1_base.png": "a1bb1d95f16ff4198817e62090ffaa645eed869bf88fad82d3479bcf74bc7f8e",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_00_wooma_temple_floor_match_v1_base.png": "1c6766f9424c6249db1167684206be812933d0bd1f7910c4d6141082b38d2edc",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_01_wooma_temple_floor_match_v1_base.png": "8d8b3a610ca06d1e714371887c65acdd125bfe601be44ef03158649a57924742",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_02_wooma_temple_floor_match_v1_base.png": "fb9211f4cf66fadd8f12360df2e037c365046ea4a0986a98f0f3367b54bf6e45",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_x_l4_v03/part_03_wooma_temple_floor_match_v1_base.png": "2cef201356e5dccbdd7779544d674f777882441161feb4ba88de00d930f3c689",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l1_v01/part_00_wooma_temple_floor_match_v1_base.png": "497660ebd5eac7a94fe0fbced2a607dd13ebce7ffeffca5e9155dc64ebe0478d",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_00_wooma_temple_floor_match_v1_base.png": "0e5a15b6722120c2fe206f38f53915c324b20154361d8621b6210c1a55bd8d27",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_01_wooma_temple_floor_match_v1_base.png": "91943e2e0cee843e070fa1fb4901b59af358fd11611b9d0685047898ac7f8f28",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_02_wooma_temple_floor_match_v1_base.png": "9d12232c58025b7f34ae0bdaeaed786261145eda0a4e2bc7b6a554bd07c48133",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v02/part_03_wooma_temple_floor_match_v1_base.png": "0ca46316a07b4e5a25f60cf4ce48dd0da4ac4936fb0053727750c5ba5148f224",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_00_wooma_temple_floor_match_v1_base.png": "979fea1e3954291b6c04ad64f9c5a77293c29c0e197735fa524cecd0a3d08855",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_01_wooma_temple_floor_match_v1_base.png": "e269cb2c10caffece140180a13c79e81a70be0b8eb0effb2ff5b63d7d79b992c",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_02_wooma_temple_floor_match_v1_base.png": "59929d3692ae185461adcc0f98679968364f7caabd2b8665f17cdac6a86514e3",
+		"assets/art/maps/_shared/walls/wooma_temple/wooma_temple_floor_warm_stone_u0/wooma_temple_warm_wall_straight_y_l4_v03/part_03_wooma_temple_floor_match_v1_base.png": "4b0ecdb9763e53c869a236738233f2dfd862daecbc547d13a0e456c002cea3e1"
+	},
+	"source_runtime_json_sha256": "17ac1fd501613285810434fdf6e3ebb148b5b0db6044f80450d67236e1fd14be",
+	"visual_geometry_contract_id": "map_editor_runtime_visual_geometry_v6"
+}

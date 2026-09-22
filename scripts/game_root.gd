@@ -1,10 +1,36 @@
 extends Node2D
 
+const BICH_RUNTIME_MAP_ID := 910001
+const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
+const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
+## perf-smoothness-r1 Phase C (audit 20260918): the loading window owns ONE
+## prewarm entry with ONE absolute deadline. Non-critical prewarm stops when
+## the budget is gone; the fire-wall first-cast workset always completes and
+## is pinned. Combat never synchronously loads/decodes textures: misses are
+## queued and drained through the bounded threaded warm-up channel below.
+const LOADING_PREWARM_BUDGET_USEC := 1500000
+const LOADING_RENDER_WARM_BUDGET_USEC := 1000000
+const FRAME_TEXTURE_WARM_PER_FRAME := 2
+const FRAME_TEXTURE_WARM_MAX_IN_FLIGHT := 4
+const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
+const AudioRuntimeServiceScript := preload("res://scripts/audio_runtime_service.gd")
+const LevelUpEffectScript := preload("res://scripts/ui_level_up_preview.gd")
+const LootVisualEffectScript := preload("res://scripts/loot_visual_effect.gd")
+
+var _town_music_controller: Node
+var _audio_runtime_service: Node
+var _player_level_up_effect: Node2D
+
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
+const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
+const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const MapTeleportRuntimePolicyScript := preload(
+	"res://scripts/layers/runtime/map_teleport_runtime_policy.gd"
+)
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
 const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
@@ -12,6 +38,9 @@ const MapRuntimeCollisionGeometryScript := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const MonsterGroundSpikeEffectScript := preload(
+	"res://scripts/monster_ground_spike_effect.gd"
+)
 const MonsterVisualStreamingCoordinatorScript := preload(
 	"res://scripts/monster_visual_streaming_coordinator.gd"
 )
@@ -59,11 +88,17 @@ const CasterSpellGeometryScript := preload("res://scripts/skills/caster_spell_ge
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const SkillFootprintQueryPlanScript := preload(
+	"res://scripts/skills/skill_footprint_query_plan.gd"
+)
 const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const PersistentGroundEffectManagerScript := preload(
 	"res://scripts/persistent_ground_effect_manager.gd"
+)
+const LootPickupRuntimeManagerScript := preload(
+	"res://scripts/loot_pickup_runtime_manager.gd"
 )
 const SpellTargetLockPolicyScript := preload(
 	"res://scripts/skills/spell_target_lock_policy.gd"
@@ -75,8 +110,15 @@ const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
 )
 const DeviceLabRuntimeScript := preload("res://scripts/device_lab_runtime.gd")
-const DEFAULT_NORMAL_RESPAWN_SECONDS := 180.0
-const DEFAULT_BOSS_RESPAWN_SECONDS := 3600.0
+const MonsterRespawnPolicyScript := preload(
+	"res://scripts/monster_respawn_policy.gd"
+)
+const MonsterTerrainNavigationPolicyScript := preload(
+	"res://scripts/monster_terrain_navigation_policy.gd"
+)
+const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
+const DEFAULT_NORMAL_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BEGINNER_OUTDOOR_SECONDS
+const DEFAULT_BOSS_RESPAWN_SECONDS := MonsterRespawnPolicyScript.BOSS_SECONDS
 const MONSTER_PREFETCH_TIMEOUT_MSEC := 8000
 const CANONICAL_MATERIAL_ITEMS := PlayerState.CANONICAL_MATERIAL_ITEMS
 const SKILL_PRODUCTION_ADAPTER_CONTRACT := "skills.production_adaptation.hardcore.v1"
@@ -97,8 +139,8 @@ const TAOIST_SUPPORT_SKILL_IDS := {
 	"taoist.defense": true,
 }
 const PLAYER_STEALTH_ALPHA := 0.60
-const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.attack_ticket.touch_lifecycle.v1"
-const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 32
+const ATTACK_INPUT_TICKET_CONTRACT_ID := "combat.input.ordinary_attack.live_owner_no_debt.v2"
+const MAX_BUFFERED_MOBILE_ATTACK_TICKETS := 0
 const SKILL_INPUT_TICKET_CONTRACT_ID := (
 	"combat.input.skill_ticket.cooldown_coalesce_hold_repeat.v2"
 )
@@ -106,6 +148,7 @@ const SKILL_HOLD_REPEAT_THRESHOLD_MS := 300
 const MAGIC_SHIELD_AUTO_REFRESH_CHECK_SECONDS := 0.10
 const MAGIC_SHIELD_AUTO_REFRESH_EXPIRY_LEAD_SECONDS := 0.60
 const SAFE_ZONE_ACTOR_PADDING_GU := 0.05
+const SAFE_ZONE_ENFORCEMENT_INTERVAL_SECONDS := 0.10
 const BOSS_SURROUNDED_NEIGHBOR_RADIUS_GU := 1.65
 const ACTOR_LANDING_CLEARANCE_GU := 0.25
 const ENEMY_LANDING_CLEARANCE_GU := 0.125
@@ -116,11 +159,24 @@ const SAFE_RING_TELEPORT_DISTANCES_GU := [
 	2.25,
 	1.125,
 ]
-const RANDOM_TELEPORT_MIN_DISTANCE_GU := 3.0
-const RANDOM_TELEPORT_MAX_DISTANCE_GU := 16.25
+const RANDOM_TELEPORT_MAX_ATTEMPTS := 256
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
 const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
 const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
+const DEATH_DROP_WORK_BUDGET_USEC := 1200
+const DEATH_JOBS_MAX_PER_FRAME := 4
+const DROP_NODES_MAX_PER_FRAME := 8
+const DEATH_QUEUE_MAX_RETRIES := 3
+const DEATH_QUEUE_RETRY_DELAY_MSEC := 100
+const DEATH_TERMINAL_LEDGER_MAX := 64
+const DEATH_STATE_QUEUED := "QUEUED"
+const DEATH_STATE_SETTLING := "SETTLING"
+const DEATH_STATE_PLANNED := "PLANNED"
+const DEATH_STATE_MATERIALIZING := "MATERIALIZING"
+const DEATH_STATE_COMMITTED := "COMMITTED"
+const DEATH_STATE_RETRY := "RETRY"
+const DEATH_STATE_FAILED := "FAILED"
+const DEATH_STATE_CANCELLED := "CANCELLED"
 const CANONICAL_WIZARD_GEOMETRY_SKILLS := [
 	"wizard.hellfire",
 	"wizard.hell_lightning",
@@ -169,11 +225,17 @@ var current_zone := ""
 var current_map_id := -1
 var current_map_data: Dictionary = {}
 var _zone_generation := 0
+var _monster_terrain_navigation_context: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
 var locked_target: EnemyActor
 var manual_target_lock := false
 var magic_locked_target: EnemyActor
 var manual_magic_target_lock := false
+## Target presentation keeps only the previous displayed actor.  Enemy group
+## enumeration is not needed to update one changed highlight; the WeakRef also
+## lets map/death teardown clear a stale presentation without retaining it.
+var _presented_target_instance_id := 0
+var _presented_target_ref: WeakRef
 ## Presentation/selection follows the latest combat action. Caster
 ## professions still own an independent magic lock, but an empty primary slot
 ## temporarily presents and consumes the physical lock just like a warrior.
@@ -188,6 +250,14 @@ var _active_skill_inputs: Dictionary = {}
 var _next_skill_input_sequence := 1
 var _skill_input_retry_remaining := 0.0
 var _keyboard_bound_skill_token := 0
+const ATTACK_ACTION_LIFECYCLE_CONTRACT_ID := "input.attack.fresh_down.v1"
+const ATTACK_ACTION_DIAGNOSTIC_LIMIT := 256
+var _attack_action_press_owned := false
+var _attack_action_neutral_observed := true
+var _attack_action_ignored_pressed_recorded := false
+var _attack_action_lifecycle_epoch := 0
+var _attack_action_diagnostic_serial := 0
+var _attack_action_diagnostic_events: Array[Dictionary] = []
 var _magic_shield_auto_enabled := false
 var _magic_shield_auto_retry_remaining := 0.0
 var _queued_mobile_attacks: int:
@@ -196,12 +266,63 @@ var _queued_mobile_attacks: int:
 var _warrior_hud_timer := 0.0
 var _system_menu_layer: CanvasLayer
 var _system_menu_panel: Control
+## The system menu is the only owner of the pause it creates.  Keep this
+## explicit so an unrelated pause source is never released by a panel hide.
+var _system_menu_pause_owned := false
 var _movement_target_refresh_remaining := 0.0
 var _bich_camp_layout: Dictionary = {}
 var _active_safe_zones: Array = []
+var _safe_zone_context: Dictionary = {
+	"contract_id": WorldSpatialRulesScript.SAFE_ZONE_CONTEXT_CONTRACT_ID,
+	"map_id": -1,
+	"revision": 0,
+	"generation": 0,
+	"valid": true,
+	"failure_reason": "",
+	"zones": [],
+	"aabb_ground_gu": Rect2(),
+}
+var _safe_zone_revision := 0
+var _safe_zone_candidate_scratch: Array[EnemyActor] = []
+var _safe_zone_query_scratch: Array[EnemyActor] = []
+var _safe_zone_candidate_stamp_serial := 0
+var _player_safe_zone_cache: Dictionary = {
+	"player_instance_id": 0,
+	"map_id": -1,
+	"revision": -1,
+	"generation": -1,
+	"ground_position_gu": Vector2.INF,
+	"inside": false,
+	"valid": false,
+}
 var _runtime_spawn_serial := 0
+var _collecting_staged_actor_plan := false
+var _staged_actor_source_index := 0
+var _staged_actor_spawn_failure_reason := ""
+var _active_enemy_cache: Dictionary = {}
+var _active_boss_cache: Dictionary = {}
+var _safe_zone_enforcement_remaining := 0.0
 var _combat_spatial_index: RuntimeCombatSpatialIndexScript
+## R1-B: the shared target-query service fronts every special-geometry
+## broadphase query (d1d015ba pattern). The service is stateless between
+## queries; this instance is rebuilt whenever the map id or the index
+## instance changes so the runtime-map binding can never go stale.
+var _combat_target_query_service: CombatTargetQueryService
+var _combat_target_query_service_map_id := -2
+var _combat_target_query_service_index: RuntimeCombatSpatialIndexScript
+## Shared caller-owned scratch for player-facing enemy broadphase queries.  All
+## production consumers filter the current map generation after the index
+## query; no SceneTree group fallback is permitted when this contract is not
+## ready.
+var _target_spatial_query_scratch: Array[EnemyActor] = []
+var _aoe_candidate_scratch: Array[EnemyActor] = []
+var _aoe_target_scratch: Array[EnemyActor] = []
+var _aoe_distance_scratch: Array[float] = []
+var _aoe_id_scratch: Array[int] = []
+var _direct_spell_target_stats_scratch: Dictionary = {}
+var _aoe_cell_stamp := 0
 var _ground_effect_manager: PersistentGroundEffectManagerScript
+var _loot_pickup_runtime_manager: LootPickupRuntimeManagerScript
 ## FREEZE-P0.1: fail-closed canonical projection diagnostics.
 var missing_projection_rejection_count := 0
 var projection_rejection_reason := &""
@@ -210,6 +331,17 @@ var projection_rejection_reason := &""
 ## projections are used - allowed ONLY for migration tools, import/reference
 ## audits and test/dev preview, never for normal gameplay.
 var reference_audit_mode := false
+## R3X-2: an explicit test-only escape hatch for the legacy group authority.
+## PlayerState.test_mode is intentionally not consulted here: ordinary tests
+## must exercise the mapped spatial path and fail closed when it is absent.
+var _aoe_reference_fallback_test_enabled := false
+## FREEZE-P0.2R: projection profiles contain closures and must be reused during
+## actor/location updates. Formal profiles also retain the exact runtime
+## Dictionary that their closures captured, so a bridge cache invalidation can
+## discard only the stale map profile without a cross-script generation API.
+var _projection_profile_cache: Dictionary = {}
+var _projection_profile_cache_audit_mode := false
+var _projection_profile_runtime_identity_cache: Dictionary = {}
 var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
@@ -240,6 +372,44 @@ var _stealth_alpha_restore: Dictionary = {}
 var _last_taoist_buff_hint_text := ""
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
+var _pending_enemy_deaths: Array[Dictionary] = []
+var _enemy_death_flush_queued := false
+var _enemy_death_pipeline_running := false
+var _enemy_death_target_refresh_pending := false
+var _enemy_death_sequence := 0
+var _enemy_death_terminal_jobs: Array[Dictionary] = []
+var _enemy_death_terminal_total_count := 0
+var _last_death_logout_failure: Dictionary = {}
+var _death_settled_jobs_last_batch := 0
+var _death_drop_work_budget_usec_override := -1
+var _death_jobs_max_per_frame_override := -1
+var _drop_nodes_max_per_frame_override := -1
+var _test_force_loot_materialization_failure_count := 0
+var _pending_loot_collections: Array = []
+var _prepared_loot_collection: Dictionary = {}
+## FRAME-STALL probe: fires once per session on the first >250ms wall-clock
+## frame, but only after loading has ended (armed post-baseline), so bootstrap
+## spikes cannot consume it. Counters are facts only: absence of growth means
+## no tracked CPU cache grew - engine-side costs (render/driver/allocator) are
+## NOT observable through these counters and must not be inferred from them.
+var _first_long_frame_diagnosed := false
+var _first_combat_probe_armed := false
+## Session identity header (perf-smoothness-r1 Phase A): printed once per
+## process at the first loading-window end so every captured log discloses
+## what ran and where. Engine timing parameters are included because the
+## process-delta clamp they define was itself a measurement defect.
+static var _session_header_printed := false
+## AOE first-engagement window (perf-smoothness-r1 Phase A): the cast/field/
+## tick/death milestones and real frame intervals live in AoeEngagementWindow;
+## GameRoot only forwards events. Replaces the retired 12-delta probe whose
+## window could never cover the actual engagement and whose samples were
+## clamped deltas.
+var _loot_collection_flush_queued := false
+## Legacy loot candidates are rejected unless a focused test explicitly opts
+## into the old fixture shape. Formal pickups always carry map/generation
+## metadata from LootPickupRuntimeManager registration.
+var _loot_legacy_reference_fallback_test_enabled := false
+var _loot_collection_origin_rejection_count := 0
 var _active_physical_hit_diagnostics: Array[Dictionary] = []
 var _world_bootstrap_in_progress := false
 var _player_input_enabled := false
@@ -250,6 +420,933 @@ var _death_revival_request_in_flight := false
 var _world_bootstrap_coordinator := WorldBootstrapCoordinator.new()
 var _gameplay_input_locks: Dictionary = {}
 var _device_lab_runtime: DeviceLabRuntimeScript
+## Debug-only lifecycle markers for the character-hall -> world handoff.
+## GameRoot._init() is the earliest hook available in this script; scene
+## resource loading/instantiation before that hook remains outside this
+## profile and is called out explicitly in the emitted record.
+var _loading_handoff_init_usec := 0
+var _loading_handoff_enter_tree_usec := 0
+
+
+func _clear_aoe_query_scratch() -> void:
+	_aoe_candidate_scratch.clear()
+	_aoe_target_scratch.clear()
+	_aoe_distance_scratch.clear()
+	_aoe_id_scratch.clear()
+	_aoe_cell_stamp = 0
+
+
+func _begin_safe_zone_context(runtime_map_id: int) -> void:
+	_safe_zone_revision += 1
+	_safe_zone_context = {
+		"contract_id": WorldSpatialRulesScript.SAFE_ZONE_CONTEXT_CONTRACT_ID,
+		"map_id": runtime_map_id,
+		"revision": _safe_zone_revision,
+		"generation": _zone_generation,
+		"valid": true,
+		"failure_reason": "",
+		"zones": [],
+		"aabb_ground_gu": Rect2(),
+	}
+	_active_safe_zones = _safe_zone_context["zones"]
+	_safe_zone_candidate_scratch.clear()
+	_safe_zone_query_scratch.clear()
+	_safe_zone_candidate_stamp_serial = 0
+	_invalidate_player_safe_zone_cache()
+
+
+func _compile_active_safe_zones(raw_zones: Variant) -> void:
+	_safe_zone_context = WorldSpatialRulesScript.compile_safe_zone_context(
+		current_map_id,
+		_safe_zone_revision,
+		_zone_generation,
+		raw_zones,
+	)
+	_active_safe_zones = _safe_zone_context.get("zones", []) as Array
+	if not bool(_safe_zone_context.get("valid", false)):
+		# Invalid formal authored geometry is a map-data error. Keep the active
+		# set empty and let all safe-zone consumers fail closed; never reinterpret
+		# a malformed polygon as a circle or infer a shape from screen bounds.
+		_active_safe_zones.clear()
+		_safe_zone_context["zones"] = _active_safe_zones
+	_invalidate_player_safe_zone_cache()
+
+
+func _invalidate_player_safe_zone_cache() -> void:
+	_player_safe_zone_cache = {
+		"player_instance_id": (
+			player.get_instance_id()
+			if is_instance_valid(player)
+			else 0
+		),
+		"map_id": current_map_id,
+		"revision": int(_safe_zone_context.get("revision", -1)),
+		"generation": _zone_generation,
+		"ground_position_gu": Vector2.INF,
+		"inside": false,
+		"valid": false,
+	}
+
+
+func _refresh_player_safe_zone_cache(force := false) -> bool:
+	if not is_instance_valid(player):
+		_invalidate_player_safe_zone_cache()
+		return false
+	var context_valid := bool(_safe_zone_context.get("valid", false))
+	var ground_position_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var context_revision := int(_safe_zone_context.get("revision", -1))
+	var player_instance_id := player.get_instance_id()
+	if (
+		not force
+		and int(_player_safe_zone_cache.get("player_instance_id", 0)) == player_instance_id
+		and int(_player_safe_zone_cache.get("map_id", -1)) == current_map_id
+		and int(_player_safe_zone_cache.get("revision", -1)) == context_revision
+		and int(_player_safe_zone_cache.get("generation", -1)) == _zone_generation
+		and _player_safe_zone_cache.get("ground_position_gu", Vector2.INF) is Vector2
+		and (_player_safe_zone_cache["ground_position_gu"] as Vector2).is_equal_approx(ground_position_gu)
+	):
+		return bool(_player_safe_zone_cache.get("inside", false))
+	var inside := (
+		true
+		if not context_valid
+		else WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
+			ground_position_gu,
+			_active_safe_zones,
+		)
+	)
+	_player_safe_zone_cache = {
+		"player_instance_id": player_instance_id,
+		"map_id": current_map_id,
+		"revision": context_revision,
+		"generation": _zone_generation,
+		"ground_position_gu": ground_position_gu,
+		"inside": inside,
+		"valid": context_valid and ground_position_gu.is_finite(),
+	}
+	return inside
+
+
+func _player_inside_active_safe_zone() -> bool:
+	return _refresh_player_safe_zone_cache()
+
+
+func _set_player_world_position(position_px: Vector2) -> void:
+	if not is_instance_valid(player):
+		return
+	player.global_position = position_px
+	_refresh_player_safe_zone_cache(true)
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.player_position_changed(position_px)
+
+
+func _safe_zone_runtime_zones() -> Array:
+	return _active_safe_zones
+
+
+func _safe_zone_context_is_valid() -> bool:
+	return bool(_safe_zone_context.get("valid", false))
+
+
+func safe_zone_runtime_context() -> Dictionary:
+	return _safe_zone_context.duplicate(true)
+
+
+## R3X-2: the broadphase is the only production candidate source for player
+## hostile target resolution.  Group enumeration remains available solely for
+## explicit reference/test callers so parity fixtures can exercise the old
+## authority without creating a gameplay fallback.
+func set_aoe_reference_fallback_for_test(enabled: bool) -> void:
+	if not OS.is_debug_build():
+		_aoe_reference_fallback_test_enabled = false
+		return
+	_aoe_reference_fallback_test_enabled = enabled
+
+
+func _aoe_reference_fallback_allowed() -> bool:
+	return reference_audit_mode or _aoe_reference_fallback_test_enabled
+
+
+func _aoe_reference_enemy_nodes_into(output: Array[EnemyActor]) -> bool:
+	output.clear()
+	if not _aoe_reference_fallback_allowed():
+		return false
+	RuntimeDiagnostics.increment_performance_counter(
+		&"aoe_full_enemy_group_scans"
+	)
+	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+		if (
+			value is EnemyActor
+			and is_instance_valid(value)
+			and not (value as EnemyActor).is_queued_for_deletion()
+			and not bool((value as EnemyActor)._dying)
+			and not bool((value as EnemyActor)._death_pending)
+			and (value as EnemyActor).current_hp > 0
+		):
+			output.append(value as EnemyActor)
+	RuntimeDiagnostics.increment_performance_counter(
+		&"aoe_spatial_candidates",
+		output.size(),
+	)
+	return true
+
+
+func _target_spatial_query_ready() -> bool:
+	## Player target/occupancy paths are formal mapped-world consumers.  A
+	## missing index or projection is a rejection, never an implicit group scan.
+	if (
+		_combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+		or current_map_id < 0
+	):
+		projection_rejection_reason = &"target_spatial_index_unavailable"
+		return false
+	var profile := _resolve_projection_profile_for_map(current_map_id)
+	if not bool(profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = str(profile.get(
+			"reason",
+			GroundUnitSpaceScript.REASON_INVALID_RUNTIME_PROJECTION,
+		))
+		return false
+	var screen_to_ground: Variant = profile.get("screen_to_ground", Callable())
+	var ground_to_screen: Variant = profile.get("ground_to_screen", Callable())
+	if (
+		not screen_to_ground is Callable
+		or not (screen_to_ground as Callable).is_valid()
+		or not ground_to_screen is Callable
+		or not (ground_to_screen as Callable).is_valid()
+	):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = &"target_spatial_projection_unavailable"
+		return false
+	return true
+
+
+func _target_spatial_enemy_is_current(enemy: EnemyActor) -> bool:
+	return (
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and not enemy._dying
+		and not enemy._death_pending
+		and enemy.current_hp > 0
+		and enemy.runtime_map_id == current_map_id
+		and enemy.projection_ready()
+		and int(enemy.get_meta("zone_generation", -1)) == _zone_generation
+	)
+
+
+func _target_query_service() -> CombatTargetQueryService:
+	if (
+		_combat_target_query_service == null
+		or _combat_target_query_service_map_id != current_map_id
+		or _combat_target_query_service_index != _combat_spatial_index
+	):
+		_combat_target_query_service = CombatTargetQueryService.new(
+			_combat_spatial_index, current_map_id
+		)
+		_combat_target_query_service_map_id = current_map_id
+		_combat_target_query_service_index = _combat_spatial_index
+	return _combat_target_query_service
+
+
+## PERF-1: one allocation-conscious service call for the special-geometry
+## skills. The aabb pass-through keeps each skill's canonical gate (melee
+## footprint/sector predicates, wizard snapshot gate) as the exact authority.
+## The service fast path delegates to the index caller-owned node query
+## (query-stamp dedup, inline live filter), so with epsilon 0 the candidate
+## set is exactly the one the legacy direct node queries produced and the
+## hot path allocates no request Dictionary and no candidate records.
+func _service_envelope_into(
+	bounds_ground_gu: Rect2,
+	output: Array[EnemyActor],
+	stable_order: bool = true,
+) -> bool:
+	var service := _target_query_service()
+	var service_ready := service.query_envelope_into(
+		bounds_ground_gu, output, stable_order
+	)
+	if not service_ready and service.last_rejection_reason() != "":
+		projection_rejection_reason = StringName(
+			"target_query_%s" % service.last_rejection_reason()
+		)
+	return service_ready
+
+
+func _target_spatial_query_aabb_into(
+	bounds_ground_gu: Rect2,
+	output: Array[EnemyActor],
+	stable_order: bool = true,
+) -> bool:
+	output.clear()
+	if (
+		not _target_spatial_query_ready()
+		or not bounds_ground_gu.position.is_finite()
+		or not bounds_ground_gu.size.is_finite()
+		or bounds_ground_gu.size.x < 0.0
+		or bounds_ground_gu.size.y < 0.0
+	):
+		if bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
+			projection_rejection_reason = &"target_spatial_query_bounds_invalid"
+		return false
+	var service_ready := _service_envelope_into(bounds_ground_gu, output)
+	var write_index := 0
+	for raw_enemy: Variant in output:
+		if not raw_enemy is EnemyActor:
+			continue
+		var enemy := raw_enemy as EnemyActor
+		if not _target_spatial_enemy_is_current(enemy):
+			continue
+		output[write_index] = enemy
+		write_index += 1
+	output.resize(write_index)
+	return service_ready
+
+
+func _target_spatial_query_segment_into(
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	output: Array[EnemyActor],
+	stable_order: bool = true,
+) -> bool:
+	output.clear()
+	if (
+		not _target_spatial_query_ready()
+		or not start_ground_gu.is_finite()
+		or not end_ground_gu.is_finite()
+		or not is_finite(expansion_gu)
+	):
+		if not is_finite(expansion_gu):
+			projection_rejection_reason = &"target_spatial_query_expansion_invalid"
+		return false
+	# PERF-1: the segment broadphase enters the service fast path as one
+	# expanded AABB with the exact envelope the index node query built
+	# (segment AABB expanded by the caller's expansion); with epsilon 0 the
+	# service adds only the index max actor bounds on top, so the candidate
+	# set is identical to the direct node query it replaces.
+	var expansion := maxf(0.0, expansion_gu)
+	var min_gu := Vector2(
+		minf(start_ground_gu.x, end_ground_gu.x),
+		minf(start_ground_gu.y, end_ground_gu.y)
+	) - Vector2.ONE * expansion
+	var max_gu := Vector2(
+		maxf(start_ground_gu.x, end_ground_gu.x),
+		maxf(start_ground_gu.y, end_ground_gu.y)
+	) + Vector2.ONE * expansion
+	var service_ready := _service_envelope_into(
+		Rect2(min_gu, max_gu - min_gu), output, stable_order
+	)
+	var write_index := 0
+	for raw_enemy: Variant in output:
+		if not raw_enemy is EnemyActor:
+			continue
+		var enemy := raw_enemy as EnemyActor
+		if not _target_spatial_enemy_is_current(enemy):
+			continue
+		output[write_index] = enemy
+		write_index += 1
+	output.resize(write_index)
+	return service_ready
+
+
+func _aoe_build_query_plan(
+	skill_id: String,
+	release_id: String,
+	snapshot: Dictionary,
+	validation_context: Dictionary,
+	options: Dictionary,
+	release_cache: Dictionary,
+) -> Dictionary:
+	if snapshot.is_empty() or skill_id.is_empty() or release_id.is_empty():
+		return {}
+	var was_cached := release_cache.has(release_id)
+	var strict_count_before := SkillFootprintQueryPlanScript.strict_validation_count
+	var plan := SkillFootprintQueryPlanScript.build_once(
+		release_cache,
+		release_id,
+		skill_id,
+		current_map_id,
+		snapshot,
+		validation_context,
+		options,
+	)
+	if not was_cached:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_query_plan_builds"
+		)
+		if SkillFootprintQueryPlanScript.strict_validation_count > strict_count_before:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_snapshot_validation_calls"
+			)
+	return plan
+
+
+func _aoe_plan_snapshot(plan: Dictionary) -> Dictionary:
+	var raw_snapshot: Variant = plan.get("validated_snapshot_reference", {})
+	return raw_snapshot as Dictionary if raw_snapshot is Dictionary else {}
+
+
+func _aoe_plan_is_ready(plan: Dictionary) -> bool:
+	if (
+		plan.is_empty()
+		or not bool(plan.get("valid", false))
+		or _combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+		or current_map_id < 0
+		or int(plan.get("runtime_map_id", -1)) != current_map_id
+	):
+		return false
+	var snapshot := _aoe_plan_snapshot(plan)
+	return str(snapshot.get("coordinate_space", "")) == str(
+		SkillFootprintSnapshotScript.COORDINATE_SPACE_RUNTIME_MAP_ABSOLUTE_GROUND_GU
+	)
+
+
+func _aoe_record_query_rejection(reason: String) -> void:
+	projection_rejection_reason = reason
+
+
+func _aoe_query_enemy_candidates_aabb(
+	plan: Dictionary,
+	bounds_ground_gu: Rect2,
+	allow_reference_fallback := true,
+) -> bool:
+	_aoe_candidate_scratch.clear()
+	if _aoe_plan_is_ready(plan):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_queries"
+		)
+		if (
+			not bounds_ground_gu.position.is_finite()
+			or not bounds_ground_gu.size.is_finite()
+			or bounds_ground_gu.size.x < 0.0
+			or bounds_ground_gu.size.y < 0.0
+		):
+			# The replaced index node query answered invalid envelopes with
+			# an empty candidate set and no rejection; keep that behavior.
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_spatial_candidates", 0
+			)
+			return true
+		var query_ready := _service_envelope_into(
+			bounds_ground_gu, _aoe_candidate_scratch
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_candidates", _aoe_candidate_scratch.size()
+		)
+		return query_ready
+	if allow_reference_fallback and _aoe_reference_fallback_allowed():
+		return _aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+	_aoe_record_query_rejection(
+		"aoe_spatial_index_unavailable_or_runtime_map_mismatch"
+	)
+	return false
+
+
+func _aoe_query_enemy_candidates_segment(
+	plan: Dictionary,
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	allow_reference_fallback := true,
+) -> bool:
+	_aoe_candidate_scratch.clear()
+	if _aoe_plan_is_ready(plan):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_queries"
+		)
+		if (
+			not start_ground_gu.is_finite()
+			or not end_ground_gu.is_finite()
+			or not is_finite(expansion_gu)
+		):
+			# The replaced index node query answered invalid segments with
+			# an empty candidate set and no rejection; keep that behavior.
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_spatial_candidates", 0
+			)
+			return true
+		var expansion := maxf(0.0, expansion_gu)
+		var min_gu := Vector2(
+			minf(start_ground_gu.x, end_ground_gu.x),
+			minf(start_ground_gu.y, end_ground_gu.y)
+		) - Vector2.ONE * expansion
+		var max_gu := Vector2(
+			maxf(start_ground_gu.x, end_ground_gu.x),
+			maxf(start_ground_gu.y, end_ground_gu.y)
+		) + Vector2.ONE * expansion
+		var query_ready := _service_envelope_into(
+			Rect2(min_gu, max_gu - min_gu), _aoe_candidate_scratch
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_spatial_candidates", _aoe_candidate_scratch.size()
+		)
+		return query_ready
+	if allow_reference_fallback and _aoe_reference_fallback_allowed():
+		return _aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+	_aoe_record_query_rejection(
+		"aoe_spatial_index_unavailable_or_runtime_map_mismatch"
+	)
+	return false
+
+
+func _aoe_validated_snapshot_intersects(
+	plan: Dictionary,
+	enemy: EnemyActor,
+) -> bool:
+	if not _aoe_plan_is_ready(plan) or not is_instance_valid(enemy):
+		return false
+	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+	if not target_ground_gu.is_finite():
+		return false
+	return SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		_aoe_plan_snapshot(plan),
+		target_ground_gu,
+		enemy.combat_radius_gu,
+	)
+
+
+func _aoe_insert_by_instance_id(
+	targets: Array[EnemyActor],
+	ids: Array[int],
+	enemy: EnemyActor,
+) -> void:
+	var enemy_id := enemy.get_instance_id()
+	var insert_at := targets.size()
+	for index: int in range(ids.size()):
+		if enemy_id < ids[index]:
+			insert_at = index
+			break
+	ids.insert(insert_at, enemy_id)
+	targets.insert(insert_at, enemy)
+
+
+func _aoe_insert_by_distance(
+	targets: Array[EnemyActor],
+	distances: Array[float],
+	ids: Array[int],
+	enemy: EnemyActor,
+	distance_along_line_gu: float,
+) -> void:
+	var enemy_id := enemy.get_instance_id()
+	var insert_at := targets.size()
+	for index: int in range(targets.size()):
+		if (
+			distance_along_line_gu < distances[index]
+			or (
+				is_equal_approx(distance_along_line_gu, distances[index])
+				and enemy_id < ids[index]
+			)
+		):
+			insert_at = index
+			break
+	distances.insert(insert_at, distance_along_line_gu)
+	ids.insert(insert_at, enemy_id)
+	targets.insert(insert_at, enemy)
+
+
+func _aoe_geometry_cells_aabb(cells: Array[Vector2i]) -> Rect2:
+	if cells.is_empty():
+		return Rect2()
+	var minimum := Vector2(cells[0]) - Vector2.ONE * 0.5
+	var maximum := Vector2(cells[0]) + Vector2.ONE * 0.5
+	for cell: Vector2i in cells:
+		var center := Vector2(cell)
+		minimum = minimum.min(center - Vector2.ONE * 0.5)
+		maximum = maximum.max(center + Vector2.ONE * 0.5)
+	return Rect2(minimum, maximum - minimum)
+
+
+func _aoe_legacy_damage_query_plan(
+	skill_id: String,
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+	radius_gu: float,
+	release_cache: Dictionary,
+) -> Dictionary:
+	var resolved_skill_id := skill_id if not skill_id.is_empty() else "legacy_damage"
+	var snapshot := SkillFootprintSnapshotScript.create_circle(
+		resolved_skill_id,
+		"legacy_damage",
+		origin_ground_gu,
+		maxf(0.0, radius_gu),
+		32,
+		_canonical_snapshot_absolute_context(origin_ground_gu),
+	)
+	var options := {
+		"maximum_targets": -1,
+		"query_kind": SkillFootprintQueryPlanScript.QUERY_KIND_AABB,
+		"ordering_policy": SkillFootprintQueryPlanScript.ORDERING_STABLE_COMBAT_INSTANCE,
+		"line_origin_ground_gu": origin_ground_gu,
+		"line_direction_ground_gu": direction_ground_gu,
+	}
+	return _aoe_build_query_plan(
+		resolved_skill_id,
+		"legacy_damage",
+		snapshot,
+		_canonical_snapshot_validation_context(origin_ground_gu),
+		options,
+		release_cache,
+	)
+
+
+func _aoe_apply_legacy_damage_candidates(
+	candidates: Array[EnemyActor],
+	origin_screen_px: Vector2,
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+	damage: int,
+	radial: bool,
+	attack_range_gu: float,
+	physical_accuracy: bool,
+	source_skill_id: String,
+) -> Dictionary:
+	var hit_any := false
+	var geometry_matches := 0
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_exact_intersection_tests"
+		)
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(
+			enemy.global_position
+		)
+		var offset_ground_gu := target_ground_gu - origin_ground_gu
+		var in_arc := (
+			offset_ground_gu.length_squared()
+			<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
+			or offset_ground_gu.normalized().dot(direction_ground_gu) > -0.05
+		)
+		if not (
+			_ground_circle_intersects_enemy_footprint_gu(
+				origin_screen_px,
+				attack_range_gu,
+				enemy,
+			)
+			and (radial or in_arc)
+		):
+			continue
+		geometry_matches += 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_selected_targets"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_damage_target_count"
+		)
+		if physical_accuracy and not PlayerState.test_mode:
+			var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
+			if not WarriorCombatMath.roll_hit(accuracy, enemy.agility, _rng):
+				continue
+		var resolved_damage := damage
+		if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
+			var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
+				enemy,
+				source_skill_id,
+				damage,
+				player,
+				_rng,
+				Callable(self, "_resolve_magic_defense"),
+				-1,
+				_direct_spell_target_stats_scratch,
+			)
+			resolved_damage = int(resolution.get("final_damage", 0))
+			if resolved_damage > 0:
+				hit_any = true
+			continue
+		if resolved_damage <= 0:
+			continue
+		hit_any = _combat_runtime.apply_enemy_physical_damage(
+			enemy,
+			resolved_damage,
+			player,
+			(
+				{
+					"damage_kind": "player_physical",
+					"confirmed_hit": true,
+					"source_skill_id": source_skill_id,
+					"source": "game_root._aoe_apply_legacy_damage_candidates",
+				}
+				if physical_accuracy
+				and not CombatResolutionRulesScript.anti_magic_eligible(source_skill_id)
+				else {}
+			),
+		) or hit_any
+	return {
+		"hit_any": hit_any,
+		"geometry_matches": geometry_matches,
+	}
+
+
+func _aoe_melee_query_plan(
+	mode: String,
+	origin_ground_gu: Vector2,
+	direction: Vector2,
+	release_geometry: Dictionary,
+	thrust_damage_axis_plan: Dictionary,
+	melee_release_snapshot: Dictionary,
+	target_aligned_plan: Dictionary,
+	release_cache: Dictionary,
+) -> Dictionary:
+	var snapshot := melee_release_snapshot
+	if snapshot.is_empty():
+		var raw_snapshot: Variant = release_geometry.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_snapshot is Dictionary:
+			snapshot = raw_snapshot as Dictionary
+	if snapshot.is_empty() and not target_aligned_plan.is_empty():
+		var raw_target_snapshot: Variant = target_aligned_plan.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_target_snapshot is Dictionary:
+			snapshot = raw_target_snapshot as Dictionary
+	if snapshot.is_empty():
+		var raw_axis_snapshot: Variant = thrust_damage_axis_plan.get(
+			"skill_footprint_snapshot", {}
+		)
+		if raw_axis_snapshot is Dictionary:
+			snapshot = raw_axis_snapshot as Dictionary
+	var skill_id: String = {
+		WarriorMeleeGeometryScript.SKILL_THRUST: "warrior.thrusting",
+		WarriorMeleeGeometryScript.SKILL_HALF_MOON: "warrior.half_moon",
+		WarriorMeleeGeometryScript.SKILL_FIRE: "warrior.fire_sword",
+	}.get(mode, "warrior.normal_attack")
+	var release_id := str(release_geometry.get("release_id", ""))
+	if release_id.is_empty() and not snapshot.is_empty():
+		release_id = str(snapshot.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = "melee:preflight:%s" % mode
+	if snapshot.is_empty():
+		var direction_index := _melee_direction_index(direction, release_geometry)
+		snapshot = WarriorMeleeGeometryScript.attack_release_footprint_snapshot_ground_gu(
+			skill_id,
+			release_id,
+			origin_ground_gu,
+			direction_index,
+			mode,
+			0.0,
+			_canonical_snapshot_absolute_context(origin_ground_gu),
+		)
+	var options := {
+		"maximum_targets": -1,
+		"query_kind": SkillFootprintQueryPlanScript.QUERY_KIND_AABB,
+		"ordering_policy": SkillFootprintQueryPlanScript.ORDERING_STABLE_COMBAT_INSTANCE,
+	}
+	var validation_context: Dictionary = release_geometry.get(
+		"snapshot_validation_context",
+		_canonical_snapshot_validation_context(origin_ground_gu),
+	)
+	if validation_context.is_empty():
+		validation_context = _canonical_snapshot_validation_context(origin_ground_gu)
+	return _aoe_build_query_plan(
+		skill_id,
+		release_id,
+		snapshot,
+		validation_context,
+		options,
+		release_cache,
+	)
+
+
+func _aoe_collect_primary_melee_candidates(
+	candidates: Array[EnemyActor],
+	result: Array[EnemyActor],
+	origin_ground_gu: Vector2,
+	direction_index: int,
+	mode: String,
+	thrust_damage_axis_plan: Dictionary,
+	melee_release_snapshot: Dictionary,
+	target_aligned_plan: Dictionary,
+	query_plan: Dictionary,
+) -> void:
+	for enemy: EnemyActor in candidates:
+		if not _is_primary_melee_candidate(
+			enemy,
+			origin_ground_gu,
+			direction_index,
+			mode,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			target_aligned_plan,
+			query_plan,
+		):
+			continue
+		result.append(enemy)
+
+
+func _aoe_target_aligned_melee_sector(
+	target_plan: Dictionary,
+	target_ground_gu: Vector2,
+	target_radius_gu: float,
+	mode: String,
+) -> int:
+	if not bool(target_plan.get("target_axis_eligible", false)):
+		return -1
+	var raw_snapshot: Variant = target_plan.get("skill_footprint_snapshot", {})
+	if not raw_snapshot is Dictionary:
+		return -1
+	var snapshot := raw_snapshot as Dictionary
+	if not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+		snapshot,
+		target_ground_gu,
+		target_radius_gu,
+	):
+		return -1
+	var origin_ground_gu: Vector2 = target_plan.get(
+		"origin_ground_gu", Vector2.ZERO
+	)
+	var axis_ground_gu: Vector2 = target_plan.get(
+		"continuous_axis_ground_gu", Vector2.ZERO
+	)
+	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_direction_ground_gu(
+			origin_ground_gu,
+			target_ground_gu,
+			target_radius_gu,
+			axis_ground_gu,
+		)
+	if mode != WarriorMeleeGeometryScript.SKILL_HALF_MOON:
+		return 0
+	var effective_reach_gu := WarriorMeleeGeometryScript.reach_gu(
+		WarriorMeleeGeometryScript.SKILL_HALF_MOON,
+		float(target_plan.get("range_bonus_gu", 0.0)),
+	)
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu,
+		effective_reach_gu,
+	):
+		return 0
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu.rotated(-PI / 4.0),
+		effective_reach_gu,
+	):
+		return 7
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu.rotated(PI / 4.0),
+		effective_reach_gu,
+	):
+		return 1
+	if WarriorMeleeGeometryScript.footprint_intersects_continuous_direction_sector_gu(
+		origin_ground_gu,
+		target_ground_gu,
+		target_radius_gu,
+		axis_ground_gu.rotated(PI / 2.0),
+		effective_reach_gu,
+	):
+		return 2
+	return -1
+
+
+func _aoe_spell_snapshot(
+	skill_release_snapshot: Dictionary,
+	continuous_line_strip_ground_gu: Dictionary,
+) -> Dictionary:
+	if not skill_release_snapshot.is_empty():
+		return skill_release_snapshot
+	var raw_snapshot: Variant = continuous_line_strip_ground_gu.get(
+		"skill_footprint_snapshot", {}
+	)
+	return raw_snapshot as Dictionary if raw_snapshot is Dictionary else {}
+
+
+func _aoe_spell_query_plan(
+	stable_skill_id: String,
+	raw_geometry_cells: Variant,
+	effect: Dictionary,
+	continuous_line_strip_ground_gu: Dictionary,
+	skill_release_snapshot: Dictionary,
+	origin_ground_gu: Vector2,
+	release_cache: Dictionary,
+) -> Dictionary:
+	var snapshot := _aoe_spell_snapshot(
+		skill_release_snapshot,
+		continuous_line_strip_ground_gu,
+	)
+	if snapshot.is_empty():
+		return {}
+	var resolved_skill_id := stable_skill_id
+	if resolved_skill_id.is_empty():
+		resolved_skill_id = str(snapshot.get("skill_id", ""))
+	if resolved_skill_id.is_empty():
+		resolved_skill_id = "canonical_aoe"
+	var release_id := str(snapshot.get("release_id", ""))
+	if release_id.is_empty():
+		release_id = str(continuous_line_strip_ground_gu.get("release_id", ""))
+	if release_id.is_empty():
+		return {}
+	var maximum_targets := int(effect.get("maximum_targets", -1))
+	var is_continuous_line := (
+		resolved_skill_id in CONTINUOUS_WIZARD_LINE_SKILLS
+		and _is_supported_continuous_line_contract(
+			str(continuous_line_strip_ground_gu.get("contract_id", ""))
+		)
+	)
+	if is_continuous_line and str(effect.get("target_limit_policy", "")) == "all_intersecting_effect_cells":
+		maximum_targets = -1
+	var ordering_policy := SkillFootprintQueryPlanScript.ORDERING_STABLE_COMBAT_INSTANCE
+	if str(snapshot.get("shape_type", "")) == SkillFootprintSnapshotScript.SHAPE_CELL_UNION:
+		ordering_policy = SkillFootprintQueryPlanScript.ORDERING_CELL_INSTANCE
+	elif raw_geometry_cells is Array and not (raw_geometry_cells as Array).is_empty():
+		ordering_policy = SkillFootprintQueryPlanScript.ORDERING_CELL_INSTANCE
+	var options := {
+		"maximum_targets": maximum_targets,
+		"query_kind": (
+			SkillFootprintQueryPlanScript.QUERY_KIND_SEGMENT
+			if is_continuous_line
+			else SkillFootprintQueryPlanScript.QUERY_KIND_AABB
+		),
+		"ordering_policy": (
+			SkillFootprintQueryPlanScript.ORDERING_DISTANCE_INSTANCE
+			if is_continuous_line
+			else ordering_policy
+		),
+	}
+	if raw_geometry_cells is Array and not (raw_geometry_cells as Array).is_empty():
+		var cell_sequence: Array[Vector2i] = []
+		for raw_cell: Variant in raw_geometry_cells as Array:
+			if raw_cell is Vector2i:
+				cell_sequence.append(raw_cell)
+		if not cell_sequence.is_empty():
+			options["cell_sequence"] = cell_sequence
+	if is_continuous_line:
+		var line_origin: Variant = continuous_line_strip_ground_gu.get(
+			"origin_ground_gu", snapshot.get("origin_ground_gu", origin_ground_gu)
+		)
+		var line_direction: Variant = continuous_line_strip_ground_gu.get(
+			"direction_ground_gu", snapshot.get("direction_ground_gu", Vector2.ZERO)
+		)
+		if line_origin is Vector2:
+			options["line_origin_ground_gu"] = line_origin
+		if line_direction is Vector2:
+			options["line_direction_ground_gu"] = line_direction
+	var snapshot_origin: Variant = snapshot.get("origin_ground_gu", origin_ground_gu)
+	var validation_origin := (
+		snapshot_origin as Vector2 if snapshot_origin is Vector2 else origin_ground_gu
+	)
+	return _aoe_build_query_plan(
+		resolved_skill_id,
+		release_id,
+		snapshot,
+		_canonical_snapshot_validation_context(validation_origin),
+		options,
+		release_cache,
+	)
 
 # --- P1-A: Gameplay Input Gate (counted runtime locks) ---
 
@@ -261,10 +1358,15 @@ const DEATH_REVIVAL_FLOW_ID := "player.death.lifecycle.ui_gated.v1"
 
 
 func gameplay_input_is_enabled() -> bool:
-	return _player_input_enabled
+	return (
+		_player_input_enabled and is_instance_valid(player)
+		and not player._dead and player.current_hp > 0
+		and not player.combat_transition_is_active()
+	)
 
 
 func _acquire_gameplay_input_lock(reason: StringName) -> void:
+	_reset_attack_action_lifecycle(reason)
 	var _count: int = int(_gameplay_input_locks.get(reason, 0))
 	_gameplay_input_locks[reason] = _count + 1
 	_refresh_gameplay_input_state()
@@ -282,6 +1384,11 @@ func _release_gameplay_input_lock(reason: StringName) -> void:
 	else:
 		_gameplay_input_locks[reason] = _count - 1
 	_refresh_gameplay_input_state()
+	if _gameplay_input_locks.is_empty() and is_instance_valid(player):
+		# A completed bootstrap/map/death transition is a fresh movement
+		# gesture. Never carry a pre-transition run-up into the ready world,
+		# even when the player keeps a direction held through the lock.
+		player.reset_locomotion()
 	if RuntimeDiagnostics.input_gate_enabled():
 		print("[GameplayInputGate] enabled=", gameplay_input_is_enabled(), " locks=", _gameplay_input_locks)
 
@@ -308,15 +1415,90 @@ func _on_gameplay_movement(value: Vector2) -> void:
 	player.set_touch_vector(value)
 
 
+func _cancel_map_transition_movement_input() -> void:
+	if is_instance_valid(hud) and hud.has_method("cancel_movement_input"):
+		hud.cancel_movement_input()
+	if is_instance_valid(player):
+		# HUD's zero signal is intentionally ignored while the gameplay lock is
+		# held, so clear the authoritative player vector at the boundary too.
+		player.set_touch_vector(Vector2.ZERO)
+
+
+
+func _init() -> void:
+	if OS.is_debug_build():
+		_loading_handoff_init_usec = Time.get_ticks_usec()
+	# Lifetime is owned by this GameRoot, including instances never added
+	# to SceneTree. Do not create another service or change combat math.
+	_combat_runtime.name = "CombatRuntimeService"
+	add_child(_combat_runtime)
+
+
+func _enter_tree() -> void:
+	if OS.is_debug_build():
+		_loading_handoff_enter_tree_usec = Time.get_ticks_usec()
+
+
+func _loading_profile_mark(
+	profile: Dictionary,
+	stage_name: String,
+	stage_started_usec: int,
+	profile_started_usec: int,
+) -> int:
+	var ended_usec := Time.get_ticks_usec()
+	profile["stages_ms"][stage_name] = {
+		"start_ms": float(stage_started_usec - profile_started_usec) / 1000.0,
+		"duration_ms": float(ended_usec - stage_started_usec) / 1000.0,
+	}
+	return ended_usec
+
 
 func _ready() -> void:
+	var loading_profile_enabled := OS.is_debug_build()
+	var ready_started_usec := 0
+	if loading_profile_enabled:
+		ready_started_usec = Time.get_ticks_usec()
+	var profile_started_usec := ready_started_usec
+	if _loading_handoff_init_usec > 0:
+		profile_started_usec = _loading_handoff_init_usec
+	var loading_profile: Dictionary = {}
+	if loading_profile_enabled:
+		loading_profile = {
+			"origin": "GameRoot._init",
+			"pre_ready_boundary": (
+				"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented"
+			),
+			"stages_ms": {},
+			"lifecycle_ms": {
+				"init_to_enter_tree": (
+					float(_loading_handoff_enter_tree_usec - _loading_handoff_init_usec)
+					/ 1000.0
+					if _loading_handoff_init_usec > 0
+					and _loading_handoff_enter_tree_usec > 0
+					else -1.0
+				),
+				"enter_tree_to_ready": (
+					float(ready_started_usec - _loading_handoff_enter_tree_usec)
+					/ 1000.0
+					if _loading_handoff_enter_tree_usec > 0
+					else -1.0
+				),
+			},
+		}
+	var stage_started_usec := ready_started_usec
+
 	y_sort_enabled = true
 	_rng.randomize()
+	PlayerState.configure_blessing_oil_rng(_rng)
 	_combat_spatial_index = RuntimeCombatSpatialIndexScript.new()
 	# Q2-B: one scheduler for generic persistent ground effects. It reuses the
 	# shared enemy spatial index; FireWall's formal field path stays outside.
 	_ground_effect_manager = PersistentGroundEffectManagerScript.new(
-		_combat_spatial_index
+		_combat_spatial_index,
+		# R1-C: the manager's damage deliveries share GameRoot's owned
+		# CombatRuntimeService instance (M30 ownership contract); the manager
+		# never delivers damage outside the shared authority.
+		_combat_runtime
 	)
 	# Q2-D: one MonsterVisual streaming coordinator; MonsterVisual instances
 	# register needs and the coordinator owns the single global streaming poll.
@@ -327,34 +1509,107 @@ func _ready() -> void:
 	get_tree().auto_accept_quit = false
 	_bich_camp_layout = GothicBichCampBuilderScript.load_layout()
 	_register_input_actions()
+	_reset_attack_action_lifecycle(&"game_root_ready")
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"pre_background_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	background = WorldBackground.new()
+	# The initial world is built by WorldBootstrapCoordinator's staged pipeline.
+	# Declare this before attachment so WorldBackground._ready() does not also
+	# run the legacy synchronous environment build.
+	background.defer_initial_legacy_build_to_coordinator()
 	add_child(background)
+	# WALL-P0 diagnostics: inert unless explicitly enabled via env/arg or the
+	# user:// marker file; read-only metrics only. Preload (not the global
+	# class name) so the hook never depends on the script class cache.
+	var probe_script: GDScript = preload(
+		"res://scripts/wall_runtime_perf_probe.gd"
+	)
+	if probe_script.enabled_by_environment():
+		var wall_perf_probe: Node = probe_script.new()
+		wall_perf_probe.configure(background, self, true)
+		add_child(wall_perf_probe)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"background_construct_and_attach",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	player = PlayerCharacter.new()
 	player.name = "Player"
 	player.attack_requested.connect(_on_player_attack)
 	player.environment_blocker = background
 	player.skill_requested.connect(_on_player_skill)
+	player.hc_world_skill_preflight = Callable(self, "_hc_skill_preflight")
+	player.skill_cast_started.connect(_on_skill_cast_audio_started)
+	player.skill_cast_started.connect(_on_first_fire_wall_cast_probe)
 	player.warrior_skill_state_changed.connect(_on_warrior_skill_state_changed)
 	player.stats_changed.connect(_on_player_stats_changed)
 	player.movement_performed.connect(_on_player_moved)
 	player.death_requested.connect(_on_player_death_requested)
 	PlayerState.consumable_requested.connect(_on_consumable_used)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
+	PlayerState.item_audio_committed.connect(_on_item_audio_committed)
+	# R2: timed 神水 effects report their end through the central notice layer.
+	PlayerState.temporary_item_buff_expired.connect(_on_temporary_item_buff_expired)
+	player.potion_buff_expired.connect(_on_player_potion_buff_expired)
 	add_child(player)
+	_player_level_up_effect = LevelUpEffectScript.new()
+	_player_level_up_effect.name = "PlayerLevelUpEffect"
+	_player_level_up_effect.z_index = 0
+	player.add_child(_player_level_up_effect)
+	_player_level_up_effect.process_mode = Node.PROCESS_MODE_INHERIT
+	_player_level_up_effect.set_meta("preview_only", false)
+	_player_level_up_effect.set_meta("gameplay_event_source", "PlayerState.levels_gained")
+	PlayerState.levels_gained.connect(_on_player_levels_gained)
+	_loot_pickup_runtime_manager = LootPickupRuntimeManagerScript.new()
+	_loot_pickup_runtime_manager.name = "LootPickupRuntimeManager"
+	_loot_pickup_runtime_manager.configure_player(player)
+	_loot_pickup_runtime_manager.collection_path_is_clear = Callable(self, "_loot_collection_path_is_clear")
+	add_child(_loot_pickup_runtime_manager)
 	PlayerState.configure_taoist_main_pets_persistence_provider(
 		Callable(self, "_capture_taoist_main_pet_runtime_states")
 	)
 	player.restore_warrior_runtime_state(PlayerState.warrior_runtime_state_for_restore())
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"player_construct_wire_attach_restore",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	_world_camera = Camera2D.new()
 	_world_camera.name = "WorldCamera"
 	_world_camera.position_smoothing_enabled = true
 	_world_camera.position_smoothing_speed = 7.0
 	_world_camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
-	player.add_child(_world_camera)
+	# The camera target is resolved explicitly in _process.  Keep it in the
+	# stable GameRoot coordinate domain so Player physics cannot implicitly move
+	# the camera between constraint updates and introduce a one-frame jitter.
+	add_child(_world_camera)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"camera_construct_and_attach",
+			stage_started_usec,
+			profile_started_usec,
+		)
 
 	hud = GameHUD.new()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_construct",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	hud.movement_changed.connect(_on_gameplay_movement)
 	hud.attack_input_started.connect(_on_mobile_attack_input_started)
 	hud.attack_input_ended.connect(_on_mobile_attack_input_ended)
@@ -364,7 +1619,10 @@ func _ready() -> void:
 	hud.skill_input_cancelled.connect(_on_skill_input_cancelled)
 	hud.interact_pressed.connect(_try_interact)
 	hud.skill_slot_pressed.connect(_use_skill_slot)
-	hud.map_travel_requested.connect(travel_to_map)
+	hud.map_teleport_availability_requested.connect(
+		_on_map_teleport_availability_requested
+	)
+	hud.map_teleport_requested.connect(_on_map_teleport_requested)
 	hud.target_switch_pressed.connect(_cycle_target)
 	hud.auto_target_changed.connect(_set_auto_target_enabled)
 	hud.special_action_pressed.connect(_on_special_action_pressed)
@@ -376,7 +1634,31 @@ func _ready() -> void:
 	hud.quest_abandon_requested.connect(_on_quest_abandon_requested)
 	hud.warehouse_sort_requested.connect(_on_warehouse_sort_requested)
 	hud.revival_requested.connect(_on_revival_requested)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_signal_wiring",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	add_child(hud)
+	_town_music_controller = TownMusicControllerScript.new()
+	_town_music_controller.name = "TownMusicController"
+	add_child(_town_music_controller)
+	_audio_runtime_service = AudioRuntimeServiceScript.new()
+	_audio_runtime_service.name = "AudioRuntimeService"
+	add_child(_audio_runtime_service)
+	_audio_runtime_service.sync_sfx_enabled_from_bus()
+	hud.loading_transition_finished.connect(
+		_town_music_controller.on_loading_transition_finished
+	)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_attach_and_ready",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	hud.set_skill_button_assignments(PlayerState.skill_button_assignments_snapshot())
 	# Device Lab is intentionally a Debug-only child.  It exposes only the
 	# bounded ADB mailbox service; release builds never create the node.
@@ -390,27 +1672,69 @@ func _ready() -> void:
 		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:
 			_sync_player_runtime_snapshot_to_hud()
 	)
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"hud_post_ready_setup",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	# 主动同步首次运行时快照到 HUD，确保资源正确后再加载地图。
 	# 120/120、40/40 仅作为未绑定前的占位值。
 	_sync_player_runtime_snapshot_to_hud()
 	# 初次进场通过独立 bootstrap 合约：显示遮罩 → 预加载 → 加载地图 → 开放输入。
 	_build_system_menu()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"system_menu_build",
+			stage_started_usec,
+			profile_started_usec,
+		)
 	_begin_initial_world_bootstrap()
+	if loading_profile_enabled:
+		stage_started_usec = _loading_profile_mark(
+			loading_profile,
+			"bootstrap_dispatch",
+			stage_started_usec,
+			profile_started_usec,
+		)
+		loading_profile["total_ms"] = (
+			float(Time.get_ticks_usec() - profile_started_usec) / 1000.0
+		)
+		print("[InitialGameRootProfile] ", JSON.stringify(loading_profile))
 
 
 func _exit_tree() -> void:
+	if not _prepared_loot_collection.is_empty():
+		_prepared_loot_collection.plan.writer.cancel()
+		_prepared_loot_collection.plan.writer.result(true)
+		_prepared_loot_collection.clear()
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.stop_all_audio("world_exited")
+	if PlayerState.levels_gained.is_connected(_on_player_levels_gained):
+		PlayerState.levels_gained.disconnect(_on_player_levels_gained)
+	if PlayerState.item_audio_committed.is_connected(_on_item_audio_committed):
+		PlayerState.item_audio_committed.disconnect(_on_item_audio_committed)
+	if is_instance_valid(_town_music_controller):
+		_town_music_controller.cancel("world_exited")
 	PlayerState.clear_taoist_main_pets_persistence_provider()
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		call_deferred("_show_system_menu")
+		# Android's WM back notification does not travel through ui_cancel, so
+		# defer the same toggle used by the keyboard path.  This also lets a
+		# paused tree close the WHEN_PAUSED menu cleanly on the next idle tick.
+		call_deferred("_toggle_system_menu")
 	elif what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
-		if is_instance_valid(hud):
-			hud.cancel_attack_inputs(&"application_interrupted")
-			hud.cancel_skill_inputs(&"application_interrupted")
-		_cancel_all_mobile_attack_inputs(true)
-		_cancel_all_skill_inputs(true)
+		# Perf Window probe (perf-smoothness-r1): an app pause is a measurement
+		# boundary. Reset the wall-clock baseline so the post-resume frame is
+		# not recorded as a giant fake frame interval.
+		RuntimeDiagnostics.reset_wall_frame_interval()
+		_cancel_player_input_boundary(&"application_interrupted")
+	elif what == NOTIFICATION_APPLICATION_RESUMED:
+		RuntimeDiagnostics.reset_wall_frame_interval()
 	elif what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_cancel_all_mobile_attack_inputs(true)
 		_cancel_all_skill_inputs(true)
@@ -423,30 +1747,72 @@ func _notification(what: int) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		if _system_menu_panel != null and _system_menu_panel.visible:
-			_hide_system_menu()
-		else:
-			_show_system_menu()
+		_toggle_system_menu()
 		get_viewport().set_input_as_handled()
 
 
 func _physics_process(delta: float) -> void:
+	var physics_started_usec := RuntimeDiagnostics.timing_start()
 	# Q2-B: generic persistent ground effects are scheduled once per physics
 	# frame by the shared manager (old per-effect _physics_process cadence).
 	if _ground_effect_manager != null:
 		_ground_effect_manager.tick_frame(delta)
+	RuntimeDiagnostics.record_timing_ms(&"physics_process_ms", physics_started_usec)
 
 
 func _process(delta: float) -> void:
+	# Real frame pacing (perf-smoothness-r1 Phase A): `_process(delta)` is
+	# clamped by the engine (8/60 = 0.133s default) and was provably blind to
+	# real stalls (PERF-02 of the 2026-09-18 audit). Measure wall-clock time
+	# between process callbacks instead. -1.0 marks a measurement boundary
+	# (first frame or pause/resume discard), never a gameplay stall.
+	var wall_interval_ms := -1.0
+	if OS.is_debug_build():
+		wall_interval_ms = RuntimeDiagnostics.wall_frame_interval_ms()
+	# AOE first-engagement window (see AoeEngagementWindow): bounded ring of real
+	# frame intervals between the first fire wall cast and first batch death.
+	if wall_interval_ms >= 0.0 and AoeEngagementWindow.window_active():
+		AoeEngagementWindow.record_frame_interval_ms(wall_interval_ms)
+	# FRAME-STALL long-frame probe (perf-smoothness-r1 Phase A): armed only
+	# after loading ends so bootstrap spikes cannot consume the one shot. Now
+	# keyed on the real wall interval (the old `delta > 0.25` could never fire
+	# under the engine's clamped delta). Counters remain neutral facts.
+	if _first_combat_probe_armed and not _first_long_frame_diagnosed and wall_interval_ms > 250.0:
+		_first_long_frame_diagnosed = true
+		print(
+			"[FRAME-STALL] long frame %.3fs at process frame %d: caster=%s presentation=%d monster_overlay=%s"
+			% [
+				wall_interval_ms / 1000.0,
+				Engine.get_process_frames(),
+				CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
+				PresentationAssets.cached_resource_count(),
+				preload(
+					"res://scripts/monster_source_frames.gd"
+				).diagnostics(),
+			]
+		)
+	preload("res://scripts/monster_source_frames.gd").poll()
+	# perf-smoothness-r1 Phase C: drain combat texture misses through the
+	# bounded threaded warm-up channel (no synchronous decode in combat).
+	_pump_pending_warm_textures()
+	if not _prepared_loot_collection.is_empty(): _poll_prepared_loot_collection()
+	var process_started_usec := RuntimeDiagnostics.timing_start()
+	# R3X-4: advance deferred death settlement/materialization in bounded main
+	# thread slices.  The queue is deliberately pumped before ordinary world
+	# presentation so a non-empty queue cannot starve behind unrelated UI work.
+	_pump_enemy_death_work_queue()
+	UIItemTextureCacheScript.poll_threaded_paths()
 	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
 	if _streaming_coordinator != null:
 		_streaming_coordinator.poll_once(Engine.get_process_frames())
 	_expire_canonical_fire_charge_if_needed()
 	_constrain_player_foot_to_runtime_ground()
+	_refresh_player_safe_zone_cache()
+	_update_town_music_presence()
 	background.set_focus_position(player.global_position)
 	_update_world_camera_constraint(delta)
 	_update_portal_arrival_guard()
-	_enforce_bich_safe_zone()
+	_tick_bich_safe_zone_enforcement(delta)
 	_update_boss_world_mechanics(delta)
 	_record_player_world_location()
 	_validate_locked_target()
@@ -466,16 +1832,12 @@ func _process(delta: float) -> void:
 		PlayerState.SKILL_SLOT_GROUP_ATTACK,
 		0
 	)
+	var attack_action_lifecycle := _poll_attack_action_lifecycle(gameplay_input_is_enabled())
 	if bound_attack_skill.is_empty():
-		if Input.is_action_just_pressed("attack"):
-			_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
-		if not _queued_mobile_attack_tickets.is_empty():
-			_drain_next_mobile_attack_ticket()
-		elif _mobile_attack_held or Input.is_action_pressed("attack"):
-			_request_mobile_attack()
+		_process_ordinary_attack_input(attack_action_lifecycle)
 	else:
 		_queued_mobile_attack_tickets.clear()
-		if Input.is_action_just_pressed("attack"):
+		if bool(attack_action_lifecycle.get("started", false)):
 			_keyboard_bound_skill_token = _allocate_synthetic_attack_token()
 			_on_skill_input_started(
 				PlayerState.SKILL_SLOT_GROUP_ATTACK,
@@ -484,7 +1846,7 @@ func _process(delta: float) -> void:
 				-4,
 				&"keyboard"
 			)
-		if Input.is_action_just_released("attack") and _keyboard_bound_skill_token != 0:
+		if bool(attack_action_lifecycle.get("ended", false)) and _keyboard_bound_skill_token != 0:
 			_on_skill_input_ended(
 				PlayerState.SKILL_SLOT_GROUP_ATTACK,
 				0,
@@ -498,6 +1860,7 @@ func _process(delta: float) -> void:
 	for index in range(4):
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
+	RuntimeDiagnostics.record_timing_ms(&"process_ms", process_started_usec)
 
 
 func _constrain_player_foot_to_runtime_ground() -> bool:
@@ -518,7 +1881,7 @@ func _constrain_player_foot_to_runtime_ground() -> bool:
 	)
 	if corrected.is_equal_approx(player.global_position):
 		return false
-	player.global_position = corrected
+	_set_player_world_position(corrected)
 	player.velocity = Vector2.ZERO
 	PlayerState.update_world_location(
 		current_map_id,
@@ -544,26 +1907,490 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
-	var target := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, base_zoom, player.global_position
+	# R14-CAM-R2 BLACK-BUDGET REGION (user work order 2026-09-19, review of
+	# 7c2631d3), replacing the superseded R14-CAM-R1 per-axis anchor box:
+	#   Ruled follow shape: the player stays EXACTLY at the camera center
+	#         while black(player) <= B - the unlock threshold event happens
+	#         EXACTLY when the centered view reaches the frozen black
+	#         budget (the review-declared cap). Past it the camera is the
+	#         nearest point of the FIXED convex budget region K_B
+	#         intersected with the player display visibility box, so the
+	#         black exposure stays capped AND the full player display stays
+	#         on screen (the box is centered on the player, so it never
+	#         triggers or delays the unlock). The early glide unlock of
+	#         C1.5 stays rejected by device ruling.
+	#   The view height is exactly ArtSpec.CAMERA_ZOOM (1.06); no dynamic
+	#         zoom exists here. Rendering stability (smoothing/pixel snap)
+	#         is G2 and is deliberately NOT touched here.
+	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
+	var camera_center := (
+		MapDiamondCameraConstraintScript.apply_player_visibility_guard(
+			design_size,
+			viewport_half,
+			fixed_zoom,
+			player.global_position,
+			_player_display_extent_world_px()
+		)
 	)
-	var target_zoom: Vector2 = target.get("recommended_zoom", base_zoom)
-	var zoom_alpha := 1.0 - exp(-6.0 * maxf(0.0, delta))
-	var resolved_zoom := _world_camera.zoom.lerp(target_zoom, zoom_alpha)
-	resolved_zoom.x = clampf(
-		resolved_zoom.x, ArtSpec.CAMERA_ZOOM,
-		MapDiamondCameraConstraintScript.DEFAULT_MAXIMUM_ZOOM
+	_world_camera.zoom = fixed_zoom
+	_world_camera.global_position = camera_center
+
+
+## R14-CAM-R2: the real display geometry of the player composite, derived
+## from the ArtSpec display contract (the final displayed character cell
+## CHARACTER_FRAME 64x96 with its foot anchor, placed by the approved
+## visual composite offset) and measured against the approved logical foot
+## point (visual.position + PLAYER_VISUAL_FOOT_ANCHOR_ADJUSTMENT = origin).
+## This is the real displayed-character bound - NOT a hardcoded body width
+## and NOT the padded 192x160 source atlas cell the body sprite samples
+## from (that cell is mostly transparent padding and would phantom-tighten
+## the visibility box). Returned as Vector3(sideways half extent,
+## above-foot, below-foot) in world px relative to the logical foot.
+func _player_display_extent_world_px() -> Vector3:
+	var frame_size := Vector2(ArtSpec.CHARACTER_FRAME)
+	var foot_in_frame := Vector2(ArtSpec.CHARACTER_FOOT_ANCHOR)
+	var composite := ArtSpec.PLAYER_VISUAL_RUNTIME_POSITION
+	# Cell edges relative to the logical foot (the player origin): the
+	# cell top-left sits at composite - foot_in_frame in the actor space.
+	var left := foot_in_frame.x - composite.x
+	var right := frame_size.x - foot_in_frame.x + composite.x
+	var above := foot_in_frame.y - composite.y
+	var below := frame_size.y - foot_in_frame.y + composite.y
+	return Vector3(maxf(left, right), above, below)
+
+
+## FW-COLD (GPT audit 2026-09-16): prewarm the caster-skill animation frames
+## of the player's learned skills during the loading window. Learned skills
+## are the superset of the hotbar contents, so this covers every skill the
+## player can actually cast first. Fire wall's six frames land here, killing
+## the first-cast main-thread texture load spike.
+##
+## FIRST-COMBAT extension (user device report 2026-09-16): a one-time ~1s
+## hitch a few seconds after the first aggro. Static tracing determined the
+## only remaining first-combat synchronous loads on the main thread: the
+## weapon swing audio streams (PresentationAssets.audio resolves through a
+## sync load() on cache miss, first played on the first attack) and the
+## fallback presentation action textures. Everything else in the first
+## combat presentation path is already warm: paper doll and weapon action
+## atlases load at equipment refresh, monster action frames thread-load
+## off the main thread, and caster skill frames prewarm above. The audio
+## warming is idempotent (all three swing ids, whatever the equipped
+## weapon resolves to).
+## perf-smoothness-r1 Phase C: bounded async warm-up channel for combat-time
+## animation-frame misses. The registry queues paths instead of synchronously
+## loading/decoding on the main thread; this pump admits a few threaded
+## requests per frame and retains finished textures back into the registry
+## cache. Deliberately no-ops while the loading window is active.
+var _frame_texture_threaded: Dictionary = {}
+
+
+func _pump_pending_warm_textures() -> void:
+	if CasterSkillVisualRegistry.is_loading_window_active():
+		return
+	for path: String in _frame_texture_threaded.keys():
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			_frame_texture_threaded.erase(path)
+			var texture := ResourceLoader.load_threaded_get(path) as Texture2D
+			if texture != null:
+				CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+		elif (
+			status == ResourceLoader.THREAD_LOAD_FAILED
+			or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+		):
+			_frame_texture_threaded.erase(path)
+	if _frame_texture_threaded.size() >= FRAME_TEXTURE_WARM_MAX_IN_FLIGHT:
+		return
+	for path: String in CasterSkillVisualRegistry.take_pending_warm_paths(
+		FRAME_TEXTURE_WARM_PER_FRAME
+	):
+		if _frame_texture_threaded.has(path):
+			continue
+		# PERF-R2 R5: combat warm-up must never use sub threads - the main
+		# thread's frame time stability outranks background texture speed.
+		if ResourceLoader.load_threaded_request(path, "Texture2D", false) == OK:
+			_frame_texture_threaded[path] = true
+
+
+## perf-smoothness-r1 C-R1 (PERF-R2 R7): the workset priority comes from the
+## player's ACTUAL bound attack slots and attack ring, not the learned-skills
+## Dictionary whose key order is historical. A skill the player cannot cast
+## has zero first-cast value.
+func _active_skill_workset_candidates() -> Array[String]:
+	var raw: Array = []
+	raw.append_array(
+		PlayerState.skill_slots_for_group(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK
+		)
 	)
-	resolved_zoom.y = resolved_zoom.x
-	# Re-resolve the position at the zoom actually displayed this frame. This
-	# keeps the player inside the +/-14% screen band even while zoom is easing.
-	var result := MapDiamondCameraConstraintScript.resolve_soft_follow(
-		design_size, viewport_half, resolved_zoom, player.global_position,
-		resolved_zoom.x
+	raw.append_array(
+		PlayerState.skill_slots_for_group(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK_RING
+		)
 	)
-	_world_camera.zoom = resolved_zoom
-	_world_camera.global_position = Vector2(
-		result.get("center", player.global_position)
+	return CasterSkillVisualRegistry.workset_skill_order(raw, 7)
+
+
+## PERF-R2 R8: thread-pump texture paths with a REAL absolute deadline.
+## No synchronous load() ever runs on this budget path: paths are admitted
+## through load_threaded_request, polled every frame, and only a
+## THREAD_LOAD_LOADED status may call load_threaded_get. The deadline stops
+## new admissions; already-in-flight completions are still collected so no
+## threaded work is wasted or leaked.
+func _prewarm_texture_paths_until(
+	paths: Array[String],
+	deadline_usec: int
+) -> Dictionary:
+	var cursor := 0
+	var in_flight: Dictionary = {}
+	var loaded := 0
+	var failed := 0
+	# perf(R13-D1): first moment the absolute deadline became true, so the
+	# in-flight drain tail is measurable (diagnostics only, no behavior).
+	var first_deadline_hit_usec := 0
+	while cursor < paths.size() or not in_flight.is_empty():
+		var deadline_hit := Time.get_ticks_usec() >= deadline_usec
+		if deadline_hit and first_deadline_hit_usec == 0:
+			first_deadline_hit_usec = Time.get_ticks_usec()
+		if not deadline_hit:
+			while (
+				in_flight.size() < FRAME_TEXTURE_WARM_MAX_IN_FLIGHT
+				and cursor < paths.size()
+			):
+				var path := paths[cursor]
+				cursor += 1
+				if CasterSkillVisualRegistry.frame_texture_is_resident(path):
+					loaded += 1
+					continue
+				var err := ResourceLoader.load_threaded_request(
+					path, "Texture2D", true
+				)
+				if err == OK:
+					in_flight[path] = true
+				else:
+					failed += 1
+		for raw_path: Variant in in_flight.keys():
+			var path := str(raw_path)
+			var status := ResourceLoader.load_threaded_get_status(path)
+			if status == ResourceLoader.THREAD_LOAD_LOADED:
+				in_flight.erase(path)
+				var texture := ResourceLoader.load_threaded_get(
+					path
+				) as Texture2D
+				if texture != null:
+					CasterSkillVisualRegistry.retain_loaded_texture(path, texture)
+					loaded += 1
+				else:
+					failed += 1
+			elif (
+				status == ResourceLoader.THREAD_LOAD_FAILED
+				or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE
+			):
+				in_flight.erase(path)
+				failed += 1
+		if in_flight.is_empty() and (
+			cursor >= paths.size() or Time.get_ticks_usec() >= deadline_usec
+		):
+			break
+		await get_tree().process_frame
+	var completed_usec := Time.get_ticks_usec()
+	var tail_after_deadline_ms := 0.0
+	if first_deadline_hit_usec > 0:
+		tail_after_deadline_ms = (
+			float(completed_usec - first_deadline_hit_usec) / 1000.0
+		)
+	return {
+		"loaded": loaded,
+		"failed": failed,
+		"not_admitted": paths.size() - cursor,
+		"in_flight_at_deadline": in_flight.size(),
+		"deadline_exceeded": first_deadline_hit_usec > 0,
+		"deadline_hit_at_usec": first_deadline_hit_usec,
+		"completed_at_usec": completed_usec,
+		"tail_after_deadline_ms": tail_after_deadline_ms,
+	}
+
+
+## perf(R13-D2): returns the prewarm diagnostics Dictionary so the caller can
+## fold it into the self-contained [LOADING-TOTAL] record - no second state
+## copy, the values are the same pump/pin/gate results already printed.
+func _prewarm_learned_skill_visuals() -> Dictionary:
+	# perf-smoothness-r1 Phase C + C-R1: the loading window is explicitly
+	# opened for this one prewarm entry and closed at READY release; combat
+	# texture misses go through the async warm-up channel instead. The whole
+	# entry now runs under ONE enforced absolute deadline: texture prewarm is
+	# thread-pumped frame by frame and stops admitting past the budget.
+	CasterSkillVisualRegistry.set_loading_window_active(true)
+	CasterSkillVisualRegistry.unpin_all_frames()
+	var workset: Array[String] = _active_skill_workset_candidates()
+	if workset.is_empty():
+		return {
+			"deadline_exceeded": false,
+			"tail_after_deadline_ms": 0.0,
+			"loaded": 0,
+			"failed": 0,
+			"not_admitted": 0,
+			"incomplete_skills": [],
+		}
+	var started_usec := Time.get_ticks_usec()
+	var deadline_usec := started_usec + LOADING_PREWARM_BUDGET_USEC
+	# R14-C6: directional skills prewarm ONLY the current player-facing
+	# sequence instead of every direction (a 16-direction laser sequence is
+	# ~3-4 MiB, not ~48 MiB); non-directional skills prewarm their unique
+	# sequence. Same workset, same deadlines, same pin budget.
+	var facing_direction_index := 8
+	if is_instance_valid(player):
+		facing_direction_index = CasterSkillVisualRegistry.direction_index(
+			player.facing
+		)
+	var all_paths: Array[String] = []
+	for skill_id: String in workset:
+		all_paths.append_array(
+			CasterSkillVisualRegistry.animation_sequence_paths(
+				skill_id, facing_direction_index
+			)
+		)
+	var pump_result: Dictionary = await _prewarm_texture_paths_until(
+		all_paths, deadline_usec
+	)
+	# Optional low-cost warming yields to the same deadline: skipped entirely
+	# once the budget is gone (PERF-R2 R8 - the deadline is absolute).
+	var optional_skipped := false
+	if Time.get_ticks_usec() < deadline_usec:
+		for audio_id: String in ["sword", "wood", "fist"]:
+			PresentationAssets.audio(audio_id)
+		for action_key: String in ["attack", "hit", "cast", "death"]:
+			PresentationAssets.player_texture(action_key)
+	else:
+		optional_skipped = true
+	# READY-critical workset gate: every workset skill's PREWARMED SEQUENCE
+	# (R14-C6: the current-facing sequence for directional skills) must be
+	# fully resident before Loading ends. The gate reports truthfully.
+	var incomplete_skills: Array[String] = []
+	for skill_id: String in workset:
+		var sequence_paths := (
+			CasterSkillVisualRegistry.animation_sequence_paths(
+				skill_id, facing_direction_index
+			)
+		)
+		if not CasterSkillVisualRegistry.sequence_resident(sequence_paths):
+			incomplete_skills.append(skill_id)
+	# Pin the bounded workset lease (atomic per skill, R14-C6 sequence-level):
+	# accepted skills are exempt from LRU eviction; rejected skills are
+	# reported truthfully.
+	var pin_result: Dictionary = CasterSkillVisualRegistry.pin_skill_workset(
+		workset, facing_direction_index
+	)
+	var prewarm_usec := Time.get_ticks_usec() - started_usec
+	print(
+		"[LOADING-WORKSET] skills=%d paths=%d loaded=%d failed=%d not_admitted=%d prewarm_ms=%d deadline_exceeded=%s tail_after_deadline_ms=%.1f optional_skipped=%s accepted=%s rejected=%s pinned_paths=%d pinned_bytes=%d incomplete=%s"
+		% [
+			workset.size(),
+			all_paths.size(),
+			int(pump_result.get("loaded", 0)),
+			int(pump_result.get("failed", 0)),
+			int(pump_result.get("not_admitted", 0)),
+			prewarm_usec / 1000,
+			str(pump_result.get("deadline_exceeded", false)),
+			float(pump_result.get("tail_after_deadline_ms", 0.0)),
+			str(optional_skipped),
+			str(pin_result.get("accepted_skills", [])),
+			str(pin_result.get("rejected_skills", [])),
+			int(pin_result.get("pinned_paths", -1)),
+			int(pin_result.get("pinned_bytes", -1)),
+			str(incomplete_skills),
+		]
+	)
+	return {
+		"deadline_exceeded": bool(pump_result.get("deadline_exceeded", false)),
+		"tail_after_deadline_ms": float(
+			pump_result.get("tail_after_deadline_ms", 0.0)
+		),
+		"loaded": int(pump_result.get("loaded", 0)),
+		"failed": int(pump_result.get("failed", 0)),
+		"not_admitted": int(pump_result.get("not_admitted", 0)),
+		"incomplete_skills": incomplete_skills,
+	}
+
+
+## FW-COLD2 Phase B (remote review 2026-09-16): RESOURCE WARM is not RENDER
+## WARM. The device still showed a one-time first fire wall cast hitch while
+## the CPU texture cache was already hot; on this project's gl_compatibility
+## renderer that matches the first-render cold path (GPU texture upload,
+## first CanvasItem draw state, driver first-use). The officially recommended
+## Compatibility warm-up is to really draw the effect inside the viewport
+## once per frame texture while the loading overlay still fully covers the
+## screen. Presentation-only: no fire wall field controller, no damage, no
+## combat-side registration, no MP cost. The visual must stay visible -
+## visible=false or alpha 0 lets the renderer skip the draw - the loading
+## overlay is what hides it from the player.
+## R14-C-R1 P0-11..16: the warm covers EVERY workset skill's actual
+## prewarmed facing sequence under a hard wall-clock budget
+## (LOADING_RENDER_WARM_BUDGET_USEC, ~1s) so GPU warm can never consume the
+## user-allowed Loading budget. Skills whose sequence is not fully resident
+## are skipped (no extending resource loading for render warm). Every warm
+## visual is deterministically released (P0-13) so _exit_tree reclaims its
+## sequence lease; the active-sequence lease refcount before/after must be
+## identical (P0-15). Returns a structured diagnostic merged into
+## [LOADING-TOTAL] (P0-16).
+func _warm_fire_wall_render_path() -> Dictionary:
+	var result := {
+		"skills_considered": 0,
+		"skills_warmed": 0,
+		"frames_drawn": 0,
+		"budget_exhausted": false,
+		"elapsed_ms": 0.0,
+		"lease_refcount_before": 0,
+		"lease_refcount_after": 0,
+	}
+	var lease_before := 0
+	var lease_after := 0
+	if DisplayServer.get_name() == "headless":
+		# Automated headless runs have no real rendering server; the CPU
+		# residency gate already proves everything headless can prove. Still
+		# report the structured result with the (trivially equal) lease pair.
+		lease_before = 0
+		lease_after = 0
+		result["lease_refcount_before"] = lease_before
+		result["lease_refcount_after"] = lease_after
+		return result
+	lease_before = int(
+		CasterSkillVisualRegistry.frame_texture_cache_diagnostics().get(
+			"leased_sequence_refcount_total", 0
+		)
+	)
+	result["lease_refcount_before"] = lease_before
+	var started_usec := Time.get_ticks_usec()
+	var deadline_usec := started_usec + LOADING_RENDER_WARM_BUDGET_USEC
+	var warm_position := Vector2.ZERO
+	if is_instance_valid(_world_camera):
+		warm_position = _world_camera.get_screen_center_position()
+	elif is_instance_valid(player):
+		warm_position = player.global_position
+	var facing_direction := Vector2.DOWN
+	if is_instance_valid(player):
+		var normalized := player.facing.normalized()
+		if normalized.length_squared() > 0.0:
+			facing_direction = normalized
+	var facing_direction_index := (
+		CasterSkillVisualRegistry.direction_index(facing_direction)
+	)
+	for skill_id: String in _active_skill_workset_candidates():
+		result["skills_considered"] += 1
+		if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
+			continue
+		# P0-12: warm only fully-resident facing sequences; never extend
+		# resource loading for the sake of render warm.
+		var sequence_paths := (
+			CasterSkillVisualRegistry.animation_sequence_paths(
+				skill_id, facing_direction_index
+			)
+		)
+		if not CasterSkillVisualRegistry.sequence_resident(sequence_paths):
+			continue
+		var warm_visual := CasterSkillAnimationPlayer.new()
+		# P0-1: configure returns true for any ACCEPTED configuration; a
+		# structural failure (unknown skill/contract/frames) still returns
+		# false and frees the candidate.
+		if not warm_visual.configure(skill_id, facing_direction):
+			warm_visual.free()
+			continue
+		result["skills_warmed"] += 1
+		if skill_id == "wizard.fire_wall":
+			# P0-14: fire wall keeps its production presentation values.
+			warm_visual.modulate = Color(1.0, 1.0, 1.0, 0.78)
+			warm_visual.scale.y *= 0.6
+		warm_visual.global_position = warm_position
+		# P0-12: the visual must be actually visible so the renderer cannot
+		# skip the draw; the loading overlay hides it from the player.
+		warm_visual.visible = true
+		add_child(warm_visual)
+		var budget_exhausted := false
+		for frame_index: int in warm_visual.frame_count():
+			warm_visual.set_manual_frame(frame_index)
+			await RenderingServer.frame_post_draw
+			result["frames_drawn"] += 1
+			if Time.get_ticks_usec() >= deadline_usec:
+				budget_exhausted = true
+				break
+		if budget_exhausted:
+			result["budget_exhausted"] = true
+		# P0-13: EVERY warm visual is deterministically released so
+		# _exit_tree reclaims its sequence lease.
+		warm_visual.queue_free()
+		await RenderingServer.frame_post_draw
+		if Time.get_ticks_usec() >= deadline_usec:
+			result["budget_exhausted"] = true
+			break
+	lease_after = int(
+		CasterSkillVisualRegistry.frame_texture_cache_diagnostics().get(
+			"leased_sequence_refcount_total", 0
+		)
+	)
+	result["lease_refcount_after"] = lease_after
+	result["elapsed_ms"] = (
+		float(Time.get_ticks_usec() - started_usec) / 1000.0
+	)
+	if lease_after != lease_before:
+		# P0-15: render warm must never leak or drop an active-sequence lease.
+		push_error(
+			"[RENDER-WARM] sequence lease leak detected: before=%d after=%d"
+			% [lease_before, lease_after]
+		)
+	# FRAME-STALL baseline: one print at the end of the loading window. The
+	# one-time long-frame probe (see _process) prints the same counters when
+	# the first >250ms wall-clock frame occurs; the delta localizes the stall
+	# source. Counters are separated per cache owner (perf-smoothness-r1
+	# PERF-01): caster skill frames, presentation assets, monster overlay
+	# frames, and the monster BODY streaming coordinator are distinct caches.
+	var body_streaming := {}
+	if _streaming_coordinator != null:
+		var raw_body: Dictionary = _streaming_coordinator.monster_streaming_diagnostics()
+		body_streaming = {
+			"ready": raw_body.get("ready_resource_count", 0),
+			"failed": raw_body.get("failed_request_count", raw_body.get("failed_resource_count", 0)),
+			"decoded_bytes": raw_body.get("decoded_rgba8_bytes", 0),
+			"pinned_bytes": raw_body.get("pinned_decoded_rgba8_bytes", 0),
+			"leased": raw_body.get("leased_visual_count", 0),
+			"sync_loads": raw_body.get("sync_load_count", 0),
+		}
+	print(
+		"[FRAME-STALL] baseline: caster=%s presentation=%d monster_overlay=%s monster_body=%s"
+		% [
+			CasterSkillVisualRegistry.frame_texture_cache_diagnostics(),
+			PresentationAssets.cached_resource_count(),
+			preload(
+				"res://scripts/monster_source_frames.gd"
+			).diagnostics(),
+			JSON.stringify(body_streaming),
+		]
+	)
+	return result
+
+
+## Session identity header (perf-smoothness-r1 Phase A): once per process.
+## Discloses the running identity and the engine timing parameters that
+## define the process-delta clamp, so captured logs are self-describing.
+func _print_session_diagnostics_header() -> void:
+	if _session_header_printed:
+		return
+	_session_header_printed = true
+	var refresh_rate := -1.0
+	if DisplayServer.get_name() != "headless":
+		refresh_rate = DisplayServer.screen_get_refresh_rate()
+	print(
+		"[SESSION-ID] godot=%s renderer=%s adapter=%s api=%s refresh=%.1fHz physics_tps=%d max_physics_steps=%d app_version=%s os=%s"
+		% [
+			Engine.get_version_info().get("string", ""),
+			str(ProjectSettings.get_setting("rendering/renderer/rendering_method", "")),
+			RenderingServer.get_video_adapter_name(),
+			RenderingServer.get_video_adapter_api_version(),
+			refresh_rate,
+			Engine.physics_ticks_per_second,
+			Engine.max_physics_steps_per_frame,
+			str(ProjectSettings.get_setting("application/config/version", "")),
+			OS.get_name(),
+		]
 	)
 
 
@@ -597,28 +2424,113 @@ func _build_system_menu() -> void:
 	_system_menu_panel.name = "SystemMenuPanel"
 	_system_menu_panel.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	_system_menu_panel.visible = false
+	_system_menu_panel.visibility_changed.connect(_on_system_menu_visibility_changed)
 	_system_menu_panel.continue_requested.connect(_hide_system_menu)
 	_system_menu_panel.return_to_character_select_requested.connect(_return_to_character_select)
 	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
 	_system_menu_panel.audio_setting_changed.connect(_on_system_menu_audio_setting_changed)
 	_system_menu_layer.add_child(_system_menu_panel)
-	_system_menu_panel.set_audio_settings(
-		_audio_bus_enabled("Music"),
-		_audio_bus_enabled("SFX")
+	_system_menu_panel.set_audio_levels(
+		AudioPreferences.music_volume,
+		AudioPreferences.sfx_volume
 	)
 
 
 func _show_system_menu() -> void:
 	if _system_menu_panel == null:
 		return
+	# The paused tree may never receive the matching Android UP/CANCEL. Revoke
+	# each current owner before pausing; a later press must establish a new token.
+	_cancel_player_input_boundary(&"system_menu_opened")
+	_system_menu_pause_owned = _system_menu_pause_owned or not get_tree().paused
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
 
 
 func _hide_system_menu() -> void:
-	get_tree().paused = false
 	if _system_menu_panel != null:
 		_system_menu_panel.close_menu()
+	_release_system_menu_pause()
+
+
+func _toggle_system_menu() -> void:
+	if _system_menu_panel != null and _system_menu_panel.visible:
+		_hide_system_menu()
+	else:
+		_show_system_menu()
+
+
+func _on_system_menu_visibility_changed() -> void:
+	if _system_menu_panel == null:
+		return
+	# A panel can be hidden by an owner other than the Continue action (for
+	# example a modal coordinator or a scene transition).  Do not leave the
+	# world paused behind an invisible menu, but only release a pause this menu
+	# actually acquired.
+	if not _system_menu_panel.visible or not _system_menu_panel.is_visible_in_tree():
+		_release_system_menu_pause()
+
+
+func _release_system_menu_pause() -> void:
+	if not _system_menu_pause_owned:
+		return
+	_cancel_player_input_boundary(&"system_menu_closed")
+	_system_menu_pause_owned = false
+	get_tree().paused = false
+
+
+func _cancel_player_input_boundary(reason: StringName) -> void:
+	if is_instance_valid(hud):
+		hud.cancel_attack_inputs(reason)
+		hud.cancel_skill_inputs(reason)
+	_cancel_map_transition_movement_input()
+	_cancel_all_mobile_attack_inputs(true)
+	_cancel_all_skill_inputs(true)
+	_reset_attack_action_lifecycle(reason)
+
+
+## R2: timed 神水 (temporary stat buff) expiry reports once through the
+## central notice layer, using the authoritative item name.
+func _on_temporary_item_buff_expired(item_name: String) -> void:
+	if not is_instance_valid(hud):
+		return
+	hud.show_message("%s效果结束" % item_name)
+
+
+## R2: legacy potion combat buffs (ac/mac) report their end the same way.
+func _on_player_potion_buff_expired(kind: String) -> void:
+	if not is_instance_valid(hud):
+		return
+	hud.show_message("神水效果结束")
+
+
+func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
+	if new_level <= previous_level or not is_instance_valid(player):
+		return
+	player.restore_level_up_resources()
+	# PlayerState emits once per successful experience settlement, outside its
+	# level loop. The approved visual follows the actor rather than a world point.
+	if is_instance_valid(_player_level_up_effect):
+		_player_level_up_effect.replay(player.approved_ground_footpoint_local_px())
+	# R2: the level-up result joins the unified central notice layer.
+	hud.show_success_message("等级提升至 %d" % new_level)
+
+
+func _update_town_music_presence() -> void:
+	if (
+		not is_instance_valid(_town_music_controller)
+		or _map_transition_in_progress
+		or _world_bootstrap_in_progress
+	):
+		return
+	# Reuse the already-computed player safe-area result, without adding a
+	# second geometry query or a world scan to the presentation hot path.
+	_town_music_controller.set_town_presence(
+		TownMusicControllerScript.is_main_city_map(current_map_id)
+		and bool(_player_safe_zone_cache.get("valid", false))
+		and int(_player_safe_zone_cache.get("map_id", -1)) == current_map_id
+		and bool(_player_safe_zone_cache.get("inside", false))
+	)
 
 
 func _audio_bus_enabled(bus_name: StringName) -> bool:
@@ -627,15 +2539,15 @@ func _audio_bus_enabled(bus_name: StringName) -> bool:
 
 
 func _on_system_menu_audio_setting_changed(request: Dictionary) -> void:
-	if str(request.get("contract_id", "")) != "ui.audio.setting.v1":
-		return
-	var setting_id := str(request.get("setting_id", ""))
-	var bus_name := "Music" if setting_id == "audio.music.enabled" else "SFX"
-	if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
-		return
-	var bus_index := AudioServer.get_bus_index(bus_name)
-	if bus_index >= 0:
-		AudioServer.set_bus_mute(bus_index, not bool(request.get("enabled", true)))
+	var contract_id := str(request.get("contract_id", ""))
+	if contract_id == "ui.audio.setting.v2":
+		AudioPreferences.set_level(str(request.get("channel", "")), request.get("value", null))
+	elif contract_id == "ui.audio.setting.v1":
+		var setting_id := str(request.get("setting_id", ""))
+		if setting_id not in ["audio.music.enabled", "audio.sfx.enabled"]:
+			return
+		var channel := "music" if setting_id == "audio.music.enabled" else "sfx"
+		AudioPreferences.set_level(channel, 1.0 if bool(request.get("enabled", true)) else 0.0)
 
 
 func _on_shop_sell_quotes_requested(items: Array) -> void:
@@ -656,7 +2568,8 @@ func _on_shop_buy_requested(request: Dictionary) -> void:
 
 func _on_shop_sell_requested(request: Dictionary) -> void:
 	if is_instance_valid(hud):
-		hud.apply_shop_sell_result(PlayerState.sell_inventory_item(request))
+		var result := PlayerState.sell_inventory_items(request.get("batch", [])) if request.get("batch", null) is Array else PlayerState.sell_inventory_item(request)
+		hud.apply_shop_sell_result(result)
 
 
 func _on_quest_abandon_requested(quest_id: String) -> void:
@@ -666,10 +2579,16 @@ func _on_quest_abandon_requested(quest_id: String) -> void:
 
 func _on_warehouse_sort_requested() -> void:
 	if is_instance_valid(hud):
-		hud.apply_warehouse_sort_result(PlayerState.sort_warehouse())
+		hud.apply_warehouse_sort_result(PlayerState.sort_warehouse(hud.warehouse_panel.warehouse_page))
 
 
 func _prepare_safe_logout() -> Dictionary:
+	var death_queue_result := _drain_enemy_death_queue_for_logout()
+	if not bool(death_queue_result.get("success", false)):
+		return death_queue_result
+	var loot_queue_result := _drain_loot_collection_queue_for_logout()
+	if not bool(loot_queue_result.get("success", false)):
+		return loot_queue_result
 	PlayerState.apply_warrior_runtime_state(player.warrior_runtime_state_for_save())
 	PlayerState.apply_taoist_main_pet_runtime_states(
 		_capture_taoist_main_pet_runtime_states()
@@ -720,6 +2639,140 @@ func _prepare_safe_logout() -> Dictionary:
 	}
 
 
+func _drain_loot_collection_queue_for_logout() -> Dictionary:
+	# A close request may arrive after a pickup emitted its signal but before
+	# the deferred transaction flush.  Force the manager's final nearby query
+	# and consume the deferred collection synchronously before logout save.
+	var manager_result: Dictionary = {}
+	if _loot_pickup_runtime_manager != null:
+		manager_result = _loot_pickup_runtime_manager.flush_for_logout()
+		if not bool(manager_result.get("success", false)):
+			return {
+				"success": false,
+				"save_performed": false,
+				"reason": "safe_logout_loot_manager_failed",
+				"loot_queue": manager_result,
+			}
+		if int(manager_result.get("logout_retry_blocked_count", 0)) > 0:
+			return {
+				"success": false,
+				"save_performed": false,
+				"reason": "safe_logout_loot_retry_pending",
+				"loot_queue": manager_result,
+			}
+	if _pending_loot_collections.is_empty() and _prepared_loot_collection.is_empty():
+		return {
+			"success": true,
+			"save_performed": false,
+			"reason": "",
+			"loot_queue_drained": true,
+		}
+	var result := _flush_loot_collections()
+	if not bool(result.get("success", false)):
+		return {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_loot_collection_failed",
+			"loot_queue": result,
+		}
+	if not _pending_loot_collections.is_empty():
+		return {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_loot_queue_pending",
+			"loot_queue": result,
+		}
+	return {
+		"success": true,
+		"save_performed": false,
+		"reason": "",
+		"loot_queue_drained": true,
+	}
+
+
+func _flush_pending_enemy_death_signals_for_logout() -> void:
+	# A lethal hit queues Enemy._begin_death() through call_deferred().  A WM
+	# close can arrive before that deferred callback, so explicitly finish the
+	# actor-side death boundary before draining the GameRoot queue.  This is an
+	# exit-only scan; it is never part of gameplay or per-frame processing.
+	var pending_actors: Array[EnemyActor] = []
+	var seen_instance_ids: Dictionary = {}
+	var candidates: Array = []
+	if is_inside_tree():
+		candidates.append_array(get_tree().get_nodes_in_group("death_pending"))
+	for raw_actor: Variant in _active_enemy_cache.values():
+		candidates.append(raw_actor)
+	for raw_actor: Variant in candidates:
+		if not raw_actor is EnemyActor or not is_instance_valid(raw_actor):
+			continue
+		var enemy := raw_actor as EnemyActor
+		var instance_id := enemy.get_instance_id()
+		if seen_instance_ids.has(instance_id):
+			continue
+		seen_instance_ids[instance_id] = true
+		if enemy._death_pending and not enemy._dying:
+			pending_actors.append(enemy)
+	for enemy: EnemyActor in pending_actors:
+		if is_instance_valid(enemy) and enemy._death_pending and not enemy._dying:
+			enemy._begin_death()
+
+
+func _drain_enemy_death_queue_for_logout() -> Dictionary:
+	# Exit actions are the one deliberate synchronous boundary for the deferred
+	# death pipeline.  A queued death must finish (or become an explicit,
+	# diagnosable terminal failure) before PlayerState writes its logout record;
+	# otherwise a successful logout can silently lose XP, respawn state, or loot.
+	if not _last_death_logout_failure.is_empty():
+		var early_latched_failure := _last_death_logout_failure.duplicate(true)
+		early_latched_failure["death_queue"] = death_work_queue_snapshot()
+		return early_latched_failure
+	_flush_pending_enemy_death_signals_for_logout()
+	var terminal_count_before := _enemy_death_terminal_jobs.size()
+	var guard := 0
+	while not _pending_enemy_deaths.is_empty() and guard < 4096:
+		var progressed := _pump_enemy_death_work_queue(true)
+		guard += 1
+		if not progressed:
+			break
+	if not _pending_enemy_deaths.is_empty():
+		var pending_result := {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_death_queue_pending",
+			"pending_deaths": _pending_enemy_deaths.size(),
+			"death_queue": death_work_queue_snapshot(),
+		}
+		_last_death_logout_failure = pending_result.duplicate(true)
+		return pending_result
+	# A bounded terminal ledger can evict the just-created record when it was
+	# already full.  The failure latch is therefore authoritative for this
+	# drain; do not rely only on array indices below.
+	if not _last_death_logout_failure.is_empty():
+		var latched_failure := _last_death_logout_failure.duplicate(true)
+		latched_failure["death_queue"] = death_work_queue_snapshot()
+		return latched_failure
+	for index: int in range(terminal_count_before, _enemy_death_terminal_jobs.size()):
+		var terminal: Dictionary = _enemy_death_terminal_jobs[index]
+		if str(terminal.get("state", "")) != DEATH_STATE_FAILED:
+			continue
+		var failed_result := {
+			"success": false,
+			"save_performed": false,
+			"reason": "safe_logout_death_queue_failed",
+			"death_key": str(terminal.get("death_key", "")),
+			"death_error": str(terminal.get("last_error", "")),
+			"death_queue": death_work_queue_snapshot(),
+		}
+		_last_death_logout_failure = failed_result.duplicate(true)
+		return failed_result
+	return {
+		"success": true,
+		"save_performed": false,
+		"reason": "",
+		"death_queue_drained": true,
+	}
+
+
 func _return_to_character_select() -> void:
 	var logout_result := _prepare_safe_logout()
 	if not bool(logout_result.get("success", false)):
@@ -762,9 +2815,11 @@ func _handle_safe_logout_failure(action: StringName, result: Dictionary) -> void
 		action,
 		str(result.get("reason", "safe_logout_failed"))
 	)
-	if is_instance_valid(hud) and hud.has_method("show_message"):
-		hud.show_message(
-			"安全退出失败：%s" % str(result.get("reason", "")),
+	if is_instance_valid(hud) and hud.has_method("show_error_message"):
+		# Player sees Chinese prose only; the raw reason stays in the
+		# diagnostic above and in push_error via the reporter.
+		hud.show_error_message(
+			UIErrorFeedbackScript.from_result(result, "安全退出失败，请稍后重试。"),
 			2.0
 		)
 
@@ -788,11 +2843,10 @@ func _handle_home_resolution_failure(
 		action,
 		str(result.get("reason", "home_resolution_failed"))
 	)
-	if is_instance_valid(hud) and hud.has_method("show_message"):
-		hud.show_message(
-			"目标位置解析失败：%s" % str(result.get("reason", "")),
-			2.0
-		)
+	if is_instance_valid(hud) and hud.has_method("show_error_message"):
+		# Player-readable Chinese only; the raw resolution reason is retained
+		# in the diagnostic above and in push_error via the reporter.
+		hud.show_error_message("无法确定安全返回位置。", 2.0)
 
 
 func _report_safe_logout_error_production(action: StringName, reason: String) -> void:
@@ -835,8 +2889,9 @@ func _change_zone_immediate(zone_name: String, initial := false) -> void:
 			_handle_home_resolution_failure(&"change_zone_bich", home)
 			return
 		_load_zone(str(bich_map.get("name", "比奇省")), initial, bich_map)
-		player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
+		_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 		player.velocity = Vector2.ZERO
+		_relocate_main_pets_after_map_arrival()
 		background.set_focus_position(player.global_position)
 		return
 	_load_zone(zone_name, initial, GameData.get_map(zone_name))
@@ -888,8 +2943,9 @@ func _travel_to_service_home_immediate(
 		_load_zone(str(map_data.get("name", "比奇省")), initial, map_data)
 		if not red_name and service_map_id == 0:
 			# 服务端(289,618)直接进入700×700原MAP统一坐标，不再压缩到场景中心。
-			player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
+			_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 			player.velocity = Vector2.ZERO
+			_relocate_main_pets_after_map_arrival()
 			background.set_focus_position(player.global_position)
 	else:
 		# 红名地图3尚未进入项目地图表；保留显式回退，不伪造服务端映射。
@@ -903,8 +2959,92 @@ func travel_to_map(map_id: int) -> void:
 	_request_map_travel(map_id)
 
 
+func _on_map_teleport_availability_requested(map_ids: Array) -> void:
+	if not is_instance_valid(hud):
+		return
+	hud.set_map_teleport_availability(
+		MapTeleportRuntimePolicyScript.rules_for_maps(
+			map_ids,
+			Callable(self, "_map_teleport_item_count_by_id"),
+		)
+	)
+
+
+func _on_map_teleport_requested(request: Dictionary) -> void:
+	if not gameplay_input_is_enabled() or _map_transition_in_progress:
+		return
+	var selected_map_id := int(request.get("selected_map_id", -1))
+	var rule := MapTeleportRuntimePolicyScript.rule_for_map(
+		selected_map_id,
+		Callable(self, "_map_teleport_item_count_by_id"),
+	)
+	if not MapTeleportRuntimePolicyScript.request_matches_rule(request, rule):
+		if is_instance_valid(hud):
+			hud.set_map_teleport_availability({selected_map_id: rule})
+			hud.show_error_message(
+				UIErrorFeedbackScript.user_message(
+					str(rule.get("reason", "传送条件已经失效"))
+				)
+			)
+		return
+	var destination_map_id := int(rule.get("destination_map_id", -1))
+	var travel_profile := _resolve_projection_profile_for_map(destination_map_id)
+	if not bool(travel_profile.get("success", false)):
+		missing_projection_rejection_count += 1
+		projection_rejection_reason = str(travel_profile.get("reason", ""))
+		hud.show_error_message("目标地图投影暂不可用（%d）" % destination_map_id)
+		return
+	var map_data := GameData.get_map_by_id(destination_map_id)
+	if map_data.is_empty():
+		hud.show_error_message("地图数据不存在：%d" % destination_map_id)
+		return
+	var operation := Callable(self, "_teleport_to_map_immediate").bind(
+		destination_map_id,
+		str(rule.get("arrival_anchor_id", "")),
+	)
+	if not _begin_map_transition(operation, destination_map_id):
+		hud.show_error_message("当前无法开始传送")
+
+
+func _teleport_to_map_immediate(map_id: int, arrival_anchor_id: String) -> bool:
+	var arrival := MapTeleportRuntimePolicyScript.resolve_arrival(
+		map_id,
+		arrival_anchor_id,
+	)
+	if not bool(arrival.get("valid", false)):
+		return false
+	var map_data := GameData.get_map_by_id(map_id)
+	if map_data.is_empty():
+		return false
+	map_data = _runtime_named_map_data(map_data)
+	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
+	if current_map_id != map_id:
+		return false
+	_set_player_world_position(arrival.get("position_px", Vector2.ZERO) as Vector2)
+	player.velocity = Vector2.ZERO
+	_relocate_main_pets_after_map_arrival()
+	background.set_focus_position(player.global_position)
+	_record_player_world_location()
+	return true
+
+
+func _map_teleport_item_count_by_id(item_id: int) -> int:
+	if item_id <= 0:
+		return 0
+	var total := 0
+	for raw_record: Variant in PlayerState.inventory:
+		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
+			continue
+		var record: Dictionary = raw_record
+		var catalog_item := GameData.get_item_record(record)
+		if int(catalog_item.get("itemId", -1)) == item_id:
+			total += maxi(0, int(record.get("count", 1)))
+	return total
+
+
 func _request_map_travel(map_id: int) -> bool:
 	if not gameplay_input_is_enabled(): return false
+	map_id = GameData.service_runtime_map_id(map_id)
 	# FREEZE-P0.2: refuse travel before the transition when the target map has
 	# no formal projection profile; never load_zone into a half-broken world.
 	var travel_profile := _resolve_projection_profile_for_map(map_id)
@@ -913,11 +3053,11 @@ func _request_map_travel(map_id: int) -> bool:
 		projection_rejection_reason = str(
 			travel_profile.get("reason", "")
 		)
-		hud.show_message("map_projection_unavailable:%d" % map_id)
+		hud.show_error_message("当前地图投影暂不可用（%d）" % map_id)
 		return false
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty():
-		hud.show_message("地图数据不存在：%d" % map_id)
+		hud.show_error_message("地图数据不存在：%d" % map_id)
 		return false
 	if current_map_id == map_id:
 		return false
@@ -931,17 +3071,27 @@ func _travel_to_map_immediate(map_id: int) -> bool:
 	var map_data := GameData.get_map_by_id(map_id)
 	if map_data.is_empty() or current_map_id == map_id:
 		return false
+	# Resolve Home before _load_zone tears down the source world. The staged
+	# pipeline already has this gate; synchronous travel must fail closed too.
+	if map_id == BICH_RUNTIME_MAP_ID:
+		var home_result := _resolve_bich_home()
+		if not bool(home_result.get("valid", false)):
+			_handle_home_resolution_failure(&"sync_travel_arrival", home_result)
+			return false
 	map_data = _runtime_named_map_data(map_data)
 	var source_map_id := current_map_id
 	_load_zone(str(map_data.get("name", "未命名地图")), false, map_data)
 	if current_map_id == map_id:
-		player.global_position = route_arrival_position(map_id, source_map_id)
+		_set_player_world_position(route_arrival_position(map_id, source_map_id))
 		player.velocity = Vector2.ZERO
+		_relocate_main_pets_after_map_arrival()
 		background.set_focus_position(player.global_position)
 	return current_map_id == map_id
 
 
 func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
+	if not gameplay_input_is_enabled():
+		return false
 	if str(portal.portal_data.get("portal_contract_id", "")) != MapPortalRuntimeServiceScript.PORTAL_CONTRACT_ID:
 		return _request_map_travel(portal.target_map_id)
 	var portal_id := str(portal.portal_data.get("source_portal_id", ""))
@@ -950,7 +3100,7 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		current_runtime, portal_id
 	)
 	if endpoint.is_empty():
-		hud.show_message("传送节点端点不存在", 1.5)
+		hud.show_error_message("传送节点端点不存在", 1.5)
 		return false
 	var current_ground_gu := (
 		MapEditorRuntimeBridgeScript.screen_position_px_to_ground_position_gu(
@@ -966,11 +3116,11 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 		current_ground_gu,
 		fresh_activation
 	):
-		hud.show_message("传送节点尚未稳定，请稍候或先离开入口", 1.5)
+		hud.show_error_message("传送节点尚未稳定，请稍候或先离开入口", 1.5)
 		return false
 	var request := MapPortalRuntimeServiceScript.travel_request(endpoint)
 	if not _valid_portal_request(request):
-		hud.show_message("传送节点配置无效", 1.5)
+		hud.show_error_message("传送节点配置无效", 1.5)
 		return false
 	if not MapPortalTravelGuardScript.begin_travel(_portal_guard_state):
 		return false
@@ -978,7 +3128,7 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 	var map_data := GameData.get_map_by_id(target_map_id)
 	if map_data.is_empty():
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("地图数据不存在：%d" % target_map_id)
+		hud.show_error_message("地图数据不存在：%d" % target_map_id)
 		return false
 	var target_runtime := MapEditorRuntimeBridgeScript.load_map(target_map_id)
 	var target_portal_id := str(request.get("target_portal_id", ""))
@@ -987,16 +3137,16 @@ func travel_via_portal(portal: ZonePortal, fresh_activation := true) -> bool:
 	)
 	if target_runtime.is_empty() or target_endpoint.is_empty():
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("目标地图或目标门点不可用", 1.5)
+		hud.show_error_message("目标地图或目标门点不可用", 1.5)
 		return false
 	if str(target_runtime.get("source", {}).get("map_id", "")) != str(request.get("target_map_key", "")):
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("目标地图标识不匹配", 1.5)
+		hud.show_error_message("目标地图标识不匹配", 1.5)
 		return false
 	var target_tile := _portal_tile(target_endpoint.get("tile", []))
 	if target_tile == Vector2.INF or target_tile != _portal_tile(request.get("target_tile", [])):
 		_portal_guard_state["travel_in_flight"] = false
-		hud.show_message("目标门点坐标不匹配", 1.5)
+		hud.show_error_message("目标门点坐标不匹配", 1.5)
 		return false
 	map_data = _runtime_named_map_data(map_data)
 	var operation := Callable(self, "_complete_portal_travel").bind(
@@ -1034,8 +3184,9 @@ func _complete_portal_travel(
 			arrival_ground_gu
 		)
 	)
-	player.global_position = arrival_position
+	_set_player_world_position(arrival_position)
 	player.velocity = Vector2.ZERO
+	_relocate_main_pets_after_map_arrival()
 	background.set_focus_position(player.global_position)
 	MapPortalTravelGuardScript.finish_arrival(
 		_portal_guard_state,
@@ -1093,7 +3244,9 @@ func _begin_initial_world_bootstrap() -> void:
 		_world_bootstrap_coordinator.finish(false, "initial_travel_rejected")
 		_world_bootstrap_in_progress = false
 		return
-	var bootstrap_deadline := Time.get_ticks_msec() + 15000
+	var bootstrap_deadline := (
+		Time.get_ticks_msec() + INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC
+	)
 	while (
 		(_map_transition_in_progress
 			or _world_bootstrap_coordinator.stage not in [
@@ -1103,12 +3256,30 @@ func _begin_initial_world_bootstrap() -> void:
 		and Time.get_ticks_msec() < bootstrap_deadline
 	):
 		await get_tree().process_frame
+	if (
+		_map_transition_in_progress
+		or _world_bootstrap_coordinator.stage not in [
+			WorldBootstrapCoordinator.Stage.READY,
+			WorldBootstrapCoordinator.Stage.FAILED,
+		]
+	):
+		# A formal map may require substantially more resources than the legacy
+		# 11-map slice. Never release input onto a half-built world when the
+		# bounded bootstrap deadline is exhausted.
+		_active_map_transition_id = ""
+		_map_transition_in_progress = false
+		_world_bootstrap_coordinator.finish(false, "initial_bootstrap_timeout")
+		_world_bootstrap_in_progress = false
+		return
 	if _world_bootstrap_coordinator.stage == WorldBootstrapCoordinator.Stage.FAILED:
 		# Keep the input lock and Loading overlay; the bootstrap failed and the
 		# game must not accept gameplay on a half-built world.
 		_world_bootstrap_in_progress = false
 		return
 	_record_player_world_location()
+	# perf-smoothness-r1 Phase C: initial-world READY releases the loading
+	# window; combat-time texture misses now queue for async warm-up.
+	CasterSkillVisualRegistry.set_loading_window_active(false)
 	_on_player_stats_changed(player.current_hp, player.max_hp)
 	_world_bootstrap_in_progress = false
 	_release_gameplay_input_lock(INPUT_LOCK_INITIAL_BOOTSTRAP)
@@ -1117,17 +3288,41 @@ func _begin_initial_world_bootstrap() -> void:
 func _begin_map_transition(operation: Callable, target_map_id := -1) -> bool:
 	if _map_transition_in_progress or not operation.is_valid():
 		return false
+	if not is_instance_valid(player):
+		return false
+	var revival_authorized := _death_revival_request_in_flight and not _active_death_id.is_empty()
+	if (player._dead or player.current_hp <= 0) and not revival_authorized:
+		return false
 	_map_transition_serial += 1
+	var combat_token := "map-combat:%d" % _map_transition_serial
+	if not player.begin_combat_transition(combat_token, revival_authorized):
+		return false
 	_world_bootstrap_coordinator.begin_map_transition(target_map_id)
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.SHOW_LOADING)
 	_active_map_transition_id = "map:%d:%d" % [
 		Time.get_ticks_msec(),
 		_map_transition_serial,
 	]
+	set_meta("map_combat_transition_token", combat_token)
 	_map_transition_in_progress = true
+	if is_instance_valid(_town_music_controller):
+		_town_music_controller.begin_map_transition(target_map_id, _active_map_transition_id)
 	_acquire_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+	_cancel_map_transition_movement_input()
 	_run_map_transition(_active_map_transition_id, operation, target_map_id)
 	return true
+
+
+func _begin_monster_transition_prefetch(target_map_id: int) -> Dictionary:
+	# Same-map Home/revival/teleport keeps the existing EnemyActors: _load_zone
+	# returns without rebuilding that world. Do not fence their visual leases
+	# merely because a Loading transition is shown. A real map change (or first
+	# bootstrap) still starts a new generation and rejects stale actors.
+	if target_map_id == current_map_id and target_map_id >= 0 and not _world_bootstrap_in_progress:
+		return {"complete": true, "preserved_world": true}
+	return _streaming_coordinator.begin_map_prefetch(
+		_monster_ids_for_map(target_map_id), _world_bootstrap_in_progress
+	)
 
 
 func _run_map_transition(
@@ -1136,6 +3331,26 @@ func _run_map_transition(
 	target_map_id: int
 ) -> void:
 	hud.begin_loading_transition(transition_id)
+	# perf(R13-D1): total-loading timing profile. Read-only diagnostics only;
+	# the production execution order below is untouched. Covered = the moment
+	# the overlay confirmed coverage (loading_transition_covered); total = the
+	# moment the loading cover lift starts (fade excluded).
+	var r13_mode := "map_transition"
+	if _world_bootstrap_in_progress:
+		r13_mode = "initial_world"
+	var r13_loading_profile := {
+		"mode": r13_mode,
+		"transition_id": transition_id,
+		"target_map_id": target_map_id,
+		"covered_usec": 0,
+		"monster_prefetch_ms": 0.0,
+		"world_pipeline_ms": 0.0,
+		"actor_spawn_ms": 0.0,
+		"skill_workset_ms": 0.0,
+		"render_warm_ms": 0.0,
+		"finalize_ms": 0.0,
+	}
+	var r13_stage_started_usec := Time.get_ticks_usec()
 	if not PlayerState.test_mode:
 		while _map_transition_in_progress and _active_map_transition_id == transition_id:
 			var request: Dictionary = await hud.loading_transition_covered
@@ -1143,23 +3358,26 @@ func _run_map_transition(
 				str(request.get("contract_id", "")) == LoadingTransitionOverlay.CONTRACT_ID
 				and str(request.get("transition_id", "")) == transition_id
 			):
+				r13_loading_profile["covered_usec"] = Time.get_ticks_usec()
 				break
+	else:
+		# Test mode skips the real covered await; anchor at begin for the
+		# stage decomposition (diagnostics only).
+		r13_loading_profile["covered_usec"] = r13_stage_started_usec
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
-	# Initial entry used to serialize all reusable-panel warm-up after the world
-	# had already reached FINALIZE. Start the same hidden, fully awaited warm-up
-	# now that Loading is opaque so its frame-separated layout passes overlap
-	# threaded resource waits and frame-budgeted map construction below.
-	if _world_bootstrap_in_progress and not PlayerState.test_mode:
-		hud.prewarm_all_panels(_system_menu_panel)
+	# Initial entry deliberately does not prewarm every reusable panel. That
+	# work is not part of the world-ready contract and made the first Loading
+	# screen wait for unrelated UI layout/action preparation. Panels remain
+	# on-demand and are created only when the player opens them.
 	_last_monster_prefetch_status.clear()
+	r13_stage_started_usec = Time.get_ticks_usec()
+	_preload_map_loot_icons(target_map_id)
 	if PlayerState.test_mode:
 		_last_monster_prefetch_status = {"complete": true}
 	elif _monster_prefetch_enabled and target_map_id >= 0:
 		_last_monster_prefetch_status = (
-			_streaming_coordinator.begin_map_prefetch(
-				_monster_ids_for_map(target_map_id)
-			)
+			_begin_monster_transition_prefetch(target_map_id)
 		)
 		var prefetch_deadline := (
 			Time.get_ticks_msec() + MONSTER_PREFETCH_TIMEOUT_MSEC
@@ -1176,6 +3394,9 @@ func _run_map_transition(
 			)
 	elif _monster_prefetch_enabled:
 		_streaming_coordinator.release_map_pins()
+	r13_loading_profile["monster_prefetch_ms"] = (
+		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+	)
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	# HC-P1-004: stage the world build through the coordinator budget queues
@@ -1183,10 +3404,59 @@ func _run_map_transition(
 	# operation below only performs zone arrival (content spawn + player
 	# placement); WorldBackground.set_zone_data() skips the rebuild because the
 	# environment was already staged-built for the same map.
+	r13_stage_started_usec = Time.get_ticks_usec()
 	var built_ok := await _run_world_build_pipeline(target_map_id, transition_id)
-	if not built_ok or not _map_transition_in_progress or _active_map_transition_id != transition_id:
+	r13_loading_profile["world_pipeline_ms"] = (
+		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+	)
+	if not built_ok:
+		# P0-3: pre-arrival failure - the coordinator is already FAILED and
+		# the old world is untouched. Own the whole FAILED transition through
+		# the central recovery function instead of stranding the transition
+		# lock, the player combat token and the Loading overlay.
+		_fail_map_transition(&"pre_arrival_keep_world")
 		return
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	r13_stage_started_usec = Time.get_ticks_usec()
+	_collecting_staged_actor_plan = true
+	_staged_actor_source_index = 0
+	_staged_actor_spawn_failure_reason = ""
 	operation.call()
+	_collecting_staged_actor_plan = false
+	if PlayerState.test_mode:
+		# Preserve the established deterministic synchronous travel hook while
+		# exercising the identical descriptor handler and slice accounting.
+		_world_bootstrap_coordinator.process_actor_queue_blocking(
+			Callable(self, "_spawn_staged_actor_descriptor"),
+			_bootstrap_max_items_per_frame(),
+			_bootstrap_slice_budget_ms()
+		)
+	else:
+		await _world_bootstrap_coordinator.process_actor_queue(
+			Callable(self, "_spawn_staged_actor_descriptor"),
+			_bootstrap_max_items_per_frame(),
+			_bootstrap_slice_budget_ms()
+		)
+	r13_loading_profile["actor_spawn_ms"] = (
+		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+	)
+	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+		return
+	var actor_summary := _world_bootstrap_coordinator.ready_contract_summary()
+	if (
+		int(actor_summary.get("failed_actors", 0)) != 0
+		or int(actor_summary.get("duplicate_actors", 0)) != 0
+		or int(actor_summary.get("planned_actors", 0))
+		!= int(actor_summary.get("spawned_actors", 0))
+		+ int(actor_summary.get("deferred_actors", 0))
+	):
+		_world_bootstrap_coordinator.finish(false, "actor_spawn_plan_failed")
+		# P0-3: the world was already swapped by operation.call(), so this
+		# is a post-arrival failure - recover through the safe home instead
+		# of stranding the lock/token/Loading over an incomplete world.
+		_fail_map_transition(&"post_arrival_safe_home")
+		return
 	if not PlayerState.test_mode:
 		await get_tree().process_frame
 		if DisplayServer.get_name() != "headless":
@@ -1194,12 +3464,134 @@ func _run_map_transition(
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	_world_bootstrap_coordinator.advance(WorldBootstrapCoordinator.Stage.FINALIZE)
+	# P0-3b: route_arrival_position never consults environment collision
+	# (the collision layer does not exist yet at selection time), so a map
+	# whose routed arrival point sits on an environment-blocked cell used
+	# to hard-fail the ready contract even though the world itself is
+	# complete. With collision built, relocate the player to the nearest
+	# unblocked point before validating; the blocked-arrival invariant the
+	# contract enforces ("the player never stands inside a wall") is then
+	# satisfied in the freshly built world instead of discarding the whole
+	# transition.
+	_maybe_relocate_blocked_arrival()
 	if _check_world_ready_contract():
-		# Complete reusable UI construction while initial Loading still covers
-		# the world. Panels stay hidden and this warm-up does not invoke actions.
-		if _world_bootstrap_in_progress and not PlayerState.test_mode:
-			await hud.prewarm_all_panels(_system_menu_panel)
+		_relocate_main_pets_after_map_arrival()
+		# FW-COLD (perf-smoothness-r1 C-R1): thread-pumped, deadline-aware
+		# prewarm of the ACTUAL bound workset under the loading overlay. The
+		# first real cast of every workset skill must be a pure texture-cache
+		# hit. Loading-phase work only: damage, spatial index and fire wall
+		# systems are untouched.
+		r13_stage_started_usec = Time.get_ticks_usec()
+		var r13_workset_diag: Dictionary = (
+			await _prewarm_learned_skill_visuals()
+		)
+		r13_loading_profile["skill_workset_ms"] = (
+			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+		)
+		# FW-COLD2 Phase B + PERF-R2 R7/C8: the GPU render warm is bound to
+		# the workset - a warrior/taoist without fire wall bound never pays
+		# for fire-wall warm-up here. R14-C7 + R14-C-R1 P0-11..16: the warm
+		# covers every workset skill's prewarmed facing sequence under a hard
+		# ~1s budget and reports a structured result merged into
+		# [LOADING-TOTAL].
+		r13_stage_started_usec = Time.get_ticks_usec()
+		var r13_render_warm_diag: Dictionary = {}
+		if not _active_skill_workset_candidates().is_empty():
+			r13_render_warm_diag = await _warm_fire_wall_render_path()
+		r13_loading_profile["render_warm_ms"] = (
+			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+		)
+		r13_loading_profile["render_warm_diag"] = r13_render_warm_diag
+		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+			return
+		# perf(R13-D2): Finalize restarts its own timer HERE - it must never
+		# include the render-warm span (stages do not overlap).
+		r13_stage_started_usec = Time.get_ticks_usec()
+		if is_instance_valid(_town_music_controller):
+			_town_music_controller.set_map_context(
+				current_map_id,
+				_active_safe_zones,
+				_canonical_screen_px_to_ground_gu(player.global_position),
+				transition_id
+			)
+		# Release the world first. Reusable UI then warms invisibly in small,
+		# frame-separated batches; this keeps Loading and gameplay input responsive
+		# while removing the one-time cost from the player's first panel click.
+		# perf-smoothness-r1 Phase C: map-transition READY releases the loading
+		# window the same way the initial-world READY does.
+		CasterSkillVisualRegistry.set_loading_window_active(false)
+		# perf(R13-D1): finalize = READY release tail (music context + window
+		# close) up to the finish_loading_transition call. Total = covered ->
+		# finish, the player-visible Loading duration (fade excluded). Bootstrap
+		# stage data comes from the coordinator's own non-destructive
+		# diagnostic - no second implementation.
+		r13_loading_profile["finalize_ms"] = (
+			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+		)
+		var r13_bootstrap_diag: Dictionary = (
+			_world_bootstrap_coordinator.diagnostic
+		)
+		var r13_total_usec: int = maxi(
+			1,
+			Time.get_ticks_usec() - int(r13_loading_profile.get("covered_usec", 0)),
+		)
+		r13_loading_profile["total_ms"] = float(r13_total_usec) / 1000.0
+		if OS.is_debug_build():
+			print("[LOADING-TOTAL] ", JSON.stringify({
+				"mode": r13_loading_profile.get("mode", ""),
+				"transition_id": str(r13_loading_profile.get("transition_id", "")),
+				"target_map_id": int(r13_loading_profile.get("target_map_id", -1)),
+				"monster_prefetch_ms": float(r13_loading_profile.get("monster_prefetch_ms", 0.0)),
+				"world_pipeline_ms": float(r13_loading_profile.get("world_pipeline_ms", 0.0)),
+				"actor_spawn_ms": float(r13_loading_profile.get("actor_spawn_ms", 0.0)),
+				"skill_workset_ms": float(r13_loading_profile.get("skill_workset_ms", 0.0)),
+				"render_warm_ms": float(r13_loading_profile.get("render_warm_ms", 0.0)),
+				"render_warm": {
+					"skills_considered": int(
+						r13_render_warm_diag.get("skills_considered", 0)
+					),
+					"skills_warmed": int(
+						r13_render_warm_diag.get("skills_warmed", 0)
+					),
+					"frames_drawn": int(
+						r13_render_warm_diag.get("frames_drawn", 0)
+					),
+					"budget_exhausted": bool(
+						r13_render_warm_diag.get("budget_exhausted", false)
+					),
+					"elapsed_ms": float(
+						r13_render_warm_diag.get("elapsed_ms", 0.0)
+					),
+					"lease_refcount_before": int(
+						r13_render_warm_diag.get("lease_refcount_before", 0)
+					),
+					"lease_refcount_after": int(
+						r13_render_warm_diag.get("lease_refcount_after", 0)
+					),
+				},
+				"finalize_ms": float(r13_loading_profile.get("finalize_ms", 0.0)),
+				"total_ms": float(r13_loading_profile.get("total_ms", 0.0)),
+				"prewarm_deadline_exceeded": bool(
+					r13_workset_diag.get("deadline_exceeded", false)
+				),
+				"prewarm_tail_after_deadline_ms": float(
+					r13_workset_diag.get("tail_after_deadline_ms", 0.0)
+				),
+				"stage_elapsed_ms": r13_bootstrap_diag.get("stage_elapsed_ms", {}),
+				"map_slice_count": int(r13_bootstrap_diag.get("map_slice_count", 0)),
+				"collision_slice_count": int(r13_bootstrap_diag.get("collision_slice_count", 0)),
+				"actor_slice_count": int(r13_bootstrap_diag.get("actor_slice_count", 0)),
+				"map_max_slice_ms": float(r13_bootstrap_diag.get("map_max_slice_ms", 0.0)),
+				"collision_max_slice_ms": float(r13_bootstrap_diag.get("collision_max_slice_ms", 0.0)),
+				"actor_max_slice_ms": float(r13_bootstrap_diag.get("actor_max_slice_ms", 0.0)),
+				"actor_max_item_ms": float(r13_bootstrap_diag.get("actor_max_item_ms", 0.0)),
+			}))
 		hud.finish_loading_transition()
+		# FRAME-STALL discipline (remote review 2026-09-16): arm the generic
+		# long-frame probe only now - loading has ended and the prewarm
+		# baseline has printed - so bootstrap spikes cannot consume it.
+		_first_combat_probe_armed = true
+		_print_session_diagnostics_header()
 		if PlayerState.test_mode and hud.loading_transition_overlay != null:
 			# Test-mode fast path hides the fade overlay immediately so tests
 			# can assert the bootstrap completed without waiting the fade tween.
@@ -1216,16 +3608,159 @@ func _run_map_transition(
 				"stages_ms": bootstrap_profile.get("stage_elapsed_ms", {}),
 				"map_slices": int(bootstrap_profile.get("map_slice_count", 0)),
 				"collision_slices": int(bootstrap_profile.get("collision_slice_count", 0)),
+				"actor_slices": int(bootstrap_profile.get("actor_slice_count", 0)),
+				"planned_actors": int(bootstrap_profile.get("planned_actors", 0)),
+				"spawned_actors": int(bootstrap_profile.get("spawned_actors", 0)),
+				"deferred_actors": int(bootstrap_profile.get("deferred_actors", 0)),
+				"failed_actors": int(bootstrap_profile.get("failed_actors", 0)),
+				"duplicate_actors": int(bootstrap_profile.get("duplicate_actors", 0)),
+				"actor_total_ms": float(bootstrap_profile.get("actor_total_ms", 0.0)),
+				"actor_max_item_ms": float(bootstrap_profile.get("actor_max_item_ms", 0.0)),
+				"actor_max_slice_ms": float(bootstrap_profile.get("actor_max_slice_ms", 0.0)),
 				"max_slice_ms": float(bootstrap_profile.get("max_slice_ms", 0.0)),
 				"hud": hud.panel_prewarm_diagnostic(),
 			}))
+		# Cancel again immediately before READY releases the lock. This covers a
+		# release delivered during the lock as well as a release lost entirely.
+		_cancel_map_transition_movement_input()
+		player.finish_combat_transition(str(get_meta("map_combat_transition_token", "")))
 		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		if not PlayerState.test_mode and hud.has_method("start_budgeted_panel_prewarm"):
+			hud.start_budgeted_panel_prewarm(_system_menu_panel)
 	else:
-		# READY contract failed: keep the input lock and Loading overlay so the
-		# player never acts on an incomplete world.
-		_active_map_transition_id = ""
-		_map_transition_in_progress = false
+		# P0-3: READY contract failed after the world swap (post-arrival).
+		# The player must never act on an incomplete world, but the FAILED
+		# transition may not strand its lock/token/Loading either - hand the
+		# whole thing to the central recovery owner (safe home).
 		_world_bootstrap_coordinator.finish(false, "ready_contract_failed")
+		_fail_map_transition(&"post_arrival_safe_home")
+
+
+## P0-3b: nearest-unblocked-point relocation for a blocked routed arrival.
+## Only relocates a living player whose current position is actually
+## environment-blocked; every other condition is left to the normal ready
+## contract / failure paths. Bounded spiral search keeps the relocation
+## deterministic and cheap.
+func _maybe_relocate_blocked_arrival() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	if not is_instance_valid(background):
+		return
+	if bool(player._dead) or int(player.current_hp) <= 0:
+		return
+	if not background.is_environment_point_blocked(player.global_position):
+		return
+	var origin := player.global_position
+	var best := Vector2.INF
+	var radius := 24.0
+	while radius <= 320.0 and best == Vector2.INF:
+		var steps := maxi(8, int(radius / 4.0))
+		for i: int in steps:
+			var angle := TAU * float(i) / float(steps)
+			var candidate := origin + Vector2(cos(angle), sin(angle)) * radius
+			if not background.is_environment_point_blocked(candidate):
+				best = candidate
+				break
+		radius += 24.0
+	if best == Vector2.INF:
+		return
+	player.global_position = best
+	player.velocity = Vector2.ZERO
+	if is_instance_valid(background):
+		background.set_focus_position(player.global_position)
+	print("[MapTransition] blocked arrival point; relocated player to nearest unblocked point (%.0f, %.0f)" % [best.x, best.y])
+
+
+## P0-3: single owner for a FAILED map transition. Every FAILED path funnels
+## here; no implicit combat token, map-transition lock or Loading overlay may
+## survive the call. Callers must have already finished the coordinator with
+## the concrete failure reason (this function reads it for the user message).
+## pre_arrival_keep_world: the old world is still current - keep it playable
+## and surface a retryable error.
+## post_arrival_safe_home: the world was swapped but is not contract-ready -
+## relocate the player to the resolved safe home so an incomplete map is
+## never handed to gameplay input.
+func _fail_map_transition(recovery_policy: StringName) -> void:
+	var coordinator := _world_bootstrap_coordinator
+	var reason := "map_transition_failed"
+	if coordinator != null and is_instance_valid(coordinator):
+		reason = str(coordinator.diagnostic.get("failure_reason", reason))
+	if player != null and is_instance_valid(player):
+		player.finish_combat_transition(str(get_meta("map_combat_transition_token", "")))
+	_cancel_map_transition_movement_input()
+	_active_map_transition_id = ""
+	_map_transition_in_progress = false
+	if is_instance_valid(hud):
+		hud.finish_loading_transition()
+		if recovery_policy == &"pre_arrival_keep_world":
+			hud.show_error_message("地图切换失败：%s，已保留当前区域，可稍后重试。" % reason, 4.0)
+		elif recovery_policy == &"post_arrival_safe_home":
+			hud.show_error_message("地图加载未完成：%s，正在送回安全点。" % reason, 4.0)
+		else:
+			hud.show_error_message("地图切换失败：%s" % reason, 4.0)
+	print("[MapTransition] FAILED reason=%s policy=%s" % [reason, str(recovery_policy)])
+	if recovery_policy == &"post_arrival_safe_home":
+		# A player killed during the failed arrival goes through the
+		# production death revival (home relocation + death state cleanup);
+		# a living player goes through the plain safe-home relocation. An
+		# in-flight death flow (hp 0, _dead not yet set) gets a short settle
+		# window so the revival sees the real state; the transition lock is
+		# only released after the recovery finished.
+		if player != null and is_instance_valid(player):
+			# Death settlement is queued and may land after the transition
+			# already ended (the arrival fight can kill the player while the
+			# ready-contract check is still running); give it a bounded
+			# window to land so the recovery picks the right branch.
+			var death_settle := Time.get_ticks_msec() + 5000
+			while (
+				int(player.current_hp) <= 0
+				and not bool(player._dead)
+				and Time.get_ticks_msec() < death_settle
+			):
+				await get_tree().create_timer(0.05, true).timeout
+			print("[MapTransition] recovery state dead=%s hp=%d" % [
+				str(player._dead), int(player.current_hp),
+			])
+			# The FAILED transition's own lock must go before a new home
+			# transition can acquire it; the recovery transition re-owns
+			# the lock and releases it through its own READY/FAILED path.
+			_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+			var recovery_started := false
+			if bool(player._dead):
+				# Formal production town revival: full home travel +
+				# _finish_death_revival completion boundary (no bare
+				# teleport - the player must land in the home WORLD).
+				recovery_started = _request_production_town_revival()
+			else:
+				recovery_started = travel_to_service_home(
+					false, false, "比奇省", Callable()
+				)
+			if recovery_started:
+				print("[MapTransition] safe-home recovery transition started")
+				return
+		# Recovery could not start (no player / home unresolvable): release
+		# the FAILED transition lock so the state is not double-locked and
+		# leave the explicit error message pointing at the retry path.
+		_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+		return
+	# pre_arrival_keep_world (and future title-return): the current world is
+	# safe to hand back to gameplay input, so the transition lock goes away.
+	_release_gameplay_input_lock(INPUT_LOCK_MAP_TRANSITION_LOCAL)
+
+
+## P0-3: formal production town revival for a dead player - constructs the
+## revival request and hands it to the production handler, which owns the
+## home travel, the revival completion boundary and the death-lock release.
+func _request_production_town_revival() -> bool:
+	if _active_death_id.is_empty() or _death_revival_request_in_flight:
+		return false
+	_on_revival_requested({
+		"contract_id": DEATH_REVIVAL_CONTRACT_ID,
+		"death_id": _active_death_id,
+		"option_slot": "town",
+		"method_id": "revive.nearest_town",
+	})
+	return _death_revival_request_in_flight
 
 
 func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
@@ -1258,7 +3793,6 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 	background.set_pending_arrival_position(
 		arrival_result.get("position_px", Vector2.ZERO) as Vector2
 	)
-	background.submit_staged_build()
 
 	# 2) REQUEST_RESOURCES -> 3) WAIT_RESOURCES
 	coordinator.advance(WorldBootstrapCoordinator.Stage.REQUEST_RESOURCES)
@@ -1278,6 +3812,13 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 		return false
 	if not coordinator.is_generation_current(generation):
 		return false
+
+	# WALL-P1R C4: the descriptor queue is handed over only after
+	# WAIT_RESOURCES (and the required-resource gate) completed, so
+	# submit_staged_build's optimized/legacy mode selection can verify the
+	# prefetched derived textures. The resource manifest was fully built
+	# during prepare_map_build; nothing needs the queue before this point.
+	background.submit_staged_build()
 
 	# 4) BUILD_MAP: one atomic map unit per queue task, frame-budgeted.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.BUILD_MAP)
@@ -1313,8 +3854,9 @@ func _run_world_build_pipeline(map_id: int, transition_id: String) -> bool:
 		coordinator.finish(false, "collision_count_mismatch")
 		return false
 
-	# 6) SPAWN_ACTORS: gameplay actors are spawned by the arrival operation
-	# while the coordinator is in this stage.
+	# 6) SPAWN_ACTORS: the arrival operation records production actor
+	# descriptors after this pipeline returns. GameRoot then drains that exact
+	# plan with the same frame budget before FINALIZE/READY.
 	coordinator.advance(WorldBootstrapCoordinator.Stage.SPAWN_ACTORS)
 	background.finish_map_build()
 	return true
@@ -1335,7 +3877,7 @@ func _bootstrap_slice_budget_ms() -> float:
 
 
 func _pipeline_arrival_position(map_id: int) -> Dictionary:
-	if map_id == 4:
+	if map_id == BICH_RUNTIME_MAP_ID:
 		return _resolve_bich_home()
 	return {
 		"valid": true,
@@ -1370,6 +3912,16 @@ func _check_world_ready_contract() -> bool:
 		return false
 	if int(summary.get("failed_collision_count", 0)) != 0:
 		return false
+	if (
+		int(summary.get("planned_actors", 0))
+		!= int(summary.get("spawned_actors", 0))
+		+ int(summary.get("deferred_actors", 0))
+	):
+		return false
+	if int(summary.get("failed_actors", 0)) != 0:
+		return false
+	if int(summary.get("duplicate_actors", 0)) != 0:
+		return false
 	if int(summary.get("unexpected_sync_load_count", 0)) != 0:
 		return false
 	if not is_instance_valid(player):
@@ -1400,6 +3952,13 @@ func _check_world_ready_contract() -> bool:
 	if declares_content and get_tree().get_nodes_in_group("zone_content").is_empty():
 		return false
 	return true
+
+
+func _preload_map_loot_icons(map_id: int) -> void:
+	if map_id < 0:
+		return
+	var names := LootRuntime.possible_item_names_for_monster_ids(_monster_ids_for_map(map_id))
+	LootPickup.prewarm_item_names(names)
 
 
 func _monster_ids_for_map(map_id: int) -> Array[int]:
@@ -1494,7 +4053,7 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 			var portal_screen_px: Vector2 = portal.get("position", Vector2.ZERO)
 			var interior_target_screen_px := (
 				_bich_home_position_px_if_valid()
-				if destination_map_id == 4
+				if destination_map_id == BICH_RUNTIME_MAP_ID
 				else Vector2.ZERO
 			)
 			var portal_ground_gu := (
@@ -1521,12 +4080,19 @@ func route_arrival_position(destination_map_id: int, source_map_id: int) -> Vect
 			return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 				portal_ground_gu + inward_direction_ground_gu * arrival_offset_gu
 			)
-	return _bich_home_position_px_if_valid() if destination_map_id == 4 else Vector2.ZERO
+	return (
+		_bich_home_position_px_if_valid()
+		if destination_map_id == BICH_RUNTIME_MAP_ID
+		else Vector2.ZERO
+	)
 
 
 func route_next_target(map_id: int) -> Dictionary:
 	var content := RegionContent.get_map_content(map_id)
-	if map_id == 221 and not content.get("bosses", []).is_empty():
+	if (
+		map_id == ORC_TOMB_F3_RUNTIME_MAP_ID
+		and not content.get("bosses", []).is_empty()
+	):
 		return {"position": content.get("bosses", [])[0].get("position", Vector2.ZERO), "label": "骷髅精灵Boss房"}
 	var portals: Array = content.get("portals", [])
 	if not portals.is_empty():
@@ -1605,8 +4171,18 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		if map_data.is_empty() or int(map_data.get("mapId", -1)) == current_map_id:
 			return
 	_zone_generation += 1
+	_cancel_pending_enemy_deaths_for_generation_change()
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.clear_map(current_map_id)
 	_active_safe_zones.clear()
+	_active_enemy_cache.clear()
+	_active_boss_cache.clear()
+	_safe_zone_enforcement_remaining = 0.0
 	_cancel_all_combat_targets()
+	if _combat_spatial_index != null and current_map_id >= 0:
+		# Actors are queued for deletion below; clear the old map partition now so
+		# a transition cannot expose stale candidates before their exit callbacks.
+		_combat_spatial_index.clear_map(current_map_id)
 	# Preserve the live summon before zone_content is queued for deletion. The
 	# destination map restores the same gameplay state beside the owner.
 	PlayerState.apply_taoist_main_pet_runtime_states(
@@ -1619,6 +4195,9 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# Every zone_content node (including ground effect visuals) is freed
 		# above; their manager registrations must not survive into the next map.
 		_ground_effect_manager.clear_all()
+	# FireWall field controllers are not zone_content members; free them
+	# explicitly so no field (or registry entry) crosses a map transition.
+	_clear_fire_wall_field_registry()
 	current_zone = zone_name
 	current_map_data = map_data.duplicate(true)
 	current_map_id = int(map_data.get("mapId", -1)) if not map_data.is_empty() else -1
@@ -1628,26 +4207,46 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		# map 4). Snapshot consumers receive a formal runtime map id instead of
 		# -1, so STRICT_V2 absolute snapshots stay valid.
 		current_map_id = GameData.service_runtime_map_id(0)
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.configure_map(
+			current_map_id,
+			_zone_generation,
+			Callable(self, "_canonical_screen_px_to_ground_gu"),
+			Callable(self, "_canonical_ground_gu_to_screen_px"),
+		)
+	_begin_safe_zone_context(current_map_id)
+	_monster_terrain_navigation_context = (
+		MonsterTerrainNavigationPolicyScript.build_context(
+			current_map_id,
+			MapEditorRuntimeBridgeScript.load_map(current_map_id),
+			MonsterTerrainNavigationPolicyScript.EXPECTED_GROUND_COORDINATE_CONTRACT_ID,
+		)
+	)
 	background.set_zone_data(zone_name, current_map_data)
-	hud.set_zone_name("比奇营地 · 安全区" if current_map_id == 4 else zone_name)
+	hud.set_zone_name(
+		"比奇营地 · 安全区"
+		if current_map_id == BICH_RUNTIME_MAP_ID
+		else zone_name
+	)
 	if zone_name == "比奇城":
-		player.global_position = Vector2(0, 80)
+		_set_player_world_position(Vector2(0, 80))
 		_spawn_city_content()
 	elif zone_name == "比奇郊外":
-		player.global_position = Vector2.ZERO
+		_set_player_world_position(Vector2.ZERO)
 		_spawn_outskirts_content()
 	else:
-		if current_map_id == 4:
+		if current_map_id == BICH_RUNTIME_MAP_ID:
 			var home := _resolve_bich_home()
 			if bool(home.get("valid", false)):
-				player.global_position = home.get(
+				_set_player_world_position(home.get(
 					"position_px", Vector2.ZERO
-				) as Vector2
+				) as Vector2)
 			else:
 				_handle_home_resolution_failure(&"load_zone_arrival", home)
 		else:
-			player.global_position = Vector2.ZERO
+			_set_player_world_position(Vector2.ZERO)
 		_spawn_database_zone_content(current_map_data)
+	_refresh_player_safe_zone_cache(true)
 	player.velocity = Vector2.ZERO
 	background.set_focus_position(player.global_position)
 	_restore_persisted_taoist_main_pet_if_needed()
@@ -1701,8 +4300,10 @@ func _spawn_database_zone_content(map_data: Dictionary) -> void:
 
 
 func _spawn_editor_runtime_content(content: Dictionary) -> void:
-	_active_safe_zones = content.get("safe_areas", []).duplicate(true)
+	_compile_active_safe_zones(content.get("safe_areas", []))
+	var editor_spawn_index := -1
 	for spawn: Dictionary in content.get("spawns", []):
+		editor_spawn_index += 1
 		var monster_id := GameData.canonical_monster_id(
 			spawn.get("monster_id", null)
 		)
@@ -1730,7 +4331,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 				var raw_group: Dictionary = spawn.get("spawn_group", {})
 				var group_id := str(spawn.get(
 					"spawnGroupId",
-					raw_group.get("id", "editor:%d:%d" % [current_map_id, int(content.get("spawns", []).find(spawn))])
+					raw_group.get("id", "editor:%d:%d" % [current_map_id, editor_spawn_index])
 				))
 				_spawn_enemy(
 					monster,
@@ -1740,11 +4341,14 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 					{
 						"spawn_group_id": group_id,
 						"spawn_slot_id": "%s:%d" % [group_id, copy_index],
+						"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 						"respawn_evidence": spawn.get("respawnEvidence", {"status": "map_editor_authored"}),
 						"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 					}
 				)
+	var editor_boss_index := -1
 	for spawn: Dictionary in content.get("bosses", []):
+		editor_boss_index += 1
 		var boss_id := GameData.canonical_monster_id(
 			spawn.get("monster_id", null)
 		)
@@ -1756,7 +4360,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			"spawn_group_id",
 			"editor:%d:boss:%d" % [
 				current_map_id,
-				int(content.get("bosses", []).find(spawn)),
+				editor_boss_index,
 			]
 		))
 		_spawn_enemy(
@@ -1767,6 +4371,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			{
 				"spawn_group_id": group_id,
 				"spawn_slot_id": "%s:0" % group_id,
+				"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 				"respawn_evidence": {
 					"status": "map_editor_authored",
 				},
@@ -1793,15 +4398,21 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 
 
 func _spawn_authored_map_content(content: Dictionary) -> void:
-	var camp_layout := _bich_camp_layout if current_map_id == 4 else {}
+	if content.has("safe_areas"):
+		_compile_active_safe_zones(content.get("safe_areas", []))
+	var camp_layout := (
+		_bich_camp_layout if current_map_id == BICH_RUNTIME_MAP_ID else {}
+	)
 	var camp_home := Vector2.ZERO
-	if current_map_id == 4:
+	if current_map_id == BICH_RUNTIME_MAP_ID:
 		var home := _resolve_bich_home()
 		if not bool(home.get("valid", false)):
 			_handle_home_resolution_failure(&"camp_spawn", home)
 			return
 		camp_home = home.get("position_px", Vector2.ZERO) as Vector2
+	var authored_spawn_index := -1
 	for spawn: Variant in content.get("spawns", []):
+		authored_spawn_index += 1
 		if not spawn is Dictionary:
 			continue
 		var monster_id := GameData.canonical_monster_id(
@@ -1810,14 +4421,16 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 		var monster := GameData.get_monster_by_id(monster_id)
 		if not monster.is_empty():
 			var spawn_position: Vector2 = spawn.get("position", Vector2.ZERO)
-			if current_map_id == 4:
+			var group_id := str(spawn.get(
+				"spawnGroupId",
+				"map:%d:spawn:%d" % [current_map_id, authored_spawn_index]
+			))
+			if current_map_id == BICH_RUNTIME_MAP_ID:
 				var copies := int(camp_layout.get("fieldSpawnCopies", 4))
 				var radii: Array = camp_layout.get("fieldSpawnRadii", [940, 1180, 1460, 1740])
-				var spawn_index := int(content.get("spawns", []).find(spawn))
 				for copy_index in range(copies):
-					var angle := float(spawn_index * copies + copy_index) * TAU / float(maxi(1, content.get("spawns", []).size() * copies))
+					var angle := float(authored_spawn_index * copies + copy_index) * TAU / float(maxi(1, content.get("spawns", []).size() * copies))
 					var radius := float(radii[copy_index % radii.size()])
-					var group_id := str(spawn.get("spawnGroupId", "map:%d:spawn:%d" % [current_map_id, spawn_index]))
 					_spawn_enemy(
 						monster,
 						camp_home + Vector2.RIGHT.rotated(angle) * radius,
@@ -1826,6 +4439,7 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 						{
 							"spawn_group_id": group_id,
 							"spawn_slot_id": "%s:%d" % [group_id, copy_index],
+							"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 							"respawn_evidence": spawn.get("respawnEvidence", {}),
 							"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 						}
@@ -1837,12 +4451,16 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 				false,
 				float(spawn.get("respawn_seconds", DEFAULT_NORMAL_RESPAWN_SECONDS)),
 				{
-					"spawn_group_id": str(spawn.get("spawnGroupId", "")),
+					"spawn_group_id": group_id,
+					"spawn_slot_id": "%s:0" % group_id,
+					"respawn_policy_id": str(spawn.get("respawn_policy_id", "")),
 					"respawn_evidence": spawn.get("respawnEvidence", {}),
 					"respawn_random_seconds": float(spawn.get("respawn_random_seconds", 0.0)),
 				}
 			)
+	var authored_boss_index := -1
 	for boss_spawn: Variant in content.get("bosses", []):
+		authored_boss_index += 1
 		if not boss_spawn is Dictionary:
 			continue
 		var boss_id := GameData.canonical_monster_id(
@@ -1850,13 +4468,19 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 		)
 		var boss := GameData.get_monster_by_id(boss_id)
 		if not boss.is_empty():
+			var boss_group_id := str(boss_spawn.get(
+				"spawnGroupId",
+				"map:%d:boss:%d" % [current_map_id, authored_boss_index]
+			))
 			_spawn_enemy(
 				boss,
 				boss_spawn.get("position", Vector2(560, 230)),
 				true,
 				float(boss_spawn.get("respawn_seconds", DEFAULT_BOSS_RESPAWN_SECONDS)),
 				{
-					"spawn_group_id": str(boss_spawn.get("spawnGroupId", "")),
+					"spawn_group_id": boss_group_id,
+					"spawn_slot_id": "%s:0" % boss_group_id,
+					"respawn_policy_id": str(boss_spawn.get("respawn_policy_id", "")),
 					"respawn_evidence": boss_spawn.get("respawnEvidence", {}),
 					"respawn_random_seconds": float(boss_spawn.get("respawn_random_seconds", 0.0)),
 				}
@@ -1873,40 +4497,117 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 			"books": stock = _build_skill_book_stock(PlayerState.profession)
 		var npc_name := str(npc_data.get("name", "NPC"))
 		var npc_position: Vector2 = npc_data.get("position", Vector2.ZERO)
-		if current_map_id == 4 and camp_layout.get("npcSlots", {}).has(npc_name):
+		if (
+			current_map_id == BICH_RUNTIME_MAP_ID
+			and camp_layout.get("npcSlots", {}).has(npc_name)
+		):
 			npc_position = camp_home + GothicBichCampBuilderScript._vector(camp_layout.npcSlots[npc_name])
 		_spawn_npc(npc_position, npc_name, str(npc_data.get("kind", "shop")), stock, str(npc_data.get("stock", "")), int(npc_data.get("appearance", -1)))
-	if current_map_id == 4:
+	if current_map_id == BICH_RUNTIME_MAP_ID:
 		_spawn_npc(camp_home + GothicBichCampBuilderScript._vector(camp_layout.npcSlots.get("仓库管理员", [-520, 185])), "仓库管理员", "warehouse")
 	for portal: Variant in content.get("portals", []):
 		if portal is Dictionary:
 			_spawn_map_portal(portal.get("position", Vector2.ZERO), int(portal.get("target_map_id", -1)), str(portal.get("label", "地图入口")))
 
 
-func _enforce_bich_safe_zone() -> void:
-	if current_map_id != 4:
+func _tick_bich_safe_zone_enforcement(delta: float) -> void:
+	if current_map_id != BICH_RUNTIME_MAP_ID:
+		_safe_zone_enforcement_remaining = 0.0
 		return
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or not is_instance_valid(node):
+	_safe_zone_enforcement_remaining -= delta
+	if _safe_zone_enforcement_remaining > 0.0:
+		return
+	_safe_zone_enforcement_remaining = SAFE_ZONE_ENFORCEMENT_INTERVAL_SECONDS
+	_enforce_bich_safe_zone()
+
+
+func _enforce_enemy_outside_bich_safe_zone(enemy: EnemyActor) -> void:
+	var safe_zone_started_usec := RuntimeDiagnostics.timing_start()
+	RuntimeDiagnostics.increment_performance_counter(&"safe_zone_queries")
+	if (
+		current_map_id != BICH_RUNTIME_MAP_ID
+		or not is_instance_valid(enemy)
+		or enemy.is_queued_for_deletion()
+	):
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return
+	var current_ground_gu := _canonical_screen_px_to_ground_gu(
+		enemy.global_position
+	)
+	var legal_ground_gu: Vector2 = hc_m30_stable_enemy_ground_point(
+		current_ground_gu, float(enemy.combat_radius_gu), enemy.runtime_map_id
+	)
+	if not legal_ground_gu.is_finite():
+		RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+		return
+	if not legal_ground_gu.is_equal_approx(current_ground_gu):
+		enemy.set_combat_position(
+			_canonical_ground_gu_to_screen_px(legal_ground_gu),
+			&"safe_zone_enforcement",
+		)
+		enemy.velocity = Vector2.ZERO
+	RuntimeDiagnostics.record_timing_usec(&"safe_zone_usec", safe_zone_started_usec)
+
+
+func _enforce_bich_safe_zone() -> void:
+	if (
+		current_map_id != BICH_RUNTIME_MAP_ID
+		or not _safe_zone_context_is_valid()
+		or _active_safe_zones.is_empty()
+		or _combat_spatial_index == null
+		or not is_instance_valid(_combat_spatial_index)
+	):
+		return
+	_safe_zone_candidate_scratch.clear()
+	_safe_zone_candidate_stamp_serial += 1
+	if _safe_zone_candidate_stamp_serial <= 0:
+		_safe_zone_candidate_stamp_serial = 1
+	for zone_variant: Variant in _active_safe_zones:
+		if not zone_variant is Dictionary:
 			continue
-		var current_ground_gu := _canonical_screen_px_to_ground_gu(
-			node.global_position
+		var zone := zone_variant as Dictionary
+		var zone_aabb: Variant = zone.get("aabb_ground_gu", null)
+		if not zone_aabb is Rect2:
+			continue
+		_combat_spatial_index.query_enemy_nodes_aabb_into(
+			current_map_id,
+			zone_aabb as Rect2,
+			_safe_zone_query_scratch,
 		)
-		var padding_gu: float = (
-			float(node.combat_radius_gu) + SAFE_ZONE_ACTOR_PADDING_GU
+		for value: Variant in _safe_zone_query_scratch:
+			if not value is EnemyActor:
+				continue
+			var enemy := value as EnemyActor
+			if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+				continue
+			if enemy._safe_zone_candidate_stamp == _safe_zone_candidate_stamp_serial:
+				continue
+			enemy._safe_zone_candidate_stamp = _safe_zone_candidate_stamp_serial
+			_append_safe_zone_candidate_sorted(enemy)
+	for enemy: EnemyActor in _safe_zone_candidate_scratch:
+		_enforce_enemy_outside_bich_safe_zone(enemy)
+	_safe_zone_query_scratch.clear()
+
+
+func _append_safe_zone_candidate_sorted(enemy: EnemyActor) -> void:
+	var candidate_order := int(
+		enemy.get_meta("spawn_serial", enemy.get_instance_id())
+	)
+	var insert_at := _safe_zone_candidate_scratch.size()
+	while insert_at > 0:
+		var previous := _safe_zone_candidate_scratch[insert_at - 1]
+		var previous_order := int(
+			previous.get_meta("spawn_serial", previous.get_instance_id())
 		)
-		var legal_ground_gu := (
-			WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
-				current_ground_gu,
-				_active_safe_zones,
-				padding_gu
-			)
-		)
-		if not legal_ground_gu.is_equal_approx(current_ground_gu):
-			node.global_position = _canonical_ground_gu_to_screen_px(
-				legal_ground_gu
-			)
-			node.velocity = Vector2.ZERO
+		if previous_order < candidate_order:
+			break
+		if (
+			previous_order == candidate_order
+			and previous.get_instance_id() < enemy.get_instance_id()
+		):
+			break
+		insert_at -= 1
+	_safe_zone_candidate_scratch.insert(insert_at, enemy)
 
 
 func _general_shop_stock() -> Array:
@@ -1934,10 +4635,27 @@ func _spawn_outskirts_content() -> void:
 		[30, Vector2(520, 160)],
 		[56, Vector2(670, 280)],
 	]
-	for entry: Array in spawn_plan:
+	for spawn_index in range(spawn_plan.size()):
+		var entry: Array = spawn_plan[spawn_index]
 		var monster := GameData.get_monster_by_id(int(entry[0]))
 		if not monster.is_empty():
-			_spawn_enemy(monster, entry[1], false)
+			var group_id := "outskirts:%d:spawn:%d" % [current_map_id, spawn_index]
+			var policy := MonsterRespawnPolicyScript.resolve(
+				"", str(monster.get("classification", "")),
+				DEFAULT_NORMAL_RESPAWN_SECONDS,
+				str(monster.get("spawn_classification", ""))
+			)
+			_spawn_enemy(
+				monster,
+				entry[1],
+				false,
+				DEFAULT_NORMAL_RESPAWN_SECONDS,
+				{
+					"spawn_group_id": group_id,
+					"spawn_slot_id": "%s:0" % group_id,
+					"respawn_policy_id": str(policy.get("policy_id", "")),
+				}
+			)
 	_spawn_portal(Vector2(560, -305), "比奇城", "进入比奇城")
 
 
@@ -1964,7 +4682,91 @@ func _build_skill_book_stock(profession: String) -> Array:
 	return stock
 
 
+func _submit_staged_actor_descriptor(
+	actor_type: String,
+	payload: Dictionary,
+	stable_actor_id := ""
+) -> bool:
+	var source_index := _staged_actor_source_index
+	_staged_actor_source_index += 1
+	var actor_id := stable_actor_id
+	if actor_id.is_empty():
+		actor_id = "%s:%d:%06d" % [actor_type, current_map_id, source_index]
+	return _world_bootstrap_coordinator.submit_actor_descriptor({
+		"actor_id": actor_id,
+		"actor_type": actor_type,
+		"source_index": source_index,
+		"payload": payload,
+	})
+
+
+func _spawn_staged_actor_descriptor(descriptor: Dictionary) -> Dictionary:
+	var actor_type := str(descriptor.get("actor_type", ""))
+	var payload: Dictionary = descriptor.get("payload", {})
+	match actor_type:
+		"enemy":
+			var monster_id := int(payload.get("monster_id", -1))
+			var monster := GameData.get_monster_by_id(monster_id)
+			if monster.is_empty():
+				return {"ok": false, "reason": "missing_monster"}
+			_staged_actor_spawn_failure_reason = ""
+			var enemy := _spawn_enemy(
+				monster,
+				payload.get("position", Vector2.ZERO),
+				bool(payload.get("is_boss", false)),
+				float(payload.get("respawn_seconds", -1.0)),
+				payload.get("spawn_context", {})
+			)
+			if not _staged_actor_spawn_failure_reason.is_empty():
+				return {
+					"ok": false,
+					"reason": _staged_actor_spawn_failure_reason,
+				}
+			# A persisted death may deliberately schedule this slot for later. The
+			# descriptor was still handled successfully even though no node exists yet.
+			return {"ok": true, "materialized": enemy != null}
+		"npc":
+			_spawn_npc(
+				payload.get("position", Vector2.ZERO),
+				str(payload.get("display_name", "NPC")),
+				str(payload.get("kind", "dialogue")),
+				payload.get("stock", []),
+				str(payload.get("stock_key", "")),
+				int(payload.get("appearance", -1)),
+				payload.get("map_center_override", null)
+			)
+			return {"ok": true, "materialized": true}
+		"zone_portal":
+			_spawn_portal(
+				payload.get("position", Vector2.ZERO),
+				str(payload.get("target_zone", "")),
+				str(payload.get("label_text", ""))
+			)
+			return {"ok": true, "materialized": true}
+		"map_portal":
+			_spawn_map_portal(
+				payload.get("position", Vector2.ZERO),
+				int(payload.get("target_map_id", -1)),
+				str(payload.get("label_text", "")),
+				payload.get("portal_data", {})
+			)
+			return {"ok": true, "materialized": true}
+		_:
+			return {"ok": false, "reason": "unknown_actor_type"}
+
+
 func _spawn_npc(position: Vector2, display_name: String, kind: String, stock: Array = [], stock_key := "", appearance := -1, map_center_override: Variant = null) -> void:
+	if _collecting_staged_actor_plan:
+		_submit_staged_actor_descriptor("npc", {
+			"position": position,
+			"display_name": display_name,
+			"kind": kind,
+			"stock": stock,
+			"stock_key": stock_key,
+			"appearance": appearance,
+			"map_center_override": map_center_override,
+		})
+		return
 	var npc := NPCActor.new()
 	var map_center := _current_map_center_screen_position_px() if map_center_override == null else Vector2(map_center_override)
 	npc.setup(display_name, kind, stock, stock_key, appearance, map_center)
@@ -1984,6 +4786,13 @@ func _current_map_center_screen_position_px() -> Vector2:
 
 
 func _spawn_portal(position: Vector2, target_zone: String, label_text: String) -> void:
+	if _collecting_staged_actor_plan:
+		_submit_staged_actor_descriptor("zone_portal", {
+			"position": position,
+			"target_zone": target_zone,
+			"label_text": label_text,
+		})
+		return
 	var portal := ZonePortal.new()
 	portal.setup(target_zone, label_text)
 	portal.global_position = position
@@ -1996,6 +4805,14 @@ func _spawn_map_portal(
 	label_text: String,
 	portal_data: Dictionary = {}
 ) -> void:
+	if _collecting_staged_actor_plan:
+		_submit_staged_actor_descriptor("map_portal", {
+			"position": position,
+			"target_map_id": target_map_id,
+			"label_text": label_text,
+			"portal_data": portal_data,
+		})
+		return
 	var portal := ZonePortal.new()
 	portal.setup_map(target_map_id, label_text, portal_data)
 	portal.global_position = position
@@ -2009,9 +4826,28 @@ func _spawn_enemy(
 	respawn_seconds := -1.0,
 	spawn_context: Dictionary = {}
 ) -> EnemyActor:
+	if _collecting_staged_actor_plan:
+		var monster_id_for_plan := _strict_runtime_monster_id(monster_data)
+		var slot_id_for_plan := str(spawn_context.get(
+			"spawn_slot_id",
+			spawn_context.get("spawn_group_id", "")
+		))
+		_submit_staged_actor_descriptor(
+			"enemy",
+			{
+				"monster_id": monster_id_for_plan,
+				"position": spawn_position,
+				"is_boss": is_boss,
+				"respawn_seconds": respawn_seconds,
+				"spawn_context": spawn_context,
+			},
+			"enemy:%s" % slot_id_for_plan if not slot_id_for_plan.is_empty() else ""
+		)
+		return null
 	var monster_id := _strict_runtime_monster_id(monster_data)
 	var canonical_monster := GameData.get_monster_by_id(monster_id)
 	if canonical_monster.is_empty():
+		_staged_actor_spawn_failure_reason = "missing_canonical_monster"
 		return null
 	monster_data = canonical_monster
 	# Classification is canonical data, never a caller-controlled flag.
@@ -2024,24 +4860,97 @@ func _spawn_enemy(
 			# FREEZE-P0.1: mapped world without a loadable runtime projection
 			# must never register an enemy at fake/delta coordinates.
 			missing_projection_rejection_count += 1
+			_staged_actor_spawn_failure_reason = "missing_spawn_projection"
 			return null
 	_runtime_spawn_serial += 1
 	var context := spawn_context.duplicate(true)
+	var respawn_enabled := bool(context.get("respawn_enabled", true))
 	var slot_id := str(context.get("spawn_slot_id", context.get("spawn_group_id", "")))
 	if slot_id.is_empty():
+		if respawn_enabled:
+			push_error(
+				"Monster respawn authority rejected unstable formal slot: monster_id=%d map_id=%d"
+				% [monster_id, current_map_id]
+			)
+			_staged_actor_spawn_failure_reason = "unstable_spawn_slot"
+			return null
 		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
 	context["spawn_slot_id"] = slot_id
-	var effective_respawn := float(respawn_seconds)
-	if effective_respawn <= 0.0:
-		effective_respawn = DEFAULT_BOSS_RESPAWN_SECONDS if is_boss else DEFAULT_NORMAL_RESPAWN_SECONDS
+	var classification := str(canonical_monster.get("classification", ""))
+	var spawn_classification := str(
+		canonical_monster.get("spawn_classification", "")
+	)
+	var policy: Dictionary = {}
+	var effective_respawn := maxf(0.0, float(respawn_seconds))
+	if respawn_enabled:
+		policy = MonsterRespawnPolicyScript.resolve(
+			str(context.get("respawn_policy_id", "")),
+			classification,
+			float(respawn_seconds),
+			spawn_classification
+		)
+		if not bool(policy.get("valid", false)):
+			push_error(
+				"Monster respawn policy rejected monster_id=%d slot=%s reason=%s"
+				% [
+					monster_id,
+					slot_id,
+					str(policy.get("reason", "invalid_policy")),
+				]
+			)
+			_staged_actor_spawn_failure_reason = "invalid_respawn_policy"
+			return null
+		effective_respawn = float(policy.get("seconds", 0.0))
+		context["respawn_policy_id"] = str(policy.get("policy_id", ""))
+		context["respawn_policy_source"] = str(policy.get("source", ""))
+		context["spawn_classification"] = spawn_classification
+		context["respawn_policy_requires_authored_policy"] = bool(
+			policy.get("requires_authored_policy", false)
+		)
+	else:
+		context["respawn_policy_id"] = ""
+		context["respawn_policy_source"] = "respawn_disabled"
+		context["respawn_policy_requires_authored_policy"] = false
+	context["respawn_runtime_map_id"] = current_map_id
 	context["respawn_base_seconds"] = effective_respawn
-	context["respawn_random_seconds"] = maxf(0.0, float(context.get("respawn_random_seconds", 0.0)))
+	# MFC-4 fixed tiers are exact. Historical random variance remains readable
+	# in old authored data but is retired from runtime authority.
+	context["respawn_random_seconds"] = 0.0
+
+	var clear_persisted_respawn_after_spawn := false
+	if respawn_enabled:
+		var persisted := PlayerState.monster_respawn_entry(current_map_id, slot_id)
+		if not persisted.is_empty():
+			if int(persisted.get("monster_id", -1)) != monster_id:
+				# The map slot was deliberately re-authored to another
+				# canonical identity. A stale death record must not suppress it.
+				PlayerState.clear_monster_respawn_slot(current_map_id, slot_id)
+			else:
+				var remaining := maxf(
+					0.0,
+					float(persisted.get("respawn_at_unix", 0.0))
+					- Time.get_unix_time_from_system()
+				)
+				if remaining > 0.0:
+					_respawn_later(
+						canonical_monster,
+						spawn_position,
+						is_boss,
+						remaining,
+						_zone_generation,
+						context
+					)
+					return null
+				clear_persisted_respawn_after_spawn = true
 	var enemy := EnemyActor.new()
 	enemy.setup(monster_data, player, is_boss)
 	enemy.configure_runtime_map_projection(
 		current_map_id,
 		Callable(self, "_canonical_ground_gu_to_screen_px"),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
+	)
+	enemy.configure_terrain_navigation_context(
+		_monster_terrain_navigation_context
 	)
 	enemy.configure_spatial_index(
 		_combat_spatial_index,
@@ -2070,21 +4979,56 @@ func _spawn_enemy(
 	enemy.set_meta("spawn_is_boss", is_boss)
 	enemy.set_meta("respawn_seconds", effective_respawn)
 	enemy.set_meta("respawn_random_seconds", float(context["respawn_random_seconds"]))
-	enemy.set_meta("respawn_enabled", bool(context.get("respawn_enabled", true)))
+	enemy.set_meta("respawn_enabled", respawn_enabled)
+	enemy.set_meta("respawn_policy_id", str(context.get("respawn_policy_id", "")))
+	enemy.set_meta("respawn_policy_source", str(context.get("respawn_policy_source", "")))
+	enemy.set_meta("respawn_policy_requires_authored_policy", bool(context.get("respawn_policy_requires_authored_policy", false)))
 	enemy.set_meta("spawn_slot_id", slot_id)
 	enemy.set_meta("spawn_group_id", str(context.get("spawn_group_id", slot_id)))
 	enemy.set_meta("spawn_context", context)
+	enemy.set_meta(
+		"death_runtime_snapshot",
+		_build_enemy_death_runtime_snapshot(canonical_monster)
+	)
 	enemy.set_meta("summoner_spawn_slot", str(context.get("summoner_spawn_slot", "")))
 	enemy.set_meta("zone_generation", _zone_generation)
-	enemy.set_meta("safe_zones", _active_safe_zones.duplicate(true))
+	# All actors on a loaded map share the compiled context. Do not deep-copy
+	# polygon geometry per EnemyActor; realtime checks remain actor-owned while
+	# consuming this map-lifetime immutable value.
+	enemy.set_meta("safe_zone_context", _safe_zone_context)
+	enemy.set_meta("safe_zones", _active_safe_zones)
 	enemy.environment_blocker = background
 	enemy.add_to_group("zone_content")
 	enemy.died.connect(_on_enemy_died)
 	enemy.target_requested.connect(_on_enemy_target_requested)
 	enemy.summon_requested.connect(_on_boss_summon_requested)
 	enemy.relocation_requested.connect(_on_boss_relocation_requested)
+	enemy.fixed_area_ground_spike_requested.connect(
+		_on_enemy_fixed_area_ground_spike_requested.bind(enemy)
+	)
 	add_child(enemy)
+	var enemy_instance_id := enemy.get_instance_id()
+	_active_enemy_cache[enemy_instance_id] = enemy
+	if is_instance_valid(_hc_m30_summon_queue):
+		_hc_m30_summon_queue.track_child(enemy)
+	if enemy.is_boss:
+		_active_boss_cache[enemy_instance_id] = enemy
+	enemy.tree_exiting.connect(
+		_on_cached_enemy_tree_exiting.bind(enemy_instance_id),
+		CONNECT_ONE_SHOT
+	)
+	# Authored placement is corrected before the first rendered frame. Runtime
+	# movement also enforces safe-zone targeting/motion; the 10 Hz cache sweep is
+	# a bounded safety net rather than an all-enemy scan on every render frame.
+	_enforce_enemy_outside_bich_safe_zone(enemy)
+	if clear_persisted_respawn_after_spawn:
+		PlayerState.clear_monster_respawn_slot(current_map_id, slot_id)
 	return enemy
+
+
+func _on_cached_enemy_tree_exiting(enemy_instance_id: int) -> void:
+	_active_enemy_cache.erase(enemy_instance_id)
+	_active_boss_cache.erase(enemy_instance_id)
 
 
 func _strict_runtime_monster_id(monster_data: Dictionary) -> int:
@@ -2110,14 +5054,31 @@ func _strict_runtime_monster_id(monster_data: Dictionary) -> int:
 	return -1
 
 
+func _build_enemy_death_runtime_snapshot(canonical_monster: Dictionary) -> Dictionary:
+	var monster_id := _strict_runtime_monster_id(canonical_monster)
+	if monster_id <= 0:
+		return {}
+	var combat: Dictionary = canonical_monster.get("combat", {})
+	var stats: Dictionary = combat.get("stats", {})
+	return {
+		"monster_id": monster_id,
+		"canonical_name": str(canonical_monster.get("canonical_name", "")),
+		"experience": int(stats.get("exp", 0)),
+		"classification": str(canonical_monster.get("classification", "")),
+		"spawn_classification": str(
+			canonical_monster.get("spawn_classification", "")
+		),
+	}
+
+
 func _request_mobile_attack() -> bool:
+	if not gameplay_input_is_enabled() or not player.can_start_attack():
+		return false
 	_activate_physical_attack_domain()
 	var target := _ensure_attack_locked_target()
 	var facing_before := player.facing
 	var touch_before := player.touch_vector
 	var movement_was_active := player.movement_input_active
-	if not player.can_start_attack():
-		return false
 	var attack_direction := player.facing.normalized()
 	if is_instance_valid(target):
 		attack_direction = _face_locked_target()
@@ -2277,11 +5238,29 @@ func _has_melee_hittable_target(
 	if direction.length_squared() <= 0.01:
 		return false
 	var resolved_mode := mode if not mode.is_empty() else _selected_warrior_melee_mode()
+	var release_origin_ground_gu := _canonical_screen_px_to_ground_gu(
+		player.global_position
+	)
+	var melee_release_cache: Dictionary = {}
+	var melee_query_plan := _aoe_melee_query_plan(
+		resolved_mode,
+		release_origin_ground_gu,
+		direction.normalized(),
+		release_geometry,
+		{},
+		release_geometry.get("skill_footprint_snapshot", {}),
+		release_geometry.get("target_aligned_plan", {}),
+		melee_release_cache,
+	)
 	var primary_targets := _physical_primary_targets(
 		player.global_position,
 		direction.normalized(),
 		resolved_mode,
-		release_geometry
+		release_geometry,
+		{},
+		release_geometry.get("skill_footprint_snapshot", {}),
+		release_geometry.get("target_aligned_plan", {}),
+		melee_query_plan,
 	)
 	if not primary_targets.is_empty():
 		return true
@@ -2290,14 +5269,20 @@ func _has_melee_hittable_target(
 			player.global_position,
 			direction.normalized(),
 			primary_targets,
-			release_geometry
+			release_geometry,
+			{},
+		release_geometry.get("skill_footprint_snapshot", {}),
+		release_geometry.get("target_aligned_plan", {}),
+		melee_query_plan,
 		).is_empty()
 	if resolved_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return not _half_moon_secondary_targets(
 			player.global_position,
 			direction.normalized(),
 			primary_targets,
-			release_geometry
+			release_geometry,
+		release_geometry.get("skill_footprint_snapshot", {}),
+		melee_query_plan,
 		).is_empty()
 	return false
 
@@ -2309,30 +5294,21 @@ func _allocate_synthetic_attack_token() -> int:
 
 
 func _submit_mobile_attack_ticket(press_token: int) -> void:
-	if press_token == 0 or press_token in _queued_mobile_attack_tickets:
+	# Compatibility entry point only. A DOWN is an attempt, NOT a future debt.
+	_queued_mobile_attack_tickets.clear()
+	if press_token == 0:
 		return
-	if _queued_mobile_attack_tickets.is_empty() and _request_mobile_attack():
-		return
-	if _queued_mobile_attack_tickets.size() >= MAX_BUFFERED_MOBILE_ATTACK_TICKETS:
-		return
-	_queued_mobile_attack_tickets.append(press_token)
+	_try_ordinary_attack_intent(&"fresh_down")
 
 
 func _drain_next_mobile_attack_ticket() -> bool:
-	if _queued_mobile_attack_tickets.is_empty():
-		return false
-	if not _request_mobile_attack():
-		return false
-	_queued_mobile_attack_tickets.pop_front()
-	return true
+	# Compatibility shim: an old caller can never resurrect deferred attacks.
+	_queued_mobile_attack_tickets.clear()
+	return false
 
 
 func _refresh_mobile_attack_held() -> void:
-	_mobile_attack_held = false
-	for value in _active_mobile_attack_tokens.values():
-		if bool(value):
-			_mobile_attack_held = true
-			return
+	_mobile_attack_held = not _active_mobile_attack_tokens.is_empty()
 
 
 func _on_mobile_attack_input_started(
@@ -2340,29 +5316,30 @@ func _on_mobile_attack_input_started(
 	touch_id: int,
 	source: StringName
 ) -> void:
-	if not gameplay_input_is_enabled(): return
-	if press_token == 0 or _active_mobile_attack_tokens.has(press_token):
+	if not gameplay_input_is_enabled() or press_token == 0:
+		return
+	if _active_mobile_attack_tokens.has(press_token):
 		return
 	var ordinary_attack := PlayerState.skill_name_for_slot(
-		PlayerState.SKILL_SLOT_GROUP_ATTACK,
-		0
+		PlayerState.SKILL_SLOT_GROUP_ATTACK, 0
 	).is_empty()
 	if not ordinary_attack:
 		_on_skill_input_started(
-			PlayerState.SKILL_SLOT_GROUP_ATTACK,
-			0,
-			press_token,
-			touch_id,
-			source
+			PlayerState.SKILL_SLOT_GROUP_ATTACK, 0,
+			press_token, touch_id, source
 		)
 		return
-	_active_mobile_attack_tokens[press_token] = true
+	_active_mobile_attack_tokens[press_token] = {
+		"press_token": press_token,
+		"touch_id": touch_id,
+		"source": source,
+		"started_at_ms": Time.get_ticks_msec(),
+	}
 	_refresh_mobile_attack_held()
-	if ordinary_attack:
-		_submit_mobile_attack_ticket(press_token)
-		return
-	_queued_mobile_attack_tickets.clear()
-	_request_primary_attack_action()
+	_record_attack_action_diagnostic(&"pointer_down", source, {
+		"press_token": press_token, "touch_id": touch_id,
+	})
+	_submit_mobile_attack_ticket(press_token)
 
 
 func _on_mobile_attack_input_ended(
@@ -2372,15 +5349,18 @@ func _on_mobile_attack_input_ended(
 ) -> void:
 	if not _active_mobile_attack_tokens.has(press_token):
 		_on_skill_input_ended(
-			PlayerState.SKILL_SLOT_GROUP_ATTACK,
-			0,
-			press_token,
-			touch_id,
-			source
+			PlayerState.SKILL_SLOT_GROUP_ATTACK, 0,
+			press_token, touch_id, source
 		)
 		return
+	if not _ordinary_attack_owner_matches(press_token, touch_id, source):
+		return
 	_active_mobile_attack_tokens.erase(press_token)
+	_queued_mobile_attack_tickets.clear()
 	_refresh_mobile_attack_held()
+	_record_attack_action_diagnostic(&"pointer_up", source, {
+		"press_token": press_token, "touch_id": touch_id,
+	})
 
 
 func _on_mobile_attack_input_cancelled(
@@ -2391,25 +5371,27 @@ func _on_mobile_attack_input_cancelled(
 ) -> void:
 	if not _active_mobile_attack_tokens.has(press_token):
 		_on_skill_input_cancelled(
-			PlayerState.SKILL_SLOT_GROUP_ATTACK,
-			0,
-			press_token,
-			touch_id,
-			source,
-			reason
+			PlayerState.SKILL_SLOT_GROUP_ATTACK, 0,
+			press_token, touch_id, source, reason
 		)
 		return
+	if not _ordinary_attack_owner_matches(press_token, touch_id, source):
+		return
 	_active_mobile_attack_tokens.erase(press_token)
-	_queued_mobile_attack_tickets.erase(press_token)
+	_queued_mobile_attack_tickets.clear()
 	_refresh_mobile_attack_held()
+	_record_attack_action_diagnostic(&"pointer_cancel", reason, {
+		"press_token": press_token, "touch_id": touch_id,
+		"source": str(source),
+	})
 
 
-func _cancel_all_mobile_attack_inputs(clear_tickets := false) -> void:
+func _cancel_all_mobile_attack_inputs(_clear_tickets := false) -> void:
+	# Retain the argument for old callers, but stale debt is never retained.
 	_active_mobile_attack_tokens.clear()
 	_mobile_attack_held = false
 	_legacy_mobile_attack_token = 0
-	if clear_tickets:
-		_queued_mobile_attack_tickets.clear()
+	_queued_mobile_attack_tickets.clear()
 
 
 func _skill_input_key(
@@ -2438,7 +5420,7 @@ func _on_skill_input_started(
 		return
 	var skill_name := PlayerState.skill_name_for_slot(slot_group, slot_index)
 	if skill_name.is_empty():
-		hud.show_message("技能栏为空")
+		hud.show_error_message("技能栏为空")
 		return
 	var metadata := SkillInputPolicyScript.metadata(skill_name)
 	if metadata.is_empty() or bool(metadata.get("passive", false)):
@@ -2502,6 +5484,116 @@ func _cancel_all_skill_inputs(clear_tickets := false) -> void:
 	# lifetime, so there are no deferred skill tickets to clear.
 	if clear_tickets:
 		_skill_input_retry_remaining = 0.0
+
+
+func _reset_attack_action_lifecycle(reason: StringName) -> void:
+	if _keyboard_bound_skill_token != 0:
+		_on_skill_input_cancelled(
+			PlayerState.SKILL_SLOT_GROUP_ATTACK,
+			0,
+			_keyboard_bound_skill_token,
+			-4,
+			&"keyboard",
+			reason
+		)
+		_keyboard_bound_skill_token = 0
+	_attack_action_press_owned = false
+	_attack_action_neutral_observed = not Input.is_action_pressed("attack")
+	_attack_action_ignored_pressed_recorded = false
+	_attack_action_lifecycle_epoch += 1
+	_record_attack_action_diagnostic(&"boundary", reason)
+
+
+func _poll_attack_action_lifecycle(input_enabled: bool) -> Dictionary:
+	var pressed := Input.is_action_pressed("attack")
+	if not input_enabled:
+		_attack_action_press_owned = false
+		_attack_action_neutral_observed = not pressed
+		return {"started": false, "ended": false, "active": false}
+	if not pressed:
+		var ended := _attack_action_press_owned
+		_attack_action_press_owned = false
+		_attack_action_neutral_observed = true
+		_attack_action_ignored_pressed_recorded = false
+		if ended:
+			_record_attack_action_diagnostic(&"released", &"input_action")
+		return {"started": false, "ended": ended, "active": false}
+	if (
+		not _attack_action_press_owned
+		and _attack_action_neutral_observed
+		and Input.is_action_just_pressed("attack")
+	):
+		_attack_action_press_owned = true
+		_attack_action_neutral_observed = false
+		_attack_action_ignored_pressed_recorded = false
+		_record_attack_action_diagnostic(&"fresh_down", &"input_action")
+		return {"started": true, "ended": false, "active": true}
+	if not _attack_action_press_owned and not _attack_action_ignored_pressed_recorded:
+		_attack_action_ignored_pressed_recorded = true
+		_record_attack_action_diagnostic(&"pressed_without_fresh_down_ignored", &"input_action")
+	return {"started": false, "ended": false, "active": _attack_action_press_owned}
+
+
+func _record_attack_action_diagnostic(
+	kind: StringName,
+	reason: StringName,
+	details: Dictionary = {}
+) -> void:
+	_attack_action_diagnostic_serial += 1
+	var entry := {
+		"serial": _attack_action_diagnostic_serial,
+		"time_ms": Time.get_ticks_msec(),
+		"epoch": _attack_action_lifecycle_epoch,
+		"kind": str(kind),
+		"reason": str(reason),
+		"pressed": Input.is_action_pressed("attack"),
+		"touch_attack_held": _mobile_attack_held,
+		"active_touch_count": _active_mobile_attack_tokens.size(),
+		"queued_ticket_count": _queued_mobile_attack_tickets.size(),
+		"map_id": current_map_id,
+		"zone_generation": _zone_generation,
+	}
+	if is_instance_valid(player):
+		entry["attack_timer"] = player._attack_timer
+		entry["attack_action_timer"] = player._attack_action_timer
+		entry["attack_cooldown"] = player.attack_cooldown
+		entry["combat_action_sequence"] = player._combat_action_sequence
+		entry["player_hp"] = player.current_hp
+	if is_instance_valid(locked_target):
+		entry["locked_target_id"] = locked_target.get_instance_id()
+		entry["locked_target_hp"] = locked_target.current_hp
+	else:
+		entry["locked_target_id"] = 0
+		entry["locked_target_hp"] = 0
+	entry["details"] = details.duplicate(true)
+	_attack_action_diagnostic_events.append(entry)
+	while _attack_action_diagnostic_events.size() > ATTACK_ACTION_DIAGNOSTIC_LIMIT:
+		_attack_action_diagnostic_events.pop_front()
+
+
+func attack_action_lifecycle_snapshot() -> Dictionary:
+	var result := {
+		"contract_id": ATTACK_ACTION_LIFECYCLE_CONTRACT_ID,
+		"ordinary_attack_contract_id": ATTACK_INPUT_TICKET_CONTRACT_ID,
+		"epoch": _attack_action_lifecycle_epoch,
+		"press_owned": _attack_action_press_owned,
+		"neutral_observed": _attack_action_neutral_observed,
+		"raw_attack_pressed": Input.is_action_pressed("attack"),
+		"touch_attack_held": _mobile_attack_held,
+		"active_touch_count": _active_mobile_attack_tokens.size(),
+		"active_touch_owners": _active_mobile_attack_tokens.duplicate(true),
+		"queued_ticket_count": _queued_mobile_attack_tickets.size(),
+		"events": _attack_action_diagnostic_events.duplicate(true),
+	}
+	if is_instance_valid(player):
+		result["attack_timer"] = player._attack_timer
+		result["attack_action_timer"] = player._attack_action_timer
+		result["combat_action_sequence"] = player._combat_action_sequence
+		result["attack_cooldown"] = player.attack_cooldown
+	if is_instance_valid(hud) and is_instance_valid(hud.attack_button):
+		if hud.attack_button.has_method("input_lifecycle_snapshot"):
+			result["button"] = hud.attack_button.call("input_lifecycle_snapshot")
+	return result
 
 
 func _submit_skill_input_ticket(entry: Dictionary) -> void:
@@ -2591,8 +5683,8 @@ func _on_mobile_attack_pressed() -> void:
 
 
 func _on_mobile_attack_released() -> void:
+	# A duplicate legacy release must not release another finger's ownership.
 	if _legacy_mobile_attack_token == 0:
-		_cancel_all_mobile_attack_inputs(false)
 		return
 	var press_token := _legacy_mobile_attack_token
 	_legacy_mobile_attack_token = 0
@@ -2600,6 +5692,9 @@ func _on_mobile_attack_released() -> void:
 
 
 func _ensure_attack_locked_target(excluded: EnemyActor = null) -> EnemyActor:
+	if not is_instance_valid(locked_target):
+		locked_target = null
+		manual_target_lock = false
 	if _is_attack_target_in_range(locked_target) and locked_target != excluded:
 		return locked_target
 	if locked_target != null:
@@ -2651,10 +5746,17 @@ func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
 	)
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if not value is EnemyActor:
-			continue
-		var enemy := value as EnemyActor
+	if not origin_ground_gu.is_finite():
+		return []
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			origin_ground_gu - Vector2.ONE * ATTACK_LOCK_RANGE_GU,
+			Vector2.ONE * ATTACK_LOCK_RANGE_GU * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return []
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		if enemy == excluded or not _is_attack_target_in_range(enemy):
 			continue
 		var target_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -2755,16 +5857,24 @@ func _is_magic_target_in_range(target: EnemyActor) -> bool:
 			_spell_lock_ground_gu(player.global_position),
 			_spell_lock_ground_gu(target.global_position)
 		)
+		and _combat_target_world_clear(target, player.global_position, true)
 	)
 
 
 func _spell_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 	var raw_candidates: Array[Dictionary] = []
 	var origin_ground_gu := _spell_lock_ground_gu(player.global_position)
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if not value is EnemyActor:
-			continue
-		var enemy := value as EnemyActor
+	if not origin_ground_gu.is_finite():
+		return []
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			origin_ground_gu - Vector2.ONE * SpellTargetLockPolicyScript.LOCK_RANGE_GU,
+			Vector2.ONE * SpellTargetLockPolicyScript.LOCK_RANGE_GU * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return []
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		if enemy == excluded or not _is_magic_target_in_range(enemy):
 			continue
 		raw_candidates.append({
@@ -2796,9 +5906,31 @@ func _active_display_target() -> EnemyActor:
 
 func _refresh_target_highlights() -> void:
 	var active_target := _active_display_target()
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor and is_instance_valid(value):
-			(value as EnemyActor).set_targeted(value == active_target)
+	var next_instance_id := (
+		active_target.get_instance_id()
+		if is_instance_valid(active_target)
+		else 0
+	)
+	var previous_target: EnemyActor = null
+	if _presented_target_ref != null:
+		var previous_value: Variant = _presented_target_ref.get_ref()
+		if previous_value is EnemyActor and is_instance_valid(previous_value):
+			previous_target = previous_value as EnemyActor
+	if (
+		next_instance_id == _presented_target_instance_id
+		and previous_target == active_target
+	):
+		return
+	if previous_target != null and previous_target != active_target:
+		previous_target.set_targeted(false)
+	if is_instance_valid(active_target):
+		active_target.set_targeted(true)
+	_presented_target_instance_id = next_instance_id
+	_presented_target_ref = (
+		weakref(active_target)
+		if is_instance_valid(active_target)
+		else null
+	)
 
 
 func _attack_lock_distance_gu(target: EnemyActor) -> float:
@@ -2817,10 +5949,13 @@ func _is_attack_target_in_range(target: EnemyActor) -> bool:
 		and target.current_hp > 0
 		and _attack_lock_distance_gu(target)
 		<= ATTACK_LOCK_RANGE_GU + GroundUnitSpaceScript.EPSILON_GU
+		and _combat_target_world_clear(target, player.global_position, true)
 	)
 
 
 func _on_enemy_target_requested(enemy: EnemyActor) -> void:
+	if not gameplay_input_is_enabled():
+		return
 	var magic_domain_active := _magic_target_domain_is_active()
 	if _uses_magic_lock_domain():
 		# A caster click may be valid in one or both lock domains. Keep each
@@ -2842,7 +5977,9 @@ func _on_enemy_target_requested(enemy: EnemyActor) -> void:
 
 
 func _update_boss_world_mechanics(delta: float) -> void:
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
+	# Only bosses can own these mechanics. The spawn/exit cache keeps this
+	# per-frame path independent of the total number of ordinary monsters.
+	for value: Variant in _active_boss_cache.values():
 		if not value is EnemyActor:
 			continue
 		var enemy := value as EnemyActor
@@ -2895,47 +6032,14 @@ func _blocking_neighbor_count(enemy: EnemyActor) -> int:
 func _on_boss_summon_requested(enemy: EnemyActor, monster_ids: Array, count: int, max_active: int) -> void:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or monster_ids.is_empty():
 		return
-	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+	if enemy.current_hp <= 0 or enemy._dying or enemy._death_pending:
 		return
-	var owner_slot := str(enemy.get_meta("spawn_slot_id", ""))
-	var active := 0
-	for value: Variant in get_tree().get_nodes_in_group("enemies"):
-		if value is EnemyActor and not value.is_queued_for_deletion():
-			if str(value.get_meta("summoner_spawn_slot", "")) == owner_slot:
-				active += 1
-	var allowed := mini(maxi(0, count), maxi(0, max_active - active))
-	for index in range(allowed):
-		var monster_id := GameData.canonical_monster_id(
-			monster_ids[index % monster_ids.size()]
-		)
-		if monster_id <= 0:
-			continue
-		var monster := GameData.get_monster_by_id(monster_id)
-		if monster.is_empty():
-			continue
-		var landing := _find_valid_enemy_landing(
-			enemy.global_position,
-			1.5,
-			6.0,
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.MONSTER_COLLISION_RADIUS_PX
-			),
-			null
-		)
-		if landing == enemy.global_position:
-			continue
-		_spawn_enemy(
-			monster,
-			landing,
-			false,
-			DEFAULT_NORMAL_RESPAWN_SECONDS,
-			{
-				"spawn_group_id": "%s:summons" % owner_slot,
-				"respawn_enabled": false,
-				"summoner_spawn_slot": owner_slot,
-				"summon_monster_id": monster_id,
-			}
-		)
+	if enemy.runtime_map_id != current_map_id or int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+		return
+	if _map_transition_in_progress or _world_bootstrap_in_progress:
+		return
+	_hc_m30_get_summon_queue().enqueue(enemy, monster_ids, count, max_active)
+
 
 
 func _on_boss_relocation_requested(enemy: EnemyActor, radius_gu: float) -> void:
@@ -2956,6 +6060,29 @@ func _on_boss_relocation_requested(enemy: EnemyActor, radius_gu: float) -> void:
 	enemy.velocity = Vector2.ZERO
 
 
+func _on_enemy_fixed_area_ground_spike_requested(
+	descriptor: Dictionary,
+	enemy: EnemyActor,
+) -> void:
+	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+		return
+	if int(enemy.get_meta("zone_generation", -1)) != _zone_generation:
+		return
+	if str(descriptor.get("effect_id", "")) != MonsterGroundSpikeEffectScript.EFFECT_ID:
+		return
+	if str(descriptor.get("release_id", "")).is_empty():
+		return
+	if int(descriptor.get("source_instance_id", 0)) != enemy.get_instance_id():
+		return
+	if int(descriptor.get("source_monster_id", -1)) != enemy.monster_id:
+		return
+	var target_world_px: Variant = descriptor.get("target_world_px", null)
+	if not target_world_px is Vector2 or not (target_world_px as Vector2).is_finite():
+		return
+	var effect: Node2D = MonsterGroundSpikeEffectScript.create_visual(descriptor)
+	add_child(effect)
+
+
 func _find_valid_enemy_landing(
 	origin_screen_px: Vector2,
 	minimum_distance_gu: float,
@@ -2963,64 +6090,17 @@ func _find_valid_enemy_landing(
 	combat_radius_gu: float,
 	ignored_enemy: EnemyActor
 ) -> Vector2:
-	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
-		origin_screen_px
-	)
-	var footprint_radius_px := (
-		WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(
-			combat_radius_gu
-		)
-	)
-	for _attempt in range(96):
-		var candidate_ground_gu := (
-			origin_ground_gu
-			+ Vector2.from_angle(_rng.randf_range(0.0, TAU))
-			* _rng.randf_range(minimum_distance_gu, maximum_distance_gu)
-		)
-		if WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
-			candidate_ground_gu,
-			_active_safe_zones
-		):
-			continue
-		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
-			candidate_ground_gu
-		)
-		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
-			background,
-			candidate_screen_px,
-			footprint_radius_px
-		):
-			continue
-		var player_combat_radius_gu := (
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				ArtSpec.PLAYER_COLLISION_RADIUS_PX
-			)
-		)
-		if (
-			is_instance_valid(player)
-			and GroundUnitSpaceScript.distance_gu(
-				_canonical_screen_px_to_ground_gu(player.global_position),
-				candidate_ground_gu
-			)
-			< combat_radius_gu
-			+ player_combat_radius_gu
-			+ ACTOR_LANDING_CLEARANCE_GU
-		):
-			continue
-		var occupied := false
-		for value: Variant in get_tree().get_nodes_in_group("enemies"):
-			if not value is EnemyActor or value == ignored_enemy or value.is_queued_for_deletion():
-				continue
-			var other := value as EnemyActor
-			if GroundUnitSpaceScript.distance_gu(
-				_canonical_screen_px_to_ground_gu(other.global_position),
-				candidate_ground_gu
-			) < combat_radius_gu + other.combat_radius_gu + ENEMY_LANDING_CLEARANCE_GU:
-				occupied = true
-				break
-		if not occupied:
-			return candidate_screen_px
+	# Relocation retains its old synchronous 96-attempt API and origin sentinel.
+	# Enemy summons instead call ONE probe through the global frame-budget queue.
+	var origin_gu: Vector2 = _canonical_screen_px_to_ground_gu(origin_screen_px)
+	if not origin_gu.is_finite():
+		return origin_screen_px
+	for _attempt: int in range(96):
+		var candidate_gu: Vector2 = origin_gu + Vector2.from_angle(_rng.randf_range(0.0, TAU)) * _rng.randf_range(minimum_distance_gu, maximum_distance_gu)
+		if _hc_m30_landing_clear(candidate_gu, combat_radius_gu, ignored_enemy):
+			return _canonical_ground_gu_to_screen_px(candidate_gu)
 	return origin_screen_px
+
 
 
 func _cycle_target() -> void:
@@ -3036,7 +6116,7 @@ func _cycle_target() -> void:
 			_cancel_magic_target()
 		else:
 			_cancel_target()
-		hud.show_message(
+		hud.show_error_message(
 			"周围12格内没有可锁定目标"
 			if magic_domain
 			else "周围10格内没有可锁定目标"
@@ -3078,11 +6158,18 @@ func _set_auto_target_enabled(enabled: bool) -> void:
 
 
 func _on_player_moved(_position: Vector2, _facing: Vector2) -> void:
+	_refresh_player_safe_zone_cache()
+	if _loot_pickup_runtime_manager != null:
+		_loot_pickup_runtime_manager.player_position_changed(_position)
 	_validate_locked_target()
 
 
 func _on_player_death_requested() -> void:
-	if not gameplay_input_is_enabled():
+	# Death is a lifecycle event, not gameplay input. The input gate correctly
+	# rejects zero HP before this delayed notification is delivered.
+	if not is_instance_valid(player) or not _active_death_id.is_empty():
+		return
+	if not player._dead or player.current_hp > 0 or player.combat_transition_is_active():
 		return
 	# player.gd emits this only after the automatic-revival branch has failed,
 	# making it the formal-death boundary.  This boundary opens the gameplay-
@@ -3177,9 +6264,10 @@ func _finish_death_revival() -> void:
 				"revival_options": _death_revival_context().get("revival_options", []),
 			})
 		return
-	player.global_position = home.get("position_px", Vector2.ZERO) as Vector2
+	_set_player_world_position(home.get("position_px", Vector2.ZERO) as Vector2)
 	player.velocity = Vector2.ZERO
 	player.complete_death_revival()
+	_relocate_main_pets_after_map_arrival()
 	background.set_focus_position(player.global_position)
 	_record_player_world_location()
 	PlayerState.save_game()
@@ -3219,9 +6307,15 @@ func _cancel_all_combat_targets() -> void:
 
 
 func _validate_locked_target() -> void:
-	if locked_target != null and not _is_attack_target_in_range(locked_target):
+	if not is_instance_valid(locked_target):
+		locked_target = null
+		manual_target_lock = false
+	elif not _is_attack_target_in_range(locked_target):
 		_cancel_target()
-	if magic_locked_target != null and not _is_magic_target_in_range(magic_locked_target):
+	if not is_instance_valid(magic_locked_target):
+		magic_locked_target = null
+		manual_magic_target_lock = false
+	elif not _is_magic_target_in_range(magic_locked_target):
 		_cancel_magic_target()
 
 
@@ -3241,6 +6335,11 @@ func _face_locked_target() -> Vector2:
 
 func _ensure_skill_cast_target(excluded: EnemyActor = null) -> EnemyActor:
 	_activate_magic_skill_domain()
+	if not is_instance_valid(magic_locked_target):
+		magic_locked_target = null
+		manual_magic_target_lock = false
+	if not is_instance_valid(_skill_cast_target):
+		_skill_cast_target = null
 	if _is_magic_target_in_range(magic_locked_target) and magic_locked_target != excluded:
 		_skill_cast_target = magic_locked_target
 		return _skill_cast_target
@@ -3273,18 +6372,28 @@ func _face_skill_cast_target() -> Vector2:
 
 
 func _select_wild_rush_target() -> EnemyActor:
+	if not is_instance_valid(locked_target):
+		locked_target = null
+		manual_target_lock = false
 	if _is_attack_target_in_range(locked_target):
 		# A live lock is authoritative. An ineligible, over-level, boss, or
 		# out-of-reach lock must make this cast invalid instead of silently
 		# redirecting the charge to a different nearby monster.
 		return locked_target if _wild_rush_target_is_eligible(locked_target) else null
 	var player_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	if not player_ground_gu.is_finite():
+		return null
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			player_ground_gu - Vector2.ONE * WarriorMeleeGeometryScript.WILD_RUSH_TARGET_REACH_GU,
+			Vector2.ONE * WarriorMeleeGeometryScript.WILD_RUSH_TARGET_REACH_GU * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return null
 	var best: EnemyActor
 	var best_distance_gu := INF
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor:
-			continue
-		var enemy: EnemyActor = node
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		if not _wild_rush_target_is_eligible(enemy):
 			continue
 		var enemy_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
@@ -3292,7 +6401,13 @@ func _select_wild_rush_target() -> EnemyActor:
 			player_ground_gu,
 			enemy_ground_gu
 		)
-		if distance_gu < best_distance_gu:
+		# The no-lock contract is strict at 1.5 GU.  The index result is kept in
+		# the established stable spawn/group order, so equal distances retain the
+		# first legacy candidate instead of introducing an instance-id tie-break.
+		if (
+			distance_gu < WarriorMeleeGeometryScript.WILD_RUSH_TARGET_REACH_GU
+			and distance_gu < best_distance_gu
+		):
 			best = enemy
 			best_distance_gu = distance_gu
 	return best
@@ -3309,10 +6424,7 @@ func _wild_rush_target_is_eligible(target: EnemyActor) -> bool:
 	):
 		return false
 	if (
-		WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
-			_canonical_screen_px_to_ground_gu(player.global_position),
-			_active_safe_zones
-		)
+		_player_inside_active_safe_zone()
 		or WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(
 			_canonical_screen_px_to_ground_gu(target.global_position),
 			_active_safe_zones
@@ -3398,10 +6510,26 @@ func _wild_rush_has_dynamic_blocker(
 	var forward_ground_gu := direction_ground_gu.normalized()
 	var side_ground_gu := Vector2(-forward_ground_gu.y, forward_ground_gu.x)
 	var target_radius_gu := target.combat_radius_gu
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node == target:
+	if (
+		not target_ground_gu.is_finite()
+		or forward_ground_gu.length_squared()
+		<= WarriorMeleeGeometryScript.EPSILON * WarriorMeleeGeometryScript.EPSILON
+	):
+		return false
+	if not _target_spatial_query_segment_into(
+		target_ground_gu,
+		target_ground_gu
+			+ forward_ground_gu * WarriorMeleeGeometryScript.WILD_RUSH_PUSH_DISTANCE_GU,
+		target_radius_gu,
+		_target_spatial_query_scratch,
+		# PERF-2: existence probe — the boolean blocker verdict is
+		# order-insensitive, so the broadphase may skip combat ordering.
+		false,
+	):
+		return false
+	for other: EnemyActor in _target_spatial_query_scratch:
+		if other == target:
 			continue
-		var other: EnemyActor = node
 		if other.is_queued_for_deletion() or other.current_hp <= 0:
 			continue
 		var delta_ground_gu := (
@@ -3525,8 +6653,8 @@ func _apply_wild_rush_displacement(
 		return false
 	# Both destinations were preflighted before either actor is mutated. This is
 	# one coupled transaction: partial single-actor movement is forbidden.
-	target.global_position = target_destination
-	player.global_position = player_destination
+	target.set_combat_position(target_destination, &"wild_rush_displacement")
+	_set_player_world_position(player_destination)
 	player.velocity = Vector2.ZERO
 	player.movement_performed.emit(player.global_position, player.facing)
 	return true
@@ -3537,21 +6665,31 @@ func _update_target_hud() -> void:
 		return
 	var magic_domain := _magic_target_domain_is_active()
 	var active_target := magic_locked_target if magic_domain else locked_target
-	var target_valid := (
-		_is_magic_target_in_range(active_target)
-		if magic_domain
-		else _is_attack_target_in_range(active_target)
-	)
+	# A target can be freed by a test/world teardown without emitting the normal
+	# death signal. Never pass that stale Object through a typed range helper.
+	var target_valid := false
+	if is_instance_valid(active_target) and active_target is EnemyActor:
+		target_valid = (
+			_is_magic_target_in_range(active_target as EnemyActor)
+			if magic_domain
+			else _is_attack_target_in_range(active_target as EnemyActor)
+		)
 	if target_valid:
 		hud.update_target(
 			active_target.display_name,
 			active_target.current_hp,
 			active_target.max_hp,
 			manual_magic_target_lock if magic_domain else manual_target_lock,
-			auto_target_enabled
+			auto_target_enabled,
+			active_target.monster_id
 		)
 	else:
 		hud.update_target("", 0, 0, false, auto_target_enabled)
+
+
+func play_npc_interaction_voice(service_id: String) -> void:
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_npc_interaction_success(service_id, {"map_id": current_map_id})
 
 
 func _try_interact() -> void:
@@ -3576,7 +6714,7 @@ func _try_interact() -> void:
 			nearest = node
 			nearest_distance_gu = distance_gu
 	if nearest == null:
-		hud.show_message("附近没有可交互目标")
+		hud.show_error_message("附近没有可交互目标")
 		return
 	nearest.interact(self)
 
@@ -3595,7 +6733,7 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 			if slot_group == PlayerState.SKILL_SLOT_GROUP_ATTACK
 			else "攻击环%d" % (slot_index + 1)
 		)
-		hud.show_message("%s为空" % group_label)
+		hud.show_error_message("%s为空" % group_label)
 		return
 	var metadata := SkillInputPolicyScript.metadata(skill_name)
 	if bool(metadata.get("toggle", false)):
@@ -3607,7 +6745,7 @@ func _use_skill_slot(slot_group: String, slot_index: int) -> void:
 func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		if show_failure:
-			hud.show_message("技能尚未学习")
+			hud.show_error_message("技能尚未学习")
 		return &"rejected"
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
@@ -3615,7 +6753,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		return &"rejected"
 	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
 		if show_failure:
-			hud.show_message("该技能已隐藏，无法使用")
+			hud.show_error_message("该技能已隐藏，无法使用")
 		return &"rejected"
 	_activate_magic_skill_domain()
 	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
@@ -3629,7 +6767,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		# Player.request_skill as the authority for dead/control/struck locks.
 		if not player.request_skill(skill_name):
 			if show_failure:
-				hud.show_message("技能动作或冷却尚未结束")
+				hud.show_error_message("技能动作或冷却尚未结束")
 			return &"busy"
 		_skill_cast_target = null
 		return &"accepted"
@@ -3642,7 +6780,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		)
 		if not bool(heal_selection.get("valid", false)):
 			if show_failure:
-				hud.show_message("附近没有可治疗的友方")
+				hud.show_error_message("附近没有可治疗的友方")
 			_skill_cast_target = null
 			_selected_friendly_instance_id = 0
 			return &"rejected"
@@ -3663,20 +6801,20 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
 			_selected_friendly_instance_id = 0
 		if show_failure:
-			hud.show_message("魔法不足")
+			hud.show_error_message("魔法不足")
 		return &"rejected"
 	if not player.can_request_skill(skill_name):
 		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
 			_selected_friendly_instance_id = 0
 		if show_failure:
-			hud.show_message("技能动作或冷却尚未结束")
+			hud.show_error_message("技能动作或冷却尚未结束")
 		return &"busy"
 	_skill_cast_target = null
 	if stable_skill_id == WILD_RUSH_SKILL_ID:
 		_skill_cast_target = _select_wild_rush_target()
 		if _skill_cast_target == null:
 			if show_failure:
-				hud.show_message("附近没有可冲撞的低级普通怪物")
+				hud.show_error_message("附近没有可冲撞的低级普通怪物")
 			return &"rejected"
 		_face_skill_cast_target()
 	elif _skill_needs_target(str(profile.get("cast_type", "melee"))):
@@ -3685,11 +6823,11 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	if _definition_requires_hostile_target(definition):
 		if not is_instance_valid(_skill_cast_target):
 			if show_failure:
-				hud.show_message("法术需要有效目标")
+				hud.show_error_message("法术需要有效目标")
 			return &"rejected"
 		if not _spell_definition_allows_target(definition, _skill_cast_target):
 			if show_failure:
-				hud.show_message("目标超出该法术的有效范围")
+				hud.show_error_message("目标超出该法术的有效范围")
 			return &"rejected"
 	var locked_skill_target_id := 0
 	if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
@@ -3704,7 +6842,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	if not player.request_skill(skill_name, locked_skill_target_id):
 		_selected_friendly_instance_id = 0
 		if show_failure:
-			hud.show_message("技能动作或冷却尚未结束")
+			hud.show_error_message("技能动作或冷却尚未结束")
 		return &"busy"
 	if stable_skill_id.begins_with("warrior."):
 		_skill_cast_target = null
@@ -3796,7 +6934,8 @@ func _on_item_quick_slot_assignment_requested(
 ) -> void:
 	var result := PlayerState.assign_quick_item_slot(slot_index, item_name)
 	if not bool(result.get("ok", false)):
-		hud.show_message(str(result.get("message", "快捷物品绑定失败")))
+		_sync_item_quick_slots_to_hud()
+		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品绑定失败"))))
 		return
 	_sync_item_quick_slots_to_hud()
 	hud.show_message(str(result.get("message", "快捷物品已绑定")))
@@ -3810,12 +6949,14 @@ func _on_item_quick_slot_use_requested(
 		return
 	var result := PlayerState.use_quick_item_slot(slot_index, item_name)
 	if not bool(result.get("ok", false)):
-		hud.show_message(str(result.get("message", "快捷物品使用失败")))
+		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品使用失败"))))
 		return
-	# consumable/scroll effects are already surfaced by their existing signal
-	# chain; only skill_book needs an immediate visible confirmation.
-	if str(result.get("kind", "")) == "skill_book":
-		hud.show_message(str(result.get("message", "技能学习成功")))
+	# One player action owns one central result notice (R2). Only the
+	# contract-approved uses report (skill books, blessing/repair oils,
+	# timed 神水); instant potions stay silent by design.
+	var used_item := GameData.get_item_record(str(result.get("item_name", "")))
+	if UIPlayerNoticeScript.should_report_item_use(used_item):
+		hud.show_success_message(str(result.get("message", "")))
 
 
 func _on_skill_button_assignment_requested(request: Dictionary) -> void:
@@ -3832,10 +6973,15 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 		)
 	)
 	if not bool(result.get("ok", false)):
-		hud.show_message("技能栏配置失败：%s" % str(result.get("reason", "invalid_request")))
+		hud.show_error_message("技能栏配置失败")
 		return
 	if not PlayerState.apply_skill_button_assignment(result):
-		hud.show_message("技能栏配置未能保存")
+		if is_instance_valid(hud) and hud.has_method("set_skill_button_assignments"):
+			hud.call(
+				"set_skill_button_assignments",
+				PlayerState.skill_button_assignments_snapshot()
+			)
+		hud.show_error_message("技能栏配置未能保存")
 		return
 	if is_instance_valid(hud):
 		hud.cancel_attack_inputs(&"skill_assignment_changed")
@@ -3908,13 +7054,26 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			)
 		)
 		thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
+	var melee_release_cache: Dictionary = {}
+	var melee_query_plan := _aoe_melee_query_plan(
+		selection_mode,
+		release_geometry["origin_ground_gu"],
+		direction,
+		release_geometry,
+		thrust_damage_axis_plan,
+		melee_release_snapshot,
+		release_geometry.get("target_aligned_plan", {}),
+		melee_release_cache,
+	)
 	var primary_targets := _physical_primary_targets(
 		origin,
 		direction,
 		selection_mode,
 		release_geometry,
 		thrust_damage_axis_plan,
-		melee_release_snapshot
+		melee_release_snapshot,
+		release_geometry.get("target_aligned_plan", {}),
+		melee_query_plan,
 	)
 	var thrust_secondary_targets: Array[EnemyActor] = []
 	var half_moon_secondary_targets: Array[EnemyActor] = []
@@ -3926,7 +7085,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			primary_targets,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			melee_query_plan,
 		)
 		eligible_target_count += thrust_secondary_targets.size()
 	elif selection_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
@@ -3935,7 +7096,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			direction,
 			primary_targets,
 			release_geometry,
-			melee_release_snapshot
+			melee_release_snapshot,
+			melee_query_plan,
 		)
 		eligible_target_count += half_moon_secondary_targets.size()
 	var has_eligible_target := eligible_target_count > 0
@@ -3990,13 +7152,26 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				)
 			)
 			thrust_damage_axis_plan["skill_footprint_snapshot"] = melee_release_snapshot
+		melee_release_cache.clear()
+		melee_query_plan = _aoe_melee_query_plan(
+			effect_mode,
+			release_geometry["origin_ground_gu"],
+			direction,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			melee_release_cache,
+		)
 		primary_targets = _physical_primary_targets(
 			origin,
 			direction,
 			effect_mode,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			release_geometry.get("target_aligned_plan", {}),
+			melee_query_plan,
 		)
 		thrust_secondary_targets.clear()
 		half_moon_secondary_targets.clear()
@@ -4008,7 +7183,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				primary_targets,
 				release_geometry,
 				thrust_damage_axis_plan,
-				melee_release_snapshot
+				melee_release_snapshot,
+				release_geometry.get("target_aligned_plan", {}),
+				melee_query_plan,
 			)
 			eligible_target_count += thrust_secondary_targets.size()
 		elif effect_mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
@@ -4017,7 +7194,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				direction,
 				primary_targets,
 				release_geometry,
-				melee_release_snapshot
+				melee_release_snapshot,
+				melee_query_plan,
 			)
 			eligible_target_count += half_moon_secondary_targets.size()
 		has_eligible_target = eligible_target_count > 0
@@ -4041,6 +7219,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
 	var hit_any := false
+	var primary_hit := false
 	var canonical_resolution := "rejected"
 	if effect_mode in ["thrust", "half_moon", "fire"]:
 		var melee_resolution := _execute_canonical_melee(
@@ -4061,6 +7240,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			true
 		)
 		hit_any = bool(melee_resolution.get("hit_any", false))
+		primary_hit = bool(melee_resolution.get("primary_hit", false))
 		canonical_resolution = str(melee_resolution.get("resolution", "rejected"))
 	elif effect_mode == "normal":
 		if not primary_targets.is_empty():
@@ -4070,7 +7250,16 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 				modified_base_damage + post_body_damage_bonus,
 				accuracy_bonus
 			)
+			primary_hit = hit_any
 			canonical_resolution = "hit" if hit_any else "miss"
+	# Weapon wear belongs to the physical swing, not to each target struck by
+	# that swing. Besides matching the original server, this prevents Half Moon,
+	# Thrusting and any future multi-target melee release from performing one
+	# synchronous save per victim.
+	if primary_hit and is_instance_valid(player):
+		player.apply_confirmed_physical_hit_durability(
+			maxi(1, modified_base_damage + post_body_damage_bonus)
+		)
 	_spawn_target_aligned_melee_visual(
 		melee_release_snapshot,
 		effect_mode,
@@ -4088,6 +7277,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
 		bool(melee_modifiers.get("slaying_proc", false))
+		and effect_mode == "normal"
 		and player.visual != null
 		and player.visual.has_method("play_passive_proc_effect")
 	):
@@ -4238,6 +7428,9 @@ func _melee_candidate_diagnostics(
 	mode: String,
 	primary_targets: Array[EnemyActor]
 ) -> Array[Dictionary]:
+	# Explicit diagnostic-only candidate evidence still uses the same mapped
+	# broadphase.  Diagnostics must not reintroduce a SceneTree full-group scan
+	# into an attack release just because the log is enabled.
 	var result: Array[Dictionary] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var resolved_mode := (
@@ -4250,10 +7443,29 @@ func _melee_candidate_diagnostics(
 		]
 		else WarriorMeleeGeometryScript.SKILL_NORMAL
 	)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
+	if not origin_ground_gu.is_finite():
+		return result
+	var diagnostic_radius_gu := (
+		WarriorMeleeGeometryScript.reach_gu(resolved_mode) + 1.0
+	)
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			origin_ground_gu - Vector2.ONE * diagnostic_radius_gu,
+			Vector2.ONE * diagnostic_radius_gu * 2.0,
+		),
+		_target_spatial_query_scratch,
+	):
+		return result
+	# A selected target is authoritative release evidence. Preserve it in the
+	# diagnostic record even if a malformed fixture placed it outside the
+	# conservative diagnostic envelope, without broadening the production query.
+	for selected: EnemyActor in primary_targets:
+		if (
+			_target_spatial_enemy_is_current(selected)
+			and not _target_spatial_query_scratch.has(selected)
+		):
+			_target_spatial_query_scratch.append(selected)
+	for enemy: EnemyActor in _target_spatial_query_scratch:
 		var explanation := WarriorMeleeDiagnosticScript.explain_footprint_candidate(
 			origin_ground_gu,
 			_canonical_screen_px_to_ground_gu(enemy.global_position),
@@ -4328,17 +7540,17 @@ func _commit_warrior_melee_modifier_events(modifiers: Dictionary) -> void:
 
 func _on_special_action_pressed(effect_id: String) -> void:
 	if not PlayerState.has_special_effect(effect_id):
-		hud.show_message("特殊装备已失效")
+		hud.show_error_message("特殊装备已失效")
 		return
 	match effect_id:
 		"teleport":
 			if _try_safe_ring_teleport():
 				hud.show_message("传送戒指：安全位移")
 			else:
-				hud.show_message("前方没有合法传送落点")
+				hud.show_error_message("前方没有合法传送落点")
 		"flame_skill":
 			if not player.spend_mana(5):
-				hud.show_message("火球需要5点魔法")
+				hud.show_error_message("火球需要5点魔法")
 				return
 			_skill_cast_target = null
 			_ensure_skill_cast_target(null)
@@ -4366,7 +7578,7 @@ func _on_special_action_pressed(effect_id: String) -> void:
 			hud.show_message("火焰戒指：火球")
 		"recovery_skill":
 			if not player.spend_mana(5):
-				hud.show_message("治愈需要5点魔法")
+				hud.show_error_message("治愈需要5点魔法")
 				return
 			var amount := maxi(12, int(PlayerState.level / 2) + int(PlayerState.computed_stats.get("tao_max", 0)) * 2)
 			player.restore_health(amount)
@@ -4403,6 +7615,36 @@ func _on_warrior_skill_state_changed(_skill_name: String, _enabled: bool, messag
 		hud.update_warrior_states(player.warrior_state_snapshot())
 
 
+func _on_skill_cast_audio_started(stable_skill_id: String) -> void:
+	_play_skill_audio_phase(stable_skill_id, "cast")
+
+
+## AOE first-engagement window (perf-smoothness-r1 Phase A): the first
+## wizard.fire_wall cast opens the milestone window in AoeEngagementWindow. The
+## window closes on the first committed enemy death (or its deadline) and
+## reports real wall-clock frame intervals once. See AoeEngagementWindow.
+func _on_first_fire_wall_cast_probe(stable_skill_id: String) -> void:
+	AoeEngagementWindow.on_skill_cast(stable_skill_id)
+
+
+func _on_item_audio_committed(identity_domain: String, identity_id: int, semantic_event: String) -> void:
+	if identity_domain not in ["item", "service"] or identity_id < 0:
+		return
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_item_event(
+			"%s:%d" % [identity_domain, identity_id], semantic_event,
+			{"map_id": current_map_id},
+		)
+
+
+func _play_skill_audio_phase(stable_skill_id: String, phase: String) -> void:
+	if is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_event("skill.%s.%s" % [stable_skill_id, phase], {
+			"gender": PlayerState.gender,
+			"map_id": current_map_id,
+		})
+
+
 func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, damage: int) -> void:
 	if not gameplay_input_is_enabled(): return
 	var skill_context := player.consume_skill_context()
@@ -4424,7 +7666,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			# domain during windup, reject the cast instead of degrading to the
 			# generic ground/direction fallback used by untargeted area spells.
 			_skill_cast_target = null
-			hud.show_message("锁定目标已失效，技能未释放", 1.5)
+			hud.show_error_message("锁定目标已失效，技能未释放", 1.5)
 			return
 		_skill_cast_target = release_target
 	var friendly_identity_release: Dictionary = release_geometry.get(
@@ -4454,8 +7696,10 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
-		hud.show_message("技能释放失败：%s" % str(execution.get("reason", "runtime_rejected")), 1.5)
+		hud.show_error_message("技能释放失败", 1.5)
 		return
+	if hit_any:
+		_play_skill_audio_phase(stable_skill_id, "effect")
 	var effect_color := Color(1.0, 0.22, 0.05) if PlayerState.profession == "战士" else (Color(0.28, 0.62, 1.0) if PlayerState.profession == "法师" else Color(0.45, 0.92, 0.55))
 	_show_attack_flash(origin, direction, hit_any, effect_color)
 	if skill_name == "烈火剑法":
@@ -4559,6 +7803,11 @@ func _execute_canonical_skill(
 		release_context
 	)
 	var cast_target := _skill_cast_target
+	if stable_skill_id == "wizard.lightning" and not _hc_lightning_clear(cast_target, origin):
+		_skill_cast_target = null
+		return {"accepted": false, "effect_success": false, "reason": "world_los_blocked", "skill_id": stable_skill_id}
+	if stable_skill_id == "wizard.lightning":
+		target_context["line_of_sight"] = true
 	var request_facing := _canonical_facing_for_skill(stable_skill_id, direction)
 	if stable_skill_id == WILD_RUSH_SKILL_ID and cast_target != null:
 		var rush_plan := _build_wild_rush_path_plan(
@@ -4846,14 +8095,28 @@ func _execute_canonical_melee(
 	var primary_targets: Array[EnemyActor] = resolved_primary_targets
 	var thrust_secondaries: Array[EnemyActor] = resolved_thrust_secondaries
 	var half_moon_secondaries: Array[EnemyActor] = resolved_half_moon_secondaries
+	var melee_query_plan: Dictionary = {}
 	if not targets_resolved_at_release:
+		var release_cache: Dictionary = {}
+		melee_query_plan = _aoe_melee_query_plan(
+			mode,
+			_canonical_screen_px_to_ground_gu(origin),
+			direction,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {}),
+			release_cache,
+		)
 		primary_targets = _physical_primary_targets(
 			origin,
 			direction,
 			mode,
 			release_geometry,
 			thrust_damage_axis_plan,
-			melee_release_snapshot
+			melee_release_snapshot,
+			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {}),
+			melee_query_plan,
 		)
 		if mode == "thrust":
 			thrust_secondaries = _thrust_secondary_targets(
@@ -4863,7 +8126,8 @@ func _execute_canonical_melee(
 				release_geometry,
 				thrust_damage_axis_plan,
 				melee_release_snapshot,
-				target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
+				target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {}),
+				melee_query_plan,
 			)
 		elif mode == "half_moon":
 			half_moon_secondaries = _half_moon_secondary_targets(
@@ -4871,7 +8135,8 @@ func _execute_canonical_melee(
 				direction,
 				primary_targets,
 				release_geometry,
-				melee_release_snapshot
+				melee_release_snapshot,
+				melee_query_plan,
 			)
 	var eligible_target_count := (
 		primary_targets.size()
@@ -4908,6 +8173,7 @@ func _execute_canonical_melee(
 	if not bool(result.get("accepted", false)):
 		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
 	var hit_any := false
+	var primary_hit := false
 	for raw_effect: Variant in result.get("effects", []):
 		if not raw_effect is Dictionary:
 			continue
@@ -4920,20 +8186,35 @@ func _execute_canonical_melee(
 					else thrust_secondaries
 				)
 				for target: EnemyActor in targets:
-					hit_any = _apply_physical_hit(
-						target,
+					var resolved_damage := (
 						roundi(float(base_damage) * float(effect.get("multiplier", 1.0)))
-						+ post_body_damage_bonus,
+						+ post_body_damage_bonus
+					)
+					if mode == "thrust":
+						var physical_resolution := WarriorCombatMath.resolve_enemy_physical_damage(
+							resolved_damage,
+							target.defense,
+							WarriorCombatMath.thrust_segment_ignores_ac(int(effect.get("cell", 1))),
+						)
+						resolved_damage = int(physical_resolution.get("final_damage", 0))
+					var target_hit := _apply_physical_hit(
+						target,
+						resolved_damage,
 						accuracy_bonus
-					) or hit_any
+					)
+					hit_any = target_hit or hit_any
+					if int(effect.get("cell", 1)) == 1:
+						primary_hit = target_hit or primary_hit
 			"melee_arc":
 				for primary: EnemyActor in primary_targets:
-					hit_any = _apply_physical_hit(
+					var target_hit := _apply_physical_hit(
 						primary,
 						roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0)))
 						+ post_body_damage_bonus,
 						accuracy_bonus
-					) or hit_any
+					)
+					primary_hit = target_hit or primary_hit
+					hit_any = target_hit or hit_any
 				for secondary: EnemyActor in half_moon_secondaries:
 					hit_any = _apply_physical_hit(
 						secondary,
@@ -4944,15 +8225,17 @@ func _execute_canonical_melee(
 			"next_melee_charge":
 				if not primary_targets.is_empty():
 					var target := primary_targets[0]
-					hit_any = _apply_physical_hit(
+					primary_hit = _apply_physical_hit(
 						target,
 						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0)))
 						+ post_body_damage_bonus,
 						accuracy_bonus
 					)
+					hit_any = primary_hit
 	return {
 		"accepted": true,
 		"hit_any": hit_any,
+		"primary_hit": primary_hit,
 		"resolution": "hit" if hit_any else "miss",
 	}
 
@@ -5120,6 +8403,8 @@ func _canonical_target_context(
 	# effect destination and footprint snapshot describe different ground
 	# positions.
 	context.merge(context_overrides, true)
+	if stable_skill_id == "wizard.lightning":
+		context["line_of_sight"] = usable_target and _hc_lightning_clear(target, origin)
 	if stable_skill_id in [
 		"taoist.summon_skeleton",
 		"taoist.summon_divine_beast",
@@ -5228,6 +8513,12 @@ func _canonical_target_context(
 				)
 			)
 		)
+	var exact_snapshot_valid := false
+	if (
+		not bool(context.get("hostile_targets_pre_resolved", false))
+		or friendly_cast
+	):
+		exact_snapshot_valid = _snapshot_strict_ok(exact_release_snapshot)
 	var nearby: Array[Dictionary] = []
 	var adjacent_ring_cells: Array[Vector2i] = []
 	if str(definition.get("geometry", {}).get("shape", "")) == "adjacent_ring":
@@ -5239,56 +8530,75 @@ func _canonical_target_context(
 						caster_tile + Vector2i(ring_x, ring_y)
 					)
 	if not bool(context.get("hostile_targets_pre_resolved", false)):
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if (
-				not node is EnemyActor
-				or node.is_queued_for_deletion()
-				or (
-					_snapshot_strict_ok(exact_release_snapshot)
-					and not _skill_snapshot_intersects_enemy(
-						exact_release_snapshot, node as EnemyActor
-					)
+		# The broadphase envelope is deliberately conservative; the exact
+		# snapshot/range/adjacent-ring checks below remain authoritative.
+		var target_query_bounds := Rect2(
+			origin_ground_gu - Vector2.ONE * search_range_gu,
+			Vector2.ONE * search_range_gu * 2.0,
+		)
+		if exact_snapshot_valid:
+			var snapshot_aabb := SkillFootprintSnapshotScript.ground_aabb(
+				exact_release_snapshot
+			)
+			if bool(snapshot_aabb.get("valid", false)):
+				target_query_bounds = snapshot_aabb.get(
+					"bounds_ground_gu",
+					target_query_bounds
 				)
-				or (
-					not _snapshot_strict_ok(exact_release_snapshot)
+		if _target_spatial_query_aabb_into(
+			target_query_bounds,
+			_target_spatial_query_scratch,
+		):
+			for node: EnemyActor in _target_spatial_query_scratch:
+				if (
+					exact_snapshot_valid
+					and not SkillFootprintSnapshotScript.intersects_target_combat_footprint_ground_gu(
+						exact_release_snapshot,
+						_canonical_screen_px_to_ground_gu(node.global_position),
+						node.combat_radius_gu,
+					)
+				):
+					continue
+				if (
+					not exact_snapshot_valid
 					and not GroundUnitSpaceScript.is_within_range_gu(
 						origin_ground_gu,
 						_canonical_screen_px_to_ground_gu(node.global_position),
 						search_range_gu
 					)
+				):
+					continue
+				if (
+					not exact_snapshot_valid and not adjacent_ring_cells.is_empty()
+					and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+						adjacent_ring_cells,
+						_canonical_screen_px_to_ground_gu(node.global_position),
+						node.combat_radius_gu
+					).get("intersects", false))
+				):
+					continue
+				var node_ground_gu := _canonical_screen_px_to_ground_gu(
+					node.global_position
 				)
-			):
-				continue
-			if (
-				not adjacent_ring_cells.is_empty()
-				and not bool(CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
-					adjacent_ring_cells,
-					_canonical_screen_px_to_ground_gu(node.global_position),
-					node.combat_radius_gu
-				).get("intersects", false))
-			):
-				continue
-			nearby.append({
-				"instance_id": node.get_instance_id(),
-				"target_instance_id": node.get_instance_id(),
-				"level": node.level,
-				"is_boss": node.is_boss,
-				"immovable": node.is_boss,
-				"path_blocked": background.is_environment_point_blocked(
-					_canonical_ground_gu_to_screen_px(
-						_canonical_screen_px_to_ground_gu(node.global_position)
-						+ (
-							_canonical_screen_px_to_ground_gu(node.global_position)
-							- origin_ground_gu
-						).normalized()
-					)
-				),
-				"hostile_monster": true,
-				"control_immune": node.is_boss,
-				"within_level_gate": node.level <= PlayerState.level,
-			})
+				nearby.append({
+					"instance_id": node.get_instance_id(),
+					"target_instance_id": node.get_instance_id(),
+					"level": node.level,
+					"is_boss": node.is_boss,
+					"immovable": node.is_boss,
+					"path_blocked": background.is_environment_point_blocked(
+						_canonical_ground_gu_to_screen_px(
+							node_ground_gu + (
+								node_ground_gu - origin_ground_gu
+							).normalized()
+						)
+					),
+					"hostile_monster": true,
+					"control_immune": node.is_boss,
+					"within_level_gate": node.level <= PlayerState.level,
+				})
 	context["targets"] = nearby
-	if friendly_cast and _snapshot_strict_ok(exact_release_snapshot):
+	if friendly_cast and exact_snapshot_valid:
 		var friendly_targets: Array[Dictionary] = []
 		var friendly_missing_hp: Array[int] = []
 		var friendly_actors: Array[Node2D] = [player]
@@ -5401,6 +8711,7 @@ func _apply_canonical_effects_from_plan(
 	var continuous_line_strip_ground_gu: Dictionary = plan.get(
 		"continuous_line_strip_ground_gu", {}
 	)
+	var aoe_release_cache: Dictionary = {}
 	var spawned_nodes: Array[Node2D] = _spawn_canonical_cast_nodes_from_plan(
 		plan,
 		origin,
@@ -5456,7 +8767,9 @@ func _apply_canonical_effects_from_plan(
 					effective_geometry_cells,
 					effect,
 					continuous_line_strip_ground_gu,
-					skill_release_snapshot
+					skill_release_snapshot,
+					{},
+					aoe_release_cache,
 				)
 			"dedicated_heal":
 				var heal_target_id := int(
@@ -5788,7 +9101,9 @@ func _spawn_canonical_cast_nodes_from_plan(
 	var stable_skill_id := str(plan.get("skill_id", ""))
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
 		# Q2-C/Q3-B: the formal fire wall release owns exactly ONE
-		# FireWallFieldController plus its 4 pure-visual cells. Never fall back
+		# FireWallFieldController plus its pure-visual cells (3x3 geometry =>
+		# 9 cells today; the old "4 cells" comment predates the 2026-09-13
+		# geometry override). Never fall back
 		# to the generic ground-dot factory or standalone GroundSkillEffect
 		# cells; the field controller is the single damage/visual owner.
 		var ground_effect := _canonical_plan_ground_effect(plan)
@@ -5901,14 +9216,43 @@ func _apply_canonical_spell_damage(
 	raw_geometry_cells: Variant = [],
 	effect: Dictionary = {},
 	continuous_line_strip_ground_gu: Dictionary = {},
-	skill_release_snapshot: Dictionary = {}
+	skill_release_snapshot: Dictionary = {},
+	query_plan: Dictionary = {},
+	release_cache: Dictionary = {},
 ) -> bool:
-	if not _snapshot_strict_ok(skill_release_snapshot):
-		var raw_line_snapshot: Variant = continuous_line_strip_ground_gu.get(
-			"skill_footprint_snapshot", {}
+	var resolved_snapshot := _aoe_spell_snapshot(
+		skill_release_snapshot,
+		continuous_line_strip_ground_gu,
+	)
+	var context_release_id := str(resolved_snapshot.get("release_id", ""))
+	if context_release_id.is_empty():
+		context_release_id = str(continuous_line_strip_ground_gu.get("release_id", ""))
+	var context_skill_id := stable_skill_id if not stable_skill_id.is_empty() else "canonical_aoe"
+	if context_release_id.is_empty():
+		context_release_id = context_skill_id
+	RuntimeDiagnostics.set_performance_release_context(
+		context_release_id,
+		context_skill_id,
+	)
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_spell_query_plan(
+			stable_skill_id,
+			raw_geometry_cells,
+			effect,
+			continuous_line_strip_ground_gu,
+			resolved_snapshot,
+			_canonical_screen_px_to_ground_gu(origin),
+			release_cache,
 		)
-		if raw_line_snapshot is Dictionary:
-			skill_release_snapshot = raw_line_snapshot as Dictionary
+	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
+	if not _aoe_plan_is_ready(plan) and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"aoe_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		_record_aoe_candidate_timing(aoe_candidate_started_usec)
+		return false
 	var targets: Array[EnemyActor] = []
 	var has_declared_geometry_cells := (
 		raw_geometry_cells is Array
@@ -5920,62 +9264,136 @@ func _apply_canonical_spell_damage(
 			raw_geometry_cells,
 			effect,
 			continuous_line_strip_ground_gu,
-			skill_release_snapshot
+			resolved_snapshot,
+			plan,
 		)
 	elif (
 		effect_type == "targeted_sky_strike"
 		and primary != null
-		and _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
 	):
-		targets.append(primary)
+		if _aoe_plan_is_ready(plan):
+			if _aoe_query_enemy_candidates_aabb(
+				plan,
+				plan.get("ground_aabb", Rect2()),
+				false,
+			):
+				for node: EnemyActor in _aoe_candidate_scratch:
+					RuntimeDiagnostics.increment_performance_counter(
+						&"aoe_exact_intersection_tests"
+					)
+					if node == primary and _aoe_validated_snapshot_intersects(plan, node):
+						targets.append(node)
+						break
+				if targets.is_empty() and _aoe_validated_snapshot_intersects(plan, primary):
+					# The locked target is already an authoritative identity; the
+					# broadphase only gates unbounded discovery and does not replace
+					# direct identity resolution.
+					targets.append(primary)
+		elif _aoe_reference_fallback_allowed() and _skill_snapshot_intersects_enemy(
+			resolved_snapshot,
+			primary,
+		):
+			targets.append(primary)
 	elif (
 		primary != null
 		and effect_type not in ["area_damage", "caster_centered_area_damage"]
-		and (
-			not _snapshot_strict_ok(skill_release_snapshot)
-			or _skill_snapshot_intersects_enemy(skill_release_snapshot, primary)
-		)
 	):
-		targets.append(primary)
+		if _aoe_plan_is_ready(plan):
+			if _aoe_query_enemy_candidates_aabb(
+				plan,
+				plan.get("ground_aabb", Rect2()),
+				false,
+			):
+				for node: EnemyActor in _aoe_candidate_scratch:
+					RuntimeDiagnostics.increment_performance_counter(
+						&"aoe_exact_intersection_tests"
+					)
+					if node == primary and _aoe_validated_snapshot_intersects(plan, node):
+						targets.append(node)
+						break
+				if targets.is_empty() and _aoe_validated_snapshot_intersects(plan, primary):
+					targets.append(primary)
+		elif _aoe_reference_fallback_allowed() and (
+				resolved_snapshot.is_empty()
+				or _skill_snapshot_intersects_enemy(resolved_snapshot, primary)
+			):
+			targets.append(primary)
 	else:
 		var radial: bool = effect_type in ["area_damage", "caster_centered_area_damage"]
 		var radius_gu := maxf(0.0, float(effect.get("radius_gu", 0.0)))
 		if not radial or radius_gu <= 0.0:
+			_record_aoe_candidate_timing(aoe_candidate_started_usec)
 			return false
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node.is_queued_for_deletion():
-				continue
-			var enemy := node as EnemyActor
-			if (
-				_skill_snapshot_intersects_enemy(skill_release_snapshot, enemy)
-				or (
-					not _snapshot_strict_ok(skill_release_snapshot)
-					and _ground_circle_intersects_enemy_footprint_gu(
-						origin,
-						radius_gu,
-						enemy
-					)
+		if _aoe_plan_is_ready(plan):
+			_aoe_query_enemy_candidates_aabb(
+				plan,
+				plan.get("ground_aabb", Rect2()),
+				false,
+			)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
 				)
-			):
-				targets.append(enemy)
+				if _aoe_validated_snapshot_intersects(plan, enemy):
+					targets.append(enemy)
+		elif _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
+				)
+				if _ground_circle_intersects_enemy_footprint_gu(
+					origin,
+					radius_gu,
+					enemy,
+				):
+					targets.append(enemy)
+		if targets.is_empty() and _aoe_plan_is_ready(plan) and _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
+				)
+				if _aoe_validated_snapshot_intersects(plan, enemy):
+					targets.append(enemy)
+	_record_aoe_candidate_timing(aoe_candidate_started_usec)
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_selected_targets", targets.size())
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_damage_target_count", targets.size())
+	var aoe_exact_started_usec := RuntimeDiagnostics.timing_start()
 	var hit_any := false
 	for enemy: EnemyActor in targets:
+		if stable_skill_id == "wizard.lightning" and not _hc_lightning_clear(enemy, origin):
+			continue
 		var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
 			enemy,
 			stable_skill_id,
 			raw_power,
 			player,
 			_rng,
-			Callable(self, "_resolve_magic_defense")
+			Callable(self, "_resolve_magic_defense"),
+			-1,
+			_direct_spell_target_stats_scratch,
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
+	RuntimeDiagnostics.record_timing_usec(&"aoe_exact_phase_usec", aoe_exact_started_usec)
 	_record_skill_footprint_release_diagnostic(
 		stable_skill_id,
-		skill_release_snapshot,
+		resolved_snapshot,
 		targets.size(),
 		hit_any
 	)
 	return hit_any
+
+
+func _record_aoe_candidate_timing(started_usec: int) -> void:
+	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(started_usec)
+	if elapsed_usec <= 0:
+		return
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_candidate_usec", elapsed_usec)
+	RuntimeDiagnostics.record_performance_max(
+		&"aoe_max_single_release_candidate_usec",
+		float(elapsed_usec),
+	)
 
 
 func _record_skill_footprint_release_diagnostic(
@@ -5984,6 +9402,8 @@ func _record_skill_footprint_release_diagnostic(
 	eligible_target_count: int,
 	damage_applied: bool
 ) -> void:
+	if not SkillFootprintDiagnosticLogScript.capture_enabled():
+		return
 	var raw_snapshot: Variant = skill_release_snapshot
 	if not _snapshot_strict_ok(skill_release_snapshot):
 		raw_snapshot = skill_release_snapshot.get("skill_footprint_snapshot", {})
@@ -6249,12 +9669,57 @@ func _canonical_spell_cell_is_terrain_blocked(cell: Vector2i) -> bool:
 	)
 
 
+func _aoe_collect_continuous_line_candidates(
+	plan: Dictionary,
+	line_strip: Dictionary,
+	candidates: Array[EnemyActor],
+	targets: Array[EnemyActor],
+	distances: Array[float],
+	ids: Array[int],
+	origin_ground_gu: Vector2,
+	direction_ground_gu: Vector2,
+) -> void:
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		RuntimeDiagnostics.increment_performance_counter(
+			&"aoe_exact_intersection_tests"
+		)
+		var intersects := (
+			_aoe_validated_snapshot_intersects(plan, enemy)
+			if _aoe_plan_is_ready(plan)
+			else CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
+				line_strip,
+				_enemy_footprint_polygon_ground_gu(enemy),
+			)
+		)
+		if not intersects:
+			continue
+		var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
+			enemy.global_position
+		)
+		if not enemy_ground_gu.is_finite():
+			continue
+		_aoe_insert_by_distance(
+			targets,
+			distances,
+			ids,
+			enemy,
+			(enemy_ground_gu - origin_ground_gu).dot(direction_ground_gu),
+		)
+
+
 func _canonical_spell_geometry_targets(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
 	effect: Dictionary,
 	continuous_line_strip_ground_gu: Dictionary = {},
-	skill_release_snapshot: Dictionary = {}
+	skill_release_snapshot: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	var geometry_cells: Array[Vector2i] = []
 	if raw_geometry_cells is Array:
@@ -6262,6 +9727,31 @@ func _canonical_spell_geometry_targets(
 			if raw_cell is Vector2i:
 				geometry_cells.append(raw_cell)
 	var targets: Array[EnemyActor] = []
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_spell_query_plan(
+			stable_skill_id,
+			geometry_cells,
+			effect,
+			continuous_line_strip_ground_gu,
+			skill_release_snapshot,
+			_canonical_screen_px_to_ground_gu(
+				player.global_position if is_instance_valid(player) else Vector2.ZERO
+			),
+			release_cache,
+		)
+		if not _aoe_spell_snapshot(
+			skill_release_snapshot,
+			continuous_line_strip_ground_gu,
+		).is_empty():
+			RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"aoe_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return targets
 	# Hellfire is a five-tile, one-tile-wide area line. `pierces_units` controls
 	# whether units stop the visual/line traversal; it must not turn the area
 	# damage into a single-target spell. A negative limit means every hostile
@@ -6288,106 +9778,143 @@ func _canonical_spell_geometry_targets(
 		]
 	):
 		var origin_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
-			"origin_ground_gu", Vector2.ZERO
+			"origin_ground_gu", plan.get("line_origin_ground_gu", Vector2.ZERO)
 		)
 		var direction_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
-			"direction_ground_gu", Vector2.DOWN
+			"direction_ground_gu", plan.get("line_direction_ground_gu", Vector2.DOWN)
 		)
-		var candidates: Array[Dictionary] = []
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if (
-				not node is EnemyActor
-				or node.is_queued_for_deletion()
-				or (node as EnemyActor).current_hp <= 0
-			):
-				continue
-			var enemy := node as EnemyActor
-			if (
-				_snapshot_strict_ok(skill_release_snapshot)
-				and not _skill_snapshot_intersects_enemy(
-					skill_release_snapshot, enemy
-				)
-			):
-				continue
-			if (
-				not _snapshot_strict_ok(skill_release_snapshot)
-				and not CasterSpellGeometryScript.target_footprint_intersects_continuous_line_ground_gu(
-					continuous_line_strip_ground_gu,
-					_enemy_footprint_polygon_ground_gu(enemy)
-				)
-			):
-				continue
-			var enemy_ground_gu := _canonical_screen_px_to_ground_gu(
-				enemy.global_position
+		var line_end_ground_gu: Vector2 = continuous_line_strip_ground_gu.get(
+			"strip_end_ground_gu",
+			origin_ground_gu + direction_ground_gu * float(
+				continuous_line_strip_ground_gu.get("effect_length_gu", 0.0)
+			),
+		)
+		var line_width_gu := maxf(
+			0.0,
+			float(continuous_line_strip_ground_gu.get("effect_width_gu", 0.0)) * 0.5,
+		)
+		if not _aoe_query_enemy_candidates_segment(
+			plan,
+			origin_ground_gu,
+			line_end_ground_gu,
+			line_width_gu,
+		):
+			return targets
+		var distances: Array[float] = []
+		var ids: Array[int] = []
+		_aoe_collect_continuous_line_candidates(
+			plan,
+			continuous_line_strip_ground_gu,
+			_aoe_candidate_scratch,
+			targets,
+			distances,
+			ids,
+			origin_ground_gu,
+			direction_ground_gu,
+		)
+		if targets.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			_aoe_collect_continuous_line_candidates(
+				plan,
+				continuous_line_strip_ground_gu,
+				_aoe_candidate_scratch,
+				targets,
+				distances,
+				ids,
+				origin_ground_gu,
+				direction_ground_gu,
 			)
-			candidates.append({
-				"enemy": enemy,
-				"distance_along_line_gu": (
-					(enemy_ground_gu - origin_ground_gu).dot(
-						direction_ground_gu
-					)
-				),
-			})
-		candidates.sort_custom(func(left: Dictionary, right: Dictionary) -> bool:
-			var left_distance := float(left.get("distance_along_line_gu", INF))
-			var right_distance := float(right.get("distance_along_line_gu", INF))
-			if not is_equal_approx(left_distance, right_distance):
-				return left_distance < right_distance
-			return (
-				(left.get("enemy") as EnemyActor).get_instance_id()
-				< (right.get("enemy") as EnemyActor).get_instance_id()
-			)
-		)
-		for candidate: Dictionary in candidates:
-			targets.append(candidate.get("enemy") as EnemyActor)
-			if maximum_targets > 0 and targets.size() >= maximum_targets:
-				break
-		return targets
-	if (
-		_snapshot_strict_ok(skill_release_snapshot)
-		and str(skill_release_snapshot.get("shape_type", ""))
-		== SkillFootprintSnapshotScript.SHAPE_CELL_UNION
-	):
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if (
-				node is EnemyActor
-				and not node.is_queued_for_deletion()
-				and (node as EnemyActor).current_hp > 0
-				and _skill_snapshot_intersects_enemy(
-					skill_release_snapshot, node as EnemyActor
-				)
-			):
-				targets.append(node as EnemyActor)
-		targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
-			return a.get_instance_id() < b.get_instance_id()
-		)
 		if maximum_targets > 0 and targets.size() > maximum_targets:
 			targets.resize(maximum_targets)
 		return targets
-	var selected_instance_ids := {}
-	for cell: Vector2i in geometry_cells:
+	if broadphase_ready and str(plan.get("shape_type", "")) == SkillFootprintSnapshotScript.SHAPE_CELL_UNION:
+		_aoe_query_enemy_candidates_aabb(
+			plan,
+			plan.get("ground_aabb", Rect2()),
+			false,
+		)
+		var target_ids: Array[int] = []
+		for enemy: EnemyActor in _aoe_candidate_scratch:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_exact_intersection_tests"
+			)
+			if _aoe_validated_snapshot_intersects(plan, enemy):
+				_aoe_insert_by_instance_id(targets, target_ids, enemy)
+		if targets.is_empty() and _aoe_reference_fallback_allowed():
+			_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				RuntimeDiagnostics.increment_performance_counter(
+					&"aoe_exact_intersection_tests"
+				)
+				if _aoe_validated_snapshot_intersects(plan, enemy):
+					_aoe_insert_by_instance_id(targets, target_ids, enemy)
+		if maximum_targets > 0 and targets.size() > maximum_targets:
+			targets.resize(maximum_targets)
+		return targets
+	var query_bounds: Rect2 = (
+		plan.get("ground_aabb", Rect2()) as Rect2
+		if broadphase_ready
+		else _aoe_geometry_cells_aabb(geometry_cells)
+	)
+	if not _aoe_query_enemy_candidates_aabb(plan, query_bounds):
+		return targets
+	var selected_instance_ids: Array[int] = []
+	var cells_to_visit: Array[Vector2i] = geometry_cells
+	if broadphase_ready:
+		var raw_cells_to_visit: Variant = plan.get(
+			"cell_sequence", geometry_cells
+		)
+		if raw_cells_to_visit is Array:
+			cells_to_visit.clear()
+			for raw_cell: Variant in raw_cells_to_visit as Array:
+				if raw_cell is Vector2i:
+					cells_to_visit.append(raw_cell)
+		if cells_to_visit.is_empty():
+			cells_to_visit = geometry_cells
+	for cell: Vector2i in cells_to_visit:
+		RuntimeDiagnostics.increment_performance_counter(&"aoe_nested_cell_enemy_scans")
 		var cell_targets: Array[EnemyActor] = []
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node.is_queued_for_deletion():
-				continue
-			var enemy := node as EnemyActor
+		var cell_target_ids: Array[int] = []
+		for enemy: EnemyActor in _aoe_candidate_scratch:
 			if selected_instance_ids.has(enemy.get_instance_id()):
 				continue
+			RuntimeDiagnostics.increment_performance_counter(
+				&"aoe_exact_intersection_tests"
+			)
 			var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
 				[cell],
 				_canonical_screen_px_to_ground_gu(enemy.global_position),
 				enemy.combat_radius_gu
 			)
 			if bool(contact.get("intersects", false)):
-				cell_targets.append(enemy)
-		cell_targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
-			return a.get_instance_id() < b.get_instance_id()
-		)
+				_aoe_insert_by_instance_id(cell_targets, cell_target_ids, enemy)
 		for enemy: EnemyActor in cell_targets:
 			targets.append(enemy)
-			selected_instance_ids[enemy.get_instance_id()] = true
+			selected_instance_ids.append(enemy.get_instance_id())
 			if maximum_targets > 0 and targets.size() >= maximum_targets:
 				return targets
+	if targets.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		selected_instance_ids.clear()
+		targets.clear()
+		for cell: Vector2i in cells_to_visit:
+			var cell_targets: Array[EnemyActor] = []
+			var cell_target_ids: Array[int] = []
+			for enemy: EnemyActor in _aoe_candidate_scratch:
+				if selected_instance_ids.has(enemy.get_instance_id()):
+					continue
+				var contact := CasterSpellGeometryScript.declared_cells_intersect_actor_footprint(
+					[cell],
+					_canonical_screen_px_to_ground_gu(enemy.global_position),
+					enemy.combat_radius_gu
+				)
+				if bool(contact.get("intersects", false)):
+					_aoe_insert_by_instance_id(cell_targets, cell_target_ids, enemy)
+			for enemy: EnemyActor in cell_targets:
+				targets.append(enemy)
+				selected_instance_ids.append(enemy.get_instance_id())
+				if maximum_targets > 0 and targets.size() >= maximum_targets:
+					return targets
 	return targets
 
 
@@ -6438,6 +9965,8 @@ func _spawn_canonical_ground_field(
 		positions.append(fallback_position)
 
 	if stable_skill_id == FIRE_WALL_SKILL_ID:
+		# AOE window probe: fire wall field spawn milestone. Diagnostics only.
+		AoeEngagementWindow.on_field_spawned(stable_skill_id)
 		var field_snapshot_validation_context := (
 			_canonical_snapshot_validation_context(
 				_canonical_screen_px_to_ground_gu(fallback_position)
@@ -6474,6 +10003,40 @@ func _spawn_canonical_ground_field(
 				)
 			)
 		var empty_target_filters: Array[Callable] = []
+		# SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
+		# project_canonical): "same_caster_same_tile_refreshes_duration" with
+		# "max_active_fields_per_caster": "config_required_default_8".
+		# R2 ruling (user device ruling 2026-09-15, GPT audit adoption): the
+		# ninth-field behavior is now recorded in the SOT mechanics as
+		# "cap_policy": "evict_oldest" — casting must always succeed and the
+		# oldest field is cancelled when the cap is reached. The runtime
+		# keeps fail-closed to reject_new ONLY for unconfigured data. The
+		# registry key is source-aware: caster/map/generation/family/tile,
+		# so two casters on one tile own separate fields instead of
+		# cross-refreshing each other.
+		var registry_center := _fire_wall_registry_center_cell(coverage_cells)
+		var registry_usable := not coverage_cells.is_empty()
+		var registry_key := ""
+		if registry_usable:
+			registry_key = _fire_wall_registry_key(
+				player, stable_skill_id, registry_center
+			)
+			_fire_wall_prune_invalid_registry_entries()
+			var existing_field: Variant = _fire_wall_field_registry.get(
+				registry_key
+			)
+			if _fire_wall_registry_controller_is_active(existing_field):
+				(existing_field as FireWallFieldControllerScript).refresh_field(
+					effect,
+					canonical_snapshot,
+					field_snapshot_validation_context,
+					release_id
+				)
+				return
+			if not _fire_wall_cap_allows_new_field(
+				effect, player, stable_skill_id
+			):
+				return
 		var field_controller := FireWallFieldControllerScript.new()
 		field_controller.setup_fire_wall_field(
 			player,
@@ -6491,9 +10054,26 @@ func _spawn_canonical_ground_field(
 			current_map_id
 		)
 		add_child(field_controller)
-		# Q2-C: the controller owns the 4 GroundSkillVisualCell presentation
-		# nodes; no additional standalone GroundSkillEffect cells are spawned,
-		# so the base-class enemy-group scan can never run on this path.
+		if registry_usable:
+			_fire_wall_field_registry[registry_key] = field_controller
+			_fire_wall_field_order.append(registry_key)
+			# R2-2: the controller releases its registry slot the moment it
+			# leaves the tree (expiry/cancel/map teardown) instead of
+			# waiting for the next cast's lazy prune.
+			field_controller.tree_exited.connect(
+				_on_fire_wall_field_tree_exited.bind(
+					registry_key, field_controller
+				)
+			)
+			_debug_validate_fire_wall_registry("cast_insert")
+		for visual_cell: GroundSkillVisualCell in field_controller.visual_cells:
+			visual_cell.set_shared_anim_clock_ms(
+				Callable(field_controller, "fire_wall_anim_clock_ms")
+			)
+		# Q2-C: the controller owns the GroundSkillVisualCell presentation
+		# nodes (3x3 geometry => 9 cells today); no additional standalone
+		# GroundSkillEffect cells are spawned, so the base-class enemy-group
+		# scan can never run on this path.
 		return
 
 	# Generic persistent ground effects share one canonical validation context
@@ -6514,6 +10094,236 @@ func _spawn_canonical_ground_field(
 			skill_release_snapshot,
 			generic_snapshot_validation_context
 		)
+
+
+## SOT wizard.fire_wall mechanics (mir2_176_skills_source_of_truth_v1,
+## status project_canonical):
+##   "stacking_policy":
+##     "same_caster_same_tile_refreshes_duration; one target takes at most
+##      one tick per caster per tick"
+##   "max_active_fields_per_caster": "config_required_default_8"
+## The registry below restores that canonical stacking contract in the
+## runtime: same center tile refreshes the existing field, different tiles
+## create fields up to the canonical cap. The registry key is source-aware
+## (GPT audit R1-P0): map, zone generation, caster identity, skill family
+## and the selected center tile — a tile alone is not the field identity, so
+## two casters on one tile own separate fields and never cross-refresh.
+## Cap policy: explicit data from the SOT mechanics ("cap_policy":
+## "evict_oldest" | "reject_new"). R2 ruling (user device ruling
+## 2026-09-15): the SOT now records evict_oldest for wizard.fire_wall —
+## casting always succeeds and the oldest field is cancelled at the cap —
+## because the R1-P0 reject_new default locked the skill out for the whole
+## 10-40s field duration window. Unconfigured data still fails closed to
+## reject_new.
+const FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER := 8
+const FIRE_WALL_CAP_POLICY_EVICT_OLDEST := "evict_oldest"
+const FIRE_WALL_CAP_POLICY_REJECT_NEW := "reject_new"
+var _fire_wall_field_registry: Dictionary = {}
+var _fire_wall_field_order: Array = []
+## R2-6 (GPT audit adoption): debug registry-invariant switch. The
+## functional-verification APK keeps it on; the dedicated performance A/B
+## build turns it off so lifecycle diagnostics cannot pollute frame-timing
+## percentiles during rapid fire-wall casting.
+var _fire_wall_registry_validation_enabled := true
+
+
+func _fire_wall_registry_controller_is_active(controller: Variant) -> bool:
+	## R2-6 (GPT audit adoption): CAST_ACTIVE = structural validity plus not
+	## queued for deletion. A queued controller is mid-release (expiry or
+	## cancel already ran; Godot frees it at frame end): refreshing it could
+	## not save it, and keeping it registered would swallow a same-tile
+	## recast for one frame. Prune and the same-tile refresh gate share this
+	## helper so both treat the window identically.
+	return (
+		controller is FireWallFieldControllerScript
+		and is_instance_valid(controller)
+		and not (controller as FireWallFieldController).is_queued_for_deletion()
+	)
+
+
+func _fire_wall_registry_center_cell(coverage_cells: Array[Vector2i]) -> Vector2i:
+	## The registry center is the selected center tile of the field footprint.
+	## Coverage cells are absolute grid steps, so two casts on the same tile
+	## produce the same centered 3x3 cell set and therefore the same key.
+	if coverage_cells.is_empty():
+		return Vector2i.ZERO
+	var minimum := Vector2i(2147483647, 2147483647)
+	var maximum := Vector2i(-2147483648, -2147483648)
+	for cell: Vector2i in coverage_cells:
+		minimum = Vector2i(mini(minimum.x, cell.x), mini(minimum.y, cell.y))
+		maximum = Vector2i(maxi(maximum.x, cell.x), maxi(maximum.y, cell.y))
+	var center := Vector2(minimum + maximum) * 0.5
+	return Vector2i(roundi(center.x), roundi(center.y))
+
+
+func _fire_wall_registry_key(
+	caster: Node2D,
+	family: String,
+	registry_center: Vector2i
+) -> String:
+	return "%d|%d|%d|%s|%d_%d" % [
+		current_map_id,
+		_zone_generation,
+		caster.get_instance_id() if is_instance_valid(caster) else 0,
+		family,
+		registry_center.x,
+		registry_center.y,
+	]
+
+
+func _fire_wall_registry_caster_prefix(caster: Node2D) -> String:
+	return "%d|%d|%d|" % [
+		current_map_id,
+		_zone_generation,
+		caster.get_instance_id() if is_instance_valid(caster) else 0,
+	]
+
+
+func _fire_wall_max_active_fields(effect: Dictionary) -> int:
+	var raw := str(effect.get("max_active_fields_per_caster", ""))
+	if raw.begins_with("config_required_default_"):
+		var suffix := raw.trim_prefix("config_required_default_")
+		if suffix.is_valid_int():
+			return maxi(1, int(suffix))
+	if raw.is_valid_int():
+		return maxi(1, int(raw))
+	return FIRE_WALL_MAX_ACTIVE_FIELDS_PER_CASTER
+
+
+func _fire_wall_cap_policy(effect: Dictionary) -> String:
+	var raw := str(effect.get("cap_policy", "")).strip_edges().to_lower()
+	if raw == FIRE_WALL_CAP_POLICY_EVICT_OLDEST:
+		return FIRE_WALL_CAP_POLICY_EVICT_OLDEST
+	return FIRE_WALL_CAP_POLICY_REJECT_NEW
+
+
+func _fire_wall_cap_allows_new_field(
+	effect: Dictionary,
+	caster: Node2D,
+	_family: String
+) -> bool:
+	## Per-caster cap check: "max_active_fields_per_caster" counts the
+	## fields of THIS caster only, not the whole registry.
+	var max_fields := _fire_wall_max_active_fields(effect)
+	var caster_prefix := _fire_wall_registry_caster_prefix(caster)
+	var caster_fields := 0
+	for key: Variant in _fire_wall_field_order:
+		if str(key).begins_with(caster_prefix):
+			caster_fields += 1
+	if caster_fields < max_fields:
+		return true
+	if _fire_wall_cap_policy(effect) == FIRE_WALL_CAP_POLICY_EVICT_OLDEST:
+		_fire_wall_evict_oldest_field_for_caster(caster_prefix)
+		return true
+	RuntimeDiagnostics.increment_performance_counter(
+		&"fire_wall_cap_reject_new"
+	)
+	return false
+
+
+func _fire_wall_prune_invalid_registry_entries() -> void:
+	var stale_keys: Array = []
+	for key: Variant in _fire_wall_field_registry.keys():
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		# R2-6: CAST_ACTIVE check — a queued-for-deletion controller is
+		# stale NOW, so a same-tile recast inside the expiry frame creates
+		# a fresh field instead of refreshing a dying one.
+		if not _fire_wall_registry_controller_is_active(controller):
+			stale_keys.append(key)
+	for key: Variant in stale_keys:
+		_fire_wall_field_registry.erase(key)
+		_fire_wall_field_order.erase(key)
+	if not stale_keys.is_empty():
+		_debug_validate_fire_wall_registry("prune")
+
+
+func _on_fire_wall_field_tree_exited(
+	registry_key: String,
+	controller: FireWallFieldController
+) -> void:
+	## R2-2: proactive registry release when a field controller leaves the
+	## tree. The identity guard keeps a stale signal from evicting a newer
+	## field that was registered under the same key (same-tile recast).
+	if _fire_wall_field_registry.get(registry_key) == controller:
+		_fire_wall_field_registry.erase(registry_key)
+		_fire_wall_field_order.erase(registry_key)
+	_debug_validate_fire_wall_registry("tree_exited")
+
+
+func _debug_validate_fire_wall_registry(context := "") -> void:
+	## R2-5 (GPT audit adoption): debug-only STRUCTURAL invariant, executed
+	## at lifecycle boundaries (cast insert, eviction, expiry release, prune,
+	## map teardown): registry keys and order slots must stay 1:1 and every
+	## entry must reference a valid controller. STRUCTURAL_VALID means type
+	## correct + instance still valid — a queued-for-deletion entry is
+	## accepted as mid-release because its own tree_exited hook drops the
+	## slot within the same frame. CAST_ACTIVE (also !is_queued_for_deletion)
+	## is the separate production gate in
+	## _fire_wall_registry_controller_is_active(). Never runs per frame.
+	if (
+		not OS.is_debug_build()
+		or not _fire_wall_registry_validation_enabled
+	):
+		return
+	assert(
+		_fire_wall_field_registry.size() == _fire_wall_field_order.size(),
+		"fire wall registry/order size mismatch (%s): %d vs %d" % [
+			context,
+			_fire_wall_field_registry.size(),
+			_fire_wall_field_order.size(),
+		]
+	)
+	var order_keys := {}
+	for key: Variant in _fire_wall_field_order:
+		assert(
+			not order_keys.has(key),
+			"fire wall order duplicates key %s (%s)" % [str(key), context]
+		)
+		order_keys[key] = true
+		assert(
+			_fire_wall_field_registry.has(key),
+			"fire wall order key %s missing from registry (%s)"
+			% [str(key), context]
+		)
+	for key: Variant in _fire_wall_field_registry:
+		var entry: Variant = _fire_wall_field_registry.get(key)
+		# A queued-for-deletion controller is mid-release: its own
+		# tree_exited hook drops the registry slot within the same frame
+		# (expiry/cancel window), so queued entries are still consistent.
+		assert(
+			entry is FireWallFieldController
+			and is_instance_valid(entry),
+			"fire wall registry entry %s must reference a structurally valid controller (%s)"
+			% [str(key), context]
+		)
+		assert(
+			order_keys.has(key),
+			"fire wall registry key %s missing from order (%s)"
+			% [str(key), context]
+		)
+
+
+func _fire_wall_evict_oldest_field_for_caster(caster_prefix: String) -> void:
+	for key: Variant in _fire_wall_field_order:
+		if not str(key).begins_with(caster_prefix):
+			continue
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if is_instance_valid(controller):
+			(controller as FireWallFieldController).cancel()
+		_fire_wall_field_registry.erase(key)
+		_fire_wall_field_order.erase(key)
+		_debug_validate_fire_wall_registry("evict_oldest")
+		return
+
+
+func _clear_fire_wall_field_registry() -> void:
+	for key: Variant in _fire_wall_field_registry.keys():
+		var controller: Variant = _fire_wall_field_registry.get(key)
+		if is_instance_valid(controller):
+			(controller as FireWallFieldController).cancel()
+	_fire_wall_field_registry.clear()
+	_fire_wall_field_order.clear()
+	_debug_validate_fire_wall_registry("clear")
 
 
 func _spawn_canonical_ground_effect(
@@ -6562,6 +10372,11 @@ func _spawn_canonical_ground_effect(
 			)
 		),
 		Callable(self, "_canonical_screen_px_to_ground_gu")
+	)
+	# R1-B: give the self-managed tick the shared spatial candidate authority
+	# (the manager-owned path ignores it; the legacy group scan stays closed).
+	ground_effect.set_combat_spatial_context(
+		_combat_spatial_index, current_map_id
 	)
 	add_child(ground_effect)
 	if applies_damage:
@@ -6672,13 +10487,24 @@ func _ignore_canonical_ground_visual_tick(
 
 
 func _apply_canonical_ground_tick(enemy: EnemyActor, raw_power: int, stable_skill_id: String) -> void:
+	# AOE window probe: first canonical ground damage tick after the first
+	# fire wall cast. Diagnostics only, one write while the window is active.
+	AoeEngagementWindow.on_ground_damage_tick(stable_skill_id)
+	# R1: ground-effect ticks are the RM_MAGSTRUCK_MINE family (the vanilla
+	# TFireBurnEvent.Run sends RM_MAGSTRUCK_MINE, never RM_MAGSTRUCK). They
+	# keep normal MAC/damage and an ordinary STRUCK on positive damage, but
+	# must never postpone the target's walk tick by 800..1799ms - otherwise a
+	# fire wall would freeze a whole pack in place one second at a time.
 	_combat_runtime.apply_enemy_direct_spell_damage(
 		enemy,
 		stable_skill_id,
 		raw_power,
 		player,
 		_rng,
-		Callable(self, "_resolve_magic_defense")
+		Callable(self, "_resolve_magic_defense"),
+		-1,
+		_direct_spell_target_stats_scratch,
+		CombatRuntimeServiceScript.EnemyMagicDeliveryKind.MAGSTRUCK_MINE,
 	)
 
 
@@ -6700,15 +10526,22 @@ func _apply_canonical_displacement_screen_px(
 		collision_radius_px
 	):
 		return false
-	actor.global_position = destination_screen_px
+	if actor is EnemyActor:
+		(actor as EnemyActor).set_combat_position(
+			destination_screen_px,
+			&"canonical_displacement",
+		)
+	else:
+		actor.global_position = destination_screen_px
 	return true
 
 
 func _apply_canonical_player_teleport(destination: Vector2) -> bool:
 	if destination == Vector2.ZERO or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, destination, ArtSpec.PLAYER_COLLISION_RADIUS_PX):
 		return false
-	player.global_position = destination
+	_set_player_world_position(destination)
 	player.velocity = Vector2.ZERO
+	_relocate_main_pets_after_map_arrival()
 	player.movement_performed.emit(player.global_position, player.facing)
 	return true
 
@@ -6758,6 +10591,7 @@ func _apply_canonical_poison(target: EnemyActor, effect: Dictionary) -> void:
 			Time.get_ticks_msec() + roundi(duration * 1000.0)
 		)
 		target.set_meta("canonical_red_poison", merged)
+		RuntimeDiagnostics.increment_performance_counter(&"actor_redraw_requests")
 		target.queue_redraw()
 
 
@@ -6945,6 +10779,7 @@ func _register_ongoing_heal(
 	if target_instance_id <= 0 or heal_per_tick <= 0 or tick_count <= 0:
 		return
 	_ongoing_heals.append({
+		"started_at_usec": Time.get_ticks_usec(),
 		"target_instance_id": target_instance_id,
 		"heal_per_tick": heal_per_tick,
 		"remaining_ticks": tick_count,
@@ -7033,24 +10868,40 @@ func _update_stealth_alpha() -> void:
 func _update_taoist_buff_hints() -> void:
 	if hud == null or not is_instance_valid(player):
 		return
-	var entries: Array[String] = []
-	var defence_snapshot := player.defence_buff_snapshot()
-	if player.is_stealthed():
-		entries.append("隐身 %ds" % int(ceil(maxf(0.0, player.stealth_time))))
-	var heal_ticks := _ongoing_heal_remaining_ticks(player.get_instance_id())
-	if heal_ticks > 0:
-		entries.append("恢复 %ds" % int(ceil(float(heal_ticks) * 0.8)))
-	var hint_text := "%s|%d|%d|%d|%d" % [
-		"｜".join(entries),
-		int(defence_snapshot.get("ac_bonus", 0)),
-		int(ceil(float(defence_snapshot.get("ac_remaining_seconds", 0.0)))),
-		int(defence_snapshot.get("mac_bonus", 0)),
-		int(ceil(float(defence_snapshot.get("mac_remaining_seconds", 0.0)))),
-	]
+	var entries := _status_buff_entries()
+	var signature: Array = []
+	for entry: Dictionary in entries:
+		signature.append([entry.id, ceili(entry.remaining), entry.started_at, entry.get("item_id", -1)])
+	var hint_text := str(signature)
 	if hint_text == _last_taoist_buff_hint_text:
 		return
 	_last_taoist_buff_hint_text = hint_text
-	hud.update_taoist_buff_hints(entries, defence_snapshot)
+	hud.update_status_buffs(entries)
+
+func _status_buff_entries() -> Array:
+	var entries: Array = []
+	for spec: Array in [["ac", player.defense_buff_time, player.defense_buff > 0], ["mac", player.mac_buff_time, player.mac_buff > 0], ["shield", player.shield_time, player.shield_capacity > 0.0], ["stealth", player.stealth_time, player.is_stealthed()]]:
+		if not bool(spec[2]) or (float(spec[1]) <= 0.0 and spec[0] != "stealth"): continue
+		var entry := {"id":spec[0], "remaining":spec[1], "started_at":int(player.status_buff_started_at.get(spec[0], 0))}
+		if spec[0] == "shield": entry.skill = "魔法盾"
+		if spec[0] == "stealth": entry.skill = "隐身术"
+		entries.append(entry)
+	var heal_remaining := 0.0
+	var heal_started := 9223372036854775807
+	for heal: Dictionary in _ongoing_heals:
+		if int(heal.target_instance_id) != player.get_instance_id(): continue
+		heal_remaining = maxf(heal_remaining, int(heal.remaining_ticks) * float(heal.tick_interval_seconds) - float(heal.elapsed))
+		heal_started = mini(heal_started, int(heal.get("started_at_usec", 0)))
+	if heal_remaining > 0.0:
+		entries.append({"id":"heal", "skill":"治愈术", "remaining":heal_remaining, "started_at":heal_started})
+	for buff: Dictionary in PlayerState.temporary_item_buffs.values():
+		if float(buff.remaining) <= 0.0: continue
+		entries.append({"id":"item:" + str(buff.buffGroup), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
+	# Player 麻痹/中毒 no longer surface on the bottom HUD buff strip (R1.1):
+	# they present as fixed-slot dots on the status marker row under the
+	# player overhead HP bar (PlayerStatusMarkerStrip). Gameplay poison and
+	# control timers are unchanged.
+	return entries
 
 
 func _canonical_friendly_candidates() -> Array:
@@ -7320,7 +11171,32 @@ func _apply_canonical_main_pet(
 	)
 
 
-func _canonical_summon_spawn_plan(stable_skill_id: String) -> Dictionary:
+func _relocate_main_pets_after_map_arrival() -> void:
+	# _load_zone restores pets before the caller installs its final arrival.
+	# Reuse the canonical legal-position search, excluding only the moving pet.
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var summon := _canonical_main_pet(summon_id)
+		if summon == null:
+			continue
+		summon.configure_runtime_map_projection(
+			current_map_id,
+			Callable(self, "_canonical_ground_gu_to_screen_px"),
+			Callable(self, "_canonical_screen_px_to_ground_gu"),
+		)
+		summon.configure_spatial_index(_combat_spatial_index)
+		var stable_skill_id := (
+			"taoist.summon_skeleton" if summon_id == "skeleton"
+			else "taoist.summon_divine_beast"
+		)
+		var plan := _canonical_summon_spawn_plan(stable_skill_id, summon)
+		if bool(plan.get("valid", false)):
+			summon.relocate_after_owner_teleport(plan.get("position_screen_px") as Vector2)
+
+
+func _canonical_summon_spawn_plan(
+	stable_skill_id: String,
+	ignored_summon: SummonActor = null,
+) -> Dictionary:
 	if not is_instance_valid(player):
 		return {"valid": false, "reason": "player_unavailable"}
 	var player_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -7382,7 +11258,7 @@ func _canonical_summon_spawn_plan(stable_skill_id: String) -> Dictionary:
 		if not _canonical_summon_position_is_valid(
 			candidate_ground_gu,
 			summon_radius_gu,
-			null
+			ignored_summon
 		):
 			continue
 		return {
@@ -7423,31 +11299,55 @@ func _canonical_summon_position_is_valid(
 		)
 	):
 		return false
-	var actors: Array = []
-	if is_instance_valid(player):
-		actors.append(player)
-	actors.append_array(get_tree().get_nodes_in_group("enemies"))
-	actors.append_array(get_tree().get_nodes_in_group("summons"))
-	var seen: Dictionary = {}
-	for raw_actor: Variant in actors:
-		if (
-			not raw_actor is Node2D
-			or not is_instance_valid(raw_actor)
-			or raw_actor == ignored_summon
-			or (raw_actor as Node2D).is_queued_for_deletion()
-		):
-			continue
-		var actor := raw_actor as Node2D
-		var actor_id := actor.get_instance_id()
-		if seen.has(actor_id):
-			continue
-		seen[actor_id] = true
+	if is_instance_valid(player) and player != ignored_summon:
 		if GroundUnitSpaceScript.distance_gu(
-			_canonical_screen_px_to_ground_gu(actor.global_position),
+			_canonical_screen_px_to_ground_gu(player.global_position),
 			candidate_ground_gu
 		) < (
 			summon_radius_gu
-			+ _actor_combat_radius_gu(actor)
+			+ _actor_combat_radius_gu(player)
+			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+		):
+			return false
+	var enemy_query_radius_gu := (
+		summon_radius_gu
+		+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+	)
+	if not _target_spatial_query_aabb_into(
+		Rect2(
+			candidate_ground_gu - Vector2.ONE * enemy_query_radius_gu,
+			Vector2.ONE * enemy_query_radius_gu * 2.0,
+		),
+		_target_spatial_query_scratch,
+		# PERF-2: existence probe — occupancy is order-insensitive.
+		false,
+	):
+		return false
+	for enemy: EnemyActor in _target_spatial_query_scratch:
+		if GroundUnitSpaceScript.distance_gu(
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
+			candidate_ground_gu
+		) < (
+			summon_radius_gu
+			+ enemy.combat_radius_gu
+			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
+		):
+			return false
+	for raw_summon: Variant in get_tree().get_nodes_in_group("summons"):
+		if (
+			not raw_summon is Node2D
+			or not is_instance_valid(raw_summon)
+			or raw_summon == ignored_summon
+			or raw_summon.is_queued_for_deletion()
+		):
+			continue
+		var summon := raw_summon as Node2D
+		if GroundUnitSpaceScript.distance_gu(
+			_canonical_screen_px_to_ground_gu(summon.global_position),
+			candidate_ground_gu
+		) < (
+			summon_radius_gu
+			+ _actor_combat_radius_gu(summon)
 			+ CANONICAL_SUMMON_ACTOR_CLEARANCE_GU
 		):
 			return false
@@ -7576,13 +11476,41 @@ func _resolve_projection_profile_for_map(map_id: int) -> Dictionary:
 	## FREEZE-P0.2R: formal runtime profile in normal gameplay; reference
 	## profile only inside an explicit reference_audit_mode context (migration /
 	## import audit / test-dev preview). Never inferred from WorldContent.
+	if _projection_profile_cache_audit_mode != reference_audit_mode:
+		_projection_profile_cache.clear()
+		_projection_profile_runtime_identity_cache.clear()
+		_projection_profile_cache_audit_mode = reference_audit_mode
+	var cache_key := "%d|%d" % [
+		map_id,
+		1 if reference_audit_mode else 0,
+	]
+	var profile: Dictionary
 	if reference_audit_mode:
-		return MapCoordinateMapperScript.resolve_reference_projection_profile(
+		_projection_profile_runtime_identity_cache.clear()
+		if _projection_profile_cache.has(cache_key):
+			return _projection_profile_cache[cache_key]
+		profile = MapCoordinateMapperScript.resolve_reference_projection_profile(
 			map_id
 		)
-	return MapCoordinateMapperScript.resolve_formal_runtime_projection_profile(
-		map_id
-	)
+	else:
+		var runtime_identity := MapEditorRuntimeBridgeScript.load_map(map_id)
+		if (
+			_projection_profile_cache.has(cache_key)
+			and _projection_profile_runtime_identity_cache.has(cache_key)
+			and is_same(
+				_projection_profile_runtime_identity_cache[cache_key],
+				runtime_identity
+			)
+		):
+			return _projection_profile_cache[cache_key]
+		_projection_profile_cache.erase(cache_key)
+		_projection_profile_runtime_identity_cache.erase(cache_key)
+		profile = MapCoordinateMapperScript.resolve_formal_runtime_projection_profile(
+			map_id
+		)
+		_projection_profile_runtime_identity_cache[cache_key] = runtime_identity
+	_projection_profile_cache[cache_key] = profile
+	return profile
 
 
 func _try_canonical_screen_px_to_ground_gu(
@@ -7762,7 +11690,7 @@ func _canonical_primary_stat_roll(profession_id: String) -> int:
 	var maximum_key := "tao_max" if profession_id == "taoist" else ("magic_max" if profession_id == "wizard" else "attack_max")
 	var minimum := int(PlayerState.computed_stats.get(minimum_key, 0))
 	var maximum := maxi(minimum, int(PlayerState.computed_stats.get(maximum_key, minimum)))
-	return _rng.randi_range(minimum, maximum)
+	return WarriorCombatMath.roll_primary_stat(minimum, maximum, int(PlayerState.computed_stats.get("luck", 0)), _rng)
 
 
 func _next_canonical_seed() -> int:
@@ -7854,8 +11782,16 @@ func _damage_enemies(
 	radial: bool,
 	attack_range_gu := 1.5,
 	physical_accuracy := false,
-	source_skill_id := ""
+	source_skill_id := "",
+	query_plan: Dictionary = {},
 ) -> bool:
+	var context_skill_id := source_skill_id if not source_skill_id.is_empty() else "legacy_damage"
+	RuntimeDiagnostics.set_performance_release_context(
+		"legacy_damage",
+		context_skill_id,
+	)
+	RuntimeDiagnostics.increment_performance_counter(&"aoe_release_count")
+	var aoe_candidate_started_usec := RuntimeDiagnostics.timing_start()
 	var hit_any := false
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin_screen_px)
 	var direction_ground_gu := (
@@ -7863,47 +11799,59 @@ func _damage_enemies(
 			direction_screen_px
 		).normalized()
 	)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion():
-			continue
-		var target_ground_gu := _canonical_screen_px_to_ground_gu(
-			node.global_position
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_legacy_damage_query_plan(
+			context_skill_id,
+			origin_ground_gu,
+			direction_ground_gu,
+			attack_range_gu,
+			release_cache,
 		)
-		var offset_ground_gu := target_ground_gu - origin_ground_gu
-		var in_arc := (
-			offset_ground_gu.length_squared()
-			<= GroundUnitSpaceScript.EPSILON_GU * GroundUnitSpaceScript.EPSILON_GU
-			or offset_ground_gu.normalized().dot(direction_ground_gu) > -0.05
+	if not _aoe_plan_is_ready(plan) and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"aoe_query_plan_invalid_or_spatial_index_unavailable"
 		)
-		if (
-			_ground_circle_intersects_enemy_footprint_gu(
-				origin_screen_px,
-				attack_range_gu,
-				node
-			)
-			and (radial or in_arc)
-		):
-			if physical_accuracy and not PlayerState.test_mode:
-				var accuracy := int(PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT))
-				if not WarriorCombatMath.roll_hit(accuracy, node.agility, _rng):
-					continue
-			var resolved_damage := damage
-			if CombatResolutionRulesScript.anti_magic_eligible(source_skill_id):
-				var resolution: Dictionary = _combat_runtime.apply_enemy_direct_spell_damage(
-					node,
-					source_skill_id,
-					damage,
-					player,
-					_rng,
-					Callable(self, "_resolve_magic_defense")
-				)
-				resolved_damage = int(resolution.get("final_damage", 0))
-				if resolved_damage > 0:
-					hit_any = true
-				continue
-			if resolved_damage <= 0:
-				continue
-			hit_any = _combat_runtime.apply_enemy_physical_damage(node, resolved_damage, player) or hit_any
+		_record_aoe_candidate_timing(aoe_candidate_started_usec)
+		return false
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", _aoe_geometry_cells_aabb([])),
+	):
+		_record_aoe_candidate_timing(aoe_candidate_started_usec)
+		return false
+	var pass_result := _aoe_apply_legacy_damage_candidates(
+		_aoe_candidate_scratch,
+		origin_screen_px,
+		origin_ground_gu,
+		direction_ground_gu,
+		damage,
+		radial,
+		attack_range_gu,
+		physical_accuracy,
+		source_skill_id,
+	)
+	hit_any = bool(pass_result.get("hit_any", false))
+	if (
+		int(pass_result.get("geometry_matches", 0)) == 0
+		and _aoe_plan_is_ready(plan)
+		and _aoe_reference_fallback_allowed()
+	):
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		pass_result = _aoe_apply_legacy_damage_candidates(
+			_aoe_candidate_scratch,
+			origin_screen_px,
+			origin_ground_gu,
+			direction_ground_gu,
+			damage,
+			radial,
+			attack_range_gu,
+			physical_accuracy,
+			source_skill_id,
+		)
+		hit_any = bool(pass_result.get("hit_any", false))
+	_record_aoe_candidate_timing(aoe_candidate_started_usec)
 	return hit_any
 
 
@@ -8007,7 +11955,8 @@ func _physical_primary_target(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> EnemyActor:
 	var targets := _physical_primary_targets(
 		origin,
@@ -8015,7 +11964,9 @@ func _physical_primary_target(
 		mode,
 		release_geometry,
 		thrust_damage_axis_plan,
-		melee_release_snapshot
+		melee_release_snapshot,
+		target_aligned_plan,
+		query_plan,
 	)
 	return targets[0] if not targets.is_empty() else null
 
@@ -8027,7 +11978,8 @@ func _physical_primary_targets(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	# The attack lock owns facing and priority only. Actual damage rights are
 	# rebuilt from live footpoints and the selected melee geometry at release.
@@ -8036,21 +11988,57 @@ func _physical_primary_targets(
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var direction_index := _melee_direction_index(direction, release_geometry)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
-		if not _is_primary_melee_candidate(
-			enemy,
+	var resolved_target_plan: Dictionary = target_aligned_plan
+	if resolved_target_plan.is_empty():
+		resolved_target_plan = release_geometry.get("target_aligned_plan", {})
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_melee_query_plan(
+			mode,
+			origin_ground_gu,
+			direction,
+			release_geometry,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			resolved_target_plan,
+			release_cache,
+		)
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"melee_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return result
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", Rect2()),
+	):
+		return result
+	_aoe_collect_primary_melee_candidates(
+		_aoe_candidate_scratch,
+		result,
+		origin_ground_gu,
+		direction_index,
+		mode,
+		thrust_damage_axis_plan,
+		melee_release_snapshot,
+		resolved_target_plan,
+		plan,
+	)
+	if result.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		_aoe_collect_primary_melee_candidates(
+			_aoe_candidate_scratch,
+			result,
 			origin_ground_gu,
 			direction_index,
 			mode,
 			thrust_damage_axis_plan,
 			melee_release_snapshot,
-			target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
-		):
-			continue
-		result.append(enemy)
+			resolved_target_plan,
+			plan,
+		)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
@@ -8061,25 +12049,43 @@ func _sort_melee_targets(
 	release_geometry: Dictionary
 ) -> void:
 	var locked_instance_id := int(release_geometry.get("locked_target_instance_id", 0))
-	if locked_instance_id <= 0 and _is_attack_target_in_range(locked_target):
+	if (
+		locked_instance_id <= 0
+		and is_instance_valid(locked_target)
+		and _is_attack_target_in_range(locked_target)
+	):
 		locked_instance_id = locked_target.get_instance_id()
-	targets.sort_custom(func(a: EnemyActor, b: EnemyActor) -> bool:
-		var a_locked := a.get_instance_id() == locked_instance_id
-		var b_locked := b.get_instance_id() == locked_instance_id
-		if a_locked != b_locked:
-			return a_locked
-		var a_distance_gu := GroundUnitSpaceScript.distance_gu(
+	var ordered: Array[EnemyActor] = []
+	var ordered_distances: Array[float] = []
+	var ordered_ids: Array[int] = []
+	for enemy: EnemyActor in targets:
+		var enemy_id := enemy.get_instance_id()
+		var enemy_distance_gu := GroundUnitSpaceScript.distance_gu(
 			origin_ground_gu,
-			_canonical_screen_px_to_ground_gu(a.global_position)
+			_canonical_screen_px_to_ground_gu(enemy.global_position),
 		)
-		var b_distance_gu := GroundUnitSpaceScript.distance_gu(
-			origin_ground_gu,
-			_canonical_screen_px_to_ground_gu(b.global_position)
-		)
-		if not is_equal_approx(a_distance_gu, b_distance_gu):
-			return a_distance_gu < b_distance_gu
-		return a.get_instance_id() < b.get_instance_id()
-	)
+		var enemy_locked := enemy_id == locked_instance_id
+		var insert_at := ordered.size()
+		for index: int in range(ordered.size()):
+			var existing_locked := ordered_ids[index] == locked_instance_id
+			if enemy_locked != existing_locked:
+				if enemy_locked:
+					insert_at = index
+				break
+			elif (
+				enemy_distance_gu < ordered_distances[index]
+				or (
+					is_equal_approx(enemy_distance_gu, ordered_distances[index])
+					and enemy_id < ordered_ids[index]
+				)
+			):
+				insert_at = index
+				break
+		ordered.insert(insert_at, enemy)
+		ordered_distances.insert(insert_at, enemy_distance_gu)
+		ordered_ids.insert(insert_at, enemy_id)
+	targets.clear()
+	targets.append_array(ordered)
 
 
 func _is_primary_melee_candidate(
@@ -8089,31 +12095,38 @@ func _is_primary_melee_candidate(
 	mode: String,
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> bool:
 	if not is_instance_valid(enemy) or enemy.is_queued_for_deletion() or enemy.current_hp <= 0:
 		return false
 	var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+	var query_context: Dictionary = query_plan.get(
+		"validation_context_reference",
+		_canonical_snapshot_validation_context(origin_ground_gu),
+	)
+	var validated_plan_ready := _aoe_plan_is_ready(query_plan)
 	var target_plan: Dictionary = target_aligned_plan
 	if not target_plan.is_empty():
-		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
 		if not bool(target_plan.get("target_axis_eligible", false)):
 			return false
-		if not WarriorMeleeGeometryScript.target_aligned_release_plan_intersects_target_footprint_ground_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx):
-			return false
-		if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
-			return WarriorMeleeGeometryScript.target_aligned_thrust_slot_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 1
-		if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
-			return WarriorMeleeGeometryScript.target_aligned_half_moon_relative_sector_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 0
-		return true
-	if (
-		_snapshot_strict_ok(melee_release_snapshot)
-		and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
-			melee_release_snapshot,
+		var target_aligned_sector := _aoe_target_aligned_melee_sector(
+			target_plan,
 			target_ground_gu,
-			enemy.combat_radius_gu
+			enemy.combat_radius_gu,
+			mode,
 		)
+		if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
+			return target_aligned_sector == 1
+		if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
+			return target_aligned_sector == 0
+		return target_aligned_sector == 0
+	if (
+		validated_plan_ready
+		and not _aoe_validated_snapshot_intersects(query_plan, enemy)
 	):
+		return false
+	if not validated_plan_ready and not _aoe_reference_fallback_allowed():
 		return false
 	if mode == WarriorMeleeGeometryScript.SKILL_THRUST:
 		if thrust_damage_axis_plan.is_empty():
@@ -8121,16 +12134,22 @@ func _is_primary_melee_candidate(
 				WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
 					direction_index,
 					{},
-					_canonical_snapshot_validation_context(origin_ground_gu)
+					query_context
 				)
 			)
-		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
+		if str(thrust_damage_axis_plan.get("contract_id", "")) != WarriorMeleeGeometryScript.THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID:
+			return false
+		var damage_direction: Variant = thrust_damage_axis_plan.get(
+			"damage_direction_ground_gu", Vector2.ZERO
+		)
+		if not damage_direction is Vector2 or (damage_direction as Vector2).length_squared() <= 0.000001:
+			return false
+		return WarriorMeleeGeometryScript.thrust_footprint_slot_for_direction_ground_gu(
 			origin_ground_gu,
 			target_ground_gu,
 			enemy.combat_radius_gu,
-			thrust_damage_axis_plan,
+			(damage_direction as Vector2),
 			0.0,
-			_canonical_snapshot_validation_context(origin_ground_gu)
 		) == 1
 	if mode == WarriorMeleeGeometryScript.SKILL_HALF_MOON:
 		return WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
@@ -8149,17 +12168,52 @@ func _is_primary_melee_candidate(
 
 
 func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) -> bool:
-	if enemy == null or enemy.is_queued_for_deletion():
+	if (
+		enemy == null
+		or enemy.is_queued_for_deletion()
+		or not enemy.can_receive_damage()
+	):
 		return false
 	var accuracy := int(
 		PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT)
 	) + accuracy_bonus
 	var target_agility := maxi(1, enemy.agility)
+	var diagnostics_enabled := CombatDiagnosticLogScript.capture_enabled()
 	var hit_roll := -1
-	var hit_probability := WarriorCombatMath.hit_probability(accuracy, target_agility)
+	var hit_probability := (
+		WarriorCombatMath.hit_probability(accuracy, target_agility)
+		if diagnostics_enabled
+		else 0.0
+	)
 	if not PlayerState.test_mode:
 		hit_roll = _rng.randi_range(0, target_agility - 1)
 		if not WarriorCombatMath.hit_succeeds(accuracy, target_agility, hit_roll):
+			if diagnostics_enabled:
+				_active_physical_hit_diagnostics.append({
+					"target_id": enemy.get_instance_id(),
+					"target_name": enemy.display_name,
+					"accuracy": accuracy,
+					"accuracy_bonus": accuracy_bonus,
+					"target_agility": target_agility,
+					"hit_roll": hit_roll,
+					"hit_probability": hit_probability,
+					"test_mode_bypass": false,
+					"requested_damage": maxi(1, damage),
+					"result_code": "ACCURACY_MISS",
+				})
+			return false
+	var hp_before := enemy.current_hp
+	if not _combat_runtime.apply_enemy_physical_damage(
+		enemy,
+		maxi(1, damage),
+		player,
+		{
+			"damage_kind": "player_physical",
+			"confirmed_hit": true,
+			"source": "game_root._apply_physical_hit",
+		},
+	):
+		if diagnostics_enabled:
 			_active_physical_hit_diagnostics.append({
 				"target_id": enemy.get_instance_id(),
 				"target_name": enemy.display_name,
@@ -8168,13 +12222,14 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 				"target_agility": target_agility,
 				"hit_roll": hit_roll,
 				"hit_probability": hit_probability,
-				"test_mode_bypass": false,
+				"test_mode_bypass": PlayerState.test_mode,
 				"requested_damage": maxi(1, damage),
-				"result_code": "ACCURACY_MISS",
+				"hp_before": hp_before,
+				"hp_after": enemy.current_hp,
+				"result_code": "DAMAGE_COMMIT_FAILED",
 			})
-			return false
-	var hp_before := enemy.current_hp
-	if not _combat_runtime.apply_enemy_physical_damage(enemy, maxi(1, damage), player):
+		return false
+	if diagnostics_enabled:
 		_active_physical_hit_diagnostics.append({
 			"target_id": enemy.get_instance_id(),
 			"target_name": enemy.display_name,
@@ -8187,31 +12242,9 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 			"requested_damage": maxi(1, damage),
 			"hp_before": hp_before,
 			"hp_after": enemy.current_hp,
-			"result_code": "DAMAGE_COMMIT_FAILED",
+			"actual_hp_delta": maxi(0, hp_before - enemy.current_hp),
+			"result_code": "HIT_COMMITTED",
 		})
-		return false
-	_active_physical_hit_diagnostics.append({
-		"target_id": enemy.get_instance_id(),
-		"target_name": enemy.display_name,
-		"accuracy": accuracy,
-		"accuracy_bonus": accuracy_bonus,
-		"target_agility": target_agility,
-		"hit_roll": hit_roll,
-		"hit_probability": hit_probability,
-		"test_mode_bypass": PlayerState.test_mode,
-		"requested_damage": maxi(1, damage),
-		"hp_before": hp_before,
-		"hp_after": enemy.current_hp,
-		"actual_hp_delta": maxi(0, hp_before - enemy.current_hp),
-		"result_code": "HIT_COMMITTED",
-	})
-	# Durability is committed only after the authoritative physical damage
-	# transaction succeeds. Misses, empty swings, spell routes and rejected
-	# damage never reach this point.
-	if is_instance_valid(player):
-		player.apply_confirmed_physical_hit_durability(
-			maxi(0, hp_before - enemy.current_hp)
-		)
 	var life_steal_percent := int(PlayerState.computed_stats.get("life_steal_percent", 0))
 	var recovered := int(float(maxi(1, damage)) * float(life_steal_percent) / 100.0)
 	if recovered >= 2:
@@ -8221,6 +12254,123 @@ func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0) ->
 	return true
 
 
+func _aoe_collect_thrust_secondary_candidates(
+	candidates: Array[EnemyActor],
+	result: Array[EnemyActor],
+	excluded_targets: Array[EnemyActor],
+	origin_ground_gu: Vector2,
+	target_plan: Dictionary,
+	thrust_damage_axis_plan: Dictionary,
+	melee_release_snapshot: Dictionary,
+	query_plan: Dictionary,
+	direction_index: int,
+	release_geometry: Dictionary,
+) -> void:
+	var query_context: Dictionary = query_plan.get(
+		"validation_context_reference",
+		release_geometry.get(
+			"snapshot_validation_context",
+			_canonical_snapshot_validation_context(origin_ground_gu),
+		),
+	)
+	var axis_plan := thrust_damage_axis_plan
+	if axis_plan.is_empty():
+		axis_plan = WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
+			direction_index,
+			release_geometry,
+			query_context,
+		)
+	if str(axis_plan.get("contract_id", "")) != WarriorMeleeGeometryScript.THRUST_CONTINUOUS_DAMAGE_AXIS_CONTRACT_ID:
+		return
+	var axis_ground_gu: Vector2 = axis_plan.get(
+		"damage_direction_ground_gu",
+		Vector2(
+			WarriorMeleeGeometryScript.facing_tile_step(direction_index)
+			).normalized(),
+	)
+	if axis_ground_gu.length_squared() <= 0.000001:
+		return
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or excluded_targets.has(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		var slot := (
+			_aoe_target_aligned_melee_sector(
+				target_plan,
+				target_ground_gu,
+				enemy.combat_radius_gu,
+				WarriorMeleeGeometryScript.SKILL_THRUST,
+			)
+			if not target_plan.is_empty()
+			else (
+				WarriorMeleeGeometryScript.thrust_footprint_slot_for_direction_ground_gu(
+					origin_ground_gu,
+					target_ground_gu,
+					enemy.combat_radius_gu,
+					axis_ground_gu,
+				)
+				if (
+					query_plan.is_empty()
+					or not _aoe_plan_is_ready(query_plan)
+					or _aoe_validated_snapshot_intersects(query_plan, enemy)
+				)
+				else 0
+			)
+		)
+		if slot == 2:
+			result.append(enemy)
+
+
+func _aoe_collect_half_moon_secondary_candidates(
+	candidates: Array[EnemyActor],
+	result: Array[EnemyActor],
+	excluded_targets: Array[EnemyActor],
+	origin_ground_gu: Vector2,
+	direction_index: int,
+	target_plan: Dictionary,
+	query_plan: Dictionary,
+	release_geometry: Dictionary,
+) -> void:
+	for enemy: EnemyActor in candidates:
+		if (
+			not is_instance_valid(enemy)
+			or excluded_targets.has(enemy)
+			or enemy.is_queued_for_deletion()
+			or enemy.current_hp <= 0
+		):
+			continue
+		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
+		var sector := -1
+		if not target_plan.is_empty():
+			sector = _aoe_target_aligned_melee_sector(
+				target_plan,
+				target_ground_gu,
+				enemy.combat_radius_gu,
+				WarriorMeleeGeometryScript.SKILL_HALF_MOON,
+			)
+		else:
+			if (
+				query_plan.is_empty()
+				or not _aoe_plan_is_ready(query_plan)
+				or _aoe_validated_snapshot_intersects(query_plan, enemy)
+			):
+				sector = WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
+					origin_ground_gu,
+					target_ground_gu,
+					enemy.combat_radius_gu,
+					direction_index,
+				)
+			else:
+				sector = -1
+		if sector != -1 and sector != 0:
+			result.append(enemy)
+
+
 func _thrust_secondary_targets(
 	origin: Vector2,
 	direction: Vector2,
@@ -8228,55 +12378,63 @@ func _thrust_secondary_targets(
 	release_geometry: Dictionary = {},
 	thrust_damage_axis_plan: Dictionary = {},
 	melee_release_snapshot: Dictionary = {},
-	target_aligned_plan: Dictionary = {}
+	target_aligned_plan: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var target_plan: Dictionary = target_aligned_plan if not target_aligned_plan.is_empty() else release_geometry.get("target_aligned_plan", {})
-	if not target_plan.is_empty():
-		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-				continue
-			var enemy := node as EnemyActor
-			var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-			if WarriorMeleeGeometryScript.target_aligned_thrust_slot_for_plan_gu(target_plan, target_ground_gu, enemy.combat_radius_gu, ctx) == 2:
-				result.append(enemy)
-		_sort_melee_targets(result, origin_ground_gu, release_geometry)
-		return result
 	var direction_index := _melee_direction_index(direction, release_geometry)
-	if thrust_damage_axis_plan.is_empty():
-		thrust_damage_axis_plan = (
-			WarriorMeleeGeometryScript.thrust_damage_axis_plan_ground_gu(
-				direction_index,
-				release_geometry,
-				release_geometry.get("snapshot_validation_context", {})
-			)
-		)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
-		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-		if (
-			_snapshot_strict_ok(melee_release_snapshot)
-			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
-				melee_release_snapshot,
-				target_ground_gu,
-				enemy.combat_radius_gu
-			)
-		):
-			continue
-		if WarriorMeleeGeometryScript.thrust_footprint_slot_for_axis_plan_gu(
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_melee_query_plan(
+			WarriorMeleeGeometryScript.SKILL_THRUST,
 			origin_ground_gu,
-			target_ground_gu,
-			enemy.combat_radius_gu,
+			direction,
+			release_geometry,
 			thrust_damage_axis_plan,
-			0.0,
-			_canonical_snapshot_validation_context(origin_ground_gu)
-		) != 2:
-			continue
-		result.append(enemy)
+			melee_release_snapshot,
+			target_plan,
+			release_cache,
+		)
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"melee_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return result
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", Rect2()),
+	):
+		return result
+	_aoe_collect_thrust_secondary_candidates(
+		_aoe_candidate_scratch,
+		result,
+		excluded_targets,
+		origin_ground_gu,
+		target_plan,
+		thrust_damage_axis_plan,
+		melee_release_snapshot,
+		plan,
+		direction_index,
+		release_geometry,
+	)
+	if result.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		_aoe_collect_thrust_secondary_candidates(
+			_aoe_candidate_scratch,
+			result,
+			excluded_targets,
+			origin_ground_gu,
+			target_plan,
+			thrust_damage_axis_plan,
+			melee_release_snapshot,
+			plan,
+			direction_index,
+			release_geometry,
+		)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
@@ -8286,46 +12444,59 @@ func _half_moon_secondary_targets(
 	direction: Vector2,
 	excluded_targets: Array[EnemyActor],
 	release_geometry: Dictionary = {},
-	melee_release_snapshot: Dictionary = {}
+	melee_release_snapshot: Dictionary = {},
+	query_plan: Dictionary = {},
 ) -> Array[EnemyActor]:
 	var result: Array[EnemyActor] = []
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	var target_plan: Dictionary = release_geometry.get("target_aligned_plan", {})
-	if not target_plan.is_empty():
-		var ctx := _canonical_snapshot_validation_context(origin_ground_gu)
-		for node: Node in get_tree().get_nodes_in_group("enemies"):
-			if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-				continue
-			var enemy := node as EnemyActor
-			var sector := WarriorMeleeGeometryScript.target_aligned_half_moon_relative_sector_for_plan_gu(target_plan, _canonical_screen_px_to_ground_gu(enemy.global_position), enemy.combat_radius_gu, ctx)
-			if sector > 0:
-				result.append(enemy)
-		_sort_melee_targets(result, origin_ground_gu, release_geometry)
-		return result
 	var direction_index := _melee_direction_index(direction, release_geometry)
-	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if not node is EnemyActor or node in excluded_targets or node.is_queued_for_deletion() or node.current_hp <= 0:
-			continue
-		var enemy := node as EnemyActor
-		var target_ground_gu := _canonical_screen_px_to_ground_gu(enemy.global_position)
-		if (
-			_snapshot_strict_ok(melee_release_snapshot)
-			and not WarriorMeleeGeometryScript.release_snapshot_intersects_target_footprint_ground_gu(
-				melee_release_snapshot,
-				target_ground_gu,
-				enemy.combat_radius_gu
-			)
-		):
-			continue
-		var relative_sector := WarriorMeleeGeometryScript.half_moon_footprint_relative_sector_gu(
+	var release_cache: Dictionary = {}
+	var plan := query_plan
+	if plan.is_empty():
+		plan = _aoe_melee_query_plan(
+			WarriorMeleeGeometryScript.SKILL_HALF_MOON,
 			origin_ground_gu,
-			target_ground_gu,
-			enemy.combat_radius_gu,
-			direction_index
+			direction,
+			release_geometry,
+			{},
+			melee_release_snapshot,
+			target_plan,
+			release_cache,
 		)
-		if relative_sector == -1 or relative_sector == 0:
-			continue
-		result.append(enemy)
+	var broadphase_ready := _aoe_plan_is_ready(plan)
+	if not broadphase_ready and not _aoe_reference_fallback_allowed():
+		_aoe_record_query_rejection(
+			"melee_query_plan_invalid_or_spatial_index_unavailable"
+		)
+		return result
+	if not _aoe_query_enemy_candidates_aabb(
+		plan,
+		plan.get("ground_aabb", Rect2()),
+	):
+		return result
+	_aoe_collect_half_moon_secondary_candidates(
+		_aoe_candidate_scratch,
+		result,
+		excluded_targets,
+		origin_ground_gu,
+		direction_index,
+		target_plan,
+		plan,
+		release_geometry,
+	)
+	if result.is_empty() and broadphase_ready and _aoe_reference_fallback_allowed():
+		_aoe_reference_enemy_nodes_into(_aoe_candidate_scratch)
+		_aoe_collect_half_moon_secondary_candidates(
+			_aoe_candidate_scratch,
+			result,
+			excluded_targets,
+			origin_ground_gu,
+			direction_index,
+			target_plan,
+			plan,
+			release_geometry,
+		)
 	_sort_melee_targets(result, origin_ground_gu, release_geometry)
 	return result
 
@@ -8356,74 +12527,1278 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
+	var queued_at_usec := RuntimeDiagnostics.timing_start()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
 			int(enemy.get_meta("spawn_serial", 0))
 		)
+	# Clearing references is cheap and must be immediate, but refreshing every
+	# enemy highlight and the HUD here would run inside the death signal and can
+	# interrupt a multi-target release. Coalesce that presentation work into the
+	# deferred death pipeline.
 	if enemy == locked_target:
-		_cancel_target()
+		locked_target = null
+		manual_target_lock = false
+		_enemy_death_target_refresh_pending = true
 	if enemy == magic_locked_target:
-		_cancel_magic_target()
+		magic_locked_target = null
+		manual_magic_target_lock = false
+		_enemy_death_target_refresh_pending = true
 	if enemy == _skill_cast_target:
 		_skill_cast_target = null
-	var death_position := enemy.global_position
-	var spawn_position: Vector2 = enemy.get_meta("spawn_position", death_position)
-	var was_boss: bool = enemy.get_meta("spawn_is_boss", false)
-	var generation: int = enemy.get_meta("zone_generation", _zone_generation)
-	var configured_respawn := float(enemy.get_meta("respawn_seconds", -1.0))
-	var configured_random_respawn := float(enemy.get_meta("respawn_random_seconds", 0.0))
-	var respawn_enabled := bool(enemy.get_meta("respawn_enabled", true))
-	var spawn_context: Dictionary = enemy.get_meta("spawn_context", {}).duplicate(true)
+		_enemy_death_target_refresh_pending = true
 	var monster_id := _strict_runtime_monster_id(monster_data)
-	var canonical_monster := GameData.get_monster_by_id(monster_id)
-	if canonical_monster.is_empty():
-		return
-	var combat: Dictionary = canonical_monster.get("combat", {})
-	var stats: Dictionary = combat.get("stats", {})
-	PlayerState.record_kill(str(canonical_monster.get("canonical_name", "")))
-	PlayerState.add_experience(int(stats.get("exp", 0)))
-	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, 6)
-	for item_name: String in drop_roll.get("items", []):
-		_spawn_loot(item_name, death_position + Vector2(_rng.randf_range(-34, 34), _rng.randf_range(-18, 18)))
-	if not respawn_enabled:
-		return
-	var respawn_seconds := configured_respawn if configured_respawn > 0.0 else (DEFAULT_BOSS_RESPAWN_SECONDS if was_boss else DEFAULT_NORMAL_RESPAWN_SECONDS)
-	var respawn_wait_seconds := respawn_seconds
-	if configured_random_respawn > 0.0:
-		respawn_wait_seconds = maxf(
-			60.0,
-			respawn_seconds - configured_random_respawn + _rng.randf_range(0.0, configured_random_respawn * 2.0)
+	var raw_snapshot: Variant = enemy.get_meta("death_runtime_snapshot", {})
+	var death_runtime_snapshot: Dictionary = (
+		raw_snapshot as Dictionary if raw_snapshot is Dictionary else {}
+	)
+	if int(death_runtime_snapshot.get("monster_id", -1)) != monster_id:
+		var canonical_monster := GameData.get_monster_by_id(monster_id)
+		death_runtime_snapshot = _build_enemy_death_runtime_snapshot(
+			canonical_monster
 		)
-	_respawn_later(canonical_monster, spawn_position, was_boss, respawn_wait_seconds, generation, spawn_context)
+	if death_runtime_snapshot.is_empty():
+		_schedule_enemy_death_work()
+		return
+	# The callback can run after a deferred death animation and even after a
+	# map transition.  Runtime map/generation and positions therefore come only
+	# from the lethal-time actor snapshot, never from current_map_id or the
+	# current zone generation.
+	var raw_death_origin: Variant = enemy.get_meta("death_origin", {})
+	var death_origin: Dictionary = (
+		raw_death_origin.duplicate(true)
+		if raw_death_origin is Dictionary
+		else {}
+	)
+	var origin_captured := bool(death_origin.get("captured", false))
+	var origin_map_id := int(death_origin.get("map_id", -1))
+	var origin_generation := int(death_origin.get("generation", -1))
+	if not origin_captured:
+		var snapshot_map_id := int(
+			death_runtime_snapshot.get("death_runtime_map_id", -1)
+		)
+		var snapshot_generation := int(
+			death_runtime_snapshot.get("death_zone_generation", -1)
+		)
+		if snapshot_map_id >= 0 or snapshot_generation >= 0:
+			origin_map_id = snapshot_map_id
+			origin_generation = snapshot_generation
+			origin_captured = true
+	if not origin_captured:
+		var actor_map_id := int(enemy.runtime_map_id)
+		var actor_generation := int(enemy.get_meta("zone_generation", -1))
+		if actor_map_id >= 0 or actor_generation >= 0:
+			origin_map_id = actor_map_id
+			origin_generation = actor_generation
+			origin_captured = true
+	var raw_death_position: Variant = death_origin.get(
+		"death_position", enemy.global_position
+	)
+	var death_position := (
+		raw_death_position as Vector2
+		if raw_death_position is Vector2
+		else enemy.global_position
+	)
+	var raw_spawn_position: Variant = death_origin.get(
+		"spawn_position", enemy.get_meta("spawn_position", death_position)
+	)
+	var spawn_position := (
+		raw_spawn_position as Vector2
+		if raw_spawn_position is Vector2
+		else death_position
+	)
+	var raw_spawn_context: Variant = death_origin.get(
+		"spawn_context", enemy.get_meta("spawn_context", {})
+	)
+	var spawn_context: Dictionary = (
+		raw_spawn_context.duplicate(true)
+		if raw_spawn_context is Dictionary
+		else {}
+	)
+	_enemy_death_sequence += 1
+	var sequence := _enemy_death_sequence
+	var canonical_snapshot := death_runtime_snapshot.duplicate(true)
+	var canonical_monster := {
+		"monster_id": monster_id,
+		"classification": str(canonical_snapshot.get("classification", "")),
+		"spawn_classification": str(
+			canonical_snapshot.get("spawn_classification", "")
+		),
+	}
+	_pending_enemy_deaths.append({
+		"death_key": "death:%d:%d:%d:%d" % [
+			origin_map_id,
+			origin_generation,
+			sequence,
+			enemy.get_instance_id(),
+		],
+		"sequence": sequence,
+		"state": DEATH_STATE_QUEUED,
+		"origin": {
+			"map_id": origin_map_id,
+			"generation": origin_generation,
+		},
+		"origin_map_id": origin_map_id,
+		"origin_generation": origin_generation,
+		"origin_captured": origin_captured,
+		"queued_at_usec": queued_at_usec,
+		"death_position": death_position,
+		"spawn_position": spawn_position,
+		"monster_snapshot": canonical_snapshot,
+		"canonical_monster": canonical_monster,
+		"monster_id": monster_id,
+		"monster_name": str(canonical_snapshot.get("canonical_name", "")),
+		"experience": int(canonical_snapshot.get("experience", 0)),
+		"respawn": {
+			"enabled": bool(enemy.get_meta("respawn_enabled", true)),
+			"configured_seconds": float(
+				enemy.get_meta("respawn_seconds", -1.0)
+			),
+			"was_boss": bool(enemy.get_meta("spawn_is_boss", false)),
+			"spawn_context": spawn_context,
+		},
+		"was_boss": bool(enemy.get_meta("spawn_is_boss", false)),
+		"generation": origin_generation,
+		"configured_respawn": float(enemy.get_meta("respawn_seconds", -1.0)),
+		"respawn_enabled": bool(enemy.get_meta("respawn_enabled", true)),
+		"spawn_context": spawn_context,
+		"drop_plan": {},
+		"transaction_result": {},
+		"respawn_preparation": {},
+		"retry_count": 0,
+		"retry_at_msec": 0,
+		"materialization_retry_count": 0,
+		"materialized_node_index": 0,
+		"materialized_node_count": 0,
+		"remaining_requests": [],
+		"remaining_request_count": 0,
+		"reward_status": "queued",
+		"respawn_scheduled": false,
+		"last_error": "",
+	})
+	RuntimeDiagnostics.record_performance_max(
+		&"drop_queue_depth_max",
+		float(_pending_enemy_deaths.size()),
+	)
+	_schedule_enemy_death_work()
 
 
-func _spawn_loot(item_name: String, position: Vector2) -> void:
+func _schedule_enemy_death_work() -> void:
+	if _enemy_death_flush_queued or _enemy_death_pipeline_running:
+		return
+	_enemy_death_flush_queued = true
+	call_deferred("_flush_enemy_deaths", true)
+
+
+func _flush_enemy_deaths(spread_across_frames := true) -> void:
+	_enemy_death_flush_queued = false
+	if spread_across_frames:
+		_pump_enemy_death_work_queue()
+		return
+	# Tests and a few synchronous compatibility callers explicitly request the
+	# old completion boundary.  Use the same state machine without yielding.
+	var guard := 0
+	while not _pending_enemy_deaths.is_empty() and guard < 4096:
+		var progressed := _pump_enemy_death_work_queue(true)
+		guard += 1
+		if not progressed and not _pending_enemy_deaths.is_empty():
+			# A future retry deadline is ignored by the synchronous compatibility
+			# path; a malformed item is terminally observable rather than silently
+			# stranded in the queue.
+			var head: Dictionary = _pending_enemy_deaths[0]
+			_set_enemy_death_state(head, DEATH_STATE_FAILED)
+			head["last_error"] = "death_queue_no_progress"
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_failed_count"
+			)
+			_compact_enemy_death_queue()
+
+
+func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
+	if _enemy_death_pipeline_running:
+		return false
+	_enemy_death_pipeline_running = true
+	var progressed := false
+	var slice_started_usec := RuntimeDiagnostics.timing_start()
+	var budget_usec := _death_drop_work_budget_usec()
+	var jobs_limit := _death_jobs_max_per_frame()
+	var nodes_limit := _drop_nodes_max_per_frame()
+	if force_synchronous:
+		budget_usec = 2147483647
+		jobs_limit = 2147483647
+		nodes_limit = 2147483647
+	if _enemy_death_target_refresh_pending:
+		_enemy_death_target_refresh_pending = false
+		RuntimeDiagnostics.increment_performance_counter(&"death_target_refresh_count")
+		if is_inside_tree():
+			_refresh_target_highlights()
+			if is_instance_valid(hud):
+				_update_target_hud()
+		progressed = true
+	_compact_enemy_death_queue()
+	if _pending_enemy_deaths.is_empty():
+		_enemy_death_pipeline_running = false
+		return progressed
+	var jobs_processed := 0
+	var nodes_processed := 0
+	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_RETRY:
+		var retry_item: Dictionary = _pending_enemy_deaths[0]
+		if force_synchronous or _death_retry_ready(retry_item):
+			retry_item["retry_at_msec"] = 0
+			_set_enemy_death_state(retry_item, DEATH_STATE_QUEUED)
+			progressed = true
+	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_QUEUED:
+		if (
+			(force_synchronous or _death_retry_ready(_pending_enemy_deaths[0]))
+			and (
+				force_synchronous
+				or jobs_processed == 0
+				or RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) < budget_usec
+			)
+		):
+			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
+				jobs_processed += _death_settled_jobs_last_batch
+				progressed = true
+				_compact_enemy_death_queue()
+	while not _pending_enemy_deaths.is_empty():
+		if (
+			not force_synchronous
+			and progressed
+			and RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) >= budget_usec
+		):
+			break
+		var death: Dictionary = _pending_enemy_deaths[0]
+		var state := str(death.get("state", ""))
+		if state in [DEATH_STATE_FAILED, DEATH_STATE_CANCELLED, DEATH_STATE_COMMITTED]:
+			_compact_enemy_death_queue()
+			progressed = true
+			continue
+		if state == DEATH_STATE_RETRY:
+			if not force_synchronous and not _death_retry_ready(death):
+				break
+			death["retry_at_msec"] = 0
+			_set_enemy_death_state(death, DEATH_STATE_QUEUED)
+			progressed = true
+			continue
+		if state == DEATH_STATE_QUEUED:
+			if not force_synchronous and not _death_retry_ready(death):
+				break
+			if jobs_processed >= jobs_limit:
+				break
+			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
+				jobs_processed += _death_settled_jobs_last_batch
+				progressed = true
+				_compact_enemy_death_queue()
+				continue
+			break
+		if state == DEATH_STATE_SETTLING:
+			if jobs_processed >= jobs_limit:
+				break
+			jobs_processed += 1
+			if _plan_enemy_death_item(death):
+				progressed = true
+				continue
+			break
+		if state == DEATH_STATE_PLANNED:
+			if jobs_processed >= jobs_limit:
+				break
+			_set_enemy_death_state(death, DEATH_STATE_MATERIALIZING)
+			jobs_processed += 1
+			progressed = true
+		elif state == DEATH_STATE_MATERIALIZING:
+			if jobs_processed >= jobs_limit:
+				break
+			if not force_synchronous and not _death_retry_ready(death):
+				break
+			jobs_processed += 1
+		var materialization := _materialize_enemy_death_nodes(
+			death,
+			slice_started_usec,
+			budget_usec,
+			nodes_limit - nodes_processed,
+			force_synchronous,
+		)
+		nodes_processed += int(materialization.get("nodes", 0))
+		if bool(materialization.get("progressed", false)):
+			progressed = true
+		if bool(materialization.get("complete", false)):
+			if str(death.get("state", "")) == DEATH_STATE_MATERIALIZING:
+				_commit_enemy_death_item(death)
+			elif str(death.get("state", "")) == DEATH_STATE_FAILED:
+				# The XP/quest/respawn transaction already committed before node
+				# materialization. A terminal node failure must not strand a valid
+				# respawn, but it must never retry or duplicate a reward node.
+				_schedule_queued_enemy_respawn(death)
+			progressed = true
+			_compact_enemy_death_queue()
+			continue
+		break
+	if progressed:
+		RuntimeDiagnostics.increment_performance_counter(&"death_work_frames")
+		RuntimeDiagnostics.increment_performance_counter(&"drop_work_frames")
+	RuntimeDiagnostics.record_performance_max(
+		&"death_jobs_per_frame_max", float(jobs_processed)
+	)
+	RuntimeDiagnostics.record_performance_max(
+		&"drop_nodes_per_frame_max", float(nodes_processed)
+	)
+	_enemy_death_pipeline_running = false
+	return progressed
+
+
+func _death_drop_work_budget_usec() -> int:
+	if _death_drop_work_budget_usec_override >= 0:
+		return maxi(1, _death_drop_work_budget_usec_override)
+	return maxi(
+		1,
+		int(ProjectSettings.get_setting(
+			"hardcore/performance/death_drop_work_budget_usec",
+			DEATH_DROP_WORK_BUDGET_USEC,
+		)),
+	)
+
+
+func _death_jobs_max_per_frame() -> int:
+	if _death_jobs_max_per_frame_override >= 0:
+		return maxi(1, _death_jobs_max_per_frame_override)
+	return maxi(
+		1,
+		int(ProjectSettings.get_setting(
+			"hardcore/performance/death_jobs_max_per_frame",
+			DEATH_JOBS_MAX_PER_FRAME,
+		)),
+	)
+
+
+func _drop_nodes_max_per_frame() -> int:
+	if _drop_nodes_max_per_frame_override >= 0:
+		return maxi(1, _drop_nodes_max_per_frame_override)
+	return maxi(
+		1,
+		int(ProjectSettings.get_setting(
+			"hardcore/performance/drop_nodes_max_per_frame",
+			DROP_NODES_MAX_PER_FRAME,
+		)),
+	)
+
+
+func set_death_drop_work_limits_for_test(
+	budget_usec: int,
+	jobs_per_frame: int,
+	nodes_per_frame: int,
+) -> bool:
+	if not PlayerState.test_mode:
+		return false
+	_death_drop_work_budget_usec_override = budget_usec
+	_death_jobs_max_per_frame_override = jobs_per_frame
+	_drop_nodes_max_per_frame_override = nodes_per_frame
+	return true
+
+
+func clear_death_drop_work_limits_for_test() -> void:
+	_death_drop_work_budget_usec_override = -1
+	_death_jobs_max_per_frame_override = -1
+	_drop_nodes_max_per_frame_override = -1
+
+
+func set_loot_materialization_failure_count_for_test(count: int) -> bool:
+	if not PlayerState.test_mode:
+		return false
+	_test_force_loot_materialization_failure_count = maxi(0, count)
+	return true
+
+
+func set_loot_legacy_reference_fallback_for_test(enabled: bool) -> bool:
+	if enabled and not PlayerState.test_mode:
+		return false
+	_loot_legacy_reference_fallback_test_enabled = enabled
+	return true
+
+
+func death_work_queue_snapshot() -> Dictionary:
+	return {
+		"pending": _pending_enemy_deaths.duplicate(true),
+		"terminal": _enemy_death_terminal_jobs.duplicate(true),
+		"terminal_count": _enemy_death_terminal_total_count,
+		"terminal_ledger_limit": DEATH_TERMINAL_LEDGER_MAX,
+	}
+
+
+func _death_retry_ready(death: Dictionary) -> bool:
+	return Time.get_ticks_msec() >= int(death.get("retry_at_msec", 0))
+
+
+func _set_enemy_death_state(death: Dictionary, next_state: String) -> void:
+	var previous := str(death.get("state", ""))
+	if previous == next_state:
+		return
+	death["state"] = next_state
+	RuntimeDiagnostics.increment_performance_counter(
+		&"death_queue_state_transitions"
+	)
+
+
+func _compact_enemy_death_queue() -> void:
+	if _pending_enemy_deaths.is_empty():
+		return
+	var retained: Array[Dictionary] = []
+	for death: Dictionary in _pending_enemy_deaths:
+		var state := str(death.get("state", ""))
+		if state in [DEATH_STATE_FAILED, DEATH_STATE_CANCELLED, DEATH_STATE_COMMITTED]:
+			if state == DEATH_STATE_FAILED and _last_death_logout_failure.is_empty():
+				_last_death_logout_failure = {
+					"success": false,
+					"save_performed": false,
+					"reason": "safe_logout_death_queue_failed",
+					"death_key": str(death.get("death_key", "")),
+					"death_error": str(death.get("last_error", "")),
+				}
+			_enemy_death_terminal_total_count += 1
+			if _enemy_death_terminal_jobs.size() >= DEATH_TERMINAL_LEDGER_MAX:
+				_enemy_death_terminal_jobs.pop_front()
+			_enemy_death_terminal_jobs.append(death.duplicate(true))
+		else:
+			retained.append(death)
+	_pending_enemy_deaths = retained
+
+
+func _death_origin_matches_current(death: Dictionary) -> bool:
+	return (
+		bool(death.get("origin_captured", false))
+		and
+		int(death.get("origin_map_id", -1)) == current_map_id
+		and int(death.get("origin_generation", -1)) == _zone_generation
+	)
+
+
+func _cancel_pending_enemy_deaths_for_generation_change() -> void:
+	if _pending_enemy_deaths.is_empty():
+		return
+	for death: Dictionary in _pending_enemy_deaths:
+		if (
+			bool(death.get("origin_captured", false))
+			and int(death.get("origin_generation", -1)) == _zone_generation
+			and int(death.get("origin_map_id", -1)) == current_map_id
+		):
+			continue
+		death["last_error"] = "origin_map_generation_changed_before_settlement"
+		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+	_compact_enemy_death_queue()
+
+
+
+func _settle_pending_enemy_death_batch(
+	max_deaths := DEATH_JOBS_MAX_PER_FRAME,
+) -> bool:
+	_death_settled_jobs_last_batch = 0
+	if _pending_enemy_deaths.is_empty():
+		return false
+	if max_deaths <= 0:
+		return false
+	var first: Dictionary = _pending_enemy_deaths[0]
+	if str(first.get("state", "")) != DEATH_STATE_QUEUED:
+		return false
+	if not _death_retry_ready(first):
+		return false
+	# Reject stale/unidentified deaths before touching PlayerState.  This guard
+	# is intentionally before the batched save so an old actor can never grant
+	# XP, quest progress, respawn state, or a drop after a map transition.
+	if not _death_origin_matches_current(first):
+		first["last_error"] = (
+			"origin_map_generation_mismatch_before_settlement"
+			if bool(first.get("origin_captured", false))
+			else "death_origin_missing"
+		)
+		_set_enemy_death_state(first, DEATH_STATE_CANCELLED)
+		_death_settled_jobs_last_batch = 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+		return true
+	var batch: Array[Dictionary] = []
+	for death: Dictionary in _pending_enemy_deaths:
+		if batch.size() >= max_deaths:
+			break
+		if str(death.get("state", "")) != DEATH_STATE_QUEUED:
+			break
+		if not _death_retry_ready(death):
+			break
+		if not _death_origin_matches_current(death):
+			break
+		_set_enemy_death_state(death, DEATH_STATE_SETTLING)
+		batch.append(death)
+	if batch.is_empty():
+		return false
+	_death_settled_jobs_last_batch = batch.size()
+	RuntimeDiagnostics.increment_performance_counter(&"death_batch_count")
+	RuntimeDiagnostics.record_performance_max(
+		&"death_batch_size_max", float(batch.size())
+	)
+	var oldest_queued_usec := int(batch[0].get("queued_at_usec", 0))
+	RuntimeDiagnostics.record_performance_max(
+		&"drop_queue_oldest_age_ms",
+		float(RuntimeDiagnostics.timing_elapsed_usec(oldest_queued_usec)) / 1000.0,
+	)
+	var settlements: Array = []
+	var respawn_state_before: Dictionary = (
+		PlayerState.monster_respawn_state_for_restore()
+	)
+	for death: Dictionary in batch:
+		var respawn_preparation := _prepare_queued_enemy_respawn(death)
+		death["respawn_preparation"] = respawn_preparation
+		var respawn: Dictionary = death.get("respawn", {})
+		respawn["preparation"] = respawn_preparation
+		death["respawn"] = respawn
+		settlements.append({
+			"monster_name": str(death.get("monster_name", "")),
+			"experience": int(death.get("experience", 0)),
+		})
+	var settlement_started_usec := RuntimeDiagnostics.timing_start()
+	var settlement := PlayerState.record_kills_and_experience_batch(
+		settlements,
+		true,
+	)
+	RuntimeDiagnostics.record_timing_usec(
+		&"death_settlement_usec", settlement_started_usec
+	)
+	if not bool(settlement.get("success", false)):
+		# Respawn state, quest progress and experience are one save boundary. A
+		# failed save restores the pre-attempt state, and the death item remains
+		# observable for retry/terminal handling; no drop roll is performed.
+		PlayerState.world_monster_respawn_state = respawn_state_before
+		for death: Dictionary in batch:
+			death["transaction_result"] = settlement.duplicate(true)
+			death["last_error"] = str(settlement.get("reason", "save_failed"))
+			death["retry_count"] = int(death.get("retry_count", 0)) + 1
+			if int(death["retry_count"]) >= DEATH_QUEUE_MAX_RETRIES:
+				_set_enemy_death_state(death, DEATH_STATE_FAILED)
+				RuntimeDiagnostics.increment_performance_counter(
+					&"death_queue_failed_count"
+				)
+			else:
+				death["retry_at_msec"] = (
+					Time.get_ticks_msec() + DEATH_QUEUE_RETRY_DELAY_MSEC
+				)
+				_set_enemy_death_state(death, DEATH_STATE_RETRY)
+				RuntimeDiagnostics.increment_performance_counter(
+					&"death_queue_retry_count"
+				)
+		_compact_enemy_death_queue()
+		return true
+	for death: Dictionary in batch:
+		death["transaction_result"] = settlement.duplicate(true)
+		_plan_enemy_death_item(death)
+	return true
+
+
+var _drop_instance_session_key := Crypto.new().generate_random_bytes(16).hex_encode()
+
+
+func _plan_enemy_death_item(death: Dictionary) -> bool:
+	if not _death_origin_matches_current(death):
+		death["last_error"] = "origin_map_generation_mismatch_before_roll"
+		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+		return true
+	var started_usec := RuntimeDiagnostics.timing_start()
+	var monster_id := int(death.get("monster_id", -1))
+	RuntimeDiagnostics.increment_performance_counter(&"drop_roll_count")
+	var drop_roll := LootRuntime.roll_monster_drops(monster_id, _rng, false)
+	var death_position: Vector2 = death.get("death_position", Vector2.ZERO)
+	var requests: Array[Dictionary] = []
+	var raw_items: Variant = drop_roll.get("items", [])
+	var identity_records: Array = drop_roll.get("item_records", [])
+	if raw_items is Array:
+		for item_index in range(raw_items.size()):
+			var item_name := str(raw_items[item_index])
+			var identity_record: Dictionary = (
+				identity_records[item_index]
+				if item_index < identity_records.size() and identity_records[item_index] is Dictionary
+				else {}
+			)
+			identity_record = PlayerState.create_drop_item_instance(
+				identity_record,
+				"%s:%s:item:%d" % [_drop_instance_session_key, str(death.get("death_key", "")), item_index],
+			)
+			requests.append({
+				"item_name": item_name,
+				"item_record": identity_record,
+				"position": death_position + Vector2(
+					_rng.randf_range(-34, 34),
+					_rng.randf_range(-18, 18)
+				),
+			})
+	var raw_gold_drops: Variant = drop_roll.get("gold_drops", [])
+	if raw_gold_drops is Array:
+		for raw_gold: Variant in raw_gold_drops:
+			var amount := int(raw_gold)
+			if amount > 0:
+				requests.append({
+					"gold_amount": amount,
+					"position": death_position + Vector2(
+						_rng.randf_range(-34, 34),
+						_rng.randf_range(-18, 18)
+					),
+				})
+	var overflow_discarded_count := int(
+		drop_roll.get("overflow_discarded_count", 0)
+	)
+	if overflow_discarded_count > 0:
+		var overflow_telemetry := LootRuntime.record_overflow_telemetry(
+			monster_id,
+			drop_roll
+		)
+		if (
+			not overflow_telemetry.is_empty()
+			and CombatDiagnosticLogScript.capture_enabled()
+		):
+			CombatDiagnosticLogScript.record({
+				"event": "loot_overflow_discarded",
+				"monster_id": int(overflow_telemetry.get("monster_id", monster_id)),
+				"successful_roll_count": int(
+					overflow_telemetry.get("successful_roll_count", 0)
+				),
+				"ground_output_count": int(
+					overflow_telemetry.get("ground_output_count", 0)
+				),
+				"overflow_discarded_count": int(
+					overflow_telemetry.get("overflow_discarded_count", 0)
+				),
+				"protected_overflow_count": int(
+					overflow_telemetry.get("protected_overflow_count", 0)
+				),
+			})
+	death["drop_plan"] = {
+		"roll": drop_roll.duplicate(true),
+		"requests": requests,
+		"next_request_index": 0,
+		"item_count": raw_items.size() if raw_items is Array else 0,
+		"gold_drop_count": raw_gold_drops.size() if raw_gold_drops is Array else 0,
+		"materialized": false,
+	}
+	death["remaining_requests"] = requests.duplicate(true)
+	death["remaining_request_count"] = requests.size()
+	death["reward_status"] = "planned"
+	death["materialized_node_index"] = 0
+	death["materialized_node_count"] = 0
+	death["materialization_retry_count"] = 0
+	_set_enemy_death_state(death, DEATH_STATE_PLANNED)
+	RuntimeDiagnostics.increment_performance_counter(
+		&"drop_request_count", requests.size()
+	)
+	RuntimeDiagnostics.record_timing_usec(&"drop_roll_usec", started_usec)
+	return true
+
+
+func _materialize_enemy_death_nodes(
+	death: Dictionary,
+	slice_started_usec: int,
+	budget_usec: int,
+	node_budget: int,
+	force_synchronous: bool,
+) -> Dictionary:
+	var raw_plan: Variant = death.get("drop_plan", {})
+	if not raw_plan is Dictionary:
+		death["last_error"] = "drop_plan_invalid"
+		death["remaining_requests"] = []
+		death["remaining_request_count"] = 0
+		death["reward_status"] = "materialization_failed"
+		_set_enemy_death_state(death, DEATH_STATE_FAILED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_materialization_failures"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_failed_count"
+		)
+		return {"complete": true, "progressed": true, "nodes": 0}
+	var plan: Dictionary = raw_plan
+	var raw_requests: Variant = plan.get("requests", [])
+	if not raw_requests is Array:
+		death["last_error"] = "drop_plan_requests_invalid"
+		death["remaining_requests"] = []
+		death["remaining_request_count"] = 0
+		death["reward_status"] = "materialization_failed"
+		_set_enemy_death_state(death, DEATH_STATE_FAILED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_materialization_failures"
+		)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_failed_count"
+		)
+		return {"complete": true, "progressed": true, "nodes": 0}
+	if not _death_origin_matches_current(death):
+		death["last_error"] = "origin_map_generation_mismatch_after_roll"
+		death["remaining_requests"] = raw_requests.duplicate(true)
+		death["remaining_request_count"] = raw_requests.size()
+		death["reward_status"] = "cancelled_after_roll"
+		_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		RuntimeDiagnostics.increment_performance_counter(
+			&"death_queue_cancelled_count"
+		)
+		return {"complete": true, "progressed": true, "nodes": 0}
+	var requests: Array = raw_requests
+	var request_index := int(death.get("materialized_node_index", 0))
+	var nodes := 0
+	var progressed := false
+	while request_index < requests.size():
+		if node_budget <= nodes:
+			break
+		if (
+			not force_synchronous
+			and progressed
+			and RuntimeDiagnostics.timing_elapsed_usec(slice_started_usec) >= budget_usec
+		):
+			break
+		if not _death_origin_matches_current(death):
+			death["last_error"] = "origin_map_generation_mismatch_after_roll"
+			death["remaining_requests"] = requests.slice(request_index)
+			death["remaining_request_count"] = requests.size() - request_index
+			death["reward_status"] = "cancelled_after_roll"
+			_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_cancelled_count"
+			)
+			return {"complete": true, "progressed": true, "nodes": nodes}
+		var request_value: Variant = requests[request_index]
+		if not request_value is Dictionary:
+			death["last_error"] = "drop_request_invalid"
+			death["remaining_requests"] = requests.slice(request_index)
+			death["remaining_request_count"] = requests.size() - request_index
+			death["reward_status"] = "materialization_failed"
+			_set_enemy_death_state(death, DEATH_STATE_FAILED)
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_materialization_failures"
+			)
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_failed_count"
+			)
+			return {"complete": true, "progressed": true, "nodes": nodes}
+		var request: Dictionary = request_value
+		var materialized := false
+		if request.has("gold_amount"):
+			materialized = _spawn_gold_loot(
+				int(request.get("gold_amount", 0)),
+				request.get("position", death.get("death_position", Vector2.ZERO)),
+				death.get("death_position", Vector2.INF),
+			)
+		else:
+			materialized = _spawn_loot(
+				str(request.get("item_name", "")),
+				request.get("position", death.get("death_position", Vector2.ZERO)),
+				request.get("item_record", {}),
+				death.get("death_position", Vector2.INF),
+			)
+		if not materialized:
+			death["remaining_requests"] = requests.slice(request_index)
+			death["remaining_request_count"] = requests.size() - request_index
+			death["reward_status"] = "materialization_retry"
+			death["materialization_retry_count"] = (
+				int(death.get("materialization_retry_count", 0)) + 1
+			)
+			death["last_error"] = "loot_node_materialization_failed"
+			RuntimeDiagnostics.increment_performance_counter(
+				&"death_queue_materialization_failures"
+			)
+			if int(death["materialization_retry_count"]) >= DEATH_QUEUE_MAX_RETRIES:
+				death["reward_status"] = "materialization_failed"
+				_set_enemy_death_state(death, DEATH_STATE_FAILED)
+				RuntimeDiagnostics.increment_performance_counter(
+					&"death_queue_failed_count"
+				)
+				return {"complete": true, "progressed": true, "nodes": nodes}
+			death["retry_at_msec"] = (
+				Time.get_ticks_msec() + DEATH_QUEUE_RETRY_DELAY_MSEC
+			)
+			return {"complete": false, "progressed": true, "nodes": nodes}
+		request_index += 1
+		nodes += 1
+		progressed = true
+		death["materialized_node_index"] = request_index
+		death["materialized_node_count"] = (
+			int(death.get("materialized_node_count", 0)) + 1
+		)
+		death["retry_at_msec"] = 0
+	plan["next_request_index"] = request_index
+	if request_index >= requests.size():
+		plan["materialized"] = true
+		death["remaining_requests"] = []
+		death["remaining_request_count"] = 0
+		death["reward_status"] = "materialized"
+		death["drop_plan"] = plan
+		return {"complete": true, "progressed": progressed, "nodes": nodes}
+	return {"complete": false, "progressed": progressed, "nodes": nodes}
+
+
+func _commit_enemy_death_item(death: Dictionary) -> void:
+	_schedule_queued_enemy_respawn(death)
+	death["reward_status"] = "committed"
+	_set_enemy_death_state(death, DEATH_STATE_COMMITTED)
+	RuntimeDiagnostics.increment_performance_counter(
+		&"death_queue_committed_count"
+	)
+	# AOE window probe: first committed death closes the first-engagement
+	# window. Diagnostics only.
+	AoeEngagementWindow.on_enemy_death_committed()
+
+
+func _schedule_queued_enemy_respawn(death: Dictionary) -> void:
+	if bool(death.get("respawn_scheduled", false)):
+		return
+	var preparation: Dictionary = death.get("respawn_preparation", {})
+	if preparation.is_empty() or not bool(preparation.get("valid", false)):
+		return
+	if not bool(preparation.get("enabled", false)):
+		return
+	var canonical_monster: Dictionary = death.get("canonical_monster", {})
+	var respawn: Dictionary = death.get("respawn", {})
+	var spawn_context: Dictionary = preparation.get(
+		"spawn_context", respawn.get("spawn_context", {})
+	)
+	_respawn_later(
+		canonical_monster,
+		death.get("spawn_position", death.get("death_position", Vector2.ZERO)),
+		bool(respawn.get("was_boss", death.get("was_boss", false))),
+		float(preparation.get("wait_seconds", 0.0)),
+		int(death.get("origin_generation", _zone_generation)),
+		spawn_context,
+	)
+	death["respawn_scheduled"] = true
+
+
+func _resolve_queued_enemy_death(
+	death: Dictionary,
+	_spread_across_frames := false,
+) -> Dictionary:
+	# Compatibility helper retained for focused tests/tools.  Production uses
+	# _pump_enemy_death_work_queue so scheduling and state transitions remain
+	# observable and budgeted.
+	var started_usec := RuntimeDiagnostics.timing_start()
+	if not death.has("origin_map_id"):
+		# Compatibility callers must provide a frozen origin explicitly.  Never
+		# manufacture one from the current world here, since this helper may be
+		# invoked after a delayed death signal.
+		death["origin_map_id"] = -1
+		death["origin_generation"] = -1
+		death["origin_captured"] = false
+	if str(death.get("state", "")) == "":
+		death["state"] = DEATH_STATE_SETTLING
+	var raw_plan: Variant = death.get("drop_plan", {})
+	if not raw_plan is Dictionary or (raw_plan as Dictionary).is_empty():
+		_plan_enemy_death_item(death)
+	if str(death.get("state", "")) == DEATH_STATE_PLANNED:
+		_set_enemy_death_state(death, DEATH_STATE_MATERIALIZING)
+	var result := _materialize_enemy_death_nodes(
+		death,
+		RuntimeDiagnostics.timing_start(),
+		2147483647,
+		2147483647,
+		true,
+	)
+	if bool(result.get("complete", false)) and str(death.get("state", "")) == DEATH_STATE_MATERIALIZING:
+		_commit_enemy_death_item(death)
+	return {
+		"monster_id": int(death.get("monster_id", -1)),
+		"item_count": int((death.get("drop_plan", {}) as Dictionary).get("item_count", 0)),
+		"gold_drop_count": int((death.get("drop_plan", {}) as Dictionary).get("gold_drop_count", 0)),
+		"respawn_scheduled": bool(death.get("respawn_scheduled", false)),
+		"state": str(death.get("state", "")),
+		"reason": str(death.get("last_error", "")),
+		"total_ms": float(RuntimeDiagnostics.timing_elapsed_usec(started_usec)) / 1000.0,
+	}
+
+
+func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
+	if not bool(death.get("respawn_enabled", true)):
+		return {"valid": true, "enabled": false}
+	var monster_id := int(death.get("monster_id", -1))
+	var canonical_monster: Dictionary = death.get("canonical_monster", {})
+	var spawn_context: Dictionary = (
+		(death.get("spawn_context", {}) as Dictionary).duplicate(true)
+	)
+	var spawn_classification := str(
+		canonical_monster.get("spawn_classification", "")
+	)
+	var policy := MonsterRespawnPolicyScript.resolve(
+		str(spawn_context.get("respawn_policy_id", "")),
+		str(canonical_monster.get("classification", "")),
+		float(death.get("configured_respawn", -1.0)),
+		spawn_classification
+	)
+	if not bool(policy.get("valid", false)):
+		push_error(
+			"Monster death respawn policy rejected monster_id=%d reason=%s"
+			% [monster_id, str(policy.get("reason", "invalid_policy"))]
+		)
+		return {"valid": false, "reason": "invalid_respawn_policy"}
+	var respawn_wait_seconds := float(policy.get("seconds", 0.0))
+	var respawn_runtime_map_id := int(
+		spawn_context.get("respawn_runtime_map_id", current_map_id)
+	)
+	var spawn_slot_id := str(spawn_context.get("spawn_slot_id", ""))
+	var respawn_marked := PlayerState.mark_monster_respawn_dead(
+		respawn_runtime_map_id,
+		spawn_slot_id,
+		monster_id,
+		str(policy.get("policy_id", "")),
+		Time.get_unix_time_from_system() + respawn_wait_seconds
+	)
+	if not respawn_marked:
+		push_error(
+			"Monster respawn state rejected unstable slot monster_id=%d map_id=%d slot=%s"
+			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
+		)
+		return {"valid": false, "reason": "unstable_respawn_slot"}
+	RuntimeDiagnostics.increment_performance_counter(&"respawn_state_updates")
+	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
+	spawn_context["spawn_classification"] = spawn_classification
+	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
+	spawn_context["respawn_random_seconds"] = 0.0
+	return {
+		"valid": true,
+		"enabled": true,
+		"wait_seconds": respawn_wait_seconds,
+		"spawn_context": spawn_context,
+	}
+
+
+func _loot_world_segment_clear(origin_px: Vector2, target_px: Vector2) -> bool:
+	if not origin_px.is_finite() or not target_px.is_finite() or not is_instance_valid(background):
+		return false
+	var origin_gu := _canonical_screen_px_to_ground_gu(origin_px)
+	var target_gu := _canonical_screen_px_to_ground_gu(target_px)
+	if background.is_environment_segment_blocked_ground(origin_gu, target_gu, 0.125):
+		return false
+	var space := get_world_2d().direct_space_state
+	if space == null:
+		return false
+	var query := PhysicsRayQueryParameters2D.create(origin_px, target_px, WorldSpatialRulesScript.WORLD_MASK)
+	query.hit_from_inside = true
+	return space.intersect_ray(query).is_empty()
+
+
+func _loot_ground_point_clear(position_px: Vector2) -> bool:
+	if not position_px.is_finite() or not is_instance_valid(background):
+		return false
+	if background.is_environment_actor_blocked(position_px, 6.0):
+		return false
+	var shape := CircleShape2D.new()
+	shape.radius = 5.0
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0.0, position_px)
+	query.collision_mask = WorldSpatialRulesScript.WORLD_MASK
+	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
+
+
+func _resolve_loot_ground_position(desired_px: Vector2, death_origin := Vector2.INF) -> Vector2:
+	var anchor: Vector2 = death_origin if death_origin.is_finite() else desired_px
+	if _loot_ground_point_clear(desired_px) and _loot_world_segment_clear(anchor, desired_px):
+		return desired_px
+	# Stable bounded search: materialization retries never consume drop RNG.
+	# Every candidate remains connected to the death footpoint by WORLD geometry.
+	var anchor_gu := _canonical_screen_px_to_ground_gu(anchor)
+	for radius in [0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0]:
+		for direction in range(8 if radius > 0.0 else 1):
+			var candidate := _canonical_ground_gu_to_screen_px(anchor_gu + Vector2.from_angle(direction * TAU / 8.0) * radius)
+			if _loot_ground_point_clear(candidate) and _loot_world_segment_clear(anchor, candidate):
+				return candidate
+	return Vector2.INF
+
+
+func _loot_collection_path_is_clear(pickup: LootPickup) -> bool:
+	if not is_instance_valid(pickup) or not is_instance_valid(player) or not gameplay_input_is_enabled():
+		return false
+	if pickup.filtered or pickup.is_queued_for_deletion():
+		return false
+	var origin_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	var target_gu := _canonical_screen_px_to_ground_gu(pickup.global_position)
+	if origin_gu.distance_to(target_gu) >= LootPickupRuntimeManagerScript.COLLECTION_RADIUS_GU:
+		return false
+	return _loot_world_segment_clear(player.global_position, pickup.global_position)
+
+
+func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary = {}, death_origin := Vector2.INF) -> bool:
+	# A formal but unresolved identity must never become an unrelated valid
+	# name-only item at collection time. Legacy callers still pass no record.
+	if not item_record.is_empty() and str(item_record.get("identity_status", "")) != "resolved":
+		return false
+	if _test_force_loot_materialization_failure_count > 0:
+		_test_force_loot_materialization_failure_count -= 1
+		return false
+	position = _resolve_loot_ground_position(position, death_origin)
+	if not position.is_finite():
+		return false
 	var loot := LootPickup.new()
-	loot.setup(item_name, player)
+	if item_record.is_empty():
+		loot.setup(item_name, player)
+	else:
+		loot.setup_item_record(item_record, player)
 	loot.global_position = position
 	loot.add_to_group("zone_content")
 	loot.collected.connect(_on_loot_collected)
 	loot.collection_rejected.connect(_on_loot_collection_rejected)
+	var spawn_started_usec := RuntimeDiagnostics.timing_start()
 	add_child(loot)
+	var registered := (
+		_loot_pickup_runtime_manager != null
+		and _loot_pickup_runtime_manager.register_pickup(loot)
+	)
+	if not registered:
+		# A formal loot node without a map-scoped registration is not collectible;
+		# remove it synchronously so materialization cannot leave dead ground loot.
+		loot.free()
+		return false
+	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
+	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
+	return is_instance_valid(loot)
+
+
+func _spawn_gold_loot(amount: int, position: Vector2, death_origin := Vector2.INF) -> bool:
+	if _test_force_loot_materialization_failure_count > 0:
+		_test_force_loot_materialization_failure_count -= 1
+		return false
+	position = _resolve_loot_ground_position(position, death_origin)
+	if not position.is_finite():
+		return false
+	var loot := LootPickup.new()
+	loot.setup_gold(amount, player)
+	loot.global_position = position
+	loot.add_to_group("zone_content")
+	loot.gold_collected.connect(_on_gold_loot_collected)
+	loot.collection_rejected.connect(_on_loot_collection_rejected)
+	var spawn_started_usec := RuntimeDiagnostics.timing_start()
+	add_child(loot)
+	var registered := (
+		_loot_pickup_runtime_manager != null
+		and _loot_pickup_runtime_manager.register_pickup(loot)
+	)
+	if not registered:
+		loot.free()
+		return false
+	RuntimeDiagnostics.increment_performance_counter(&"drop_node_spawn_count")
+	RuntimeDiagnostics.record_timing_usec(&"drop_node_spawn_usec", spawn_started_usec)
+	return is_instance_valid(loot)
+
+
+func _on_gold_loot_collected(amount: int, pickup: LootPickup) -> void:
+	_queue_loot_collection({"gold": true, "amount": amount, "pickup": pickup})
 
 
 func _on_loot_collected(item_name: String, pickup: LootPickup) -> void:
-	var result: Dictionary = PlayerState.receive(item_name, 1)
-	if bool(result.get("success", false)):
-		hud.show_loot(item_name)
-		if is_instance_valid(pickup):
-			pickup.confirm_collect()
+	var candidate := {"item_name": item_name, "pickup": pickup}
+	if is_instance_valid(pickup) and pickup.item_id >= 0:
+		candidate["item_id"] = pickup.item_id
+		if pickup.item_record.has("item_instance"):
+			var instance_value: Variant = pickup.item_record["item_instance"]
+			candidate["item_instance"] = (
+				instance_value.duplicate(true)
+				if instance_value is Dictionary or instance_value is Array
+				else instance_value
+			)
+	_queue_loot_collection(candidate)
+
+
+func _queue_loot_collection(candidate: Dictionary) -> bool:
+	var queued_candidate := candidate.duplicate(true)
+	var pickup: Variant = queued_candidate.get("pickup")
+	if not pickup is LootPickup or not is_instance_valid(pickup):
+		_loot_collection_origin_rejection_count += 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"loot_collection_origin_rejections"
+		)
+		return false
+	var pickup_object := pickup as LootPickup
+	var raw_map_id: Variant = null
+	var raw_generation: Variant = null
+	if pickup_object.has_meta("loot_runtime_map_id"):
+		raw_map_id = pickup_object.get_meta("loot_runtime_map_id")
+	if pickup_object.has_meta("loot_zone_generation"):
+		raw_generation = pickup_object.get_meta("loot_zone_generation")
+	var formal_origin_valid := (
+			raw_map_id is int
+			and raw_generation is int
+			and int(raw_map_id) >= 0
+			and int(raw_generation) >= 0
+		)
+	if not formal_origin_valid:
+		if not (PlayerState.test_mode and _loot_legacy_reference_fallback_test_enabled):
+			_loot_collection_origin_rejection_count += 1
+			RuntimeDiagnostics.increment_performance_counter(
+				&"loot_collection_origin_rejections"
+			)
+			pickup_object.reject_collection("拾取来源无效，无法入账。")
+			return false
+		raw_map_id = current_map_id
+		raw_generation = _zone_generation
+	queued_candidate["origin_map_id"] = int(raw_map_id)
+	queued_candidate["origin_generation"] = int(raw_generation)
+	if int(queued_candidate.get("origin_map_id", -1)) < 0 or int(queued_candidate.get("origin_generation", -1)) < 0:
+		_loot_collection_origin_rejection_count += 1
+		RuntimeDiagnostics.increment_performance_counter(
+			&"loot_collection_origin_rejections"
+		)
+		pickup_object.reject_collection("拾取来源无效，无法入账。")
+		return false
+	_pending_loot_collections.append(queued_candidate)
+	if not _loot_collection_flush_queued:
+		_loot_collection_flush_queued = true
+		call_deferred("_flush_loot_collections", true)
+	return true
+
+
+func _flush_loot_collections(allow_background := false) -> Dictionary:
+	if not _prepared_loot_collection.is_empty():
+		if allow_background:
+			# This deferred call has been consumed. The in-flight completion must
+			# be allowed to schedule the next cohort queued during its write.
+			_loot_collection_flush_queued = false
+			return {"pending": true}
+		var finished := _poll_prepared_loot_collection(true)
+		if not bool(finished.get("success", false)) and not bool(finished.get("retry", false)): return finished
+	var profile_started_usec := Time.get_ticks_usec()
+	_loot_collection_flush_queued = false
+	if _pending_loot_collections.is_empty():
+		return {"success": true, "candidate_count": 0, "saved": false}
+	var pending := _pending_loot_collections
+	_pending_loot_collections = []
+	var candidates: Array = []
+	var transaction_pending: Array[Dictionary] = []
+	var stale_count := 0
+	for candidate: Dictionary in pending:
+		var origin_matches := (
+			int(candidate.get("origin_map_id", -1)) == current_map_id
+			and int(candidate.get("origin_generation", -1)) == _zone_generation
+		)
+		var pickup: Variant = candidate.get("pickup")
+		if not origin_matches:
+			stale_count += 1
+			if pickup is LootPickup and is_instance_valid(pickup):
+				(pickup as LootPickup).reject_collection("地图已切换，无法拾取。")
+			continue
+		if not pickup is LootPickup or not _loot_collection_path_is_clear(pickup):
+			if pickup is LootPickup and is_instance_valid(pickup):
+				pickup.reject_collection("暂时无法到达该物品。")
+			continue
+		transaction_pending.append(candidate)
+		candidates.append(candidate.duplicate(true))
+	if allow_background and not PlayerState.test_mode and not candidates.is_empty():
+		var plan := PlayerState.prepare_loot_save(candidates)
+		if not plan.has("immediate"):
+			_prepared_loot_collection = {"plan": plan, "pending": transaction_pending, "candidate_count": pending.size(), "stale_count": stale_count}
+			return {"pending": true}
+		return _finish_loot_collection_outcomes(transaction_pending, plan.immediate, pending.size(), stale_count, profile_started_usec)
+	var result: Dictionary = (
+		PlayerState.receive_loot_batch_partial(candidates)
+		if not candidates.is_empty()
+		else {"success": true, "saved": false, "outcomes": [], "success_count": 0}
+	)
+	return _finish_loot_collection_outcomes(transaction_pending, result, pending.size(), stale_count, profile_started_usec)
+
+
+func _poll_prepared_loot_collection(wait := false) -> Dictionary:
+	if _prepared_loot_collection.is_empty(): return {"success": true}
+	var cohort := _prepared_loot_collection
+	var started_usec := Time.get_ticks_usec()
+	var valid := true
+	for candidate: Dictionary in cohort.pending:
+		var pickup: Variant = candidate.get("pickup")
+		if (int(candidate.get("origin_map_id", -1)) != current_map_id
+			or int(candidate.get("origin_generation", -1)) != _zone_generation
+			or not pickup is LootPickup or not is_instance_valid(pickup)
+			or not pickup.collection_pending() or not _loot_collection_path_is_clear(pickup)):
+			valid = false
+			break
+	var result: Dictionary
+	if not valid:
+		cohort.plan.writer.cancel()
+		result = {"retry": true, "reason": "pickup_origin_changed"}
 	else:
-		var message := str(result.get("message", "超过负重，无法拾取。"))
-		if is_instance_valid(pickup):
-			pickup.reject_collection(message)
-		else:
-			hud.show_message(message)
+		result = PlayerState.finish_prepared_loot_save(cohort.plan, wait)
+	if bool(result.get("pending", false)): return result
+	_prepared_loot_collection = {}
+	if bool(result.get("retry", false)):
+		_pending_loot_collections.append_array(cohort.pending)
+	else:
+		result = _finish_loot_collection_outcomes(cohort.pending, result, int(cohort.candidate_count), int(cohort.stale_count), started_usec)
+	if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
+		_loot_collection_flush_queued = true
+		call_deferred("_flush_loot_collections", true)
+	return result
+
+
+func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictionary, candidate_count: int, stale_count: int, profile_started_usec: int) -> Dictionary:
+	var transaction_finished_usec := Time.get_ticks_usec()
+	RuntimeDiagnostics.increment_performance_counter(&"loot_collection_authority_checks", candidate_count)
+	var outcomes: Array = result.get("outcomes", [])
+	var loot_feedback_names: Array = []
+	var collected_gold := 0
+	var processed_count := mini(transaction_pending.size(), outcomes.size())
+	for index in range(processed_count):
+		var candidate: Dictionary = transaction_pending[index]
+		var outcome: Dictionary = outcomes[index]
+		var pickup: Variant = candidate.get("pickup")
+		if bool(outcome.get("success", false)):
+			if bool(candidate.get("gold", false)):
+				collected_gold += maxi(0, int(candidate.get("amount", 0)))
+			if bool(candidate.get("gold", false)):
+				loot_feedback_names.append("金币 +%d" % int(candidate.get("amount", 0)))
+			else:
+				var display_item_id := LootVisualEffectScript.exact_item_id(pickup.item_record) if pickup is LootPickup and is_instance_valid(pickup) else int(candidate.get("item_id", -1))
+				var display_name := ("★" if pickup is LootPickup and is_instance_valid(pickup) and LootVisualEffectScript.affix_is_valid(pickup.item_record) else "") + str(candidate.get("item_name", ""))
+				loot_feedback_names.append({"item_name": display_name, "item_id": display_item_id})
+			if pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():
+				pickup.confirm_collect()
+		elif pickup is LootPickup and is_instance_valid(pickup) and (pickup as LootPickup).collection_pending():
+			pickup.reject_collection(str(outcome.get("message", "超过负重，无法拾取。")))
+	var outcomes_complete := processed_count == transaction_pending.size()
+	if not outcomes_complete:
+		# Keep unacknowledged candidates pending for a diagnosable retry instead
+		# of silently dropping them when a malformed/partial transaction result
+		# is returned.
+		_pending_loot_collections.append_array(
+			transaction_pending.slice(processed_count)
+		)
+		if not _pending_loot_collections.is_empty() and not _loot_collection_flush_queued:
+			_loot_collection_flush_queued = true
+			call_deferred("_flush_loot_collections", true)
+	if collected_gold > 0 and is_instance_valid(_audio_runtime_service):
+		_audio_runtime_service.play_item_event("currency:gold", "loot_success", {"map_id": current_map_id})
+	if hud != null and not loot_feedback_names.is_empty():
+		hud.show_loot_batch(loot_feedback_names)
+	if CombatDiagnosticLogScript.capture_enabled():
+		print("[LootPickupProfile] ", JSON.stringify({
+			"candidate_count": candidate_count,
+			"transaction_ms": float(transaction_finished_usec - profile_started_usec) / 1000.0,
+			"feedback_ms": float(Time.get_ticks_usec() - transaction_finished_usec) / 1000.0,
+			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
+			"transaction": PlayerState._last_loot_batch_profile.duplicate(true),
+		}))
+	return {
+		"success": bool(result.get("success", false)) and outcomes_complete,
+		"saved": bool(result.get("saved", false)),
+		"candidate_count": candidate_count,
+		"success_count": int(result.get("success_count", 0)),
+		"stale_count": stale_count,
+		"outcomes_count": outcomes.size(),
+		"remaining_count": _pending_loot_collections.size(),
+		"reason": (
+			"loot_collection_outcomes_incomplete"
+			if not outcomes_complete
+			else str(result.get("reason", ""))
+		),
+	}
 
 
 func _on_loot_collection_rejected(_item_name: String, message: String) -> void:
 	if is_instance_valid(hud):
-		hud.show_message(message)
+		# A rejected pickup is an operation failure: it belongs to the
+		# dedicated error channel, not the general notice lane.
+		hud.show_error_message(message)
 
 
 func _on_player_stats_changed(current_hp: int, max_hp: int) -> void:
@@ -8470,10 +13845,9 @@ func _on_consumable_used(item_name: String) -> void:
 		player.restore_health(30)
 		player.restore_mana(30)
 		player.apply_defense_buff(60.0, 2)
-	elif item_name == "祝福油":
-		hud.show_message(PlayerState.apply_blessing_oil(_rng))
-		return
-	hud.show_message("使用了%s" % item_name)
+	# R2: the generic "使用了X" text is retired here — the structured use
+	# result is the single central owner for every consumable use notice, so
+	# this legacy signal lane must not add a second one. Effects stay.
 
 
 func _on_scroll_used(item_name: String) -> void:
@@ -8485,19 +13859,32 @@ func _on_scroll_used(item_name: String) -> void:
 	elif effect == "random_teleport" or "随机" in item_name:
 		var destination := _find_valid_random_teleport_position(player.global_position)
 		if destination == player.global_position:
-			hud.show_message("附近没有可用传送落点")
+			hud.show_error_message("附近没有可用传送落点")
 			return
-		player.global_position = destination
-	elif effect == "blessing_oil":
-		hud.show_message(PlayerState.apply_blessing_oil(_rng))
-		return
+		_set_player_world_position(destination)
+		player.velocity = Vector2.ZERO
+		_relocate_main_pets_after_map_arrival()
 	elif effect == "repair_oil":
-		hud.show_message(PlayerState.apply_weapon_repair_oil(false))
+		_report_repair_oil_result(PlayerState.apply_weapon_repair_oil_result(false))
 		return
 	elif effect == "war_god_oil":
-		hud.show_message(PlayerState.apply_weapon_repair_oil(true))
+		_report_repair_oil_result(PlayerState.apply_weapon_repair_oil_result(true))
 		return
-	hud.show_message("使用了%s" % item_name)
+	# R2: the generic "使用了X" text is retired here — the structured use
+	# result is the single central owner for every scroll use notice, so this
+	# legacy signal lane must not add a second one. Effects stay.
+
+
+func _report_repair_oil_result(result: Dictionary) -> void:
+	# The repair-oil authority now reports a structured result: an actual
+	# repair stays on the notice lane, every rejection (no weapon, nothing to
+	# repair, save failure) surfaces on the dedicated error channel.
+	if bool(result.get("success", false)):
+		hud.show_message(str(result.get("message", "")))
+	else:
+		hud.show_error_message(
+			UIErrorFeedbackScript.from_result(result, "修复失败，请稍后重试。")
+		)
 
 
 func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
@@ -8506,19 +13893,24 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 	var origin_ground_gu := _canonical_screen_px_to_ground_gu(
 		origin_screen_px
 	)
+	if not origin_ground_gu.is_finite() or not _target_spatial_query_ready():
+		return origin_screen_px
+	# Primary MapRandomMove samples the map dimensions, not a radius around
+	# the actor. Use the published map's actual GU extent; collision below
+	# rejects black borders, walls and occupied cells without biasing to Home.
+	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	if raw_size.size() != 2 or int(raw_size[0]) <= 0 or int(raw_size[1]) <= 0:
+		return origin_screen_px
 	var player_combat_radius_gu := (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
 			ArtSpec.PLAYER_COLLISION_RADIUS_PX
 		)
 	)
-	for _attempt in range(96):
-		var angle := _rng.randf_range(0.0, TAU)
-		var distance_gu := _rng.randf_range(
-			RANDOM_TELEPORT_MIN_DISTANCE_GU,
-			RANDOM_TELEPORT_MAX_DISTANCE_GU
-		)
-		var candidate_ground_gu := (
-			origin_ground_gu + Vector2.from_angle(angle) * distance_gu
+	for _attempt in range(RANDOM_TELEPORT_MAX_ATTEMPTS):
+		var candidate_ground_gu := Vector2(
+			float(_rng.randi_range(0, int(raw_size[0]) - 1)) + 0.5,
+			float(_rng.randi_range(0, int(raw_size[1]) - 1)) + 0.5,
 		)
 		var candidate_screen_px := _canonical_ground_gu_to_screen_px(
 			candidate_ground_gu
@@ -8530,10 +13922,20 @@ func _find_valid_random_teleport_position(origin_screen_px: Vector2) -> Vector2:
 		):
 			continue
 		var occupied := false
-		for enemy_value: Variant in get_tree().get_nodes_in_group("enemies"):
-			if not enemy_value is EnemyActor:
-				continue
-			var enemy := enemy_value as EnemyActor
+		var enemy_query_radius_gu := (
+			player_combat_radius_gu + RANDOM_TELEPORT_ACTOR_CLEARANCE_GU
+		)
+		if not _target_spatial_query_aabb_into(
+			Rect2(
+				candidate_ground_gu - Vector2.ONE * enemy_query_radius_gu,
+				Vector2.ONE * enemy_query_radius_gu * 2.0,
+			),
+			_target_spatial_query_scratch,
+			# PERF-2: existence probe — occupancy is order-insensitive.
+			false,
+		):
+			return origin_screen_px
+		for enemy: EnemyActor in _target_spatial_query_scratch:
 			if GroundUnitSpaceScript.distance_gu(
 				_canonical_screen_px_to_ground_gu(enemy.global_position),
 				candidate_ground_gu
@@ -8578,3 +13980,188 @@ func _spawn_slot_is_alive(slot_id: String, generation: int) -> bool:
 			if str(value.get_meta("spawn_slot_id", "")) == slot_id and int(value.get_meta("zone_generation", -1)) == generation:
 				return true
 	return false
+
+# HC-MELEE-AI-PACKAGE: lightning legality stays in the canonical pipeline.
+var _hc_lightning_hint_ms := -1000
+
+func _hc_lightning_clear(victim: EnemyActor, caster_origin: Vector2) -> bool:
+	return _combat_target_world_clear(victim, caster_origin, false)
+
+
+func _combat_target_world_clear(victim: EnemyActor, caster_origin: Vector2, allow_cache := false) -> bool:
+	if not is_instance_valid(player) or player._dead or player.combat_transition_is_active() or current_map_id < 0:
+		return false
+	if not is_instance_valid(victim) or not victim.can_receive_damage():
+		return false
+	if victim.runtime_map_id != current_map_id or victim.is_queued_for_deletion():
+		return false
+	if int(victim.get_meta("zone_generation", _zone_generation)) != _zone_generation:
+		return false
+	var a := _canonical_screen_px_to_ground_gu(caster_origin)
+	var b := _canonical_screen_px_to_ground_gu(victim.global_position)
+	if not a.is_finite() or not b.is_finite() or not is_instance_valid(background):
+		return false
+	# Cast gates query fresh WORLD geometry; target selection can reuse its cache.
+	# The victim provides the same formal map projection injected by GameRoot.
+	return victim._world_attack_path_is_clear(a, b, caster_origin, victim.global_position, allow_cache)
+
+func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
+	if stable_skill_id != "wizard.lightning":
+		return true
+	var object: Object = instance_from_id(target_id) if target_id > 0 else null
+	var victim := object as EnemyActor
+	var clear := _hc_lightning_clear(victim, player.global_position)
+	if not clear and hud != null and Time.get_ticks_msec() - _hc_lightning_hint_ms >= 500:
+		_hc_lightning_hint_ms = Time.get_ticks_msec()
+		hud.show_error_message("目标被遮挡或已失效", 1.5)
+	return clear
+
+
+func _ordinary_attack_owner_matches(
+	press_token: int, touch_id: int, source: StringName
+) -> bool:
+	var raw_entry: Variant = _active_mobile_attack_tokens.get(press_token)
+	if not raw_entry is Dictionary:
+		return false
+	var entry := raw_entry as Dictionary
+	return (
+		int(entry.get("touch_id", -999)) == touch_id
+		and StringName(entry.get("source", &"")) == source
+	)
+
+
+func _process_ordinary_attack_input(attack_action_lifecycle: Dictionary) -> void:
+	_queued_mobile_attack_tickets.clear()
+	if not gameplay_input_is_enabled():
+		_cancel_all_mobile_attack_inputs(true)
+		return
+	_reconcile_ordinary_attack_button_owners()
+	if bool(attack_action_lifecycle.get("started", false)):
+		_submit_mobile_attack_ticket(_allocate_synthetic_attack_token())
+	elif _mobile_attack_held or bool(attack_action_lifecycle.get("active", false)):
+		_try_ordinary_attack_intent(&"live_hold")
+
+
+func _reconcile_ordinary_attack_button_owners() -> void:
+	# Reconcile two software ledgers; this is NOT an inactivity/hold timer.
+	# No inference is made from the absence of DRAG events.
+	if not is_instance_valid(hud) or not is_instance_valid(hud.attack_button):
+		return
+	if not hud.attack_button.has_method("owns_lifecycle_input"):
+		return
+	for raw_token: Variant in _active_mobile_attack_tokens.keys():
+		var token := int(raw_token)
+		var raw_entry: Variant = _active_mobile_attack_tokens.get(token)
+		if not raw_entry is Dictionary:
+			# Legacy bool entries cannot describe a current verified pointer.
+			_active_mobile_attack_tokens.erase(token)
+			continue
+		var entry := raw_entry as Dictionary
+		var source := StringName(entry.get("source", &""))
+		if source not in [&"touch", &"mouse", &"ui_accept"]:
+			continue
+		var touch_id := int(entry.get("touch_id", -999))
+		if not bool(hud.attack_button.call(
+			"owns_lifecycle_input", token, touch_id, source
+		)):
+			_on_mobile_attack_input_cancelled(
+				token, touch_id, source, &"button_owner_revoked"
+			)
+	_refresh_mobile_attack_held()
+
+
+func _try_ordinary_attack_intent(origin: StringName) -> bool:
+	if not gameplay_input_is_enabled():
+		return false
+	# Reject before target selection/geometry. Never adjust gameplay timers.
+	if not player.can_start_attack():
+		return false
+	var accepted := _request_mobile_attack()
+	if accepted:
+		# This means action STARTED; it does NOT mean damage has been committed.
+		_record_attack_action_diagnostic(&"attack_action_started", origin)
+	return accepted
+
+# HCM30-R4: adapters are deliberately kept in GameRoot, the existing authority.
+const HCM30SummonQueueScript := preload("res://scripts/monster_ai_package/m30/summon_queue.gd")
+var _hc_m30_summon_queue: HCM30SummonQueue
+var _hc_m30_landing_scratch: Array = []
+
+func _hc_m30_get_summon_queue() -> HCM30SummonQueue:
+	if not is_instance_valid(_hc_m30_summon_queue):
+		_hc_m30_summon_queue = HCM30SummonQueueScript.new()
+		_hc_m30_summon_queue.configure(self)
+		add_child(_hc_m30_summon_queue)
+	return _hc_m30_summon_queue
+
+func _hc_m30_probe_landing(origin_screen_px: Vector2) -> Vector2:
+	var origin_gu: Vector2 = _canonical_screen_px_to_ground_gu(origin_screen_px)
+	if not origin_gu.is_finite():
+		return Vector2.INF
+	# Preserve the existing angle/radius distribution (NOT uniform-area sampling).
+	var candidate_gu: Vector2 = origin_gu + Vector2.from_angle(_rng.randf_range(0.0, TAU)) * _rng.randf_range(1.5, 6.0)
+	# This is deliberately the SAME radius as the original summon call site.
+	var radius_gu: float = WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
+	return _canonical_ground_gu_to_screen_px(candidate_gu) if _hc_m30_landing_clear(candidate_gu, radius_gu, null) else Vector2.INF
+
+func _hc_m30_landing_clear(candidate_gu: Vector2, radius_gu: float, ignored_enemy: EnemyActor) -> bool:
+	if not candidate_gu.is_finite() or not is_finite(radius_gu) or radius_gu < 0.0:
+		return false
+	if not is_instance_valid(background) or _combat_spatial_index == null or current_map_id < 0:
+		return false
+	if not bool(_safe_zone_context.get("valid", false)):
+		return false
+	if WorldSpatialRulesScript.point_inside_safe_zones_ground_gu(candidate_gu, _active_safe_zones):
+		return false
+	var candidate_px: Vector2 = _canonical_ground_gu_to_screen_px(candidate_gu)
+	var radius_px: float = WorldSpatialRulesScript.actor_screen_radius_px_from_combat_radius_gu(radius_gu)
+	if not candidate_px.is_finite() or WorldSpatialRulesScript.environment_blocks_actor_screen_px(background, candidate_px, radius_px):
+		return false
+	if is_instance_valid(player):
+		var player_gu: Vector2 = _canonical_screen_px_to_ground_gu(player.global_position)
+		var player_radius: float = WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX)
+		if not player_gu.is_finite() or player_gu.distance_to(candidate_gu) < radius_gu + player_radius + ACTOR_LANDING_CLEARANCE_GU:
+			return false
+	# Degenerate segment = point AABB. The index itself adds max actor bounds.
+	# Use the unsorted API: occupancy is existence, not a selected damage victim.
+	_combat_spatial_index.query_enemy_nodes_segment_unsorted_into(
+		current_map_id, candidate_gu, candidate_gu,
+		radius_gu + ENEMY_LANDING_CLEARANCE_GU, _hc_m30_landing_scratch)
+	for raw: Variant in _hc_m30_landing_scratch:
+		if not is_instance_valid(raw) or not raw is EnemyActor:
+			continue
+		var other: EnemyActor = raw as EnemyActor
+		if other == ignored_enemy or other.is_queued_for_deletion() or other.current_hp <= 0 or other._death_pending or other._dying:
+			continue
+		if other.runtime_map_id != current_map_id or int(other.get_meta("zone_generation", -1)) != _zone_generation:
+			continue
+		var other_gu: Vector2 = other.spatial_index_position()
+		if not other_gu.is_finite():
+			return false
+		if other_gu.distance_to(candidate_gu) < radius_gu + other.combat_radius_gu + ENEMY_LANDING_CLEARANCE_GU:
+			return false
+	return true
+
+func _hc_m30_materialize(monster: Dictionary, candidate_px: Vector2, context: Dictionary) -> EnemyActor:
+	# Return through the canonical spawn authority; no parallel EnemyActor factory.
+	return _spawn_enemy(monster, candidate_px, false, DEFAULT_NORMAL_RESPAWN_SECONDS, context)
+
+func hc_m30_summon_snapshot() -> Dictionary:
+	return _hc_m30_summon_queue.snapshot() if is_instance_valid(_hc_m30_summon_queue) else {"pending_batches": 0}
+
+func _hc_m30_resolve_monster(raw_id: Variant) -> Dictionary:
+	var monster_id: int = GameData.canonical_monster_id(raw_id)
+	return GameData.get_monster_by_id(monster_id) if monster_id > 0 else {}
+
+func hc_m30_stable_enemy_ground_point(point: Vector2, radius_gu: float, expected_map_id: int) -> Vector2:
+	# Read-only projection shared by existing Bich enforcement and navigation.
+	# Does NOT modify positions, safe zones, attack reach or attack eligibility.
+	if expected_map_id != current_map_id or not point.is_finite() or not is_finite(radius_gu) or radius_gu < 0.0:
+		return Vector2.INF
+	if current_map_id != BICH_RUNTIME_MAP_ID:
+		return point
+	if not _safe_zone_context_is_valid():
+		return Vector2.INF
+	return WorldSpatialRulesScript.project_outside_safe_zones_ground_gu(
+		point, _active_safe_zones, radius_gu + SAFE_ZONE_ACTOR_PADDING_GU
+	)

@@ -27,7 +27,9 @@ static func initialize(document: Dictionary) -> Dictionary:
 	if state.is_empty():
 		state = {"schema_version": GROUND_SCHEMA_VERSION, "map_id": document.map_id, "dirty_chunks": [], "operations_by_chunk": {}}
 		state_changed = true
-	var contract_sync := _sync_coordinate_contract(manifest, state)
+	var contract_sync := _sync_coordinate_contract(
+		manifest, state, _design_size(document)
+	)
 	manifest_changed = manifest_changed or bool(contract_sync.manifest_changed)
 	state_changed = state_changed or bool(contract_sync.state_changed)
 	if manifest_changed:
@@ -80,8 +82,7 @@ static func _record_tile_batch(document: Dictionary, paints: Array[Dictionary]) 
 		var tile := Vector2i(int(raw_tile[0]), int(raw_tile[1]))
 		if not MapEditorCoordinate.contains_tile(tile, design_size):
 			return {"ok": false, "errors": ["tile_out_of_bounds"]}
-		var ground_px := MapEditorCoordinate.cell_center_to_ground_px(tile, design_size)
-		var chunk_id := chunk_id_for_grid(MapEditorCoordinate.chunk_grid_for_ground_px(ground_px, chunk_size))
+		var chunk_id := chunk_id_for_tile(tile, design_size, chunk_size)
 		var chunk_index := -1
 		for index in chunks.size():
 			if str(chunks[index].get("chunk_id", "")) == chunk_id:
@@ -175,8 +176,7 @@ static func _record_operation(document: Dictionary, tile: Vector2i, operation_da
 	var state: Dictionary = initialized.state
 	var chunk_size := Vector2i(int(manifest.chunk_size_px[0]), int(manifest.chunk_size_px[1]))
 	var ground_px := MapEditorCoordinate.cell_center_to_ground_px(tile, design_size)
-	var grid := MapEditorCoordinate.chunk_grid_for_ground_px(ground_px, chunk_size)
-	var chunk_id := chunk_id_for_grid(grid)
+	var chunk_id := chunk_id_for_tile(tile, design_size, chunk_size)
 	var chunks: Array = manifest.chunks
 	var found := false
 	for index in chunks.size():
@@ -222,6 +222,19 @@ static func chunk_id_for_grid(grid: Vector2i) -> String:
 	return "c_%d_%d" % [grid.x, grid.y]
 
 
+static func chunk_id_for_tile(
+	tile: Vector2i,
+	design_size: Vector2i,
+	chunk_size: Vector2i
+) -> String:
+	return chunk_id_for_grid(
+		MapEditorCoordinate.chunk_grid_for_ground_px(
+			MapEditorCoordinate.cell_center_to_ground_px(tile, design_size),
+			chunk_size
+		)
+	)
+
+
 static func _new_manifest(document: Dictionary) -> Dictionary:
 	var design_size := _design_size(document)
 	var pixel_size := MapEditorCoordinate.ground_image_size(design_size)
@@ -262,11 +275,30 @@ static func _sync_document_ground_contract(document: Dictionary, root: String) -
 	document["ground"] = ground
 
 
-static func _sync_coordinate_contract(manifest: Dictionary, state: Dictionary) -> Dictionary:
-	var manifest_changed := str(manifest.get("coordinate_contract_id", "")) != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
-	var state_changed := str(state.get("coordinate_contract_id", "")) != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+static func _sync_coordinate_contract(
+	manifest: Dictionary,
+	state: Dictionary,
+	design_size: Vector2i
+) -> Dictionary:
+	var manifest_contract_before := str(manifest.get("coordinate_contract_id", ""))
+	var state_contract_before := str(state.get("coordinate_contract_id", ""))
+	var contract_changed := (
+		manifest_contract_before != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+		or state_contract_before != MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	)
+	var manifest_changed := contract_changed
+	var state_changed := contract_changed
 	manifest["coordinate_contract_id"] = MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
 	state["coordinate_contract_id"] = MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	if contract_changed:
+		var chunk_size := _manifest_chunk_size(manifest)
+		if chunk_size.x > 0 and chunk_size.y > 0:
+			state_changed = (
+				_repartition_operations_by_chunk(
+					state, design_size, chunk_size
+				)
+				or state_changed
+			)
 	var dirty_chunks: Array = state.get("dirty_chunks", [])
 	var chunks: Array = manifest.get("chunks", [])
 	for index in chunks.size():
@@ -284,10 +316,62 @@ static func _sync_coordinate_contract(manifest: Dictionary, state: Dictionary) -
 				chunk["state"] = "dirty"
 				chunks[index] = chunk
 				manifest_changed = true
+	if contract_changed:
+		# The cell-center raster moved north by 16px.  Any operation bucket may
+		# therefore have a different chunk owner; keep every resulting bucket
+		# dirty until it is rebaked under v2.
+		for raw_chunk_id: Variant in state.get("operations_by_chunk", {}).keys():
+			var chunk_id := str(raw_chunk_id)
+			if not chunk_id.is_empty() and not dirty_chunks.has(chunk_id):
+				dirty_chunks.append(chunk_id)
+				state_changed = true
 	dirty_chunks.sort()
 	state["dirty_chunks"] = dirty_chunks
 	manifest["chunks"] = chunks
 	return {"manifest_changed": manifest_changed, "state_changed": state_changed}
+
+
+static func _manifest_chunk_size(manifest: Dictionary) -> Vector2i:
+	var raw_chunk_size: Variant = manifest.get("chunk_size_px", [])
+	if not raw_chunk_size is Array or (raw_chunk_size as Array).size() != 2:
+		return Vector2i.ZERO
+	return Vector2i(int(raw_chunk_size[0]), int(raw_chunk_size[1]))
+
+
+static func _repartition_operations_by_chunk(
+	state: Dictionary,
+	design_size: Vector2i,
+	chunk_size: Vector2i
+) -> bool:
+	var original: Dictionary = state.get("operations_by_chunk", {})
+	var repartitioned: Dictionary = {}
+	for raw_bucket: Variant in original.keys():
+		var bucket_id := str(raw_bucket)
+		var raw_operations: Variant = original.get(raw_bucket, [])
+		if not raw_operations is Array:
+			repartitioned[bucket_id] = raw_operations
+			continue
+		for raw_operation: Variant in raw_operations:
+			var target_bucket := bucket_id
+			if raw_operation is Dictionary:
+				var raw_tile: Variant = raw_operation.get("tile", [])
+				if raw_tile is Array and (raw_tile as Array).size() == 2:
+					var tile := Vector2i(
+						int(raw_tile[0]), int(raw_tile[1])
+					)
+					if MapEditorCoordinate.contains_tile(tile, design_size):
+						target_bucket = chunk_id_for_tile(
+							tile, design_size, chunk_size
+						)
+			var target_operations: Array = repartitioned.get(
+				target_bucket, []
+			)
+			target_operations.append(raw_operation)
+			repartitioned[target_bucket] = target_operations
+	if repartitioned == original:
+		return false
+	state["operations_by_chunk"] = repartitioned
+	return true
 
 
 static func _sync_blank_policy(document: Dictionary, manifest: Dictionary) -> bool:

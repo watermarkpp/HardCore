@@ -182,7 +182,7 @@ func _button_at(node: Node, position: Vector2) -> BaseButton:
 			return nested
 	if node is BaseButton:
 		var button := node as BaseButton
-		if button.is_visible_in_tree() and button.get_global_rect().has_point(position):
+		if button.is_visible_in_tree() and _screen_rect(button).has_point(position):
 			return button
 	return null
 
@@ -215,11 +215,18 @@ func _control_at(position: Vector2) -> Control:
 		if control == null:
 			_registered_controls.remove_at(index)
 			continue
-		if control.is_visible_in_tree() and control.get_global_rect().has_point(position):
+		if control.is_visible_in_tree() and _screen_rect(control).has_point(position):
 			var scroll_bar := _vertical_scroll_bar(control)
 			if scroll_bar != null and scroll_bar.max_value > scroll_bar.page:
 				return control
 	return null
+
+
+func _screen_rect(control: Control) -> Rect2:
+	# PopupPanel/Window children keep get_global_rect() in their window-local
+	# canvas. Touch events, however, arrive in viewport/screen coordinates. The
+	# screen position bridges both ordinary HUD controls and popup scroll areas.
+	return Rect2(control.get_screen_position(), control.size)
 
 
 func _vertical_scroll_bar(control: Control) -> VScrollBar:

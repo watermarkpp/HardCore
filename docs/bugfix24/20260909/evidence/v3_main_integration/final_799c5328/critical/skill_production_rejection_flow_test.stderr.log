@@ -1,0 +1,20 @@
+SCRIPT ERROR: Assertion failed: invalid_target reason mismatch: world_los_blocked
+   at: _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+   GDScript backtrace (most recent call first):
+       [0] _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+       [1] _run (res://tests/skill_production_rejection_flow_test.gd:45)
+SCRIPT ERROR: Assertion failed: insufficient_resource reason mismatch: world_los_blocked
+   at: _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+   GDScript backtrace (most recent call first):
+       [0] _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+       [1] _run (res://tests/skill_production_rejection_flow_test.gd:56)
+SCRIPT ERROR: Assertion failed: invalid_snapshot reason mismatch: invalid_target
+   at: _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+   GDScript backtrace (most recent call first):
+       [0] _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+       [1] _run (res://tests/skill_production_rejection_flow_test.gd:65)
+SCRIPT ERROR: Assertion failed: map_mismatch reason mismatch: invalid_target
+   at: _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+   GDScript backtrace (most recent call first):
+       [0] _rejection_case (res://tests/skill_production_rejection_flow_test.gd:128)
+       [1] _run (res://tests/skill_production_rejection_flow_test.gd:96)

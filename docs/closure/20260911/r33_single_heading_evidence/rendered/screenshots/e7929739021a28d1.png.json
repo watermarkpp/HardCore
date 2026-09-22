@@ -1,0 +1,926 @@
+{
+  "domain": "buy",
+  "image_size": [
+    1598,
+    720
+  ],
+  "name": "超级魔法药",
+  "row": {
+    "actions": [
+      {
+        "bounds": {
+          "ok": true,
+          "reason": "",
+          "rect": [
+            -1.0,
+            -1.0,
+            272.0,
+            53.0
+          ]
+        },
+        "combined_minimum": [
+          0.0,
+          27.0
+        ],
+        "custom_minimum": [
+          0.0,
+          0.0
+        ],
+        "font_size": 16,
+        "minimum": [
+          0.0,
+          27.0
+        ],
+        "name": "BuyButton",
+        "owner_hit_rect": [
+          717.755249023438,
+          463.599975585938,
+          270.0,
+          51.0
+        ],
+        "owner_visual_rect": [
+          716.755249023438,
+          462.599975585938,
+          272.0,
+          53.0
+        ],
+        "position": [
+          43.7552490234375,
+          387.599975585938
+        ],
+        "property": "buy_button",
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "size": [
+          270.0,
+          51.0
+        ],
+        "styles": [
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "normal"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "hover"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "pressed"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                -1.0,
+                -1.0,
+                272.0,
+                53.0
+              ]
+            },
+            "class": "StyleBoxFlat",
+            "state": "hover_pressed"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "disabled"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "focus"
+          }
+        ],
+        "text": "购买",
+        "theme_variation": "GothicShopBuyActionGemButton",
+        "visible": true
+      },
+      {
+        "bounds": {
+          "ok": true,
+          "reason": "",
+          "rect": [
+            -1.0,
+            -1.0,
+            272.0,
+            53.0
+          ]
+        },
+        "combined_minimum": [
+          0.0,
+          27.0
+        ],
+        "custom_minimum": [
+          0.0,
+          0.0
+        ],
+        "font_size": 16,
+        "minimum": [
+          0.0,
+          27.0
+        ],
+        "name": "RepairButton",
+        "owner_hit_rect": [
+          721.0,
+          457.0,
+          270.0,
+          51.0
+        ],
+        "owner_visual_rect": [
+          720.0,
+          456.0,
+          272.0,
+          53.0
+        ],
+        "position": [
+          47.0,
+          381.0
+        ],
+        "property": "repair_button",
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "size": [
+          270.0,
+          51.0
+        ],
+        "styles": [
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "normal"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "hover"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "pressed"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                -1.0,
+                -1.0,
+                272.0,
+                53.0
+              ]
+            },
+            "class": "StyleBoxFlat",
+            "state": "hover_pressed"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "disabled"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                270.0,
+                51.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "focus"
+          }
+        ],
+        "text": "维修全部装备",
+        "theme_variation": "GothicShopBuyActionGemButton",
+        "visible": false
+      },
+      {
+        "bounds": {
+          "ok": true,
+          "reason": "",
+          "rect": [
+            0.0,
+            -1.0,
+            326.0,
+            48.0
+          ]
+        },
+        "combined_minimum": [
+          0.0,
+          0.0
+        ],
+        "custom_minimum": [
+          0.0,
+          0.0
+        ],
+        "minimum": [
+          0.0,
+          0.0
+        ],
+        "name": "SellQuantityRow",
+        "owner_hit_rect": [
+          694.0,
+          402.599975585938,
+          326.0,
+          46.0
+        ],
+        "owner_visual_rect": [
+          694.0,
+          401.599975585938,
+          326.0,
+          48.0
+        ],
+        "position": [
+          20.0,
+          326.599975585938
+        ],
+        "property": "sell_quantity_row",
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "size": [
+          326.0,
+          46.0
+        ],
+        "theme_variation": "",
+        "visible": false
+      },
+      {
+        "bounds": {
+          "ok": true,
+          "reason": "",
+          "rect": [
+            -1.0,
+            -1.0,
+            328.0,
+            50.0
+          ]
+        },
+        "combined_minimum": [
+          0.0,
+          27.0
+        ],
+        "custom_minimum": [
+          0.0,
+          0.0
+        ],
+        "font_size": 16,
+        "minimum": [
+          0.0,
+          27.0
+        ],
+        "name": "SellQuantityButton",
+        "owner_hit_rect": [
+          689.755249023438,
+          466.599975585938,
+          326.0,
+          48.0
+        ],
+        "owner_visual_rect": [
+          688.755249023438,
+          465.599975585938,
+          328.0,
+          50.0
+        ],
+        "position": [
+          15.7552490234375,
+          390.599975585938
+        ],
+        "property": "sell_quantity_button",
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "size": [
+          326.0,
+          48.0
+        ],
+        "styles": [
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                326.0,
+                48.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "normal"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                326.0,
+                48.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "hover"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                326.0,
+                48.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "pressed"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                -1.0,
+                -1.0,
+                328.0,
+                50.0
+              ]
+            },
+            "class": "StyleBoxFlat",
+            "state": "hover_pressed"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                326.0,
+                48.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "disabled"
+          },
+          {
+            "bounds": {
+              "ok": true,
+              "reason": "",
+              "rect": [
+                0.0,
+                0.0,
+                326.0,
+                48.0
+              ]
+            },
+            "class": "StyleBox",
+            "state": "focus"
+          }
+        ],
+        "text": "出售",
+        "theme_variation": "GothicShopSellActionGemButton",
+        "visible": false
+      }
+    ],
+    "actual_body_bbcode": "[color=#d3a763]价格：1210金币 × 1，共1210金币[/color]\n\n类别：药品\n持续恢复魔法：每0.20秒11点（约55.0点/秒）\n魔法总恢复：320点，持续约5.80秒\n使用方式：双击使用\n可叠加：是",
+    "actual_title_color": [
+      0.901960790157318,
+      0.866666674613953,
+      0.796078443527222,
+      1.0
+    ],
+    "alpha": 1.0,
+    "body_content_width": 200,
+    "body_font": "",
+    "body_font_size": 14,
+    "body_visible": true,
+    "caption_rect": [
+      698.0,
+      94.0,
+      318.0,
+      28.0
+    ],
+    "caption_text": "商品详情",
+    "caption_visible": false,
+    "domain": "buy",
+    "expected_body_bbcode": "[color=#d3a763]价格：1210金币 × 1，共1210金币[/color]\n\n类别：药品\n持续恢复魔法：每0.20秒11点（约55.0点/秒）\n魔法总恢复：320点，持续约5.80秒\n使用方式：双击使用\n可叠加：是",
+    "expected_title": "超级魔法药",
+    "expected_title_color": [
+      0.901960790157318,
+      0.866666674613953,
+      0.796078443527222,
+      1.0
+    ],
+    "frame_decoration_rect": [
+      669.801086425781,
+      49.6000061035156,
+      365.908386230469,
+      509.999969482422
+    ],
+    "merchant_context": {
+      "merchant_id": "merchant.server.crystal.cjlaaa.33",
+      "merchant_rate_bps": 10000,
+      "stock_key": "general",
+      "stock_markup_bps": 11000,
+      "supports_repair": false,
+      "types": [
+        8,
+        12
+      ]
+    },
+    "name": "超级魔法药",
+    "owner_canvas_transform": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (259.0, 50.0)]",
+    "panel_rect": [
+      259.0,
+      50.0,
+      1080.0,
+      620.0
+    ],
+    "panel_visible": true,
+    "pixel_scope": "screen",
+    "rectangle_units": "owner_local_coordinates",
+    "screen_scale": [
+      1.0,
+      1.0
+    ],
+    "screen_transform": "[X: (1.0, 0.0), Y: (0.0, 1.0), O: (0.0, 0.0)]",
+    "scrollbar_visible": false,
+    "snapshot": {
+      "body": "价格：1210金币 × 1，共1210金币\n\n类别：药品\n持续恢复魔法：每0.20秒11点（约55.0点/秒）\n魔法总恢复：320点，持续约5.80秒\n使用方式：双击使用\n可叠加：是",
+      "body_content_height": 200,
+      "body_rect": [
+        18.0,
+        62.0,
+        203.0,
+        204.0
+      ],
+      "candidate_trace": [
+        {
+          "actual_body_width": 124.0,
+          "actual_title_width": 124.0,
+          "available_height": 318.0,
+          "body_content_width": 114,
+          "body_line_count": 12,
+          "body_measured_h": 242.0,
+          "fits_height": false,
+          "height": 322.0,
+          "natural_height": 322.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 124.0,
+          "title_measured_h": 32.0,
+          "width": 160.0
+        },
+        {
+          "actual_body_width": 130.0,
+          "actual_title_width": 130.0,
+          "available_height": 318.0,
+          "body_content_width": 128,
+          "body_line_count": 11,
+          "body_measured_h": 223.0,
+          "fits_height": true,
+          "height": 303.0,
+          "natural_height": 303.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 130.0,
+          "title_measured_h": 32.0,
+          "width": 166.0
+        },
+        {
+          "actual_body_width": 137.0,
+          "actual_title_width": 137.0,
+          "available_height": 318.0,
+          "body_content_width": 136,
+          "body_line_count": 11,
+          "body_measured_h": 223.0,
+          "fits_height": true,
+          "height": 303.0,
+          "natural_height": 303.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 137.0,
+          "title_measured_h": 32.0,
+          "width": 173.0
+        },
+        {
+          "actual_body_width": 143.0,
+          "actual_title_width": 143.0,
+          "available_height": 318.0,
+          "body_content_width": 140,
+          "body_line_count": 11,
+          "body_measured_h": 224.0,
+          "fits_height": true,
+          "height": 304.0,
+          "natural_height": 304.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 143.0,
+          "title_measured_h": 32.0,
+          "width": 179.0
+        },
+        {
+          "actual_body_width": 150.0,
+          "actual_title_width": 150.0,
+          "available_height": 318.0,
+          "body_content_width": 150,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 150.0,
+          "title_measured_h": 32.0,
+          "width": 186.0
+        },
+        {
+          "actual_body_width": 156.0,
+          "actual_title_width": 156.0,
+          "available_height": 318.0,
+          "body_content_width": 154,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 156.0,
+          "title_measured_h": 32.0,
+          "width": 192.0
+        },
+        {
+          "actual_body_width": 163.0,
+          "actual_title_width": 163.0,
+          "available_height": 318.0,
+          "body_content_width": 154,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 163.0,
+          "title_measured_h": 32.0,
+          "width": 199.0
+        },
+        {
+          "actual_body_width": 170.0,
+          "actual_title_width": 170.0,
+          "available_height": 318.0,
+          "body_content_width": 170,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 170.0,
+          "title_measured_h": 32.0,
+          "width": 206.0
+        },
+        {
+          "actual_body_width": 176.0,
+          "actual_title_width": 176.0,
+          "available_height": 318.0,
+          "body_content_width": 170,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 176.0,
+          "title_measured_h": 32.0,
+          "width": 212.0
+        },
+        {
+          "actual_body_width": 183.0,
+          "actual_title_width": 183.0,
+          "available_height": 318.0,
+          "body_content_width": 178,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 183.0,
+          "title_measured_h": 32.0,
+          "width": 219.0
+        },
+        {
+          "actual_body_width": 189.0,
+          "actual_title_width": 189.0,
+          "available_height": 318.0,
+          "body_content_width": 186,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 189.0,
+          "title_measured_h": 32.0,
+          "width": 225.0
+        },
+        {
+          "actual_body_width": 196.0,
+          "actual_title_width": 196.0,
+          "available_height": 318.0,
+          "body_content_width": 186,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 196.0,
+          "title_measured_h": 32.0,
+          "width": 232.0
+        },
+        {
+          "actual_body_width": 203.0,
+          "actual_title_width": 203.0,
+          "available_height": 318.0,
+          "body_content_width": 200,
+          "body_line_count": 10,
+          "body_measured_h": 204.0,
+          "fits_height": true,
+          "height": 284.0,
+          "natural_height": 284.0,
+          "region": [
+            732.801086425781,
+            107.600006103516,
+            239.908386230469,
+            318.999969482422
+          ],
+          "requested_text_width": 203.0,
+          "title_measured_h": 32.0,
+          "width": 239.0
+        }
+      ],
+      "density": "comfortable",
+      "epoch": 32,
+      "error": "",
+      "layouts": 16,
+      "margin": 18.0,
+      "name_style": {
+        "color": [
+          0.901960790157318,
+          0.866666674613953,
+          0.796078443527222,
+          1.0
+        ],
+        "group": "default",
+        "identity_conflict": false,
+        "item_id": -1,
+        "known": false,
+        "name": "超级魔法药",
+        "tier": "UNCLASSIFIED"
+      },
+      "rect": [
+        733.255249023438,
+        125.099990844727,
+        239.0,
+        284.0
+      ],
+      "scroll_active": false,
+      "source_body": "[color=#d3a763]价格：1210金币 × 1，共1210金币[/color]\n\n类别：药品\n持续恢复魔法：每0.20秒11点（约55.0点/秒）\n魔法总恢复：320点，持续约5.80秒\n使用方式：双击使用\n可叠加：是",
+      "source_title": "超级魔法药",
+      "space_spec": {
+        "action_gap_px": 36.0,
+        "action_layout": "stack",
+        "caption_reserved": false,
+        "caption_reserved_height": 0.0,
+        "frame_gap_px": 32.0,
+        "frame_opening": [
+          700.801086425781,
+          75.6000061035156,
+          303.908386230469,
+          457.999969482422
+        ],
+        "frame_safe_rect": [
+          732.801086425781,
+          107.600006103516,
+          239.908386230469,
+          393.999969482422
+        ],
+        "heading_mode": "card_title",
+        "kind": "shop",
+        "pixel_scope": "screen",
+        "protected": [
+          [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ]
+        ],
+        "region": [
+          732.801086425781,
+          107.600006103516,
+          239.908386230469,
+          318.999969482422
+        ],
+        "screen_scale": [
+          1.0,
+          1.0
+        ],
+        "side": "center",
+        "title_rect": [
+          698.0,
+          94.0,
+          318.0,
+          28.0
+        ]
+      },
+      "title": "超级魔法药",
+      "title_color": [
+        0.901960790157318,
+        0.866666674613953,
+        0.796078443527222,
+        1.0
+      ],
+      "title_gap": 12.0,
+      "title_rect": [
+        18.0,
+        18.0,
+        203.0,
+        32.0
+      ],
+      "valid": true
+    },
+    "stage": "settled",
+    "stock_key": "general",
+    "title_font": "",
+    "title_font_size": 20,
+    "title_visible": true,
+    "viewport": [
+      0.0,
+      0.0,
+      1598.0,
+      720.0
+    ],
+    "window": [
+      1598,
+      720
+    ]
+  },
+  "scope": "raw_rendered_runtime_not_phone_not_acceptance",
+  "stock_key": "general"
+}

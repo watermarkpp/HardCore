@@ -1,0 +1,1220 @@
+{
+  "asset_schema_version": 2,
+  "package_id": "mse_chain_roadblock_pack_20260822_v1",
+  "package_version": 1,
+  "classification": "装饰物1/路障",
+  "palette_path": "装饰物1/路障",
+  "source_count": 2,
+  "asset_count": 8,
+  "cutting_policy": "alpha_x_run_bbox_rgba_preserve_v1",
+  "alpha_threshold": 8,
+  "padding_px": 4,
+  "default_collision_policy": "none",
+  "collision_authority": "manual_by_user",
+  "sources": [
+    {
+      "source_index": 1,
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月21日 23_52_30.png",
+      "source_sha256": "a42752c5ca3cd095eeef804b2509de792f467973bcf524b580bb1cd0b6018dc1",
+      "source_canvas": [
+        1774,
+        469
+      ],
+      "alpha_threshold": 8,
+      "x_run_count": 4,
+      "x_run_bounds_px_inclusive": [
+        [
+          178,
+          249
+        ],
+        [
+          518,
+          784
+        ],
+        [
+          924,
+          1291
+        ],
+        [
+          1423,
+          1690
+        ]
+      ]
+    },
+    {
+      "source_index": 2,
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月22日 00_00_52.png",
+      "source_sha256": "0d84c91b295ca7a0566f1ce92d65c782412894431ef0aa4cffc155af8fdf8022",
+      "source_canvas": [
+        1536,
+        554
+      ],
+      "alpha_threshold": 8,
+      "x_run_count": 4,
+      "x_run_bounds_px_inclusive": [
+        [
+          63,
+          135
+        ],
+        [
+          383,
+          709
+        ],
+        [
+          764,
+          1150
+        ],
+        [
+          1210,
+          1516
+        ]
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "mse.roadblock.chain_fence.01",
+      "display_name": "铁链路障 01",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_01.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_01.png",
+      "canvas_size": [
+        80,
+        463
+      ],
+      "image_size": [
+        80,
+        463
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        72,
+        455
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        72,
+        455
+      ],
+      "anchor_px": [
+        40,
+        458
+      ],
+      "placement_anchor_px": [
+        40,
+        458
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        8
+      ],
+      "visual_footprint_tiles": [
+        2,
+        8
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        8
+      ],
+      "base_footprint_tiles": [
+        2,
+        8
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月21日 23_52_30.png",
+      "source_sha256": "a42752c5ca3cd095eeef804b2509de792f467973bcf524b580bb1cd0b6018dc1",
+      "source_canvas": [
+        1774,
+        469
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        178,
+        249
+      ],
+      "source_bounds_px": [
+        178,
+        1,
+        72,
+        455
+      ],
+      "output_sha256": "0d4dfc6ae77444a6680503c56211d04b0376abf922048b005f2801c841fc55bd",
+      "thumbnail_source_sha256": "0d4dfc6ae77444a6680503c56211d04b0376abf922048b005f2801c841fc55bd",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1774,
+          469
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          178,
+          249
+        ],
+        "source_bounds_px": [
+          178,
+          1,
+          72,
+          455
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 1,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 1,
+      "source_run_index": 1,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.02",
+      "display_name": "铁链路障 02",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_02.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_02.png",
+      "canvas_size": [
+        275,
+        441
+      ],
+      "image_size": [
+        275,
+        441
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        267,
+        433
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        267,
+        433
+      ],
+      "anchor_px": [
+        137,
+        436
+      ],
+      "placement_anchor_px": [
+        137,
+        436
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        5,
+        7
+      ],
+      "visual_footprint_tiles": [
+        5,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        5,
+        7
+      ],
+      "base_footprint_tiles": [
+        5,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月21日 23_52_30.png",
+      "source_sha256": "a42752c5ca3cd095eeef804b2509de792f467973bcf524b580bb1cd0b6018dc1",
+      "source_canvas": [
+        1774,
+        469
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        518,
+        784
+      ],
+      "source_bounds_px": [
+        518,
+        0,
+        267,
+        433
+      ],
+      "output_sha256": "398b7e5bd11c21f12e8a1022ec02bc23a35cf8f8eb679f28acfddfecae46d8cf",
+      "thumbnail_source_sha256": "398b7e5bd11c21f12e8a1022ec02bc23a35cf8f8eb679f28acfddfecae46d8cf",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1774,
+          469
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          518,
+          784
+        ],
+        "source_bounds_px": [
+          518,
+          0,
+          267,
+          433
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 2,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 1,
+      "source_run_index": 2,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.03",
+      "display_name": "铁链路障 03",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_03.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_03.png",
+      "canvas_size": [
+        376,
+        274
+      ],
+      "image_size": [
+        376,
+        274
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        368,
+        266
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        368,
+        266
+      ],
+      "anchor_px": [
+        188,
+        269
+      ],
+      "placement_anchor_px": [
+        188,
+        269
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        5
+      ],
+      "visual_footprint_tiles": [
+        6,
+        5
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        5
+      ],
+      "base_footprint_tiles": [
+        6,
+        5
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月21日 23_52_30.png",
+      "source_sha256": "a42752c5ca3cd095eeef804b2509de792f467973bcf524b580bb1cd0b6018dc1",
+      "source_canvas": [
+        1774,
+        469
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        924,
+        1291
+      ],
+      "source_bounds_px": [
+        924,
+        85,
+        368,
+        266
+      ],
+      "output_sha256": "f8c3fd132a2ad2a1ff6807601a1edb35bc7c1ad108ad697ba449d480ca35f37d",
+      "thumbnail_source_sha256": "f8c3fd132a2ad2a1ff6807601a1edb35bc7c1ad108ad697ba449d480ca35f37d",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1774,
+          469
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          924,
+          1291
+        ],
+        "source_bounds_px": [
+          924,
+          85,
+          368,
+          266
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 3,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 1,
+      "source_run_index": 3,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.04",
+      "display_name": "铁链路障 04",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_04.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_04.png",
+      "canvas_size": [
+        276,
+        421
+      ],
+      "image_size": [
+        276,
+        421
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        268,
+        413
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        268,
+        413
+      ],
+      "anchor_px": [
+        138,
+        416
+      ],
+      "placement_anchor_px": [
+        138,
+        416
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        5,
+        7
+      ],
+      "visual_footprint_tiles": [
+        5,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        5,
+        7
+      ],
+      "base_footprint_tiles": [
+        5,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月21日 23_52_30.png",
+      "source_sha256": "a42752c5ca3cd095eeef804b2509de792f467973bcf524b580bb1cd0b6018dc1",
+      "source_canvas": [
+        1774,
+        469
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        1423,
+        1690
+      ],
+      "source_bounds_px": [
+        1423,
+        18,
+        268,
+        413
+      ],
+      "output_sha256": "cab4cb3531a9ae38d01f32e7248c39c78a39ad8bd7901a5c271e2ab4f5de2a59",
+      "thumbnail_source_sha256": "cab4cb3531a9ae38d01f32e7248c39c78a39ad8bd7901a5c271e2ab4f5de2a59",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1774,
+          469
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          1423,
+          1690
+        ],
+        "source_bounds_px": [
+          1423,
+          18,
+          268,
+          413
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 4,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 1,
+      "source_run_index": 4,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.05",
+      "display_name": "铁链路障 05",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_05.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_05.png",
+      "canvas_size": [
+        81,
+        445
+      ],
+      "image_size": [
+        81,
+        445
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        73,
+        437
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        73,
+        437
+      ],
+      "anchor_px": [
+        40,
+        440
+      ],
+      "placement_anchor_px": [
+        40,
+        440
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        2,
+        7
+      ],
+      "visual_footprint_tiles": [
+        2,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        2,
+        7
+      ],
+      "base_footprint_tiles": [
+        2,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月22日 00_00_52.png",
+      "source_sha256": "0d84c91b295ca7a0566f1ce92d65c782412894431ef0aa4cffc155af8fdf8022",
+      "source_canvas": [
+        1536,
+        554
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        63,
+        135
+      ],
+      "source_bounds_px": [
+        63,
+        39,
+        73,
+        437
+      ],
+      "output_sha256": "676d199f151415a5e42bc81ea9f974d6ac3529392982a1ed30b0c4b74d2a4791",
+      "thumbnail_source_sha256": "676d199f151415a5e42bc81ea9f974d6ac3529392982a1ed30b0c4b74d2a4791",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1536,
+          554
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          63,
+          135
+        ],
+        "source_bounds_px": [
+          63,
+          39,
+          73,
+          437
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 1,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 2,
+      "source_run_index": 1,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.06",
+      "display_name": "铁链路障 06",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_06.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_06.png",
+      "canvas_size": [
+        335,
+        434
+      ],
+      "image_size": [
+        335,
+        434
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        327,
+        426
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        327,
+        426
+      ],
+      "anchor_px": [
+        167,
+        429
+      ],
+      "placement_anchor_px": [
+        167,
+        429
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        6,
+        7
+      ],
+      "visual_footprint_tiles": [
+        6,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        6,
+        7
+      ],
+      "base_footprint_tiles": [
+        6,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月22日 00_00_52.png",
+      "source_sha256": "0d84c91b295ca7a0566f1ce92d65c782412894431ef0aa4cffc155af8fdf8022",
+      "source_canvas": [
+        1536,
+        554
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        383,
+        709
+      ],
+      "source_bounds_px": [
+        383,
+        32,
+        327,
+        426
+      ],
+      "output_sha256": "b6e88fc882cf89414bd06a373c7d6b122ed16538b485275602a7c62502619af0",
+      "thumbnail_source_sha256": "b6e88fc882cf89414bd06a373c7d6b122ed16538b485275602a7c62502619af0",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1536,
+          554
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          383,
+          709
+        ],
+        "source_bounds_px": [
+          383,
+          32,
+          327,
+          426
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 2,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 2,
+      "source_run_index": 2,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.07",
+      "display_name": "铁链路障 07",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_07.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_07.png",
+      "canvas_size": [
+        395,
+        277
+      ],
+      "image_size": [
+        395,
+        277
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        387,
+        269
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        387,
+        269
+      ],
+      "anchor_px": [
+        197,
+        272
+      ],
+      "placement_anchor_px": [
+        197,
+        272
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        7,
+        5
+      ],
+      "visual_footprint_tiles": [
+        7,
+        5
+      ],
+      "occupancy_footprint_tiles": [
+        7,
+        5
+      ],
+      "base_footprint_tiles": [
+        7,
+        5
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月22日 00_00_52.png",
+      "source_sha256": "0d84c91b295ca7a0566f1ce92d65c782412894431ef0aa4cffc155af8fdf8022",
+      "source_canvas": [
+        1536,
+        554
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        764,
+        1150
+      ],
+      "source_bounds_px": [
+        764,
+        114,
+        387,
+        269
+      ],
+      "output_sha256": "f02026a98780667fa13e7c93d790c61de0e3b5c5cd13db5b2c53b97c22037062",
+      "thumbnail_source_sha256": "f02026a98780667fa13e7c93d790c61de0e3b5c5cd13db5b2c53b97c22037062",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1536,
+          554
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          764,
+          1150
+        ],
+        "source_bounds_px": [
+          764,
+          114,
+          387,
+          269
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 3,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 2,
+      "source_run_index": 3,
+      "projection": "orthographic_isometric_2_to_1"
+    },
+    {
+      "asset_id": "mse.roadblock.chain_fence.08",
+      "display_name": "铁链路障 08",
+      "asset_type": "large_prop",
+      "category": "obstacle",
+      "object_class": "obstacle",
+      "theme": "user_palette",
+      "image": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_08.png",
+      "thumbnail": "assets/art/maps/_shared/user_palette/decorations_1/barricades/chain_fence_20260821/chain_fence_08.png",
+      "canvas_size": [
+        315,
+        439
+      ],
+      "image_size": [
+        315,
+        439
+      ],
+      "visible_bounds_px": [
+        4,
+        4,
+        307,
+        431
+      ],
+      "selection_bounds_px": [
+        4,
+        4,
+        307,
+        431
+      ],
+      "anchor_px": [
+        157,
+        434
+      ],
+      "placement_anchor_px": [
+        157,
+        434
+      ],
+      "anchor_tile": [
+        0,
+        0
+      ],
+      "anchor_mode": "foot_tile",
+      "footprint_tiles": [
+        5,
+        7
+      ],
+      "visual_footprint_tiles": [
+        5,
+        7
+      ],
+      "occupancy_footprint_tiles": [
+        5,
+        7
+      ],
+      "base_footprint_tiles": [
+        5,
+        7
+      ],
+      "collision_footprint_tiles": [
+        0,
+        0
+      ],
+      "collision_cells": [],
+      "placement_clearance_cells": [],
+      "tile_size": [
+        64,
+        32
+      ],
+      "approved_scale": 1.0,
+      "logical_scale_level": 0,
+      "scale_approved": false,
+      "anchor_approved": false,
+      "default_layer": "object_base",
+      "default_object_role": "obstacle",
+      "collision_policy": "none",
+      "collision_profile_id": "none_visual",
+      "navigation_policy": "ignore",
+      "manual_collision_expected": true,
+      "map_collision_override": "default",
+      "collision_authority": "manual_by_user",
+      "occlusion": true,
+      "content_layer": "personal_expansion",
+      "placeable": true,
+      "calibration_status": "placeable",
+      "calibration_source": "pending_manual_geometry_v1",
+      "geometry_pending_manual": true,
+      "palette_path": "装饰物1/路障",
+      "source_external_path": "C:\\Users\\Administrator\\Downloads\\ChatGPT Image 2026年8月22日 00_00_52.png",
+      "source_sha256": "0d84c91b295ca7a0566f1ce92d65c782412894431ef0aa4cffc155af8fdf8022",
+      "source_canvas": [
+        1536,
+        554
+      ],
+      "source_x_run_bounds_px_inclusive": [
+        1210,
+        1516
+      ],
+      "source_bounds_px": [
+        1210,
+        44,
+        307,
+        431
+      ],
+      "output_sha256": "ad731bd9d0c03a3315f41b964671f0a93d31ab16292aff41332fa4579db190f0",
+      "thumbnail_source_sha256": "ad731bd9d0c03a3315f41b964671f0a93d31ab16292aff41332fa4579db190f0",
+      "processing": {
+        "pipeline": "alpha_x_run_bbox_rgba_preserve_v1",
+        "alpha_threshold": 8,
+        "padding_px": 4,
+        "source_canvas": [
+          1536,
+          554
+        ],
+        "source_x_run_bounds_px_inclusive": [
+          1210,
+          1516
+        ],
+        "source_bounds_px": [
+          1210,
+          44,
+          307,
+          431
+        ],
+        "rgba_pixels_preserved": true,
+        "run_index": 4,
+        "run_count": 4,
+        "output_mask_edge_touch": []
+      },
+      "tags": [
+        "new_local_asset",
+        "chain_fence",
+        "roadblock",
+        "alpha_x_run_bbox_rgba_preserve_v1"
+      ],
+      "editable": true,
+      "allows_edge_clipping": true,
+      "semantic_role": "",
+      "trigger_on_enter": false,
+      "package_id": "mse_chain_roadblock_pack_20260822_v1",
+      "source_index": 2,
+      "source_run_index": 4,
+      "projection": "orthographic_isometric_2_to_1"
+    }
+  ]
+}

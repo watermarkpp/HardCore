@@ -226,7 +226,21 @@ def matched_profile(record: dict[str, Any], status: str) -> dict[str, Any]:
 def build_catalog() -> dict[str, Any]:
     database, service_records = parse_database()
     project = json.loads(PROJECT_PATH.read_text(encoding="utf-8"))
-    project_records = sorted(project["records"], key=lambda row: int(row["monsterId"]))
+    project_records = sorted(
+        (
+            row
+            for row in project["records"]
+            if row.get("recordStatus") != "retired"
+        ),
+        key=lambda row: int(row["monsterId"]),
+    )
+    expected_active_count = 156
+    if len(project_records) != expected_active_count:
+        raise ValueError(
+            "active monster count mismatch: "
+            f"expected={expected_active_count} "
+            f"actual={len(project_records)}"
+        )
 
     service_by_name: dict[str, list[dict[str, Any]]] = {}
     for record in service_records:

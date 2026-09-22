@@ -82,6 +82,12 @@ ACTIONS = {
     "hit": {"start": 472, "frames": 3},
     "death": {"start": 536, "frames": 4},
 }
+# ActRun is prepared separately from the existing six-action policy.  Keeping
+# the legacy ACTIONS table unchanged prevents this asset-preparation command
+# from rewriting the helmet visibility policy or manufacturing helmet run
+# atlases; male run consumers call extract_action with this exact spec.
+RUN_ACTION = {"start": 128, "frames": 6}
+MALE_ACTIONS = {**ACTIONS, "run": RUN_ACTION}
 
 sys.path.insert(0, str(ROOT / "tools/vendor"))
 from extract_wil import decode_sprite, read_library  # noqa: E402
@@ -190,7 +196,7 @@ def extract_action(
             )
     target = OUTPUT_ROOT / f"hair_002_{action_name}.png"
     save_exact_atlas(target, atlas)
-    return {
+    result = {
         "path": resource_path(target),
         "fileSha256": file_sha256(target),
         "atlasRgbaSha256": rgba_sha256(atlas),
@@ -202,6 +208,10 @@ def extract_action(
         "confidence": "primary_client_exact",
         "frames": frames,
     }
+    if action_name == "run":
+        result["sourceFeature"] = HAIR_SOURCE_BLOCK
+        result["decodedFrameCount"] = len(frames)
+    return result
 
 
 def preview_font(size: int) -> ImageFont.ImageFont:
@@ -607,7 +617,7 @@ def main() -> None:
         HAIR_BASE_INDEX
         + max(
             int(spec["start"]) + 7 * 8 + int(spec["frames"]) - 1
-            for spec in ACTIONS.values()
+            for spec in MALE_ACTIONS.values()
         )
     )
     if int(info["image_count"]) <= maximum_index:
@@ -621,7 +631,7 @@ def main() -> None:
             action_name,
             action_spec,
         )
-        for action_name, action_spec in ACTIONS.items()
+        for action_name, action_spec in MALE_ACTIONS.items()
     }
     policy = {
         "schemaVersion": 1,
@@ -632,6 +642,7 @@ def main() -> None:
             "frontLayerVisible": False,
             "backLayerVisible": False,
             "headOcclusionMaskEnabled": False,
+            "runAssetsGenerated": False,
             "calibrationAndGeneratedAssetsPreserved": True,
         },
         "preservedPresentationScopes": [
@@ -682,7 +693,7 @@ def main() -> None:
                     / "dev_art_sources/reference/mir2_client_raw/Data/Hum.wil"
                 ),
                 "blockFrames": 600,
-                "actionTable": ACTIONS,
+                "actionTable": MALE_ACTIONS,
                 "runtimePreviewFeature": 6,
                 "runtimePreviewRoot": resource_path(BODY_ROOT),
                 "frameRule": (
@@ -693,10 +704,8 @@ def main() -> None:
             },
         },
     }
-    POLICY_PATH.write_text(
-        json.dumps(policy, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    with POLICY_PATH.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(policy, ensure_ascii=False, indent=2) + "\n")
     save_candidate_preview(library)
     save_single_candidate_preview(library)
     save_auxiliary_male_candidates_preview(
@@ -713,7 +722,7 @@ def main() -> None:
     save_runtime_preview()
     print(
         "WORLD_HAIR_EXTRACT_PASS "
-        f"appearance={HAIR_APPEARANCE} actions={len(ACTIONS)} "
+        f"appearance={HAIR_APPEARANCE} actions={len(MALE_ACTIONS)} "
         f"frames={sum(len(value['frames']) for value in action_records.values())} "
         "resampled=false synthetic=false"
     )

@@ -4,8 +4,9 @@
   "authority": {
     "kind": "explicit_user_primary_override",
     "approvedDate": "2026-08-02",
+    "rangeAmendedDate": "2026-09-06",
     "documentPath": "docs/COMBAT-UNIT-V1.md",
-    "evidenceSha256": "9CA9328169EB92F2925BE5A8DD5D0592C979C807BFA92EA62C1307407AC66DC0"
+    "evidenceSha256": "3E7D5DFB2DA386CFCA03F3EA5BDF3DB36B9849289598625AD8A08840EB2A947E"
   },
   "projection": {
     "contractId": "world.ground_projection.iso_64x32.v1",
@@ -32,10 +33,10 @@
     }
   },
   "rangesGu": {
-    "normalMelee": 1.5,
-    "fireSword": 1.5,
-    "halfMoon": 1.5,
-    "thrust": 2.5,
+    "normalMelee": 2.0,
+    "fireSword": 2.0,
+    "halfMoon": 2.0,
+    "thrust": 3.0,
     "hellfire": 5.0,
     "laser": 8.0,
     "attackLock": 10.0,

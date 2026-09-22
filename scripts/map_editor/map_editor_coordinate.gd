@@ -5,16 +5,30 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 
 const HALF_TILE_W := 32.0
 const HALF_TILE_H := 16.0
-const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v1"
+## Ground rasterization is centered on the same cell-center lattice consumed by
+## runtime actors.  v2 removes the historical one-half-cell canvas edge drift:
+## the authored tile union is [0, design_size], while cell (0, 0) still has
+## its center at (0.5, 0.5) in GU.
+const GROUND_COORDINATE_CONTRACT_ID := "isometric_cell_center_64x32_v2"
 const GROUND_TILE_SIZE_PX := Vector2(64.0, 32.0)
 
 
 static func origin_px(design_size: Vector2i) -> Vector2:
-	return Vector2(design_size.y * HALF_TILE_W, HALF_TILE_H)
+	return Vector2(design_size.y * HALF_TILE_W, 0.0)
 
 
 static func ground_image_size(design_size: Vector2i) -> Vector2i:
 	return Vector2i((design_size.x + design_size.y) * int(HALF_TILE_W), (design_size.x + design_size.y) * int(HALF_TILE_H))
+
+
+static func ground_pixel_center(design_size: Vector2i) -> Vector2:
+	## This is the raster canvas anchor, not the arithmetic midpoint of the
+	## canvas.  The isometric cell union has an intentional half-tile vertical
+	## asymmetry: for 80x80 it is (2560, 1264), while the canvas is 5120x2560.
+	return tile_to_ground_px(
+		(Vector2(design_size) - Vector2.ONE) * 0.5,
+		design_size
+	)
 
 
 static func tile_to_ground_px(tile: Vector2, design_size: Vector2i) -> Vector2:

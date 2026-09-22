@@ -85,17 +85,21 @@ func _check_projectile_parity(
 			0.3
 		)
 		var delta_enemy := EnemyActor.new()
-		delta_enemy.setup(
-			{
-				"name": "parity_delta_%d" % serial,
-				"hp": 99999,
-				"attackMin": 1,
-				"attackMax": 1,
-				"level": 1,
-			},
-			null,
-			false
+		var canonical_data := GameData.get_monster_by_id(
+			Fixtures.FIXTURE_MONSTER_ID
 		)
+		assert(
+			not canonical_data.is_empty(),
+			"parity fixture canonical monster ID=%d must resolve"
+			% Fixtures.FIXTURE_MONSTER_ID
+		)
+		delta_enemy.setup(canonical_data, null, false)
+		# Keep the legacy identity-space comparison independent of authored combat
+		# stats while preserving a real canonical actor identity.
+		delta_enemy.max_hp = 99999
+		delta_enemy.current_hp = delta_enemy.max_hp
+		delta_enemy.attack_min = 1
+		delta_enemy.attack_max = 1
 		delta_enemy.configure_runtime_map_projection(
 			MAP_ID,
 			GroundUnit.ground_delta_gu_to_screen_delta_px

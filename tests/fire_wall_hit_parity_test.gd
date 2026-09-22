@@ -70,7 +70,54 @@ func _run_case(
 	enemy_map_id := MAP_A
 ) -> void:
 	_case_count += 1
+	var legacy_result := _run_variant(
+		label,
+		enemy_specs,
+		controller_count,
+		move_to_ground_gu,
+		enemy_map_id,
+		false
+	)
+	var manager_result := _run_variant(
+		label,
+		enemy_specs,
+		controller_count,
+		move_to_ground_gu,
+		enemy_map_id,
+		true
+	)
+	if label == "dead_target":
+		_assert_dead_target_result("legacy", legacy_result)
+		_assert_dead_target_result("manager", manager_result)
+	var legacy_order: Array = legacy_result.get("damage_order", [])
+	var manager_order: Array = manager_result.get("damage_order", [])
+	if legacy_order.size() != manager_order.size():
+		_difference_count += 1
+		push_error(
+			"parity %s: damage count legacy=%d manager=%d"
+			% [label, legacy_order.size(), manager_order.size()]
+		)
+		return
+	for i: int in range(legacy_order.size()):
+		if legacy_order[i] != manager_order[i]:
+			_difference_count += 1
+			push_error(
+				"parity %s: stable serial mismatch at %d legacy=%d manager=%d"
+				% [label, i, legacy_order[i], manager_order[i]]
+			)
+			break
+
+
+func _run_variant(
+	label: String,
+	enemy_specs: Array,
+	controller_count: int,
+	move_to_ground_gu: Vector2,
+	enemy_map_id: int,
+	use_manager: bool
+) -> Dictionary:
 	_fresh_world()
+	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
 	for i: int in range(controller_count):
 		_controllers.append(
 			Fixtures.make_controller(
@@ -105,33 +152,14 @@ func _run_case(
 			GroundUnit.ground_delta_gu_to_screen_delta_px(move_to_ground_gu),
 			&"q2c_parity_move"
 		)
-
-	var legacy_order := _run_legacy()
-	_restore_hp()
-	_damage_log.clear()
-	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
-	var manager_order := _run_manager()
-	if legacy_order.size() != manager_order.size():
-		_difference_count += 1
-		push_error(
-			"parity %s: damage count legacy=%d manager=%d"
-			% [label, legacy_order.size(), manager_order.size()]
-		)
-		_cleanup_world()
-		return
-	for i: int in range(legacy_order.size()):
-		if legacy_order[i] != manager_order[i]:
-			_difference_count += 1
-			push_error(
-				"parity %s: order mismatch at %d legacy=%d manager=%d"
-				% [label, i, legacy_order[i], manager_order[i]]
-			)
-			break
+	var result := _run_manager() if use_manager else _run_legacy()
 	_cleanup_world()
+	return result
 
 
-func _run_legacy() -> Array[int]:
-	var order: Array[int] = []
+func _run_legacy() -> Dictionary:
+	var exact_test_count := 0
+	var damage_count := 0
 	for controller: FireWallFieldController in _controllers:
 		var testers: Array[Callable] = []
 		var claim_cells: Array = []
@@ -146,15 +174,38 @@ func _run_legacy() -> Array[int]:
 			true,
 			true
 		)
-		for enemy_id: int in result.get("damage_order", []):
-			order.append(enemy_id)
-	return order
+		exact_test_count += int(result.get("exact_test_count", 0))
+		damage_count += int(result.get("damage_count", 0))
+	assert(
+		damage_count == _damage_log.size(),
+		"legacy callback count must match reported damage count"
+	)
+	return {
+		"exact_test_count": exact_test_count,
+		"callback_count": _damage_log.size(),
+		"damage_count": damage_count,
+		"damage_order": _damage_log.duplicate(),
+	}
 
 
-func _run_manager() -> Array[int]:
+func _run_manager() -> Dictionary:
 	for controller: FireWallFieldController in _controllers:
 		controller._apply_field_tick()
-	return _damage_log.duplicate()
+	var exact_test_count := 0
+	var damage_count := 0
+	for controller: FireWallFieldController in _controllers:
+		exact_test_count += controller.controller_exact_test_count
+		damage_count += controller.damage_application_count
+	assert(
+		damage_count == _damage_log.size(),
+		"manager callback count must match reported damage count"
+	)
+	return {
+		"exact_test_count": exact_test_count,
+		"callback_count": _damage_log.size(),
+		"damage_count": damage_count,
+		"damage_order": _damage_log.duplicate(),
+	}
 
 
 func _fresh_world() -> void:
@@ -163,12 +214,6 @@ func _fresh_world() -> void:
 	_controllers.clear()
 	_enemies.clear()
 	_damage_log.clear()
-
-
-func _restore_hp() -> void:
-	for enemy: EnemyActor in _enemies:
-		if is_instance_valid(enemy):
-			enemy.current_hp = 10000
 
 
 func _cleanup_world() -> void:
@@ -188,8 +233,27 @@ func _cleanup() -> void:
 
 
 func _record_damage(enemy: EnemyActor, raw_power: int) -> void:
-	_damage_log.append(enemy.get_instance_id())
+	assert(
+		enemy.spatial_actor_runtime_id > 0,
+		"parity damage target must expose a stable fixture serial"
+	)
+	_damage_log.append(enemy.spatial_actor_runtime_id)
 	enemy.take_damage(raw_power, null)
+
+
+func _assert_dead_target_result(label: String, result: Dictionary) -> void:
+	assert(
+		int(result.get("exact_test_count", -1)) == 0,
+		"%s dead target must not enter exact intersection tests" % label
+	)
+	assert(
+		int(result.get("callback_count", -1)) == 0,
+		"%s dead target must not invoke damage callbacks" % label
+	)
+	assert(
+		int(result.get("damage_count", -1)) == 0,
+		"%s dead target must not receive damage" % label
+	)
 
 
 func _ground_to_screen(value: Vector2) -> Vector2:

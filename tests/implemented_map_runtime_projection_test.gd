@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	for map_id: int in [4, 217, 268]:
+	for map_id: int in [910001, 911001, 910004]:
 		assert(
 			Bridge.is_runtime_built(map_id),
 			"map %d must be runtime-built" % map_id
@@ -52,21 +52,38 @@ func _run() -> void:
 			back.distance_to(ground) <= EPSILON,
 			"map %d runtime profile roundtrip must be identity" % map_id
 		)
-	# Formal GameRoot spawn on the live runtime map 4.
+	# Formal GameRoot spawn on canonical Bich runtime map 910001.
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	for _wait in range(300):
-		if not bool(game.get("_world_bootstrap_in_progress")):
+	for _wait in range(1200):
+		if (
+			not bool(game.get("_world_bootstrap_in_progress"))
+			and not bool(game.get("_map_transition_in_progress"))
+		):
 			break
 		await get_tree().process_frame
 	await get_tree().process_frame
-	assert(int(game.current_map_id) == 4, "game must boot on runtime map 4")
+	assert(
+		int(game.current_map_id) == 910001,
+		(
+			"game must boot on canonical Bich runtime; current=%d game_data_error=%s "
+			+ "bootstrap=%s transition=%s rejection=%s coordinator=%s"
+		)
+		% [
+			int(game.current_map_id),
+			GameData.load_error,
+			str(game.get("_world_bootstrap_in_progress")),
+			str(game.get("_map_transition_in_progress")),
+			str(game.get("projection_rejection_reason")),
+			JSON.stringify(game.get("_world_bootstrap_coordinator").snapshot()),
+		]
+	)
 	var pharmacist: NPCActor = null
 	for candidate: Node in get_tree().get_nodes_in_group("interactable"):
 		if candidate is NPCActor and str((candidate as NPCActor).stock_key) == "medicine":
 			pharmacist = candidate as NPCActor
 			break
-	assert(pharmacist != null, "runtime map 4 must spawn the Bichon pharmacist")
+	assert(pharmacist != null, "canonical Bich runtime must spawn the pharmacist")
 	assert(pharmacist.npc_name == "药剂商", "药剂商仍带地区前缀")
 	assert(pharmacist.service_identity_id == NPCServiceIdentityScript.PHARMACIST_ID, "药剂商没有合并到全局功能身份")
 	assert(not pharmacist.shop_stock.is_empty(), "Bichon pharmacist must receive the primary medicine stock")
@@ -101,15 +118,17 @@ func _run() -> void:
 	var enemy: EnemyActor = game._spawn_enemy(
 		monster,
 		Vector2(0.0, 80.0),
-		false
+		false,
+		-1.0,
+		{"respawn_enabled": false}
 	)
-	assert(enemy != null, "runtime map 4 enemy spawn must succeed")
+	assert(enemy != null, "canonical Bich runtime enemy spawn must succeed")
 	assert(
 		enemy.spatial_index_position().is_finite(),
-		"runtime map 4 enemy provider must be finite"
+		"canonical Bich runtime enemy provider must be finite"
 	)
 	var candidates: Array = game._combat_spatial_index.query_aabb_candidates(
-		4,
+		910001,
 		Rect2(
 			enemy.spatial_index_position() - Vector2(2, 2),
 			Vector2(4, 4)
@@ -118,9 +137,9 @@ func _run() -> void:
 	)
 	assert(
 		not candidates.is_empty(),
-		"runtime map 4 spatial index must contain the enemy"
+		"canonical Bich runtime spatial index must contain the enemy"
 	)
 	game.queue_free()
 	await get_tree().process_frame
-	print("IMPLEMENTED_MAP_RUNTIME_PROJECTION_PASS maps=4,217,268")
+	print("IMPLEMENTED_MAP_RUNTIME_PROJECTION_PASS maps=910001,911001,910004")
 	get_tree().quit(0)

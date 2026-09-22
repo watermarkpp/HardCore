@@ -22,8 +22,27 @@ func _run() -> void:
 	var panel := MapPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	var presentation_expected := 0
+	for raw_map: Variant in GameData.get_available_maps(PlayerState.later_content_enabled):
+		if raw_map is Dictionary and not str(raw_map.get("region", "")).strip_edges().is_empty():
+			presentation_expected += 1
+	assert(panel._presentation_maps.size() == presentation_expected, "presentation 只应包含当前可见且有 region 的地图")
+	var cold_counters := panel.debug_operation_counters()
+	assert(cold_counters["snapshot_scans"] == 1 and cold_counters["snapshot_builds"] == 1, "冷快照必须只扫描并构建一次")
+	assert(cold_counters["content_resolves"] == presentation_expected, "冷快照必须为每个展示地图解析一次内容")
+	assert(cold_counters["layout_applies"] == 1, "冷初始化必须只应用一次布局")
+	for presentation_map: Variant in panel._presentation_maps:
+		assert(not str((presentation_map as Dictionary).get("region", "")).strip_edges().is_empty(), "presentation 不得包含空 region")
+	panel.debug_reset_operation_counters()
+	var before_open := panel.debug_operation_counters()
+	var open_requests: Array = []
+	panel.teleport_availability_requested.connect(func(map_ids: Array) -> void: open_requests.append(map_ids.duplicate()))
 	panel.open_panel()
 	await get_tree().process_frame
+	var after_open := panel.debug_operation_counters()
+	for counter: String in ["snapshot_scans", "snapshot_builds", "content_resolves", "world_tree_rebuilds", "card_rebuilds", "layout_applies"]:
+		assert(after_open[counter] == before_open[counter], "open_panel 热路径重复操作：%s" % counter)
+	assert(open_requests.size() == 1 and open_requests[0] == panel._visible_map_ids(), "open_panel 必须只重新请求当前可见地图传送授权")
 
 	assert(panel.size == Vector2(1160, 650), "地图面板没有使用既定横屏底板尺寸")
 	assert(panel.theme_type_variation == "GothicModalFrame", "地图面板没有复用公共哥特外框")
@@ -36,7 +55,27 @@ func _run() -> void:
 	var saved_scroll: Array = layout_contract["profiles"]["map"]["nodes"]["MapListPanel/MapListScroll"]["logicalRect"]
 	assert(map_scroll.position.is_equal_approx(Vector2(float(saved_scroll[0]), float(saved_scroll[1]))) and map_scroll.size.is_equal_approx(Vector2(float(saved_scroll[2]), float(saved_scroll[3]))), "MapListScroll 几何必须与正式校准合同一致")
 	assert(map_scroll.get_meta("calibration_layout_dependencies") == ["MapListPanel/SearchBox", "MapListPanel/LaterContentToggle", "MapListPanel/CountLabel"], "滚动区依赖元数据错误")
-	assert(panel._selected_world_node_id == "bich_province" and panel.map_entries.size() < 129, "默认必须是首个过滤大区")
+	assert(panel._selected_world_node_id == "bich_province" and panel.map_entries.size() < 196, "默认必须是首个过滤大区")
+	var selection_before := panel.debug_operation_counters()
+	assert(panel.map_entries.size() >= 3, "默认区域至少需要三个地图用于选择热路径合同")
+	for selection_index in range(3):
+		panel._select_map(selection_index)
+	var selection_after := panel.debug_operation_counters()
+	for counter: String in ["snapshot_scans", "snapshot_builds", "content_resolves", "world_tree_rebuilds", "card_rebuilds", "layout_applies"]:
+		assert(selection_after[counter] == selection_before[counter], "地图选择热路径重复操作：%s" % counter)
+	var region_before := panel.debug_operation_counters()
+	var alternate_region := ""
+	for node_id: Variant in panel.world_node_buttons.keys():
+		if str(node_id) != panel._selected_world_node_id:
+			alternate_region = str(node_id)
+			break
+	assert(not alternate_region.is_empty(), "至少需要两个世界区域用于切换热路径合同")
+	panel._select_world_node(alternate_region)
+	var region_after := panel.debug_operation_counters()
+	for counter: String in ["snapshot_scans", "snapshot_builds", "content_resolves", "layout_applies", "world_tree_rebuilds"]:
+		assert(region_after[counter] == region_before[counter], "大区切换重复全局操作：%s" % counter)
+	assert(region_after["card_rebuilds"] == region_before["card_rebuilds"] + 1, "大区切换应只重建一次地图卡")
+	panel._select_world_node("bich_province")
 	var hint := panel.get_node("MapPreviewPanel/WorldTreeHint") as Label
 	assert(hint.position.x >= 0.0 and hint.position.y >= 0.0 and hint.size.x > 0.0 and hint.size.y >= 18.0, "世界树提示必须为有效矩形")
 	var tree_scroll := panel.get_node("MapPreviewPanel/WorldTreeScroll") as ScrollContainer
@@ -55,7 +94,9 @@ func _run() -> void:
 	var expected_regions: Dictionary = {}
 	for map_value: Variant in GameData.get_available_maps(false):
 		if map_value is Dictionary:
-			expected_regions[str(map_value.get("region", ""))] = true
+			var region_name := str(map_value.get("region", "")).strip_edges()
+			if not region_name.is_empty():
+				expected_regions[region_name] = true
 	var actual_regions: Dictionary = {}
 	for node_value: Variant in panel.world_tree_nodes:
 		var node_data: Dictionary = node_value
@@ -95,16 +136,8 @@ func _run() -> void:
 	for expected_text: String in ["地图说明：", "营地：有安全营地", "常见怪物：", "首领：", "出口："]:
 		assert(expected_text in bich_detail, "比奇省玩家说明缺少真实游玩信息：%s" % expected_text)
 	var bich_content := panel._player_map_content(4)
-	var checked_monsters := 0
-	for spawn: Variant in bich_content.get("spawns", []):
-		if spawn is Dictionary:
-			var expected_monster := str(spawn.get("display_name", spawn.get("name", ""))).strip_edges()
-			if not expected_monster.is_empty():
-				assert(expected_monster in bich_detail, "比奇省说明缺少正式怪物：%s" % expected_monster)
-				checked_monsters += 1
-				if checked_monsters >= 3:
-					break
-	assert(checked_monsters > 0, "比奇省正式怪物数据为空")
+	assert(not bich_content.is_empty(), "比奇省正式内容为空")
+	assert("常见怪物：暂未发现常驻怪物" in bich_detail, "当前正式 fail-closed 内容必须显示无常驻怪物")
 	assert("兽人古墓一层" in bich_detail and "沃玛森林" in bich_detail, "比奇省出口未显示真实目的地")
 	var node_ids: Dictionary = {}
 	for node_value: Variant in panel.world_tree_nodes:
@@ -216,6 +249,6 @@ func _run() -> void:
 	PlayerState.set_later_content_enabled(true)
 	panel.refresh()
 	await get_tree().process_frame
-	assert(PlayerState.later_content_enabled and panel.map_entries.size() < 142, "后期状态过滤异常")
+	assert(PlayerState.later_content_enabled and panel.map_entries.size() < 209, "后期状态过滤异常")
 	print("MAP_GOTHIC_UI_PASS：世界地图树、牛魔寺庙 8 图筛选、单传送按钮与落点契约均正常")
 	get_tree().quit(0)

@@ -35,7 +35,11 @@ func _run() -> void:
 	assert(not GameData.get_drops_for_boss(162).is_empty() and not GameData.get_drops_for_boss(163).is_empty() and not GameData.get_drops_for_boss(180).is_empty(), "赤月三Boss掉落未接入")
 	var moon_spider := EnemyActor.new()
 	moon_spider.setup(GameData.get_monster("月魔蜘蛛"), game.player, false)
-	assert(moon_spider.control_on_hit_seconds >= 1.2, "月魔蜘蛛麻痹能力失效")
+	assert(
+		moon_spider.control_on_hit_seconds == 5.0
+		and moon_spider.control_chance_denominator_base == 20,
+		"月魔蜘蛛必须保留原版5秒、基础1/20麻痹规则",
+	)
 	moon_spider.free()
 	var illusion_spider := EnemyActor.new()
 	illusion_spider.setup(GameData.get_monster("幻影蜘蛛"), game.player, false)

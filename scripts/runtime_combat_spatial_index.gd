@@ -23,6 +23,10 @@ const CONTRACT_ID := "hardcore.combat.spatial_index.map_ground_gu_buckets.v1"
 var _buckets: Dictionary = {}
 var _entries: Dictionary = {}
 var _max_actor_bounds_gu := 0.0
+## PERF-2: set when a removed entry carried the current maximum bounds so
+## the next query can shrink the expansion back to the live registered set
+## (lazy, one O(live) scan per dirty episode; never per-unregister work).
+var _max_actor_bounds_dirty := false
 var _bucket_size_gu := DEFAULT_BUCKET_SIZE_GU
 
 var index_register_count := 0
@@ -33,6 +37,20 @@ var index_stale_cleanup_count := 0
 var index_query_count := 0
 var index_total_candidate_count := 0
 var index_max_candidate_count := 0
+var index_neighbor_query_count := 0
+var index_neighbor_candidate_count := 0
+var index_enemy_node_aabb_query_count := 0
+var index_enemy_node_segment_query_count := 0
+var index_enemy_node_candidate_count := 0
+
+# The neighbor API receives a caller-owned Array, so it only needs a stable
+# order lookup while inserting candidates.  Keeping this side table on the
+# index avoids allocating records or a sort/seen collection in each crowd
+# query, while preserving the stable combat order already used by broadphase
+# consumers.
+var _stable_order_by_node_instance_id: Dictionary = {}
+var _neighbor_stale_actor_ids: Array[int] = []
+var _enemy_query_stamp_serial := 0
 
 
 func _init() -> void:
@@ -60,6 +78,8 @@ func register(
 ) -> void:
 	if actor_runtime_id <= 0 or runtime_map_id < 0:
 		return
+	if not absolute_ground_gu.is_finite() or not is_finite(bounds_radius_gu) or not is_instance_valid(node):
+		return
 	unregister(actor_runtime_id)
 	var safe_bounds := maxf(0.0, bounds_radius_gu)
 	_entries[actor_runtime_id] = {
@@ -68,10 +88,13 @@ func register(
 		"absolute_ground_gu": absolute_ground_gu,
 		"bounds_gu": safe_bounds,
 		"stable_combat_order": stable_combat_order,
+		"node_instance_id": node.get_instance_id() if is_instance_valid(node) else 0,
 		"position_provider": (
 			position_provider if position_provider is Callable else Callable()
 		),
 	}
+	if is_instance_valid(node):
+		_stable_order_by_node_instance_id[node.get_instance_id()] = stable_combat_order
 	_max_actor_bounds_gu = maxf(_max_actor_bounds_gu, safe_bounds)
 	_bucket_set(runtime_map_id, _entries[actor_runtime_id]["bucket_key"])[
 		actor_runtime_id
@@ -83,6 +106,11 @@ func unregister(actor_runtime_id: int) -> void:
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
+	if float(entry.get("bounds_gu", 0.0)) >= _max_actor_bounds_gu:
+		_max_actor_bounds_dirty = true
+	var node_instance_id := int(entry.get("node_instance_id", 0))
+	if node_instance_id > 0:
+		_stable_order_by_node_instance_id.erase(node_instance_id)
 	var runtime_map_id := int(entry.get("runtime_map_id", -1))
 	var bucket_key: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
@@ -97,6 +125,8 @@ func unregister(actor_runtime_id: int) -> void:
 
 
 func update_actor(actor_runtime_id: int, absolute_ground_gu: Vector2) -> void:
+	if not absolute_ground_gu.is_finite():
+		return
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
@@ -123,6 +153,11 @@ func clear_map(runtime_map_id: int) -> void:
 	for raw_id: Variant in _entries.keys():
 		var entry: Dictionary = _entries.get(raw_id, {})
 		if int(entry.get("runtime_map_id", -1)) == runtime_map_id:
+			if float(entry.get("bounds_gu", 0.0)) >= _max_actor_bounds_gu:
+				_max_actor_bounds_dirty = true
+			var node_instance_id := int(entry.get("node_instance_id", 0))
+			if node_instance_id > 0:
+				_stable_order_by_node_instance_id.erase(node_instance_id)
 			_entries.erase(raw_id)
 			removed += 1
 	index_unregister_count += removed
@@ -132,12 +167,31 @@ func registered_actor_count() -> int:
 	return _entries.size()
 
 
+## PERF-2: lazy shrink of the broadphase expansion bound. While dirty the
+## stored maximum is an upper bound (the removed max holder), so deferring
+## the recompute to the next query keeps every envelope conservative; the
+## recompute itself walks the live registered set once and can only shrink.
+func _maybe_refresh_max_actor_bounds() -> void:
+	if not _max_actor_bounds_dirty:
+		return
+	var maximum := 0.0
+	for raw_entry: Variant in _entries.values():
+		if raw_entry is Dictionary:
+			maximum = maxf(
+				maximum,
+				float((raw_entry as Dictionary).get("bounds_gu", 0.0))
+			)
+	_max_actor_bounds_gu = maximum
+	_max_actor_bounds_dirty = false
+
+
 func query_segment_candidates(
 	runtime_map_id: int,
 	start_ground_gu: Vector2,
 	end_ground_gu: Vector2,
 	expansion_gu: float
 ) -> Array[Dictionary]:
+	_maybe_refresh_max_actor_bounds()
 	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
 	var min_gu := Vector2(
 		minf(start_ground_gu.x, end_ground_gu.x),
@@ -158,6 +212,7 @@ func query_aabb_candidates(
 	bounds_ground_gu: Rect2,
 	expansion_gu := 0.0
 ) -> Array[Dictionary]:
+	_maybe_refresh_max_actor_bounds()
 	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
 	return _query_aabb_candidates(
 		runtime_map_id,
@@ -168,13 +223,297 @@ func query_aabb_candidates(
 	)
 
 
+## R3X-1: caller-owned, allocation-free enemy-node AABB broadphase.  The
+## service expands the requested envelope by the largest registered actor
+## footprint so the result is conservative for every enemy.  It emits only
+## live EnemyActor nodes, never the Dictionary records used by legacy callers.
+func query_enemy_nodes_aabb_into(
+	runtime_map_id: int,
+	bounds_ground_gu: Rect2,
+	output: Array,
+	stable_order := true,
+) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_aabb_query_count += 1
+	_maybe_refresh_max_actor_bounds()
+	var query_stamp := _next_enemy_query_stamp()
+	if (
+		runtime_map_id < 0
+		or not bounds_ground_gu.position.is_finite()
+		or not bounds_ground_gu.size.is_finite()
+		or bounds_ground_gu.size.x < 0.0
+		or bounds_ground_gu.size.y < 0.0
+	):
+		return
+	var expansion := maxf(0.0, _max_actor_bounds_gu)
+	_query_enemy_nodes_in_aabb(
+		runtime_map_id,
+		Rect2(
+			bounds_ground_gu.position - Vector2.ONE * expansion,
+			bounds_ground_gu.size + Vector2.ONE * expansion * 2.0,
+		),
+		output,
+		query_stamp,
+		stable_order,
+	)
+	_finish_enemy_node_query(output)
+
+
+## R3X-1: segment broadphase expressed as one expanded AABB over the complete
+## segment.  Narrow geometry remains the caller's authority.
+func query_enemy_nodes_segment_into(
+	runtime_map_id: int,
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	output: Array,
+	stable_order := true,
+) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_segment_query_count += 1
+	_maybe_refresh_max_actor_bounds()
+	var query_stamp := _next_enemy_query_stamp()
+	if (
+		runtime_map_id < 0
+		or not start_ground_gu.is_finite()
+		or not end_ground_gu.is_finite()
+		or not is_finite(expansion_gu)
+	):
+		return
+	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
+	var min_gu := Vector2(
+		minf(start_ground_gu.x, end_ground_gu.x),
+		minf(start_ground_gu.y, end_ground_gu.y)
+	) - Vector2.ONE * expansion
+	var max_gu := Vector2(
+		maxf(start_ground_gu.x, end_ground_gu.x),
+		maxf(start_ground_gu.y, end_ground_gu.y)
+	) + Vector2.ONE * expansion
+	_query_enemy_nodes_in_aabb(
+		runtime_map_id,
+		Rect2(min_gu, max_gu - min_gu),
+		output,
+		query_stamp,
+		stable_order,
+	)
+	_finish_enemy_node_query(output)
+
+
+## Existence-only narrow phases do not need combat ordering. Preserve the
+## identical conservative candidates, live filtering and query-stamp dedup.
+## Callers choosing a victim or applying ordered damage must use the ordered API.
+func query_enemy_nodes_segment_unsorted_into(
+	runtime_map_id: int,
+	start_ground_gu: Vector2,
+	end_ground_gu: Vector2,
+	expansion_gu: float,
+	output: Array,
+) -> void:
+	query_enemy_nodes_segment_into(
+		runtime_map_id, start_ground_gu, end_ground_gu, expansion_gu, output, false,
+	)
+
+
+func _query_enemy_nodes_in_aabb(
+	runtime_map_id: int,
+	bounds_ground_gu: Rect2,
+	output: Array,
+	query_stamp: int,
+	stable_order := true,
+) -> void:
+	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
+	if map_buckets.is_empty():
+		return
+	var min_bucket := _bucket_key(bounds_ground_gu.position)
+	var max_bucket := _bucket_key(bounds_ground_gu.end)
+	for bucket_y: int in range(min_bucket.y, max_bucket.y + 1):
+		for bucket_x: int in range(min_bucket.x, max_bucket.x + 1):
+			var query_bucket := Vector2i(bucket_x, bucket_y)
+			var bucket: Dictionary = map_buckets.get(query_bucket, {})
+			if bucket.is_empty():
+				continue
+			for raw_id: Variant in bucket:
+				var actor_id := int(raw_id)
+				var raw_entry: Variant = _entries.get(actor_id, null)
+				if not raw_entry is Dictionary:
+					continue
+				var entry := raw_entry as Dictionary
+				# Existential melee queries need only the inclusive segment envelope,
+				# not every actor in its coarse 4-GU buckets. Position transactions
+				# update this value synchronously, including forced moves. The caller
+				# still performs its live, exact body/segment narrow phase.
+				if not stable_order:
+					var indexed_position: Vector2 = entry.get("absolute_ground_gu", Vector2.INF)
+					if not _point_in_inclusive_bounds(indexed_position, bounds_ground_gu.position, bounds_ground_gu.end):
+						continue
+				if int(entry.get("_enemy_query_stamp", 0)) == query_stamp:
+					continue
+				entry["_enemy_query_stamp"] = query_stamp
+				var node_ref: WeakRef = bucket.get(actor_id)
+				var node: Node = (
+					node_ref.get_ref()
+					if node_ref != null
+					else null
+				)
+				if node == null or not is_instance_valid(node):
+					_neighbor_stale_actor_ids.append(actor_id)
+					continue
+				if not node is EnemyActor:
+					continue
+				var enemy := node as EnemyActor
+				if (
+					enemy.is_queued_for_deletion()
+					or
+					enemy._dying
+					or enemy._death_pending
+					or enemy.current_hp <= 0
+				):
+					_neighbor_stale_actor_ids.append(actor_id)
+					continue
+				if stable_order:
+					_append_neighbor_node_sorted(
+						output,
+						enemy,
+						int(entry.get("stable_combat_order", actor_id)),
+					)
+				else:
+					output.append(enemy)
+
+
+func _finish_enemy_node_query(output: Array) -> void:
+	for actor_id: int in _neighbor_stale_actor_ids:
+		_erase_entry(actor_id)
+		index_stale_cleanup_count += 1
+	_neighbor_stale_actor_ids.clear()
+	index_enemy_node_candidate_count += output.size()
+	index_total_candidate_count += output.size()
+	index_max_candidate_count = maxi(
+		index_max_candidate_count,
+		output.size()
+	)
+
+
+func _next_enemy_query_stamp() -> int:
+	_enemy_query_stamp_serial += 1
+	if _enemy_query_stamp_serial <= 0:
+		_enemy_query_stamp_serial = 1
+		for raw_entry: Variant in _entries.values():
+			if raw_entry is Dictionary:
+				(raw_entry as Dictionary)["_enemy_query_stamp"] = 0
+	return _enemy_query_stamp_serial
+
+
+## Lightweight crowd broadphase. The output array belongs to the caller and
+## is cleared/reused in place; this path intentionally emits live Nodes rather
+## than Dictionary records. Each registered actor is owned by exactly one
+## bucket, so no per-query seen set is necessary. Exact distance and footprint
+## math remains in EnemyActor.
+func query_neighbor_enemy_nodes_into(
+	runtime_map_id: int,
+	center_ground_gu: Vector2,
+	query_radius_gu: float,
+	output: Array,
+) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_neighbor_query_count += 1
+	if (
+		runtime_map_id < 0
+		or not center_ground_gu.is_finite()
+		or not is_finite(query_radius_gu)
+	):
+		return
+	var radius := maxf(0.0, query_radius_gu)
+	var min_bucket := _bucket_key(
+		center_ground_gu - Vector2.ONE * radius
+	)
+	var max_bucket := _bucket_key(
+		center_ground_gu + Vector2.ONE * radius
+	)
+	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
+	if map_buckets.is_empty():
+		return
+	for bucket_y: int in range(min_bucket.y, max_bucket.y + 1):
+		for bucket_x: int in range(min_bucket.x, max_bucket.x + 1):
+			var query_bucket := Vector2i(bucket_x, bucket_y)
+			var bucket: Dictionary = map_buckets.get(query_bucket, {})
+			if bucket.is_empty():
+				continue
+			for raw_id: Variant in bucket:
+				var actor_id := int(raw_id)
+				var entry: Dictionary = _entries.get(actor_id, {})
+				if entry.is_empty():
+					continue
+				var node_ref: WeakRef = bucket.get(actor_id)
+				var node: Node = (
+					node_ref.get_ref()
+					if node_ref != null
+					else null
+				)
+				if node == null or not is_instance_valid(node):
+					_neighbor_stale_actor_ids.append(actor_id)
+					continue
+				# The EnemyActor position transaction updates this bucket before
+				# callers can issue the next query. Do not invoke a live provider or
+				# re-home here: that would add script calls and dictionary mutation to
+				# every crowd query.
+				_append_neighbor_node_sorted(
+					output,
+					node,
+					int(entry.get("stable_combat_order", actor_id)),
+				)
+	for actor_id: int in _neighbor_stale_actor_ids:
+		_erase_entry(actor_id)
+		index_stale_cleanup_count += 1
+	_neighbor_stale_actor_ids.clear()
+	index_neighbor_candidate_count += output.size()
+	index_total_candidate_count += output.size()
+	index_max_candidate_count = maxi(
+		index_max_candidate_count,
+		output.size()
+	)
+
+
+func _append_neighbor_node_sorted(
+	output: Array,
+	node: Node,
+	stable_combat_order: int,
+) -> void:
+	var insert_at := output.size()
+	while insert_at > 0:
+		var previous: Variant = output[insert_at - 1]
+		if not previous is Node:
+			break
+		var previous_node := previous as Node
+		var previous_order := int(
+			_stable_order_by_node_instance_id.get(
+				previous_node.get_instance_id(),
+				previous_node.get_instance_id(),
+			)
+		)
+		if previous_order < stable_combat_order:
+			break
+		if (
+			previous_order == stable_combat_order
+			and previous_node.get_instance_id() < node.get_instance_id()
+		):
+			break
+		insert_at -= 1
+	output.insert(insert_at, node)
+
+
 func _query_aabb_candidates(
 	runtime_map_id: int,
 	bounds_ground_gu: Rect2
 ) -> Array[Dictionary]:
 	index_query_count += 1
 	var result: Array[Dictionary] = []
-	if runtime_map_id < 0 or bounds_ground_gu.size.x < 0.0:
+	if runtime_map_id < 0 or not bounds_ground_gu.position.is_finite() or not bounds_ground_gu.size.is_finite() or bounds_ground_gu.size.x < 0.0 or bounds_ground_gu.size.y < 0.0:
 		return result
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
 	if map_buckets.is_empty():
@@ -214,6 +553,9 @@ func _query_aabb_candidates(
 					var live_value: Variant = position_provider.call()
 					if live_value is Vector2:
 						live_position_gu = live_value as Vector2
+				if not live_position_gu.is_finite():
+					continue
+				entry["absolute_ground_gu"] = live_position_gu
 				var current_bucket := _bucket_key(live_position_gu)
 				if current_bucket != query_bucket:
 					# Lazy re-home: entry's stored bucket is stale. Move it and
@@ -233,6 +575,10 @@ func _query_aabb_candidates(
 					),
 					"node": node,
 					"bounds_gu": float(entry.get("bounds_gu", 0.0)),
+					# R1-A additive: expose the entry's live ground-GU position
+					# so shape services can run exact predicates without
+					# re-projecting nodes. Existing consumers ignore this key.
+					"position_ground_gu": live_position_gu,
 				})
 	result.sort_custom(
 		func(a: Dictionary, b: Dictionary) -> bool:
@@ -263,6 +609,11 @@ func diagnostics() -> Dictionary:
 		"index_query_count": index_query_count,
 		"index_total_candidate_count": index_total_candidate_count,
 		"index_max_candidate_count": index_max_candidate_count,
+		"index_neighbor_query_count": index_neighbor_query_count,
+		"index_neighbor_candidate_count": index_neighbor_candidate_count,
+		"index_enemy_node_aabb_query_count": index_enemy_node_aabb_query_count,
+		"index_enemy_node_segment_query_count": index_enemy_node_segment_query_count,
+		"index_enemy_node_candidate_count": index_enemy_node_candidate_count,
 	}
 
 
@@ -330,6 +681,11 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	var entry: Dictionary = _entries.get(actor_runtime_id, {})
 	if entry.is_empty():
 		return
+	if float(entry.get("bounds_gu", 0.0)) >= _max_actor_bounds_gu:
+		_max_actor_bounds_dirty = true
+	var node_instance_id := int(entry.get("node_instance_id", 0))
+	if node_instance_id > 0:
+		_stable_order_by_node_instance_id.erase(node_instance_id)
 	var runtime_map_id := int(entry.get("runtime_map_id", -1))
 	var bucket_key: Vector2i = entry.get("bucket_key", Vector2i.ZERO)
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
@@ -341,3 +697,73 @@ func _erase_entry(actor_runtime_id: int) -> void:
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
 	index_unregister_count += 1
+
+
+static func _point_in_inclusive_bounds(point: Vector2, low: Vector2, high: Vector2) -> bool:
+	return point.x >= low.x and point.x <= high.x and point.y >= low.y and point.y <= high.y
+
+
+var index_enemy_node_batch_query_count := 0
+var index_enemy_node_batch_segment_count := 0
+
+
+## Exact batch of unordered inclusive segment-envelope queries. This is NOT a
+## cross-frame cache. It is used only inside one synchronous flank evaluation.
+## Output i contains the same live nodes, in the same bucket traversal order,
+## as query_enemy_nodes_segment_unsorted_into for segment i at this instant.
+func query_enemy_nodes_segment_batch_into(
+	runtime_map_id: int,
+	starts: PackedVector2Array,
+	ends: PackedVector2Array,
+	expansions: PackedFloat64Array,
+	outputs: Array,
+	scratch: Array,
+) -> bool:
+	_maybe_refresh_max_actor_bounds()
+	var count := starts.size()
+	for old: Variant in outputs:
+		if old is Array:
+			(old as Array).clear()
+	scratch.clear()
+	if runtime_map_id < 0 or count <= 0 or count > 32 or ends.size() != count or expansions.size() != count:
+		return false
+	outputs.resize(count)
+	var minimum_points := PackedVector2Array()
+	var maximum_points := PackedVector2Array()
+	var union_min := Vector2(INF, INF)
+	var union_max := Vector2(-INF, -INF)
+	for i in range(count):
+		if not starts[i].is_finite() or not ends[i].is_finite() or not is_finite(expansions[i]):
+			return false
+		if not outputs[i] is Array:
+			outputs[i] = []
+		var expansion := maxf(0.0, expansions[i]) + _max_actor_bounds_gu
+		var low := Vector2(minf(starts[i].x, ends[i].x), minf(starts[i].y, ends[i].y)) - Vector2.ONE * expansion
+		var high := Vector2(maxf(starts[i].x, ends[i].x), maxf(starts[i].y, ends[i].y)) + Vector2.ONE * expansion
+		minimum_points.append(low)
+		maximum_points.append(high)
+		union_min = Vector2(minf(union_min.x, low.x), minf(union_min.y, low.y))
+		union_max = Vector2(maxf(union_max.x, high.x), maxf(union_max.y, high.y))
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_segment_query_count += 1
+	index_enemy_node_batch_query_count += 1
+	index_enemy_node_batch_segment_count += count
+	_query_enemy_nodes_in_aabb(runtime_map_id, Rect2(union_min, union_max - union_min), scratch, _next_enemy_query_stamp(), false)
+	_finish_enemy_node_query(scratch)
+	for raw: Variant in scratch:
+		var enemy := raw as EnemyActor
+		if enemy == null:
+			continue
+		var entry: Dictionary = _entries.get(enemy.spatial_actor_runtime_id, {})
+		# Non-production fixtures with a deliberately unbound runtime id can use
+		# the untouched single-query path; never guess a bucket from live motion.
+		if entry.is_empty() or int(entry.get("node_instance_id", 0)) != enemy.get_instance_id():
+			for output: Array in outputs:
+				output.clear()
+			return false
+		var indexed_position: Vector2 = entry.get("absolute_ground_gu", Vector2.INF)
+		for i in range(count):
+			if _point_in_inclusive_bounds(indexed_position, minimum_points[i], maximum_points[i]):
+				(outputs[i] as Array).append(enemy)
+	return true

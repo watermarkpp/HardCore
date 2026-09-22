@@ -60,6 +60,9 @@ var selected_selectable_id := ""
 
 
 func set_document(value: Dictionary) -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_controller):
+		_hc_polygon_controller.invalidate_document()
 	var next_map_id := str(value.get("map_id", ""))
 	if next_map_id != _cached_map_id:
 		_cached_map_id = next_map_id
@@ -236,6 +239,10 @@ func set_walkability_preview(result: Dictionary, enabled: bool) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
+	# HC-POLY-R2
+	if is_instance_valid(_hc_polygon_controller) and _hc_polygon_controller.handle_input(event):
+		accept_event()
+		return
 	if document.is_empty():
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -803,6 +810,9 @@ static func instance_visual_geometry(instance: Dictionary, design_size: Vector2i
 
 
 func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
+	# HC-POLY-R2
+	if HCPPolyGeo.enabled(document):
+		return
 	if not show_walkable_preview:
 		return
 	for key: String in _blocked_tiles:
@@ -812,6 +822,26 @@ func _draw_blocked_tiles(design_size: Vector2i, offset: Vector2, scale_factor: f
 		var tile := Vector2i(int(parts[0]), int(parts[1]))
 		var polygon := _cell_polygon_screen(tile, design_size, offset, scale_factor)
 		draw_colored_polygon(polygon, Color(0.85, 0.15, 0.12, 0.42))
+
+
+## Canvas ground-px polygon (33 samples, closed) of a GU-space ground circle.
+## The tile lattice and the GU lattice share the isometric projection, so the
+## ring must be projected with tile_to_ground_px like every other canvas
+## overlay.  Projecting center-relative GU deltas here would detach the ring
+## from its marker diamond and draw it toward the canvas top-left.
+static func semantic_area_circle_ground_px(
+	center_ground_gu: Vector2,
+	radius_gu: float,
+	design_size: Vector2i
+) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for direction_index in range(33):
+		var angle := TAU * float(direction_index) / 32.0
+		var point_ground_gu := center_ground_gu + Vector2(
+			cos(angle), sin(angle)
+		) * radius_gu
+		points.append(MapEditorCoordinate.tile_to_ground_px(point_ground_gu, design_size))
+	return points
 
 
 func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float) -> void:
@@ -842,16 +872,10 @@ func _draw_semantics(design_size: Vector2i, offset: Vector2, scale_factor: float
 						float(raw_tile[1]) + 0.5
 					)
 					var projected_circle := PackedVector2Array()
-					for direction_index in range(33):
-						var angle := TAU * float(direction_index) / 32.0
-						var point_ground_gu := center_ground_gu + Vector2(
-							cos(angle), sin(angle)
-						) * area_radius_gu
-						projected_circle.append(
-							offset + MapEditorCoordinate.ground_position_gu_to_screen_position_px(
-								point_ground_gu, design_size
-							) * scale_factor
-						)
+					for ground_point: Vector2 in semantic_area_circle_ground_px(
+						center_ground_gu, area_radius_gu, design_size
+					):
+						projected_circle.append(offset + ground_point * scale_factor)
 					draw_polyline(projected_circle, Color(color, 0.9), 2.0)
 		if kind == "npc":
 			draw_circle(center + Vector2(0,-radius*.45), radius*.38, Color(color,0.95))
@@ -1127,3 +1151,8 @@ func _draw_center_text(text: String) -> void:
 	var font := ThemeDB.fallback_font
 	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 	draw_string(font, (size - text_size) * 0.5, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color("aeb7c2"))
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPPolyGeo := preload("res://scripts/map_editor/polygon/poly_geometry.gd")
+var _hc_polygon_controller: Variant = null

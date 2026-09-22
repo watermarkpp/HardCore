@@ -1,0 +1,51 @@
+{
+  "schema": "hardcore.dpv2.v5.ssh_alias_hotfix.v1",
+  "version": "V5.0.1",
+  "original_zip_sha256": "8e27193ba57bce5c9dd8430fa0e1244c58de4c6ef0380d9f6e0ae004380c9fff",
+  "purpose": "Accept the existing github-hardcore SSH alias only for watermarkpp/HardCore, at both execution and publication guards.",
+  "original_guard": "^((https://github\\.com/)|(git@github\\.com:))watermarkpp/HardCore(\\.git)?$",
+  "patched_guard": "^((https://github\\.com/)|(git@github\\.com:)|(git@github-hardcore:))watermarkpp/HardCore(\\.git)?$",
+  "script_changes": [
+    {
+      "file": "RUN_V5.ps1",
+      "sha256_before": "e3e8df1b4dcf139177a6bc0c8ec08ea4cb138026ac512793bc77935fe8c075a5",
+      "sha256_after": "1d08ce348e9555b9e5852719541bce6680cc403daad5bdfdf30f5a0eaa518f3c",
+      "code_change": "One exact regex replacement; add github-hardcore SSH alias with unchanged owner/repo restriction."
+    },
+    {
+      "file": "PUSH_REVIEW.ps1",
+      "sha256_before": "ba85e91db3d3b1a6df61a305d7ce78183f7b01ff63b0b27abca9892a09c3f564",
+      "sha256_after": "8364160f11f4ff2d4aeef0c902bd897e8c33218821aa8ad0be27c36766640f4f",
+      "code_change": "One exact regex replacement; add github-hardcore SSH alias with unchanged owner/repo restriction."
+    }
+  ],
+  "base_sha_changed": false,
+  "game_payload_changed": false,
+  "ssh_config_changed_by_package": false,
+  "python_regex_cases": {
+    "positive": [
+      "https://github.com/watermarkpp/HardCore",
+      "https://github.com/watermarkpp/HardCore.git",
+      "git@github.com:watermarkpp/HardCore",
+      "git@github.com:watermarkpp/HardCore.git",
+      "git@github-hardcore:watermarkpp/HardCore",
+      "git@github-hardcore:watermarkpp/HardCore.git"
+    ],
+    "negative": [
+      "git@github-hardcore:someone/HardCore.git",
+      "git@github-hardcore:watermarkpp/Other.git",
+      "git@github-hardcore.evil:watermarkpp/HardCore.git",
+      "git@github-other:watermarkpp/HardCore.git",
+      "https://github.com.evil/watermarkpp/HardCore.git",
+      "https://evil/github.com/watermarkpp/HardCore.git",
+      "git@github.com:watermarkpp/HardCore.git.evil",
+      "git@github-hardcore:watermarkpp/HardCore/extra",
+      "git@github-hardcore:watermarkpp/HardCore.git;command",
+      ""
+    ],
+    "passed": 16
+  },
+  "powershell_execution": "NOT_RUN",
+  "local_ssh_verification": "REQUIRED_NOT_RUN_HERE",
+  "repository_push": "NOT_PERFORMED_HERE"
+}

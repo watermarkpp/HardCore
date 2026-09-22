@@ -38,7 +38,13 @@ func _run() -> void:
 	assert(not PlayerState.equipment["武器"].is_empty(), "耐久归零后装备被删除")
 	assert(str(PlayerState.equipment["武器"].get("instance_id", "")) == instance_id, "耐久归零后装备实例被替换")
 	assert(int(PlayerState.equipment["武器"].get("durability", -1)) == 0, "装备耐久没有归零")
-	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 5, "零耐久装备仍提供属性")
+	# Zero-durability authority contract: the attribute stops applying
+	# (recalculate_stats skips equipment without positive raw durability), so
+	# only the base remains: attack_with_weapon minus the wooden sword's 5.
+	assert(
+		int(PlayerState.computed_stats.get("attack_max", 0)) == attack_with_weapon - 5,
+		"零耐久装备仍提供属性"
+	)
 
 	var blacksmith_context := GameData.merchant_context("starter_gear")
 	assert(PricingServiceScript.merchant_supports_full_equipment_repair(blacksmith_context))
@@ -74,7 +80,24 @@ func _run() -> void:
 	shop.open_for("比奇铁匠", GameData.merchant_stock("starter_gear"))
 	assert(shop.repair_button.text == "装备无需维修", "商店维修按钮初始预览错误")
 	PlayerState.damage_equipment_durability("武器", 1)
-	assert("金币" in shop.repair_button.text and str(PlayerState.repair_cost(blacksmith_context)) in shop.repair_button.text, "商店没有显示唯一维修价格预览")
+	# UI-L1 contract: equipment_changed refresh is deferred and coalesced, so
+	# the repair preview settles within a few process frames instead of the
+	# same call stack.  Allow up to 3 frames and verify the exact preview.
+	var repair_expected := str(PlayerState.repair_cost(blacksmith_context))
+	var repair_settled := false
+	for _frame in range(3):
+		await get_tree().process_frame
+		if "金币" in shop.repair_button.text and repair_expected in shop.repair_button.text:
+			repair_settled = true
+			break
+	assert(repair_settled, "商店没有显示唯一维修价格预览")
+	var repair_plan_count := int(shop._ui_l1_repair_plan_count)
+	for _frame in range(3):
+		await get_tree().process_frame
+	assert(
+		int(shop._ui_l1_repair_plan_count) == repair_plan_count,
+		"UI-L1 维修计划计数每帧持续增长",
+	)
 
 	_verify_batch_all_equipment_contract(blacksmith_context)
 	_verify_live_high_gear_repair_contract(blacksmith_context)

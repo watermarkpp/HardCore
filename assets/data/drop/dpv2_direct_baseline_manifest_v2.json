@@ -1,0 +1,92 @@
+{
+  "schema": "hardcore.dpv2.direct_baseline_manifest.v2",
+  "manifest_id": "dpv2.direct_baseline.manifest.v2",
+  "status": "REPRODUCIBLE_PRODUCTION_BUILD_PASS",
+  "production_active": true,
+  "hash_policy": {
+    "generated_text_artifacts": "UTF-8_WITH_LF_NORMALIZATION",
+    "tracked_source_raw_hash_also_preserved": true
+  },
+  "tracked_logical_source": {
+    "path": "assets/data/canonical_monster_drop_source_v2.json",
+    "schema": "canonical_monster_drop_source_excel_v1",
+    "authority": "user_locked",
+    "logical_monster_records": 217,
+    "logical_rows": 9590,
+    "sha256_raw": "59338A7E5CAACCC82661E942908CAEA0A4A06CF56402961E4C3E55FB123E4013",
+    "sha256_lf": "1A0BE3AFB28628F14E2C7F30EA08856301BB5D9E152B62CE6D1AEF47D9AB1BD5",
+    "upstream_workbook_sha256": "6902A37DB839577D2CE440B9EFDC4628430CF063BF9DF505F03B41E24A5D67EE",
+    "physical_raw_monitems_files_in_git": 0
+  },
+  "artifacts": {
+    "semantic_authority": {
+      "path": "assets/data/drop/dpv2_monster_drop_semantic_authority_v1.json",
+      "sha256": "FA7C860CEFCF3AC07AF58DA21D842530500EB8D2E9F2A402BA72CC92FA4AFA4C",
+      "hash_normalization": "lf_text"
+    },
+    "monster_mapping": {
+      "path": "assets/data/drop/dpv2_21cq_monster_mapping_v1.json",
+      "sha256": "499714F9B61CC56E5CE7550AB69B4E74883343017B3AD07B78EAC5F4630903E7",
+      "hash_normalization": "lf_text"
+    },
+    "item_mapping": {
+      "path": "assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+      "sha256": "EA7CBCB43C9077AF46D2953FB4D1C993A35F693053001F32942CEA1408E6D021",
+      "hash_normalization": "lf_text"
+    },
+    "overflow_authority": {
+      "path": "assets/data/drop/dpv2_21cq_overflow_authority_v1.json",
+      "sha256": "8EE86C24F290C02FA2630A553CBEF54F365B10DF0A3761622A60D9E1F4D5A053",
+      "hash_normalization": "lf_text"
+    },
+    "source_provenance": {
+      "path": "assets/data/drop/dpv2_21cq_source_provenance_v1.json",
+      "sha256": "E7E57BF197A960F988B0FF60897CFBFC20884DE420C300366A665FC41EF14F01",
+      "hash_normalization": "lf_text"
+    },
+    "direct_baseline_authority": {
+      "path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+      "sha256": "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7",
+      "hash_normalization": "lf_text"
+    },
+    "source_correction_authority": {
+      "path": "assets/data/drop/dpv2_21cq_source_corrections_v1.json",
+      "sha256": "F4490B54332B672053840A7E4F12251979E148A0F7F6DB8FFE68EE30345BA5A7",
+      "hash_normalization": "lf_text"
+    },
+    "source_priority_policy": {
+      "path": "assets/data/source_priority_policy.json",
+      "sha256": "BF6DB3F60F35019C68196F6D95A6DE44D2EBC33B585BC0E63CF62E4AA4C47EDF",
+      "hash_normalization": "lf_text",
+      "lane": "monster_drop_probability"
+    },
+    "global_drop_rate_authority": {
+      "path": "assets/data/drop/dpv2_global_drop_rate_authority_v1.json",
+      "sha256": "653BB10069CE3B9C06F7412F23EB2D7931FD4C1CA0BCB00C0428C82F2E4DFCC0",
+      "hash_normalization": "lf_text"
+    },
+    "verified_profile_authority": {
+      "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+      "sha256": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515",
+      "hash_normalization": "lf_text"
+    }
+  },
+  "build_entrypoint": "tools/build_dpv2_21cq_direct_baseline.py",
+  "write_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --write",
+  "check_command": "py -3.12 tools/build_dpv2_21cq_direct_baseline.py --check",
+  "v505_source_migration": true,
+  "verified_profile_source": {
+    "path": "assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json",
+    "schema": "hardcore.dpv2.21cq_verified_profile_authority.v1",
+    "source_status_counts": {
+      "EXPLICIT_NON_LOOT": 9,
+      "FULL_21CQ_VERIFIED": 141,
+      "LEGACY_PRESERVED_EXTERNAL_EMPTY": 2,
+      "PROJECT_EXTENSION": 1,
+      "RUNTIME_DISABLED": 3
+    },
+    "compiled_slots": 7611,
+    "sha256_lf": "1F5240EEB01CC0D488DE08D570EE3E794EA13F7CA31A639677800B7AE44AB515",
+    "reference_claim": "PROJECT_21CQ_REFERENCE_BASELINE_NOT_OFFICIAL_SERVER_PROOF"
+  }
+}

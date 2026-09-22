@@ -1,0 +1,41 @@
+{
+  "total": 2,
+  "generated_at": "2026-09-09T17:45:35.9270940+08:00",
+  "git_head": "675005cd24e1ec6d0ff659d00dadbc178309f715",
+  "suite": "adhoc",
+  "failed": 0,
+  "passed": 2,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "w1_special_delivery_runtime_test",
+      "test_path": "tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_special_delivery_contract_test",
+      "test_path": "tests/monster_special_delivery_contract_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

@@ -1,0 +1,394 @@
+{
+  "provenance_schema_version": 1,
+  "family_id": "chiyue_valley_rock_wall_u0",
+  "socket_profile_id": "chiyue_valley_rock_wall_socket_u0",
+  "generation": {
+    "tool": "image_gen.imagegen",
+    "session_id": "01a01ede-3674-7e13-9da2-95fcf6ab1745",
+    "front_output_id": "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+    "front_output_ids": [
+      "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+    ],
+    "cap_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+    "cap_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+    "front_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+    "front_external_paths": [
+      "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png"
+    ],
+    "front_crop_boxes": [
+      [
+        60,
+        120,
+        210,
+        870
+      ],
+      [
+        250,
+        260,
+        400,
+        1010
+      ],
+      [
+        470,
+        520,
+        620,
+        1270
+      ],
+      [
+        660,
+        760,
+        810,
+        1510
+      ]
+    ],
+    "source_crop_policy": "front_internal_hard_rock_windows_and_cap_dominant_alpha_crop",
+    "cap_derivation_policy": "dominant_alpha_bbox_then_four_deterministic_quadrant_windows",
+    "style_contract": {
+      "material": "hard_planar_wet_cave_rock",
+      "palette": "wet_gray_black_rock_with_sparse_dark_red_brown_mineral_veins",
+      "lighting": "wet_highlights_on_rock_planes_with_deep_fissures",
+      "moss": "confined_to_fissures",
+      "variation": "front_texture_window_and_cap_crop_only",
+      "prohibited": "organic_folds_roots_tumors_scales_brickwork_masonry"
+    },
+    "clipboard_reference_path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\codex-clipboard-1d2451a7-b6dc-40ee-b56d-bb810caa5876.png",
+    "clipboard_reference_available_at_build": true,
+    "clipboard_reference_sha256": "382e3c0c87f44a0270e2bd9e399b88cebe75cf36d76fe65dd38359e112b23ffe"
+  },
+  "source_files": [
+    {
+      "role": "front",
+      "variant": 1,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v01.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_output_id": "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_sha256": "494e6d6e7af9c8927747b4d2978e6c4a6132a4e423ee996024d652b575a15573",
+      "tracked_sha256": "d93cecb1c2351092aef00fa6c32424af0f475621c331841cd053b9fbdacfcc29",
+      "crop_box_in_raw_source": [
+        60,
+        120,
+        210,
+        870
+      ],
+      "source_cleanup_policy": "internal_hard_planar_rock_crop_set_alpha_255",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "raw_dimensions": [
+        869,
+        1810
+      ],
+      "raw_alpha_extrema": [
+        255,
+        255
+      ],
+      "dimensions": [
+        150,
+        750
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "sha256": "d93cecb1c2351092aef00fa6c32424af0f475621c331841cd053b9fbdacfcc29",
+      "sha256_verified_by_builder": "d93cecb1c2351092aef00fa6c32424af0f475621c331841cd053b9fbdacfcc29"
+    },
+    {
+      "role": "front",
+      "variant": 2,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v02.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_output_id": "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_sha256": "494e6d6e7af9c8927747b4d2978e6c4a6132a4e423ee996024d652b575a15573",
+      "tracked_sha256": "b70ca60920077435243b7bc86f4690f7e148aae2408a7ce87a4de6fca5f0eeb2",
+      "crop_box_in_raw_source": [
+        250,
+        260,
+        400,
+        1010
+      ],
+      "source_cleanup_policy": "internal_hard_planar_rock_crop_set_alpha_255",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "raw_dimensions": [
+        869,
+        1810
+      ],
+      "raw_alpha_extrema": [
+        255,
+        255
+      ],
+      "dimensions": [
+        150,
+        750
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "sha256": "b70ca60920077435243b7bc86f4690f7e148aae2408a7ce87a4de6fca5f0eeb2",
+      "sha256_verified_by_builder": "b70ca60920077435243b7bc86f4690f7e148aae2408a7ce87a4de6fca5f0eeb2"
+    },
+    {
+      "role": "front",
+      "variant": 3,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v03.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_output_id": "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_sha256": "494e6d6e7af9c8927747b4d2978e6c4a6132a4e423ee996024d652b575a15573",
+      "tracked_sha256": "66c068efdd0b12c262c794977f8acdf85ebf8185af95bab3d060d317afd25fd6",
+      "crop_box_in_raw_source": [
+        470,
+        520,
+        620,
+        1270
+      ],
+      "source_cleanup_policy": "internal_hard_planar_rock_crop_set_alpha_255",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "raw_dimensions": [
+        869,
+        1810
+      ],
+      "raw_alpha_extrema": [
+        255,
+        255
+      ],
+      "dimensions": [
+        150,
+        750
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "sha256": "66c068efdd0b12c262c794977f8acdf85ebf8185af95bab3d060d317afd25fd6",
+      "sha256_verified_by_builder": "66c068efdd0b12c262c794977f8acdf85ebf8185af95bab3d060d317afd25fd6"
+    },
+    {
+      "role": "front",
+      "variant": 4,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_front_v04.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_output_id": "exec-a16c2c00-468a-45e3-a09e-35e7b6b63dda.png",
+      "raw_sha256": "494e6d6e7af9c8927747b4d2978e6c4a6132a4e423ee996024d652b575a15573",
+      "tracked_sha256": "def1c5fd763180a7ee8456b37105b4bc1e9e9066a4f9128f946f3f3716b00e4f",
+      "crop_box_in_raw_source": [
+        660,
+        760,
+        810,
+        1510
+      ],
+      "source_cleanup_policy": "internal_hard_planar_rock_crop_set_alpha_255",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "raw_dimensions": [
+        869,
+        1810
+      ],
+      "raw_alpha_extrema": [
+        255,
+        255
+      ],
+      "dimensions": [
+        150,
+        750
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        255,
+        255
+      ],
+      "sha256": "def1c5fd763180a7ee8456b37105b4bc1e9e9066a4f9128f946f3f3716b00e4f",
+      "sha256_verified_by_builder": "def1c5fd763180a7ee8456b37105b4bc1e9e9066a4f9128f946f3f3716b00e4f"
+    },
+    {
+      "role": "cap",
+      "variant": 1,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v01.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_sha256": "986043f92428b62b3c7fd2256620049814a359d88e535cd9cb25744eec3759d9",
+      "tracked_sha256": "9c37b54db921d9b2f62c493a0804eec9da28b14de0e6030f1a0dcd6eea86f4da",
+      "dominant_alpha_bbox": [
+        33,
+        29,
+        1227,
+        1227
+      ],
+      "crop_box_in_dominant_alpha": [
+        0,
+        0,
+        896,
+        896
+      ],
+      "crop_box_in_raw_source": [
+        33,
+        29,
+        929,
+        925
+      ],
+      "source_cleanup_policy": "dominant_alpha_bbox_then_deterministic_quadrant_crop",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "dimensions": [
+        896,
+        896
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "9c37b54db921d9b2f62c493a0804eec9da28b14de0e6030f1a0dcd6eea86f4da",
+      "sha256_verified_by_builder": "9c37b54db921d9b2f62c493a0804eec9da28b14de0e6030f1a0dcd6eea86f4da"
+    },
+    {
+      "role": "cap",
+      "variant": 2,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v02.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_sha256": "986043f92428b62b3c7fd2256620049814a359d88e535cd9cb25744eec3759d9",
+      "tracked_sha256": "2ed6a11fc5c075e5a029ad0c654be73ccef6b2d0623e1604810063813d279b2b",
+      "dominant_alpha_bbox": [
+        33,
+        29,
+        1227,
+        1227
+      ],
+      "crop_box_in_dominant_alpha": [
+        298,
+        0,
+        1194,
+        896
+      ],
+      "crop_box_in_raw_source": [
+        331,
+        29,
+        1227,
+        925
+      ],
+      "source_cleanup_policy": "dominant_alpha_bbox_then_deterministic_quadrant_crop",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "dimensions": [
+        896,
+        896
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "2ed6a11fc5c075e5a029ad0c654be73ccef6b2d0623e1604810063813d279b2b",
+      "sha256_verified_by_builder": "2ed6a11fc5c075e5a029ad0c654be73ccef6b2d0623e1604810063813d279b2b"
+    },
+    {
+      "role": "cap",
+      "variant": 3,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v03.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_sha256": "986043f92428b62b3c7fd2256620049814a359d88e535cd9cb25744eec3759d9",
+      "tracked_sha256": "d35843ec670a1e60babd4ea20be654f3e4a0a0f83b3c4e828316175fb75a71d5",
+      "dominant_alpha_bbox": [
+        33,
+        29,
+        1227,
+        1227
+      ],
+      "crop_box_in_dominant_alpha": [
+        0,
+        302,
+        896,
+        1198
+      ],
+      "crop_box_in_raw_source": [
+        33,
+        331,
+        929,
+        1227
+      ],
+      "source_cleanup_policy": "dominant_alpha_bbox_then_deterministic_quadrant_crop",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "dimensions": [
+        896,
+        896
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "d35843ec670a1e60babd4ea20be654f3e4a0a0f83b3c4e828316175fb75a71d5",
+      "sha256_verified_by_builder": "d35843ec670a1e60babd4ea20be654f3e4a0a0f83b3c4e828316175fb75a71d5"
+    },
+    {
+      "role": "cap",
+      "variant": 4,
+      "tracked_path": "assets/art/maps/_shared/walls/chiyue_valley/source/chiyue_valley_wall_cap_v04.png",
+      "raw_external_path": "C:\\Users\\Administrator\\.codex\\generated_images\\01a01ede-3674-7e13-9da2-95fcf6ab1745\\exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_output_id": "exec-394b3c43-bf78-40ad-9aaa-d97b8e17af26.png",
+      "raw_sha256": "986043f92428b62b3c7fd2256620049814a359d88e535cd9cb25744eec3759d9",
+      "tracked_sha256": "893891428d08d6a09b399042b7ef1697e64a651f86fa88541e6ced8ac7ed38cc",
+      "dominant_alpha_bbox": [
+        33,
+        29,
+        1227,
+        1227
+      ],
+      "crop_box_in_dominant_alpha": [
+        298,
+        302,
+        1194,
+        1198
+      ],
+      "crop_box_in_raw_source": [
+        331,
+        331,
+        1227,
+        1227
+      ],
+      "source_cleanup_policy": "dominant_alpha_bbox_then_deterministic_quadrant_crop",
+      "style_contract": "hard_planar_wet_cave_rock_moss_confined_to_fissures",
+      "dimensions": [
+        896,
+        896
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "893891428d08d6a09b399042b7ef1697e64a651f86fa88541e6ced8ac7ed38cc",
+      "sha256_verified_by_builder": "893891428d08d6a09b399042b7ef1697e64a651f86fa88541e6ced8ac7ed38cc"
+    }
+  ],
+  "geometry_contract": {
+    "tile_size": [
+      64,
+      32
+    ],
+    "wall_face_height_px": 160,
+    "allowed_lengths": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "slots": "iso_x/iso_y x l1/l2/l3_v01..v03/l4_v01..v03",
+    "corner_join_mode": "straight_overlap",
+    "corner_assets": 0,
+    "collision_policy": "none",
+    "collision_footprint_tiles": [
+      0,
+      0
+    ],
+    "collision_authority": "manual_by_user"
+  },
+  "art_direction": [
+    "hard planar wet gray-black rock strata",
+    "large fractured slabs and sharp fault lines",
+    "wet highlights on high rock planes",
+    "moss confined to fissures",
+    "sparse dark red-brown mineral veins",
+    "no organic folds, roots, tumors, scales, brickwork, masonry, gothic architecture, doors, windows, or carving"
+  ]
+}

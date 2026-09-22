@@ -1,0 +1,77 @@
+{
+  "schema": "hardcore.dpv2.drop_role_design_authority.v1",
+  "status": "A0_6_PARTIAL_WAITING_32_HUMAN_ROLE_DECISIONS",
+  "authority": {
+    "kind": "user_authoritative_override",
+    "decision_document": "docs/drop/DPV2_A06_AUTHORITY_DECISION.md",
+    "decision_document_sha256": "70F76CC3C7ACA7CA3CDBD5186C06AE7B5A9DED173FC0DEDE12C0D422A7E969E4",
+    "base_sha": "ca4908b1ea3dc6d4a75dd081b18dc28960570c7b",
+    "identity_authority": "assets/data/runtime/canonical_monster_catalog.json",
+    "v1_role_seed_only": "HardCore_怪物变体与掉率母版_V1_审核稿.xlsx",
+    "highest_role_wins": false
+  },
+  "formal_roles": [
+    {"role": "COMMON", "factor": 1, "production_eligible": true},
+    {"role": "STRONG_COMMON", "factor": 1.5, "production_eligible": true},
+    {"role": "ELITE", "factor": 3, "production_eligible": true},
+    {"role": "OFFICIAL_JP", "factor": 4, "production_eligible": true},
+    {"role": "OFFICIAL_SUPER_JP", "factor": 5, "production_eligible": true},
+    {"role": "MINOR_BOSS", "factor": 6, "production_eligible": true},
+    {"role": "BOSS", "factor": 8, "production_eligible": true},
+    {"role": "MAJOR_BOSS", "factor": 12, "production_eligible": true},
+    {"role": "ENDGAME_BOSS", "factor": 16, "production_eligible": true},
+    {"role": "NEW_CLOTHES_BOSS", "factor": 16, "production_eligible": true},
+    {"role": "PRESENTATION", "factor": 0, "production_eligible": false},
+    {"role": "NON_LOOT", "factor": 0, "production_eligible": false},
+    {"role": "SYSTEM", "factor": 0, "production_eligible": false}
+  ],
+  "removed_roles": [
+    {
+      "role": "VETERAN",
+      "former_factor": 2,
+      "reason": "user_authoritative_removal_after_zero canonical assignments",
+      "replacement": null
+    },
+    {
+      "role": "UNIQUE_GEAR_BOSS",
+      "former_factor": 16,
+      "reason": "replaced by the exact six-member NEW_CLOTHES_BOSS authority",
+      "replacement": "NEW_CLOTHES_BOSS"
+    }
+  ],
+  "frozen_overrides": [
+    {
+      "canonical_monster_id": 225,
+      "canonical_name": "暗之牛魔王",
+      "role": "ENDGAME_BOSS",
+      "factor": 16,
+      "new_clothes_eligible": false
+    }
+  ],
+  "new_clothes_boss_authority": {
+    "role": "NEW_CLOTHES_BOSS",
+    "factor": 16,
+    "boss_count": 6,
+    "item_count": 6,
+    "one_to_one_required": true,
+    "mappings": [
+      {"canonical_monster_id": 235, "canonical_monster_name": "暗之双头血魔", "canonical_item_id": 140, "canonical_item_name": "天魔神甲"},
+      {"canonical_monster_id": 236, "canonical_monster_name": "暗之双头金刚", "canonical_item_id": 144, "canonical_item_name": "天尊道袍"},
+      {"canonical_monster_id": 237, "canonical_monster_name": "暗之黄泉教主", "canonical_item_id": 142, "canonical_item_name": "法神披风"},
+      {"canonical_monster_id": 238, "canonical_monster_name": "暗之骷髅精灵", "canonical_item_id": 141, "canonical_item_name": "圣战宝甲"},
+      {"canonical_monster_id": 239, "canonical_monster_name": "暗之沃玛教主", "canonical_item_id": 145, "canonical_item_name": "天师长袍"},
+      {"canonical_monster_id": 240, "canonical_monster_name": "暗之虹魔教主", "canonical_item_id": 143, "canonical_item_name": "霓裳羽衣"}
+    ]
+  },
+  "accepted_candidate_counts": {
+    "canonical_monsters": 156,
+    "runtime_allowed": 153,
+    "accepted_without_conflict": 124,
+    "waiting_human_role_decision": 32
+  },
+  "activation": {
+    "production_active": false,
+    "phase_1_allowed": false,
+    "runtime_consumer": null
+  }
+}

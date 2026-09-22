@@ -14,17 +14,23 @@ func _wait_for_transition(game: Node) -> bool:
 	return not bool(game._map_transition_in_progress)
 
 
+func _wait_for_initial_world(game: Node) -> bool:
+	var deadline := Time.get_ticks_msec() + 15000
+	while not bool(game.gameplay_input_is_enabled()) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	return bool(game.gameplay_input_is_enabled())
+
+
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	assert(await _wait_for_initial_world(game), "initial staged world did not finish")
 	game._monster_prefetch_enabled = false
 
 	PlayerState.test_mode = false
-	game.travel_to_map(217)
+	assert(game._request_map_travel(911001), "formal staged travel request failed")
 	assert(game._map_transition_in_progress)
 	assert(not game.gameplay_input_is_enabled(), "input must stay locked while Loading covers")
 	game.hud.loading_transition_covered.emit({
@@ -55,7 +61,7 @@ func _run() -> void:
 	assert(observed_build, "staged build stages were not observed")
 
 	assert(await _wait_for_transition(game), "transition did not finish")
-	assert(game.current_map_id == 217)
+	assert(game.current_map_id == 911001)
 	assert(not game._map_transition_in_progress)
 	assert(game.gameplay_input_is_enabled(), "input must be released only after READY")
 
@@ -75,14 +81,24 @@ func _run() -> void:
 		not game.background.is_environment_point_blocked(game.player.global_position),
 		"READY requires a clear player spawn"
 	)
+	var terrain_ready_enemy_count := 0
+	for node: Node in get_tree().get_nodes_in_group("enemies"):
+		if node is EnemyActor:
+			assert(
+				node.terrain_navigation_context_ready(),
+				"formal enemy missing shared terrain navigation context"
+			)
+			terrain_ready_enemy_count += 1
+	assert(terrain_ready_enemy_count > 0, "formal map must spawn terrain-aware enemies")
 
 	game.queue_free()
 	print(
 		"WORLD_BACKGROUND_READY_COLLISION_CONTRACT_PASS input_locked_during_build=true "
-		+ "collisions=%d/%d failed=%d ready=%s" % [
+		+ "collisions=%d/%d failed=%d terrain_enemies=%d ready=%s" % [
 			coord.built_collision_count,
 			coord.planned_collision_count,
 			coord.failed_collision_count,
+			terrain_ready_enemy_count,
 			str(coord.stage == WorldBootstrapCoordinator.Stage.READY),
 		]
 	)

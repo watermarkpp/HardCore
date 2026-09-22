@@ -1,6 +1,23 @@
 extends Node
 
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
+
+## R1: vanilla monster magic delivery classes.
+## DIRECT_MAGSTRUCK is the RM_MAGSTRUCK family (targeted/destined direct
+## magic): when the resolution enters the magic-defense stage (anti-magic did
+## not evade) and the target is a Lv<50 monster, the target's next autonomous
+## walk is postponed by 800 + Random(1000) ms.
+## MAGSTRUCK_MINE is the RM_MAGSTRUCK_MINE family (TFireBurnEvent ground
+## burns, e.g. wizard.fire_wall): MAC and damage resolve normally and a
+## positive tick still produces an ordinary STRUCK, but the walk tick is
+## NEVER postponed. Every pre-R1 caller keeps DIRECT_MAGSTRUCK semantics.
+enum EnemyMagicDeliveryKind {
+	DIRECT_MAGSTRUCK,
+	MAGSTRUCK_MINE,
+}
+
+var _direct_spell_stats_scratch: Dictionary = {}
 
 func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
 	if not is_instance_valid(actor) or not is_instance_valid(target):
@@ -17,16 +34,37 @@ func face_target_screen_px(actor: Node2D, target: Node2D) -> Vector2:
 
 
 func apply_damage(target: Node, amount: int) -> bool:
-	if not is_instance_valid(target) or not target.has_method("take_damage"):
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
 		return false
+	var damage_started_usec := RuntimeDiagnostics.timing_start()
 	target.take_damage(maxi(1, amount))
+	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	return true
 
 
-func apply_enemy_physical_damage(target: Node, amount: int, source_actor: Node2D = null) -> bool:
-	if not is_instance_valid(target) or not target.has_method("take_damage"):
+func apply_enemy_physical_damage(
+	target: Node,
+	amount: int,
+	source_actor: Node2D = null,
+	damage_context: Dictionary = {},
+) -> bool:
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
 		return false
-	target.call("take_damage", maxi(1, amount), source_actor)
+	var damage_started_usec := RuntimeDiagnostics.timing_start()
+	if damage_context.is_empty():
+		target.call("take_damage", maxi(1, amount), source_actor)
+	else:
+		# Only callers with a proven semantic source opt into the third argument.
+		target.call("take_damage", maxi(1, amount), source_actor, damage_context)
+	RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	return true
 
 
@@ -35,46 +73,171 @@ func apply_enemy_direct_spell_damage(
 	stable_skill_id: String,
 	raw_damage: int,
 	source_actor: Node2D,
-	rng: RandomNumberGenerator,
-	magic_defense_adapter: Callable
+	rng: RandomNumberGenerator = null,
+	magic_defense_adapter := Callable(),
+	anti_magic_roll := -1,
+	target_stats_scratch: Dictionary = {},
+	delivery_kind: EnemyMagicDeliveryKind = EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK,
 ) -> Dictionary:
-	if not is_instance_valid(target) or not target.has_method("take_damage"):
+	if (
+		not is_instance_valid(target)
+		or not target.has_method("take_damage")
+		or _target_rejects_damage(target)
+	):
 		return {
 			"success": false,
 			"failure_reason": "target_missing_damage_pipeline",
 			"final_damage": 0,
 		}
-	var target_stats: Dictionary = _target_stats_with_runtime_buffs(target)
+	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_resolution_count")
+	var resolution_started_usec := RuntimeDiagnostics.timing_start()
+	var target_stats: Dictionary = (
+		target_stats_scratch
+		if target_stats_scratch != null
+		else _direct_spell_stats_scratch
+	)
+	if not _target_stats_with_runtime_buffs_into(target, target_stats):
+		RuntimeDiagnostics.record_timing_usec(
+			&"direct_spell_resolution_usec",
+			resolution_started_usec,
+		)
+		return {
+			"success": false,
+			"failure_reason": "target_direct_spell_stats_invalid",
+			"final_damage": 0,
+		}
+	var checked_anti_magic_roll := anti_magic_roll
+	if checked_anti_magic_roll < 0:
+		if rng != null:
+			checked_anti_magic_roll = rng.randi_range(
+				0,
+				CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+			)
+		else:
+			checked_anti_magic_roll = randi_range(
+				0,
+				CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1,
+			)
 	var resolution := CombatResolutionRulesScript.resolve_direct_spell_damage(
 		stable_skill_id,
 		maxi(0, raw_damage),
 		target_stats,
-		rng.randi_range(0, CombatResolutionRulesScript.ANTI_MAGIC_ROLL_SIDES - 1),
+		checked_anti_magic_roll,
 		magic_defense_adapter
 	)
+	# Vanilla order: the walk-tick postponement applies when the message
+	# actually enters the magic-defense stage (anti-magic did not evade),
+	# even if MAC later compresses the final damage to 0. The ordinary STRUCK
+	# (take_damage below) still requires final_damage > 0.
+	if (
+		delivery_kind == EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
+		and bool(resolution.get("enters_magic_defense_stage", false))
+	):
+		_apply_direct_magic_walk_delay(target)
 	var final_damage := int(resolution.get("final_damage", 0))
 	if final_damage > 0:
+		if delivery_kind == EnemyMagicDeliveryKind.MAGSTRUCK_MINE:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"monster_magic_mine_struck_count"
+			)
+		var damage_started_usec := RuntimeDiagnostics.timing_start()
 		target.call("take_damage", final_damage, source_actor)
-	var result := resolution.duplicate(true)
+		RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
+	RuntimeDiagnostics.record_timing_usec(
+		&"direct_spell_resolution_usec",
+		resolution_started_usec,
+	)
+	var result: Dictionary = resolution
 	result["success"] = final_damage > 0
 	return result
 
 
+func _target_rejects_damage(target: Node) -> bool:
+	return (
+		target.has_method("can_receive_damage")
+		and not bool(target.call("can_receive_damage"))
+	)
+
+
+## RM_MAGSTRUCK walk postponement (Lv<50 monsters, not source-exempt).
+## The 800..1799ms composition lives in MonsterStruckPolicy; the target owns
+## the movement cadence AND the roll (its own RNG stream, never the caller's
+## spell-resolution stream - that stream's continuation is a validated
+## contract). Fail-closed on targets without an integer level (summons keep
+## their own delivery rules and are not R1 scope).
+##
+## Evidence Note (R1.1, reviewer adjudication): the vanilla source-exemption
+## flag is the server-side `bo2BF` member, whose only known setter is
+## `TCowKingMonster.Create -> bo2BF := True` (牛魔王). Every known exempt
+## monster in the 1.76 data set is Level >= 50, so the `level < 50` gate in
+## MonsterStruckPolicy already yields the identical result and the runtime
+## passes `false` deliberately - there is no monster-data field carrying this
+## flag yet, and R1 must not invent one. When a future data revision adds a
+## real exemption source, replace the literal `false` with that field here;
+## the policy API stays unchanged.
+func _apply_direct_magic_walk_delay(target: Node) -> void:
+	if not target.has_method("apply_source_direct_magic_walk_delay"):
+		return
+	var raw_level: Variant = target.get("level")
+	if not raw_level is int:
+		return
+	if not MonsterStruckPolicyScript.direct_magic_can_delay_walk(
+		int(raw_level), false
+	):
+		return
+	target.call("apply_source_direct_magic_walk_delay")
+
+
 func _target_stats_with_runtime_buffs(target: Node) -> Dictionary:
+	var result: Dictionary = {}
+	_target_stats_with_runtime_buffs_into(target, result)
+	return result
+
+
+func _target_stats_with_runtime_buffs_into(
+	target: Node,
+	output: Dictionary,
+) -> bool:
+	output.clear()
+	if target.has_method("direct_spell_runtime_stats_into"):
+		var raw_result: Variant = target.call(
+			"direct_spell_runtime_stats_into",
+			output,
+		)
+		if not raw_result is bool or not bool(raw_result):
+			return false
+		return true
+	return _legacy_target_stats_with_runtime_buffs_into(target, output)
+
+
+func _legacy_target_stats_with_runtime_buffs_into(
+	target: Node,
+	output: Dictionary,
+) -> bool:
+	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_stats_snapshot_count")
 	var raw_stats: Variant = target.get("monster_data")
-	var result: Dictionary = raw_stats.duplicate(true) if raw_stats is Dictionary else {}
+	if raw_stats is Dictionary:
+		RuntimeDiagnostics.increment_performance_counter(&"direct_spell_full_monster_data_duplicates")
+	if raw_stats is Dictionary:
+		output.merge(raw_stats as Dictionary, true)
 	var red_poison: Variant = target.get_meta("canonical_red_poison", {})
 	if not red_poison is Dictionary:
-		return result
+		return true
 	if Time.get_ticks_msec() >= int(red_poison.get("expires_at_ms", 0)):
 		target.remove_meta("canonical_red_poison")
-		return result
-	var reduction := maxi(0, int(red_poison.get("flat_reduction", 0)))
+		return true
+	var reduction := 0
+	if red_poison.has("flat_mac_reduction"):
+		reduction = maxi(0, int(red_poison.get("flat_mac_reduction", 0)))
+	elif bool(red_poison.get("legacy_metadata_fallback", false)):
+		reduction = maxi(0, int(red_poison.get("flat_reduction", 0)))
 	for field: String in ["magic_defense_min", "magic_defense_max", "mdefMin", "mdefMax", "MinMAC", "MaxMAC"]:
-		if result.has(field):
-			result[field] = maxi(0, int(result[field]) - reduction)
-	result["runtime_buff_contract"] = "buff.taoist.red_poison.v1"
-	return result
+		if output.has(field):
+			output[field] = maxi(0, int(output[field]) - reduction)
+	output["runtime_buff_contract"] = str(
+		red_poison.get("contract_id", "buff.taoist.red_poison.v1")
+	)
+	return true
 
 
 func apply_player_direct_spell_damage(

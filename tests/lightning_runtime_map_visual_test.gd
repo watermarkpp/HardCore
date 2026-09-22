@@ -65,9 +65,12 @@ func _ready() -> void:
 	add_child(base_node)
 	assert(base_node is CasterSkillSkyStrikeVisualEffect)
 	base_node._process(0.0)
+	var expected_base_anchor := (target.global_position + offset).round()
+	var base_drawable := base_node._sprites[0] as CasterSkillAnimationPlayer
 	assert(
-		base_node.global_position == (target.global_position + offset).round(),
-		"Lightning profile anchor should use target footprint-derived anchor"
+		base_drawable != null
+		and (base_node.global_position + base_drawable.position).is_equal_approx(expected_base_anchor),
+		"Lightning profile drawable anchor should use target footprint-derived anchor"
 	)
 
 	var runtime_map_plan := plan.duplicate(true)
@@ -87,9 +90,11 @@ func _ready() -> void:
 	assert(runtime_map_node is CasterSkillSkyStrikeVisualEffect)
 	add_child(runtime_map_node)
 	runtime_map_node._process(0.0)
+	var runtime_map_drawable := runtime_map_node._sprites[0] as CasterSkillAnimationPlayer
 	assert(
-		runtime_map_node.global_position == (target.global_position + offset).round(),
-		"Sky strike should not drift from runtime map gameplay geometry origin"
+		runtime_map_drawable != null
+		and (runtime_map_node.global_position + runtime_map_drawable.position).is_equal_approx(expected_base_anchor),
+		"Sky strike drawable should not drift from runtime map gameplay geometry origin"
 	)
 
 	target.global_position = Vector2(470.0, 320.0)
@@ -103,9 +108,12 @@ func _ready() -> void:
 	)
 	add_child(moved_node)
 	moved_node._process(0.0)
+	var moved_drawable := moved_node._sprites[0] as CasterSkillAnimationPlayer
+	var expected_moved_anchor := (target.global_position + offset).round()
 	assert(
-		moved_node.global_position == (target.global_position + offset).round(),
-		"Lightning anchor should continue following runtime target"
+		moved_drawable != null
+		and (moved_node.global_position + moved_drawable.position).is_equal_approx(expected_moved_anchor),
+		"Lightning drawable anchor should continue following runtime target"
 	)
 
 	base_node.free()

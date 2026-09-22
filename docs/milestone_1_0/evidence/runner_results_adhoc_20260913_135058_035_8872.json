@@ -1,0 +1,41 @@
+{
+  "passed": 1,
+  "generated_at": "2026-09-13T13:50:58.0361299+08:00",
+  "git_head": "0d3de7e7c254cab01bdeb051b8c74d68b0c98088",
+  "failed": 1,
+  "total": 2,
+  "suite": "adhoc",
+  "engine_log_errors": 2,
+  "results": [
+    {
+      "test_name": "character_stats_test",
+      "test_path": "tests/milestone_1_0/character_stats_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    },
+    {
+      "test_name": "attribute_help_test",
+      "test_path": "tests/repair_20260913/attribute_help_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

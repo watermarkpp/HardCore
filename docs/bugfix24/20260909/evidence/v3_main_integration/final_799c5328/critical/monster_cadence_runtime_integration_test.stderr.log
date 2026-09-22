@@ -1,0 +1,4 @@
+SCRIPT ERROR: Assertion failed: target engagement must preserve movement progress instead of rolling back
+   at: _test_engagement_completion_does_not_rollback (res://tests/monster_cadence_runtime_integration_test.gd:779)
+   GDScript backtrace (most recent call first):
+       [0] _test_engagement_completion_does_not_rollback (res://tests/monster_cadence_runtime_integration_test.gd:779)

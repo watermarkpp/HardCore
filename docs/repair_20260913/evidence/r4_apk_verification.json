@@ -1,0 +1,187 @@
+{
+  "status": "PASS",
+  "apk": "C:\\Users\\Administrator\\Desktop\\HardCore-20260913-r4-ui-jp-debug.apk",
+  "size_bytes": 465952528,
+  "sha256": "71a4b0ff88b41569e227b7947ad7b6bc53fc5105294ce031bbe0ef957c5533cf",
+  "build_info": {
+    "version_code": 77,
+    "build_timestamp_utc": "2026-09-13T04:43:48.6590722Z",
+    "build_type": "development",
+    "git_branch": "HEAD",
+    "git_short_head": "59014144",
+    "version_name": "1.23.2-r4-ui-jp-20260913",
+    "git_dirty": false,
+    "git_head": "59014144bd2730d39644db7853f479b94c5cebe7"
+  },
+  "source_test_commit": "275e570b6a8b9b3aac53bd3f3f6b2478837b0945",
+  "runtime_code_data_tests_identical_to_tested_commit": true,
+  "critical_scripts": [
+    {
+      "entry": "assets/scripts/item_attribute_help.gdc",
+      "sha256": "864f257a5bfe2db7aaa78abfcbe88569dbca5436f53c55c5b4daded82711736d",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/item_drop_affix_v3_rules.gdc",
+      "sha256": "5709ddc24cb0b2a24a04b86e69f857cd4fe6a532031f761e9f46f3b40dba2e8b",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/warehouse_prepared_transaction.gdc",
+      "sha256": "7ec07cee8950b1012578da0548b2460a849f36111e52f641d100ecd5a04ef681",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/shop_panel.gdc",
+      "sha256": "88167f549e6e5dea13db832c27ccd775026c6a1f6988c56b9ba54069d1e9aa06",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/item_detail_presenter.gdc",
+      "sha256": "1eb9b8f1a5687e95b202666631fd4ea5c5b788670f44240fac8ba7063bb0644e",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/item_detail_docked_presenter.gdc",
+      "sha256": "f57ee88453bd868c350d29b48c0955825fcb67ba039161380820da27b95130fe",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/player_state.gdc",
+      "sha256": "0799f15ea2e5d012e496deb72aaa304ae9765360c577d57d806a573b2a274b1d",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/game_data.gdc",
+      "sha256": "e4c6bad2245dc70b837b15a21ce9e3e7fcc945d43f3e2e41f232f825346c8e2e",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/player.gdc",
+      "sha256": "7f19429788d1cd8aad16b4bc1a229b0b4eb019c1a44b0156fc4443f01ced64b9",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/enemy.gdc",
+      "sha256": "cb95e0ec9042266a1f181968af6f8f8899aac2f3e493a697eef160dd5c66742b",
+      "changed_from_v76": true
+    },
+    {
+      "entry": "assets/scripts/combat_resolution_rules.gdc",
+      "sha256": "e13bc5822936f9f6a1425c2200fd834c2e48124869a3ae35a2773d23624a7309",
+      "changed_from_v76": true
+    }
+  ],
+  "rules_count": 175,
+  "rules_sha256": "e173a663f17b80ead98c240ae7c306ed717b7ce00516b3cd1d0432f6a8fe53b3",
+  "frozen_against_v76": [
+    {
+      "entry": "assets/assets/data/equipment_attribute_master.json",
+      "sha256": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701"
+    },
+    {
+      "entry": "assets/assets/data/ui/manual_layout_overrides.json",
+      "sha256": "0ea858c9fe5867b8b7057dfc16ff32fb06df68a7a6862992a702e45d470cbf10"
+    },
+    {
+      "entry": "assets/assets/data/ui/item_name_rarity_v1.json",
+      "sha256": "ac421f4034b0c8c58c5b455f706a120ada3454ef52e456dab37672bd78aa2778"
+    },
+    {
+      "entry": "assets/assets/data/runtime/canonical_monster_catalog.json",
+      "sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099"
+    },
+    {
+      "entry": "assets/assets/data/vanilla_176/skills.json",
+      "sha256": "ebe747187948253c30fcafcc534eb634573f62b924034f38c2f66932b773ce35"
+    }
+  ],
+  "excluded_test_fixtures": "PASS",
+  "device": "NOT_RUN: no connected Android device",
+  "gates": [
+    {
+      "log": "android_r4_v77_build.log",
+      "sha256": "1f0c380725266f7747f205b6f75b3143693d0363f2ffe91f1ea978b33ea575c1",
+      "markers": [
+        "ANDROID_APK_VERIFY_PASS",
+        "ANDROID_DIRECT_UPDATE_IDENTITY_PASS",
+        "ANDROID_R4_V77_REEXPORT_PASS"
+      ],
+      "status": "PASS"
+    },
+    {
+      "log": "r4_runtime_resource_verify.log",
+      "sha256": "f7443c68574c4dc52a10bc252d8670b6460684d4be45387965fad355c2e445e3",
+      "markers": [
+        "APK_RUNTIME_RESOURCE_PROBE_PASS"
+      ],
+      "status": "PASS"
+    },
+    {
+      "log": "r4_resource_closure_verify.log",
+      "sha256": "77296f48a6ed844287d448c3f61ab36ca96c7c3e17804cfe2f2e18f99db1142f",
+      "markers": [
+        "R3_APK_RESOURCE_CLOSURE_PASS",
+        "APK_LAYOUT_SOURCE_HASH_PASS"
+      ],
+      "status": "PASS"
+    },
+    {
+      "log": "r4_splash_verify.log",
+      "sha256": "48d7966d8d1ee3f46316a2213188e51d46bc998a88bcc57eb79c4c0f96393edf",
+      "markers": [
+        "ANDROID_SPLASH_THEME_VERIFY_PASS"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "final_source_smoke": {
+    "failed": 0,
+    "suite": "adhoc",
+    "results": [
+      {
+        "test_name": "bank_prepared_transaction_test",
+        "test_path": "tests/repair_20260913/bank_prepared_transaction_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      {
+        "test_name": "attribute_help_test",
+        "test_path": "tests/repair_20260913/attribute_help_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      }
+    ],
+    "generated_at": "2026-09-13T12:20:34.3335413+08:00",
+    "git_head": "275e570b6a8b9b3aac53bd3f3f6b2478837b0945",
+    "engine_log_errors": 0,
+    "passed": 2,
+    "total": 2
+  },
+  "version_only_source_delta": [
+    "project.godot",
+    "export_presets.cfg",
+    "docs/repair_20260913/UI_AND_JP_FOLLOWUP.md"
+  ],
+  "build_retry": "Initial v76 re-export rejected by higher-version direct-update gate. Source metadata advanced to v77; same task-created isolated stage reused after exact source delta checks. Imported generated artifacts were backed up; no user files removed.",
+  "layout_verifier_scope": "Original R3/R5 default hash belongs to an older approved layout. Default preserved; current verifier supplied explicit frozen primary hash 0EA858C9FE5867B8B7057DFC16FF32FB06DF68A7A6862992A702E45D470CBF10, already byte-equal in source, old v76 APK and this APK.",
+  "import_fixture_diagnostics": "Only known intentionally malformed tests/runner_fixtures scenes reported parse diagnostics; tests/docs verified absent from APK. Production feature/regression runners have zero engine errors."
+}

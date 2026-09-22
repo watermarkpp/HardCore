@@ -1,0 +1,18 @@
+strict_ab_manifest=20260909
+tree=baseline
+head=cf1d2718befdef7e6cc2fb274fd91ce0759d105f
+branch=(detached)
+fixture_gd=3FC5419B559163C8B8417434CAA6B1148053964E1F66A0E047B546A98DA764D4 tests/audio_w4_full_frame_probe_test.gd
+fixture_tscn=2E18A7D95C1B85FB388769873F9718F6E05F979FC19A8F1CF435C1375F44ACBD tests/audio_w4_full_frame_probe_test.tscn
+overlay_world_bootstrap=796C59DE6190516F2CED97252C6E692F1135C25C369C997C89000B268E917199 scripts/world_bootstrap_coordinator.gd
+overlay_ui_texture_cache=8821B38D2A6C7615796C7A7A69AD570BA5C7518023DB346353E32E00EE03E5F5 scripts/ui_item_texture_cache.gd
+status:
+## HEAD (no branch)
+ M scripts/ui_item_texture_cache.gd
+ M scripts/world_bootstrap_coordinator.gd
+A  tests/audio_w4_full_frame_probe_test.tscn
+A  tests/audio_w4_performance_probe_test.gd
+A  tests/audio_w4_performance_probe_test.tscn
+A  tests/hc_monster_ai/performance_comparison_test.tscn
+?? tests/audio_w4_performance_probe_test.gd.uid
+?? tests/hc_monster_ai/performance_comparison_test.gd

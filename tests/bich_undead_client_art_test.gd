@@ -2,7 +2,19 @@ extends Node
 
 
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
-const EXPECTED_NAMES := ["骷髅", "掷斧骷髅", "骷髅战士", "骷髅战将", "僵尸1", "僵尸2", "僵尸3", "僵尸4", "僵尸5", "骷髅精灵", "尸王"]
+const EXPECTED := [
+	{"id": 47, "name": "骷髅"},
+	{"id": 50, "name": "掷斧骷髅"},
+	{"id": 52, "name": "骷髅战士"},
+	{"id": 54, "name": "骷髅战将"},
+	{"id": 79, "name": "僵尸1"},
+	{"id": 81, "name": "僵尸2"},
+	{"id": 83, "name": "僵尸3"},
+	{"id": 85, "name": "僵尸4"},
+	{"id": 87, "name": "僵尸5"},
+	{"id": 56, "name": "骷髅精灵"},
+	{"id": 89, "name": "尸王"},
+]
 const EXPECTED_FRAMES := {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 10}
 
 
@@ -19,8 +31,9 @@ func _run() -> void:
 	assert(manifest.get("rejectedMappings", []).is_empty(), "目标亡灵仍有被拒绝的客户端动作")
 	assert(int(manifest.get("generatedAtlases", 0)) == 55, "五动作图集数量错误")
 	var mappings: Dictionary = manifest.get("runtimeMappings", {})
-	assert(mappings.size() == EXPECTED_NAMES.size(), "亡灵映射覆盖数量错误")
-	for monster_name: String in EXPECTED_NAMES:
+	assert(mappings.size() == EXPECTED.size(), "亡灵映射覆盖数量错误")
+	for expected: Dictionary in EXPECTED:
+		var monster_name := str(expected.get("name", ""))
 		var mapping: Dictionary = mappings.get(monster_name, {})
 		assert(mapping.get("mappingConfidence", "") == "B", "名称到Appearance不得冒充客户端A源")
 		var frame_size: Array = mapping.get("frameSize", [])
@@ -44,11 +57,15 @@ func _run() -> void:
 	add_child(player)
 	player.set_physics_process(false)
 	player.global_position = Vector2.ZERO
-	for index in range(EXPECTED_NAMES.size()):
-		var monster_name: String = EXPECTED_NAMES[index]
-		var boss := monster_name in ["骷髅精灵", "尸王"]
+	for index in range(EXPECTED.size()):
+		var expected: Dictionary = EXPECTED[index]
+		var monster_name := str(expected.get("name", ""))
+		var monster_id := int(expected.get("id", -1))
+		var boss := monster_id in [56, 89]
+		var canonical_data := GameData.get_monster_by_id(monster_id)
+		assert(monster_id > 0 and not canonical_data.is_empty(), "%s canonical monster_id 无效" % monster_name)
 		var enemy := EnemyActor.new()
-		enemy.setup({"name": monster_name, "hp": 500 if boss else 100, "attackMin": 1, "attackMax": 2}, player, boss)
+		enemy.setup(canonical_data, player, boss)
 		enemy.global_position = Vector2(index * 170, 0)
 		add_child(enemy)
 		enemy.set_physics_process(false)

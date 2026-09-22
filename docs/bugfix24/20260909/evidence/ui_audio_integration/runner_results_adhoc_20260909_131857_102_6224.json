@@ -1,0 +1,56 @@
+{
+  "passed": 3,
+  "suite": "adhoc",
+  "total": 3,
+  "git_head": "efdbde7c7dabb0d43616742ba0338dc16653c973",
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "audio_w4_actor_service_test",
+      "test_path": "tests/audio_w4_actor_service_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "audio_w4_contract_test",
+      "test_path": "tests/audio_w4_contract_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "audio_runtime_service_test",
+      "test_path": "tests/audio_runtime_service_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-09T13:18:57.1022260+08:00",
+  "failed": 0
+}

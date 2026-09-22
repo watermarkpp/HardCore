@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "expected_intentionally_malformed_fixture_messages": 16,
+  "unexpected_errors": [],
+  "fixture_paths": [
+    "res://tests/runner_fixtures/case1_pass.tscn",
+    "res://tests/runner_fixtures/case2_pass_then_assert.tscn",
+    "res://tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn",
+    "res://tests/runner_fixtures/case4_pass_then_hang.tscn",
+    "res://tests/runner_fixtures/case5_no_pass_exit_zero.tscn",
+    "res://tests/runner_fixtures/case6_engine_log_fatal.tscn",
+    "res://tests/runner_fixtures/case7_parse_error.tscn",
+    "res://tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn"
+  ]
+}

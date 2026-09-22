@@ -1,6 +1,16 @@
 extends Node
 
+## R1-B port (GPT audit 2026-09-15): the claim-parity harness keeps driving
+## bare GroundSkillEffects, but candidates now come from the shared
+## RuntimeCombatSpatialIndex — the enemy-group scan is closed in production
+## and the harness registers its target through the same index contract.
+
+const RuntimeCombatSpatialIndexScript := preload(
+	"res://scripts/runtime_combat_spatial_index.gd"
+)
+
 var _recorded_tick_powers: Array[int] = []
+var _spatial_index: RuntimeCombatSpatialIndexScript
 
 
 func _ready() -> void:
@@ -9,16 +19,29 @@ func _ready() -> void:
 
 func _run() -> void:
 	GroundSkillEffect.reset_runtime_tick_claims_for_tests()
+	_spatial_index = RuntimeCombatSpatialIndexScript.new()
 	var caster := Node2D.new()
 	add_child(caster)
 	var target := EnemyActor.new()
+	target.setup({
+		"monster_id": 19,
+	}, null, false)
+	target.display_name = "fire-wall-overlap-target"
 	target.max_hp = 999
 	target.current_hp = 999
-	target.monster_data = {"name": "fire-wall-overlap-target"}
 	add_child(target)
 	target.global_position = Vector2.ZERO
 	target.add_to_group("enemies")
 	target.set_physics_process(false)
+	_spatial_index.register(
+		1001,
+		0,
+		Vector2.ZERO,
+		1.0,
+		1,
+		target,
+		Callable(target, "get_global_position")
+	)
 
 	var first_field := _make_field(caster, 37)
 	var overlapping_field := _make_field(caster, 91)
@@ -90,6 +113,7 @@ func _make_field(caster: Node2D, raw_power: int) -> GroundSkillEffect:
 		caster,
 		Callable(self, "_record_tick")
 	)
+	field.set_combat_spatial_context(_spatial_index, 0)
 	return field
 
 

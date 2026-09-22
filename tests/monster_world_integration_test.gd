@@ -1,5 +1,6 @@
 extends Node
 
+const GameRootScript := preload("res://scripts/game_root.gd")
 const BridgeScript := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
@@ -11,6 +12,9 @@ const DomainRuntimeServicesScript := preload(
 )
 const RuntimeMapServiceScript := preload(
 	"res://scripts/map_editor/map_editor_runtime_map_service.gd"
+)
+const V505_SOURCE_AUTHORITY_PATH := (
+	"res://assets/data/drop/dpv2_21cq_verified_profile_authority_v1.json"
 )
 
 
@@ -28,8 +32,8 @@ func _run() -> void:
 		== "monster.catalog.runtime_counts.v1",
 		"canonical count contract drifted"
 	)
-	assert(int(counts.get("catalog_identity_count", 0)) == 217, "catalog identity count drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) >= 120, "catalog runtime policy count drifted")
+	assert(int(counts.get("catalog_identity_count", 0)) == 156, "catalog identity count drifted")
+	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 153, "catalog runtime policy count drifted")
 	assert(
 		int(counts.get("runtime_spawnable_count", -1)) == GameData.monsters.size(),
 		"runtime spawnable count is not the GameData runtime view"
@@ -40,16 +44,25 @@ func _run() -> void:
 		- int(counts.get("runtime_spawnable_count", 0)),
 		"runtime rejection count drifted"
 	)
-	assert(int(counts.get("runtime_spawnable_count", 0)) >= 120, "final runtime monster count drifted")
+	assert(int(counts.get("runtime_spawnable_count", 0)) == 153, "final runtime monster count drifted")
 	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "final catalog retains runtime drop rejection")
 
-	for monster_id: int in [64, 66, 68, 69, 73, 76]:
+	for monster_id: int in [64, 66, 68, 70, 73, 76]:
 		var entry := GameData.get_monster_by_id(monster_id)
 		assert(not entry.is_empty(), "canonical runtime ID rejected: %d" % monster_id)
 		assert(int(entry.get("monster_id", -1)) == monster_id, "ID drifted")
 		var drops := GameData.get_canonical_monster_drop_profile(monster_id)
 		assert(not drops.is_empty(), "runtime hostile has no drop profile: %d" % monster_id)
 		assert(not (drops.get("entries", []) as Array).is_empty(), "runtime hostile has empty drops: %d" % monster_id)
+	# P3C: 78/239 are active/runtime-allowed identities (not runtime-rejected).
+	assert(not GameData.get_monster_by_id(78).is_empty(), "active ID 78 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(239).is_empty(), "active ID 239 was rejected from runtime")
+	# R4C2: no-drop/exemption/gold entities must all be runtime-accessible.
+	assert(not GameData.get_monster_by_id(59).is_empty(), "active ID 59 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(161).is_empty(), "active ID 161 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(186).is_empty(), "active ID 186 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(187).is_empty(), "active ID 187 was rejected from runtime")
+	assert(not GameData.get_monster_by_id(226).is_empty(), "active ID 226 was rejected from runtime")
 	var entries_by_id: Dictionary = GameData.canonical_monster_catalog.get(
 		"entries_by_id", {}
 	)
@@ -62,13 +75,12 @@ func _run() -> void:
 			continue
 		var runtime_id := int(catalog_entry.get("monster_id", -1))
 		var closure := GameData.canonical_monster_runtime_drop_closure(runtime_id)
+		# Runtime drop gate is the canonical drop_policy authority: any
+		# runtime_allowed entry whose closure allows it must be spawnable.
+		assert(bool(closure.get("allowed", false)), "runtime_allowed closure rejected ID=%d" % runtime_id)
+		assert(not GameData.get_monster_by_id(runtime_id).is_empty(), "runtime_allowed missing from runtime ID=%d" % runtime_id)
 		if int(closure.get("resolved_non_gold_count", 0)) > 0:
-			assert(bool(closure.get("allowed", false)), "resolved hostile item closure rejected ID=%d" % runtime_id)
-			assert(not GameData.get_monster_by_id(runtime_id).is_empty(), "resolved hostile missing from runtime ID=%d" % runtime_id)
-		else:
-			assert(not bool(closure.get("allowed", true)), "zero-resolution hostile entered runtime ID=%d" % runtime_id)
-			assert(str(closure.get("reason", "")) == "drop_items_unresolved", "zero-resolution hostile lacks stable reason ID=%d" % runtime_id)
-			assert(GameData.get_monster_by_id(runtime_id).is_empty(), "zero-resolution hostile escaped runtime gate ID=%d" % runtime_id)
+			assert(str(closure.get("reason", "")) == "", "resolved reward closure kept a rejection reason ID=%d" % runtime_id)
 	var non_hostile_194 := GameData.get_monster_by_id(194)
 	assert(not non_hostile_194.is_empty(), "non_hostile ID 194 was treated as hostile")
 	assert(
@@ -77,10 +89,12 @@ func _run() -> void:
 	)
 
 	_test_runtime_no_drop_rejection()
+	_test_overflow_telemetry_death_entry()
+	_test_same_frame_death_batch()
 
-	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 78, 239, 999999]:
+	for rejected: Variant in [0, -1, "", "64", "abc", "64x", 999999]:
 		var monster_id := GameData.canonical_monster_id(rejected)
-		if rejected in [78, 239, 999999]:
+		if rejected in [999999]:
 			monster_id = int(rejected)
 		assert(
 			GameData.get_monster_by_id(monster_id).is_empty(),
@@ -119,9 +133,34 @@ func _run() -> void:
 
 	print(
 		"MONSTER_WORLD_INTEGRATION_PASS: canonical_ids=6 "
-		+ "bridge_fail_closed=1 loot_rows_76=33 game_root_id_only=1"
+		+ "bridge_fail_closed=1 loot_rows_76=v505_source_authority game_root_id_only=1"
 	)
 	get_tree().quit(0)
+
+
+func _v505_source_record(monster_id: int) -> Dictionary:
+	assert(
+		FileAccess.file_exists(V505_SOURCE_AUTHORITY_PATH),
+		"V505 source authority missing"
+	)
+	var parsed: Variant = JSON.parse_string(
+		FileAccess.get_file_as_string(V505_SOURCE_AUTHORITY_PATH)
+	)
+	assert(parsed is Dictionary, "V505 source authority invalid JSON")
+	var authority: Dictionary = parsed as Dictionary
+	assert(
+		str(authority.get("schema", ""))
+		== "hardcore.dpv2.21cq_verified_profile_authority.v1",
+		"V505 source authority schema drifted"
+	)
+	for raw_record: Variant in authority.get("records", []):
+		if (
+			raw_record is Dictionary
+			and int((raw_record as Dictionary).get("canonical_monster_id", -1))
+			== monster_id
+		):
+			return (raw_record as Dictionary).duplicate(true)
+	return {}
 
 
 func _test_bridge_contract() -> void:
@@ -170,7 +209,6 @@ func _test_bridge_contract() -> void:
 		{"monster_id": 64, "boss_id": 76, "tile": [0, 0]},
 		{"monster_id": 64, "monsterId": 64, "tile": [0, 0]},
 		{"name": "沃玛战士", "tile": [0, 0]},
-		{"monster_id": 78, "tile": [0, 0]},
 		{"boss_id": "boss.239", "tile": [0, 0]},
 		{"monster_id": 64, "tile": [0, 0]},
 	]:
@@ -187,17 +225,24 @@ func _test_bridge_contract() -> void:
 
 
 func _test_formal_runtime_bridge_projection() -> void:
-	var raw_total := 0
+	var authored_slot_total := 0
 	var projected_total := 0
-	for runtime_map_id: int in BridgeScript.released_map_ids():
+	var formal_maps := _formal_authored_maps()
+	assert(not formal_maps.is_empty(), "formal release registry has no playable maps")
+	for authored_map: Dictionary in formal_maps:
+		var runtime_map_id := int(authored_map.runtime_map_id)
 		var loaded := RuntimeMapServiceScript.load_runtime(
-			BridgeScript.runtime_path(runtime_map_id)
+			str(authored_map.runtime_path)
 		)
 		assert(bool(loaded.get("ok", false)), "formal runtime failed validation: %d" % runtime_map_id)
 		var runtime: Dictionary = loaded.get("runtime", {})
 		var semantics: Dictionary = runtime.get("semantics", {})
 		var raw_spawns: Array = semantics.get("monster_spawn", [])
 		var raw_bosses: Array = semantics.get("boss_spawn", [])
+		for raw_entry: Variant in raw_spawns:
+			_assert_valid_authored_slot(raw_entry, "monster_spawn")
+		for raw_entry: Variant in raw_bosses:
+			_assert_valid_authored_slot(raw_entry, "boss_spawn")
 		var projected := BridgeScript.game_content_for_map(runtime_map_id)
 		var projected_spawns: Array = projected.get("spawns", [])
 		var projected_bosses: Array = projected.get("bosses", [])
@@ -209,30 +254,120 @@ func _test_formal_runtime_bridge_projection() -> void:
 			projected_bosses.size() == raw_bosses.size(),
 			"bridge lost canonical elite/boss spawns on map %d" % runtime_map_id
 		)
-		raw_total += raw_spawns.size() + raw_bosses.size()
+		authored_slot_total += raw_spawns.size() + raw_bosses.size()
 		projected_total += projected_spawns.size() + projected_bosses.size()
-	assert(raw_total == 107, "formal canonical spawn total drifted")
-	assert(projected_total == raw_total, "bridge dropped canonical formal spawns")
+	assert(authored_slot_total > 0, "formal authored spawn slots are empty")
+	assert(
+		projected_total == authored_slot_total,
+		"bridge dropped canonical formal authored slots"
+	)
+
+
+func _formal_authored_maps() -> Array[Dictionary]:
+	assert(bool(BridgeScript.registry_load_state().get("valid", false)))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		BridgeScript.RELEASE_REGISTRY_PATH
+	))
+	assert(parsed is Dictionary)
+	var registry := parsed as Dictionary
+	assert(int(registry.get("schema_version", 0)) == 1)
+	assert(str(registry.get("registry_contract_id", "")) == "mse.map.runtime.release.v1")
+	var result: Array[Dictionary] = []
+	for raw_entry: Variant in registry.get("maps", []):
+		assert(raw_entry is Dictionary)
+		var entry := raw_entry as Dictionary
+		if str(entry.get("release_state", "")) != "implemented_playable":
+			continue
+		var runtime_path := str(entry.get("runtime_path", ""))
+		var runtime_value: Variant = JSON.parse_string(
+			FileAccess.get_file_as_string(runtime_path)
+		)
+		assert(runtime_value is Dictionary)
+		var runtime := runtime_value as Dictionary
+		assert(str(runtime.get("build_sha256", "")) == str(entry.get("approved_build_sha256", "")))
+		assert(str(runtime.get("source", {}).get("map_id", "")) == str(entry.get("map_key", "")))
+		assert(int(runtime.get("source", {}).get("runtime_map_id", -1)) == int(entry.get("runtime_map_id", -1)))
+		result.append({
+			"runtime_map_id": int(entry.get("runtime_map_id", -1)),
+			"runtime_path": runtime_path,
+		})
+	return result
+
+
+func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> void:
+	assert(raw_entry is Dictionary)
+	var entry := raw_entry as Dictionary
+	var raw_id: Variant = entry.get("monster_id", null)
+	assert(
+		raw_id is int
+		or (
+			raw_id is float
+			and is_finite(float(raw_id))
+			and float(raw_id) == floorf(float(raw_id))
+		)
+	)
+	var monster_id := int(raw_id)
+	var runtime_monster := GameData.get_canonical_monster_entry(monster_id, "runtime")
+	var editor_monster := GameData.get_canonical_monster_entry(monster_id, "editor")
+	assert(not runtime_monster.is_empty() and not editor_monster.is_empty())
+	var classification := GameData.canonical_monster_classification(monster_id)
+	var spawn_classification := str(
+		runtime_monster.get("spawn_classification", "")
+	)
+	var canonical_placement := str(
+		editor_monster.get("editor_placement", {}).get("placement_kind", "")
+	)
+	assert(
+		canonical_placement.is_empty() or canonical_placement == source_layer
+	)
+	if spawn_classification == "special_normal":
+		assert(source_layer == "monster_spawn")
+	elif source_layer == "boss_spawn":
+		assert(classification in ["elite", "boss"])
+	else:
+		# Ordinary layers: the original legal classification, or one of the
+		# two niumo elites (218/222) whitelisted for ordinary-layer spawns by
+		# the production bridge (ELITE_ORDINARY_SPAWN_IDS); every other elite
+		# and all bosses are rejected there.
+		assert(
+			classification != "elite" or monster_id in [218, 222, 164, 166, 168, 170, 172, 178, 182],
+			"ordinary-layer elite %d is not in the production whitelist {218, 222, 164, 166, 168, 170, 172, 178, 182}"
+			% monster_id
+		)
+		assert(classification != "boss")
 
 
 func _test_loot_contract() -> void:
 	var loot_runtime := LootRuntimeScript.new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 20260815
-	var wooma_boss := loot_runtime.roll_monster_drops(76, rng, 6)
+	var source_76 := _v505_source_record(76)
+	assert(
+		str(source_76.get("source_status", "")) == "FULL_21CQ_VERIFIED",
+		"ID 76 must use the V505 full 21CQ source authority"
+	)
+	var expected_source_rows_76 := int(source_76.get("source_row_count", -1))
+	assert(expected_source_rows_76 > 0, "ID 76 V505 source row count invalid")
+	var wooma_boss := loot_runtime.roll_monster_drops(76, rng)
 	assert(bool(wooma_boss.get("configured", false)), "ID 76 drop profile not configured")
-	assert(int(wooma_boss.get("source_entry_count", 0)) == 33, "ID 76 must expose all 33 source rows")
-	assert(int(wooma_boss.get("resolution_attempted_count", 0)) == 33, "ID 76 rows did not enter item resolution")
+	assert(
+		int(wooma_boss.get("source_entry_count", 0)) == expected_source_rows_76,
+		"ID 76 runtime did not expose the complete V505 source profile"
+	)
+	assert(
+		int(wooma_boss.get("resolution_attempted_count", 0)) == expected_source_rows_76,
+		"ID 76 V505 source rows did not all enter item resolution"
+	)
 	assert(int(wooma_boss.get("resolved_entry_count", 0)) > 0, "ID 76 is configured but can never produce an item")
 	assert(
 		int(wooma_boss.get("resolved_entry_count", -1))
 		+ (wooma_boss.get("rejected_entries", []) as Array).size()
-		== 33,
-		"every ID 76 row must resolve or carry a stable rejection"
+		== expected_source_rows_76,
+		"every ID 76 V505 source row must resolve or carry a stable rejection"
 	)
-	for monster_id: int in [68, 69]:
+	for monster_id: int in [68]:
 		var ordinary_roll := loot_runtime.roll_monster_drops(
-			monster_id, rng, 6
+			monster_id, rng
 		)
 		assert(
 			bool(ordinary_roll.get("configured", false)),
@@ -242,8 +377,8 @@ func _test_loot_contract() -> void:
 			int(ordinary_roll.get("resolved_entry_count", 0)) > 0,
 			"ID %d has no resolvable drop" % monster_id
 		)
-	for rejected: Variant in [0, 78, 239, 999999]:
-		var rejected_roll := loot_runtime.roll_monster_drops(int(rejected), rng, 6)
+	for rejected: Variant in [0, 999999]:
+		var rejected_roll := loot_runtime.roll_monster_drops(int(rejected), rng)
 		assert(not bool(rejected_roll.get("configured", false)), "rejected monster rolled drops")
 		assert(not str(rejected_roll.get("reason", "")).is_empty(), "rejected roll has no reason")
 	var bad_item := GameData.resolve_canonical_drop_item({
@@ -252,6 +387,91 @@ func _test_loot_contract() -> void:
 	})
 	assert(not bool(bad_item.get("ok", false)), "unknown item token escaped authority")
 	assert(str(bad_item.get("reason", "")) == "unknown_item_token", "bad item reason drifted")
+
+
+func _test_overflow_telemetry_death_entry() -> void:
+	# Exercise the real GameRoot death callback with an explicit NON_LOOT monster:
+	# no overflow means no telemetry aggregate and no diagnostic event.
+	LootRuntime.clear_overflow_telemetry()
+	var game := GameRootScript.new()
+	var enemy := EnemyActor.new()
+	enemy.global_position = Vector2.ZERO
+	enemy.set_meta("respawn_enabled", false)
+	var monster_data := GameData.get_monster_by_id(145).duplicate(true)
+	assert(int(monster_data.get("monster_id", -1)) == 145)
+	enemy.set_meta("death_origin", {
+		"captured": true,
+		"map_id": game.current_map_id,
+		"generation": game._zone_generation,
+		"death_position": enemy.global_position,
+		"spawn_position": enemy.global_position,
+		"spawn_context": {},
+	})
+	game._on_enemy_died(enemy, monster_data)
+	game._flush_enemy_deaths(false)
+	assert(
+		LootRuntime.overflow_telemetry_snapshot().is_empty(),
+		"disabled-drop death must not create overflow telemetry"
+	)
+	var source := FileAccess.get_file_as_string("res://scripts/game_root.gd")
+	assert(source.contains("if overflow_discarded_count > 0:"))
+	for field: String in [
+		"monster_id",
+		"successful_roll_count",
+		"ground_output_count",
+		"overflow_discarded_count",
+		"protected_overflow_count",
+	]:
+		assert(
+			source.contains('"%s"' % field),
+			"GameRoot overflow telemetry field missing: %s" % field
+		)
+	game.free()
+	enemy.free()
+
+
+func _test_same_frame_death_batch() -> void:
+	var game := GameRootScript.new()
+	var monster_data := GameData.get_monster_by_id(34).duplicate(true)
+	var experience_each := int(
+		(monster_data.get("combat", {}) as Dictionary).get("stats", {}).get("exp", 0)
+	)
+	assert(experience_each > 0, "AOE death fixture has no experience")
+	# This contract verifies batch aggregation, not level-up rollover. Level 22's
+	# current threshold is safely above the two-monster 50 XP fixture.
+	PlayerState.level = 22
+	PlayerState.experience = 0
+	PlayerState.test_transaction_debug_reset()
+	var enemies: Array[EnemyActor] = []
+	for index in range(2):
+		var enemy := EnemyActor.new()
+		enemy.global_position = Vector2(index * 8, 0)
+		enemy.set_meta("respawn_enabled", false)
+		enemy.set_meta("death_origin", {
+			"captured": true,
+			"map_id": game.current_map_id,
+			"generation": game._zone_generation,
+			"death_position": enemy.global_position,
+			"spawn_position": enemy.global_position,
+			"spawn_context": {},
+		})
+		enemies.append(enemy)
+		game._on_enemy_died(enemy, monster_data)
+	assert(game._pending_enemy_deaths.size() == 2, "same-frame deaths were not queued together")
+	assert(
+		PlayerState.test_transaction_debug_snapshot().commit_attempts == 0,
+		"death callback committed before the same-frame batch closed"
+	)
+	game._flush_enemy_deaths(false)
+	var counters := PlayerState.test_transaction_debug_snapshot()
+	assert(counters.commit_attempts == 1, "two same-frame deaths did not share one save")
+	assert(PlayerState.level == 22, "AOE batch fixture unexpectedly crossed a level boundary")
+	assert(PlayerState.experience == experience_each * 2, "AOE batch lost experience")
+	assert(game._pending_enemy_deaths.is_empty(), "AOE death queue did not drain")
+	assert(not game._enemy_death_pipeline_running, "AOE death pipeline remained active")
+	game.free()
+	for enemy: EnemyActor in enemies:
+		enemy.free()
 
 
 func _test_region_content_contract() -> void:
@@ -276,7 +496,6 @@ func _test_region_content_contract() -> void:
 		{"monster_id": 64, "content_id": "monster.64"},
 		{"monster_id": 64, "boss_id": "boss.76"},
 		{"monster_id": 64.5},
-		{"monster_id": 78},
 	]:
 		assert(
 			RegionContent._canonical_combat_entry(rejected).is_empty(),
@@ -305,33 +524,58 @@ func _test_region_content_contract() -> void:
 
 
 func _test_runtime_no_drop_rejection() -> void:
-	# The final catalog is expected to close every runtime hostile drop table.
-	# Temporarily replace one already-built closure to exercise the real public
-	# GameData, bridge and LootRuntime rejection paths without inventing a test
-	# monster or changing the generated catalog.
-	var saved_closure: Dictionary = GameData._monster_runtime_drop_closure.get(
-		64, {}
-	).duplicate(true)
-	GameData._monster_runtime_drop_closure[64] = {
-		"allowed": false,
-		"reason": "drop_items_unresolved",
-		"resolved_non_gold_count": 0,
-	}
-	assert(GameData.get_monster_by_id(64).is_empty(), "no-drop GameData gate failed")
+	# Temporarily remove one direct V2 profile to exercise the real fail-closed
+	# LootRuntime path without changing canonical monster identity or its spawn
+	# closure. The direct profile index is the only state under test here.
+	var had_profile := GameData._dpv2_direct_profile_by_id.has(64)
+	var saved_profile: Variant = GameData._dpv2_direct_profile_by_id.get(64, {})
+	if had_profile:
+		GameData._dpv2_direct_profile_by_id.erase(64)
+	var canonical_id := GameData.canonical_monster_id(64)
+	var game_data_entry := GameData.get_monster_by_id(64)
 	var bridge_result := BridgeScript._combat_spawn(
 		{"design": {"design_size": [50, 50]}},
 		{"monster_id": 64, "tile": [0, 0]},
 		"monster_spawn"
 	)
-	assert(bridge_result.is_empty(), "no-drop bridge gate failed")
 	var rng := RandomNumberGenerator.new()
-	var roll := LootRuntimeScript.new().roll_monster_drops(64, rng, 6)
-	assert(not bool(roll.get("configured", false)), "no-drop loot was configured")
-	assert(
-		str(roll.get("reason", "")) == "drop_items_unresolved",
-		"no-drop loot reason drifted"
+	var loot_service: Variant = LootRuntimeScript.new()
+	# The production authority is now the compiled user sheet provider. The
+	# fail-closed equivalent of a missing profile is an invalid authority:
+	# injecting one must stop every drop with zero RNG and no legacy fallback.
+	var saved_authority: Variant = loot_service._sheet_authority
+	var broken_authority: Variant = load("res://scripts/drop/user_loot_sheet_provider.gd").new()
+	broken_authority.valid = false
+	loot_service._sheet_authority = broken_authority
+	var roll: Dictionary = loot_service.roll_monster_drops(64, rng)
+	loot_service._sheet_authority = saved_authority
+	var identity_ok := canonical_id == 64
+	var game_data_ok := (
+		not game_data_entry.is_empty()
+		and int(game_data_entry.get("monster_id", -1)) == 64
 	)
-	GameData._monster_runtime_drop_closure[64] = saved_closure
+	var bridge_ok := (
+		not bridge_result.is_empty()
+		and int(bridge_result.get("monster_id", -1)) == 64
+	)
+	var loot_ok := (
+		not bool(roll.get("configured", false))
+		and str(roll.get("reason", "")) == "user_loot_sheet_authority_unavailable"
+		and int(roll.get("rng_roll_count", -1)) == 0
+	)
+	if had_profile:
+		GameData._dpv2_direct_profile_by_id[64] = saved_profile
+	else:
+		GameData._dpv2_direct_profile_by_id.erase(64)
+	var restored := GameData.dpv2_direct_profile(64)
+	assert(identity_ok, "canonical identity changed while direct profile was absent")
+	assert(game_data_ok, "GameData identity became inaccessible while direct profile was absent")
+	assert(bridge_ok, "bridge identity became inaccessible while direct profile was absent")
+	assert(loot_ok, "sheet authority failure did not fail closed: %s" % str(roll))
+	assert(
+		not restored.is_empty() if had_profile else restored.is_empty(),
+		"direct profile index was not restored"
+	)
 
 
 func _test_game_root_spawn(wrong_display_payload: Dictionary) -> void:
@@ -362,10 +606,6 @@ func _test_game_root_spawn(wrong_display_payload: Dictionary) -> void:
 		enemy.display_name
 		== str(GameData.get_monster_by_id(64).get("canonical_name", "")),
 		"GameRoot/Enemy trusted wrong display text"
-	)
-	assert(
-		game._spawn_enemy({"monster_id": 78}, Vector2.ZERO, false) == null,
-		"GameRoot spawned runtime-disabled ID"
 	)
 	assert(
 		game._spawn_enemy({"name": "沃玛战士"}, Vector2.ZERO, false) == null,

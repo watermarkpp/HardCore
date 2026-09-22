@@ -46,6 +46,19 @@ func _run() -> void:
 	}, stock)
 	assert(bool(bought.get("success", false)) and PlayerState.item_count("金创药(小量)") == 20, "购买packCount未按20瓶直接叠加")
 	assert(PlayerState.inventory_weight() == 20, "购买packCount重量未按实际瓶数计算")
+	PlayerState.inventory = [{"name": "强效太阳水", "count": 220}]
+	var overweight_quotes := PlayerState.shop_buy_quotes(stock)
+	var overweight_quote: Dictionary = overweight_quotes[0]
+	var overweight_buy := PlayerState.buy_shop_item({
+		"stock_index": 0,
+		"quote_id": overweight_quote.get("quote_id", ""),
+		"item_name": overweight_quote.get("item_name", ""),
+		"stock_key": overweight_quote.get("stock_key", ""),
+		"merchant_id": overweight_quote.get("merchant_id", ""),
+		"quantity": 20,
+	}, stock)
+	assert(not bool(overweight_buy.get("success", true)), "超负重购买没有被拒绝")
+	assert(str(overweight_buy.get("message", "")) == "背包空间不足或者超过最大负重。", "购买失败提示没有说明空间或负重")
 
 	PlayerState.reset_progress()
 	PlayerState.level = 50
@@ -90,6 +103,28 @@ func _run() -> void:
 	assert(PlayerState.inventory == inventory_before_failed_deposit, "仓库存入失败没有恢复背包")
 	assert(PlayerState.warehouse_inventory == warehouse_before_failed_deposit, "仓库存入失败没有恢复仓库结构")
 	assert(PlayerState.warehouse_inventory.size() == 0, "仓库存入失败遗留扩容空槽")
+
+	# Absolute inventory slot contract: ordinary mutations leave middle holes;
+	# only explicit auto-sort may compact them, and new records fill the first hole.
+	PlayerState._test_force_atomic_write_failure = false
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	assert(PlayerState.receive("木剑").success)
+	assert(PlayerState.receive("太阳水").success)
+	assert(PlayerState.receive("回城卷").success)
+	var first_before: Dictionary = PlayerState.inventory[0].duplicate(true)
+	var tail_before: Dictionary = PlayerState.inventory[2].duplicate(true)
+	assert(PlayerState.use_inventory_index(1).begins_with("使用："), "中间消耗品使用失败")
+	assert(PlayerState.inventory.size() == 3 and PlayerState.inventory[1].is_empty(), "中间消耗后没有保留绝对空洞")
+	assert(PlayerState.inventory[0] == first_before and PlayerState.inventory[2] == tail_before, "中间消耗移动了相邻物品")
+	assert(PlayerState.receive("匕首").success, "首洞回填测试物品获取失败")
+	assert(str(PlayerState.inventory[1].get("name", "")) == "匕首", "新增物品没有优先填入第一个空槽")
+	assert(PlayerState.equip_inventory_index(1).begins_with("已装备"), "中间装备穿戴失败")
+	assert(PlayerState.inventory.size() == 3 and PlayerState.inventory[1].is_empty(), "穿戴后原背包槽没有保留空洞")
+	assert(PlayerState.inventory[0] == first_before and PlayerState.inventory[2] == tail_before, "穿戴移动了无关背包物品")
+	var sort_result := PlayerState.sort_inventory_deterministic()
+	assert(sort_result.success and PlayerState.inventory.size() == 2, "显式自动整理没有压缩中间空洞")
 
 	print("INVENTORY_WEIGHT_AUTHORITY_PASS")
 	get_tree().quit(0)

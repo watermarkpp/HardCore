@@ -1,0 +1,28 @@
+{
+  "monster_id": 96,
+  "name": "羊",
+  "url": "https://www.21cq.com/mir/Mob.Aspx?ID=96",
+  "retrieved_utc": "2026-09-07T18:19:39.221979+00:00",
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "肉",
+      "numerator": 1,
+      "denominator": 1,
+      "amount": 1
+    },
+    {
+      "item": "肉",
+      "numerator": 1,
+      "denominator": 10,
+      "amount": 1
+    }
+  ],
+  "http_status": 200,
+  "declared_charset": "gb2312",
+  "actual_encoding": "gb2312",
+  "raw_sha256": "2DFDE5A8B94AEBAF65CA023E9E89AAFBD3A8E8B9A0A717E1D92494265BB17C01",
+  "raw_path": "docs/drop/v5/source/monster_96.bin",
+  "cache_reparsed": true
+}

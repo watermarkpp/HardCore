@@ -28,6 +28,7 @@ const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
+const MonsterSourcePoisonStateScript := preload("res://scripts/monster_source_poison_state.gd")
 const DIRECT_SPELL_DAMAGE_RUNTIME_ID := "player.direct_spell_damage.openmir2.v1"
 const SOUL_FIRE_TALISMAN_LAUNCH_TIMING_CONTRACT_ID := (
 	"skills.taoist.soul_fire_talisman.body_release_frame_launch.v1"
@@ -43,6 +44,12 @@ const WARRIOR_STATE_SKILL_NAMES := [
 	"半月弯刀",
 	"烈火剑法",
 ]
+## Legacy movement speed is the two-ground-unit run cadence (2 GU/600 ms).
+## A fresh directional input performs one 1 GU walk step before entering run.
+const WALK_MOVE_SPEED_GU_PER_SEC := 1.0 / 0.6
+const WALK_TO_RUN_DISTANCE_GU := 1.0
+const LOCOMOTION_WALK := "walk"
+const LOCOMOTION_RUN := "run"
 
 # GameOfMir server evidence:
 # - M2Server/ObjBase.pas RM_STRUCK only records m_dwStruckTick when nPower > 0.
@@ -55,8 +62,12 @@ const WARRIOR_STATE_SKILL_NAMES := [
 signal stats_changed(current_hp: int, max_hp: int)
 signal attack_requested(origin: Vector2, direction: Vector2, damage: int)
 signal skill_requested(skill_name: String, origin: Vector2, direction: Vector2, damage: int)
+signal skill_cast_started(stable_skill_id: String)
 signal warrior_skill_state_changed(skill_name: String, enabled: bool, message: String)
 signal resources_changed(current_hp: int, max_hp: int, current_mp: int, max_mp: int)
+## R2: fired once when a potion-granted combat buff (ac/mac) fully expires, so
+## the central notice layer can report the end of the effect exactly once.
+signal potion_buff_expired(kind: String)
 signal movement_performed(position: Vector2, facing: Vector2)
 signal death_requested
 
@@ -89,8 +100,10 @@ var defense_buff := 0
 var defense_buff_time := 0.0
 var mac_buff := 0
 var mac_buff_time := 0.0
+var status_buff_started_at: Dictionary = {}
 var control_time := 0.0
 var poison_time := 0.0
+var _monster_source_poison := MonsterSourcePoisonStateScript.new()
 var poison_damage := 0
 var touch_vector := Vector2.ZERO
 var facing := Vector2.DOWN
@@ -115,19 +128,33 @@ var _combat_action_sequence := 0
 var _pending_combat_action_id := 0
 var _pending_combat_action_active := false
 var _pending_combat_action_committed := false
+# RV14-01: lifecycle identity frozen when the action is accepted. A delayed
+# release carries the epoch it was admitted under; transitions, formal death
+# and leaving the tree all advance the epoch, which voids stale releases even
+# when the actor is alive and back inside the tree by the time the timer fires.
+var _pending_combat_action_epoch := 0
 var _pending_combat_action_kind := ""
 var _test_combat_time_ms := -1
+var _last_temporary_item_buff_revision := -1
 var _last_revival_at_ms := -60000
 var _pending_potion_health := 0
 var _pending_potion_mana := 0
 var _potion_tick_remaining := 0.0
 var _attack_speed_tier := 0
 var _cast_speed_multiplier := 1.0
+var _equipment_spell_time_scale := 1.0
 var _dead := false
+var _combat_transition_token := ""
+var combat_epoch := 0
+var hc_world_skill_preflight := Callable()
 var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
 var actual_ground_motion_gu := Vector2.ZERO
+## Gameplay locomotion state. This is driven by successful Ground GU motion,
+## never by screen velocity or animation timing.
+var locomotion_state := LOCOMOTION_WALK
+var locomotion_distance_gu := 0.0
 var environment_blocker: Node
 var ground_runtime_diagnostic_overlay: Node2D
 
@@ -135,6 +162,26 @@ const FACING_DIRECTIONS: Array[Vector2] = [
 	Vector2.DOWN, Vector2(-0.70710678, 0.70710678), Vector2.LEFT, Vector2(-0.70710678, -0.70710678),
 	Vector2.UP, Vector2(0.70710678, -0.70710678), Vector2.RIGHT, Vector2(0.70710678, 0.70710678),
 ]
+
+
+func approved_ground_footpoint_local_px() -> Vector2:
+	if visual != null and visual.has_method("approved_ground_footpoint_in_actor_px"):
+		var point: Variant = visual.call("approved_ground_footpoint_in_actor_px")
+		if point is Vector2 and point.is_finite():
+			return point
+	return Vector2.ZERO
+
+
+func approved_ground_footpoint_world_px() -> Vector2:
+	return to_global(approved_ground_footpoint_local_px())
+
+
+func _exit_tree() -> void:
+	# RV14-01: leaving the tree ends the lifetime of every pending delayed
+	# release. Re-entering the tree must not re-arm them; a fresh action
+	# freezes a new epoch at acceptance time. The epoch is only compared for
+	# equality by release ownership, so advancing it here has no other effect.
+	combat_epoch += 1
 
 
 func _ready() -> void:
@@ -213,11 +260,13 @@ func _physics_process(delta: float) -> void:
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
 	var previous_poison_second := int(ceil(poison_time))
-	poison_time = maxf(0.0, poison_time - delta)
-	if poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
+	if not combat_transition_is_active():
+		poison_time = maxf(0.0, poison_time - delta)
+	if not combat_transition_is_active() and poison_time > 0.0 and int(ceil(poison_time)) < previous_poison_second:
 		# Periodic poison damage is not an RM_STRUCK hit in the reference server,
 		# so it must not refresh the movement/action lock.
 		take_damage(poison_damage, false)
+	_update_monster_source_poison(delta)
 	if shield_time == 0.0:
 		damage_reduction = 0.0
 		shield_capacity = 0.0
@@ -228,13 +277,16 @@ func _physics_process(delta: float) -> void:
 		mac_buff = 0
 	var keyboard := _keyboard_movement_vector()
 	var direction := touch_vector if touch_vector.length() > keyboard.length() else keyboard
+	var has_direction_input := direction.length() > 0.08
 	var movement_locked := (
 		_attack_action_timer > 0.0
 		or _movement_visual_lock_timer > 0.0
 		or was_struck_locked
 	)
-	if _dead or control_time > 0.0 or movement_locked:
+	if _dead or combat_transition_is_active() or control_time > 0.0 or movement_locked:
 		direction = Vector2.ZERO
+	if not has_direction_input or control_time > 0.0:
+		reset_locomotion()
 	movement_input_active = direction.length() > 0.08
 	if movement_locked:
 		velocity = Vector2.ZERO
@@ -252,9 +304,14 @@ func _physics_process(delta: float) -> void:
 		)
 		facing = FACING_DIRECTIONS[ArtSpec.direction_index(direction_screen_px)]
 		movement_facing = facing
+		var movement_speed := (
+			move_speed_gu_per_sec
+			if locomotion_state == LOCOMOTION_RUN
+			else WALK_MOVE_SPEED_GU_PER_SEC
+		)
 		velocity = GroundUnitSpaceScript.desired_screen_velocity_px_per_sec(
 			direction_ground_gu,
-			move_speed_gu_per_sec
+			movement_speed
 		)
 	else:
 		velocity = Vector2.ZERO
@@ -280,10 +337,30 @@ func _physics_process(delta: float) -> void:
 		movement_facing = actual_motion_facing
 		facing = actual_motion_facing
 		movement_performed.emit(global_position, facing)
+	if has_direction_input and not movement_locked and control_time <= 0.0 and not _dead:
+		# Accumulate only the displacement accepted by move_and_slide. A blocked
+		# frame therefore contributes zero and cannot manufacture a run transition.
+		locomotion_distance_gu += actual_ground_motion_gu.length()
+		if locomotion_state == LOCOMOTION_WALK and locomotion_distance_gu >= WALK_TO_RUN_DISTANCE_GU:
+			locomotion_state = LOCOMOTION_RUN
 
 
 func set_touch_vector(value: Vector2) -> void:
 	touch_vector = value.limit_length(1.0)
+
+
+func reset_locomotion() -> void:
+	locomotion_state = LOCOMOTION_WALK
+	locomotion_distance_gu = 0.0
+
+
+func locomotion_snapshot() -> Dictionary:
+	return {
+		"state": locomotion_state,
+		"distance_gu": locomotion_distance_gu,
+		"walk_speed_gu_per_sec": WALK_MOVE_SPEED_GU_PER_SEC,
+		"run_speed_gu_per_sec": move_speed_gu_per_sec,
+	}
 
 
 func _keyboard_movement_vector() -> Vector2:
@@ -307,7 +384,7 @@ func can_start_attack() -> bool:
 
 
 func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
-	if _dead:
+	if _dead or current_hp <= 0 or combat_transition_is_active():
 		return false
 	## Any attack submission breaks stealth uniformly (user override
 	## 2026-08-09).
@@ -320,8 +397,13 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 	var action_duration := attack_animation_duration
 	_attack_timer = attack_cooldown
 	_attack_action_timer = action_duration
+	reset_locomotion()
 	velocity = Vector2.ZERO
 	var action_id := _begin_combat_action("attack")
+	# Freeze the accepted epoch before any visual/signal work: a synchronous
+	# observer may finish a begin/finish transition and bump the live epoch
+	# before the delayed release reads it (RV14-R2 reentry boundary).
+	var accepted_action_epoch := _pending_combat_action_epoch
 	var animation_name := str(context.get("skill_name", "attack"))
 	visual.play_action(animation_name, action_duration)
 	var damage := WarriorCombatMath.roll_attack_power(attack_min, attack_max, int(PlayerState.computed_stats.get("luck", 0)), _rng)
@@ -333,6 +415,7 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 		attack_hit_windup,
 		context,
 		action_id,
+		accepted_action_epoch,
 		facing.normalized(),
 		locked_target_instance_id
 	)
@@ -355,7 +438,7 @@ func request_attack_toward(
 func can_request_skill(skill_name: String) -> bool:
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
-	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead:
+	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead or current_hp <= 0 or combat_transition_is_active():
 		return false
 	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
 		return true
@@ -413,6 +496,9 @@ func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
+	if stable_skill_id == "wizard.lightning":
+		if not hc_world_skill_preflight.is_valid() or not bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id)):
+			return false
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
@@ -474,11 +560,11 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	var action_lock_seconds := maxf(
 		0.0,
 		float(total_action_lock_ms) / 1000.0
-	) / _cast_speed_multiplier
+	) * _equipment_spell_time_scale / _cast_speed_multiplier
 	var cooldown_seconds := maxf(
 		0.0,
 		float(cooldown_ms) / 1000.0
-	) / _cast_speed_multiplier
+	) * _equipment_spell_time_scale / _cast_speed_multiplier
 	_attack_timer = action_lock_seconds
 	if cooldown_seconds > 0.0:
 		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
@@ -486,8 +572,10 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 			## Shared dual-defence cooldown: both skill ids enter the same
 			## cooldown from one action so neither button can bypass the gate.
 			_skill_cooldown_remaining[partner_skill_id] = cooldown_seconds
-	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0)
+	var action_duration := maxf(0.0, float(body_cast_ms) / 1000.0) * _equipment_spell_time_scale
+	var release_seconds := maxf(0.0, float(release_ms) / 1000.0) * _equipment_spell_time_scale
 	_attack_action_timer = action_duration
+	reset_locomotion()
 	var primary_visual_duration := (
 		CasterSkillVisualRegistryScript.primary_action_completion_seconds(
 			stable_skill_id
@@ -502,13 +590,12 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		# FireGun trail and 900ms recast gate do not hold the actor in place.
 		_movement_visual_lock_timer = maxf(
 			_movement_visual_lock_timer,
-			float(explicit_movement_lock_ms) / 1000.0
+			float(explicit_movement_lock_ms) / 1000.0 * _equipment_spell_time_scale
 		)
 	elif primary_visual_duration > 0.0:
-		var release_seconds := maxf(0.0, float(release_ms) / 1000.0)
 		var movement_contract_seconds := maxf(
 			action_duration,
-			float(total_action_lock_ms) / 1000.0
+			float(total_action_lock_ms) / 1000.0 * _equipment_spell_time_scale
 		)
 		_movement_visual_lock_timer = maxf(
 			_movement_visual_lock_timer,
@@ -520,12 +607,18 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	velocity = Vector2.ZERO
 	movement_input_active = false
 	var action_id := _begin_combat_action("skill:%s" % skill_name)
+	# Freeze the accepted epoch before visual.play_action/skill_cast_started:
+	# a synchronous observer may complete a begin/finish transition and bump
+	# the live epoch before the delayed release reads it (RV14-R2 boundary).
+	var accepted_action_epoch := _pending_combat_action_epoch
 	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
+	skill_cast_started.emit(stable_skill_id)
 	_emit_skill_after_windup(
 		skill_name,
 		0,
-		maxf(0.0, float(release_ms) / 1000.0),
+		release_seconds,
 		action_id,
+		accepted_action_epoch,
 		facing.normalized(),
 		locked_target_instance_id,
 		track_locked_target
@@ -548,15 +641,126 @@ func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dict
 	)
 
 
-func take_damage(amount: int, causes_struck: bool = true, durability_context := {}) -> void:
-	if _dead:
+func combat_transition_is_active() -> bool:
+	return not _combat_transition_token.is_empty()
+
+
+func begin_combat_transition(token: String, allow_dead := false) -> bool:
+	if token.is_empty() or combat_transition_is_active():
+		return false
+	if not allow_dead and (_dead or current_hp <= 0):
+		return false
+	_combat_transition_token = token
+	combat_epoch += 1
+	_pending_combat_action_active = false
+	_pending_combat_action_committed = false
+	_pending_attack_context.clear()
+	_pending_skill_context.clear()
+	reset_locomotion()
+	velocity = Vector2.ZERO
+	touch_vector = Vector2.ZERO
+	return true
+
+
+func finish_combat_transition(token: String) -> bool:
+	if token.is_empty() or token != _combat_transition_token:
+		return false
+	_combat_transition_token = ""
+	return true
+
+
+func restore_level_up_resources() -> bool:
+	if _dead or current_hp <= 0:
+		return false
+	current_hp = max_hp
+	current_mp = max_mp
+	stats_changed.emit(current_hp, max_hp)
+	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+	queue_redraw()
+	return true
+
+
+func take_damage(
+	amount: int,
+	causes_struck: bool = true,
+	durability_context := {},
+	force_struck_reaction := false,
+) -> void:
+	if _dead or combat_transition_is_active():
 		return
 	if amount <= 0:
 		return
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
 	_apply_resolved_damage(
-		maxi(1, amount - absorbed), causes_struck, "physical", durability_context
+		maxi(1, amount - absorbed),
+		causes_struck,
+		"physical",
+		durability_context,
+		force_struck_reaction,
 	)
+
+
+func _resolve_incoming_evasion(amount: int, forced_roll := -1) -> Dictionary:
+	var roll := forced_roll if forced_roll >= 0 else _rng.randi_range(0, 9)
+	return CombatResolutionRules.resolve_magic_damage_for_target_stats("", amount, PlayerState.computed_stats, roll, true)
+
+
+func take_ranged_damage(amount: int, causes_struck := true, force_struck_reaction := false, forced_evasion_roll := -1) -> Dictionary:
+	if _dead or amount <= 0 or combat_transition_is_active():
+		return {"applied_damage": 0, "final_damage": 0, "success": false}
+	var result := _resolve_incoming_evasion(amount, forced_evasion_roll)
+	var hp_before := current_hp
+	if not bool(result.magic_evaded):
+		take_damage(amount, causes_struck, {}, force_struck_reaction)
+	result["applied_damage"] = maxi(0, hp_before - current_hp)
+	result["final_damage"] = int(result.applied_damage)
+	result["success"] = true
+	return result
+
+
+func take_monster_mixed_damage(
+	physical_raw: int,
+	magic_raw: int,
+	context: Dictionary,
+) -> Dictionary:
+	# ObjBase.HitMagAttackTarget resolves AC and MAC, sums both channels, then
+	# calls StruckDamage once. Keep the existing common shield/death pipeline
+	# atomic; separate take_damage / take_direct_spell_damage calls are unsafe.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return {"success": false, "applied_damage": 0, "failure_reason": "player_combat_isolated"}
+	if physical_raw < 0 or magic_raw < 0:
+		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
+	# This is one incoming release, so avoid both components with one roll.
+	var evasion := _resolve_incoming_evasion(physical_raw + magic_raw)
+	if bool(evasion.magic_evaded):
+		evasion.merge({"success": true, "applied_damage": 0, "pipeline_input": 0, "physical_damage": 0, "magic_damage": 0, "final_damage": 0, "release_id": str(context.get("release_id", ""))})
+		return evasion
+	var ac_roll := (
+		_rng.randi_range(defense_min, defense_max)
+		if defense_max >= defense_min else defense_min
+	) + defense_buff
+	var target_stats: Dictionary = PlayerState.computed_stats
+	var mac_minimum := maxi(0, int(target_stats.get("magic_defense_min", 0)))
+	var mac_maximum := maxi(mac_minimum, int(target_stats.get("magic_defense_max", mac_minimum)))
+	var active_mac_buff := mac_buff if mac_buff_time > 0.0 else 0
+	mac_minimum += active_mac_buff
+	mac_maximum += active_mac_buff
+	var mac_roll := _rng.randi_range(mac_minimum, mac_maximum)
+	var physical_damage := maxi(0, physical_raw - ac_roll)
+	var magic_damage := maxi(0, magic_raw - mac_roll)
+	var total := physical_damage + magic_damage
+	var hp_before := current_hp
+	if total > 0:
+		_apply_resolved_damage(
+			total, true, "physical" if physical_damage > 0 else "magic", context,
+		)
+	return {
+		"success": true, "runtime_contract": "monster_mixed_damage.v1",
+		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
+		"physical_damage": physical_damage, "magic_damage": magic_damage,
+		"pipeline_input": total, "applied_damage": maxi(0, hp_before - current_hp),
+		"release_id": str(context.get("release_id", "")),
+	}
 
 
 func take_direct_spell_damage(
@@ -566,6 +770,8 @@ func take_direct_spell_damage(
 	magic_defense_roll := -1,
 	causes_struck := true
 ) -> Dictionary:
+	if _dead or combat_transition_is_active():
+		return {"applied_damage": 0, "final_damage": 0, "failure_reason": "player_combat_isolated"}
 	var stable_skill_id := ProfessionRules.skill_id(skill_id)
 	var target_stats: Dictionary = PlayerState.computed_stats
 	## MAC buff joins the magic-defence roll range without touching
@@ -606,7 +812,8 @@ func take_direct_spell_damage(
 		raw_damage,
 		adapted_stats,
 		checked_anti_magic_roll,
-		magic_defense_adapter
+		magic_defense_adapter,
+		true # User policy: every incoming magic release, including monster AoE.
 	)
 	resolution["runtime_contract"] = DIRECT_SPELL_DAMAGE_RUNTIME_ID
 	resolution["mac_buff_applied"] = active_mac_buff
@@ -646,17 +853,19 @@ func _apply_resolved_damage(
 	amount: int,
 	causes_struck: bool,
 	damage_type := "physical",
-	durability_context := {}
+	durability_context := {},
+	force_struck_reaction := false,
 ) -> void:
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/UI selection/respawn transition is active must not repeat
 	# durability, gold loss, signals or schedule another death coroutine.
-	if _dead:
+	if _dead or combat_transition_is_active():
 		return
 	var incoming_damage := maxi(1, amount)
 	var final_damage := incoming_damage
 	if (
 		shield_time > 0.0
+		and damage_type != "source_poison"
 		and shield_capacity > 0.0
 		and damage_reduction > 0.0
 	):
@@ -704,7 +913,15 @@ func _apply_resolved_damage(
 			PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
 			event_context
 		)
-	if causes_struck and ProfessionRules.should_player_stagger(final_damage, max_hp) and current_hp > 0:
+	if (
+		causes_struck
+		and final_damage > 0
+		and current_hp > 0
+		and (
+			force_struck_reaction
+			or ProfessionRules.should_player_stagger(final_damage, max_hp)
+		)
+	):
 		_struck_lock_remaining = maxf(_struck_lock_remaining, ProfessionRules.player_struck_action_lock_seconds())
 		velocity = Vector2.ZERO
 		movement_input_active = false
@@ -728,6 +945,13 @@ func _apply_resolved_damage(
 			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 			return
 		_dead = true
+		_monster_source_poison.clear()
+		# Formal death clears every poison lane: no poison may survive the
+		# revival boundary and keep ticking on the revived actor.
+		poison_time = 0.0
+		poison_damage = 0
+		combat_epoch += 1
+		reset_locomotion()
 		velocity = Vector2.ZERO
 		touch_vector = Vector2.ZERO
 		_pending_combat_action_active = false
@@ -753,6 +977,7 @@ func complete_death_revival() -> void:
 	current_hp = max_hp
 	current_mp = max_mp
 	_dead = false
+	reset_locomotion()
 	velocity = Vector2.ZERO
 	touch_vector = Vector2.ZERO
 	if visual != null:
@@ -778,12 +1003,29 @@ func _emit_attack_after_windup(
 	windup: float,
 	context: Dictionary,
 	action_id: int,
+	action_epoch: int,
 	input_direction: Vector2,
 	locked_target_instance_id: int
 ) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
-	if is_inside_tree() and _commit_combat_action(action_id):
+	# R2-W5: a begun action owns its delayed release. A superseding action
+	# replaces the presentation/action slot but must never void this release:
+	# the cast already charged its cooldown, so the effect still resolves
+	# unless the player died, left the tree, or its lifecycle epoch advanced
+	# (map transition, formal death, explicit teardown). RV14-01: the release
+	# carries the epoch frozen at acceptance and re-checks it here — never a
+	# value read after the await. At most one release per action.
+	if (
+		is_inside_tree()
+		and not is_queued_for_deletion()
+		and not _dead
+		and current_hp > 0
+		and not combat_transition_is_active()
+		and combat_epoch == action_epoch
+	):
+		if action_id == _pending_combat_action_id and _pending_combat_action_active:
+			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
 			input_direction,
 			locked_target_instance_id,
@@ -812,13 +1054,28 @@ func _emit_skill_after_windup(
 	damage: int,
 	windup: float,
 	action_id: int,
+	action_epoch: int,
 	input_direction: Vector2,
 	locked_target_instance_id: int,
 	track_locked_target: bool
 ) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
-	if is_inside_tree() and _commit_combat_action(action_id):
+	# R2-W5: same release ownership as _emit_attack_after_windup — a superseding
+	# action never voids a pending delayed release; only death, leaving the
+	# tree, or an advanced lifecycle epoch does (RV14-01: map transition,
+	# formal death + revival, exit/re-enter tree). Committed tracking stays
+	# owned by the current action; at most one release per action.
+	if (
+		is_inside_tree()
+		and not is_queued_for_deletion()
+		and not _dead
+		and current_hp > 0
+		and not combat_transition_is_active()
+		and combat_epoch == action_epoch
+	):
+		if action_id == _pending_combat_action_id and _pending_combat_action_active:
+			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
 			input_direction,
 			locked_target_instance_id,
@@ -922,6 +1179,9 @@ func _begin_combat_action(action_kind: String) -> int:
 	_pending_combat_action_active = true
 	_pending_combat_action_committed = false
 	_pending_combat_action_kind = action_kind
+	# RV14-01: freeze the lifecycle identity at acceptance time. The pending
+	# release resolves only under this same epoch.
+	_pending_combat_action_epoch = combat_epoch
 	return _pending_combat_action_id
 
 
@@ -944,8 +1204,14 @@ func _finish_combat_action(action_id: int) -> void:
 
 
 func _start_struck_reaction() -> void:
-	var duration := ProfessionRules.player_struck_reaction_seconds()
+	var duration := ProfessionRules.player_struck_reaction_seconds(PlayerState.level)
 	_struck_reaction_lock_remaining = maxf(_struck_reaction_lock_remaining, duration)
+
+	# Ordinary struck pauses displacement but preserves locomotion state
+	# and walk-to-run progress: RUN stays RUN, a partial 1GU run-up keeps its
+	# accumulated distance. Releasing direction input still resets locomotion
+	# through the normal physics path, and a committed combat action still
+	# finishes before the queued reaction plays.
 	visual.play_hit(duration)
 
 
@@ -960,6 +1226,7 @@ func combat_action_snapshot() -> Dictionary:
 		"kind": _pending_combat_action_kind,
 		"active": _pending_combat_action_active,
 		"committed": _pending_combat_action_committed,
+		"epoch": _pending_combat_action_epoch,
 	}
 
 
@@ -1122,6 +1389,11 @@ func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
 
 
 func restore_health(amount: int) -> void:
+	# Formal death stays at 0 HP until GameRoot completes an explicit revival.
+	# This also blocks delayed potion/ongoing-heal callbacks from reviving a
+	# dead player at the source-map position.
+	if _dead:
+		return
 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
@@ -1178,6 +1450,8 @@ func spend_mana(amount: int) -> bool:
 
 func apply_magic_shield(seconds: float, reduction: float) -> void:
 	var applied_duration := maxf(0.0, seconds)
+	if applied_duration > 0.0 and (shield_time <= 0.0 or shield_capacity <= 0.0):
+		status_buff_started_at["shield"] = Time.get_ticks_usec()
 	shield_time = maxf(shield_time, applied_duration)
 	shield_initial_duration = maxf(shield_initial_duration, applied_duration)
 	damage_reduction = maxf(damage_reduction, clampf(reduction, 0.0, 0.8))
@@ -1224,6 +1498,8 @@ func magic_shield_requires_refresh(
 
 
 func apply_stealth(seconds: float) -> void:
+	if seconds > 0.0 and not is_stealthed():
+		status_buff_started_at["stealth"] = Time.get_ticks_usec()
 	_stealth_break_override = false
 	stealth_time = maxf(stealth_time, seconds)
 	queue_redraw()
@@ -1249,6 +1525,7 @@ func apply_ac_buff(seconds: float, amount: int) -> void:
 		return
 	var safe_amount := maxi(0, amount)
 	if defense_buff_time <= 0.0:
+		status_buff_started_at["ac"] = Time.get_ticks_usec()
 		defense_buff = safe_amount
 	else:
 		defense_buff = maxi(defense_buff, safe_amount)
@@ -1259,6 +1536,8 @@ func apply_ac_buff(seconds: float, amount: int) -> void:
 func apply_mac_buff(seconds: float, amount: int) -> void:
 	if seconds <= 0.0:
 		return
+	if mac_buff_time <= 0.0:
+		status_buff_started_at["mac"] = Time.get_ticks_usec()
 	mac_buff_time = maxf(mac_buff_time, seconds)
 	mac_buff = maxi(mac_buff, maxi(0, amount))
 	queue_redraw()
@@ -1285,6 +1564,41 @@ func apply_poison(tick_damage: int, seconds: float) -> void:
 	queue_redraw()
 
 
+func apply_monster_poison(tick_damage: int, seconds: float, interval_seconds: float) -> bool:
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return false
+	var applied: bool = _monster_source_poison.apply(tick_damage, seconds, interval_seconds)
+	if applied:
+		queue_redraw()
+	return applied
+
+
+## Presentation-facing accessor for the unified poison status flag. Reads both
+## poison sources (legacy + monster-source) without mutating any gameplay
+## state. The HUD status strip uses this to show exactly one 中毒 flag.
+func poison_status_remaining() -> float:
+	return maxf(poison_time, _monster_source_poison.remaining_seconds)
+
+
+func _update_monster_source_poison(delta: float) -> void:
+	if _dead or current_hp <= 0:
+		_monster_source_poison.clear()
+		return
+	if combat_transition_is_active():
+		return
+	var was_active: bool = _monster_source_poison.remaining_seconds > 0.0
+	var ticks: int = _monster_source_poison.advance(delta)
+	for _tick in range(ticks):
+		if _dead or current_hp <= 0:
+			_monster_source_poison.clear()
+			break
+		# ObjBase.DamageHealth bypasses AC/MAC and the spell bubble, but retains
+		# the MP magic-shield ring and the target's single death boundary.
+		_apply_resolved_damage(_monster_source_poison.tick_damage, false, "source_poison")
+	if was_active and _monster_source_poison.remaining_seconds <= 0.0:
+		queue_redraw()
+
+
 func is_stealthed() -> bool:
 	return stealth_time > 0.0 or (
 		PlayerState.has_special_effect("stealth")
@@ -1305,15 +1619,22 @@ func _draw() -> void:
 		var profession_color: Color = {"战士": Color(0.24, 0.34, 0.48), "法师": Color(0.20, 0.28, 0.56), "道士": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession, Color(0.24, 0.34, 0.48))
 		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
-	if control_time > 0.0:
-		draw_circle(Vector2(0, -4), 37.0, Color(0.42, 0.62, 1.0, 0.75), false, 4.0)
-	if poison_time > 0.0:
-		draw_circle(Vector2(0, -4), 40.0, Color(0.20, 0.85, 0.22, 0.70), false, 4.0)
+	# Neither paralysis nor poison draws a ground ring under the character any
+	# more (R1.1). Both states present as fixed-slot dots on the status marker
+	# row under the overhead HP bar (see PlayerStatusMarkerStrip attached by
+	# player_health_bar.gd). Gameplay timers are only read, never changed here.
 
 
 func _apply_profile_stats() -> void:
 	var old_max := maxi(1, max_hp)
-	var hp_ratio := float(current_hp) / float(old_max) if current_hp > 0 else 1.0
+	var previous_hp := current_hp
+	# A lethal physical hit applies incoming durability before it marks `_dead`.
+	# That durability transaction emits profile_changed synchronously. Preserve
+	# an already-zero HP value during that transition; treating zero as a full
+	# health ratio would bypass the formal death branch below the hit transaction
+	# and silently revive the player in place.
+	var hp_was_zero := current_hp <= 0
+	var hp_ratio := float(current_hp) / float(old_max) if not hp_was_zero else 1.0
 	var stats: Dictionary = PlayerState.computed_stats
 	max_hp = int(stats.get("max_hp", 120))
 	max_mp = int(stats.get("max_mp", 40))
@@ -1322,6 +1643,10 @@ func _apply_profile_stats() -> void:
 	_attack_speed_tier = int(stats.get("attack_speed_tier", 0))
 	attack_cooldown = WarriorCombatMath.physical_attack_interval_seconds(_attack_speed_tier)
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
+	_equipment_spell_time_scale = (
+		CombatResolutionRules.equipment_spell_time_scale(_attack_speed_tier)
+		if PlayerState.profession in ["法师", "道士"] else 1.0
+	)
 	defense_min = int(stats.get("defense_min", 0))
 	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))
 	# Gold loss and equipment durability can emit profile_changed during the
@@ -1329,10 +1654,18 @@ func _apply_profile_stats() -> void:
 	# state machine; only the respawn completion owns that transition.
 	current_hp = (
 		0
-		if _dead
+		if _dead or hp_was_zero
 		else clampi(int(round(max_hp * hp_ratio)), 1, max_hp)
 	)
 	current_mp = clampi(current_mp, 0, max_mp)
+	# Preserve absolute HP/MP values across temporary buff stat changes.
+	var buff_revision: int = PlayerState.temporary_item_buff_revision
+	if buff_revision != _last_temporary_item_buff_revision:
+		_last_temporary_item_buff_revision = buff_revision
+		# When a buff activates or expires, keep the absolute current values
+		# and only clamp to the new caps.
+		current_hp = 0 if _dead or hp_was_zero else mini(previous_hp, max_hp)
+		current_mp = mini(current_mp, max_mp)
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	if visual != null:

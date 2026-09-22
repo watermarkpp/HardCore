@@ -9,6 +9,7 @@ const SpatialIndexScript := preload(
 const Reference := preload(
 	"res://tests/helpers/projectile_legacy_reference_query.gd"
 )
+const FIXTURE_MONSTER_ID := 19
 
 const SCENARIO_COUNT := 100
 const MOVEMENT_SCENARIOS := 32
@@ -19,6 +20,7 @@ const MAP_SWITCH_SCENARIOS := 20
 var _index: SpatialIndexScript
 var _enemies: Array[EnemyActor] = []
 var _false_negative_count := 0
+var _expected_exact_hit_count := 0
 
 
 func _ready() -> void:
@@ -37,6 +39,10 @@ func _run() -> void:
 	assert(
 		_false_negative_count == 0,
 		"broadphase must not drop any enemy the exact phase would hit"
+	)
+	assert(
+		_expected_exact_hit_count > 0,
+		"no-false-negative scenarios must exercise at least one exact hit"
 	)
 	_cleanup()
 	await get_tree().process_frame
@@ -238,6 +244,8 @@ func _run_scenario(rng: RandomNumberGenerator, scenario: int) -> void:
 			expected_context,
 			projectile_radius_gu
 		)
+		if hit:
+			_expected_exact_hit_count += 1
 		if hit and not candidate_ids.has(int(enemy.get_meta("spatial_id", 0))):
 			_false_negative_count += 1
 	_cleanup()
@@ -249,11 +257,18 @@ func _make_enemy(
 	serial: int
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup(
-		{"name": "fn_%d" % serial, "hp": 100, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"no-false-negative fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	enemy.setup(canonical_data, null, false)
+	assert(
+		enemy.monster_id == FIXTURE_MONSTER_ID and not enemy.is_boss,
+		"no-false-negative fixture must remain an ordinary exact-ID target"
+	)
+	enemy.max_hp = 100
+	enemy.current_hp = enemy.max_hp
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_ground_to_screen")
@@ -265,6 +280,12 @@ func _make_enemy(
 	)
 	enemy.combat_radius_gu = combat_radius_gu
 	add_child(enemy)
+	assert(
+		is_instance_valid(enemy)
+		and not enemy.is_queued_for_deletion()
+		and enemy.can_receive_damage(),
+		"no-false-negative fixture target must survive exact-ID admission"
+	)
 	_index.register(
 		serial,
 		1,

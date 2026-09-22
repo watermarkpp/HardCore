@@ -1,0 +1,4527 @@
+{
+  "content_layer": "personal_expansion",
+  "design": {
+    "design_size": [
+      48.0,
+      48.0
+    ],
+    "map_type": "dungeon_floor",
+    "source_size": [
+      null,
+      null
+    ],
+    "source_size_is_design_size": false,
+    "strategy": "custom_blank_layout",
+    "tile_size": [
+      64.0,
+      32.0
+    ],
+    "view_type": "isometric_2_to_1"
+  },
+  "display_name": "封魔谷",
+  "editor_meta": {
+    "authoring_chunk_grid": [
+      3.0,
+      3.0
+    ],
+    "authoring_chunk_size_tiles": [
+      16.0,
+      16.0
+    ],
+    "collision_authority": "hc_polygon_v1",
+    "connection_policy_id": "map_connection_unified_bidirectional_v2",
+    "content_policy": "empty_layers",
+    "created_by": "human_codex_shared_tool",
+    "default_connection_mode": "bidirectional",
+    "identity_contract_id": "hardcore.formal_map_identity.v1",
+    "portal_contract_id": "unified_map_portal_endpoint_v1",
+    "revision": 75,
+    "runtime_approved": false,
+    "source_editor_schema_version": 4.0,
+    "template_kind": "custom_empty_map",
+    "unit_legacy_adapter_id": "map.editor.unit_legacy_adapter.v1",
+    "workspace": "res://map_editor_workspace/world_fengmo_valley"
+  },
+  "ground": {
+    "blank_chunk_policy": "transparent_until_painted",
+    "blank_fill_asset_id": "",
+    "blank_generated": false,
+    "chunk_manifest": "res://assets/data/maps/ground/world_fengmo_valley.ground_chunks.json",
+    "chunk_size": [
+      1024.0,
+      1024.0
+    ],
+    "collision_from_ground": false,
+    "coordinate_contract_id": "isometric_cell_center_64x32_v2",
+    "editable_source_required": true,
+    "ground_mode": "generated_painted_chunks",
+    "mask_storage": "chunked_l8",
+    "master_image": null,
+    "origin_px": [
+      1536.0,
+      0.0
+    ],
+    "paint_manifest": "res://assets/data/maps/ground_paint/world_fengmo_valley.ground_paint_ops.json",
+    "paint_state": "res://assets/data/maps/ground_paint/world_fengmo_valley.ground_paint_state.json",
+    "source_manifest": "res://assets/data/maps/ground_paint/world_fengmo_valley.ground_source_manifest.json",
+    "tile_anchor_mode": "cell_center",
+    "visual_only": true,
+    "workspace_manifest": "res://map_editor_workspace/world_fengmo_valley/ground/ground_manifest.json",
+    "workspace_state": "res://map_editor_workspace/world_fengmo_valley/ground/ground_state.json"
+  },
+  "identity_contract_id": "hardcore.formal_map_identity.v1",
+  "layers": {
+    "boss_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "boss",
+          "source_line": 187.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "boss",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "千年树妖",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 195.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            1.0,
+            33.0,
+            1.0,
+            1.0,
+            1496.0,
+            -1.0,
+            -34.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          41.0,
+          5.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "elite",
+          "source_line": 186.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅精灵",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 56.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            58.0,
+            2.0,
+            1.0,
+            1496.0,
+            -46.0,
+            -21.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000002",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000002",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          13.0,
+          2.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "elite",
+          "source_line": 186.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED_BOSS",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅精灵",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 56.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            58.0,
+            2.0,
+            1.0,
+            1496.0,
+            -46.0,
+            -21.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_seconds": 1800.0,
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          2.0,
+          11.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 7.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽勇士",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 38.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            41.0,
+            7.0,
+            1.0,
+            1496.0,
+            -30.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          34.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 4.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "elite",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅战将",
+        "kind": "boss_spawn",
+        "max_alive": 1.0,
+        "monster_id": 54.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            20.0,
+            20.0,
+            1.0,
+            1496.0,
+            -9.0,
+            -46.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.boss_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.boss_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          45.0,
+          10.0
+        ]
+      }
+    ],
+    "collision": [
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000017",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              7.0,
+              31.0
+            ],
+            [
+              8.0,
+              31.0
+            ],
+            [
+              8.0,
+              37.0
+            ],
+            [
+              7.0,
+              37.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000018",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              4.0,
+              33.0
+            ],
+            [
+              7.0,
+              33.0
+            ],
+            [
+              7.0,
+              37.0
+            ],
+            [
+              4.0,
+              37.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000020",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              4.0,
+              37.0
+            ],
+            [
+              6.0,
+              37.0
+            ],
+            [
+              6.0,
+              38.0
+            ],
+            [
+              4.0,
+              38.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000021",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              4.0,
+              39.0
+            ],
+            [
+              6.0,
+              39.0
+            ],
+            [
+              6.0,
+              47.0
+            ],
+            [
+              4.0,
+              47.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000022",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              3.0,
+              41.0
+            ],
+            [
+              4.0,
+              41.0
+            ],
+            [
+              4.0,
+              47.0
+            ],
+            [
+              3.0,
+              47.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000023",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              6.0,
+              41.0
+            ],
+            [
+              7.0,
+              41.0
+            ],
+            [
+              7.0,
+              47.0
+            ],
+            [
+              6.0,
+              47.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000033",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              12.97226905822754,
+              45.74559020996094
+            ],
+            [
+              15.978666305541992,
+              45.85894012451172
+            ],
+            [
+              16.0,
+              47.0
+            ],
+            [
+              13.022642135620115,
+              47.00349426269531
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000035",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              18.0,
+              46.0
+            ],
+            [
+              19.0,
+              46.0
+            ],
+            [
+              19.0,
+              47.0
+            ],
+            [
+              18.0,
+              47.0
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000010",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              7.0,
+              47.0
+            ],
+            [
+              3.0,
+              47.0
+            ],
+            [
+              3.0,
+              41.0
+            ],
+            [
+              4.0,
+              40.25
+            ],
+            [
+              4.0,
+              39.0
+            ],
+            [
+              6.0,
+              39.0
+            ],
+            [
+              6.0,
+              40.0
+            ],
+            [
+              6.90266227722168,
+              40.946388244628906
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000011",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              6.414022445678711,
+              24.958984375
+            ],
+            [
+              6.38459587097168,
+              25.304698944091797
+            ],
+            [
+              6.29744815826416,
+              25.637128829956055
+            ],
+            [
+              6.155926704406738,
+              25.943498611450195
+            ],
+            [
+              5.9654717445373535,
+              26.21203231811523
+            ],
+            [
+              5.733401775360107,
+              26.43241310119629
+            ],
+            [
+              5.468634605407715,
+              26.59617042541504
+            ],
+            [
+              5.181345462799072,
+              26.697011947631836
+            ],
+            [
+              4.882575035095215,
+              26.731061935424805
+            ],
+            [
+              4.583804607391357,
+              26.697011947631836
+            ],
+            [
+              4.296515464782715,
+              26.59617042541504
+            ],
+            [
+              4.0317487716674805,
+              26.43241310119629
+            ],
+            [
+              3.799678325653076,
+              26.21203231811523
+            ],
+            [
+              3.609222888946533,
+              25.943498611450195
+            ],
+            [
+              3.4677021503448486,
+              25.637128829956055
+            ],
+            [
+              3.380553960800171,
+              25.304698944091797
+            ],
+            [
+              3.3511276245117188,
+              24.958984375
+            ],
+            [
+              3.380553960800171,
+              24.613269805908203
+            ],
+            [
+              3.4677021503448486,
+              24.280839920043945
+            ],
+            [
+              3.609223127365112,
+              23.974470138549805
+            ],
+            [
+              3.799678087234497,
+              23.70593643188477
+            ],
+            [
+              4.031748294830322,
+              23.48555564880371
+            ],
+            [
+              4.296515464782715,
+              23.32179832458496
+            ],
+            [
+              4.583804130554199,
+              23.220956802368164
+            ],
+            [
+              4.882575035095215,
+              23.186906814575195
+            ],
+            [
+              5.1813459396362305,
+              23.220956802368164
+            ],
+            [
+              5.468634605407715,
+              23.32179832458496
+            ],
+            [
+              5.733401298522949,
+              23.48555564880371
+            ],
+            [
+              5.9654717445373535,
+              23.70593643188477
+            ],
+            [
+              6.155926704406738,
+              23.974470138549805
+            ],
+            [
+              6.29744815826416,
+              24.280839920043945
+            ],
+            [
+              6.38459587097168,
+              24.613269805908203
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000012",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              17.04107093811035,
+              36.00446319580078
+            ],
+            [
+              17.02021026611328,
+              36.22373580932617
+            ],
+            [
+              16.95842933654785,
+              36.43458557128906
+            ],
+            [
+              16.85810089111328,
+              36.628902435302734
+            ],
+            [
+              16.72308349609375,
+              36.799224853515625
+            ],
+            [
+              16.558563232421875,
+              36.939002990722656
+            ],
+            [
+              16.37086296081543,
+              37.042869567871094
+            ],
+            [
+              16.16719627380371,
+              37.10683059692383
+            ],
+            [
+              15.95539093017578,
+              37.12842559814453
+            ],
+            [
+              15.743585586547852,
+              37.10683059692383
+            ],
+            [
+              15.539918899536133,
+              37.042869567871094
+            ],
+            [
+              15.352219581604004,
+              36.939002990722656
+            ],
+            [
+              15.187699317932127,
+              36.799224853515625
+            ],
+            [
+              15.05268096923828,
+              36.628902435302734
+            ],
+            [
+              14.952352523803713,
+              36.43458557128906
+            ],
+            [
+              14.89057159423828,
+              36.22373580932617
+            ],
+            [
+              14.869710922241213,
+              36.00446319580078
+            ],
+            [
+              14.89057159423828,
+              35.78519058227539
+            ],
+            [
+              14.952352523803713,
+              35.5743408203125
+            ],
+            [
+              15.05268096923828,
+              35.38002395629883
+            ],
+            [
+              15.187698364257813,
+              35.20970153808594
+            ],
+            [
+              15.352218627929688,
+              35.069923400878906
+            ],
+            [
+              15.539918899536133,
+              34.96605682373047
+            ],
+            [
+              15.743585586547852,
+              34.902095794677734
+            ],
+            [
+              15.95539093017578,
+              34.88050079345703
+            ],
+            [
+              16.16719627380371,
+              34.902095794677734
+            ],
+            [
+              16.37086296081543,
+              34.96605682373047
+            ],
+            [
+              16.558563232421875,
+              35.069923400878906
+            ],
+            [
+              16.72308349609375,
+              35.20970153808594
+            ],
+            [
+              16.85810089111328,
+              35.38002395629883
+            ],
+            [
+              16.95842933654785,
+              35.5743408203125
+            ],
+            [
+              17.02021026611328,
+              35.78519058227539
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000013",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              30.44092559814453,
+              45.29446029663086
+            ],
+            [
+              30.422325134277344,
+              45.48759078979492
+            ],
+            [
+              30.36723518371582,
+              45.673301696777344
+            ],
+            [
+              30.277774810791016,
+              45.84445571899414
+            ],
+            [
+              30.157381057739254,
+              45.99446868896485
+            ],
+            [
+              30.010679244995117,
+              46.117584228515625
+            ],
+            [
+              29.84330940246582,
+              46.20906829833984
+            ],
+            [
+              29.66170310974121,
+              46.265403747558594
+            ],
+            [
+              29.47283935546875,
+              46.284423828125
+            ],
+            [
+              29.28397560119629,
+              46.265403747558594
+            ],
+            [
+              29.10236930847168,
+              46.20906829833984
+            ],
+            [
+              28.934999465942383,
+              46.117584228515625
+            ],
+            [
+              28.78829765319824,
+              45.99446868896485
+            ],
+            [
+              28.667903900146484,
+              45.84445571899414
+            ],
+            [
+              28.57844352722168,
+              45.673301696777344
+            ],
+            [
+              28.523353576660156,
+              45.48759078979492
+            ],
+            [
+              28.50475311279297,
+              45.29446029663086
+            ],
+            [
+              28.523353576660156,
+              45.1013298034668
+            ],
+            [
+              28.57844352722168,
+              44.915618896484375
+            ],
+            [
+              28.667903900146484,
+              44.74446487426758
+            ],
+            [
+              28.78829765319824,
+              44.594451904296875
+            ],
+            [
+              28.934999465942383,
+              44.471336364746094
+            ],
+            [
+              29.102367401123047,
+              44.379852294921875
+            ],
+            [
+              29.28397560119629,
+              44.323516845703125
+            ],
+            [
+              29.47283935546875,
+              44.30449676513672
+            ],
+            [
+              29.66170310974121,
+              44.323516845703125
+            ],
+            [
+              29.843311309814453,
+              44.379852294921875
+            ],
+            [
+              30.010679244995117,
+              44.471336364746094
+            ],
+            [
+              30.157381057739254,
+              44.594451904296875
+            ],
+            [
+              30.277774810791016,
+              44.74446487426758
+            ],
+            [
+              30.36723518371582,
+              44.915618896484375
+            ],
+            [
+              30.422325134277344,
+              45.1013298034668
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000014",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              30.905681610107425,
+              42.950958251953125
+            ],
+            [
+              30.890811920166016,
+              43.08807373046875
+            ],
+            [
+              30.846771240234375,
+              43.21991729736328
+            ],
+            [
+              30.77525329589844,
+              43.341426849365234
+            ],
+            [
+              30.67900657653809,
+              43.44792938232422
+            ],
+            [
+              30.561729431152344,
+              43.53533554077149
+            ],
+            [
+              30.427928924560547,
+              43.60028076171875
+            ],
+            [
+              30.28274726867676,
+              43.64027786254883
+            ],
+            [
+              30.131763458251953,
+              43.65378189086914
+            ],
+            [
+              29.98077964782715,
+              43.64027786254883
+            ],
+            [
+              29.83559799194336,
+              43.60028076171875
+            ],
+            [
+              29.701797485351563,
+              43.53533554077149
+            ],
+            [
+              29.58452033996582,
+              43.44792938232422
+            ],
+            [
+              29.48827362060547,
+              43.341426849365234
+            ],
+            [
+              29.41675567626953,
+              43.21991729736328
+            ],
+            [
+              29.37271499633789,
+              43.08807373046875
+            ],
+            [
+              29.357845306396484,
+              42.950958251953125
+            ],
+            [
+              29.37271499633789,
+              42.8138427734375
+            ],
+            [
+              29.41675567626953,
+              42.68199920654297
+            ],
+            [
+              29.48827362060547,
+              42.560489654541016
+            ],
+            [
+              29.58452033996582,
+              42.45398712158203
+            ],
+            [
+              29.701797485351563,
+              42.366580963134766
+            ],
+            [
+              29.83559799194336,
+              42.3016357421875
+            ],
+            [
+              29.98077964782715,
+              42.26163864135742
+            ],
+            [
+              30.131763458251953,
+              42.24813461303711
+            ],
+            [
+              30.28274726867676,
+              42.26163864135742
+            ],
+            [
+              30.427928924560547,
+              42.3016357421875
+            ],
+            [
+              30.561729431152344,
+              42.366580963134766
+            ],
+            [
+              30.67900657653809,
+              42.45398712158203
+            ],
+            [
+              30.77525329589844,
+              42.560489654541016
+            ],
+            [
+              30.846771240234375,
+              42.68199920654297
+            ],
+            [
+              30.890811920166016,
+              42.8138427734375
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000015",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              32.9024772644043,
+              16.547325134277344
+            ],
+            [
+              32.87679672241211,
+              16.79458236694336
+            ],
+            [
+              32.80073547363281,
+              17.032339096069336
+            ],
+            [
+              32.677223205566406,
+              17.25145721435547
+            ],
+            [
+              32.51100158691406,
+              17.443513870239258
+            ],
+            [
+              32.3084602355957,
+              17.601131439208984
+            ],
+            [
+              32.0773811340332,
+              17.718252182006836
+            ],
+            [
+              31.826648712158203,
+              17.790374755859375
+            ],
+            [
+              31.565893173217773,
+              17.814727783203125
+            ],
+            [
+              31.305137634277344,
+              17.790374755859375
+            ],
+            [
+              31.054405212402344,
+              17.718252182006836
+            ],
+            [
+              30.823326110839844,
+              17.601131439208984
+            ],
+            [
+              30.620784759521484,
+              17.443513870239258
+            ],
+            [
+              30.45456314086914,
+              17.25145721435547
+            ],
+            [
+              30.331050872802734,
+              17.032339096069336
+            ],
+            [
+              30.25499153137207,
+              16.79458236694336
+            ],
+            [
+              30.22930908203125,
+              16.547325134277344
+            ],
+            [
+              30.25499153137207,
+              16.300067901611328
+            ],
+            [
+              30.331050872802734,
+              16.06231117248535
+            ],
+            [
+              30.454565048217773,
+              15.843194007873535
+            ],
+            [
+              30.620784759521484,
+              15.65113639831543
+            ],
+            [
+              30.823326110839844,
+              15.493518829345703
+            ],
+            [
+              31.054405212402344,
+              15.376398086547852
+            ],
+            [
+              31.305137634277344,
+              15.304275512695313
+            ],
+            [
+              31.565893173217773,
+              15.279922485351564
+            ],
+            [
+              31.826648712158203,
+              15.304275512695313
+            ],
+            [
+              32.0773811340332,
+              15.376398086547852
+            ],
+            [
+              32.3084602355957,
+              15.493517875671388
+            ],
+            [
+              32.51100158691406,
+              15.65113639831543
+            ],
+            [
+              32.677223205566406,
+              15.843194007873535
+            ],
+            [
+              32.80073547363281,
+              16.06231117248535
+            ],
+            [
+              32.87679672241211,
+              16.300067901611328
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000016",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              48.0,
+              48.0
+            ],
+            [
+              43.5,
+              48.0
+            ],
+            [
+              41.75,
+              46.5
+            ],
+            [
+              40.5,
+              45.0
+            ],
+            [
+              40.25,
+              44.25
+            ],
+            [
+              44.25,
+              40.5
+            ],
+            [
+              45.0,
+              40.75
+            ],
+            [
+              46.25,
+              41.5
+            ],
+            [
+              47.25,
+              42.75
+            ],
+            [
+              48.0,
+              43.75
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000019",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              4.5,
+              0.0
+            ],
+            [
+              2.25,
+              2.25
+            ],
+            [
+              0.0,
+              4.5
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000024",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              4.5,
+              0.0
+            ],
+            [
+              5.0,
+              0.75
+            ],
+            [
+              4.5,
+              1.5
+            ],
+            [
+              1.5,
+              4.5
+            ],
+            [
+              1.0,
+              4.75
+            ],
+            [
+              0.0,
+              4.5
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000025",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              6.752745628356934,
+              23.51266860961914
+            ],
+            [
+              4.947681427001953,
+              21.824050903320313
+            ],
+            [
+              3.3006792068481445,
+              20.57628631591797
+            ],
+            [
+              2.377346992492676,
+              19.636322021484375
+            ],
+            [
+              2.1444053649902344,
+              18.73797607421875
+            ],
+            [
+              2.2109127044677734,
+              18.006006240844727
+            ],
+            [
+              1.9114465713500977,
+              17.506916046142578
+            ],
+            [
+              1.1877946853637695,
+              17.63165283203125
+            ],
+            [
+              0.5056877136230469,
+              16.816465377807617
+            ],
+            [
+              1.5536823272705078,
+              15.535558700561523
+            ],
+            [
+              2.4104080200195313,
+              15.144657135009766
+            ],
+            [
+              5.221880912780762,
+              15.627226829528809
+            ],
+            [
+              5.055481910705566,
+              14.762158393859863
+            ],
+            [
+              5.945479393005371,
+              14.337985038757324
+            ],
+            [
+              7.875244140625,
+              14.637523651123049
+            ],
+            [
+              9.13131618499756,
+              16.109851837158203
+            ],
+            [
+              9.031519889831545,
+              16.509105682373047
+            ],
+            [
+              7.359652519226074,
+              17.149505615234375
+            ],
+            [
+              7.384659767150879,
+              18.255783081054688
+            ],
+            [
+              8.1582612991333,
+              19.0460205078125
+            ],
+            [
+              8.091737747192383,
+              19.511823654174805
+            ],
+            [
+              4.357023239135742,
+              19.95249366760254
+            ],
+            [
+              8.790655136108398,
+              24.03679084777832
+            ],
+            [
+              8.774053573608398,
+              24.75213050842285
+            ],
+            [
+              8.108626365661621,
+              24.85191345214844
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      },
+      {
+        "blocks_monster": true,
+        "blocks_player": true,
+        "collision_id": "poly_000026",
+        "content_layer": "personal_expansion",
+        "data": {
+          "points": [
+            [
+              13.36616325378418,
+              44.78507232666016
+            ],
+            [
+              13.262210845947266,
+              43.99203872680664
+            ],
+            [
+              15.023292541503906,
+              44.22182846069336
+            ],
+            [
+              15.110834121704102,
+              44.987510681152344
+            ]
+          ]
+        },
+        "shape": "polygon",
+        "source": "manual"
+      }
+    ],
+    "collision_erase": [],
+    "door_points": [],
+    "editor_guides": [],
+    "ground_base": [],
+    "ground_overlay": [],
+    "interactables": [],
+    "light": [],
+    "map_entrance_points": [],
+    "map_exit_points": [
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "portal_pair.world_fengmo_valley.map_exit_000001.world_wooma_forest.map_exit_000002",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "沃玛森林",
+        "exit_id": "map_exit_000001",
+        "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000025",
+        "official_connection_id": "portal.world_fengmo_valley.map_exit_000001",
+        "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          40,
+          40
+        ],
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "world_wooma_forest",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000001",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "world_fengmo_valley",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 910004.0,
+        "target_map_key": "world_wooma_forest",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          6.0,
+          6.0
+        ],
+        "tile": [
+          40,
+          40
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_direction": "forward",
+        "connection_mode": "bidirectional",
+        "connection_pair_id": "portal_pair.world_fengmo_valley.map_exit_000002.fengmo_forked_path.map_exit_000002",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "封魔矿区",
+        "exit_id": "map_exit_000002",
+        "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000026",
+        "official_connection_id": "portal.world_fengmo_valley.map_exit_000002",
+        "one_way": false,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "bidirectional_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          5,
+          5
+        ],
+        "reciprocal_exit_id": "map_exit_000002",
+        "reciprocal_map_key": "fengmo_forked_path",
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000002",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "world_fengmo_valley",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000002",
+        "target_map_id": 914001.0,
+        "target_map_key": "fengmo_forked_path",
+        "target_portal_id": "map_exit_000002",
+        "target_tile": [
+          60.0,
+          15.0
+        ],
+        "tile": [
+          5,
+          5
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
+      },
+      {
+        "arrival_locks_current_portal": true,
+        "arrival_reentry_policy_id": "portal_arrival_guard_v2",
+        "blocks_movement": false,
+        "connection_mode": "one_way",
+        "connection_policy_id": "map_connection_unified_bidirectional_v2",
+        "content_layer": "personal_expansion",
+        "display_name": "死亡神殿",
+        "exit_id": "map_exit_000003",
+        "explicit_one_way_reason": "terminal_dungeon_has_no_return_portal",
+        "kind": "map_exit",
+        "linked_visual_instance_id": "inst_000027",
+        "official_connection_id": "portal.world_fengmo_valley.map_exit_000003",
+        "one_way": true,
+        "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+        "portal_contract_id": "unified_map_portal_endpoint_v1",
+        "portal_role": "one_way_endpoint",
+        "portal_visual_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "portal_visual_origin_tile": [
+          43,
+          26
+        ],
+        "requires_leave_before_retrigger": true,
+        "return_minimum_seconds": 3.0,
+        "return_requires_fresh_activation": true,
+        "return_unlock_distance_gu": 1.5,
+        "runtime_export": true,
+        "semantic_id": "map_exit_000003",
+        "semantic_role": "map_portal_endpoint",
+        "source_map_key": "world_fengmo_valley",
+        "target_configured": true,
+        "target_entrance_id": "map_exit_000001",
+        "target_map_id": 918004.0,
+        "target_map_key": "hidden_death_temple",
+        "target_portal_id": "map_exit_000001",
+        "target_tile": [
+          14.0,
+          25.0
+        ],
+        "tile": [
+          43,
+          26
+        ],
+        "travel_request_single_flight": true,
+        "trigger_on_enter": true
+      }
+    ],
+    "monster_spawn": [
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 6.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "半兽战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 36.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            46.0,
+            12.0,
+            1.0,
+            1496.0,
+            -14.0,
+            -1.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000001",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000001",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          10.0,
+          17.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 1.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 47.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            29.0,
+            22.0,
+            21.0,
+            1496.0,
+            -21.0,
+            -25.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000003",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000003",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          29.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 2.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "掷斧骷髅",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 50.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            23.0,
+            12.0,
+            6.0,
+            1496.0,
+            -6.0,
+            -16.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000004",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000004",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          15.0,
+          8.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 3.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "骷髅战士",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 52.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            21.0,
+            2.0,
+            10.0,
+            1496.0,
+            -27.0,
+            -10.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000005",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000005",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          22.0,
+          19.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸1",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 79.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            20.0,
+            14.0,
+            12.0,
+            1496.0,
+            -35.0,
+            -31.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000007",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000007",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          33.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸2",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 81.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            19.0,
+            6.0,
+            1.0,
+            1496.0,
+            -46.0,
+            -40.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000008",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000008",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          35.0,
+          44.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸3",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 83.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            16.0,
+            18.0,
+            11.0,
+            1496.0,
+            -15.0,
+            -36.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000009",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000009",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          37.0,
+          15.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸4",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 85.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            16.0,
+            4.0,
+            1.0,
+            1496.0,
+            -1.0,
+            -5.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000010",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000010",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          5.0,
+          1.0
+        ]
+      },
+      {
+        "authority_ref": {
+          "map_id": "world_fengmo_valley",
+          "source_category_role": "ordinary",
+          "source_line": 185.0,
+          "source_token_index": 5.0
+        },
+        "auto_placement_status": "AUTO_POSITIONED",
+        "classification": "ordinary",
+        "content_layer": "personal_expansion",
+        "count": 1.0,
+        "display_name": "僵尸5",
+        "kind": "monster_spawn",
+        "max_alive": 1.0,
+        "monster_id": 87.0,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "placement_evidence": {
+          "component_id": 0.0,
+          "current_monster_library_only": true,
+          "planner_contract_id": "hardcore.map_monster_auto_placement_plan.v2",
+          "selection_score": [
+            0.0,
+            14.0,
+            27.0,
+            9.0,
+            1496.0,
+            -9.0,
+            -28.0
+          ]
+        },
+        "radius_gu": 0.0,
+        "respawn_policy_id": "beginner_outdoor",
+        "runtime_export": true,
+        "semantic_id": "mse.placement.v1.world_fengmo_valley.monster_spawn.000011",
+        "spawn_group_id": "mse.group.v1.world_fengmo_valley.monster_spawn.000011",
+        "spawn_rule": "single_anchor_user_copy_template",
+        "tile": [
+          27.0,
+          7.0
+        ]
+      }
+    ],
+    "npc_points": [
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.4.001",
+        "content_layer": "personal_expansion",
+        "display_name": "杂货商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.4.001",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000001",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000001",
+        "service_identity_id": "npc.service.general_vendor.v1",
+        "service_role": "shop",
+        "tile": [
+          15.0,
+          42.0
+        ],
+        "tile_anchor": [
+          8.0,
+          33.0
+        ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.4.002",
+        "content_layer": "personal_expansion",
+        "display_name": "铁匠",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.4.002",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000002",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000002",
+        "service_identity_id": "npc.service.blacksmith.v1",
+        "service_role": "shop",
+        "tile": [
+          8.0,
+          41.0
+        ],
+        "tile_anchor": [
+          8.0,
+          41.0
+        ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.expansion.bich_pharmacist",
+        "content_layer": "personal_expansion",
+        "display_name": "药剂商",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.expansion.bich_pharmacist",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000003",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000003",
+        "service_identity_id": "npc.service.pharmacist.v1",
+        "service_role": "shop",
+        "tile": [
+          8.0,
+          32.0
+        ],
+        "tile_anchor": [
+          8.0,
+          30.0
+        ]
+      },
+      {
+        "collision_policy": "profile",
+        "collision_profile_id": "small_prop_1x1",
+        "content_id": "npc.expansion.bich_warehouse",
+        "content_layer": "personal_expansion",
+        "display_name": "仓库管理员",
+        "editor_visual_asset_id": "editor_npc_placeholder_humanoid",
+        "editor_visual_only": true,
+        "facing": "south",
+        "kind": "npc",
+        "movable": true,
+        "npc_id": "npc.expansion.bich_warehouse",
+        "npc_occupancy_profile_id": "npc_humanoid_1x1",
+        "object_role": "npc_placeholder",
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placeholder_instance_id": "npc_placeholder_npc_000004",
+        "placement_anchor_px": [
+          32.0,
+          48.0
+        ],
+        "runtime_export": true,
+        "safe": true,
+        "selectable": true,
+        "selection_shape": {
+          "padding_px": 4.0,
+          "type": "bounds"
+        },
+        "semantic_id": "npc_000004",
+        "service_identity_id": "npc.service.warehouse.v1",
+        "service_role": "warehouse",
+        "tile": [
+          8.0,
+          37.0
+        ],
+        "tile_anchor": [
+          9.0,
+          37.0
+        ]
+      }
+    ],
+    "object_base": [
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          216.0,
+          289.71429443359375
+        ],
+        "asset_id": "user.map_exit.20260822.s05_r1_c1",
+        "base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000001",
+        "instance_scale_level": -3.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          216.0,
+          289.71429443359375
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.7,
+          0.7
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          0,
+          0
+        ],
+        "tile_anchor": [
+          0,
+          0
+        ],
+        "visual_footprint_tiles": [
+          5.0,
+          5.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          210.0,
+          265.0
+        ],
+        "asset_id": "user.map_exit.20260822.s05_r2_c1",
+        "base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000002",
+        "instance_scale_level": -2.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          210.0,
+          265.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.8,
+          0.8
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          41,
+          41
+        ],
+        "tile_anchor": [
+          41,
+          41
+        ],
+        "visual_footprint_tiles": [
+          6.0,
+          6.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          172.0,
+          274.0
+        ],
+        "asset_id": "user.28b31525fb159e6f",
+        "base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "gameplay_role": "service_or_landmark",
+        "instance_base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000003",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "building",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          172.0,
+          274.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "landmark",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          4,
+          33
+        ],
+        "tile_anchor": [
+          4,
+          33
+        ],
+        "visual_footprint_tiles": [
+          5.0,
+          5.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          177.0,
+          271.0
+        ],
+        "asset_id": "user.6bded61bd890ed90",
+        "base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "gameplay_role": "service_or_landmark",
+        "instance_base_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000004",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "building",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          5.0,
+          5.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          177.0,
+          271.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "landmark",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          42
+        ],
+        "tile_anchor": [
+          3,
+          42
+        ],
+        "visual_footprint_tiles": [
+          5.0,
+          5.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          216.0,
+          229.0
+        ],
+        "asset_id": "user.e53abea5a827ff39",
+        "base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000005",
+        "instance_scale_level": -9.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          216.0,
+          229.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.1,
+          0.1
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5,
+          39
+        ],
+        "tile_anchor": [
+          5,
+          39
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          225.0,
+          205.33334350585938
+        ],
+        "asset_id": "user.20ff8a4bbda2be8f",
+        "base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000006",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          225.0,
+          205.33334350585938
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3,
+          0.3
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5,
+          29
+        ],
+        "tile_anchor": [
+          5,
+          29
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          236.3333282470703,
+          128.0
+        ],
+        "asset_id": "user.f4774b51043b5125",
+        "base_footprint_tiles": [
+          9.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          5.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          9.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000007",
+        "instance_scale_level": -4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          5.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          236.3333282470703,
+          128.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.6,
+          0.6
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          1,
+          14
+        ],
+        "tile_anchor": [
+          1,
+          14
+        ],
+        "visual_footprint_tiles": [
+          5.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          211.0,
+          157.6666717529297
+        ],
+        "asset_id": "user.cef59003e49deab3",
+        "base_footprint_tiles": [
+          9.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          5.0,
+          2.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          9.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000008",
+        "instance_scale_level": -4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          5.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          211.0,
+          157.6666717529297
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.6,
+          0.6
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          18
+        ],
+        "tile_anchor": [
+          3,
+          18
+        ],
+        "visual_footprint_tiles": [
+          5.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          113.0,
+          169.0
+        ],
+        "asset_id": "user.2521d070d4ac5790",
+        "base_footprint_tiles": [
+          10.0,
+          10.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          10.0,
+          10.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000009",
+        "instance_scale_level": -4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          113.0,
+          169.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.6,
+          0.6
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          19
+        ],
+        "tile_anchor": [
+          3,
+          19
+        ],
+        "visual_footprint_tiles": [
+          6.0,
+          6.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          150.0,
+          65.0
+        ],
+        "asset_id": "user.7567ce1ebf045717",
+        "base_footprint_tiles": [
+          4.0,
+          5.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          4.0,
+          5.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000010",
+        "instance_scale_level": -5.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          150.0,
+          65.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.5,
+          0.5
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          4,
+          16
+        ],
+        "tile_anchor": [
+          4,
+          16
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          223.6666717529297,
+          151.0
+        ],
+        "asset_id": "user.5357fd733b6a0198",
+        "base_footprint_tiles": [
+          7.0,
+          9.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          5.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          7.0,
+          9.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000011",
+        "instance_scale_level": -4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          5.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          223.6666717529297,
+          151.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.6,
+          0.6
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5,
+          14
+        ],
+        "tile_anchor": [
+          5,
+          14
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          5.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          133.0,
+          127.0
+        ],
+        "asset_id": "user.b4b0b2aadb9e7e69",
+        "base_footprint_tiles": [
+          4.0,
+          6.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          4.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000012",
+        "instance_scale_level": -5.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          133.0,
+          127.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.5,
+          0.5
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          2,
+          17
+        ],
+        "tile_anchor": [
+          2,
+          17
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          167.0,
+          315.3333435058594
+        ],
+        "asset_id": "mse.small_decor.001",
+        "base_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000013",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          167.0,
+          315.3333435058594
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3,
+          0.3
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          15,
+          35
+        ],
+        "tile_anchor": [
+          15,
+          35
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          136.0,
+          213.0
+        ],
+        "asset_id": "mse.small_decor.003",
+        "base_footprint_tiles": [
+          10.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          10.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000014",
+        "instance_scale_level": -8.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          136.0,
+          213.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.2,
+          0.2
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          13,
+          44
+        ],
+        "tile_anchor": [
+          13,
+          44
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          182.33334350585938,
+          290.3333435058594
+        ],
+        "asset_id": "mse.small_decor.008",
+        "base_footprint_tiles": [
+          9.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          9.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000015",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          3.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          182.33334350585938,
+          290.3333435058594
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3,
+          0.3
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          13,
+          46
+        ],
+        "tile_anchor": [
+          13,
+          46
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          184.0,
+          224.0
+        ],
+        "asset_id": "mse.small_decor.034",
+        "base_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          6.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000016",
+        "instance_scale_level": -8.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          184.0,
+          224.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.2,
+          0.2
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          16,
+          44
+        ],
+        "tile_anchor": [
+          16,
+          44
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          164.6666717529297,
+          135.6666717529297
+        ],
+        "asset_id": "mse.small_decor.031",
+        "base_footprint_tiles": [
+          9.0,
+          6.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          2.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          9.0,
+          6.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000017",
+        "instance_scale_level": -7.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          3.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          164.6666717529297,
+          135.6666717529297
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.3,
+          0.3
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          4,
+          40
+        ],
+        "tile_anchor": [
+          4,
+          40
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          94.0,
+          401.0
+        ],
+        "asset_id": "mse.small_decor.014",
+        "base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000018",
+        "instance_scale_level": -8.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          94.0,
+          401.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.2,
+          0.2
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          7,
+          31
+        ],
+        "tile_anchor": [
+          7,
+          31
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          94.0,
+          401.0
+        ],
+        "asset_id": "mse.small_decor.014",
+        "base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000019",
+        "instance_scale_level": -8.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          94.0,
+          401.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.2,
+          0.2
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          18,
+          46
+        ],
+        "tile_anchor": [
+          18,
+          46
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          173.0,
+          405.0
+        ],
+        "asset_id": "user.28d43d258bb9bc67",
+        "base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000020",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          173.0,
+          405.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          28,
+          44
+        ],
+        "tile_anchor": [
+          28,
+          44
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          138.0,
+          297.0
+        ],
+        "asset_id": "user.579a470a8534302d",
+        "base_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000021",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          2.0,
+          2.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          138.0,
+          297.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          29,
+          42
+        ],
+        "tile_anchor": [
+          29,
+          42
+        ],
+        "visual_footprint_tiles": [
+          2.0,
+          2.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          224.0,
+          467.0
+        ],
+        "asset_id": "user.8ef1be8fe5701083",
+        "base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000022",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          3.0,
+          3.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          224.0,
+          467.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          30,
+          15
+        ],
+        "tile_anchor": [
+          30,
+          15
+        ],
+        "visual_footprint_tiles": [
+          3.0,
+          3.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          247.0,
+          462.0
+        ],
+        "asset_id": "user.7b7f513b10d798c6",
+        "base_footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_id": "inst_000023",
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "obstacle",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          247.0,
+          462.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.0,
+          1.0
+        ],
+        "scene_intent": "block_path",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          3,
+          23
+        ],
+        "tile_anchor": [
+          3,
+          23
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          226.0,
+          92.0
+        ],
+        "asset_id": "user.boss_entrance.20260823.death_temple",
+        "base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "gameplay_role": "navigation_blocker",
+        "instance_base_footprint_tiles": [
+          7.0,
+          7.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000024",
+        "instance_scale_level": -5.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": -1.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "terrain",
+        "occlusion": false,
+        "occupancy_footprint_tiles": [
+          4.0,
+          4.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          226.0,
+          92.0
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          0.5,
+          0.5
+        ],
+        "scene_intent": "terrain_boundary",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          43,
+          25
+        ],
+        "tile_anchor": [
+          43,
+          25
+        ],
+        "visual_footprint_tiles": [
+          4.0,
+          4.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000025",
+        "instance_scale_level": 4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.4000000000000004,
+          1.4000000000000004
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          40,
+          40
+        ],
+        "tile_anchor": [
+          40,
+          40
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "asset_id": "user.portal_gate.20260916.s01_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000026",
+        "instance_scale_level": 4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.4000000000000004,
+          1.4000000000000004
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          5,
+          5
+        ],
+        "tile_anchor": [
+          5,
+          5
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "anchor_mode": "foot_tile",
+        "anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "asset_id": "user.portal_gate.20260916.s02_r1_c1",
+        "base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "collision_authority": "manual_by_user",
+        "collision_cells": [],
+        "collision_footprint_tiles": [
+          0.0,
+          0.0
+        ],
+        "collision_policy": "none",
+        "collision_policy_id": "maps.new_instance_manual_collision_only_v1",
+        "collision_profile_id": "none_visual",
+        "content_layer": "personal_expansion",
+        "flip_x": false,
+        "flip_y": false,
+        "footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "gameplay_role": "none",
+        "instance_base_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "instance_base_scale": 1.0,
+        "instance_custom_scale": true,
+        "instance_id": "inst_000027",
+        "instance_scale_level": 4.0,
+        "layer": "object_base",
+        "manual_collision_expected": true,
+        "map_collision_override": "disabled",
+        "material_layer_order": 0.0,
+        "movable": true,
+        "navigation_policy": "ignore",
+        "object_role": "decoration",
+        "occlusion": true,
+        "occupancy_footprint_tiles": [
+          1.0,
+          1.0
+        ],
+        "offset_px": [
+          0.0,
+          0.0
+        ],
+        "placement_anchor_policy_id": "footprint_bottom_vertex_v1",
+        "placement_anchor_px": [
+          26.0,
+          71.57142639160156
+        ],
+        "placement_rule": "inside_map",
+        "position_mode": "tile_anchor",
+        "rotation_deg": 0.0,
+        "runtime_export": true,
+        "scale": [
+          1.4000000000000004,
+          1.4000000000000004
+        ],
+        "scene_intent": "visual_detail",
+        "selectable": true,
+        "selection_locked": false,
+        "tile": [
+          43,
+          26
+        ],
+        "tile_anchor": [
+          43,
+          26
+        ],
+        "visual_footprint_tiles": [
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "object_front": [],
+    "region_semantics": [],
+    "region_trigger": [],
+    "respawn_points": [
+      {
+        "content_layer": "personal_expansion",
+        "is_birth_point": true,
+        "is_default": true,
+        "is_respawn_point": true,
+        "kind": "respawn_point",
+        "respawn_id": "respawn_point_000001",
+        "runtime_export": true,
+        "semantic_id": "respawn_point_000001",
+        "semantic_role": "birth_and_respawn",
+        "tile": [
+          12.0,
+          38.0
+        ]
+      }
+    ],
+    "safe_area": [
+      {
+        "area_id": "safe_area_000001",
+        "blocks_monster_damage": true,
+        "blocks_pvp": true,
+        "content_layer": "personal_expansion",
+        "display_name": "安全区",
+        "kind": "safe_area",
+        "polygon_ground_gu": [
+          [
+            20.0,
+            47.0
+          ],
+          [
+            17.0,
+            34.0
+          ],
+          [
+            11.0,
+            29.0
+          ],
+          [
+            2.0,
+            26.0
+          ],
+          [
+            0.0,
+            27.0
+          ],
+          [
+            0.0,
+            47.0
+          ],
+          [
+            20.0,
+            47.0
+          ]
+        ],
+        "radius_gu": 0.0,
+        "return_anchor": false,
+        "runtime_export": true,
+        "semantic_id": "safe_area_000001",
+        "shape": "polygon",
+        "tile": [
+          10.0,
+          37.0
+        ]
+      }
+    ],
+    "shadow": [],
+    "terrain_base": [],
+    "terrain_front": []
+  },
+  "legacy_map_id": "fmg_1",
+  "legacy_runtime_map_id": 930100.0,
+  "map_id": "world_fengmo_valley",
+  "runtime_map_id": 910005.0,
+  "schema_version": 5.0,
+  "source_policy": "expansion_editable"
+}

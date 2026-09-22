@@ -1,0 +1,537 @@
+WorkerThreadPool: 12 threads, 3 max low-priority.
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Using "default" pen tablet driver...
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 3472268009
+EDITOR API HASH: 2212757246
+SceneTreeFTI: traversal method DEFAULT
+Loading resource: res://scripts/device_lab_patch_bootstrap.gd remapped: res://scripts/device_lab_patch_bootstrap.gd
+Completed load for: 'res://scripts/device_lab_patch_bootstrap.gd' remapped 'res://scripts/device_lab_patch_bootstrap.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/content_layer_registry.gd remapped: res://scripts/layers/runtime/content_layer_registry.gd
+Completed load for: 'res://scripts/layers/runtime/content_layer_registry.gd' remapped 'res://scripts/layers/runtime/content_layer_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/world_content_service.gd remapped: res://scripts/layers/runtime/world_content_service.gd
+Completed load for: 'res://scripts/layers/runtime/world_content_service.gd' remapped 'res://scripts/layers/runtime/world_content_service.gd' at thread -1
+Loading resource: res://scripts/layers/presentation/presentation_registry.gd remapped: res://scripts/layers/presentation/presentation_registry.gd
+Completed load for: 'res://scripts/layers/presentation/presentation_registry.gd' remapped 'res://scripts/layers/presentation/presentation_registry.gd' at thread -1
+Loading resource: res://scripts/game_data.gd remapped: res://scripts/game_data.gd
+Completed load for: 'res://scripts/game_data.gd' remapped 'res://scripts/game_data.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/targeting_runtime_service.gd remapped: res://scripts/layers/runtime/targeting_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/targeting_runtime_service.gd' remapped 'res://scripts/layers/runtime/targeting_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/loot_runtime_service.gd remapped: res://scripts/layers/runtime/loot_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/loot_runtime_service.gd' remapped 'res://scripts/layers/runtime/loot_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/combat_runtime_service.gd remapped: res://scripts/layers/runtime/combat_runtime_service.gd
+Completed load for: 'res://scripts/layers/runtime/combat_runtime_service.gd' remapped 'res://scripts/layers/runtime/combat_runtime_service.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/domain_runtime_services.gd remapped: res://scripts/layers/runtime/domain_runtime_services.gd
+Completed load for: 'res://scripts/layers/runtime/domain_runtime_services.gd' remapped 'res://scripts/layers/runtime/domain_runtime_services.gd' at thread -1
+Loading resource: res://scripts/layers/rules/boss_mechanic_registry.gd remapped: res://scripts/layers/rules/boss_mechanic_registry.gd
+Completed load for: 'res://scripts/layers/rules/boss_mechanic_registry.gd' remapped 'res://scripts/layers/rules/boss_mechanic_registry.gd' at thread -1
+Loading resource: res://scripts/layers/runtime/runtime_service_facade.gd remapped: res://scripts/layers/runtime/runtime_service_facade.gd
+Completed load for: 'res://scripts/layers/runtime/runtime_service_facade.gd' remapped 'res://scripts/layers/runtime/runtime_service_facade.gd' at thread -1
+Loaded system CA certificates
+Loading resource: res://tests/m30_r4_r2/test_safe_projection.tscn remapped: res://tests/m30_r4_r2/test_safe_projection.tscn
+Loading resource: res://tests/m30_r4_r2/test_safe_projection.gd remapped: res://tests/m30_r4_r2/test_safe_projection.gd
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png
+Loading resource: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex remapped: res://.godot/imported/cow_mage_thunder_magic2.png-f1ada7cfae9bb41578ecd7be36fbb1ee.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_mage_thunder_magic2.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png
+Loading resource: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex remapped: res://.godot/imported/cow_priest_cast_wmon21.png-541f8f113f1635cd0f77bea1759fddb7.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_cast_wmon21.png' at thread -1
+Loading resource: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png remapped: res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png
+Loading resource: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex remapped: res://.godot/imported/cow_priest_fly_magic.png-4b64792ab4d2f6c6884e9ad1021249a0.ctex
+Completed load for: 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' remapped 'res://assets/art/monsters/effects/monster_target_magic/cow_priest_fly_magic.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/modal_frame.png remapped: res://assets/ui/gothic_theme/v1/sample/modal_frame.png
+Loading resource: res://.godot/imported/modal_frame.png-4bf8e66cb0b75fa44c78908a4c2e9d75.ctex remapped: res://.godot/imported/modal_frame.png-4bf8e66cb0b75fa44c78908a4c2e9d75.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/modal_frame.png' remapped 'res://assets/ui/gothic_theme/v1/sample/modal_frame.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/title_bar.png remapped: res://assets/ui/gothic_theme/v1/sample/title_bar.png
+Loading resource: res://.godot/imported/title_bar.png-bd2b21183e5e9339f21b79e35e222b5f.ctex remapped: res://.godot/imported/title_bar.png-bd2b21183e5e9339f21b79e35e222b5f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/title_bar.png' remapped 'res://assets/ui/gothic_theme/v1/sample/title_bar.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/inset_frame_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/inset_frame_single_v2.png
+Loading resource: res://.godot/imported/inset_frame_single_v2.png-08300247ff0a03e71ec010d7951cc8ef.ctex remapped: res://.godot/imported/inset_frame_single_v2.png-08300247ff0a03e71ec010d7951cc8ef.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/inset_frame_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/inset_frame_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/tab_frame_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/tab_frame_single_v2.png
+Loading resource: res://.godot/imported/tab_frame_single_v2.png-0ca893f8891a77186da88a00f866999f.ctex remapped: res://.godot/imported/tab_frame_single_v2.png-0ca893f8891a77186da88a00f866999f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/tab_frame_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/tab_frame_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_normal_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/button_normal_single_v2.png
+Loading resource: res://.godot/imported/button_normal_single_v2.png-ac46aa39d6e1f38694ecdffba19db0fc.ctex remapped: res://.godot/imported/button_normal_single_v2.png-ac46aa39d6e1f38694ecdffba19db0fc.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_normal_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_normal_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_pressed_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/button_pressed_single_v2.png
+Loading resource: res://.godot/imported/button_pressed_single_v2.png-6b6bdea689c26df6fe49bf33e1624cd8.ctex remapped: res://.godot/imported/button_pressed_single_v2.png-6b6bdea689c26df6fe49bf33e1624cd8.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_pressed_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_pressed_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_disabled_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/button_disabled_single_v2.png
+Loading resource: res://.godot/imported/button_disabled_single_v2.png-ae8bac584a63f0fa3a3adf4fe1871a5f.ctex remapped: res://.godot/imported/button_disabled_single_v2.png-ae8bac584a63f0fa3a3adf4fe1871a5f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_disabled_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_disabled_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4.png remapped: res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4.png
+Loading resource: res://.godot/imported/button_compact_normal_v4.png-d99be140b3ea0c80df4ffe56ab515d8a.ctex remapped: res://.godot/imported/button_compact_normal_v4.png-d99be140b3ea0c80df4ffe56ab515d8a.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4.png remapped: res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4.png
+Loading resource: res://.godot/imported/button_standard_normal_v4.png-cc76501cf31997b506e7ebcd919d2750.ctex remapped: res://.godot/imported/button_standard_normal_v4.png-cc76501cf31997b506e7ebcd919d2750.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4.png remapped: res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4.png
+Loading resource: res://.godot/imported/button_wide_normal_v4.png-577372e00cacc80936fa611abf627318.ctex remapped: res://.godot/imported/button_wide_normal_v4.png-577372e00cacc80936fa611abf627318.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_square_normal_v5.png remapped: res://assets/ui/gothic_theme/v1/sample/button_square_normal_v5.png
+Loading resource: res://.godot/imported/button_square_normal_v5.png-0534c4e28c707564e3375d5659397981.ctex remapped: res://.godot/imported/button_square_normal_v5.png-0534c4e28c707564e3375d5659397981.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_square_normal_v5.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_square_normal_v5.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_shortwide_normal_v5.png remapped: res://assets/ui/gothic_theme/v1/sample/button_shortwide_normal_v5.png
+Loading resource: res://.godot/imported/button_shortwide_normal_v5.png-00f3abb48338b9d3967ccf1cb4af87c6.ctex remapped: res://.godot/imported/button_shortwide_normal_v5.png-00f3abb48338b9d3967ccf1cb4af87c6.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_shortwide_normal_v5.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_shortwide_normal_v5.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_widesmall_normal_v5.png remapped: res://assets/ui/gothic_theme/v1/sample/button_widesmall_normal_v5.png
+Loading resource: res://.godot/imported/button_widesmall_normal_v5.png-fd39d2c44f25da0f570d6c9c6569e155.ctex remapped: res://.godot/imported/button_widesmall_normal_v5.png-fd39d2c44f25da0f570d6c9c6569e155.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_widesmall_normal_v5.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_widesmall_normal_v5.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_feedback_mask_v1.png
+Loading resource: res://.godot/imported/button_compact_normal_v4_feedback_mask_v1.png-3d250e0847b611840395664e9eb68c5e.ctex remapped: res://.godot/imported/button_compact_normal_v4_feedback_mask_v1.png-3d250e0847b611840395664e9eb68c5e.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_frame_only_v1.png
+Loading resource: res://.godot/imported/button_compact_normal_v4_frame_only_v1.png-6d080b15901e61a93d9e5817736bf06d.ctex remapped: res://.godot/imported/button_compact_normal_v4_frame_only_v1.png-6d080b15901e61a93d9e5817736bf06d.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_compact_normal_v4_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_feedback_mask_v1.png
+Loading resource: res://.godot/imported/button_standard_normal_v4_feedback_mask_v1.png-23ed2b3e9d0d2951345ce93c5928eb7e.ctex remapped: res://.godot/imported/button_standard_normal_v4_feedback_mask_v1.png-23ed2b3e9d0d2951345ce93c5928eb7e.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_frame_only_v1.png
+Loading resource: res://.godot/imported/button_standard_normal_v4_frame_only_v1.png-67b06271d06d7e38eee8ab14dd836269.ctex remapped: res://.godot/imported/button_standard_normal_v4_frame_only_v1.png-67b06271d06d7e38eee8ab14dd836269.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_standard_normal_v4_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_feedback_mask_v1.png
+Loading resource: res://.godot/imported/button_wide_normal_v4_feedback_mask_v1.png-a6281db1d218ec4c4144773853e8cbd8.ctex remapped: res://.godot/imported/button_wide_normal_v4_feedback_mask_v1.png-a6281db1d218ec4c4144773853e8cbd8.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_frame_only_v1.png
+Loading resource: res://.godot/imported/button_wide_normal_v4_frame_only_v1.png-b652bd22cd455ea335a8de88eda3dbc1.ctex remapped: res://.godot/imported/button_wide_normal_v4_frame_only_v1.png-b652bd22cd455ea335a8de88eda3dbc1.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_wide_normal_v4_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7.png remapped: res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7.png
+Loading resource: res://.godot/imported/character_ai_status_frame_v7.png-81a8d9cd967b986b59b62045f159c4c0.ctex remapped: res://.godot/imported/character_ai_status_frame_v7.png-81a8d9cd967b986b59b62045f159c4c0.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7.png remapped: res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7.png
+Loading resource: res://.godot/imported/character_profession_frame_v7.png-4e2d16943ee0cc52b7481f85b8b26c3d.ctex remapped: res://.godot/imported/character_profession_frame_v7.png-4e2d16943ee0cc52b7481f85b8b26c3d.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7.png remapped: res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7.png
+Loading resource: res://.godot/imported/character_profile_frame_v7.png-b4a14078d292d0b97862228e637e1e93.ctex remapped: res://.godot/imported/character_profile_frame_v7.png-b4a14078d292d0b97862228e637e1e93.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_feedback_mask_v1.png
+Loading resource: res://.godot/imported/character_ai_status_frame_v7_feedback_mask_v1.png-c58f14c582ff54602b56a45b668324bc.ctex remapped: res://.godot/imported/character_ai_status_frame_v7_feedback_mask_v1.png-c58f14c582ff54602b56a45b668324bc.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_frame_only_v1.png
+Loading resource: res://.godot/imported/character_ai_status_frame_v7_frame_only_v1.png-4a2b5a78e768783089b58c908dcd03d9.ctex remapped: res://.godot/imported/character_ai_status_frame_v7_frame_only_v1.png-4a2b5a78e768783089b58c908dcd03d9.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_ai_status_frame_v7_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_feedback_mask_v1.png
+Loading resource: res://.godot/imported/character_profession_frame_v7_feedback_mask_v1.png-083c1aba7704b355d1c5c133f9e06c43.ctex remapped: res://.godot/imported/character_profession_frame_v7_feedback_mask_v1.png-083c1aba7704b355d1c5c133f9e06c43.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_frame_only_v1.png
+Loading resource: res://.godot/imported/character_profession_frame_v7_frame_only_v1.png-65f25b0be9036c779844e214b65c16ac.ctex remapped: res://.godot/imported/character_profession_frame_v7_frame_only_v1.png-65f25b0be9036c779844e214b65c16ac.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_profession_frame_v7_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_feedback_mask_v1.png
+Loading resource: res://.godot/imported/character_profile_frame_v7_feedback_mask_v1.png-3430457439938373357d7d56ad587198.ctex remapped: res://.godot/imported/character_profile_frame_v7_feedback_mask_v1.png-3430457439938373357d7d56ad587198.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_frame_only_v1.png
+Loading resource: res://.godot/imported/character_profile_frame_v7_frame_only_v1.png-edb0c03e459d459b8ef6ce62d4d0197c.ctex remapped: res://.godot/imported/character_profile_frame_v7_frame_only_v1.png-edb0c03e459d459b8ef6ce62d4d0197c.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/sample/character_profile_frame_v7_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png remapped: res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png
+Loading resource: res://.godot/imported/inset_frame_v3.png-af38642e66051732e7145c5809b14ed8.ctex remapped: res://.godot/imported/inset_frame_v3.png-af38642e66051732e7145c5809b14ed8.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png' remapped 'res://assets/ui/gothic_theme/v1/sample/inset_frame_v3.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64.png
+Loading resource: res://.godot/imported/gem_266x64.png-fd5e2f9720282940578ad88f4141f524.ctex remapped: res://.godot/imported/gem_266x64.png-fd5e2f9720282940578ad88f4141f524.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_266x64_feedback_mask_v1.png-99629b878105d8732a0200a3a7e05f3f.ctex remapped: res://.godot/imported/gem_266x64_feedback_mask_v1.png-99629b878105d8732a0200a3a7e05f3f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_266x64_frame_only_v1.png-47109cf04dbdb0be03e294150ece9f6b.ctex remapped: res://.godot/imported/gem_266x64_frame_only_v1.png-47109cf04dbdb0be03e294150ece9f6b.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/gem_266x64_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82.png
+Loading resource: res://.godot/imported/plain_230x82.png-604c5f2177b38defefc2e39e69eb848e.ctex remapped: res://.godot/imported/plain_230x82.png-604c5f2177b38defefc2e39e69eb848e.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_230x82_feedback_mask_v1.png-678d71b113fe494feefcf3785c6ac3ab.ctex remapped: res://.godot/imported/plain_230x82_feedback_mask_v1.png-678d71b113fe494feefcf3785c6ac3ab.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_230x82_frame_only_v1.png-3437aa056d137f46e63c5915afec58c4.ctex remapped: res://.godot/imported/plain_230x82_frame_only_v1.png-3437aa056d137f46e63c5915afec58c4.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_230x82_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82.png
+Loading resource: res://.godot/imported/plain_104x82.png-17e9dbc9ecf2ce509341829c2e496279.ctex remapped: res://.godot/imported/plain_104x82.png-17e9dbc9ecf2ce509341829c2e496279.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_104x82_feedback_mask_v1.png-404f49ec4c6937be6690318d62815d81.ctex remapped: res://.godot/imported/plain_104x82_feedback_mask_v1.png-404f49ec4c6937be6690318d62815d81.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_104x82_frame_only_v1.png-e25ee3e3a79550a94e80da45b7204c0b.ctex remapped: res://.godot/imported/plain_104x82_frame_only_v1.png-e25ee3e3a79550a94e80da45b7204c0b.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_104x82_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60.png
+Loading resource: res://.godot/imported/plain_108x60.png-d4cf4f91087705b24baa29fd66f5787c.ctex remapped: res://.godot/imported/plain_108x60.png-d4cf4f91087705b24baa29fd66f5787c.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_108x60_feedback_mask_v1.png-1673cc571ed68f654be0c30059e46671.ctex remapped: res://.godot/imported/plain_108x60_feedback_mask_v1.png-1673cc571ed68f654be0c30059e46671.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_108x60_frame_only_v1.png-eca1d7fd32e5b7ffe428e4ece64b5362.ctex remapped: res://.godot/imported/plain_108x60_frame_only_v1.png-eca1d7fd32e5b7ffe428e4ece64b5362.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x60_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40.png
+Loading resource: res://.godot/imported/plain_108x40.png-3a083a00280213e69d7588b6f418e2d5.ctex remapped: res://.godot/imported/plain_108x40.png-3a083a00280213e69d7588b6f418e2d5.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_108x40_feedback_mask_v1.png-2bfc6e54eb901de1897a37ecd95ea1a1.ctex remapped: res://.godot/imported/plain_108x40_feedback_mask_v1.png-2bfc6e54eb901de1897a37ecd95ea1a1.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_108x40_frame_only_v1.png-f52dd3a52f7c066e93905c6cbcd1b454.ctex remapped: res://.godot/imported/plain_108x40_frame_only_v1.png-f52dd3a52f7c066e93905c6cbcd1b454.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/skill_exact_frames/plain_108x40_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62.png remapped: res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62.png
+Loading resource: res://.godot/imported/gem_176x62.png-57d02e48b01af3ef901c57a9f4324260.ctex remapped: res://.godot/imported/gem_176x62.png-57d02e48b01af3ef901c57a9f4324260.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62.png' remapped 'res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_176x62_feedback_mask_v1.png-3608cdf60d4ea1690136fb035903e195.ctex remapped: res://.godot/imported/gem_176x62_feedback_mask_v1.png-3608cdf60d4ea1690136fb035903e195.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_176x62_frame_only_v1.png-70ac772f5b68537b6d578bce034c5b81.ctex remapped: res://.godot/imported/gem_176x62_frame_only_v1.png-70ac772f5b68537b6d578bce034c5b81.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/inventory_exact_frames/gem_176x62_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82.png remapped: res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82.png
+Loading resource: res://.godot/imported/plain_230x82.png-eb465808bddc13abf1558b43d92f9f38.ctex remapped: res://.godot/imported/plain_230x82.png-eb465808bddc13abf1558b43d92f9f38.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82.png' remapped 'res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_230x82_feedback_mask_v1.png-4464960af32862c01374eb9d3697aa10.ctex remapped: res://.godot/imported/plain_230x82_feedback_mask_v1.png-4464960af32862c01374eb9d3697aa10.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_230x82_frame_only_v1.png-f2794f17bc189a9010ed482c325e690b.ctex remapped: res://.godot/imported/plain_230x82_frame_only_v1.png-f2794f17bc189a9010ed482c325e690b.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/map_exact_frames/plain_230x82_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50.png remapped: res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50.png
+Loading resource: res://.godot/imported/gem_342x50.png-ac7e62d0cafe2009f3258e759547ec3d.ctex remapped: res://.godot/imported/gem_342x50.png-ac7e62d0cafe2009f3258e759547ec3d.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50.png' remapped 'res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_342x50_feedback_mask_v1.png-450227b60e7ab7d8b36ab636753ed940.ctex remapped: res://.godot/imported/gem_342x50_feedback_mask_v1.png-450227b60e7ab7d8b36ab636753ed940.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_342x50_frame_only_v1.png-ba78b7af8ed20887bb8e8345dfa48211.ctex remapped: res://.godot/imported/gem_342x50_frame_only_v1.png-ba78b7af8ed20887bb8e8345dfa48211.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/map_exact_frames/gem_342x50_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51.png
+Loading resource: res://.godot/imported/gem_128x51.png-48483c89b4d40243200c785cf56ebe67.ctex remapped: res://.godot/imported/gem_128x51.png-48483c89b4d40243200c785cf56ebe67.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_128x51_feedback_mask_v1.png-fc2f49dbad2452c8feb5f0e026c32aa8.ctex remapped: res://.godot/imported/gem_128x51_feedback_mask_v1.png-fc2f49dbad2452c8feb5f0e026c32aa8.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_128x51_frame_only_v1.png-5b9f59f0cd8142a1d1ad22623b8e0033.ctex remapped: res://.godot/imported/gem_128x51_frame_only_v1.png-5b9f59f0cd8142a1d1ad22623b8e0033.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_128x51_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51.png
+Loading resource: res://.godot/imported/gem_270x51.png-abfe95a1325e7839098a5401d488de50.ctex remapped: res://.godot/imported/gem_270x51.png-abfe95a1325e7839098a5401d488de50.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_270x51_feedback_mask_v1.png-0b5cb35b2486fb0bb2eb1acb431f0b2f.ctex remapped: res://.godot/imported/gem_270x51_feedback_mask_v1.png-0b5cb35b2486fb0bb2eb1acb431f0b2f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_270x51_frame_only_v1.png-ac49197ddff92f98e82cac9a29aa346b.ctex remapped: res://.godot/imported/gem_270x51_frame_only_v1.png-ac49197ddff92f98e82cac9a29aa346b.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/gem_270x51_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46.png
+Loading resource: res://.godot/imported/plain_58x46.png-674c6562fa9ff55a73614fa529f500a0.ctex remapped: res://.godot/imported/plain_58x46.png-674c6562fa9ff55a73614fa529f500a0.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_58x46_feedback_mask_v1.png-5596909dedd939f23b98a999a0d824fc.ctex remapped: res://.godot/imported/plain_58x46_feedback_mask_v1.png-5596909dedd939f23b98a999a0d824fc.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_58x46_frame_only_v1.png-0b207ac034e3ee362f81a5c08aa36d05.ctex remapped: res://.godot/imported/plain_58x46_frame_only_v1.png-0b207ac034e3ee362f81a5c08aa36d05.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/shop_sell_exact_frames/plain_58x46_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62.png
+Loading resource: res://.godot/imported/plain_286x62.png-391be2cd81c5b19e2cf59b56121d13e0.ctex remapped: res://.godot/imported/plain_286x62.png-391be2cd81c5b19e2cf59b56121d13e0.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_286x62_feedback_mask_v1.png-cdb18319facd39071ce55e07fab502ee.ctex remapped: res://.godot/imported/plain_286x62_feedback_mask_v1.png-cdb18319facd39071ce55e07fab502ee.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_286x62_frame_only_v1.png-4649c7080747d31092cdf420462b5727.ctex remapped: res://.godot/imported/plain_286x62_frame_only_v1.png-4649c7080747d31092cdf420462b5727.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_286x62_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50.png
+Loading resource: res://.godot/imported/gem_342x50.png-85ffae25d7ebb837159e6529c4ae1242.ctex remapped: res://.godot/imported/gem_342x50.png-85ffae25d7ebb837159e6529c4ae1242.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_342x50_feedback_mask_v1.png-13637476f41c7fb84f539d41ac2d8f1a.ctex remapped: res://.godot/imported/gem_342x50_feedback_mask_v1.png-13637476f41c7fb84f539d41ac2d8f1a.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_342x50_frame_only_v1.png-a2f3bbeaf5a865cfa19eba8f10290a38.ctex remapped: res://.godot/imported/gem_342x50_frame_only_v1.png-a2f3bbeaf5a865cfa19eba8f10290a38.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/gem_342x50_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52.png
+Loading resource: res://.godot/imported/plain_128x52.png-5238fafd0f100422373fb880d35e6f64.ctex remapped: res://.godot/imported/plain_128x52.png-5238fafd0f100422373fb880d35e6f64.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_128x52_feedback_mask_v1.png-d247deccffba4744b7fa6fa8e88bed2c.ctex remapped: res://.godot/imported/plain_128x52_feedback_mask_v1.png-d247deccffba4744b7fa6fa8e88bed2c.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_128x52_frame_only_v1.png-9d6fc7265150ff5abe87cc88c684858b.ctex remapped: res://.godot/imported/plain_128x52_frame_only_v1.png-9d6fc7265150ff5abe87cc88c684858b.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/quest_exact_frames/plain_128x52_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60.png remapped: res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60.png
+Loading resource: res://.godot/imported/gem_356x60.png-a8afbf44977658b91eb5798d8d41a8f8.ctex remapped: res://.godot/imported/gem_356x60.png-a8afbf44977658b91eb5798d8d41a8f8.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60.png' remapped 'res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_356x60_feedback_mask_v1.png-9051b93cce1bf696f6d5763484143277.ctex remapped: res://.godot/imported/gem_356x60_feedback_mask_v1.png-9051b93cce1bf696f6d5763484143277.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_356x60_frame_only_v1.png-c7ca1897c656cbe0c2531e38f5e12713.ctex remapped: res://.godot/imported/gem_356x60_frame_only_v1.png-c7ca1897c656cbe0c2531e38f5e12713.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/system_menu_exact_frames/gem_356x60_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68.png remapped: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68.png
+Loading resource: res://.godot/imported/gem_356x68.png-3156ed166efef834c980ca314c27fc4e.ctex remapped: res://.godot/imported/gem_356x68.png-3156ed166efef834c980ca314c27fc4e.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68.png' remapped 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_356x68_feedback_mask_v1.png-fe73bb565d62c099fdad9cdd14c96ab3.ctex remapped: res://.godot/imported/gem_356x68_feedback_mask_v1.png-fe73bb565d62c099fdad9cdd14c96ab3.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_356x68_frame_only_v1.png-d8f99b16aa425be4f25bd77c830efa5c.ctex remapped: res://.godot/imported/gem_356x68_frame_only_v1.png-d8f99b16aa425be4f25bd77c830efa5c.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x68_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60.png remapped: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60.png
+Loading resource: res://.godot/imported/gem_356x60.png-df90645fc30e10a131e442fc91788363.ctex remapped: res://.godot/imported/gem_356x60.png-df90645fc30e10a131e442fc91788363.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60.png' remapped 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_356x60_feedback_mask_v1.png-3766320851de5ae44c27182979da2a16.ctex remapped: res://.godot/imported/gem_356x60_feedback_mask_v1.png-3766320851de5ae44c27182979da2a16.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_356x60_frame_only_v1.png-7c98a9824e4687b14c8329387f712469.ctex remapped: res://.godot/imported/gem_356x60_frame_only_v1.png-7c98a9824e4687b14c8329387f712469.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/system_settings_exact_frames/gem_356x60_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81.png
+Loading resource: res://.godot/imported/plain_184x81.png-c3838f031a9c6faebc149c2d9775dd26.ctex remapped: res://.godot/imported/plain_184x81.png-c3838f031a9c6faebc149c2d9775dd26.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_184x81_feedback_mask_v1.png-4d8d17a5f598d05de6c371f1496799b8.ctex remapped: res://.godot/imported/plain_184x81_feedback_mask_v1.png-4d8d17a5f598d05de6c371f1496799b8.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_184x81_frame_only_v1.png-7fe16fa57d57afcd823f208b8fa0c605.ctex remapped: res://.godot/imported/plain_184x81_frame_only_v1.png-7fe16fa57d57afcd823f208b8fa0c605.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81.png
+Loading resource: res://.godot/imported/plain_80x81.png-41994567cee8343beffc879f63e0a8e0.ctex remapped: res://.godot/imported/plain_80x81.png-41994567cee8343beffc879f63e0a8e0.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_feedback_mask_v1.png
+Loading resource: res://.godot/imported/plain_80x81_feedback_mask_v1.png-3002f2cfeaad0118557f0b182c704c96.ctex remapped: res://.godot/imported/plain_80x81_feedback_mask_v1.png-3002f2cfeaad0118557f0b182c704c96.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_frame_only_v1.png
+Loading resource: res://.godot/imported/plain_80x81_frame_only_v1.png-0dd6c850bdd589a74b78c24305e5f104.ctex remapped: res://.godot/imported/plain_80x81_frame_only_v1.png-0dd6c850bdd589a74b78c24305e5f104.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_80x81_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132.png
+Loading resource: res://.godot/imported/gem_98x132.png-8fe37c89a684993f2810eb054b9a42c6.ctex remapped: res://.godot/imported/gem_98x132.png-8fe37c89a684993f2810eb054b9a42c6.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_98x132_feedback_mask_v1.png-cb2e5955a1c157208ae6eb2f368b246f.ctex remapped: res://.godot/imported/gem_98x132_feedback_mask_v1.png-cb2e5955a1c157208ae6eb2f368b246f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_98x132_frame_only_v1.png-eda5e43717d7b18c958125d9b75e625b.ctex remapped: res://.godot/imported/gem_98x132_frame_only_v1.png-eda5e43717d7b18c958125d9b75e625b.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_98x132_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62.png
+Loading resource: res://.godot/imported/gem_286x62.png-611c68364b23d918a5bbdfd6c527bbf3.ctex remapped: res://.godot/imported/gem_286x62.png-611c68364b23d918a5bbdfd6c527bbf3.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_286x62_feedback_mask_v1.png-c5c42f33ac0f98d58ed10838448a136c.ctex remapped: res://.godot/imported/gem_286x62_feedback_mask_v1.png-c5c42f33ac0f98d58ed10838448a136c.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_286x62_frame_only_v1.png-0ce5226fa0631ee1cf055d17a544d522.ctex remapped: res://.godot/imported/gem_286x62_frame_only_v1.png-0ce5226fa0631ee1cf055d17a544d522.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_286x62_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62.png
+Loading resource: res://.godot/imported/gem_120x62.png-5bf9808dee2cb35b848c7c3fd658d128.ctex remapped: res://.godot/imported/gem_120x62.png-5bf9808dee2cb35b848c7c3fd658d128.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_120x62_feedback_mask_v1.png-b07590cace3e0172f639083d9a0c1fce.ctex remapped: res://.godot/imported/gem_120x62_feedback_mask_v1.png-b07590cace3e0172f639083d9a0c1fce.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_120x62_frame_only_v1.png-b34643212d746bee43584a5afb227a35.ctex remapped: res://.godot/imported/gem_120x62_frame_only_v1.png-b34643212d746bee43584a5afb227a35.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_120x62_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58.png
+Loading resource: res://.godot/imported/gem_310x58.png-96850063601af618a4895ace103779f0.ctex remapped: res://.godot/imported/gem_310x58.png-96850063601af618a4895ace103779f0.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_310x58_feedback_mask_v1.png-30eb1564b734b23f779e88da70d452fe.ctex remapped: res://.godot/imported/gem_310x58_feedback_mask_v1.png-30eb1564b734b23f779e88da70d452fe.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_310x58_frame_only_v1.png-d57bff642deb1d5358aa55438cf91c9a.ctex remapped: res://.godot/imported/gem_310x58_frame_only_v1.png-d57bff642deb1d5358aa55438cf91c9a.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/character_hall_exact_frames/gem_310x58_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64.png remapped: res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64.png
+Loading resource: res://.godot/imported/gem_440x64.png-d91a16976fbaac1e602db89ea4892e2c.ctex remapped: res://.godot/imported/gem_440x64.png-d91a16976fbaac1e602db89ea4892e2c.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64.png' remapped 'res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_440x64_feedback_mask_v1.png-3167cfa28bbf0771eb5a601f449fd11f.ctex remapped: res://.godot/imported/gem_440x64_feedback_mask_v1.png-3167cfa28bbf0771eb5a601f449fd11f.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_440x64_frame_only_v1.png-4ff786c5623e480ef62bf90cea382d5d.ctex remapped: res://.godot/imported/gem_440x64_frame_only_v1.png-4ff786c5623e480ef62bf90cea382d5d.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/death_revival_exact_frames/gem_440x64_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58.png remapped: res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58.png
+Loading resource: res://.godot/imported/gem_202x58.png-6d1e6b1b20e84986a5ded90400b6dcb2.ctex remapped: res://.godot/imported/gem_202x58.png-6d1e6b1b20e84986a5ded90400b6dcb2.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58.png' remapped 'res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_feedback_mask_v1.png remapped: res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_feedback_mask_v1.png
+Loading resource: res://.godot/imported/gem_202x58_feedback_mask_v1.png-7a5e29f04d14d3ede2caee675bf6d927.ctex remapped: res://.godot/imported/gem_202x58_feedback_mask_v1.png-7a5e29f04d14d3ede2caee675bf6d927.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_feedback_mask_v1.png' remapped 'res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_feedback_mask_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_frame_only_v1.png remapped: res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_frame_only_v1.png
+Loading resource: res://.godot/imported/gem_202x58_frame_only_v1.png-ab367c222d2ea289eb787d44c7f54cea.ctex remapped: res://.godot/imported/gem_202x58_frame_only_v1.png-ab367c222d2ea289eb787d44c7f54cea.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_frame_only_v1.png' remapped 'res://assets/ui/gothic_theme/v1/confirmation_exact_frames/gem_202x58_frame_only_v1.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/item_slot_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/item_slot_single_v2.png
+Loading resource: res://.godot/imported/item_slot_single_v2.png-d5eaa2fac2170c8e16e043a4d45277d5.ctex remapped: res://.godot/imported/item_slot_single_v2.png-d5eaa2fac2170c8e16e043a4d45277d5.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/item_slot_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/item_slot_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/shop_card_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/shop_card_single_v2.png
+Loading resource: res://.godot/imported/shop_card_single_v2.png-51a435d41e836add94b0863614d0c4b2.ctex remapped: res://.godot/imported/shop_card_single_v2.png-51a435d41e836add94b0863614d0c4b2.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/shop_card_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/shop_card_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/close_ring_single_v2.png remapped: res://assets/ui/gothic_theme/v1/sample/close_ring_single_v2.png
+Loading resource: res://.godot/imported/close_ring_single_v2.png-5559a8cd96b10a5d8af3dc1c6ed863c9.ctex remapped: res://.godot/imported/close_ring_single_v2.png-5559a8cd96b10a5d8af3dc1c6ed863c9.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/close_ring_single_v2.png' remapped 'res://assets/ui/gothic_theme/v1/sample/close_ring_single_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_compact_disabled_v4.png remapped: res://assets/ui/gothic_theme/v1/sample/button_compact_disabled_v4.png
+Loading resource: res://.godot/imported/button_compact_disabled_v4.png-a0e1781ff6a4117430c0d088975b0fc7.ctex remapped: res://.godot/imported/button_compact_disabled_v4.png-a0e1781ff6a4117430c0d088975b0fc7.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_compact_disabled_v4.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_compact_disabled_v4.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_standard_disabled_v4.png remapped: res://assets/ui/gothic_theme/v1/sample/button_standard_disabled_v4.png
+Loading resource: res://.godot/imported/button_standard_disabled_v4.png-bd40a3d8aabac20139590716d0c3d1f0.ctex remapped: res://.godot/imported/button_standard_disabled_v4.png-bd40a3d8aabac20139590716d0c3d1f0.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_standard_disabled_v4.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_standard_disabled_v4.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_wide_disabled_v4.png remapped: res://assets/ui/gothic_theme/v1/sample/button_wide_disabled_v4.png
+Loading resource: res://.godot/imported/button_wide_disabled_v4.png-f66c0a8f39b4acc8fdea67a26c0eef4e.ctex remapped: res://.godot/imported/button_wide_disabled_v4.png-f66c0a8f39b4acc8fdea67a26c0eef4e.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_wide_disabled_v4.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_wide_disabled_v4.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_square_disabled_v5.png remapped: res://assets/ui/gothic_theme/v1/sample/button_square_disabled_v5.png
+Loading resource: res://.godot/imported/button_square_disabled_v5.png-ebacb778d0734ea78e3e7847deb6ba01.ctex remapped: res://.godot/imported/button_square_disabled_v5.png-ebacb778d0734ea78e3e7847deb6ba01.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_square_disabled_v5.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_square_disabled_v5.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_shortwide_disabled_v5.png remapped: res://assets/ui/gothic_theme/v1/sample/button_shortwide_disabled_v5.png
+Loading resource: res://.godot/imported/button_shortwide_disabled_v5.png-72a1902e555c698e733534413dce177a.ctex remapped: res://.godot/imported/button_shortwide_disabled_v5.png-72a1902e555c698e733534413dce177a.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_shortwide_disabled_v5.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_shortwide_disabled_v5.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/sample/button_widesmall_disabled_v5.png remapped: res://assets/ui/gothic_theme/v1/sample/button_widesmall_disabled_v5.png
+Loading resource: res://.godot/imported/button_widesmall_disabled_v5.png-6b5d43ac0da0b68dc3814e747c43c902.ctex remapped: res://.godot/imported/button_widesmall_disabled_v5.png-6b5d43ac0da0b68dc3814e747c43c902.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/sample/button_widesmall_disabled_v5.png' remapped 'res://assets/ui/gothic_theme/v1/sample/button_widesmall_disabled_v5.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png remapped: res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png
+Loading resource: res://.godot/imported/target_bar_v2.png-7afbdb827c97bcc16e867ed412e5e968.ctex remapped: res://.godot/imported/target_bar_v2.png-7afbdb827c97bcc16e867ed412e5e968.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/target_bar_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png remapped: res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png
+Loading resource: res://.godot/imported/utility_stack_v2.png-04b6a991a12810e4c783d99e4a7ebe36.ctex remapped: res://.godot/imported/utility_stack_v2.png-04b6a991a12810e4c783d99e4a7ebe36.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/utility_stack_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png remapped: res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png
+Loading resource: res://.godot/imported/joystick_v2.png-ec0c26cfa916fb49715f36a4d28d8e43.ctex remapped: res://.godot/imported/joystick_v2.png-ec0c26cfa916fb49715f36a4d28d8e43.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/joystick_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png remapped: res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png
+Loading resource: res://.godot/imported/bottom_chassis_v2.png-ec18f5a513d7173f5707197e3e32b00d.ctex remapped: res://.godot/imported/bottom_chassis_v2.png-ec18f5a513d7173f5707197e3e32b00d.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/bottom_chassis_v2.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png remapped: res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png
+Loading resource: res://.godot/imported/round_action_frame_v3.png-1d582eb100499ceb8f2d9013e0c36146.ctex remapped: res://.godot/imported/round_action_frame_v3.png-1d582eb100499ceb8f2d9013e0c36146.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/round_action_frame_v3.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader remapped: res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader' remapped 'res://assets/ui/gothic_hud/v2/runtime/circular_icon_mask.gdshader' at thread -1
+Loading resource: res://assets/art/characters/taoist/skill_icons/defense.png remapped: res://assets/art/characters/taoist/skill_icons/defense.png
+Loading resource: res://.godot/imported/defense.png-1fc32b33ad391dfb500b261241f63b68.ctex remapped: res://.godot/imported/defense.png-1fc32b33ad391dfb500b261241f63b68.ctex
+Completed load for: 'res://assets/art/characters/taoist/skill_icons/defense.png' remapped 'res://assets/art/characters/taoist/skill_icons/defense.png' at thread -1
+Loading resource: res://assets/art/characters/taoist/skill_icons/magic_defense.png remapped: res://assets/art/characters/taoist/skill_icons/magic_defense.png
+Loading resource: res://.godot/imported/magic_defense.png-f60292d3de18b1c54caf11ec8650be8a.ctex remapped: res://.godot/imported/magic_defense.png-f60292d3de18b1c54caf11ec8650be8a.ctex
+Completed load for: 'res://assets/art/characters/taoist/skill_icons/magic_defense.png' remapped 'res://assets/art/characters/taoist/skill_icons/magic_defense.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_basic_swordsmanship.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_basic_swordsmanship.png
+Loading resource: res://.godot/imported/warrior_basic_swordsmanship.png-1fc8b37a04289066e1366779f2a2d701.ctex remapped: res://.godot/imported/warrior_basic_swordsmanship.png-1fc8b37a04289066e1366779f2a2d701.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_basic_swordsmanship.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_basic_swordsmanship.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_slaying_swordsmanship.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_slaying_swordsmanship.png
+Loading resource: res://.godot/imported/warrior_slaying_swordsmanship.png-a7993abeff02eabb3a300cd5c761d9d3.ctex remapped: res://.godot/imported/warrior_slaying_swordsmanship.png-a7993abeff02eabb3a300cd5c761d9d3.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_slaying_swordsmanship.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_slaying_swordsmanship.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_thrusting.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_thrusting.png
+Loading resource: res://.godot/imported/warrior_thrusting.png-e9a82f21b573a1b41416887031774916.ctex remapped: res://.godot/imported/warrior_thrusting.png-e9a82f21b573a1b41416887031774916.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_thrusting.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_thrusting.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_half_moon.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_half_moon.png
+Loading resource: res://.godot/imported/warrior_half_moon.png-bb268f304ec290d348e15e3ff81d43b7.ctex remapped: res://.godot/imported/warrior_half_moon.png-bb268f304ec290d348e15e3ff81d43b7.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_half_moon.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_half_moon.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_wild_rush.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_wild_rush.png
+Loading resource: res://.godot/imported/warrior_wild_rush.png-9223515eb72dfe2ea0d232c91fd23251.ctex remapped: res://.godot/imported/warrior_wild_rush.png-9223515eb72dfe2ea0d232c91fd23251.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_wild_rush.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_wild_rush.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_fire_sword.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_fire_sword.png
+Loading resource: res://.godot/imported/warrior_fire_sword.png-b4dd2c737fe8f5e879a65672e7f38a17.ctex remapped: res://.godot/imported/warrior_fire_sword.png-b4dd2c737fe8f5e879a65672e7f38a17.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_fire_sword.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/warrior_fire_sword.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fireball.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fireball.png
+Loading resource: res://.godot/imported/wizard_fireball.png-0b44c2b2e772946c3c7b4236b0836679.ctex remapped: res://.godot/imported/wizard_fireball.png-0b44c2b2e772946c3c7b4236b0836679.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fireball.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fireball.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_repulsion_ring.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_repulsion_ring.png
+Loading resource: res://.godot/imported/wizard_repulsion_ring.png-43eab3415ef7183642887f7d97da87dd.ctex remapped: res://.godot/imported/wizard_repulsion_ring.png-43eab3415ef7183642887f7d97da87dd.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_repulsion_ring.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_repulsion_ring.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_temptation_light.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_temptation_light.png
+Loading resource: res://.godot/imported/wizard_temptation_light.png-19562e61aaab59d502547975ebef20dc.ctex remapped: res://.godot/imported/wizard_temptation_light.png-19562e61aaab59d502547975ebef20dc.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_temptation_light.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_temptation_light.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hellfire.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hellfire.png
+Loading resource: res://.godot/imported/wizard_hellfire.png-15fbdf55d06e958b2d04a37bc011b7b6.ctex remapped: res://.godot/imported/wizard_hellfire.png-15fbdf55d06e958b2d04a37bc011b7b6.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hellfire.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hellfire.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_lightning.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_lightning.png
+Loading resource: res://.godot/imported/wizard_lightning.png-6065e1a3d726bf7242e15c5495a4cd20.ctex remapped: res://.godot/imported/wizard_lightning.png-6065e1a3d726bf7242e15c5495a4cd20.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_lightning.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_lightning.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_teleport.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_teleport.png
+Loading resource: res://.godot/imported/wizard_teleport.png-5ccb3b1a16810f50123dbcc33f82d163.ctex remapped: res://.godot/imported/wizard_teleport.png-5ccb3b1a16810f50123dbcc33f82d163.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_teleport.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_teleport.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_great_fireball.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_great_fireball.png
+Loading resource: res://.godot/imported/wizard_great_fireball.png-bc85f9e967744078377759d9d6c5473e.ctex remapped: res://.godot/imported/wizard_great_fireball.png-bc85f9e967744078377759d9d6c5473e.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_great_fireball.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_great_fireball.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_exploding_flame.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_exploding_flame.png
+Loading resource: res://.godot/imported/wizard_exploding_flame.png-28306ef6ec3992c07fe0b6565dbaf4c9.ctex remapped: res://.godot/imported/wizard_exploding_flame.png-28306ef6ec3992c07fe0b6565dbaf4c9.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_exploding_flame.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_exploding_flame.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fire_wall.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fire_wall.png
+Loading resource: res://.godot/imported/wizard_fire_wall.png-845f4fc62aa543752c4c5ed09779c32c.ctex remapped: res://.godot/imported/wizard_fire_wall.png-845f4fc62aa543752c4c5ed09779c32c.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fire_wall.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_fire_wall.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_laser.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_laser.png
+Loading resource: res://.godot/imported/wizard_laser.png-fceb06fc3edbc2a9bb02bc72a7cd31b3.ctex remapped: res://.godot/imported/wizard_laser.png-fceb06fc3edbc2a9bb02bc72a7cd31b3.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_laser.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_laser.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hell_lightning.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hell_lightning.png
+Loading resource: res://.godot/imported/wizard_hell_lightning.png-525080d1d7186b168b1e236b7533bea6.ctex remapped: res://.godot/imported/wizard_hell_lightning.png-525080d1d7186b168b1e236b7533bea6.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hell_lightning.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_hell_lightning.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_magic_shield.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_magic_shield.png
+Loading resource: res://.godot/imported/wizard_magic_shield.png-5632e099cfb915dff3e435dac8d7e033.ctex remapped: res://.godot/imported/wizard_magic_shield.png-5632e099cfb915dff3e435dac8d7e033.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_magic_shield.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_magic_shield.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_holy_word.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_holy_word.png
+Loading resource: res://.godot/imported/wizard_holy_word.png-1df06d5ef9cf36dba413d33a31d7a5e2.ctex remapped: res://.godot/imported/wizard_holy_word.png-1df06d5ef9cf36dba413d33a31d7a5e2.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_holy_word.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_holy_word.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_ice_storm.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_ice_storm.png
+Loading resource: res://.godot/imported/wizard_ice_storm.png-fed321eceb7527f3e48927dc0309abee.ctex remapped: res://.godot/imported/wizard_ice_storm.png-fed321eceb7527f3e48927dc0309abee.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_ice_storm.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/wizard_ice_storm.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_healing.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_healing.png
+Loading resource: res://.godot/imported/taoist_healing.png-8060d58edd91dbb50283d5d205163f3d.ctex remapped: res://.godot/imported/taoist_healing.png-8060d58edd91dbb50283d5d205163f3d.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_healing.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_healing.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_spiritual_warfare.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_spiritual_warfare.png
+Loading resource: res://.godot/imported/taoist_spiritual_warfare.png-f9a9c53a62c7569005f35bdb63079550.ctex remapped: res://.godot/imported/taoist_spiritual_warfare.png-f9a9c53a62c7569005f35bdb63079550.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_spiritual_warfare.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_spiritual_warfare.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_poison.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_poison.png
+Loading resource: res://.godot/imported/taoist_poison.png-c307c0d7011eb33be549b0871efed0ae.ctex remapped: res://.godot/imported/taoist_poison.png-c307c0d7011eb33be549b0871efed0ae.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_poison.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_poison.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_soul_fire_talisman.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_soul_fire_talisman.png
+Loading resource: res://.godot/imported/taoist_soul_fire_talisman.png-e4a12f0365da7d55a88ceff56b9355a7.ctex remapped: res://.godot/imported/taoist_soul_fire_talisman.png-e4a12f0365da7d55a88ceff56b9355a7.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_soul_fire_talisman.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_soul_fire_talisman.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_skeleton.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_skeleton.png
+Loading resource: res://.godot/imported/taoist_summon_skeleton.png-2a46dcebde9ef586b320c0a5f008c376.ctex remapped: res://.godot/imported/taoist_summon_skeleton.png-2a46dcebde9ef586b320c0a5f008c376.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_skeleton.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_skeleton.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_invisibility.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_invisibility.png
+Loading resource: res://.godot/imported/taoist_invisibility.png-a1468fe0cd79b7c7217f4c93ae3cd7af.ctex remapped: res://.godot/imported/taoist_invisibility.png-a1468fe0cd79b7c7217f4c93ae3cd7af.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_invisibility.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_invisibility.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_invisibility.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_invisibility.png
+Loading resource: res://.godot/imported/taoist_mass_invisibility.png-c2b85986f910fc5ace3cba8e0c630167.ctex remapped: res://.godot/imported/taoist_mass_invisibility.png-c2b85986f910fc5ace3cba8e0c630167.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_invisibility.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_invisibility.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_magic_defense.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_magic_defense.png
+Loading resource: res://.godot/imported/taoist_magic_defense.png-ec24ec8ee59a3ce2fe4f49adad49ecf6.ctex remapped: res://.godot/imported/taoist_magic_defense.png-ec24ec8ee59a3ce2fe4f49adad49ecf6.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_magic_defense.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_magic_defense.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_defense.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_defense.png
+Loading resource: res://.godot/imported/taoist_defense.png-7cc366965c239de547ea881d591d6a3d.ctex remapped: res://.godot/imported/taoist_defense.png-7cc366965c239de547ea881d591d6a3d.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_defense.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_defense.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_revelation.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_revelation.png
+Loading resource: res://.godot/imported/taoist_revelation.png-f5e27c566e9464f69ba79895d8bc75b5.ctex remapped: res://.godot/imported/taoist_revelation.png-f5e27c566e9464f69ba79895d8bc75b5.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_revelation.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_revelation.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_entrapment.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_entrapment.png
+Loading resource: res://.godot/imported/taoist_entrapment.png-2812bdd8714a3932107807e0c6c9cf78.ctex remapped: res://.godot/imported/taoist_entrapment.png-2812bdd8714a3932107807e0c6c9cf78.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_entrapment.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_entrapment.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_healing.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_healing.png
+Loading resource: res://.godot/imported/taoist_mass_healing.png-bf6b0a0f7f3589dc78799156c2ff6239.ctex remapped: res://.godot/imported/taoist_mass_healing.png-bf6b0a0f7f3589dc78799156c2ff6239.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_healing.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_mass_healing.png' at thread -1
+Loading resource: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_divine_beast.png remapped: res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_divine_beast.png
+Loading resource: res://.godot/imported/taoist_summon_divine_beast.png-1856b7998f789cb4c20593114cdde9f2.ctex remapped: res://.godot/imported/taoist_summon_divine_beast.png-1856b7998f789cb4c20593114cdde9f2.ctex
+Completed load for: 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_divine_beast.png' remapped 'res://assets/ui/gothic_hud/v2/runtime/skill_icons/generated_v2/taoist_summon_divine_beast.png' at thread -1
+Loading resource: res://assets/branding/game_icon.png remapped: res://assets/branding/game_icon.png
+Loading resource: res://.godot/imported/game_icon.png-3eef35d1ca2cc65faf84387bdd9bf3b8.ctex remapped: res://.godot/imported/game_icon.png-3eef35d1ca2cc65faf84387bdd9bf3b8.ctex
+Completed load for: 'res://assets/branding/game_icon.png' remapped 'res://assets/branding/game_icon.png' at thread -1
+Loading resource: res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg remapped: res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg
+Loading resource: res://.godot/imported/loading_battlefield_background.jpg-1d8d91119e20b51eb4a7a4da368e7d8a.ctex remapped: res://.godot/imported/loading_battlefield_background.jpg-1d8d91119e20b51eb4a7a4da368e7d8a.ctex
+Completed load for: 'res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg' remapped 'res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg' at thread -1
+Completed load for: 'res://tests/m30_r4_r2/test_safe_projection.gd' remapped 'res://tests/m30_r4_r2/test_safe_projection.gd' at thread -1
+Completed load for: 'res://tests/m30_r4_r2/test_safe_projection.tscn' remapped 'res://tests/m30_r4_r2/test_safe_projection.tscn' at thread -1
+数据库载入完成：地图209 怪物153 Boss20 装备175 技能等级132 掉落槽3424 任务9
+M30_R2_SAFE_PROJECTION_PASS checks=24 failures=0 contract=pre_R2_centre_trigger
+XR: Clearing primary interface
+XR: Removed interface "Native mobile"
+XR: Removed interface "OpenXR"
+Leaked instance: GDScriptNativeClass:9223372049555129050 - Reference count: 1
+Leaked instance: GDScript:9223372085324154349 - Reference count: 1
+Leaked instance: Node:222650435078 - Node path: 
+Hint: Leaked instances typically happen when nodes are removed from the scene tree (with `remove_child()`) but not freed (with `free()` or `queue_free()`).
+Resource still in use: res://scripts/layers/runtime/combat_runtime_service.gd (GDScript)
+Orphan StringName: _target_stats_with_runtime_buffs (static: 0, total: 1)
+Orphan StringName: CombatRuntime (static: 0, total: 1)
+Orphan StringName: _direct_spell_stats_scratch (static: 0, total: 3)
+Orphan StringName: _legacy_target_stats_with_runtime_buffs_into (static: 0, total: 1)
+Orphan StringName: CombatResolutionRulesScript (static: 0, total: 1)
+Orphan StringName: apply_damage (static: 0, total: 1)
+Orphan StringName: _target_stats_with_runtime_buffs_into (static: 0, total: 1)
+Orphan StringName: _target_rejects_damage (static: 0, total: 1)
+Orphan StringName: apply_player_direct_spell_damage (static: 0, total: 1)
+Orphan StringName: Node (static: 1, total: 2)
+Orphan StringName: face_target_screen_px (static: 0, total: 1)
+Orphan StringName: apply_enemy_physical_damage (static: 0, total: 1)
+Orphan StringName: apply_enemy_direct_spell_damage (static: 0, total: 1)
+StringName: 13 unclaimed string names at exit.

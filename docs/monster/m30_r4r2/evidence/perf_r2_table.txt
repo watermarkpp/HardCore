@@ -1,0 +1,13 @@
+dense_crowd              10 | base 17.117 | r2 16.726 | gate 17.973 | PASS | delta -0.392 ms
+dense_crowd              20 | base 23.166 | r2 23.557 | gate 24.324 | PASS | delta +0.391 ms
+dense_crowd              30 | base 29.363 | r2 31.026 | gate 30.831 | FAIL | delta +1.663 ms
+open_pursuit             10 | base 16.495 | r2 16.390 | gate 17.320 | PASS | delta -0.105 ms
+open_pursuit             20 | base 21.523 | r2 20.601 | gate 22.599 | PASS | delta -0.922 ms
+open_pursuit             30 | base 25.340 | r2 24.151 | gate 26.608 | PASS | delta -1.189 ms
+sustained_close_attacks  10 | base 17.958 | r2 17.957 | gate 18.856 | PASS | delta -0.000 ms
+sustained_close_attacks  20 | base 24.272 | r2 24.468 | gate 25.485 | PASS | delta +0.196 ms
+sustained_close_attacks  30 | base 30.494 | r2 32.147 | gate 32.018 | FAIL | delta +1.653 ms
+world_obstacles          10 | base 16.233 | r2 16.279 | gate 17.045 | PASS | delta +0.046 ms
+world_obstacles          20 | base 16.884 | r2 18.755 | gate 17.728 | FAIL | delta +1.871 ms
+world_obstacles          30 | base 21.975 | r2 22.173 | gate 23.074 | PASS | delta +0.198 ms
+gates: 9/12 PASS

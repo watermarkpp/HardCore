@@ -11,7 +11,7 @@ signal save_and_exit_requested
 signal audio_setting_changed(request: Dictionary)
 
 const ACTION_CONTRACT_ID := "ui.system_menu.action.v1"
-const AUDIO_CONTRACT_ID := "ui.audio.setting.v1"
+const AUDIO_CONTRACT_ID := "ui.audio.setting.v2"
 const PANEL_RECT := Rect2(390, 56, 500, 608)
 
 var modal: Panel
@@ -23,6 +23,10 @@ var continue_button: Button
 var character_select_button: Button
 var settings_button: Button
 var save_exit_button: Button
+var music_slider: HSlider
+var sfx_slider: HSlider
+var loot_filter_slider: HSlider
+var audio_save_note: Label
 var music_toggle: CheckButton
 var sfx_toggle: CheckButton
 var music_status_label: Label
@@ -32,9 +36,12 @@ var current_page := "main"
 var music_enabled := true
 var sfx_enabled := true
 var _action_feedback_serial := 0
+var _layout_initialized := false
+var _layout_apply_count := 0
 
 
 func _ready() -> void:
+	set_meta("calibration_retired_paths", ["SystemMenuModal/SettingsPage/MusicToggle", "SystemMenuModal/SettingsPage/SFXToggle", "SystemMenuModal/SettingsPage/MusicFrame", "SystemMenuModal/SettingsPage/SFXFrame", "SystemMenuModal/SettingsPage/MusicTitle", "SystemMenuModal/SettingsPage/SFXTitle", "SystemMenuModal/SettingsPage/MusicStatus", "SystemMenuModal/SettingsPage/SFXStatus", "SystemMenuModal/SettingsPage/SettingsNote", "SystemMenuModal/SettingsPage/SettingsFooter"])
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -42,7 +49,10 @@ func _ready() -> void:
 	_build_background()
 	_build_modal()
 	show_main_page()
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
+	_ensure_layout_initialized()
+	AudioPreferences.levels_changed.connect(set_audio_levels)
+	visibility_changed.connect(_ui_audio_visibility_changed)
+	set_audio_levels(AudioPreferences.music_volume, AudioPreferences.sfx_volume)
 
 
 func _build_background() -> void:
@@ -95,13 +105,20 @@ func _build_main_page() -> void:
 	status_label.add_theme_color_override("font_color", Color("b9c9a8"))
 	status.add_child(status_label)
 	continue_button = _menu_button(main_page, "ContinueButton", "继续游戏", 198, "system_menu.continue")
-	continue_button.theme_type_variation = "GothicComponentButton"
+	continue_button.theme_type_variation = "GothicSystemMenuGemButton"
+	continue_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	continue_button.pressed.connect(_request_continue)
 	settings_button = _menu_button(main_page, "SettingsButton", "游戏设置", 270, "system_menu.settings")
+	settings_button.theme_type_variation = "GothicSystemMenuGemButton"
+	settings_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_button.pressed.connect(show_settings_page)
 	character_select_button = _menu_button(main_page, "CharacterSelectButton", "返回人物选择", 342, "system_menu.return_to_character_select")
+	character_select_button.theme_type_variation = "GothicSystemMenuGemButton"
+	character_select_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	character_select_button.pressed.connect(_request_character_select)
 	save_exit_button = _menu_button(main_page, "SaveExitButton", "保存并退出", 414, "system_menu.save_and_exit")
+	save_exit_button.theme_type_variation = "GothicSystemMenuGemButton"
+	save_exit_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	save_exit_button.pressed.connect(_request_save_exit)
 	var footer := Label.new()
 	footer.name = "Footer"
@@ -120,35 +137,62 @@ func _build_settings_page() -> void:
 	settings_page.name = "SettingsPage"
 	settings_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal.add_child(settings_page)
-	settings_title = _title_bar(settings_page, "游戏设置", "声音")
-	music_toggle = _audio_toggle(settings_page, "MusicToggle", "游戏音乐", 158, "audio.music.enabled")
-	music_toggle.toggled.connect(_on_music_toggled)
-	music_status_label = _toggle_status(settings_page, "MusicStatus", 158)
-	sfx_toggle = _audio_toggle(settings_page, "SFXToggle", "游戏音效", 250, "audio.sfx.enabled")
-	sfx_toggle.toggled.connect(_on_sfx_toggled)
-	sfx_status_label = _toggle_status(settings_page, "SFXStatus", 250)
-	var note := Label.new()
-	note.name = "SettingsNote"
-	note.text = "更多游戏设置将在后续版本加入"
-	note.position = Vector2(72, 352)
-	note.size = Vector2(356, 32)
-	note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	note.theme_type_variation = "GothicMutedLabel"
-	settings_page.add_child(note)
+	settings_title = _title_bar(settings_page, "游戏设置", "")
+	# Accepted in the production calibrator on 2026-09-14. Keep this header
+	# inside the modal opening; the old y=18 placed it beneath the top ornament.
+	var title_frame := settings_title.get_parent() as Control
+	title_frame.position.y = 66.0
+	title_frame.set_meta("calibration_layout_revision", 9)
+	settings_title.set_meta("calibration_layout_revision", 9)
+	settings_title.size.y = 34.0
+	title_frame.get_node("Subtitle").hide()
+	title_frame.get_node("Subtitle").set_meta("calibration_layout_revision", 9)
+	music_slider = _ui_volume_row("MusicVolume", "游戏音乐", 148.0, "music")
+	sfx_slider = _ui_volume_row("SFXVolume", "游戏音效", 230.0, "sfx")
+	loot_filter_slider = _ui_volume_row("LootFilter", "物品过滤", 312.0, "loot_filter")
+	loot_filter_slider.max_value = 2.0
+	loot_filter_slider.tick_count = 3
+	loot_filter_slider.ticks_on_borders = true
+	loot_filter_slider.set_value_no_signal(LootPreferences.filter_level)
+	loot_filter_slider.position = Vector2(70, 36)
+	loot_filter_slider.size = Vector2(216, 28)
+	loot_filter_slider.set_meta("setting_id", "loot.filter.level")
+	var filter_row := loot_filter_slider.get_parent() as Control
+	filter_row.size.y = 100.0
+	filter_row.get_node("Percent").hide()
+	var caption := filter_row.get_node("Caption") as Label
+	caption.position = Vector2(20, 12)
+	caption.size = Vector2(316, 22)
+	var labels := ["关闭", "沃玛以下不显示", "祖玛以下不显示"]
+	for index in range(3):
+		var label := Label.new()
+		label.text = labels[index]
+		label.position = Vector2(16 + index * 108, 68)
+		label.size = Vector2(108, 20)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 11)
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		filter_row.add_child(label)
+	music_status_label = settings_page.get_node("MusicVolume/Percent") as Label
+	sfx_status_label = settings_page.get_node("SFXVolume/Percent") as Label
+	audio_save_note = Label.new()
+	audio_save_note.name = "VolumeSaveNote"
+	audio_save_note.position = Vector2(72, 496)
+	audio_save_note.size = Vector2(356, 32)
+	audio_save_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	audio_save_note.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	audio_save_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	audio_save_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	audio_save_note.theme_type_variation = "GothicMutedLabel"
+	audio_save_note.text = ""
+	audio_save_note.hide()
+	audio_save_note.set_meta("calibration_layout_revision", 9)
+	settings_page.add_child(audio_save_note)
 	settings_back_button = _menu_button(settings_page, "SettingsBackButton", "返回游戏菜单", 430, "system_menu.settings.back")
-	settings_back_button.theme_type_variation = "GothicComponentButton"
+	settings_back_button.set_meta("calibration_layout_revision", 9)
+	settings_back_button.theme_type_variation = "GothicSystemSettingsBackGemButton"
+	settings_back_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	settings_back_button.pressed.connect(show_main_page)
-	var footer := Label.new()
-	footer.name = "SettingsFooter"
-	footer.text = "开关状态由游戏音频服务保存并应用"
-	footer.position = Vector2(60, 510)
-	footer.size = Vector2(380, 28)
-	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	footer.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	footer.theme_type_variation = "GothicMutedLabel"
-	footer.add_theme_font_size_override("font_size", 12)
-	settings_page.add_child(footer)
 
 
 func _title_bar(parent: Control, title_text: String, subtitle_text: String) -> Label:
@@ -199,7 +243,7 @@ func _audio_toggle(parent: Control, node_name: String, label_text: String, y: fl
 	frame.name = node_name.trim_suffix("Toggle") + "Frame"
 	frame.position = Vector2(72, y)
 	frame.size = Vector2(356, 68)
-	frame.theme_type_variation = "GothicComponentButton"
+	frame.theme_type_variation = "GothicSystemSettingsRowGemButton"
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.focus_mode = Control.FOCUS_NONE
 	frame.set_meta("calibration_layout_revision", 3)
@@ -242,26 +286,40 @@ func _toggle_status(parent: Control, node_name: String, y: float) -> Label:
 
 
 func open_menu() -> void:
+	set_audio_levels(AudioPreferences.music_volume, AudioPreferences.sfx_volume)
 	_clear_action_feedback()
 	show()
 	show_main_page()
 
 
 func close_menu() -> void:
+	_ui_flush_audio()
 	_clear_action_feedback()
 	hide()
 
 
 func show_main_page() -> void:
+	if current_page == "settings":
+		_ui_flush_audio()
 	current_page = "main"
 	if main_page != null:
 		main_page.show()
 	if settings_page != null:
 		settings_page.hide()
+	_ensure_layout_initialized()
+
+
+func _ensure_layout_initialized() -> void:
+	if _layout_initialized:
+		return
+	_layout_initialized = true
+	_layout_apply_count += 1
 	UIRuntimeLayoutOverridesScript.apply_profile(self, "system_menu")
 
 
 func show_settings_page() -> void:
+	set_audio_levels(AudioPreferences.music_volume, AudioPreferences.sfx_volume)
+	loot_filter_slider.set_value_no_signal(LootPreferences.filter_level)
 	_clear_action_feedback()
 	_show_menu_action_result(settings_button, true, "system_menu.settings")
 	current_page = "settings"
@@ -270,18 +328,21 @@ func show_settings_page() -> void:
 
 
 func set_audio_settings(next_music_enabled: bool, next_sfx_enabled: bool) -> void:
-	music_enabled = next_music_enabled
-	sfx_enabled = next_sfx_enabled
-	music_toggle.set_pressed_no_signal(music_enabled)
-	sfx_toggle.set_pressed_no_signal(sfx_enabled)
-	_refresh_audio_status()
+	# Compatibility for legacy callers/tests; the live root uses numeric levels.
+	set_audio_levels(1.0 if next_music_enabled else 0.0, 1.0 if next_sfx_enabled else 0.0)
 
 
 func _refresh_audio_status() -> void:
-	music_status_label.text = "已开启" if music_enabled else "已关闭"
-	music_status_label.add_theme_color_override("font_color", Color("a9c28e") if music_enabled else Color("9a7b6e"))
-	sfx_status_label.text = "已开启" if sfx_enabled else "已关闭"
-	sfx_status_label.add_theme_color_override("font_color", Color("a9c28e") if sfx_enabled else Color("9a7b6e"))
+	if music_status_label == null or sfx_status_label == null:
+		return
+	music_enabled = music_slider.value > 0.0
+	sfx_enabled = sfx_slider.value > 0.0
+	music_status_label.text = "%d%%" % roundi(music_slider.value)
+	sfx_status_label.text = "%d%%" % roundi(sfx_slider.value)
+	if audio_save_note != null:
+		var failed := AudioPreferences.last_save_error != OK or LootPreferences.last_save_error != OK
+		audio_save_note.text = "设置尚未保存，请关闭菜单后重试" if failed else ""
+		audio_save_note.visible = failed
 
 
 func _on_music_toggled(enabled: bool) -> void:
@@ -297,26 +358,27 @@ func _on_sfx_toggled(enabled: bool) -> void:
 
 
 func _emit_audio_setting(setting_id: String, enabled: bool) -> void:
-	audio_setting_changed.emit({
-		"contract_id": AUDIO_CONTRACT_ID,
-		"setting_id": setting_id,
-		"enabled": enabled,
-	})
+	# Legacy test/accessibility adapter. The visible UI only emits numeric gain.
+	var channel := "music" if setting_id == "audio.music.enabled" else "sfx"
+	_ui_emit_volume_setting(channel, 1.0 if enabled else 0.0)
 
 
 func _request_continue() -> void:
+	_ui_flush_audio()
 	_clear_action_feedback()
 	GothicUIThemeScript.set_button_feedback(continue_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.continue")
 	continue_requested.emit()
 
 
 func _request_character_select() -> void:
+	_ui_flush_audio()
 	_clear_action_feedback()
 	GothicUIThemeScript.set_button_feedback(character_select_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.character_select")
 	return_to_character_select_requested.emit()
 
 
 func _request_save_exit() -> void:
+	_ui_flush_audio()
 	_clear_action_feedback()
 	GothicUIThemeScript.set_button_feedback(save_exit_button, GothicUIThemeScript.BUTTON_FEEDBACK_TRANSITION, "system_menu.save_exit")
 	save_and_exit_requested.emit()
@@ -340,3 +402,100 @@ func _clear_action_feedback() -> void:
 	_action_feedback_serial += 1
 	for button in [continue_button, settings_button, character_select_button, save_exit_button, settings_back_button]:
 		GothicUIThemeScript.clear_button_feedback(button)
+
+
+func _ui_volume_row(node_name: String, caption: String, y: float, channel: String) -> HSlider:
+	var row := Control.new()
+	row.name = node_name
+	row.position = Vector2(72, y)
+	row.size = Vector2(356, 76)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.set_meta("calibration_layout_revision", 7)
+	settings_page.add_child(row)
+	var frame := Button.new()
+	frame.name = "RowFrame"
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.theme_type_variation = "GothicSystemSettingsRowGemButton"
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.focus_mode = Control.FOCUS_NONE
+	frame.set_meta("calibration_layout_revision", 7)
+	row.add_child(frame)
+	var title := Label.new()
+	title.name = "Caption"
+	title.text = caption
+	title.position = Vector2(20, 10)
+	title.size = Vector2(92, 56)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", Color("f2d29b"))
+	title.set_meta("calibration_runtime_text", true)
+	title.set_meta("calibration_layout_revision", 7)
+	row.add_child(title)
+	var percent := Label.new()
+	percent.name = "Percent"
+	percent.position = Vector2(286, 10)
+	percent.size = Vector2(50, 56)
+	percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	percent.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	percent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	percent.set_meta("calibration_runtime_text", true)
+	percent.set_meta("calibration_layout_revision", 7)
+	row.add_child(percent)
+	var slider := HSlider.new()
+	slider.name = "Slider"
+	slider.position = Vector2(122, 10)
+	slider.size = Vector2(152, 56)
+	slider.min_value = 0.0
+	slider.max_value = 100.0
+	slider.step = 1.0
+	slider.scrollable = false
+	slider.mouse_filter = Control.MOUSE_FILTER_STOP
+	slider.set_meta("setting_id", "audio." + channel + ".volume")
+	slider.set_meta("calibration_layout_revision", 7)
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color("241c15")
+	track.border_color = Color("705438")
+	track.set_border_width_all(1)
+	track.content_margin_top = 5.0
+	track.content_margin_bottom = 5.0
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color("b1874f")
+	fill.content_margin_top = 5.0
+	fill.content_margin_bottom = 5.0
+	slider.add_theme_stylebox_override("slider", track)
+	slider.add_theme_stylebox_override("grabber_area", fill)
+	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
+	slider.value_changed.connect(_ui_slider_changed.bind(channel))
+	row.add_child(slider)
+	return slider
+
+func set_audio_levels(music: float, sfx: float) -> void:
+	if music_slider == null or sfx_slider == null:
+		return
+	music_slider.set_value_no_signal(clampf(music, 0.0, 1.0) * 100.0)
+	sfx_slider.set_value_no_signal(clampf(sfx, 0.0, 1.0) * 100.0)
+	_refresh_audio_status()
+
+func _ui_slider_changed(percent: float, channel: String) -> void:
+	if channel == "loot_filter":
+		LootPreferences.set_filter_level(roundi(percent))
+		return
+	_ui_emit_volume_setting(channel, clampf(percent / 100.0, 0.0, 1.0))
+	_refresh_audio_status()
+
+func _ui_emit_volume_setting(channel: String, value: float) -> void:
+	audio_setting_changed.emit({"contract_id": AUDIO_CONTRACT_ID, "channel": channel, "value": value})
+
+func _ui_flush_audio() -> void:
+	AudioPreferences.flush()
+	LootPreferences.flush()
+	_refresh_audio_status()
+
+func _ui_audio_visibility_changed() -> void:
+	if not is_visible_in_tree():
+		_ui_flush_audio()
+
+func _exit_tree() -> void:
+	AudioPreferences.flush()
+	LootPreferences.flush()

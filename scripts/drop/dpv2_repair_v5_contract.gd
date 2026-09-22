@@ -1,0 +1,191 @@
+extends RefCounted
+## Build-time sealed V5 extension to the existing SPB validation.
+## Gameplay still reads the existing SPB effective ledger, not a new override.
+
+const AUTHORITY_SHA256 := "CDC9FDA6469F9B5CE4A888581253D36E4F1E38CD91F225EB9F7FE2E97B3A0A3C"
+const EFFECTIVE_SHA256 := "2959F0FB0493984FCA6252307AD831D4C79AAAF1C83D7E6EC21ABAC2D21A8580"
+const BASELINE_SHA256 := "A4CD03688418820D4657403DA46424ED9BDDF0D930D46E4778B54B912555DAD7"
+const MAX_RATIONAL := 2147483647
+
+# The classification authority migrated 218/222 to elite together with the
+# user loot sheet activation, and 164/166/168/170/172/178/182 to elite with
+# the RV15 user-directive elite migration. This sealed contract froze its
+# ledger verification while those identities were still ordinary, so the
+# historical classification stays pinned here: the sealed ledger keeps
+# validating the exact inputs it was sealed with, while gameplay reads the
+# live catalog.
+const HISTORICAL_CLASSIFICATION_BY_MONSTER_ID := {
+	218: "ordinary",
+	222: "ordinary",
+	164: "ordinary",
+	166: "ordinary",
+	168: "ordinary",
+	170: "ordinary",
+	172: "ordinary",
+	178: "ordinary",
+	182: "ordinary",
+}
+
+
+static func historical_classification(monster_id: int, current: String) -> String:
+	var pinned: Variant = HISTORICAL_CLASSIFICATION_BY_MONSTER_ID.get(monster_id, null)
+	return str(pinned) if pinned != null else current
+
+
+static func _integer(value: Variant) -> int:
+	if value is int:
+		return int(value)
+	if value is float:
+		var number := float(value)
+		if is_finite(number) and number == floor(number) and abs(number) <= MAX_RATIONAL:
+			return int(number)
+	return -1
+
+
+# V5.0.5c: JSON.parse_string yields numeric literals as float Variants.
+# Never use Array.has/int `in` directly for numeric contract-ID arrays.
+static func _integer_array_has(value: Variant, expected: int) -> bool:
+	if not value is Array:
+		return false
+	for raw_value: Variant in value:
+		if _integer(raw_value) == expected:
+			return true
+	return false
+
+
+static func _sha256_lf(path: String) -> String:
+	if not FileAccess.file_exists(path):
+		return ""
+	var text := FileAccess.get_file_as_string(path).replace("\r\n", "\n").replace("\r", "\n")
+	return text.sha256_text().to_upper()
+
+
+static func verify_documents(authority: Dictionary, effective: Dictionary) -> bool:
+	if _sha256_lf("res://assets/data/drop/dpv2_single_player_drop_boost_v1.json") != AUTHORITY_SHA256:
+		return false
+	if _sha256_lf("res://assets/data/drop/dpv2_single_player_effective_probability_v1.json") != EFFECTIVE_SHA256:
+		return false
+	if _sha256_lf("res://assets/data/drop/dpv2_direct_baseline_v2.json") != BASELINE_SHA256:
+		return false
+	var av: Variant = authority.get("repair_v5_contract", null)
+	var ev: Variant = effective.get("repair_v5_contract", null)
+	if not av is Dictionary or not ev is Dictionary or av != ev:
+		return false
+	return _integer(av.get("revision", null)) == 505
+
+
+static func _gcd(a: int, b: int) -> int:
+	while b > 0:
+		var remainder := a % b
+		a = b
+		b = remainder
+	return a
+
+
+static func _ratio(numerator: int, denominator: int) -> Dictionary:
+	if numerator <= 0 or denominator <= 0 or numerator > denominator:
+		return {}
+	var divisor := _gcd(numerator, denominator)
+	@warning_ignore("integer_division")
+	numerator = numerator / divisor
+	@warning_ignore("integer_division")
+	denominator = denominator / divisor
+	if denominator > MAX_RATIONAL:
+		return {}
+	return {"numerator": numerator, "denominator": denominator}
+
+
+static func _multiply(n: int, d: int, mn: int, md: int) -> Dictionary:
+	if mn <= 0 or md <= 0 or mn > MAX_RATIONAL or md > MAX_RATIONAL:
+		return {}
+	var left := _gcd(n, md)
+	var right := _gcd(mn, d)
+	@warning_ignore("integer_division")
+	n = n / left
+	@warning_ignore("integer_division")
+	md = md / left
+	@warning_ignore("integer_division")
+	mn = mn / right
+	@warning_ignore("integer_division")
+	d = d / right
+	# Every operand is at most INT32_MAX; each product fits signed int64.
+	return {"numerator": n * mn, "denominator": d * md}
+
+
+static func final_formula(
+	record: Dictionary,
+	contract: Dictionary,
+	base_stage: Dictionary,
+	monster_classification: String,
+) -> Dictionary:
+	var mid := _integer(record.get("canonical_monster_id", null))
+	var item := _integer(record.get("canonical_item_id", null))
+	var uid := str(record.get("slot_uid", ""))
+	var n := _integer(base_stage.get("numerator", null))
+	var d := _integer(base_stage.get("denominator", null))
+	if n <= 0 or d <= 0 or n > d:
+		return {}
+	if _integer(record.get("repair_v5_pre_numerator", null)) != n or _integer(record.get("repair_v5_pre_denominator", null)) != d:
+		return {}
+	var expected_rule := "NONE"
+	if uid in contract.get("armor_slot_uids", []):
+		expected_rule = "ARMOR_BASE_1_OVER_60"
+		if mid < 235 or mid > 240 or _integer(record.get("base_numerator", null)) != 1 or _integer(record.get("base_denominator", null)) != 60:
+			return {}
+		n = 1
+		d = 60
+	elif bool(contract.get("boss_k_enabled", false)) and uid in contract.get("boss_allowed_slot_uids", []):
+		expected_rule = "BOSS_K"
+		if (
+			mid not in [76, 198, 199, 225]
+			or not _integer_array_has(contract.get("boss_allowed_monster_ids", null), mid)
+		):
+			return {}
+		var multiplied := _multiply(n, d, _integer(contract.get("boss_k_numerator", null)), _integer(contract.get("boss_k_denominator", null)))
+		if multiplied.is_empty():
+			return {}
+		# min(p*K, max(p, 1/4)), never reduce an already higher probability.
+		var cap_n := n if n * 4 >= d else 1
+		var cap_d := d if n * 4 >= d else 4
+		var product_n: int = int(multiplied.numerator)
+		var product_d: int = int(multiplied.denominator)
+		# These bounds are enforced by the build-time rational gate as well.
+		if product_n > MAX_RATIONAL or product_d > MAX_RATIONAL:
+			return {}
+		if product_n * cap_d > cap_n * product_d:
+			n = cap_n
+			d = cap_d
+		else:
+			n = product_n
+			d = product_d
+	elif (
+		_integer_array_has(contract.get("book_item_ids", null), item)
+		and _integer_array_has(contract.get("verified_book_monster_ids", null), mid)
+		and (mid < 235 or mid > 240)
+	):
+		if monster_classification in ["ordinary", "elite", "boss"]:
+			expected_rule = "BOOK_ORDINARY" if monster_classification == "ordinary" else "BOOK_ELITE_BOSS"
+			n = _integer(record.get("base_numerator", null))
+			d = _integer(record.get("base_denominator", null))
+			var cap_d := 100 if monster_classification == "ordinary" else 20
+			var multiplier := 5 if monster_classification == "ordinary" else 25
+			if n <= 0 or d <= 0:
+				return {}
+			if n * cap_d < d:
+				n *= multiplier
+				if n * cap_d > d:
+					n = 1
+					d = cap_d
+	if str(record.get("repair_v5_rule", "")) != expected_rule:
+		return {}
+	var output := _ratio(n, d)
+	if output.is_empty():
+		return {}
+	if _integer(record.get("repair_v5_final_numerator", null)) != int(output.numerator) or _integer(record.get("repair_v5_final_denominator", null)) != int(output.denominator):
+		return {}
+	# Legacy ceiling_applied refers to the original SPB stage, not the Boss K.
+	output["ceiling_applied"] = bool(base_stage.get("ceiling_applied", false))
+	output["ok"] = true
+	return output
+
+# DPV2_V505_CONTRACT_SEAL

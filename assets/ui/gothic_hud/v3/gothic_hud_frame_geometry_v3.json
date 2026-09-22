@@ -1,0 +1,603 @@
+{
+  "contract": "hardcore.hud.bottom_chassis.v3.geometry.v1",
+  "note": "User-authored 2172x724 candidate frames with pre-cut alpha slot wells. Art is copied unchanged; geometry is measured from the enclosed alpha holes (2 resource orbs, 4 item quick slots, 1 experience bar slot). Runtime maps source pixels through the same aspect-fit as v2.",
+  "orb_liquid_radius_ratio": 0.49,
+  "designs": {
+    "v3_dragon": {
+      "id": "v3_dragon",
+      "display_name": "魔龙",
+      "texture_path": "res://assets/ui/gothic_hud/v3/runtime/bottom_chassis_v3_dragon.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "display_size": [
+        820.0,
+        273.0
+      ],
+      "source_to_display_scale": 0.377072,
+      "render_origin": [
+        0.5,
+        0.0
+      ],
+      "health_orb": {
+        "hole_bbox_source": [
+          417,
+          294,
+          230,
+          232
+        ],
+        "center_source": [
+          532.0,
+          410.0
+        ],
+        "center_display": [
+          201.102,
+          154.599
+        ],
+        "orb_display_size": 87
+      },
+      "mana_orb": {
+        "hole_bbox_source": [
+          1525,
+          294,
+          230,
+          232
+        ],
+        "center_source": [
+          1640.0,
+          410.0
+        ],
+        "center_display": [
+          618.898,
+          154.599
+        ],
+        "orb_display_size": 87
+      },
+      "orb_symmetry_error_source_px": 0.0,
+      "item_slots": [
+        {
+          "index": 1,
+          "hole_bbox_source": [
+            719,
+            345,
+            132,
+            135
+          ],
+          "center_source": [
+            785.0,
+            412.5
+          ],
+          "center_display": [
+            296.501,
+            155.542
+          ]
+        },
+        {
+          "index": 2,
+          "hole_bbox_source": [
+            915,
+            345,
+            132,
+            135
+          ],
+          "center_source": [
+            981.0,
+            412.5
+          ],
+          "center_display": [
+            370.407,
+            155.542
+          ]
+        },
+        {
+          "index": 3,
+          "hole_bbox_source": [
+            1125,
+            345,
+            131,
+            135
+          ],
+          "center_source": [
+            1190.5,
+            412.5
+          ],
+          "center_display": [
+            449.404,
+            155.542
+          ]
+        },
+        {
+          "index": 4,
+          "hole_bbox_source": [
+            1322,
+            345,
+            132,
+            135
+          ],
+          "center_source": [
+            1388.0,
+            412.5
+          ],
+          "center_display": [
+            523.876,
+            155.542
+          ]
+        }
+      ],
+      "item_slot_fill_display_size": [
+        50,
+        51
+      ],
+      "experience_slot": {
+        "hole_bbox_source": [
+          675,
+          560,
+          821,
+          35
+        ],
+        "center_source": [
+          1085.5,
+          577.5
+        ],
+        "bar_rect_display": [
+          256.155,
+          212.291,
+          307.314,
+          10.935
+        ]
+      },
+      "center_peak_source": [
+        1086,
+        139
+      ]
+    },
+    "v3_lion": {
+      "id": "v3_lion",
+      "display_name": "雄狮",
+      "texture_path": "res://assets/ui/gothic_hud/v3/runtime/bottom_chassis_v3_lion.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "display_size": [
+        820.0,
+        273.0
+      ],
+      "source_to_display_scale": 0.377072,
+      "render_origin": [
+        0.5,
+        0.0
+      ],
+      "health_orb": {
+        "hole_bbox_source": [
+          374,
+          288,
+          238,
+          247
+        ],
+        "center_source": [
+          493.0,
+          411.5
+        ],
+        "center_display": [
+          186.396,
+          155.165
+        ],
+        "orb_display_size": 90
+      },
+      "mana_orb": {
+        "hole_bbox_source": [
+          1560,
+          288,
+          238,
+          247
+        ],
+        "center_source": [
+          1679.0,
+          411.5
+        ],
+        "center_display": [
+          633.604,
+          155.165
+        ],
+        "orb_display_size": 90
+      },
+      "orb_symmetry_error_source_px": 0.0,
+      "item_slots": [
+        {
+          "index": 1,
+          "hole_bbox_source": [
+            679,
+            342,
+            149,
+            146
+          ],
+          "center_source": [
+            753.5,
+            415.0
+          ],
+          "center_display": [
+            284.624,
+            156.485
+          ]
+        },
+        {
+          "index": 2,
+          "hole_bbox_source": [
+            894,
+            342,
+            155,
+            146
+          ],
+          "center_source": [
+            971.5,
+            415.0
+          ],
+          "center_display": [
+            366.825,
+            156.485
+          ]
+        },
+        {
+          "index": 3,
+          "hole_bbox_source": [
+            1123,
+            341,
+            156,
+            147
+          ],
+          "center_source": [
+            1201.0,
+            414.5
+          ],
+          "center_display": [
+            453.363,
+            156.296
+          ]
+        },
+        {
+          "index": 4,
+          "hole_bbox_source": [
+            1345,
+            342,
+            150,
+            146
+          ],
+          "center_source": [
+            1420.0,
+            415.0
+          ],
+          "center_display": [
+            535.942,
+            156.485
+          ]
+        }
+      ],
+      "item_slot_fill_display_size": [
+        56,
+        55
+      ],
+      "experience_slot": {
+        "hole_bbox_source": [
+          649,
+          558,
+          875,
+          38
+        ],
+        "center_source": [
+          1086.5,
+          577.0
+        ],
+        "bar_rect_display": [
+          246.351,
+          211.537,
+          327.675,
+          12.066
+        ]
+      },
+      "center_peak_source": [
+        1086,
+        159
+      ]
+    },
+    "v3_winged_lion": {
+      "id": "v3_winged_lion",
+      "display_name": "飞狮",
+      "texture_path": "res://assets/ui/gothic_hud/v3/runtime/bottom_chassis_v3_winged_lion.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "display_size": [
+        820.0,
+        273.0
+      ],
+      "source_to_display_scale": 0.377072,
+      "render_origin": [
+        0.5,
+        0.0
+      ],
+      "health_orb": {
+        "hole_bbox_source": [
+          405,
+          291,
+          245,
+          242
+        ],
+        "center_source": [
+          527.5,
+          412.0
+        ],
+        "center_display": [
+          199.405,
+          155.354
+        ],
+        "orb_display_size": 91
+      },
+      "mana_orb": {
+        "hole_bbox_source": [
+          1522,
+          291,
+          243,
+          242
+        ],
+        "center_source": [
+          1643.5,
+          412.0
+        ],
+        "center_display": [
+          620.218,
+          155.354
+        ],
+        "orb_display_size": 91
+      },
+      "orb_symmetry_error_source_px": 1.0,
+      "item_slots": [
+        {
+          "index": 1,
+          "hole_bbox_source": [
+            715,
+            347,
+            133,
+            137
+          ],
+          "center_source": [
+            781.5,
+            415.5
+          ],
+          "center_display": [
+            295.182,
+            156.673
+          ]
+        },
+        {
+          "index": 2,
+          "hole_bbox_source": [
+            915,
+            347,
+            133,
+            136
+          ],
+          "center_source": [
+            981.5,
+            415.0
+          ],
+          "center_display": [
+            370.596,
+            156.485
+          ]
+        },
+        {
+          "index": 3,
+          "hole_bbox_source": [
+            1122,
+            347,
+            134,
+            136
+          ],
+          "center_source": [
+            1189.0,
+            415.0
+          ],
+          "center_display": [
+            448.838,
+            156.485
+          ]
+        },
+        {
+          "index": 4,
+          "hole_bbox_source": [
+            1323,
+            347,
+            135,
+            137
+          ],
+          "center_source": [
+            1390.5,
+            415.5
+          ],
+          "center_display": [
+            524.818,
+            156.673
+          ]
+        }
+      ],
+      "item_slot_fill_display_size": [
+        50,
+        52
+      ],
+      "experience_slot": {
+        "hole_bbox_source": [
+          674,
+          563,
+          823,
+          34
+        ],
+        "center_source": [
+          1085.5,
+          580.0
+        ],
+        "bar_rect_display": [
+          255.778,
+          213.423,
+          308.068,
+          10.558
+        ]
+      },
+      "center_peak_source": [
+        1086,
+        144
+      ]
+    },
+    "v3_demon": {
+      "id": "v3_demon",
+      "display_name": "恶魔",
+      "texture_path": "res://assets/ui/gothic_hud/v3/runtime/bottom_chassis_v3_demon.png",
+      "source_size": [
+        2172,
+        724
+      ],
+      "display_size": [
+        820.0,
+        273.0
+      ],
+      "source_to_display_scale": 0.377072,
+      "render_origin": [
+        0.5,
+        0.0
+      ],
+      "health_orb": {
+        "hole_bbox_source": [
+          413,
+          293,
+          235,
+          235
+        ],
+        "center_source": [
+          530.5,
+          410.5
+        ],
+        "center_display": [
+          200.537,
+          154.788
+        ],
+        "orb_display_size": 89
+      },
+      "mana_orb": {
+        "hole_bbox_source": [
+          1523,
+          293,
+          235,
+          235
+        ],
+        "center_source": [
+          1640.5,
+          410.5
+        ],
+        "center_display": [
+          619.086,
+          154.788
+        ],
+        "orb_display_size": 89
+      },
+      "orb_symmetry_error_source_px": 1.0,
+      "item_slots": [
+        {
+          "index": 1,
+          "hole_bbox_source": [
+            716,
+            343,
+            135,
+            138
+          ],
+          "center_source": [
+            783.5,
+            412.0
+          ],
+          "center_display": [
+            295.936,
+            155.354
+          ]
+        },
+        {
+          "index": 2,
+          "hole_bbox_source": [
+            913,
+            343,
+            135,
+            138
+          ],
+          "center_source": [
+            980.5,
+            412.0
+          ],
+          "center_display": [
+            370.219,
+            155.354
+          ]
+        },
+        {
+          "index": 3,
+          "hole_bbox_source": [
+            1123,
+            343,
+            134,
+            139
+          ],
+          "center_source": [
+            1190.0,
+            412.5
+          ],
+          "center_display": [
+            449.215,
+            155.542
+          ]
+        },
+        {
+          "index": 4,
+          "hole_bbox_source": [
+            1320,
+            343,
+            135,
+            138
+          ],
+          "center_source": [
+            1387.5,
+            412.0
+          ],
+          "center_display": [
+            523.687,
+            155.354
+          ]
+        }
+      ],
+      "item_slot_fill_display_size": [
+        51,
+        52
+      ],
+      "experience_slot": {
+        "hole_bbox_source": [
+          676,
+          558,
+          819,
+          37
+        ],
+        "center_source": [
+          1085.5,
+          576.5
+        ],
+        "bar_rect_display": [
+          256.532,
+          211.537,
+          306.559,
+          11.689
+        ]
+      },
+      "center_peak_source": [
+        1086,
+        148
+      ]
+    }
+  }
+}

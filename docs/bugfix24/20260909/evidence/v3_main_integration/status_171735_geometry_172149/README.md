@@ -1,0 +1,22 @@
+# Source status and exact cell follow-up
+
+171735: source status + mixed + existing summon incoming 3/3 PASS, production/status test changes later committed as 05f83a7c. This was a working-tree test, not clean-HEAD evidence.
+172149: exact cell geometry 1/1 PASS on main 671861a5. Fixes floor quantization that could exclude the original target point; tests cover positive/negative fractional and half-cell positions with zero-radius original-point membership.
+Both runners naturally exited0 with engine_log_errors=0. Raw cleanup warnings are retained. These are correctness-only runs.
+
+SHA256 | File
+---|---
+0AEE573CB35B88550A0A40B4D9C14328CF4FE3992C7C44DCB8A18300940D689F | monster_mixed_damage_atomic_test.godot.log
+26E0268E603F5C2CC6A8B554013E3937808D3CF8B666A3093E3047ABF6E377D5 | monster_mixed_damage_atomic_test.stderr.log
+9C528A49F7AC0EFF5EE371E9314389B52FA1DD9289E9249ECC8F616A4E53C222 | monster_mixed_damage_atomic_test.stdout.log
+152A2485DB277A8494EA89FF7BFBB0F14BFB02B51A2AC2DF522F3E49B590672E | monster_source_status_test.godot.log
+26E0268E603F5C2CC6A8B554013E3937808D3CF8B666A3093E3047ABF6E377D5 | monster_source_status_test.stderr.log
+1BB85B194BD36C4E62F4F41CCD3F7AA6D136D88577C3C4E532C8B23AFA15CFF6 | monster_source_status_test.stdout.log
+14802951A786D65E4C6ED509247173ADF5B3EBF72FD76912DDF300AA153DE1B8 | runner_results_adhoc_20260909_171735_064_18128.json
+2771ADF3826503FA1EFA94C1EC72DC951F536E2764663E660597ACEB8D63E3C1 | runner_results_adhoc_20260909_172149_662_8284.json
+BD84CA1AFA8EE719DD66702808D41426BA777AE442CBDD8824FA1F9E8D704676 | summon_incoming_damage_runtime_test.godot.log
+26E0268E603F5C2CC6A8B554013E3937808D3CF8B666A3093E3047ABF6E377D5 | summon_incoming_damage_runtime_test.stderr.log
+4683FA9840FA0121A4A49286EB24CC235573B656C40055E731F500AD2007DF4E | summon_incoming_damage_runtime_test.stdout.log
+6FA302EAF8ACFB2C0A73037DB0E331038FBD2F2574D7E94E9952D52F369150D3 | w1_delivery_geometry_test.godot.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | w1_delivery_geometry_test.stderr.log
+C201BF3C597B4096B47EDA99C8519BDA2A6950DC682307B7AEE52E65EA4A8FF8 | w1_delivery_geometry_test.stdout.log

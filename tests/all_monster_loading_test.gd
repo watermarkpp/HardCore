@@ -15,8 +15,8 @@ func _run() -> void:
 	var entries: Array = catalog.get("entries", [])
 	var entries_by_id: Dictionary = catalog.get("entries_by_id", {})
 	var summary: Dictionary = catalog.get("summary", {})
-	assert(entries.size() == 217, "canonical catalog must retain all 217 stable identities")
-	assert(entries_by_id.size() == 217, "canonical ID index must close all stable identities")
+	assert(entries.size() == 156, "canonical catalog must have 156 active identities after final variant retirement")
+	assert(entries_by_id.size() == 156, "canonical ID index must have 156 active entries")
 	assert(catalog.get("identity_key", "") == "monster_id", "canonical catalog must be ID keyed")
 	var seen_ids: Dictionary = {}
 	var runtime_count := 0
@@ -67,12 +67,12 @@ func _run() -> void:
 		"agility": 999,
 		"antiPoison": 999,
 	}, null, true)
-	assert(not ordinary_enemy.is_boss and ordinary_enemy.max_hp == 285, "ID 64 caller payload changed canonical identity/stats")
-	assert(ordinary_enemy.attack_min == 16 and ordinary_enemy.attack_max == 28, "ID 64 attack range was not projected from canonical stats")
+	assert(not ordinary_enemy.is_boss and ordinary_enemy.max_hp == 265, "ID 64 caller payload changed canonical identity/stats")
+	assert(ordinary_enemy.attack_min == 14 and ordinary_enemy.attack_max == 28, "ID 64 attack range was not projected from canonical stats")
 	assert(ordinary_enemy.agility == 15 and ordinary_enemy.anti_poison == 0, "ID 64 legacy projection fields leaked into runtime")
 	ordinary_enemy.free()
 
-	print("ALL_MONSTER_LOADING_CANONICAL_PASS: identities=217 runtime_allowed=%d id_only=1" % runtime_count)
+	print("ALL_MONSTER_LOADING_CANONICAL_PASS: identities=156 runtime_allowed=%d id_only=1" % runtime_count)
 	get_tree().quit(0)
 
 

@@ -18,38 +18,34 @@ SPEC.loader.exec_module(GENERATOR)
 
 
 def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
-    """The user Excel (217 records / 9590 slots) is the canonical drop authority.
-
-    Old Crystal Drops must not be a primary runtime drop source.
+    """The user Excel (217 source records / 9590 source slots) is the canonical
+    drop authority.  The P3C active runtime universe carries 156 entries /
+    7032 drop slots.  Old Crystal Drops must not be a primary runtime drop
+    source.  The 217 source record count is a source-table truth, not a
+    runtime count.
     """
     entries = catalog.get("entries", [])
     entries_by_id = catalog.get("entries_by_id", {})
     drop_profiles = catalog.get("drop_profiles", {})
-    assert len(entries) == 217, len(entries)
+    # Active runtime identities: P3C active universe = 156.
+    assert len(entries) == 156, len(entries)
 
     anchors = {76: 33, 239: 54, 240: 54}
     for monster_id, expected in anchors.items():
         entry = entries_by_id.get(str(monster_id), {})
         profile = drop_profiles.get(str(entry.get("drop_profile_id", "")), {})
-        assert int(profile.get("entry_count", 0)) == expected, (monster_id, profile.get("entry_count"))
+        assert _base_drop_row_count(profile) == expected, (monster_id, profile.get("entry_count"))
         assert profile.get("status") == "exact_slots", (monster_id, profile.get("status"))
 
     snowman = entries_by_id.get("33", {})
     assert drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status") == "no_drop_confirmed"
 
-    # 21CQ stable Mob.aspx?ID identity: 鸡=14, 鹿=16, 鹿1=17.
-    assert entries_by_id.get("14", {}).get("canonical_name") == "鸡", entries_by_id.get("14")
-    assert entries_by_id.get("16", {}).get("canonical_name") == "鹿", entries_by_id.get("16")
-    assert entries_by_id.get("17", {}).get("canonical_name") == "鹿1", entries_by_id.get("17")
+    # Retired IDs 14 (鸡), 16 (鹿), 17 (鹿1) must NOT appear in active runtime.
+    for retired_id in ("14", "16", "17"):
+        assert retired_id not in entries_by_id, f"retired ID {retired_id} must not be in active canonical"
     # The Excel audit sequence IDs 1/2/3 are NOT canonical monster IDs.
     for forbidden in ("1", "2", "3"):
         assert forbidden not in entries_by_id, forbidden
-
-    # 鹿1 (17) is a hidden-suffix high-attribute variant from the Excel/21CQ
-    # offline audit; its classification evidence must not claim an attachment
-    # exact ID override (the attachment has no exactIdOverrides entry for 17).
-    deer1_classification = entries_by_id.get("17", {}).get("source_evidence", {}).get("classification", {})
-    assert deer1_classification.get("resolution") == "excel_offline_audit_hidden_suffix_variant", deer1_classification
 
     workbook_sha = "6902A37DB839577D2CE440B9EFDC4628430CF063BF9DF505F03B41E24A5D67EE"
     excel_primary_count = 0
@@ -67,11 +63,71 @@ def _assert_excel_drop_authority(catalog: dict[str, object]) -> None:
                 excel_primary_count += 1
             if distribution == "server.crystal.cjlaaa" and role.startswith("drop_profile_primary"):
                 crystal_primary_count += 1
-    assert excel_primary_count == 217, excel_primary_count
+    # Active runtime drop profiles: P3C active universe = 156.
+    assert excel_primary_count == 156, excel_primary_count
     assert crystal_primary_count == 0, crystal_primary_count
 
-    total = sum(int(p.get("entry_count", 0)) for p in drop_profiles.values())
-    assert total == 9590, total
+    total = sum(_base_drop_row_count(p) for p in drop_profiles.values())
+    # Active runtime base drop slots: P3C active universe total = 7032.
+    # Authoring overlay rows are excluded from the base count so future
+    # authoring additions do not break the Excel authority anchor.
+    assert total == 7032, total
+
+
+def _assert_special_normal_spawn_only(catalog: dict[str, object]) -> None:
+    """The special-normal overlay must not carry a probability binding."""
+    expected_ids = {39, 57, 74, 77, 90, 121, 137, 142}
+    special = catalog.get("special_normal_spawn_authority", {})
+    assert isinstance(special, dict)
+    assert set(special) == {
+        "schema",
+        "authority_id",
+        "path",
+        "sha256",
+        "canonical_monster_ids",
+        "production_active",
+        "drop_probability",
+    }
+    assert set(special.get("canonical_monster_ids", [])) == expected_ids
+    assert special.get("drop_probability") == {
+        "authority": "external_direct_baseline",
+        "authority_id": "dpv2.direct_baseline.v2",
+        "source_path": "assets/data/drop/dpv2_direct_baseline_v2.json",
+        "identity_key": "canonical_monster_id",
+        "resolution": "direct_baseline_by_canonical_monster_id",
+        "production_rng_input": False,
+    }
+    source_paths = set(catalog.get("sources", {}))
+    assert not any("dpv2_monster_role" in path for path in source_paths)
+    assert not any("dpv2_item_tier" in path for path in source_paths)
+    assert not any("dpv2_global_drop_rate" in path for path in source_paths)
+    entries_by_id = catalog.get("entries_by_id", {})
+    expected_spawn_keys = {
+        "authority_id",
+        "authority_path",
+        "record_key",
+        "spawn_classification",
+        "placement_kind",
+        "respawn_policy_id",
+        "respawn_seconds",
+        "random_seconds",
+        "count",
+        "max_alive",
+    }
+    for monster_id in expected_ids:
+        entry = entries_by_id[str(monster_id)]
+        assert set(entry.get("spawn_authority", {})) == expected_spawn_keys
+    for profile in catalog.get("drop_profiles", {}).values():
+        for row in profile.get("entries", []):
+            assert row.get("rate_policy") == "AUDIT_ONLY"
+
+
+def _base_drop_row_count(profile: dict[str, object]) -> int:
+    count = 0
+    for raw_row in profile.get("entries", []):
+        if isinstance(raw_row, dict) and "authoring_entry_key" not in raw_row:
+            count += 1
+    return count
 
 
 def _assert_classification_placement_kind() -> None:
@@ -85,6 +141,76 @@ def _assert_classification_placement_kind() -> None:
     assert classification_name == "special", classification_name
     assert placement_allowed is True
     assert placement_kind == "boss_spawn", placement_kind
+
+
+def _assert_variant_visual_pairs(catalog: dict[str, object]) -> None:
+    """Active variants must share appearance_profile_id with their base,
+    while retaining their own distinct monster_id and combat data.
+
+    P3C pruned the retired duplicate variants (48/49/51/53/80/82/84/86/88), so
+    only the remaining active pairs are asserted here.
+    """
+    entries_by_id = catalog.get("entries_by_id", {})
+    variant_pairs = [
+        (55, 54), (57, 56), (59, 56),
+        (77, 76), (78, 76),
+        (90, 89), (91, 89),
+        (161, 160),
+    ]
+    for variant_id, base_id in variant_pairs:
+        v = entries_by_id.get(str(variant_id), {})
+        b = entries_by_id.get(str(base_id), {})
+        assert v, f"variant id={variant_id} missing from canonical"
+        assert b, f"base id={base_id} missing from canonical"
+        assert int(v.get("monster_id", -1)) == variant_id, f"variant {variant_id} monster_id mismatch"
+        assert int(b.get("monster_id", -1)) == base_id, f"base {base_id} monster_id mismatch"
+        assert variant_id != base_id, f"variant {variant_id} == base"
+        v_profile = v.get("appearance_profile_id", "")
+        b_profile = b.get("appearance_profile_id", "")
+        assert v_profile and v_profile == b_profile, (
+            f"variant {variant_id} profile '{v_profile}' != base {base_id} profile '{b_profile}'"
+        )
+
+
+def _assert_undead_exact_id_authority() -> None:
+    """bich_undead runtimeMappingsByMonsterId must have exactly 25 string-ref
+    entries and zero full-dict duplication."""
+    undead = GENERATOR.load_json(ROOT / "assets" / "data" / "bich_undead_client_art_sources.json")
+    by_id = undead.get("runtimeMappingsByMonsterId", {})
+    assert len(by_id) == 25, f"undead by_id count={len(by_id)} expected 25"
+    full_dict_count = sum(1 for v in by_id.values() if isinstance(v, dict))
+    string_ref_count = sum(1 for v in by_id.values() if isinstance(v, str))
+    assert full_dict_count == 0, f"undead full dict duplication={full_dict_count} expected 0"
+    assert string_ref_count == 25, f"undead string refs={string_ref_count} expected 25"
+
+
+def _assert_boss_variant_mappings() -> None:
+    """classic_boss must map 77->沃玛教主, 78->沃玛教主, 161->祖玛教主."""
+    boss = GENERATOR.load_json(ROOT / "assets" / "data" / "classic_boss_client_art_sources.json")
+    by_id = boss.get("runtimeMappingsByMonsterId", {})
+    assert by_id.get("77") == "沃玛教主", by_id.get("77")
+    assert by_id.get("78") == "沃玛教主", by_id.get("78")
+    assert by_id.get("161") == "祖玛教主", by_id.get("161")
+
+
+def _assert_retired_ids() -> None:
+    """Retired IDs 14/16/17 must be preserved in vanilla source with
+    recordStatus=retired, but absent from active canonical runtime."""
+    vanilla = GENERATOR.load_json(ROOT / "assets" / "data" / "vanilla_176" / "monsters.json")
+    records = {int(r.get("monsterId", -1)): r for r in vanilla.get("records", [])}
+    for rid, name in [(14, "鸡"), (16, "鹿"), (17, "鹿1")]:
+        r = records.get(rid)
+        assert r is not None, f"retired id={rid} ({name}) missing from vanilla source"
+        assert r.get("recordStatus") == "retired", f"id={rid} recordStatus={r.get('recordStatus')} expected retired"
+
+
+def _assert_no_generic_fallback() -> None:
+    """Generator art_profiles() must not perform name-based fallback.
+    Verify by checking that only runtimeMappingsByMonsterId is consumed."""
+    import inspect
+    source = inspect.getsource(GENERATOR.art_profiles)
+    assert "vanilla_name_by_id" not in source, "generic name fallback still present in art_profiles()"
+    assert "for monster_id, name in vanilla_name_by_id" not in source, "name->ID promotion loop present"
 
 
 def _assert_local_from_res_portable() -> None:
@@ -141,19 +267,36 @@ def main() -> None:
         assert evidence.get("hash_normalization") == expected, (path, evidence)
 
     _assert_excel_drop_authority(catalog)
+    _assert_special_normal_spawn_only(catalog)
     _assert_classification_placement_kind()
     _assert_local_from_res_portable()
+    _assert_variant_visual_pairs(catalog)
+    _assert_undead_exact_id_authority()
+    _assert_boss_variant_mappings()
+    _assert_retired_ids()
+    _assert_no_generic_fallback()
     entries_by_id = catalog.get("entries_by_id", {})
-    assert entries_by_id.get("39", {}).get("editor_placement", {}).get(
-        "placement_kind"
-    ) == "boss_spawn", entries_by_id.get("39", {}).get("editor_placement", {})
+    special_normal_ids = {39, 57, 74, 77, 90, 121, 137, 142}
+    assert {
+        int(monster_id)
+        for monster_id, entry in entries_by_id.items()
+        if entry.get("spawn_classification") == "special_normal"
+    } == special_normal_ids
+    for monster_id in special_normal_ids:
+        entry = entries_by_id[str(monster_id)]
+        assert entry.get("editor_placement", {}).get("placement_kind") == "monster_spawn"
+        assert entry.get("spawn_authority", {}).get("respawn_policy_id") == "special_normal"
+        assert entry.get("spawn_authority", {}).get("respawn_seconds") == 900
+    assert entries_by_id["74"].get("classification") == "elite"
 
     print(
         "CANONICAL_MONSTER_CATALOG_HASH_PASS: "
         "lf_crlf_equivalent=1 binary_raw=1 source_metadata=1 "
         "excel_drop_authority=1 classification_placement_kind=1 "
         "local_from_res_portable=1 excel_source_sha=1 crystal_primary_zero=1 "
-        "deer1_provenance=1"
+        "variant_visual_pairs=8 undead_exact_id=25 boss_variants=3 "
+        "retired_source_preserved=3 retired_active_absent=3 "
+        "no_generic_fallback=1 special_normal_exact_ids=8"
     )
 
 

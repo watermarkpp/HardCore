@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "baseline": "e38215978c481b988df3203410bb1dda6b5b0968",
+  "protected": [
+    {
+      "path": "assets/maps",
+      "baseline_git_object": "c46ea4b3146096113ae793236a87e4ceceb7812d",
+      "status": "PASS"
+    },
+    {
+      "path": "map_editor_workspace",
+      "baseline_git_object": "fa6c3e7a67d389e555cdf4140337f37cf0ee88f2",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/equipment_attribute_master.json",
+      "baseline_git_object": "fd8262dbc67bd65b978f63e38da728a84e2ecf37",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "baseline_git_object": "9331d165fd92e48f459d40d463b426d213e64f09",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/ui",
+      "baseline_git_object": "990bbde8a34c2b1f384df05fb9ee9d8a6aa5440c",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/ui/manual_layout_overrides.json",
+      "baseline_git_object": "5d4c4ca3936f292c78f482c5e2205c58fc851270",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/ui/item_name_rarity_v1.json",
+      "baseline_git_object": "ae1d4fdab6581147912d0c67a8dfc05257a9042d",
+      "status": "PASS"
+    }
+  ],
+  "skill_source_changed_fields": [
+    {
+      "path": ".skills[14].geometry.conflict_note",
+      "before": "CN 1.76文字明确2×2；部分开源源码为十字，Vanilla在本项目冻结为2×2。",
+      "after": "2026-09-13 user request 5 overrides the previous 2x2 project geometry; timing, damage and stacking unchanged."
+    },
+    {
+      "path": ".skills[14].geometry.width_tiles",
+      "before": 2,
+      "after": 3
+    },
+    {
+      "path": ".skills[14].geometry.center_policy",
+      "before": "snap selected point to canonical 2x2 anchor",
+      "after": "selected grid cell centered in exact 3x3 square"
+    },
+    {
+      "path": ".skills[14].geometry.height_tiles",
+      "before": 2,
+      "after": 3
+    },
+    {
+      "path": ".skills[14].required_tests[0]",
+      "before": "fire_wall_exact_2x2",
+      "after": "fire_wall_exact_3x3"
+    }
+  ]
+}

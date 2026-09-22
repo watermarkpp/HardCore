@@ -585,7 +585,8 @@ static func create_cell_union(
 	release_id: String,
 	origin_ground_gu: Vector2,
 	geometry_cells_grid_steps: Array[Vector2i],
-	coordinate_context := {}
+	coordinate_context := {},
+	cell_origin_offset_gu := Vector2.ZERO
 ) -> Dictionary:
 	var coordinate_fields := _coordinate_fields_from_context(
 		coordinate_context
@@ -600,7 +601,7 @@ static func create_cell_union(
 	var polygons_screen_offset_px: Array[PackedVector2Array] = []
 	var copied_cells_grid_steps: Array[Vector2i] = []
 	for cell_grid_steps: Vector2i in geometry_cells_grid_steps:
-		var center_ground_gu := Vector2(cell_grid_steps)
+		var center_ground_gu := Vector2(cell_grid_steps) + cell_origin_offset_gu
 		var cell_polygon_ground_gu := PackedVector2Array([
 			center_ground_gu + Vector2(-0.5, -0.5),
 			center_ground_gu + Vector2(0.5, -0.5),
@@ -652,6 +653,8 @@ static func create_cell_union(
 		),
 		"visual_space": "screen_px_derived_only",
 	}
+	if cell_origin_offset_gu != Vector2.ZERO:
+		snapshot["cell_origin_offset_gu"] = cell_origin_offset_gu
 	snapshot.merge(coordinate_fields, true)
 	snapshot.make_read_only()
 	return snapshot
@@ -707,6 +710,12 @@ static func validate_for_consumer(
 	policy: StringName = VALIDATION_STRICT_V2
 ) -> Dictionary:
 	if policy == VALIDATION_STRICT_V2:
+		var payload_reason := _audit_strict_payload_reason(snapshot)
+		if not payload_reason.is_empty():
+			return {"valid": false, "reason": payload_reason, "schema_version": 0,
+				"coordinate_space": str(snapshot.get("coordinate_space", "")),
+				"runtime_map_id": str(snapshot.get("runtime_map_id", "")),
+				"policy": VALIDATION_STRICT_V2, "legacy_used": false, "details": {}}
 		var strict := validate(snapshot, expected_context)
 		if not bool(strict.get("valid", false)):
 			return {
@@ -923,6 +932,7 @@ static func validate(
 		"axis_screen_direction_px",
 		"start_ground_gu",
 		"end_ground_gu",
+		"cell_origin_offset_gu",
 	]:
 		if snapshot.has(vector_key) and not _vector2_is_finite(
 			snapshot.get(vector_key, Vector2.ZERO) as Vector2
@@ -1122,6 +1132,131 @@ static func ground_polygon_gu(snapshot: Dictionary) -> PackedVector2Array:
 		if raw_polygon is PackedVector2Array
 		else PackedVector2Array()
 	)
+
+
+## R3X-1: derive the broadphase envelope only from authoritative ground-GU
+## geometry. Screen-space visual bounds are intentionally never consulted.
+static func ground_aabb(snapshot: Dictionary) -> Dictionary:
+	if snapshot.is_empty():
+		return _ground_aabb_failure("snapshot_missing")
+	if not has_legacy_base_contract(snapshot):
+		return _ground_aabb_failure("contract_invalid")
+	var shape_type := str(snapshot.get("shape_type", ""))
+	if shape_type not in SUPPORTED_SHAPE_TYPES:
+		return _ground_aabb_failure("shape_type_invalid")
+	if shape_type == SHAPE_CELL_UNION:
+		return _ground_aabb_cell_union(snapshot)
+	if shape_type == SHAPE_SWEPT_CAPSULE_PATH:
+		var raw_start: Variant = snapshot.get("segment_start_ground_gu")
+		var raw_end: Variant = snapshot.get("segment_end_ground_gu")
+		var raw_radius: Variant = snapshot.get("path_radius_gu")
+		if not raw_start is Vector2 or not raw_end is Vector2 or not _audit_nonnegative_number(raw_radius):
+			return _ground_aabb_failure("capsule_fields_invalid")
+		var start: Vector2 = raw_start
+		var end: Vector2 = raw_end
+		if not start.is_finite() or not end.is_finite():
+			return _ground_aabb_failure("capsule_points_invalid")
+		var radius := float(raw_radius)
+		return _ground_aabb_from_min_max(start.min(end) - Vector2.ONE * radius, start.max(end) + Vector2.ONE * radius)
+	if shape_type in [SHAPE_CIRCLE, SHAPE_SECTOR_ARC, SHAPE_TARGET_FOOTPRINT]:
+		var center_key := "center_ground_gu"
+		var radius_key := "radius_gu"
+		if shape_type == SHAPE_SECTOR_ARC:
+			center_key = "origin_ground_gu"
+		elif shape_type == SHAPE_TARGET_FOOTPRINT:
+			center_key = "target_center_ground_gu"
+			radius_key = "target_combat_radius_gu"
+		var raw_center: Variant = snapshot.get(center_key)
+		var raw_radius: Variant = snapshot.get(radius_key)
+		if not raw_center is Vector2 or not _audit_nonnegative_number(raw_radius):
+			return _ground_aabb_failure("analytic_fields_invalid")
+		var center: Vector2 = raw_center
+		if not center.is_finite():
+			return _ground_aabb_failure("analytic_center_invalid")
+		var radius := float(raw_radius)
+		# A sector's enclosing circle is deliberately conservative. The exact
+		# sector predicate still decides hits; preview tessellation never does.
+		return _ground_aabb_from_min_max(center - Vector2.ONE * radius, center + Vector2.ONE * radius)
+	return _ground_aabb_from_polygon_value(snapshot.get("polygon_ground_gu"))
+
+
+
+static func _ground_aabb_cell_union(snapshot: Dictionary) -> Dictionary:
+	var raw_polygons: Variant = snapshot.get("polygons_ground_gu", null)
+	if raw_polygons is Array and not (raw_polygons as Array).is_empty():
+		var min_ground_gu := Vector2(INF, INF)
+		var max_ground_gu := Vector2(-INF, -INF)
+		for raw_polygon: Variant in raw_polygons as Array:
+			if not raw_polygon is PackedVector2Array:
+				return _ground_aabb_failure("cell_union_polygon_invalid")
+			var polygon: PackedVector2Array = raw_polygon
+			if polygon.size() < 3 or not _polygon_is_finite(polygon):
+				return _ground_aabb_failure("cell_union_polygon_invalid")
+			for point_ground_gu: Vector2 in polygon:
+				min_ground_gu = min_ground_gu.min(point_ground_gu)
+				max_ground_gu = max_ground_gu.max(point_ground_gu)
+		return _ground_aabb_from_min_max(min_ground_gu, max_ground_gu)
+	if raw_polygons != null and not raw_polygons is Array:
+		return _ground_aabb_failure("cell_union_polygons_invalid")
+	var raw_cells: Variant = snapshot.get("geometry_cells_grid_steps", null)
+	if not raw_cells is Array or (raw_cells as Array).is_empty():
+		return _ground_aabb_failure("cell_union_geometry_missing")
+	var min_ground_gu := Vector2(INF, INF)
+	var max_ground_gu := Vector2(-INF, -INF)
+	for raw_cell: Variant in raw_cells as Array:
+		if not raw_cell is Vector2i:
+			return _ground_aabb_failure("cell_union_cell_invalid")
+		var center_ground_gu := Vector2(raw_cell as Vector2i) + Vector2(snapshot.get("cell_origin_offset_gu", Vector2.ZERO))
+		min_ground_gu = min_ground_gu.min(
+			center_ground_gu - Vector2.ONE * 0.5
+		)
+		max_ground_gu = max_ground_gu.max(
+			center_ground_gu + Vector2.ONE * 0.5
+		)
+	return _ground_aabb_from_min_max(min_ground_gu, max_ground_gu)
+
+
+static func _ground_aabb_from_polygon_value(raw_polygon: Variant) -> Dictionary:
+	if not raw_polygon is PackedVector2Array:
+		return _ground_aabb_failure("polygon_missing")
+	var polygon: PackedVector2Array = raw_polygon
+	if polygon.size() < 3 or not _polygon_is_finite(polygon):
+		return _ground_aabb_failure("polygon_invalid")
+	var min_ground_gu := polygon[0]
+	var max_ground_gu := polygon[0]
+	for point_ground_gu: Vector2 in polygon:
+		min_ground_gu = min_ground_gu.min(point_ground_gu)
+		max_ground_gu = max_ground_gu.max(point_ground_gu)
+	return _ground_aabb_from_min_max(min_ground_gu, max_ground_gu)
+
+
+static func _ground_aabb_from_min_max(
+	min_ground_gu: Vector2,
+	max_ground_gu: Vector2
+) -> Dictionary:
+	if (
+		not _vector2_is_finite(min_ground_gu)
+		or not _vector2_is_finite(max_ground_gu)
+		or min_ground_gu.x > max_ground_gu.x
+		or min_ground_gu.y > max_ground_gu.y
+	):
+		return _ground_aabb_failure("aabb_non_finite")
+	return {
+		"valid": true,
+		"bounds_ground_gu": Rect2(
+			min_ground_gu,
+			max_ground_gu - min_ground_gu
+		),
+		"reason": "",
+	}
+
+
+static func _ground_aabb_failure(reason: String) -> Dictionary:
+	return {
+		"valid": false,
+		"bounds_ground_gu": Rect2(),
+		"reason": reason,
+	}
 
 
 static func ground_polygons_gu(
@@ -1562,7 +1697,7 @@ static func _cell_union_intersects_circle_inclusive_ground_gu(
 	for raw_cell: Variant in raw_cells:
 		if not raw_cell is Vector2i:
 			continue
-		var delta_ground_gu := target_center_ground_gu - Vector2(raw_cell)
+		var delta_ground_gu := target_center_ground_gu - Vector2(raw_cell) - Vector2(snapshot.get("cell_origin_offset_gu", Vector2.ZERO))
 		var nearest_delta_ground_gu := Vector2(
 			maxf(absf(delta_ground_gu.x) - 0.5, 0.0),
 			maxf(absf(delta_ground_gu.y) - 0.5, 0.0)
@@ -1623,3 +1758,105 @@ static func _project_polygon(
 		minimum = minf(minimum, projected)
 		maximum = maxf(maximum, projected)
 	return Vector2(minimum, maximum)
+
+
+static func _audit_nonnegative_number(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value)) and float(value) >= 0.0
+
+
+static func _audit_strict_payload_reason(snapshot: Dictionary) -> String:
+	var version: Variant = snapshot.get("schema_version")
+	if not version is int or int(version) != SCHEMA_VERSION:
+		return "strict_v2_requires_schema_2"
+	if not has_legacy_base_contract(snapshot):
+		return "strict_v2_base_contract_missing"
+	if str(snapshot.get("snapshot_id", "")).is_empty():
+		return "snapshot_id_missing"
+	if str(snapshot.get("projection_api_contract_id", "")) != PROJECTION_API_CONTRACT_ID:
+		return "projection_api_contract_invalid"
+	var shape_type := str(snapshot.get("shape_type", ""))
+	var contracts := {
+		SHAPE_DIRECTED_RECTANGLE: DIRECTED_RECTANGLE_CONTRACT_ID,
+		SHAPE_SECTOR_ARC: SECTOR_ARC_CONTRACT_ID,
+		SHAPE_CIRCLE: CIRCLE_CONTRACT_ID,
+		SHAPE_SWEPT_CAPSULE_PATH: SWEPT_CAPSULE_PATH_CONTRACT_ID,
+		SHAPE_TARGET_FOOTPRINT: TARGET_FOOTPRINT_CONTRACT_ID,
+		SHAPE_CELL_UNION: CELL_UNION_CONTRACT_ID,
+	}
+	if str(snapshot.get("shape_contract_id", "")) != str(contracts.get(shape_type, "INVALID")):
+		return "shape_contract_invalid"
+	for key: String in ["origin_ground_gu", "projection_origin_ground_gu"]:
+		var point: Variant = snapshot.get(key)
+		if not point is Vector2:
+			return "invalid_%s" % key
+		if not (point as Vector2).is_finite():
+			return "non_finite_%s" % key
+	# Guard types before the older validator's typed casts execute.
+	for key: String in ["direction_ground_gu", "axis_screen_offset_px", "axis_screen_direction_px", "start_ground_gu", "end_ground_gu", "cell_origin_offset_gu", "perpendicular_ground_gu"]:
+		if snapshot.has(key):
+			var point: Variant = snapshot[key]
+			if not point is Vector2:
+				return "invalid_%s" % key
+			if not (point as Vector2).is_finite():
+				return "non_finite_%s" % key
+	for key: String in ["effect_length_gu", "effect_width_gu", "axis_screen_length_px"]:
+		if snapshot.has(key) and not _audit_nonnegative_number(snapshot[key]):
+			return "invalid_%s" % key
+	# Q1-A: an absolute snapshot created with a failing position converter
+	# legitimately stores an EMPTY screen-offset polygon (explicit projection
+	# failure marker). The empty state is owned by the converter checks in
+	# validate()/validate_for_consumer(), not by this payload audit; only
+	# non-empty screen polygons must be well-formed. Ground polygons have no
+	# converter path, so they must always be real polygons.
+	for key: String in ["polygon_ground_gu", "polygon_screen_offset_px"]:
+		var polygon: Variant = snapshot.get(key)
+		if not polygon is PackedVector2Array:
+			return "invalid_%s" % key
+		var points := polygon as PackedVector2Array
+		if points.is_empty():
+			if key == "polygon_screen_offset_px":
+				continue
+			return "invalid_%s" % key
+		if points.size() < 3:
+			return "invalid_%s" % key
+		if not _polygon_is_finite(points):
+			return "non_finite_%s" % key
+	for key: String in ["polygons_ground_gu", "polygons_screen_offset_px"]:
+		if not snapshot.has(key):
+			continue # Directed-rectangle builder intentionally uses singular keys.
+		var polygons: Variant = snapshot[key]
+		if not polygons is Array or (polygons as Array).is_empty():
+			return "invalid_%s" % key
+		for polygon: Variant in polygons:
+			if not polygon is PackedVector2Array:
+				return "invalid_%s_member" % key
+			var member := polygon as PackedVector2Array
+			if not _polygon_is_finite(member):
+				return "non_finite_%s_member" % key
+			if member.size() < 3:
+				if key == "polygons_screen_offset_px" and member.is_empty():
+					continue
+				return "invalid_%s_member" % key
+	if shape_type in [SHAPE_DIRECTED_RECTANGLE, SHAPE_SECTOR_ARC]:
+		var direction: Variant = snapshot.get("direction_ground_gu")
+		if not direction is Vector2 or not (direction as Vector2).is_finite() or (direction as Vector2).length_squared() <= 0.0:
+			return "direction_invalid"
+	if shape_type == SHAPE_DIRECTED_RECTANGLE:
+		for key: String in ["half_width_gu", "effect_length_gu", "effect_width_gu"]:
+			if not _audit_nonnegative_number(snapshot.get(key)):
+				return "invalid_%s" % key
+	if shape_type == SHAPE_SECTOR_ARC:
+		var half_angle: Variant = snapshot.get("half_angle_radians")
+		if not _audit_nonnegative_number(half_angle) or float(half_angle) > PI * 0.5:
+			return "sector_angle_invalid"
+	if shape_type == SHAPE_CELL_UNION:
+		var cells: Variant = snapshot.get("geometry_cells_grid_steps")
+		if not cells is Array or (cells as Array).is_empty():
+			return "cell_union_cells_missing"
+		for cell: Variant in cells:
+			if not cell is Vector2i:
+				return "cell_union_cell_invalid"
+	var bounds_result := ground_aabb(snapshot)
+	if not bool(bounds_result.get("valid", false)):
+		return str(bounds_result.get("reason", "snapshot_bounds_invalid"))
+	return ""

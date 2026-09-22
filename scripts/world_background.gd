@@ -4,10 +4,13 @@ extends Node2D
 const EnvironmentCatalogScript := preload("res://scripts/environment_catalog.gd")
 const MapCoordinateMapperScript := preload("res://scripts/map_coordinate_mapper.gd")
 const GothicBichCampBuilderScript := preload("res://scripts/layers/presentation/gothic_bich_camp_builder.gd")
+const EditorChunkGroundCanvasScript := preload("res://scripts/layers/presentation/editor_chunk_ground_canvas.gd")
 const MapEditorRuntimeBridgeScript := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
 const EditorCoordinateScript := preload("res://scripts/map_editor/map_editor_coordinate.gd")
 const RuntimeCollisionGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd")
 const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_editor_runtime_visual_geometry_service.gd")
+const WallRenderPlanRuntimeServiceScript := preload("res://scripts/map_editor/map_editor_wall_render_plan_runtime_service.gd")
+const MapEditorInstanceServiceScript := preload("res://scripts/map_editor/map_editor_instance_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 # P1-004: texture atlases are now lazy-loaded.  Only the target map's
 # atlases are loaded when a map is built.  Old const names remain as
@@ -89,6 +92,8 @@ const SOURCE_COLLISION_RADIUS := 28
 const EDITOR_RUNTIME_EDGE_SKIRT_CONTRACT_ID := "map_runtime_nonwalkable_edge_skirt_v1"
 const EDITOR_RUNTIME_EDGE_SKIRT_FADE_TILES := 10.0
 const DEFAULT_EDITOR_RUNTIME_GUARD_BAND_WORLD := 1536.0
+const STAGED_INITIAL_BUILD_CONTRACT_ID := "world_background.staged_initial_build.v1"
+const STATIC_WALL_BRIDGE_BUCKET_SIZE := 32
 
 @export var grid_radius := 28
 @export var tile_width := 64.0
@@ -103,6 +108,7 @@ var _draw_focus_source := Vector2i(-99999, -99999)
 var _collision_focus_source := Vector2i(-99999, -99999)
 var _source_collision_nodes: Array[Node] = []
 var _source_collision_shape_count := 0
+var _environment_collision_revision := 0
 var _collision_rebuild_pending := false
 var _pending_collision_focus := Vector2i.ZERO
 var _source_mask_image: Image
@@ -114,9 +120,52 @@ var _full_ground_ready := false
 var _gothic_camp_layout: Dictionary = {}
 var _editor_runtime_visual: Dictionary = {}
 var _editor_runtime_size := Vector2i.ZERO
-var _editor_runtime_blocked_tiles: Dictionary = {}
+var _editor_runtime_collision_snapshot: Dictionary = {}
+var _editor_runtime_collision_invalid := false
 var _editor_runtime_chunk_draws: Array[Dictionary] = []
+## FW-STRIPES: dedicated single-item canvas for authored ground chunks with
+## LINEAR sampling (see editor_chunk_ground_canvas.gd). Data authority stays
+## _editor_runtime_chunk_draws; this node only owns the presentation filter.
+## Untyped on purpose: the canvas is accessed through the preloaded script
+## const (this file's dependency convention), not a global class reference.
+var _editor_chunk_ground_canvas = null
 var _editor_runtime_fallback_ground := false
+var _editor_runtime_actor_sort_roots: Dictionary = {}
+var _editor_runtime_bridge_commands: Array[Dictionary] = []
+var _editor_runtime_bridge_size := Vector2i.ZERO
+var _static_wall_bridge_image_cache: Dictionary = {}
+var _static_wall_bridge_used_rect_cache: Dictionary = {}
+var _static_wall_bridge_built_generation := -999999
+# ── WALL-P1R Consumer R1 state (advisor contracts C3-C8) ──
+## Validated plan candidate from the runtime service; {} before registration.
+var _wall_render_candidate: Dictionary = {}
+## LEGACY until submit-time selection proves every derived texture; the
+## switch happens on pure descriptor data before any node is created.
+var _wall_render_mode := "LEGACY"
+var _wall_render_plan_found := false
+var _wall_render_fallback_reason := ""
+var _wall_render_derived_prefetch_failures := 0
+var _static_wall_bridge_stats := {
+	"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+	"generation": -1,
+	"candidate_pairs": 0,
+	"scanned_pixels": 0,
+	"overlay_count": 0,
+	"record_usec": 0,
+	"raster_usec": 0,
+	"upload_usec": 0,
+	"build_usec": 0,
+	"wall_alpha_samples": 0,
+	"wall_stack_cache_hits": 0,
+	"wall_stack_cache_misses": 0,
+	"wall_stack_duplicate_builds": 0,
+	"wall_resolve_queries": 0,
+	"wall_owner_samples": 0,
+	"wall_base_samples": 0,
+	"wall_relation_skips": 0,
+	"hydrated_textures": 0,
+	"hydrated_bytes": 0,
+}
 
 # ── HC-P1-004 staged build contract ──
 # When attached, every formal resource in the build stages is obtained through
@@ -132,6 +181,8 @@ var _pending_collision_descriptors: Array[Dictionary] = []
 var _pending_arrival_position := Vector2.ZERO
 var _source_mask_markers: Array[Node] = []
 var _gothic_camp_built: Dictionary = {}
+var _skip_initial_legacy_build_once := false
+var _legacy_ready_rebuild_count := 0
 
 # Explicit whitelist of global resources that may be shared across regions.
 # Each entry documents ownership; these are the only resources allowed with
@@ -151,8 +202,28 @@ const SHARED_GLOBAL_RESOURCE_WHITELIST := {
 func _ready() -> void:
 	z_index = -20
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_rebuild_environment()
+	if _skip_initial_legacy_build_once:
+		_skip_initial_legacy_build_once = false
+		set_meta("initial_legacy_build_skipped", true)
+	else:
+		_legacy_ready_rebuild_count += 1
+		_rebuild_environment()
 	queue_redraw()
+
+
+## Production initial entry calls this before add_child(background). The
+## coordinator then owns the first map build through prepare_map_build() and
+## its staged descriptor/collision queues. Other callers retain the legacy
+## synchronous _ready() build by default.
+func defer_initial_legacy_build_to_coordinator() -> bool:
+	if is_inside_tree():
+		return false
+	_skip_initial_legacy_build_once = true
+	return true
+
+
+func legacy_ready_rebuild_count() -> int:
+	return _legacy_ready_rebuild_count
 
 
 func set_zone(value: String) -> void:
@@ -164,8 +235,14 @@ func set_zone(value: String) -> void:
 
 func set_focus_position(world_position: Vector2) -> void:
 	_focus_position = world_position
+	# G0.1 (remote review 2026-09-16): decide whether the profile is needed
+	# BEFORE fetching it. Without the source mask there is no focus work at
+	# all, and editor maps without a catalog profile must not pay even a
+	# cache lookup on this per-frame path.
+	if _source_mask_image == null:
+		return
 	var profile := environment_profile()
-	if _source_mask_image == null or str(profile.get("coordinate_projection", "")) != "isometric_64x32_full_size":
+	if str(profile.get("coordinate_projection", "")) != "isometric_64x32_full_size":
 		return
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	var focus_source := Vector2i(MapCoordinateMapperScript.world_to_source(world_position, source_size).round())
@@ -188,7 +265,10 @@ func _apply_pending_collision_rebuild() -> void:
 
 
 func uses_bich_art() -> bool:
-	return str(_active_theme().get("asset_set", "")) == "bich" and _active_map_id() == 4
+	return (
+		str(_active_theme().get("asset_set", "")) == "bich"
+		and _presentation_map_id(_active_map_id()) == 4
+	)
 
 
 func uses_orc_tomb_art() -> bool:
@@ -236,7 +316,9 @@ func uses_environment_template() -> bool:
 
 
 func environment_profile() -> Dictionary:
-	return EnvironmentCatalogScript.get_map_profile(_active_map_id())
+	return EnvironmentCatalogScript.get_map_profile(
+		_presentation_map_id(_active_map_id())
+	)
 
 
 func environment_theme_id() -> String:
@@ -245,6 +327,14 @@ func environment_theme_id() -> String:
 
 func environment_collision_count() -> int:
 	return _bich_collision_shapes.size() + _tomb_collision_shapes.size()
+
+
+## Monotonic revision for the formal environment collision authority. This is
+## deliberately independent from bootstrap/generation tokens: a focus-window
+## rebuild, map clear, or completed staged build must invalidate attack LOS
+## results even when the surrounding bootstrap generation is unchanged.
+func environment_collision_revision() -> int:
+	return _environment_collision_revision
 
 
 func source_collision_shape_count() -> int:
@@ -282,7 +372,117 @@ func is_environment_point_blocked(world_position: Vector2) -> bool:
 	# obsolete collision data into the current map.
 	if _editor_runtime_size != Vector2i.ZERO:
 		return _editor_runtime_blocks_world(world_position)
+	if _editor_runtime_collision_invalid:
+		return true
 	return is_bich_point_blocked(world_position) or is_orc_tomb_point_blocked(world_position) or _source_mask_blocks_world(world_position)
+
+
+## One deterministic environment query for an actor footprint.  Formal runtime
+## collision uses the compiled integer-cell snapshot directly; legacy profiles
+## retain the existing point provider semantics and sample order.
+func is_environment_actor_blocked(
+	center_world_px: Vector2,
+	collision_radius_px: float
+) -> bool:
+	# HC-POLY-R2
+	if _editor_runtime_collision_snapshot.has("poly_index"):
+		if not is_finite(collision_radius_px) or collision_radius_px < 0.0:
+			return true
+		return HCPPolyRuntime.actor_world(_editor_runtime_collision_snapshot, center_world_px,
+			WorldSpatialRulesScript.actor_footprint_polygon_px(maxf(0.0, collision_radius_px)))
+	if not center_world_px.is_finite():
+		return true
+	var sample_radius_px := maxf(0.0, collision_radius_px - 1.0)
+	if _editor_runtime_size != Vector2i.ZERO:
+		RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+		if _editor_runtime_blocks_world(center_world_px):
+			return true
+		if sample_radius_px <= 0.0:
+			return false
+		for index: int in range(WorldSpatialRulesScript.ACTOR_FOOTPRINT_SEGMENTS):
+			var offset_px := WorldSpatialRulesScript.actor_footprint_offset_px(
+				index,
+				sample_radius_px,
+			)
+			RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+			if _editor_runtime_blocks_world(center_world_px + offset_px):
+				return true
+		return false
+	if _editor_runtime_collision_invalid:
+		return true
+	RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+	if is_environment_point_blocked(center_world_px):
+		return true
+	if sample_radius_px <= 0.0:
+		return false
+	for index: int in range(WorldSpatialRulesScript.ACTOR_FOOTPRINT_SEGMENTS):
+		var offset_px := WorldSpatialRulesScript.actor_footprint_offset_px(
+			index,
+			sample_radius_px,
+		)
+		RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+		if is_environment_point_blocked(center_world_px + offset_px):
+			return true
+	return false
+
+
+## Ground-GU segment query with the legacy inclusive ceil sample contract.
+## Formal maps use the precompiled snapshot and therefore perform no dynamic
+## provider call per sample; profile maps retain the old point conversion.
+func is_environment_segment_blocked_ground(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+	step_gu := 0.25
+) -> bool:
+	# HC-POLY-R2
+	if _editor_runtime_collision_snapshot.has("poly_index"):
+		if not is_finite(step_gu) or step_gu <= 0.0:
+			return true
+		return _editor_runtime_collision_snapshot.poly_index.capsule_blocked(source_ground_gu, target_ground_gu, 0.0)
+	if (
+		not source_ground_gu.is_finite()
+		or not target_ground_gu.is_finite()
+		or not is_finite(float(step_gu))
+		or float(step_gu) <= 0.0
+	):
+		return true
+	var distance_gu := source_ground_gu.distance_to(target_ground_gu)
+	if not is_finite(distance_gu):
+		return true
+	var sample_count := maxi(1, int(ceil(distance_gu / float(step_gu))))
+	if _editor_runtime_collision_invalid:
+		return true
+	var legacy_source_size := Vector2i.ZERO
+	if _editor_runtime_size == Vector2i.ZERO:
+		var legacy_profile := environment_profile()
+		var raw_source_size: Variant = legacy_profile.get("source_size", null)
+		if not raw_source_size is Vector2i:
+			return true
+		legacy_source_size = raw_source_size
+		if legacy_source_size.x <= 0 or legacy_source_size.y <= 0:
+			return true
+	for sample_index: int in range(sample_count + 1):
+		var progress := float(sample_index) / float(sample_count)
+		var sample_ground_gu := source_ground_gu.lerp(target_ground_gu, progress)
+		var blocked := false
+		if _editor_runtime_size != Vector2i.ZERO:
+			RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+			blocked = RuntimeCollisionGeometryScript.compiled_collision_contains_ground(
+				_editor_runtime_collision_snapshot,
+				sample_ground_gu,
+			)
+		else:
+			var sample_world_px := MapCoordinateMapperScript.ground_position_gu_to_screen_position_px(
+				sample_ground_gu,
+				legacy_source_size,
+			)
+			if not sample_world_px.is_finite():
+				return true
+			RuntimeDiagnostics.increment_performance_counter(&"environment_point_samples")
+			blocked = is_environment_point_blocked(sample_world_px)
+		if blocked:
+			return true
+	return false
 
 
 func bich_collision_count() -> int:
@@ -452,14 +652,10 @@ func _draw() -> void:
 		var raw_size:Array=_editor_runtime_visual.get("design_size",[64,64]);var size:=Vector2i(int(raw_size[0]),int(raw_size[1]))
 		var corners := editor_runtime_ground_boundary_world(size)
 		draw_colored_polygon(corners, Color(str(_editor_runtime_visual.get("base_color", "#465827"))))
-		# Keep all authored chunk textures on one CanvasItem. Godot otherwise
-		# culls distant Sprite2D chunks and can defer their GPU upload until the
-		# player approaches an edge, producing a visible hitch on mobile.
-		for chunk_draw: Dictionary in _editor_runtime_chunk_draws:
-			var texture: Texture2D = chunk_draw.get("texture")
-			var rect: Rect2 = chunk_draw.get("rect", Rect2())
-			if texture != null and rect.size.x > 0.0 and rect.size.y > 0.0:
-				draw_texture_rect(texture, rect, false)
+		# Ground chunks render on the dedicated EditorChunkGroundCanvas child
+		# (single canvas item, LINEAR sampling - FW-STRIPES fix). The base
+		# fill above still draws on this item first, so the layering below
+		# props and above the guard band is unchanged.
 		return
 	if _full_ground_ready:
 		return
@@ -498,10 +694,8 @@ func _draw() -> void:
 
 
 func editor_runtime_ground_boundary_world(size: Vector2i) -> PackedVector2Array:
-	# Ground chunks are rasterized around cell centres, so their visible diamond
-	# spans [-0.5, size - 0.5]. Keep base fill, guard calculations and hard
-	# collision on that one boundary. [0, size] is the same diamond shifted 16
-	# world pixels downward and creates the double edge visible on mobile.
+	# The v2 ground canvas contains the complete authored cell union. Keep the
+	# base fill and guard on the same logical [0, size] boundary as collision.
 	return RuntimeCollisionGeometryScript.map_inner_boundary_world(size)
 
 
@@ -580,14 +774,51 @@ func _rebuild_environment() -> void:
 
 
 func clear_environment() -> void:
+	_environment_collision_revision += 1
 	_ground_tile_cache.clear()
 	_full_ground_ready = false
 	_gothic_camp_layout.clear()
 	_editor_runtime_visual.clear()
 	_editor_runtime_size = Vector2i.ZERO
-	_editor_runtime_blocked_tiles.clear()
+	_editor_runtime_collision_snapshot.clear()
+	_editor_runtime_collision_invalid = false
 	_editor_runtime_chunk_draws.clear()
+	_editor_chunk_ground_canvas = null
 	_editor_runtime_fallback_ground = false
+	_editor_runtime_actor_sort_roots.clear()
+	_editor_runtime_bridge_commands.clear()
+	_editor_runtime_bridge_size = Vector2i.ZERO
+	# WALL-P1R: clear cross-map diagnostic state so a legacy map built after
+	# a planned map never inherits its candidate/mode/fallback fields.
+	_wall_render_candidate = {}
+	_wall_render_plan_found = false
+	_wall_render_mode = "LEGACY"
+	_wall_render_fallback_reason = ""
+	_wall_render_derived_prefetch_failures = 0
+	_static_wall_bridge_image_cache.clear()
+	_static_wall_bridge_used_rect_cache.clear()
+	_static_wall_bridge_built_generation = -999999
+	_static_wall_bridge_stats = {
+		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+		"generation": _generation_token(),
+		"candidate_pairs": 0,
+		"scanned_pixels": 0,
+		"overlay_count": 0,
+		"record_usec": 0,
+		"raster_usec": 0,
+		"upload_usec": 0,
+		"build_usec": 0,
+		"wall_alpha_samples": 0,
+		"wall_stack_cache_hits": 0,
+		"wall_stack_cache_misses": 0,
+		"wall_stack_duplicate_builds": 0,
+		"wall_resolve_queries": 0,
+		"wall_owner_samples": 0,
+		"wall_base_samples": 0,
+		"wall_relation_skips": 0,
+		"hydrated_textures": 0,
+		"hydrated_bytes": 0,
+	}
 	for node: Node in _environment_nodes:
 		if is_instance_valid(node):
 			node.queue_free()
@@ -660,6 +891,9 @@ func set_pending_arrival_position(position_px: Vector2) -> void:
 func submit_staged_build() -> void:
 	if bootstrap_coordinator == null:
 		return
+	# WALL-P1R C4: select optimized vs legacy BEFORE any descriptor reaches
+	# BUILD_MAP; only the selected descriptor set is ever submitted.
+	_select_wall_render_mode()
 	bootstrap_coordinator.submit_map_descriptors(_pending_map_descriptors)
 	bootstrap_coordinator.submit_collision_descriptors(_pending_collision_descriptors)
 
@@ -669,13 +903,17 @@ func finish_map_build() -> void:
 
 
 func _finish_map_build() -> void:
+	_build_static_authored_wall_bridge(
+		_editor_runtime_bridge_commands, _editor_runtime_bridge_size
+	)
+	_environment_collision_revision += 1
 	_staged_build_complete = true
 	_staged_build_map_id = _active_map_id()
 	queue_redraw()
 
 
 func _default_zone_name(map_id: int) -> String:
-	if map_id == 4:
+	if _presentation_map_id(map_id) == 4:
 		return "比奇省"
 	if _orc_tomb_map_id() in [217, 218, 221]:
 		return "兽人古墓"
@@ -714,9 +952,10 @@ func _append_actor_sort_node(root: Node2D, sprite: Sprite2D) -> Node2D:
 	if not _generation_is_current():
 		root.free()
 		return null
-	get_parent().add_child(root)
+	if root.get_parent() == null:
+		get_parent().add_child(root)
+		_environment_nodes.append(root)
 	root.add_child(sprite)
-	_environment_nodes.append(root)
 	return root
 
 
@@ -775,7 +1014,10 @@ func _ground_atlas_path_for(profile: Dictionary) -> String:
 	var override_path := str(profile.get("ground_atlas_override", ""))
 	if not override_path.is_empty() and ResourceLoader.exists(override_path):
 		return override_path
-	if _active_map_id() == 4 or str(profile.get("asset_set", "")) == "bich":
+	if (
+		_presentation_map_id(_active_map_id()) == 4
+		or str(profile.get("asset_set", "")) == "bich"
+	):
 		return _REGION_ATLAS_PATHS.get("gothic_bich_ground", "")
 	return _REGION_ATLAS_PATHS.get("orc_tomb_ground", "")
 
@@ -894,6 +1136,19 @@ func _append_chunk_descriptors(
 		))
 
 
+## FW-STRIPES: lazily create the dedicated ground chunk canvas and keep it
+## in sync with the chunk draw list. Created through _append_environment_node
+## so clear_environment frees it with the rest of the map content; added as
+## the first ground child so props appended later keep rendering above it.
+func _sync_editor_chunk_ground_canvas() -> void:
+	if not is_instance_valid(_editor_chunk_ground_canvas):
+		var canvas := EditorChunkGroundCanvasScript.new()
+		_editor_chunk_ground_canvas = _append_environment_node(canvas)
+		if _editor_chunk_ground_canvas == null:
+			return
+	_editor_chunk_ground_canvas.set_chunk_draws(_editor_runtime_chunk_draws)
+
+
 func _append_instance_descriptors(
 	descriptors: Array,
 	runtime: Dictionary,
@@ -902,8 +1157,10 @@ func _append_instance_descriptors(
 	var raw_size: Array = runtime.get("design", {}).get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
+	_editor_runtime_bridge_commands = commands
+	_editor_runtime_bridge_size = size
 	for command_index in commands.size():
 		var command: Dictionary = commands[command_index]
 		var image_path := str(command.get("image_path", ""))
@@ -936,7 +1193,10 @@ func _append_profile_map_descriptors(
 	var profile := environment_profile()
 	if profile.is_empty():
 		return
-	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+	if (
+		_presentation_map_id(map_id) == 4
+		and bool(profile.get("gothic_camp_enabled", true))
+	):
 		descriptors.append(_descriptor(
 			"gothic_camp", 0, "ground", "", Vector2.ZERO, -20,
 			{
@@ -1023,7 +1283,7 @@ func _append_profile_map_descriptors(
 # ── HC-P1-004 target-map resource collection ──
 
 func _region_id_for_map(map_id: int, profile: Dictionary) -> String:
-	if map_id == 4:
+	if _presentation_map_id(map_id) == 4:
 		return "bich"
 	var asset_set := str(profile.get("asset_set", ""))
 	if asset_set == "":
@@ -1055,6 +1315,7 @@ func _collect_target_map_resources(map_id: int) -> void:
 						image_path, "texture", true, "editor_chunk", "target", region
 					)
 		_register_command_resources(runtime, region)
+		_register_wall_render_plan_resources(map_id, runtime, region)
 		_register_profile_ground_resources(map_id, profile, region)
 		# Editor runtime maps still resolve prop/light atlases through the
 		# profile (legacy draw fallbacks and diagnostics), so they must be
@@ -1070,7 +1331,10 @@ func _collect_target_map_resources(map_id: int) -> void:
 		coord.register_resource(
 			mask_path, "collision_mask", true, "collision_mask", "target", region
 		)
-	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+	if (
+		_presentation_map_id(map_id) == 4
+		and bool(profile.get("gothic_camp_enabled", true))
+	):
 		_register_gothic_camp_resources(region)
 
 
@@ -1079,7 +1343,7 @@ func _register_command_resources(runtime: Dictionary, region: String) -> void:
 	if coord == null:
 		return
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
 	for command: Dictionary in commands:
 		var image_path := _res_path(str(command.get("image_path", "")))
@@ -1087,6 +1351,449 @@ func _register_command_resources(runtime: Dictionary, region: String) -> void:
 			coord.register_resource(
 				image_path, "texture", true, "editor_instance", "target", region
 			)
+
+
+## WALL-P1R C3: validate the map's wall render plan at registration time and
+## register its derived textures (atlas pages + shadow chunks) as optional
+## best-effort prefetch. Legacy command textures stay fully registered above,
+## so a complete legacy fallback never needs a resource it does not have.
+## R11: the measurement-only A/B hook must never activate in release builds
+## - release players cannot flip the wall pipeline through an environment
+## variable. Dev/editor/test binaries (is_debug_build) keep the hook so the
+## formal R8/R9 A/B measurements keep working.
+static func wall_render_legacy_force_allowed() -> bool:
+	return OS.is_debug_build()
+
+
+func _register_wall_render_plan_resources(
+	map_id: int,
+	runtime: Dictionary,
+	region: String
+) -> void:
+	_wall_render_candidate = {}
+	_wall_render_plan_found = false
+	_wall_render_mode = "LEGACY"
+	_wall_render_fallback_reason = ""
+	_wall_render_derived_prefetch_failures = 0
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return
+	# Measurement-only A/B hook (WALL-P1R C10): forces the complete legacy
+	# path for the same map through the same production pipeline. Fail-closed
+	# by construction - unset (or any other value) keeps normal behavior,
+	# and release builds ignore the variable entirely (R11).
+	if (
+		wall_render_legacy_force_allowed()
+		and OS.get_environment("WALL_RENDER_FORCE_LEGACY") == "1"
+	):
+		_wall_render_fallback_reason = (
+			"forced legacy (WALL_RENDER_FORCE_LEGACY)"
+		)
+		return
+	var runtime_path := str(MapEditorRuntimeBridgeScript.runtime_path(map_id))
+	if runtime_path.is_empty() or runtime.is_empty():
+		return
+	var map_key := runtime_path.get_file().replace(".runtime.json", "")
+	var plan_path := (
+		"res://assets/data/runtime/map_editor/wall_render_plans/%s.wall_render_plan.json"
+		% map_key
+	)
+	_wall_render_plan_found = FileAccess.file_exists(plan_path)
+	# design_size authority mirrors the publisher: nested design.design_size.
+	# Missing/malformed design means no plan validation and a plain legacy
+	# map - never a silently assumed default size.
+	var design_container: Dictionary = runtime.get("design", {})
+	var design_raw: Array = design_container.get("design_size", [])
+	if design_raw.size() != 2 or int(design_raw[0]) <= 0 or int(design_raw[1]) <= 0:
+		_wall_render_fallback_reason = "runtime design.design_size missing"
+		return
+	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
+	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
+	)
+	var candidate := WallRenderPlanRuntimeServiceScript.load_candidate(
+		plan_path, _res_path(runtime_path), map_key, design_size, commands
+	)
+	_wall_render_candidate = candidate
+	if not bool(candidate.get("ok", false)):
+		_wall_render_fallback_reason = str(candidate.get("reason", "unknown"))
+		return
+	var plan: Dictionary = candidate["plan"]
+	for record: Dictionary in plan.get("atlas_pages", []):
+		_register_optional_derived_texture(str(record.get("path", "")), region)
+	for record: Dictionary in plan.get("shadow_chunks", []):
+		_register_optional_derived_texture(str(record.get("path", "")), region)
+
+
+func _register_optional_derived_texture(store_path: String, region: String) -> void:
+	var coord := bootstrap_coordinator
+	if coord == null or store_path.is_empty():
+		return
+	var resource_path := _res_path(store_path)
+	if not ResourceLoader.exists(resource_path):
+		return
+	coord.register_optional_prefetch_resource(
+		resource_path, "texture", "wall_render_derived", "target", region
+	)
+
+
+## WALL-P1R C4 selection point: runs at submit time, after WAIT_RESOURCES
+## completed, before any descriptor reaches BUILD_MAP. Optimized mode is
+## chosen only when every derived texture was prefetched and its size
+## matches the plan exactly; otherwise the already-built legacy descriptors
+## are submitted untouched. No node is ever created before this decision.
+func _select_wall_render_mode() -> void:
+	_wall_render_mode = "LEGACY"
+	var coord := bootstrap_coordinator
+	if coord == null or not bool(_wall_render_candidate.get("ok", false)):
+		return
+	var plan: Dictionary = _wall_render_candidate["plan"]
+	var derived_failures := 0
+	for record: Dictionary in plan.get("atlas_pages", []):
+		var error := _verify_derived_texture(record, "width", "height")
+		if error != "":
+			derived_failures += 1
+			_wall_render_fallback_reason = error
+	for record: Dictionary in plan.get("shadow_chunks", []):
+		var error := _verify_derived_texture(record, "size_px.x", "size_px.y")
+		if error != "":
+			derived_failures += 1
+			_wall_render_fallback_reason = error
+	_wall_render_derived_prefetch_failures = derived_failures
+	if derived_failures > 0:
+		return
+	# The descriptor transform is all-or-nothing: it flips the mode to
+	# LEGACY itself when its preflight or structural assertions fail, and
+	# OPTIMIZED is only recorded after a successful atomic swap.
+	if not _apply_wall_render_optimized_descriptors():
+		return
+	_wall_render_mode = "OPTIMIZED"
+	_wall_render_fallback_reason = ""
+
+
+func _verify_derived_texture(record: Dictionary, width_key: String, height_key: String) -> String:
+	var coord := bootstrap_coordinator
+	if coord == null:
+		return "no coordinator"
+	var resource_path := _res_path(str(record.get("path", "")))
+	var texture := coord.get_prefetched_resource(resource_path) as Texture2D
+	if texture == null:
+		return "derived texture not prefetched: %s" % resource_path
+	var expected_size := Vector2(
+		float(_record_dimension(record, width_key)),
+		float(_record_dimension(record, height_key)),
+	)
+	if texture.get_size() != expected_size:
+		return "derived texture size mismatch: %s" % resource_path
+	return ""
+
+
+## Atlas pages record width/height; chunk records record size_px[2].
+func _record_dimension(record: Dictionary, key: String) -> int:
+	if key == "size_px.x":
+		return int(record.get("size_px", [0, 0])[0])
+	if key == "size_px.y":
+		return int(record.get("size_px", [0, 0])[1])
+	return int(record.get(key, -1))
+
+
+## Replaces the wall-command legacy descriptors with optimized ones on pure
+## descriptor data - all-or-nothing (advisor Consumer R1.1 P0-3): the
+## preflight must prove every mapping command is representable before
+## _pending_map_descriptors is touched; any failure keeps the legacy set for
+## the WHOLE map. Returns true only when the optimized set was swapped in.
+## Per-group partial fallback is forbidden.
+func _apply_wall_render_optimized_descriptors() -> bool:
+	var plan: Dictionary = _wall_render_candidate["plan"]
+	var generation := _generation_token()
+	var commands := _editor_runtime_bridge_commands
+	var atlas_set := {}
+	for value: Variant in plan["atlas_command_indices"]:
+		atlas_set[int(value)] = true
+	var chunk_set := {}
+	for value: Variant in plan["shadow_chunk_command_indices"]:
+		chunk_set[int(value)] = true
+	var pages: Array = plan["atlas_pages"]
+	# Representative command -> {mapping, entry, page_path}.
+	var mapping_by_representative: Dictionary = {}
+	for entry: Dictionary in plan["atlas_entries"]:
+		for mapping: Dictionary in entry["group_mappings"]:
+			var representative := int(mapping["representative_command_index"])
+			var page_path := ""
+			var page_index := int(entry["page"])
+			if page_index >= 0 and page_index < pages.size():
+				page_path = _res_path(str(pages[page_index]["path"]))
+			mapping_by_representative[representative] = {
+				"mapping": mapping,
+				"entry": entry,
+				"page_path": page_path,
+			}
+	# Index every legacy descriptor by command.
+	var descriptor_by_command: Dictionary = {}
+	for descriptor: Dictionary in _pending_map_descriptors:
+		if str(descriptor.get("kind", "")) != "instance_sprite":
+			continue
+		descriptor_by_command[int(descriptor.get("source_index", -1))] = (
+			descriptor
+		)
+	# ── Preflight (advisor P0-3): prove the whole optimized set is
+	# representable BEFORE mutating _pending_map_descriptors.
+	for representative: int in mapping_by_representative:
+		if not descriptor_by_command.has(representative):
+			_wall_render_mode = "LEGACY"
+			_wall_render_fallback_reason = (
+				"atlas representative descriptor missing: %d" % representative
+			)
+			return false
+		var packed_preflight: Dictionary = mapping_by_representative[
+			representative
+		]
+		for value: Variant in packed_preflight["mapping"]["command_indices"]:
+			if not descriptor_by_command.has(int(value)):
+				_wall_render_mode = "LEGACY"
+				_wall_render_fallback_reason = (
+					"atlas mapping command descriptor missing: %d"
+					% int(value)
+				)
+				return false
+	# ── Transform: representative emits exactly one atlas sprite; EVERY
+	# other mapping command is consumed (advisor P0-2) - no legacy residue.
+	var atlas_command_to_representative: Dictionary = {}
+	for representative: int in mapping_by_representative:
+		for value: Variant in mapping_by_representative[representative][
+			"mapping"
+		]["command_indices"]:
+			atlas_command_to_representative[int(value)] = representative
+	var chunks_by_anchor: Dictionary = {}
+	for record: Dictionary in plan["shadow_chunks"]:
+		var anchor := int(record.get("insert_command_index", -1))
+		if not chunks_by_anchor.has(anchor):
+			chunks_by_anchor[anchor] = []
+		chunks_by_anchor[anchor].append(record)
+	var new_descriptors: Array[Dictionary] = []
+	var emitted_atlas_count := 0
+	for descriptor: Dictionary in _pending_map_descriptors:
+		if str(descriptor.get("kind", "")) != "instance_sprite":
+			new_descriptors.append(descriptor)
+			continue
+		var command_index := int(descriptor.get("source_index", -1))
+		# Flush chunk sprites anchored at or before this command position.
+		var pending_anchors: Array = chunks_by_anchor.keys()
+		pending_anchors.sort()
+		for anchor: int in pending_anchors:
+			if anchor > command_index:
+				continue
+			for record: Dictionary in chunks_by_anchor[anchor]:
+				new_descriptors.append(_wall_chunk_descriptor(
+					record, commands, generation
+				))
+			chunks_by_anchor.erase(anchor)
+		if atlas_command_to_representative.has(command_index):
+			if command_index == atlas_command_to_representative[command_index]:
+				var packed: Dictionary = mapping_by_representative[
+					command_index
+				]
+				new_descriptors.append(_descriptor(
+					"wall_atlas_sprite", command_index, "object",
+					str(packed["page_path"]), Vector2.ZERO, -5,
+					{
+						"command": descriptor["payload"]["command"],
+						"entry": packed["entry"],
+						"mapping": packed["mapping"],
+						"design_size": descriptor["payload"]["design_size"],
+					},
+					generation
+				))
+				emitted_atlas_count += 1
+			# Non-representative mapping commands are consumed by the
+			# group's single atlas sprite - emit nothing (P0-2).
+			continue
+		if chunk_set.has(command_index):
+			# Baked into a shadow chunk sprite; no legacy sprite.
+			continue
+		new_descriptors.append(descriptor)
+	# Chunks anchored beyond the last descriptor still must be emitted.
+	var remaining_anchors: Array = chunks_by_anchor.keys()
+	remaining_anchors.sort()
+	for anchor: int in remaining_anchors:
+		for record: Dictionary in chunks_by_anchor[anchor]:
+			new_descriptors.append(_wall_chunk_descriptor(
+				record, commands, generation
+			))
+	# ── Structural assertions (advisor P0-2): exact accounting on the
+	# transformed set; any failure reverts the WHOLE map to legacy.
+	var dynamic_group_count := 0
+	for entry: Dictionary in plan["atlas_entries"]:
+		dynamic_group_count += entry["group_mappings"].size()
+	if emitted_atlas_count != dynamic_group_count:
+		_wall_render_mode = "LEGACY"
+		_wall_render_fallback_reason = "atlas emission %d != group count %d" % [
+			emitted_atlas_count, dynamic_group_count,
+		]
+		return false
+	for transformed_descriptor: Dictionary in new_descriptors:
+		if str(transformed_descriptor.get("kind", "")) != "instance_sprite":
+			continue
+		if atlas_set.has(int(transformed_descriptor.get("source_index", -1))):
+			_wall_render_mode = "LEGACY"
+			_wall_render_fallback_reason = "atlas command legacy residue: %d" % (
+				int(transformed_descriptor["source_index"])
+			)
+			return false
+	# Commit point: swap the whole descriptor set atomically.
+	_pending_map_descriptors = new_descriptors
+	return true
+
+
+func _wall_chunk_descriptor(
+	record: Dictionary,
+	commands: Array,
+	generation: int
+) -> Dictionary:
+	var insert_index := int(record.get("insert_command_index", 0))
+	var command: Dictionary = {}
+	if insert_index >= 0 and insert_index < commands.size():
+		command = commands[insert_index]
+	return _descriptor(
+		"wall_chunk_sprite", insert_index, "object",
+		_res_path(str(record.get("path", ""))), Vector2.ZERO, -5,
+		{"chunk": record, "command": command},
+		generation
+	)
+
+
+## WALL-P1R C5: one atlas-backed sprite per wall group mapping. Geometry
+## authority is the representative command exactly as in the legacy path;
+## only the drawn rectangle changes to the shared composite region anchored
+## at the entry's min sprite offset (the Lab Mode E proven formula).
+func _build_wall_atlas_sprite_node(payload: Dictionary, texture: Texture2D) -> Node:
+	if not _generation_is_current():
+		return null
+	var command: Dictionary = payload.get("command", {})
+	var entry: Dictionary = payload.get("entry", {})
+	var mapping: Dictionary = payload.get("mapping", {})
+	var size: Vector2i = payload.get("design_size", Vector2i.ZERO)
+	var group_key := str(mapping.get("group_key", ""))
+	var source_texture := _prefetched_texture(
+		_res_path(str(command.get("image_path", ""))), "BUILD_MAP"
+	)
+	if source_texture == null or group_key.is_empty():
+		return null
+	var geometry := RuntimeVisualGeometryScript.runtime_command_geometry(
+		command, size, source_texture.get_size()
+	)
+	var sprite := Sprite2D.new()
+	sprite.name = "WallAtlasSprite_%s" % group_key
+	sprite.texture = texture
+	sprite.region_enabled = true
+	var region: Array = entry["region"]
+	sprite.region_rect = Rect2(
+		int(region[0]), int(region[1]), int(region[2]), int(region[3])
+	)
+	sprite.centered = false
+	var render_domain := str(command.get(
+		"render_domain",
+		RuntimeVisualGeometryScript.RENDER_DOMAIN_STATIC_BACKGROUND
+	))
+	var actor_sort_root: Node2D = null
+	var parent_world_origin := Vector2.ZERO
+	if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
+		actor_sort_root = _editor_runtime_actor_sort_roots.get(group_key) as Node2D
+		if actor_sort_root == null:
+			actor_sort_root = Node2D.new()
+			actor_sort_root.name = "WallAtlasOccluder_%s" % group_key
+			actor_sort_root.position = (
+				RuntimeVisualGeometryScript.command_actor_sort_world(
+					command, size
+				)
+			)
+			actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+			actor_sort_root.set_meta("editor_runtime_actor_sort_group", group_key)
+			actor_sort_root.set_meta(
+				"editor_runtime_sort_tile", command.sort_tile
+			)
+			actor_sort_root.set_meta("editor_runtime_instance_id", str(
+				command.get("instance", {}).get("instance_id", "")
+			))
+			_editor_runtime_actor_sort_roots[group_key] = actor_sort_root
+		parent_world_origin = actor_sort_root.position
+	RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
+		sprite, command, geometry, parent_world_origin
+	)
+	# Composite placement override: shared min offset in texture space.
+	var min_offset: Array = entry["min_offset"]
+	sprite.offset = Vector2(float(min_offset[0]), float(min_offset[1]))
+	sprite.set_meta("editor_runtime_render_domain", render_domain)
+	sprite.set_meta("editor_runtime_image_pass", int(command.get("image_pass", -1)))
+	sprite.set_meta("editor_runtime_wall_asset", true)
+	sprite.set_meta("editor_runtime_wall_composite", true)
+	sprite.set_meta("editor_runtime_actor_sort_group", group_key)
+	if actor_sort_root != null:
+		sprite.z_index = 0
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if actor_sort_root != null and get_parent() != null:
+		return _append_actor_sort_node(actor_sort_root, sprite)
+	return _append_environment_node(sprite)
+
+
+## WALL-P1R C6: one sprite per baked shadow chunk at its recorded static
+## position. Material/z contract mirrors ordinary static instances using the
+## segment's first command as the material authority.
+func _build_wall_chunk_sprite_node(payload: Dictionary, texture: Texture2D) -> Node:
+	if not _generation_is_current():
+		return null
+	var record: Dictionary = payload.get("chunk", {})
+	var position: Array = record.get("position_px", [0, 0])
+	var command: Dictionary = payload.get("command", {})
+	var sprite := Sprite2D.new()
+	sprite.name = "WallChunkSprite_%d_%d" % [
+		int(record.get("segment_index", 0)), int(record.get("insert_command_index", 0)),
+	]
+	sprite.texture = texture
+	sprite.centered = false
+	sprite.position = Vector2(float(position[0]), float(position[1]))
+	MapEditorInstanceServiceScript.configure_runtime_material_canvas_item(
+		sprite, command.get("instance", {})
+	)
+	sprite.set_meta("editor_runtime_wall_asset", true)
+	sprite.set_meta("wall_static_chunk", true)
+	sprite.set_meta(
+		"editor_runtime_chunk_segment", int(record.get("segment_index", -1))
+	)
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	return _append_environment_node(sprite)
+
+
+## WALL-P1R C8 runtime diagnostics accessor.
+func wall_render_stats() -> Dictionary:
+	var valid := bool(_wall_render_candidate.get("ok", false))
+	var plan: Dictionary = (
+		_wall_render_candidate.get("plan", {}) if valid else {}
+	)
+	var derived_pixel_count := 0
+	for record: Dictionary in plan.get("atlas_pages", []):
+		derived_pixel_count += int(record.get("width", 0)) * int(
+			record.get("height", 0)
+		)
+	for record: Dictionary in plan.get("shadow_chunks", []):
+		derived_pixel_count += int(record.get("size_px", [0, 0])[0]) * int(
+			record.get("size_px", [0, 0])[1]
+		)
+	var dynamic_group_count := 0
+	for entry: Dictionary in plan.get("atlas_entries", []):
+		dynamic_group_count += entry.get("group_mappings", []).size()
+	return {
+		"wall_render_plan_found": _wall_render_plan_found,
+		"wall_render_plan_valid": valid,
+		"wall_render_mode": _wall_render_mode,
+		"wall_render_fallback_reason": _wall_render_fallback_reason,
+		"atlas_page_count": plan.get("atlas_pages", []).size(),
+		"dynamic_group_count": dynamic_group_count,
+		"static_chunk_count": plan.get("shadow_chunks", []).size(),
+		"legacy_command_count": plan.get("legacy_command_indices", []).size(),
+		"derived_prefetch_failure_count": _wall_render_derived_prefetch_failures,
+		"derived_texture_pixel_count": derived_pixel_count,
+	}
 
 
 func _register_profile_ground_resources(
@@ -1120,7 +1827,7 @@ func _register_profile_ground_resources(
 				base_path, "texture", true, "tomb_ground_draw",
 				"shared", "global"
 			)
-	if map_id == 4:
+	if _presentation_map_id(map_id) == 4:
 		var bich_ground: String = str(_REGION_ATLAS_PATHS.get("bich_ground", ""))
 		if not bich_ground.is_empty() and ResourceLoader.exists(bich_ground):
 			coord.register_resource(
@@ -1218,6 +1925,7 @@ func build_one_map_item(descriptor: Dictionary) -> Node:
 				"texture": texture,
 				"rect": payload.get("rect", Rect2()),
 			})
+			_sync_editor_chunk_ground_canvas()
 			var marker := Node2D.new()
 			marker.name = "WorldChunk_%s" % str(payload.get("chunk_id", "x"))
 			marker.set_meta("editor_runtime_chunk_marker", true)
@@ -1243,6 +1951,16 @@ func build_one_map_item(descriptor: Dictionary) -> Node:
 				payload.get("design_size", Vector2i.ZERO),
 				instance_texture
 			)
+		"wall_atlas_sprite":
+			var atlas_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if atlas_texture == null:
+				return null
+			return _build_wall_atlas_sprite_node(payload, atlas_texture)
+		"wall_chunk_sprite":
+			var chunk_texture := _prefetched_texture(resource_path, "BUILD_MAP")
+			if chunk_texture == null:
+				return null
+			return _build_wall_chunk_sprite_node(payload, chunk_texture)
 		"prop_sprite":
 			var prop_texture := _prefetched_texture(resource_path, "BUILD_MAP")
 			if prop_texture == null:
@@ -1261,12 +1979,30 @@ func build_one_map_item(descriptor: Dictionary) -> Node:
 # ── HC-P1-004 collision descriptors ──
 
 func build_collision_descriptors(map_data: Dictionary) -> Array:
+	# This public rebuild entry can be called independently of clear_environment()
+	# by tests/tools. Invalidate the old authority before resolving the new map so
+	# a missing or invalid replacement can never keep serving stale occupancy.
+	_environment_collision_revision += 1
+	_editor_runtime_collision_snapshot.clear()
+	_editor_runtime_size = Vector2i.ZERO
+	_editor_runtime_collision_invalid = false
 	var map_id := _map_id_from_data(map_data)
 	var runtime := _runtime_data_for(map_id)
 	var generation := _generation_token()
 	var descriptors: Array[Dictionary] = []
-	if MapEditorRuntimeBridgeScript.has_runtime_map(map_id) and not runtime.is_empty():
-		_append_editor_runtime_collision_descriptors(descriptors, runtime, generation)
+	var formal_runtime_registered := not MapEditorRuntimeBridgeScript.runtime_path(
+		map_id
+	).is_empty()
+	if formal_runtime_registered:
+		if runtime.is_empty():
+			_editor_runtime_collision_invalid = true
+		else:
+			_append_editor_runtime_collision_descriptors(
+				descriptors,
+				runtime,
+				generation,
+				map_id,
+			)
 	elif not environment_profile().is_empty():
 		_append_profile_collision_descriptors(descriptors, map_id, generation)
 	_pending_collision_descriptors = descriptors
@@ -1276,16 +2012,26 @@ func build_collision_descriptors(map_data: Dictionary) -> Array:
 func _append_editor_runtime_collision_descriptors(
 	descriptors: Array,
 	runtime: Dictionary,
-	generation: int
+	generation: int,
+	expected_runtime_map_id: int,
 ) -> void:
-	var raw_size: Array = runtime.design.get("design_size", [256, 256])
-	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
-	_editor_runtime_size = size
-	_editor_runtime_blocked_tiles = RuntimeCollisionGeometryScript.blocked_cell_set(
-		runtime.collision
+	var compiled_result := RuntimeCollisionGeometryScript.compile_runtime_collision(
+		runtime,
+		expected_runtime_map_id,
 	)
-	var inner := RuntimeCollisionGeometryScript.map_actor_boundary_world(size)
-	var outer := RuntimeCollisionGeometryScript.map_outer_boundary_world(size)
+	if not bool(compiled_result.get("ok", false)):
+		_editor_runtime_collision_invalid = true
+		return
+	var compiled_collision: Dictionary = compiled_result.get("snapshot", {})
+	_editor_runtime_collision_snapshot = compiled_collision
+	_editor_runtime_collision_invalid = false
+	_editor_runtime_size = compiled_collision.get("design_size", Vector2i.ZERO)
+	var inner: PackedVector2Array = compiled_collision.get(
+		"boundary_world", PackedVector2Array()
+	)
+	var outer: PackedVector2Array = compiled_collision.get(
+		"outer_boundary_world", PackedVector2Array()
+	)
 	for side in range(inner.size()):
 		var next := (side + 1) % 4
 		descriptors.append(_collision_descriptor(
@@ -1296,16 +2042,22 @@ func _append_editor_runtime_collision_descriptors(
 				"inner": inner[side],
 				"inner_next": inner[next],
 				"side": side,
-				"size": size,
+				"size": _editor_runtime_size,
 			},
 			generation
 		))
-	for rect: Rect2i in RuntimeCollisionGeometryScript.blocked_cell_runs(
-		runtime.collision
+	# HC-POLY-R2: boundary descriptors above remain unchanged.
+	if compiled_collision.has("poly_index"):
+		for polygon: PackedVector2Array in compiled_collision.poly_index.parts:
+			descriptors.append(_collision_descriptor("polygon_convex", descriptors.size(),
+				{"polygon": polygon, "size": _editor_runtime_size}, generation))
+		return
+	for rect: Rect2i in RuntimeCollisionGeometryScript.compiled_collision_blocked_cell_runs(
+		compiled_collision
 	):
 		descriptors.append(_collision_descriptor(
 			"blocked_rect_run", descriptors.size(),
-			{"rect": rect, "size": size},
+			{"rect": rect, "size": _editor_runtime_size},
 			generation
 		))
 
@@ -1318,7 +2070,10 @@ func _append_profile_collision_descriptors(
 	var profile := environment_profile()
 	if profile.is_empty():
 		return
-	if map_id == 4 and bool(profile.get("gothic_camp_enabled", true)):
+	if (
+		_presentation_map_id(map_id) == 4
+		and bool(profile.get("gothic_camp_enabled", true))
+	):
 		descriptors.append(_collision_descriptor(
 			"gothic_camp_collisions", 0, {}, generation
 		))
@@ -1428,6 +2183,8 @@ func build_one_collision(descriptor: Dictionary) -> CollisionObject2D:
 	var kind := str(descriptor.get("kind", ""))
 	var payload: Dictionary = descriptor.get("payload", {})
 	match kind:
+		"polygon_convex":
+			return _build_hc_polygon_part(payload)
 		"boundary_side":
 			return _build_editor_boundary_side(payload)
 		"blocked_rect_run":
@@ -1587,7 +2344,9 @@ func _load_editor_runtime_visual(
 		return {}
 	if int(visual.get("runtime_map_id", -1)) != runtime_map_id:
 		return {}
-	if not bool(visual.get("coverage", {}).get("complete", runtime_map_id == 4)):
+	if not bool(visual.get("coverage", {}).get(
+		"complete", _presentation_map_id(runtime_map_id) == 4
+	)):
 		return {}
 	return visual
 
@@ -1635,8 +2394,43 @@ func _build_guard_band_node(payload: Dictionary) -> Node:
 		guard_bounds.end,
 		Vector2(guard_bounds.position.x, guard_bounds.end.y),
 	])
+	var is_bich_runtime := (
+		int(visual.get("runtime_map_id", -1))
+		== MapEditorRuntimeBridgeScript.BICH_MAP_ID
+	)
 	var shader := Shader.new()
-	shader.code = """
+	shader.code = ("""
+shader_type canvas_item;
+render_mode unshaded;
+uniform vec2 design_size = vec2(80.0, 80.0);
+uniform float fade_tiles = 10.0;
+varying vec2 map_position;
+void vertex() {
+	map_position = VERTEX;
+}
+void fragment() {
+	vec2 iso = vec2(
+		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
+		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
+	) + (design_size - vec2(1.0)) * 0.5;
+	vec2 outside_low = max(-iso, vec2(0.0));
+	vec2 outside_high = max(
+		iso - design_size, vec2(0.0)
+	);
+	float outside_tiles = max(
+		max(outside_low.x, outside_low.y),
+		max(outside_high.x, outside_high.y)
+	);
+	if (outside_tiles <= 0.0001) {
+		discard;
+	}
+	float fade = smoothstep(0.0, max(fade_tiles, 0.001), outside_tiles);
+	vec3 near_skirt = vec3(0.050, 0.066, 0.033);
+	vec3 far_skirt = vec3(0.030, 0.046, 0.022);
+	vec3 color = mix(near_skirt, far_skirt, fade);
+	COLOR = vec4(color, mix(0.98, 0.94, fade));
+}
+""" if is_bich_runtime else """
 shader_type canvas_item;
 render_mode unshaded;
 uniform vec2 design_size = vec2(80.0, 80.0);
@@ -1655,9 +2449,9 @@ void fragment() {
 		(map_position.x / 32.0 + map_position.y / 16.0) * 0.5,
 		(map_position.y / 16.0 - map_position.x / 32.0) * 0.5
 	) + (design_size - vec2(1.0)) * 0.5;
-	vec2 outside_low = max(vec2(-0.5) - iso, vec2(0.0));
+	vec2 outside_low = max(-iso, vec2(0.0));
 	vec2 outside_high = max(
-		iso - (design_size - vec2(0.5)), vec2(0.0)
+		iso - design_size, vec2(0.0)
 	);
 	float outside_tiles = max(
 		max(outside_low.x, outside_low.y),
@@ -1673,6 +2467,7 @@ void fragment() {
 	COLOR = vec4(color, mix(1.0, 0.92, fade));
 }
 """
+)
 	var material := ShaderMaterial.new()
 	material.shader = shader
 	material.set_shader_parameter("design_size", Vector2(size))
@@ -1695,22 +2490,36 @@ func uses_editor_runtime_fallback_ground() -> bool:
 	return _editor_runtime_fallback_ground
 
 
+func static_wall_bridge_stats() -> Dictionary:
+	return _static_wall_bridge_stats.duplicate(true)
+
+
 func _build_editor_runtime_instances(runtime:Dictionary)->void:
 	var raw_size: Array = runtime.design.get("design_size", [64, 64])
 	var size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var commands := RuntimeVisualGeometryScript.sorted_draw_commands(
-		runtime.get("instances", [])
+		runtime.get("instances", []), runtime.get("visual_asset_snapshot", {})
 	)
+	_editor_runtime_bridge_commands = commands
+	_editor_runtime_bridge_size = size
 	for command_index in commands.size():
 		var command: Dictionary = commands[command_index]
-		_build_one_editor_runtime_instance(command, command_index, size)
+		var group_key := str(command.get("actor_sort_group", ""))
+		var shared_root: Node2D = _editor_runtime_actor_sort_roots.get(group_key) as Node2D
+		var built := _build_one_editor_runtime_instance(
+			command, command_index, size, null, shared_root
+		)
+		if not group_key.is_empty() and built is Node2D:
+			_editor_runtime_actor_sort_roots[group_key] = built
+	_build_static_authored_wall_bridge(commands, size)
 
 
 func _build_one_editor_runtime_instance(
 	command: Dictionary,
 	command_index: int,
 	size: Vector2i,
-	texture: Texture2D = null
+	texture: Texture2D = null,
+	shared_actor_sort_root: Node2D = null
 ) -> Node:
 	var image_path := str(command.get("image_path", ""))
 	if image_path.is_empty():
@@ -1736,6 +2545,9 @@ func _build_one_editor_runtime_instance(
 	sprite.set_meta("editor_runtime_command_index", command_index)
 	sprite.texture = texture
 	sprite.centered = false
+	if _hc_precision_probe_enabled:
+		sprite.set_meta("hc_expected_visual_corners_world", HCPAlignmentProbe.world_corners(geometry, texture.get_size()))
+		sprite.set_meta("hc_precision_generation", _generation_token())
 	# Keep the node at the authored foot/part center and move only the drawn
 	# pixels.  Using top_left as position would rotate wall parts around the
 	# wrong pivot and recreate the editor/runtime offset.
@@ -1746,21 +2558,39 @@ func _build_one_editor_runtime_instance(
 	var actor_sort_root: Node2D = null
 	var parent_world_origin := Vector2.ZERO
 	if render_domain == RuntimeVisualGeometryScript.RENDER_DOMAIN_ACTOR_Y_SORT:
-		actor_sort_root = Node2D.new()
-		actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
-		actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
-			command, size
-		)
+		actor_sort_root = shared_actor_sort_root
+		var group_key := str(command.get("actor_sort_group", ""))
+		if actor_sort_root == null and not group_key.is_empty():
+			actor_sort_root = _editor_runtime_actor_sort_roots.get(group_key) as Node2D
+		if actor_sort_root == null:
+			actor_sort_root = Node2D.new()
+			actor_sort_root.name = "EditorRuntimeOccluder_%d" % command_index
+			actor_sort_root.position = RuntimeVisualGeometryScript.command_actor_sort_world(
+				command, size
+			)
 		parent_world_origin = actor_sort_root.position
 		actor_sort_root.set_meta("editor_runtime_actor_occluder", true)
+		actor_sort_root.set_meta(
+			"editor_runtime_actor_sort_group",
+			str(command.get("actor_sort_group", ""))
+		)
 		actor_sort_root.set_meta("editor_runtime_sort_tile", command.sort_tile)
 		actor_sort_root.set_meta("editor_runtime_instance_id", str(
 			command.get("instance", {}).get("instance_id", "")
 		))
+		if not group_key.is_empty():
+			_editor_runtime_actor_sort_roots[group_key] = actor_sort_root
 	RuntimeVisualGeometryScript.apply_runtime_sprite_geometry(
 		sprite, command, geometry, parent_world_origin
 	)
 	sprite.set_meta("editor_runtime_render_domain", render_domain)
+	sprite.set_meta("editor_runtime_image_pass", int(command.get("image_pass", -1)))
+	# WALL-P0 diagnostics: inert metadata letting the perf probe classify
+	# wall sprites (shadow vs base/front) without re-deriving asset types.
+	sprite.set_meta(
+		"editor_runtime_wall_asset",
+		str(command.get("asset", {}).get("asset_type", "")) == "wall_module"
+	)
 	if actor_sort_root != null:
 		# The wrapper is a direct sibling of actors under GameRoot's Y-sort.
 		# Keep the sprite in that same z domain so Y order, not a fixed z,
@@ -1772,13 +2602,506 @@ func _build_one_editor_runtime_instance(
 	return _append_environment_node(sprite)
 
 
-func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
-	if _editor_runtime_size == Vector2i.ZERO:
+func _build_static_authored_wall_bridge(
+	commands: Array[Dictionary],
+	size: Vector2i
+) -> void:
+	var build_started_usec := Time.get_ticks_usec()
+	var generation := _generation_token()
+	if (
+		commands.is_empty()
+		or size == Vector2i.ZERO
+		or _static_wall_bridge_built_generation == generation
+	):
+		return
+	_static_wall_bridge_built_generation = generation
+	# Do not even request texture metadata when a map has no atomic walls.
+	var has_atomic_wall := false
+	for command: Dictionary in commands:
+		if RuntimeVisualGeometryScript.is_atomic_wall_pass(command):
+			has_atomic_wall = true
+			break
+	if not has_atomic_wall:
+		_static_wall_bridge_stats = _static_wall_bridge_empty_stats(generation)
+		_static_wall_bridge_stats.build_usec = Time.get_ticks_usec() - build_started_usec
+		set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
+		return
+	var record_started_usec := Time.get_ticks_usec()
+	var groups := {}
+	var wall_pass_records: Array[Dictionary] = []
+	var object_records: Array[Dictionary] = []
+	for command: Dictionary in commands:
+		if (
+			RuntimeVisualGeometryScript.is_atomic_wall_pass(command)
+			or RuntimeVisualGeometryScript.is_static_authored_wall_bridge_candidate(command)
+		):
+			var record := _static_wall_bridge_record_metadata(command, size)
+			if record.is_empty():
+				continue
+			if RuntimeVisualGeometryScript.is_atomic_wall_pass(command):
+				wall_pass_records.append(record)
+				var group_key := str(command.get("actor_sort_group", ""))
+				if not groups.has(group_key):
+					groups[group_key] = {
+						"group_key": group_key,
+						"wall_command": {},
+						"wall_sort_y": 0.0,
+						"aabb": record.aabb,
+						"pixels": {},
+						"source_instance_ids": {},
+					}
+				var group: Dictionary = groups[group_key]
+				var group_aabb: Rect2i = group.aabb
+				group.aabb = group_aabb.merge(record.aabb)
+				if int(command.get("image_pass", -1)) == 1:
+					group.wall_command = command
+					group.wall_sort_y = float(record.wall_sort_y)
+			else:
+				object_records.append(record)
+	var record_usec := Time.get_ticks_usec() - record_started_usec
+	if groups.is_empty() or object_records.is_empty():
+		_static_wall_bridge_stats = _static_wall_bridge_empty_stats(generation)
+		_static_wall_bridge_stats.record_usec = record_usec
+		_static_wall_bridge_stats.build_usec = Time.get_ticks_usec() - build_started_usec
+		set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
+		return
+	var group_grid := _static_wall_bridge_group_grid(groups)
+	var pass_grid := _static_wall_bridge_pass_grid(wall_pass_records)
+	var metrics := {
+		"candidate_pairs": 0,
+		"scanned_pixels": 0,
+		"wall_alpha_samples": 0,
+		"wall_stack_cache_hits": 0,
+		"wall_stack_cache_misses": 0,
+		"wall_stack_duplicate_builds": 0,
+		"wall_resolve_queries": 0,
+		"wall_owner_samples": 0,
+		"wall_base_samples": 0,
+		"wall_relation_skips": 0,
+		"hydrated_texture_paths": {},
+		"hydrated_bytes": 0,
+	}
+	var raster_started_usec := Time.get_ticks_usec()
+	# Commands are already in the original global draw order. Processing the
+	# object records in that order preserves all object-object compositing.
+	for object_record: Dictionary in object_records:
+		var candidate_groups := {}
+		for bucket: Vector2i in _static_wall_bridge_buckets(object_record.aabb):
+			for group_key: String in group_grid.get(bucket, []):
+				candidate_groups[group_key] = true
+		if candidate_groups.is_empty():
+			continue
+		if not _static_wall_bridge_hydrate_record(object_record, metrics):
+			continue
+		var object_aabb: Rect2i = object_record.used_world_aabb
+		if object_aabb.size == Vector2i.ZERO:
+			continue
+		var scan_rects: Array[Rect2i] = []
+		for group_key: String in candidate_groups:
+			var group: Dictionary = groups[group_key]
+			var group_aabb: Rect2i = group.aabb
+			if (
+				group.wall_command.is_empty()
+				or not RuntimeVisualGeometryScript.static_wall_bridge_pair_is_candidate(
+					object_record.command, group.wall_command, size,
+					object_aabb, group_aabb
+				)
+			):
+				continue
+			var scan_rect := object_aabb.intersection(group_aabb)
+			if scan_rect.size.x <= 0 or scan_rect.size.y <= 0:
+				continue
+			metrics.candidate_pairs = int(metrics.candidate_pairs) + 1
+			scan_rects.append(scan_rect)
+		if scan_rects.is_empty():
+			continue
+		_static_wall_bridge_scan_object_once(
+			object_record, groups, scan_rects, pass_grid,
+			metrics
+		)
+	var raster_usec := Time.get_ticks_usec() - raster_started_usec
+	var upload_started_usec := Time.get_ticks_usec()
+	var overlay_count := 0
+	for group_key: String in groups:
+		var group: Dictionary = groups[group_key]
+		if _static_wall_bridge_append_overlay(group):
+			overlay_count += 1
+	var upload_usec := Time.get_ticks_usec() - upload_started_usec
+	_static_wall_bridge_stats = {
+		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+		"generation": generation,
+		"candidate_pairs": int(metrics.candidate_pairs),
+		"scanned_pixels": int(metrics.scanned_pixels),
+		"overlay_count": overlay_count,
+		"record_usec": record_usec,
+		"raster_usec": raster_usec,
+		"upload_usec": upload_usec,
+		"build_usec": Time.get_ticks_usec() - build_started_usec,
+		"wall_alpha_samples": int(metrics.wall_alpha_samples),
+		"wall_stack_cache_hits": int(metrics.wall_stack_cache_hits),
+		"wall_stack_cache_misses": int(metrics.wall_stack_cache_misses),
+		"wall_stack_duplicate_builds": int(metrics.wall_stack_duplicate_builds),
+		"wall_resolve_queries": int(metrics.wall_resolve_queries),
+		"wall_owner_samples": int(metrics.wall_owner_samples),
+		"wall_base_samples": int(metrics.wall_base_samples),
+		"wall_relation_skips": int(metrics.wall_relation_skips),
+		"hydrated_textures": (metrics.hydrated_texture_paths as Dictionary).size(),
+		"hydrated_bytes": int(metrics.hydrated_bytes),
+	}
+	set_meta("static_wall_bridge_stats", _static_wall_bridge_stats.duplicate(true))
+
+
+func _static_wall_bridge_record_metadata(
+	command: Dictionary,
+	size: Vector2i
+) -> Dictionary:
+	var resource_path := _res_path(str(command.get("image_path", "")))
+	if resource_path.is_empty() or not ResourceLoader.exists(resource_path):
+		return {}
+	var texture := _prefetched_texture(resource_path, "BUILD_MAP")
+	if texture == null:
+		return {}
+	var transform := RuntimeVisualGeometryScript.command_texture_transform(
+		command, size, texture.get_size()
+	)
+	return {
+		"command": command,
+		"command_index": int(command.get("command_index", -1)),
+		"image_pass": int(command.get("image_pass", -1)),
+		"group_key": str(command.get("actor_sort_group", "")),
+		"resource_path": resource_path,
+		"texture": texture,
+		"image": null,
+		"used_rect": Rect2i(Vector2i.ZERO, texture.get_size()),
+		"static_sort_y": RuntimeVisualGeometryScript.static_authored_sort_world(
+			command, size
+		).y,
+		"wall_sort_y": RuntimeVisualGeometryScript.command_actor_sort_world(
+			command, size
+		).y,
+		"texture_transform": transform,
+		"inverse_transform": transform.affine_inverse(),
+		"aabb": RuntimeVisualGeometryScript.transformed_texture_aabb(
+			transform, texture.get_size()
+		),
+		"used_world_aabb": RuntimeVisualGeometryScript.transformed_texture_aabb(
+			transform, texture.get_size()
+		),
+	}
+
+
+func _static_wall_bridge_hydrate_record(
+	record: Dictionary,
+	metrics: Dictionary
+) -> bool:
+	var image: Image = record.get("image") as Image
+	if image != null and not image.is_empty():
+		return true
+	var resource_path := str(record.get("resource_path", ""))
+	image = _static_wall_bridge_image_cache.get(resource_path) as Image
+	if image == null:
+		var texture := record.get("texture") as Texture2D
+		if texture == null:
+			return false
+		image = texture.get_image()
+		if image == null or image.is_empty():
+			return false
+		_static_wall_bridge_image_cache[resource_path] = image
+		var hydrated_paths: Dictionary = metrics.hydrated_texture_paths
+		if not hydrated_paths.has(resource_path):
+			hydrated_paths[resource_path] = true
+			metrics.hydrated_bytes = int(metrics.hydrated_bytes) + image.get_data_size()
+	record.image = image
+	var used_rect: Rect2i = _static_wall_bridge_used_rect_cache.get(
+		resource_path, Rect2i()
+	)
+	if used_rect.size == Vector2i.ZERO:
+		used_rect = image.get_used_rect()
+		_static_wall_bridge_used_rect_cache[resource_path] = used_rect
+	record.used_rect = used_rect
+	record.used_world_aabb = _static_wall_bridge_transformed_source_rect_aabb(
+		record.texture_transform, used_rect
+	)
+	return true
+
+
+func _static_wall_bridge_transformed_source_rect_aabb(
+	texture_transform: Transform2D,
+	source_rect: Rect2i
+) -> Rect2i:
+	if source_rect.size == Vector2i.ZERO:
+		return Rect2i()
+	var begin := Vector2(source_rect.position)
+	var finish := Vector2(source_rect.end)
+	var points := [
+		texture_transform * begin,
+		texture_transform * Vector2(finish.x, begin.y),
+		texture_transform * finish,
+		texture_transform * Vector2(begin.x, finish.y),
+	]
+	var minimum: Vector2 = points[0]
+	var maximum: Vector2 = points[0]
+	for point: Vector2 in points:
+		minimum = minimum.min(point)
+		maximum = maximum.max(point)
+	var world_begin := Vector2i(floori(minimum.x), floori(minimum.y))
+	var world_finish := Vector2i(ceili(maximum.x), ceili(maximum.y))
+	return Rect2i(world_begin, (world_finish - world_begin).max(Vector2i.ONE))
+
+
+func _static_wall_bridge_group_grid(groups: Dictionary) -> Dictionary:
+	var result := {}
+	for group_key: String in groups:
+		var group: Dictionary = groups[group_key]
+		for bucket: Vector2i in _static_wall_bridge_buckets(group.aabb):
+			if not result.has(bucket):
+				result[bucket] = []
+			result[bucket].append(group_key)
+	return result
+
+
+func _static_wall_bridge_pass_grid(records: Array[Dictionary]) -> Dictionary:
+	var result := {}
+	for record_index in records.size():
+		var record: Dictionary = records[record_index]
+		for bucket: Vector2i in _static_wall_bridge_buckets(record.aabb):
+			if not result.has(bucket):
+				result[bucket] = []
+			result[bucket].append(record_index)
+	for bucket: Vector2i in result:
+		var bucket_records: Array = result[bucket]
+		bucket_records.sort_custom(
+			func(a: int, b: int) -> bool:
+				return (
+					int(records[a].command_index)
+					> int(records[b].command_index)
+				)
+		)
+	return {"grid": result, "records": records}
+
+
+func _static_wall_bridge_buckets(rect: Rect2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	if rect.size.x <= 0 or rect.size.y <= 0:
+		return result
+	var last := rect.end - Vector2i.ONE
+	var begin_bucket := Vector2i(
+		floori(float(rect.position.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(rect.position.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	var end_bucket := Vector2i(
+		floori(float(last.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(last.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	for bucket_y in range(begin_bucket.y, end_bucket.y + 1):
+		for bucket_x in range(begin_bucket.x, end_bucket.x + 1):
+			result.append(Vector2i(bucket_x, bucket_y))
+	return result
+
+
+func _static_wall_bridge_scan_object_once(
+	object_record: Dictionary,
+	groups: Dictionary,
+	scan_rects: Array[Rect2i],
+	pass_grid: Dictionary,
+	metrics: Dictionary
+) -> void:
+	var spans_by_y := _static_wall_bridge_merged_scan_spans(scan_rects)
+	for world_y: int in spans_by_y:
+		for span: Vector2i in spans_by_y[world_y]:
+			for world_x in range(span.x, span.y):
+				metrics.scanned_pixels = int(metrics.scanned_pixels) + 1
+				var world_pixel := Vector2i(world_x, world_y)
+				var source := _static_wall_bridge_sample(object_record, world_pixel)
+				if source.a <= 0.0:
+					continue
+				var owner := _static_wall_bridge_resolve_owner(
+					world_pixel, object_record, groups, pass_grid, metrics
+				)
+				if owner.is_empty():
+					continue
+				var owner_group: Dictionary = groups[str(owner.group_key)]
+				var pixels: Dictionary = owner_group.pixels
+				var destination: Color = pixels.get(world_pixel, Color(0, 0, 0, 0))
+				pixels[world_pixel] = RuntimeVisualGeometryScript.static_wall_bridge_source_over(
+					source, destination
+				)
+				var source_ids: Dictionary = owner_group.source_instance_ids
+				var source_command: Dictionary = object_record.command
+				source_ids[str(source_command.get("instance", {}).get("instance_id", ""))] = true
+
+
+func _static_wall_bridge_merged_scan_spans(
+	scan_rects: Array[Rect2i]
+) -> Dictionary:
+	var rows := {}
+	for rect: Rect2i in scan_rects:
+		for world_y in range(rect.position.y, rect.end.y):
+			if not rows.has(world_y):
+				rows[world_y] = []
+			(rows[world_y] as Array).append(Vector2i(rect.position.x, rect.end.x))
+	for world_y: int in rows:
+		var intervals: Array = rows[world_y]
+		intervals.sort_custom(
+			func(a: Vector2i, b: Vector2i) -> bool:
+				return a.x < b.x or (a.x == b.x and a.y < b.y)
+		)
+		var merged: Array[Vector2i] = []
+		for interval: Vector2i in intervals:
+			if merged.is_empty() or interval.x > merged[merged.size() - 1].y:
+				merged.append(interval)
+			else:
+				var last := merged[merged.size() - 1]
+				last.y = maxi(last.y, interval.y)
+				merged[merged.size() - 1] = last
+		rows[world_y] = merged
+	return rows
+
+
+func _static_wall_bridge_resolve_owner(
+	world_pixel: Vector2i,
+	object_record: Dictionary,
+	groups: Dictionary,
+	pass_grid: Dictionary,
+	metrics: Dictionary
+) -> Dictionary:
+	metrics.wall_resolve_queries = int(metrics.wall_resolve_queries) + 1
+	var bucket := Vector2i(
+		floori(float(world_pixel.x) / STATIC_WALL_BRIDGE_BUCKET_SIZE),
+		floori(float(world_pixel.y) / STATIC_WALL_BRIDGE_BUCKET_SIZE)
+	)
+	var grid: Dictionary = pass_grid.grid
+	var records: Array[Dictionary] = pass_grid.records
+	var owner: Dictionary = {}
+	var object_sort_y := float(object_record.static_sort_y)
+	# Bucket records are explicitly sorted by descending global command index.
+	# The first opaque pass is the owner of this wall pixel. The wall group's
+	# cached base sort Y is the depth authority for the whole wall union, so a
+	# front-only pixel must not require same-pixel base alpha to bridge.
+	for record_index: int in grid.get(bucket, []):
+		var record: Dictionary = records[record_index]
+		var record_aabb: Rect2i = record.aabb
+		if not record_aabb.has_point(world_pixel):
+			continue
+		if not _static_wall_bridge_hydrate_record(record, metrics):
+			continue
+		var used_world_aabb: Rect2i = record.used_world_aabb
+		if not used_world_aabb.has_point(world_pixel):
+			continue
+		metrics.wall_alpha_samples = int(metrics.wall_alpha_samples) + 1
+		if owner.is_empty():
+			metrics.wall_owner_samples = int(metrics.wall_owner_samples) + 1
+			if _static_wall_bridge_sample(record, world_pixel).a <= 0.0:
+				continue
+			owner = record
+			var owner_key := str(owner.group_key)
+			if not groups.has(owner_key):
+				return {}
+			var owner_group: Dictionary = groups[owner_key]
+			if (
+				owner_group.wall_command.is_empty()
+				or object_sort_y <= float(owner_group.wall_sort_y)
+			):
+				return {}
+			return owner
+	return {}
+
+
+func _static_wall_bridge_sample(record: Dictionary, world_pixel: Vector2i) -> Color:
+	var inverse_transform: Transform2D = record.inverse_transform
+	var source_position: Vector2 = inverse_transform * (
+		Vector2(world_pixel) + Vector2(0.5, 0.5)
+	)
+	var source_pixel := Vector2i(floori(source_position.x), floori(source_position.y))
+	var image: Image = record.image
+	var used_rect: Rect2i = record.used_rect
+	if (
+		not used_rect.has_point(source_pixel)
+		or source_pixel.x < 0
+		or source_pixel.y < 0
+		or source_pixel.x >= image.get_width()
+		or source_pixel.y >= image.get_height()
+	):
+		return Color(0, 0, 0, 0)
+	return image.get_pixelv(source_pixel)
+
+
+func _static_wall_bridge_append_overlay(group: Dictionary) -> bool:
+	var pixels: Dictionary = group.pixels
+	if pixels.is_empty():
 		return false
-	return RuntimeCollisionGeometryScript.blocked_cells_contain_world(
-		_editor_runtime_blocked_tiles,
+	var minimum := Vector2i(2147483647, 2147483647)
+	var maximum := Vector2i(-2147483648, -2147483648)
+	for world_pixel: Vector2i in pixels:
+		minimum = minimum.min(world_pixel)
+		maximum = maximum.max(world_pixel)
+	var image_size := maximum - minimum + Vector2i.ONE
+	var image := Image.create(image_size.x, image_size.y, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	for world_pixel: Vector2i in pixels:
+		image.set_pixelv(world_pixel - minimum, pixels[world_pixel])
+	var root := _editor_runtime_actor_sort_roots.get(str(group.group_key)) as Node2D
+	if root == null or not is_instance_valid(root):
+		return false
+	var overlay := Sprite2D.new()
+	overlay.name = "StaticAuthoredWallBridge"
+	overlay.texture = ImageTexture.create_from_image(image)
+	overlay.centered = false
+	overlay.position = Vector2(minimum) - root.position
+	overlay.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	overlay.z_index = 0
+	overlay.set_meta("static_authored_wall_bridge", true)
+	overlay.set_meta(
+		"static_wall_bridge_contract_id",
+		RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID
+	)
+	overlay.set_meta("static_wall_bridge_world_rect", Rect2i(minimum, image_size))
+	var source_instance_ids: Dictionary = group.source_instance_ids
+	overlay.set_meta(
+		"static_wall_bridge_source_instance_ids", source_instance_ids.keys()
+	)
+	root.add_child(overlay)
+	# The bridge is the completed wall union restoration. It must be drawn after
+	# every authored wall base/front child so the wall's upper/front pixels cannot
+	# cover a decoration that was authored in front of the wall. The bridge raster
+	# itself already contains only the pixels resolved by the shared owner/base
+	# algorithm, so changing node placement does not alter object-object order.
+	root.move_child(overlay, root.get_child_count() - 1)
+	return true
+
+
+func _static_wall_bridge_empty_stats(generation: int) -> Dictionary:
+	return {
+		"contract_id": RuntimeVisualGeometryScript.STATIC_WALL_BRIDGE_CONTRACT_ID,
+		"generation": generation,
+		"candidate_pairs": 0,
+		"scanned_pixels": 0,
+		"overlay_count": 0,
+		"record_usec": 0,
+		"raster_usec": 0,
+		"upload_usec": 0,
+		"build_usec": 0,
+		"wall_alpha_samples": 0,
+		"wall_stack_cache_hits": 0,
+		"wall_stack_cache_misses": 0,
+		"wall_stack_duplicate_builds": 0,
+		"wall_resolve_queries": 0,
+		"wall_owner_samples": 0,
+		"wall_base_samples": 0,
+		"wall_relation_skips": 0,
+		"hydrated_textures": 0,
+		"hydrated_bytes": 0,
+	}
+
+
+func _editor_runtime_blocks_world(world_position: Vector2) -> bool:
+	if _editor_runtime_collision_invalid:
+		return true
+	if _editor_runtime_collision_snapshot.is_empty():
+		return true
+	return RuntimeCollisionGeometryScript.compiled_collision_contains_world(
+		_editor_runtime_collision_snapshot,
 		world_position,
-		_editor_runtime_size
 	)
 
 
@@ -1950,6 +3273,7 @@ func _clear_source_collision_nodes() -> void:
 
 
 func _rebuild_source_collision_chunk(profile: Dictionary, focus_source: Vector2i) -> void:
+	_environment_collision_revision += 1
 	_clear_source_collision_nodes()
 	if _source_mask_image == null:
 		return
@@ -2051,6 +3375,7 @@ void fragment() {
 
 
 func _rebuild_full_source_collision(profile: Dictionary) -> void:
+	_environment_collision_revision += 1
 	_clear_source_collision_nodes()
 	var source_size: Vector2i = profile.get("source_size", Vector2i.ZERO)
 	var body := StaticBody2D.new()
@@ -2103,7 +3428,10 @@ func _source_mask_blocks_world(world_position: Vector2) -> bool:
 
 
 func _source_cell_is_cleared(source_coordinate: Vector2i, profile: Dictionary) -> bool:
-	if _active_map_id() == 4 and not _gothic_camp_layout.is_empty():
+	if (
+		_presentation_map_id(_active_map_id()) == 4
+		and not _gothic_camp_layout.is_empty()
+	):
 		var camp_world := MapCoordinateMapperScript.source_to_world(Vector2(source_coordinate), profile.get("source_size", Vector2i.ZERO))
 		if camp_world.distance_to(profile.get("runtime_home_position", Vector2.ZERO)) <= float(_gothic_camp_layout.get("safeRadius", 690.0)):
 			return true
@@ -2229,7 +3557,7 @@ func _add_static_body_node(position: Vector2, shape: Shape2D) -> CollisionObject
 
 
 func _orc_tomb_map_id() -> int:
-	var map_id := int(zone_data.get("mapId", -1))
+	var map_id := _presentation_map_id(int(zone_data.get("mapId", -1)))
 	if map_id in [217, 218, 221]:
 		return map_id
 	match zone_name:
@@ -2244,8 +3572,16 @@ func _active_map_id() -> int:
 	if map_id > 0:
 		return map_id
 	if zone_name in ["比奇郊外", "比奇省"]:
-		return 4
+		return 910001
 	return _orc_tomb_map_id()
+
+
+func _presentation_map_id(runtime_map_id: int) -> int:
+	if runtime_map_id == int(zone_data.get("mapId", -1)):
+		var legacy_id := int(zone_data.get("legacyRuntimeMapId", -1))
+		if legacy_id > 0:
+			return legacy_id
+	return runtime_map_id
 
 
 func _active_theme() -> Dictionary:
@@ -2305,3 +3641,46 @@ func _draw_city() -> void:
 		draw_line(rect.position + Vector2(rect.size.x, 0), rect.position + Vector2(rect.size.x * 0.5, -80), Color(0.56, 0.20, 0.10), 18.0)
 	for x in range(-800, 801, 80):
 		draw_rect(Rect2(x, -560, 72, 45), Color(0.32, 0.29, 0.25))
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPAlignmentProbe := preload("res://scripts/map_editor/polygon/poly_alignment_probe.gd")
+var _hc_precision_probe_enabled := OS.get_environment("HC_POLYGON_DEBUG") == "1"
+var _hc_precision_debug_generation := -1
+var _hc_precision_debug_parts := 0
+var _hc_precision_debug_revision := -1
+
+const HCPPolyRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
+
+func _build_hc_polygon_part(payload: Dictionary) -> CollisionObject2D:
+	var polygon: Variant = payload.get("polygon", null)
+	var design_size: Variant = payload.get("size", null)
+	if not polygon is PackedVector2Array or polygon.size() < 3 or not design_size is Vector2i:
+		return null
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	body.collision_mask = 0
+	body.set_meta("editor_runtime_collision_kind", "polygon_convex")
+	var collision := CollisionShape2D.new()
+	var shape := ConvexPolygonShape2D.new()
+	shape.points = RuntimeCollisionGeometryScript.tile_polygon_world(polygon, design_size)
+	if _hc_precision_probe_enabled:
+		body.set_meta("hc_polygon_expected_world", shape.points)
+	collision.shape = shape
+	body.add_child(collision)
+	_source_collision_shape_count += 1
+	var appended := _append_environment_node(body) as CollisionObject2D
+	if _hc_precision_probe_enabled:
+		var generation := _generation_token()
+		if generation != _hc_precision_debug_generation or _hc_precision_debug_revision != _environment_collision_revision:
+			_hc_precision_debug_generation = generation
+			_hc_precision_debug_revision = _environment_collision_revision
+			_hc_precision_debug_parts = 0
+		_hc_precision_debug_parts += 1
+		if _editor_runtime_collision_snapshot.has("poly_index") and _hc_precision_debug_parts == _editor_runtime_collision_snapshot.poly_index.parts.size():
+			call_deferred("_hc_polygon_debug_probe", generation, _environment_collision_revision)
+	return appended
+
+func _hc_polygon_debug_probe(expected_generation: int, expected_revision: int) -> void:
+	if expected_generation == _generation_token() and expected_revision == _environment_collision_revision and _generation_is_current():
+		HCPAlignmentProbe.attach_if_enabled(self)

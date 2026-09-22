@@ -646,11 +646,11 @@
         },
         "geometry": {
           "shape": "square",
-          "width_tiles": 2,
-          "height_tiles": 2,
-          "center_policy": "snap selected point to canonical 2x2 anchor",
+          "width_tiles": 3,
+          "height_tiles": 3,
+          "center_policy": "selected grid cell centered in exact 3x3 square",
           "status": "project_canonical",
-          "conflict_note": "CN 1.76文字明确2×2；部分开源源码为十字，Vanilla在本项目冻结为2×2。"
+          "conflict_note": "2026-09-13 user request 5 overrides the previous 2x2 project geometry; timing, damage and stacking unchanged."
         },
         "timing": {
           "body_action": "cast_8dir_6f",

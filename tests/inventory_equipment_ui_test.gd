@@ -1,6 +1,7 @@
 extends Node
 
 const PreviewScript := preload("res://scripts/equipment_character_preview.gd")
+const ItemDetailPresenterScript := preload("res://scripts/item_detail_presenter.gd")
 const UI_LAYOUT_CONTRACT := "res://assets/data/ui/manual_layout_overrides.json"
 
 
@@ -21,6 +22,14 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
+	await panel.wait_until_runtime_ready()
+	var fixed_cell_zero := panel.item_grid.get_child(0)
+	var fixed_cell_last := panel.item_grid.get_child(InventoryPanel.BAG_CAPACITY - 1)
+	var created_cells := panel._bag_cell_creation_count
+	panel.refresh()
+	assert(created_cells == InventoryPanel.BAG_CAPACITY and panel._bag_cell_creation_count == created_cells, "背包刷新重复创建固定格节点")
+	assert(panel.item_grid.get_child(0) == fixed_cell_zero and panel.item_grid.get_child(InventoryPanel.BAG_CAPACITY - 1) == fixed_cell_last, "背包刷新替换了固定格节点")
+	assert(panel._layout_apply_count == 1, "背包重复刷新重复应用布局")
 	assert(panel._kind_label("skill_book") == "技能书", "技能书类型标签错误")
 	assert(panel._kind_label("scroll") == "卷轴", "卷轴被错误显示为技能书")
 	assert(panel._kind_label("quest_item") == "任务物品", "任务物品类型标签错误")
@@ -37,6 +46,12 @@ func _run() -> void:
 	]:
 		assert(panel.get_node_or_null(stable_title_path) is Label, "inventory section title must have a stable saved path: %s" % stable_title_path)
 	assert(panel.theme.get_stylebox("normal", "GothicComponentSlotButton") is StyleBoxFlat, "人物与背包插槽没有使用简洁原生方格")
+	var selected_normal := panel.theme.get_stylebox("normal", "GothicComponentSelectedSlotButton") as StyleBoxFlat
+	assert(selected_normal != null and selected_normal.bg_color != (panel.theme.get_stylebox("normal", "GothicComponentSlotButton") as StyleBoxFlat).bg_color, "背包选中格缺少整格背景高亮")
+	for state: StringName in [&"hover", &"pressed", &"focus"]:
+		var selected_state := panel.theme.get_stylebox(state, "GothicComponentSelectedSlotButton") as StyleBoxFlat
+		assert(selected_state != null and selected_state.bg_color == selected_normal.bg_color and selected_state.border_color == selected_normal.border_color, "背包选中格的交互状态亮度不一致：%s" % state)
+	assert((panel.item_grid.get_child(0).get_child(0) as Button).focus_mode == Control.FOCUS_NONE, "复用背包格仍会保留持久焦点高亮")
 	assert(panel.get_node("AttributePanel").position.x < panel.get_node("EquipmentPanel").position.x, "人物属性面板必须位于装备栏左侧")
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
 	assert(panel.bag_summary_label.position.y >= 18.0 and panel.bag_summary_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "背包金币与占用格数仍然贴近装饰框上沿")
@@ -88,9 +103,10 @@ func _run() -> void:
 	)
 	PlayerState.inventory_changed.emit()
 	assert(
-		panel.selected_inventory_index == -1
-		and panel.selected_inventory_indices.is_empty(),
-		"没有索引重映射合同的背包结构变化仍必须清空旧选择"
+		panel.selected_inventory_index == 0
+		and panel.selected_inventory_indices.has(0)
+		and panel.item_detail_presenter.visible,
+		"同一实例的背包结构信号应按 instance_id 保留选择与详情"
 	)
 	var bag_scroll := panel.get_node("BagPanel/InventoryScroll") as ScrollContainer
 	assert(bag_scroll.has_theme_stylebox_override("panel"), "背包物品阵列外框必须由局部样式覆盖移除")
@@ -124,19 +140,12 @@ func _run() -> void:
 	assert(PreviewScript.FOOT_STAGE_RADII.x > PreviewScript.FOOT_STAGE_RADII.y * 3.0, "人物脚下舞台没有使用正确的透视椭圆")
 	assert(PreviewScript.FOOT_STAGE_CENTER.y >= 185.0, "人物脚下舞台仍与双脚外沿重合")
 	assert(panel.equipment_stats_label is RichTextLabel and panel.equipment_stats_label.scroll_active, "人物属性超长时没有右侧滑块")
-	assert(panel.detail_label.scroll_active, "物品属性超长时没有右侧滑块")
-	assert(
-		panel.detail_label.position.is_equal_approx(Vector2(16, 312))
-		and panel.detail_label.size.is_equal_approx(Vector2(218, 204))
-		and int(panel.detail_label.get_meta("calibration_layout_revision", 0)) == InventoryPanel.ITEM_DETAIL_LAYOUT_REVISION,
-		"物品属性文字区必须上收并拒绝旧存档把它压回下方"
-	)
-	var attribute_decoration := panel.get_node("AttributePanel/AttributePanelDecoration") as Control
-	assert(
-		panel.detail_label.position.y + panel.detail_label.size.y
-		<= attribute_decoration.position.y + attribute_decoration.size.y,
-		"物品属性文字区超出了人物属性二级装饰框下边缘"
-	)
+	assert(panel.detail_label.mouse_filter == Control.MOUSE_FILTER_STOP and panel.item_detail_presenter.mouse_filter == Control.MOUSE_FILTER_IGNORE, "共享物品属性浮窗缺少受控滚动或拦截了背包输入")
+	assert(not panel.item_detail_presenter.z_as_relative and panel.item_detail_presenter.z_index >= 2048, "共享物品属性浮窗没有置于运行时UI最高层")
+	assert(panel.item_detail_presenter.title_label.get_theme_font_size("font_size") == 20, "物品属性标题字号没有按校准要求缩小")
+	assert(panel.detail_label.get_theme_font_size("normal_font_size") == 14, "物品属性正文字号没有按校准要求缩小")
+	assert(panel.item_detail_presenter.size.x > 0.0 and panel.item_detail_presenter.size.x <= 340.0, "共享物品属性浮窗宽度越过安全边界")
+	assert(not panel.get_node("AttributePanel/ItemDetailTitle").visible and not panel.get_node("AttributePanel/ItemDetail").visible, "旧固定物品详情块仍在显示")
 	for saved_path: String in [
 		"AttributePanel/AttributeTitle",
 		"AttributePanel/CharacterStats",
@@ -182,18 +191,121 @@ func _run() -> void:
 	assert(panel._context_actions[1].get("slot", "") == "左戒指" and panel._context_actions[2].get("slot", "") == "右戒指", "戒指左右槽位菜单顺序错误")
 
 	var attack_before := int(PlayerState.computed_stats.get("attack_max", 0))
+	var potion_index_for_slot_selection := _inventory_index_of("太阳水")
+	panel._clear_inventory_selection_styles()
+	panel._select_inventory_item(potion_index_for_slot_selection)
+	var bag_updates_before_equipment_slot := panel._bag_cell_update_count
+	panel._select_equipment_slot("武器")
+	assert(panel._bag_cell_update_count == bag_updates_before_equipment_slot, "仅选择装备槽触发了全背包格刷新")
+	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "装备槽选择没有清除背包选择")
+	var selection_updates_before := panel._selection_cell_update_count
+	var cell_updates_before_selection := panel._bag_cell_update_count
 	panel._select_inventory_item(0)
-	assert("匕首" in panel.detail_label.text, "点击背包物品没有显示物品属性")
+	assert(panel._selection_cell_update_count - selection_updates_before <= 2, "单次选择更新超过旧/新两个背包格")
+	assert(panel._bag_cell_update_count == cell_updates_before_selection, "单次选择触发了全背包格刷新")
+	assert(panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "点击背包物品没有显示物品属性")
 	assert("穿戴要求：" in panel.detail_label.text, "装备详情缺少玩家可读的穿戴要求")
 	assert("（" not in panel.detail_label.text and "对比武器" not in panel.detail_label.text, "装备详情仍显示来源括号或无意义的武器对比")
 	for forbidden_source_word: String in ["equipment.attribute", "confidence", "source", "StdItems"]:
 		assert(forbidden_source_word not in panel.detail_label.text, "装备详情泄露程序来源字段：%s" % forbidden_source_word)
+	var formal_affix_text := ItemDetailPresenterScript.format_item(
+		GameData.get_item_record("匕首"),
+		{
+			"name": "匕首", "durability": 10, "max_durability": 10,
+			"modifiers": [{"stat": "attack_max", "op": "add", "value": 1}],
+			"drop_affix": {"applied": true, "stat": "attack_max", "op": "add", "value": 1},
+		},
+	)
+	assert(formal_affix_text.count("攻击上限 +1") == 1, "正式 modifiers[]/drop_affix 属性没有准确显示或发生重复")
+	assert("无额外属性" not in formal_affix_text, "存在追加属性时仍输出无额外属性占位行")
+	var dagger_popup_size: Vector2 = panel.item_detail_presenter.size
+	panel._clear_inventory_selection_styles()
+	var potion_index_for_size_probe := _inventory_index_of("太阳水")
+	panel._select_inventory_item(potion_index_for_size_probe)
+	var potion_popup_size: Vector2 = panel.item_detail_presenter.size
+	# R6.1 portrait contract (user mandate): non-shop details keep H > W via the
+	# portrait envelope even for short content, replacing the older
+	# tighten-to-content expectation.
+	assert(potion_popup_size.y > potion_popup_size.x, "短药水详情没有保持 portrait 形态：%s" % potion_popup_size)
+	assert(dagger_popup_size.y > dagger_popup_size.x, "匕首详情没有保持 portrait 形态：%s" % dagger_popup_size)
+	panel._clear_inventory_selection_styles()
+	panel._select_inventory_item(0)
+	var selected_item_rect := (panel.item_grid.get_child(0) as Control).get_global_rect()
+	var selected_overlap: float = panel.item_detail_presenter.get_global_rect().intersection(selected_item_rect).get_area()
+	assert(selected_overlap / selected_item_rect.get_area() <= 0.5 + 0.001, "详情浮窗遮挡已选物品超过一半：%s/%s" % [selected_overlap, selected_item_rect])
+	for occupied_index in range(mini(InventoryPanel.BAG_VISIBLE_CAPACITY, PlayerState.inventory.size())):
+		if occupied_index == 0 or PlayerState.inventory[occupied_index].is_empty():
+			continue
+		var occupied_rect := (panel.item_grid.get_child(occupied_index) as Control).get_global_rect()
+		if panel.item_detail_presenter.get_global_rect().intersects(occupied_rect):
+			assert(panel.item_detail_presenter.get_global_rect().intersection(occupied_rect).get_area() < occupied_rect.get_area(), "详情浮窗完全遮住了可操作物品格：%d" % occupied_index)
+	# R5 布局更新（用户要求：背包详情停靠在背包格右侧，不再浮在格子上）：
+	# 旧断言“必须枚举连续空格作为浮窗候选区/支持小于5列×3行空区”与停靠设计冲突，
+	# docs/01 §六与 docs/04 明示详情“不再依赖空格分布”。新断言加严为：
+	# 停靠详情可见且与全部背包格零重叠。
+	assert(panel.item_detail_presenter.visible, "选中物品后停靠详情未显示")
+	assert(panel.item_detail_presenter.debug_layout_valid(), "停靠详情布局有效（不能只检查 visible）")
+	assert(panel.item_detail_presenter.modulate.a == 1.0, "支持布局下停靠详情保持实际可见")
+	var docked_presenter_rect: Rect2 = panel.item_detail_presenter.get_global_rect()
+	assert(docked_presenter_rect.size != Vector2.ZERO, "停靠详情没有按内容生成尺寸")
+	for bag_index in range(mini(InventoryPanel.BAG_VISIBLE_CAPACITY, panel.item_grid.get_child_count())):
+		var docked_cell_rect := (panel.item_grid.get_child(bag_index) as Control).get_global_rect()
+		assert(docked_presenter_rect.intersection(docked_cell_rect).get_area() <= 0.001, "停靠详情覆盖了背包格：%d" % bag_index)
+	# Dense fallback regression: a long instance detail must still leave the
+	# selected cell at least half clickable and every other occupied cell with
+	# some actionable surface when no empty-cell region exists.
+	var dense_inventory: Array[Dictionary] = []
+	for dense_index in range(InventoryPanel.BAG_VISIBLE_CAPACITY):
+		dense_inventory.append({
+			"name": "匕首", "count": 1, "durability": 10, "max_durability": 10,
+			"instance_id": "dense-%d" % dense_index,
+			"modifiers": [
+				{"stat": "attack_min", "op": "add", "value": 1},
+				{"stat": "attack_max", "op": "add", "value": 1},
+				{"stat": "accuracy", "op": "add", "value": 1},
+				{"stat": "agility", "op": "add", "value": 1},
+				{"stat": "hpBonus", "op": "add", "value": 1},
+				{"stat": "mpBonus", "op": "add", "value": 1},
+			],
+		})
+	PlayerState.inventory = dense_inventory
+	panel._clear_inventory_selection_styles()
+	panel._press_cancelled = false
+	panel.refresh()
+	await get_tree().process_frame
+	panel._select_inventory_item(0)
+	var dense_presenter_rect: Rect2 = panel.item_detail_presenter.get_global_rect()
+	# R5 停靠语义（用户要求：详情停靠背包格右侧）：边界权威是视口安全区
+	# （UIItemDetailDock.EDGE=18，与屏幕边缘保持 18px），不再是浮窗时代的
+	# “面板矩形内缩 18px”。格子不覆盖的不变量原样保留。
+	var dense_safe_rect: Rect2 = panel.get_viewport().get_visible_rect().grow(-18.0)
+	var dense_selected_rect := (panel.item_grid.get_child(0) as Control).get_global_rect()
+	var dense_selected_overlap: float = dense_presenter_rect.intersection(dense_selected_rect).get_area()
+	assert(dense_safe_rect.encloses(dense_presenter_rect), "满背包长停靠详情越出屏幕安全区")
+	assert(dense_selected_overlap <= 0.001, "满背包长停靠详情覆盖选中格")
+	for dense_index in range(1, InventoryPanel.BAG_VISIBLE_CAPACITY):
+		var dense_occupied_rect := (panel.item_grid.get_child(dense_index) as Control).get_global_rect()
+		assert(
+			not dense_presenter_rect.encloses(dense_occupied_rect),
+			"满背包长详情完全遮住了可操作物品格：%d" % dense_index,
+		)
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("匕首")
+	PlayerState.add_item("布衣(男)")
+	panel._press_cancelled = false
+	panel.refresh()
+	await get_tree().process_frame
 	panel.context_menu.clear()
 	panel._context_actions.clear()
 	panel._add_inventory_context_actions(0)
 	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("action", "") == "equip", "长按武器没有生成装备菜单")
+	var refresh_before_equip := panel._refresh_execution_count
 	panel._on_context_action(1)
+	assert(panel._refresh_execution_count == refresh_before_equip + 1, "单次穿戴没有恰好执行一次 UI 刷新")
 	await get_tree().process_frame
+	assert(panel._refresh_execution_count == refresh_before_equip + 1, "穿戴信号的 deferred refresh 重复执行")
 	assert(str(PlayerState.equipment["武器"].get("name", "")) == "匕首", "界面穿戴没有进入武器槽")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) > attack_before, "界面穿戴没有即时刷新装备属性")
 	assert(panel.character_preview._weapon_texture != null, "武器穿戴后人物预览没有外观")
@@ -220,7 +332,10 @@ func _run() -> void:
 	assert(panel.character_preview._body_texture != null, "衣服穿戴后人物预览没有外观")
 
 	panel._select_equipment_slot("武器")
-	assert("匕首" in panel.detail_label.text, "点击已装备物品没有显示物品属性")
+	assert(panel.selected_equipment_slot == "武器" and panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "点击已装备物品没有显示物品属性")
+	panel._select_equipment_slot("武器")
+	assert(not panel.item_detail_presenter.visible and panel.selected_equipment_slot.is_empty(), "再次点击同一装备槽没有取消选择")
+	panel._select_equipment_slot("武器")
 	panel._press_context = {"source": "equipment", "slot": "武器"}
 	panel._press_button = panel.equipment_buttons["武器"]
 	panel._open_long_press_menu()
@@ -240,8 +355,9 @@ func _run() -> void:
 	panel._select_inventory_item(dagger_direct)
 	var wrong_equipment := PlayerState.equipment.duplicate(true)
 	var wrong_inventory := PlayerState.inventory.duplicate(true)
+	var wrong_slot_detail := panel.detail_label.text
 	panel._select_equipment_slot("衣服")
-	assert(PlayerState.equipment == wrong_equipment and PlayerState.inventory == wrong_inventory and panel.selected_inventory_index == dagger_direct, "wrong equipment slot must reject without mutation")
+	assert(PlayerState.equipment == wrong_equipment and PlayerState.inventory == wrong_inventory and panel.selected_inventory_index == dagger_direct and panel.detail_label.text == wrong_slot_detail, "wrong equipment slot must reject without mutation or detail jump")
 	panel._select_equipment_slot("武器")
 	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首" and not PlayerState.has_item("匕首"), "correct slot click must equip")
 	await get_tree().process_frame
@@ -257,7 +373,7 @@ func _run() -> void:
 	panel._select_inventory_item(sun_index)
 	assert(PlayerState.item_count("太阳水") == 2, "单击不应使用物品")
 	assert(panel.selected_inventory_index == sun_index, "单击应只选择并显示详情")
-	assert("太阳水" in panel.detail_label.text, "单击未显示物品详情")
+	assert(panel.item_detail_presenter.title_label.text == "太阳水" and panel.item_detail_presenter.visible, "单击未显示物品详情")
 	panel._select_inventory_item(dagger_index)
 	assert(PlayerState.equipment.get("武器", {}).is_empty(), "单击装备不应直接装备")
 	await get_tree().process_frame
@@ -371,20 +487,97 @@ func _run() -> void:
 	PlayerState.add_item("布衣(男)")
 	panel.refresh()
 	await get_tree().process_frame
+	panel._clear_inventory_selection_styles()
+	assert(panel.auto_sort_button.get_theme_font_size("font_size") == 16 and panel.discard_button.get_theme_font_size("font_size") == 16, "背包操作按钮字号基准不是16")
+	assert(panel.discard_button.disabled, "未选择物品时丢弃按钮没有进入灰色禁用状态")
+	var inventory_before_empty_discard: Array = PlayerState.inventory.duplicate(true)
+	panel._on_discard_pressed()
+	assert(PlayerState.inventory == inventory_before_empty_discard, "空选择仍触发了丢弃交易")
+	assert(not panel.discard_button.has_meta("gothic_feedback_state"), "空选择仍启动了丢弃按钮动画")
 	var selected_for_sort := 0
 	panel.selected_inventory_indices = {selected_for_sort: true}
 	panel.selected_inventory_index = selected_for_sort
+	panel._refresh_inventory_action_states()
 	assert(panel.selected_inventory_index == selected_for_sort, "整理前未建立选择")
 	panel._on_auto_sort_pressed()
 	await get_tree().process_frame
 	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "整理后保留了陈旧选择")
 	panel.selected_inventory_indices = {0: true, 1: true}
 	panel.selected_inventory_index = 1
+	panel._refresh_inventory_action_states()
 	assert(not panel.selected_inventory_indices.is_empty(), "丢弃前未建立多选")
+	assert(not panel.discard_button.disabled, "已有物品选择时丢弃按钮仍被禁用")
 	panel._on_discard_pressed()
 	await get_tree().process_frame
 	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "丢弃后保留了陈旧选择")
+	assert(panel.discard_button.disabled, "丢弃清空选择后按钮没有恢复灰色禁用状态")
 	assert(panel.selected_inventory_index < PlayerState.inventory.size(), "丢弃后选择索引越界")
+
+	# --- Structured selection contract: multi-select guard, stale failure, and
+	# exact empty destination follow the same instance. ---
+	PlayerState.reset_progress()
+	PlayerState.level = 50
+	PlayerState.recalculate_stats()
+	PlayerState.add_item("匕首")
+	PlayerState.add_item("布衣(男)")
+	panel.refresh()
+	await get_tree().process_frame
+	var contract_dagger_index := _inventory_index_of("匕首")
+	var contract_armor_index := _inventory_index_of("布衣(男)")
+	# The preceding pointer-cancel coverage intentionally leaves the gesture
+	# guard set.  A fresh test selection represents a new pointer-down frame.
+	panel._press_cancelled = false
+	panel._select_inventory_item(contract_dagger_index)
+	assert(panel.item_detail_presenter.visible and panel.item_detail_presenter.title_label.text == "匕首", "单选详情没有显示当前实例")
+	panel._select_inventory_item(contract_armor_index)
+	assert(
+		panel.selected_inventory_indices.size() == 2
+		and panel.item_detail_presenter.visible
+		and panel.item_detail_presenter.title_label.text == "布衣(男)",
+		"多选详情没有跟随最后选中的物品",
+	)
+	panel._select_inventory_item(contract_armor_index)
+	assert(
+		panel.selected_inventory_indices.size() == 1
+		and panel.selected_inventory_indices.has(contract_dagger_index)
+		and panel.item_detail_presenter.visible
+		and panel.item_detail_presenter.title_label.text == "匕首",
+		"取消多选最后一件后详情没有回落到剩余物品",
+	)
+	panel._select_inventory_item(contract_dagger_index)
+	assert(panel.selected_inventory_indices.is_empty() and not panel.item_detail_presenter.visible, "清空多选后详情没有隐藏")
+	panel._select_inventory_item(contract_dagger_index)
+	panel._select_inventory_item(contract_armor_index)
+	panel._select_equipment_slot("武器")
+	assert(PlayerState.equipment["武器"].is_empty() and PlayerState.has_item("匕首"), "多选物品点击穿戴槽仍触发了单项穿戴")
+	panel._clear_inventory_selection_styles()
+	panel._press_cancelled = false
+	panel._select_inventory_item(contract_dagger_index)
+	panel._select_equipment_slot("武器")
+	assert(str(PlayerState.equipment["武器"].get("name", "")) == "匕首", "结构化装备入口未穿戴选定实例")
+	var equipped_instance_id := str(PlayerState.equipment["武器"].get("instance_id", ""))
+	var empty_destination := -1
+	for candidate_index in range(InventoryPanel.BAG_VISIBLE_CAPACITY):
+		if panel._can_receive_unequip_to_index(candidate_index):
+			empty_destination = candidate_index
+			break
+	assert(empty_destination >= 0, "已选穿戴装备没有任何可用空格作为指定卸装目标")
+	var detail_before_stale_failure: String = panel.item_detail_presenter.title_label.text
+	panel.selected_equipment_ref = {"container": "equipment", "slot": "武器", "instance_id": "stale-instance", "revision": panel._selection_revision}
+	panel._unequip_to_inventory_slot(empty_destination)
+	assert(
+		str(PlayerState.equipment["武器"].get("instance_id", "")) == equipped_instance_id
+		and panel.selected_equipment_slot == "武器"
+		and panel.item_detail_presenter.title_label.text == detail_before_stale_failure,
+		"过期实例卸装失败没有保持源槽与详情",
+	)
+	panel.selected_equipment_ref = panel._equipment_selection_ref("武器", PlayerState.equipment["武器"])
+	panel._select_inventory_item(empty_destination)
+	assert(
+		PlayerState.equipment["武器"].is_empty()
+		and str(PlayerState.inventory[empty_destination].get("instance_id", "")) == equipped_instance_id,
+		"指定空格卸装没有落到点击的格子或保留同一实例",
+	)
 	get_tree().quit(0)
 
 

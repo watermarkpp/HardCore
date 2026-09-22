@@ -1,0 +1,35 @@
+# V3 main integration correctness evidence
+
+Production/test HEAD: 06d10038 (ID50 data 81f3cb89 + V3 d995b6fa cherry-pick).
+Command: tools/run_godot_tests.ps1 -TestPaths <the seven scenes in runner JSON> -TimeoutSeconds 60.
+Runner: 162631_412_20420; 7/7 PASS, natural exit, engine_log_errors=0 under the existing runner rules.
+Controlled headless editor import completed first with project-local APPDATA and log. This is not a GUI editor run.
+This is correctness evidence, NOT a quiet performance run or APK/device acceptance. Performance REV07 remains OPEN/FAIL.
+New T30 fixture authoring may have run concurrently in disjoint, unreferenced test files. No production source was changed during the run.
+Original logs are preserved; allowlisted error/warning text is not removed. ID50 data review found no stats/classification/drop/movement semantic change.
+
+SHA256 | File
+---|---
+80E2AEADEF27BD2ABAA93A111BFCFC9ACEEA00ACA22E2EB950B63E0655339D15 | runner_results_adhoc_20260909_162631_412_20420.json
+77817742727F3D16C8C8928D79118814ACBDAEDA4439438FA356E2163072C926 | v3_main_import_06d10038.godot.log
+37B64FD5082FFE14EB36670B6FC1AEE08B4E4EFEE251DD33D9C855F067A0BE88 | path_test.stdout.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | path_test.stderr.log
+207D45688E8C2E13BBAECB96A2971EB0231DFF1FD6298FDB0E32237746D78A6E | path_test.godot.log
+70720036ABAC4B135D37D15FA91C4814F23CB040DA43D0C774178A5DD18D5786 | runtime_test.stdout.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | runtime_test.stderr.log
+0DD77F2F16B0A05E0A82C22913709EC0E25C75AF9658D73F24C90744A3E90A36 | runtime_test.godot.log
+ADE16818DEE7A24F06DB65135613132F3527693C1D50430B1A4BAFA19800F253 | world_obstacle_runtime_test.stdout.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | world_obstacle_runtime_test.stderr.log
+A1283FB561C2EED9F2FF4509214966C9A6FE31CEB479F2EA8B9FFFB31AEF0DA6 | world_obstacle_runtime_test.godot.log
+C4C4D3ECAB788DEC8AAEC437F65C09FEB359B77F8FEE87064FF76CD26871DC75 | combat_epoch_delivery_test.stdout.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | combat_epoch_delivery_test.stderr.log
+E296AF38A390C691D7AEA3333C37B8C8BC64EA2B4BFE43F8CD7A116DE4D0C2B6 | combat_epoch_delivery_test.godot.log
+296BF59AC0168F0AD6A2E0646AF41DA88AA61FACD1B823E59961216FDF3950C5 | mobile_targeting_test.stdout.log
+C97498A987672E08CC50B133A61A5E626AC5841E865AFC32AFA14342F6E6A874 | mobile_targeting_test.stderr.log
+12EDBA192858B3B3E96A0BEBBBDD11BE39D0D81C231AAA2F8DC5C817C1424C0E | mobile_targeting_test.godot.log
+D49C6FCFC711B520FB42711CE3225B788CFD2EA1E28EDF8A032250436A737157 | monster_physical_projectile_attack_test.stdout.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | monster_physical_projectile_attack_test.stderr.log
+8F1D8E9907E14A383840C6FB86248064B5133B969C724A88625674A3CE74E2F0 | monster_physical_projectile_attack_test.godot.log
+B330C58E267498300E19FD0146A3F501FF55488C113B6AADDE5A08D9AC00F6B9 | monster_special_delivery_contract_test.stdout.log
+E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 | monster_special_delivery_contract_test.stderr.log
+F644898675CD8B7D7FED42641202625404DFD859E9DE2B2A0C649A00264E2D0C | monster_special_delivery_contract_test.godot.log

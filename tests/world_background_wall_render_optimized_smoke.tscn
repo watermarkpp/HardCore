@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3 uid="uid://wall_smoke_p1r"]
+[ext_resource type="Script" path="res://tests/world_background_wall_render_optimized_smoke.gd" id="1"]
+[node name="WallRenderOptimizedSmoke" type="Node"]
+script = ExtResource("1")

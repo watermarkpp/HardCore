@@ -16,6 +16,7 @@ const EXPECTED := {
 	"蛤蟆": {"idle": 4, "walk": 6, "attack": 6, "hit": 2, "death": 10},
 }
 const RUNTIME_SAMPLES := ["毒蜘蛛", "山洞蝙蝠"]
+const RUNTIME_IDS := {"毒蜘蛛": 18, "山洞蝙蝠": 43}
 
 
 func _ready() -> void:
@@ -64,8 +65,11 @@ func _run() -> void:
 		if monster_name not in RUNTIME_SAMPLES:
 			continue
 
+		var monster_id := int(RUNTIME_IDS.get(monster_name, -1))
+		var canonical_data := GameData.get_monster_by_id(monster_id)
+		assert(monster_id > 0 and not canonical_data.is_empty(), "%s canonical monster_id 无效" % monster_name)
 		var enemy := EnemyActor.new()
-		enemy.setup({"name": monster_name, "hp": 100, "attackMin": 1, "attackMax": 2}, player, false)
+		enemy.setup(canonical_data, player, false)
 		add_child(enemy)
 		enemy.set_physics_process(false)
 		await get_tree().process_frame

@@ -1,13 +1,14 @@
 <#
 .SYNOPSIS
-    Generate res://generated/build_info.json from Git state.
+    Generate res://assets/generated/build_info.json from Git state.
     HC-P1-014: binds exported builds to source revision.
 #>
 param(
     [switch]$AllowDirty,
     [string]$StageRoot,
     [switch]$SkipDirtyCheck,
-    [switch]$IgnoreAndroidBuildTemplate
+    [switch]$IgnoreAndroidBuildTemplate,
+    [int]$VersionCodeOverride = 0
 )
 
 $ErrorActionPreference = "Stop"
@@ -48,6 +49,12 @@ if ($dirty -and -not $AllowDirty -and -not $SkipDirtyCheck) {
 
 $versionName = (git show HEAD:project.godot | Select-String 'config/version' | ForEach { $_ -replace '.*=\s*"([^"]+)".*','$1' }).Trim()
 $versionCode = (git show HEAD:export_presets.cfg | Select-String 'version/code=' | ForEach { $_ -replace '.*version/code=(\d+).*','$1' }).Trim()
+# QA override (remote review 2026-09-16): the isolated build injects a
+# monotonic per-QA versionCode into the staged preset; build_info.json must
+# record the SAME code or the runtime-resource verify step rejects the APK.
+if ($VersionCodeOverride -gt 0) {
+    $versionCode = [string]$VersionCodeOverride
+}
 $buildType = if ($dirty) { "dirty_dev" } elseif ($branch -match "validation/") { "validation" } else { "development" }
 
 $info = @{

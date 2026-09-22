@@ -176,6 +176,16 @@ func _run_case(
 
 	var legacy_count := legacy_order.size()
 	var manager_count := manager_order.size()
+	if label == "dead_target":
+		# The legacy loop intentionally documents the stale-target behavior that
+		# this guard fixes. A pending-death actor must not be exact-tested, claimed,
+		# or passed to the damage callback by the production manager.
+		assert(
+			manager_order.is_empty(),
+			"pending-death target must not consume a ground-effect tick"
+		)
+		_cleanup_world()
+		return
 	if legacy_count != manager_count:
 		_difference_count += 1
 		push_error(

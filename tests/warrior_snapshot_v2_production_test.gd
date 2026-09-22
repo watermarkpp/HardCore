@@ -38,8 +38,11 @@ func _run() -> void:
 	var rush_target: EnemyActor = game._spawn_enemy(
 		GameData.get_monster_by_id(21),
 		game.player.global_position + Vector2(80, 40),
-		false
+		false,
+		-1.0,
+		{"respawn_enabled": false}
 	)
+	assert(rush_target != null, "wild-rush snapshot fixture enemy must spawn")
 	var rush_plan: Dictionary = game._build_wild_rush_path_plan(
 		rush_target, "test:wild:1"
 	)

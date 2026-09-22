@@ -14,7 +14,7 @@ const LEGACY_SKILL_GEOMETRY_SOURCE_EVIDENCE := {
 	"source_tier": "primary",
 	"distribution": "project_formal_contract",
 	"path": "assets/data/vanilla_176/skills_source_of_truth_v1.json",
-	"sha256": "883359E2CF191A196F749653067F2030130FC11FD59A033A89EE557CAB7607E2",
+	"sha256": "D439258D5EF1E76F86FB2EB590A8EC22D49757CD909DE0C1F889370BD2CCDC19",
 	"source_contract_id": "skills.mir2_176.vanilla_33.v1.0.1",
 	"adapter_semantics": "legacy_primary_numeric_semantics_as_gu_once",
 	"topology_semantics": "legacy_declared_grid_topology_as_gs_once",

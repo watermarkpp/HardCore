@@ -208,7 +208,13 @@ static func configure_one_way_to_arrival(
 		"official_connection_id",
 	]:
 		target_arrival.erase(field)
-	target_arrival["display_name"] = "尸王殿入口（仅到达）"
+	# Preserve the human-authored terminal label.  Corpse King Hall was the
+	# original one-way fixture, but this helper is shared by every terminal
+	# dungeon and must not rename their accepted arrival anchors.
+	var arrival_display_name := str(target_arrival.get("display_name", "")).strip_edges()
+	if arrival_display_name.is_empty():
+		arrival_display_name = "地图入口（仅到达）"
+	target_arrival["display_name"] = arrival_display_name
 	target_arrival["portal_role"] = "arrival_only_endpoint"
 	target_arrival["semantic_role"] = "map_portal_arrival_anchor"
 	target_arrival["connection_mode"] = "arrival_only"

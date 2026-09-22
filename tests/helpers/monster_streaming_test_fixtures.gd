@@ -27,7 +27,7 @@ static func catalog_ids() -> Array[int]:
 	assert(catalog is Dictionary)
 	for row: Dictionary in (catalog as Dictionary).get("monsters", []):
 		_catalog_ids.append(int(row.monster_id))
-	assert(_catalog_ids.size() == 217, "catalog must contain 217 monster ids")
+	assert(_catalog_ids.size() == 156, "catalog must contain 156 monster ids")
 	return _catalog_ids
 
 
@@ -80,10 +80,9 @@ static func drive_residency_activation(
 	visual: MonsterVisual,
 	steps := 40
 ) -> void:
-	## Mirrors the frozen actor residency path: each step forces the 0.12s
-	## residency timer and runs one _process frame.
+	## Mirrors the production coordinator callback. Animation remains a visual
+	## process concern after the bounded residency visit activates resources.
 	for _step: int in range(steps):
 		if not visual.active_resources.is_empty():
 			break
-		visual._resource_residency_timer = 0.0
-		visual._process(0.13)
+		visual.streaming_residency_poll(Time.get_ticks_msec())

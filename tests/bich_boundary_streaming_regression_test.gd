@@ -14,7 +14,10 @@ func _ready() -> void:
 
 	var background := WorldBackground.new()
 	add_child(background)
-	background.set_zone_data("比奇省", {"mapId": 4, "name": "比奇省"})
+	background.set_zone_data(
+		"比奇省",
+		{"mapId": MapEditorRuntimeBridge.BICH_MAP_ID, "name": "比奇省"}
+	)
 	await get_tree().process_frame
 	await get_tree().process_frame
 

@@ -1,0 +1,46 @@
+{
+  "monster_id": 127,
+  "name": "蝙蝠",
+  "url": "https://www.21cq.com/mir/Mob.Aspx?ID=127",
+  "retrieved_utc": "2026-09-07T18:19:45.834500+00:00",
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "金币",
+      "numerator": 1,
+      "denominator": 30,
+      "amount": 250
+    },
+    {
+      "item": "金创药(中量)",
+      "numerator": 1,
+      "denominator": 80,
+      "amount": 1
+    },
+    {
+      "item": "魔法药(中量)",
+      "numerator": 1,
+      "denominator": 80,
+      "amount": 1
+    },
+    {
+      "item": "太阳水",
+      "numerator": 1,
+      "denominator": 100,
+      "amount": 1
+    },
+    {
+      "item": "回城卷",
+      "numerator": 1,
+      "denominator": 80,
+      "amount": 1
+    }
+  ],
+  "http_status": 200,
+  "declared_charset": "gb2312",
+  "actual_encoding": "gb2312",
+  "raw_sha256": "00C26A46F8539AE9F71E5321CD347FCE057542EE207C495A957021916644F245",
+  "raw_path": "docs/drop/v5/source/monster_127.bin",
+  "cache_reparsed": true
+}

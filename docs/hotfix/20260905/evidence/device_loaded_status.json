@@ -1,0 +1,33 @@
+{
+	"action": "status",
+	"nonce": "7cbb50b6d6594de9b617872a2469ec1d",
+	"ok": true,
+	"protocolVersion": 1,
+	"status": {
+		"allowlist": "device_lab.v1",
+		"capabilities": [
+			"ui_profile",
+			"player_state",
+			"chiyue_test_roster",
+			"checkpoints",
+			"snapshot",
+			"reset_diagnostics",
+			"read_diagnostics",
+			"stop_diagnostics",
+			"frame_sampling",
+			"repair_diagnostics",
+			"resource_patch"
+		],
+		"debugBuild": true,
+		"inbox": "user://device_lab/inbox/pending.json",
+		"lastCommandNonce": "7cbb50b6d6594de9b617872a2469ec1d",
+		"outbox": "user://device_lab/outbox",
+		"pollIntervalMs": 150,
+		"protocolVersion": 1,
+		"resourcePatch": {
+			"loadError": "",
+			"loadedPatchId": "hotfix-20260905-xp-town-minimal",
+			"loadedPatchSha256": "1643D8D05276D4DF45A823697645173C6D27A654C37B60238F024086BA501434"
+		}
+	}
+}

@@ -34,8 +34,29 @@ func _run() -> void:
 	assert(safe_zone.get("shape") == "circle", "Bich safe area must be circular")
 	assert(safe_zone.get("center_ground_gu") == MapEditorRuntimeBridge.home_position_ground_gu(), "Safe area center differs from the resurrection point")
 	assert(is_equal_approx(float(safe_zone.get("radius_gu")), 9.0), "Safe area radius is not nine GU")
-
+	var compiled_context: Dictionary = game.safe_zone_runtime_context()
+	assert(bool(compiled_context.get("valid", false)), "safe-zone context is not valid")
+	assert(int(compiled_context.get("map_id", -1)) == game.current_map_id)
+	assert(int(compiled_context.get("revision", -1)) > 0)
+	assert((compiled_context.get("zones", []) as Array).size() == 1)
+	assert(compiled_context.get("zones", [])[0].get("aabb_ground_gu") is Rect2)
+	var cache_before: Dictionary = game.get("_player_safe_zone_cache")
+	assert(bool(cache_before.get("valid", false)), "player safe-zone cache not primed")
 	var runtime := MapEditorRuntimeBridge.load_bich()
+	var home_screen_px := MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
+		runtime,
+		safe_zone.center_ground_gu,
+	)
+	game._set_player_world_position(home_screen_px)
+	assert(game._player_inside_active_safe_zone(), "player cache missed teleport into safe area")
+	var cache_after: Dictionary = game.get("_player_safe_zone_cache")
+	assert(
+		(cache_after.get("ground_position_gu") as Vector2).is_equal_approx(
+			safe_zone.center_ground_gu,
+		),
+		"player safe-zone cache did not refresh on teleport",
+	)
+
 	var outside := MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(runtime, Vector2(-1.0, 0.0))
 	assert(game.background.is_environment_point_blocked(outside), "Map exterior is not part of unified occupancy")
 	var first_blocked := str(runtime.get("collision", {}).get("blocked_tiles", [])[0]).split(",")
@@ -43,10 +64,10 @@ func _run() -> void:
 	assert(game.background.is_environment_point_blocked(obstacle), "Editor obstacle is not part of unified occupancy")
 
 	var probe := enemies[0] as EnemyActor
-	probe.global_position = MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
+	probe.set_combat_position(MapEditorRuntimeBridge.ground_position_gu_to_screen_position_px(
 		runtime,
 		safe_zone.center_ground_gu
-	)
+	), &"test_safe_zone_probe")
 	game._enforce_bich_safe_zone()
 	var probe_ground_gu := MapEditorRuntimeBridge.screen_position_px_to_ground_position_gu(
 		runtime,

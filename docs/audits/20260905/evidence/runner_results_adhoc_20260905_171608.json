@@ -1,0 +1,41 @@
+{
+  "total": 2,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "hud_background_prewarm_test",
+      "test_path": "tests/hud_background_prewarm_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "startup_loading_failure_recovery_test",
+      "test_path": "tests/startup_loading_failure_recovery_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-05T17:16:08.6276936+08:00",
+  "git_head": "43c8ea2e0926cf22c73f94720aba8bf83ffcd5bc",
+  "failed": 0,
+  "passed": 2,
+  "suite": "adhoc"
+}

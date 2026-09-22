@@ -1,0 +1,20 @@
+# Baseline freeze manifest - HardCore UI R5 + M30 closure
+BASE_LOCAL_HEAD: 8dd1d092c58734f83c511a8f796e103f0a6cc823
+branch: codex/m30-r3-integration
+generated: 2026-09-11T05:22:18.8722802+08:00
+signed_cert_sha256_expected: c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc
+
+49b43b52e202d6357296edfcf3571fd299b26a85  scripts/game_root.gd
+f74a044c595d90e1a3c4a4a2cc2eeca151f7264c  scripts/enemy.gd
+a78d7edaac9ac03d1a351acb4d86ee9295b0f4b2  scripts/hud.gd
+5331483e3140169474404846d5f666e43602bdf6  scripts/player.gd
+349e81e9779b22aaf7cb8cef54b902243b632cdc  scripts/player_state.gd
+5b870cbbd18b95bb1eaefe0643b87410f8b78132  scripts/layers/runtime/combat_runtime_service.gd
+c2a681f5672f37b30156bddca7ef08b87eb1721e  scripts/monster_ai_package/m30/summon_queue.gd
+e4a40eaa861c1cd44b2deec078304c3371efaf7f  scripts/monster_ai_package/m30/walk_phase.gd
+ad5686f70ab46b95ccebf33727e6c1b126270a3c  scripts/monster_ai_package/m30/context_token.gd
+9d36069bffa7d7bf6f8627cac886fee0f95c1250  scripts/equipment_rules.gd
+033b11993e425813e00807602b915dfeeb0d3739  scripts/loot_pickup.gd
+fd8262dbc67bd65b978f63e38da728a84e2ecf37  assets/data/equipment_attribute_master.json
+e28d7a3a2fa3f0c318e394a55f939845212384ef  assets/data/ui/manual_layout_overrides.json
+52a3213be3612d65aed423cf3b7363a40fc7236c  assets/data/source_priority_policy.json

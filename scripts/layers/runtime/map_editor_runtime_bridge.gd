@@ -2,13 +2,28 @@ class_name MapEditorRuntimeBridge
 extends RefCounted
 
 const NPCServiceIdentityScript := preload("res://scripts/npc_service_identity.gd")
-const BICH_MAP_ID := 4
+const MonsterRespawnPolicyScript := preload(
+	"res://scripts/monster_respawn_policy.gd"
+)
+const MapUIPresentationProjectionScript := preload(
+	"res://scripts/map_editor/map_ui_presentation_projection.gd"
+)
+const MapAssetCatalogServiceScript := preload(
+	"res://scripts/map_assets/map_asset_catalog_service.gd"
+)
+const BICH_MAP_ID := 910001
+# Elite monsters that keep authored ordinary-layer spawn points after the
+# user loot sheet classification migration (218 牛魔将军 / 222 牛魔祭司) and
+# the RV15 user-directive elite migration (164 血巨人 / 166 血僵尸 /
+# 168 月魔蜘蛛 / 170 黑锷蜘蛛 / 172 钢牙蜘蛛 / 178 花吻蜘蛛 / 182 幻影蜘蛛).
+# The 500-hp pair (174 暴牙蜘蛛 / 176 天狼蜘蛛) stays ordinary by directive.
+const ELITE_ORDINARY_SPAWN_IDS := [218, 222, 164, 166, 168, 170, 172, 178, 182]
 const SAFE_RADIUS_GU := 9.0
 const RUNTIME_OUTPUT_CONTRACT_ID := "map.editor.runtime.output_units.v1"
 const BOSS_RESPAWN_OVERRIDES := {
-	218: 3600.0,
-	221: 3600.0,
-	1578: 1800.0,
+	911002: 3600.0,
+	911003: 3600.0,
+	911103: 1800.0,
 }
 ## FREEZE-P0.2R: formal map implementation states. Only maps with a MapEditor
 ## runtime build + ready marker are implemented_playable; world/reference data
@@ -127,7 +142,6 @@ static func invalidate_release_registry() -> void:
 	_runtime_cache.clear()
 	_readiness_result.clear()
 
-
 static func released_map_ids() -> Array[int]:
 	_load_release_registry()
 	if not _registry_load_valid:
@@ -177,6 +191,17 @@ static func validate_release_registry(registry: Dictionary) -> Array[String]:
 			errors.append("missing_runtime_path")
 		if approved.is_empty():
 			errors.append("missing_approved_hash")
+		var ui_projection: Variant = entry.get("ui_presentation", null)
+		if ui_projection != null:
+			if not ui_projection is Dictionary:
+				errors.append("map_ui_projection_invalid")
+			else:
+				errors.append_array(
+					MapUIPresentationProjectionScript.validate(
+						ui_projection as Dictionary,
+						approved
+					)
+				)
 		if (
 			release_state != str(RELEASE_STATE_IMPLEMENTED_PLAYABLE)
 			and release_state != str(RELEASE_STATE_IMPLEMENTED_STAGING)
@@ -356,6 +381,42 @@ static func load_map(runtime_map_id: int) -> Dictionary:
 		runtime["runtime_map_id"] = runtime_map_id
 	_runtime_cache[runtime_map_id] = runtime
 	return runtime
+
+
+## Lightweight, build-bound map information for UI presentation. This reads
+## only the already-loaded release registry and never opens a full runtime map.
+static func map_ui_content_for_map(runtime_map_id: int) -> Dictionary:
+	var entry := _release_entry(runtime_map_id)
+	if entry.is_empty():
+		return {}
+	var raw_projection: Variant = entry.get("ui_presentation", null)
+	if not raw_projection is Dictionary:
+		return {}
+	var projection: Dictionary = raw_projection
+	if not MapUIPresentationProjectionScript.validate(
+		projection,
+		str(entry.get("approved_build_sha256", ""))
+	).is_empty():
+		return {}
+	return MapUIPresentationProjectionScript.content_from_projection(projection)
+
+
+static func map_ui_presentation_snapshot_key() -> String:
+	_load_release_registry()
+	if not _registry_load_valid:
+		return "invalid"
+	var parts: Array[String] = []
+	for runtime_map_id: int in released_map_ids():
+		var entry: Dictionary = _registry_cache.get(runtime_map_id, {})
+		parts.append("%d:%s" % [
+			runtime_map_id,
+			str(entry.get("approved_build_sha256", "")),
+		])
+	return "|".join(parts)
+
+
+static func debug_runtime_cache_size() -> int:
+	return _runtime_cache.size()
 
 
 static func load_bich() -> Dictionary:
@@ -637,6 +698,9 @@ static func _combat_spawn(
 	).is_empty():
 		return {}
 	var classification := str(canonical.get("classification", ""))
+	var spawn_classification := str(
+		canonical.get("spawn_classification", "")
+	)
 	var canonical_placement := str(
 		canonical.get("editor_placement", {}).get("placement_kind", "")
 	)
@@ -644,17 +708,36 @@ static func _combat_spawn(
 		return {}
 	if not canonical_placement.is_empty() and canonical_placement != placement_kind:
 		return {}
-	if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
-		return {}
-	if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
-		return {}
+	if spawn_classification == MonsterRespawnPolicyScript.SPECIAL_NORMAL:
+		if placement_kind != "monster_spawn":
+			return {}
+		if int(entry.get("count", 1)) != 1 or int(entry.get("max_alive", 1)) != 1:
+			return {}
+	else:
+		if placement_kind == "boss_spawn" and classification not in ["elite", "boss"]:
+			return {}
+		if placement_kind == "monster_spawn" and classification in ["elite", "boss"]:
+			# 218/222 migrated to elite together with the user loot sheet
+			# activation while keeping their ordinary-layer spawn points, so
+			# they stay eligible for monster_spawn; every other elite/boss
+			# monster is still rejected on the ordinary layer.
+			if numeric_id not in ELITE_ORDINARY_SPAWN_IDS:
+				return {}
 	var respawn_seconds := float(entry.get("respawn_seconds", 60.0))
+	var respawn_policy_id := str(entry.get("respawn_policy_id", ""))
+	if spawn_classification == MonsterRespawnPolicyScript.SPECIAL_NORMAL:
+		# Canonical Authority upgrades legacy/dirty authoring values without
+		# mutating the user's map workspace. Published runtime always receives
+		# the frozen special_normal tier.
+		respawn_policy_id = MonsterRespawnPolicyScript.SPECIAL_NORMAL
+		respawn_seconds = MonsterRespawnPolicyScript.SPECIAL_NORMAL_SECONDS
 	if respawn_override > 0.0:
 		respawn_seconds = respawn_override
 	return {
 		"name": str(canonical.get("canonical_name", "")),
 		"monster_id": numeric_id,
 		"classification": classification,
+		"spawn_classification": spawn_classification,
 		"placement_kind": placement_kind,
 		"is_boss": classification == "boss",
 		"screen_position_px": grid_cell_to_screen_position_px(
@@ -664,6 +747,7 @@ static func _combat_spawn(
 			entry.get("tile", [0, 0])
 		),
 		"respawn_seconds": respawn_seconds,
+		"respawn_policy_id": respawn_policy_id,
 		"count": int(entry.get("count", 1)),
 		"max_alive": int(entry.get("max_alive", 1)),
 		"radius_gu": float(entry.get("radius_gu", 0.0)),
@@ -706,7 +790,7 @@ static func _portal_record(
 	runtime: Dictionary,
 	entry: Dictionary
 ) -> Dictionary:
-	return {
+	var record := {
 		"screen_position_px": grid_cell_to_screen_position_px(
 			runtime, entry.get("tile", [0, 0])
 		),
@@ -729,6 +813,44 @@ static func _portal_record(
 		)),
 		"travel_request_single_flight": bool(entry.get("travel_request_single_flight", false)),
 	}
+	# Visual-only augmentation: when the authored portal endpoint carries a
+	# linked portal-gate instance, expose the linked asset id and the pixel
+	# height of that artwork above the portal foot so the runtime can suppress
+	# the generated placeholder circles and ride the label above the artwork.
+	# Portal function fields above are never derived from these values.
+	var linked_visual := _linked_portal_visual_info(runtime, entry)
+	record["linked_visual_asset_id"] = str(linked_visual.get("asset_id", ""))
+	record["visual_top_offset_px"] = float(linked_visual.get("top_offset_px", 0.0))
+	return record
+
+
+## Resolve the linked portal-gate instance of a semantic endpoint against the
+## compiled runtime instance list. Read-only lookup; missing links resolve to
+## empty info and the runtime keeps the placeholder rendering.
+static func _linked_portal_visual_info(
+	runtime: Dictionary,
+	entry: Dictionary
+) -> Dictionary:
+	var linked_id := str(entry.get("linked_visual_instance_id", ""))
+	if linked_id.is_empty():
+		return {}
+	for instance: Dictionary in runtime.get("instances", []):
+		if str(instance.get("instance_id", "")) != linked_id:
+			continue
+		var asset_id := str(instance.get("asset_id", ""))
+		var asset: Dictionary = MapAssetCatalogServiceScript.find_asset(asset_id)
+		if asset.is_empty():
+			return {"asset_id": asset_id}
+		var anchor: Array = asset.get("anchor_px", [])
+		var bounds: Array = asset.get("visible_bounds_px", [])
+		var top_offset := 0.0
+		if anchor.size() == 2 and bounds.size() == 4:
+			top_offset = float(anchor[1]) - float(bounds[1])
+		return {
+			"asset_id": asset_id,
+			"top_offset_px": maxf(0.0, top_offset),
+		}
+	return {}
 
 
 static func _array_to_vector2(raw: Array) -> Vector2:

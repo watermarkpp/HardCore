@@ -1,17 +1,103 @@
 # HardCore Current Status
 
-Updated against audited runtime HEAD: `58db719671c15a126fde67733745e1a84ccee3a9`
-Branch: `codex/integration`
-Updated: 2026-08-10
-Purpose: where the project stands right now.
+Branch: `codex/integration`。Updated: 2026-09-20。
+
+## 2026-09-20：全量合入——墙体 P1R 战役 + 受击 V4 历史闭环
+
+- 集成落库源码：wall 合并 `fdb298c2`（codex/wall-p1r-final-v2 @ ab0d5524 → integration @ 3d572da1，唯一冲突 game_root.gd 按"R13 计时行 + P0-3 pre-arrival 失败接管 + 常规 guard"并集裁决；P0-3b blocked-arrival 重定位与 R14 相机约束共存）；受击 V4 归并 `88784258`（13 文件中 12 个 blob 级相同、player.gd 唯一改动已在集成 L1148 原文存在，合并零内容变更，仅关闭祖先链）；`.uid` 侧车入库 `ed497c32`；注册契约对齐 `ade575d1`（map_runtime_release_critical 期望列表 5→14 对齐 HC-POLY-R2 实际 suite）。
+- 门禁（同 commit ade575d1）：注册检查 PASS；冒烟 PASS；受击 V4 六场景 6/6；相机五场景 5/5；多边形九场景 9/9；map_runtime_release_critical 14/14；transaction critical 6/6；P0-3 转移专项 3/3；R11 force_legacy gate PASS；R7 全程直跑 `WALL_RENDER_R7_STRICT_PASS hops=16 checks=74`；R6 全程直跑 `WALL_RENDER_R6_STRICT_PASS maps=67 a_maps=60 checks=387`；monster 45/47；full critical 360/377。
+- 失败逐项基线归因（对照 3d572da1 主树与 ab0d5524 wall tip）：14 项同断言基线旧债（含 ID76/V505 :344 既有接受债、fire_wall_exact_2x2、W7 affix、共享金币 :342、shop 价格行等）；2 项摇摆/噪声（canonical_skill_production_entry 三次运行断言点 :154/:184/:222 跨两树漂移，技能代码与数据零差异；source_collision_chunk 自身 PASS 后仅退出期引擎日志噪声，隔离复跑 PASS）；1 项环境（complete_client_resource_catalog 新树缺 outputs/resource_catalog 生成产物，重建属冻结验收管线待用户授权）。**本轮零合并回归。**
+- classic_boss_order_test 按方案 E3 十次专项：候选隔离 10/10 PASS；基线 9/10（第 7 次复现同断言 :104）→ 既有间歇债。
+- APK_BUILD=NOT_RUN；打包前检查与工作树清理见本轮交付报告（HardCore-consolidation-evidence/20260919-2）。设备帧率/触感 NOT_RUN。
+
+## 2026-09-14：物品详情、Buff、设置与地面名称 v81
+
+- APK源码 `4f4462ad027714acf657c7a2ac28fa4f15a6e293`。物品详情按实际最长行宽度整体居中，各行保持左对齐，名称单行居中且★独立；标题20/正文14不变。设置布局已由用户验收，正式功能验证通过。
+- 持久单独增加不算JP；地面图标在人物/技能下、名称事件驱动防重叠；10项精确分类调整；沃玛教主命运之刃新增1/24槽，原108槽/概率/优先级/15上限不变；共用Buff行及12类神水到期属性和图标清理验证。
+- 31不同场景分批最终PASS，固定源码4/4 PASS。桌面 `HardCore-1.0-v81-release.apk`，81 / `hardcore 1.0 正式版`，466,010,045 bytes，SHA256 `6AF911A381AA5D567B6086D698EC4480FAC9316192D4E6BAEE50B96E4705D89E`。
+- APK同签名覆盖、源码身份、冻结内容验证PASS；228其他运行时脚本/8983其他资源项与v80相同。沿用项目development导出和旧签名。旧APK/标签及用户现场保留；设备NOT_RUN，旧冷UI/故障回滚/多怪安卓性能债务未由本轮测试消除。
+- 里程碑 `milestone-hardcore-1.0-v81` 固定上述APK源码；交付和远端核对见 `docs/loot_ui_20260914/DELIVERY.md`，后续文档提交不是APK源码。
+
+## 2026-09-14：人物成长、神水、地面过滤与掉率 v80
+
+- 源码 `fa4a1ffa88f7d2ec20d83a8548afc2d4b99d1393`，三职业裸属性统一到主服务端生成链；神水正式计时到期、单个与旧堆叠无损拆分、当前仓库页整理、JP范围合并及★、药水颜色说明、三挡即时过滤与600秒地面回收。
+- 按用户DOCX明确倍率调整765原槽并向M159复制17槽，原台账/优先级/15上限保留；Excel仅比对，不参与规则。
+- 26场景分批最终PASS；固定源码3/3 PASS。APK 80 / `hardcore 1.0 正式版` 已在桌面 `HardCore-1.0-v80-release.apk`，465,996,946 bytes，SHA256 `D8B9E5FF0C395F354997A0F0ED8E7E4F996C1433191D07C04CA5C7F76746F52D`。
+- APK同签名升级和内容核对PASS，221其他脚本/8979其他资源项与v79不变；已接受校准布局冻结。手机性能/设备NOT_RUN，既存冷UI及故障回滚延迟保留明确记录。
+- 快进合并integration；源码里程碑 `milestone-hardcore-1.0-v80`，旧标签与桌面旧包保留。详见 `docs/progression_loot_20260913/DELIVERY.md`。
+
+## 2026-09-13：人物属性与稀有度复核 v79
+
+- 用户批准校准器候选：恢复人物属性标题，角色名/职业等级居中，正文按零至三位数自动增宽并整体居中，保持固定字号和十行；完整等级含数字可点击查看经验。
+- 175 项装备按用户 DOCX 精确 ID 分类；三类衣服男女六项按祖玛橙色，赤月紫色，极其稀有红字暗金边。修改仅为显示策略及 UI，不改装备数值、掉率或已接受玩法。
+- APK 源 `98b38830ea074084cde49e964b3ca1da15263417`；79 / `hardcore 1.0 正式版`；桌面 `HardCore-1.0-v79-release.apk`，465,961,383 bytes，SHA256 `3FEE8F55D649090C52C8C5165DF9CBC1ABD006FEADA09CD3F07536CD0FABCDA8`。
+- 最终源码专项 3/3、合并冒烟 1/1 PASS。背包、仓库、购买页分别覆盖 188 ID；原旧商店价格断言和仓库单场景超时已分类并按当前合同复验。包内 228 个其他脚本、603 项其他数据与 v78 字节相同，原校准表和签名不变；设备 NOT_RUN。
+- 快进合并至 integration，源码以 `milestone-hardcore-1.0-v79` 标记，原 1.0 里程碑和桌面 v78 包保留。详情与原始证据见 `docs/ui_character_review_20260913.md`（快照相对路径 `ui_character_review_20260913.md`）。
+
+## 2026-09-13 hardcore 1.0 正式版里程碑
+
+- 用户接受 v77 的其他功能后，本轮完成完整人物属性与点击说明、精确名称颜色三端统一、抗拒火环动画和判定中心修正。源码固定 `00ca013d032346fc2e0020388933de9ad23ec8dc`。
+- 版本 78 / `hardcore 1.0 正式版`；桌面 `HardCore-1.0-release.apk`，465,955,859 bytes，SHA-256 `E687CB8F6A871B2BAD9B2BDDBF83A427FA24047FF16B7BDB57BD5ECA3E379E01`。原包名与签名保留，覆盖安装资格、包内源码与冻结资源校验 PASS；新 APK 未安装手机。
+- 18 个不同专项场景分批 PASS；源码提交后核心 4/4 PASS，合并后主副本缓存刷新并复验通过。9 个预期脚本改变，其余 225 个运行时脚本和 603 项数据与 v77 字节一致。
+- 标签 `milestone-hardcore-1.0` 固定 APK 源码；主工作副本恢复 `codex/integration`。详细规则、原始失败和证据见 `docs/milestone_1_0/DELIVERY.md`。下文旧阶段记录仅作历史，不替代本轮结果。
+
+## 2026-09-09 V3/R3 与 24 项整合
+
+- 最终生产源码固定 `909821c928ddb66e5fd48f7cef718baa2e8bfe03`；后续提交为证据与文档。功能施工与集成已完成，12 条来源不足的精确 ID 保持 DATA_HOLD。
+- 属性面板已按用户批准使用：标题20/正文14、内容自适应、优先背包空位、装备详情邻位允许覆盖纸娃娃。不再等待重复校准。
+- 完整 Critical 基线318/344，26个失败修复后全部分批复验通过；影响回归34/34，渲染三轮各3/3。输入/补丁组合5/5，真实菜单/冒烟2/2，最终移动向量边界3/3。不冒称一次最终HEAD全套全绿。
+- 持续攻击相关输入生命周期、模拟鼠标、指针所有权、暂停/失焦/Loading清零均已修复并验证；6 Pro普通聊天审计的新增边界已处理。尚未在故障手机确认消失。
+- 热补丁使用真实包内身份路径；身份未知拒载，版本失配定向退役旧PCK，存档保留。APK以72 / 1.21.0-r3-closure构建，对照桌面v71验证覆盖资格。成品结果见本轮交付记录。
+- **性能验收未完成**：最终8bf77a34四场景×三数量全部12项未达标；30怪近战23.451ms、拥堵25.443ms，较旧版11.962/11.720ms仍退化。下一阶段测试包不代表性能与设备验收通过。
+- 详细范围、测试锚点、原始失败与限制见 `docs/bugfix24/20260909/FINAL_REVIEW.md`、`CONSTRUCTION_CONTENTS.md` 与 `ACCEPTANCE_MATRIX.md`。
+## 2026-09-06 玩法与精确音频升级（最近已构建包）
+
+- APK 源码锚点 `e6939a74fb091db24683c738fb85fb977d580cd0`，版本 `71 / 1.20.0-gameplay-audio`。完整安装包已放桌面 `HardCore-20260906-gameplay-audio-debug.apk`，461,365,538 bytes，SHA-256 `A759922572001C43B00C329C7FE398BDF979B70F07B20B53137B32A05898772F`。版本/签名/资源验证通过，交付身份见 `docs/upgrade/20260906/DELIVERY.md`；未安装手机，实机听感/玩法待验。
+- 音乐 6 秒且播放不截断；NPC 单语音随机切换与 BGM 独立；522 个精确音频事件，无法确认来源/材质映射的声音保留为空，不猜配。
+- 召唤物防御与最终传送落点、首本技能 1 级、全图随机卷、物品/掉落 ID 链、主源远程射程、普攻/烈火 2 GU、半月 2 GU/120°、刺杀 3 GU/末端 1.5 GU 无视防御及当前经验门槛再除 3 已接入。保留地图/怪物数/AI 节拍和已批准升级动画。
+- 完整 critical 首轮 310/317，7 个失败均完成夹具修正后分批复验通过；音频核心 3/3、相邻 6/6；最终干净代码锚点最小专项 3/3 PASS。不是一次全套全绿。正式成功/失败 JSON 已入 `docs/upgrade/20260906/evidence/`。
+- 尸王人工倍率未变：当前十只零掉落概率约 16.96%；修复的是正式物品身份传递，未擅自增加保底。详情见 `docs/UPGRADE_20260906.md`。
+
+## 2026-09-06 复活后怪物视觉与经验/音乐跟进（前一版）
+
+- 源码 `571db0bc`：同图死亡回城保留怪物视觉 generation/订阅，真实跨图隔离不变；死亡扣本级总升级门槛 10%（封顶已有经验），主城音乐默认音量 70%。未修改地图、AI、怪物数量或已批准升级动画。
+- 最终源码专项 3/3 PASS、0 engine errors；最小累计热补丁 1,445,316 bytes / 13 项，无删除项，独立基包加载通过。手机已加载精确最终 patchId/SHA，loadError 为空，存档保留。
+- 启动后比奇 82 个视觉注册，屏幕内 6 个活怪正常显示；实机死亡回城后再接近怪物仍待用户验收。完整根因、包身份及证据见 `docs/hotfix/20260905/FOLLOWUP.md`。
+
+## 2026-09-05 经验与城镇音乐 hotfix（前一版）
+
+- 源码 `0abc83e9`：经验门槛 10%、经验条横跨四快捷物品槽、一次成功结算仅一次升级动画、技能音效关闭、主城安全区 Loading 后 10 秒一次背景音乐。用户已批准 75% 光焰及人物前后遮挡视觉。
+- 干净源码专项 7/7 PASS。最小补丁 `hotfix-20260905-xp-town-minimal` 为 1,404,188 bytes，SHA-256 `1643D8D05276D4DF45A823697645173C6D27A654C37B60238F024086BA501434`；独立基包+补丁加载验证通过。
+- 手机已安装精确里程碑 APK70；本次只原子替换旧补丁，备份并保留存档。手机运行回执已确认新 patchId/SHA，loadError 为空。玩法及音乐听感等待用户实测，不宣称全部手动验收完成。详见 `docs/hotfix/20260905/DELIVERY.md`。
+- 首次全量导出夹带无关资源和两个删除项，被安全检查拒绝、未安装；最终仅 12 项精确闭包，无删除项。主树交付记录保留失败与成功证据。
+
+## 2026-09-05 审计里程碑（历史基包记录）
+
+- 审计修复及 APK 构建完成：构建提交 `52ae0565856c2d99a28639b2bf0c6278186e0858`，版本 `70 / 1.19.0-audit-milestone`。桌面文件 `HardCore-20260905-audit-milestone-debug.apk`，大小 449,193,057 bytes，SHA-256 `26584B871F61B2F6EC2DDDAF52432263E7D68A6B8BEA35B2A3196D59D5B21664`。证据见 `docs/audits/20260905/MILESTONE_APK.md`。
+- 全量 critical 295/298 PASS；余下三项在干净构建提交独立复验 3/3 PASS，正常退出且错误计数为 0。不是一次 298/298 全绿。签名、build-info、运行时资源与实际构建目录的 67 图/208 纹理闭包通过；126 项 CRLF 检出字节差异逐项证明无内容漂移，原始 FAIL 记录保留。
+- 用户已拔手机，要求回来再安装：本包未安装、未做新版本实机验收，手机存档/补丁未改动。后续只用精确 SHA 包安装并复核三职业 40 级赤月档案。
+- 主树及标签 `milestone-20260905-audit-upgrade` 已同步并核对；标签固定 APK 源 `52ae0565`，主树后续含交付文档证据。13 个旧/临时构建工作树已在远端核对和归档后移除，两次磁盘采样净增 52,050,092,032 bytes（约 48.475 GiB）；源提交、重要包/日志及共享工具保留。详见 `docs/audits/20260905/CLEANUP_COMPLETED.md`。
+- 已人工验收的怪物密度性能基线 `c97a08b43832b174f98de31f5ed6673ccda344ae` 已归入 `codex/integration`。该基线不是本轮全部审计通过证明。
+- 当前工作树、专业领域、冻结保护与代理调度以根目录最新 `AGENTS.md` 为准。下文旧“只在主树修改”是历史阶段记录，不否定本轮由 integration 明确分配的隔离专项树。
+- 下文旧 PASS、旧 APK 和旧标签仅作历史证据，不代表当前 HEAD 验收结果。本轮源码构建锚点与后续证据文档提交分开记录，文件变化必须以实时 Git 为准。
 
 ## Current HEAD
 
-`58db719671c15a126fde67733745e1a84ccee3a9`（APK runtime commit；后续仅文档快照提交）
+Use annotated tag `standard-20260829-main-tree` for the immutable consolidated standard. Formal runtime/map baseline is `00f6e5e6525a4a07679b41eb482a2cfd05fdd068`.
 
 ## Current Stage
 
-**FOUNDATION AUDIT CLOSED / DEVICE ACCEPTANCE READY**
+**MAIN TREE CONSOLIDATION CLOSED / DEVICE ACCEPTANCE CONTINUES**
+
+## 2026-08-29 Main Tree Standard Freeze
+
+- 地图、怪物、装备、职业、UI、地图编辑器、素材编辑工具和校准器已按提交与工作副本双层筛查，正式内容统一收口到 `codex/integration`。
+- DeepSeek/DSH 工作树的正式地图编辑器、footprint 校准、XZSC 素材导入/校准及怪物编辑器成果均已在正式历史中；未倒灌中间版本和旧 217 怪 Authority。
+- 所有仍有历史价值但不应启用的 WIP、候选数据和校准证据均已保存到远端 `archive/*-20260829` refs。
+- 以后正常修改只在主树完成；临时工作树验收并合入后立即删除。可热修内容继续通过补丁进入 APK，超出热修边界的重大修改重新打包。
+- 完整证据与恢复点见 `docs/handoff/2026-08-29/MAIN_TREE_STANDARD_FREEZE.md`。
+
+## Historical 2026-08-10 Foundation Audit Closure
 
 ## 2026-08-10 Foundation Audit Closure
 
@@ -81,7 +167,7 @@ Purpose: where the project stands right now.
 - `TestPaths`：`adhoc only`
 - timeout hard range：`1..60`
 - `monster_streaming_critical` direct suite remains available。
-- `monster_streaming_critical` excluded from default critical while `HOLD`。
+- 2026-09-21 RV14-04 (O07)：`monster_streaming_critical` 重新加入默认 critical suite（去重保留）；runner 对包含 streaming 成员的运行强制 `-TimeoutSeconds >= 30`，低于预算启动前直接拒绝。注册自检（`tools/tests/test_suite_registration.ps1`）同步断言包含与预算守卫。历史 HOLD 记录保留为档案，不再作为排除默认 suite 的依据。
 - formal suite smoke：`player_visual_contract_critical = PASS / 1_OF_1`
 - `confirmed_runner_blockers = 0`
 - registration guard remaining weakness：`NON_BLOCKING_TEST_INFRA_DEBT`

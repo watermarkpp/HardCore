@@ -65,11 +65,22 @@ static func explain_candidate(
 		normalized_attack_direction,
 		range_bonus_gu
 	)
-	var relative_sector := (
-		Geometry.half_moon_relative_sector(normalized_attack_direction, target_direction)
-		if has_target_direction
-		else -1
-	)
+	var relative_sector := -1
+	if resolved_mode == Geometry.SKILL_HALF_MOON and has_target_direction:
+		## Use the same continuous GU fan as the runtime candidate gate. The old
+		## 8-way direction index would incorrectly admit the removed +90 sector.
+		relative_sector = Geometry.half_moon_footprint_relative_sector_gu(
+			origin_ground_gu,
+			target_ground_gu,
+			0.0,
+			normalized_attack_direction,
+			range_bonus_gu,
+		)
+	elif has_target_direction:
+		relative_sector = Geometry.half_moon_relative_sector(
+			normalized_attack_direction,
+			target_direction,
+		)
 	var result_code := _result_code(
 		resolved_mode,
 		distance_gu,

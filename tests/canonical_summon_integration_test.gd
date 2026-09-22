@@ -35,8 +35,13 @@ func _run() -> void:
 	_player.facing = Vector2.RIGHT
 	_player.current_mp = 999
 	for raw_enemy: Node in get_tree().get_nodes_in_group("enemies"):
-		if raw_enemy is Node2D:
-			(raw_enemy as Node2D).global_position += Vector2(5000.0, 5000.0)
+		if raw_enemy is EnemyActor:
+			var enemy := raw_enemy as EnemyActor
+			enemy.set_combat_position(
+				enemy.global_position + Vector2(5000.0, 5000.0),
+				&"summon_fixture_move",
+			)
+			enemy.set_physics_process(false)
 
 	# The exact radius-2 authority skips an occupied nearest cell and chooses the
 	# next deterministic legal point.

@@ -9,9 +9,10 @@ func _ready()->void:
 	assert(not found.is_empty() and int(found.level)==30)
 	assert(PlayerState.select_character("developer_warrior_30"))
 	assert(PlayerState.level==30 and PlayerState.profession=="战士")
-	for slot:String in PlayerState.EQUIPMENT_SLOTS:assert(not PlayerState.equipment[slot].is_empty())
-	assert(PlayerState.learned_skills.size()>=6 and PlayerState.quick_slots==["攻杀剑术","刺杀剑术","半月弯刀","烈火剑法"])
-	assert(PlayerState.saved_map_id==4 and PlayerState.saved_position==Vector2.ZERO)
+	for slot:String in ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]:assert(not PlayerState.equipment[slot].is_empty())
+	assert(PlayerState.equipment["圣物"].is_empty() and PlayerState.equipment["徽章"].is_empty())
+	assert(PlayerState.learned_skills.size()>=6 and PlayerState.quick_slots==["","刺杀剑术","半月弯刀","烈火剑法"])
+	assert(PlayerState.saved_map_id==910001 and PlayerState.saved_position==Vector2.ZERO)
 	var zuma_found:Dictionary={}
 	for profile:Dictionary in PlayerState.list_characters():
 		if str(profile.id)=="developer_zuma_warrior_40":zuma_found=profile;break
@@ -36,20 +37,20 @@ func _ready()->void:
 	for row in range(8):
 		game.player.facing=directions[row];visual._process(0.01)
 		assert(visual.current_direction==row,"裁决方向映射错误：row=%d"%row)
-		assert(weapon_layer.region_rect.position.y==row*ArtSpec.WARRIOR_FRAME.y,"裁决方向图集行错误：row=%d"%row)
-		assert(weapon_layer.z_index==(-1 if row in behind_rows else 1),"裁决方向遮挡层错误：row=%d"%row)
+		assert(weapon_layer.region_rect.position.y==row*visual._weapon_frame_size.y,"裁决方向图集行错误：row=%d"%row)
+		assert(weapon_layer.z_index==0,"裁决装备层不得逃逸Actor/墙体统一Z平面：row=%d"%row)
 		assert(visual.get_node("ClientHelmetLayer").region_rect.position.y==row*ArtSpec.WARRIOR_FRAME.y,"头盔方向图集行错误：row=%d"%row)
 		assert(visual.get_node("ClientHairLayer").region_rect.position.y==row*ArtSpec.WARRIOR_FRAME.y,"头发方向图集行错误：row=%d"%row)
 	assert(not visual.get_node("ClientHelmetLayer").visible,"世界人物不应显示黑铁头盔")
 	assert(visual.get_node("ClientHairLayer").visible and visual.get_node("ClientHairLayer").texture==visual._hair_action_textures.get("idle",null),"世界人物未显示原客户端男性头发")
 	assert(not visual.get_node("HelmetAccent").visible,"头部右侧半透明几何残留仍可见")
-	var preview:=EquipmentCharacterPreview.new();preview.size=Vector2(230,286);add_child(preview);await get_tree().process_frame
+	var preview:=EquipmentCharacterPreview.new();preview.configure_presentation_mode("classic_avatar");preview.size=Vector2(230,286);add_child(preview);await get_tree().process_frame
 	assert(preview._direction_row==4,"装备预览不是固定正面")
-	assert(preview._base_texture!=null and preview._base_texture.resource_path.ends_with("base_male_00376_anatomy.png"),"装备预览没有使用原客户端男性平面底图")
+	assert(preview._base_source_texture!=null and preview._base_source_texture.resource_path.ends_with("base_male_00376_anatomy.png"),"装备预览没有绑定原客户端男性平面底图源")
 	assert(preview.paper_layer_source_index("衣服")==62,"装备预览战神盔甲没有使用原客户端 StateItem 62")
 	assert(preview.paper_layer_source_index("武器")==55,"装备预览裁决没有使用原客户端 StateItem 55")
-	assert(preview.paper_layer_source_index("头盔")==344,"装备预览黑铁头盔没有使用原客户端 StateItem 344")
-	assert(preview._helmet_texture!=null and preview._helmet_texture.resource_path.ends_with("stateitem_00344.png"),"装备预览未显示原客户端黑铁头盔层")
+	assert(preview.paper_layer_source_index("头盔")==151,"装备预览黑铁头盔没有使用人工冻结的最终头盔校准151")
+	assert(preview._helmet_texture!=null and preview._helmet_texture.resource_path.ends_with("item_00151_paper_doll.png"),"装备预览未显示最终黑铁头盔校准层")
 	var bar_anchor:Vector2=visual.health_bar_anchor()
 	assert(bar_anchor==ArtSpec.PLAYER_HEALTH_BAR_OFFSET and game.player.get_node("HealthBar").position==bar_anchor,"人物血条没有使用独立固定锚点")
 	print("DEVELOPER_CHARACTER_PASS")

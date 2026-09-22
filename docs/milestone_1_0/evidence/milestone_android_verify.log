@@ -1,0 +1,44 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Godot, OU=Godot Engine, O=Stichting Godot, C=NL
+Signer #1 certificate SHA-256 digest: c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc
+Signer #1 certificate SHA-1 digest: c679cd3bc30bb20b637a15a9a722d4a9d2489741
+Signer #1 certificate MD5 digest: a5cbb54a16d26ceb6312e12b828208d5
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 23f061ac450be921f3fb7d7a5c69ea0f7c9589bc772abc7be195c8cd372c12fd
+Signer #1 public key SHA-1 digest: 4f27f57058b35a84b1491deba2e8e11408f0810a
+Signer #1 public key MD5 digest: 0ac33eaab46962bf4354f31c73b00c80
+ANDROID_DIRECT_UPDATE_IDENTITY_PASS certificate_sha256=C62D0F8239B926F819038845C302143FD24DCFD75ED8D877ED846C430C6F3FCC
+APK_RUNTIME_RESOURCE_PROBE_PASS
+CONTRACT=release.apk.runtime_resource_probe.v1
+APK=C:\Users\Administrator\Desktop\HardCore-1.0-release.apk
+APK_SHA256=E687CB8F6A871B2BAD9B2BDDBF83A427FA24047FF16B7BDB57BD5ECA3E379E01
+BASELINE_APK=C:\Users\Administrator\Desktop\HardCore-20260913-r4-ui-jp-debug.apk
+BASELINE_SHA256=71A4B0FF88B41569E227B7947AD7B6BC53FC5105294CE031BBE0EF957C5533CF
+COMPILED_SCRIPTS_VERIFIED=12
+BUILD_INFO_COMMIT=00ca013d032346fc2e0020388933de9ad23ec8dc
+BUILD_INFO_VERSION=hardcore 1.0 正式版
+RUNTIME_CHANGE_COMPARISON=False
+WORLD_HELMET_VISIBLE=false
+MALE_HAIR_BLOCK=4
+MALE_HAIR_ACTION_TEXTURES=6
+PAPER_DOLL_BASE_IMPORT=assets/assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png.import
+PAPER_DOLL_HAIR_IMPORT=assets/assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png.import
+PAPER_DOLL_HEAD_PATCHES=12
+CASTER_SKILL_FRAME_IMPORTS=586
+ANDROID_APK_VERIFY_PASS
+APK=C:\Users\Administrator\Desktop\HardCore-1.0-release.apk
+SIZE=465955859
+SHA256=E687CB8F6A871B2BAD9B2BDDBF83A427FA24047FF16B7BDB57BD5ECA3E379E01
+package: name='com.personal.mafaoffline' versionCode='78' versionName='hardcore 1.0 正式版' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+application-label:'HardCore'
+native-code: 'arm64-v8a'

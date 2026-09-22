@@ -33,6 +33,12 @@ func _ready() -> void:
 	safe_root.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	safe_root.position = Vector2(safe_left, 0.0)
 	safe_root.size = logical - Vector2(safe_left + safe_right, 0.0)
+	# On a real device the safe-area change flows through the HUD's production
+	# callback, which realigns the center-exempt controls (dragon chassis and
+	# top enemy bar) onto the true screen midline. Replay that exact step so
+	# the simulated injection matches real-device behavior.
+	if hud.has_method("_apply_center_alignment_delta"):
+		hud._apply_center_alignment_delta((safe_right - safe_left) * 0.5)
 	await get_tree().process_frame
 	var output_dir := ProjectSettings.globalize_path("res://outputs/android_device")
 	DirAccess.make_dir_recursive_absolute(output_dir)

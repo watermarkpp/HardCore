@@ -1,0 +1,56 @@
+{
+  "total": 3,
+  "suite": "adhoc",
+  "generated_at": "2026-09-09T17:17:35.0646115+08:00",
+  "engine_log_errors": 0,
+  "failed": 0,
+  "results": [
+    {
+      "test_name": "monster_source_status_test",
+      "test_path": "tests/monster_source_status_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_mixed_damage_atomic_test",
+      "test_path": "tests/monster_mixed_damage_atomic_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "summon_incoming_damage_runtime_test",
+      "test_path": "tests/skills/summon_incoming_damage_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 3,
+  "git_head": "b7cbfc471007c0536106fe1a2a2aff8d1b05eafd"
+}

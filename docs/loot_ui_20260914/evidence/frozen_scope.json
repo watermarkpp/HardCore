@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "baseline": "d35519f87e5ccfc020ed2b8ead3651006ac8b01c",
+  "changed_data": [
+    "assets/data/drop/user_additions_v81.json",
+    "assets/data/ui/item_name_rarity_policy_v2.json",
+    "assets/data/ui/item_name_rarity_v1.json"
+  ],
+  "changed_name_ids": [
+    228,
+    229,
+    230,
+    231,
+    244,
+    245,
+    246,
+    247,
+    248,
+    249
+  ],
+  "classification_count": 241,
+  "other_rarity_fields_unchanged": true,
+  "old_drop_tables_unchanged": true,
+  "equipment_master_unchanged": true,
+  "manual_layout_sha256": "0ea858c9fe5867b8b7057dfc16ff32fb06df68a7a6862992a702e45d470cbf10"
+}

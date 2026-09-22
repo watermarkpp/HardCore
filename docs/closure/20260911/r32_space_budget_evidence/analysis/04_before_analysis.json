@@ -1,0 +1,2584 @@
+{
+  "schema": "hc.r32.geometry_analysis.v1",
+  "verdict": "STABLE_LAYOUT_STILL_BLOCKED",
+  "settled_ok": 8,
+  "settled_total": 16,
+  "rows": [
+    {
+      "key": [
+        "medicine",
+        "木剑",
+        "buy",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "木剑",
+        "buy",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "木剑",
+        "buy",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "木剑",
+        "sell",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "木剑",
+        "sell",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "木剑",
+        "sell",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "匕首",
+        "buy",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "匕首",
+        "buy",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "匕首",
+        "buy",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "匕首",
+        "sell",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "匕首",
+        "sell",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "匕首",
+        "sell",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "超级金创药",
+        "buy",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "超级金创药",
+        "buy",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "超级金创药",
+        "buy",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "超级金创药",
+        "sell",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "超级金创药",
+        "sell",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "超级金创药",
+        "sell",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "超级魔法药",
+        "buy",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "超级魔法药",
+        "buy",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "超级魔法药",
+        "buy",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "medicine",
+        "超级魔法药",
+        "sell",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "超级魔法药",
+        "sell",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "medicine",
+        "超级魔法药",
+        "sell",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "木剑",
+        "buy",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "木剑",
+        "buy",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "木剑",
+        "buy",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "木剑",
+        "sell",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "木剑",
+        "sell",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "木剑",
+        "sell",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "匕首",
+        "buy",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "匕首",
+        "buy",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "匕首",
+        "buy",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "匕首",
+        "sell",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "匕首",
+        "sell",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "匕首",
+        "sell",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 244.0,
+      "vertical_shortfall": 27.0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "超级金创药",
+        "buy",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "超级金创药",
+        "buy",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "超级金创药",
+        "buy",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "超级金创药",
+        "sell",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "超级金创药",
+        "sell",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "超级金创药",
+        "sell",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "超级魔法药",
+        "buy",
+        "synchronous"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "超级魔法药",
+        "buy",
+        "next_frame"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "超级魔法药",
+        "buy",
+        "settled"
+      ],
+      "valid": false,
+      "error": "SPACE_PLAN_REQUIRED",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        278.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [
+        "ALL_MEASURED_CANDIDATES_TOO_TALL"
+      ],
+      "minimum_observed_required_height": 284.0,
+      "vertical_shortfall": 6.0,
+      "visible_actions": [
+        {
+          "name": "BuyButton",
+          "text": "购买",
+          "hit": [
+            717.755249023438,
+            463.599975585938,
+            270.0,
+            51.0
+          ],
+          "visual": [
+            716.755249023438,
+            462.599975585938,
+            272.0,
+            53.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ]
+    },
+    {
+      "key": [
+        "general",
+        "超级魔法药",
+        "sell",
+        "synchronous"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "超级魔法药",
+        "sell",
+        "next_frame"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    },
+    {
+      "key": [
+        "general",
+        "超级魔法药",
+        "sell",
+        "settled"
+      ],
+      "valid": true,
+      "error": "",
+      "region": [
+        732.801086425781,
+        148.0,
+        239.908386230469,
+        217.599975585938
+      ],
+      "candidate_count": 13,
+      "signals": [],
+      "minimum_observed_required_height": 144.0,
+      "vertical_shortfall": 0,
+      "visible_actions": [
+        {
+          "name": "SellQuantityRow",
+          "text": null,
+          "hit": [
+            694.0,
+            402.599975585938,
+            326.0,
+            46.0
+          ],
+          "visual": [
+            694.0,
+            401.599975585938,
+            326.0,
+            48.0
+          ],
+          "minimum": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "SellQuantityButton",
+          "text": "出售",
+          "hit": [
+            689.755249023438,
+            466.599975585938,
+            326.0,
+            48.0
+          ],
+          "visual": [
+            688.755249023438,
+            465.599975585938,
+            328.0,
+            50.0
+          ],
+          "minimum": [
+            0.0,
+            27.0
+          ]
+        }
+      ],
+      "observed_action_layout": "stack"
+    }
+  ],
+  "attribution": "Signals are measured constraints; causes require comparing action/width/text changes.",
+  "not_proven": [
+    "full catalog",
+    "30px screenshot appearance",
+    "Android",
+    "UI latency",
+    "M30 performance"
+  ]
+}

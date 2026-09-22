@@ -1,0 +1,44 @@
+{
+  "schema": "hardcore.dpv2.v505.acceptance.v1",
+  "pass": true,
+  "errors": [],
+  "compiled_slots": 7611,
+  "source_status_counts": {
+    "EXPLICIT_NON_LOOT": 9,
+    "FULL_21CQ_VERIFIED": 141,
+    "LEGACY_PRESERVED_EXTERNAL_EMPTY": 2,
+    "PROJECT_EXTENSION": 1,
+    "RUNTIME_DISABLED": 3
+  },
+  "migration_added_slots": 1463,
+  "migration_removed_slots": 661,
+  "migration_reused_uids": 5889,
+  "verified_book_monsters": 42,
+  "book_rule_counts": {
+    "BOOK_ELITE_BOSS": 325,
+    "BOOK_ORDINARY": 149
+  },
+  "boss_k_status": "NO_BOOST_SOURCE_ALREADY_AT_OR_BELOW_TARGET",
+  "boss_k": "1",
+  "woma_no_equipment_after": 2.1363883933000385e-07,
+  "boss_no_equipment": {
+    "76": {
+      "before": 2.1363883933000385e-07,
+      "after": 2.1363883933000385e-07
+    },
+    "198": {
+      "before": 0.6674026326662957,
+      "after": 0.6674026326662957
+    },
+    "199": {
+      "before": 0.10577489871304631,
+      "after": 0.10577489871304631
+    },
+    "225": {
+      "before": 0.2341400898941459,
+      "after": 0.2341400898941459
+    }
+  },
+  "armor_1_over_60_proofs": 6,
+  "gd_uid_worktree_paths": []
+}

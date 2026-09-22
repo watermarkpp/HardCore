@@ -1,0 +1,3 @@
+# Regression evidence — ed01d668
+
+This archive preserves the final focused regression evidence for the `799c532812700083bd6d658bdb3816e4b88a2f1d` production-equivalent baseline. The 20-case skill/snapshot/runtime run reports `20/20 PASS`, `engine_log_errors=0`, with test-source HEAD `6240c3712b0fc31b604289ec5c18023434c4ea96`. The profile business/storage run reports `1/1 PASS`, `engine_log_errors=0`, with test-source HEAD `ed01d6682b0fc31b604289ec5c18023434c4ea96`. The intervening commits are tests/fixture-only; no production runtime file is represented by these changes. Each run keeps its runner JSON plus the corresponding stdout, stderr, and Godot raw log for every scene. Checksums cover every file in this directory except `SHA256SUMS` itself.

@@ -1,0 +1,38 @@
+{
+  "source": "remote CSV snapshot, not a rerun",
+  "comparators": "B=v74; C=R6.1",
+  "rounds": [
+    {
+      "round": 1,
+      "p50_pct": 38.914,
+      "p95_pct": 0.353,
+      "p99_pct": -7.196,
+      "max_pct": 4.497,
+      "physics_pct": -6.029
+    },
+    {
+      "round": 2,
+      "p50_pct": -45.081,
+      "p95_pct": -24.241,
+      "p99_pct": -12.753,
+      "max_pct": -12.986,
+      "physics_pct": -11.172
+    },
+    {
+      "round": 3,
+      "p50_pct": -9.313,
+      "p95_pct": 2.857,
+      "p99_pct": 36.586,
+      "max_pct": 52.012,
+      "physics_pct": -8.624
+    }
+  ],
+  "verdict": "NOT_CLOSED",
+  "limits": [
+    "No device identity or sample count in this CSV",
+    "No 12/15-monster cases in this CSV",
+    "physics is cumulative elapsed time, not deterministic work count",
+    "C third-round p99/max worse; attribution needs raw frames",
+    "A before M30/UI and current R3 integrated candidate are not sampled"
+  ]
+}

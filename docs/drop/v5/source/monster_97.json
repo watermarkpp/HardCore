@@ -1,0 +1,40 @@
+{
+  "monster_id": 97,
+  "name": "猎鹰",
+  "url": "https://www.21cq.com/mir/Mob.Aspx?ID=97",
+  "retrieved_utc": "2026-09-07T18:19:39.562697+00:00",
+  "status": "PARSED",
+  "parser": "dpv2-drop-anchored-one-column-v5.0.3",
+  "rows": [
+    {
+      "item": "金币",
+      "numerator": 1,
+      "denominator": 4,
+      "amount": 70
+    },
+    {
+      "item": "金创药(小量)",
+      "numerator": 1,
+      "denominator": 15,
+      "amount": 1
+    },
+    {
+      "item": "魔法药(小量)",
+      "numerator": 1,
+      "denominator": 25,
+      "amount": 1
+    },
+    {
+      "item": "回城卷",
+      "numerator": 1,
+      "denominator": 180,
+      "amount": 1
+    }
+  ],
+  "http_status": 200,
+  "declared_charset": "gb2312",
+  "actual_encoding": "gb2312",
+  "raw_sha256": "7E56571966DEF2D66B97F2491E9ABB57F76E68AA0F3A96E139FA57B6E6585AAC",
+  "raw_path": "docs/drop/v5/source/monster_97.bin",
+  "cache_reparsed": true
+}

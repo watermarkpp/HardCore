@@ -28,7 +28,7 @@ func _run() -> void:
 	var file := FileAccess.open("res://assets/data/equipment_luck_rules.json", FileAccess.READ)
 	assert(file != null, "装备幸运规则来源表缺失")
 	var source: Variant = JSON.parse_string(file.get_as_text())
-	assert(source is Dictionary and source.get("contractId", "") == "equipment.blessing_luck.v2", "祝福油规则合同错误")
+	assert(source is Dictionary and source.get("contractId", "") == "equipment.blessing_luck.v3", "祝福油规则合同错误")
 	assert(source.get("sourcePolicy", {}).get("distribution", "") == "source.original_gameofmir.server_suite", "祝福油没有使用server_rules主源")
 	assert(int(source.defaults.get("unluckyRate", 0)) == 20, "祝福油失败率来源错误")
 	var luck_points: Array = source.defaults.get("luckPoints", [])
@@ -134,22 +134,41 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	_oil_unlucky_roll = 0
 	_oil_success_roll = 1
-	assert(PlayerState.use_inventory_index(_inventory_index("祝福油")).begins_with("使用"), "装备武器后祝福油没有正常消耗")
+	var blessing_use_result := PlayerState.use_blessing_oil_inventory_index_with_rolls(
+		_inventory_index("祝福油"),
+		_oil_unlucky_roll,
+		_oil_success_roll
+	)
+	assert(
+		bool(blessing_use_result.get("ok", false))
+		and str(blessing_use_result.get("message", "")).begins_with("使用"),
+		"装备武器后祝福油没有正常消耗"
+	)
 	assert(PlayerState.has_item("祝福油", 2), "祝福油每次应消耗一个")
 	assert(int(weapon.get("weapon_luck", 0)) == 4, "命运之刃幸运+3后喝油没有继续提升")
 
 	var ring_item := GameData.get_item("古铜戒指")
+	var ring_id := int(ring_item.get("itemId", -1))
+	assert(ring_id > 0 and GameData._catalog_by_item_id.has(ring_id))
+	var ring_original_by_id: Dictionary = GameData._catalog_by_item_id[ring_id].duplicate(true)
+	var ring_original_by_name: Dictionary = GameData._catalog_by_name["古铜戒指"].duplicate(true)
 	var ring_had_luck := ring_item.has("luck")
 	var ring_had_curse := ring_item.has("curse")
 	var ring_old_luck: Variant = ring_item.get("luck", null)
 	var ring_old_curse: Variant = ring_item.get("curse", null)
 	ring_item["luck"] = 2
 	ring_item["curse"] = 1
+	# Equipment aggregation resolves exact item IDs. Keep this temporary test
+	# authority aligned in both indexes; production catalog files stay frozen.
+	GameData._catalog_by_item_id[ring_id] = ring_item.duplicate(true)
+	GameData._catalog_by_name["古铜戒指"] = ring_item.duplicate(true)
 	PlayerState.add_item("古铜戒指")
 	assert(PlayerState.equip_inventory_index(_inventory_index("古铜戒指")).begins_with("已装备"), "总幸运测试戒指穿戴失败")
+	# A successful equipment transaction publishes a new immutable snapshot.
+	weapon = PlayerState.equipment["武器"]
 	weapon["weapon_curse"] = 1
 	PlayerState.recalculate_stats()
-	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "总幸运没有按全部装备luck-curse和武器实例差值计算")
+	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "总幸运没有按全部装备luck-curse和武器实例差值计算: %s / %s" % [PlayerState.computed_stats.get("luck", 0), weapon])
 	var ring: Dictionary = PlayerState.equipment["左戒指"]
 	PlayerState.damage_equipment_durability("左戒指", int(ring.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 3, "零耐久非武器仍贡献luck/curse")
@@ -185,8 +204,10 @@ func _run() -> void:
 	var panel := InventoryPanel.new()
 	add_child(panel)
 	await get_tree().process_frame
-	assert("幸运+4" in panel.equipment_label.text, "装备面板没有显示武器幸运")
+	assert("幸运+3" in panel.equipment_label.text and not "幸运+4" in panel.equipment_label.text, "装备面板必须显示旧双字段的净幸运3")
 
+	GameData._catalog_by_item_id[ring_id] = ring_original_by_id
+	GameData._catalog_by_name["古铜戒指"] = ring_original_by_name
 	if ring_had_luck:
 		ring_item["luck"] = ring_old_luck
 	else:

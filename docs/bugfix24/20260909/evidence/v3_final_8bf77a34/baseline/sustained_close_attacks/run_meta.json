@@ -1,0 +1,11 @@
+{
+  "label": "baseline_sustained_close_attacks_8bf77a34",
+  "source_anchor": "8bf77a341b2ab866622d8ee5b74376f6f93fd1ca",
+  "tree_head": "cf1d2718befdef7e6cc2fb274fd91ce0759d105f",
+  "runner_exit": 0,
+  "runner_json": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\bugfix24-audio-baseline-20260909\\outputs\\test_logs\\runner_results_adhoc_20260909_195751_656_9112.json",
+  "metrics": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\bugfix24-audio-baseline-20260909\\outputs\\hc_monster_ai_package\\rev07_baseline_sustained_close_attacks_8bf77a34.json",
+  "command": "tools/run_godot_tests.ps1 -TestPaths tests/hc_monster_ai/performance_comparison_test.tscn -TimeoutSeconds 60",
+  "env_scenario": "sustained_close_attacks",
+  "env_counts": "10,20,30"
+}

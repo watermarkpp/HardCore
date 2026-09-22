@@ -1,0 +1,38 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _create_item_cell (res://scripts/warehouse_panel.gd:484)
+       [1] _initialize_grid_cells (res://scripts/warehouse_panel.gd:416)
+       [2] _continue_grid_cell_initialization (res://scripts/warehouse_panel.gd:438)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _create_item_cell (res://scripts/warehouse_panel.gd:484)
+       [1] _initialize_grid_cells (res://scripts/warehouse_panel.gd:416)
+       [2] _continue_grid_cell_initialization (res://scripts/warehouse_panel.gd:438)
+ERROR: Attempting to initialize the wrong RID
+   at: get_or_null (./core/templates/rid_owner.h:240)
+ERROR: Parameter "mem" is null.
+   at: initialize_rid (./core/templates/rid_owner.h:284)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_paths (res://scripts/ui_item_texture_cache.gd:54)
+       [1] _process (res://scripts/game_root.gd:1618)
+ERROR: Attempting to initialize the wrong RID
+   at: get_or_null (./core/templates/rid_owner.h:240)
+ERROR: Parameter "mem" is null.
+   at: initialize_rid (./core/templates/rid_owner.h:284)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] poll_threaded_paths (res://scripts/ui_item_texture_cache.gd:54)
+       [1] _process (res://scripts/game_root.gd:1618)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _physics_process (res://scripts/player.gd:293)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

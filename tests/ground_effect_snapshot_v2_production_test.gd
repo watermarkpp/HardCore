@@ -4,6 +4,7 @@ const Snapshot := preload("res://scripts/skills/skill_footprint_snapshot.gd")
 const CasterRuntime := preload("res://scripts/caster_skill_runtime.gd")
 const GroundEffect := preload("res://scripts/ground_effect.gd")
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
+const FIXTURE_MONSTER_ID := 19
 
 
 func _ready() -> void:
@@ -122,14 +123,27 @@ func _screen_to_ground(value: Vector2) -> Vector2:
 
 func _target_at(screen_position: Vector2) -> EnemyActor:
 	var target := EnemyActor.new()
-	target.setup(
-		{"name": "t", "hp": 100, "attackMin": 1, "attackMax": 1, "level": 1},
-		null,
-		false
+	var canonical_data := GameData.get_monster_by_id(FIXTURE_MONSTER_ID)
+	assert(
+		not canonical_data.is_empty(),
+		"ground effect fixture monster_id=%d must exist" % FIXTURE_MONSTER_ID
 	)
+	target.setup(canonical_data, null, false)
+	assert(
+		target.monster_id == FIXTURE_MONSTER_ID and not target.is_boss,
+		"ground effect fixture must remain an ordinary exact-ID target"
+	)
+	target.max_hp = 100
+	target.current_hp = target.max_hp
 	target.global_position = screen_position
 	target.combat_radius_gu = 0.1
 	add_child(target)
+	assert(
+		is_instance_valid(target)
+		and not target.is_queued_for_deletion()
+		and target.can_receive_damage(),
+		"ground effect fixture target must survive exact-ID admission"
+	)
 	return target
 
 

@@ -4,8 +4,14 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const OpenTerrainFixture := preload(
+	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
+)
 const START_DISTANCE_GU := 3.0
 const SETTLED_POSITION_EPSILON_GU := 0.002
+const HCSpatial := preload("res://scripts/runtime_combat_spatial_index.gd")
+var _hc_test_index := HCSpatial.new()
+var _hc_test_registered: Dictionary = {}
 
 
 func _test_ground_to_screen(value: Vector2) -> Vector2:
@@ -17,6 +23,24 @@ func _configure_enemy_map(enemy: EnemyActor) -> void:
 		1,
 		Callable(self, "_test_ground_to_screen")
 	, GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu)
+	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(1))
+	enemy.combat_spatial_index = _hc_test_index
+	enemy.spatial_actor_runtime_id = enemy.get_instance_id()
+	if not _hc_test_registered.has(enemy.get_instance_id()):
+		_hc_test_registered[enemy.get_instance_id()] = true
+		_hc_test_index.register(enemy.get_instance_id(), 1,
+			enemy._screen_position_px_to_ground_position_gu(enemy.global_position),
+			enemy.combat_radius_gu, enemy.get_instance_id(), enemy)
+
+
+func _force_enemy_cadence_ready(enemy: EnemyActor) -> void:
+	var cadence = enemy._movement_cadence
+	assert(cadence != null, "contact probe must own cadence")
+	var now_ms := Time.get_ticks_msec()
+	cadence.walk_wait_locked = false
+	cadence.walk_tick_ms = now_ms - cadence.walk_interval_ms - 1
+	cadence.walk_wait_tick_ms = now_ms
+	cadence.last_evaluated_ms = now_ms - 1
 
 
 func _ready() -> void:
@@ -29,7 +53,9 @@ func _run() -> void:
 
 	var player := PlayerCharacter.new()
 	player.name = "StaticContactPlayer"
-	player.global_position = Vector2.ZERO
+	player.global_position = _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
 	add_child(player)
 	player.set_physics_process(false)
 	player.visual.set_process(false)
@@ -38,14 +64,21 @@ func _run() -> void:
 	player.set_touch_vector(Vector2.ZERO)
 
 	var ranged_probe := EnemyActor.new()
-	ranged_probe.setup(GameData.get_monster("火焰沃玛"), player, false)
-	assert(is_equal_approx(ranged_probe.attack_range_gu, 155.0 / 32.0), "远程旧PX范围未在adapter边界转换为GU")
+	# The old test used flame wooma as a generic ranged stand-in. Its exact
+	# Race=91 contract is now adjacent magic melee, so exercise the same swept
+	# projectile geometry with the authoritative archer profile instead.
+	ranged_probe.setup(GameData.get_monster_by_id(150), player, false)
+	assert(is_equal_approx(ranged_probe.attack_range_gu, 7.0), "弓箭手未应用正式GU射程规则")
+	assert(str(ranged_probe.get_meta("attack_range_policy_shape", "")) == "euclidean_circle")
 	assert(not ranged_probe._uses_player_melee_contact_contract(player))
-	ranged_probe.global_position = Vector2.ZERO
+	ranged_probe.global_position = player.global_position
 	ranged_probe.set_physics_process(false)
 	add_child(ranged_probe)
-	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-		Vector2(4.0, 0.0)
+	player.global_position = (
+		ranged_probe.global_position
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+			Vector2(4.0, 0.0)
+		)
 	)
 	var ranged_hp_before := player.current_hp
 	_configure_enemy_map(ranged_probe)
@@ -77,7 +110,9 @@ func _run() -> void:
 		),
 		"ranged sweep does not end at the selected target footpoint",
 	)
-	player.global_position = Vector2.ZERO
+	player.global_position = _test_ground_to_screen(
+		OpenTerrainFixture.CENTER_GROUND_GU
+	)
 	ranged_probe.free()
 
 	var final_distances_gu: Array[float] = []
@@ -88,9 +123,15 @@ func _run() -> void:
 		var direction_ground := Vector2.from_angle(angle)
 		var enemy := EnemyActor.new()
 		enemy.name = "ContactProbe_%d" % direction_index
-		enemy.setup({"monsterId": -9001, "name": "接敌测试怪"}, player, false)
-		enemy.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
-			direction_ground * START_DISTANCE_GU
+		# Runtime setup is fail-closed for unknown monster IDs. Use the canonical
+		# ordinary-melee 沃玛战士 fixture so the eight-direction collision probe
+		# exercises the production actor instead of a rejected placeholder.
+		enemy.setup(GameData.get_monster_by_id(64), player, false)
+		enemy.global_position = (
+			player.global_position
+			+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+				direction_ground * START_DISTANCE_GU
+			)
 		)
 		enemy.set_meta("spawn_position", enemy.global_position)
 		enemy.set_meta("safe_zones", [])
@@ -99,35 +140,58 @@ func _run() -> void:
 		enemies.append(enemy)
 		settled_frame_counts.append(0)
 
-	# Run every direction in the same physics frames. This keeps the formal
-	# 8-direction equivalence test below the repository's default 8s budget.
-	for _frame in range(120):
-		await get_tree().physics_frame
+	# Preserve the original purpose of this regression: the monster itself must
+	# move from START_DISTANCE_GU into the existing melee-contact geometry.
+	# M01A already tests real cadence timing, so this geometry regression only
+	# accelerates the cadence gate between discrete steps; it never teleports a
+	# monster to the expected contact point.
+	for _frame in range(240):
 		for direction_index in range(enemies.size()):
 			if settled_frame_counts[direction_index] >= 5:
 				continue
 			var enemy := enemies[direction_index]
 			_configure_enemy_map(enemy)
-			var delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
-				player.global_position - enemy.global_position
+			if not enemy._movement_step_active:
+				_force_enemy_cadence_ready(enemy)
+
+		await get_tree().physics_frame
+
+		for direction_index in range(enemies.size()):
+			if settled_frame_counts[direction_index] >= 5:
+				continue
+			var enemy := enemies[direction_index]
+			var delta_ground_gu := (
+				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+					player.global_position - enemy.global_position
+				)
 			)
-			var engagement_distance_gu := maxf(
-				enemy.attack_range_gu,
-				enemy._contact_distance_gu_to_target(player),
-			)
+			var engagement_distance_gu := enemy._hc_preferred(player)
 			if (
-				delta_ground_gu.length() <= engagement_distance_gu + 0.002
-				and enemy.actual_ground_motion_gu.length() <= SETTLED_POSITION_EPSILON_GU
+				delta_ground_gu.length()
+				<= engagement_distance_gu + 0.002
+				and not enemy._movement_step_active
+				and enemy.actual_ground_motion_gu.length()
+				<= SETTLED_POSITION_EPSILON_GU
 			):
 				settled_frame_counts[direction_index] += 1
 			else:
 				settled_frame_counts[direction_index] = 0
-		if settled_frame_counts.all(func(count: int) -> bool: return count >= 5):
+
+		if settled_frame_counts.all(
+			func(count: int) -> bool:
+				return count >= 5
+		):
 			break
 
 	for direction_index in range(enemies.size()):
+		assert(
+			settled_frame_counts[direction_index] >= 5,
+			"direction %d did not settle in cadence-governed GU contact"
+			% direction_index,
+		)
+
+	for direction_index in range(enemies.size()):
 		var enemy := enemies[direction_index]
-		assert(settled_frame_counts[direction_index] >= 5, "direction %d did not settle in GU contact" % direction_index)
 		var final_delta_ground_gu := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
 			player.global_position - enemy.global_position
 		)
@@ -162,7 +226,10 @@ func _run() -> void:
 
 	var minimum: float = float(final_distances_gu.min())
 	var maximum: float = float(final_distances_gu.max())
-	assert(maximum - minimum <= 0.025, "GU melee contact remains direction dependent: %s" % final_distances_gu)
+	assert(
+		maximum - minimum <= 0.025,
+		"GU melee contact remains direction dependent: %s" % [final_distances_gu],
+	)
 
 	player.queue_free()
 	print(

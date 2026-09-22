@@ -183,7 +183,10 @@ func _verify_heal_release_timing_and_summon_redraw() -> void:
 	)
 
 	## Dead summons are never revived by either direct or scheduled healing.
-	mass_target.take_damage(mass_target.current_hp)
+	# The summon fixture has canonical AC absorption enabled.  Use the explicit
+	# minimum-roll override plus AC headroom so this assertion exercises the
+	# real lethal/dead transition instead of depending on a random roll.
+	mass_target.take_damage(mass_target.current_hp + mass_target.ac_max, 0)
 	assert(mass_target.state == SummonActor.SummonState.DEAD)
 	mass_target.reset_performance_diagnostics_for_tests()
 	assert(game._apply_canonical_friendly_heal(mass_target, 50) == 0)

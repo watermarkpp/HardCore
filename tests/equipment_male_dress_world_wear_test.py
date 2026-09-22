@@ -34,6 +34,7 @@ EXPECTED_ITEM_FEATURES = {
 ACTION_FRAMES = {
     "idle": 4,
     "walk": 6,
+    "run": 6,
     "attack": 6,
     "cast": 6,
     "hit": 3,
@@ -85,7 +86,7 @@ def main() -> None:
         "expectedMaleArmorItems": 12,
         "maleHumFeatureFamiliesIncludingBase": 9,
         "dressedFeatureFamilies": 8,
-        "actionsPerFeature": 6,
+        "actionsPerFeature": 7,
         "directionsPerAction": 8,
         "missingFrames": 0,
         "femaleItems": 0,
@@ -186,14 +187,28 @@ def main() -> None:
             assert record["decodedFrameCount"] == 8 * frames_per_direction
             assert record["missingFrames"] == []
             assert record["pixelActionConfidence"] == "A"
-            assert len(record["sourceFrames"]) == 8 * frames_per_direction
 
             atlas = Image.open(disk_path(record["path"])).convert("RGBA")
             assert atlas.size == (192 * frames_per_direction, 160 * 8)
             assert rgba_sha256(atlas) == record["atlasRgbaSha256"]
             rebuilt = Image.new("RGBA", atlas.size, (0, 0, 0, 0))
             transparent_indices: list[int] = []
-            for frame in record["sourceFrames"]:
+            if action == "run":
+                assert "sourceFrames" not in record
+                assert int(record["sourceStart"]) == 128
+                source_frames = [
+                    {
+                        "sourceIndex": feature_id * 600 + 128 + direction * 8 + frame,
+                        "direction": direction,
+                        "frame": frame,
+                    }
+                    for direction in range(8)
+                    for frame in range(frames_per_direction)
+                ]
+            else:
+                source_frames = record["sourceFrames"]
+                assert len(source_frames) == 8 * frames_per_direction
+            for frame in source_frames:
                 source_index = int(frame["sourceIndex"])
                 decoded, metadata = decode_sprite(
                     data,
@@ -201,25 +216,29 @@ def main() -> None:
                     palette,
                 )
                 decoded = decoded.convert("RGBA")
-                assert [int(metadata["x"]), int(metadata["y"])] == frame["hot"]
-                assert [decoded.width, decoded.height] == frame["sourceSize"]
-                assert rgba_sha256(decoded) == frame["rgbaSha256"]
+                hot = [int(metadata["x"]), int(metadata["y"])]
                 opaque_pixels = sum(
                     alpha != 0 for alpha in decoded.getchannel("A").tobytes()
                 )
-                assert opaque_pixels == int(frame["opaquePixelCount"])
-                assert bool(frame["transparentEmpty"]) == (opaque_pixels == 0)
+                if action != "run":
+                    assert hot == frame["hot"]
+                    assert [decoded.width, decoded.height] == frame["sourceSize"]
+                    assert rgba_sha256(decoded) == frame["rgbaSha256"]
+                    assert opaque_pixels == int(frame["opaquePixelCount"])
+                    assert bool(frame["transparentEmpty"]) == (opaque_pixels == 0)
+                else:
+                    assert opaque_pixels > 0
                 if opaque_pixels == 0:
                     transparent_indices.append(source_index)
                 x = (
                     int(frame["frame"]) * 192
                     + 64
-                    + int(frame["hot"][0])
+                    + hot[0]
                 )
                 y = (
                     int(frame["direction"]) * 160
                     + 80
-                    + int(frame["hot"][1])
+                    + hot[1]
                 )
                 rebuilt.alpha_composite(decoded, (x, y))
             assert transparent_indices == record["transparentEmptyFrames"]
@@ -227,7 +246,7 @@ def main() -> None:
 
     print(
         "EQUIPMENT_MALE_DRESS_WORLD_WEAR_TEST_PASS "
-        "items=12 features=9 actions=6 directions=8"
+        "items=12 features=9 actions=7 directions=8"
     )
 
 

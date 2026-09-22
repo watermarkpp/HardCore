@@ -3,9 +3,9 @@ extends Node
 
 const Catalog := preload("res://scripts/environment_catalog.gd")
 const EXPECTED := {
-	217: {"code": "D001", "blocked": 0.6908, "lights": 32, "doors": 0, "sha": "0047842a53a4806562746f6580859b3b06e2d64a7c4bfeb1ead40831bea2fa24"},
-	218: {"code": "D002", "blocked": 0.8241, "lights": 19, "doors": 12, "sha": "ab03734fdc35327cee0f663eb5a020ff69d453e4d3e565483be81521cc7fbe3f"},
-	221: {"code": "D003", "blocked": 0.6788, "lights": 31, "doors": 0, "sha": "46f18a27b58bbf76087ddf4df679717beea06eafbe6c19de854fbc0a6cb79d81"},
+	217: {"map_key": "bich_orc_tomb_f1", "code": "D001", "blocked": 0.6908, "lights": 32, "doors": 0, "sha": "0047842a53a4806562746f6580859b3b06e2d64a7c4bfeb1ead40831bea2fa24"},
+	218: {"map_key": "bich_orc_tomb_f2", "code": "D002", "blocked": 0.8241, "lights": 19, "doors": 12, "sha": "ab03734fdc35327cee0f663eb5a020ff69d453e4d3e565483be81521cc7fbe3f"},
+	221: {"map_key": "bich_orc_tomb_f3", "code": "D003", "blocked": 0.6788, "lights": 31, "doors": 0, "sha": "46f18a27b58bbf76087ddf4df679717beea06eafbe6c19de854fbc0a6cb79d81"},
 }
 
 
@@ -59,19 +59,47 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	for map_id: int in EXPECTED:
-		game.travel_to_map(map_id)
+	for source_map_id: int in EXPECTED:
+		var expected: Dictionary = EXPECTED[source_map_id]
+		var runtime_map_id := _runtime_map_id(str(expected.map_key))
+		game.travel_to_map(runtime_map_id)
 		await get_tree().process_frame
 		await get_tree().process_frame
+		assert(game.current_map_id == runtime_map_id, "正式兽人古墓切图失败:%d" % runtime_map_id)
 		var background: WorldBackground = game.background
-		assert(background.uses_orc_tomb_art() and background.environment_source_map_code() == EXPECTED[map_id].code, "地图%d运行时客户端古墓资源未加载" % map_id)
+		assert(background.uses_orc_tomb_art() and background.environment_source_map_code() == expected.code, "地图%d运行时客户端古墓资源未加载" % runtime_map_id)
 		assert(background.orc_tomb_ground_atlas_size() == Vector2i(512, 32) and background.orc_tomb_prop_atlas_size() == Vector2i(768, 128), "兽人古墓图集规格错误")
-		assert(background.editor_runtime_ground_ready(), "地图%d编辑器尺寸地表未加载" % map_id)
-		assert(background.editor_runtime_chunk_texture_count() == 5, "地图%d正式编辑器地表块未完整加载" % map_id)
-		assert(not background.uses_editor_runtime_fallback_ground(), "地图%d错误回退到旧兽人古墓地表" % map_id)
-		assert(background._editor_runtime_size == Vector2i(38, 38), "地图%d仍混用旧400x400运行碰撞" % map_id)
-		assert(background.source_collision_mask_size() == Vector2i.ZERO, "地图%d仍加载旧MAP阻挡图" % map_id)
-		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡网格或硬边界缺失" % map_id)
-		assert(not background.is_environment_point_blocked(game.player.global_position), "地图%d出生点不可行走" % map_id)
+		assert(background.editor_runtime_ground_ready(), "地图%d编辑器尺寸地表未加载" % runtime_map_id)
+		assert(background.editor_runtime_chunk_texture_count() == _published_chunk_count(runtime_map_id), "地图%d正式编辑器地表块未完整加载" % runtime_map_id)
+		assert(not background.uses_editor_runtime_fallback_ground(), "地图%d错误回退到旧兽人古墓地表" % runtime_map_id)
+		assert(background._editor_runtime_size == _runtime_design_size(runtime_map_id), "地图%d仍混用旧400x400运行碰撞" % runtime_map_id)
+		assert(background.source_collision_mask_size() == Vector2i.ZERO, "地图%d仍加载旧MAP阻挡图" % runtime_map_id)
+		assert(background.source_collision_shape_count() >= 4, "地图%d编辑器阻挡网格或硬边界缺失" % runtime_map_id)
+		assert(not background.is_environment_point_blocked(game.player.global_position), "地图%d出生点不可行走" % runtime_map_id)
 	print("ORC_TOMB_SOURCE_INTEGRATION_PASS：D001—D003哈希、400×400结构、专用资源、碰撞、门点、刷新和Boss空间完整")
 	get_tree().quit(0)
+
+
+func _published_chunk_count(runtime_map_id: int) -> int:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+		MapEditorRuntimeBridge.visual_path(runtime_map_id)
+	))
+	assert(parsed is Dictionary)
+	return (parsed as Dictionary).get("chunks", []).size()
+
+
+func _runtime_design_size(runtime_map_id: int) -> Vector2i:
+	var runtime := MapEditorRuntimeBridge.load_map(runtime_map_id)
+	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
+	assert(raw_size.size() == 2)
+	return Vector2i(int(raw_size[0]), int(raw_size[1]))
+
+
+func _runtime_map_id(map_key: String) -> int:
+	for raw_map: Variant in GameData.get_available_maps(true):
+		if (
+			raw_map is Dictionary
+			and str((raw_map as Dictionary).get("formalMapKey", "")) == map_key
+		):
+			return int((raw_map as Dictionary).get("mapId", -1))
+	return -1

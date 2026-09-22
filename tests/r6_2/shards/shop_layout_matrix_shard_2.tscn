@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/r6_2/shop_layout_matrix.gd" id="1"]
+
+[node name="ShopLayoutMatrixShard2" type="Node"]
+script = ExtResource("1")
+offset = 400
+limit = 200

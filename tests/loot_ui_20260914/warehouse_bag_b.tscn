@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/r6_1_review/real_panel_matrix_test.gd" id="1"]
+
+[node name="R61RealPanelMatrix" type="Node"]
+script = ExtResource("1")
+zone = "warehouse_bag"
+id_from = 120
+id_to = 159

@@ -5,20 +5,15 @@ const Bridge := preload(
 	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
 )
 
-const RUNTIME_MAP_IDS := [4, 268, 313, 314, 315, 217, 218, 221, 406, 408, 1578]
-
-
 func _ready() -> void:
 	_run.call_deferred()
 
 
 func _run() -> void:
-	assert(
-		RUNTIME_MAP_IDS.size() == 11,
-		"phase1 runtime-ready set must be exactly 11 maps"
-	)
+	var runtime_map_ids := Bridge.released_map_ids()
+	assert(runtime_map_ids.size() == 67, "formal runtime-ready set must be exactly 67 maps")
 	var unresolved: Array = []
-	for map_id: int in RUNTIME_MAP_IDS:
+	for map_id: int in runtime_map_ids:
 		assert(
 			Bridge.is_runtime_built(map_id),
 			"phase1 map %d must be runtime-built" % map_id
@@ -36,6 +31,6 @@ func _run() -> void:
 	await get_tree().process_frame
 	print(
 		"PHASE1_NETWORK_RUNTIME_COVERAGE_PASS count=%d unresolved=0"
-		% RUNTIME_MAP_IDS.size()
+		% runtime_map_ids.size()
 	)
 	get_tree().quit(0)

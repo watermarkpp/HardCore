@@ -1,0 +1,6 @@
+{
+  "state": "BLOCKED_PARTIAL",
+  "error": "PACKAGE_FILE_MISSING:00_START_HERE.md",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\Administrator\\Downloads\\dpv2_v5_ps51_recovery_evidence_20260907-233952\\apply_v5.py\", line 348, in main\n    validate_package()\n  File \"C:\\Users\\Administrator\\Downloads\\dpv2_v5_ps51_recovery_evidence_20260907-233952\\apply_v5.py\", line 236, in validate_package\n    require(path.is_file(), 'PACKAGE_FILE_MISSING:' + name)\n  File \"C:\\Users\\Administrator\\Downloads\\dpv2_v5_ps51_recovery_evidence_20260907-233952\\apply_v5.py\", line 48, in require\n    raise RuntimeError(message)\nRuntimeError: PACKAGE_FILE_MISSING:00_START_HERE.md\n",
+  "base_sha": "ffcdc76b360d5976eef2ce17a45664ddaf550590"
+}

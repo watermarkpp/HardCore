@@ -1,0 +1,71 @@
+{
+  "git_head": "d35519f87e5ccfc020ed2b8ead3651006ac8b01c",
+  "passed": 4,
+  "generated_at": "2026-09-14T12:51:26.9066361+08:00",
+  "failed": 0,
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "total": 4,
+  "results": [
+    {
+      "test_name": "detail_adaptive_test",
+      "test_path": "tests/loot_ui_20260914/detail_adaptive_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "buff_expiry_test",
+      "test_path": "tests/loot_ui_20260914/buff_expiry_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "attribute_help_test",
+      "test_path": "tests/repair_20260913/attribute_help_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "real_panel_matrix_inventory_bag",
+      "test_path": "tests/r6_1_review/real_panel_matrix_inventory_bag.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

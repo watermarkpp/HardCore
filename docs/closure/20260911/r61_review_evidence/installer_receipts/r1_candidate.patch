@@ -1,0 +1,279 @@
+--- a/scripts/shop_panel.gd
++++ b/scripts/shop_panel.gd
+@@ -894,7 +894,7 @@
+ 	var sellable := bool(quote.get("sellable", false))
+ 	_set_sell_actions_enabled(sellable)
+ 	if quote.is_empty():
+-		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, inventory_index, true)
++		_show_shop_detail(str(record.get("name", "物品")), "数量：%d\n\n[color=#d4a15e]等待玩法层提供出售报价。[/color]" % count, _selected_sell_index, true)
+ 		return
+ 	_show_shop_detail(
+ 		str(record.get("name", "物品")),
+@@ -903,7 +903,7 @@
+ 			GameData.get_item_record(str(record.get("name", ""))),
+ 			quote,
+ 		),
+-		inventory_index,
++		_selected_sell_index,
+ 		true,
+ 	)
+ 
+--- /dev/null
++++ b/tests/r6_1_review/detail_visible_assertions.gd
+@@ -0,0 +1,87 @@
++extends RefCounted
++
++## Locked assertions for the executor's REAL-panel matrix fixtures.
++## Coordinates of allowed/protected rectangles must be owner-local. Populate
++## them from actual calibrated controls, never by increasing a dummy Scope.
++## No assertion mutation permitted to make a normal item pass.
++static func _rect_in(owner_control: Control, control: Control) -> Rect2:
++	var owner_transform := owner_control.get_global_transform_with_canvas()
++	if absf(owner_transform.determinant()) < 0.000001:
++		return Rect2()
++	var transform := owner_transform.affine_inverse() * control.get_global_transform_with_canvas()
++	var result := Rect2(transform * Vector2.ZERO, Vector2.ZERO)
++	for point: Vector2 in [Vector2(control.size.x, 0), control.size, Vector2(0, control.size.y)]:
++		result = result.expand(transform * point)
++	return result
++
++static func inspect(
++	owner_control: Control,
++	view: Control,
++	allowed_rects: Array[Rect2],
++	protected_rects: Array[Rect2],
++	expected_title: String,
++	expected_item_id: int,
++	expected_color: Color,
++	expected_body_bbcode: String
++) -> Array[String]:
++	var errors: Array[String] = []
++	if not is_instance_valid(owner_control) or not is_instance_valid(view):
++		return ["INVALID_REAL_PANEL_OR_PRESENTER"]
++	var title: Label = view.get_node_or_null("Title") as Label
++	var body: RichTextLabel = view.get_node_or_null("Body") as RichTextLabel
++	if title == null or body == null:
++		return ["MISSING_TITLE_OR_BODY"]
++	if not view.has_method("debug_layout_snapshot"):
++		return ["MISSING_LAYOUT_DIAGNOSTICS"]
++	var snapshot: Dictionary = view.call("debug_layout_snapshot")
++	if not bool(snapshot.get("valid", false)):
++		errors.append("INVALID_LAYOUT:" + str(snapshot.get("error", "")))
++	if not view.is_visible_in_tree() or not title.is_visible_in_tree() or not body.is_visible_in_tree():
++		errors.append("NOT_VISIBLE_IN_TREE")
++	var ancestor: Node = title
++	while ancestor != null:
++		if ancestor is CanvasItem and (ancestor as CanvasItem).modulate.a <= 0.0:
++			errors.append("ZERO_ALPHA_ANCESTOR:" + str(ancestor.name))
++		ancestor = ancestor.get_parent()
++	if title.self_modulate.a <= 0.0 or body.self_modulate.a <= 0.0 or body.modulate.a <= 0.0:
++		errors.append("ZERO_TEXT_ALPHA")
++	if title.text.strip_edges().is_empty() or title.text != expected_title:
++		errors.append("TITLE_MISMATCH_OR_EMPTY")
++	if not title.get_theme_color("font_color").is_equal_approx(expected_color):
++		errors.append("NAME_COLOR_MISMATCH")
++	var name_style: Dictionary = snapshot.get("name_style", {})
++	if expected_item_id > 0 and int(name_style.get("item_id", -1)) != expected_item_id:
++		errors.append("DISPLAYED_ITEM_ID_MISMATCH")
++	if body.text != expected_body_bbcode:
++		errors.append("BODY_SOURCE_CHANGED_OR_TRUNCATED")
++	if body.scroll_active or body.get_v_scroll_bar().visible:
++		errors.append("BODY_SCROLLING_OR_SCROLLBAR")
++	if body.visible_characters != -1 or title.visible_characters != -1:
++		errors.append("VISIBLE_CHARACTER_LIMIT")
++	if float(body.get_content_height()) > body.size.y or title.get_minimum_size().y > title.size.y:
++		errors.append("TEXT_HEIGHT_OVERFLOW")
++	var local := Rect2(Vector2.ZERO, view.size)
++	if not local.grow(0.5).encloses(Rect2(title.position, title.size)) or not local.grow(0.5).encloses(Rect2(body.position, body.size)):
++		errors.append("TEXT_OUTSIDE_DETAIL_PANEL")
++	if view.size.y < view.size.x * 1.12 - 1.0:
++		errors.append("NON_PORTRAIT_DETAIL")
++	var actual := _rect_in(owner_control, view)
++	var inside_allowed := false
++	for allowed: Rect2 in allowed_rects:
++		if allowed.has_area() and allowed.grow(1.0).encloses(actual):
++			inside_allowed = true
++	if not inside_allowed:
++		errors.append("OUTSIDE_ALLOWED_REGION")
++	if protected_rects.is_empty():
++		errors.append("NO_INDEPENDENT_PROTECTED_GEOMETRY")
++	for protected: Rect2 in protected_rects:
++		if protected.has_area() and protected.intersects(actual):
++			errors.append("OVERLAPS_GRID_ACTION_TITLE_OR_FRAME_RING")
++	# This check is independent of a production dock returning an over-large region.
++	var visible_viewport: Rect2 = owner_control.get_viewport().get_visible_rect()
++	var in_viewport := Rect2(view.get_global_transform_with_canvas() * Vector2.ZERO, Vector2.ZERO)
++	for point: Vector2 in [Vector2(view.size.x, 0), view.size, Vector2(0, view.size.y)]:
++		in_viewport = in_viewport.expand(view.get_global_transform_with_canvas() * point)
++	if not visible_viewport.grow(1.0).encloses(in_viewport):
++		errors.append("OUTSIDE_REAL_VIEWPORT")
++	return errors
+--- /dev/null
++++ b/tests/r6_1_review/shop_selection_identity_test.gd
+@@ -0,0 +1,157 @@
++extends Node
++
++## Real ShopPanel function-level regression. Deliberately controlled quote fixtures.
++## Does NOT claim to test real pricing authority, device touch or all item layouts.
++## No buy/sell action is invoked. Use the project's isolated user:// runner only.
++const ShopScript := preload("res://scripts/shop_panel.gd")
++const Style := preload("res://scripts/ui_item_name_style.gd")
++const GROUPS := ["default", "wooma", "zuma", "redmoon", "ultra_rare"]
++var failures: Array[String] = []
++var checks := 0
++var rows: Array = []
++var shop: Control
++var fixtures: Dictionary = {}
++var requests := {"buy": 0, "sell": 0}
++
++func expect(condition: bool, message: String) -> void:
++	checks += 1
++	if not condition:
++		failures.append(message)
++
++func _ready() -> void:
++	PlayerState.test_mode = true
++	_run.call_deferred()
++
++func settle() -> void:
++	for unused in range(3):
++		await get_tree().process_frame
++
++func _collect_fixtures() -> bool:
++	if not GameData.ensure_loaded() or not Style.ensure_loaded():
++		failures.append("DATA_NOT_LOADED")
++		return false
++	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(Style.DATA_PATH))
++	if not data is Dictionary:
++		failures.append("RARITY_DATA_INVALID")
++		return false
++	var mapping: Dictionary = data.get("records", {})
++	var ids: Array[int] = []
++	for key: Variant in mapping:
++		ids.append(int(key))
++	ids.sort()
++	for item_id: int in ids:
++		var group := str(mapping[str(item_id)].get("name_style", "default"))
++		if not group in GROUPS or fixtures.has(group):
++			continue
++		var item: Dictionary = GameData.get_item_record(item_id)
++		if item.is_empty() or str(item.get("kind", "")) != "equipment":
++			continue
++		if Style.canonical_id(item) != item_id:
++			continue
++		fixtures[group] = {
++			"item_id": item_id, "name": Style.display_name(item), "count": 1,
++			"instance_id": "r61-review:" + str(item_id),
++		}
++	for group: String in GROUPS:
++		expect(fixtures.has(group), "mapped runtime equipment fixture exists: " + group)
++	return fixtures.size() == GROUPS.size()
++
++func _quotes() -> Dictionary:
++	var result: Dictionary = {}
++	for i in range(PlayerState.inventory.size()):
++		var record: Dictionary = PlayerState.inventory[i]
++		result[shop.sell_quote_key(i, record)] = {
++			"sellable": true, "unit_price": 100 + i, "max_quantity": 1,
++			"risk_flags": [], "reason": "review-only quote fixture",
++		}
++	return result
++
++func _new_pair(a: String, b: String) -> void:
++	shop._ui_dismiss_selection()
++	PlayerState.inventory = [fixtures[a].duplicate(true), fixtures[b].duplicate(true)]
++	shop.set_sell_quotes(_quotes())
++	await settle()
++
++func _assert_view_for(index: int, label: String) -> void:
++	var record: Dictionary = PlayerState.inventory[index]
++	var item: Dictionary = GameData.get_item_record(record)
++	var expected: Dictionary = Style.describe(item, record)
++	var view = shop.item_detail_presenter
++	var actual: Dictionary = view.debug_layout_snapshot()
++	var name_style: Dictionary = actual.get("name_style", {})
++	expect(view.visible, label + ": detail exists")
++	expect(str(actual.get("title", "")) == Style.display_name(item, record), label + ": title matches displayed record")
++	expect(int(name_style.get("item_id", -1)) == int(record.item_id), label + ": rarity ID matches displayed record")
++	expect(str(name_style.get("group", "")) == str(expected.group), label + ": rarity group matches displayed record")
++	var actual_color: Color = view.title_label.get_theme_color("font_color")
++	var expected_color: Color = expected.color
++	expect(actual_color.is_equal_approx(expected_color), label + ": title color matches displayed record")
++	rows.append({"case": label, "expected_id": record.item_id, "actual_id": name_style.get("item_id", -1), "expected_group": expected.group, "actual_group": name_style.get("group", ""), "title": actual.get("title", "")})
++
++func _run() -> void:
++	var saved_inventory: Array = PlayerState.inventory.duplicate(true)
++	var saved_gold: int = PlayerState.gold
++	if not _collect_fixtures():
++		_finish()
++		return
++	PlayerState.inventory = [fixtures.default.duplicate(true), fixtures.wooma.duplicate(true)]
++	shop = ShopScript.new()
++	add_child(shop)
++	shop.buy_requested.connect(func(_request: Dictionary) -> void: requests["buy"] += 1)
++	shop.sell_requested.connect(func(_request: Dictionary) -> void: requests["sell"] += 1)
++	await settle()
++	shop._set_trade_mode("sell")
++	await settle()
++	# All ordered pairs of the 5 styles; not just two same-color items.
++	for a: String in GROUPS:
++		for b: String in GROUPS:
++			if a == b:
++				continue
++			await _new_pair(a, b)
++			var before := JSON.stringify(PlayerState.inventory)
++			shop._select_sell_item(0)
++			_assert_view_for(0, a + "/" + b + ": select A")
++			shop._select_sell_item(1)
++			_assert_view_for(1, a + "/" + b + ": select B")
++			shop._select_sell_item(1)
++			expect(shop._selected_sell_index == 0, "cancel B keeps A selected")
++			_assert_view_for(0, a + "/" + b + ": cancel B -> A")
++			shop._select_sell_item(0)
++			expect(shop._selected_sell_index == -1 and not shop.item_detail_presenter.visible, "empty selection hides item detail")
++			expect(JSON.stringify(PlayerState.inventory) == before, "selection never mutates inventory")
++	# When a remaining selection loses its quote, the waiting-quote branch must
++	# still use that remaining item's ID, not the just-deselected item's ID.
++	await _new_pair("wooma", "ultra_rare")
++	shop._select_sell_item(0)
++	shop._select_sell_item(1)
++	shop._sell_quotes.erase(shop.sell_quote_key(0, PlayerState.inventory[0]))
++	shop._select_sell_item(1)
++	_assert_view_for(0, "missing remaining quote after cancel B")
++	expect(shop.sell_quantity_button.disabled, "missing quote disables selling")
++	# Non-sellable preview is intentionally the clicked record, NOT a replacement
++	# of the existing sell selection. Never globally substitute every index.
++	await _new_pair("default", "redmoon")
++	shop._select_sell_item(0)
++	var blocked_key: String = shop.sell_quote_key(1, PlayerState.inventory[1])
++	shop._sell_quotes[blocked_key] = {"sellable": false, "reason": "review blocked", "max_quantity": 1}
++	shop._select_sell_item(1)
++	expect(shop._selected_sell_index == 0, "non-sellable preview retains existing sell selection")
++	_assert_view_for(1, "non-sellable preview B while A remains selected")
++	expect(requests.buy == 0 and requests.sell == 0, "selection never emits a trade action")
++	expect(PlayerState.gold == saved_gold, "selection never changes gold")
++	shop.queue_free()
++	await settle()
++	PlayerState.inventory = saved_inventory
++	_finish()
++
++func _finish() -> void:
++	var out := FileAccess.open("user://r61_review_shop_selection_identity.json", FileAccess.WRITE)
++	if out == null:
++		failures.append("EVIDENCE_WRITE_FAILED")
++	else:
++		out.store_string(JSON.stringify({"checks": checks, "failures": failures, "rows": rows, "scope": "real_shop_function_level_with_controlled_quotes_not_device_input"}))
++		out.close()
++	for message: String in failures:
++		push_error("R61_REVIEW_SHOP_IDENTITY: " + message)
++	print("R61_REVIEW_SHOP_IDENTITY_%s checks=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", checks, failures.size()])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- /dev/null
++++ b/tests/r6_1_review/shop_selection_identity_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/r6_1_review/shop_selection_identity_test.gd" id="1_test"]
++
++[node name="R61ReviewShopSelectionIdentityTest" type="Node"]
++script = ExtResource("1_test")

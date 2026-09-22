@@ -1,0 +1,1047 @@
+{
+  "apk": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hardcore\\HardCore-20260905-audit-milestone-debug.apk",
+  "apkSHA": "26584b871f61b2f6ec2dddaf52432263e7d68a6b8bea35b2a3196d59d5b21664",
+  "contract": "hardcore.formal_map_apk_closure.v1",
+  "counts": {
+    "authored_chunk_refs": 445,
+    "chunk_imports_checked": 208,
+    "ctex_targets_checked": 208,
+    "formal_registry_entries": 67,
+    "implemented_playable_entries": 67,
+    "non_empty_ctex_targets": 208,
+    "runtime_files_checked": 67,
+    "unique_chunk_pngs": 208,
+    "visual_files_checked": 67
+  },
+  "errors": [
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/world_snake_valley.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_snake_valley.runtime.json",
+      "package_sha256": "4ccb846ee6e2c13030ec841b61595254384ee9ad1cb486d2e6ad9f2ab3f4d1b2",
+      "path": "assets/data/runtime/map_editor/world_snake_valley.runtime.json",
+      "source_sha256": "2a07d3af18a968cca655e6d18ad5aaf76edc2b8bbff18b51a6245d12b66e1e03"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/world_snake_valley.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_snake_valley.visual.json",
+      "package_sha256": "4cf0b1bf34895cbf0d5e6337f566da1a4d9e0a7f30d446623d8ca07c86785855",
+      "path": "assets/data/runtime/map_editor/world_snake_valley.visual.json",
+      "source_sha256": "c49cc3820facebab04f673a6901aa4888bf088d52afc07c7ebc59fe863bc4651"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/world_mengzhong_province.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_mengzhong_province.runtime.json",
+      "package_sha256": "def6793cd45cecfe3dd25f3a540c61822fa35296452bb642bdf12bff7b1ed9af",
+      "path": "assets/data/runtime/map_editor/world_mengzhong_province.runtime.json",
+      "source_sha256": "2f38d57b60f1ae0e85317ae1098923951b14e19c9cd1162cd046d141521e3f3d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/world_mengzhong_province.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_mengzhong_province.visual.json",
+      "package_sha256": "3279ec36176fe129d23e01bda99e4fbf3504ced2d1ba95649d93d6cb75aeb2e7",
+      "path": "assets/data/runtime/map_editor/world_mengzhong_province.visual.json",
+      "source_sha256": "0e60e5753143aa51127d320f367731f1c81aeaf2aa247dbf4e8184880c6f8f3d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/world_fengmo_valley.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_fengmo_valley.runtime.json",
+      "package_sha256": "04c7e13fb15d04d6d5cd7f62635426263117a870c9bc193985910cee1b573a6a",
+      "path": "assets/data/runtime/map_editor/world_fengmo_valley.runtime.json",
+      "source_sha256": "6f255dd1094c51096219d52a8fb6a1745292b4d0b4f97291910c216653d1ef06"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/world_fengmo_valley.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_fengmo_valley.visual.json",
+      "package_sha256": "3fac57071d866c0a12eac70bc8092a5faf85092cef9c11eec68321c18abf0463",
+      "path": "assets/data/runtime/map_editor/world_fengmo_valley.visual.json",
+      "source_sha256": "b7d4ae9547eb5e55fe09caaa0d180a7d749b77d79f6720ceda30581ee43144c4"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
+      "package_sha256": "57560afa348026612819419c99eba663a9b53d47056721ed04878e3719c408b8",
+      "path": "assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
+      "source_sha256": "9ec8f13d3f1d2830347aeebc9e49ae605fc3702742b9541a900c2e2d5bff3760"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/world_white_day_gate.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/world_white_day_gate.visual.json",
+      "package_sha256": "46219fc69879936d0c512171ba3a07ce1b8e8a05cc6f506fe5cb06b78d2a0214",
+      "path": "assets/data/runtime/map_editor/world_white_day_gate.visual.json",
+      "source_sha256": "9c13817eade501c1e324f61fcf829dabcf598ddfec3026d0cd6f51116e75d903"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/bich_orc_tomb_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_orc_tomb_f2.runtime.json",
+      "package_sha256": "36be3519c855b3f2d413aba29a62b96c5bc2667fbd0099cf25673e8a2fbfde29",
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f2.runtime.json",
+      "source_sha256": "c70a45c610d5fc646d6594f8e2e129f8cbcc00ebf89a8bdeff482cbb00a6463b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/bich_orc_tomb_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_orc_tomb_f2.visual.json",
+      "package_sha256": "f090296c247e10f517c0dbb377275350d470b00de5a00ab9bde9636ab8897463",
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f2.visual.json",
+      "source_sha256": "467d8ffd735a8f55d5f1c93dc6945b1366f71ae4edd3b79073241a8da1963635"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/bich_orc_tomb_f3.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_orc_tomb_f3.runtime.json",
+      "package_sha256": "7bdd748fc643aefd84ca310216289751263f69739b1a8f3e098cf1c77a9e639b",
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f3.runtime.json",
+      "source_sha256": "32e2babfac4ea7f26bb8dea197d775bde419ca0d8323ff2c739f36987e96515c"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/bich_orc_tomb_f3.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_orc_tomb_f3.visual.json",
+      "package_sha256": "7239598a2e99e50814e34ce5384de2b88112e654c62772fe06c484022d71a1be",
+      "path": "assets/data/runtime/map_editor/bich_orc_tomb_f3.visual.json",
+      "source_sha256": "02c8d6883f0a7d9cd90ae1ce7b56f02179888ce304e6dc9b5e454f0a9f57a8ef"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/bich_mine_f1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_mine_f1.runtime.json",
+      "package_sha256": "a89da72800c1fb708390d400d97c73c905ff4da395f621c8cef3eae42b0a1d52",
+      "path": "assets/data/runtime/map_editor/bich_mine_f1.runtime.json",
+      "source_sha256": "02e9bdbece3b18a2fe47c6897dcf8d6a88df2182eba3675fea4fd708b208f094"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/bich_mine_f1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_mine_f1.visual.json",
+      "package_sha256": "cb118fbef6a5d46ac7d85fb2b7e6476f206a78b978d964cb648f3db4eb8fc79f",
+      "path": "assets/data/runtime/map_editor/bich_mine_f1.visual.json",
+      "source_sha256": "d11ff2da54c4a33db17313e5a359fd4162b09fe36af1f2851fa54f4ab367d953"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/bich_mine_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_mine_f2.runtime.json",
+      "package_sha256": "a0c72662462ee84ec403d5da50ba0e73568ad9d3ced57f35c77edc8265fa3af3",
+      "path": "assets/data/runtime/map_editor/bich_mine_f2.runtime.json",
+      "source_sha256": "095a8cddf8e775788f74f68879e813ff8cd222f669bd4506bf8d29000a7e173f"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/bich_mine_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_mine_f2.visual.json",
+      "package_sha256": "53f3b172cd02b463dff95a45e9675d54e9ddb0ff4a0e679c9662d3246cdb8a0b",
+      "path": "assets/data/runtime/map_editor/bich_mine_f2.visual.json",
+      "source_sha256": "ab90a98fa020d27944dca25da5d39492b7f97155cc0e6536eb0e852b2f7480de"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/bich_corpse_king_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_corpse_king_hall.runtime.json",
+      "package_sha256": "51effc3fff3e5eda0f23e83b77bad7e895437c7b0cd1c30cd88eaf3581f94cf2",
+      "path": "assets/data/runtime/map_editor/bich_corpse_king_hall.runtime.json",
+      "source_sha256": "1e42000fb41501aeb0c7623006e212b3f0f01514708371fbe4a699d4a94f92ef"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/bich_corpse_king_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/bich_corpse_king_hall.visual.json",
+      "package_sha256": "04c007c37c41e43e2b21a7885b5f15f26229e24243193a329570b1a1ee0d85a7",
+      "path": "assets/data/runtime/map_editor/bich_corpse_king_hall.visual.json",
+      "source_sha256": "4fb5c71fea487ed639909de0916c4b18da8ec87f27f112a68c0c46a065d9865b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/snake_mine_passage_1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/snake_mine_passage_1.runtime.json",
+      "package_sha256": "1a69f89109ccc3916a4596c2c9300446afb863aa69511d941dd3b1426d4dabe0",
+      "path": "assets/data/runtime/map_editor/snake_mine_passage_1.runtime.json",
+      "source_sha256": "df3fe01daa3ce29897d304aa97a070e2142eccf7cd76e7cd134c6460e74385de"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/snake_mine_passage_1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/snake_mine_passage_1.visual.json",
+      "package_sha256": "91f291f7dfae57d9e1ffa0ba1af790eef98716bbb0742d9d5d5a2f64fcec1b21",
+      "path": "assets/data/runtime/map_editor/snake_mine_passage_1.visual.json",
+      "source_sha256": "e0559e6ae056bd0695c64b9db3247a62d448e183a4c42140ac95ae525dddc8a7"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/snake_mine_passage_2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/snake_mine_passage_2.runtime.json",
+      "package_sha256": "a23ee2ed443ccfdb4d9c60dadfa50fb3e89d647aecf0e0249331d9436be16522",
+      "path": "assets/data/runtime/map_editor/snake_mine_passage_2.runtime.json",
+      "source_sha256": "e58866c7dd1a604de69371e599ab596d85d99758ebdf9b67da6c4633b3498391"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/snake_mine_passage_2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/snake_mine_passage_2.visual.json",
+      "package_sha256": "fb53031a3653ca9550a2f847a125459e663e5579948672cc8e3e4b9a971352dc",
+      "path": "assets/data/runtime/map_editor/snake_mine_passage_2.visual.json",
+      "source_sha256": "2d864d7652570a1354d138daaa8c3d1fecd662f62973b51ab05f94741fd2ac97"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/snake_unknown_dark_palace.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/snake_unknown_dark_palace.runtime.json",
+      "package_sha256": "61975acbf931394430f716681c8443dc2619d05eb004828620376aabf28de940",
+      "path": "assets/data/runtime/map_editor/snake_unknown_dark_palace.runtime.json",
+      "source_sha256": "5f68d651bd3ba736e0b1a11a16d284645c2816ca92c4a50c2ce36791da272d5b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/snake_unknown_dark_palace.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/snake_unknown_dark_palace.visual.json",
+      "package_sha256": "11c5d3d262fb9573b44e2253e53464a9df4100b00112fa544dd09b3678eb8b99",
+      "path": "assets/data/runtime/map_editor/snake_unknown_dark_palace.visual.json",
+      "source_sha256": "3da0025fd98e7da5cbd510f3b631e30f60045795607c6b14055b8761fe19fc29"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.runtime.json",
+      "package_sha256": "4bc5caf0cc84b54ba769fcf298d8c94c4bf4bef907df3c340583d504c6b43f53",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.runtime.json",
+      "source_sha256": "eecc9b36c355e5e57aed05f52028294912c18163331ce1bf1abb7274a9683bd0"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.visual.json",
+      "package_sha256": "aa27d8294dcf32dd399da637b9c864f8d223f275c05adc9484bc29ede6a99047",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f1.visual.json",
+      "source_sha256": "d40c4efcf2cb9ecb66cb0ff90c098e7c9aef724a7b223474a8cc58557ab09c89"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.runtime.json",
+      "package_sha256": "2a4ed8775751e8598ebebccce597290ed76e7a45882b1134c6fea72d81155168",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.runtime.json",
+      "source_sha256": "ebd279e647db546b21fc8d0660ee25ccba15ebb0fb5428709a5367dd438b4991"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.visual.json",
+      "package_sha256": "a6626294c2871d370e86b872a28881595ceb150129a9fed435c428d56b9d1d85",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f2.visual.json",
+      "source_sha256": "d1573bb310f4aa1a521cd46f8390a49c222c949b06ae543fc98bdc6872b6a932"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.runtime.json",
+      "package_sha256": "e913bc1cd88d73b8756787d880d64aa69518b98ba71d6f06a80d6a8ec4006247",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.runtime.json",
+      "source_sha256": "d6219a9a194a1ba92207636564a215e987bcd8e0d7d2bbb3a597392f626a3164"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.visual.json",
+      "package_sha256": "d4c3c705d5fb289e34b2d7fd7cf3afe5e0158cdd1fe9aa9508f36df6020ff3a2",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f3.visual.json",
+      "source_sha256": "35f0b022a1c5599c93d206c2a56afb4da283d5e7a90ef6e57b74b653ca68545c"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.runtime.json",
+      "package_sha256": "ce1755dbaf04a3ad27e824d3d6fec5b9ae1ed1a1594fba849c770b923dab6f15",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.runtime.json",
+      "source_sha256": "5170811a1fe5024eea6d368a29f7e6855ae627835ef93d1eae4d5d68990c96b7"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.visual.json",
+      "package_sha256": "a90225a4a5bde1d79b31962f14d4068665bdec87a56080ebe4b4d4e399197ec7",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_tomb_f4.visual.json",
+      "source_sha256": "470c2c579855148bfb6f6672d90096d0cf481eb3fbbbd72c7ffd9c4a43d71a75"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.runtime.json",
+      "package_sha256": "cd44edc244cec0af8e5aa9a0da14f3ff765b5a9450eda442cdf21f8ba2876124",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.runtime.json",
+      "source_sha256": "c6c65ca22551378b436daf2d76a42b2cb74af58d0f748fecacc311b4eb215eb6"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.visual.json",
+      "package_sha256": "454d5a11790cb485e59d9aee4ec7715455cdea7d5806d574903ca7d5a99034e3",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f1.visual.json",
+      "source_sha256": "92922f1d2666f92222489cd0182cbf20cd07a50afa9879fc904387693be6df41"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.runtime.json",
+      "package_sha256": "d8b2e5d8202416696eeb0d5fc237d926677ee5f2810fd32587614aa7e8bd5760",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.runtime.json",
+      "source_sha256": "26edd3d0983e6f2d07e188401d9461d3d7c9bc9076f6ac2a492bc85bab59572c"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.visual.json",
+      "package_sha256": "19e088725044b6aee762f08314dbb454d750ef4a0235a41c92e6e5d0c73f03cc",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f2.visual.json",
+      "source_sha256": "757ffdc0f2231b8ce665c64fdd1ed73104e6fd61331482873e1aa7a2b7902273"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.runtime.json",
+      "package_sha256": "3a9ab951f54d6079d886c7ef8ce2cec612e3234ba70998abcfd8be28833c4ee5",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.runtime.json",
+      "source_sha256": "220de9d880c10b6daec423c70f5947aac51eec0f02e877353b5c7a5a1fbc5741"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.visual.json",
+      "package_sha256": "829936601b4768293f3dc9bd02d75eec084fb8d6f5869b980d0b7e61b9bf35c9",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f3.visual.json",
+      "source_sha256": "d848f17397e8cdeae5791b3e1f7022637d526e067f474f58d40381633a0d62e4"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.runtime.json",
+      "package_sha256": "d2b5da342d23c67a23fc7d3f6dbc3335fca9f65be0f599c0c6ec65847f0df5af",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.runtime.json",
+      "source_sha256": "48f79872a828c6878452e48fe63f3eed4b76163e3db69dccb8410e7b7a4b4228"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.visual.json",
+      "package_sha256": "44845437d39302d35808cec9bc8e940fb12488567acf6b7a0e487fd2a38ef3bc",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_temple_f4.visual.json",
+      "source_sha256": "aae66a888d01bc2175a2fe1dfe503a6a3748a6454df75352c9d7d35dfcb88452"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_pavilion.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_pavilion.runtime.json",
+      "package_sha256": "9205621b367e5b547d80c64640805661d8e749e9f269c325df274e40da3a32ad",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_pavilion.runtime.json",
+      "source_sha256": "bc5d31b3fe4101f6b16ce51d8642b947ea8c757ac0225f5e81322eb0dfe48403"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_pavilion.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_pavilion.visual.json",
+      "package_sha256": "94a758d1880f8b28932035c6edbf01807c87e76edbaddc194516a1c0745b883d",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_pavilion.visual.json",
+      "source_sha256": "bb314de2998ff432528fbbacdeefefeab99c47927f456fc2a6f58333bd520e5d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
+      "package_sha256": "c485a19fe737e3d9918966ea1f6309ff9ebaba1243494de134426444e58ef9ce",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
+      "source_sha256": "c512aabdc78a8e2d90ef390560050b5b275612696a3e9ce1069532340573b15b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_zuma_leader_home.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_zuma_leader_home.visual.json",
+      "package_sha256": "146cd1f2c9bf226225a7cfb0da4eb9b85e1bac805a96aa464089a98753102117",
+      "path": "assets/data/runtime/map_editor/mengzhong_zuma_leader_home.visual.json",
+      "source_sha256": "8809c490a2e870eaf744d49c262b335fb1e442a0c9850e575b8fb28177276272"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.runtime.json",
+      "package_sha256": "9de193d9f31db4165a969ff468048e7f2418f564cb08d036471f2f779a203b5c",
+      "path": "assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.runtime.json",
+      "source_sha256": "bbd84b6fe621122a16ebb32b8a53919896c412d6bc439c3692cf7d37d46ad97b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.visual.json",
+      "package_sha256": "4ce8acbb70568280ccaaa198ba74d1ea243e85de19b455c72afd7725fb6d004d",
+      "path": "assets/data/runtime/map_editor/mengzhong_death_valley_dungeon.visual.json",
+      "source_sha256": "e34e62912f0bc98c2f33d02cd9085895cf6d65e8d5cd2258fa1e934d8b608fe9"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_coffin_room.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_coffin_room.runtime.json",
+      "package_sha256": "4d88e5f236b9e23b1b4f67594ca2f428967a4ff9967a4a03bef45c24c23cdcfa",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_coffin_room.runtime.json",
+      "source_sha256": "fe770b34b943f7a553cb518c9f6fa97839bcce27cb075561131877d6b5aae388"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_stone_coffin_room.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_stone_coffin_room.visual.json",
+      "package_sha256": "44ad71a4de417ac38e0bf61effdb1c997375e3e1b20286ca70fdf5d7159fd2fb",
+      "path": "assets/data/runtime/map_editor/mengzhong_stone_coffin_room.visual.json",
+      "source_sha256": "25935a48cb036a89edb53d2e1fd5510d3f1dc6c4e31d9dd710f9807ee02bfa96"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_dark_area.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_dark_area.runtime.json",
+      "package_sha256": "52fbc63a6b2e6dfd48838766ab88491ec57e92289958cf0896b58f4a5d8667ae",
+      "path": "assets/data/runtime/map_editor/mengzhong_dark_area.runtime.json",
+      "source_sha256": "2c4c659858bfd4d694af5049fbcd86ee45be67664daac22580178712e4375701"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_dark_area.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_dark_area.visual.json",
+      "package_sha256": "4a79fd16223dfac6dc5ecf0d2a3044804eff19871e26360b29532a23f054ef01",
+      "path": "assets/data/runtime/map_editor/mengzhong_dark_area.visual.json",
+      "source_sha256": "66e9ff0c208846d31e12861db2ad944003d1bc715178e47e6583ece9635261e6"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_between_life_and_death.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_between_life_and_death.runtime.json",
+      "package_sha256": "9ed64bcdabdbe15fb56acbe093187fd89013923ed87839723b5f72e47b5aafe0",
+      "path": "assets/data/runtime/map_editor/mengzhong_between_life_and_death.runtime.json",
+      "source_sha256": "2c97c34cbb50fdc138c29d4e8b0c938f232ea8cb88df4cf98a0cb60064a85dd8"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_between_life_and_death.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_between_life_and_death.visual.json",
+      "package_sha256": "57c926ac000bff707582bf12b742f18691677c41a3607d8bbadb4f19fd5123e2",
+      "path": "assets/data/runtime/map_editor/mengzhong_between_life_and_death.visual.json",
+      "source_sha256": "1e3d03dfec2b6cf47b774a6a3d1150384dd50d947a47df61696757477e66a644"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_terror_space.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_terror_space.runtime.json",
+      "package_sha256": "29e24bf69dfed2e36078e1788448bb03f2b3d28e8abcd11fb0e43369047bc332",
+      "path": "assets/data/runtime/map_editor/mengzhong_terror_space.runtime.json",
+      "source_sha256": "9b908266b660e65e927639e1204b49ff82a0d325c6049dc2b1b4c1344fd6af86"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_terror_space.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_terror_space.visual.json",
+      "package_sha256": "050f755de5cbe1f65f2df65d4b83e037a3cec590cf0b0e6d3a1ca440ca034fd0",
+      "path": "assets/data/runtime/map_editor/mengzhong_terror_space.visual.json",
+      "source_sha256": "23265c01536f722590351c2194c61f01662ce53eaf22485aaf856493e9459996"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_thin_sky_passage.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_thin_sky_passage.runtime.json",
+      "package_sha256": "12c37e62f7b3c8cfe82557ef88b7390757aa7a5479ceec2d05adc2716aaba900",
+      "path": "assets/data/runtime/map_editor/mengzhong_thin_sky_passage.runtime.json",
+      "source_sha256": "b3bb69398952e36cf9d6a54c8cbb3a72d1d79d2698074ac70509601c24a42a02"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_thin_sky_passage.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_thin_sky_passage.visual.json",
+      "package_sha256": "95cddea2076d77c42b156f25a2d29035dd7e1513418aaa7f532c8cde3f112eea",
+      "path": "assets/data/runtime/map_editor/mengzhong_thin_sky_passage.visual.json",
+      "source_sha256": "c767469fabcd4c1f4fe01863b2d48569f747323e50472b55a60181f651b5e47b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/mengzhong_death_coffin.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_death_coffin.runtime.json",
+      "package_sha256": "1cbaa1b8f50effd4228c0c6d2ae9bad3676e982d9bbab78e3b02765254ede661",
+      "path": "assets/data/runtime/map_editor/mengzhong_death_coffin.runtime.json",
+      "source_sha256": "eed6c6c532104e5089283304eb63ed39bc94ec467e815fd3982c5e4447943f9a"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/mengzhong_death_coffin.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/mengzhong_death_coffin.visual.json",
+      "package_sha256": "9c708710306b1db6dfb1ba9f42ddc5180097f5dcffda4917f3f0dc931a39de39",
+      "path": "assets/data/runtime/map_editor/mengzhong_death_coffin.visual.json",
+      "source_sha256": "0026a7266cdbcece87fcc5161532e6e6548aa9d0aee73b76ab835b4c38654ba0"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_forked_path.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_forked_path.runtime.json",
+      "package_sha256": "2da12cf88d08212d4ac7a53db1ce4f6099f31b1d467829f1e37d61892596e969",
+      "path": "assets/data/runtime/map_editor/fengmo_forked_path.runtime.json",
+      "source_sha256": "8e480bd51d04f896e4107743c534b2fd69ee58d698be03b7ca6093396fef2fe6"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_forked_path.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_forked_path.visual.json",
+      "package_sha256": "ddf721ea810f1511536824c3a7ad8b45ea350e16aed372aad526598526f94afb",
+      "path": "assets/data/runtime/map_editor/fengmo_forked_path.visual.json",
+      "source_sha256": "a67540dc21566ad6c5f45d02aca77871787e3440e393f3af40a5966d07ab5418"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_light_corridor.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_light_corridor.runtime.json",
+      "package_sha256": "7f8ec4ab0d0d155eee9bb55fc48a43926c9b6093d01171030dfed08ae34051df",
+      "path": "assets/data/runtime/map_editor/fengmo_light_corridor.runtime.json",
+      "source_sha256": "90f2a61f84c9cef5447d42f5bff7cc6935b2ff5022223fe469cf30989ffce982"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_light_corridor.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_light_corridor.visual.json",
+      "package_sha256": "3cc2958becda30deff86bf75eae7a53b2477d472af8ec55e1c313caa4855dede",
+      "path": "assets/data/runtime/map_editor/fengmo_light_corridor.visual.json",
+      "source_sha256": "bc7923be55f5d527953ddcd7b2a244ec157d02b748988f08c32a3bd3fc6591a4"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_thunder_road.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_thunder_road.runtime.json",
+      "package_sha256": "c2f3d3ec750846f17e8cd2170e3b987a3829a0b9d1dfa88939f4dee0f00da58c",
+      "path": "assets/data/runtime/map_editor/fengmo_thunder_road.runtime.json",
+      "source_sha256": "21927ff0e30b2b70a26f6e656558608e423c15427e3aa0052e552e20f9afdb39"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_thunder_road.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_thunder_road.visual.json",
+      "package_sha256": "299de9e302c5f6a83147835cd255d6df1aee0af317282b9532ebf39c1b1fc5c3",
+      "path": "assets/data/runtime/map_editor/fengmo_thunder_road.visual.json",
+      "source_sha256": "988a3805137534b6173db1732b9d15c53a009c1083b39c23463a12e335776127"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_bazhe_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_bazhe_hall.runtime.json",
+      "package_sha256": "1f98b3d34f37c25daf8ec7887b8212483dc68169f7091328e0fbb9ca8adc4b3c",
+      "path": "assets/data/runtime/map_editor/fengmo_bazhe_hall.runtime.json",
+      "source_sha256": "7f62886f5a9350a7ed9beda108aa700c6d3fa24f303b78fb178f6d57f80d9090"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_bazhe_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_bazhe_hall.visual.json",
+      "package_sha256": "6ae755fa69adf3ec0b88f7a53f2b73ae87cce5ba10be7440de60f1b29e62ca1d",
+      "path": "assets/data/runtime/map_editor/fengmo_bazhe_hall.visual.json",
+      "source_sha256": "9cd35d5aae3956e976a3adb84c5218df31224ae2cdde27d4275e42dee5cb00ff"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_zonghengdao.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_zonghengdao.runtime.json",
+      "package_sha256": "4232156bd89a5ae25de745c587922acf4532e61fc076ccd616114fad9f464eff",
+      "path": "assets/data/runtime/map_editor/fengmo_zonghengdao.runtime.json",
+      "source_sha256": "02a18a89ff370f5efd6c63dd6b1f27951e847002870d791b8a6d62eb6d234374"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_zonghengdao.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_zonghengdao.visual.json",
+      "package_sha256": "d107f6b33ce53ca579ee0f343ad15c87ff5d99faece290e9a6412ed8d9c5b1f9",
+      "path": "assets/data/runtime/map_editor/fengmo_zonghengdao.visual.json",
+      "source_sha256": "7a808a0fdf3ed4afe54e7aa6cc58444e5b363f5bf12a0dcc3998a5b02bd7b8d1"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_mohun_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_mohun_hall.runtime.json",
+      "package_sha256": "e0073cd6231ef43706945618b87ac06ba8e6ac89f4583b447391b02fe91ea3c3",
+      "path": "assets/data/runtime/map_editor/fengmo_mohun_hall.runtime.json",
+      "source_sha256": "36c9c5926f334477fa60a06d3cb8f4247bcc131e34364926d81d9ecce13484ca"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_mohun_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_mohun_hall.visual.json",
+      "package_sha256": "564dd47a288269c17c302fa2b043e719c11b524e5ff11633a6688938576a0fa1",
+      "path": "assets/data/runtime/map_editor/fengmo_mohun_hall.visual.json",
+      "source_sha256": "c438127554247063257f85ab0a55a014b8a2ee92167b2b8502135b214fdb3d9d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_purgatory_corridor.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_purgatory_corridor.runtime.json",
+      "package_sha256": "0ccdcbcd9efbfeefb607de91b347e2e906445ca3e10e22f951019a264ba5af75",
+      "path": "assets/data/runtime/map_editor/fengmo_purgatory_corridor.runtime.json",
+      "source_sha256": "4cc121bd4f985dca127a51ccbc78d73862da5b803e7d463ffbe35c5150cb507b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_purgatory_corridor.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_purgatory_corridor.visual.json",
+      "package_sha256": "fe15d1caf3482303cc1839dd1c258eed55882cc0f293890d125c9dd54f27e070",
+      "path": "assets/data/runtime/map_editor/fengmo_purgatory_corridor.visual.json",
+      "source_sha256": "e11f2654876511b90a8c51a01dcf114ef2a6fcbd4c03b1510be08b9af20a23b3"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/fengmo_final_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_final_hall.runtime.json",
+      "package_sha256": "4e18ed933ad02fdeb3ea14f4698b9d7e440a40394f5bfd5d30983da583d07343",
+      "path": "assets/data/runtime/map_editor/fengmo_final_hall.runtime.json",
+      "source_sha256": "c0b72d967c7fbcc9abb452e3332bfb29eb7a4d465a5684cf412aadf24dd04267"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/fengmo_final_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/fengmo_final_hall.visual.json",
+      "package_sha256": "991250fc0087d27ceec3acc88e66dd007b8ac99281fd27ad1a7fa7a1e6dc2718",
+      "path": "assets/data/runtime/map_editor/fengmo_final_hall.visual.json",
+      "source_sha256": "b448603e20080230a560df7942f0dfcf4f8df498f70619d3ad583a745d8adbce"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/wooma_temple_f1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/wooma_temple_f1.runtime.json",
+      "package_sha256": "5ee5dd573fa0d48811c1e6eb19646a81e76b36a17af95526a63323c98f144507",
+      "path": "assets/data/runtime/map_editor/wooma_temple_f1.runtime.json",
+      "source_sha256": "247ffd1460a7b3d3222f18c794a221ee094e7e4b93563fa730ec6f8f998fa58c"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/wooma_temple_f1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/wooma_temple_f1.visual.json",
+      "package_sha256": "d8c1c81119145166669ebe021cac6dbc13065bdc2ea2f90a953ccaacc2b5ab8e",
+      "path": "assets/data/runtime/map_editor/wooma_temple_f1.visual.json",
+      "source_sha256": "72ff4c5a2d814915645e65cdb7565a5d465171932d768686d458c20def8a2efb"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/wooma_temple_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/wooma_temple_f2.runtime.json",
+      "package_sha256": "5cbd4d33cdd9db27e7c06bdaddf06ccd8551f1a8dff6c2b85cb92f263a099388",
+      "path": "assets/data/runtime/map_editor/wooma_temple_f2.runtime.json",
+      "source_sha256": "e9831b11abd72bd8c1f860fed04351ea1be66271f796267ea4c9c1ba4ae26425"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/wooma_temple_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/wooma_temple_f2.visual.json",
+      "package_sha256": "d35d2a3bb51bd746d7741ad6549bc6d3a4090c1ae196a5384e3a80c4633032d6",
+      "path": "assets/data/runtime/map_editor/wooma_temple_f2.visual.json",
+      "source_sha256": "760160fe2692fc105c818090dc95905807f06e6a2b30ca15d36a5d6f7bfc229b"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/wooma_temple_boss_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/wooma_temple_boss_hall.runtime.json",
+      "package_sha256": "9d3d9843f719a3b63382c1518d19284d1ccff16bd4f4f5acfa1a075e0284fddf",
+      "path": "assets/data/runtime/map_editor/wooma_temple_boss_hall.runtime.json",
+      "source_sha256": "0f02af25528202dd92555793c8720366a5f1326225f2c1c7b9df8d045d90a306"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/wooma_temple_boss_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/wooma_temple_boss_hall.visual.json",
+      "package_sha256": "d216118f8288e081ccfe8d5ca77cc26aff370cd8b8a53b3d4bca79ff51435548",
+      "path": "assets/data/runtime/map_editor/wooma_temple_boss_hall.visual.json",
+      "source_sha256": "91bab610f88f0a1f0fcb4c9d5a5ad846c220abd044819ead0f912bb1874f13ea"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_valley.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley.runtime.json",
+      "package_sha256": "06cb13d9b0791f84210f38496462e086213cd4f5b2a3a7e02ed87925cfd3077a",
+      "path": "assets/data/runtime/map_editor/chiyue_valley.runtime.json",
+      "source_sha256": "7f09897f44db75ceff0e68a167c174f26924ca116967e5400b96fca90e3d710f"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_valley.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley.visual.json",
+      "package_sha256": "a921e2b960fccc124141455578a5d691a58ed65c51c6cc454ba8aa26234b1807",
+      "path": "assets/data/runtime/map_editor/chiyue_valley.visual.json",
+      "source_sha256": "b13906bd652c6210dad6ef5cbdc59e3c2edd0566fa4db3d33f330e5830a1efd0"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_valley_square.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley_square.runtime.json",
+      "package_sha256": "8f53a9f638e026f722ea4de6113943bcd69606fbae90767d77403a39f99d1a30",
+      "path": "assets/data/runtime/map_editor/chiyue_valley_square.runtime.json",
+      "source_sha256": "08bf213fb1dfd1e07784e60dd61c6a10fa5a48ea69c397b8d2ceda9dae9b5ef1"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_valley_square.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley_square.visual.json",
+      "package_sha256": "a49f40bd3eff5a53c0b88ba8bf50d3811b5bb15a8667348761f5a1bb23a75000",
+      "path": "assets/data/runtime/map_editor/chiyue_valley_square.visual.json",
+      "source_sha256": "be2a812f98018f7cd72d7be8d92601c81c60f2d00d81c9eb40e1711483aa78f1"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_choice_land.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_choice_land.runtime.json",
+      "package_sha256": "f59646feb4b314b1c5ffd4e53dc89f28bb9724c8aa25be74904f92e34cc34f41",
+      "path": "assets/data/runtime/map_editor/chiyue_choice_land.runtime.json",
+      "source_sha256": "23afb48e6d81945c62a001c4921d8c215b3f80b35ea2f4acb464867c8cb90baf"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_choice_land.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_choice_land.visual.json",
+      "package_sha256": "088bce69df3c94e6d774ca9cce564cf24a427752730a06eec0d1a05a7e5b55dd",
+      "path": "assets/data/runtime/map_editor/chiyue_choice_land.visual.json",
+      "source_sha256": "3b82af641941951219e449e0f4dca2422c8c481b0d223dd5f568a45adbfc7a9d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.runtime.json",
+      "package_sha256": "f860b83a0a5a8f53a1a13ee4e8e7637a85a22f2d34c51dba7d0e9a464289aefa",
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.runtime.json",
+      "source_sha256": "6f0dbfe6feb27b14c26e0989f21ebccdd5aed5980da238dd018ff8b35f4575cc"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.visual.json",
+      "package_sha256": "44bcce21f8fd3a186929cf72049632f0ebb678680ee363a9417f711e5929afe8",
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.visual.json",
+      "source_sha256": "68da430031de07c4505b1bed87797a2cfc6609d42c2eb06f568761a8a4ec3259"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.runtime.json",
+      "package_sha256": "bba92d28c672e83e2926a1c150b9474284f2451d6856d49db71078293a3c70c9",
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.runtime.json",
+      "source_sha256": "6122be7de3c4eb0feae29d2d4735663636de4bc6f4d68bd3ff72ba8cb255cb21"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.visual.json",
+      "package_sha256": "5d2abe7e049f6f918613324f6f7951337eb824ea27deace85e360b9142b9f31f",
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.visual.json",
+      "source_sha256": "f425cb2302ed6693644994ffc8cb7ba743b498afe7fe05f1ea2701f71980db49"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_demon_altar.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_demon_altar.runtime.json",
+      "package_sha256": "c9e74e90a6f219ad97f8e9520b159e6b50f379aba2a67833ce84d48b115caaf3",
+      "path": "assets/data/runtime/map_editor/chiyue_demon_altar.runtime.json",
+      "source_sha256": "388e1c0a01fa7ceebd4f807fcee8db4a62b4c6327be8424762c90340fd0627f9"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_demon_altar.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_demon_altar.visual.json",
+      "package_sha256": "537bc254e4ba81a9c4ac0de2a3f5c643ff3457353d1036218242ba28689da5b5",
+      "path": "assets/data/runtime/map_editor/chiyue_demon_altar.visual.json",
+      "source_sha256": "63d1fa78606862f8e677bd0ede61f02e5e7950c4e71da270f631512dfb4fa6da"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/chiyue_red_moon_lair.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_red_moon_lair.runtime.json",
+      "package_sha256": "f1f6d1ef11e5666c8097b14342c32bfc29a4bf456cd8e9d20af3e00c238adead",
+      "path": "assets/data/runtime/map_editor/chiyue_red_moon_lair.runtime.json",
+      "source_sha256": "2c89e0eaeb12aeb670f5ab00d62bafb53c6691f58157f5071c9b98fd5511084d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/chiyue_red_moon_lair.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/chiyue_red_moon_lair.visual.json",
+      "package_sha256": "b48e66157417cd6414aba5a27fa940b05be82c9beb7b91fe361cd731bc5e843b",
+      "path": "assets/data/runtime/map_editor/chiyue_red_moon_lair.visual.json",
+      "source_sha256": "374484912967953944aca4fbca96e49908ea1ec12223f9cb534dc0cc78a2823f"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f1.runtime.json",
+      "package_sha256": "2d2a99c7fce8846593f50b4b4522bb5846ab9cf9557b9d5e72cec4abe4a70975",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f1.runtime.json",
+      "source_sha256": "1f8cf7761b4f39c6c429350d07fc21123ebb7aa231af806e0410d2a1a00a3e40"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f1.visual.json",
+      "package_sha256": "efc020416fab83d0273684b6296eacceb02a8329aa0e8b88eadb4730067026f6",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f1.visual.json",
+      "source_sha256": "8638a8101a979f3e519ba286277f0eb8cf6d346bd9e4304726f7c55b4d4d935a"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f2.runtime.json",
+      "package_sha256": "21190585cbf977ee73a70485fc04c5d158b35205de1c5c1000b35bc1791a2ca7",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f2.runtime.json",
+      "source_sha256": "06493069de549c628d30cc3c86dff5882dc5315ed9fc2b464c15105978609b11"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f2.visual.json",
+      "package_sha256": "3bd37d798652ab2800c7d50a368d67a0a6635277b917d56c8855476da148638f",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f2.visual.json",
+      "source_sha256": "42f258b97ced101ba8114388a326fc1d6a2d7712597f22bd8c94049beeb896a9"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f3.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f3.runtime.json",
+      "package_sha256": "d70301a9d3a1711ad60f066009bd696468cbf14c6d91b2d9fa930e81c2a4e1ec",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f3.runtime.json",
+      "source_sha256": "e7d6097bc1bb31d7a22dc0e7d390f0812fc707183380a7d63b5a021793c85c2a"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f3.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f3.visual.json",
+      "package_sha256": "cce42865cbf96c5f7d50f1622ba6c2fdd7214a062e377f631def45ad970c028a",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f3.visual.json",
+      "source_sha256": "69df32e7f3044790d15c0b21681ebd839d10b9f596e32d7042c9edfc2597de93"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f4.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f4.runtime.json",
+      "package_sha256": "f5eb13dc950f3247f5b30b445f0fc5c14739db0d237c0c546e82e973852c73ce",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f4.runtime.json",
+      "source_sha256": "9709c016237659ae761ffaf6277d401a37cb576f959a231d7a5bd35909f60721"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f4.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f4.visual.json",
+      "package_sha256": "f89b94bef6a2a7c2a88781e0ffda4d6306e744e509414d02e8a24e40df74c73a",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f4.visual.json",
+      "source_sha256": "25358bd4c589ed4ed7f22b6a4b2ba67fb10db584728f5d14b27b34e2b4ba7745"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f5.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f5.runtime.json",
+      "package_sha256": "6898abe388ebda88f8c65c2c54986d0f0849fd8986452e897cc635b49e6b2b73",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f5.runtime.json",
+      "source_sha256": "eb4f038e47cdff0c3fc86521d1bbc6f4d533043b638203d11b9988b90e1e7078"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bone_cave_f5.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bone_cave_f5.visual.json",
+      "package_sha256": "8fefb00b18baa698a0c94c3dfef90baaf9c0dee7cceacae5f784990a8cfa6974",
+      "path": "assets/data/runtime/map_editor/cangyue_bone_cave_f5.visual.json",
+      "source_sha256": "783e8bc990fbb84d9ce38349178632109c412ced140f42e5a94c40a1758775ce"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f1.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f1.runtime.json",
+      "package_sha256": "816b650dd91296a3735a423d3b18e0e9715457340fb2be60b1c54de4aa5db7f4",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f1.runtime.json",
+      "source_sha256": "da99547fee61960693332f2a1b2af435578d35cbdd4004023ae5cc09f73c5365"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f1.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f1.visual.json",
+      "package_sha256": "9d1fe8939dc471e030ed48ef4da54de8051cc999e380e9b03da8d04ef379c3c2",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f1.visual.json",
+      "source_sha256": "bbb437c1106384490bf4b5b1a9e7affbbfedddc7b0e66b9074afa0b99e782cce"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f2.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f2.runtime.json",
+      "package_sha256": "2d898e59f03e5f76a3fdc1a1f65f5b4fd1606cddcc357ae6feeafd754c4efe00",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f2.runtime.json",
+      "source_sha256": "f16fbf3cac1f9138ecd5fd230cf5f2e6b15b043798f80854e8b04794d3eb426e"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f2.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f2.visual.json",
+      "package_sha256": "5efd58810f2241f7cb2f9635fda4de3c3f37fd2bf87eade0c54d4f1d49c41e2a",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f2.visual.json",
+      "source_sha256": "b1d4680f3b2292d598efbb86d63065a402be582bda1987d965a90eeb69a7d8ff"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f3.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f3.runtime.json",
+      "package_sha256": "759c1769e796eaf7af99d82fe7fa17b6c277c9d5962ac9517f6bfd89e17b84af",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f3.runtime.json",
+      "source_sha256": "69f763cfa58a8fe2ffc39428fbe2a0128f8a22eccfdfa50acacec76c394c787a"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f3.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f3.visual.json",
+      "package_sha256": "bb454e723c8790512112ae73e27891587e8f71a6d9fd58cf075f39b373d01a16",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f3.visual.json",
+      "source_sha256": "5834f9584534b661e8c16aae1a0f2e57df88cb6c0b749146d9f9e4a5896f9ce5"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f4.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f4.runtime.json",
+      "package_sha256": "7e98494eed4bf9ef952e717bc3371baac1893612c1d097b62ca0b9ab9c747369",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f4.runtime.json",
+      "source_sha256": "6468a585f7bc7a0db31be68e51f66e888cf0e6bca6f2cd47674e6bfbe88c04ec"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_f4.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_f4.visual.json",
+      "package_sha256": "570e24228ac0d54d2ff84f0dca03a3b2aa4ff2612890b19cbc7b808b08c9907d",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_f4.visual.json",
+      "source_sha256": "846fcf301ea393e9602628680474abd60d305c7ea65b12a207082ae212d5195e"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_hall.runtime.json",
+      "package_sha256": "165e8fe3e9056950b8857b426351d51b04ee16b5abfbb14c5b655166168b3faa",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_hall.runtime.json",
+      "source_sha256": "8a0795779462bb92c383cd9efb69b3b1a2a799b7b6f9ef2c74a6cb7352e3a137"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/cangyue_bull_temple_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/cangyue_bull_temple_hall.visual.json",
+      "package_sha256": "e8fa59494920b6ebfaaa4019c9b65a5049c2e02c06bfe5b22a119f35bf2cc782",
+      "path": "assets/data/runtime/map_editor/cangyue_bull_temple_hall.visual.json",
+      "source_sha256": "2a8464b5d86666d98e927bc91750a96df547a6f47b9844a1a8e7cf415e64b444"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/hidden_confusion_hall.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_confusion_hall.runtime.json",
+      "package_sha256": "0b10aa567761b8a02959eab1ca6043874bd683746e30761fc08bee9603cb41cb",
+      "path": "assets/data/runtime/map_editor/hidden_confusion_hall.runtime.json",
+      "source_sha256": "f3b2e5232e97c623919d4b1f31eb30bd2693e6f9117d4a960f48d34521c720b3"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/hidden_confusion_hall.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_confusion_hall.visual.json",
+      "package_sha256": "9db99b94284df7917ec11ea1f0efc2b4f18f3c45aad0eba8686969f1e0d1c1b7",
+      "path": "assets/data/runtime/map_editor/hidden_confusion_hall.visual.json",
+      "source_sha256": "53daf3071456c237968bf108d4add125e4b109a301ec795293e48aa88aeabb8a"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/hidden_hellfire.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_hellfire.runtime.json",
+      "package_sha256": "f4ad0483807ccd592a42c0ebadb8ea687cc9f1f3593889a126a7079bcaf32b70",
+      "path": "assets/data/runtime/map_editor/hidden_hellfire.runtime.json",
+      "source_sha256": "825a2828ae03626f3c1ade8b92106d135f812458f4b3c7533dd3a36ac499eb9d"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/hidden_hellfire.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_hellfire.visual.json",
+      "package_sha256": "386032d6e0fa1263c735e0effeaf567c8d5d79b0d0cda320a874a4759ed2444f",
+      "path": "assets/data/runtime/map_editor/hidden_hellfire.visual.json",
+      "source_sha256": "afcccb5fbfa45f1e6b20a3329f5f4b27299089a83c3d5c4e0d9bbd101c2f342e"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/hidden_fallen_graveyard.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_fallen_graveyard.runtime.json",
+      "package_sha256": "7fa6aba7e18b365d2f8f94b488b54be7b8e58e5945189252c1047f21d83c3c60",
+      "path": "assets/data/runtime/map_editor/hidden_fallen_graveyard.runtime.json",
+      "source_sha256": "9d5830e4ae8155feeb6da2730cd5f4d1223993f4b47039e545504fbaf6b8fb98"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/hidden_fallen_graveyard.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_fallen_graveyard.visual.json",
+      "package_sha256": "54c59b584af9d052fbea12f4f37e690ebaf69714d50352bc5a59f4722723c76e",
+      "path": "assets/data/runtime/map_editor/hidden_fallen_graveyard.visual.json",
+      "source_sha256": "0335ee37997a22d57ed8d804c7fd73fe799496f100a18ef5c6c115989058658a"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/hidden_death_temple.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_death_temple.runtime.json",
+      "package_sha256": "a8430417fb34c60cbb43940eb256ee08dfac521b9d39de80f4039f74809e21b1",
+      "path": "assets/data/runtime/map_editor/hidden_death_temple.runtime.json",
+      "source_sha256": "19f475de725eece4025d6a3b91aed0c151b9b73b8e80966f99245d2ed34f82ca"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/hidden_death_temple.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_death_temple.visual.json",
+      "package_sha256": "8f0c211892f790ffe8593eb2884a17d4004678d3d64a7a5e67f4089fa7b52b04",
+      "path": "assets/data/runtime/map_editor/hidden_death_temple.visual.json",
+      "source_sha256": "950b16eec669acac9288d24692880b897a6cde0ff1998b8b2e526511d5d86d72"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/hidden_abyss_domain.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_abyss_domain.runtime.json",
+      "package_sha256": "c9f9f3307b2958a96d98167b7515ffad20fcef364e29d1354ec9c6ccfa2e1987",
+      "path": "assets/data/runtime/map_editor/hidden_abyss_domain.runtime.json",
+      "source_sha256": "9b65fae7e6cdf6e949c31833d34b161404c01eae064f8653c8e1c2a8d30c15cf"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/hidden_abyss_domain.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_abyss_domain.visual.json",
+      "package_sha256": "8adc16dce1fcbb2a89dc81937f6c89bcc0fc0f9313ad47c9ef8d216c3136342b",
+      "path": "assets/data/runtime/map_editor/hidden_abyss_domain.visual.json",
+      "source_sha256": "abd8a6c3a4d8b3e5fd6d948914ceb38239356a5e7859b87a01139606d3c90daf"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK runtime JSON differs from source: assets/data/runtime/map_editor/hidden_pincer_nest.runtime.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_pincer_nest.runtime.json",
+      "package_sha256": "de1b33120ada18ef77fd3dff8378c82783d31a75837c8a382cab3b84526ba08f",
+      "path": "assets/data/runtime/map_editor/hidden_pincer_nest.runtime.json",
+      "source_sha256": "1e2957e2230a4f880fa3b6cc209a794272f01cf530eabb59a65d5f6517714bc1"
+    },
+    {
+      "code": "json_sha256_mismatch",
+      "message": "APK visual JSON differs from source: assets/data/runtime/map_editor/hidden_pincer_nest.visual.json",
+      "package_path": "assets/assets/data/runtime/map_editor/hidden_pincer_nest.visual.json",
+      "package_sha256": "0bc90e8169e29c3cbf1f20d6245455ef826707db695e7f44b957fabf3a7c46b4",
+      "path": "assets/data/runtime/map_editor/hidden_pincer_nest.visual.json",
+      "source_sha256": "5daa7af2832ef282420efe93ededc8f1aab4721f403262328ac352281a675bef"
+    }
+  ],
+  "expectedCounts": {
+    "authored_chunk_refs": 445,
+    "formal_registry_entries": 67,
+    "implemented_playable_entries": 67,
+    "unique_chunk_pngs": 208
+  },
+  "ok": false,
+  "registry": {
+    "packagePath": "assets/assets/data/runtime/map_editor/map_runtime_release_registry.json",
+    "packageSHA256": "aea45233cd7dad247d1c701b7a33d673307f2cff8d8890b7e39c1a5bbe056e5b",
+    "sourcePath": "assets/data/runtime/map_editor/map_runtime_release_registry.json",
+    "sourceSHA256": "aea45233cd7dad247d1c701b7a33d673307f2cff8d8890b7e39c1a5bbe056e5b"
+  },
+  "root": "C:\\Users\\Administrator\\Documents\\HardCore",
+  "rootHEAD": "52ae0565856c2d99a28639b2bf0c6278186e0858",
+  "scope": "formal_registry_runtime_visual_ground_chunk_closure_only",
+  "scopeLimitations": [
+    "The 922-entry runtime asset/wall texture chain is not verified by this tool.",
+    "Source PNGs are not required in the APK; their .import -> .ctex closure is required.",
+    "ETC2 is not required; ordinary non-empty .ctex targets are accepted."
+  ]
+}

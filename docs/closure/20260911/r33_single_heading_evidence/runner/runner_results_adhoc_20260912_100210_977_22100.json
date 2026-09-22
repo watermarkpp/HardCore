@@ -1,0 +1,26 @@
+{
+  "passed": 1,
+  "total": 1,
+  "generated_at": "2026-09-12T10:02:10.9779505+08:00",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "space_diagnostic",
+      "test_path": "tests/r6_3_3/space_diagnostic.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0,
+  "git_head": "d2aa9e6ae2feda2723a95edbcaf9e951a475f5b8",
+  "failed": 0
+}

@@ -1,0 +1,26 @@
+﻿{
+    "git_head":  "9a742ee892e9a759bfedeaf6652dd219b6c2a657",
+    "engine_log_errors":  1,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "audio_w4_full_frame_probe_test",
+                        "test_path":  "tests/audio_w4_full_frame_probe_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  1,
+                        "engine_log_failure_count":  1,
+                        "result":  "FAIL",
+                        "reason":  "stderr_failures_1;engine_log_failures_1"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-09-09T15:18:08.8731338+08:00",
+    "total":  1,
+    "failed":  1
+}

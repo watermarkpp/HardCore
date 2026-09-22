@@ -1,0 +1,30 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] request_client_profile (res://scripts/monster_visual_streaming_coordinator.gd:126)
+       [1] begin_map_prefetch (res://scripts/monster_visual_streaming_coordinator.gd:543)
+       [2] _begin_monster_transition_prefetch (res://scripts/game_root.gd:2625)
+       [3] _run_map_transition (res://scripts/game_root.gd:2655)
+       [4] <anonymous lambda> (res://scripts/hud.gd:456)
+       [5] _emit_covered (res://scripts/loading_transition_overlay.gd:281)
+       [6] _emit_covered_after_present (res://scripts/loading_transition_overlay.gd:277)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _create_bag_cell (res://scripts/inventory_panel.gd:584)
+       [1] _initialize_bag_cells (res://scripts/inventory_panel.gd:554)
+       [2] _continue_bag_cell_initialization (res://scripts/inventory_panel.gd:567)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] set_combat_position (res://scripts/enemy.gd:2467)
+       [1] _physics_process_internal (res://scripts/enemy.gd:2147)
+       [2] _physics_process (res://scripts/enemy.gd:2050)
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _physics_process (res://scripts/player.gd:293)
+WARNING: 5 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

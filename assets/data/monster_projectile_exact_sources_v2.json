@@ -1,0 +1,918 @@
+{
+  "contract_id": "monster.projectile.exact_source.v2",
+  "profiles": {
+    "axe": {
+      "monster_ids": [
+        42,
+        50,
+        145
+      ],
+      "frame_ms": 50,
+      "frames_per_direction": 3,
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+        "sha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+        "distribution": "client.classic_raw_complete",
+        "tier": "primary",
+        "formula": "447 + Dir16 * 10 + frame",
+        "rule": "MirClient/AxeMon.pas:608-619; magiceff.pas:554-561,909-941"
+      },
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_00_0.png",
+          "direction": 0,
+          "frame": 0,
+          "source_index": 447,
+          "hot_x": 17,
+          "hot_y": -23,
+          "rgba_sha256": "7a80ea147e44fa3cb5b13fe5f202ef6bc764ea7a4132ab29548998976174323e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_00_1.png",
+          "direction": 0,
+          "frame": 1,
+          "source_index": 448,
+          "hot_x": 15,
+          "hot_y": -27,
+          "rgba_sha256": "5125695eb569d7ee504eed696d7845fd4ec9c6e133541fb462d3055c9f0f6b50"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_00_2.png",
+          "direction": 0,
+          "frame": 2,
+          "source_index": 449,
+          "hot_x": 16,
+          "hot_y": -21,
+          "rgba_sha256": "2f078d0ab1ed4a0c7b7a976c2f4429c942690d5cce9c32837bd70fce9750e8b2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_01_0.png",
+          "direction": 1,
+          "frame": 0,
+          "source_index": 457,
+          "hot_x": 15,
+          "hot_y": -25,
+          "rgba_sha256": "d1aff43f6eedcf779063d3f0ca2e8e7ef1ddcc36b6127b07d4534cf02737507d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_01_1.png",
+          "direction": 1,
+          "frame": 1,
+          "source_index": 458,
+          "hot_x": 15,
+          "hot_y": -29,
+          "rgba_sha256": "bf294d7ef06f479b1e037503eb8cf7d889e131c76c73b08e2001a5044dfff3aa"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_01_2.png",
+          "direction": 1,
+          "frame": 2,
+          "source_index": 459,
+          "hot_x": 14,
+          "hot_y": -23,
+          "rgba_sha256": "590094d53de6e331acb28bd3934545ba6f6617b8bbf3d1dbef7fe4327409043f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_02_0.png",
+          "direction": 2,
+          "frame": 0,
+          "source_index": 467,
+          "hot_x": 9,
+          "hot_y": -26,
+          "rgba_sha256": "a6db2758e98eed602c88ed8cf131d051e7e30407c0a1f2bf2a9078a3c0d0652e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_02_1.png",
+          "direction": 2,
+          "frame": 1,
+          "source_index": 468,
+          "hot_x": 13,
+          "hot_y": -30,
+          "rgba_sha256": "3370cb4e6a6740c4fa09d8942bf32a12f26f5394120fe1d699bc45913669229d"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_02_2.png",
+          "direction": 2,
+          "frame": 2,
+          "source_index": 469,
+          "hot_x": 10,
+          "hot_y": -24,
+          "rgba_sha256": "e2e3fbeaea5a66fbaf4ba8b0769af91bdb4632ab257a50c340c77b143b9ce2c1"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_03_0.png",
+          "direction": 3,
+          "frame": 0,
+          "source_index": 477,
+          "hot_x": 5,
+          "hot_y": -26,
+          "rgba_sha256": "770179974e01fb8db889d4cefa9563a1b892115a1d82738e9276d971c035c701"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_03_1.png",
+          "direction": 3,
+          "frame": 1,
+          "source_index": 478,
+          "hot_x": 10,
+          "hot_y": -31,
+          "rgba_sha256": "a2e8f1f1c61e2d4d208867cd0bded12d8dddcfa173325c869f14dc896db50455"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_03_2.png",
+          "direction": 3,
+          "frame": 2,
+          "source_index": 479,
+          "hot_x": 9,
+          "hot_y": -25,
+          "rgba_sha256": "3d42b54ae9179be1cc78d3d25e311e7c9f04057ea68b029b60cd3b706b2fe4fd"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_04_0.png",
+          "direction": 4,
+          "frame": 0,
+          "source_index": 487,
+          "hot_x": 3,
+          "hot_y": -25,
+          "rgba_sha256": "1e235447c58733933ed28e3c5dc084bdae9dda2162766d37d0c126a252af4eb0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_04_1.png",
+          "direction": 4,
+          "frame": 1,
+          "source_index": 488,
+          "hot_x": 8,
+          "hot_y": -30,
+          "rgba_sha256": "727c6c4f40902c1e75d19c99470102b1a6fb224ebdf6cde0ff852fb83c3349cf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_04_2.png",
+          "direction": 4,
+          "frame": 2,
+          "source_index": 489,
+          "hot_x": 9,
+          "hot_y": -26,
+          "rgba_sha256": "52dc0b4beb7f4e0c9904fbdee9babbb60cfe64f909e381ca5893b3b8b2e6b1f6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_05_0.png",
+          "direction": 5,
+          "frame": 0,
+          "source_index": 497,
+          "hot_x": 4,
+          "hot_y": -24,
+          "rgba_sha256": "d0171185007849cb6831aef0a26d949a1a20360b798fea37d698fbd8e625af6e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_05_1.png",
+          "direction": 5,
+          "frame": 1,
+          "source_index": 498,
+          "hot_x": 9,
+          "hot_y": -29,
+          "rgba_sha256": "826525a62779d5980c4cbc34fd026d1b4dff5521c7b62dd2c44b6ef3f8dc95a5"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_05_2.png",
+          "direction": 5,
+          "frame": 2,
+          "source_index": 499,
+          "hot_x": 9,
+          "hot_y": -27,
+          "rgba_sha256": "4660f6c075a8281178b6f8db6405f27ab15e991f647dbea4e62a5253161d047c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_06_0.png",
+          "direction": 6,
+          "frame": 0,
+          "source_index": 507,
+          "hot_x": 8,
+          "hot_y": -22,
+          "rgba_sha256": "a419bfc5ff82fdff0a4b219ac07aad0f02a70c37b01ed43da73a6f8c10d56442"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_06_1.png",
+          "direction": 6,
+          "frame": 1,
+          "source_index": 508,
+          "hot_x": 12,
+          "hot_y": -28,
+          "rgba_sha256": "76fd9d22c01b7d557245c11ae4d2b161fb1b4db3691fe8845b2c57a8c8409faf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_06_2.png",
+          "direction": 6,
+          "frame": 2,
+          "source_index": 509,
+          "hot_x": 12,
+          "hot_y": -28,
+          "rgba_sha256": "97da58d33b212ee087829874a9259f71324db43b33093d50ba55a8a4364ca5c0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_07_0.png",
+          "direction": 7,
+          "frame": 0,
+          "source_index": 517,
+          "hot_x": 14,
+          "hot_y": -22,
+          "rgba_sha256": "c8a9e471561e5e759f51575fa2459732359ee8247b53191e9561818aa8104704"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_07_1.png",
+          "direction": 7,
+          "frame": 1,
+          "source_index": 518,
+          "hot_x": 16,
+          "hot_y": -26,
+          "rgba_sha256": "bfc57e8661c0154615da14b48420f3bfa9d1894e7e6843d41f4345378750eda0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_07_2.png",
+          "direction": 7,
+          "frame": 2,
+          "source_index": 519,
+          "hot_x": 16,
+          "hot_y": -29,
+          "rgba_sha256": "b34136ae40228ba78cc497afb6e4810dc8f23bdff645dcfd950a1251dbeaa829"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_08_0.png",
+          "direction": 8,
+          "frame": 0,
+          "source_index": 527,
+          "hot_x": 21,
+          "hot_y": -21,
+          "rgba_sha256": "977a140d8489326d3db584466a9b3ff718ece31d5e4e5a21ca064d6091aa2ff0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_08_1.png",
+          "direction": 8,
+          "frame": 1,
+          "source_index": 528,
+          "hot_x": 20,
+          "hot_y": -24,
+          "rgba_sha256": "ba5008c61967069ba79b1850e48a7e2edc6e1d687ceff58cce954ab01676086c"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_08_2.png",
+          "direction": 8,
+          "frame": 2,
+          "source_index": 529,
+          "hot_x": 20,
+          "hot_y": -28,
+          "rgba_sha256": "b0636df181be8ee6873ab1c94acb7e041e54783b7aea252eda3b1146d9252154"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_09_0.png",
+          "direction": 9,
+          "frame": 0,
+          "source_index": 537,
+          "hot_x": 16,
+          "hot_y": -21,
+          "rgba_sha256": "32e5b80f334c2c8fc35eec60c219c1fe176da974d10a001fa7448c420f1769e9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_09_1.png",
+          "direction": 9,
+          "frame": 1,
+          "source_index": 538,
+          "hot_x": 14,
+          "hot_y": -25,
+          "rgba_sha256": "b280e9e90180bea4c6a1e43d9ecbda4e11ae21878b5947700a3cdb7b8aae4df6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_09_2.png",
+          "direction": 9,
+          "frame": 2,
+          "source_index": 539,
+          "hot_x": 18,
+          "hot_y": -28,
+          "rgba_sha256": "e520ef61432e07159f822663af68c3c8302494c41024355286a0b5dd11d18ce0"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_10_0.png",
+          "direction": 10,
+          "frame": 0,
+          "source_index": 547,
+          "hot_x": 12,
+          "hot_y": -21,
+          "rgba_sha256": "b579837b544cadda26646519712596b8a34dd1d09c9f918ce71e0f3e7a82fc60"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_10_1.png",
+          "direction": 10,
+          "frame": 1,
+          "source_index": 548,
+          "hot_x": 14,
+          "hot_y": -27,
+          "rgba_sha256": "8d566f889d0b5708c3a04719854de9f989764fdcc7057586dbfd0a7f67b5adf6"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_10_2.png",
+          "direction": 10,
+          "frame": 2,
+          "source_index": 549,
+          "hot_x": 14,
+          "hot_y": -27,
+          "rgba_sha256": "1b263fa2307a0350cc81de4f26788e0cbfeb0e86618a401e93f40e9f7f18a296"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_11_0.png",
+          "direction": 11,
+          "frame": 0,
+          "source_index": 557,
+          "hot_x": 7,
+          "hot_y": -22,
+          "rgba_sha256": "627261b852eb53aafdca6701df28594bed21687d146a64321f61429ec78c32ba"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_11_1.png",
+          "direction": 11,
+          "frame": 1,
+          "source_index": 558,
+          "hot_x": 14,
+          "hot_y": -28,
+          "rgba_sha256": "a77323d44e5422cf3aed712f141c8ca1eb460cb33fd1e9cf36c01e8799457a25"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_11_2.png",
+          "direction": 11,
+          "frame": 2,
+          "source_index": 559,
+          "hot_x": 8,
+          "hot_y": -26,
+          "rgba_sha256": "24f63a3ca6009a4a7d648da1e527e54784b7bbd8012060c72c2731e668d0d8cb"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_12_0.png",
+          "direction": 12,
+          "frame": 0,
+          "source_index": 567,
+          "hot_x": 6,
+          "hot_y": -24,
+          "rgba_sha256": "d83eec1ff626ea1a6d6cc223e83c6c53af920153dc540b28cb03dced4825925b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_12_1.png",
+          "direction": 12,
+          "frame": 1,
+          "source_index": 568,
+          "hot_x": 13,
+          "hot_y": -29,
+          "rgba_sha256": "aaf90dc12c100a7c888729bb8e7ad78731d5eca3b741ea5d20aa558b95af6afa"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_12_2.png",
+          "direction": 12,
+          "frame": 2,
+          "source_index": 569,
+          "hot_x": 5,
+          "hot_y": -25,
+          "rgba_sha256": "df387af5468e5d82aa8a2cf59775496e96e0c6782d7ded7c0ecec2012dcebe6f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_13_0.png",
+          "direction": 13,
+          "frame": 0,
+          "source_index": 577,
+          "hot_x": 6,
+          "hot_y": -25,
+          "rgba_sha256": "f9a878a461de47da516017a99fd448f49e2132afc7b218d3b7aa72605ef1af10"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_13_1.png",
+          "direction": 13,
+          "frame": 1,
+          "source_index": 578,
+          "hot_x": 11,
+          "hot_y": -30,
+          "rgba_sha256": "7f34d10c8d1dfe9774ddcdb3bbde5cf887c1b7c4e382d6e62ce1e9aac72509d9"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_13_2.png",
+          "direction": 13,
+          "frame": 2,
+          "source_index": 579,
+          "hot_x": 4,
+          "hot_y": -24,
+          "rgba_sha256": "e46611615c1edb64a6b49b6c6e03dbbf5322bc44ddb506676925f07ad6d51a16"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_14_0.png",
+          "direction": 14,
+          "frame": 0,
+          "source_index": 587,
+          "hot_x": 9,
+          "hot_y": -25,
+          "rgba_sha256": "b80b33f9aad1c31023c0f25d1c519c5c6df0b6b71502fe5ac21c15ce8061843e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_14_1.png",
+          "direction": 14,
+          "frame": 1,
+          "source_index": 588,
+          "hot_x": 11,
+          "hot_y": -29,
+          "rgba_sha256": "2fcdf57a4f50b0ae2bc72e2cb5dab92b750336439477682ffa690f506819949e"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_14_2.png",
+          "direction": 14,
+          "frame": 2,
+          "source_index": 589,
+          "hot_x": 5,
+          "hot_y": -23,
+          "rgba_sha256": "a769a6648f4482339f9d0660bcdf5fa58c1b0761dde8f72728195780b2840197"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_15_0.png",
+          "direction": 15,
+          "frame": 0,
+          "source_index": 597,
+          "hot_x": 13,
+          "hot_y": -24,
+          "rgba_sha256": "b6af537ced1af91267333ee15f2c1b781f1a567831abc60e17ee30cedfd59831"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_15_1.png",
+          "direction": 15,
+          "frame": 1,
+          "source_index": 598,
+          "hot_x": 12,
+          "hot_y": -29,
+          "rgba_sha256": "9f1ca672a36f87c76f0f62ee09dc9fcda980a813d2b9948725bc70420e00d8c2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/axe_15_2.png",
+          "direction": 15,
+          "frame": 2,
+          "source_index": 599,
+          "hot_x": 10,
+          "hot_y": -22,
+          "rgba_sha256": "55153b1e2e77fc5d5109bf56d481e2744ea0bcdf82cb64ea9ccd0bd439fe6484"
+        }
+      ]
+    },
+    "thorn": {
+      "monster_ids": [
+        174
+      ],
+      "frame_ms": 50,
+      "frames_per_direction": 3,
+      "source": {
+        "path": "dev_art_sources/reference/mir2_client_raw/Data/Mon3.wil",
+        "sha256": "5af297556364dfaa8fa402e0ec7e4a7a6b6fee48949bbb5be0b30e5ccf98b276",
+        "distribution": "client.classic_raw_complete",
+        "tier": "primary",
+        "formula": "2967 + Dir16 * 10 + frame",
+        "rule": "MirClient/AxeMon.pas:608-619; magiceff.pas:554-561,909-941"
+      },
+      "frames": [
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_00_0.png",
+          "direction": 0,
+          "frame": 0,
+          "source_index": 2967,
+          "hot_x": 17,
+          "hot_y": -6,
+          "rgba_sha256": "a5bb2a49e5beced676cf00bc7ba9ec99f0f162774360c4b288d5871b138ca2bf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_00_1.png",
+          "direction": 0,
+          "frame": 1,
+          "source_index": 2968,
+          "hot_x": 17,
+          "hot_y": -6,
+          "rgba_sha256": "a5bb2a49e5beced676cf00bc7ba9ec99f0f162774360c4b288d5871b138ca2bf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_00_2.png",
+          "direction": 0,
+          "frame": 2,
+          "source_index": 2969,
+          "hot_x": 17,
+          "hot_y": -6,
+          "rgba_sha256": "a5bb2a49e5beced676cf00bc7ba9ec99f0f162774360c4b288d5871b138ca2bf"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_01_0.png",
+          "direction": 1,
+          "frame": 0,
+          "source_index": 2977,
+          "hot_x": 16,
+          "hot_y": -4,
+          "rgba_sha256": "31c57dc107f2d8640fc516f1bcb50bdf707d33987266cc770c7c14b384b18139"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_01_1.png",
+          "direction": 1,
+          "frame": 1,
+          "source_index": 2978,
+          "hot_x": 16,
+          "hot_y": -4,
+          "rgba_sha256": "31c57dc107f2d8640fc516f1bcb50bdf707d33987266cc770c7c14b384b18139"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_01_2.png",
+          "direction": 1,
+          "frame": 2,
+          "source_index": 2979,
+          "hot_x": 16,
+          "hot_y": -4,
+          "rgba_sha256": "31c57dc107f2d8640fc516f1bcb50bdf707d33987266cc770c7c14b384b18139"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_02_0.png",
+          "direction": 2,
+          "frame": 0,
+          "source_index": 2987,
+          "hot_x": 17,
+          "hot_y": -1,
+          "rgba_sha256": "33ceb7dbb9a4b5eb00be9d2b95d1aa5501b2a7442d7e08d71718ee6925c67ac8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_02_1.png",
+          "direction": 2,
+          "frame": 1,
+          "source_index": 2988,
+          "hot_x": 17,
+          "hot_y": -1,
+          "rgba_sha256": "33ceb7dbb9a4b5eb00be9d2b95d1aa5501b2a7442d7e08d71718ee6925c67ac8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_02_2.png",
+          "direction": 2,
+          "frame": 2,
+          "source_index": 2989,
+          "hot_x": 17,
+          "hot_y": -1,
+          "rgba_sha256": "33ceb7dbb9a4b5eb00be9d2b95d1aa5501b2a7442d7e08d71718ee6925c67ac8"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_03_0.png",
+          "direction": 3,
+          "frame": 0,
+          "source_index": 2997,
+          "hot_x": 14,
+          "hot_y": 0,
+          "rgba_sha256": "c4759024a57e058c978217d66d8d8129c72f401145bce71d425847530c56200f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_03_1.png",
+          "direction": 3,
+          "frame": 1,
+          "source_index": 2998,
+          "hot_x": 14,
+          "hot_y": 0,
+          "rgba_sha256": "c4759024a57e058c978217d66d8d8129c72f401145bce71d425847530c56200f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_03_2.png",
+          "direction": 3,
+          "frame": 2,
+          "source_index": 2999,
+          "hot_x": 14,
+          "hot_y": 0,
+          "rgba_sha256": "c4759024a57e058c978217d66d8d8129c72f401145bce71d425847530c56200f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_04_0.png",
+          "direction": 4,
+          "frame": 0,
+          "source_index": 3007,
+          "hot_x": 10,
+          "hot_y": 4,
+          "rgba_sha256": "3a9e20f6b9a3c1bacbb36152d96cad4617dfde78ac44fe4fc5068319d84e3329"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_04_1.png",
+          "direction": 4,
+          "frame": 1,
+          "source_index": 3008,
+          "hot_x": 10,
+          "hot_y": 4,
+          "rgba_sha256": "3a9e20f6b9a3c1bacbb36152d96cad4617dfde78ac44fe4fc5068319d84e3329"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_04_2.png",
+          "direction": 4,
+          "frame": 2,
+          "source_index": 3009,
+          "hot_x": 10,
+          "hot_y": 4,
+          "rgba_sha256": "3a9e20f6b9a3c1bacbb36152d96cad4617dfde78ac44fe4fc5068319d84e3329"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_05_0.png",
+          "direction": 5,
+          "frame": 0,
+          "source_index": 3017,
+          "hot_x": 12,
+          "hot_y": 7,
+          "rgba_sha256": "470acb8c6d00aac8ed544c85622de80f73e19a625e7774050d676adf484c7f01"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_05_1.png",
+          "direction": 5,
+          "frame": 1,
+          "source_index": 3018,
+          "hot_x": 12,
+          "hot_y": 7,
+          "rgba_sha256": "470acb8c6d00aac8ed544c85622de80f73e19a625e7774050d676adf484c7f01"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_05_2.png",
+          "direction": 5,
+          "frame": 2,
+          "source_index": 3019,
+          "hot_x": 12,
+          "hot_y": 7,
+          "rgba_sha256": "470acb8c6d00aac8ed544c85622de80f73e19a625e7774050d676adf484c7f01"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_06_0.png",
+          "direction": 6,
+          "frame": 0,
+          "source_index": 3027,
+          "hot_x": 11,
+          "hot_y": 9,
+          "rgba_sha256": "631ec11c0b22180045e4ec922f63583bc3a2cfcc8984439b07302bec01af9697"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_06_1.png",
+          "direction": 6,
+          "frame": 1,
+          "source_index": 3028,
+          "hot_x": 11,
+          "hot_y": 9,
+          "rgba_sha256": "631ec11c0b22180045e4ec922f63583bc3a2cfcc8984439b07302bec01af9697"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_06_2.png",
+          "direction": 6,
+          "frame": 2,
+          "source_index": 3029,
+          "hot_x": 11,
+          "hot_y": 9,
+          "rgba_sha256": "631ec11c0b22180045e4ec922f63583bc3a2cfcc8984439b07302bec01af9697"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_07_0.png",
+          "direction": 7,
+          "frame": 0,
+          "source_index": 3037,
+          "hot_x": 14,
+          "hot_y": 12,
+          "rgba_sha256": "4fca6f42517637079912c7779b010d13ce9af46282e7a5a5a4e91e60435942c3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_07_1.png",
+          "direction": 7,
+          "frame": 1,
+          "source_index": 3038,
+          "hot_x": 14,
+          "hot_y": 12,
+          "rgba_sha256": "4fca6f42517637079912c7779b010d13ce9af46282e7a5a5a4e91e60435942c3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_07_2.png",
+          "direction": 7,
+          "frame": 2,
+          "source_index": 3039,
+          "hot_x": 14,
+          "hot_y": 12,
+          "rgba_sha256": "4fca6f42517637079912c7779b010d13ce9af46282e7a5a5a4e91e60435942c3"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_08_0.png",
+          "direction": 8,
+          "frame": 0,
+          "source_index": 3047,
+          "hot_x": 16,
+          "hot_y": 9,
+          "rgba_sha256": "1032ca9f550afbb3abb4a4624ac4a447584369bf178abbe29a96730855828432"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_08_1.png",
+          "direction": 8,
+          "frame": 1,
+          "source_index": 3048,
+          "hot_x": 16,
+          "hot_y": 9,
+          "rgba_sha256": "1032ca9f550afbb3abb4a4624ac4a447584369bf178abbe29a96730855828432"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_08_2.png",
+          "direction": 8,
+          "frame": 2,
+          "source_index": 3049,
+          "hot_x": 16,
+          "hot_y": 9,
+          "rgba_sha256": "1032ca9f550afbb3abb4a4624ac4a447584369bf178abbe29a96730855828432"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_09_0.png",
+          "direction": 9,
+          "frame": 0,
+          "source_index": 3057,
+          "hot_x": 14,
+          "hot_y": 4,
+          "rgba_sha256": "de50349cfbd0bbe8cf1b79c3f760750889838591ed16b3f5b3af59f462b02800"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_09_1.png",
+          "direction": 9,
+          "frame": 1,
+          "source_index": 3058,
+          "hot_x": 14,
+          "hot_y": 4,
+          "rgba_sha256": "de50349cfbd0bbe8cf1b79c3f760750889838591ed16b3f5b3af59f462b02800"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_09_2.png",
+          "direction": 9,
+          "frame": 2,
+          "source_index": 3059,
+          "hot_x": 14,
+          "hot_y": 4,
+          "rgba_sha256": "de50349cfbd0bbe8cf1b79c3f760750889838591ed16b3f5b3af59f462b02800"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_10_0.png",
+          "direction": 10,
+          "frame": 0,
+          "source_index": 3067,
+          "hot_x": 8,
+          "hot_y": 2,
+          "rgba_sha256": "94ba77a1304af36713d6ec0c3e2d3756113febbaa4606e16fa68cba44875e07b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_10_1.png",
+          "direction": 10,
+          "frame": 1,
+          "source_index": 3068,
+          "hot_x": 8,
+          "hot_y": 2,
+          "rgba_sha256": "94ba77a1304af36713d6ec0c3e2d3756113febbaa4606e16fa68cba44875e07b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_10_2.png",
+          "direction": 10,
+          "frame": 2,
+          "source_index": 3069,
+          "hot_x": 8,
+          "hot_y": 2,
+          "rgba_sha256": "94ba77a1304af36713d6ec0c3e2d3756113febbaa4606e16fa68cba44875e07b"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_11_0.png",
+          "direction": 11,
+          "frame": 0,
+          "source_index": 3077,
+          "hot_x": 4,
+          "hot_y": 5,
+          "rgba_sha256": "0bafa1c74c2ec85ef932de435fac88cba11b040f3a98d431bd5491e908d2ce3f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_11_1.png",
+          "direction": 11,
+          "frame": 1,
+          "source_index": 3078,
+          "hot_x": 4,
+          "hot_y": 5,
+          "rgba_sha256": "0bafa1c74c2ec85ef932de435fac88cba11b040f3a98d431bd5491e908d2ce3f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_11_2.png",
+          "direction": 11,
+          "frame": 2,
+          "source_index": 3079,
+          "hot_x": 4,
+          "hot_y": 5,
+          "rgba_sha256": "0bafa1c74c2ec85ef932de435fac88cba11b040f3a98d431bd5491e908d2ce3f"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_12_0.png",
+          "direction": 12,
+          "frame": 0,
+          "source_index": 3087,
+          "hot_x": 5,
+          "hot_y": 7,
+          "rgba_sha256": "66082a616cae5af05412c53225c108c4da0c254c3fe384b6f7a188715441e721"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_12_1.png",
+          "direction": 12,
+          "frame": 1,
+          "source_index": 3088,
+          "hot_x": 5,
+          "hot_y": 7,
+          "rgba_sha256": "66082a616cae5af05412c53225c108c4da0c254c3fe384b6f7a188715441e721"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_12_2.png",
+          "direction": 12,
+          "frame": 2,
+          "source_index": 3089,
+          "hot_x": 5,
+          "hot_y": 7,
+          "rgba_sha256": "66082a616cae5af05412c53225c108c4da0c254c3fe384b6f7a188715441e721"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_13_0.png",
+          "direction": 13,
+          "frame": 0,
+          "source_index": 3097,
+          "hot_x": 6,
+          "hot_y": 3,
+          "rgba_sha256": "85f5f265d5e896b641382cfe9625aaacfabf4f56178ebb4cf5d1472585ed1b29"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_13_1.png",
+          "direction": 13,
+          "frame": 1,
+          "source_index": 3098,
+          "hot_x": 6,
+          "hot_y": 3,
+          "rgba_sha256": "85f5f265d5e896b641382cfe9625aaacfabf4f56178ebb4cf5d1472585ed1b29"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_13_2.png",
+          "direction": 13,
+          "frame": 2,
+          "source_index": 3099,
+          "hot_x": 6,
+          "hot_y": 3,
+          "rgba_sha256": "85f5f265d5e896b641382cfe9625aaacfabf4f56178ebb4cf5d1472585ed1b29"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_14_0.png",
+          "direction": 14,
+          "frame": 0,
+          "source_index": 3107,
+          "hot_x": 10,
+          "hot_y": 1,
+          "rgba_sha256": "c1a08bbde9cf04c266a672e34b45c06ccff6a71e6087ab53e3b846ddce0f0f25"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_14_1.png",
+          "direction": 14,
+          "frame": 1,
+          "source_index": 3108,
+          "hot_x": 10,
+          "hot_y": 1,
+          "rgba_sha256": "c1a08bbde9cf04c266a672e34b45c06ccff6a71e6087ab53e3b846ddce0f0f25"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_14_2.png",
+          "direction": 14,
+          "frame": 2,
+          "source_index": 3109,
+          "hot_x": 10,
+          "hot_y": 1,
+          "rgba_sha256": "c1a08bbde9cf04c266a672e34b45c06ccff6a71e6087ab53e3b846ddce0f0f25"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_15_0.png",
+          "direction": 15,
+          "frame": 0,
+          "source_index": 3117,
+          "hot_x": 14,
+          "hot_y": -3,
+          "rgba_sha256": "bf4bb641943914b52e195df557aca585bf5328a013bb4b0a7306872ba32d21e2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_15_1.png",
+          "direction": 15,
+          "frame": 1,
+          "source_index": 3118,
+          "hot_x": 14,
+          "hot_y": -3,
+          "rgba_sha256": "bf4bb641943914b52e195df557aca585bf5328a013bb4b0a7306872ba32d21e2"
+        },
+        {
+          "path": "res://assets/art/monsters/effects/projectile_primary_v2/thorn_15_2.png",
+          "direction": 15,
+          "frame": 2,
+          "source_index": 3119,
+          "hot_x": 14,
+          "hot_y": -3,
+          "rgba_sha256": "bf4bb641943914b52e195df557aca585bf5328a013bb4b0a7306872ba32d21e2"
+        }
+      ]
+    }
+  },
+  "body_only_monster_ids": [
+    62
+  ],
+  "body_only_evidence": "ID62 canonical race_img=19 -> PlayScn.pas:2174 TCatMon; no flying-effect dispatch. Retain formal attack body; do not invent an arrow.",
+  "preserved_arrow_monster_ids": [
+    150,
+    151,
+    152,
+    186,
+    194,
+    206,
+    207
+  ]
+}

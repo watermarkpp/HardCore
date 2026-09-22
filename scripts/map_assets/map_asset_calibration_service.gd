@@ -2,11 +2,17 @@ class_name MapAssetCalibrationService
 extends RefCounted
 
 const OVERRIDE_PATH := "res://assets/data/expansions/personal_expansion_001/map_asset_overrides.json"
+static var _load_overrides_call_count := 0
 
 
 static func effective_asset(base_asset: Dictionary, override_path := OVERRIDE_PATH) -> Dictionary:
+	var payload := load_overrides(override_path)
+	var overrides: Dictionary = payload.get("overrides", {})
+	return effective_asset_from_overrides(base_asset, overrides)
+
+
+static func effective_asset_from_overrides(base_asset: Dictionary, overrides: Dictionary) -> Dictionary:
 	var asset := base_asset.duplicate(true)
-	var overrides: Dictionary = load_overrides(override_path).get("overrides", {})
 	var change: Dictionary = overrides.get(str(asset.get("asset_id", "")), {})
 	for key: Variant in change:
 		asset[key] = change[key]
@@ -14,6 +20,7 @@ static func effective_asset(base_asset: Dictionary, override_path := OVERRIDE_PA
 
 
 static func load_overrides(path := OVERRIDE_PATH) -> Dictionary:
+	_load_overrides_call_count += 1
 	if not FileAccess.file_exists(path):
 		return {"asset_schema_version": 2, "content_layer": "personal_expansion", "overrides": {}}
 	var file := FileAccess.open(path, FileAccess.READ)
@@ -21,6 +28,14 @@ static func load_overrides(path := OVERRIDE_PATH) -> Dictionary:
 		return {"asset_schema_version": 2, "content_layer": "personal_expansion", "overrides": {}}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	return parsed if parsed is Dictionary else {"asset_schema_version": 2, "content_layer": "personal_expansion", "overrides": {}}
+
+
+static func reset_load_overrides_call_count() -> void:
+	_load_overrides_call_count = 0
+
+
+static func load_overrides_call_count() -> int:
+	return _load_overrides_call_count
 
 
 static func validate_draft(base_asset: Dictionary, draft: Dictionary) -> Array[String]:

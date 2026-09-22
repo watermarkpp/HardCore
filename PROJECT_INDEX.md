@@ -7,7 +7,13 @@ Purpose: subsystem/path navigation for model handoff. Read it after current stat
 
 Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`
 
+2026-09-05 审计升级导航：`docs/AUDIT_UPGRADE_20260905.md` 为完整施工及限制记录，`docs/audits/20260905/MILESTONE_APK.md` 为固定 `52ae0565` 构建与待设备安装交付，`docs/audits/20260905/evidence/` 为已入库验收证据。当前状态优先读取 `PROJECT_CURRENT_STATUS.md` 顶部的新日期章节，不把以下历史导航 SHA 当作当前 HEAD。
+
 ## Required Context Order
+
+2026-09-14 v81导航：`docs/loot_ui_20260914/DELIVERY.md`为APK与验收，`IMPLEMENTATION.md`为最终最长行居中规则、已批准设置、Buff与地面名称生产链，`evidence/`保留31场景索引、固定源码4项复验及包内对比。源码锚点`4f4462ad027714acf657c7a2ac28fa4f15a6e293`；设备与既存性能债务单列。
+
+2026-09-06 玩法与音频升级记录：`docs/UPGRADE_20260906.md`；精确音频来源与接线：`docs/audio/20260906/AUDIO_HANDOFF.md`、`SFX_CALLPOINTS.md`；战士范围合同：`docs/combat/warrior_melee_overrides_20260906.md`。安装包与最终验收状态以升级记录为准，不以施工期 PASS 代替最终交付。
 
 1. `PROJECT_CURRENT_STATUS.md` — 当前阶段、已关闭 Gate、HOLD 与下一正式 Gate。
 2. `PROJECT_HISTORY_CONTEXT.md` — 历史整改、已裁决方案、被否决路线与 Accepted Debt。
@@ -19,8 +25,8 @@ Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd79
 ## Quick Start
 
 - 项目路径：`C:\Users\Administrator\Documents\HardCore`（Godot 4.7 项目）
-- Godot 项目入口：`res://scenes/main.tscn`（主场景 = game_root）
-- 测试 Runner：`tools\run_godot_tests.ps1`（headless，每测试 timeout=30s，禁止 1800）
+- Godot 启动入口：`res://scenes/startup_loading.tscn` → `scenes/character_select.tscn`；进入游戏后加载 `scenes/main.tscn`（game_root）。
+- 测试 Runner：`tools\run_godot_tests.ps1`（headless，普通测试显式传 `-TimeoutSeconds 30`；不要把 runner 默认值当成 30 秒）
 - 测试注册检查：`tools\tests\test_suite_registration.ps1`
 - Python：`C:\Windows\py.exe -3.12`（禁止裸 `python`/`python3`）
 

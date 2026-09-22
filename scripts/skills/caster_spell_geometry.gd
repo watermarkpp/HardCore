@@ -193,12 +193,18 @@ static func create_exact_cell_union_release_snapshot(
 	effective_geometry_cells: Array[Vector2i],
 	coordinate_context := {}
 ) -> Dictionary:
+	# Repulsion retains its eight one-GU cells, translated together to the
+	# release-frame footpoint instead of snapping the ring centre to the grid.
+	var cell_origin_offset_gu := Vector2.ZERO
+	if skill_id == "wizard.repulsion_ring":
+		cell_origin_offset_gu = origin_ground_gu - Vector2(roundi(origin_ground_gu.x), roundi(origin_ground_gu.y))
 	return SkillFootprintSnapshotScript.create_cell_union(
 		skill_id,
 		release_id,
 		origin_ground_gu,
 		effective_geometry_cells,
-		coordinate_context
+		coordinate_context,
+		cell_origin_offset_gu
 	)
 
 

@@ -3,16 +3,13 @@ extends Node
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const EnemyActorScript := preload("res://scripts/enemy.gd")
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
+const DETAIL_SOURCE_PATH := "res://assets/data/monster_21cq_detail_source_v1.json"
 
 const WOOma_EXPECTED := {
 	64: "ordinary",
-	65: "ordinary",
 	66: "ordinary",
-	67: "ordinary",
 	68: "ordinary",
-	69: "ordinary",
 	70: "ordinary",
-	71: "ordinary",
 	73: "elite",
 	74: "elite",
 	75: "elite",
@@ -20,6 +17,14 @@ const WOOma_EXPECTED := {
 	77: "special",
 	78: "version_difference",
 	239: "boss",
+}
+# Retired Wooma variants must not appear in the P3C active canonical catalog.
+const WOOma_RETIRED := [65, 67, 69, 71]
+const EXPLICIT_NON_AUTHORABLE := {
+	59: "quarantine",
+	78: "quarantine",
+	157: "internal_subtype",
+	161: "quarantine",
 }
 
 
@@ -30,6 +35,8 @@ func _ready() -> void:
 func _run() -> void:
 	MonsterIdentityScript.reset_caches_for_test()
 	var catalog := _load_json(CATALOG_PATH)
+	var detail_source := _load_json(DETAIL_SOURCE_PATH)
+	var detail_by_id := _index_by_id(detail_source.get("records", []))
 	var entries: Array = catalog.get("entries", [])
 	var entries_by_id: Dictionary = catalog.get("entries_by_id", {})
 	var appearance_profiles: Dictionary = catalog.get("appearance_profiles", {})
@@ -38,8 +45,8 @@ func _run() -> void:
 		var source_evidence: Dictionary = catalog.get("sources", {}).get(source_path, {})
 		var expected_hash_mode := "lf_text" if source_path.to_lower().ends_with(".json") else "raw_bytes"
 		assert(source_evidence.get("hash_normalization", "") == expected_hash_mode, "source hash normalization mismatch for %s" % source_path)
-	assert(entries.size() == 217, "canonical catalog must contain 217 stable identities")
-	assert(entries_by_id.size() == 217, "entries_by_id must close all 217 identities")
+	assert(entries.size() == 156, "canonical catalog must contain 156 stable identities")
+	assert(entries_by_id.size() == 156, "entries_by_id must close all 156 identities")
 	var seen_ids: Dictionary = {}
 	for value: Variant in entries:
 		assert(value is Dictionary, "catalog entries must be dictionaries")
@@ -49,10 +56,33 @@ func _run() -> void:
 		assert(monster_id >= 0 and not seen_ids.has(key), "duplicate/invalid monster_id=%s" % key)
 		seen_ids[key] = true
 		assert(entries_by_id.get(key, {}) == entry, "entries_by_id closure failed for monster_id=%d" % monster_id)
+		var placement: Dictionary = entry.get("editor_placement", {})
+		var disposition := str(entry.get("disposition", ""))
+		if EXPLICIT_NON_AUTHORABLE.has(monster_id):
+			assert(disposition == str(EXPLICIT_NON_AUTHORABLE[monster_id]), "monster_id=%d disposition drifted" % monster_id)
+			assert(not bool(placement.get("allowed", true)), "monster_id=%d explicit disposition must be non-authorable" % monster_id)
+			assert(str(placement.get("disposition", "")) == disposition, "monster_id=%d placement disposition mismatch" % monster_id)
+			assert(entry.get("disposition_evidence", {}) is Dictionary and not entry.get("disposition_evidence", {}).is_empty(), "monster_id=%d disposition evidence missing" % monster_id)
+			assert(bool(entry.get("runtime_allowed", false)), "monster_id=%d explicit disposition must retain runtime" % monster_id)
+		else:
+			assert(disposition.is_empty(), "unexpected monster disposition for monster_id=%d" % monster_id)
+			assert(bool(placement.get("allowed", false)), "historical placement policy unexpectedly re-closed monster_id=%d" % monster_id)
 		var runtime_projection: Dictionary = entry.get("combat", {}).get("runtime_projection", {})
-		assert(runtime_projection.get("agility") == 15 and runtime_projection.get("anti_poison") == 0, "monster_id=%d runtime projection defaults changed" % monster_id)
-		for projection_field: String in ["agility", "anti_poison"]:
-			assert(str(runtime_projection.get("source_evidence", {}).get(projection_field, {}).get("tier", "")) == "project_rule", "monster_id=%d projection evidence missing for %s" % [monster_id, projection_field])
+		var detail: Dictionary = detail_by_id.get(monster_id, {})
+		assert(not detail.is_empty(), "monster_id=%d missing 21CQ detail source row" % monster_id)
+		var stats: Dictionary = entry.get("combat", {}).get("stats", {})
+		for field: String in ["level", "exp", "hp", "defense", "magic_defense", "attack_min", "attack_max"]:
+			assert(int(stats.get(field, -1)) == int(detail.get(field, -2)), "monster_id=%d 21CQ core mismatch for %s" % [monster_id, field])
+		for field: String in ["agility", "accuracy"]:
+			assert(int(runtime_projection.get(field, -1)) == int(detail.get(field, -2)), "monster_id=%d 21CQ projection mismatch for %s" % [monster_id, field])
+		assert(str(runtime_projection.get("life_type", "")) == str(detail.get("life_type", "")), "monster_id=%d 21CQ life_type mismatch" % monster_id)
+		for field: String in ["undead", "anti_stealth"]:
+			assert(bool(runtime_projection.get(field, false)) == bool(detail.get(field, false)), "monster_id=%d 21CQ projection mismatch for %s" % [monster_id, field])
+		for projection_field: String in ["agility", "accuracy", "life_type", "undead", "anti_stealth"]:
+			var detail_evidence: Dictionary = runtime_projection.get("source_evidence", {}).get(projection_field, {})
+			assert(str(detail_evidence.get("authority", "")) == "user_authoritative_override", "monster_id=%d projection evidence missing user authority for %s" % [monster_id, projection_field])
+			assert(str(detail_evidence.get("field", "")) == projection_field, "monster_id=%d projection evidence field mismatch for %s" % [monster_id, projection_field])
+		assert(str(runtime_projection.get("source_evidence", {}).get("anti_poison", {}).get("tier", "")) == "project_rule", "monster_id=%d projection evidence missing for anti_poison" % monster_id)
 		for required: String in [
 			"canonical_name",
 			"classification",
@@ -80,12 +110,27 @@ func _run() -> void:
 		var drop_id := str(entry.get("drop_profile_id", ""))
 		var drop: Dictionary = drop_profiles.get(drop_id, {})
 		assert(not drop.is_empty(), "monster_id=%d missing drop profile closure" % monster_id)
-		var drop_count := int(drop.get("entry_count", drop.get("entries", []).size()))
-		var hostile := str(entry.get("classification", "")) in ["ordinary", "elite", "boss", "special"]
-		if hostile and bool(entry.get("runtime_allowed", false)):
-			assert(drop_count > 0, "hostile runtime monster_id=%d has no drop rows" % monster_id)
-		if hostile and bool(entry.get("editor_placement", {}).get("allowed", false)):
-			assert(drop_count > 0, "hostile editor placement monster_id=%d has no drop rows" % monster_id)
+		# Runtime drop requirement uses canonical drop_policy, not a guessed
+		# hostile classification. If the policy requires a non-empty table and
+		# no exemption applies, a runtime_allowed entry must have a resolved
+		# reward closure (item or gold).
+		var drop_policy: Dictionary = entry.get("drop_policy", {})
+		var requires_non_empty := bool(drop_policy.get("hostile_requires_non_empty", false))
+		var exemption_value: Variant = drop_policy.get("exemption", null)
+		var exemption_valid := (
+			exemption_value is Dictionary
+			and bool(exemption_value.get("allowed", false))
+			and not str(exemption_value.get("reason", "")).is_empty()
+		)
+		if (
+			requires_non_empty
+			and not exemption_valid
+			and bool(entry.get("runtime_allowed", false))
+		):
+			var closure := GameData.canonical_monster_runtime_drop_closure(monster_id)
+			assert(int(closure.get("resolved_reward_count", -1)) > 0, "monster_id=%d requires resolved reward closure (item or gold)" % monster_id)
+		# P3C: editor placement is decoupled from drop closure; only explicit
+		# quarantine/internal-subtype dispositions are non-authorable.
 		var profile_id := str(entry.get("appearance_profile_id", ""))
 		var appearance: Dictionary = appearance_profiles.get(profile_id, {})
 		assert(not appearance.is_empty(), "monster_id=%d missing appearance profile closure" % monster_id)
@@ -99,34 +144,54 @@ func _run() -> void:
 	for drop_profile_id: String in drop_profiles:
 		var profile: Dictionary = drop_profiles.get(drop_profile_id, {})
 		var drop_monster_id := int(drop_profile_id.trim_prefix("drop."))
-		if drop_monster_id not in [68, 69]:
+		if drop_monster_id != 68:
 			continue
 		for row: Variant in profile.get("entries", []):
 			var item := str(row.get("item", "")) if row is Dictionary else ""
 			assert(item != "LongBow" and item != "SilverBow", "runtime drop profile %s contains audited private item token %s" % [drop_profile_id, item])
 
+	for monster_id: int in WOOma_RETIRED:
+		assert(not entries_by_id.has(str(monster_id)), "retired Wooma %d must not appear in canonical active catalog" % monster_id)
 	for monster_id: int in WOOma_EXPECTED:
 		var wooma: Dictionary = entries_by_id.get(str(monster_id), {})
 		assert(str(wooma.get("classification", "")) == WOOma_EXPECTED[monster_id], "Wooma matrix classification mismatch for %d" % monster_id)
+		if monster_id in [77, 78, 239]:
+			# P3C: all 156 active animations are formal and these are runtime-allowed.
+			assert(bool(wooma.get("runtime_allowed", false)), "Wooma %d must be runtime allowed" % monster_id)
+			var wooma_appearance: Dictionary = appearance_profiles.get(str(wooma.get("appearance_profile_id", "")), {})
+			assert(str(wooma_appearance.get("status", "")) == "formal", "Wooma %d appearance must be formal" % monster_id)
 		if monster_id == 78:
-			assert(str(wooma.get("status", "")) == "version_difference" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 78 must remain version_difference and unplaceable")
-		if monster_id == 77:
-			assert(str(wooma.get("editor_placement", {}).get("placement_kind", "")) == "monster_spawn" and not bool(wooma.get("editor_placement", {}).get("allowed", false)), "Wooma 77 must keep ordinary spawn semantics but remain unresolved")
-		if monster_id in [68, 69]:
-			var stats: Dictionary = wooma.get("combat", {}).get("stats", {})
-			assert(stats.get("level") == 30 and stats.get("hp") == 285 and stats.get("defense") == 3 and stats.get("magic_defense") == 2 and stats.get("attack_min") == 16 and stats.get("attack_max") == 28 and stats.get("exp") == 310, "Wooma %d aux1 full combat row mismatch" % monster_id)
+			assert(str(wooma.get("disposition", "")) == "quarantine", "Wooma 78 disposition must be quarantine")
+			assert(not bool(wooma.get("editor_placement", {}).get("allowed", true)), "Wooma 78 must stay out of the formal editor pool")
+		if monster_id == 68:
+			var wooma_stats: Dictionary = wooma.get("combat", {}).get("stats", {})
+			assert(wooma_stats.get("level") == 30 and wooma_stats.get("hp") == 285 and wooma_stats.get("defense") == 3 and wooma_stats.get("magic_defense") == 2 and wooma_stats.get("attack_min") == 15 and wooma_stats.get("attack_max") == 29 and wooma_stats.get("exp") == 280, "Wooma %d 21CQ full combat row mismatch" % monster_id)
 			var drop: Dictionary = drop_profiles.get(str(wooma.get("drop_profile_id", "")), {})
 			assert(int(drop.get("entry_count", -1)) > 0, "Wooma %d must carry an audited Excel drop table" % monster_id)
 			assert(drop.get("status", "") == "exact_slots", "Wooma %d drop status must be exact_slots (Excel authority)" % monster_id)
 		if monster_id == 239:
 			assert(int(wooma.get("monster_id", -1)) != int(entries_by_id.get("76", {}).get("monster_id", -1)), "Wooma 239 identity collapsed into 76")
 
+	var special_authority: Dictionary = catalog.get("special_normal_spawn_authority", {})
+	assert(special_authority.keys().size() == 7, "special-normal catalog authority shape drifted")
+	var special_probability: Dictionary = special_authority.get("drop_probability", {})
+	assert(str(special_probability.get("authority", "")) == "external_direct_baseline")
+	assert(str(special_probability.get("identity_key", "")) == "canonical_monster_id")
+	assert(str(special_probability.get("resolution", "")) == "direct_baseline_by_canonical_monster_id")
+	assert(not bool(special_probability.get("production_rng_input", true)))
+	for special_id: int in [39, 57, 74, 77, 90, 121, 137, 142]:
+		var special_entry: Dictionary = entries_by_id.get(str(special_id), {})
+		var spawn_authority: Dictionary = special_entry.get("spawn_authority", {})
+		for forbidden: String in ["drop_binding", "drop_role", "role_factor", "item_tier_resolution", "item_tier_sha", "monster_role_sha", "global_scale_sha"]:
+			assert(not spawn_authority.has(forbidden), "special-normal spawn authority leaked %s" % forbidden)
+		assert(spawn_authority.keys().size() == 10, "special-normal spawn authority shape drifted for %d" % special_id)
+
 	# Excel drop authority anchors.
 	for anchor: Array in [[76, 33], [239, 54], [240, 54]]:
 		var anchor_id: int = anchor[0]
 		var anchor_entry: Dictionary = entries_by_id.get(str(anchor_id), {})
 		var anchor_drop: Dictionary = drop_profiles.get(str(anchor_entry.get("drop_profile_id", "")), {})
-		assert(int(anchor_drop.get("entry_count", -1)) == anchor[1], "Excel drop anchor %d slot count mismatch" % anchor_id)
+		assert(_base_drop_row_count(anchor_drop) == anchor[1], "Excel base drop anchor %d slot count mismatch" % anchor_id)
 	var snowman: Dictionary = entries_by_id.get("33", {})
 	assert(drop_profiles.get(str(snowman.get("drop_profile_id", "")), {}).get("status", "") == "no_drop_confirmed", "Snowman must be no_drop_confirmed")
 
@@ -146,7 +211,8 @@ func _run() -> void:
 	var ordinary_enemy := EnemyActorScript.new()
 	ordinary_enemy.setup({"monster_id": 64, "name": "wrong", "agility": 999, "antiPoison": 999}, null, true)
 	assert(not ordinary_enemy.is_boss, "caller boss flag must not upgrade an ordinary canonical monster")
-	assert(ordinary_enemy.agility == 15 and ordinary_enemy.anti_poison == 0, "legacy combat payload fields must not override canonical safe defaults")
+	var id64_detail: Dictionary = detail_by_id.get(64, {})
+	assert(ordinary_enemy.agility == int(id64_detail.get("agility", -1)) and ordinary_enemy.accuracy == int(id64_detail.get("accuracy", -1)) and ordinary_enemy.anti_poison == 0, "legacy combat payload fields must not override canonical detail projection")
 	assert(not ordinary_enemy.monster_data.has("agility") and not ordinary_enemy.monster_data.has("name"), "legacy caller fields must not leak into EnemyActor payload")
 	var boss_enemy := EnemyActorScript.new()
 	boss_enemy.setup({"monster_id": 76, "name": "wrong"}, null, false)
@@ -160,7 +226,7 @@ func _run() -> void:
 	for forbidden: String in ["baseName", "trim_suffix", "legacyNameToMonsterId", "legacyAliases", "PresentationAssets", "data.get(\"agility\"", "data.get(\"antiPoison\""]:
 		assert(not identity_source.contains(forbidden) and not visual_source.contains(forbidden) and not enemy_source.contains(forbidden), "production monster path contains forbidden fallback token %s" % forbidden)
 	assert(enemy_source.contains("is_boss = classification == \"boss\""), "EnemyActor must derive boss identity from canonical classification")
-	print("CANONICAL_MONSTER_CATALOG_TEST_PASS: identities=217 wooma_matrix=15 id_only=1 drop_closure=1 excel_authority=1")
+	print("CANONICAL_MONSTER_CATALOG_TEST_PASS: identities=156 wooma_matrix=11 id_only=1 drop_closure=1 excel_authority=1")
 	get_tree().quit(0)
 
 
@@ -182,12 +248,35 @@ func _assert_clean_value(value: Variant, monster_id: int) -> void:
 			_assert_clean_value(child, monster_id)
 
 
+func _base_drop_row_count(profile: Dictionary) -> int:
+	var count := 0
+	for raw_row: Variant in profile.get(
+		"entries", []
+	):
+		if (
+			raw_row is Dictionary
+			and not raw_row.has(
+				"authoring_entry_key"
+			)
+		):
+			count += 1
+	return count
+
+
 func _load_json(path: String) -> Dictionary:
 	assert(FileAccess.file_exists(path), "missing JSON: %s" % path)
 	var file := FileAccess.open(path, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	assert(parsed is Dictionary, "invalid JSON: %s" % path)
 	return parsed
+
+func _index_by_id(records: Array) -> Dictionary:
+	var result := {}
+	for raw: Variant in records:
+		if raw is Dictionary:
+			var record: Dictionary = raw
+			result[int(record.get("monster_id", -1))] = record
+	return result
 
 func _read_text(path: String) -> String:
 	var file := FileAccess.open(path, FileAccess.READ)

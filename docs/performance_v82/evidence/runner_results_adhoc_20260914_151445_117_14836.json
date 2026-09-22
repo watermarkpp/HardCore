@@ -1,0 +1,26 @@
+{
+  "git_head": "643d4185cfb3c67f86c0821d5c2393ba0c1581e2",
+  "total": 1,
+  "suite": "adhoc",
+  "generated_at": "2026-09-14T15:14:45.1176320+08:00",
+  "results": [
+    {
+      "test_name": "resource_reuse_test",
+      "test_path": "tests/performance_v82/resource_reuse_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "passed": 1,
+  "engine_log_errors": 0
+}

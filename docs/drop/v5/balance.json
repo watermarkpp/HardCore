@@ -1,0 +1,712 @@
+{
+  "schema": "hardcore.dpv2.v505.balance.v1",
+  "k_status": "NO_BOOST_SOURCE_ALREADY_AT_OR_BELOW_TARGET",
+  "k": "1",
+  "woma_no_equipment_before": 2.1363883933000385e-07,
+  "woma_no_equipment_after": 2.1363883933000385e-07,
+  "woma_target": "7/20",
+  "boss_no_equipment": {
+    "76": {
+      "before": 2.1363883933000385e-07,
+      "after": 2.1363883933000385e-07
+    },
+    "198": {
+      "before": 0.6674026326662957,
+      "after": 0.6674026326662957
+    },
+    "199": {
+      "before": 0.10577489871304631,
+      "after": 0.10577489871304631
+    },
+    "225": {
+      "before": 0.2341400898941459,
+      "after": 0.2341400898941459
+    }
+  },
+  "boss_allowlist_resolution": [
+    {
+      "monster_id": 76,
+      "canonical_item_id": 168,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_012"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 169,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_013"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 170,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_014"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 189,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_015"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 190,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_016"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 195,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_017"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 212,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_018"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 213,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_019"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 76,
+      "canonical_item_id": 214,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m76.slot_020"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 98,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_034"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 165,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_037"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 175,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_043"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 184,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_041"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 185,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_040"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 186,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_042"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 187,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_033"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 201,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_032"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 202,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_039"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 203,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_029"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 204,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_030"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 205,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_031"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 207,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_027"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 208,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_036"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 209,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_035"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 198,
+      "canonical_item_id": 210,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m198.slot_028"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 98,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_037"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 165,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_040"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 175,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_048"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 184,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_046"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 185,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_045"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 186,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_047"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 187,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_036"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 201,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_035"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 202,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_044"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 203,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_032"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 204,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_033"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 205,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_034"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 207,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_030"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 208,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_039"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 209,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_038"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 199,
+      "canonical_item_id": 210,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m199.slot_031"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 98,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_055"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 99,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_049"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 100,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_048"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 101,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_047"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 128,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_058"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 129,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_059"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 130,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_062"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 131,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_063"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 132,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_061"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 133,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_060"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 149,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_054"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 166,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_052"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 167,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_053"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 168,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_044"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 169,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_043"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 210,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_056"
+      ],
+      "missing_approved_occurrences": 0
+    },
+    {
+      "monster_id": 225,
+      "canonical_item_id": 211,
+      "approved_occurrences": 1,
+      "source_occurrences": 1,
+      "selected_slot_uids": [
+        "dpv2.direct.m225.slot_057"
+      ],
+      "missing_approved_occurrences": 0
+    }
+  ],
+  "armor_retention_proof": [
+    {
+      "monster_id": 235,
+      "slot_uid": "dpv2.direct.m235.slot_054",
+      "canonical_item_id": 140,
+      "draw": "1/60",
+      "selected_given_hit": "1",
+      "final": "1/60"
+    },
+    {
+      "monster_id": 236,
+      "slot_uid": "dpv2.direct.m236.slot_054",
+      "canonical_item_id": 144,
+      "draw": "1/60",
+      "selected_given_hit": "1",
+      "final": "1/60"
+    },
+    {
+      "monster_id": 237,
+      "slot_uid": "dpv2.direct.m237.slot_054",
+      "canonical_item_id": 142,
+      "draw": "1/60",
+      "selected_given_hit": "1",
+      "final": "1/60"
+    },
+    {
+      "monster_id": 238,
+      "slot_uid": "dpv2.direct.m238.slot_054",
+      "canonical_item_id": 141,
+      "draw": "1/60",
+      "selected_given_hit": "1",
+      "final": "1/60"
+    },
+    {
+      "monster_id": 239,
+      "slot_uid": "dpv2.direct.m239.slot_054",
+      "canonical_item_id": 145,
+      "draw": "1/60",
+      "selected_given_hit": "1",
+      "final": "1/60"
+    },
+    {
+      "monster_id": 240,
+      "slot_uid": "dpv2.direct.m240.slot_054",
+      "canonical_item_id": 143,
+      "draw": "1/60",
+      "selected_given_hit": "1",
+      "final": "1/60"
+    }
+  ],
+  "books_enabled_monsters": [
+    38,
+    56,
+    73,
+    76,
+    79,
+    81,
+    83,
+    85,
+    87,
+    89,
+    91,
+    107,
+    120,
+    124,
+    131,
+    134,
+    135,
+    140,
+    141,
+    143,
+    152,
+    155,
+    158,
+    159,
+    160,
+    162,
+    163,
+    180,
+    188,
+    189,
+    191,
+    192,
+    193,
+    195,
+    196,
+    198,
+    199,
+    208,
+    209,
+    218,
+    222,
+    224
+  ],
+  "source_exception_monster_ids": [
+    75,
+    123
+  ],
+  "rule_counts": {
+    "ARMOR_BASE_1_OVER_60": 6,
+    "BOOK_ELITE_BOSS": 325,
+    "BOOK_ORDINARY": 149,
+    "NONE": 7131
+  }
+}

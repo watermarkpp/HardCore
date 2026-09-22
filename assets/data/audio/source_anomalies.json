@@ -1,0 +1,2055 @@
+{
+  "schema_version": 1,
+  "source_distribution": "client.classic_raw_complete",
+  "sound_index_sha256": "9b74427b29334aadaa150e81c0c2f69e30f3dcad8aadb441986ba61111982802",
+  "non_comment_record_count": 712,
+  "distinct_sound_id_count": 710,
+  "empty_path_count": 184,
+  "duplicate_sound_ids": {
+    "1680": [
+      {
+        "line_number": 600,
+        "sound_id": 1680,
+        "raw_line_utf8": "1680:",
+        "raw_line_sha256": "60c5cddb0f9b8a8e6c71907d93f9aef7d4853688fdf11628ffbb98b39641a273",
+        "is_comment_or_blank": false,
+        "raw_path": "",
+        "normalized_path": "",
+        "has_path": false
+      },
+      {
+        "line_number": 601,
+        "sound_id": 1680,
+        "raw_line_utf8": "1680:    wav\\430-1.wav",
+        "raw_line_sha256": "85a1a22ee69af17b333c1e526d9b47dddfec1538abc1b2f4ec1dd5814571e972",
+        "is_comment_or_blank": false,
+        "raw_path": "wav\\430-1.wav",
+        "normalized_path": "430-1.wav",
+        "has_path": true
+      }
+    ],
+    "1943": [
+      {
+        "line_number": 687,
+        "sound_id": 1943,
+        "raw_line_utf8": "1943:   wav\\2210-2.wav",
+        "raw_line_sha256": "e311033f563b2e3a15cc69c2237be498b673c4958fa806bbb419bfd4c6bd48a1",
+        "is_comment_or_blank": false,
+        "raw_path": "wav\\2210-2.wav",
+        "normalized_path": "2210-2.wav",
+        "has_path": true
+      },
+      {
+        "line_number": 688,
+        "sound_id": 1943,
+        "raw_line_utf8": "1943:   wav\\2210-3.wav",
+        "raw_line_sha256": "a94dbfac42e41febac7a4e3533881e28a6fe71fc74c1989c73790f860714c237",
+        "is_comment_or_blank": false,
+        "raw_path": "wav\\2210-3.wav",
+        "normalized_path": "2210-3.wav",
+        "has_path": true
+      }
+    ]
+  },
+  "missing_referenced_files": [
+    {
+      "line_number": 131,
+      "sound_id": 291,
+      "raw_path": "wav\\290-1.wav"
+    },
+    {
+      "line_number": 132,
+      "sound_id": 292,
+      "raw_path": "wav\\290-2.wav"
+    },
+    {
+      "line_number": 134,
+      "sound_id": 294,
+      "raw_path": "wav\\290-4.wav"
+    },
+    {
+      "line_number": 135,
+      "sound_id": 295,
+      "raw_path": "wav\\290-5.wav"
+    },
+    {
+      "line_number": 406,
+      "sound_id": 943,
+      "raw_path": "wav\\940-3.wav"
+    },
+    {
+      "line_number": 747,
+      "sound_id": 9224,
+      "raw_path": "wav\\9220-4.wav"
+    },
+    {
+      "line_number": 754,
+      "sound_id": 9234,
+      "raw_path": "wav\\9220-4.wav"
+    },
+    {
+      "line_number": 784,
+      "sound_id": 10110,
+      "raw_path": "wav\\M11-1.wav"
+    },
+    {
+      "line_number": 785,
+      "sound_id": 10111,
+      "raw_path": "wav\\M11-1.wav"
+    }
+  ],
+  "unreferenced_wav_files": [
+    "001.wav",
+    "002.wav",
+    "004.wav",
+    "005.wav",
+    "1220-2 .wav",
+    "1300-1.wav",
+    "1300-2.wav",
+    "1300-4.wav",
+    "1300-5.wav",
+    "1320-2.wav",
+    "1330-2-1.wav",
+    "1330-2-2.wav",
+    "1340-3.wav",
+    "1350-1.wav",
+    "1350-2.wav",
+    "1350-3.wav",
+    "1350-4.wav",
+    "1350-5.wav",
+    "1360-1.wav",
+    "1360-2.wav",
+    "1360-5.wav",
+    "1370-2-1.wav",
+    "1370-2-2.wav",
+    "1380-1.wav",
+    "1380-2.wav",
+    "1380-4.wav",
+    "1380-5.wav",
+    "1390-3.wav",
+    "1510-1.wav",
+    "1510-2.wav",
+    "1510-3.wav",
+    "1510-4.wav",
+    "1510-5.wav",
+    "1520-1.wav",
+    "1520-2.wav",
+    "1520-4.wav",
+    "1520-5.wav",
+    "1600-3.wav",
+    "2240-2.wav",
+    "2240-3.wav",
+    "820-5.wav",
+    "830-3.wav",
+    "Game over2.wav",
+    "Log-in-long2.wav",
+    "M34-1.wav",
+    "M35-1.wav",
+    "M36-1.wav",
+    "M37-1.wav",
+    "S1-1.WAV",
+    "S1-2.WAV",
+    "S1-3.WAV",
+    "S3-2.WAV",
+    "S4-2.WAV",
+    "S6-1.WAV",
+    "S6-2.WAV",
+    "S6-3.WAV",
+    "itmclick.wav",
+    "main_theme.wav",
+    "sellect-loop2.wav",
+    "struck_2.wav",
+    "钱圭(儡叼圭)-(R)1.wav",
+    "钱圭(儡叼圭)-(R)顿扁.wav",
+    "钱圭(儡叼圭)-(R)顿扁1.wav"
+  ],
+  "cross_number_references": [
+    {
+      "line_number": 124,
+      "sound_id": 211,
+      "raw_path": "wav\\210-1.wav"
+    },
+    {
+      "line_number": 125,
+      "sound_id": 212,
+      "raw_path": "wav\\210-2.wav"
+    },
+    {
+      "line_number": 127,
+      "sound_id": 214,
+      "raw_path": "wav\\210-4.wav"
+    },
+    {
+      "line_number": 128,
+      "sound_id": 215,
+      "raw_path": "wav\\210-5.wav"
+    },
+    {
+      "line_number": 131,
+      "sound_id": 291,
+      "raw_path": "wav\\290-1.wav"
+    },
+    {
+      "line_number": 132,
+      "sound_id": 292,
+      "raw_path": "wav\\290-2.wav"
+    },
+    {
+      "line_number": 134,
+      "sound_id": 294,
+      "raw_path": "wav\\290-4.wav"
+    },
+    {
+      "line_number": 135,
+      "sound_id": 295,
+      "raw_path": "wav\\290-5.wav"
+    },
+    {
+      "line_number": 138,
+      "sound_id": 301,
+      "raw_path": "wav\\300-1.wav"
+    },
+    {
+      "line_number": 139,
+      "sound_id": 302,
+      "raw_path": "wav\\300-2.wav"
+    },
+    {
+      "line_number": 141,
+      "sound_id": 304,
+      "raw_path": "wav\\300-4.wav"
+    },
+    {
+      "line_number": 142,
+      "sound_id": 305,
+      "raw_path": "wav\\300-5.wav"
+    },
+    {
+      "line_number": 145,
+      "sound_id": 401,
+      "raw_path": "wav\\400-1.wav"
+    },
+    {
+      "line_number": 146,
+      "sound_id": 402,
+      "raw_path": "wav\\400-2.wav"
+    },
+    {
+      "line_number": 147,
+      "sound_id": 403,
+      "raw_path": "wav\\400-3.wav"
+    },
+    {
+      "line_number": 148,
+      "sound_id": 404,
+      "raw_path": "wav\\400-4.wav"
+    },
+    {
+      "line_number": 149,
+      "sound_id": 405,
+      "raw_path": "wav\\400-5.wav"
+    },
+    {
+      "line_number": 152,
+      "sound_id": 411,
+      "raw_path": "wav\\410-1.wav"
+    },
+    {
+      "line_number": 153,
+      "sound_id": 412,
+      "raw_path": "wav\\410-2.wav"
+    },
+    {
+      "line_number": 155,
+      "sound_id": 414,
+      "raw_path": "wav\\410-4.wav"
+    },
+    {
+      "line_number": 156,
+      "sound_id": 415,
+      "raw_path": "wav\\410-5.wav"
+    },
+    {
+      "line_number": 159,
+      "sound_id": 421,
+      "raw_path": "wav\\420-1.wav"
+    },
+    {
+      "line_number": 160,
+      "sound_id": 422,
+      "raw_path": "wav\\420-2.wav"
+    },
+    {
+      "line_number": 162,
+      "sound_id": 424,
+      "raw_path": "wav\\420-4.wav"
+    },
+    {
+      "line_number": 163,
+      "sound_id": 425,
+      "raw_path": "wav\\420-5.wav"
+    },
+    {
+      "line_number": 166,
+      "sound_id": 431,
+      "raw_path": "wav\\430-1.wav"
+    },
+    {
+      "line_number": 167,
+      "sound_id": 432,
+      "raw_path": "wav\\430-2.wav"
+    },
+    {
+      "line_number": 168,
+      "sound_id": 433,
+      "raw_path": "wav\\430-3.wav"
+    },
+    {
+      "line_number": 169,
+      "sound_id": 434,
+      "raw_path": "wav\\430-4.wav"
+    },
+    {
+      "line_number": 170,
+      "sound_id": 435,
+      "raw_path": "wav\\430-5.wav"
+    },
+    {
+      "line_number": 173,
+      "sound_id": 441,
+      "raw_path": "wav\\440-1.wav"
+    },
+    {
+      "line_number": 174,
+      "sound_id": 442,
+      "raw_path": "wav\\440-2.wav"
+    },
+    {
+      "line_number": 176,
+      "sound_id": 444,
+      "raw_path": "wav\\440-4.wav"
+    },
+    {
+      "line_number": 177,
+      "sound_id": 445,
+      "raw_path": "wav\\440-5.wav"
+    },
+    {
+      "line_number": 180,
+      "sound_id": 451,
+      "raw_path": "wav\\450-1.wav"
+    },
+    {
+      "line_number": 181,
+      "sound_id": 452,
+      "raw_path": "wav\\450-2.wav"
+    },
+    {
+      "line_number": 182,
+      "sound_id": 453,
+      "raw_path": "wav\\450-3.wav"
+    },
+    {
+      "line_number": 183,
+      "sound_id": 454,
+      "raw_path": "wav\\450-4.wav"
+    },
+    {
+      "line_number": 184,
+      "sound_id": 455,
+      "raw_path": "wav\\450-5.wav"
+    },
+    {
+      "line_number": 187,
+      "sound_id": 461,
+      "raw_path": "wav\\460-1.wav"
+    },
+    {
+      "line_number": 188,
+      "sound_id": 462,
+      "raw_path": "wav\\460-2.wav"
+    },
+    {
+      "line_number": 189,
+      "sound_id": 463,
+      "raw_path": "wav\\460-3.wav"
+    },
+    {
+      "line_number": 190,
+      "sound_id": 464,
+      "raw_path": "wav\\460-4.wav"
+    },
+    {
+      "line_number": 191,
+      "sound_id": 465,
+      "raw_path": "wav\\460-5.wav"
+    },
+    {
+      "line_number": 194,
+      "sound_id": 471,
+      "raw_path": "wav\\470-1.wav"
+    },
+    {
+      "line_number": 195,
+      "sound_id": 472,
+      "raw_path": "wav\\470-2.wav"
+    },
+    {
+      "line_number": 197,
+      "sound_id": 474,
+      "raw_path": "wav\\470-4.wav"
+    },
+    {
+      "line_number": 198,
+      "sound_id": 475,
+      "raw_path": "wav\\470-5.wav"
+    },
+    {
+      "line_number": 201,
+      "sound_id": 481,
+      "raw_path": "wav\\480-1.wav"
+    },
+    {
+      "line_number": 202,
+      "sound_id": 482,
+      "raw_path": "wav\\480-2.wav"
+    },
+    {
+      "line_number": 204,
+      "sound_id": 484,
+      "raw_path": "wav\\480-4.wav"
+    },
+    {
+      "line_number": 205,
+      "sound_id": 485,
+      "raw_path": "wav\\480-5.wav"
+    },
+    {
+      "line_number": 208,
+      "sound_id": 491,
+      "raw_path": "wav\\490-1.wav"
+    },
+    {
+      "line_number": 209,
+      "sound_id": 492,
+      "raw_path": "wav\\490-2.wav"
+    },
+    {
+      "line_number": 211,
+      "sound_id": 494,
+      "raw_path": "wav\\490-4.wav"
+    },
+    {
+      "line_number": 212,
+      "sound_id": 495,
+      "raw_path": "wav\\490-5.wav"
+    },
+    {
+      "line_number": 215,
+      "sound_id": 501,
+      "raw_path": "wav\\500-1.wav"
+    },
+    {
+      "line_number": 216,
+      "sound_id": 502,
+      "raw_path": "wav\\500-2.wav"
+    },
+    {
+      "line_number": 218,
+      "sound_id": 504,
+      "raw_path": "wav\\500-4.wav"
+    },
+    {
+      "line_number": 219,
+      "sound_id": 505,
+      "raw_path": "wav\\500-5.wav"
+    },
+    {
+      "line_number": 222,
+      "sound_id": 511,
+      "raw_path": "wav\\510-1.wav"
+    },
+    {
+      "line_number": 223,
+      "sound_id": 512,
+      "raw_path": "wav\\510-2.wav"
+    },
+    {
+      "line_number": 225,
+      "sound_id": 514,
+      "raw_path": "wav\\510-4.wav"
+    },
+    {
+      "line_number": 226,
+      "sound_id": 515,
+      "raw_path": "wav\\510-5.wav"
+    },
+    {
+      "line_number": 229,
+      "sound_id": 521,
+      "raw_path": "wav\\520-1.wav"
+    },
+    {
+      "line_number": 230,
+      "sound_id": 522,
+      "raw_path": "wav\\520-2.wav"
+    },
+    {
+      "line_number": 232,
+      "sound_id": 524,
+      "raw_path": "wav\\520-4.wav"
+    },
+    {
+      "line_number": 233,
+      "sound_id": 525,
+      "raw_path": "wav\\520-5.wav"
+    },
+    {
+      "line_number": 236,
+      "sound_id": 531,
+      "raw_path": "wav\\530-1.wav"
+    },
+    {
+      "line_number": 237,
+      "sound_id": 532,
+      "raw_path": "wav\\530-2.wav"
+    },
+    {
+      "line_number": 239,
+      "sound_id": 534,
+      "raw_path": "wav\\530-4.wav"
+    },
+    {
+      "line_number": 240,
+      "sound_id": 535,
+      "raw_path": "wav\\530-5.wav"
+    },
+    {
+      "line_number": 243,
+      "sound_id": 541,
+      "raw_path": "wav\\540-1.wav"
+    },
+    {
+      "line_number": 244,
+      "sound_id": 542,
+      "raw_path": "wav\\540-2.wav"
+    },
+    {
+      "line_number": 245,
+      "sound_id": 543,
+      "raw_path": "wav\\540-3.wav"
+    },
+    {
+      "line_number": 246,
+      "sound_id": 544,
+      "raw_path": "wav\\540-4.wav"
+    },
+    {
+      "line_number": 247,
+      "sound_id": 545,
+      "raw_path": "wav\\540-5.wav"
+    },
+    {
+      "line_number": 250,
+      "sound_id": 561,
+      "raw_path": "wav\\560-1.wav"
+    },
+    {
+      "line_number": 251,
+      "sound_id": 562,
+      "raw_path": "wav\\560-2.wav"
+    },
+    {
+      "line_number": 253,
+      "sound_id": 564,
+      "raw_path": "wav\\560-4.wav"
+    },
+    {
+      "line_number": 254,
+      "sound_id": 565,
+      "raw_path": "wav\\560-5.wav"
+    },
+    {
+      "line_number": 258,
+      "sound_id": 572,
+      "raw_path": "wav\\54.wav"
+    },
+    {
+      "line_number": 259,
+      "sound_id": 573,
+      "raw_path": "wav\\64.wav"
+    },
+    {
+      "line_number": 261,
+      "sound_id": 575,
+      "raw_path": "wav\\570-5.wav"
+    },
+    {
+      "line_number": 264,
+      "sound_id": 581,
+      "raw_path": "wav\\580-1.wav"
+    },
+    {
+      "line_number": 265,
+      "sound_id": 582,
+      "raw_path": "wav\\580-2.wav"
+    },
+    {
+      "line_number": 267,
+      "sound_id": 584,
+      "raw_path": "wav\\580-4.wav"
+    },
+    {
+      "line_number": 268,
+      "sound_id": 585,
+      "raw_path": "wav\\580-5.wav"
+    },
+    {
+      "line_number": 271,
+      "sound_id": 591,
+      "raw_path": "wav\\590-1.wav"
+    },
+    {
+      "line_number": 272,
+      "sound_id": 592,
+      "raw_path": "wav\\590-2.wav"
+    },
+    {
+      "line_number": 274,
+      "sound_id": 594,
+      "raw_path": "wav\\590-4.wav"
+    },
+    {
+      "line_number": 275,
+      "sound_id": 595,
+      "raw_path": "wav\\590-5.wav"
+    },
+    {
+      "line_number": 278,
+      "sound_id": 601,
+      "raw_path": "wav\\600-1.wav"
+    },
+    {
+      "line_number": 279,
+      "sound_id": 602,
+      "raw_path": "wav\\600-2.wav"
+    },
+    {
+      "line_number": 281,
+      "sound_id": 604,
+      "raw_path": "wav\\600-4.wav"
+    },
+    {
+      "line_number": 282,
+      "sound_id": 605,
+      "raw_path": "wav\\600-5.wav"
+    },
+    {
+      "line_number": 285,
+      "sound_id": 611,
+      "raw_path": "wav\\610-1.wav"
+    },
+    {
+      "line_number": 286,
+      "sound_id": 612,
+      "raw_path": "wav\\610-2.wav"
+    },
+    {
+      "line_number": 288,
+      "sound_id": 614,
+      "raw_path": "wav\\610-4.wav"
+    },
+    {
+      "line_number": 289,
+      "sound_id": 615,
+      "raw_path": "wav\\610-5.wav"
+    },
+    {
+      "line_number": 292,
+      "sound_id": 621,
+      "raw_path": "wav\\620-1.wav"
+    },
+    {
+      "line_number": 293,
+      "sound_id": 622,
+      "raw_path": "wav\\620-2.wav"
+    },
+    {
+      "line_number": 295,
+      "sound_id": 624,
+      "raw_path": "wav\\620-4.wav"
+    },
+    {
+      "line_number": 296,
+      "sound_id": 625,
+      "raw_path": "wav\\620-5.wav"
+    },
+    {
+      "line_number": 299,
+      "sound_id": 631,
+      "raw_path": "wav\\630-1.wav"
+    },
+    {
+      "line_number": 300,
+      "sound_id": 632,
+      "raw_path": "wav\\630-2.wav"
+    },
+    {
+      "line_number": 302,
+      "sound_id": 634,
+      "raw_path": "wav\\630-4.wav"
+    },
+    {
+      "line_number": 303,
+      "sound_id": 635,
+      "raw_path": "wav\\630-5.wav"
+    },
+    {
+      "line_number": 306,
+      "sound_id": 641,
+      "raw_path": "wav\\640-1.wav"
+    },
+    {
+      "line_number": 307,
+      "sound_id": 642,
+      "raw_path": "wav\\640-2.wav"
+    },
+    {
+      "line_number": 309,
+      "sound_id": 644,
+      "raw_path": "wav\\640-4.wav"
+    },
+    {
+      "line_number": 310,
+      "sound_id": 645,
+      "raw_path": "wav\\640-5.wav"
+    },
+    {
+      "line_number": 313,
+      "sound_id": 651,
+      "raw_path": "wav\\650-1.wav"
+    },
+    {
+      "line_number": 314,
+      "sound_id": 652,
+      "raw_path": "wav\\650-2.wav"
+    },
+    {
+      "line_number": 316,
+      "sound_id": 654,
+      "raw_path": "wav\\650-4.wav"
+    },
+    {
+      "line_number": 317,
+      "sound_id": 655,
+      "raw_path": "wav\\650-5.wav"
+    },
+    {
+      "line_number": 320,
+      "sound_id": 661,
+      "raw_path": "wav\\660-1.wav"
+    },
+    {
+      "line_number": 321,
+      "sound_id": 662,
+      "raw_path": "wav\\660-2.wav"
+    },
+    {
+      "line_number": 323,
+      "sound_id": 664,
+      "raw_path": "wav\\660-4.wav"
+    },
+    {
+      "line_number": 324,
+      "sound_id": 665,
+      "raw_path": "wav\\660-5.wav"
+    },
+    {
+      "line_number": 327,
+      "sound_id": 671,
+      "raw_path": "wav\\670-1.wav"
+    },
+    {
+      "line_number": 328,
+      "sound_id": 672,
+      "raw_path": "wav\\670-2.wav"
+    },
+    {
+      "line_number": 330,
+      "sound_id": 674,
+      "raw_path": "wav\\670-4.wav"
+    },
+    {
+      "line_number": 331,
+      "sound_id": 675,
+      "raw_path": "wav\\670-5.wav"
+    },
+    {
+      "line_number": 334,
+      "sound_id": 681,
+      "raw_path": "wav\\680-1.wav"
+    },
+    {
+      "line_number": 335,
+      "sound_id": 682,
+      "raw_path": "wav\\680-2.wav"
+    },
+    {
+      "line_number": 337,
+      "sound_id": 684,
+      "raw_path": "wav\\680-4.wav"
+    },
+    {
+      "line_number": 338,
+      "sound_id": 685,
+      "raw_path": "wav\\680-5.wav"
+    },
+    {
+      "line_number": 341,
+      "sound_id": 701,
+      "raw_path": "wav\\700-1.wav"
+    },
+    {
+      "line_number": 342,
+      "sound_id": 702,
+      "raw_path": "wav\\700-2.wav"
+    },
+    {
+      "line_number": 344,
+      "sound_id": 704,
+      "raw_path": "wav\\700-4.wav"
+    },
+    {
+      "line_number": 345,
+      "sound_id": 705,
+      "raw_path": "wav\\700-5.wav"
+    },
+    {
+      "line_number": 348,
+      "sound_id": 711,
+      "raw_path": "wav\\710-1.wav"
+    },
+    {
+      "line_number": 349,
+      "sound_id": 712,
+      "raw_path": "wav\\710-2.wav"
+    },
+    {
+      "line_number": 351,
+      "sound_id": 714,
+      "raw_path": "wav\\710-4.wav"
+    },
+    {
+      "line_number": 352,
+      "sound_id": 715,
+      "raw_path": "wav\\710-5.wav"
+    },
+    {
+      "line_number": 354,
+      "sound_id": 720,
+      "raw_path": "wav\\710-0.wav"
+    },
+    {
+      "line_number": 355,
+      "sound_id": 721,
+      "raw_path": "wav\\720-1.wav"
+    },
+    {
+      "line_number": 356,
+      "sound_id": 722,
+      "raw_path": "wav\\720-2.wav"
+    },
+    {
+      "line_number": 358,
+      "sound_id": 724,
+      "raw_path": "wav\\720-4.wav"
+    },
+    {
+      "line_number": 359,
+      "sound_id": 725,
+      "raw_path": "wav\\720-5.wav"
+    },
+    {
+      "line_number": 361,
+      "sound_id": 730,
+      "raw_path": "wav\\710-0.wav"
+    },
+    {
+      "line_number": 362,
+      "sound_id": 731,
+      "raw_path": "wav\\730-1.wav"
+    },
+    {
+      "line_number": 363,
+      "sound_id": 732,
+      "raw_path": "wav\\730-2.wav"
+    },
+    {
+      "line_number": 365,
+      "sound_id": 734,
+      "raw_path": "wav\\730-4.wav"
+    },
+    {
+      "line_number": 366,
+      "sound_id": 735,
+      "raw_path": "wav\\730-5.wav"
+    },
+    {
+      "line_number": 369,
+      "sound_id": 811,
+      "raw_path": "wav\\810-1.wav"
+    },
+    {
+      "line_number": 370,
+      "sound_id": 812,
+      "raw_path": "wav\\810-2.wav"
+    },
+    {
+      "line_number": 372,
+      "sound_id": 814,
+      "raw_path": "wav\\810-4.wav"
+    },
+    {
+      "line_number": 373,
+      "sound_id": 815,
+      "raw_path": "wav\\810-5.wav"
+    },
+    {
+      "line_number": 376,
+      "sound_id": 821,
+      "raw_path": "wav\\820-1.wav"
+    },
+    {
+      "line_number": 377,
+      "sound_id": 822,
+      "raw_path": "wav\\820-2.wav"
+    },
+    {
+      "line_number": 379,
+      "sound_id": 824,
+      "raw_path": "wav\\820-4.wav"
+    },
+    {
+      "line_number": 383,
+      "sound_id": 831,
+      "raw_path": "wav\\830-1.wav"
+    },
+    {
+      "line_number": 384,
+      "sound_id": 832,
+      "raw_path": "wav\\830-2.wav"
+    },
+    {
+      "line_number": 386,
+      "sound_id": 834,
+      "raw_path": "wav\\830-4.wav"
+    },
+    {
+      "line_number": 387,
+      "sound_id": 835,
+      "raw_path": "wav\\830-5.wav"
+    },
+    {
+      "line_number": 390,
+      "sound_id": 901,
+      "raw_path": "wav\\900-1.wav"
+    },
+    {
+      "line_number": 391,
+      "sound_id": 902,
+      "raw_path": "wav\\900-2.wav"
+    },
+    {
+      "line_number": 393,
+      "sound_id": 904,
+      "raw_path": "wav\\900-4.wav"
+    },
+    {
+      "line_number": 394,
+      "sound_id": 905,
+      "raw_path": "wav\\900-5.wav"
+    },
+    {
+      "line_number": 397,
+      "sound_id": 931,
+      "raw_path": "wav\\930-1.wav"
+    },
+    {
+      "line_number": 398,
+      "sound_id": 932,
+      "raw_path": "wav\\930-2.wav"
+    },
+    {
+      "line_number": 400,
+      "sound_id": 934,
+      "raw_path": "wav\\930-4.wav"
+    },
+    {
+      "line_number": 401,
+      "sound_id": 935,
+      "raw_path": "wav\\930-5.wav"
+    },
+    {
+      "line_number": 404,
+      "sound_id": 941,
+      "raw_path": "wav\\940-1.wav"
+    },
+    {
+      "line_number": 405,
+      "sound_id": 942,
+      "raw_path": "wav\\940-2.wav"
+    },
+    {
+      "line_number": 406,
+      "sound_id": 943,
+      "raw_path": "wav\\940-3.wav"
+    },
+    {
+      "line_number": 407,
+      "sound_id": 944,
+      "raw_path": "wav\\940-4.wav"
+    },
+    {
+      "line_number": 408,
+      "sound_id": 945,
+      "raw_path": "wav\\940-5.wav"
+    },
+    {
+      "line_number": 412,
+      "sound_id": 1002,
+      "raw_path": "wav\\1000-2.wav"
+    },
+    {
+      "line_number": 415,
+      "sound_id": 1005,
+      "raw_path": "wav\\1000-5.wav"
+    },
+    {
+      "line_number": 416,
+      "sound_id": 1006,
+      "raw_path": "wav\\1000-6.wav"
+    },
+    {
+      "line_number": 419,
+      "sound_id": 1011,
+      "raw_path": "wav\\1010-1.wav"
+    },
+    {
+      "line_number": 420,
+      "sound_id": 1012,
+      "raw_path": "wav\\1010-2.wav"
+    },
+    {
+      "line_number": 422,
+      "sound_id": 1014,
+      "raw_path": "wav\\1010-4.wav"
+    },
+    {
+      "line_number": 423,
+      "sound_id": 1015,
+      "raw_path": "wav\\1010-5.wav"
+    },
+    {
+      "line_number": 426,
+      "sound_id": 1021,
+      "raw_path": "wav\\1020-1.wav"
+    },
+    {
+      "line_number": 427,
+      "sound_id": 1022,
+      "raw_path": "wav\\1020-2.wav"
+    },
+    {
+      "line_number": 429,
+      "sound_id": 1024,
+      "raw_path": "wav\\1020-4.wav"
+    },
+    {
+      "line_number": 430,
+      "sound_id": 1025,
+      "raw_path": "wav\\1020-5.wav"
+    },
+    {
+      "line_number": 434,
+      "sound_id": 1032,
+      "raw_path": "wav\\1030-2.wav"
+    },
+    {
+      "line_number": 437,
+      "sound_id": 1035,
+      "raw_path": "wav\\1030-5.wav"
+    },
+    {
+      "line_number": 440,
+      "sound_id": 1101,
+      "raw_path": "wav\\1100-1.wav"
+    },
+    {
+      "line_number": 441,
+      "sound_id": 1102,
+      "raw_path": "wav\\1100-2.wav"
+    },
+    {
+      "line_number": 443,
+      "sound_id": 1104,
+      "raw_path": "wav\\1100-4.wav"
+    },
+    {
+      "line_number": 444,
+      "sound_id": 1105,
+      "raw_path": "wav\\1100-5.wav"
+    },
+    {
+      "line_number": 447,
+      "sound_id": 1111,
+      "raw_path": "wav\\1110-1.wav"
+    },
+    {
+      "line_number": 448,
+      "sound_id": 1112,
+      "raw_path": "wav\\1110-2.wav"
+    },
+    {
+      "line_number": 450,
+      "sound_id": 1114,
+      "raw_path": "wav\\1110-4.wav"
+    },
+    {
+      "line_number": 451,
+      "sound_id": 1115,
+      "raw_path": "wav\\1110-5.wav"
+    },
+    {
+      "line_number": 454,
+      "sound_id": 1201,
+      "raw_path": "wav\\1200-1.wav"
+    },
+    {
+      "line_number": 455,
+      "sound_id": 1202,
+      "raw_path": "wav\\1200-2.wav"
+    },
+    {
+      "line_number": 457,
+      "sound_id": 1204,
+      "raw_path": "wav\\1200-4.wav"
+    },
+    {
+      "line_number": 458,
+      "sound_id": 1205,
+      "raw_path": "wav\\1200-5.wav"
+    },
+    {
+      "line_number": 461,
+      "sound_id": 1211,
+      "raw_path": "wav\\1210-1.wav"
+    },
+    {
+      "line_number": 462,
+      "sound_id": 1212,
+      "raw_path": "wav\\1210-2.wav"
+    },
+    {
+      "line_number": 463,
+      "sound_id": 1213,
+      "raw_path": "wav\\1220-3.wav"
+    },
+    {
+      "line_number": 464,
+      "sound_id": 1214,
+      "raw_path": "wav\\1210-4.wav"
+    },
+    {
+      "line_number": 465,
+      "sound_id": 1215,
+      "raw_path": "wav\\1210-5.wav"
+    },
+    {
+      "line_number": 468,
+      "sound_id": 1221,
+      "raw_path": "wav\\1220-1.wav"
+    },
+    {
+      "line_number": 469,
+      "sound_id": 1222,
+      "raw_path": "wav\\1220-2.wav"
+    },
+    {
+      "line_number": 470,
+      "sound_id": 1223,
+      "raw_path": "wav\\1220-3.wav"
+    },
+    {
+      "line_number": 471,
+      "sound_id": 1224,
+      "raw_path": "wav\\1220-4.wav"
+    },
+    {
+      "line_number": 472,
+      "sound_id": 1225,
+      "raw_path": "wav\\1220-5.wav"
+    },
+    {
+      "line_number": 475,
+      "sound_id": 1301,
+      "raw_path": "wav\\1310-1.wav"
+    },
+    {
+      "line_number": 476,
+      "sound_id": 1302,
+      "raw_path": "wav\\1310-2.wav"
+    },
+    {
+      "line_number": 478,
+      "sound_id": 1304,
+      "raw_path": "wav\\1310-4.wav"
+    },
+    {
+      "line_number": 479,
+      "sound_id": 1305,
+      "raw_path": "wav\\1310-5.wav"
+    },
+    {
+      "line_number": 482,
+      "sound_id": 1311,
+      "raw_path": "wav\\1310-1.wav"
+    },
+    {
+      "line_number": 483,
+      "sound_id": 1312,
+      "raw_path": "wav\\1310-2.wav"
+    },
+    {
+      "line_number": 485,
+      "sound_id": 1314,
+      "raw_path": "wav\\1310-4.wav"
+    },
+    {
+      "line_number": 486,
+      "sound_id": 1315,
+      "raw_path": "wav\\1310-5.wav"
+    },
+    {
+      "line_number": 489,
+      "sound_id": 1321,
+      "raw_path": "wav\\1320-1.wav"
+    },
+    {
+      "line_number": 491,
+      "sound_id": 1323,
+      "raw_path": "wav\\1320-3.wav"
+    },
+    {
+      "line_number": 492,
+      "sound_id": 1324,
+      "raw_path": "wav\\1320-4.wav"
+    },
+    {
+      "line_number": 493,
+      "sound_id": 1325,
+      "raw_path": "wav\\1320-5.wav"
+    },
+    {
+      "line_number": 496,
+      "sound_id": 1331,
+      "raw_path": "wav\\1330-1.wav"
+    },
+    {
+      "line_number": 497,
+      "sound_id": 1332,
+      "raw_path": "wav\\1330-2.wav"
+    },
+    {
+      "line_number": 498,
+      "sound_id": 1333,
+      "raw_path": "wav\\1330-3.wav"
+    },
+    {
+      "line_number": 499,
+      "sound_id": 1334,
+      "raw_path": "wav\\1330-4.wav"
+    },
+    {
+      "line_number": 500,
+      "sound_id": 1335,
+      "raw_path": "wav\\1330-5.wav"
+    },
+    {
+      "line_number": 503,
+      "sound_id": 1341,
+      "raw_path": "wav\\1340-1.wav"
+    },
+    {
+      "line_number": 504,
+      "sound_id": 1342,
+      "raw_path": "wav\\1340-2.wav"
+    },
+    {
+      "line_number": 506,
+      "sound_id": 1344,
+      "raw_path": "wav\\1340-4.wav"
+    },
+    {
+      "line_number": 507,
+      "sound_id": 1345,
+      "raw_path": "wav\\1340-5.wav"
+    },
+    {
+      "line_number": 510,
+      "sound_id": 1371,
+      "raw_path": "wav\\1370-1.wav"
+    },
+    {
+      "line_number": 511,
+      "sound_id": 1372,
+      "raw_path": "wav\\1370-2.wav"
+    },
+    {
+      "line_number": 512,
+      "sound_id": 1373,
+      "raw_path": "wav\\1370-3.wav"
+    },
+    {
+      "line_number": 513,
+      "sound_id": 1374,
+      "raw_path": "wav\\1370-4.wav"
+    },
+    {
+      "line_number": 514,
+      "sound_id": 1375,
+      "raw_path": "wav\\1370-5.wav"
+    },
+    {
+      "line_number": 517,
+      "sound_id": 1391,
+      "raw_path": "wav\\1390-1.wav"
+    },
+    {
+      "line_number": 518,
+      "sound_id": 1392,
+      "raw_path": "wav\\1390-2.wav"
+    },
+    {
+      "line_number": 520,
+      "sound_id": 1394,
+      "raw_path": "wav\\1390-4.wav"
+    },
+    {
+      "line_number": 521,
+      "sound_id": 1395,
+      "raw_path": "wav\\1390-5.wav"
+    },
+    {
+      "line_number": 524,
+      "sound_id": 1401,
+      "raw_path": "wav\\1400-1.wav"
+    },
+    {
+      "line_number": 525,
+      "sound_id": 1402,
+      "raw_path": "wav\\1400-2.wav"
+    },
+    {
+      "line_number": 527,
+      "sound_id": 1404,
+      "raw_path": "wav\\1400-4.wav"
+    },
+    {
+      "line_number": 528,
+      "sound_id": 1405,
+      "raw_path": "wav\\1400-5.wav"
+    },
+    {
+      "line_number": 531,
+      "sound_id": 1411,
+      "raw_path": "wav\\1410-1.wav"
+    },
+    {
+      "line_number": 532,
+      "sound_id": 1412,
+      "raw_path": "wav\\1410-2.wav"
+    },
+    {
+      "line_number": 534,
+      "sound_id": 1414,
+      "raw_path": "wav\\1410-4.wav"
+    },
+    {
+      "line_number": 535,
+      "sound_id": 1415,
+      "raw_path": "wav\\1410-5.wav"
+    },
+    {
+      "line_number": 538,
+      "sound_id": 1501,
+      "raw_path": "wav\\1500-1.wav"
+    },
+    {
+      "line_number": 539,
+      "sound_id": 1502,
+      "raw_path": "wav\\1500-2.wav"
+    },
+    {
+      "line_number": 541,
+      "sound_id": 1504,
+      "raw_path": "wav\\1500-4.wav"
+    },
+    {
+      "line_number": 542,
+      "sound_id": 1505,
+      "raw_path": "wav\\1500-5.wav"
+    },
+    {
+      "line_number": 545,
+      "sound_id": 1531,
+      "raw_path": "wav\\1530-1.wav"
+    },
+    {
+      "line_number": 546,
+      "sound_id": 1532,
+      "raw_path": "wav\\1530-2.wav"
+    },
+    {
+      "line_number": 548,
+      "sound_id": 1534,
+      "raw_path": "wav\\1530-4.wav"
+    },
+    {
+      "line_number": 549,
+      "sound_id": 1535,
+      "raw_path": "wav\\1530-5.wav"
+    },
+    {
+      "line_number": 553,
+      "sound_id": 1602,
+      "raw_path": "wav\\1600-2.wav"
+    },
+    {
+      "line_number": 555,
+      "sound_id": 1604,
+      "raw_path": "wav\\1600-4.wav"
+    },
+    {
+      "line_number": 556,
+      "sound_id": 1605,
+      "raw_path": "wav\\1600-5.wav"
+    },
+    {
+      "line_number": 559,
+      "sound_id": 1621,
+      "raw_path": "wav\\600-1.wav"
+    },
+    {
+      "line_number": 560,
+      "sound_id": 1622,
+      "raw_path": "wav\\2101-2.wav"
+    },
+    {
+      "line_number": 561,
+      "sound_id": 1623,
+      "raw_path": "wav\\2101-3.wav"
+    },
+    {
+      "line_number": 562,
+      "sound_id": 1624,
+      "raw_path": "wav\\600-4.wav"
+    },
+    {
+      "line_number": 563,
+      "sound_id": 1625,
+      "raw_path": "wav\\600-5.wav"
+    },
+    {
+      "line_number": 566,
+      "sound_id": 1631,
+      "raw_path": "wav\\1720-1.wav"
+    },
+    {
+      "line_number": 567,
+      "sound_id": 1632,
+      "raw_path": "wav\\2110-2.wav"
+    },
+    {
+      "line_number": 568,
+      "sound_id": 1633,
+      "raw_path": "wav\\2110-3.wav"
+    },
+    {
+      "line_number": 569,
+      "sound_id": 1634,
+      "raw_path": "wav\\1720-4.wav"
+    },
+    {
+      "line_number": 570,
+      "sound_id": 1635,
+      "raw_path": "wav\\1720-5.wav"
+    },
+    {
+      "line_number": 573,
+      "sound_id": 1641,
+      "raw_path": "wav\\420-1.wav"
+    },
+    {
+      "line_number": 574,
+      "sound_id": 1642,
+      "raw_path": "wav\\2120-2.wav"
+    },
+    {
+      "line_number": 575,
+      "sound_id": 1643,
+      "raw_path": "wav\\2120-3.wav"
+    },
+    {
+      "line_number": 576,
+      "sound_id": 1644,
+      "raw_path": "wav\\420-4.wav"
+    },
+    {
+      "line_number": 577,
+      "sound_id": 1645,
+      "raw_path": "wav\\420-5.wav"
+    },
+    {
+      "line_number": 580,
+      "sound_id": 1651,
+      "raw_path": "wav\\410-1.wav"
+    },
+    {
+      "line_number": 581,
+      "sound_id": 1652,
+      "raw_path": "wav\\2130-2.wav"
+    },
+    {
+      "line_number": 582,
+      "sound_id": 1653,
+      "raw_path": "wav\\2130-3.wav"
+    },
+    {
+      "line_number": 583,
+      "sound_id": 1654,
+      "raw_path": "wav\\410-4.wav"
+    },
+    {
+      "line_number": 584,
+      "sound_id": 1655,
+      "raw_path": "wav\\410-5.wav"
+    },
+    {
+      "line_number": 587,
+      "sound_id": 1661,
+      "raw_path": "wav\\420-1.wav"
+    },
+    {
+      "line_number": 589,
+      "sound_id": 1663,
+      "raw_path": "wav\\2140-3.wav"
+    },
+    {
+      "line_number": 590,
+      "sound_id": 1664,
+      "raw_path": "wav\\420-4.wav"
+    },
+    {
+      "line_number": 591,
+      "sound_id": 1665,
+      "raw_path": "wav\\420-5.wav"
+    },
+    {
+      "line_number": 594,
+      "sound_id": 1671,
+      "raw_path": "wav\\430-1.wav"
+    },
+    {
+      "line_number": 595,
+      "sound_id": 1672,
+      "raw_path": "wav\\430-3.wav"
+    },
+    {
+      "line_number": 596,
+      "sound_id": 1673,
+      "raw_path": "wav\\2150-3.wav"
+    },
+    {
+      "line_number": 597,
+      "sound_id": 1674,
+      "raw_path": "wav\\430-4.wav"
+    },
+    {
+      "line_number": 598,
+      "sound_id": 1675,
+      "raw_path": "wav\\430-5.wav"
+    },
+    {
+      "line_number": 601,
+      "sound_id": 1680,
+      "raw_path": "wav\\430-1.wav"
+    },
+    {
+      "line_number": 602,
+      "sound_id": 1682,
+      "raw_path": "wav\\2160-2.wav"
+    },
+    {
+      "line_number": 603,
+      "sound_id": 1683,
+      "raw_path": "wav\\1360-3.wav"
+    },
+    {
+      "line_number": 604,
+      "sound_id": 1684,
+      "raw_path": "wav\\1360-4.wav"
+    },
+    {
+      "line_number": 605,
+      "sound_id": 1685,
+      "raw_path": "wav\\2240-5.wav"
+    },
+    {
+      "line_number": 608,
+      "sound_id": 1701,
+      "raw_path": "wav\\1700-1.wav"
+    },
+    {
+      "line_number": 609,
+      "sound_id": 1702,
+      "raw_path": "wav\\1700-2.wav"
+    },
+    {
+      "line_number": 610,
+      "sound_id": 1703,
+      "raw_path": "wav\\1700-2.wav"
+    },
+    {
+      "line_number": 611,
+      "sound_id": 1704,
+      "raw_path": "wav\\1700-4.wav"
+    },
+    {
+      "line_number": 612,
+      "sound_id": 1705,
+      "raw_path": "wav\\1700-5.wav"
+    },
+    {
+      "line_number": 615,
+      "sound_id": 1711,
+      "raw_path": "wav\\1710-1.wav"
+    },
+    {
+      "line_number": 616,
+      "sound_id": 1712,
+      "raw_path": "wav\\1710-2.wav"
+    },
+    {
+      "line_number": 618,
+      "sound_id": 1714,
+      "raw_path": "wav\\1710-4.wav"
+    },
+    {
+      "line_number": 619,
+      "sound_id": 1715,
+      "raw_path": "wav\\1710-5.wav"
+    },
+    {
+      "line_number": 622,
+      "sound_id": 1721,
+      "raw_path": "wav\\1720-1.wav"
+    },
+    {
+      "line_number": 623,
+      "sound_id": 1722,
+      "raw_path": "wav\\1720-2.wav"
+    },
+    {
+      "line_number": 625,
+      "sound_id": 1724,
+      "raw_path": "wav\\1720-4.wav"
+    },
+    {
+      "line_number": 626,
+      "sound_id": 1725,
+      "raw_path": "wav\\1720-5.wav"
+    },
+    {
+      "line_number": 629,
+      "sound_id": 1801,
+      "raw_path": "wav\\1800-1.wav"
+    },
+    {
+      "line_number": 630,
+      "sound_id": 1802,
+      "raw_path": "wav\\1800-2.wav"
+    },
+    {
+      "line_number": 632,
+      "sound_id": 1804,
+      "raw_path": "wav\\1800-4.wav"
+    },
+    {
+      "line_number": 633,
+      "sound_id": 1805,
+      "raw_path": "wav\\1800-5.wav"
+    },
+    {
+      "line_number": 636,
+      "sound_id": 1811,
+      "raw_path": "wav\\1810-1.wav"
+    },
+    {
+      "line_number": 637,
+      "sound_id": 1812,
+      "raw_path": "wav\\1810-2.wav"
+    },
+    {
+      "line_number": 639,
+      "sound_id": 1814,
+      "raw_path": "wav\\1810-4.wav"
+    },
+    {
+      "line_number": 640,
+      "sound_id": 1815,
+      "raw_path": "wav\\1810-5.wav"
+    },
+    {
+      "line_number": 643,
+      "sound_id": 1821,
+      "raw_path": "wav\\1820-1.wav"
+    },
+    {
+      "line_number": 644,
+      "sound_id": 1822,
+      "raw_path": "wav\\1820-2.wav"
+    },
+    {
+      "line_number": 646,
+      "sound_id": 1824,
+      "raw_path": "wav\\1820-4.wav"
+    },
+    {
+      "line_number": 647,
+      "sound_id": 1825,
+      "raw_path": "wav\\1820-5.wav"
+    },
+    {
+      "line_number": 650,
+      "sound_id": 1831,
+      "raw_path": "wav\\1830-1.wav"
+    },
+    {
+      "line_number": 651,
+      "sound_id": 1832,
+      "raw_path": "wav\\1830-2.wav"
+    },
+    {
+      "line_number": 653,
+      "sound_id": 1834,
+      "raw_path": "wav\\1830-4.wav"
+    },
+    {
+      "line_number": 654,
+      "sound_id": 1835,
+      "raw_path": "wav\\1830-5.wav"
+    },
+    {
+      "line_number": 657,
+      "sound_id": 1851,
+      "raw_path": "wav\\2270-1.wav"
+    },
+    {
+      "line_number": 658,
+      "sound_id": 1852,
+      "raw_path": "wav\\2270-2.wav"
+    },
+    {
+      "line_number": 659,
+      "sound_id": 1853,
+      "raw_path": "wav\\2270-3.wav"
+    },
+    {
+      "line_number": 660,
+      "sound_id": 1854,
+      "raw_path": "wav\\2270-4.wav"
+    },
+    {
+      "line_number": 661,
+      "sound_id": 1855,
+      "raw_path": "wav\\2270-5.wav"
+    },
+    {
+      "line_number": 662,
+      "sound_id": 1856,
+      "raw_path": "wav\\2270.wav"
+    },
+    {
+      "line_number": 665,
+      "sound_id": 1901,
+      "raw_path": "wav\\1900-1.wav"
+    },
+    {
+      "line_number": 668,
+      "sound_id": 1904,
+      "raw_path": "wav\\1900-4.wav"
+    },
+    {
+      "line_number": 669,
+      "sound_id": 1905,
+      "raw_path": "wav\\1900-5.wav"
+    },
+    {
+      "line_number": 672,
+      "sound_id": 1911,
+      "raw_path": "wav\\1910-1.wav"
+    },
+    {
+      "line_number": 673,
+      "sound_id": 1912,
+      "raw_path": "wav\\1910-2.wav"
+    },
+    {
+      "line_number": 674,
+      "sound_id": 1913,
+      "raw_path": "wav\\1910-3.wav"
+    },
+    {
+      "line_number": 675,
+      "sound_id": 1914,
+      "raw_path": "wav\\1910-4.wav"
+    },
+    {
+      "line_number": 676,
+      "sound_id": 1915,
+      "raw_path": "wav\\1910-5.wav"
+    },
+    {
+      "line_number": 679,
+      "sound_id": 1931,
+      "raw_path": "wav\\2200-1.wav"
+    },
+    {
+      "line_number": 680,
+      "sound_id": 1932,
+      "raw_path": "wav\\2200-2.wav"
+    },
+    {
+      "line_number": 681,
+      "sound_id": 1933,
+      "raw_path": "wav\\2200-3.wav"
+    },
+    {
+      "line_number": 682,
+      "sound_id": 1934,
+      "raw_path": "wav\\2200-4.wav"
+    },
+    {
+      "line_number": 683,
+      "sound_id": 1935,
+      "raw_path": "wav\\2200-5.wav"
+    },
+    {
+      "line_number": 686,
+      "sound_id": 1941,
+      "raw_path": "wav\\2210-1.wav"
+    },
+    {
+      "line_number": 687,
+      "sound_id": 1943,
+      "raw_path": "wav\\2210-2.wav"
+    },
+    {
+      "line_number": 688,
+      "sound_id": 1943,
+      "raw_path": "wav\\2210-3.wav"
+    },
+    {
+      "line_number": 689,
+      "sound_id": 1944,
+      "raw_path": "wav\\2210-4.wav"
+    },
+    {
+      "line_number": 690,
+      "sound_id": 1945,
+      "raw_path": "wav\\2210-5.wav"
+    },
+    {
+      "line_number": 693,
+      "sound_id": 1951,
+      "raw_path": "wav\\2220-1.wav"
+    },
+    {
+      "line_number": 694,
+      "sound_id": 1952,
+      "raw_path": "wav\\2220-2.wav"
+    },
+    {
+      "line_number": 695,
+      "sound_id": 1953,
+      "raw_path": "wav\\2220-3.wav"
+    },
+    {
+      "line_number": 696,
+      "sound_id": 1954,
+      "raw_path": "wav\\2220-4.wav"
+    },
+    {
+      "line_number": 697,
+      "sound_id": 1955,
+      "raw_path": "wav\\2220-5.wav"
+    },
+    {
+      "line_number": 700,
+      "sound_id": 1961,
+      "raw_path": "wav\\2230-1.wav"
+    },
+    {
+      "line_number": 701,
+      "sound_id": 1962,
+      "raw_path": "wav\\2230-2.wav"
+    },
+    {
+      "line_number": 702,
+      "sound_id": 1963,
+      "raw_path": "wav\\2230-3.wav"
+    },
+    {
+      "line_number": 703,
+      "sound_id": 1964,
+      "raw_path": "wav\\2230-4.wav"
+    },
+    {
+      "line_number": 704,
+      "sound_id": 1965,
+      "raw_path": "wav\\2230-5.wav"
+    },
+    {
+      "line_number": 708,
+      "sound_id": 1971,
+      "raw_path": "wav\\2250-1.wav"
+    },
+    {
+      "line_number": 709,
+      "sound_id": 1972,
+      "raw_path": "wav\\2250-2.wav"
+    },
+    {
+      "line_number": 710,
+      "sound_id": 1973,
+      "raw_path": "wav\\2250-3.wav"
+    },
+    {
+      "line_number": 711,
+      "sound_id": 1974,
+      "raw_path": "wav\\2250-4.wav"
+    },
+    {
+      "line_number": 712,
+      "sound_id": 1975,
+      "raw_path": "wav\\2250-5.wav"
+    },
+    {
+      "line_number": 715,
+      "sound_id": 1981,
+      "raw_path": "wav\\2240-1.wav"
+    },
+    {
+      "line_number": 718,
+      "sound_id": 1984,
+      "raw_path": "wav\\2240-4.wav"
+    },
+    {
+      "line_number": 719,
+      "sound_id": 1985,
+      "raw_path": "wav\\2240-5.wav"
+    },
+    {
+      "line_number": 722,
+      "sound_id": 1991,
+      "raw_path": "wav\\2260-1.wav"
+    },
+    {
+      "line_number": 723,
+      "sound_id": 1992,
+      "raw_path": "wav\\2260-2.wav"
+    },
+    {
+      "line_number": 724,
+      "sound_id": 1993,
+      "raw_path": "wav\\2260-3.wav"
+    },
+    {
+      "line_number": 725,
+      "sound_id": 1994,
+      "raw_path": "wav\\2260-4.wav"
+    },
+    {
+      "line_number": 726,
+      "sound_id": 1995,
+      "raw_path": "wav\\2260-5.wav"
+    },
+    {
+      "line_number": 731,
+      "sound_id": 9202,
+      "raw_path": "wav\\9200-2.wav"
+    },
+    {
+      "line_number": 733,
+      "sound_id": 9204,
+      "raw_path": "wav\\9200-4.wav"
+    },
+    {
+      "line_number": 734,
+      "sound_id": 9205,
+      "raw_path": "wav\\9200-5.wav"
+    },
+    {
+      "line_number": 740,
+      "sound_id": 9214,
+      "raw_path": "wav\\9210-4.wav"
+    },
+    {
+      "line_number": 741,
+      "sound_id": 9215,
+      "raw_path": "wav\\9210-5.wav"
+    },
+    {
+      "line_number": 743,
+      "sound_id": 9220,
+      "raw_path": "wav\\9210-0.wav"
+    },
+    {
+      "line_number": 747,
+      "sound_id": 9224,
+      "raw_path": "wav\\9220-4.wav"
+    },
+    {
+      "line_number": 748,
+      "sound_id": 9225,
+      "raw_path": "wav\\9210-5.wav"
+    },
+    {
+      "line_number": 750,
+      "sound_id": 9230,
+      "raw_path": "wav\\9210-0.wav"
+    },
+    {
+      "line_number": 754,
+      "sound_id": 9234,
+      "raw_path": "wav\\9220-4.wav"
+    },
+    {
+      "line_number": 755,
+      "sound_id": 9235,
+      "raw_path": "wav\\9210-5.wav"
+    }
+  ],
+  "casefold_path_collisions": [],
+  "whitespace_normalized_path_collisions": [
+    {
+      "normalized_path": "1220-2.wav",
+      "paths": [
+        "1220-2 .wav",
+        "1220-2.wav"
+      ]
+    }
+  ],
+  "encoding_status": "cp949",
+  "policy_note": "Anomaly records are preserved evidence; they do not authorize filename repair or semantic guessing."
+}

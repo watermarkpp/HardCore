@@ -57,8 +57,8 @@ const SKILL_CATALOG := {
 	"taoist.summon_divine_beast": "召唤神兽",
 }
 
-# 运行时成长入口。精确逐级官服数值将在等级经验/属性表完成考据后替换，
-# 所有调用方只依赖此处，避免把职业公式散落到角色、HUD和技能代码中。
+# Historical export metadata only. Runtime base growth is compiled from the
+# primary server by build_character_base_growth.py; this is never a fallback.
 const BASE_STATS := {
 	"战士": {"hp_base": 100, "hp_per_level": 20, "mp_base": 20, "mp_per_level": 4, "attack_min": 2, "attack_max": 5},
 	"法师": {"hp_base": 55, "hp_per_level": 8, "mp_base": 55, "mp_per_level": 18, "attack_min": 1, "attack_max": 3},
@@ -141,18 +141,25 @@ const SKILL_TIMING_OVERRIDES := {
 # 服务端对任意 nPower>0 发 SM_STRUCK，并以 StruckTime=100 拒绝新动作；
 # 客户端则将 SM_STRUCK 排在当前动作之后，并以三帧表现受击。用户明确要求
 # 小额擦伤不能触发硬反应，因此下列阈值是 HardCore 的数据化平衡策略。
+# V4（HardCore 单机平衡，非原版规则）：普通硬直阈值升级为
+# max(3, ceil(当前MaxHP×3%))；24 级起受击表现统一 80ms×3 帧=240ms，
+# 1-23 级完整保留原三帧曲线；边界值本身（final_damage == 阈值）触发硬直。
 const COMBAT_REACTION_POLICY := {
-	"policy_id": "hardcore_player_hit_reaction_v2",
+	"policy_id": "hardcore_player_hit_reaction_v4",
 	"origin": "hardcore_custom_balance_not_original_176",
-	"max_hp_ratio": 0.02,
+	"max_hp_ratio": 0.03,
 	"minimum_actual_damage": 3,
 	"comparison": "actual_damage_gte_threshold",
 	"server_action_lock_seconds": 0.10,
-	"reaction_animation_seconds": 0.24,
 	"reaction_frame_count": 3,
+	"reaction_frame_base_ms": 140,
+	"reaction_frame_level_step_ms": 2,
+	"reaction_frame_floor_ms": 100,
+	"reaction_high_level_start": 24,
+	"reaction_high_level_frame_ms": 80,
 	"reaction_queue_policy": "after_current_action",
 	"balance_basis": "Bich baseline: scarecrow 1-2; rake/hook cats 2-4; level-1 warrior HP 120",
-	"reaction_basis": "mobile fixed 3x80ms, using the floor of modified-1.5 client max(80, 200-level*5) per-frame timing",
+	"reaction_basis": "HardCore tuned 3-frame curve: levels 1-23 keep frame_ms=max(100,140-level*2) (300-414ms total), level 24+ unified 80ms frames (240ms total)",
 	"evidence": [
 		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjBase.pas:5468-5521,25225-25243", "finding": "nPower>0 sends SM_STRUCK; CheckActionStatus uses configured StruckTime"},
 		{"confidence": "B", "scope": "modified_1.5_2002_not_verified_1.76", "path": "dev_art_sources/reference/original_gameofmir/Client/Actor.pas:75-90,1407-1414,1536-1546,1617-1634", "finding": "three struck frames; frame_ms=max(80,200-level*5); SM_STRUCK waits for current action to finish"},
@@ -161,6 +168,7 @@ const COMBAT_REACTION_POLICY := {
 }
 
 static var _runtime_data: Dictionary = {}
+static var _base_growth_cache: Dictionary = {}
 static var _skill_ids_by_name: Dictionary = {}
 
 
@@ -217,20 +225,24 @@ static func skill_input_metadata(skill_name_or_id: String) -> Dictionary:
 
 
 static func stats_for_level(profession: String, level: int) -> Dictionary:
-	var resolved_profession := profession_display_name(profession)
-	var selected := resolved_profession if is_valid_profession(resolved_profession) else "战士"
-	if GameData != null and not GameData.service_reference.is_empty():
-		var service_stats := GameData.service_profession_stats(selected, level)
-		if not service_stats.is_empty():
-			return service_stats
-	var source: Dictionary = _data().get("baseStats", BASE_STATS)[selected]
-	var safe_level := maxi(1, level)
-	return {
-		"max_hp": int(source.hp_base) + safe_level * int(source.hp_per_level),
-		"max_mp": int(source.mp_base) + safe_level * int(source.mp_per_level),
-		"attack_min": int(source.attack_min),
-		"attack_max": int(source.attack_max),
-	}
+	return _base_growth_row(profession, level).duplicate()
+
+
+static func base_stat_for_level(profession: String, level: int, stat: String) -> int:
+	return int(_base_growth_row(profession, level)[stat])
+
+
+static func _base_growth_row(profession: String, level: int) -> Dictionary:
+	var display := profession_display_name(profession)
+	if display not in PROFESSIONS:
+		display = "战士"
+	var normalized_level := maxi(1, level)
+	var key := "%s:%d" % [display, normalized_level]
+	if not _base_growth_cache.has(key):
+		var row := preload("res://scripts/generated/character_base_growth_v1.gd").stats_for_level(display, normalized_level)
+		row.make_read_only()
+		_base_growth_cache[key] = row
+	return _base_growth_cache[key]
 
 
 static func skill_profile(skill_name_or_id: String) -> Dictionary:
@@ -383,9 +395,41 @@ static func player_struck_action_lock_seconds() -> float:
 	return maxf(0.0, float(policy.get("server_action_lock_seconds", COMBAT_REACTION_POLICY.server_action_lock_seconds)))
 
 
-static func player_struck_reaction_seconds() -> float:
+static func player_struck_reaction_frame_milliseconds(character_level: int) -> int:
 	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
-	return maxf(0.0, float(policy.get("reaction_animation_seconds", COMBAT_REACTION_POLICY.reaction_animation_seconds)))
+	var safe_level := maxi(1, character_level)
+	var high_level_start := maxi(1, int(policy.get(
+		"reaction_high_level_start",
+		COMBAT_REACTION_POLICY.reaction_high_level_start
+	)))
+	var high_level_frame_ms := maxi(1, int(policy.get(
+		"reaction_high_level_frame_ms",
+		COMBAT_REACTION_POLICY.reaction_high_level_frame_ms
+	)))
+	if safe_level >= high_level_start:
+		return high_level_frame_ms
+	var frame_base_ms := maxi(1, int(policy.get(
+		"reaction_frame_base_ms",
+		COMBAT_REACTION_POLICY.reaction_frame_base_ms
+	)))
+	var level_step_ms := maxi(0, int(policy.get(
+		"reaction_frame_level_step_ms",
+		COMBAT_REACTION_POLICY.reaction_frame_level_step_ms
+	)))
+	var frame_floor_ms := maxi(1, int(policy.get(
+		"reaction_frame_floor_ms",
+		COMBAT_REACTION_POLICY.reaction_frame_floor_ms
+	)))
+	return maxi(frame_floor_ms, frame_base_ms - safe_level * level_step_ms)
+
+
+static func player_struck_reaction_seconds(character_level: int) -> float:
+	var policy: Dictionary = _data().get("combatReactionPolicy", COMBAT_REACTION_POLICY)
+	var frame_count := maxi(1, int(policy.get(
+		"reaction_frame_count",
+		COMBAT_REACTION_POLICY.reaction_frame_count
+	)))
+	return float(player_struck_reaction_frame_milliseconds(character_level) * frame_count) / 1000.0
 
 
 static func missing_runtime_skills(skill_rows: Array) -> PackedStringArray:

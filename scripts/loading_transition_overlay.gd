@@ -8,9 +8,13 @@ const MobileLayoutRules := preload("res://scripts/mobile_layout.gd")
 const CONTRACT_ID := "ui.loading.transition.v1"
 const LOADING_TEXT := "Loading......"
 const GAME_ICON := preload("res://assets/branding/game_icon.png")
+const BATTLEFIELD_BACKGROUND := preload(
+	"res://assets/ui/gothic_theme/v1/loading_battlefield_background.jpg"
+)
 const EMBER_COUNT := 14
 
 var shade: ColorRect
+var battlefield_background: TextureRect
 var game_icon_watermark: TextureRect
 var content_safe_root: Control
 var red_glow: ColorRect
@@ -18,7 +22,7 @@ var vignette: ColorRect
 var loading_label: Label
 var embers: Array[ColorRect] = []
 var transition_id := ""
-var _fade_tween: Tween
+var _coverage_request_serial := 0
 var _pulse_time := 0.0
 var _holding_final := false
 
@@ -30,9 +34,18 @@ func _ready() -> void:
 	set_meta("stable_id", "ui.loading.overlay")
 	shade = ColorRect.new()
 	shade.name = "LoadingShade"
-	shade.color = Color(0.018, 0.025, 0.035, 0.90)
+	shade.color = Color(0.018, 0.025, 0.035, 1.0)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(shade)
+	battlefield_background = TextureRect.new()
+	battlefield_background.name = "BattlefieldBackground"
+	battlefield_background.texture = BATTLEFIELD_BACKGROUND
+	battlefield_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	battlefield_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	battlefield_background.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	battlefield_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	battlefield_background.set_meta("stable_id", "ui.loading.battlefield_background")
+	add_child(battlefield_background)
 	_build_vignette()
 	content_safe_root = Control.new()
 	content_safe_root.name = "LoadingSafeContent"
@@ -82,6 +95,7 @@ func apply_layout(viewport_size: Vector2, safe_margins := Vector4.ZERO) -> void:
 	var full_size := Vector2(maxf(1.0, viewport_size.x), maxf(1.0, viewport_size.y))
 	_set_top_left_rect(self, Vector2.ZERO, full_size)
 	_set_top_left_rect(shade, Vector2.ZERO, full_size)
+	_set_top_left_rect(battlefield_background, Vector2.ZERO, full_size)
 	_set_top_left_rect(vignette, Vector2.ZERO, full_size)
 	var safe_position := Vector2(maxf(0.0, safe_margins.x), maxf(0.0, safe_margins.y))
 	var safe_size := Vector2(
@@ -203,21 +217,23 @@ void fragment() {
 
 
 func begin_loading(next_transition_id := "") -> void:
-	_stop_fade()
+	_coverage_request_serial += 1
+	var request_serial := _coverage_request_serial
 	_holding_final = false
 	transition_id = str(next_transition_id)
+	var request_transition_id := transition_id
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT
-	modulate.a = 0.0
+	# The complete overlay remains opaque for every frame in which it is visible.
+	# Only the internal text/glow atmosphere animates; gameplay and HUD pixels
+	# must never become part of the Loading presentation.
+	modulate.a = 1.0
 	show()
-	_fade_tween = create_tween()
-	_fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_fade_tween.tween_property(self, "modulate:a", 1.0, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_fade_tween.tween_callback(_emit_covered)
+	_emit_covered_after_present(request_serial, request_transition_id)
 
 
 func show_loading_immediately(next_transition_id := "") -> void:
-	_stop_fade()
+	_coverage_request_serial += 1
 	_holding_final = false
 	transition_id = str(next_transition_id)
 	_pulse_time = 0.0
@@ -230,7 +246,6 @@ func show_loading_immediately(next_transition_id := "") -> void:
 ## an asynchronous resource finishes. Existing map transitions never call
 ## this API and retain their breathing/ember animation unchanged.
 func freeze_final_visual() -> void:
-	_stop_fade()
 	_holding_final = true
 	loading_label.modulate.a = 1.0
 	var watermark_material := game_icon_watermark.material as ShaderMaterial
@@ -242,11 +257,24 @@ func freeze_final_visual() -> void:
 func finish_loading() -> void:
 	if not visible:
 		return
-	_stop_fade()
-	_fade_tween = create_tween()
-	_fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_fade_tween.tween_property(self, "modulate:a", 0.0, 0.20).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	_fade_tween.tween_callback(_finish_hide)
+	_coverage_request_serial += 1
+	_finish_hide()
+
+
+func _emit_covered_after_present(request_serial: int, request_transition_id: String) -> void:
+	# Keep the handshake asynchronous so callers can attach their signal await
+	# immediately after begin_loading(). Production waits for a rendered opaque
+	# frame before it permits world replacement.
+	await get_tree().process_frame
+	if DisplayServer.get_name() != "headless":
+		await RenderingServer.frame_post_draw
+	if (
+		request_serial != _coverage_request_serial
+		or not visible
+		or request_transition_id != transition_id
+	):
+		return
+	_emit_covered()
 
 
 func _emit_covered() -> void:
@@ -263,9 +291,3 @@ func _finish_hide() -> void:
 		"contract_id": CONTRACT_ID,
 		"transition_id": transition_id,
 	})
-
-
-func _stop_fade() -> void:
-	if _fade_tween != null and _fade_tween.is_valid():
-		_fade_tween.kill()
-	_fade_tween = null

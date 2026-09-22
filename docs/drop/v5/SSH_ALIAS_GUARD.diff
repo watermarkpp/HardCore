@@ -1,0 +1,22 @@
+--- a/RUN_V5.ps1
++++ b/RUN_V5.ps1
+@@ -21,7 +21,7 @@
+     return ($output -join "`n").Trim()
+ }
+ $Origin = Invoke-CheckedGit -Root $Repository -GitArgs @('remote', 'get-url', 'origin')
+-if ($Origin -notmatch '^((https://github\.com/)|(git@github\.com:))watermarkpp/HardCore(\.git)?$') {
++if ($Origin -notmatch '^((https://github\.com/)|(git@github\.com:)|(git@github-hardcore:))watermarkpp/HardCore(\.git)?$') {
+     throw 'Origin is not watermarkpp/HardCore; no push or remote rewrite is authorized.'
+ }
+ Invoke-CheckedGit -Root $Repository -GitArgs @('fetch', 'origin') | Out-Null
+--- a/PUSH_REVIEW.ps1
++++ b/PUSH_REVIEW.ps1
+@@ -17,7 +17,7 @@
+ $Branch = Git-Checked -GitArgs @('branch', '--show-current')
+ if ($Branch -notmatch '^codex/dpv2-glm52-flash-v5-[A-Za-z0-9_-]+$') { throw 'Not the authorized dedicated review branch.' }
+ $Origin = Git-Checked -GitArgs @('remote', 'get-url', 'origin')
+-if ($Origin -notmatch '^((https://github\.com/)|(git@github\.com:))watermarkpp/HardCore(\.git)?$') { throw 'Unexpected origin. Do not publish.' }
++if ($Origin -notmatch '^((https://github\.com/)|(git@github\.com:)|(git@github-hardcore:))watermarkpp/HardCore(\.git)?$') { throw 'Unexpected origin. Do not publish.' }
+ Git-Checked -GitArgs @('merge-base', '--is-ancestor', $BaseSha, 'HEAD') | Out-Null
+ & $Python -3.12 (Join-Path $PSScriptRoot 'report_v5.py') --repo $Worktree
+ if ($LASTEXITCODE -ne 0) { throw 'Could not create the factual review report.' }

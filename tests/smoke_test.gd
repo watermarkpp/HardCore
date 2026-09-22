@@ -1,24 +1,35 @@
 extends Node
 
+const DEATH_RELEASE_TIMEOUT_SECONDS := 5.0
+
 
 func _ready() -> void:
 	_run.call_deferred()
 
 
 func _run() -> void:
-	PlayerState.test_mode = true
+	# Exercise the production frame-paced bootstrap. The headless test-mode
+	# blocking loader can starve dummy-renderer texture finalization.
+	PlayerState.test_mode = false
 	PlayerState.reset_progress()
 	var packed: PackedScene = load("res://scenes/main.tscn")
 	assert(packed != null, "主场景无法载入")
 	var game := packed.instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var bootstrap_deadline := Time.get_ticks_msec() + 60000
+	while (
+		(game._world_bootstrap_in_progress or game._map_transition_in_progress)
+		and Time.get_ticks_msec() < bootstrap_deadline
+	):
+		await get_tree().process_frame
+	assert(not game._world_bootstrap_in_progress, "综合烟测初始世界加载未完成")
+	assert(not game._map_transition_in_progress, "综合烟测初始地图切换未完成")
+	PlayerState.test_mode = true
 
-	assert(GameData.maps.size() == 142, "地图数据数量不符")
+	assert(GameData.maps.size() == 209, "142张来源地图与67张正式地图身份未完整载入")
 	var monster_counts := GameData.canonical_monster_counts()
 	assert(
-		int(monster_counts.get("catalog_identity_count", 0)) == 217,
+		int(monster_counts.get("catalog_identity_count", 0)) == 156,
 		"canonical怪物身份目录数量不符"
 	)
 	assert(
@@ -33,15 +44,23 @@ func _run() -> void:
 	assert(PlayerState.inventory.size() == 1, "拾取入包失败")
 	var equip_result := PlayerState.equip_inventory_index(0)
 	assert(equip_result.begins_with("已装备"), "装备穿戴失败")
-	assert(int(PlayerState.computed_stats.get("attack_max", 0)) == 10, "装备属性没有计入角色")
+	# The base growth chain (character_base_growth_v1) is the stat authority
+	# since fa4a1ffa: a level-1 warrior has attack_max 1.  The canonical 木剑
+	# carries dc 2-5, so equipping it must land attack_max at 1 + 5 = 6.
+	var growth_base_attack_max := int(
+		preload("res://scripts/generated/character_base_growth_v1.gd")
+			.stats_for_level("战士", 1)["attack_max"]
+	)
+	assert(growth_base_attack_max == 1, "1级战士成长攻击上限必须为1")
+	assert(
+		int(PlayerState.computed_stats.get("attack_max", 0)) == growth_base_attack_max + 5,
+		"装备属性没有按成长基础+木剑上限(2-5)计入角色"
+	)
 	assert(game.player != null, "玩家未创建")
 
-	# 综合烟测使用稳定ID的郊外样本；正式启动点按服务端HomeMap=0进入比奇省。
-	game.change_zone("比奇郊外")
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# 综合烟测直接使用正式比奇运行图；旧郊外演示区不再是生产入口。
 	var enemies := get_tree().get_nodes_in_group("enemies")
-	assert(enemies.size() >= 5, "演示怪物未完整生成（鸡、鹿已删除）")
+	assert(enemies.size() > 0, "正式比奇运行图没有生成怪物")
 	for actor: Node in enemies:
 		if actor is EnemyActor:
 			actor.apply_control(5.0)
@@ -66,14 +85,62 @@ func _run() -> void:
 	while game.player._struck_lock_remaining > 0.0:
 		await get_tree().physics_frame
 	var enemy: EnemyActor = enemies[0]
-	enemy.global_position = game.player.global_position + Vector2(30, 0)
+	game.player.global_position = enemy.global_position - Vector2(30, 0)
 	enemy.apply_control(2.0)
 	game._set_locked_target(enemy, true)
 	game.player.facing = Vector2.RIGHT
-	game.player.attack_min = enemy.current_hp
-	game.player.attack_max = enemy.current_hp
+	game.player.attack_min = enemy.max_hp * 10
+	game.player.attack_max = enemy.max_hp * 10
+	var enemy_hp_before_attack := enemy.current_hp
+	var death_observation: Dictionary = {
+		"lethal_hp_observed": false,
+		"death_pending_observed": false,
+		"dying_observed": false,
+		"died_signal_observed": false,
+	}
+	enemy.died.connect(func(dead_enemy: EnemyActor, _monster_data: Dictionary) -> void:
+		death_observation["died_signal_observed"] = true
+		death_observation["lethal_hp_observed"] = dead_enemy.current_hp < enemy_hp_before_attack
+		death_observation["dying_observed"] = dead_enemy._dying
+	)
 	assert(game.player.request_attack(true, enemy.get_instance_id()), "Basic attack rejected: attack=%.3f action=%.3f struck=%.3f control=%.3f dead=%s" % [game.player._attack_timer, game.player._attack_action_timer, game.player._struck_lock_remaining, game.player.control_time, game.player._dead])
-	await get_tree().create_timer(0.95).timeout
+	var death_observation_deadline := Time.get_ticks_msec() + 3000
+	while Time.get_ticks_msec() < death_observation_deadline:
+		if not is_instance_valid(enemy):
+			break
+		death_observation["lethal_hp_observed"] = bool(death_observation.get("lethal_hp_observed", false)) or enemy.current_hp < enemy_hp_before_attack
+		death_observation["death_pending_observed"] = bool(death_observation.get("death_pending_observed", false)) or enemy._death_pending
+		death_observation["dying_observed"] = bool(death_observation.get("dying_observed", false)) or enemy._dying
+		if (
+			bool(death_observation.get("lethal_hp_observed", false))
+			and (
+				bool(death_observation.get("death_pending_observed", false))
+				or bool(death_observation.get("dying_observed", false))
+				or bool(death_observation.get("died_signal_observed", false))
+			)
+		):
+			break
+		await get_tree().process_frame
+	assert(bool(death_observation.get("lethal_hp_observed", false)), "攻击释放后目标HP没有下降")
+	assert(
+		bool(death_observation.get("death_pending_observed", false))
+		or bool(death_observation.get("dying_observed", false))
+		or bool(death_observation.get("died_signal_observed", false)),
+		"致死攻击没有进入death_pending/dying生命周期"
+	)
+	# The two production SceneTreeTimers advance in game/process time. A cold
+	# background UI prewarm can block a frame while wall time advances, so a
+	# wall-clock-only deadline would expire before those timers received 5 s.
+	# Keep the same 5 s game-time bound; the runner still caps total wall time.
+	var death_release_elapsed := 0.0
+	var death_release_wall_start := Time.get_ticks_msec()
+	while is_instance_valid(enemy) and death_release_elapsed < DEATH_RELEASE_TIMEOUT_SECONDS:
+		await get_tree().process_frame
+		death_release_elapsed += get_process_delta_time()
+	if is_instance_valid(enemy):
+		print("SMOKE_DEATH_DIAGNOSTIC ", JSON.stringify(game.death_work_queue_snapshot()))
+		print("SMOKE_ACTOR_DIAGNOSTIC id=", enemy.monster_id, " hp=", enemy.current_hp, " pending=", enemy._death_pending, " dying=", enemy._dying)
+	print("SMOKE_DEATH_CLOCK game_seconds=", death_release_elapsed, " wall_seconds=", float(Time.get_ticks_msec() - death_release_wall_start) / 1000.0)
 	assert(not is_instance_valid(enemy), "攻击、死亡链路未完成")
 
 	PlayerState.level = 7
@@ -82,13 +149,19 @@ func _run() -> void:
 	game.change_zone("比奇城")
 	await get_tree().process_frame
 	await get_tree().process_frame
-	assert(game.current_zone == "比奇省" and game.current_map_id == 4, "旧比奇城入口没有重定向到客户端0.map")
+	assert(game.current_zone.begins_with("比奇省") and game.current_map_id == 910001, "旧比奇城入口没有重定向到正式比奇地图")
 	var interactables := get_tree().get_nodes_in_group("interactable")
 	var npc_count := 0
+	var service_identity_ids := {}
 	for interactable: Node in interactables:
 		if interactable is NPCActor:
 			npc_count += 1
-	assert(npc_count == 7, "比奇省正式运行时NPC数量不符")
+			service_identity_ids[(interactable as NPCActor).service_identity_id] = true
+	assert(
+		npc_count == MapEditorRuntimeBridge.game_content_for_map(910001).npcs.size(),
+		"比奇省正式NPC布置没有逐点生成"
+	)
+	assert(service_identity_ids.size() == 7, "比奇省七种统一NPC功能身份未闭环")
 	var bookseller: NPCActor
 	var trainer: NPCActor
 	var veteran: NPCActor
@@ -125,9 +198,7 @@ func _run() -> void:
 	var gold_before_claim := PlayerState.gold
 	game.hud.quest_panel._act()
 	assert(PlayerState.gold == gold_before_claim + 100 and PlayerState.has_item("布衣(男)"), "任务奖励领取失败")
-	game.change_zone("比奇郊外")
-	await get_tree().process_frame
-	assert(get_tree().get_nodes_in_group("enemies").size() >= 5, "返回野外后怪物未生成")
+	assert(get_tree().get_nodes_in_group("enemies").size() > 0, "正式比奇野外怪物被任务流程清空")
 
 	print("SMOKE_TEST_PASS：数据、区域、商店、药品、技能、任务、战斗与Boss链路正常")
 	get_tree().quit(0)

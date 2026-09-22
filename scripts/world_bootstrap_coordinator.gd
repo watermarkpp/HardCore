@@ -39,6 +39,9 @@ var generation := 0
 var map_id := -1
 var mode := ""
 var started_at_usec := 0
+# P0-1/P0-3 audit trail: the most recent FAILED bootstrap, kept across
+# chained recovery transitions that overwrite stage/diagnostic.
+var last_failure: Dictionary = {}
 
 # When false the budget queues drain without yielding between slices. This is
 # the production adapter's test-mode fast path; slicing, metrics and per-item
@@ -86,6 +89,18 @@ var failed_collision_count := 0
 var collision_slice_count := 0
 var collision_max_items_in_slice := 0
 var collision_max_slice_ms := 0.0
+
+var planned_actors := 0
+var spawned_actors := 0
+var deferred_actors := 0
+var duplicate_actors := 0
+var failed_actors := 0
+var actor_slice_count := 0
+var actor_max_items_in_slice := 0
+var actor_max_slice_ms := 0.0
+var actor_max_item_ms := 0.0
+var actor_total_ms := 0.0
+var _planned_actor_ids: Dictionary = {}
 
 var target_map_resource_count := 0
 var shared_resource_count := 0
@@ -135,6 +150,17 @@ func _internal_begin(_map_id: int, _mode: String) -> void:
 	collision_slice_count = 0
 	collision_max_items_in_slice = 0
 	collision_max_slice_ms = 0.0
+	planned_actors = 0
+	spawned_actors = 0
+	deferred_actors = 0
+	duplicate_actors = 0
+	failed_actors = 0
+	actor_slice_count = 0
+	actor_max_items_in_slice = 0
+	actor_max_slice_ms = 0.0
+	actor_max_item_ms = 0.0
+	actor_total_ms = 0.0
+	_planned_actor_ids.clear()
 	target_map_resource_count = 0
 	shared_resource_count = 0
 	cross_region_resource_count = 0
@@ -158,6 +184,7 @@ func _empty_diagnostic() -> Dictionary:
 		"collision_count": 0,
 		"planned_actors": 0,
 		"spawned_actors": 0,
+		"deferred_actors": 0,
 		"duplicate_actors": 0,
 		"failed_actors": 0,
 		"sync_load_spawn": 0,
@@ -179,6 +206,11 @@ func _empty_diagnostic() -> Dictionary:
 		"collision_slice_count": 0,
 		"collision_max_items_in_slice": 0,
 		"collision_max_slice_ms": 0.0,
+		"actor_slice_count": 0,
+		"actor_max_items_in_slice": 0,
+		"actor_max_slice_ms": 0.0,
+		"actor_max_item_ms": 0.0,
+		"actor_total_ms": 0.0,
 		"unexpected_sync_load_count": 0,
 		"unexpected_sync_load_count_build_map": 0,
 		"unexpected_sync_load_count_build_collision": 0,
@@ -219,6 +251,17 @@ func finish(success: bool, reason: String) -> Dictionary:
 		stage = Stage.READY
 	else:
 		stage = Stage.FAILED
+		# P0-1/P0-3 audit trail: a FAILED bootstrap may be immediately
+		# followed by a chained recovery transition (central failure owner),
+		# which re-runs this coordinator and overwrites stage/diagnostic
+		# within the same frame. Keep the last FAILED record persistent so
+		# strict drivers and diagnostics can still attribute the failure.
+		last_failure = {
+			"generation": generation,
+			"map_id": int(diagnostic.get("map_id", -1)),
+			"reason": reason,
+			"total_duration_ms": float(diagnostic.get("total_duration_ms", 0.0)),
+		}
 	diagnostic["success"] = success
 	diagnostic["failure_reason"] = reason
 	diagnostic["sync_load_spawn"] = _synchronous_load_during_spawn
@@ -245,6 +288,16 @@ func _sync_diagnostics() -> void:
 	diagnostic["collision_slice_count"] = collision_slice_count
 	diagnostic["collision_max_items_in_slice"] = collision_max_items_in_slice
 	diagnostic["collision_max_slice_ms"] = collision_max_slice_ms
+	diagnostic["planned_actors"] = planned_actors
+	diagnostic["spawned_actors"] = spawned_actors
+	diagnostic["deferred_actors"] = deferred_actors
+	diagnostic["duplicate_actors"] = duplicate_actors
+	diagnostic["failed_actors"] = failed_actors
+	diagnostic["actor_slice_count"] = actor_slice_count
+	diagnostic["actor_max_items_in_slice"] = actor_max_items_in_slice
+	diagnostic["actor_max_slice_ms"] = actor_max_slice_ms
+	diagnostic["actor_max_item_ms"] = actor_max_item_ms
+	diagnostic["actor_total_ms"] = actor_total_ms
 	diagnostic["unexpected_sync_load_count"] = unexpected_sync_load_count
 	diagnostic["unexpected_sync_load_count_build_map"] = unexpected_sync_load_count_build_map
 	diagnostic["unexpected_sync_load_count_build_collision"] = unexpected_sync_load_count_build_collision
@@ -315,6 +368,23 @@ func register_resource(
 	region := ""
 ) -> void:
 	_register_resource(path, kind, required, owner_id, scope, region)
+
+
+## WALL-P1R C3 narrow interface: best-effort threaded prefetch for derived
+## resources. Optional entries ARE prefetched (threaded request like any
+## other) but their failure never counts as a required-resource failure, so
+## a missing wall atlas/chunk degrades that map to legacy rendering instead
+## of blocking the map load. Required-resource semantics are untouched.
+func register_optional_prefetch_resource(
+	path: String,
+	kind: String,
+	owner_id: String,
+	scope := "target",
+	region := ""
+) -> void:
+	_register_resource(path, kind, false, owner_id, scope, region)
+	if resource_manifest.has(path):
+		resource_manifest[path]["optional_prefetch"] = true
 
 
 func _finalize_resource_scope() -> void:
@@ -398,6 +468,11 @@ func ready_contract_summary() -> Dictionary:
 		"planned_collision_count": planned_collision_count,
 		"built_collision_count": built_collision_count,
 		"failed_collision_count": failed_collision_count,
+		"planned_actors": planned_actors,
+		"spawned_actors": spawned_actors,
+		"deferred_actors": deferred_actors,
+		"duplicate_actors": duplicate_actors,
+		"failed_actors": failed_actors,
 		"unexpected_sync_load_count": unexpected_sync_load_count,
 		"resource_count": diagnostic.get("resource_count", 0),
 		"cross_region_resource_count": cross_region_resource_count,
@@ -440,6 +515,20 @@ func submit_collision_descriptors(descriptors: Array) -> void:
 	collision_max_slice_ms = 0.0
 
 
+func submit_actor_descriptor(descriptor: Dictionary) -> bool:
+	planned_actors += 1
+	var actor_id := str(descriptor.get("actor_id", ""))
+	if actor_id.is_empty():
+		failed_actors += 1
+		return false
+	if _planned_actor_ids.has(actor_id):
+		duplicate_actors += 1
+		return false
+	_planned_actor_ids[actor_id] = true
+	_actor_spawn_queue.append(descriptor.duplicate(true))
+	return true
+
+
 func process_map_queue(handler: Callable, max_items: int, budget_ms: float) -> void:
 	await _process_staged_queue(_map_build_queue, handler, max_items, budget_ms, "map")
 
@@ -458,6 +547,31 @@ func process_collision_queue(
 	)
 
 
+func process_actor_queue(handler: Callable, max_items: int, budget_ms: float) -> void:
+	await _process_staged_queue(
+		_actor_spawn_queue,
+		handler,
+		max_items,
+		budget_ms,
+		"actor"
+	)
+
+
+func process_actor_queue_blocking(
+	handler: Callable,
+	max_items: int,
+	budget_ms: float
+) -> void:
+	while not _actor_spawn_queue.is_empty():
+		_process_staged_queue_slice(
+			_actor_spawn_queue,
+			handler,
+			max_items,
+			budget_ms,
+			"actor"
+		)
+
+
 func _process_staged_queue(
 	queue: Array,
 	handler: Callable,
@@ -466,39 +580,67 @@ func _process_staged_queue(
 	kind: String
 ) -> void:
 	while not queue.is_empty():
-		var slice_start := Time.get_ticks_usec()
-		var processed := 0
-		while not queue.is_empty():
-			var item: Variant = queue.pop_front()
-			if item is Dictionary:
-				var result: Variant = handler.call(item as Dictionary)
-				if kind == "map":
-					built_map_item_count += 1
-				elif kind == "collision":
-					if result == null:
-						failed_collision_count += 1
-					else:
-						built_collision_count += 1
-			processed += 1
-			var elapsed_ms := (Time.get_ticks_usec() - slice_start) / 1000.0
-			if processed >= max_items or elapsed_ms >= budget_ms:
-				break
-		var slice_ms := (Time.get_ticks_usec() - slice_start) / 1000.0
-		_slice_count += 1
-		_max_slice_ms = maxf(_max_slice_ms, slice_ms)
-		_total_slice_ms += slice_ms
-		if kind == "map":
-			map_slice_count += 1
-			map_max_items_in_slice = maxi(map_max_items_in_slice, processed)
-			map_max_slice_ms = maxf(map_max_slice_ms, slice_ms)
-		elif kind == "collision":
-			collision_slice_count += 1
-			collision_max_items_in_slice = maxi(
-				collision_max_items_in_slice, processed
-			)
-			collision_max_slice_ms = maxf(collision_max_slice_ms, slice_ms)
+		_process_staged_queue_slice(queue, handler, max_items, budget_ms, kind)
 		if not queue.is_empty() and defer_between_slices:
 			await Engine.get_main_loop().process_frame
+
+
+func _process_staged_queue_slice(
+	queue: Array,
+	handler: Callable,
+	max_items: int,
+	budget_ms: float,
+	kind: String
+) -> void:
+	var slice_start := Time.get_ticks_usec()
+	var processed := 0
+	while not queue.is_empty():
+		var item: Variant = queue.pop_front()
+		if item is Dictionary:
+			var item_started_usec := Time.get_ticks_usec()
+			var result: Variant = handler.call(item as Dictionary)
+			var item_ms := (
+				float(Time.get_ticks_usec() - item_started_usec) / 1000.0
+			)
+			if kind == "map":
+				built_map_item_count += 1
+			elif kind == "collision":
+				if result == null:
+					failed_collision_count += 1
+				else:
+					built_collision_count += 1
+			elif kind == "actor":
+				actor_total_ms += item_ms
+				actor_max_item_ms = maxf(actor_max_item_ms, item_ms)
+				if result is Dictionary and bool(result.get("ok", false)):
+					if bool(result.get("materialized", true)):
+						spawned_actors += 1
+					else:
+						deferred_actors += 1
+				else:
+					failed_actors += 1
+		processed += 1
+		var elapsed_ms := (Time.get_ticks_usec() - slice_start) / 1000.0
+		if processed >= max_items or elapsed_ms >= budget_ms:
+			break
+	var slice_ms := (Time.get_ticks_usec() - slice_start) / 1000.0
+	_slice_count += 1
+	_max_slice_ms = maxf(_max_slice_ms, slice_ms)
+	_total_slice_ms += slice_ms
+	if kind == "map":
+		map_slice_count += 1
+		map_max_items_in_slice = maxi(map_max_items_in_slice, processed)
+		map_max_slice_ms = maxf(map_max_slice_ms, slice_ms)
+	elif kind == "collision":
+		collision_slice_count += 1
+		collision_max_items_in_slice = maxi(
+			collision_max_items_in_slice, processed
+		)
+		collision_max_slice_ms = maxf(collision_max_slice_ms, slice_ms)
+	elif kind == "actor":
+		actor_slice_count += 1
+		actor_max_items_in_slice = maxi(actor_max_items_in_slice, processed)
+		actor_max_slice_ms = maxf(actor_max_slice_ms, slice_ms)
 
 
 func record_sync_load() -> void:
@@ -509,9 +651,29 @@ func record_sync_load() -> void:
 
 func request_threaded_prefetch() -> int:
 	var _requested := 0
+	# Godot 4.7's dummy renderer has unsafe concurrent texture RID allocation.
+	# Automated gameplay tests retain the same manifest and failure gates while
+	# creating imported resources on this thread. Visible/Android loading keeps
+	# its original asynchronous path; this is not an engine-wide repair.
+	var serial_test_load := DisplayServer.get_name() == "headless"
+	diagnostic["headless_serial_prefetch"] = serial_test_load
 	for _path: Variant in resource_manifest:
 		var _entry: Dictionary = resource_manifest[_path]
-		if not (_entry.get("required", true) as bool):
+		var _required := (_entry.get("required", true) as bool)
+		var _optional := (_entry.get("optional_prefetch", false) as bool)
+		if not (_required or _optional):
+			continue
+		if serial_test_load:
+			var resource_path := str(_path)
+			var resource: Resource = ResourceLoader.load(resource_path) if ResourceLoader.exists(resource_path) else null
+			if resource != null:
+				_prefetched_resources[resource_path] = resource
+				_entry["status"] = "ready"
+				_requested += 1
+			else:
+				_entry["status"] = "load_failed"
+				if _required:
+					diagnostic["prefetch_failure_count"] += 1
 			continue
 		var _status := ResourceLoader.load_threaded_request(str(_path))
 		if _status == OK or _status == ERR_ALREADY_IN_USE:
@@ -519,7 +681,11 @@ func request_threaded_prefetch() -> int:
 			_requested += 1
 		else:
 			_entry["status"] = "request_failed"
-			diagnostic["prefetch_failure_count"] += 1
+			# Optional (wall-render derived) resources must not pollute
+			# required failure diagnostics; a missing optional texture is
+			# handled by mode selection falling back to LEGACY.
+			if _required:
+				diagnostic["prefetch_failure_count"] += 1
 	return _requested
 
 

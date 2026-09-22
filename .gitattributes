@@ -1,3 +1,22 @@
+*.import text eol=lf
+
+# DPV2-SPB raw-byte authorities are frozen to their audited Windows CRLF
+# representation.  Keep clean worktrees and isolated Android build worktrees
+# byte-identical so the fail-closed runtime and final gate remain portable.
+assets/data/canonical_monster_drop_source_v2.json text eol=crlf
+docs/drop/v5/source/monster_*.bin text eol=crlf
+assets/data/drop/dpv2_direct_baseline_v2.json text eol=lf
+assets/data/drop/dpv2_21cq_source_provenance_v1.json text eol=lf
+assets/data/drop/dpv2_single_player_item_boost_classification_v1.json text eol=crlf
+map_editor_workspace/**/*.editor.json text eol=crlf
+
+# WALL-P1R: the wall render contract hashes runtime json bytes
+# (source_runtime_json_sha256) and publishes byte-deterministic plan
+# documents; fresh worktrees and Android build trees must checkout both
+# sides of that contract byte-identically (R1.1a reproducibility ruling).
+assets/data/runtime/map_editor/*.json text eol=lf
+assets/data/runtime/map_editor/wall_render_plans/*.json text eol=lf
+
 assets/data/vanilla_176/skill_source_package_v1_0_1/** binary
 assets/data/vanilla_176/skills_source_of_truth_v1.json binary
 assets/data/equipment_classic_avatar_head_patches.json -text
@@ -5,3 +24,9 @@ assets/data/equipment_helmet_finalization_manifest.json -text
 assets/data/equipment_helmet_visual_v2_overrides.json -text
 assets/data/equipment_visual_catalog.json -text
 assets/data/ui/manual_layout_overrides.json -text
+
+# Preserve archived test evidence bytes and their recorded SHA-256 values.
+docs/bugfix24/20260909/evidence/audio_full_frame_strict/** -text
+docs/bugfix24/20260909/evidence/v3_main_integration/** -text
+docs/bugfix24/20260909/evidence/v3_final_8bf77a34/** -text
+docs/bugfix24/20260909/evidence/t30_gold_cap/** -text

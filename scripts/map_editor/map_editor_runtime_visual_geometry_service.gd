@@ -1,12 +1,13 @@
 class_name MapEditorRuntimeVisualGeometryService
 extends RefCounted
 
-const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v5"
+const VISUAL_GEOMETRY_CONTRACT_ID := "map_editor_runtime_visual_geometry_v6"
 const EDITOR_LAYOUT_CONTRACT_ID := "map_editor_authoritative_layout_v1"
-const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v5"
+const OCCLUSION_SORT_CONTRACT_ID := "map_actor_occlusion_sort_v6"
 const RENDER_DOMAIN_STATIC_BACKGROUND := "static_background"
 const RENDER_DOMAIN_ACTOR_Y_SORT := "actor_y_sort"
 const WALL_PART_SORT_BASELINE_TILE_OFFSET := Vector2(0.5, 0.5)
+const STATIC_WALL_BRIDGE_CONTRACT_ID := "static_authored_atomic_wall_bridge_v1"
 const MATERIAL_LAYER_NAMES := [
 	"terrain_base", "terrain_front", "object_base", "object_front",
 ]
@@ -330,7 +331,8 @@ static func instance_draw_commands(
 	if (
 		split_wall
 	):
-		for part: Dictionary in render_parts:
+		for part_index in render_parts.size():
+			var part: Dictionary = render_parts[part_index]
 			var sort_offset_raw: Array = part.get(
 				"sort_tile_offset", part.get("tile_offset", [0, 0])
 			)
@@ -357,6 +359,21 @@ static func instance_draw_commands(
 				var image_path := str(part.get(str(image_pass.field), ""))
 				if image_path.is_empty():
 					continue
+				var pass_index := int(image_pass.pass)
+				var render_domain := render_domain_for_pass(
+					instance, asset, pass_index, has_split_foreground
+				)
+				var actor_sort_group := ""
+				if (
+					pass_index > 0
+					and render_domain == RENDER_DOMAIN_ACTOR_Y_SORT
+				):
+					# A wall part is one opaque occluder relative to actors.  Its
+					# base and front images remain separate children only to retain
+					# their authored pass order; they share one Y-sort wrapper.
+					actor_sort_group = "wall_part:%s:%d:%d" % [
+						str(instance.get("instance_id", "")), sequence, part_index,
+					]
 				result.append({
 					"instance": instance,
 					"asset": asset,
@@ -367,15 +384,11 @@ static func instance_draw_commands(
 					# Their part offset selects the occupied cell; the actual
 					# actor crossing baseline is that cell's physical centre.
 					"sort_baseline_tile": part_sort_baseline,
-					"sort_baseline_offset_px": Vector2.ZERO,
+					"sort_baseline_offset_px": instance_sort_baseline_world_offset(instance, asset),
 					"layer_index": layer_index,
-					"image_pass": int(image_pass.pass),
-					"render_domain": render_domain_for_pass(
-						instance,
-						asset,
-						int(image_pass.pass),
-						has_split_foreground
-					),
+					"image_pass": pass_index,
+					"render_domain": render_domain,
+					"actor_sort_group": actor_sort_group,
 					"occlusion_contract_id": OCCLUSION_SORT_CONTRACT_ID,
 					"part_order": int(part.get("draw_order_index", 0)),
 					"sequence": sequence,
@@ -428,17 +441,14 @@ static func render_domain_for_pass(
 	image_pass: int,
 	has_split_foreground: bool
 ) -> String:
-	# Shadows and the lower/base half of a deliberately split wall stay baked
-	# behind actors. Its foreground half sorts at the authored foot. Every
-	# unsplit occluder (ordinary tree/building or legacy wall) sorts as one unit.
+	# Ground shadows stay baked behind actors.  Both opaque halves of a split
+	# wall sort at the same authored foot: base contains real lower-facade pixels,
+	# so leaving it static lets every world object paint into the wall.  Ordinary
+	# unsplit occluders continue to sort as one unit.
 	if image_pass == 0:
 		return RENDER_DOMAIN_STATIC_BACKGROUND
 	if has_split_foreground:
-		return (
-			RENDER_DOMAIN_ACTOR_Y_SORT
-			if image_pass == 2
-			else RENDER_DOMAIN_STATIC_BACKGROUND
-		)
+		return RENDER_DOMAIN_ACTOR_Y_SORT
 	return (
 		RENDER_DOMAIN_ACTOR_Y_SORT
 		if instance_is_occluder(instance, asset)
@@ -463,14 +473,14 @@ static func legacy_profile_prop_actor_sort_world(prop: Dictionary) -> Vector2:
 	return prop.get("position", Vector2.ZERO)
 
 
-static func sorted_draw_commands(instances: Array) -> Array[Dictionary]:
+static func sorted_draw_commands(instances: Array, published_snapshot: Dictionary = {}) -> Array[Dictionary]:
 	var commands: Array[Dictionary] = []
 	var asset_cache := {}
 	var sequence := 0
 	for instance: Dictionary in instances:
 		var asset_id := str(instance.get("asset_id", ""))
 		if not asset_cache.has(asset_id):
-			asset_cache[asset_id] = MapAssetCatalogService.find_asset(asset_id)
+			asset_cache[asset_id] = HCPVisualSnapshot.resolve_asset(asset_id, published_snapshot)
 		var asset: Dictionary = asset_cache[asset_id]
 		var layer_index := MATERIAL_LAYER_NAMES.find(
 			str(instance.get("layer", "object_base"))
@@ -481,7 +491,115 @@ static func sorted_draw_commands(instances: Array) -> Array[Dictionary]:
 			commands.append(command)
 		sequence += 1
 	commands.sort_custom(draw_command_less)
+	for command_index in commands.size():
+		commands[command_index]["command_index"] = command_index
 	return commands
+
+
+static func is_atomic_wall_pass(command: Dictionary) -> bool:
+	return (
+		str(command.get("asset", {}).get("asset_type", "")) == "wall_module"
+		and not str(command.get("actor_sort_group", "")).is_empty()
+		and int(command.get("image_pass", -1)) in [1, 2]
+	)
+
+
+static func is_static_authored_wall_bridge_candidate(command: Dictionary) -> bool:
+	# Eligibility is intentionally semantic and public.  The original authored
+	# static command remains untouched; this only identifies commands whose
+	# pixels may need their pre-atomic-wall relation restored over a wall base.
+	var instance: Dictionary = command.get("instance", {})
+	var asset: Dictionary = command.get("asset", {})
+	var layer := str(instance.get("layer", ""))
+	return (
+		str(command.get("render_domain", "")) == RENDER_DOMAIN_STATIC_BACKGROUND
+		and not instance_is_occluder(instance, asset)
+		and layer in ["object_base", "object_front"]
+		and int(command.get("image_pass", -1)) > 0
+		and str(asset.get("asset_type", "")) != "wall_module"
+		and not command_is_terrain_floor_or_shadow(command)
+	)
+
+
+static func command_is_terrain_floor_or_shadow(command: Dictionary) -> bool:
+	var instance: Dictionary = command.get("instance", {})
+	var asset: Dictionary = command.get("asset", {})
+	var layer := str(instance.get("layer", "")).to_lower()
+	var category := str(asset.get("category", "")).to_lower()
+	var asset_type := str(asset.get("asset_type", "")).to_lower()
+	return (
+		layer in ["terrain_base", "terrain_front", "floor", "ground"]
+		or int(command.get("image_pass", -1)) == 0
+		or category in ["terrain", "floor", "ground", "shadow"]
+		or asset_type in ["terrain_tile", "floor_tile", "ground_tile", "shadow"]
+	)
+
+
+static func static_wall_bridge_source_over(
+	source: Color,
+	destination: Color
+) -> Color:
+	var out_alpha := source.a + destination.a * (1.0 - source.a)
+	if out_alpha <= 0.0:
+		return Color(0, 0, 0, 0)
+	var premultiplied := (
+		Vector3(source.r, source.g, source.b) * source.a
+		+ Vector3(destination.r, destination.g, destination.b)
+			* destination.a * (1.0 - source.a)
+	)
+	return Color(
+		premultiplied.x / out_alpha,
+		premultiplied.y / out_alpha,
+		premultiplied.z / out_alpha,
+		out_alpha
+	)
+
+
+static func static_wall_bridge_compose_ordered_colors(colors: Array[Color]) -> Color:
+	var result := Color(0, 0, 0, 0)
+	for color: Color in colors:
+		result = static_wall_bridge_source_over(color, result)
+	return result
+
+
+static func command_texture_transform(
+	command: Dictionary,
+	design_size: Vector2i,
+	texture_size: Vector2
+) -> Transform2D:
+	# Maps source texture coordinates directly to world pixels.  Keeping this
+	# transform public makes the bridge consume the exact same anchor, scale and
+	# rotation contract as the runtime Sprite2D; dormant flip fields stay inert.
+	var geometry := runtime_command_geometry(command, design_size, texture_size)
+	var basis := Transform2D(
+		float(geometry.get("rotation", 0.0)),
+		Vector2(geometry.get("visual_scale", Vector2.ONE)),
+		0.0,
+		Vector2.ZERO
+	)
+	var anchor := Vector2(geometry.get("anchor", Vector2.ZERO))
+	basis.origin = Vector2(geometry.get("center", Vector2.ZERO)) - basis.basis_xform(anchor)
+	return basis
+
+
+static func transformed_texture_aabb(
+	texture_transform: Transform2D,
+	texture_size: Vector2
+) -> Rect2i:
+	var points := [
+		texture_transform * Vector2.ZERO,
+		texture_transform * Vector2(texture_size.x, 0.0),
+		texture_transform * texture_size,
+		texture_transform * Vector2(0.0, texture_size.y),
+	]
+	var minimum: Vector2 = points[0]
+	var maximum: Vector2 = points[0]
+	for point: Vector2 in points:
+		minimum = minimum.min(point)
+		maximum = maximum.max(point)
+	var begin := Vector2i(floori(minimum.x), floori(minimum.y))
+	var finish := Vector2i(ceili(maximum.x), ceili(maximum.y))
+	return Rect2i(begin, (finish - begin).max(Vector2i.ONE))
 
 
 static func command_actor_sort_world(
@@ -500,6 +618,55 @@ static func command_actor_sort_world(
 			baseline_tile, design_size
 		)
 		+ Vector2(raw_offset)
+	)
+
+
+static func static_authored_sort_world(
+	command: Dictionary,
+	design_size: Vector2i
+) -> Vector2:
+	# Static authored materials retain their established far-corner draw plane.
+	# Compare the centre of that occupied cell with an atomic wall's occupied-
+	# cell centre; this raises the decoration group as a unit without deriving a
+	# new foot from sprite alpha, anchor, asset identity, or collision geometry.
+	var sort_tile := Vector2(command.get("sort_tile", Vector2i.ZERO))
+	var raw_offset: Variant = command.get(
+		"sort_baseline_offset_px", Vector2.ZERO
+	)
+	return (
+		MapEditorCoordinate.ground_position_gu_to_screen_position_px(
+			sort_tile + WALL_PART_SORT_BASELINE_TILE_OFFSET, design_size
+		)
+		+ Vector2(raw_offset)
+	)
+
+
+static func static_authored_command_is_in_front_of_wall(
+	static_command: Dictionary,
+	wall_command: Dictionary,
+	design_size: Vector2i
+) -> bool:
+	return (
+		static_authored_sort_world(static_command, design_size).y
+		> command_actor_sort_world(wall_command, design_size).y
+	)
+
+
+static func static_wall_bridge_pair_is_candidate(
+	static_command: Dictionary,
+	wall_base_command: Dictionary,
+	design_size: Vector2i,
+	static_aabb: Rect2i,
+	wall_group_aabb: Rect2i
+) -> bool:
+	return (
+		is_static_authored_wall_bridge_candidate(static_command)
+		and is_atomic_wall_pass(wall_base_command)
+		and int(wall_base_command.get("image_pass", -1)) == 1
+		and static_authored_command_is_in_front_of_wall(
+			static_command, wall_base_command, design_size
+		)
+		and static_aabb.intersects(wall_group_aabb)
 	)
 
 
@@ -581,6 +748,7 @@ static func draw_command_payload(instances: Array) -> Array[Dictionary]:
 			"render_domain": str(command.get(
 				"render_domain", RENDER_DOMAIN_STATIC_BACKGROUND
 			)),
+			"actor_sort_group": str(command.get("actor_sort_group", "")),
 			"occlusion_contract_id": str(command.get(
 				"occlusion_contract_id", OCCLUSION_SORT_CONTRACT_ID
 			)),
@@ -627,3 +795,7 @@ static func _sha256_text(value: String) -> String:
 	hashing.start(HashingContext.HASH_SHA256)
 	hashing.update(value.to_utf8_buffer())
 	return hashing.finish().hex_encode()
+
+
+# HC-POLY-R2 — appended integration adapter
+const HCPVisualSnapshot := preload("res://scripts/map_editor/polygon/poly_visual_snapshot.gd")

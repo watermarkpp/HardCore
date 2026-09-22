@@ -11,7 +11,13 @@ param(
 
     [string]$ExpectedCommit = "",
 
-    [switch]$RequireRuntimeChangesFromBaseline
+    [switch]$RequireRuntimeChangesFromBaseline,
+
+    # Incremental releases may declare critical entries that are EXPECTED to
+    # stay byte-identical to the baseline (for example scripts untouched by
+    # this round). Each listed entry still gets its full presence check; only
+    # the "must differ" assertion is relaxed, and every use is logged.
+    [string[]]$AllowedUnchangedEntries = @()
 )
 
 $ErrorActionPreference = "Stop"
@@ -96,6 +102,10 @@ function Assert-ChangedFromBaseline {
     }
     $BaselineHash = Get-ArchiveEntrySha256 -Archive $BaselineArchive -EntryName $EntryName -ArchiveLabel "baseline APK"
     if ($CurrentHash -eq $BaselineHash) {
+        if ($AllowedUnchangedEntries -contains $EntryName) {
+            Write-Output "ALLOWED_UNCHANGED_FROM_BASELINE entry=$EntryName sha256=$CurrentHash"
+            return
+        }
         throw "Critical APK entry is unchanged from the baseline APK: $EntryName"
     }
 }

@@ -124,7 +124,52 @@ static func get_theme(theme_id: String) -> Dictionary:
 	return THEMES.get(theme_id, {}).duplicate(true)
 
 
+## G0 (remote review 2026-09-16 authorization): get_map_profile() sits on
+## the per-frame camera/focus paths, and every miss rebuilt the whole
+## profile (props, world math, region-content lookups). Profiles are
+## immutable per-map catalog data, so memoize per map id and return the
+## SHARED reference. Every consumer is a read-only .get() reader (audited:
+## all 17 world_background call sites plus internal callers never assign
+## into the returned profile; world_background duplicates before mutating
+## its runtime copy). G0.1: negative results are cached as well, and the
+## build counter counts resolved lookups (positive and negative) so no
+## per-frame rebuild branch can hide from diagnostics. Behavior contract:
+## the first fetch of any map id resolves exactly once, a minute of
+## gameplay adds nothing, and a first fetch of another map id adds exactly
+## one.
+static var _map_profile_cache: Dictionary = {}
+static var _map_profile_build_count := 0
+
+
+static func environment_profile_build_count() -> int:
+	return _map_profile_build_count
+
+
+static func environment_profile_cache_size() -> int:
+	return _map_profile_cache.size()
+
+
+## Test/diagnostic hook only: production catalog data is immutable per map.
+static func invalidate_map_profile_cache() -> void:
+	_map_profile_cache.clear()
+
+
 static func get_map_profile(map_id: int) -> Dictionary:
+	if _map_profile_cache.has(map_id):
+		return _map_profile_cache[map_id]
+	var profile := _build_map_profile(map_id)
+	# G0.1 (remote review 2026-09-16): cache negative results too. The
+	# catalog is immutable - a map without a profile will never gain one
+	# mid-session - and per-frame callers on editor maps must not re-run
+	# the family probes every frame. The build counter now counts RESOLVED
+	# lookups (positive and negative), so diagnostics can no longer be
+	# blind to any per-frame rebuild branch.
+	_map_profile_cache[map_id] = profile
+	_map_profile_build_count += 1
+	return profile
+
+
+static func _build_map_profile(map_id: int) -> Dictionary:
 	if map_id == 4:
 		return _bich_profile()
 	if ORC_TOMB_SOURCE_LAYOUTS.has(map_id):

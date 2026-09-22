@@ -11,9 +11,10 @@ signal closed
 signal abandon_requested(quest_id: String)
 
 const PANEL_SIZE := Vector2(1020, 636)
-const QUEST_CARD_SIZE := Vector2(286, 62)
+const QUEST_CARD_SIZE := Vector2(266, 62)
 const QUEST_CARD_SEPARATION := 7
 const QUEST_LIST_LAYOUT_REVISION := 1
+const ACTION_ROW_GAP := 12.0
 
 var title_label: Label
 var description_label: RichTextLabel
@@ -34,6 +35,11 @@ var _selected_quest_id := ""
 var _pending_abandon_quest_id := ""
 var _action_request_locked := false
 var _action_feedback_serial := 0
+var _refresh_pending := false
+var _refresh_scheduled := false
+var _refresh_execution_count := 0
+var _layout_initialized := false
+var _layout_apply_count := 0
 
 
 func _ready() -> void:
@@ -51,7 +57,8 @@ func _ready() -> void:
 	_build_quest_list()
 	_build_quest_detail()
 	GothicFrameFactoryScript.seal_modal_rings(self)
-	PlayerState.quests_changed.connect(refresh)
+	PlayerState.quests_changed.connect(_on_quests_changed)
+	visibility_changed.connect(_on_visibility_changed)
 	refresh()
 
 
@@ -104,16 +111,13 @@ func _build_quest_list() -> void:
 	var scroll := ScrollContainer.new()
 	scroll.name = "QuestListScroll"
 	scroll.position = Vector2(18, 84)
-	scroll.size = Vector2(290, 418)
-	# The approved secondary frame owns the list boundary.  The scroll viewport
-	# must not draw an extra one-pixel outline around the task cards.
-	scroll.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	scroll.size = Vector2(270, 418)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	panel.add_child(scroll)
 	quest_list = VBoxContainer.new()
 	quest_list.name = "QuestList"
-	quest_list.custom_minimum_size = Vector2(286, 0)
+	quest_list.custom_minimum_size = Vector2(QUEST_CARD_SIZE.x, 0)
 	quest_list.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	quest_list.add_theme_constant_override("separation", QUEST_CARD_SEPARATION)
 	scroll.add_child(quest_list)
@@ -221,8 +225,9 @@ func _build_quest_detail() -> void:
 	abandon_button.text = "放弃任务"
 	abandon_button.position = Vector2(204, 436)
 	abandon_button.size = Vector2(128, 52)
-	abandon_button.theme_type_variation = "GothicComponentButton"
-	abandon_button.add_theme_font_size_override("font_size", 16)
+	abandon_button.theme_type_variation = "GothicQuestAbandonPlainButton"
+	abandon_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	abandon_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	abandon_button.visible = false
 	abandon_button.pressed.connect(_request_abandon)
 	panel.add_child(abandon_button)
@@ -232,8 +237,9 @@ func _build_quest_detail() -> void:
 	action_button.size = Vector2(400, 52)
 	# Accept/claim is a transaction action.  Quest cards keep the persistent
 	# selection state; this button receives only an explicit operation cue.
-	action_button.theme_type_variation = "GothicComponentButton"
-	action_button.add_theme_font_size_override("font_size", 18)
+	action_button.theme_type_variation = "GothicQuestActionGemButton"
+	action_button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	action_button.add_theme_font_size_override("font_size", GothicUIThemeScript.BUTTON_ACTION_FONT_SIZE)
 	action_button.pressed.connect(_act)
 	panel.add_child(action_button)
 	abandon_confirmation = GothicConfirmationPanelScript.new()
@@ -255,6 +261,9 @@ func open_for(display_name: String) -> void:
 func refresh() -> void:
 	if status_label == null:
 		return
+	_refresh_pending = false
+	_refresh_scheduled = false
+	_refresh_execution_count += 1
 	var active_quest_id := PlayerState.current_bich_quest_id()
 	if _selected_quest_id.is_empty() or GameData.get_bich_quest(_selected_quest_id).is_empty():
 		_selected_quest_id = active_quest_id
@@ -265,13 +274,36 @@ func refresh() -> void:
 	current_quest_id = _selected_quest_id
 	_rebuild_quest_cards(active_quest_id)
 	_refresh_selected_quest(active_quest_id)
-	UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
+	if not _layout_initialized:
+		_layout_initialized = true
+		_layout_apply_count += 1
+		UIRuntimeLayoutOverridesScript.apply_profile(self, "quest")
+
+
+func _on_quests_changed() -> void:
+	_refresh_pending = true
+	if not visible:
+		return
+	if _refresh_scheduled:
+		return
+	_refresh_scheduled = true
+	call_deferred("_flush_queued_refresh")
+
+
+func _on_visibility_changed() -> void:
+	if visible and _refresh_pending:
+		refresh()
+
+
+func _flush_queued_refresh() -> void:
+	_refresh_scheduled = false
+	if visible and _refresh_pending:
+		refresh()
 
 
 func _on_runtime_layout_profile_applied(profile_id: String) -> void:
 	if profile_id == "quest" and abandon_button != null:
 		_stabilize_quest_list_layout()
-		_stabilize_story_divider()
 		_set_abandon_available(abandon_button.visible)
 
 
@@ -286,18 +318,6 @@ func _stabilize_quest_list_layout() -> void:
 		button.custom_minimum_size = QUEST_CARD_SIZE
 		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	quest_list.queue_sort()
-
-
-func _stabilize_story_divider() -> void:
-	if story_divider == null or not is_instance_valid(story_divider):
-		return
-	var detail_panel := story_divider.get_parent() as Control
-	if detail_panel == null:
-		return
-	story_divider.anchor_left = 0.0
-	story_divider.anchor_right = 1.0
-	story_divider.offset_left = 20.0
-	story_divider.offset_right = -20.0
 
 
 func _rebuild_quest_cards(active_quest_id: String) -> void:
@@ -320,7 +340,7 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		button.toggle_mode = true
 		button.text = ""
 		button.set_pressed_no_signal(quest_id == _selected_quest_id)
-		button.theme_type_variation = "GothicComponentSelectedButton" if quest_id == _selected_quest_id else "GothicComponentButton"
+		button.theme_type_variation = "GothicQuestCardSelectedPlainButton" if quest_id == _selected_quest_id else "GothicQuestCardPlainButton"
 		button.pressed.connect(_select_quest.bind(quest_id))
 		button.set_meta("quest_id", quest_id)
 		button.set_meta("quest_state", state_text)
@@ -338,8 +358,9 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		var name_label := Label.new()
 		name_label.name = "QuestName"
 		name_label.text = str(quest.get("name", "任务"))
-		name_label.position = Vector2(54, 7)
-		name_label.size = Vector2(212, 25)
+		name_label.position = Vector2(0, 7)
+		name_label.size = Vector2(QUEST_CARD_SIZE.x, 25)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		name_label.add_theme_font_size_override("font_size", 16)
@@ -347,8 +368,9 @@ func _rebuild_quest_cards(active_quest_id: String) -> void:
 		var state_label := Label.new()
 		state_label.name = "QuestState"
 		state_label.text = state_text
-		state_label.position = Vector2(54, 32)
-		state_label.size = Vector2(212, 22)
+		state_label.position = Vector2(0, 32)
+		state_label.size = Vector2(QUEST_CARD_SIZE.x, 22)
+		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		state_label.add_theme_font_size_override("font_size", 14)
@@ -458,22 +480,38 @@ func _act() -> void:
 	_action_request_locked = false
 	_show_action_result_feedback(after_state != before_state and not after_state.is_empty())
 	_selected_quest_id = PlayerState.current_bich_quest_id()
-	refresh.call_deferred()
+	_on_quests_changed()
 
 
 func _set_abandon_available(enabled: bool) -> void:
 	abandon_button.visible = enabled
 	abandon_button.disabled = not enabled
+	# AbandonButton is intentionally absent from the authored profile. Mirror the
+	# calibrated action label size so the two controls remain one visual row.
+	abandon_button.add_theme_font_size_override(
+		"font_size",
+		action_button.get_theme_font_size("font_size"),
+	)
 	# The authored quest profile owns the action button rectangle. Refreshes
 	# and state transitions still toggle the abandon control, but must not
 	# replace the user's saved action-button geometry with procedural presets
 	# after the profile has been applied.
-	if UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest"):
-		return
+	var profile_ready := UIRuntimeLayoutOverridesScript.profile_is_ready(self, "quest")
 	if enabled:
-		action_button.position = Vector2(344, 436)
-		action_button.size = Vector2(260, 52)
-	else:
+		if not profile_ready:
+			action_button.position = Vector2(344, 436)
+			action_button.size = Vector2(260, 52)
+		# The action rectangle may come from the saved calibration profile while
+		# AbandonButton was hidden and therefore absent from that profile.  Derive
+		# the secondary control from the live action rectangle so both always form
+		# one row without replacing the calibrated action geometry.
+		abandon_button.position = Vector2(
+			maxf(0.0, action_button.position.x - ACTION_ROW_GAP - abandon_button.size.x),
+			action_button.position.y,
+		)
+		abandon_button.custom_minimum_size.y = action_button.size.y
+		abandon_button.size.y = action_button.size.y
+	elif not profile_ready:
 		action_button.position = Vector2(204, 436)
 		action_button.size = Vector2(400, 52)
 
@@ -532,7 +570,7 @@ func apply_abandon_result(result: Dictionary) -> void:
 	status_label.text = str(result.get("message", "放弃任务请求已处理"))
 	if bool(result.get("success", false)):
 		_selected_quest_id = PlayerState.current_bich_quest_id()
-		refresh.call_deferred()
+		_on_quests_changed()
 	else:
 		abandon_button.disabled = false
 
@@ -544,9 +582,12 @@ func _clear_action_feedback() -> void:
 
 
 func _show_action_result_feedback(success: bool) -> void:
-	_clear_action_feedback()
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(action_button) or not action_button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		action_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,
@@ -561,9 +602,12 @@ func _show_action_result_feedback(success: bool) -> void:
 
 
 func _show_abandon_result_feedback(success: bool) -> void:
-	_clear_action_feedback()
 	_action_feedback_serial += 1
 	var serial := _action_feedback_serial
+	if is_inside_tree():
+		await get_tree().process_frame
+	if serial != _action_feedback_serial or not is_instance_valid(abandon_button) or not abandon_button.is_inside_tree():
+		return
 	GothicUIThemeScript.set_button_feedback(
 		abandon_button,
 		GothicUIThemeScript.BUTTON_FEEDBACK_SUCCESS if success else GothicUIThemeScript.BUTTON_FEEDBACK_FAILURE,

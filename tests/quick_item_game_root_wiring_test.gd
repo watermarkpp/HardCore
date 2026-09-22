@@ -5,10 +5,14 @@ const GameHUD := preload("res://scripts/hud.gd")
 
 class FakeHud extends GameHUD:
 	var received_assignments: Array = []
+	var received_skill_assignments: Dictionary = {}
 	var messages: Array[String] = []
 
 	func set_item_quick_slots(assignments: Array) -> void:
 		received_assignments = assignments.duplicate()
+
+	func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
+		received_skill_assignments = assignments.duplicate(true)
 
 	func show_message(message: String, seconds := 2.0) -> void:
 		messages.append(message)
@@ -30,7 +34,10 @@ func _run() -> void:
 	var fake_hud := FakeHud.new()
 	game.hud = fake_hud
 	game._wire_item_quick_slots_hud()
-	# 裸实例没有 player，需显式打开输入门才能验证使用动作。
+	# 裸实例没有场景，但 2ceb73b0 (2026-09-09) 将 gameplay_input_is_enabled
+	# 加固为"必须有活着的 player"。提供满足门的最小存活 player，才能验证
+	# 使用动作的真实生产链路（PlayerState.use_quick_item_slot）。
+	game.player = PlayerCharacter.new()
 	game._player_input_enabled = true
 	assert(
 		fake_hud.item_quick_slot_assignment_requested.get_connections().size() == 1,
@@ -63,6 +70,30 @@ func _run() -> void:
 	fake_hud.item_quick_slot_assignment_requested.emit(1, "木剑")
 	assert(PlayerState.quick_item_slots[1].is_empty(), "非法绑定未被拒绝")
 	assert(fake_hud.messages.size() == 2, "非法绑定未提示")
+
+	# 持久化失败必须回滚 PlayerState，并覆盖 HUD 的乐观本地镜像。
+	var quick_slots_before := PlayerState.quick_item_slots_snapshot()
+	fake_hud.received_assignments = ["本地乐观值", "", "", ""]
+	PlayerState._test_force_atomic_write_failure = true
+	fake_hud.item_quick_slot_assignment_requested.emit(2, "太阳水")
+	PlayerState._test_force_atomic_write_failure = false
+	assert(PlayerState.quick_item_slots_snapshot() == quick_slots_before)
+	assert(fake_hud.received_assignments == quick_slots_before, "物品绑定保存失败后 HUD 未同步回权威值")
+
+	PlayerState.learned_skills = {"烈火剑法": 1}
+	var skill_assignments_before := PlayerState.skill_button_assignments_snapshot()
+	fake_hud.received_skill_assignments = {"optimistic": true}
+	PlayerState._test_force_atomic_write_failure = true
+	game._on_skill_button_assignment_requested({
+		"contract_id": "ui.skill.button_assignment.v3",
+		"slot_group": PlayerState.SKILL_SLOT_GROUP_ATTACK_RING,
+		"slot_index": 0,
+		"slot_id": "hud.attack_ring_skill.1",
+		"skill_id": "warrior.fire_sword",
+	})
+	PlayerState._test_force_atomic_write_failure = false
+	assert(PlayerState.skill_button_assignments_snapshot() == skill_assignments_before)
+	assert(fake_hud.received_skill_assignments == skill_assignments_before, "技能绑定保存失败后 HUD 未同步回权威值")
 
 	# PlayerState 信号生命周期同步
 	fake_hud.received_assignments = []
@@ -125,5 +156,11 @@ func _run() -> void:
 		merged_hud.received_assignments == PlayerState.quick_item_slots_snapshot(),
 		"合并态 HUD 未收到快捷物品快照"
 	)
+	# 释放裸实例，避免退出时物理/画布 RID 泄漏干扰 runner 判定。
+	game.player.free()
+	game.free()
+	real_hud.free()
+	merged_hud.free()
+	fake_hud.free()
 	print("QUICK_ITEM_GAME_ROOT_WIRING_PASS")
 	get_tree().quit(0)

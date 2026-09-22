@@ -2,8 +2,9 @@ class_name PersistentGroundEffectManager
 extends RefCounted
 
 ## Q2-B / HC-P1-007: unified scheduler for generic persistent ground effects.
-## Owned by GameRoot; reuses the shared RuntimeCombatSpatialIndex (no second
-## enemy index). It only schedules ticks and candidate processing; it never
+## Owned by GameRoot; reuses the shared RuntimeCombatSpatialIndex through
+## the CombatTargetQueryService (no second enemy index). It only schedules
+## ticks and candidate processing; it never
 ## computes damage values, decides skill ranges, creates visuals, rebuilds
 ## snapshots or changes stacking rules. FireWall's formal path (controller +
 ## 4 visual cells) stays independent.
@@ -18,6 +19,20 @@ const EXPANSION_EPSILON_GU := 0.05
 
 
 var _spatial_index: SpatialIndexScript
+## R1-C: shared damage-delivery authority for the callback-less fallback.
+## GameRoot injects its owned CombatRuntimeService instance (M30 ownership
+## contract); without an injection the fallback fails closed — the delivery
+## is refused and counted, never routed around the shared authority.
+var _combat_runtime: Node = null
+var damage_delivery_skip_count := 0
+## PERF-1: the manager broadphase enters the shared target-query service
+## (same instance pattern as the fire wall controller; the service is
+## stateless between queries and is rebuilt when the map id or the index
+## instance changes).
+var _target_query_service: CombatTargetQueryService
+var _target_query_service_map_id := -2
+var _target_query_service_index: SpatialIndexScript
+var _service_envelope_scratch: Array[EnemyActor] = []
 var _effects: Dictionary = {}
 var _registration_sequence := 0
 var _rejection_reason := ""
@@ -38,8 +53,28 @@ var cross_map_rejection_count := 0
 var spatial_index_unavailable_count := 0
 
 
-func _init(spatial_index: SpatialIndexScript) -> void:
+func _init(
+	spatial_index: SpatialIndexScript,
+	combat_runtime: Node = null
+) -> void:
 	_spatial_index = spatial_index
+	_combat_runtime = combat_runtime
+
+
+func _effect_target_query_service(
+	runtime_map_id: int
+) -> CombatTargetQueryService:
+	if (
+		_target_query_service == null
+		or _target_query_service_map_id != runtime_map_id
+		or _target_query_service_index != _spatial_index
+	):
+		_target_query_service = CombatTargetQueryService.new(
+			_spatial_index, runtime_map_id
+		)
+		_target_query_service_map_id = runtime_map_id
+		_target_query_service_index = _spatial_index
+	return _target_query_service
 
 
 func register(registration: Dictionary) -> bool:
@@ -243,19 +278,35 @@ func _dispatch_tick(entry: Dictionary) -> void:
 	):
 		return
 	broadphase_query_count += 1
-	var candidates: Array[Dictionary] = _spatial_index.query_aabb_candidates(
-		runtime_map_id,
+	# PERF-1: the manager broadphase enters the shared service through the
+	# allocation-conscious envelope path (caller-owned node output,
+	# query-stamp dedup, no candidate records). EXPANSION_EPSILON_GU keeps
+	# the record-query universe (bounds + epsilon + index max actor bounds);
+	# the exact gate, claim authority and damage routing below are
+	# unchanged. Candidate counters now reflect live nodes (the replaced
+	# record path also counted dying registrations).
+	var service := _effect_target_query_service(runtime_map_id)
+	_service_envelope_scratch.clear()
+	if not service.query_envelope_into(
 		_snapshot_bounds_ground_gu(snapshot),
-		EXPANSION_EPSILON_GU
+		_service_envelope_scratch,
+		true,
+		EXPANSION_EPSILON_GU,
+	):
+		# Fail-closed parity: the replaced record query answered an
+		# unavailable map/index with an empty candidate set; the tick
+		# delivers nothing either way.
+		return
+	total_candidate_count += _service_envelope_scratch.size()
+	max_candidate_count = maxi(
+		max_candidate_count, _service_envelope_scratch.size()
 	)
-	total_candidate_count += candidates.size()
-	max_candidate_count = maxi(max_candidate_count, candidates.size())
-	for candidate: Dictionary in candidates:
-		var raw_node: Variant = candidate.get("node")
-		if not raw_node is EnemyActor:
-			continue
-		var enemy := raw_node as EnemyActor
-		if enemy.is_queued_for_deletion() or not is_instance_valid(enemy):
+	for enemy: EnemyActor in _service_envelope_scratch:
+		if (
+			not is_instance_valid(enemy)
+			or enemy.is_queued_for_deletion()
+			or not enemy.can_receive_damage()
+		):
 			continue
 		exact_intersection_test_count += 1
 		if not ground_effect.runtime_target_is_inside(enemy):
@@ -278,22 +329,21 @@ func _apply_damage(
 	elif ground_effect.runtime_tick_adapter.is_valid():
 		ground_effect.runtime_tick_adapter.call(enemy, ground_effect.damage)
 	elif ground_effect.damage > 0:
-		enemy.take_damage(ground_effect.damage, ground_effect.source_actor)
+		# R1-C: the last direct-damage escape hatch is closed. The fallback
+		# delivers only through the shared CombatRuntimeService authority
+		# (same amount, same source attribution, service-side rejection and
+		# timing diagnostics); without an injected service the delivery is
+		# refused and counted.
+		if _combat_runtime != null and is_instance_valid(_combat_runtime):
+			_combat_runtime.apply_enemy_physical_damage(
+				enemy, ground_effect.damage, ground_effect.source_actor
+			)
+		else:
+			damage_delivery_skip_count += 1
 
 
 func _snapshot_bounds_ground_gu(snapshot: Dictionary) -> Rect2:
-	var min_gu := Vector2.INF
-	var max_gu := -Vector2.INF
-	var polygons: Variant = snapshot.get("polygons_ground_gu", [])
-	if polygons is Array:
-		for raw_polygon: Variant in polygons:
-			if raw_polygon is PackedVector2Array:
-				for point: Vector2 in raw_polygon as PackedVector2Array:
-					min_gu.x = minf(min_gu.x, point.x)
-					min_gu.y = minf(min_gu.y, point.y)
-					max_gu.x = maxf(max_gu.x, point.x)
-					max_gu.y = maxf(max_gu.y, point.y)
-	if not min_gu.is_finite() or not max_gu.is_finite():
-		var origin := snapshot.get("origin_ground_gu", Vector2.ZERO) as Vector2
-		return Rect2(origin, Vector2.ZERO)
-	return Rect2(min_gu, max_gu - min_gu)
+	var result := Snapshot.ground_aabb(snapshot)
+	if not bool(result.get("valid", false)):
+		return Rect2(Vector2.ZERO, Vector2(-1.0, -1.0))
+	return result.get("bounds_ground_gu", Rect2(Vector2.ZERO, Vector2(-1.0, -1.0)))

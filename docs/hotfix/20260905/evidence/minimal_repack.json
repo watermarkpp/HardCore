@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "kind": "hotfix_patch_minimal_repack_evidence",
+  "generatedAtUtc": "2026-09-05T14:39:16.951373+00:00",
+  "inputs": {
+    "basePack": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_base\\52ae0565_apk_asset_base.pck",
+    "basePackSha256": "0FC6C2DAE3672130F9EEB8F9ED1A8C250DF119435BC43E55E5D47802FE0A4E5B",
+    "dangerousPatch": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-xp-town.pck",
+    "dangerousPatchSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+    "baseCommit": "52ae0565856c2d99a28639b2bf0c6278186e0858",
+    "patchCommit": "930c17aaa269da02e3313713b7c2604ccc70172f",
+    "featureCommit": "0abc83e94a58ba4f71b0e15485d384935ab4dd56"
+  },
+  "output": {
+    "pack": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-xp-town-minimal.pck",
+    "manifest": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_patches\\hotfix-20260905-xp-town-minimal.json",
+    "bytes": 1404188,
+    "mib": 1.339138,
+    "sha256": "1643D8D05276D4DF45A823697645173C6D27A654C37B60238F024086BA501434",
+    "entries": 12,
+    "flags": {
+      "encrypted": 0,
+      "removal": 0,
+      "delta": 0
+    },
+    "paths": [
+      ".godot/global_script_class_cache.cfg",
+      ".godot/imported/main_city_bgm.ogg-0266bce75d6e2d820dbb960ab2ff9c87.oggvorbisstr",
+      "assets/audio/town/main_city_bgm.ogg.import",
+      "assets/audio/town/main_city_bgm.source.json",
+      "scripts/game_root.gdc",
+      "scripts/hud.gdc",
+      "scripts/player_state.gdc",
+      "scripts/player_visual.gdc",
+      "scripts/town_music_controller.gd.remap",
+      "scripts/town_music_controller.gdc",
+      "scripts/ui_level_up_preview.gd.remap",
+      "scripts/ui_level_up_preview.gdc"
+    ]
+  },
+  "classCache": {
+    "baseClassCount": 180,
+    "dangerousPatchClassCount": 182,
+    "mergedClassCount": 182,
+    "addedOnly": [
+      [
+        "TownMusicController",
+        "res://scripts/town_music_controller.gd"
+      ],
+      [
+        "UILevelUpPreview",
+        "res://scripts/ui_level_up_preview.gd"
+      ]
+    ],
+    "baseByteSha256": "E5230DA28F464B8127B46030EC404E3A66C8B7FF11A5820CA54E1361445B80D5",
+    "dangerousPatchByteSha256": "984EDCA0D4C8C09C04C2E3C357A7A9388D2FFD657AC3C0AA79805C9DE4BD34E4",
+    "mergedByteSha256": "7B491F9655B222B4199CFA9BCDC2B7ED49CC60338C3F307739B328956550601D",
+    "baseRecordBytesPreserved": true
+  },
+  "resourceLoader": {
+    "baseLoaded": true,
+    "basePath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\device_lab_base\\52ae0565_apk_asset_base.pck",
+    "classCache": {
+      "classCount": 182,
+      "expectedClassCount": 182,
+      "hasTownMusicController": true,
+      "hasUILevelUpPreview": true,
+      "levelUpPath": true,
+      "loaded": true,
+      "townPath": true
+    },
+    "effect": {
+      "constantVerified": true,
+      "expectedFlameSizeScale": 0.75,
+      "flameSizeScale": 0.75
+    },
+    "method": "fresh_sandbox_resource_loader_base_then_patch_cache_mode_ignore",
+    "music": {
+      "expectedLengthSeconds": 48.181406,
+      "lengthSeconds": 48.1814041137695,
+      "lengthVerified": true,
+      "sourceRecordDurationSeconds": -1.0,
+      "sourceRecordLoaded": true,
+      "streamLoaded": true
+    },
+    "ok": true,
+    "patchLoaded": true,
+    "patchPath": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\minimal_pack_work_f7he6zj1\\hotfix-20260905-xp-town-minimal.pck",
+    "resources": {
+      "remaps": {
+        "res://scripts/town_music_controller.gd.remap": true,
+        "res://scripts/ui_level_up_preview.gd.remap": true
+      },
+      "scriptFailures": [],
+      "scripts": {
+        "res://scripts/game_root.gd": true,
+        "res://scripts/hud.gd": true,
+        "res://scripts/player_state.gd": true,
+        "res://scripts/player_visual.gd": true,
+        "res://scripts/town_music_controller.gd": true,
+        "res://scripts/ui_level_up_preview.gd": true
+      }
+    },
+    "sfx": {
+      "representativeBaseStreamLoaded": true,
+      "representativePath": "res://assets/audio/warrior/51.wav",
+      "skillAudioEnabled": false,
+      "skillAudioGateVerifiedFalse": true
+    },
+    "sourceFallback": {
+      "cacheMode": "CACHE_MODE_IGNORE",
+      "sourceGuardDir": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\hotfix_20260905\\minimal_pack_work_f7he6zj1\\source_guard",
+      "sourceScriptsAbsentOnDisk": true
+    },
+    "xp": {
+      "expectedGameplayThresholdLevel1": 10,
+      "expectedSourceLevel1": 100,
+      "gameplayThresholdLevel1": 10,
+      "minimumConstantProof": true,
+      "scaleConstantProof": true,
+      "scaledThresholdProof": true,
+      "serviceTableUnchangedProof": true,
+      "sourceLevel1": 100,
+      "thresholdMinimum": 1,
+      "thresholdScale": 0.1
+    }
+  },
+  "sourceEntries": [
+    {
+      "resourcePath": "res://scripts/game_root.gdc",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/game_root.gdc",
+      "bytes": 275544,
+      "sha256": "CEC3080444DBDD1BC346526DF9FD765CE46335C56F41C39C8866502CA179EDBE",
+      "directoryMd5": "28b05810a0edbf0dd6abc093225955b2"
+    },
+    {
+      "resourcePath": "res://scripts/hud.gdc",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/hud.gdc",
+      "bytes": 60210,
+      "sha256": "1CC9D1CC046B139891618DBED3E2BE817A4F4DB1640746D8E909EEC22FDB1EFA",
+      "directoryMd5": "6000274669b820c3607c5b6917353e80"
+    },
+    {
+      "resourcePath": "res://scripts/player_state.gdc",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/player_state.gdc",
+      "bytes": 169164,
+      "sha256": "A742AA4C7D457B97834097BD2DFCA0E52A9FC9DD369C59772E1FE27CD30EB6BA",
+      "directoryMd5": "78e7acc4ab87b163be98fc76ec6c0a92"
+    },
+    {
+      "resourcePath": "res://scripts/player_visual.gdc",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/player_visual.gdc",
+      "bytes": 25114,
+      "sha256": "5416066D144F1B3FF383999C992F69A85D8C589178D63196926BE230B47F7262",
+      "directoryMd5": "7ea5d541d007e9e5d8f018dc6a0c6006"
+    },
+    {
+      "resourcePath": "res://scripts/town_music_controller.gdc",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/town_music_controller.gdc",
+      "bytes": 6680,
+      "sha256": "C5282F58AF85386244FAF2DBD390DE42E21F4E1AFB0D90B86A21CE1A9836AAE4",
+      "directoryMd5": "44655a87c863caf6db8621f45692cb6b"
+    },
+    {
+      "resourcePath": "res://scripts/ui_level_up_preview.gdc",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/ui_level_up_preview.gdc",
+      "bytes": 8814,
+      "sha256": "EA8DDD0DDF96C5A1B5F6EF3BAFE403A76E602F086EF1E43AFE084C6B7366D4EE",
+      "directoryMd5": "db72671de5ab2bb04d5889fa136455c2"
+    },
+    {
+      "resourcePath": "res://scripts/town_music_controller.gd.remap",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/town_music_controller.gd.remap",
+      "bytes": 56,
+      "sha256": "D5F7BAD190F7DCE4654A98CDBDBD1250E756C7A19E81CCA9173D861C944C479D",
+      "directoryMd5": "4b217429ba4dd9c4b5aaab1c9abc7b3b"
+    },
+    {
+      "resourcePath": "res://scripts/ui_level_up_preview.gd.remap",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "scripts/ui_level_up_preview.gd.remap",
+      "bytes": 54,
+      "sha256": "CA2A42D5C0C35A13F92A87339497407FA63FDCC9748961092BD1BE73D2946183",
+      "directoryMd5": "288e82c6cfcd83cbae9399810b95e514"
+    },
+    {
+      "resourcePath": "res://assets/audio/town/main_city_bgm.ogg.import",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "assets/audio/town/main_city_bgm.ogg.import",
+      "bytes": 180,
+      "sha256": "6AB79D17FA0C8D589FB66615F18461571F34FA9FECF4B43D3973C512A8D9FAF4",
+      "directoryMd5": "5f643ab5220e575dd04cb9dbc78f6abb"
+    },
+    {
+      "resourcePath": "res://assets/audio/town/main_city_bgm.source.json",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": "assets/audio/town/main_city_bgm.source.json",
+      "bytes": 1188,
+      "sha256": "F316F8B280AD09015680F33CAA5F0A9FDCE762155F63DDF567B44CE40DB954C4",
+      "directoryMd5": "691ab25a5015543efa771bf7a68c3ac8"
+    },
+    {
+      "resourcePath": "res://.godot/imported/main_city_bgm.ogg-0266bce75d6e2d820dbb960ab2ff9c87.oggvorbisstr",
+      "sourcePack": "dangerous-exported-patch",
+      "sourcePackSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "sourceEntry": ".godot/imported/main_city_bgm.ogg-0266bce75d6e2d820dbb960ab2ff9c87.oggvorbisstr",
+      "bytes": 820639,
+      "sha256": "D5FD14D334A9A71B0CDEAB765D6384323B5BA9654A26AB8F53624205B824DBA9",
+      "directoryMd5": "31991314bb85e43897319a55209d39d4"
+    },
+    {
+      "resourcePath": "res://.godot/global_script_class_cache.cfg",
+      "sourcePack": "verified-base-plus-explicit-two-class-merge",
+      "basePackSha256": "0FC6C2DAE3672130F9EEB8F9ED1A8C250DF119435BC43E55E5D47802FE0A4E5B",
+      "baseEntry": ".godot/global_script_class_cache.cfg",
+      "dangerousPatchSha256": "B5811F685A4CF8BC55A3FEA39AF1A6F7837A53AAA57A0C280EBFCE993A695839",
+      "dangerousPatchEntry": ".godot/global_script_class_cache.cfg",
+      "bytes": 35355,
+      "sha256": "7B491F9655B222B4199CFA9BCDC2B7ED49CC60338C3F307739B328956550601D",
+      "cacheEvidence": {
+        "baseClassCount": 180,
+        "dangerousPatchClassCount": 182,
+        "mergedClassCount": 182,
+        "addedOnly": [
+          [
+            "TownMusicController",
+            "res://scripts/town_music_controller.gd"
+          ],
+          [
+            "UILevelUpPreview",
+            "res://scripts/ui_level_up_preview.gd"
+          ]
+        ],
+        "baseByteSha256": "E5230DA28F464B8127B46030EC404E3A66C8B7FF11A5820CA54E1361445B80D5",
+        "dangerousPatchByteSha256": "984EDCA0D4C8C09C04C2E3C357A7A9388D2FFD657AC3C0AA79805C9DE4BD34E4",
+        "mergedByteSha256": "7B491F9655B222B4199CFA9BCDC2B7ED49CC60338C3F307739B328956550601D",
+        "baseRecordBytesPreserved": true
+      }
+    }
+  ],
+  "safety": {
+    "safeForInstall": true,
+    "noRemovalEntries": true,
+    "noDeltaEntries": true,
+    "noEncryptedEntries": true,
+    "exactApprovedClosure": true,
+    "under64MiB": true,
+    "dangerousPatchPreserved": true
+  }
+}

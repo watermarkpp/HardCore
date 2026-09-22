@@ -51,6 +51,10 @@ func _run() -> void:
 	assert(selected_profession_count == 1, "profession cards must be a single-select group")
 	assert(launcher.create_button.text == "创建角色", "create action must keep its own label")
 	assert(launcher.create_button.theme_type_variation == &"GothicCharacterLaunchButton", "create action must reuse the layered launch frame")
+	assert(launcher.enter_button.get_meta("calibration_layout_revision", 0) == 1, "old single enter-button rect must be retired")
+	assert(launcher.delete_button.get_meta("calibration_layout_revision", 0) == 1, "delete button must own the new paired layout")
+	assert(not launcher.enter_button.get_rect().intersects(launcher.delete_button.get_rect()), "enter and delete buttons overlap")
+	assert(launcher.delete_button.disabled == launcher.selected_main_profile_id.is_empty(), "delete enablement must follow exact profile selection")
 	if not launcher.profile_cards.is_empty():
 		var main_profile_id := str(launcher.profile_cards.keys()[0])
 		launcher._select_main_profile(main_profile_id)

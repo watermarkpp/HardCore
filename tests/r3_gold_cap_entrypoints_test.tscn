@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/r3_gold_cap_entrypoints_test.gd" id="1_r3_gold"]
+
+[node name="R3GoldCapEntrypointsTest" type="Node"]
+script = ExtResource("1_r3_gold")

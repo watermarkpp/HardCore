@@ -22,6 +22,24 @@ var _frame_time_seconds := 0.05
 var _elapsed := 0.0
 var _loop := false
 var _manual_mode := false
+## R14-C3/C4 + R14-C-R2: active-sequence residency lease + wait state.
+## _sequence_paths is the ONE selected direction's frame paths. Combat plays
+## a sequence as an ATOMIC unit: a first-frame miss AND a partial-residency
+## miss keep the player alive waiting for the WHOLE sequence (no early frame
+## 0, no logical-clock start) instead of permanently stopping, and a
+## mid-sequence miss freezes the logical clock without skipping a frame.
+## R14-C-R1 P0-4/5/6/7: _sequence_lease_held is the ownership truth - a
+## waiter that has never acquired must never decrement the registry refcount
+## (no phantom release of another owner's lease), and retry must not stack a
+## second refcount after an acquire.
+var _sequence_paths: Array[String] = []
+var _sequence_lease_held := false
+var _waiting_for_residency := false
+## External clock mode: when set, frame selection is derived from the shared
+## clock value (ms) instead of this player's own accumulator. Keeps the
+## canonical frame timing (frame_time_ms) unchanged while removing per-node
+## timer work when many cells share one field clock.
+var _shared_clock_ms: Callable = Callable()
 var _native_extent := 1.0
 var _desired_extent := 0.0
 var _desired_footprint := Vector2.ZERO
@@ -50,10 +68,14 @@ func configure(
 	desired_cross_axis_extent := 0.0,
 	presentation_overrides: Dictionary = {}
 ) -> bool:
+	# R14-C5: release the previous sequence lease before reconfigure.
+	_release_sequence_lease()
 	skill_id = ProfessionRules.skill_id(source_skill_id)
 	phase_id = requested_phase_id
 	visual_loaded = false
 	playback_complete = false
+	_waiting_for_residency = false
+	_sequence_lease_held = false
 	texture = null
 	transform = Transform2D.IDENTITY
 	offset = Vector2.ZERO
@@ -227,29 +249,191 @@ func configure(
 	_elapsed = 0.0
 	_manual_mode = false
 	playback_complete = false
+	# R14-C3 + R14-C-R1 P0-1/P0-5: configure() returns whether the
+	# configuration was ACCEPTED, not whether frame 0 is already resident.
+	# Structural failures (unknown skill, bad contract, empty frames) return
+	# false. A legal configuration whose texture sequence is still warming up
+	# returns true with visual_loaded=false and _waiting_for_residency=true;
+	# the production caller keeps the node and playback starts on residency.
+	# The sequence lease is acquired through the helper (only when the whole
+	# sequence is resident - never a phantom lease on missing paths).
+	_sequence_paths = CasterSkillVisualRegistry.animation_sequence_paths(
+		skill_id, direction_index, phase_id
+	)
+	# R14-C-R2 C-R2-1/2/3: combat plays a sequence as an ATOMIC unit. When
+	# the loading window is closed and ANY frame of the sequence is missing,
+	# the player must NOT show an already-resident frame 0, must not start
+	# the logical clock and must not claim visual_loaded: it queues the
+	# async warm and waits, then starts from frame 0 once the WHOLE sequence
+	# is resident. Inside the loading window the pre-existing synchronous
+	# semantics stay (request_animation_frame_texture resolves frame 0 -
+	# and later frames - synchronously), and GameRoot's loading prewarm
+	# makes whole workset sequences resident so the formal Loading->READY
+	# path still reaches the full-resident branch below.
+	if CasterSkillVisualRegistry.combat_sequence_requires_wait(_sequence_paths):
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		_waiting_for_residency = true
+		visual_loaded = false
+		current_frame_index = 0
+		_elapsed = 0.0
+		texture = null
+		set_process(true)
+		return true
+	# Combat full-resident or loading-window path: acquire the lease (only
+	# when the whole sequence is resident - never a phantom lease) and try
+	# frame 0 exactly like the pre-R14-C path.
+	_acquire_sequence_lease_if_ready()
 	visual_loaded = _apply_frame(0)
-	set_process(visual_loaded)
-	return visual_loaded
+	if visual_loaded:
+		_waiting_for_residency = false
+		set_process(true)
+	else:
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		_waiting_for_residency = true
+		set_process(true)
+	return true
+
+
+## R14-C-R1 P0-5: acquire the sequence lease exactly once. Already held ->
+## true (no refcount stacking). Not fully resident -> false (waiter stays
+## un-leased; the async warm-up channel fills the sequence without a lease).
+func _acquire_sequence_lease_if_ready() -> bool:
+	if _sequence_lease_held:
+		return true
+	if not CasterSkillVisualRegistry.acquire_sequence_lease(_sequence_paths):
+		return false
+	_sequence_lease_held = true
+	return true
+
+
+## R14-C-R1 P0-6: safe release. Only a real owner decrements the registry
+## refcount; a never-acquired waiter must not release another owner's lease.
+func _release_sequence_lease() -> void:
+	if _sequence_lease_held:
+		CasterSkillVisualRegistry.release_sequence_lease(_sequence_paths)
+		_sequence_lease_held = false
+	_sequence_paths.clear()
+
+
+func _exit_tree() -> void:
+	# R14-C5: looping/persistent effects hold the lease until node teardown;
+	# one-shot players release on completion. Reconfigure and exit both
+	# release here.
+	_release_sequence_lease()
 
 
 func _process(delta: float) -> void:
+	if _waiting_for_residency:
+		# R14-C3/C4: hold the frame index and logical clock while the active
+		# sequence warms up; resume from frame 0 (first-frame miss) or from
+		# the last committed index (mid-sequence miss) once resident. This
+		# must run even when visual_loaded is still false (first-frame miss).
+		_retry_after_warm()
+		return
 	if not visual_loaded or playback_complete or _manual_mode:
 		return
+	if _shared_clock_ms.is_valid():
+		_apply_shared_clock_frame()
+		return
+	# perf-smoothness-r1 C-R1 (PERF-R2 R19/Phase D first item): catch-up must
+	# commit ONLY the final frame. A long frame (e.g. 100 ms) used to bind
+	# every intermediate texture in one render frame; the player only ever
+	# sees the last one, so compute the final index in closed form and apply
+	# it once. Frame-index parity with small-delta playback is contract-tested.
 	_elapsed += delta
-	while _elapsed >= _frame_time_seconds:
-		_elapsed -= _frame_time_seconds
-		var next_frame := current_frame_index + 1
-		if next_frame >= _frames.size():
-			if _loop:
-				next_frame = 0
-			else:
-				next_frame = _frames.size() - 1
-				playback_complete = true
-				animation_finished.emit(skill_id)
-		current_frame_index = next_frame
-		_apply_frame(current_frame_index)
-		if playback_complete:
-			break
+	if _elapsed < _frame_time_seconds:
+		return
+	var steps := int(floor(_elapsed / _frame_time_seconds))
+	_elapsed -= float(steps) * _frame_time_seconds
+	if _loop:
+		var loop_target := (
+			(current_frame_index + steps) % _frames.size()
+		)
+		# R14-C4: commit the frame BEFORE advancing the index; a miss on a
+		# leased sequence freezes the clock instead of skipping a frame.
+		if _apply_frame(loop_target) or _sequence_paths.is_empty():
+			current_frame_index = loop_target
+		else:
+			_handle_mid_sequence_miss()
+		return
+	var target_frame := current_frame_index + steps
+	if target_frame >= _frames.size():
+		target_frame = _frames.size() - 1
+		if _apply_frame(target_frame) or _sequence_paths.is_empty():
+			current_frame_index = target_frame
+			playback_complete = true
+			# R14-C5: one-shot completed - release the sequence lease.
+			_release_sequence_lease()
+			animation_finished.emit(skill_id)
+		else:
+			_handle_mid_sequence_miss()
+		return
+	if _apply_frame(target_frame) or _sequence_paths.is_empty():
+		current_frame_index = target_frame
+	else:
+		_handle_mid_sequence_miss()
+
+
+func _handle_mid_sequence_miss() -> void:
+	# R14-C4: keep the last committed texture, freeze the logical clock and
+	# queue the missing path. The frame index is NOT advanced while the
+	# texture is uncommitted; playback resumes at the same index once the
+	# sequence is resident again.
+	CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+	_waiting_for_residency = true
+	_elapsed = 0.0
+
+
+func _retry_after_warm() -> void:
+	if not CasterSkillVisualRegistry.sequence_resident(_sequence_paths):
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		return
+	# R14-C-R1 P0-7: acquire at most once. If _apply_frame below edge-fails
+	# after a successful acquire, the lease is KEPT and the next retry sees
+	# _sequence_lease_held==true - it must not stack a second refcount.
+	_acquire_sequence_lease_if_ready()
+	_waiting_for_residency = false
+	_elapsed = 0.0
+	# C3 first-frame miss: index is still 0 -> starts from frame 0.
+	# C4 mid-sequence miss: index is the last committed frame -> continues
+	# there without skipping a logical frame.
+	visual_loaded = _apply_frame(current_frame_index)
+	if not visual_loaded:
+		# Edge: the sequence was resident a moment ago but the frame still
+		# could not be committed. Never permanently stop the player (C3):
+		# go back to waiting so the next process tick retries.
+		_waiting_for_residency = true
+		CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
+		set_process(true)
+		return
+	set_process(true)
+
+
+func set_shared_clock_ms(clock_ms_provider: Callable) -> void:
+	_shared_clock_ms = clock_ms_provider
+
+
+func _apply_shared_clock_frame() -> void:
+	if _frames.is_empty() or _frame_time_seconds <= 0.0:
+		return
+	var raw: Variant = _shared_clock_ms.call()
+	if not (raw is float or raw is int):
+		return
+	var clock_ms := float(raw)
+	if clock_ms < 0.0:
+		return
+	var frame_time_ms := _frame_time_seconds * 1000.0
+	var cycle_ms := float(_frames.size()) * frame_time_ms
+	var frame_index := int(floor(fmod(clock_ms, cycle_ms) / frame_time_ms))
+	frame_index = clampi(frame_index, 0, _frames.size() - 1)
+	if frame_index != current_frame_index:
+		# R14-C4: shared-clock mode cannot freeze the external field clock,
+		# but it must not advance the committed index while the texture is
+		# uncommitted; queue the missing path and keep the last frame drawn.
+		if _apply_frame(frame_index):
+			current_frame_index = frame_index
+		elif not _sequence_paths.is_empty():
+			CasterSkillVisualRegistry.queue_sequence_warm(_sequence_paths)
 
 
 func set_manual_frame(frame_index: int) -> bool:
@@ -376,7 +560,11 @@ func _apply_frame(frame_index: int) -> bool:
 		return false
 	var frame: Dictionary = _frames[frame_index]
 	var path := "res://%s" % str(frame.get("path", ""))
-	var loaded := CasterSkillVisualRegistry.load_texture_path(path)
+	# perf-smoothness-r1 Phase C (audit): combat-time misses must never
+	# synchronously load/decode on the main thread. Inside the loading window
+	# this is the normal synchronous prewarm path; in combat a miss returns
+	# null and the frame is skipped while the async warm-up channel fills it.
+	var loaded := CasterSkillVisualRegistry.request_animation_frame_texture(path)
 	if loaded == null:
 		return false
 	texture = loaded

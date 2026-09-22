@@ -1,0 +1,17 @@
+**CANDIDATE_EVIDENCE**
+- 状态：`PASS`；错误：`[]`。本次仅成功执行指定远程只读资源一次，未使用执行命令、网络搜索、计划或本地快照。
+- 远程证明：`watermarkpp/HardCore@191958eaa194639b1072149cd23e34a389d8a7e4`；HTTPS raw.githubusercontent.com；174 个远程文件已缓存；143 个来源捕获已核对；所有检查均读取远程字节；审计器 SHA256 `3777550efc6084c50999ad197fa49d5617da2db862a9b1c94bfb849cd99ee62b`。
+- 计数：profiles 156；runtime_allowed 153；enabled 144；slots 7611；effective_records 7611；provenance_records 7611；classes 233；elite_boss_potion_slots 1289。
+- 规则计数：`NONE` 7131；`BOOK_ELITE_BOSS` 325；`BOOK_ORDINARY` 149；`ARMOR_BASE_1_OVER_60` 6；合计 7611。
+- 保留结果：5 份保留检查对象全部 `equal=true`。仅列出的单一路径字段不同：direct baseline 的 `post_rng_ground_slot_limit`；runtime authority 的 `maximum_ground_slots`；单玩家 boost/effective probability 的 `direct_baseline_sha256_raw`；manifest 的 `direct_baseline_authority.sha256`。
+- 换行表示差异：Git blob 与 checkout 表示共有 144 处差异；全部按历史 Windows CRLF 表示完成 LF→CRLF 恢复后，144/144 与记录哈希精确匹配。这里的 144/144 是完整哈希恢复计数。
+- 必须区分：匹配的是 checkout/原始捕获哈希，不是 Git raw blob 哈希。示例中 blob SHA256 与 expected 不同是表示差异，不应称为捕获哈希。
+- 表示差异示例：`assets/data/canonical_monster_drop_source_v2.json`，Git blob SHA256 `1A0BE3AF…AB1BD5`；checkout/expected SHA256 `59338A7E…E4013`。
+- 表示差异示例：`docs/drop/v5/source/monster_18.bin`，Git blob SHA256 `3F0558C9…89F6`；checkout/expected SHA256 `0BE721CB…EAE8B`。
+- 完整恢复证据 SHA256：`5f7b37b1720bd9bb33ae11e268f56ee5698b27fda808578924dc3f892296dbcc`。
+- 核心哈希示例：`dpv2_direct_baseline_v2.json`、semantic authority、monster mapping、item mapping、overflow authority、provenance、corrections、source priority、global drop rate、verified profile authority 共 10 项 actual=expected，全部匹配。
+- 太阳水示例：多钩猫王（monster 31）slot_002–005 base/effective `1/2`，runtime_draw `1/4`，priority 200，未保护；钉耙猫王（monster 32）slot_002–004 同理。
+- 太阳水示例：半兽勇士9（monster 41）slot_002 base/effective `1/40`，runtime_draw `1/80`，priority 200，未保护。
+- Profile 样本：毒蜘蛛 1 槽、蛤蟆 13 槽、稻草人 15 槽、多钩猫 14 槽、森林雪人 25 槽均启用且 runtime_allowed；雪人王 0 槽、禁用且不可 runtime。
+- 审计备注：inactive overflow seed 保持 `cap=9`，生产 GameData 从 direct_baseline 读取 `cap=15`；semantic source_accounting 保留 V505 前的 6809，而迁移 baseline 为 7611。二者需要生产路径解释，审计结果不代表应替换数据。
+- 剩余限制：这是完整静态数据、精确有理数和保留性审计；不是 Godot 运行测试、设备验收、性能验收，也不是最终项目验收。

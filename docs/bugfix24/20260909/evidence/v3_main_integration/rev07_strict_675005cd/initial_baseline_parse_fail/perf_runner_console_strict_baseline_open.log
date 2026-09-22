@@ -1,0 +1,14 @@
+[FAIL] performance_comparison_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/monster_ai_package/path_search.gd" does not exist.
+   at: GDScript::reload (res://tests/hc_monster_ai/performance_comparison_test.gd:9)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "Search" constant because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/hc_monster_ai/performance_comparison_test.gd:9)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "path_search_metrics" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/hc_monster_ai/performance_comparison_test.gd:267)
+ERROR: Failed to load script "res://tests/hc_monster_ai/performance_comparison_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore-worktrees\bugfix24-audio-baseline-20260909\outputs\test_logs\runner_results_adhoc_20260909_174829_639_2280.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=4
+FAILED_TESTS=performance_comparison_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4)
+exit_code=1

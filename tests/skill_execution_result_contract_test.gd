@@ -4,6 +4,8 @@ extends Node
 ## full frozen field set; rejections carry accepted=false and zero commits.
 
 const Plan := preload("res://scripts/skills/skill_execution_plan.gd")
+const FIXTURE_MONSTER_ID := 19
+const FormalFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
 
 var _game: Node
 var _caster: PlayerCharacter
@@ -26,7 +28,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_caster = _game.player
-	_target = _make_enemy(_game, _caster, _caster.global_position + Vector2(40, 0))
+	_target = await FormalFixture.prepare_target(
+		self,
+		_game,
+		_caster,
+		FIXTURE_MONSTER_ID,
+		"skill_execution_result_contract",
+	)
 	await get_tree().process_frame
 
 	_game._set_magic_locked_target(_target, true)
@@ -132,21 +140,3 @@ func _check_rejection_result(result: Dictionary) -> void:
 		str(execution_result.get("rejection_reason", "")) == "insufficient_resource",
 		"rejection reason normalization"
 	)
-
-
-func _make_enemy(game: Node, caster: PlayerCharacter, position: Vector2) -> EnemyActor:
-	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "execution_result_target",
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-		"anti_magic_points": 0,
-		"magic_defense_min": 0,
-		"magic_defense_max": 0,
-	}, caster, false)
-	enemy.global_position = position
-	enemy.control_time = 60.0
-	game.add_child(enemy)
-	return enemy

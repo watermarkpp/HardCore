@@ -1,0 +1,4 @@
+SCRIPT ERROR: Assertion failed: Loading transition did not finish
+   at: _wait_for_transition (res://tests/game_root_loading_transition_test.gd:114)
+   GDScript backtrace (most recent call first):
+       [0] _wait_for_transition (res://tests/game_root_loading_transition_test.gd:114)

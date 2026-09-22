@@ -68,6 +68,8 @@ func _run() -> void:
 	)
 	var preview := EquipmentCharacterPreview.new()
 	preview.size = Vector2(230, 286)
+	# This fixture contains classic base/hair/paperDoll, not worldBaseByGender.
+	preview.configure_presentation_mode("classic_avatar")
 	preview.configure_source_document(document)
 	add_child(preview)
 	await get_tree().process_frame
@@ -161,6 +163,9 @@ func _assert_actual_contact(preview: EquipmentCharacterPreview, body_case: Dicti
 
 
 func _alpha_foot_contact(preview: EquipmentCharacterPreview) -> Vector2:
+	assert(not preview._uses_world_avatar, "classic contact fixture routed to world-avatar data")
+	assert(preview._base_texture != null, "classic base texture was not loaded")
+	assert(preview._body_layer.get("texture") is Texture2D, "classic body texture was not loaded")
 	var image_layers: Array[Dictionary] = []
 	image_layers.append({
 		"image": preview._base_texture.get_image(),

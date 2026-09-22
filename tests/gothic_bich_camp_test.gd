@@ -15,7 +15,7 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if not _check(game.current_map_id == 4, "启动未进入比奇主城地图"): return
+	if not _check(game.current_map_id == 910001, "启动未进入正式比奇主城地图"): return
 	if not _check(game.background.environment_node_count() >= 40, "哥特主城物件没有完成构建"): return
 	if not _check(game.background.environment_light_count() <= 5, "主城灯光超过移动端上限"): return
 	var home_ground_gu: Vector2 = MapEditorRuntimeBridge.home_position_ground_gu()
@@ -28,7 +28,7 @@ func _run() -> void:
 			>= 9.0 + enemy.combat_radius_gu - 0.001,
 			"怪物刷新在安全区内"
 		): return
-	var expected_names := ["比奇杂货商", "比奇武器店", "书店老板", "武馆教头", "比奇老兵", "仓库管理员"]
+	var expected_names := ["杂货商", "铁匠", "书店老板", "强化商人", "老兵", "仓库管理员"]
 	var actual_names: Array[String] = []
 	for node: Node in get_tree().get_nodes_in_group("interactable"):
 		if node is NPCActor:

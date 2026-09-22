@@ -1,0 +1,110 @@
+{
+  "schema": "hc.r33p1.install.v1",
+  "base": "bc14c63b6048fac2f4a87a430240a2eef0083707",
+  "head": "bc14c63b6048fac2f4a87a430240a2eef0083707",
+  "branch": "codex/r3-3-single-heading",
+  "repo": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\r3-3-single-heading",
+  "mode": "audit",
+  "dirty_before": "M  scripts/item_detail_presenter.gd\nM  scripts/shop_panel.gd\nA  scripts/ui_item_player_copy.gd\nA  tests/r6_3_3_p1/copy_audit.gd\nA  tests/r6_3_3_p1/copy_audit.tscn\nA  tests/r6_3_3_p1/player_copy_test.gd\nA  tests/r6_3_3_p1/player_copy_test.tscn\n?? docs/bugfix24/20260909/monster_delivery_inventory.actor.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.ai.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.attack.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.canonical.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.classification.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.delivery.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.implementation.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.runtime.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.server.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.shared.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.source.translation\n?? docs/bugfix24/20260909/monster_delivery_inventory.stationary.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.env.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.max.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.movement.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p50.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p95.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.p99.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.physics.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.retarget.translation\n?? docs/closure/20260911/r3_joint_evidence/m30/m30_three_rounds_remote.side.translation\n?? scripts/ui_item_player_copy.gd.uid\n?? tests/diag_r6_screenshot_capture.gd.uid\n?? tests/diag_shop_overflow_evidence.gd.uid\n?? tests/r2_measure/qa_latency_driver.gd.uid\n?? tests/r2_measure/seed_builder.gd.uid\n?? tests/r6_1_review/detail_visible_assertions.gd.uid\n?? tests/r6_1_review/hotspot_batch_equivalence_test.gd.uid\n?? tests/r6_1_review/inventory_activation_integration_test.gd.uid\n?? tests/r6_1_review/real_panel_matrix_common.gd.uid\n?? tests/r6_1_review/real_panel_matrix_test.gd.uid\n?? tests/r6_1_review/shop_selection_identity_test.gd.uid\n?? tests/r6_1_review/showcase_capture.gd.uid\n?? tests/r6_2/shop_layout_matrix.gd.uid\n?? tests/r6_3_1/m30_counts_12_15_test.gd.uid\n?? tests/r6_3_1_1/type_branch_smoke.gd.uid\n?? tests/r6_3_2/drawn_budget_test.gd.uid\n?? tests/r6_3_2/space_diagnostic.gd.uid\n?? tests/r6_3_3/header_geometry_test.gd.uid\n?? tests/r6_3_3/header_session_test.gd.uid\n?? tests/r6_3_3/space_diagnostic.gd.uid\n?? tests/r6_3_3_p1/copy_audit.gd.uid\n?? tests/r6_3_3_p1/player_copy_test.gd.uid\n?? tests/ui_l1/background_gate_test.gd.uid\n?? tests/ui_l1/hidden_views_test.gd.uid\n?? tests/ui_l1/price_quote_parity_test.gd.uid\n",
+  "facts": {
+    "scripts/item_detail_presenter.gd": {
+      "state": "INSTALLED",
+      "base_blob": "ea37fb379d68bd5ca4a824b074deab07ce709746",
+      "before_sha256": "252512a4353b9b71e9f5c2f73bb601f858df4be71ab07d20a5b1572b53ebaf38",
+      "after_sha256": "3d4331bebfd47a01bf226184548f246373dc050d1b9153327c6dd9c3fa320cc0"
+    },
+    "scripts/shop_panel.gd": {
+      "state": "INSTALLED",
+      "base_blob": "1771d2fc66948b79f272123e03a99d5c061e946a",
+      "before_sha256": "14a945c3dfa89144941f07da70289fe03124966bc81e5648bbae94d26bcb93d8",
+      "after_sha256": "bc5ea7c2f108460724ccfa297e24c8eada1b14b6fb387fc366ec99353337aa99"
+    },
+    "scripts/item_detail_docked_presenter.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "e9fe369c17cc994cf5117b370f2a1e74e357e7a171893d23fa9e11afae9ffd64"
+    },
+    "scripts/ui_shop_detail_space.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "a4ea436ea1e7dc4ad79a5126218630ab437eca585dd2d2b1d766678b2e1f8573"
+    },
+    "scripts/ui_style_visual_bounds.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "13c099965a3e24253b2a56b6f7fe48571aa587ea8dd4e8c45e7847eca4138f57"
+    },
+    "scripts/ui_item_selection_lifecycle.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "c159328eeea45a9eb774a03d3723375bd989f6ff77fdce5400e8640a95651be9"
+    },
+    "scripts/ui_activation_once.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "6e37276d65555bd3a167ead8a2b2fda4cd324ad5b12aa4182b933bd2e8f0b9bb"
+    },
+    "scripts/ui_item_name_style.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "9bee0cae5d94997bd1eb7ab7d2a3334d2bbbc2a9de3f9fb115fc3fd1a3682e23"
+    },
+    "scripts/inventory_panel.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "0ceb4db0a97c2995bbe1ea9e8328439b3505b077df65c5a6f2690085b50729c7"
+    },
+    "scripts/warehouse_panel.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "c13b71e38bbc75b25ffca26748e5a19246f35df624baf860600f754bf30c986e"
+    },
+    "scripts/equipment_rules.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "105dec7d867049f0185bb115fff6f40ca8cd240bc7116c04cacf24eb5e41c85d"
+    },
+    "scripts/game_data.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "127c59b619eebc630f61c78f0c098bbe6e709617d9d2792e009cb8fb32bc2e2b"
+    },
+    "scripts/player_state.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "c0565cd49b09038ec7103bf48fca32ec4e15d44be22c58d9e6ccff6854e5bf45"
+    },
+    "scripts/enemy.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "57aa237557e8dd3da75239ad63fa84850785b635f3f41ad0f2bec45a1906e725"
+    },
+    "scripts/monster_visual.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "bb62444df578f411b2599a6f7b72fd7fa36b080df90c6e0f1ba0d27d86b1d8b8"
+    },
+    "scripts/runtime_combat_spatial_index.gd": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "1c5b960651d490749406f561bf28ef1211ce613dd7beeab87867b043ae65025e"
+    },
+    "project.godot": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "f3c776b4f74812ed0e7d8d692e94f9c84b2ed45062abf3f5cb48dd2c8de87ff9"
+    },
+    "AGENTS.md": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "0df56c6624432cbe179bb52a2d985abdf33075887e46928cab7d5dfa52a76601"
+    },
+    "assets/data/ui/manual_layout_overrides.json": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "ddfdbfc3418d8286ee6264ac24fb725b5bb0b5e1285410ee62cc31837b349496"
+    },
+    "assets/data/equipment_attribute_master.json": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "a13f1a53f4fcd87f4a260384fab9fb391479b2ca7a3aecd408da178c91e8de27"
+    },
+    "assets/data/vanilla_176/items.json": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "dcc347fe7b2770ec6b620df8b84dae937e8d3ae2b911669acfb14d272d6d121f"
+    },
+    "assets/data/service_item_catalog.json": {
+      "state": "FROZEN_SAME",
+      "sha256_lf": "f5e50f4d4391314607c00485594e80ea6663562917d90ca91c130c9f9728dc24"
+    },
+    "scripts/ui_item_player_copy.gd": {
+      "state": "PRESENT",
+      "sha256": "616ffca882460e79b28d97bc95c781784d0a76edbf6756387c9ee0caa45f1579"
+    }
+  },
+  "written": [],
+  "runtime": "NOT_RUN",
+  "status": "P1_CORE_INTACT_NOT_RUNTIME_ACCEPTANCE"
+}

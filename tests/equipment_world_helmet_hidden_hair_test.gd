@@ -3,7 +3,10 @@ extends Node
 const POLICY_PATH := "res://assets/data/equipment_world_helmet_runtime_policy.json"
 const HELMET_CONTRACT_PATH := "res://assets/data/equipment_male_world_helmet.json"
 const ITEM_IDS := [146, 147, 148, 149, 150, 151, 218, 224, 228, 232, 236, 240]
-const ACTIONS := ["idle", "walk", "attack", "cast", "hit", "death"]
+const ACTIONS := ["idle", "run", "attack", "cast", "hit", "death"]
+const PREPARED_HAIR_ACTIONS := [
+	"idle", "walk", "attack", "cast", "hit", "death", "run"
+]
 const DIRECTION_VECTORS := [
 	Vector2.UP,
 	Vector2(0.70710678, -0.70710678),
@@ -73,8 +76,19 @@ func _run() -> void:
 	assert(bool(paired_body.get("sameDistributionAndActionTable", false)))
 	assert(
 		paired_body.get("actionTable", {}).keys().size()
-		== ACTIONS.size()
+		== PREPARED_HAIR_ACTIONS.size()
 	)
+	assert(
+		hair_appearance.get("actions", {}).keys().size()
+		== PREPARED_HAIR_ACTIONS.size()
+	)
+	var prepared_run: Dictionary = hair_appearance.get(
+		"actions", {}
+	).get("run", {})
+	assert(str(prepared_run.get("path", "")).ends_with("hair_002_run.png"))
+	assert(int(prepared_run.get("framesPerDirection", 0)) == 6)
+	assert(int(prepared_run.get("decodedFrameCount", 0)) == 48)
+	assert(prepared_run.get("missingFrames", []) == [])
 	assert(
 		not bool(
 			hair_appearance.get("source", {}).get("resampled", true)
@@ -188,15 +202,13 @@ func _set_pose(
 	var facing: Vector2 = DIRECTION_VECTORS[direction_index]
 	player.facing = facing
 	player.actual_motion_facing = facing
-	player.velocity = (
-		facing * 100.0 if action == "walk" else Vector2.ZERO
-	)
+	player.velocity = facing * 100.0 if action == "run" else Vector2.ZERO
 	visual._action_remaining = 0.0
 	if action == "idle":
 		visual._last_state = "idle"
 		visual._elapsed = float(frame_index) / 6.0 + 0.001
-	elif action == "walk":
-		visual._last_state = "walk"
+	elif action == "run":
+		visual._last_state = "run"
 		visual._elapsed = float(frame_index) / 10.0 + 0.001
 	else:
 		visual._action_name = action

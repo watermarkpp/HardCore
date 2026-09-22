@@ -1,5 +1,7 @@
 extends Node
 
+const ChassisDesigns := preload("res://scripts/hud_chassis_designs.gd")
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -13,7 +15,8 @@ func _run() -> void:
 	var root := hud.get_node("MobileSafeRoot") as Control
 	var chassis := root.get_node("IntegratedHUDChassis") as Control
 	var label := hud.warrior_state_label as Label
-	var peak_y: float = (chassis.get_global_transform() * hud._chassis_source_to_local(GameHUD.HUD_CHASSIS_CENTER_PEAK_SOURCE)).y
+	var peak_source: Vector2 = ChassisDesigns.active_design()["center_peak_source"]
+	var peak_y: float = (chassis.get_global_transform() * hud._chassis_source_to_local(peak_source)).y
 	assert(absf(label.get_global_rect().get_center().x - chassis.get_global_rect().get_center().x) <= 1.0)
 	assert(absf(peak_y - label.get_global_rect().end.y - GameHUD.HUD_CHASSIS_STATE_LABEL_GAP) <= 1.0)
 	print("WARRIOR_STATE_LABEL_LAYOUT_PASS")

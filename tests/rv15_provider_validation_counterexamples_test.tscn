@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/rv15_provider_validation_counterexamples_test.gd" id="1"]
+
+[node name="RV15ProviderValidationCounterexamplesTest" type="Node"]
+script = ExtResource("1")

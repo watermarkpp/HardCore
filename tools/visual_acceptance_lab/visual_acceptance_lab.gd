@@ -3,6 +3,9 @@ extends Control
 const MonsterDraftScript := preload(
 	"res://scripts/monster_ground_alignment_draft.gd"
 )
+const MonsterGroundSpikeEffectScript := preload(
+	"res://scripts/monster_ground_spike_effect.gd"
+)
 const ACTIONS := ["idle", "walk", "attack", "cast", "hit", "death"]
 const ACTION_LABELS := ["站立", "行走", "攻击", "施法", "受击", "死亡"]
 const MONSTER_ACTIONS := ["idle", "walk", "attack", "hit", "death"]
@@ -70,14 +73,19 @@ const ALIGNMENT_NUDGE := 0.5
 const PLAYBACK_TICK_SECONDS := 1.0 / 60.0
 const MONSTER_GROUND_REVIEW_ARG := "--monster-ground-review"
 const WARRIOR_SKILL_REVIEW_ARG := "--warrior-skill-review"
+const MONSTER_ID_ARG_PREFIX := "--monster-id="
+const GROUND_SPIKE_REVIEW_ARG := "--fixed-area-ground-spike-review"
+const FIXED_AREA_GROUND_SPIKE_MONSTER_IDS := [180, 195]
+const GROUND_SPIKE_TARGET_OFFSET := Vector2(105.0, 28.0)
 const MONSTER_FOOT_MATCH_EPSILON := 0.01
-const MONSTER_TARGET_RING_COLOR := Color("#ffd54f")
-const MONSTER_FOOT_DELTA_COLOR := Color("#ff6b6b")
-const MONSTER_ACTOR_ORIGIN_COLOR := Color("#ff9f43")
+const RUNTIME_TARGET_RING_OVERLAY_NAME := "RuntimeTargetRingOverlay"
+const RUNTIME_TARGET_RING_COLOR := Color(1.0, 0.78, 0.18, 0.78)
+const RUNTIME_TARGET_RING_WIDTH := 2.0
 
 var _old_test_mode := false
 var _player: PlayerCharacter
 var _monster: EnemyActor
+var _ground_spike_preview: Node2D
 var _monster_rows: Array[Dictionary] = []
 var _active_monster_id := -1
 var _preview_root: Node2D
@@ -143,19 +151,52 @@ func _ready() -> void:
 	_build_preview_actor()
 	_load_alignment_draft()
 	_on_zoom_changed(_zoom_slider.value)
-	if OS.get_cmdline_user_args().has(MONSTER_GROUND_REVIEW_ARG):
-		if DisplayServer.get_name() != "headless":
-			get_window().title = "HardCore 怪物脚点 / 黄色光圈验收"
-		_mode_option.select(1)
-		_on_mode_changed(1)
-	elif OS.get_cmdline_user_args().has(WARRIOR_SKILL_REVIEW_ARG):
+	var requested_monster_id := monster_id_from_args(OS.get_cmdline_user_args())
+	if OS.get_cmdline_user_args().has(WARRIOR_SKILL_REVIEW_ARG):
 		if DisplayServer.get_name() != "headless":
 			get_window().title = "HardCore 战士技能动画验收"
 		_mode_option.select(2)
 		_on_mode_changed(2)
+	elif (
+		OS.get_cmdline_user_args().has(MONSTER_GROUND_REVIEW_ARG)
+		or OS.get_cmdline_user_args().has(GROUND_SPIKE_REVIEW_ARG)
+		or requested_monster_id > 0
+	):
+		if DisplayServer.get_name() != "headless":
+			get_window().title = (
+				"HardCore 赤月 / 千年树妖地刺攻击验收"
+				if OS.get_cmdline_user_args().has(GROUND_SPIKE_REVIEW_ARG)
+				else "HardCore 怪物脚点 / 黄色光圈验收"
+			)
+		_mode_option.select(1)
+		_on_mode_changed(1)
+		if requested_monster_id > 0:
+			_select_monster_id(requested_monster_id)
+		if OS.get_cmdline_user_args().has(GROUND_SPIKE_REVIEW_ARG):
+			_action_option.select(2)
+			_on_selection_changed(2)
 	else:
 		_apply_selection()
 	_start_playback_timer()
+
+
+static func monster_id_from_args(args: Variant) -> int:
+	var expect_value := false
+	for raw_arg: Variant in args:
+		var arg := str(raw_arg)
+		if expect_value:
+			expect_value = false
+			if arg.is_valid_int():
+				var separated_id := int(arg)
+				return separated_id if separated_id > 0 else -1
+			continue
+		if arg == "--monster-id" or arg == "-monster-id":
+			expect_value = true
+			continue
+		if arg.begins_with(MONSTER_ID_ARG_PREFIX):
+			var inline_id := int(arg.trim_prefix(MONSTER_ID_ARG_PREFIX))
+			return inline_id if inline_id > 0 else -1
+	return -1
 
 
 func _exit_tree() -> void:
@@ -471,9 +512,21 @@ func _build_preview_actor() -> void:
 	_player.set_physics_process(false)
 	if _player.health_bar != null:
 		_player.health_bar.visible = false
+	# Resolve the same normalized equipment/body anchor used by the APK before
+	# freezing the validator actor's processing.
+	_player.visual._process(0.0)
 	_player.visual.set_process(false)
 	_runtime_visual_origin = _player.visual.position
 	_load_formal_alignment_contract()
+	_ground_spike_preview = MonsterGroundSpikeEffectScript.create_visual({
+		"effect_id": MonsterGroundSpikeEffectScript.EFFECT_ID,
+		"release_id": "visual-acceptance-ground-spike",
+		"target_world_px": Vector2.ZERO,
+	})
+	_ground_spike_preview.name = "FixedAreaGroundSpikePreview"
+	_preview_root.add_child(_ground_spike_preview)
+	_ground_spike_preview.set_process(false)
+	_ground_spike_preview.visible = false
 	_overlay_root = Node2D.new()
 	_overlay_root.name = "DiagnosticsOverlay"
 	_overlay_root.z_index = 100
@@ -643,16 +696,53 @@ func _apply_monster_preview_frame() -> void:
 	visual.current_direction = visual._direction_row(
 		DIRECTIONS[_direction_option.selected]
 	)
-	visual.current_frame = _current_frame
+	var body_frame_count := maxi(
+		1,
+		MonsterAnimationPolicy.frame_count(
+			visual.active_resources,
+			StringName(action),
+		),
+	)
+	var body_frame := mini(_current_frame, body_frame_count - 1)
+	visual.current_frame = body_frame
 	visual.sprite.texture = visual.active_resources.get(action)
 	visual.sprite.region_rect = Rect2(
-		_current_frame * visual.frame_size.x,
+		body_frame * visual.frame_size.x,
 		visual.current_direction * visual.frame_size.y,
 		visual.frame_size.x,
 		visual.frame_size.y,
 	)
+	_apply_ground_spike_preview_frame()
 	_update_overlay()
 	_update_status()
+
+
+func _apply_ground_spike_preview_frame() -> void:
+	if _ground_spike_preview == null:
+		return
+	var show_spike := _fixed_area_ground_spike_preview_active()
+	_ground_spike_preview.visible = show_spike
+	if _is_monster_mode():
+		_player.visible = show_spike
+	if not show_spike:
+		return
+	_player.position = GROUND_SPIKE_TARGET_OFFSET
+	_player.velocity = Vector2.ZERO
+	_ground_spike_preview.position = _preview_root.to_local(
+		_player.approved_ground_footpoint_world_px()
+	)
+	_ground_spike_preview.call(
+		"_set_frame",
+		mini(_current_frame, MonsterGroundSpikeEffectScript.FRAME_COUNT - 1)
+	)
+
+
+func _fixed_area_ground_spike_preview_active() -> bool:
+	return (
+		_is_monster_mode()
+		and _active_monster_id in FIXED_AREA_GROUND_SPIKE_MONSTER_IDS
+		and _selected_action() == "attack"
+	)
 
 
 func _rebuild_monster_actor(force := false) -> bool:
@@ -687,12 +777,6 @@ func _rebuild_monster_actor(force := false) -> bool:
 	# and subtract it from the visual-foot vector. This preserves every frozen
 	# draft field while making the lab and the game use the same transform chain.
 	_monster.position = Vector2.ZERO
-	# The lab owns its diagnostic overlays. A runtime-selected MonsterVisual can
-	# now draw the game's yellow target ring itself, which would duplicate the
-	# saved-draft overlay and make sub-pixel differences look like changed user
-	# data. Keep the preview actor unselected so draft review remains a single,
-	# read-only coordinate presentation.
-	_monster.set_targeted(false)
 	_monster.set_process(false)
 	_monster.set_physics_process(false)
 	_monster.velocity = Vector2.ZERO
@@ -701,6 +785,10 @@ func _rebuild_monster_actor(force := false) -> bool:
 	# while the user is inspecting animation and ground alignment.
 	_monster._burrowed = false
 	_monster.dormant = false
+	# Calibration review deliberately uses the same selected state as gameplay.
+	# MonsterVisual therefore owns the yellow ring through its normal _draw path;
+	# the lab overlay below is limited to the human foot/collision/map guides.
+	_monster.set_targeted(true)
 	if _monster.visual != null:
 		_monster.visual.set_process(false)
 		_monster.visual.visible = true
@@ -762,7 +850,7 @@ func _update_overlay() -> void:
 	var body_sprite: Sprite2D = visual.sprite
 	var foot_origin := _visual_foot_origin()
 	_draw_canonical_ground_overlay(
-		foot_origin, ArtSpec.PLAYER_COLLISION_RADIUS
+		foot_origin, ArtSpec.PLAYER_COLLISION_RADIUS_PX
 	)
 	if body_sprite != null:
 		var rect := Rect2(
@@ -814,20 +902,25 @@ func _update_monster_overlay() -> void:
 		return
 	var visual := _monster.visual
 	var body_sprite: Sprite2D = visual.sprite
+	var runtime_ring_center := _visual_foot_origin()
+	var runtime_ring_radii := _monster.ground_indicator_radii()
 	_draw_canonical_ground_overlay(
-		_visual_foot_origin(), _monster.collision_radius
+		runtime_ring_center, _monster.collision_radius_px
 	)
-	var formal_center := (
-		visual.position + visual.ground_contact_offset()
+	_draw_runtime_target_ring_overlay(
+		runtime_ring_center, runtime_ring_radii
 	)
-	var formal_radii := visual.ground_indicator_radii(Vector2(22, 7))
-	_add_ellipse_line(
-		_overlay_root,
-		formal_center,
-		formal_radii,
-		Color(1.0, 0.62, 0.20, 0.72),
-		1.0,
-	)
+	if _fixed_area_ground_spike_preview_active() and _player != null:
+		# Reuse the exact point from the original approved player draft. This
+		# cyan cross stays above the effect so visual acceptance is unambiguous.
+		_add_cross(
+			_overlay_root,
+			_preview_root.to_local(
+				_player.approved_ground_footpoint_world_px()
+			),
+			Color("#4de1ff"),
+			11.0,
+		)
 	var rect := Rect2(
 		visual.position + body_sprite.position,
 		Vector2(body_sprite.region_rect.size)
@@ -838,6 +931,36 @@ func _update_monster_overlay() -> void:
 		Color(0.55, 1.0, 0.52, 0.75),
 		1.0
 	)
+
+
+func _draw_runtime_target_ring_overlay(
+	center: Vector2,
+	radii: Vector2,
+) -> void:
+	if _overlay_root == null:
+		return
+	# _update_overlay() normally clears all diagnostic children first. Remove a
+	# queued prior ring as well so repeated updates never expose two named rings
+	# in the same frame.
+	for child: Node in _overlay_root.get_children():
+		if child.name == RUNTIME_TARGET_RING_OVERLAY_NAME:
+			child.free()
+	var ring := Line2D.new()
+	ring.name = RUNTIME_TARGET_RING_OVERLAY_NAME
+	ring.default_color = RUNTIME_TARGET_RING_COLOR
+	ring.width = RUNTIME_TARGET_RING_WIDTH
+	ring.antialiased = true
+	ring.set_meta("center", center)
+	ring.set_meta("radii", radii)
+	ring.set_meta("source", "monster_visual_runtime_target_ring")
+	var points := PackedVector2Array()
+	for index in range(49):
+		var angle := TAU * float(index) / 48.0
+		points.append(
+			center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		)
+	ring.points = points
+	_overlay_root.add_child(ring)
 
 
 func _draw_canonical_ground_overlay(
@@ -958,7 +1081,7 @@ func _update_status(message := "") -> void:
 		)
 		_status.text = (
 			"%s　#%d %s　%s / %s　帧 %d/%d　倍率 %dx\n"
-			+ "橙十字=怪物物理原点　青十字=人工视觉脚点　"
+			+ "黄轴=怪物物理原点　青十字=人工视觉脚点　"
 			+ "黄圈/黄小十字=游戏实时目标光圈\n"
 			+ "来源=%s　保存姿态=%s【%s】\n"
 			+ "人工脚点=(%.1f, %.1f)　实时黄圈=(%.1f, %.1f)　"
@@ -1406,8 +1529,8 @@ func monster_alignment_draft_payload() -> Dictionary:
 		_monster_visual_alignment_offset,
 		_monster_picked_visual_foot_offset,
 		Vector2(
-			_monster.collision_radius,
-			_monster.collision_radius * 0.5,
+			_monster.collision_radius_px,
+			_monster.collision_radius_px * 0.5,
 		),
 	)
 
@@ -1557,6 +1680,7 @@ func monster_ground_review_snapshot() -> Dictionary:
 	var pose_matches := (
 		current_selection == _monster_saved_selection
 	)
+	var runtime_layout := _monster.visual.ground_shadow_layout_snapshot()
 	return {
 		"monsterId": _active_monster_id,
 		"draftLoaded": _active_monster_draft_loaded,
@@ -1566,6 +1690,10 @@ func monster_ground_review_snapshot() -> Dictionary:
 		"expectedTargetCenter": expected_target,
 		"runtimeRingCenter": runtime_ring,
 		"runtimeRingRadii": _monster.ground_indicator_radii(),
+		"runtimeSelected": _monster.is_targeted,
+		"runtimeRingVisible": bool(runtime_layout.get("ring_visible", false)),
+		"runtimeRingOwner": str(runtime_layout.get("owner", "")),
+		"runtimeRingMode": str(runtime_layout.get("mode", "")),
 		"manualFootDelta": manual_delta,
 		"runtimeTargetDelta": runtime_target_delta,
 		"delta": runtime_ring - manual_foot,
@@ -1871,13 +1999,17 @@ func _frame_count() -> int:
 	if _is_monster_mode():
 		if _monster == null or _monster.visual == null:
 			return 1
-		return maxi(
+		var body_frame_count := maxi(
 			1,
 			MonsterAnimationPolicy.frame_count(
 				_monster.visual.active_resources,
 				StringName(_selected_action()),
 			),
 		)
+		return maxi(
+			body_frame_count,
+			MonsterGroundSpikeEffectScript.FRAME_COUNT,
+		) if _fixed_area_ground_spike_preview_active() else body_frame_count
 	if _player == null or _player.visual == null:
 		return 1
 	var action_key := (
@@ -1952,6 +2084,19 @@ func _on_monster_changed(_index: int) -> void:
 		return
 	_active_monster_id = -1
 	_apply_selection()
+
+
+func _select_monster_id(monster_id: int) -> bool:
+	if _monster_option == null:
+		return false
+	for row_index in _monster_rows.size():
+		if int(_monster_rows[row_index].get("monster_id", -1)) != monster_id:
+			continue
+		_monster_option.select(row_index)
+		_on_monster_changed(row_index)
+		return _active_monster_id == monster_id
+	_update_status("当前主树目录没有 monster_id=%d。" % monster_id)
+	return false
 
 
 func _on_speed_changed(_index: int) -> void:
@@ -2087,26 +2232,6 @@ func _add_rect_line(
 		rect.end,
 		Vector2(rect.position.x, rect.end.y),
 	]), color, width)
-
-
-func _add_ellipse_line(
-	parent: Node2D,
-	center: Vector2,
-	radii: Vector2,
-	color: Color,
-	width: float,
-) -> void:
-	var points := PackedVector2Array()
-	for index in range(49):
-		var angle := TAU * float(index) / 48.0
-		points.append(
-			center
-			+ Vector2(
-				cos(angle) * radii.x,
-				sin(angle) * radii.y,
-			)
-		)
-	_add_closed_line(parent, points, color, width)
 
 
 func _add_closed_line(

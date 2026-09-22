@@ -53,6 +53,7 @@ func _run() -> void:
 	assert(effect_sprite.region_rect.position == Vector2(visual.current_frame * 224, visual.current_direction * 224), "攻杀帧/方向区域错误")
 	assert(effect_sprite.position == -Vector2(86, 130) + Vector2(-32, -28), "技能特效没有与迁移后的战士脚点保持同一演员原点")
 	assert(audio.stream != null and audio.stream.resource_path.ends_with("57.wav"), "空手攻击没有使用客户端57号挥击声")
+	assert(not audio.playing, "暂时关闭技能音效时不得启动WeaponAudio播放")
 	visual.play_action("半月弯刀", 0.51)
 	visual.play_passive_proc_effect("攻杀剑术", 0.24)
 	visual._process(0.05)

@@ -44,5 +44,23 @@ func _run() -> void:
 			continue
 		assert(JSON.stringify(PlayerState.inventory[index]) == JSON.stringify(inventory_before[index]), "替换装备改动了无关背包格%d" % index)
 
-	print("EQUIPMENT_INVENTORY_SLOT_SWAP_PASS：换装按原背包格互换，其他格位及实例状态不变")
+	var equipped_snapshot: Dictionary = PlayerState.equipment["武器"].duplicate(true)
+	var rejected: Dictionary = PlayerState.unequip_to_inventory_slot("武器", replacement_index)
+	assert(not rejected.success, "occupied destination must reject without replacing its item")
+	var selected_slot := 25
+	var moved: Dictionary = PlayerState.unequip_to_inventory_slot("武器", selected_slot)
+	assert(moved.success and int(moved.destination.slot) == selected_slot)
+	assert(PlayerState.inventory[selected_slot] == equipped_snapshot, "selected empty slot must receive complete instance")
+	var reequipped: Dictionary = PlayerState.equip_inventory_index_result(selected_slot, "武器")
+	assert(reequipped.success and str(reequipped.instance_id) == replacement_id)
+	var before_failed_inventory: Array = PlayerState.inventory.duplicate(true)
+	var before_failed_equipment: Dictionary = PlayerState.equipment.duplicate(true)
+	var before_failed_cursor: Dictionary = PlayerState.equip_cycle_cursor.duplicate(true)
+	PlayerState._test_force_atomic_write_failure = true
+	var failed: Dictionary = PlayerState.unequip_to_inventory_slot("武器", selected_slot)
+	PlayerState._test_force_atomic_write_failure = false
+	assert(not failed.success and str(failed.reason) == "save_failed")
+	assert(PlayerState.inventory == before_failed_inventory and PlayerState.equipment == before_failed_equipment)
+	assert(PlayerState.equip_cycle_cursor == before_failed_cursor)
+	print("EQUIPMENT_INVENTORY_SLOT_SWAP_PASS：换装、指定空格卸装、完整实例和保存失败回滚")
 	get_tree().quit(0)

@@ -1,5 +1,8 @@
 extends SceneTree
 
+const MapEditorCoordinate := preload(
+	"res://scripts/map_editor/map_editor_coordinate.gd"
+)
 const VISUAL_CONTRACT_ID := "orc_tomb_editor_runtime_visual_v1"
 const MAPS := [
 	{"map_id": "orc_tomb_1", "runtime_map_id": 217},
@@ -39,6 +42,9 @@ func _publish(config: Dictionary) -> Dictionary:
 	var ground_manifest := _read_json(manifest_path)
 	if ground_manifest.is_empty():
 		return {"ok": false, "errors": ["ground_manifest_missing"]}
+	var geometry := _validated_ground_geometry(ground_manifest)
+	if not bool(geometry.get("ok", false)):
+		return geometry
 	var output_root := (
 		"res://assets/art/maps/orc_tomb/editor_runtime_chunks/%s" % map_id
 	)
@@ -74,9 +80,13 @@ func _publish(config: Dictionary) -> Dictionary:
 			"image": destination_path.trim_prefix("res://"),
 			"sha256": sha,
 		})
-	var pixel_size: Array = ground_manifest.get("ground_pixel_size", [])
-	if pixel_size.size() != 2 or published_chunks.is_empty():
+	var pixel_size: Array = geometry.pixel_size
+	if published_chunks.is_empty():
 		return {"ok": false, "errors": ["publishable_ground_missing"]}
+	var design_size: Vector2i = geometry.design_size
+	var pixel_center: Vector2 = MapEditorCoordinate.ground_pixel_center(
+		design_size
+	)
 	var visual := {
 		"schema_version": 1,
 		"visual_contract_id": VISUAL_CONTRACT_ID,
@@ -84,11 +94,14 @@ func _publish(config: Dictionary) -> Dictionary:
 		"runtime_map_id": int(config.runtime_map_id),
 		"source_editor_document_sha256": FileAccess.get_sha256(editor_path),
 		"source_ground_manifest_sha256": FileAccess.get_sha256(manifest_path),
-		"design_size": ground_manifest.get("design_size", []).duplicate(),
+		"design_size": geometry.design_values.duplicate(),
 		"ground_pixel_size": pixel_size.duplicate(),
+		"ground_coordinate_contract_id": (
+			MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+		),
 		"ground_pixel_center": [
-			float(pixel_size[0]) * 0.5,
-			float(pixel_size[1]) * 0.5,
+			pixel_center.x,
+			pixel_center.y,
 		],
 		"base_color": "#16120e",
 		"guard_band_px": 512.0,
@@ -108,6 +121,44 @@ func _publish(config: Dictionary) -> Dictionary:
 	if not bool(write.get("ok", false)):
 		return write
 	return {"ok": true, "chunk_count": published_chunks.size()}
+
+
+func _validated_ground_geometry(manifest: Dictionary) -> Dictionary:
+	if str(manifest.get("coordinate_contract_id", "")) != (
+		MapEditorCoordinate.GROUND_COORDINATE_CONTRACT_ID
+	):
+		return {"ok": false, "errors": ["ground_coordinate_contract_invalid"]}
+	var design_raw: Variant = manifest.get("design_size", null)
+	var pixel_raw: Variant = manifest.get("ground_pixel_size", null)
+	if not design_raw is Array or design_raw.size() != 2:
+		return {"ok": false, "errors": ["design_size_invalid"]}
+	if not pixel_raw is Array or pixel_raw.size() != 2:
+		return {"ok": false, "errors": ["ground_pixel_size_invalid"]}
+	if not _positive_json_integer(design_raw[0]) or not _positive_json_integer(
+		design_raw[1]
+	):
+		return {"ok": false, "errors": ["design_size_invalid"]}
+	if not _positive_json_integer(pixel_raw[0]) or not _positive_json_integer(
+		pixel_raw[1]
+	):
+		return {"ok": false, "errors": ["ground_pixel_size_invalid"]}
+	var design_size := Vector2i(int(design_raw[0]), int(design_raw[1]))
+	var expected_size := MapEditorCoordinate.ground_image_size(design_size)
+	if Vector2i(int(pixel_raw[0]), int(pixel_raw[1])) != expected_size:
+		return {"ok": false, "errors": ["ground_pixel_size_contract_mismatch"]}
+	return {
+		"ok": true,
+		"design_size": design_size,
+		"design_values": design_raw,
+		"pixel_size": pixel_raw,
+	}
+
+
+func _positive_json_integer(value: Variant) -> bool:
+	if not (value is int or value is float):
+		return false
+	var number := float(value)
+	return number > 0.0 and number == floor(number)
 
 
 func _read_json(path: String) -> Dictionary:

@@ -19,6 +19,7 @@ OLD_SIZE = [64, 64]
 NEW_SIZE = [80, 80]
 SHIFT = 8
 CHUNK_SIZE = 1024
+GROUND_COORDINATE_CONTRACT_ID = "isometric_cell_center_64x32_v2"
 
 
 def read_json(path: Path) -> dict:
@@ -45,7 +46,9 @@ def migrate_document(document: dict, amount: int) -> None:
     document["design"]["resize_policy"] = "center_with_equal_8_tile_border"
     document["design"]["size_status"] = "user_confirmed_final"
     document["design"]["size_decision_source"] = "user_2026-07-17_80x80"
-    document["ground"]["origin_px"] = [NEW_SIZE[1] * 32, 16]
+    document["ground"]["origin_px"] = [NEW_SIZE[1] * 32, 0]
+    document["ground"]["tile_anchor_mode"] = "cell_center"
+    document["ground"]["coordinate_contract_id"] = GROUND_COORDINATE_CONTRACT_ID
     document["editor_meta"]["runtime_approved"] = False
     document["editor_meta"]["size_migration"] = "bich_64_to_80_centered"
     if amount == 0:
@@ -107,6 +110,7 @@ def migrate_ground(state: dict, amount: int) -> tuple[dict, dict, int]:
         "chunk_grid_size": [columns, rows],
         "blank_chunk_policy": "virtual_shared_until_dirty",
         "default_fill_asset_id": "ground.old_grass.001",
+        "coordinate_contract_id": GROUND_COORDINATE_CONTRACT_ID,
         "chunks": chunks,
     }
     migrated_state = {
@@ -114,6 +118,7 @@ def migrate_ground(state: dict, amount: int) -> tuple[dict, dict, int]:
         "map_id": "bich_province",
         "dirty_chunks": sorted(buckets),
         "operations_by_chunk": buckets,
+        "coordinate_contract_id": GROUND_COORDINATE_CONTRACT_ID,
     }
     return manifest, migrated_state, operation_count
 

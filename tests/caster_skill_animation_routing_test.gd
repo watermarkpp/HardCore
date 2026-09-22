@@ -302,7 +302,8 @@ func _ready() -> void:
 		add_child(cell)
 		assert(cell._sprite != null)
 		assert(cell._sprite.frame_count() == 6)
-		assert(cell._sprite.scale == Vector2.ONE)
+		# Accepted fire-wall presentation keeps source width and 60% height.
+		assert(cell._sprite.scale.is_equal_approx(Vector2(1.0, 0.6)))
 		cell.free()
 
 	# Q3-C: the summon factory consumes a canonical node plan.

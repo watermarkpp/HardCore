@@ -6,18 +6,17 @@ const Bridge := preload(
 )
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
 
-const RUNTIME_MAP_IDS := [4, 268, 313, 314, 315, 217, 218, 221, 406, 408, 1578]
-
-
 func _ready() -> void:
 	_run.call_deferred()
 
 
 func _run() -> void:
 	# Formal coverage is defined by runtime-built maps, NOT by WorldContent.
+	var runtime_map_ids := Bridge.released_map_ids()
+	assert(runtime_map_ids.size() == 67, "formal runtime set must be exactly 67")
 	var implemented_count := 0
 	var unresolved: Array = []
-	for map_id: int in RUNTIME_MAP_IDS:
+	for map_id: int in runtime_map_ids:
 		assert(
 			Bridge.is_runtime_built(map_id)
 			and Bridge.is_formal_playable(map_id),
@@ -34,13 +33,13 @@ func _run() -> void:
 		"every formal runtime map must resolve; unresolved=%s" % str(unresolved)
 	)
 	assert(
-		implemented_count == 11,
-		"implemented_playable set must be exactly 11"
+		implemented_count == 67,
+		"implemented_playable set must be exactly 67"
 	)
 	# Reference/planned maps are NOT formally playable.
 	var non_playable: Array = []
 	for map_id: int in WorldContent.maps.keys():
-		if map_id in RUNTIME_MAP_IDS:
+		if map_id in runtime_map_ids:
 			continue
 		if Bridge.is_formal_playable(map_id):
 			non_playable.append(map_id)

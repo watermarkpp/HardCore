@@ -1,0 +1,34 @@
+{
+  "schema": "hardcore.dpv2.v504.source_preflight.v1",
+  "pass": true,
+  "author_exceptions": [
+    {
+      "monster_id": 75,
+      "name": "沃玛卫士2",
+      "status": "EXTERNAL_EMPTY_DROP_TABLE_LEGACY_PRESERVED",
+      "local_rows_preserved": 78,
+      "source_rows": 0,
+      "raw_path": "docs/drop/v5/source/monster_75.bin",
+      "raw_sha256": "71CEA9C20EFB0C0910B89D842FDB05DCEC7A429E21A2A85EF1FE32D45128A478",
+      "decision": "B_MODIFIED_PRESERVE_LEGACY_NOT_VERIFIED",
+      "book_balance_enabled": false,
+      "variant_inheritance": false,
+      "delete_local_slots": false
+    },
+    {
+      "monster_id": 123,
+      "name": "邪恶钳虫9",
+      "status": "EXTERNAL_EMPTY_DROP_TABLE_LEGACY_PRESERVED",
+      "local_rows_preserved": 112,
+      "source_rows": 0,
+      "raw_path": "docs/drop/v5/source/monster_123.bin",
+      "raw_sha256": "D4A96B6179D25CEF2F47A3E0955ED3643430E4A9EC09E4716682078D0757F676",
+      "decision": "B_MODIFIED_PRESERVE_LEGACY_NOT_VERIFIED",
+      "book_balance_enabled": false,
+      "variant_inheritance": false,
+      "delete_local_slots": false
+    }
+  ],
+  "golden_141": "PASS",
+  "errors": []
+}
