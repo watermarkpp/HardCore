@@ -12,9 +12,9 @@ const LootRuntimeScript := preload(
 const ProviderScript := preload("res://scripts/drop/user_loot_sheet_provider.gd")
 
 const EXPECTED_MONSTERS := 126
-const EXPECTED_SLOTS := 6120
+const EXPECTED_SLOTS := 6144
 const EXPECTED_NEW_SLOTS := 41
-const EXPECTED_OVERLAY := 144
+const EXPECTED_OVERLAY := 168
 const EXPECTED_EMPTY := 5
 
 
@@ -93,6 +93,17 @@ func _test_probability_direct_read() -> void:
 	assert(bool(overlay_helm.get("ok", false)), str(overlay_helm))
 	assert(int(overlay_helm.get("final_denominator", -1)) == 120)
 	assert(int(overlay_helm.get("canonical_item_id", -1)) == 151)
+	# 178 花吻蜘蛛 (hp 750) belongs to the "others" denominator group per the
+	# original directive; the first delivery pass missed it and this slot set
+	# closes that gap (overlay tally 144 -> 168).
+	var overlay_178_ch: Dictionary = provider.probability(178, "dpv2.user.sheet.m178.set_cy_ch_001")
+	assert(bool(overlay_178_ch.get("ok", false)), str(overlay_178_ch))
+	assert(int(overlay_178_ch.get("final_denominator", -1)) == 180)
+	assert(int(overlay_178_ch.get("canonical_item_id", -1)) == 233)
+	var overlay_178_weap: Dictionary = provider.probability(178, "dpv2.user.sheet.m178.set_zm_weap_001")
+	assert(bool(overlay_178_weap.get("ok", false)), str(overlay_178_weap))
+	assert(int(overlay_178_weap.get("final_denominator", -1)) == 200)
+	assert(int(overlay_178_weap.get("canonical_item_id", -1)) == 105)
 	assert(not provider.owns(174, "dpv2.user.sheet.m174.set_cy_ch_001"))
 	assert(not provider.owns(176, "dpv2.user.sheet.m176.set_cy_ch_001"))
 	assert(int(gold.get("final_gold_amount", -1)) == 20000)

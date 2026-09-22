@@ -106,8 +106,8 @@ func _run() -> void:
 	expect(
 		bool(real.valid), "real authority must stay valid"
 	)
-	expect(int(real.slot_count) == 6120, "real authority keeps 6120 slots after the overlay")
-	expect(int(real.overlay_slot_count) == 144, "real authority keeps 144 overlay slots")
+	expect(int(real.slot_count) == 6144, "real authority keeps 6144 slots after the overlay")
+	expect(int(real.overlay_slot_count) == 168, "real authority keeps 168 overlay slots")
 	real = null
 
 	# 1. Same-monster duplicate UID: refused, not merged, not re-indexed.
