@@ -1,10 +1,10 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-22（v92 主控修复与验收中）。
+Branch: `codex/integration`。Updated: 2026-09-22 22:49（v92 APK 已交付桌面，源码已推送，手机验收 NOT_RUN）。
 
 ## 2026-09-22：v92 群怪性能、系统修复与掉落复核
 
-当前施工基线 `b961cedff8040c9fc81534e094241ad9fa2330ad`；修复尚在工作树，不能用这个基线 SHA 声称已含 v92 改动。下方 v91 的分支表、设备状态和 399/409 结果是此前交接快照。
+当前 v92 构建源码 `abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e`，已推送并核对 origin/codex/integration。施工基线为 `b961cedff8040c9fc81534e094241ad9fa2330ad`；后续提交只追加核验工具与交付证据，APK 内源码不变。下方 v91 的分支表、设备状态和 399/409 结果是此前交接快照。
 
 累计用户要求以 `docs/repair_v92/USER_REQUEST_RECONCILIATION.md` 对账，主控逐项裁决见 `CONTROLLER_REVIEW.md`。已实施密集地图/火墙与技能动画优化、精确技能分类和物理/法术结算分离、宠物成长与毒归属、掉落队列预算、UI 即时反馈和隐藏刷新、地图 ready/刷新恢复/分类桥接、发布渲染绑定与提示修复，并保留人工地图和已接受美术。完整critical原始459/463；4项失败修正后5/5及最后16/16、3/3回归PASS，火墙公共owner已补齐。原始m30性能并未统一改善，设备性能NOT_RUN，详见docs/repair_v92/FINAL_VERIFICATION.md。
 
@@ -12,7 +12,7 @@ Branch: `codex/integration`。Updated: 2026-09-22（v92 主控修复与验收中
 
 20:39最新密度调查见 `docs/repair_v92/MONSTER_DENSITY_INVESTIGATION.md`：13次有效测试，固定12参战的近/远闲置及隔墙追击对照，加三张正式地图与v91对应源码普查。附近闲置怪增加视觉更新，隔墙追击合成场景增加完整AI与寻路；正式地图静止采样未出现寻路积压，不能宣布真实卡顿根因已经关闭。密度性能项重新打开。渲染12次对照、正式空安全区入口修复及一次未定位的Godot原生退出崩溃见 `RENDER_CONTROL_TEST.md`。
 
-源码提交、v92 APK、远端推送：NOT_RUN，待最终验证后执行。20:34重新查询设备连接为空，DEVICE TEST: NOT_RUN；不得沿用下文旧 v91 的设备连接状态。
+源码提交/推送与 v92 APK 身份、签名、资源核验 PASS。桌面 `HardCore-v92-20260922-abbb5ef-debug.apk`，480221108 bytes，SHA256 `3A7E3D8CAF00743CCE27C82072C05792A3FEF72D1E53FCFEB0C287DAF0800A3F`，同包名/同证书/92 > 91。固定源码六项复验 PASS、零运行错误；60 墙体 plan、807 相关贴图、67 图地面及6042掉落槽包内 PASS。构建一次 JDK 本机通信 FAIL 经进程级临时目录修复后成功，详见 `docs/repair_v92/APK_HANDOFF.md`。当前 ADB 无设备，DEVICE TEST: NOT_RUN；不得沿用下文旧 v91 的设备连接状态。
 
 21:16闲置怪物CPU追加：范围外候选先拒绝，再做安全区/仇恨/视线；真正停驻待机按用户要求0.5秒唤醒，受击立即唤醒、返程与共享缓存0.25秒保持。11项回归与6次采样PASS，后台维护调用750→400，整帧收益尚不能据此保证。见 `docs/repair_v92/IDLE_MONSTER_CPU_REPAIR.md`；继续真实移动的怪物状态与CPU调查。
 

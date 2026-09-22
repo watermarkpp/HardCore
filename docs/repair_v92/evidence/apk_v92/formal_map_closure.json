@@ -1,0 +1,38 @@
+{
+  "apk": "C:\\Users\\Administrator\\Desktop\\HardCore-v92-20260922-abbb5ef-debug.apk",
+  "apkSHA": "3a7e3d8caf00743cce27c82072c05792a3fef72d1e53fcfeb0c287daf0800a3f",
+  "contract": "hardcore.formal_map_apk_closure.v1",
+  "counts": {
+    "authored_chunk_refs": 445,
+    "chunk_imports_checked": 208,
+    "ctex_targets_checked": 208,
+    "formal_registry_entries": 67,
+    "implemented_playable_entries": 67,
+    "non_empty_ctex_targets": 208,
+    "runtime_files_checked": 67,
+    "unique_chunk_pngs": 208,
+    "visual_files_checked": 67
+  },
+  "errors": [],
+  "expectedCounts": {
+    "authored_chunk_refs": 445,
+    "formal_registry_entries": 67,
+    "implemented_playable_entries": 67,
+    "unique_chunk_pngs": 208
+  },
+  "ok": true,
+  "registry": {
+    "packagePath": "assets/assets/data/runtime/map_editor/map_runtime_release_registry.json",
+    "packageSHA256": "083a51e759b4b950c3f9ac06434f82d53879eb1aca1dac52e5d752aea1eb76c7",
+    "sourcePath": "assets/data/runtime/map_editor/map_runtime_release_registry.json",
+    "sourceSHA256": "083a51e759b4b950c3f9ac06434f82d53879eb1aca1dac52e5d752aea1eb76c7"
+  },
+  "root": "C:\\Users\\Administrator\\Documents\\HardCore-android-staging\\abbb5efbaba3-20260922-222708-8c8f94e6",
+  "rootHEAD": "abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e",
+  "scope": "formal_registry_runtime_visual_ground_chunk_closure_only",
+  "scopeLimitations": [
+    "The 922-entry runtime asset/wall texture chain is not verified by this tool.",
+    "Source PNGs are not required in the APK; their .import -> .ctex closure is required.",
+    "ETC2 is not required; ordinary non-empty .ctex targets are accepted."
+  ]
+}

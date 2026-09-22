@@ -78,3 +78,13 @@ UI 按钮立即结果、公共持续时长、隐藏统计合并刷新均有真�
 三职业成长没有生产数据改动；独立源公式与活角色验证通过。最终enemy增量审查覆盖idle范围先行、0.5秒真待机、受击即唤醒、原追击/仇恨/宠物路径、HC单次策略选择和标量默认值。失败/不可比基准均保留；实验延迟仅存在独立diagnostic测试，未进入生产。
 
 旧报告中的“正在运行/待复测”保留历史时间语义；当前实际测试见FINAL_VERIFICATION最后追加。用户已经明确现在打包继续手机验收；不把此交付说成所有性能问题已解决。
+
+## 22:49 v92 安装包交付
+
+APK 构建源码 `abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e` 已推送并核对 origin/codex/integration。桌面包 `HardCore-v92-20260922-abbb5ef-debug.apk`，versionCode92，同 v91 包名与证书，480221108 bytes，SHA256 `3A7E3D8CAF00743CCE27C82072C05792A3FEF72D1E53FCFEB0C287DAF0800A3F`。身份、启动主题、67图地面闭包、60墙体plan真实包内哈希、807贴图导入、48新增墙体贴图、34修改脚本编译变化、6042槽掉落及测试工具排除均 PASS。
+
+固定源码六项复验6/6 PASS、零引擎错误、进程正常退出，runner `20260922_224703_880_19644` 的 git_head 即 abbb5ef；后续只增加交付核验工具与文档。原始全量459/463及其四项后续修复仍按前文记录，不改写历史。
+
+构建第一次 JDK PipeImpl/UnixDomainSockets 回环连接 FAIL，进程级 unixdomain 临时目录参数验证后同一 staging 重导出 PASS。八个初次导入报错仅为既有 BOM 测试夹具，包内排除已验证。首次额外 ZIP 核验误解未标 UTF-8 的目录元数据，明确 UTF-8 解码后全断言 PASS，未改变 APK。证据及哈希见 `evidence/apk_v92/manifest.json`，安装和监测步骤见 `APK_HANDOFF.md`。
+
+保留状态：手机性能/操作/采集 NOT_RUN；所有场景统一性能改善 FAIL；两组 M30 严格可比性 BLOCKED；一次历史 Windows Godot 原生退出故障 FAIL、引擎修复 NOT_RUN。功能修复和包内验证不替代用户实机验收。

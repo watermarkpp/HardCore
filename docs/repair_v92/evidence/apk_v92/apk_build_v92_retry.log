@@ -1,0 +1,49 @@
+WALL_RENDER_BUILD_BINDINGS_PASS maps=60 unique_files=867
+ANDROID_SPLASH_THEME_VERIFY_PASS
+Picked up JAVA_TOOL_OPTIONS: -Djdk.net.unixdomain.tmpdir=C:/Windows/Temp
+Picked up JAVA_TOOL_OPTIONS: -Djdk.net.unixdomain.tmpdir=C:/Windows/Temp
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Godot, OU=Godot Engine, O=Stichting Godot, C=NL
+Signer #1 certificate SHA-256 digest: c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc
+Signer #1 certificate SHA-1 digest: c679cd3bc30bb20b637a15a9a722d4a9d2489741
+Signer #1 certificate MD5 digest: a5cbb54a16d26ceb6312e12b828208d5
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 23f061ac450be921f3fb7d7a5c69ea0f7c9589bc772abc7be195c8cd372c12fd
+Signer #1 public key SHA-1 digest: 4f27f57058b35a84b1491deba2e8e11408f0810a
+Signer #1 public key MD5 digest: 0ac33eaab46962bf4354f31c73b00c80
+ANDROID_DIRECT_UPDATE_IDENTITY_PASS certificate_sha256=C62D0F8239B926F819038845C302143FD24DCFD75ED8D877ED846C430C6F3FCC
+APK_RUNTIME_RESOURCE_PROBE_PASS
+CONTRACT=release.apk.runtime_resource_probe.v1
+APK=C:\Users\Administrator\Desktop\HardCore-v92-20260922-abbb5ef-debug.apk
+APK_SHA256=3A7E3D8CAF00743CCE27C82072C05792A3FEF72D1E53FCFEB0C287DAF0800A3F
+BASELINE_APK=D:\HardCoreAudit\HardCore-20260922-rv15-loot-overlay-85d37077-v91-debug.apk
+BASELINE_SHA256=71E841585D333706FE87B192285649C3BC8F443D1B83F452D24D5F837F0DCDCD
+COMPILED_SCRIPTS_VERIFIED=12
+BUILD_INFO_COMMIT=abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e
+BUILD_INFO_VERSION=hardcore 1.0 正式版
+RUNTIME_CHANGE_COMPARISON=False
+WORLD_HELMET_VISIBLE=false
+MALE_HAIR_BLOCK=4
+MALE_HAIR_ACTION_TEXTURES=6
+PAPER_DOLL_BASE_IMPORT=assets/assets/art/characters/warrior/paper_doll/classic/base_male_00376_anatomy.png.import
+PAPER_DOLL_HAIR_IMPORT=assets/assets/art/characters/warrior/paper_doll/classic/hair_male_00442.png.import
+PAPER_DOLL_HEAD_PATCHES=12
+CASTER_SKILL_FRAME_IMPORTS=586
+ANDROID_APK_VERIFY_PASS
+APK=C:\Users\Administrator\Desktop\HardCore-v92-20260922-abbb5ef-debug.apk
+SIZE=480221108
+SHA256=3A7E3D8CAF00743CCE27C82072C05792A3FEF72D1E53FCFEB0C287DAF0800A3F
+package: name='com.personal.mafaoffline' versionCode='92' versionName='hardcore 1.0 正式版' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+sdkVersion:'24'
+targetSdkVersion:'36'
+application-label:'HardCore'
+native-code: 'arm64-v8a'
+ANDROID_ISOLATED_RESUME_BUILD_PASS

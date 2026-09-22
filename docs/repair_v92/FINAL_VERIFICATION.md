@@ -67,3 +67,13 @@
 新增Debug设置页两种30秒本地记录，复用DeviceLab唯一采样owner与4096帧有界ring。暂停不计入窗口，结束先停计时再序列化；世界退出会保存未完成记录并关闭计时。报告包含build_info、补丁身份、设备、地图、物理更新/深度休眠/参战怪、火墙、每秒引擎粗采样和已有CPU计数。GPU真实帧时间仍标为不可用，Godot缓存process监测不冒充逐帧耗时；frame_only和full分开。
 
 新记录专项首次因测试调用了不存在的方法产生3条解析错误，修正测试API后PASS；生产未用绕过处理。设置页、菜单触摸/暂停、帧记录与模式4项PASS；最后人物/本地记录/DeviceLab/空安全区/索敌预算/闲置频率6/6 PASS，0引擎错误，runner 20260922_221819_640_1460。所有原始runner含失败已归档evidence/delivery_close。suite registration PASS，ADB当前无设备，DEVICE TEST: NOT_RUN。
+
+## 22:49 v92 安装包交付
+
+APK 构建源码 `abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e` 已推送并核对 origin/codex/integration。桌面包 `HardCore-v92-20260922-abbb5ef-debug.apk`，versionCode92，同 v91 包名与证书，480221108 bytes，SHA256 `3A7E3D8CAF00743CCE27C82072C05792A3FEF72D1E53FCFEB0C287DAF0800A3F`。身份、启动主题、67图地面闭包、60墙体plan真实包内哈希、807贴图导入、48新增墙体贴图、34修改脚本编译变化、6042槽掉落及测试工具排除均 PASS。
+
+固定源码六项复验6/6 PASS、零引擎错误、进程正常退出，runner `20260922_224703_880_19644` 的 git_head 即 abbb5ef；后续只增加交付核验工具与文档。原始全量459/463及其四项后续修复仍按前文记录，不改写历史。
+
+构建第一次 JDK PipeImpl/UnixDomainSockets 回环连接 FAIL，进程级 unixdomain 临时目录参数验证后同一 staging 重导出 PASS。八个初次导入报错仅为既有 BOM 测试夹具，包内排除已验证。首次额外 ZIP 核验误解未标 UTF-8 的目录元数据，明确 UTF-8 解码后全断言 PASS，未改变 APK。证据及哈希见 `evidence/apk_v92/manifest.json`，安装和监测步骤见 `APK_HANDOFF.md`。
+
+保留状态：手机性能/操作/采集 NOT_RUN；所有场景统一性能改善 FAIL；两组 M30 严格可比性 BLOCKED；一次历史 Windows Godot 原生退出故障 FAIL、引擎修复 NOT_RUN。功能修复和包内验证不替代用户实机验收。

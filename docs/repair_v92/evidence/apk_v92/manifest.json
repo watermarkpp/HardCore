@@ -1,0 +1,120 @@
+{
+  "status": "PASS",
+  "scope": "Source and APK delivery verification; not Android device acceptance",
+  "source_commit": "abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e",
+  "source_push_verified_sha": "abbb5efbaba3b4d3f539f674b52b27ca2dc9f16e",
+  "remote_branch": "origin/codex/integration",
+  "apk": "C:\\Users\\Administrator\\Desktop\\HardCore-v92-20260922-abbb5ef-debug.apk",
+  "apk_bytes": 480221108,
+  "apk_sha256": "3a7e3d8caf00743cce27c82072c05792a3fef72d1e53fcfeb0c287daf0800a3f",
+  "package_id": "com.personal.mafaoffline",
+  "version_code": 92,
+  "version_name": "hardcore 1.0 正式版",
+  "baseline_version_code": 91,
+  "same_signature_and_higher_version": "PASS",
+  "certificate_sha256": "c62d0f8239b926f819038845c302143fd24dcfd75ed8d877ed846c430c6f3fcc",
+  "maps": 67,
+  "wall_plans": 60,
+  "wall_binding_unique_files": 867,
+  "wall_imported_textures": 807,
+  "new_wall_textures": 48,
+  "changed_compiled_scripts": 34,
+  "slots": 6042,
+  "overlay_slots": 168,
+  "fixed_source_tests": {
+    "passed": 6,
+    "failed": 0,
+    "engine_log_errors": 0,
+    "runner": "runner_results_adhoc_20260922_224703_880_19644.json"
+  },
+  "frozen_scopes_unchanged": 10,
+  "desktop_excel": {
+    "path": "C:\\Users\\Administrator\\Desktop\\HardCore_当前地图怪物真实掉率_20260922_衣服单槽修正版.xlsx",
+    "bytes": 680723,
+    "sha256": "0b3140886cdf24bc298663cf8f512b33110a0315aed4471f36d8dad2ac6f5826"
+  },
+  "build_attempt_1": {
+    "status": "FAIL",
+    "classification": "Environment: JDK PipeImpl UnixDomainSockets.connect Invalid argument; no APK produced"
+  },
+  "build_attempt_2": {
+    "status": "PASS",
+    "change": "Process-only JAVA_TOOL_OPTIONS=-Djdk.net.unixdomain.tmpdir=C:/Windows/Temp; same checkout and build_info; portable settings restored"
+  },
+  "initial_import_errors": {
+    "classification": "Existing UTF-8 BOM test fixtures; baseline blobs unchanged and entire tests tree excluded from verified APK",
+    "lines": {
+      "ERROR: res://tests/runner_fixtures/case1_pass.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/case2_pass_then_assert.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/case4_pass_then_hang.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/case5_no_pass_exit_zero.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/case6_engine_log_fatal.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/case7_parse_error.tscn:1 - Parse Error: Expected '['.": 2,
+      "ERROR: res://tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn:1 - Parse Error: Expected '['.": 2
+    },
+    "full_log_local_path": "C:\\Users\\Administrator\\Documents\\HardCore\\outputs\\repair_v92\\apk_build_v92.log",
+    "full_log_sha256": "3bea90ca6cd98fa0317cdc963b98cb2999cf28ae52b7049032e3a4e6b6dc209a"
+  },
+  "payload_verifier_first_attempt": {
+    "status": "FAIL",
+    "classification": "Verifier used CP437 for unflagged UTF-8 ZIP names. Exact 3x3 palette path recovered by metadata_encoding=utf-8; same metadata behavior in v91. No APK or source edit; every binding assertion retained."
+  },
+  "device_test": "NOT_RUN",
+  "device_collection": "NOT_RUN",
+  "adb_connected_devices": 0,
+  "performance_uniform_improvement": "FAIL",
+  "dense_m30_comparison": "BLOCKED",
+  "native_windows_exit_crash": "FAIL",
+  "native_crash_note": "Historical Godot 4.7 exit failure; final tests and retry export clean; engine repair NOT_RUN, Android reproduction NOT_RUN",
+  "artifacts": [
+    {
+      "file": "android_isolated_export_retry.log",
+      "sha256": "b090c246fd3d8c164368a2d421daa8b7d4f1d6e9555f872527971165ecd98bcc"
+    },
+    {
+      "file": "android_isolated_export_retry_stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "android_isolated_export_retry_stdout.log",
+      "sha256": "7e8d6188c11a4895beae0959573cadbe8afca6b188097f6bb90ba811989cc260"
+    },
+    {
+      "file": "android_isolated_export_stderr.log",
+      "sha256": "861d8ba7f7bc2f60c88aeabb4da8fa11d1a8a2e7cc79d35744bcc28a67d81311"
+    },
+    {
+      "file": "apk_build_v92_retry.log",
+      "sha256": "5ec0e947c5426222f01d88ef718d323ee7b7c80c40f76befd687251d810a7388"
+    },
+    {
+      "file": "fixed_source_smoke.log",
+      "sha256": "9e18cd7e30afcb885bba5b26c9201cfbbbc0749b2a12b418bec02f727a751160"
+    },
+    {
+      "file": "formal_map_closure.json",
+      "sha256": "aaf8b1b30a9aaf9aa114c967dff941f43ee3ee74b3a396b45233822e091afd83"
+    },
+    {
+      "file": "gradle_loopback_probe.log",
+      "sha256": "515cdad0184e00f51e775b1668a58480361365b14790e4ab2570583f0301d8ab"
+    },
+    {
+      "file": "gradle_loopback_process_local_fix.log",
+      "sha256": "e79270edd7c20995ebac34b1c8318ff7eecd53f0a58a123814e6e7946e465d4d"
+    },
+    {
+      "file": "payload_verification.json",
+      "sha256": "54748d792c36e338b4aabdb29b9db40849f072f9601608e427724d5b9608f306"
+    },
+    {
+      "file": "resume_android_export.ps1",
+      "sha256": "3be93ea2611d5a3a07874f93eb66cfb27d72017b21ab99d4f3f759718173332f"
+    },
+    {
+      "file": "runner_results_adhoc_20260922_224703_880_19644.json",
+      "sha256": "434a5c67df4c6d7c2d03376fdaddaccd96a230447cd6cf8d5a7c1469dec42a15"
+    }
+  ]
+}

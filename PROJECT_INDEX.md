@@ -124,4 +124,4 @@ When receiving a task:
 - v92 最终回归、性能局限及交付身份：`docs/repair_v92/FINAL_VERIFICATION.md`。
 
 - v92 三职业成长与负重：`docs/repair_v92/CHARACTER_GROWTH_REVIEW.md`、`tests/player_growth_live_runtime_test.gd`、`tools/audit_character_growth_v92.py`。
-- v92 手机采样/交付：`docs/repair_v92/APK_HANDOFF.md`、`scripts/device_lab_runtime.gd`、`tools/collect_android_performance.ps1`。
+- v92 手机采样/交付：`docs/repair_v92/APK_HANDOFF.md`、`scripts/device_lab_runtime.gd`、`tools/collect_android_performance.ps1`；包内验证 `tools/verify_v92_apk_payload.py`，精确包身份与日志 `docs/repair_v92/evidence/apk_v92/manifest.json`。
