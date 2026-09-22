@@ -1,9 +1,27 @@
 extends Node
 
+const BridgeScript := preload(
+	"res://scripts/layers/runtime/map_editor_runtime_bridge.gd"
+)
+
 
 func _ready() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
+	# RV15-J4 explicit whitelist cases: the production ordinary-layer elite
+	# whitelist is exactly the two niumo elites, and both classify elite in
+	# the canonical catalog. Non-whitelisted elites are covered by the
+	# per-spawn assertion in the loop below, which fails on any ordinary
+	# layer entry whose elite id is outside {218, 222}.
+	assert(
+		BridgeScript.ELITE_ORDINARY_SPAWN_IDS == [218, 222],
+		"the ordinary-layer elite whitelist drifted from {218, 222}"
+	)
+	for whitelisted_id: int in [218, 222]:
+		assert(
+			GameData.canonical_monster_classification(whitelisted_id) == "elite",
+			"whitelisted niumo elite %d must classify elite" % whitelisted_id
+		)
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
@@ -145,7 +163,14 @@ func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> in
 	elif source_layer == "boss_spawn":
 		assert(classification in ["elite", "boss"])
 	else:
-		# Ordinary layers may carry elite monsters (218/222 migrated to
-		# elite with the user loot sheet activation); bosses may not.
+		# Ordinary layers: the original legal classification, or one of the
+		# two niumo elites (218/222) whitelisted for ordinary-layer spawns by
+		# the production bridge (ELITE_ORDINARY_SPAWN_IDS); every other elite
+		# and all bosses are rejected there.
+		assert(
+			classification != "elite" or monster_id in [218, 222],
+			"ordinary-layer elite %d is not in the production whitelist {218, 222}"
+			% monster_id
+		)
 		assert(classification != "boss")
 	return monster_id

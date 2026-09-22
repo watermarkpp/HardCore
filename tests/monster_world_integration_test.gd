@@ -325,8 +325,15 @@ func _assert_valid_authored_slot(raw_entry: Variant, source_layer: String) -> vo
 	elif source_layer == "boss_spawn":
 		assert(classification in ["elite", "boss"])
 	else:
-		# Ordinary layers may carry elite monsters (218/222 migrated to
-		# elite with the user loot sheet activation); bosses may not.
+		# Ordinary layers: the original legal classification, or one of the
+		# two niumo elites (218/222) whitelisted for ordinary-layer spawns by
+		# the production bridge (ELITE_ORDINARY_SPAWN_IDS); every other elite
+		# and all bosses are rejected there.
+		assert(
+			classification != "elite" or monster_id in [218, 222],
+			"ordinary-layer elite %d is not in the production whitelist {218, 222}"
+			% monster_id
+		)
 		assert(classification != "boss")
 
 
