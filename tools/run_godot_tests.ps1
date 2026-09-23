@@ -747,6 +747,12 @@ $Suites.critical = @($Suites.critical + @(
     'tests/mse_collision_grid_alignment_test.tscn'
 ) | Select-Object -Unique)
 
+# v93 CPU query correctness gates; the timed crowd matrix remains opt-in.
+$Suites.critical = @($Suites.critical + @(
+    'tests/melee_blocked_query_order_test.tscn',
+    'tests/polygon_query_streaming_test.tscn'
+) | Select-Object -Unique)
+
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
 $FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'

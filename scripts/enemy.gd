@@ -8424,21 +8424,18 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		var neighbor := next - cell
 		if neighbor == Vector2i.ZERO:
 			neighbor = MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(intended - current)
-		var legal_neighbor := _hc_polygon_neighbor_clear(current, intended, cell, next)
-		var r6_direct_static_clear := legal_neighbor and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended)
-		var r6_motion_checked := false
-		var r6_motion_clear := false
-		if r6_direct_static_clear:
-			r6_motion_clear = _hc_motion_clear(current, intended)
-			r6_motion_checked = true
-		if r6_direct_static_clear and r6_motion_clear:
+		# The live body query is required on BOTH static-clear and static-blocked
+		# paths. Run it first: a blocked direct step cannot consume its terrain
+		# or endpoint result. In dense melee this also avoids repeating those
+		# unused polygon/footprint checks during the existing flank retry window.
+		# Never cache the body result: a newly clear lane moves immediately.
+		var r6_motion_clear := _hc_motion_clear(current, intended)
+		if r6_motion_clear and _hc_polygon_neighbor_clear(current, intended, cell, next) and not _hc_edge_blocked(cell, next) and _hc_point_walkable(intended):
 			_hc_step_override = intended
 			_hc_route.clear()
 			_hc_route_index = 0
 			return neighbor
 		# A live-body block is NOT a static terrain failure. Try bounded flanks.
-		if not r6_motion_checked:
-			r6_motion_clear = _hc_motion_clear(current, intended)
 		if not r6_motion_clear or _hc_frontline_at(current, anchor, hit_target) > 0:
 			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
 				return Vector2i.ZERO

@@ -1,0 +1,258 @@
+{
+  "status": "PASS",
+  "baseline_commit": "3eb1cb8f4a80ba24d43cb0f07102b1f79763576d",
+  "source_files": [
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "10143eab3e0da070586c879063fde23fb4d3877031e4c45a249b27c0ef6f997b",
+      "lf_sha256": "1c2b53fd11da286702e1b2da6a17cbfc0672950127441e2d9753f12d4e5ac213"
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_index.gd",
+      "sha256": "fe02669da0435a60378762ccb9b65a11db3a7042cfea824f2a29c508e7b69272",
+      "lf_sha256": "62d858d9baf8e6d1d3974540fc07a8183d8daf7ff835ccd92793597d3f9b709e"
+    },
+    {
+      "path": "scripts/map_editor/polygon/poly_geometry.gd",
+      "sha256": "dad7055a98958a57cb499e6220d4dbb5362b43ee8f2e023905a3472b05930304",
+      "lf_sha256": "74652015ecfe7accdd8c5ef09cf1b52a1411a19c2013f715a9c98eea3b98470a"
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "sha256": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69",
+      "lf_sha256": "da1aba97c2c80c2473cecb178ddce20dafd0f77907c55de6aa7dc7dd6cbd2a02"
+    },
+    {
+      "path": "tests/world_crowd_firewall_profile_test.gd",
+      "sha256": "03b116816708fe0fc891c949d0e99d05c59a069db0b1d6bf3856d1259318ccb5",
+      "lf_sha256": "03b116816708fe0fc891c949d0e99d05c59a069db0b1d6bf3856d1259318ccb5"
+    },
+    {
+      "path": "tests/world_dense_melee_profile_test.gd",
+      "sha256": "672bedade5452655dbd284fa02adb6c758751e3045ab1cfc57cba401c2863123",
+      "lf_sha256": "672bedade5452655dbd284fa02adb6c758751e3045ab1cfc57cba401c2863123"
+    },
+    {
+      "path": "tests/polygon_query_streaming_test.gd",
+      "sha256": "c083e835085e367d4839bb4c39dc311bdbe1d3d6cbcf4be5130da3c291a83dc7",
+      "lf_sha256": "c083e835085e367d4839bb4c39dc311bdbe1d3d6cbcf4be5130da3c291a83dc7"
+    },
+    {
+      "path": "tests/monster_animation_cpu_profile_test.gd",
+      "sha256": "bedbe4d9b5c7422bb73ecec31f16cd5d79b895c00f6d91bef49dfcc4b06ec083",
+      "lf_sha256": "bedbe4d9b5c7422bb73ecec31f16cd5d79b895c00f6d91bef49dfcc4b06ec083"
+    }
+  ],
+  "frozen_content_diff": "empty: assets, map_editor_workspace, project.godot, export_presets.cfg",
+  "preserved_existing_agents_sha256": "d267703e2dc8b72459ea5b01c8d9535516df7bae2c03d690cf1d938a225e9aff",
+  "evidence": [
+    {
+      "path": "comparison.json",
+      "sha256": "9495f2588b1bc59bc0b35b6d0a7997d5db285dfedbb89e548d5770b0a1708b8f"
+    },
+    {
+      "path": "monster_animation_cpu.json",
+      "sha256": "4eee79a934b5d905faa743d94a75dc83193fb1bb72933b11c26474004bd6f302"
+    },
+    {
+      "path": "monster_atlas_audit.json",
+      "sha256": "87e0c85e7f0581920315e1a99074d3a7575ed1c087bd06d60b7016ca3b30071c"
+    },
+    {
+      "path": "polygon_query_streaming.json",
+      "sha256": "461d913f4c624cc56b6d5fcced66fb7ed14d0c10edce9cba9acc67fe73ea98bd"
+    },
+    {
+      "path": "profiles/world_v93_baseline_dark_30_1.json",
+      "sha256": "d218002dd3f9bd8436370305aecbe5bcfd65c5375cd6814f59e24c16bd6e293d"
+    },
+    {
+      "path": "profiles/world_v93_baseline_dark_30_2.json",
+      "sha256": "7b1a39ec8c0e8524a99caf2aa4c4809825848afc868d64276dec2614cbede7bb"
+    },
+    {
+      "path": "profiles/world_v93_baseline_dark_30_3.json",
+      "sha256": "b4e341e33708d6453d7adec973bac0332798c9d7ffcec7f19739920e01ba51a2"
+    },
+    {
+      "path": "profiles/world_v93_baseline_dark_30_light_1.json",
+      "sha256": "a64390f74d294e0d97068208cbe033002b9b40d43a2116e22ba24049bfbc3d72"
+    },
+    {
+      "path": "profiles/world_v93_baseline_dark_30_light_2.json",
+      "sha256": "9ad89935920e442c45f5d55c6b4d00f12c7d58b149a0ba92283dcbe4dcc80b81"
+    },
+    {
+      "path": "profiles/world_v93_baseline_dark_30_light_3.json",
+      "sha256": "b5feab1ebc7296c0873fa3f31760e38f494b083a3a7d72d2219d408495b972bc"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_10_1.json",
+      "sha256": "22bcb66d010bd15fd2a57c6f9479f2e290f0cd833c110903a29b570e9ce70649"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_10_2.json",
+      "sha256": "5c1c7bb0b15cd2c9b231fd6eb2496b475d2a76cdfda6bd2011be403b3596b061"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_10_3.json",
+      "sha256": "200653283073f0223403199c5f4fb33e70e7833854008b7335193bd8efa8fb9c"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_20_1.json",
+      "sha256": "071f9592c40839022385505d008ad7f5aa90493ab9ddb0a131b1cd98ba175299"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_20_2.json",
+      "sha256": "3a78427010c8038686fb8f457013f1ab9ca0d36032aee0108d5de3582b7648b1"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_20_3.json",
+      "sha256": "97c4790be9b5fbeebb61abd6e9fbf001461f3e107a2e84b48b9b4a780d926d1d"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_1.json",
+      "sha256": "9747c9c1765d938db0d7bf8e9c570d97f13cb6a7ea8ed1172ad7f5a4c125aac8"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_2.json",
+      "sha256": "c4f0a017a88d19ef88b0468721640dbc67596fb2994e8c675dbb6c92bf22931a"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_3.json",
+      "sha256": "bc302eeed7b6bcdad07ff80266e20901994c344b800bffd2ea595a6c8cb21948"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_light_1.json",
+      "sha256": "ef604bccd6f16dc66c43c242edccbe2db9552af288fe3a3471b42829340b6d4d"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_light_2.json",
+      "sha256": "3292cbd3e29bba431a6580f2a519f5341b905a56743281c4bc5975ec44240020"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_light_3.json",
+      "sha256": "ec0eac53fcc53b31ba99e5288e2493f36b320b3f7af931bc80dba0a5b536aef3"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_nofire_1.json",
+      "sha256": "81b89505f58c5219fbc3369ac96fa1a103294a9b82c884f455507bdfd61f60b1"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_nofire_2.json",
+      "sha256": "29a1cabe28ee06d145289fe466ee80c825f470f37d48d94ce2e65cc96d9b6db2"
+    },
+    {
+      "path": "profiles/world_v93_baseline_terror_30_nofire_3.json",
+      "sha256": "293988629a0fd6507fb09370465daf2dd84f85274661c5d72a4a4de7691b8b8d"
+    },
+    {
+      "path": "profiles/world_v93_candidate_dark_30_1.json",
+      "sha256": "3f1239518e00f555caaf992d9c70157bceccbfaaf2abceb103f73283460a0b6d"
+    },
+    {
+      "path": "profiles/world_v93_candidate_dark_30_2.json",
+      "sha256": "81052acc4187fe7e0fa9bc5862bd5a33cb023482a416dcf3cfb59acd2a11cd71"
+    },
+    {
+      "path": "profiles/world_v93_candidate_dark_30_3.json",
+      "sha256": "427323b94ef7946e8bbe26f5aad278cb6df6e7f111ae4da0e9b0277c85e5f348"
+    },
+    {
+      "path": "profiles/world_v93_candidate_dark_30_light_1.json",
+      "sha256": "e71384db7052f1981d6117cc98c4b5ccc97bcab25f2184b9bfe663603f6f9ac4"
+    },
+    {
+      "path": "profiles/world_v93_candidate_dark_30_light_2.json",
+      "sha256": "5c752d8ab8628429b72572f126400b27697d17193e7db04b81aea0706f02200d"
+    },
+    {
+      "path": "profiles/world_v93_candidate_dark_30_light_3.json",
+      "sha256": "efde1432d579b0ffc1ac79cc9ca071e9b87b603c9a83e7999f8eebf3e1167838"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_10_1.json",
+      "sha256": "7b85ad52ceaba3e03a101fdd0f36cb96a228030a827d56ac18b8b5587f5b3138"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_10_2.json",
+      "sha256": "8d85711f1e828e8ed1e009abd2a06897f19c60212f2251696f515ce56600b456"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_10_3.json",
+      "sha256": "9b974fe0159622418fe08ee54c80b32b7533dc5665c2b6d1af19dacd0718d245"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_20_1.json",
+      "sha256": "54f085c4e2bbada6ba3399ae996617a96b11de40f88a19c8bb6c962dbddf9c78"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_20_2.json",
+      "sha256": "b39a930ce9b12cbb371338961caae5af55db0e0ae53feba82d137816db2d5028"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_20_3.json",
+      "sha256": "4810dc48ff0e5ab7ca914c78e9cbf13d4f16afe0bdca81647983f240ff457f35"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_1.json",
+      "sha256": "73aad211ad00764edf88222325e734931540122127bc31c1221eed8d624a248b"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_2.json",
+      "sha256": "97360ec389fe8d24d02031fa99e0cd9254d9ef8ade8e58d4045b687356fb47bd"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_3.json",
+      "sha256": "852cf06a757ebca03cfe01f47f10bf8eaf12f949fc463a1a0d7985a06ee44459"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_light_1.json",
+      "sha256": "69c6b2f7a50ce4097b318172c0f366a1af0716ac687fd33b52240c9bfeacf0cb"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_light_2.json",
+      "sha256": "dd5ae0b8db7c0557670f2853d5b411dac63b9df14ebd304a97358569ca50b8c1"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_light_3.json",
+      "sha256": "da381a5f340771f04fab35c45486bca3814224ee3b47d555cb8af14934e3ca8a"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_nofire_1.json",
+      "sha256": "b7813c45cda1d8cdd0d30f39e4ac5baa6310995bb91cc7f21446628a4321e4ed"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_nofire_2.json",
+      "sha256": "78bd2b499d36ec29d791648c80dd6b6b6c5fe52ee72f799dba525ec6d7fa6b2c"
+    },
+    {
+      "path": "profiles/world_v93_candidate_terror_30_nofire_3.json",
+      "sha256": "abcaf52f91bac0a6a0410fa8af447ec7515c1734d2a0505ed9f7d4bb1c0e7356"
+    },
+    {
+      "path": "tests/runner_results_adhoc_20260923_095306_787_10996.json",
+      "sha256": "88be1106ba9a3273364df7e6568ec92f258d612f32a7ecb9aa52a6b53a961de4"
+    },
+    {
+      "path": "tests/runner_results_adhoc_20260923_100749_890_8032.json",
+      "sha256": "ddc0125479438264bb12f3b6e4b5a8172624816facbecf9a609545cd69e87a12"
+    },
+    {
+      "path": "tests/runner_results_adhoc_20260923_101128_299_4676.json",
+      "sha256": "ddc3c05f5281c718912b55b43a95e4aaec88ccd4145e778539a00875cd2cdf38"
+    },
+    {
+      "path": "tests/runner_results_adhoc_20260923_101452_937_5904.json",
+      "sha256": "df98ee9131fb552f50ef756771e41de92d06ae896420af197369bb61ed9c4d1a"
+    },
+    {
+      "path": "tests/runner_results_map_runtime_release_critical_20260923_100619_733_8032.json",
+      "sha256": "f8410328a74eb1a1f0b0648f6af0232e3ce76892cecef5ba7a4d002c984d8ecc"
+    },
+    {
+      "path": "tests/runner_results_monster_streaming_critical_20260923_101410_570_1212.json",
+      "sha256": "9ca1ddb2575b4b523d005c429fee047c5ff853f022b2876d6545990c5cd1f350"
+    }
+  ]
+}

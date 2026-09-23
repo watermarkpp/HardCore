@@ -7,6 +7,8 @@ const MAX_BUCKET_REFERENCES := 1048576
 var design_size := Vector2i.ZERO
 var parts: Array[PackedVector2Array] = []
 var boxes: Array[Rect2] = []
+var _padded_boxes: Array[Rect2] = []
+var _first_buckets: Array[Vector2i] = []
 var buckets: Dictionary = {}
 var ready := false
 
@@ -26,6 +28,8 @@ func setup(size_gu: Vector2i, convex_parts: Array) -> bool:
 		boxes.append(box)
 		var first := _bucket(box.position - Vector2.ONE * Geo.EPS)
 		var last := _bucket(box.end + Vector2.ONE * Geo.EPS)
+		_padded_boxes.append(box.grow(Geo.EPS))
+		_first_buckets.append(first)
 		bucket_references += (last.x - first.x + 1) * (last.y - first.y + 1)
 		if bucket_references > MAX_BUCKET_REFERENCES:
 			return false
@@ -46,14 +50,21 @@ func _bucket(p: Vector2) -> Vector2i:
 
 func candidates(box: Rect2) -> Array[int]:
 	var result: Array[int] = []
-	var seen: Dictionary = {}
 	var first := _bucket(box.position - Vector2.ONE * Geo.EPS)
 	var last := _bucket(box.end + Vector2.ONE * Geo.EPS)
+	var padded := box.grow(Geo.EPS)
 	for y: int in range(first.y, last.y + 1):
 		for x: int in range(first.x, last.x + 1):
-			for index: int in buckets.get(Vector2i(x, y), []):
-				if not seen.has(index) and boxes[index].grow(Geo.EPS).intersects(box.grow(Geo.EPS), true):
-					seen[index] = true
+			var bucket: Variant = buckets.get(Vector2i(x, y))
+			if bucket == null:
+				continue
+			for index: int in bucket:
+				# Each part occupies a rectangular bucket range. Its first shared
+				# bucket with this query is max(part_min, query_min), componentwise.
+				# Visit there exactly once, in the original traversal order, with
+				# no seen dictionary or mutable/reentrant query-stamp state.
+				var owner := _first_buckets[index]
+				if x == maxi(first.x, owner.x) and y == maxi(first.y, owner.y) and _padded_boxes[index].intersects(padded, true):
 					result.append(index)
 	return result
 
@@ -75,9 +86,21 @@ func capsule_blocked(a: Vector2, b: Vector2, radius_gu: float) -> bool:
 	if not inside(a, radius_gu) or not inside(b, radius_gu):
 		return true
 	var box := Rect2(a, Vector2.ZERO).expand(b).grow(radius_gu)
-	for index: int in candidates(box):
-		if Geo.capsule_hits_polygon(a, b, radius_gu, parts[index]):
-			return true
+	var first := _bucket(box.position - Vector2.ONE * Geo.EPS)
+	var last := _bucket(box.end + Vector2.ONE * Geo.EPS)
+	var padded := box.grow(Geo.EPS)
+	# Boolean queries stop at the first exact hit, before collecting candidates.
+	for y: int in range(first.y, last.y + 1):
+		for x: int in range(first.x, last.x + 1):
+			var bucket: Variant = buckets.get(Vector2i(x, y))
+			if bucket == null:
+				continue
+			for index: int in bucket:
+				var owner := _first_buckets[index]
+				if x != maxi(first.x, owner.x) or y != maxi(first.y, owner.y) or not _padded_boxes[index].intersects(padded, true):
+					continue
+				if Geo.capsule_hits_polygon(a, b, radius_gu, parts[index]):
+					return true
 	return false
 
 func footprint_blocked(footprint_ground_gu: PackedVector2Array) -> bool:
@@ -86,7 +109,19 @@ func footprint_blocked(footprint_ground_gu: PackedVector2Array) -> bool:
 	for p: Vector2 in footprint_ground_gu:
 		if not inside(p):
 			return true
-	for index: int in candidates(Geo.bounds(footprint_ground_gu)):
-		if Geo.convex_overlap(footprint_ground_gu, parts[index]):
-			return true
+	var box := Geo.bounds(footprint_ground_gu)
+	var first := _bucket(box.position - Vector2.ONE * Geo.EPS)
+	var last := _bucket(box.end + Vector2.ONE * Geo.EPS)
+	var padded := box.grow(Geo.EPS)
+	for y: int in range(first.y, last.y + 1):
+		for x: int in range(first.x, last.x + 1):
+			var bucket: Variant = buckets.get(Vector2i(x, y))
+			if bucket == null:
+				continue
+			for index: int in bucket:
+				var owner := _first_buckets[index]
+				if x != maxi(first.x, owner.x) or y != maxi(first.y, owner.y) or not _padded_boxes[index].intersects(padded, true):
+					continue
+				if Geo.convex_overlap(footprint_ground_gu, parts[index]):
+					return true
 	return false

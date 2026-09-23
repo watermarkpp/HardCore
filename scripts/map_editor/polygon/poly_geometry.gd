@@ -137,6 +137,9 @@ static func segments_touch(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> bo
 static func segment_distance_squared(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> float:
 	if segments_touch(a, b, c, d):
 		return 0.0
+	return _separated_segment_distance_squared(a, b, c, d)
+
+static func _separated_segment_distance_squared(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> float:
 	return minf(minf(distance_squared_to_segment(a, c, d), distance_squared_to_segment(b, c, d)),
 		minf(distance_squared_to_segment(c, a, b), distance_squared_to_segment(d, a, b)))
 
@@ -149,7 +152,9 @@ static func capsule_hits_polygon(a: Vector2, b: Vector2, radius_gu: float, polyg
 		var d := polygon[(i + 1) % polygon.size()]
 		if segments_touch(a, b, c, d):
 			return true
-		if radius_gu > 0.0 and segment_distance_squared(a, b, c, d) < inner_radius * inner_radius:
+		# The same immutable endpoints have already passed the contact test.
+		# Do not repeat it inside the public distance helper for every wall edge.
+		if radius_gu > 0.0 and _separated_segment_distance_squared(a, b, c, d) < inner_radius * inner_radius:
 			return true
 	return false
 

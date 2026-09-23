@@ -2,6 +2,7 @@
 # Raw diagnostic artifacts carry SHA-256 bindings; preserve captured bytes
 # including Windows CRLF and debugger whitespace, not source-code formatting.
 docs/repair_v92/evidence/** -text -whitespace
+docs/repair_v93/evidence/** -text -whitespace
 tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json text eol=lf
 
 # DPV2-SPB raw-byte authorities are frozen to their audited Windows CRLF

@@ -14,10 +14,30 @@ var _last_usec := 0
 var _intervals: Array[float] = []
 var _process_ms: Array[float] = []
 var _direction_mismatches: Dictionary = {}
+var _physics_start: PhysicsFrameStart
+var _physics_cpu_ms: Array[float] = []
+
+class PhysicsFrameStart extends Node:
+	var started_usec := 0
+	var physics_tick := -1
+	func _physics_process(_delta: float) -> void:
+		physics_tick = Engine.get_physics_frames()
+		started_usec = Time.get_ticks_usec()
 
 
 func _ready() -> void:
+	# Two test-only boundaries observe all normal-priority production physics
+	# callbacks, without enabling per-method timing/dictionary instrumentation.
+	_physics_start = PhysicsFrameStart.new()
+	_physics_start.process_physics_priority = -1000000
+	add_child(_physics_start)
+	process_physics_priority = 1000000
 	_run.call_deferred()
+
+
+func _physics_process(_delta: float) -> void:
+	if _sampling and _physics_start.physics_tick == Engine.get_physics_frames():
+		_physics_cpu_ms.append(float(Time.get_ticks_usec() - _physics_start.started_usec) / 1000.0)
 
 
 func _process(_delta: float) -> void:
@@ -60,16 +80,9 @@ func _run() -> void:
 	if _formal_cast:
 		for index in range(enemies.size()):
 			(enemies[index] as EnemyActor)._rng.seed = 20260922 + index
-	var focus := Vector2.ZERO
-	var most_nearby := -1
-	for enemy: EnemyActor in enemies:
-		var nearby := 0
-		for other: EnemyActor in enemies:
-			if enemy.spatial_index_position().distance_squared_to(other.spatial_index_position()) <= 144.0:
-				nearby += 1
-		if nearby > most_nearby:
-			most_nearby = nearby
-			focus = enemy.global_position
+	var selected := _select_profile_focus(enemies)
+	var focus: Vector2 = selected.position
+	var most_nearby: int = selected.nearby
 	_game._set_player_world_position(focus)
 	_game.background.set_focus_position(focus)
 	_game.player.set_physics_process(false)
@@ -130,7 +143,8 @@ func _run() -> void:
 		await get_tree().physics_frame
 	var census_before := _monster_census(enemies)
 	var scheduler_before := _scheduler_census()
-	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
+	var detailed_timing := OS.get_environment("HARDCORE_PROFILE_FRAME_ONLY") != "1"
+	RuntimeDiagnostics.set_device_lab_performance_enabled(detailed_timing)
 	EnemyActor.reset_performance_diagnostics()
 	_sampling = true
 	for frame in range(SAMPLE_FRAMES):
@@ -148,6 +162,9 @@ func _run() -> void:
 	var label := OS.get_environment("HARDCORE_V92_LABEL")
 	if label.is_empty(): label = "unlabelled"
 	var result := {
+		"workload": selected,
+		"detailed_timing": detailed_timing, "physics_cpu_ms": _stats(_physics_cpu_ms),
+		"physics_cpu_samples_ms": _physics_cpu_ms,
 		"map_id": map_id, "seed": 20260922,
 		"initial_layout": initial_layout,
 		"initial_layout_sha256": JSON.stringify(initial_layout).sha256_text(),
@@ -183,6 +200,20 @@ func _run() -> void:
 	get_tree().quit(0)
 
 
+func _select_profile_focus(enemies: Array) -> Dictionary:
+	var focus := Vector2.ZERO
+	var most_nearby := -1
+	for enemy: EnemyActor in enemies:
+		var nearby := 0
+		for other: EnemyActor in enemies:
+			if enemy.spatial_index_position().distance_squared_to(other.spatial_index_position()) <= 144.0:
+				nearby += 1
+		if nearby > most_nearby:
+			most_nearby = nearby
+			focus = enemy.global_position
+	return {"position": focus, "nearby": most_nearby, "kind": "authored_spawn_layout"}
+
+
 func _monster_census(enemies: Array) -> Dictionary:
 	# Observe outside the timed window. A target reference, actual pursuit,
 	# attack reach, sprite visibility and resource residency are distinct.
@@ -202,6 +233,7 @@ func _monster_census(enemies: Array) -> Dictionary:
 			in_view = get_viewport().get_visible_rect().intersects(view_bounds)
 		var distance := enemy.spatial_index_position().distance_to(_screen_to_ground(_game.player.global_position))
 		var row := {"monster_id": enemy.monster_id, "ground": str(enemy.spatial_index_position()),
+			"attack_starts": enemy._hc_starts, "attack_settlements": enemy._hc_settlements,
 			"alive": enemy.can_receive_damage(), "target_player": enemy.target == _game.player,
 			"physics_processing": enemy.is_physics_processing(), "deep_sleep": enemy._background_deep_sleeping,
 			"path_pending": enemy._hc_path_pending, "moving": enemy._movement_step_active,

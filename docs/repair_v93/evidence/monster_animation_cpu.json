@@ -1,0 +1,726 @@
+{
+	"frames_per_trial": 600,
+	"measurement": "hot MonsterVisual._process only; headless CPU, not GPU or world FPS",
+	"profiles": {
+		"110": {
+			"actions": {
+				"attack": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_attack.png",
+					"width": 1344
+				},
+				"death": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_death.png",
+					"width": 2240
+				},
+				"hit": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_hit.png",
+					"width": 448
+				},
+				"idle": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_idle.png",
+					"width": 896
+				},
+				"walk": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_walk.png",
+					"width": 1344
+				}
+			},
+			"frame_size": [
+				224,
+				208
+			],
+			"name": "蜈蚣"
+		},
+		"112": {
+			"actions": {
+				"attack": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_attack.png",
+					"width": 960
+				},
+				"death": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_death.png",
+					"width": 1600
+				},
+				"hit": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_hit.png",
+					"width": 320
+				},
+				"idle": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_idle.png",
+					"width": 640
+				},
+				"walk": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_walk.png",
+					"width": 960
+				}
+			},
+			"frame_size": [
+				160,
+				144
+			],
+			"name": "黑色恶蛆"
+		},
+		"114": {
+			"actions": {
+				"attack": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_attack.png",
+					"width": 1152
+				},
+				"death": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_death.png",
+					"width": 1920
+				},
+				"hit": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_hit.png",
+					"width": 384
+				},
+				"idle": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_idle.png",
+					"width": 768
+				},
+				"walk": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_walk.png",
+					"width": 1152
+				}
+			},
+			"frame_size": [
+				192,
+				160
+			],
+			"name": "跳跳蜂"
+		},
+		"116": {
+			"actions": {
+				"attack": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_attack.png",
+					"width": 1248
+				},
+				"death": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_death.png",
+					"width": 2080
+				},
+				"hit": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_hit.png",
+					"width": 416
+				},
+				"idle": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_idle.png",
+					"width": 832
+				},
+				"walk": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_walk.png",
+					"width": 1248
+				}
+			},
+			"frame_size": [
+				208,
+				160
+			],
+			"name": "巨型蠕虫"
+		},
+		"118": {
+			"actions": {
+				"attack": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_attack.png",
+					"width": 1248
+				},
+				"death": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_death.png",
+					"width": 2080
+				},
+				"hit": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_hit.png",
+					"width": 416
+				},
+				"idle": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_idle.png",
+					"width": 832
+				},
+				"walk": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_walk.png",
+					"width": 1248
+				}
+			},
+			"frame_size": [
+				208,
+				176
+			],
+			"name": "钳虫"
+		},
+		"120": {
+			"actions": {
+				"attack": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_attack.png",
+					"width": 1632
+				},
+				"death": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_death.png",
+					"width": 2720
+				},
+				"hit": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_hit.png",
+					"width": 544
+				},
+				"idle": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_idle.png",
+					"width": 1088
+				},
+				"walk": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_walk.png",
+					"width": 1632
+				}
+			},
+			"frame_size": [
+				272,
+				224
+			],
+			"name": "邪恶钳虫"
+		},
+		"128": {
+			"actions": {
+				"attack": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_attack.png",
+					"width": 1344
+				},
+				"death": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_death.png",
+					"width": 2240
+				},
+				"hit": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_hit.png",
+					"width": 448
+				},
+				"idle": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_idle.png",
+					"width": 896
+				},
+				"walk": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_walk.png",
+					"width": 1344
+				}
+			},
+			"frame_size": [
+				224,
+				192
+			],
+			"name": "楔蛾"
+		},
+		"138": {
+			"actions": {
+				"attack": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_attack.png",
+					"width": 1536
+				},
+				"death": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_death.png",
+					"width": 2560
+				},
+				"hit": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_hit.png",
+					"width": 512
+				},
+				"idle": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_idle.png",
+					"width": 1024
+				},
+				"walk": {
+					"height": 1536,
+					"path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_walk.png",
+					"width": 1536
+				}
+			},
+			"frame_size": [
+				256,
+				192
+			],
+			"name": "蝎蛇"
+		},
+		"164": {
+			"actions": {
+				"attack": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_attack.png",
+					"width": 1632
+				},
+				"death": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_death.png",
+					"width": 2720
+				},
+				"hit": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_hit.png",
+					"width": 544
+				},
+				"idle": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_idle.png",
+					"width": 1088
+				},
+				"walk": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_walk.png",
+					"width": 1632
+				}
+			},
+			"frame_size": [
+				272,
+				288
+			],
+			"name": "血巨人"
+		},
+		"166": {
+			"actions": {
+				"attack": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_attack.png",
+					"width": 1632
+				},
+				"death": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_death.png",
+					"width": 2720
+				},
+				"hit": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_hit.png",
+					"width": 544
+				},
+				"idle": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_idle.png",
+					"width": 1088
+				},
+				"walk": {
+					"height": 2304,
+					"path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_walk.png",
+					"width": 1632
+				}
+			},
+			"frame_size": [
+				272,
+				288
+			],
+			"name": "血僵尸"
+		},
+		"168": {
+			"actions": {
+				"attack": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_attack.png",
+					"width": 1536
+				},
+				"death": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_death.png",
+					"width": 2560
+				},
+				"hit": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_hit.png",
+					"width": 512
+				},
+				"idle": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_idle.png",
+					"width": 1024
+				},
+				"walk": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_walk.png",
+					"width": 1536
+				}
+			},
+			"frame_size": [
+				256,
+				208
+			],
+			"name": "月魔蜘蛛"
+		},
+		"170": {
+			"actions": {
+				"attack": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_attack.png",
+					"width": 1248
+				},
+				"death": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_death.png",
+					"width": 2080
+				},
+				"hit": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_hit.png",
+					"width": 416
+				},
+				"idle": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_idle.png",
+					"width": 832
+				},
+				"walk": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_walk.png",
+					"width": 1248
+				}
+			},
+			"frame_size": [
+				208,
+				176
+			],
+			"name": "黑锷蜘蛛"
+		},
+		"174": {
+			"actions": {
+				"attack": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_attack.png",
+					"width": 2016
+				},
+				"death": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_death.png",
+					"width": 3360
+				},
+				"hit": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_hit.png",
+					"width": 672
+				},
+				"idle": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_idle.png",
+					"width": 1344
+				},
+				"walk": {
+					"height": 1792,
+					"path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_walk.png",
+					"width": 2016
+				}
+			},
+			"frame_size": [
+				336,
+				224
+			],
+			"name": "暴牙蜘蛛"
+		},
+		"176": {
+			"actions": {
+				"attack": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_attack.png",
+					"width": 3168
+				},
+				"death": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_death.png",
+					"width": 5280
+				},
+				"hit": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_hit.png",
+					"width": 1056
+				},
+				"idle": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_idle.png",
+					"width": 2112
+				},
+				"walk": {
+					"height": 1664,
+					"path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_walk.png",
+					"width": 3168
+				}
+			},
+			"frame_size": [
+				528,
+				208
+			],
+			"name": "天狼蜘蛛"
+		},
+		"18": {
+			"actions": {
+				"attack": {
+					"height": 1920,
+					"path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_attack.png",
+					"width": 2016
+				},
+				"death": {
+					"height": 1920,
+					"path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_death.png",
+					"width": 3360
+				},
+				"hit": {
+					"height": 1920,
+					"path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_hit.png",
+					"width": 672
+				},
+				"idle": {
+					"height": 1920,
+					"path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_idle.png",
+					"width": 1344
+				},
+				"walk": {
+					"height": 1920,
+					"path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_walk.png",
+					"width": 2016
+				}
+			},
+			"frame_size": [
+				336,
+				240
+			],
+			"name": "毒蜘蛛"
+		},
+		"24": {
+			"actions": {
+				"attack": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_attack.png",
+					"width": 1056
+				},
+				"death": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_death.png",
+					"width": 1760
+				},
+				"hit": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_hit.png",
+					"width": 352
+				},
+				"idle": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_idle.png",
+					"width": 704
+				},
+				"walk": {
+					"height": 1280,
+					"path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_walk.png",
+					"width": 1056
+				}
+			},
+			"frame_size": [
+				176,
+				160
+			],
+			"name": "多钩猫"
+		},
+		"50": {
+			"actions": {
+				"attack": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_attack.png",
+					"width": 1248
+				},
+				"death": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_death.png",
+					"width": 2080
+				},
+				"hit": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_hit.png",
+					"width": 416
+				},
+				"idle": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_idle.png",
+					"width": 832
+				},
+				"walk": {
+					"height": 1408,
+					"path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_walk.png",
+					"width": 1248
+				}
+			},
+			"frame_size": [
+				208,
+				176
+			],
+			"name": "掷斧骷髅"
+		},
+		"62": {
+			"actions": {
+				"attack": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_attack.png",
+					"width": 960
+				},
+				"death": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_death.png",
+					"width": 1600
+				},
+				"hit": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_hit.png",
+					"width": 320
+				},
+				"idle": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_idle.png",
+					"width": 640
+				},
+				"walk": {
+					"height": 1152,
+					"path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_walk.png",
+					"width": 960
+				}
+			},
+			"frame_size": [
+				160,
+				144
+			],
+			"name": "暗黑战士"
+		}
+	},
+	"results": [
+		{
+			"actors": 30,
+			"group": "insects",
+			"render_changes_trials": [
+				2790,
+				2820,
+				2820
+			],
+			"residency_release_checks": 30,
+			"total_process_calls_per_trial": 18000,
+			"unique_action_textures": 30,
+			"usec_trials": [
+				105011,
+				101666,
+				104906
+			]
+		},
+		{
+			"actors": 60,
+			"group": "insects",
+			"render_changes_trials": [
+				5580,
+				5640,
+				5640
+			],
+			"residency_release_checks": 60,
+			"total_process_calls_per_trial": 36000,
+			"unique_action_textures": 30,
+			"usec_trials": [
+				200556,
+				197062,
+				199023
+			]
+		},
+		{
+			"actors": 30,
+			"group": "red_moon",
+			"render_changes_trials": [
+				2790,
+				2820,
+				2820
+			],
+			"residency_release_checks": 30,
+			"total_process_calls_per_trial": 18000,
+			"unique_action_textures": 30,
+			"usec_trials": [
+				98476,
+				99873,
+				100275
+			]
+		},
+		{
+			"actors": 60,
+			"group": "red_moon",
+			"render_changes_trials": [
+				5580,
+				5640,
+				5640
+			],
+			"residency_release_checks": 60,
+			"total_process_calls_per_trial": 36000,
+			"unique_action_textures": 30,
+			"usec_trials": [
+				235248,
+				335365,
+				240605
+			]
+		},
+		{
+			"actors": 30,
+			"group": "other",
+			"render_changes_trials": [
+				2760,
+				2790,
+				2790
+			],
+			"residency_release_checks": 30,
+			"total_process_calls_per_trial": 18000,
+			"unique_action_textures": 30,
+			"usec_trials": [
+				99197,
+				99689,
+				123353
+			]
+		},
+		{
+			"actors": 60,
+			"group": "other",
+			"render_changes_trials": [
+				5520,
+				5580,
+				5580
+			],
+			"residency_release_checks": 60,
+			"total_process_calls_per_trial": 36000,
+			"unique_action_textures": 30,
+			"usec_trials": [
+				215651,
+				244388,
+				221284
+			]
+		}
+	],
+	"status": "PASS",
+	"test_sha256": "bedbe4d9b5c7422bb73ecec31f16cd5d79b895c00f6d91bef49dfcc4b06ec083",
+	"trials": 3,
+	"visual_source_sha256": "4835bbaa73d7386a14f470f21f1d15ad97beb29705c85d0f86d265826da1cf69"
+}

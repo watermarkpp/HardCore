@@ -1,0 +1,1303 @@
+{
+  "status": "PASS",
+  "scope": "18 representative species; source pixels, not GPU cost or residency",
+  "input_profile_sha256": "4eee79a934b5d905faa743d94a75dc83193fb1bb72933b11c26474004bd6f302",
+  "monsters": [
+    {
+      "monster_id": 110,
+      "name": "蜈蚣",
+      "frame_size": [
+        224,
+        208
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_attack.png",
+          "size": [
+            1344,
+            1664
+          ],
+          "sha256": "695f176dacd3f4a9482724577f91a9dcc1820be2b86b42a0bbe90b82bd223cbc",
+          "nontransparent_pixels": 52775,
+          "transparent_fraction": 0.9764019753033425,
+          "decoded_rgba8_bytes": 8945664
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_death.png",
+          "size": [
+            2240,
+            1664
+          ],
+          "sha256": "84f5e4315af0b9f20ec1de611997ede069b2e61c1096a8c4590ce0b6dd499207",
+          "nontransparent_pixels": 91528,
+          "transparent_fraction": 0.9754442822802197,
+          "decoded_rgba8_bytes": 14909440
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_hit.png",
+          "size": [
+            448,
+            1664
+          ],
+          "sha256": "d8e87f830dadcc3a1ad8380e1d42cb94f3202ea8e9ac8d528aa0a56ff4cb5a19",
+          "nontransparent_pixels": 18590,
+          "transparent_fraction": 0.9750627790178571,
+          "decoded_rgba8_bytes": 2981888
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_idle.png",
+          "size": [
+            896,
+            1664
+          ],
+          "sha256": "fcc1f387d1377b418baddeb453c52a8a0ff6ca1759b11a7e980f99045fb7e2c8",
+          "nontransparent_pixels": 40048,
+          "transparent_fraction": 0.973139165521978,
+          "decoded_rgba8_bytes": 5963776
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_073_race_19/appearance_073_race_19_walk.png",
+          "size": [
+            1344,
+            1664
+          ],
+          "sha256": "02d0d481b000c8448a85dabb8dfedff07db9890cc0fa6f07e5dfa58ed86e209d",
+          "nontransparent_pixels": 60379,
+          "transparent_fraction": 0.9730018923134157,
+          "decoded_rgba8_bytes": 8945664
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        212,
+        199
+      ],
+      "transparent_border_area_fraction": 0.1637190934065934
+    },
+    {
+      "monster_id": 112,
+      "name": "黑色恶蛆",
+      "frame_size": [
+        160,
+        144
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_attack.png",
+          "size": [
+            960,
+            1152
+          ],
+          "sha256": "d84751d1390d8c23839527295d0895aa4d385f22556d3e9b1198692c3410b3f3",
+          "nontransparent_pixels": 57358,
+          "transparent_fraction": 0.9481354890046296,
+          "decoded_rgba8_bytes": 4423680
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_death.png",
+          "size": [
+            1600,
+            1152
+          ],
+          "sha256": "f25e3dc5bd0b9a5dbd83ab27e2dd77c239f60a0bfc919dd6685371cc11bc1b73",
+          "nontransparent_pixels": 140700,
+          "transparent_fraction": 0.9236653645833334,
+          "decoded_rgba8_bytes": 7372800
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_hit.png",
+          "size": [
+            320,
+            1152
+          ],
+          "sha256": "4d5f1d3f625b8c7b54149b6d04c7823f3f67a2b08f8079c63d9ab9da51d6a820",
+          "nontransparent_pixels": 18196,
+          "transparent_fraction": 0.9506401909722222,
+          "decoded_rgba8_bytes": 1474560
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_idle.png",
+          "size": [
+            640,
+            1152
+          ],
+          "sha256": "18601640c92c739a4b405ce30ab0b7ae3dabef5efc2f41bb23e9482ef7753153",
+          "nontransparent_pixels": 37551,
+          "transparent_fraction": 0.9490681966145833,
+          "decoded_rgba8_bytes": 2949120
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_074_race_19/appearance_074_race_19_walk.png",
+          "size": [
+            960,
+            1152
+          ],
+          "sha256": "5a4d59f1b875dd371ef5a919eb011adeb3e75565281a556e342c7b254d5ad266",
+          "nontransparent_pixels": 52560,
+          "transparent_fraction": 0.9524739583333334,
+          "decoded_rgba8_bytes": 4423680
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        143,
+        124
+      ],
+      "transparent_border_area_fraction": 0.3203125
+    },
+    {
+      "monster_id": 114,
+      "name": "跳跳蜂",
+      "frame_size": [
+        192,
+        160
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_attack.png",
+          "size": [
+            1152,
+            1280
+          ],
+          "sha256": "e6ce5390dbe690387f651685115e8d9448df450b67134d957762f2378ec60eaa",
+          "nontransparent_pixels": 79370,
+          "transparent_fraction": 0.9461737738715278,
+          "decoded_rgba8_bytes": 5898240
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_death.png",
+          "size": [
+            1920,
+            1280
+          ],
+          "sha256": "f3b6d0ceb4cc3dcbb70f594883ae3f51ed03ad850d894e5ce0dd140209c2293c",
+          "nontransparent_pixels": 124807,
+          "transparent_fraction": 0.9492159016927083,
+          "decoded_rgba8_bytes": 9830400
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_hit.png",
+          "size": [
+            384,
+            1280
+          ],
+          "sha256": "991ed9283d66ca51787aec234e4a83a5736e42d3db8026f698f0e96b152512d3",
+          "nontransparent_pixels": 28648,
+          "transparent_fraction": 0.9417154947916667,
+          "decoded_rgba8_bytes": 1966080
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_idle.png",
+          "size": [
+            768,
+            1280
+          ],
+          "sha256": "abf14526440954ce926f91f02ad7a5f90800c96ce3a314f7a7be9b75f16cc6c5",
+          "nontransparent_pixels": 55698,
+          "transparent_fraction": 0.943341064453125,
+          "decoded_rgba8_bytes": 3932160
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_081_race_19/appearance_081_race_19_walk.png",
+          "size": [
+            1152,
+            1280
+          ],
+          "sha256": "17eaade215fd1f8d3517db5609917ecbafcc38f8083bf831805d03cefa62f8f1",
+          "nontransparent_pixels": 77333,
+          "transparent_fraction": 0.9475552029079861,
+          "decoded_rgba8_bytes": 5898240
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        173,
+        143
+      ],
+      "transparent_border_area_fraction": 0.27490234375
+    },
+    {
+      "monster_id": 116,
+      "name": "巨型蠕虫",
+      "frame_size": [
+        208,
+        160
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_attack.png",
+          "size": [
+            1248,
+            1280
+          ],
+          "sha256": "d0cdad5906d9607708b2087f189a4b22e0e05e54cf934e267a421f747e5c39a2",
+          "nontransparent_pixels": 100179,
+          "transparent_fraction": 0.9372877854567307,
+          "decoded_rgba8_bytes": 6389760
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_death.png",
+          "size": [
+            2080,
+            1280
+          ],
+          "sha256": "90d8920e480b87792df670699a30ac5884977b1795d024cd9764484d3b226ee2",
+          "nontransparent_pixels": 177922,
+          "transparent_fraction": 0.9331723257211538,
+          "decoded_rgba8_bytes": 10649600
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_hit.png",
+          "size": [
+            416,
+            1280
+          ],
+          "sha256": "cabf40091372b419badd2aba19811620990d35c094b6469c6e39ca34e8ac223c",
+          "nontransparent_pixels": 32894,
+          "transparent_fraction": 0.9382249098557692,
+          "decoded_rgba8_bytes": 2129920
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_idle.png",
+          "size": [
+            832,
+            1280
+          ],
+          "sha256": "1ca48d196c70bb6a99896a82023f217eca018f5355f17094bff1fcc97828139e",
+          "nontransparent_pixels": 66302,
+          "transparent_fraction": 0.9377422626201923,
+          "decoded_rgba8_bytes": 4259840
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_082_race_19/appearance_082_race_19_walk.png",
+          "size": [
+            1248,
+            1280
+          ],
+          "sha256": "83784ee850a488d26fd5df01aeb1961534cacfff72cc25406692342b23768f0a",
+          "nontransparent_pixels": 99555,
+          "transparent_fraction": 0.9376784104567307,
+          "decoded_rgba8_bytes": 6389760
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        185,
+        151
+      ],
+      "transparent_border_area_fraction": 0.23945312500000004
+    },
+    {
+      "monster_id": 118,
+      "name": "钳虫",
+      "frame_size": [
+        208,
+        176
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_attack.png",
+          "size": [
+            1248,
+            1408
+          ],
+          "sha256": "76c707844b3486ed6870bbbf7de9d6561d49792761100e60859cf0c89684010a",
+          "nontransparent_pixels": 108740,
+          "transparent_fraction": 0.9381168961247086,
+          "decoded_rgba8_bytes": 7028736
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_death.png",
+          "size": [
+            2080,
+            1408
+          ],
+          "sha256": "65b822f16b6e8efa6709746a163fa15f988677a080fc99ad516ffdd8c275ef4c",
+          "nontransparent_pixels": 213510,
+          "transparent_fraction": 0.9270958533653846,
+          "decoded_rgba8_bytes": 11714560
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_hit.png",
+          "size": [
+            416,
+            1408
+          ],
+          "sha256": "cb6282dba03ac290de95139b42c92627f6dcdb5070bfba5823c1042a3a231e7c",
+          "nontransparent_pixels": 37279,
+          "transparent_fraction": 0.9363544170673077,
+          "decoded_rgba8_bytes": 2342912
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_idle.png",
+          "size": [
+            832,
+            1408
+          ],
+          "sha256": "efeb8cdd8791e204b0768fc18ddce2c071a5891596dabace0a57ed7cbe4202a1",
+          "nontransparent_pixels": 71751,
+          "transparent_fraction": 0.9387505804742133,
+          "decoded_rgba8_bytes": 4685824
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_120_race_19/appearance_120_race_19_walk.png",
+          "size": [
+            1248,
+            1408
+          ],
+          "sha256": "79ecb42e64b39ac54978ee2f0edc2caf5814c2ddb5b2d5b04cd4d777734c3cbb",
+          "nontransparent_pixels": 100127,
+          "transparent_fraction": 0.9430184886727856,
+          "decoded_rgba8_bytes": 7028736
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        200,
+        157
+      ],
+      "transparent_border_area_fraction": 0.21853146853146854
+    },
+    {
+      "monster_id": 120,
+      "name": "邪恶钳虫",
+      "frame_size": [
+        272,
+        224
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_attack.png",
+          "size": [
+            1632,
+            1792
+          ],
+          "sha256": "a58e188ec552d4b7f78bc69b58b4ef166c69cc96a2f5b91bfa55beca7d0eb759",
+          "nontransparent_pixels": 186260,
+          "transparent_fraction": 0.9363114386379552,
+          "decoded_rgba8_bytes": 11698176
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_death.png",
+          "size": [
+            2720,
+            1792
+          ],
+          "sha256": "f8184b7786ff0fddf61fad33e357abd87e9b9c5b69cb5f9111a1671008a1490b",
+          "nontransparent_pixels": 370341,
+          "transparent_fraction": 0.924020770417542,
+          "decoded_rgba8_bytes": 19496960
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_hit.png",
+          "size": [
+            544,
+            1792
+          ],
+          "sha256": "e22c78d76bda3fb22146efd9354187e7c5280f45b24a3a53f8a781cd54bdb276",
+          "nontransparent_pixels": 63674,
+          "transparent_fraction": 0.9346831506039915,
+          "decoded_rgba8_bytes": 3899392
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_idle.png",
+          "size": [
+            1088,
+            1792
+          ],
+          "sha256": "980d86cc66da4587f355a6d1330a5a44476c2d297cbc1a491882dbc59ea1f554",
+          "nontransparent_pixels": 121365,
+          "transparent_fraction": 0.9377518341320903,
+          "decoded_rgba8_bytes": 7798784
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_121_race_19/appearance_121_race_19_walk.png",
+          "size": [
+            1632,
+            1792
+          ],
+          "sha256": "976c71c3a2db4af445cac23d7d0b6f8b6738e90056700f26f47a8fd0f457ae21",
+          "nontransparent_pixels": 172743,
+          "transparent_fraction": 0.9409333557641807,
+          "decoded_rgba8_bytes": 11698176
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        262,
+        213
+      ],
+      "transparent_border_area_fraction": 0.1453847163865546
+    },
+    {
+      "monster_id": 128,
+      "name": "楔蛾",
+      "frame_size": [
+        224,
+        192
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_attack.png",
+          "size": [
+            1344,
+            1536
+          ],
+          "sha256": "bf6cc12346d71f136d416f789d104ec7603eebe11c9a6b8e0ffc6cc519140aa9",
+          "nontransparent_pixels": 83298,
+          "transparent_fraction": 0.9596499488467262,
+          "decoded_rgba8_bytes": 8257536
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_death.png",
+          "size": [
+            2240,
+            1536
+          ],
+          "sha256": "901bb48654708e55401a6ee1efa23f6fd29edc2958fc8c1b4d3d78ccb70d2a2a",
+          "nontransparent_pixels": 98694,
+          "transparent_fraction": 0.9713152204241071,
+          "decoded_rgba8_bytes": 13762560
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_hit.png",
+          "size": [
+            448,
+            1536
+          ],
+          "sha256": "77c7671ca4c2cdb6770ab6d08f556b0d7c4c99921949278a6fb262e4a99ac47e",
+          "nontransparent_pixels": 28315,
+          "transparent_fraction": 0.9588521321614584,
+          "decoded_rgba8_bytes": 2752512
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_idle.png",
+          "size": [
+            896,
+            1536
+          ],
+          "sha256": "680de2c25621b74d8fa90ff8d0064858f5a5c30f63cf0f45805a8ce6b47e4237",
+          "nontransparent_pixels": 46719,
+          "transparent_fraction": 0.9660535539899554,
+          "decoded_rgba8_bytes": 5505024
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_039_race_52/appearance_039_race_52_walk.png",
+          "size": [
+            1344,
+            1536
+          ],
+          "sha256": "0e870b3e7e5eeac34b68f0c52359d3fb3881948b138a7b6985e9744d9ec9bd03",
+          "nontransparent_pixels": 85814,
+          "transparent_fraction": 0.9584311833457341,
+          "decoded_rgba8_bytes": 8257536
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        205,
+        174
+      ],
+      "transparent_border_area_fraction": 0.23962983630952384
+    },
+    {
+      "monster_id": 138,
+      "name": "蝎蛇",
+      "frame_size": [
+        256,
+        192
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_attack.png",
+          "size": [
+            1536,
+            1536
+          ],
+          "sha256": "d6c30d488ea0253cf4529a8f4dea674286597cf62dadc04c024bcf58ce25c1ab",
+          "nontransparent_pixels": 155302,
+          "transparent_fraction": 0.9341744316948785,
+          "decoded_rgba8_bytes": 9437184
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_death.png",
+          "size": [
+            2560,
+            1536
+          ],
+          "sha256": "462eccd217fd41e099d38ba5d09dc445177b484d4233a66a969d714ecc8708f0",
+          "nontransparent_pixels": 239837,
+          "transparent_fraction": 0.9390062967936198,
+          "decoded_rgba8_bytes": 15728640
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_hit.png",
+          "size": [
+            512,
+            1536
+          ],
+          "sha256": "de790dee78c187030d7c92f9fcef7c326e21a2c5e2ac6fc0c0dce033bb506960",
+          "nontransparent_pixels": 52239,
+          "transparent_fraction": 0.9335746765136719,
+          "decoded_rgba8_bytes": 3145728
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_idle.png",
+          "size": [
+            1024,
+            1536
+          ],
+          "sha256": "3a67b897a9a4d41f86ada5951202a35c7f6c44d47e79a258ccd23e01c836bd81",
+          "nontransparent_pixels": 98679,
+          "transparent_fraction": 0.9372615814208984,
+          "decoded_rgba8_bytes": 6291456
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_130_race_19/appearance_130_race_19_walk.png",
+          "size": [
+            1536,
+            1536
+          ],
+          "sha256": "138b4a1a25e54554548a96b70a72f6dee681ffbf77e07bc7403a6121e4e375d7",
+          "nontransparent_pixels": 160914,
+          "transparent_fraction": 0.9317957560221354,
+          "decoded_rgba8_bytes": 9437184
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        246,
+        180
+      ],
+      "transparent_border_area_fraction": 0.16715494791666663
+    },
+    {
+      "monster_id": 164,
+      "name": "血巨人",
+      "frame_size": [
+        272,
+        288
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_attack.png",
+          "size": [
+            1632,
+            2304
+          ],
+          "sha256": "988aceb03bb40c6e50ff7d602f2e420280c979debec6be60cc3b717188a4727b",
+          "nontransparent_pixels": 322779,
+          "transparent_fraction": 0.9141574435763888,
+          "decoded_rgba8_bytes": 15040512
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_death.png",
+          "size": [
+            2720,
+            2304
+          ],
+          "sha256": "3ad4690ad922f364d60843573f79f37bb812c0b613437c15ff50426aa4cd6505",
+          "nontransparent_pixels": 578504,
+          "transparent_fraction": 0.9076886744281045,
+          "decoded_rgba8_bytes": 25067520
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_hit.png",
+          "size": [
+            544,
+            2304
+          ],
+          "sha256": "83ba61b6dad35526d223f30fd683a634686803138814da476f78f4ccf501062f",
+          "nontransparent_pixels": 106197,
+          "transparent_fraction": 0.9152712354473039,
+          "decoded_rgba8_bytes": 5013504
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_idle.png",
+          "size": [
+            1088,
+            2304
+          ],
+          "sha256": "2b08479cfa99b61392fb688bee9fc018945eab8173d701ef34c157e278164ccd",
+          "nontransparent_pixels": 207333,
+          "transparent_fraction": 0.9172901826746324,
+          "decoded_rgba8_bytes": 10027008
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_19/appearance_115_race_19_walk.png",
+          "size": [
+            1632,
+            2304
+          ],
+          "sha256": "f82f9c10cee08e3c9b848786a583afd0876c68cb546f0b04badb9288285fd7a1",
+          "nontransparent_pixels": 307903,
+          "transparent_fraction": 0.9181136918743191,
+          "decoded_rgba8_bytes": 15040512
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        253,
+        277
+      ],
+      "transparent_border_area_fraction": 0.15868821486928109
+    },
+    {
+      "monster_id": 166,
+      "name": "血僵尸",
+      "frame_size": [
+        272,
+        288
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_attack.png",
+          "size": [
+            1632,
+            2304
+          ],
+          "sha256": "988aceb03bb40c6e50ff7d602f2e420280c979debec6be60cc3b717188a4727b",
+          "nontransparent_pixels": 322779,
+          "transparent_fraction": 0.9141574435763888,
+          "decoded_rgba8_bytes": 15040512
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_death.png",
+          "size": [
+            2720,
+            2304
+          ],
+          "sha256": "3ad4690ad922f364d60843573f79f37bb812c0b613437c15ff50426aa4cd6505",
+          "nontransparent_pixels": 578504,
+          "transparent_fraction": 0.9076886744281045,
+          "decoded_rgba8_bytes": 25067520
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_hit.png",
+          "size": [
+            544,
+            2304
+          ],
+          "sha256": "83ba61b6dad35526d223f30fd683a634686803138814da476f78f4ccf501062f",
+          "nontransparent_pixels": 106197,
+          "transparent_fraction": 0.9152712354473039,
+          "decoded_rgba8_bytes": 5013504
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_idle.png",
+          "size": [
+            1088,
+            2304
+          ],
+          "sha256": "2b08479cfa99b61392fb688bee9fc018945eab8173d701ef34c157e278164ccd",
+          "nontransparent_pixels": 207333,
+          "transparent_fraction": 0.9172901826746324,
+          "decoded_rgba8_bytes": 10027008
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_115_race_42/appearance_115_race_42_walk.png",
+          "size": [
+            1632,
+            2304
+          ],
+          "sha256": "f82f9c10cee08e3c9b848786a583afd0876c68cb546f0b04badb9288285fd7a1",
+          "nontransparent_pixels": 307903,
+          "transparent_fraction": 0.9181136918743191,
+          "decoded_rgba8_bytes": 15040512
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        253,
+        277
+      ],
+      "transparent_border_area_fraction": 0.15868821486928109
+    },
+    {
+      "monster_id": 168,
+      "name": "月魔蜘蛛",
+      "frame_size": [
+        256,
+        208
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_attack.png",
+          "size": [
+            1536,
+            1664
+          ],
+          "sha256": "981ada4fc69159f44ae82cd38e9a79ab4d8f0c67c4ecc76caa94bee011f49efb",
+          "nontransparent_pixels": 138166,
+          "transparent_fraction": 0.9459424141125802,
+          "decoded_rgba8_bytes": 10223616
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_death.png",
+          "size": [
+            2560,
+            1664
+          ],
+          "sha256": "edf8e2c77d485554b89ad192145b191856671559fea0a4df140e56f0d8252bef",
+          "nontransparent_pixels": 233803,
+          "transparent_fraction": 0.9451146052433894,
+          "decoded_rgba8_bytes": 17039360
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_hit.png",
+          "size": [
+            512,
+            1664
+          ],
+          "sha256": "15ac6e163db30f7a99810d1352159155ab79f978e36b163a95577912389b3493",
+          "nontransparent_pixels": 34390,
+          "transparent_fraction": 0.9596346341646634,
+          "decoded_rgba8_bytes": 3407872
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_idle.png",
+          "size": [
+            1024,
+            1664
+          ],
+          "sha256": "08925aa96088170c7954700355c216e7fa068c6da0e0911995cdde38e6a24c2d",
+          "nontransparent_pixels": 83616,
+          "transparent_fraction": 0.950927734375,
+          "decoded_rgba8_bytes": 6815744
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_113_race_19/appearance_113_race_19_walk.png",
+          "size": [
+            1536,
+            1664
+          ],
+          "sha256": "2feb8f63d2323bd155c37dfde73fbc1045dfa0d9ca8585a8999cec0770251911",
+          "nontransparent_pixels": 122773,
+          "transparent_fraction": 0.9519649407802484,
+          "decoded_rgba8_bytes": 10223616
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        233,
+        188
+      ],
+      "transparent_border_area_fraction": 0.23940805288461542
+    },
+    {
+      "monster_id": 170,
+      "name": "黑锷蜘蛛",
+      "frame_size": [
+        208,
+        176
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_attack.png",
+          "size": [
+            1248,
+            1408
+          ],
+          "sha256": "a9dd7f90e7475ab1cfd766a0e2405617d2e56202c7855b809735d5bdbb3050de",
+          "nontransparent_pixels": 175435,
+          "transparent_fraction": 0.9001612807765151,
+          "decoded_rgba8_bytes": 7028736
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_death.png",
+          "size": [
+            2080,
+            1408
+          ],
+          "sha256": "3aee5ea7ab23e91676893286f009d676dc410f6a7c260b17d15d2e66ab7fc502",
+          "nontransparent_pixels": 280008,
+          "transparent_fraction": 0.9043897508741259,
+          "decoded_rgba8_bytes": 11714560
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_hit.png",
+          "size": [
+            416,
+            1408
+          ],
+          "sha256": "c97ce04efb9d27333e4868e8af5669a455f18583426f4381d5526c9538cec89d",
+          "nontransparent_pixels": 54876,
+          "transparent_fraction": 0.9063114619755245,
+          "decoded_rgba8_bytes": 2342912
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_idle.png",
+          "size": [
+            832,
+            1408
+          ],
+          "sha256": "647ef5b61efdb81541821bfe66fe2f1b2abd1d80c6ef4119486c52f0d9597b38",
+          "nontransparent_pixels": 113341,
+          "transparent_fraction": 0.9032477532233392,
+          "decoded_rgba8_bytes": 4685824
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_118_race_19/appearance_118_race_19_walk.png",
+          "size": [
+            1248,
+            1408
+          ],
+          "sha256": "94b19d641b7a788bdf8cddef5488bac1b622ccd3845d0f7b8622c66240dab509",
+          "nontransparent_pixels": 168537,
+          "transparent_fraction": 0.904086879916958,
+          "decoded_rgba8_bytes": 7028736
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        197,
+        164
+      ],
+      "transparent_border_area_fraction": 0.1946022727272727
+    },
+    {
+      "monster_id": 174,
+      "name": "暴牙蜘蛛",
+      "frame_size": [
+        336,
+        224
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_attack.png",
+          "size": [
+            2016,
+            1792
+          ],
+          "sha256": "64f298aea5899d4679fdb7a6271cf717e04f42c42fc0af4299cacf384cd89c11",
+          "nontransparent_pixels": 149765,
+          "transparent_fraction": 0.9585445343501984,
+          "decoded_rgba8_bytes": 14450688
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_death.png",
+          "size": [
+            3360,
+            1792
+          ],
+          "sha256": "a7e10e269feeedbf36dc51c1977ed4088664a9204d2cce070a8f2eb874bd8af4",
+          "nontransparent_pixels": 274013,
+          "transparent_fraction": 0.9544913570897109,
+          "decoded_rgba8_bytes": 24084480
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_hit.png",
+          "size": [
+            672,
+            1792
+          ],
+          "sha256": "ad09e20baaf0cd65dc875b3650e1999641b6e9d7b8d2bff91320c48d93924b49",
+          "nontransparent_pixels": 47411,
+          "transparent_fraction": 0.9606294177827381,
+          "decoded_rgba8_bytes": 4816896
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_idle.png",
+          "size": [
+            1344,
+            1792
+          ],
+          "sha256": "4857bbb43eb5c2e788e1c4bd51b0c2d6d2e4e29a94e08684b541cb72f8079732",
+          "nontransparent_pixels": 98713,
+          "transparent_fraction": 0.9590138545652636,
+          "decoded_rgba8_bytes": 9633792
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_114_race_22/appearance_114_race_22_walk.png",
+          "size": [
+            2016,
+            1792
+          ],
+          "sha256": "ea9aff2536d6c0bfc4f0bfe18bf833eb5483a28d2c9c8421856641493009d4f6",
+          "nontransparent_pixels": 151503,
+          "transparent_fraction": 0.9580634499893708,
+          "decoded_rgba8_bytes": 14450688
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        318,
+        211
+      ],
+      "transparent_border_area_fraction": 0.16387648809523814
+    },
+    {
+      "monster_id": 176,
+      "name": "天狼蜘蛛",
+      "frame_size": [
+        528,
+        208
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_attack.png",
+          "size": [
+            3168,
+            1664
+          ],
+          "sha256": "0ff25cf64de357dad38a47df5abc6cd6c0617efb3b4c09072b6f6e8108d4b4d5",
+          "nontransparent_pixels": 117148,
+          "transparent_fraction": 0.977777322503885,
+          "decoded_rgba8_bytes": 21086208
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_death.png",
+          "size": [
+            5280,
+            1664
+          ],
+          "sha256": "c00e678ae85ea66288141397700d59cbee33611316ba879b8b0f6308d9b1acc3",
+          "nontransparent_pixels": 199838,
+          "transparent_fraction": 0.9772547439539627,
+          "decoded_rgba8_bytes": 35143680
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_hit.png",
+          "size": [
+            1056,
+            1664
+          ],
+          "sha256": "c38d7431bbd1cf75afbef02f8ac4a5b3a54296709c2048239802ccfefdb77102",
+          "nontransparent_pixels": 36975,
+          "transparent_fraction": 0.9789578097683567,
+          "decoded_rgba8_bytes": 7028736
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_idle.png",
+          "size": [
+            2112,
+            1664
+          ],
+          "sha256": "3e2b16c7af55cd491cea97be39428f599ed594f98e63cef656e740bd763cc39e",
+          "nontransparent_pixels": 73092,
+          "transparent_fraction": 0.9792019503933567,
+          "decoded_rgba8_bytes": 14057472
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_complete/appearance_119_race_19/appearance_119_race_19_walk.png",
+          "size": [
+            3168,
+            1664
+          ],
+          "sha256": "936e18e5ca18d6936319a5b52289c14d35b54c5b5cf6e84569f5da5eee5f7d0e",
+          "nontransparent_pixels": 110379,
+          "transparent_fraction": 0.9790613845789627,
+          "decoded_rgba8_bytes": 21086208
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        514,
+        187
+      ],
+      "transparent_border_area_fraction": 0.17528044871794868
+    },
+    {
+      "monster_id": 18,
+      "name": "毒蜘蛛",
+      "frame_size": [
+        336,
+        240
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_attack.png",
+          "size": [
+            2016,
+            1920
+          ],
+          "sha256": "95be593fad4b2bafeeb21bd271beea527708f22e5a41574e5a4e48f8b99bec1a",
+          "nontransparent_pixels": 193573,
+          "transparent_fraction": 0.9499904410548942,
+          "decoded_rgba8_bytes": 15482880
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_death.png",
+          "size": [
+            3360,
+            1920
+          ],
+          "sha256": "b6abf6863c85109433a5f6cdb01502ffe2216b211878fc376ff7b5a493e5de7c",
+          "nontransparent_pixels": 321520,
+          "transparent_fraction": 0.9501612103174604,
+          "decoded_rgba8_bytes": 25804800
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_hit.png",
+          "size": [
+            672,
+            1920
+          ],
+          "sha256": "6960f96508f6caf8984533cf57bb69e40a5f77cbfe30b68b42b6f260a3b5c8b0",
+          "nontransparent_pixels": 62180,
+          "transparent_fraction": 0.9518074156746031,
+          "decoded_rgba8_bytes": 5160960
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_idle.png",
+          "size": [
+            1344,
+            1920
+          ],
+          "sha256": "57fe5735d2ad0ae6ab6decd2b14a93bbb0fcd87450f7e848af85fa9edf6cd36b",
+          "nontransparent_pixels": 125815,
+          "transparent_fraction": 0.9512435670882936,
+          "decoded_rgba8_bytes": 10321920
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_bich_common/spitting_spider/spitting_spider_walk.png",
+          "size": [
+            2016,
+            1920
+          ],
+          "sha256": "31aee9d3ebc2a75d7e7542bbf43f6a1387845e6ed461b4eba21609beea6296a9",
+          "nontransparent_pixels": 184690,
+          "transparent_fraction": 0.9522853629298942,
+          "decoded_rgba8_bytes": 15482880
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        325,
+        230
+      ],
+      "transparent_border_area_fraction": 0.12730654761904758
+    },
+    {
+      "monster_id": 24,
+      "name": "多钩猫",
+      "frame_size": [
+        176,
+        160
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_attack.png",
+          "size": [
+            1056,
+            1280
+          ],
+          "sha256": "fb00b896d64836106d491b5f6a45279fcee2e0c88f77314fdf4cfed76a95d034",
+          "nontransparent_pixels": 81073,
+          "transparent_fraction": 0.9400205669981061,
+          "decoded_rgba8_bytes": 5406720
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_death.png",
+          "size": [
+            1760,
+            1280
+          ],
+          "sha256": "b58ec8a6ee48f954907f2558a6aea8cfa7e2aa973bc15346a03e4b8da1276d6a",
+          "nontransparent_pixels": 141151,
+          "transparent_fraction": 0.9373441938920455,
+          "decoded_rgba8_bytes": 9011200
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_hit.png",
+          "size": [
+            352,
+            1280
+          ],
+          "sha256": "a76983c89024bda36c76c0862e33b66e7c293e492b5d0c901930fc762a63986f",
+          "nontransparent_pixels": 24452,
+          "transparent_fraction": 0.9457297585227272,
+          "decoded_rgba8_bytes": 1802240
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_idle.png",
+          "size": [
+            704,
+            1280
+          ],
+          "sha256": "3a0806c373580a9e6a2e10df6668ce1019ad7d02b866b18069d8ac3bc6d8b5bb",
+          "nontransparent_pixels": 47592,
+          "transparent_fraction": 0.9471857244318181,
+          "decoded_rgba8_bytes": 3604480
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_bich_common/hook_cat/hook_cat_walk.png",
+          "size": [
+            1056,
+            1280
+          ],
+          "sha256": "ca44bdcfdbb1b94775014acf7179b57066449332032f380a26598a8eac703214",
+          "nontransparent_pixels": 68833,
+          "transparent_fraction": 0.9490759647253788,
+          "decoded_rgba8_bytes": 5406720
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        162,
+        148
+      ],
+      "transparent_border_area_fraction": 0.234375
+    },
+    {
+      "monster_id": 50,
+      "name": "掷斧骷髅",
+      "frame_size": [
+        208,
+        176
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_attack.png",
+          "size": [
+            1248,
+            1408
+          ],
+          "sha256": "16adc0d1cc5269eaa53369196feffd9753ce41818244707457d3e1b4613614a6",
+          "nontransparent_pixels": 126577,
+          "transparent_fraction": 0.9279659955929487,
+          "decoded_rgba8_bytes": 7028736
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_death.png",
+          "size": [
+            2080,
+            1408
+          ],
+          "sha256": "f0abd733c3fe303fb07fc961720dea77c200106287596e6b25f70d95966af4fc",
+          "nontransparent_pixels": 211774,
+          "transparent_fraction": 0.9276886199737763,
+          "decoded_rgba8_bytes": 11714560
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_hit.png",
+          "size": [
+            416,
+            1408
+          ],
+          "sha256": "6397a4286a6afd0d84996e0a1ff93f8d48f6675ad831e7ad50e4dcec1e95d8dc",
+          "nontransparent_pixels": 43406,
+          "transparent_fraction": 0.9258939302884616,
+          "decoded_rgba8_bytes": 2342912
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_idle.png",
+          "size": [
+            832,
+            1408
+          ],
+          "sha256": "907e1642d4f5f38f7fc3da4c4655a32556022322a2782fc5582e1aff3867bd75",
+          "nontransparent_pixels": 76748,
+          "transparent_fraction": 0.9344849486451049,
+          "decoded_rgba8_bytes": 4685824
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_undead/axe_skeleton/axe_skeleton_walk.png",
+          "size": [
+            1248,
+            1408
+          ],
+          "sha256": "ed98dce2d53ce8ff0591675e2a20efd608328510b090b727c51f6147d5242577",
+          "nontransparent_pixels": 111892,
+          "transparent_fraction": 0.9363231169871795,
+          "decoded_rgba8_bytes": 7028736
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        195,
+        162
+      ],
+      "transparent_border_area_fraction": 0.21334134615384615
+    },
+    {
+      "monster_id": 62,
+      "name": "暗黑战士",
+      "frame_size": [
+        160,
+        144
+      ],
+      "actions": {
+        "attack": {
+          "path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_attack.png",
+          "size": [
+            960,
+            1152
+          ],
+          "sha256": "6a58b463c5822215c977e20db128b6a9b2fdab5c530acb7b48c64f7757884bd8",
+          "nontransparent_pixels": 79084,
+          "transparent_fraction": 0.928490306712963,
+          "decoded_rgba8_bytes": 4423680
+        },
+        "death": {
+          "path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_death.png",
+          "size": [
+            1600,
+            1152
+          ],
+          "sha256": "48b1d641931b697780fdf6f894cc842869cf5bfc75e622801741582704c6aff1",
+          "nontransparent_pixels": 146286,
+          "transparent_fraction": 0.920634765625,
+          "decoded_rgba8_bytes": 7372800
+        },
+        "hit": {
+          "path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_hit.png",
+          "size": [
+            320,
+            1152
+          ],
+          "sha256": "ab402a5ee4e3fabfdf930ce6cb74bf05dfc8e38fb64201b2a96cea35d1b89e10",
+          "nontransparent_pixels": 26488,
+          "transparent_fraction": 0.9281467013888889,
+          "decoded_rgba8_bytes": 1474560
+        },
+        "idle": {
+          "path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_idle.png",
+          "size": [
+            640,
+            1152
+          ],
+          "sha256": "d25edeea1c52fb8a8447547a33ed213b78d3585cce64f69d3e02b4825b6d146b",
+          "nontransparent_pixels": 52250,
+          "transparent_fraction": 0.9291314019097222,
+          "decoded_rgba8_bytes": 2949120
+        },
+        "walk": {
+          "path": "res://assets/art/monsters/client_bich_common/dark_warrior/dark_warrior_walk.png",
+          "size": [
+            960,
+            1152
+          ],
+          "sha256": "20ccdd57de23c62e6bf3c188619c9e95e5c442f7c91c6d986b81fb81677685f7",
+          "nontransparent_pixels": 84160,
+          "transparent_fraction": 0.9239004629629629,
+          "decoded_rgba8_bytes": 4423680
+        }
+      },
+      "all_actions_directions_alpha_union_in_frame": [
+        8,
+        8,
+        148,
+        126
+      ],
+      "transparent_border_area_fraction": 0.28298611111111116
+    }
+  ]
+}

@@ -5,6 +5,8 @@ Branch: `codex/integration`
 Generated: 2026-08-08
 Purpose: subsystem/path navigation for model handoff. Read it after current status and historical decisions.
 
+2026-09-23 公共 CPU 优化导航：`docs/repair_v93/CPU_CROWD_REPAIR.md` 记录查询链根因、42 次基线对照、67 图 53,400 次差分和 18 种怪物动画/贴图审查；`DELIVERY.md` 记录合入主树与远端身份。本轮仅交付源码，用户要求暂不打包；贴图、人工数据和版本配置未动。
+
 2026-09-22 v92 导航：`docs/repair_v92/USER_REQUEST_RECONCILIATION.md` 是全部累计要求，`CONTROLLER_REVIEW.md` 是主控对历史候选的逐项裁决；`PERFORMANCE_AND_SKILL_CLOSURE.md`、`UI_AND_SYSTEM_CLOSURE.md`、`LOOT_CLEANUP.md` 和 `evidence/loot_workbook_armor_single_slot_20260922.md` 提供专项证据。当前施工/回归/构建状态先看 `PROJECT_CURRENT_STATUS.md` 顶部，不能使用下列历史 SHA 代替当前 Git。
 
 Current navigation context verified against HEAD: `ec057c52de4c99f59aa31a96dbd790e1fa8c6a7c`

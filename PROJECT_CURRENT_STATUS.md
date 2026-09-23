@@ -1,6 +1,12 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-22 22:49（v92 APK 已交付桌面，源码已推送，手机验收 NOT_RUN）。
+Branch: `codex/integration`。Updated: 2026-09-23（v92 后续公共 CPU 优化，用户要求先同步源码、不打包）。
+
+## 2026-09-23：密集近战公共 CPU 查询优化，贴图保持不动
+
+基于 v92 手机采集和固定 `3eb1cb8f` 基线完成本地对照，改动仅为公共 EnemyActor 近战查询顺序、poly_index 去重/提前返回、poly_geometry 重复接触判断。没有虫子/地图特判，适用于全部消费这些公共接口的地图、怪物和环境足迹查询。42 次真实正式地图本地采样：30 怪平均 CPU 下降约 18%～20%，尾部 P95 改善约 4%～6%；不是 Android FPS 验收。全部 67 发布地图 53,400 次查询差分 PASS，收尾 55 次执行/53 唯一场景 PASS、零引擎日志错误。
+
+18 种怪物的公共动画与资源共享检查 PASS，30 只热态动画 CPU 约 0.17 ms/帧；用户确认贴图先不动，未改贴图、锚点、streaming 或 MonsterVisual。人工地图、掉落、数值、技能/攻击节奏、UI/存档和版本配置保持。完整记录与原始对照见 `docs/repair_v93/CPU_CROWD_REPAIR.md`、`evidence/`，最终提交/远端交付见同目录 `DELIVERY.md`。本轮 APK BUILD / DEVICE TEST 均 NOT_RUN；目录名 repair_v93 不代表已发布 v93，等待用户后续调整后一并打包。
 
 ## 2026-09-22：v92 群怪性能、系统修复与掉落复核
 

@@ -1,0 +1,710 @@
+{
+  "status": "PASS",
+  "scope": "headless local CPU; device performance NOT_RUN",
+  "baseline_commit": "3eb1cb8f4a80ba24d43cb0f07102b1f79763576d",
+  "fixture_and_unrelated_source_parity": "PASS",
+  "comparability": "same layout, map total, engaged count, fields and physics ticks; live AI retains real-time retry clocks",
+  "rows": [
+    {
+      "case": "dark_30",
+      "layout_sha256": "961fe5bae26f6514a7125aaee68f3fd173f3b9b4ded3c1183400a2ca7fe49f68",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "enemy_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            8.4426125,
+            8.5226875,
+            8.491204166666666
+          ],
+          "candidate": [
+            6.843308333333334,
+            7.049570833333333,
+            6.783854166666667
+          ]
+        },
+        "median": {
+          "baseline": 8.491204166666666,
+          "candidate": 6.843308333333334
+        },
+        "change_percent": -19.407092339180387
+      },
+      "environment_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            1.3842875,
+            1.4130041666666666,
+            1.4184333333333334
+          ],
+          "candidate": [
+            0.7108,
+            0.731675,
+            0.7055333333333333
+          ]
+        },
+        "median": {
+          "baseline": 1.4130041666666666,
+          "candidate": 0.7108
+        },
+        "change_percent": -49.69583128146001
+      },
+      "physics_moves": {
+        "samples": {
+          "baseline": [
+            934,
+            922,
+            946
+          ],
+          "candidate": [
+            920,
+            926,
+            920
+          ]
+        },
+        "median": {
+          "baseline": 934,
+          "candidate": 920
+        },
+        "change_percent": -1.498929336188437
+      }
+    },
+    {
+      "case": "dark_30_light",
+      "layout_sha256": "961fe5bae26f6514a7125aaee68f3fd173f3b9b4ded3c1183400a2ca7fe49f68",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "physics_cpu_p50_ms": {
+        "samples": {
+          "baseline": [
+            6.497,
+            6.551,
+            7.159
+          ],
+          "candidate": [
+            5.071,
+            4.86,
+            4.899
+          ]
+        },
+        "median": {
+          "baseline": 6.551,
+          "candidate": 4.899
+        },
+        "change_percent": -25.21752404213098
+      },
+      "physics_cpu_p95_ms": {
+        "samples": {
+          "baseline": [
+            13.845,
+            16.126,
+            12.99
+          ],
+          "candidate": [
+            13.322,
+            11.613,
+            14.62
+          ]
+        },
+        "median": {
+          "baseline": 13.845,
+          "candidate": 13.322
+        },
+        "change_percent": -3.777537016973642
+      },
+      "physics_cpu_mean_ms": {
+        "samples": {
+          "baseline": [
+            7.938066666666667,
+            7.975466666666667,
+            7.942645833333334
+          ],
+          "candidate": [
+            6.47215,
+            6.39205,
+            6.4839125
+          ]
+        },
+        "median": {
+          "baseline": 7.942645833333334,
+          "candidate": 6.47215
+        },
+        "change_percent": -18.513929289935394
+      },
+      "attack_starts": {
+        "samples": {
+          "baseline": [
+            34,
+            34,
+            34
+          ],
+          "candidate": [
+            34,
+            34,
+            34
+          ]
+        },
+        "median": {
+          "baseline": 34,
+          "candidate": 34
+        },
+        "change_percent": 0.0
+      },
+      "attack_settlements": {
+        "samples": {
+          "baseline": [
+            34,
+            34,
+            34
+          ],
+          "candidate": [
+            34,
+            34,
+            34
+          ]
+        },
+        "median": {
+          "baseline": 34,
+          "candidate": 34
+        },
+        "change_percent": 0.0
+      }
+    },
+    {
+      "case": "terror_10",
+      "layout_sha256": "225d2b02f5b4bc123586db6380ae13e76b87fa5d713133400f595d0235d95e7c",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "enemy_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            1.8144583333333333,
+            1.8264666666666667,
+            1.7991541666666666
+          ],
+          "candidate": [
+            1.6223125,
+            1.8124208333333334,
+            1.6145666666666667
+          ]
+        },
+        "median": {
+          "baseline": 1.8144583333333333,
+          "candidate": 1.6223125
+        },
+        "change_percent": -10.58970767217029
+      },
+      "environment_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            0.14905,
+            0.14861666666666667,
+            0.14797916666666666
+          ],
+          "candidate": [
+            0.07458333333333333,
+            0.07995416666666667,
+            0.0746375
+          ]
+        },
+        "median": {
+          "baseline": 0.14861666666666667,
+          "candidate": 0.0746375
+        },
+        "change_percent": -49.77851295278681
+      },
+      "physics_moves": {
+        "samples": {
+          "baseline": [
+            106,
+            96,
+            103
+          ],
+          "candidate": [
+            106,
+            106,
+            106
+          ]
+        },
+        "median": {
+          "baseline": 103,
+          "candidate": 106
+        },
+        "change_percent": 2.9126213592232997
+      }
+    },
+    {
+      "case": "terror_20",
+      "layout_sha256": "54fd5ba064b96ad55e35899ab6aca6760f5f513d22c27ce6b612b3f59a1ace4f",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "enemy_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            5.0394125,
+            5.0057875,
+            5.0348125
+          ],
+          "candidate": [
+            4.150370833333334,
+            4.141583333333333,
+            4.155879166666667
+          ]
+        },
+        "median": {
+          "baseline": 5.0348125,
+          "candidate": 4.150370833333334
+        },
+        "change_percent": -17.566526393319837
+      },
+      "environment_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            0.7566083333333333,
+            0.7532583333333334,
+            0.75255
+          ],
+          "candidate": [
+            0.3835875,
+            0.38540416666666666,
+            0.3843375
+          ]
+        },
+        "median": {
+          "baseline": 0.7532583333333334,
+          "candidate": 0.3843375
+        },
+        "change_percent": -48.97666803110929
+      },
+      "physics_moves": {
+        "samples": {
+          "baseline": [
+            571,
+            621,
+            613
+          ],
+          "candidate": [
+            620,
+            621,
+            618
+          ]
+        },
+        "median": {
+          "baseline": 613,
+          "candidate": 620
+        },
+        "change_percent": 1.1419249592169667
+      }
+    },
+    {
+      "case": "terror_30",
+      "layout_sha256": "38a19bd670f64bf20c128d973f7c6ec5bb5ebb5894b3b697c3cb6e48f621ccbb",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "enemy_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            8.641345833333334,
+            8.396333333333333,
+            8.891858333333333
+          ],
+          "candidate": [
+            6.844345833333334,
+            6.961879166666667,
+            6.889195833333333
+          ]
+        },
+        "median": {
+          "baseline": 8.641345833333334,
+          "candidate": 6.889195833333333
+        },
+        "change_percent": -20.276355486679122
+      },
+      "environment_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            1.4201416666666666,
+            1.3946,
+            1.4746416666666666
+          ],
+          "candidate": [
+            0.7131375,
+            0.7326375,
+            0.7111583333333333
+          ]
+        },
+        "median": {
+          "baseline": 1.4201416666666666,
+          "candidate": 0.7131375
+        },
+        "change_percent": -49.78405910208489
+      },
+      "physics_moves": {
+        "samples": {
+          "baseline": [
+            942,
+            939,
+            943
+          ],
+          "candidate": [
+            927,
+            939,
+            925
+          ]
+        },
+        "median": {
+          "baseline": 942,
+          "candidate": 927
+        },
+        "change_percent": -1.5923566878980888
+      }
+    },
+    {
+      "case": "terror_30_light",
+      "layout_sha256": "38a19bd670f64bf20c128d973f7c6ec5bb5ebb5894b3b697c3cb6e48f621ccbb",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "physics_cpu_p50_ms": {
+        "samples": {
+          "baseline": [
+            6.681,
+            7.285,
+            6.732
+          ],
+          "candidate": [
+            5.484,
+            4.979,
+            4.803
+          ]
+        },
+        "median": {
+          "baseline": 6.732,
+          "candidate": 4.979
+        },
+        "change_percent": -26.03980986333928
+      },
+      "physics_cpu_p95_ms": {
+        "samples": {
+          "baseline": [
+            15.25,
+            13.743,
+            16.399
+          ],
+          "candidate": [
+            13.764,
+            14.623,
+            14.332
+          ]
+        },
+        "median": {
+          "baseline": 15.25,
+          "candidate": 14.332
+        },
+        "change_percent": -6.019672131147535
+      },
+      "physics_cpu_mean_ms": {
+        "samples": {
+          "baseline": [
+            8.066841666666667,
+            8.232329166666666,
+            8.0500375
+          ],
+          "candidate": [
+            6.7536375,
+            6.503895833333333,
+            6.4179625
+          ]
+        },
+        "median": {
+          "baseline": 8.066841666666667,
+          "candidate": 6.503895833333333
+        },
+        "change_percent": -19.374941246109334
+      },
+      "attack_starts": {
+        "samples": {
+          "baseline": [
+            34,
+            34,
+            34
+          ],
+          "candidate": [
+            34,
+            34,
+            34
+          ]
+        },
+        "median": {
+          "baseline": 34,
+          "candidate": 34
+        },
+        "change_percent": 0.0
+      },
+      "attack_settlements": {
+        "samples": {
+          "baseline": [
+            34,
+            34,
+            34
+          ],
+          "candidate": [
+            34,
+            34,
+            34
+          ]
+        },
+        "median": {
+          "baseline": 34,
+          "candidate": 34
+        },
+        "change_percent": 0.0
+      }
+    },
+    {
+      "case": "terror_30_nofire",
+      "layout_sha256": "38a19bd670f64bf20c128d973f7c6ec5bb5ebb5894b3b697c3cb6e48f621ccbb",
+      "runs": {
+        "baseline": 3,
+        "candidate": 3
+      },
+      "enemy_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            8.333258333333333,
+            8.407933333333334,
+            8.382316666666666
+          ],
+          "candidate": [
+            6.909370833333333,
+            6.767258333333333,
+            6.7952916666666665
+          ]
+        },
+        "median": {
+          "baseline": 8.382316666666666,
+          "candidate": 6.7952916666666665
+        },
+        "change_percent": -18.93301175689298
+      },
+      "environment_cpu_ms_per_tick": {
+        "samples": {
+          "baseline": [
+            1.3777208333333333,
+            1.3972041666666666,
+            1.3931666666666667
+          ],
+          "candidate": [
+            0.7190375,
+            0.7056833333333333,
+            0.7177416666666666
+          ]
+        },
+        "median": {
+          "baseline": 1.3931666666666667,
+          "candidate": 0.7177416666666666
+        },
+        "change_percent": -48.481277664792444
+      },
+      "physics_moves": {
+        "samples": {
+          "baseline": [
+            933,
+            946,
+            944
+          ],
+          "candidate": [
+            918,
+            889,
+            932
+          ]
+        },
+        "median": {
+          "baseline": 944,
+          "candidate": 918
+        },
+        "change_percent": -2.754237288135597
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "path": "world_v93_baseline_dark_30_1.json",
+      "sha256": "d218002dd3f9bd8436370305aecbe5bcfd65c5375cd6814f59e24c16bd6e293d"
+    },
+    {
+      "path": "world_v93_baseline_dark_30_2.json",
+      "sha256": "7b1a39ec8c0e8524a99caf2aa4c4809825848afc868d64276dec2614cbede7bb"
+    },
+    {
+      "path": "world_v93_baseline_dark_30_3.json",
+      "sha256": "b4e341e33708d6453d7adec973bac0332798c9d7ffcec7f19739920e01ba51a2"
+    },
+    {
+      "path": "world_v93_baseline_dark_30_light_1.json",
+      "sha256": "a64390f74d294e0d97068208cbe033002b9b40d43a2116e22ba24049bfbc3d72"
+    },
+    {
+      "path": "world_v93_baseline_dark_30_light_2.json",
+      "sha256": "9ad89935920e442c45f5d55c6b4d00f12c7d58b149a0ba92283dcbe4dcc80b81"
+    },
+    {
+      "path": "world_v93_baseline_dark_30_light_3.json",
+      "sha256": "b5feab1ebc7296c0873fa3f31760e38f494b083a3a7d72d2219d408495b972bc"
+    },
+    {
+      "path": "world_v93_baseline_terror_10_1.json",
+      "sha256": "22bcb66d010bd15fd2a57c6f9479f2e290f0cd833c110903a29b570e9ce70649"
+    },
+    {
+      "path": "world_v93_baseline_terror_10_2.json",
+      "sha256": "5c1c7bb0b15cd2c9b231fd6eb2496b475d2a76cdfda6bd2011be403b3596b061"
+    },
+    {
+      "path": "world_v93_baseline_terror_10_3.json",
+      "sha256": "200653283073f0223403199c5f4fb33e70e7833854008b7335193bd8efa8fb9c"
+    },
+    {
+      "path": "world_v93_baseline_terror_20_1.json",
+      "sha256": "071f9592c40839022385505d008ad7f5aa90493ab9ddb0a131b1cd98ba175299"
+    },
+    {
+      "path": "world_v93_baseline_terror_20_2.json",
+      "sha256": "3a78427010c8038686fb8f457013f1ab9ca0d36032aee0108d5de3582b7648b1"
+    },
+    {
+      "path": "world_v93_baseline_terror_20_3.json",
+      "sha256": "97c4790be9b5fbeebb61abd6e9fbf001461f3e107a2e84b48b9b4a780d926d1d"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_1.json",
+      "sha256": "9747c9c1765d938db0d7bf8e9c570d97f13cb6a7ea8ed1172ad7f5a4c125aac8"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_2.json",
+      "sha256": "c4f0a017a88d19ef88b0468721640dbc67596fb2994e8c675dbb6c92bf22931a"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_3.json",
+      "sha256": "bc302eeed7b6bcdad07ff80266e20901994c344b800bffd2ea595a6c8cb21948"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_light_1.json",
+      "sha256": "ef604bccd6f16dc66c43c242edccbe2db9552af288fe3a3471b42829340b6d4d"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_light_2.json",
+      "sha256": "3292cbd3e29bba431a6580f2a519f5341b905a56743281c4bc5975ec44240020"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_light_3.json",
+      "sha256": "ec0eac53fcc53b31ba99e5288e2493f36b320b3f7af931bc80dba0a5b536aef3"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_nofire_1.json",
+      "sha256": "81b89505f58c5219fbc3369ac96fa1a103294a9b82c884f455507bdfd61f60b1"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_nofire_2.json",
+      "sha256": "29a1cabe28ee06d145289fe466ee80c825f470f37d48d94ce2e65cc96d9b6db2"
+    },
+    {
+      "path": "world_v93_baseline_terror_30_nofire_3.json",
+      "sha256": "293988629a0fd6507fb09370465daf2dd84f85274661c5d72a4a4de7691b8b8d"
+    },
+    {
+      "path": "world_v93_candidate_dark_30_1.json",
+      "sha256": "3f1239518e00f555caaf992d9c70157bceccbfaaf2abceb103f73283460a0b6d"
+    },
+    {
+      "path": "world_v93_candidate_dark_30_2.json",
+      "sha256": "81052acc4187fe7e0fa9bc5862bd5a33cb023482a416dcf3cfb59acd2a11cd71"
+    },
+    {
+      "path": "world_v93_candidate_dark_30_3.json",
+      "sha256": "427323b94ef7946e8bbe26f5aad278cb6df6e7f111ae4da0e9b0277c85e5f348"
+    },
+    {
+      "path": "world_v93_candidate_dark_30_light_1.json",
+      "sha256": "e71384db7052f1981d6117cc98c4b5ccc97bcab25f2184b9bfe663603f6f9ac4"
+    },
+    {
+      "path": "world_v93_candidate_dark_30_light_2.json",
+      "sha256": "5c752d8ab8628429b72572f126400b27697d17193e7db04b81aea0706f02200d"
+    },
+    {
+      "path": "world_v93_candidate_dark_30_light_3.json",
+      "sha256": "efde1432d579b0ffc1ac79cc9ca071e9b87b603c9a83e7999f8eebf3e1167838"
+    },
+    {
+      "path": "world_v93_candidate_terror_10_1.json",
+      "sha256": "7b85ad52ceaba3e03a101fdd0f36cb96a228030a827d56ac18b8b5587f5b3138"
+    },
+    {
+      "path": "world_v93_candidate_terror_10_2.json",
+      "sha256": "8d85711f1e828e8ed1e009abd2a06897f19c60212f2251696f515ce56600b456"
+    },
+    {
+      "path": "world_v93_candidate_terror_10_3.json",
+      "sha256": "9b974fe0159622418fe08ee54c80b32b7533dc5665c2b6d1af19dacd0718d245"
+    },
+    {
+      "path": "world_v93_candidate_terror_20_1.json",
+      "sha256": "54f085c4e2bbada6ba3399ae996617a96b11de40f88a19c8bb6c962dbddf9c78"
+    },
+    {
+      "path": "world_v93_candidate_terror_20_2.json",
+      "sha256": "b39a930ce9b12cbb371338961caae5af55db0e0ae53feba82d137816db2d5028"
+    },
+    {
+      "path": "world_v93_candidate_terror_20_3.json",
+      "sha256": "4810dc48ff0e5ab7ca914c78e9cbf13d4f16afe0bdca81647983f240ff457f35"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_1.json",
+      "sha256": "73aad211ad00764edf88222325e734931540122127bc31c1221eed8d624a248b"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_2.json",
+      "sha256": "97360ec389fe8d24d02031fa99e0cd9254d9ef8ade8e58d4045b687356fb47bd"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_3.json",
+      "sha256": "852cf06a757ebca03cfe01f47f10bf8eaf12f949fc463a1a0d7985a06ee44459"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_light_1.json",
+      "sha256": "69c6b2f7a50ce4097b318172c0f366a1af0716ac687fd33b52240c9bfeacf0cb"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_light_2.json",
+      "sha256": "dd5ae0b8db7c0557670f2853d5b411dac63b9df14ebd304a97358569ca50b8c1"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_light_3.json",
+      "sha256": "da381a5f340771f04fab35c45486bca3814224ee3b47d555cb8af14934e3ca8a"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_nofire_1.json",
+      "sha256": "b7813c45cda1d8cdd0d30f39e4ac5baa6310995bb91cc7f21446628a4321e4ed"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_nofire_2.json",
+      "sha256": "78bd2b499d36ec29d791648c80dd6b6b6c5fe52ee72f799dba525ec6d7fa6b2c"
+    },
+    {
+      "path": "world_v93_candidate_terror_30_nofire_3.json",
+      "sha256": "abcaf52f91bac0a6a0410fa8af447ec7515c1734d2a0505ed9f7d4bb1c0e7356"
+    }
+  ]
+}
