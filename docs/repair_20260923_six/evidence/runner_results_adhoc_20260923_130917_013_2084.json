@@ -1,0 +1,41 @@
+{
+  "total": 2,
+  "git_head": "b4438d485a06614352552fbb2d15099425b4ef96",
+  "failed": 0,
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "passed": 2,
+  "generated_at": "2026-09-23T13:09:17.0134499+08:00",
+  "results": [
+    {
+      "test_name": "monster_target_ring_pixels_test",
+      "test_path": "tests/monster_target_ring_pixels_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_target_ring_calibrator_test",
+      "test_path": "tests/monster_target_ring_calibrator_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

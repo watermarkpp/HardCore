@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "approved_runtime_source": "8b32fb15780541cb39925ee693af3474ca4c43dc",
+  "scope_test_source": "b4438d485a06614352552fbb2d15099425b4ef96",
+  "profiles_sha256": "2933dbd441adc7148594ffb5e461c8ce2f6a77532113b53c64e269ed5a453c98",
+  "crawling_ids": [
+    18,
+    45,
+    46,
+    60,
+    62,
+    87,
+    92,
+    94,
+    103,
+    104,
+    105,
+    107,
+    110,
+    112,
+    116,
+    118,
+    120,
+    121,
+    122,
+    123,
+    138,
+    140,
+    141,
+    142,
+    170,
+    172,
+    174,
+    176,
+    178,
+    183,
+    185,
+    191,
+    192
+  ],
+  "direction_offset_ids": [
+    92,
+    94,
+    110,
+    118,
+    120,
+    121,
+    122,
+    123,
+    170
+  ],
+  "unchanged_non_crawlers": 123,
+  "ground_files": [
+    {
+      "path": "assets/data/runtime/monster_ground_alignment_manual_v1.json",
+      "sha256": "3fcdd1e6899181e44b2ee2f16c12a3c00109f1a33a00e56f174f1d406abb91b5",
+      "unchanged_from": "1ea58045"
+    },
+    {
+      "path": "assets/data/runtime/monster_ground_contact_calibrations.json",
+      "sha256": "c784bad60afc82b2fa5e4bd5af466f4a38adfccbb35ea0d3b733ecb6a717407c",
+      "unchanged_from": "1ea58045"
+    },
+    {
+      "path": "assets/data/runtime/monster_ground_contacts.json",
+      "sha256": "bc06134052121d7e62a4c146d536ae8a1c250585c52e43607f023b7baea319bb",
+      "unchanged_from": "1ea58045"
+    }
+  ]
+}

@@ -5,6 +5,8 @@ Branch: `codex/integration`
 Generated: 2026-08-08
 Purpose: subsystem/path navigation for model handoff. Read it after current status and historical decisions.
 
+2026-09-23 六项修复导航：`docs/repair_20260923_six/REQUEST_LEDGER.md` 对照今日12项要求，`WORKLOG.md` 记录生产路径与失败分类，`VERIFICATION.md` 记录固定源码复验、人工黄圈确认及未执行设备/打包边界。
+
 2026-09-23 怪物召唤与单图更新：`docs/repair_20260923_summons/VERIFICATION.md` 记录5只非Boss硬限、祖玛4～7/15、空掉落出生解耦、祖玛教主之家单图发布、冻结对照及已知基线失败。
 
 2026-09-23 公共 CPU 优化导航：`docs/repair_v93/CPU_CROWD_REPAIR.md` 记录查询链根因、42 次基线对照、67 图 53,400 次差分和 18 种怪物动画/贴图审查；`DELIVERY.md` 记录合入主树与远端身份。本轮仅交付源码，用户要求暂不打包；贴图、人工数据和版本配置未动。

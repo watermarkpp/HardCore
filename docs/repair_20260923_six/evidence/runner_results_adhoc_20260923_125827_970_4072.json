@@ -1,0 +1,56 @@
+{
+  "engine_log_errors": 1,
+  "suite": "adhoc",
+  "git_head": "1a8f0b24935076eade7ce200a8f2535ca3725261",
+  "passed": 2,
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "monster_target_ring_pixels_test",
+      "test_path": "tests/monster_target_ring_pixels_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ui_visual_acceptance_lab_test",
+      "test_path": "tests/ui_visual_acceptance_lab_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "monster_ground_contact_runtime_test",
+      "test_path": "tests/monster_ground_contact_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-23T12:58:27.9710210+08:00",
+  "total": 3
+}
