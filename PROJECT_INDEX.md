@@ -1,5 +1,7 @@
 # HardCore Project Index
 
+2026-09-23 v93 冻结导航：`docs/milestones/v93/README.md` 是 APK 源码标签、包身份、版本材料保留、工作树和远端分支清理的当前记录；`remote_cleanup.json` 保存清理前后远端分支精确 SHA。
+
 Generated from HEAD: `7e3d5fde42e5aeedf422a5eb1d54905e12649ec0`
 Branch: `codex/integration`
 Generated: 2026-08-08

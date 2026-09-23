@@ -1,6 +1,10 @@
 # HardCore Current Status
 
-Branch: `codex/integration`。Updated: 2026-09-23（v92 后续公共 CPU 优化，用户要求先同步源码、不打包）。
+## 2026-09-23：v93 APK 冻结里程碑
+
+已发布的 `milestone-hardcore-1.0-v93` 精确固定 APK 源码 `672811a135ddf0f4d8048a6a0eb11e92dee48dc4`；桌面 APK 已核验 versionCode 93、同包名与签名，DEVICE TEST: NOT_RUN。仅清理了两棵已合并的重复临时工作树（独立内容逐文件归档）和 54 个已并入里程碑的远端冗余分支；旧版基线、构建树、版本材料与独有提交均保留。完整身份、保留清单、清理证据和已知测试边界见 `docs/milestones/v93/README.md`。
+
+Branch: `codex/integration`。下方各章节保留当时的施工与测试快照；当前 v93 冻结身份以上方里程碑章节为准。
 
 ## 2026-09-23：六项UI/近战修复与用户确认的爬行黄圈
 
