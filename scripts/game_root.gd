@@ -495,6 +495,10 @@ func _invalidate_player_safe_zone_cache() -> void:
 
 
 func _refresh_player_safe_zone_cache(force := false) -> bool:
+	# A formally compiled empty map has no safety geometry. Dungeon movement,
+	# attacks and casting must not project points or rebuild a player cache.
+	if bool(_safe_zone_context.get("valid", false)) and _active_safe_zones.is_empty():
+		return false
 	if not is_instance_valid(player):
 		_invalidate_player_safe_zone_cache()
 		return false
@@ -6792,6 +6796,10 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if definition.is_empty():
 		return &"rejected"
+	if _hostile_skill_blocked_by_safe_zone(definition):
+		if show_failure:
+			hud.show_error_message("安全区内无法对敌人释放技能")
+		return &"rejected"
 	if not SkillVisibilityPolicyScript.is_skill_castable(stable_skill_id):
 		if show_failure:
 			hud.show_error_message("该技能已隐藏，无法使用")
@@ -6907,6 +6915,13 @@ func _definition_requires_hostile_target(definition: Dictionary) -> bool:
 		and not mode.contains("surrounding")
 		and not mode.contains("ground")
 		and not mode.begins_with("self")
+	)
+
+
+func _hostile_skill_blocked_by_safe_zone(definition: Dictionary) -> bool:
+	return (
+		_definition_requires_hostile_target(definition)
+		and _player_inside_active_safe_zone()
 	)
 
 
@@ -7741,7 +7756,11 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
-		hud.show_error_message("技能释放失败", 1.5)
+		hud.show_error_message(
+			"安全区内无法对敌人释放技能"
+			if str(execution.get("reason", "")) == "caster_in_safe_zone"
+			else "技能释放失败", 1.5
+		)
 		return
 	if hit_any:
 		_play_skill_audio_phase(stable_skill_id, "effect")
@@ -7769,6 +7788,11 @@ func _execute_canonical_skill(
 	if SkillRuntimeClassificationScript.profile(stable_skill_id).is_empty():
 		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "unknown_runtime_classification"}
+	# Recheck the live caster at release: entering a safe zone during windup
+	# must not bypass the pre-commit input gate.
+	if _hostile_skill_blocked_by_safe_zone(definition):
+		_skill_cast_target = null
+		return {"accepted": false, "effect_success": false, "reason": "caster_in_safe_zone"}
 	var rank := PlayerState.effective_skill_level(skill_name)
 	var release_context := (extra_target_context as Dictionary).duplicate(true)
 	var support_center_ground_gu := _canonical_screen_px_to_ground_gu(
@@ -14137,6 +14161,10 @@ func _combat_target_world_clear(victim: EnemyActor, caster_origin: Vector2, allo
 	return victim._world_attack_path_is_clear(a, b, caster_origin, victim.global_position, allow_cache)
 
 func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
+	if _hostile_skill_blocked_by_safe_zone(SkillDataLoaderScript.skill(stable_skill_id)):
+		if hud != null:
+			hud.show_error_message("安全区内无法对敌人释放技能")
+		return false
 	if stable_skill_id != "wizard.lightning":
 		return true
 	var object: Object = instance_from_id(target_id) if target_id > 0 else null

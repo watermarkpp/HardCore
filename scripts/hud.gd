@@ -447,6 +447,11 @@ func _apply_center_alignment_delta(delta: float) -> void:
 		control.offset_right = (
 			float(control.get_meta("center_exempt_base_offset_right")) + delta
 		)
+	# The buff strip follows the actual first slot after the chassis receives
+	# its viewport-centre correction, including safe-area/size changes.
+	var safe_root := get_node_or_null("MobileSafeRoot") as Control
+	if safe_root != null:
+		_anchor_taoist_buff_strip_above_item_quick_slots(safe_root)
 
 
 func _center_alignment_delta() -> float:
@@ -547,6 +552,7 @@ func _build_loot_feedback(root: Control) -> void:
 	loot_feedback_layer = LootFeedbackLayerScript.new()
 	loot_feedback_layer.name = "LootFeedbackLayer"
 	root.add_child(loot_feedback_layer)
+	_register_center_exempt(loot_feedback_layer)
 
 
 func _build_loading_transition() -> void:

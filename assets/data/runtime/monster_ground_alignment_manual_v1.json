@@ -4,7 +4,7 @@
   "sourceContract": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
   "identityKey": "monsterId",
   "sourceDraftRootRole": "User-owned local calibration output; imported as immutable evidence.",
-  "sourceAggregateSha256": "d572ff185baa4b60ac9d7821e582e5e70b4096a9079e76aa6ed1c32f66902fd9",
+  "sourceAggregateSha256": "641a91b7a48298c14cb9f8a90191c0e25d501685fbceb363d7034fb1ea28970d",
   "summary": {
     "catalogMonsterCount": 214,
     "userDraftCount": 212,
@@ -8484,8 +8484,8 @@
       "monsterName": "黑锷蜘蛛",
       "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
       "sourceDraftFile": "monster_170.json",
-      "sourceDraftSha256": "48d1ec87a9250d02eabff0e227b2d3de0e474cbe56313507899fe6f756454dc5",
-      "savedAt": "2026-07-30T13:03:00",
+      "sourceDraftSha256": "f07e34eab61812ab0c0aec07152954f296ebad210bb82f05d5e5d18f04963fe6",
+      "savedAt": "2026-09-23T10:49:34",
       "selection": {
         "action": "idle",
         "direction": 0,
@@ -8518,25 +8518,25 @@
       "formalSnapshot": {
         "projectionStrategy": "grounded",
         "ringCenterOffset": [
-          0.0,
-          0.0
+          -7.0,
+          -17.5
         ],
         "ringEllipseRadii": [
           22.0,
           7.0
         ],
         "visualFootOffset": [
-          0.0,
-          0.0
+          -7.0,
+          -17.5
         ]
       },
       "sourceEvidence": {
         "animationCatalogPath": "res://assets/data/runtime/monster_animation_catalog.json",
-        "animationCatalogSha256": "562de4a3103fc3c9c63b19e5c5fc8dc61d6e2e95e9dd482f1b5029dbbab098b8",
+        "animationCatalogSha256": "237ff7655b17a31c5daf1119c114ae5663960198aefaad3a0945a9d2c8986517",
         "formalCalibrationPath": "res://assets/data/runtime/monster_ground_contact_calibrations.json",
-        "formalCalibrationSha256": "8c6bd242f05029ae82a5c12291891028b242ba53dce0b106ccf2699176809ad6",
+        "formalCalibrationSha256": "f5eebe8d9d4048ccc60317eac77ffc578a5db6010acf2b5ad6cf520fe97e22a9",
         "formalContactPath": "res://assets/data/runtime/monster_ground_contacts.json",
-        "formalContactSha256": "0f22365cd495d25e0c2e60c4632d00eb7940f4cb3f86651721f23ba9afb2adec"
+        "formalContactSha256": "2a19af13e61e12f5ed1a64e9b8dc6e76c224beb8bf9828b3c1caf7bdba7ed230"
       }
     },
     "171": {

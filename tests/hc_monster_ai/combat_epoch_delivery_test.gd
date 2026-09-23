@@ -75,7 +75,7 @@ func _run() -> void:
 	_test_combat_enabled_default()
 	await _test_combat_disabled_gate()
 	_test_start_gate()
-	_test_generic_melee_epoch()
+	_test_melee_epoch()
 	_test_physical_projectile_epoch()
 	_test_target_magic_epoch()
 	_test_area_magic_epoch()
@@ -239,16 +239,16 @@ func _test_start_gate() -> void:
 	_free_enemy(actor)
 
 
-func _test_generic_melee_epoch() -> void:
-	var actor := make_enemy(Vector2(22.5, 20.0))
+func _test_melee_epoch() -> void:
+	var actor := make_enemy(Vector2(21.49, 20.0))
 	actor.attack_range_gu = 3.0
 	actor._attack_hit_delay = 0.05
 	actor._attack_timer = 0.0
 	actor._physics_process_internal(1.0 / 60.0)
 	check(
-		str(actor._pending_attack_release_record.get("kind", "")) == "generic_melee",
+		str(actor._pending_attack_release_record.get("kind", "")) == "hc_standard_melee",
 		"E01-freeze",
-		"generic melee freezes a typed release record",
+		"melee freezes a typed release record inside 1.5 GU",
 	)
 	var hp_before := player.current_hp
 	_transition_after_release("epoch-generic")

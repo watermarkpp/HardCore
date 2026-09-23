@@ -1,0 +1,59 @@
+extends Node
+
+var failures: Array[String] = []
+
+func _ready() -> void:
+	_run.call_deferred()
+
+func _check(value: bool, message: String) -> void:
+	if not value:
+		failures.append(message)
+
+func _run() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	MonsterVisual.set_synchronous_loading_for_tests(true)
+	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/monster_target_ring_profiles.json"))
+	_check(data.get("contract") == "monster.target_ring.posture_scale.v1", "formal ring posture contract")
+	_check(is_equal_approx(data.crawling_scale, 1.3) and is_equal_approx(data.default_scale, 1.0), "user-approved 30 percent radius only")
+	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/runtime/monster_animation_catalog.json"))
+	var verified := 0
+	var enlarged := 0
+	var seen := {}
+	for row: Dictionary in catalog.monsters:
+		var key := str(int(row.monster_id))
+		seen[key] = true
+		var enemy := EnemyActor.new()
+		enemy.setup(GameData.get_monster_by_id(int(key)), null, false)
+		add_child(enemy)
+		enemy.set_physics_process(false)
+		enemy.set_targeted(true)
+		var physics_radius := enemy.collision_radius_px
+		var base := enemy.ground_footprint_indicator_radii()
+		var scale := 1.3 if data.crawling_monsters.has(key) else 1.0
+		var expected := base * scale
+		if scale > 1.0:
+			enlarged += 1
+		var foot := enemy.visual.target_ring_local_position()
+		var anchor := enemy.visual.sprite.position
+		for direction in range(8):
+			enemy.facing = Vector2.from_angle(direction * TAU / 8.0)
+			enemy.visual._process(0.0)
+			var actual_row := enemy.visual.current_direction
+			var offset := Vector2(0, 10) if key == "170" and actual_row in [2, 6] else Vector2.ZERO
+			_check(enemy.ground_indicator_radii().is_equal_approx(expected), "fixed posture radius %s/%d" % [key, actual_row])
+			_check(enemy.visual.selection_ring_local_position().is_equal_approx(foot + offset), "only black spider E/W offset %s/%d" % [key, actual_row])
+			_check(enemy.visual.target_ring_local_position().is_equal_approx(foot) and enemy.visual.sprite.position.is_equal_approx(anchor), "calibrated foot/art unchanged %s/%d" % [key, actual_row])
+			_check(is_equal_approx(enemy.collision_radius_px, physics_radius) and enemy.ground_footprint_indicator_radii().is_equal_approx(base), "physics and shadow footprint unchanged %s/%d" % [key, actual_row])
+		enemy.queue_free()
+		verified += 1
+		await get_tree().process_frame
+	for key: String in data.crawling_monsters:
+		_check(seen.has(key), "reviewed crawling ID exists: " + key)
+	_check(data.direction_offsets_px.keys() == ["170"], "only requested directional exception")
+	_check(not data.crawling_monsters.has("64") and data.crawling_monsters.has("170") and data.crawling_monsters.has("172"), "standing Woma unchanged; broad spiders enlarged")
+	_check(verified == GameData.monsters.size() and enlarged == 33, "all 156 monsters and 33 reviewed crawling IDs covered")
+	for failure in failures.slice(0, 12):
+		push_error(failure)
+	print("MONSTER_TARGET_RING_PIXELS_%s monsters=%d enlarged=%d failures=%d" % ["PASS" if failures.is_empty() else "FAIL", verified, enlarged, failures.size()])
+	get_tree().quit(0 if failures.is_empty() else 1)

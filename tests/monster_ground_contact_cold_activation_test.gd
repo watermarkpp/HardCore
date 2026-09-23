@@ -35,10 +35,18 @@ func _run() -> void:
 		var monster_id := int(row.monster_id)
 		MonsterVisual.reset_client_resource_cache()
 		MonsterVisual.set_synchronous_loading_for_tests(false)
+		# The real world starts its generation/prefetch before registering actors.
+		var prefetch = _coordinator.begin_map_prefetch([monster_id])
 		var enemy := EnemyActor.new()
 		enemy.setup(GameData.get_monster_by_id(monster_id), player, false)
 		add_child(enemy)
 		enemy.set_physics_process(false)
+		# Burrowing bosses are intentionally hidden until a nearby target wakes them.
+		# Exercise the production emergence before checking visible geometry.
+		if enemy._burrowed:
+			enemy.target = player
+			enemy._attack_timer = 999.0
+			enemy._physics_process_internal(0.0)
 		await get_tree().process_frame
 		var fallback_contact := enemy.ground_indicator_center()
 		var fallback_radii := enemy.ground_indicator_radii()
@@ -54,7 +62,6 @@ func _run() -> void:
 		assert(pending_shadow.owner == "none")
 		assert(not bool(pending_shadow.draw_contact_core))
 
-		var prefetch = _coordinator.begin_map_prefetch([monster_id])
 		var deadline_msec := Time.get_ticks_msec() + ASYNC_DEADLINE_MSEC
 		while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:
 			prefetch = _coordinator.poll_once(Engine.get_process_frames())
@@ -108,5 +115,5 @@ func _run() -> void:
 
 	MonsterVisual.reset_client_resource_cache()
 	assert(verified_count == 156)
-	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 214 cold profiles preserve canonical targeting origins and footprint-sized rings")
+	print("MONSTER_GROUND_CONTACT_COLD_ACTIVATION_PASS 156 cold profiles preserve canonical targeting origins and posture-sized rings")
 	get_tree().quit(0)

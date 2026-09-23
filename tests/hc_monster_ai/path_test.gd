@@ -399,14 +399,14 @@ func _run() -> void:
 		actor.target=goal_target
 		actor.combat_radius_gu=.35
 		actor.configure_terrain_navigation_context(exact_goal_context)
-	var goal_cache_key_a:Array=cache_a._hc_goal_cache_key(Vector2(8.5,8.5),true)
-	check(goal_cache_key_a==cache_b._hc_goal_cache_key(Vector2(8.5,8.5),true),"A-goal-cache-exact-share","Exact immutable context, scope, anchor and footprint share goal authority")
-	check(goal_cache_key_a!=cache_b._hc_goal_cache_key(Vector2(9.5,8.5),true),"A-goal-cache-anchor","Changed last-known anchor invalidates shared goals")
+	var goal_cache_key_a:Array=cache_a._hc_goal_cache_key(Vector2(8.5,8.5))
+	check(goal_cache_key_a==cache_b._hc_goal_cache_key(Vector2(8.5,8.5)),"A-goal-cache-exact-share","Exact immutable context, scope, anchor and footprint share goal authority")
+	check(goal_cache_key_a!=cache_b._hc_goal_cache_key(Vector2(9.5,8.5)),"A-goal-cache-anchor","Changed last-known anchor invalidates shared goals")
 	cache_b.combat_radius_gu=.76
-	check(goal_cache_key_a!=cache_b._hc_goal_cache_key(Vector2(8.5,8.5),true),"A-goal-cache-radius","Changed monster footprint invalidates shared goals")
+	check(goal_cache_key_a!=cache_b._hc_goal_cache_key(Vector2(8.5,8.5)),"A-goal-cache-radius","Changed monster footprint invalidates shared goals")
 	cache_b.combat_radius_gu=.35
 	provider.revision=1
-	check(goal_cache_key_a!=cache_b._hc_goal_cache_key(Vector2(8.5,8.5),true),"A-goal-cache-revision","Changed WORLD revision invalidates shared goals")
+	check(goal_cache_key_a!=cache_b._hc_goal_cache_key(Vector2(8.5,8.5)),"A-goal-cache-revision","Changed WORLD revision invalidates shared goals")
 	provider.revision=0
 	cache_a.set_meta("safe_zone_context",{"valid":true,"revision":1,"zones":[{"id":"a"}]})
 	cache_b.set_meta("safe_zone_context",{"valid":true,"revision":1,"zones":[{"id":"b"}]})

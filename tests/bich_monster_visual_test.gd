@@ -47,10 +47,9 @@ func _run() -> void:
 		assert(enemy.ground_indicator_center().is_zero_approx(), "%s 地面锁定光圈未固定在怪物物理原点" % monster_name)
 		assert(
 			enemy.ground_indicator_radii().is_equal_approx(
-				WorldSpatialRules.actor_footprint_radii_px(enemy.collision_radius_px)
-				* EnemyActor.TARGET_RING_FOOTPRINT_SCALE
+				enemy.ground_footprint_indicator_radii()
 			),
-			"%s 锁定光圈未按怪物物理体积缩放" % monster_name,
+			"%s 站立怪锁定光圈不应扩大" % monster_name,
 		)
 		assert(sprite.texture.get_size() == Vector2(frame_size.x * 4, frame_size.y * 8), "%s 待机图集尺寸错误" % monster_name)
 		enemy.facing = Vector2.RIGHT

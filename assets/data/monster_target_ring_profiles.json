@@ -1,0 +1,119 @@
+{
+  "contract": "monster.target_ring.posture_scale.v1",
+  "default_scale": 1.0,
+  "crawling_scale": 1.3,
+  "review_note": "User approved 2026-09-23: crawling bodies only; standing/walking bodies keep original size. Exact IDs reviewed against idle/walk art. Feet, physics and shadows are unchanged.",
+  "crawling_monsters": {
+    "18": {
+      "name": "毒蜘蛛"
+    },
+    "45": {
+      "name": "蝎子"
+    },
+    "46": {
+      "name": "洞蛆"
+    },
+    "60": {
+      "name": "粪虫"
+    },
+    "62": {
+      "name": "暗黑战士"
+    },
+    "87": {
+      "name": "僵尸5"
+    },
+    "92": {
+      "name": "红蛇"
+    },
+    "94": {
+      "name": "虎蛇"
+    },
+    "103": {
+      "name": "威思而小虫"
+    },
+    "104": {
+      "name": "沙虫"
+    },
+    "105": {
+      "name": "多角虫"
+    },
+    "107": {
+      "name": "巨型多角虫"
+    },
+    "110": {
+      "name": "蜈蚣"
+    },
+    "112": {
+      "name": "黑色恶蛆"
+    },
+    "116": {
+      "name": "巨型蠕虫"
+    },
+    "118": {
+      "name": "钳虫"
+    },
+    "120": {
+      "name": "邪恶钳虫"
+    },
+    "121": {
+      "name": "邪恶钳虫1"
+    },
+    "122": {
+      "name": "邪恶钳虫2"
+    },
+    "123": {
+      "name": "邪恶钳虫9"
+    },
+    "138": {
+      "name": "蝎蛇"
+    },
+    "140": {
+      "name": "蝎蛇3"
+    },
+    "141": {
+      "name": "邪恶毒蛇"
+    },
+    "142": {
+      "name": "邪恶毒蛇1"
+    },
+    "170": {
+      "name": "黑锷蜘蛛"
+    },
+    "172": {
+      "name": "钢牙蜘蛛"
+    },
+    "174": {
+      "name": "暴牙蜘蛛"
+    },
+    "176": {
+      "name": "天狼蜘蛛"
+    },
+    "178": {
+      "name": "花吻蜘蛛"
+    },
+    "183": {
+      "name": "爆裂蜘蛛"
+    },
+    "185": {
+      "name": "剧毒蜘蛛"
+    },
+    "191": {
+      "name": "虹魔蝎卫"
+    },
+    "192": {
+      "name": "虹魔蝎卫0"
+    }
+  },
+  "direction_offsets_px": {
+    "170": {
+      "2": [
+        0,
+        10
+      ],
+      "6": [
+        0,
+        10
+      ]
+    }
+  }
+}

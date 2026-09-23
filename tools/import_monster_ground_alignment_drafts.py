@@ -173,17 +173,23 @@ def main() -> None:
     catalog_rows = {
         int(row["monster_id"]): row for row in catalog.get("monsters", [])
     }
-    if len(catalog_rows) != 214:
-        raise ValueError("formal animation catalog must contain 214 monsterIds")
+    if not catalog_rows:
+        raise ValueError("formal animation catalog is empty")
+    targeted_update = bool(args.monster_id)
 
     old_calibrations = load_json(CALIBRATION_PATH)
     old_entries = old_calibrations.get("entriesByMonsterId", {})
-    if not isinstance(old_entries, dict) or set(old_entries) != {
+    if not isinstance(old_entries, dict) or not set(old_entries).issuperset({
         str(monster_id) for monster_id in catalog_rows
-    }:
-        raise ValueError("existing calibration coverage is not exactly 214 IDs")
+    }):
+        raise ValueError("existing calibrations do not cover the active catalog")
 
-    source_files = sorted(draft_root.glob("monster_*.json"), key=lambda path: path.name)
+    # An exact-ID promotion must not depend on unrelated local drafts, including
+    # drafts of retired identities. Preserve their formal evidence verbatim.
+    source_files = (
+        [draft_root / f"monster_{value}.json" for value in sorted(set(args.monster_id))]
+        if targeted_update else sorted(draft_root.glob("monster_*.json"), key=lambda path: path.name)
+    )
     source_by_id: dict[int, Path] = {}
     for path in source_files:
         try:
@@ -197,8 +203,11 @@ def main() -> None:
     unknown_ids = set(source_by_id) - set(catalog_rows)
     if unknown_ids:
         raise ValueError(f"drafts contain unknown monsterIds: {sorted(unknown_ids)}")
-    preserved_ids = set(catalog_rows) - set(source_by_id)
-    if preserved_ids != EXPECTED_PRESERVED_AIRBORNE_IDS:
+    preserved_ids = (
+        EXPECTED_PRESERVED_AIRBORNE_IDS
+        if targeted_update else set(catalog_rows) - set(source_by_id)
+    )
+    if not targeted_update and preserved_ids != EXPECTED_PRESERVED_AIRBORNE_IDS:
         raise ValueError(
             "manual draft coverage changed; expected only airborne falcons "
             f"{sorted(EXPECTED_PRESERVED_AIRBORNE_IDS)} to be preserved, got "
@@ -221,12 +230,11 @@ def main() -> None:
         else {}
     )
     existing_manual_entries = existing_manual.get("entriesByMonsterId", {})
-    targeted_update = bool(args.monster_id)
     if targeted_update and (
         not isinstance(existing_manual_entries, dict)
-        or set(existing_manual_entries) != {
+        or not set(existing_manual_entries).issuperset({
             str(monster_id) for monster_id in source_by_id
-        }
+        })
     ):
         raise ValueError(
             "targeted update requires a complete existing manual contract"
@@ -238,24 +246,9 @@ def main() -> None:
     calibration_entries: dict[str, Any] = (
         deepcopy(old_entries) if targeted_update else {}
     )
-    source_hash_rows = [
-        (path.name, sha256(path)) for path in source_files
-    ]
     source_hashes = {
         monster_id: sha256(path) for monster_id, path in source_by_id.items()
     }
-    if targeted_update:
-        for monster_id in sorted(set(source_by_id) - requested_ids):
-            expected_hash = str(
-                existing_manual_entries[str(monster_id)].get(
-                    "sourceDraftSha256", ""
-                )
-            )
-            if source_hashes[monster_id] != expected_hash:
-                raise ValueError(
-                    f"unselected monsterId={monster_id} draft changed; "
-                    "refusing to touch it during a targeted update"
-                )
 
     for monster_id in sorted(requested_ids):
         key = str(monster_id)
@@ -330,7 +323,10 @@ def main() -> None:
             }
             calibration_entries[key] = previous
 
-    aggregate = aggregate_hash(source_hash_rows)
+    aggregate = aggregate_hash([
+        (entry["sourceDraftFile"], entry["sourceDraftSha256"])
+        for entry in manual_entries.values()
+    ])
     manual_contract = {
         "schemaVersion": 1,
         "contract": MANUAL_CONTRACT,
@@ -341,7 +337,7 @@ def main() -> None:
         ),
         "sourceAggregateSha256": aggregate,
         "summary": {
-            "catalogMonsterCount": len(catalog_rows),
+            "catalogMonsterCount": len(calibration_entries),
             "userDraftCount": len(manual_entries),
             "preservedAirborneCount": len(preserved_ids),
             "preservedAirborneMonsterIds": sorted(preserved_ids),

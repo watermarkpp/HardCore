@@ -1,15 +1,15 @@
 {
   "schema_version": 3,
-  "contract_id": "hardcore.monster.melee_ai.2gu_1p5gu.v3",
+  "contract_id": "hardcore.monster.melee_ai.1p5gu.v3",
   "authority": "user_gameplay_override",
-  "attack_commit_reach_gu": 2.0,
+  "attack_commit_reach_gu": 1.5,
   "preferred_melee_distance_gu": 1.5,
   "existing_delayed_melee_tolerance_gu": 0.25,
   "lane_half_width_gu": 0.1,
   "rules": {
-    "preserve_existing_long_reach_over_2gu": true,
-    "preserve_special_delivery_channels": true,
-    "ordinary_channel_delivery_kind": "",
+    "preserve_ranged_delivery_channels": true,
+    "preserve_damage_channels_and_status": true,
+    "melee_delivery_kinds": ["", "special_melee", "gas_adjacent", "mixed_target_tile"],
     "do_not_read_player_skill_state": true
   }
 }

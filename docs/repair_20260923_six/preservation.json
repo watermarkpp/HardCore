@@ -1,0 +1,36 @@
+{
+  "baseline": "f0eca40ef986c6dfef11d0bac137ba754f00a458",
+  "ground_records": [
+    {
+      "path": "assets/data/runtime/monster_ground_alignment_manual_v1.json",
+      "changed_ids": [
+        "170"
+      ],
+      "preserved_ids": 211
+    },
+    {
+      "path": "assets/data/runtime/monster_ground_contact_calibrations.json",
+      "changed_ids": [
+        "170"
+      ],
+      "preserved_ids": 213
+    },
+    {
+      "path": "assets/data/runtime/monster_ground_contacts.json",
+      "changed_ids": [
+        "170"
+      ],
+      "preserved_ids": 213
+    }
+  ],
+  "frozen_local_sources": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "d267703e2dc8b72459ea5b01c8d9535516df7bae2c03d690cf1d938a225e9aff"
+    },
+    {
+      "path": "outputs/visual_acceptance/monster_ground_alignment_drafts/monster_170.json",
+      "sha256": "f07e34eab61812ab0c0aec07152954f296ebad210bb82f05d5e5d18f04963fe6"
+    }
+  ]
+}

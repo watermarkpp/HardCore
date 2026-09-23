@@ -3,8 +3,9 @@ extends RefCounted
 
 # This policy owns only the user-authorized override, never source statistics.
 const PATH := "res://assets/data/monster_melee_ai_package_v3.json"
-const CONTRACT_ID := "hardcore.monster.melee_ai.2gu_1p5gu.v3"
-const START_GU := 2.0
+const CONTRACT_ID := "hardcore.monster.melee_ai.1p5gu.v3"
+const START_GU := 1.5
+const MELEE_DELIVERY_KINDS := ["", "special_melee", "gas_adjacent", "mixed_target_tile"]
 const PREFERRED_GU := 1.5
 const DELAY_TOLERANCE_GU := 0.25
 const LANE_GU := 0.10
@@ -48,10 +49,10 @@ static func valid() -> bool:
 	if not rules is Dictionary:
 		_valid = false
 	else:
-		for key: String in ["preserve_existing_long_reach_over_2gu", "preserve_special_delivery_channels", "do_not_read_player_skill_state"]:
+		for key: String in ["preserve_ranged_delivery_channels", "preserve_damage_channels_and_status", "do_not_read_player_skill_state"]:
 			if not rules.get(key) is bool or not bool(rules.get(key)):
 				_valid = false
-		if rules.get("ordinary_channel_delivery_kind") != "":
+		if rules.get("melee_delivery_kinds") != MELEE_DELIVERY_KINDS:
 			_valid = false
 	if not _valid:
 		push_error("HC monster policy: schema or frozen numeric contract rejected")

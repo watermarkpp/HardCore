@@ -222,7 +222,7 @@ def profile_signature(profile: dict[str, Any]) -> str:
     )
 
 
-def automatic_initials() -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+def automatic_initials(monster_ids: set[int] | None = None) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
     catalog = load_json(CATALOG_PATH)
     manifests = [load_json(path) for path in MANIFEST_PATHS]
     measured_by_signature: dict[str, dict[str, Any]] = {}
@@ -230,6 +230,8 @@ def automatic_initials() -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]
     initials: dict[str, dict[str, Any]] = {}
     for row in catalog.get("monsters", []):
         monster_id = int(row["monster_id"])
+        if monster_ids is not None and monster_id not in monster_ids:
+            continue
         lookup = str(row["resource_lookup"])
         profile, profile_name = resolve_profile(monster_id, lookup, manifests)
         signature = profile_signature(profile)
@@ -273,7 +275,9 @@ def automatic_initials() -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]
             "_profile": profile,
         }
         rows.append(row)
-    if len(initials) != 214:
+    if monster_ids is not None and set(map(int, initials)) != monster_ids:
+        raise ValueError("requested monsterId is not in the active catalog")
+    if monster_ids is None and len(initials) != 214:
         raise ValueError(f"ground projection count={len(initials)}, expected 214")
     return rows, initials
 
@@ -311,7 +315,7 @@ def seed_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def load_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def load_calibrations(initials: dict[str, dict[str, Any]], targeted: bool = False) -> dict[str, Any]:
     calibrations = load_json(CALIBRATION_PATH)
     if calibrations.get("contract") != CALIBRATION_CONTRACT:
         raise ValueError("monster ground calibration contract mismatch")
@@ -321,7 +325,9 @@ def load_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
     if len(aggregate) != 64:
         raise ValueError("monster manual alignment aggregate hash missing")
     entries = calibrations.get("entriesByMonsterId", {})
-    if not isinstance(entries, dict) or set(entries) != set(initials):
+    if not isinstance(entries, dict) or (
+        not set(entries).issuperset(initials) if targeted else set(entries) != set(initials)
+    ):
         raise ValueError(
             "monster ground calibrations must explicitly cover exactly 214 monsterIds"
         )
@@ -406,9 +412,9 @@ def load_calibrations(initials: dict[str, dict[str, Any]]) -> dict[str, Any]:
     return entries
 
 
-def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
-    rows, initials = automatic_initials()
-    calibrations = load_calibrations(initials)
+def build(monster_ids: set[int] | None = None) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
+    rows, initials = automatic_initials(monster_ids)
+    calibrations = load_calibrations(initials, targeted=monster_ids is not None)
     entries: dict[str, Any] = {}
     legacy_name_to_monster_id: dict[str, int] = {}
     strategy_counts = {strategy: 0 for strategy in PROJECTION_STRATEGIES}
@@ -496,6 +502,17 @@ def build() -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
         "entriesByMonsterId": entries,
         "legacyNameToMonsterId": legacy_name_to_monster_id,
     }
+    if monster_ids is not None:
+        # Preserve every unselected record (including historical IDs), metadata
+        # and names. Only the exact approved ID is regenerated from its inputs.
+        previous = load_json(OUTPUT_PATH)
+        if previous.get("contract") != CONTRACT:
+            raise ValueError("targeted build requires the existing v5 runtime manifest")
+        for key, entry in entries.items():
+            if key not in previous["entriesByMonsterId"]:
+                raise ValueError(f"targeted update cannot insert monsterId={key}")
+            previous["entriesByMonsterId"][key] = entry
+        output = previous
     return output, initials
 
 
@@ -634,6 +651,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--seed-calibrations", action="store_true")
+    parser.add_argument("--monster-id", action="append", type=int, default=[],
+                        help="rebuild only an explicitly approved monsterId; preserve all other records")
     parser.add_argument(
         "--review-output",
         type=Path,
@@ -641,15 +660,18 @@ def main() -> None:
         help="write the 214-monster review atlas outside Git",
     )
     args = parser.parse_args()
-    _, initials = automatic_initials()
+    monster_ids = set(args.monster_id) or None
+    if monster_ids is not None and args.seed_calibrations:
+        parser.error("targeted promotion cannot seed/replace manual calibrations")
     if args.seed_calibrations:
+        _, initials = automatic_initials()
         CALIBRATION_PATH.write_text(
             json.dumps(seed_calibrations(initials), ensure_ascii=False, indent=2)
             + "\n",
             encoding="utf-8",
         )
         print(f"wrote {CALIBRATION_PATH.relative_to(ROOT)}")
-    generated_data, initials = build()
+    generated_data, initials = build(monster_ids)
     generated = json.dumps(generated_data, ensure_ascii=False, indent=2) + "\n"
     if args.check:
         if not OUTPUT_PATH.exists() or OUTPUT_PATH.read_text(encoding="utf-8") != generated:
@@ -659,7 +681,7 @@ def main() -> None:
             )
         print(
             "MONSTER_GROUND_CONTACT_DATA_PASS "
-            "contract=v5 monsters=214 user_alignments=212 preserved_airborne=2"
+            f"contract=v5 updated={sorted(monster_ids) if monster_ids else 'all'}"
         )
     else:
         OUTPUT_PATH.write_text(generated, encoding="utf-8")
@@ -673,7 +695,7 @@ def main() -> None:
         )
         rendered_paths = render_review_atlas(
             resolved_review,
-            generated_data["entriesByMonsterId"],
+            {key: generated_data["entriesByMonsterId"][key] for key in initials},
             initials,
         )
         for rendered_path in rendered_paths:

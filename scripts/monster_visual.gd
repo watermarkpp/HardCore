@@ -138,6 +138,8 @@ var _streaming_resource_key := ""
 var _streaming_world_generation := -1
 var _last_ground_contact_position := Vector2.INF
 var _last_ground_indicator_radii := Vector2.INF
+var _selection_ring_direction_offsets: Dictionary = {}
+var _selection_ring_offset := Vector2.ZERO
 
 
 func _init() -> void:
@@ -162,6 +164,8 @@ static func configure_actor_y_sort_item(item: CanvasItem, role: String) -> void:
 
 func setup(owner_actor: EnemyActor) -> void:
 	actor = owner_actor
+	_selection_ring_direction_offsets = actor.MonsterTargetRingGeometryScript.direction_offsets(actor.monster_id)
+	_selection_ring_offset = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -275,9 +279,11 @@ func _draw() -> void:
 		return
 	var center := target_ring_local_position()
 	var radii := ground_indicator_radii(Vector2.ZERO)
-	_draw_contact_core(center, radii)
+	# Enlarging a visible selection ring must not enlarge the contact shadow.
+	_draw_contact_core(center, actor.ground_footprint_indicator_radii())
 	if actor._dying or not actor.is_targeted:
 		return
+	center = selection_ring_local_position()
 	var points := PackedVector2Array()
 	for index in range(49):
 		var angle := TAU * float(index) / 48.0
@@ -286,6 +292,12 @@ func _draw() -> void:
 			+ Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
 		)
 	draw_polyline(points, Color(1.0, 0.78, 0.18, 0.78), 2.0, true)
+
+
+func selection_ring_local_position() -> Vector2:
+	# Only the selected outline receives reviewed directional presentation offsets.
+	# The authored foot, contact shadow and gameplay origin remain fixed.
+	return target_ring_local_position() + _selection_ring_offset
 
 
 func _draw_contact_core(center: Vector2, radii: Vector2) -> void:
@@ -393,6 +405,12 @@ func _update_animation_frame(delta: float) -> void:
 		current_state = "idle"
 	var visual_facing: Vector2 = actor.movement_facing if current_state == "walk" else actor.facing
 	current_direction = _direction_row(visual_facing)
+	if not _selection_ring_direction_offsets.is_empty():
+		var offset: Vector2 = _selection_ring_direction_offsets.get(current_direction, Vector2.ZERO)
+		if offset != _selection_ring_offset:
+			_selection_ring_offset = offset
+			if actor.is_targeted:
+				queue_redraw()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state

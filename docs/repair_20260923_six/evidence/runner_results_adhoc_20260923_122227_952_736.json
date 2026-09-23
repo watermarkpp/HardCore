@@ -1,0 +1,41 @@
+{
+  "suite": "adhoc",
+  "generated_at": "2026-09-23T12:22:27.9530635+08:00",
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "monster_target_ring_pixels_test",
+      "test_path": "tests/monster_target_ring_pixels_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "moon_spider_shield_pursuit_test",
+      "test_path": "tests/moon_spider_shield_pursuit_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "total": 2,
+  "passed": 2,
+  "git_head": "f0eca40ef986c6dfef11d0bac137ba754f00a458"
+}

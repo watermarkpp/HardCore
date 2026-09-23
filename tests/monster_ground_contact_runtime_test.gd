@@ -26,6 +26,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	var ring_data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/monster_target_ring_profiles.json"))
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var manifest := MonsterVisual._ground_contact_manifest()
@@ -69,6 +70,12 @@ func _run() -> void:
 		enemy.setup(monster_data, player, false)
 		add_child(enemy)
 		enemy.set_physics_process(false)
+		# Burrowing bosses are intentionally hidden until a nearby target wakes them.
+		# Exercise the production emergence before checking visible geometry.
+		if enemy._burrowed:
+			enemy.target = player
+			enemy._attack_timer = 999.0
+			enemy._physics_process_internal(0.0)
 		await get_tree().process_frame
 		var visual: MonsterVisual = enemy.visual
 		var sprite: Sprite2D = visual.sprite
@@ -105,10 +112,9 @@ func _run() -> void:
 		visual.visible = saved_visible
 		visual.sprite.texture = saved_texture
 		var expected_projection_offset := _vector2(entry.ringCenterOffset)
-		var expected_radii := (
-			WorldSpatialRules.actor_footprint_radii_px(enemy.collision_radius_px)
-			* EnemyActor.TARGET_RING_FOOTPRINT_SCALE
-		)
+		var expected_radii := enemy.ground_footprint_indicator_radii()
+		if ring_data.crawling_monsters.has(monster_key):
+			expected_radii *= 1.3
 		var manual_entry: Dictionary = manual_entries.get(monster_key, {})
 		var expected_root := (
 			_vector2(manual_entry.runtimeVisualOrigin)
@@ -300,6 +306,12 @@ func _run() -> void:
 		enemy.setup(GameData.get_monster_by_id(monster_id), player, true)
 		add_child(enemy)
 		enemy.set_physics_process(false)
+		# Burrowing bosses are intentionally hidden until a nearby target wakes them.
+		# Exercise the production emergence before checking visible geometry.
+		if enemy._burrowed:
+			enemy.target = player
+			enemy._attack_timer = 999.0
+			enemy._physics_process_internal(0.0)
 		await get_tree().process_frame
 		var entry: Dictionary = entries[str(monster_id)]
 		var manual_entry: Dictionary = manual_entries.get(
@@ -327,7 +339,7 @@ func _run() -> void:
 		)
 		enemy.queue_free()
 		await get_tree().process_frame
-	print("MONSTER_GROUND_CONTACT_RUNTIME_PASS 212 manual origins replay exactly, grounded rings follow the reviewed foot, airborne rings keep authored projection, and all rings use 1.25x physics footprints")
+	print("MONSTER_GROUND_CONTACT_RUNTIME_PASS 212 manual origins replay exactly, grounded rings follow the reviewed foot, airborne rings keep authored projection, and selection rings use the reviewed posture scale")
 	get_tree().quit(0)
 
 

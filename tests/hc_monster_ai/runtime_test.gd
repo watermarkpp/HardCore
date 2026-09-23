@@ -88,10 +88,10 @@ func _run() -> void:
 	player.current_hp=player.max_hp
 	player.current_mp=0
 	player.shield_time=0.0
-	var actor:=make_enemy(Vector2(22.001,20))
+	var actor:=make_enemy(Vector2(21.501,20))
 	check(actor._hc_standard_melee(),"R09-fixture","ID64 is a normal physical melee channel")
-	check(actor._hc_access(player)=="OUT_OF_RANGE","R04","Footprint does not extend 2-GU centre gate")
-	actor.set_combat_position(ground_to_screen(Vector2(21.8,20)),&"hc_test_position")
+	check(actor._hc_access(player)=="OUT_OF_RANGE","R04","Footprint does not extend 1.5-GU centre gate")
+	actor.set_combat_position(ground_to_screen(Vector2(21.4,20)),&"hc_test_position")
 	await get_tree().physics_frame
 	actor._attack_timer=0.0
 	actor._movement_step_active=true
@@ -103,10 +103,10 @@ func _run() -> void:
 	check(actor._hc_settlements>0,"T-hit","Accepted attack reaches the existing damage pipeline")
 	# Post-movement opportunity; the motor's real physical displacement is tested.
 	await get_tree().physics_frame
-	actor.set_combat_position(ground_to_screen(Vector2(22.001,20)),&"hc_test_position")
+	actor.set_combat_position(ground_to_screen(Vector2(21.501,20)),&"hc_test_position")
 	actor._clear_autonomous_step_state()
 	actor._attack_timer=0.0
-	actor._hc_close_session=false
+	actor._hc_pursuit_session=false
 	ready_cadence(actor)
 	before=actor._hc_starts
 	actor._physics_process_internal(1.0/60.0)
@@ -116,7 +116,7 @@ func _run() -> void:
 	actor.set_combat_position(ground_to_screen(Vector2(21.8,20)),&"hc_test_position")
 	actor._clear_autonomous_step_state()
 	actor._attack_timer=999.0
-	actor._hc_close_session=true
+	actor._hc_pursuit_session=true
 	var source_speed:=actor.move_speed_gu_per_sec
 	var starts_before_close:=actor._hc_starts
 	for frame in range(120):
@@ -128,8 +128,8 @@ func _run() -> void:
 	check(is_equal_approx(actor.move_speed_gu_per_sec,source_speed),"S10-speed","Source movement speed remains unchanged")
 	check(Warrior.thrust_footprint_slot_for_direction_ground_gu(Vector2(20,20),screen_to_ground(actor.global_position),actor.combat_radius_gu,Vector2.RIGHT)==1,"S04-runtime","Stationary warrior does not get a permanent outer-slot target")
 	# Dynamic front obstacle, including same-tick movement and death.
-	actor.set_combat_position(ground_to_screen(Vector2(22,20)),&"hc_test_position")
-	var front:=make_enemy(Vector2(21,20))
+	actor.set_combat_position(ground_to_screen(Vector2(21.49,20)),&"hc_test_position")
+	var front:=make_enemy(Vector2(20.75,20))
 	var ordered_candidates: Array = []
 	var unordered_candidates: Array = []
 	index.query_enemy_nodes_segment_into(1,Vector2(22,20),Vector2(20,20),1.0,ordered_candidates)
@@ -184,10 +184,10 @@ func _run() -> void:
 	actor.set_combat_position(ground_to_screen(Vector2(25,25)),&"hc_test_position")
 	# C07: two legal front/rear lanes and a diagonal corner use the same live
 	# spatial-index authority. Every witness is outside physical overlap.
-	var rear_a:=make_enemy(Vector2(21.85,19.3))
-	var front_a:=make_enemy(Vector2(21.1,19.6))
-	var rear_b:=make_enemy(Vector2(21.85,20.7))
-	var front_b:=make_enemy(Vector2(21.1,20.4))
+	var rear_a:=make_enemy(Vector2(21.14,19.04),120)
+	var front_a:=make_enemy(Vector2(20.59,19.5),120)
+	var rear_b:=make_enemy(Vector2(21.14,20.96),120)
+	var front_b:=make_enemy(Vector2(20.59,20.5),120)
 	check(rear_a._hc_access(player)=="FRONTLINE_BLOCKED","C07-row-a","First legal front row blocks only through the live index")
 	check(rear_b._hc_access(player)=="FRONTLINE_BLOCKED","C07-row-b","Second legal front row blocks in the same bounded query")
 	front_a.set_combat_position(ground_to_screen(Vector2(25,24)),&"hc_test_position")
@@ -195,8 +195,8 @@ func _run() -> void:
 	rear_a.set_combat_position(ground_to_screen(Vector2(26,24)),&"hc_test_position")
 	rear_b.set_combat_position(ground_to_screen(Vector2(27,24)),&"hc_test_position")
 	front_b.set_combat_position(ground_to_screen(Vector2(28,24)),&"hc_test_position")
-	var corner_rear:=make_enemy(Vector2(21.4,21.4))
-	var corner_front:=make_enemy(Vector2(20.75,20.75))
+	var corner_rear:=make_enemy(Vector2(21.052,21.052),120)
+	var corner_front:=make_enemy(Vector2(20.545,20.545),120)
 	check(corner_rear._hc_access(player)=="FRONTLINE_BLOCKED","C07-corner","Diagonal corner front body blocks the rear attacker")
 	corner_front.set_combat_position(ground_to_screen(Vector2(20.5,22.0)),&"hc_test_position")
 	check(corner_rear._hc_access(player)=="CLEAR","C07-corner-open","Moving the corner body off-lane immediately clears the rear attacker")
@@ -234,14 +234,14 @@ func _run() -> void:
 	check(not actor._hc_owned_movement_call,"C01-flag","Ownership flag is false after the HC tick path exits")
 	index.unregister(actor.spatial_actor_runtime_id)
 	actor.queue_free()
-	# --- C02: production attack timers remain active while the residual close
-	# debt converges. No cooldown, pending state or position is rewritten after
+	# --- C02: approach from outside 1.5 GU before the first attack.
+	# No cooldown, pending state or position is rewritten after
 	# each window begins.
 	# ID162 is exact TATMonster/race81 with no attack override: it preserves a
 	# real ordinary-contact Boss lane after ID76 adopts CowKing mixed delivery.
 	for monster_id: int in [64,162]:
 		for start_distance: float in [1.8,1.99,2.0]:
-			await _assert_outer_ring_real_cadence(monster_id,start_distance)
+			await _assert_approach_real_cadence(monster_id,start_distance)
 	# --- C03: pending victim A stays the only settle target after retarget or death ---
 	await get_tree().physics_frame
 	var player_b:=PlayerCharacter.new()
@@ -340,7 +340,7 @@ func _run() -> void:
 	finish("runtime")
 
 
-func _assert_outer_ring_real_cadence(monster_id: int,start_distance: float) -> void:
+func _assert_approach_real_cadence(monster_id: int,start_distance: float) -> void:
 	await get_tree().physics_frame
 	var cadence_actor:=make_enemy(Vector2(20.0+start_distance,20.0),monster_id)
 	check(cadence_actor._hc_standard_melee(),"C02-channel-%d-%.2f"%[monster_id,start_distance],"Exact actor uses the ordinary HC physical channel")
@@ -365,7 +365,7 @@ func _assert_outer_ring_real_cadence(monster_id: int,start_distance: float) -> v
 	var final_distance:=trace[-1] if not trace.is_empty() else INF
 	check(starts_delta>=2,"C02-starts-%d-%.2f"%[monster_id,start_distance],"Real timer produces repeated starts (got %d)"%starts_delta)
 	check(settlements_delta>=1 and player.current_hp<hp_before,"C02-damage-%d-%.2f"%[monster_id,start_distance],"Real releases settle and change HP")
-	check(not release_distances.is_empty() and release_distances[0]>preferred+GU.EPSILON_GU,"C02-outer-start-%d-%.2f"%[monster_id,start_distance],"First real attack starts outside preferred contact")
+	check(not release_distances.is_empty() and release_distances.all(func(value: float)->bool:return value<=1.5+GU.EPSILON_GU),"C02-range-%d-%.2f"%[monster_id,start_distance],"Every real attack waits until inside 1.5 GU")
 	check(final_distance<=preferred+0.003,"C02-converge-%d-%.2f"%[monster_id,start_distance],"Real cadence closes %.2f GU to effective preferred %.3f (final %.3f)"%[start_distance,preferred,final_distance])
 	check(trace.min()>=cadence_actor._contact_distance_gu_to_target(player)-0.003,"C02-no-overlap-%d-%.2f"%[monster_id,start_distance],"Closing cadence never overlaps the legal actor footprint")
 	index.unregister(cadence_actor.spatial_actor_runtime_id)

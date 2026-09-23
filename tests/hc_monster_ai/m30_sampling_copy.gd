@@ -214,9 +214,9 @@ class DetailedProbeEnemy:
 		_record_probe_section("_hc_motion_clear", started)
 		return result
 
-	func _hc_try_start(hit_target: Node2D, after_motion_attempt := false) -> bool:
+	func _hc_try_start(hit_target: Node2D) -> bool:
 		var started := Time.get_ticks_usec()
-		var result := super._hc_try_start(hit_target, after_motion_attempt)
+		var result := super._hc_try_start(hit_target)
 		_record_probe_section("_hc_try_start", started)
 		return result
 

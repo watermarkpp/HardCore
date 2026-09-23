@@ -1,0 +1,84 @@
+{
+	"canonicalCenters": {
+		"actorGroundOrigin": [
+			0.0,
+			0.0
+		],
+		"mapDiamond": [
+			0.0,
+			0.0
+		],
+		"physicsFootprint": [
+			0.0,
+			0.0
+		]
+	},
+	"contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
+	"finalVisualFootPoint": [
+		0.0,
+		0.0
+	],
+	"formalRuntimeWritten": false,
+	"formalSnapshot": {
+		"projectionStrategy": "grounded",
+		"ringCenterOffset": [
+			-7.0,
+			-17.5
+		],
+		"ringEllipseRadii": [
+			22.0,
+			7.0
+		],
+		"visualFootOffset": [
+			-7.0,
+			-17.5
+		]
+	},
+	"monsterId": 170,
+	"monsterName": "黑锷蜘蛛",
+	"physicsFootprintRadii": [
+		16.0,
+		8.0
+	],
+	"pickedVisualFootOffset": [
+		-7.0,
+		-17.5
+	],
+	"recommendedRuntime": {
+		"ringCenterOffset": [
+			-7.0,
+			-17.5
+		],
+		"visualFootOffset": [
+			-7.0,
+			-17.5
+		],
+		"visualRootOffset": [
+			7.0,
+			13.5
+		]
+	},
+	"runtimeVisualOrigin": [
+		0.0,
+		4.0
+	],
+	"savedAt": "2026-09-23T10:49:34",
+	"scope": "single_formal_monster_visual",
+	"selection": {
+		"action": "idle",
+		"direction": 0,
+		"frame": 0
+	},
+	"sourceEvidence": {
+		"animationCatalogPath": "res://assets/data/runtime/monster_animation_catalog.json",
+		"animationCatalogSha256": "237ff7655b17a31c5daf1119c114ae5663960198aefaad3a0945a9d2c8986517",
+		"formalCalibrationPath": "res://assets/data/runtime/monster_ground_contact_calibrations.json",
+		"formalCalibrationSha256": "f5eebe8d9d4048ccc60317eac77ffc578a5db6010acf2b5ad6cf520fe97e22a9",
+		"formalContactPath": "res://assets/data/runtime/monster_ground_contacts.json",
+		"formalContactSha256": "2a19af13e61e12f5ed1a64e9b8dc6e76c224beb8bf9828b3c1caf7bdba7ed230"
+	},
+	"visualOffset": [
+		7.0,
+		13.5
+	]
+}

@@ -3,7 +3,7 @@
   "contract": "monster.ground_contact.calibration.v5",
   "identityKey": "monsterId",
   "manualAlignmentContract": "monster.ground_alignment.manual.v1",
-  "manualAlignmentAggregateSha256": "d572ff185baa4b60ac9d7821e582e5e70b4096a9079e76aa6ed1c32f66902fd9",
+  "manualAlignmentAggregateSha256": "641a91b7a48298c14cb9f8a90191c0e25d501685fbceb363d7034fb1ea28970d",
   "policy": "Each grounded/hover monster uses the exact user-saved visual root and body-foot offsets. The two airborne falcons retain the prior reviewed separation between flying body and ground projection.",
   "entriesByMonsterId": {
     "18": {
@@ -5677,8 +5677,8 @@
       "manualAlignmentEvidence": {
         "contractId": "local.visual_acceptance_lab.monster_ground_alignment_draft.v1",
         "sourceDraftFile": "monster_170.json",
-        "sourceDraftSha256": "48d1ec87a9250d02eabff0e227b2d3de0e474cbe56313507899fe6f756454dc5",
-        "savedAt": "2026-07-30T13:03:00",
+        "sourceDraftSha256": "f07e34eab61812ab0c0aec07152954f296ebad210bb82f05d5e5d18f04963fe6",
+        "savedAt": "2026-09-23T10:49:34",
         "selection": {
           "action": "idle",
           "direction": 0,

@@ -504,9 +504,11 @@ func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
 	var learned_level := PlayerState.effective_skill_level(skill_name)
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	if stable_skill_id == "wizard.lightning":
-		if not hc_world_skill_preflight.is_valid() or not bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id)):
+	if hc_world_skill_preflight.is_valid():
+		if not bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id)):
 			return false
+	elif stable_skill_id == "wizard.lightning":
+		return false
 	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
