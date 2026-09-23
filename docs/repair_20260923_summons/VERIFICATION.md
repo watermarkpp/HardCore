@@ -25,7 +25,7 @@
 - 玩家宠物回归 PASS：taoist_summon_growth_contract、summon_growth_rank_upgrade、canonical_summon_integration（双宠/换图恢复）。SummonActor 源码未改。
 - 地图实际加载 PASS：913106 无回退，2角蝇+2楔蛾+3祖玛卫士00+2祖玛雕像3+1教主。全67图发布身份矩阵 PASS；60墙体渲染绑定/867依赖文件 PASS。
 - 核心/r1生命周期/角蝇跨母体生命周期补召回归 PASS；人工爆率 authority 回归 PASS，掉落 profile、156份战斗属性/分类、全部贴图未变。
-- 固定提交复验：NOT_RUN（提交后进行）。
+- 固定源码提交 `7ffc1f3fcd798f22d69cc28fdb4e6ddb16d090a0` 复验 PASS：4/4 场景，零引擎错误；原始记录 `runner_results_adhoc_20260923_120725_364_10788.json`。同一源码60图/867依赖的渲染绑定检查再次 PASS。最终交付后续提交仅补文档与原始证据。
 
 ## 失败分类
 
