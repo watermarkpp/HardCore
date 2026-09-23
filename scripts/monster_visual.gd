@@ -294,6 +294,20 @@ func _draw() -> void:
 	draw_polyline(points, Color(1.0, 0.78, 0.18, 0.78), 2.0, true)
 
 
+func refresh_selection_ring_direction() -> void:
+	if _selection_ring_direction_offsets.is_empty():
+		return
+	var offset: Vector2 = _selection_ring_direction_offsets.get(current_direction, Vector2.ZERO)
+	if offset != _selection_ring_offset:
+		_selection_ring_offset = offset
+		if actor.is_targeted:
+			queue_redraw()
+
+
+func selection_ring_direction_offset() -> Vector2:
+	return _selection_ring_offset
+
+
 func selection_ring_local_position() -> Vector2:
 	# Only the selected outline receives reviewed directional presentation offsets.
 	# The authored foot, contact shadow and gameplay origin remain fixed.
@@ -405,12 +419,7 @@ func _update_animation_frame(delta: float) -> void:
 		current_state = "idle"
 	var visual_facing: Vector2 = actor.movement_facing if current_state == "walk" else actor.facing
 	current_direction = _direction_row(visual_facing)
-	if not _selection_ring_direction_offsets.is_empty():
-		var offset: Vector2 = _selection_ring_direction_offsets.get(current_direction, Vector2.ZERO)
-		if offset != _selection_ring_offset:
-			_selection_ring_offset = offset
-			if actor.is_targeted:
-				queue_redraw()
+	refresh_selection_ring_direction()
 	if current_state != _last_state:
 		_elapsed = 0.0
 		_last_state = current_state

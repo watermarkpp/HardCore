@@ -696,6 +696,7 @@ func _apply_monster_preview_frame() -> void:
 	visual.current_direction = visual._direction_row(
 		DIRECTIONS[_direction_option.selected]
 	)
+	visual.refresh_selection_ring_direction()
 	var body_frame_count := maxi(
 		1,
 		MonsterAnimationPolicy.frame_count(
@@ -902,10 +903,10 @@ func _update_monster_overlay() -> void:
 		return
 	var visual := _monster.visual
 	var body_sprite: Sprite2D = visual.sprite
-	var runtime_ring_center := _visual_foot_origin()
+	var runtime_ring_center := _visual_foot_origin() + visual.selection_ring_direction_offset()
 	var runtime_ring_radii := _monster.ground_indicator_radii()
 	_draw_canonical_ground_overlay(
-		runtime_ring_center, _monster.collision_radius_px
+		_visual_foot_origin(), _monster.collision_radius_px
 	)
 	_draw_runtime_target_ring_overlay(
 		runtime_ring_center, runtime_ring_radii
@@ -1660,7 +1661,8 @@ func monster_ground_review_snapshot() -> Dictionary:
 		return {}
 	var actor_origin := Vector2.ZERO
 	var manual_foot := _visual_foot_origin()
-	var runtime_ring := _monster.ground_indicator_center()
+	var ring_offset := _monster.visual.selection_ring_direction_offset()
+	var runtime_ring := _monster.ground_indicator_center() + ring_offset
 	var projection_strategy := _monster.visual.ground_projection_strategy()
 	var expected_target := (
 		_monster.visual.position
@@ -1668,6 +1670,7 @@ func monster_ground_review_snapshot() -> Dictionary:
 		if projection_strategy in ["flying", "hover"]
 		else actor_origin
 	)
+	expected_target += ring_offset
 	var manual_delta := manual_foot - actor_origin
 	var runtime_target_delta := runtime_ring - expected_target
 	var target_matches := (

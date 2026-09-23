@@ -40,9 +40,14 @@ func _run() -> void:
 			enemy.facing = Vector2.from_angle(direction * TAU / 8.0)
 			enemy.visual._process(0.0)
 			var actual_row := enemy.visual.current_direction
-			var offset := Vector2(0, 10) if key == "170" and actual_row in [2, 6] else Vector2.ZERO
+			var values: Array = data.direction_offsets_px.get(key, {}).get(str(actual_row), [0, 0])
+			var offset := Vector2(values[0], values[1])
+			if int(key) in [118,120,121,122,123,170]:
+				_check(offset == (Vector2.ZERO if actual_row == 4 else Vector2(0, 10)), "long spider/pincer preserves S, offsets other seven directions")
+			if actual_row == 4:
+				_check(offset.is_zero_approx(), "all saved S feet unchanged")
 			_check(enemy.ground_indicator_radii().is_equal_approx(expected), "fixed posture radius %s/%d" % [key, actual_row])
-			_check(enemy.visual.selection_ring_local_position().is_equal_approx(foot + offset), "only black spider E/W offset %s/%d" % [key, actual_row])
+			_check(enemy.visual.selection_ring_local_position().is_equal_approx(foot + offset), "reviewed long-body selection offset %s/%d" % [key, actual_row])
 			_check(enemy.visual.target_ring_local_position().is_equal_approx(foot) and enemy.visual.sprite.position.is_equal_approx(anchor), "calibrated foot/art unchanged %s/%d" % [key, actual_row])
 			_check(is_equal_approx(enemy.collision_radius_px, physics_radius) and enemy.ground_footprint_indicator_radii().is_equal_approx(base), "physics and shadow footprint unchanged %s/%d" % [key, actual_row])
 		enemy.queue_free()
@@ -50,7 +55,9 @@ func _run() -> void:
 		await get_tree().process_frame
 	for key: String in data.crawling_monsters:
 		_check(seen.has(key), "reviewed crawling ID exists: " + key)
-	_check(data.direction_offsets_px.keys() == ["170"], "only requested directional exception")
+	var offset_ids: Array = data.direction_offsets_px.keys().map(func(key: String)->int:return int(key))
+	offset_ids.sort()
+	_check(offset_ids == [92,94,110,118,120,121,122,123,170], "only reviewed elongated crawling bodies receive directional offsets")
 	_check(not data.crawling_monsters.has("64") and data.crawling_monsters.has("170") and data.crawling_monsters.has("172"), "standing Woma unchanged; broad spiders enlarged")
 	_check(verified == GameData.monsters.size() and enlarged == 33, "all 156 monsters and 33 reviewed crawling IDs covered")
 	for failure in failures.slice(0, 12):
