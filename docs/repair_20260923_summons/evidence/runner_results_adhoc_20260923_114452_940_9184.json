@@ -1,0 +1,41 @@
+{
+  "engine_log_errors": 2,
+  "results": [
+    {
+      "test_name": "dpv2_21cq_direct_runtime_test",
+      "test_path": "tests/dpv2_21cq_direct_runtime_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "summon_actor_state_machine_test",
+      "test_path": "tests/summon_actor_state_machine_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "failed": 2,
+  "passed": 0,
+  "suite": "adhoc",
+  "generated_at": "2026-09-23T11:44:52.9409621+08:00",
+  "git_head": "9e3b9c36efc3c3cef5a851f7bfd63177d5c31d80",
+  "total": 2
+}

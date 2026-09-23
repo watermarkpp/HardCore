@@ -105,6 +105,7 @@
     "239": {"classification": "boss", "appearance_key": "dark_wooma_taurus", "independent_identity": true}
   },
   "runtime_policy": {
+    "drops_gate_spawn": false,
     "identity_key": "monster_id",
     "name_lookup": "forbidden",
     "unknown_id": "reject",

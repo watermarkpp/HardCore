@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "baseline": "9e3b9c36efc3c3cef5a851f7bfd63177d5c31d80",
+  "unchanged": {
+    "appearance_profiles": true,
+    "drop_profiles": true,
+    "all_156_combat_attributes": true,
+    "all_156_classifications": true
+  },
+  "changed_monster_ids": [
+    33,
+    126,
+    160,
+    182,
+    183,
+    241
+  ],
+  "registry_target_only": true,
+  "other_registry_entries_unchanged": 66,
+  "manual_editor_sha256": "4b03a27023ee4ebead8735b7a9898873ba5acba232f638310cea71815c528545",
+  "source_evidence": [
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/ObjMon.pas",
+      "lines": "1474-1500",
+      "sha256": "e32425c0c056cd83e0dd449f752813c613e829da4eabc21c26cbad45ffa59ce2"
+    },
+    {
+      "path": "dev_art_sources/reference/original_gameofmir/MirServer/Mir200/!Setup.txt",
+      "lines": "891-894",
+      "sha256": "c1dd4a6de2a53be3f2bc520b8d42571a0112c4fa58f05292c869942fbd8e146b"
+    }
+  ]
+}

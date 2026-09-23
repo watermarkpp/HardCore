@@ -110,10 +110,8 @@ func _run() -> void:
 		var drop_id := str(entry.get("drop_profile_id", ""))
 		var drop: Dictionary = drop_profiles.get(drop_id, {})
 		assert(not drop.is_empty(), "monster_id=%d missing drop profile closure" % monster_id)
-		# Runtime drop requirement uses canonical drop_policy, not a guessed
-		# hostile classification. If the policy requires a non-empty table and
-		# no exemption applies, a runtime_allowed entry must have a resolved
-		# reward closure (item or gold).
+		# Spawn admission and loot closure are independent. Existing nonempty
+		# reward tables still need their item/gold resolution verified.
 		var drop_policy: Dictionary = entry.get("drop_policy", {})
 		var requires_non_empty := bool(drop_policy.get("hostile_requires_non_empty", false))
 		var exemption_value: Variant = drop_policy.get("exemption", null)
@@ -126,9 +124,12 @@ func _run() -> void:
 			requires_non_empty
 			and not exemption_valid
 			and bool(entry.get("runtime_allowed", false))
+			and int(drop.get("entry_count", 0)) > 0
 		):
 			var closure := GameData.canonical_monster_runtime_drop_closure(monster_id)
 			assert(int(closure.get("resolved_reward_count", -1)) > 0, "monster_id=%d requires resolved reward closure (item or gold)" % monster_id)
+		if bool(entry.get("runtime_allowed", false)):
+			assert(not GameData.get_monster_by_id(monster_id).is_empty(), "spawn must not be blocked by empty drops: %d" % monster_id)
 		# P3C: editor placement is decoupled from drop closure; only explicit
 		# quarantine/internal-subtype dispositions are non-authorable.
 		var profile_id := str(entry.get("appearance_profile_id", ""))

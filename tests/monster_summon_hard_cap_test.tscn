@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/monster_summon_hard_cap_test.gd" id="1"]
+
+[node name="MonsterSummonHardCapTest" type="Node"]
+script = ExtResource("1")

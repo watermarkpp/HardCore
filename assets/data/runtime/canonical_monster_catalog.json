@@ -8,7 +8,8 @@
     "unknown_id": "reject",
     "unresolved_art": "reject",
     "unresolved_classification": "reject",
-    "service_client_appearance_difference": "requires_translation_evidence"
+    "service_client_appearance_difference": "requires_translation_evidence",
+    "drops_gate_spawn": false
   },
   "source_policy": {
     "source_priority_policy": "assets/data/source_priority_policy.json",
@@ -124,8 +125,8 @@
   },
   "summary": {
     "identity_count": 156,
-    "runtime_allowed_count": 153,
-    "unresolved_count": 3,
+    "runtime_allowed_count": 156,
+    "unresolved_count": 0,
     "version_difference_count": 0,
     "appearance_profile_count": 110,
     "drop_profile_count": 156,
@@ -235691,19 +235692,17 @@
         "source_scope": "classification_and_drop_closure"
       },
       "spawn_authority": null,
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
+        "allowed": true,
         "classification_ok": true,
         "art_ok": true,
         "drop_ok": false,
         "combat_identity_ok": true,
         "intentional_exclusion": false,
-        "blockers": [
-          "drop_policy_not_closed"
-        ]
+        "blockers": []
       },
-      "status": "unresolved",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": true,
         "entry_count": 0,
@@ -235982,7 +235981,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "elite",
           "identity_resolution": "vanilla_exact_id",
@@ -236009,6 +236008,16 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "spawn_drop_policy": {
+          "distribution": "project.monster_runtime_contract",
+          "tier": "project_rule",
+          "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+          "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+          "hash_normalization": "lf_text",
+          "role": "spawn_independent_of_drops",
+          "field": "runtime_policy.drops_gate_spawn",
+          "evidence": "Empty or absent loot does not prevent otherwise valid monster spawning"
         }
       }
     },
@@ -256717,7 +256726,7 @@
               127
             ],
             "count": 1,
-            "maxActive": 15,
+            "maxActive": 5,
             "delaySeconds": 0.5,
             "confidence": "A"
           },
@@ -256924,6 +256933,28 @@
               "mapping_source": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
               "mapping_confidence": "B"
             }
+          }
+        },
+        "enemy_summons": {
+          "summonRule": {
+            "distribution": "project.enemy_summons",
+            "tier": "project_rule",
+            "original_path": "assets/data/monster_behavior_profiles.json",
+            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "hash_normalization": "lf_text",
+            "role": "enemy_summon_rule",
+            "field": "summonRule",
+            "evidence": "Exact monster_id=126; summon-only generation, other fields preserved"
+          },
+          "service": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "original_path": "assets/data/service_monster_runtime_catalog.json",
+            "sha256": "BC5D625645C63B4C67A3EC5DE96BB06092572F1AA3279B80F78F4B699C041580",
+            "hash_normalization": "lf_text",
+            "role": "summon_rule_service_merge",
+            "field": "summonRule",
+            "evidence": "runtimeByMonsterId[126] exact ID merge"
           }
         }
       }
@@ -267274,14 +267305,14 @@
             "healthStageSummon": {
               "enabled": true,
               "stages": 5,
-              "minCount": 6,
-              "maxCount": 11,
-              "maxActive": 30,
+              "minCount": 4,
+              "maxCount": 7,
+              "maxActive": 15,
               "monsterIds": [
-                153,
                 156,
+                153,
                 150,
-                159
+                128
               ],
               "confidence": "A",
               "source": "ObjMon.pas TScultureKingMonster.CallSlave",
@@ -267534,6 +267565,18 @@
               "mapping_source": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
               "mapping_confidence": "B"
             }
+          }
+        },
+        "enemy_summons": {
+          "healthStageSummon": {
+            "distribution": "project.enemy_summons",
+            "tier": "project_rule",
+            "original_path": "assets/data/boss_service_rules.json",
+            "sha256": "9A2249FE495FAD9DFE32D5A3C58E36A94D5275F8DF21E0C0F5DCC610E670AE6C",
+            "hash_normalization": "lf_text",
+            "role": "enemy_summon_rule",
+            "field": "healthStageSummon",
+            "evidence": "Exact monster_id=160; summon-only generation, other fields preserved"
           }
         }
       }
@@ -272201,13 +272244,12 @@
           "summonRule": {
             "enabled": true,
             "monsterIds": [
-              170
+              183
             ],
             "count": 1,
-            "maxActive": 15,
+            "maxActive": 5,
             "delaySeconds": 0.5,
-            "confidence": "B",
-            "compatibilityNote": "原服配置名小蜘蛛投影到1.76项目黑锷蜘蛛稳定ID"
+            "confidence": "B"
           },
           "timing": {
             "attackIntervalMs": 2200,
@@ -272413,6 +272455,28 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "enemy_summons": {
+          "summonRule": {
+            "distribution": "project.enemy_summons",
+            "tier": "project_rule",
+            "original_path": "assets/data/monster_behavior_profiles.json",
+            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "hash_normalization": "lf_text",
+            "role": "enemy_summon_rule",
+            "field": "summonRule",
+            "evidence": "Exact monster_id=182; summon-only generation, other fields preserved"
+          },
+          "service": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "original_path": "assets/data/service_monster_runtime_catalog.json",
+            "sha256": "BC5D625645C63B4C67A3EC5DE96BB06092572F1AA3279B80F78F4B699C041580",
+            "hash_normalization": "lf_text",
+            "role": "summon_rule_service_merge",
+            "field": "summonRule",
+            "evidence": "runtimeByMonsterId[182] exact ID merge"
+          }
         }
       }
     },
@@ -272429,19 +272493,17 @@
         "source_scope": "classification_and_drop_closure"
       },
       "spawn_authority": null,
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
+        "allowed": true,
         "classification_ok": true,
         "art_ok": true,
         "drop_ok": false,
         "combat_identity_ok": true,
         "intentional_exclusion": false,
-        "blockers": [
-          "drop_policy_not_closed"
-        ]
+        "blockers": []
       },
-      "status": "unresolved",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": true,
         "entry_count": 0,
@@ -272706,7 +272768,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "ordinary",
           "identity_resolution": "vanilla_exact_id",
@@ -272733,6 +272795,16 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "spawn_drop_policy": {
+          "distribution": "project.monster_runtime_contract",
+          "tier": "project_rule",
+          "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+          "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+          "hash_normalization": "lf_text",
+          "role": "spawn_independent_of_drops",
+          "field": "runtime_policy.drops_gate_spawn",
+          "evidence": "Empty or absent loot does not prevent otherwise valid monster spawning"
         }
       }
     },
@@ -289187,19 +289259,17 @@
         "source_scope": "classification_and_drop_closure"
       },
       "spawn_authority": null,
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
+        "allowed": true,
         "classification_ok": true,
         "art_ok": true,
         "drop_ok": false,
         "combat_identity_ok": true,
         "intentional_exclusion": false,
-        "blockers": [
-          "drop_policy_not_closed"
-        ]
+        "blockers": []
       },
-      "status": "unresolved",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": true,
         "entry_count": 0,
@@ -289478,7 +289548,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "special",
           "identity_resolution": "vanilla_exact_id",
@@ -289505,6 +289575,16 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "spawn_drop_policy": {
+          "distribution": "project.monster_runtime_contract",
+          "tier": "project_rule",
+          "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+          "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+          "hash_normalization": "lf_text",
+          "role": "spawn_independent_of_drops",
+          "field": "runtime_policy.drops_gate_spawn",
+          "evidence": "Empty or absent loot does not prevent otherwise valid monster spawning"
         }
       }
     }
@@ -292762,19 +292842,17 @@
         "source_scope": "classification_and_drop_closure"
       },
       "spawn_authority": null,
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
+        "allowed": true,
         "classification_ok": true,
         "art_ok": true,
         "drop_ok": false,
         "combat_identity_ok": true,
         "intentional_exclusion": false,
-        "blockers": [
-          "drop_policy_not_closed"
-        ]
+        "blockers": []
       },
-      "status": "unresolved",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": true,
         "entry_count": 0,
@@ -293053,7 +293131,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "elite",
           "identity_resolution": "vanilla_exact_id",
@@ -293080,6 +293158,16 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "spawn_drop_policy": {
+          "distribution": "project.monster_runtime_contract",
+          "tier": "project_rule",
+          "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+          "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+          "hash_normalization": "lf_text",
+          "role": "spawn_independent_of_drops",
+          "field": "runtime_policy.drops_gate_spawn",
+          "evidence": "Empty or absent loot does not prevent otherwise valid monster spawning"
         }
       }
     },
@@ -313788,7 +313876,7 @@
               127
             ],
             "count": 1,
-            "maxActive": 15,
+            "maxActive": 5,
             "delaySeconds": 0.5,
             "confidence": "A"
           },
@@ -313995,6 +314083,28 @@
               "mapping_source": "local 1.76 Monster.DB RaceImg/Appr + original Client/Actor.pas GetRaceByPM/GetOffset + bundled Mon*.wil pixels",
               "mapping_confidence": "B"
             }
+          }
+        },
+        "enemy_summons": {
+          "summonRule": {
+            "distribution": "project.enemy_summons",
+            "tier": "project_rule",
+            "original_path": "assets/data/monster_behavior_profiles.json",
+            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "hash_normalization": "lf_text",
+            "role": "enemy_summon_rule",
+            "field": "summonRule",
+            "evidence": "Exact monster_id=126; summon-only generation, other fields preserved"
+          },
+          "service": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "original_path": "assets/data/service_monster_runtime_catalog.json",
+            "sha256": "BC5D625645C63B4C67A3EC5DE96BB06092572F1AA3279B80F78F4B699C041580",
+            "hash_normalization": "lf_text",
+            "role": "summon_rule_service_merge",
+            "field": "summonRule",
+            "evidence": "runtimeByMonsterId[126] exact ID merge"
           }
         }
       }
@@ -324345,14 +324455,14 @@
             "healthStageSummon": {
               "enabled": true,
               "stages": 5,
-              "minCount": 6,
-              "maxCount": 11,
-              "maxActive": 30,
+              "minCount": 4,
+              "maxCount": 7,
+              "maxActive": 15,
               "monsterIds": [
-                153,
                 156,
+                153,
                 150,
-                159
+                128
               ],
               "confidence": "A",
               "source": "ObjMon.pas TScultureKingMonster.CallSlave",
@@ -324605,6 +324715,18 @@
               "mapping_source": "primary classic client WIL pixels + primary MirClient/Actor.pas GetOffset/TMonsterAction",
               "mapping_confidence": "B"
             }
+          }
+        },
+        "enemy_summons": {
+          "healthStageSummon": {
+            "distribution": "project.enemy_summons",
+            "tier": "project_rule",
+            "original_path": "assets/data/boss_service_rules.json",
+            "sha256": "9A2249FE495FAD9DFE32D5A3C58E36A94D5275F8DF21E0C0F5DCC610E670AE6C",
+            "hash_normalization": "lf_text",
+            "role": "enemy_summon_rule",
+            "field": "healthStageSummon",
+            "evidence": "Exact monster_id=160; summon-only generation, other fields preserved"
           }
         }
       }
@@ -329272,13 +329394,12 @@
           "summonRule": {
             "enabled": true,
             "monsterIds": [
-              170
+              183
             ],
             "count": 1,
-            "maxActive": 15,
+            "maxActive": 5,
             "delaySeconds": 0.5,
-            "confidence": "B",
-            "compatibilityNote": "原服配置名小蜘蛛投影到1.76项目黑锷蜘蛛稳定ID"
+            "confidence": "B"
           },
           "timing": {
             "attackIntervalMs": 2200,
@@ -329484,6 +329605,28 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "enemy_summons": {
+          "summonRule": {
+            "distribution": "project.enemy_summons",
+            "tier": "project_rule",
+            "original_path": "assets/data/monster_behavior_profiles.json",
+            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "hash_normalization": "lf_text",
+            "role": "enemy_summon_rule",
+            "field": "summonRule",
+            "evidence": "Exact monster_id=182; summon-only generation, other fields preserved"
+          },
+          "service": {
+            "distribution": "source.original_gameofmir.server_suite",
+            "tier": "primary",
+            "original_path": "assets/data/service_monster_runtime_catalog.json",
+            "sha256": "BC5D625645C63B4C67A3EC5DE96BB06092572F1AA3279B80F78F4B699C041580",
+            "hash_normalization": "lf_text",
+            "role": "summon_rule_service_merge",
+            "field": "summonRule",
+            "evidence": "runtimeByMonsterId[182] exact ID merge"
+          }
         }
       }
     },
@@ -329500,19 +329643,17 @@
         "source_scope": "classification_and_drop_closure"
       },
       "spawn_authority": null,
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
+        "allowed": true,
         "classification_ok": true,
         "art_ok": true,
         "drop_ok": false,
         "combat_identity_ok": true,
         "intentional_exclusion": false,
-        "blockers": [
-          "drop_policy_not_closed"
-        ]
+        "blockers": []
       },
-      "status": "unresolved",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": true,
         "entry_count": 0,
@@ -329777,7 +329918,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "ordinary",
           "identity_resolution": "vanilla_exact_id",
@@ -329804,6 +329945,16 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "spawn_drop_policy": {
+          "distribution": "project.monster_runtime_contract",
+          "tier": "project_rule",
+          "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+          "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+          "hash_normalization": "lf_text",
+          "role": "spawn_independent_of_drops",
+          "field": "runtime_policy.drops_gate_spawn",
+          "evidence": "Empty or absent loot does not prevent otherwise valid monster spawning"
         }
       }
     },
@@ -346258,19 +346409,17 @@
         "source_scope": "classification_and_drop_closure"
       },
       "spawn_authority": null,
-      "runtime_allowed": false,
+      "runtime_allowed": true,
       "runtime_capability": {
-        "allowed": false,
+        "allowed": true,
         "classification_ok": true,
         "art_ok": true,
         "drop_ok": false,
         "combat_identity_ok": true,
         "intentional_exclusion": false,
-        "blockers": [
-          "drop_policy_not_closed"
-        ]
+        "blockers": []
       },
-      "status": "unresolved",
+      "status": "formal",
       "drop_policy": {
         "hostile_requires_non_empty": true,
         "entry_count": 0,
@@ -346549,7 +346698,7 @@
           ]
         },
         "status": {
-          "runtime_allowed": false,
+          "runtime_allowed": true,
           "art_status": "formal",
           "classification_status": "special",
           "identity_resolution": "vanilla_exact_id",
@@ -346576,6 +346725,16 @@
               "mapping_confidence": "B"
             }
           }
+        },
+        "spawn_drop_policy": {
+          "distribution": "project.monster_runtime_contract",
+          "tier": "project_rule",
+          "original_path": "assets/data/canonical_monster_catalog_policy_v1.json",
+          "sha256": "7E2856C16AC1937CBE0A9050200C989607FFA938E8A8EC29413FA9D756107B7E",
+          "hash_normalization": "lf_text",
+          "role": "spawn_independent_of_drops",
+          "field": "runtime_policy.drops_gate_spawn",
+          "evidence": "Empty or absent loot does not prevent otherwise valid monster spawning"
         }
       }
     }

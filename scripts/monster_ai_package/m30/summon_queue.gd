@@ -8,6 +8,7 @@ const MATERIALIZATIONS_PER_TICK := 1
 const MAX_ATTEMPTS_PER_CHILD := 96
 const MAX_PENDING_BATCHES := 256
 const SOFT_BUDGET_USEC := 1000
+const MONSTER_SUMMON_HARD_CAP := 5
 
 var _host_ref: WeakRef
 var _map_id: int = -1
@@ -19,6 +20,8 @@ var _cursor: int = 0
 var _last_pump_tick: int = -1
 var _queue_epoch: int = 0
 var _pump_active: bool = false
+var _materializing_job: Dictionary = {}
+var _materializing_epoch: int = -1
 var _stats: Dictionary = {
 	"reentrant_pump_rejected": 0, "stale_callback_rejections": 0,
 	"max_resolve_call_usec": 0, "max_probe_call_usec": 0,
@@ -51,6 +54,9 @@ func _sync_world(host: Node) -> void:
 	if map_id == _map_id and generation == _generation:
 		return
 	cancel_all()
+	# An old world's in-flight birth cannot occupy a slot in the new world.
+	_reserved.clear()
+	_materializing_epoch = -1
 	_children.clear()
 	_map_id = map_id
 	_generation = generation
@@ -73,6 +79,16 @@ func track_child(child: EnemyActor) -> void:
 	var members: Dictionary = _children.get(slot, {})
 	if members.has(child.get_instance_id()):
 		return
+	# Transfer the in-flight reservation to a live child atomically, including
+	# the factory's synchronous track_child callback. Never count that birth
+	# as both live and reserved, nor free its slot before it is registered.
+	if (
+		_materializing_epoch == _queue_epoch
+		and str(_materializing_job.get("slot", "")) == slot
+		and not bool(_materializing_job.get("birth_tracked", false))
+	):
+		_release_reservation(slot, 1)
+		_materializing_job["birth_tracked"] = true
 	members[child.get_instance_id()] = weakref(child)
 	child.tree_exiting.connect(_child_exiting.bind(child.get_instance_id(), slot), CONNECT_ONE_SHOT)
 	child.died.connect(_child_died.bind(child.get_instance_id(), slot), CONNECT_ONE_SHOT)
@@ -126,6 +142,9 @@ func enqueue(source: EnemyActor, monster_ids: Array, count: int, max_active: int
 		return
 	if not _source_valid(source, host) or monster_ids.is_empty() or count <= 0 or max_active <= 0:
 		return
+	# is_boss is compiled by EnemyActor.setup from the canonical ID classification.
+	# Bosses retain their authored cap; ordinary and elite summoners share cap 5.
+	var effective_max_active := max_active if source.is_boss else mini(max_active, MONSTER_SUMMON_HARD_CAP)
 	var slot: String = str(source.get_meta("spawn_slot_id", ""))
 	if slot.is_empty():
 		return
@@ -134,6 +153,7 @@ func enqueue(source: EnemyActor, monster_ids: Array, count: int, max_active: int
 	_stats["last_source_slot"] = slot
 	_stats["last_requested_count"] = count
 	_stats["last_max_active"] = max_active
+	_stats["last_effective_max_active"] = effective_max_active
 	_stats["last_child_ids"] = monster_ids.duplicate()
 	# The producer reserves its serial BEFORE emitting the synchronous signal.
 	var serial: int = int(source.get_meta("m30_summon_release_serial", 0))
@@ -148,13 +168,13 @@ func enqueue(source: EnemyActor, monster_ids: Array, count: int, max_active: int
 		_stats["capacity_rejected"] = int(_stats["capacity_rejected"]) + 1
 		return
 	# Keep the existing cap PER SPAWN SLOT, including previous-life survivors.
-	var allowed: int = mini(count, maxi(0, max_active - _active(slot) - int(_reserved.get(slot, 0))))
+	var allowed: int = mini(count, maxi(0, effective_max_active - _active(slot) - int(_reserved.get(slot, 0))))
 	if allowed <= 0:
 		return
 	_reserved[slot] = int(_reserved.get(slot, 0)) + allowed
 	_jobs.append({
 		"source": weakref(source), "life": life, "slot": slot,
-		"ids": monster_ids.duplicate(), "limit": max_active,
+		"ids": monster_ids.duplicate(), "limit": effective_max_active,
 		"remaining": allowed, "index": 0, "attempts": 0,
 		"enqueued_tick": Engine.get_physics_frames(), "serial": serial,
 		"monster": {},
@@ -182,7 +202,9 @@ func _release_reservation(slot: String, amount: int) -> void:
 		_reserved[slot] = remaining
 
 func _finish_child(job: Dictionary) -> void:
-	_release_reservation(str(job["slot"]), 1)
+	if not bool(job.get("birth_tracked", false)):
+		_release_reservation(str(job["slot"]), 1)
+	job["birth_tracked"] = false
 	job["remaining"] = int(job["remaining"]) - 1
 	job["index"] = int(job["index"]) + 1
 	job["attempts"] = 0
@@ -199,12 +221,20 @@ func _remove_job(index: int, cancelled: bool) -> void:
 		_cursor = 0
 
 func cancel_all() -> void:
+	var in_flight_slot := ""
+	if _materializing_epoch == _queue_epoch and not bool(_materializing_job.get("birth_tracked", false)):
+		in_flight_slot = str(_materializing_job.get("slot", ""))
 	_queue_epoch += 1
 	for job: Dictionary in _jobs:
 		_stats["cancelled_children"] = int(_stats["cancelled_children"]) + int(job["remaining"])
 	_jobs.clear()
 	set_physics_process(false)
 	_reserved.clear()
+	# A synchronous factory callback can cancel and enqueue before registering
+	# its newborn. Keep that one admission occupied until the factory returns.
+	if not in_flight_slot.is_empty():
+		_reserved[in_flight_slot] = 1
+		_materializing_epoch = _queue_epoch
 	_cursor = 0
 
 func _physics_process(_delta: float) -> void:
@@ -299,6 +329,8 @@ func _pump_body(tick: int) -> void:
 			if candidate.is_finite():
 				materializations += 1
 				var spawn_started: int = Time.get_ticks_usec()
+				_materializing_job = job
+				_materializing_epoch = epoch
 				var child: EnemyActor = host.call("_hc_m30_materialize", monster, candidate, {
 					"spawn_group_id": "%s:summons" % slot,
 					"respawn_enabled": false,
@@ -318,9 +350,15 @@ func _pump_body(tick: int) -> void:
 					_stats["cancel_during_materialize"] = int(_stats["cancel_during_materialize"]) + 1
 					if is_instance_valid(child):
 						track_child(child) # map/generation filter; never own an old child
+					elif _materializing_epoch == _queue_epoch and not bool(job.get("birth_tracked", false)):
+						_release_reservation(slot, 1)
+					_materializing_job = {}
+					_materializing_epoch = -1
 					break
 				if is_instance_valid(child):
 					track_child(child)
+				_materializing_job = {}
+				_materializing_epoch = -1
 				_finish_child(job)
 			elif int(job["attempts"]) >= MAX_ATTEMPTS_PER_CHILD:
 				_stats["landing_exhausted"] = int(_stats["landing_exhausted"]) + 1

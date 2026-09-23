@@ -136,14 +136,14 @@
       "movement": {"stationary": true},
       "serviceClass": {"race": 103, "name": "TBeeQueen", "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas + ObjMon2.pas"},
       "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 0.0, "aggroRadius": 288.0},
-      "summonRule": {"enabled": true, "monsterIds": [127], "count": 1, "maxActive": 15, "delaySeconds": 0.5, "confidence": "A"}
+      "summonRule": {"enabled": true, "monsterIds": [127], "count": 1, "maxActive": 5, "delaySeconds": 0.5, "confidence": "A"}
     },
     "stationary_spider": {
       "specialClassification": "fixed_body_summoner",
       "movement": {"stationary": true},
       "serviceClass": {"race": 116, "name": "TSpiderHouseMonster", "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas + ObjMon2.pas"},
       "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 0.0, "aggroRadius": 288.0},
-      "summonRule": {"enabled": true, "monsterIds": [170], "count": 1, "maxActive": 15, "delaySeconds": 0.5, "confidence": "B", "compatibilityNote": "原服配置名小蜘蛛投影到1.76项目黑锷蜘蛛稳定ID"}
+      "summonRule": {"enabled": true, "monsterIds": [183], "count": 1, "maxActive": 5, "delaySeconds": 0.5, "confidence": "B"}
     },
     "rainbow_demon": {"lifeStealRatio": 0.33},
     "millennium_tree": {

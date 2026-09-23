@@ -77,6 +77,7 @@ const DPV2_EXPLICIT_NON_LOOT_SOURCE_COUNTS := {
 	59: 0, 78: 0, 145: 74, 146: 78, 147: 71,
 	161: 0, 186: 0, 187: 0, 194: 0,
 }
+# Historical drop-ledger status, not a restriction on monster spawning.
 const DPV2_RUNTIME_DISABLED_IDS := {33: true, 183: true, 241: true}
 const DPV2_PROJECT_EXTENSION_ID := 225
 const DPV2_SPB_BASE_SHA := "342891ab884150c0e81084c932df8205484e6388"
@@ -1672,7 +1673,9 @@ func _validate_dpv2_semantic_authority(authority: Dictionary) -> bool:
 			load_error = "dpv2_semantic_authority_runtime_allowed_invalid"
 			return false
 		var runtime_allowed := bool(runtime_allowed_value)
-		if runtime_allowed != bool(entry.get("runtime_allowed", false)):
+		# This frozen ledger describes drop eligibility when it was compiled.
+		# Empty-drop monsters may now spawn; that must not invent drop slots.
+		if runtime_allowed == DPV2_RUNTIME_DISABLED_IDS.has(monster_id):
 			load_error = "dpv2_semantic_authority_runtime_allowed_mismatch"
 			return false
 		if runtime_allowed:
@@ -2430,10 +2433,10 @@ func _build_canonical_monster_runtime_drop_closure() -> void:
 			"requires_non_empty": requires_non_empty,
 			"exemption_applied": exemption_valid,
 		}
-		if allowed:
-			monsters.append(entry.duplicate(true))
-			if str(entry.get("classification", "")) == "boss":
-				bosses.append(entry.duplicate(true))
+		# Keep the drop-closure diagnostics, but do not use loot to gate birth.
+		monsters.append(entry.duplicate(true))
+		if str(entry.get("classification", "")) == "boss":
+			bosses.append(entry.duplicate(true))
 
 
 
@@ -2705,11 +2708,6 @@ func get_canonical_monster_entry(
 		return {}
 	if context in ["runtime", "spawn", "combat"]:
 		if not bool(entry.get("runtime_allowed", false)):
-			return {}
-		var closure: Dictionary = _monster_runtime_drop_closure.get(
-			resolved_id, {}
-		)
-		if not bool(closure.get("allowed", false)):
 			return {}
 	elif context == "editor":
 		if not bool(entry.get("editor_placement", {}).get("allowed", false)):

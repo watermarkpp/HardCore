@@ -5937,7 +5937,7 @@ func _update_behavior_summon(delta: float) -> bool:
 			var ids: Array = summon_rule.get("monsterIds", []).duplicate()
 			if not ids.is_empty():
 				set_meta("m30_summon_release_serial", int(get_meta("m30_summon_release_serial", 0)) + 1)
-				summon_requested.emit(self, ids, maxi(1, int(summon_rule.get("count", 1))), maxi(1, int(summon_rule.get("maxActive", 15))))
+				summon_requested.emit(self, ids, maxi(1, int(summon_rule.get("count", 1))), maxi(1, int(summon_rule.get("maxActive", 5))))
 	elif _summon_cooldown > 0.0:
 		_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
 	elif _hc_target_usable(target):
@@ -6766,7 +6766,12 @@ func _apply_health_stage_mechanics() -> void:
 	_boss_health_stage -= 1
 	if bool(summon.get("enabled", false)):
 		var count := _rng.randi_range(int(summon.get("minCount", 6)), int(summon.get("maxCount", 11)))
-		var ids: Array = summon.get("monsterIds", []).duplicate()
+		var pool: Array = summon.get("monsterIds", [])
+		var ids: Array = []
+		# Original CallSlave selects one of the four configured kinds per child.
+		for _child_index in range(count):
+			if not pool.is_empty():
+				ids.append(pool[_rng.randi_range(0, pool.size() - 1)])
 		summon_requested.emit(self, ids, count, int(summon.get("maxActive", 30)))
 	if bool(rage.get("enabled", false)):
 		_boss_rage_time = float(rage.get("durationSeconds", 8.0))

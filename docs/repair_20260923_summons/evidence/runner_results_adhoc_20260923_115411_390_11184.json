@@ -1,0 +1,41 @@
+{
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "monster_summon_hard_cap_test",
+      "test_path": "tests/monster_summon_hard_cap_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "test_m30_summon_reproduction",
+      "test_path": "tests/m30_r4/test_m30_summon_reproduction.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 2,
+  "generated_at": "2026-09-23T11:54:11.3909578+08:00",
+  "engine_log_errors": 0,
+  "passed": 2,
+  "failed": 0,
+  "git_head": "9e3b9c36efc3c3cef5a851f7bfd63177d5c31d80"
+}

@@ -3,6 +3,7 @@
 # including Windows CRLF and debugger whitespace, not source-code formatting.
 docs/repair_v92/evidence/** -text -whitespace
 docs/repair_v93/evidence/** -text -whitespace
+docs/repair_20260923_summons/evidence/** -text -whitespace
 tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json text eol=lf
 
 # DPV2-SPB raw-byte authorities are frozen to their audited Windows CRLF
@@ -14,6 +15,9 @@ assets/data/drop/dpv2_direct_baseline_v2.json text eol=lf
 assets/data/drop/dpv2_21cq_source_provenance_v1.json text eol=lf
 assets/data/drop/dpv2_single_player_item_boost_classification_v1.json text eol=crlf
 map_editor_workspace/**/*.editor.json text eol=crlf
+# Preserve the latest editor save bytes used by this visual release's SHA.
+map_editor_workspace/mengzhong_zuma_leader_home/mengzhong_zuma_leader_home.editor.json text eol=lf
+map_editor_workspace/mengzhong_zuma_leader_home/ground/ground_state.json text eol=crlf
 
 # WALL-P1R: the wall render contract hashes runtime json bytes
 # (source_runtime_json_sha256) and publishes byte-deterministic plan

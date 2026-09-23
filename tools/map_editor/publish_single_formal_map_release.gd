@@ -11,6 +11,7 @@ const FORMAL_TARGET_COUNTS := {
 	"world_cangyue_island": Vector2i(37, 0),
 	"world_wooma_forest": Vector2i(50, 4),
 	"bich_orc_tomb_f1": Vector2i(40, 0),
+	"mengzhong_zuma_leader_home": Vector2i(4, 6),
 }
 const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 const REGISTRY_PATH := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"

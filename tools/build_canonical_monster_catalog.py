@@ -1696,9 +1696,7 @@ def build_catalog() -> dict[str, Any]:
         )
         hostile_classification = classification_name in ("ordinary", "elite", "boss", "special")
         drop_ok = bool(drop_profile.get("entry_count", 0)) or has_drop_exemption or not hostile_classification
-        # A hostile spawn cannot be placed or run without a non-empty,
-        # source-evidenced drop table.  The drop profile itself remains in the
-        # catalog as missing_for_hostile for later source-priority repair.
+        # Drop eligibility is independent of whether the actor can exist.
         # Combat identity: proven by vanilla exact-ID record existence.
         # Service exact match is decoupled — it no longer gates identity.
         core_combat_identity_ok = True  # active vanilla record always exists
@@ -1731,7 +1729,7 @@ def build_catalog() -> dict[str, Any]:
         if not art_ok:
             runtime_blockers.append("art_not_formal")
 
-        if not drop_ok:
+        if not drop_ok and policy.get("runtime_policy", {}).get("drops_gate_spawn", True):
             runtime_blockers.append("drop_policy_not_closed")
 
         if not combat_identity_ok:
@@ -1753,7 +1751,7 @@ def build_catalog() -> dict[str, Any]:
             runtime_classification_ok
             and not intentional_exclusion
             and art_ok
-            and drop_ok
+            and (drop_ok or not policy.get("runtime_policy", {}).get("drops_gate_spawn", True))
             and combat_identity_ok
         )
 
@@ -2509,14 +2507,111 @@ def validate_generator_contract() -> list[str]:
     return errors
 
 
+def apply_spawn_drop_policy(catalog: dict[str, Any], policy: dict[str, Any]) -> None:
+    """Apply the explicit spawn policy without changing any drop row/eligibility."""
+    if policy.get("runtime_policy", {}).get("drops_gate_spawn") is not False:
+        raise RuntimeError("spawn policy: explicit drops_gate_spawn=false required")
+    catalog["runtime_policy"]["drops_gate_spawn"] = False
+    for entry in catalog["entries"]:
+        capability = entry["runtime_capability"]
+        if "drop_policy_not_closed" not in capability["blockers"]:
+            continue
+        capability["blockers"].remove("drop_policy_not_closed")
+        allowed = (not capability["blockers"] and not capability["intentional_exclusion"]
+                   and all(capability[k] for k in ("classification_ok", "art_ok", "combat_identity_ok")))
+        capability["allowed"] = allowed
+        entry["runtime_allowed"] = allowed
+        if allowed:
+            entry["status"] = "formal"
+        entry["source_evidence"]["status"]["runtime_allowed"] = allowed
+        entry["source_evidence"]["spawn_drop_policy"] = source_ref(
+            POLICY_PATH, role="spawn_independent_of_drops", distribution="project.monster_runtime_contract",
+            tier="project_rule", field="runtime_policy.drops_gate_spawn",
+            evidence="Empty or absent loot does not prevent otherwise valid monster spawning",
+        )
+        catalog["entries_by_id"][str(entry["monster_id"])] = copy.deepcopy(entry)
+    catalog["summary"]["runtime_allowed_count"] = sum(e["runtime_allowed"] for e in catalog["entries"])
+    catalog["summary"]["unresolved_count"] = sum(e["status"] == "unresolved" for e in catalog["entries"])
+
+
+def build_spawn_and_summons(catalog: dict[str, Any]) -> dict[str, Any]:
+    """Refresh enemy summon rules and explicit spawn policy on a published catalog.
+
+    The full catalog also owns frozen classifications, drops, art and 21CQ
+    attributes. This explicit lane neither rebuilds nor certifies those domains.
+    Keep their original provenance; record fresh evidence on the summon fields.
+    """
+    result = copy.deepcopy(catalog)
+    entries = result["entries"]
+    by_id = result["entries_by_id"]
+    if len(entries) != len(by_id) or len({e["monster_id"] for e in entries}) != len(entries):
+        raise RuntimeError("enemy summons: duplicate or mismatched catalog identities")
+    for entry in entries:
+        if by_id.get(str(entry["monster_id"])) != entry:
+            raise RuntimeError(f"enemy summons: catalog mirrors differ for {entry['monster_id']}")
+
+    apply_spawn_drop_policy(result, load_json(POLICY_PATH))
+
+    service = load_json(SERVICE_PATH)
+    behavior = load_json(BEHAVIOR_PATH)
+    bosses = load_json(BOSS_RULE_PATH)
+    for entry in entries:
+        monster_id = entry["monster_id"]
+        profile, _, _, extra = behavior_for(monster_id, service, behavior, bosses)
+        targets = (
+            (entry["combat"]["behavior_profile"], profile, "summonRule", BEHAVIOR_PATH),
+            (entry["combat"]["boss_rule"].get("mechanics", {}),
+             extra["boss_rule"].get("mechanics", {}), "healthStageSummon", BOSS_RULE_PATH),
+        )
+        evidence = {}
+        for current, authored, key, source in targets:
+            if key not in current and key not in authored:
+                continue
+            rule = authored.get(key)
+            if not isinstance(rule, dict) or key not in current:
+                raise RuntimeError(f"enemy summons: unsupported rule addition/removal {monster_id}/{key}")
+            cap = rule.get("maxActive")
+            if type(cap) is not int or cap < 1 or (entry["classification"] != "boss" and cap > 5):
+                raise RuntimeError(f"enemy summons: invalid cap {monster_id}/{key}: {cap!r}")
+            children = rule.get("monsterIds")
+            if not isinstance(children, list) or not children or any(
+                type(child) is not int or not (
+                    by_id.get(str(child), {}).get("runtime_allowed", False)
+                )
+                for child in children
+            ):
+                raise RuntimeError(f"enemy summons: unresolved child identity {monster_id}/{key}")
+            current[key] = copy.deepcopy(rule)
+            evidence[key] = source_ref(
+                source, role="enemy_summon_rule", distribution="project.enemy_summons",
+                tier="project_rule", field=key,
+                evidence=f"Exact monster_id={monster_id}; summon-only generation, other fields preserved",
+            )
+            # Ordinary rules retain the existing service-over-authored merge.
+            if key == "summonRule":
+                evidence["service"] = source_ref(
+                    SERVICE_PATH, role="summon_rule_service_merge",
+                    distribution="source.original_gameofmir.server_suite", tier="primary",
+                    field=key, evidence=f"runtimeByMonsterId[{monster_id}] exact ID merge",
+                )
+        if evidence:
+            entry["source_evidence"]["enemy_summons"] = evidence
+        by_id[str(monster_id)] = copy.deepcopy(entry)
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="validate generated output without writing")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--spawn-and-summons-only", action="store_true",
+                        help="refresh enemy summons and spawn/drop separation; preserve all other catalog domains")
+    parser.add_argument("--base-catalog", type=Path, default=DEFAULT_OUTPUT,
+                        help="published input for --spawn-and-summons-only")
     args = parser.parse_args()
     try:
-        catalog = build_catalog()
-        errors = validate_catalog(catalog) + validate_generator_contract()
+        catalog = build_spawn_and_summons(load_json(args.base_catalog)) if args.spawn_and_summons_only else build_catalog()
+        errors = [] if args.spawn_and_summons_only else validate_catalog(catalog) + validate_generator_contract()
         if errors:
             for error in errors:
                 print(f"ERROR: {error}", file=sys.stderr)
@@ -2530,10 +2625,16 @@ def main() -> int:
             if current != rendered:
                 print(f"ERROR: {args.output} differs from generated catalog", file=sys.stderr)
                 return 1
+            if args.spawn_and_summons_only:
+                print(f"ENEMY_SUMMON_CATALOG_CHECK_PASS: identities={len(catalog['entries'])}; scope=spawn_and_summons_only")
+                return 0
             print(f"CANONICAL_MONSTER_CATALOG_CHECK_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']} drop_rows={catalog['summary']['drop_final_row_count']} authoring_rows={catalog['summary']['drop_final_row_count'] - catalog['summary']['drop_base_row_count']}")
             return 0
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered, encoding="utf-8", newline="\n")
+        if args.spawn_and_summons_only:
+            print(f"ENEMY_SUMMON_CATALOG_BUILD_PASS: identities={len(catalog['entries'])}; scope=spawn_and_summons_only")
+            return 0
         print(f"CANONICAL_MONSTER_CATALOG_BUILD_PASS: identities={len(catalog['entries'])} runtime_allowed={catalog['summary']['runtime_allowed_count']} drop_rows={catalog['summary']['drop_final_row_count']} authoring_rows={catalog['summary']['drop_final_row_count'] - catalog['summary']['drop_base_row_count']}")
         return 0
     except Exception as exc:

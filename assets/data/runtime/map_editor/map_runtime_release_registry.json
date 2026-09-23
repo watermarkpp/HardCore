@@ -1041,32 +1041,31 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "e12f48542964d7bc009fa9e48b1ba8faf53626919736d0e7fe10c64794acfbe1",
-      "display_name": "祖玛教主之家",
-      "map_key": "mengzhong_zuma_leader_home",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 913106.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "祖玛教主",
-          "祖玛卫士00",
-          "祖玛雕像3",
-          "祖玛弓箭手3"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": false,
-        "monster_names": [
-          "角蝇",
-          "楔蛾"
-        ],
-        "npc_kinds": [],
-        "portals": [],
-        "runtime_build_sha256": "e12f48542964d7bc009fa9e48b1ba8faf53626919736d0e7fe10c64794acfbe1"
-      }
-    },
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "f537e361fe114821e1e63c96e053dcea61b105e9e738fa265365d7cd23deecd5",
+  "display_name": "祖玛教主之家",
+  "map_key": "mengzhong_zuma_leader_home",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 913106,
+  "runtime_path": "res://assets/data/runtime/map_editor/mengzhong_zuma_leader_home.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "祖玛教主",
+      "祖玛卫士00",
+      "祖玛雕像3"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": false,
+    "monster_names": [
+      "角蝇",
+      "楔蛾"
+    ],
+    "npc_kinds": [],
+    "portals": [],
+    "runtime_build_sha256": "f537e361fe114821e1e63c96e053dcea61b105e9e738fa265365d7cd23deecd5"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",

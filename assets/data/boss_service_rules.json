@@ -103,7 +103,7 @@
       "phaseTwo": {"enabled": false},
       "mechanics": {
         "stoneWake": {"enabled": true, "wakeRange": 64.0, "confidence": "A", "source": "ObjMon.pas TScultureKingMonster"},
-        "healthStageSummon": {"enabled": true, "stages": 5, "minCount": 6, "maxCount": 11, "maxActive": 30, "monsterIds": [153, 156, 150, 159], "confidence": "A", "source": "ObjMon.pas TScultureKingMonster.CallSlave", "integration": "通过summon_requested信号交给刷新服务"}
+        "healthStageSummon": {"enabled": true, "stages": 5, "minCount": 4, "maxCount": 7, "maxActive": 15, "monsterIds": [156, 153, 150, 128], "confidence": "A", "source": "ObjMon.pas TScultureKingMonster.CallSlave", "integration": "通过summon_requested信号交给刷新服务"}
       },
       "knockbackImmune": true
     }
