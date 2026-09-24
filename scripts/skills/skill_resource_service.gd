@@ -85,7 +85,7 @@ static func _quote_single(
 	var mp_cost := (
 		maxi(
 			0,
-			SkillRankResolverScript.linear_int(mp_costs, safe_rank)
+			SkillRankResolverScript.timing_int(mp_costs, safe_rank)
 		)
 		if not mp_costs.is_empty()
 		else 0
@@ -115,7 +115,7 @@ static func _quote_single(
 	var item_amount := (
 		maxi(
 			0,
-			SkillRankResolverScript.linear_int(amounts, safe_rank)
+			SkillRankResolverScript.timing_int(amounts, safe_rank)
 		)
 		if not amounts.is_empty()
 		else 0
@@ -215,6 +215,12 @@ static func _requested_main_pet_is_active(
 	)
 	if requested_summon_id != expected_summon_id:
 		return false
+	if skill_id == "taoist.summon_skeleton":
+		var active_ids: Variant = resource_context.get("active_main_pet_summon_ids", cast_context.get("active_main_pet_summon_ids", []))
+		var legacy_single_count := 1 if active_ids is Array and (active_ids as Array).has("skeleton") else 0
+		var active_count := int(resource_context.get("active_skeleton_count", cast_context.get("active_skeleton_count", legacy_single_count)))
+		var group_limit := SkillRankResolverScript.skeleton_count(resource_context.get("effective_skill_rank", cast_context.get("effective_skill_rank", 3)))
+		return active_count >= group_limit
 	var active_ids: Variant = resource_context.get(
 		"active_main_pet_summon_ids",
 		cast_context.get("active_main_pet_summon_ids", [])
@@ -232,6 +238,8 @@ static func _quote_dual_defense(
 	## Single transaction: one quote call prices both currently-effective
 	## levels and returns the summed MP plus per-skill components. No caller
 	## may issue two independent quotes that could disagree.
+	primary_rank = SkillRankResolverScript.formula_rank(primary_rank)
+	partner_rank = SkillRankResolverScript.formula_rank(partner_rank)
 	var primary_skill_id := str(primary_definition.get("skill_id", ""))
 	if partner_skill_id == primary_skill_id:
 		return _invalid_dual_quote("invalid_combined_defense_partner")

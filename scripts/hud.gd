@@ -16,6 +16,7 @@ const LootFeedbackLayerScript := preload("res://scripts/loot_feedback_layer.gd")
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
 const LoadingTransitionOverlayScript := preload("res://scripts/loading_transition_overlay.gd")
 const INVENTORY_PANEL_SCRIPT_PATH := "res://scripts/inventory_panel.gd"
+const ENHANCEMENT_PANEL_SCRIPT_PATH := "res://scripts/enhancement_panel.gd"
 const MonsterDisplayFormatterScript := preload("res://scripts/monster_display_formatter.gd")
 const SHOP_PANEL_SCRIPT_PATH := "res://scripts/shop_panel.gd"
 const SKILL_PANEL_SCRIPT_PATH := "res://scripts/skill_panel.gd"
@@ -145,6 +146,7 @@ const PlayerNoticePresenterScript := preload("res://scripts/player_notice_presen
 const UIPlayerNoticeScript := preload("res://scripts/ui_player_notice.gd")
 var notice_presenter: PlayerNoticePresenter
 var error_label: Label
+var target_panel: Control
 var target_label: Label
 var target_health_fill: ColorRect
 var auto_target_button: Button
@@ -155,6 +157,7 @@ var warrior_state_label: Label
 ## member declaration makes Godot pull every panel script into the main scene's
 ## script dependency graph even though the panels are only opened on demand.
 var inventory_panel
+var enhancement_panel
 var shop_panel
 var skill_panel
 var quest_panel
@@ -516,7 +519,7 @@ func _build_hidden_compatibility_info(root: Control) -> void:
 
 
 func _build_target_bar(root: Control) -> void:
-	var target_panel := Control.new()
+	target_panel = Control.new()
 	target_panel.name = "TargetPanel"
 	target_panel.anchor_left = 0.5
 	target_panel.anchor_right = 0.5
@@ -1727,6 +1730,26 @@ func _ensure_inventory_panel() -> void:
 	add_child(inventory_panel)
 
 
+func _ensure_enhancement_panel() -> void:
+	if is_instance_valid(enhancement_panel):
+		return
+	var panel_script := load(ENHANCEMENT_PANEL_SCRIPT_PATH) as Script
+	if panel_script == null:
+		return
+	enhancement_panel = panel_script.new()
+	if enhancement_panel == null:
+		return
+	enhancement_panel.hide()
+	add_child(enhancement_panel)
+	enhancement_panel.visibility_changed.connect(_sync_target_bar_for_forge)
+	_sync_target_bar_for_forge()
+
+
+func _sync_target_bar_for_forge() -> void:
+	if target_panel != null:
+		target_panel.visible = not (is_instance_valid(enhancement_panel) and enhancement_panel.visible)
+
+
 func _ensure_shop_panel() -> void:
 	if is_instance_valid(shop_panel):
 		return
@@ -2545,6 +2568,15 @@ func open_skill_trainer(display_name: String) -> void:
 	skill_panel.open_for(display_name)
 
 
+func open_enhancement_vendor(_display_name := "") -> void:
+	_panel_prewarm_user_interaction = true
+	_close_modal_panels()
+	_ensure_enhancement_panel()
+	if enhancement_panel != null:
+		enhancement_panel.show()
+		enhancement_panel.refresh()
+
+
 func set_skill_button_assignments(assignments: Dictionary, interaction_modes := {}) -> void:
 	_skill_button_assignments = assignments.duplicate(true)
 	_skill_button_modes = interaction_modes.duplicate(true) if interaction_modes is Dictionary else {}
@@ -2857,6 +2889,8 @@ func _close_modal_panels() -> void:
 		item_quick_slot_menu.hide()
 	if inventory_panel != null:
 		inventory_panel.hide()
+	if enhancement_panel != null:
+		enhancement_panel.hide()
 	if shop_panel != null:
 		shop_panel.hide()
 	if skill_panel != null:
@@ -2879,7 +2913,7 @@ func _ui_l1_background_blocked() -> bool:
 		return true
 	if get_tree().paused or Input.is_anything_pressed():
 		return true
-	for panel: Variant in [inventory_panel, shop_panel, warehouse_panel, map_panel, skill_panel, quest_panel, death_revival_panel]:
+	for panel: Variant in [inventory_panel, enhancement_panel, shop_panel, warehouse_panel, map_panel, skill_panel, quest_panel, death_revival_panel]:
 		if is_instance_valid(panel) and panel is CanvasItem and panel.is_visible_in_tree():
 			return true
 	return false

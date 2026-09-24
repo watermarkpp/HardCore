@@ -1,0 +1,17 @@
+{
+	"contract_id": "equipment.enhancement.rules.v1",
+	"weapon_stage_base_bps": [9100, 8900, 8700, 8000, 7400, 6800, 6200],
+	"armor_stage_base_bps": [6000, 5500, 5000],
+	"black_iron_min_purity": 10,
+	"black_iron_max_purity": 20,
+	"black_iron_bonus_at_min_bps": 100,
+	"black_iron_bonus_step_bps": 40,
+	"weapon_accessory_penalty_by_stage_bps": [400, 400, 400, 600, 800, 1000, 1200],
+	"armor_accessory_penalty_by_stage_bps": [400, 600, 800],
+	"weapon_difficulty_scale_bps": 9182,
+	"armor_difficulty_scale_bps": 8876,
+	"minimum_success_bps": 1000,
+	"maximum_success_bps": 9900,
+	"weapon_gold_cost": [100000, 150000, 220000, 320000, 440000, 570000, 700000],
+	"armor_gold_cost": [100000, 250000, 500000]
+}

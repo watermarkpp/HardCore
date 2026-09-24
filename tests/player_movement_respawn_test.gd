@@ -6,6 +6,17 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	# Character creation needs an account warehouse. Keep this regression's
+	# profile and warehouse authority isolated from other test processes.
+	var isolated_root := "user://player_movement_respawn_%d" % Time.get_ticks_usec()
+	PlayerState.profile_directory = isolated_root.path_join("characters")
+	PlayerState.profile_index_path = isolated_root.path_join("profiles.json")
+	PlayerState.shared_warehouse_path = isolated_root.path_join("shared.json")
+	PlayerState.shared_warehouse_transaction_log_path = isolated_root.path_join("shared.transaction.json")
+	PlayerState._shared_warehouse_initialized = false
+	assert(DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(PlayerState.profile_directory)
+	) == OK, "死亡耐久回归测试无法创建独立角色目录")
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	var test_character_name := "死耐%d" % (Time.get_ticks_usec() % 1000000)

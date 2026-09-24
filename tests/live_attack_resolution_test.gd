@@ -19,6 +19,10 @@ func _run() -> void:
 	add_child(game)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	game._set_player_world_position(
+		game._canonical_ground_gu_to_screen_px(Vector2(40.5, 13.5))
+	)
+	assert(not game._player_inside_active_safe_zone())
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			_move_enemy(

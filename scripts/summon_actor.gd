@@ -117,6 +117,9 @@ var summon_name := "骷髅"
 var summon_id := "skeleton"
 var skill_id := "taoist.summon_skeleton"
 var skill_level := 0
+var effective_skill_rank := 0
+var pet_slot_index := 0
+var _divine_damage_more := 1.0
 var summon_level := 0
 var summon_exp_level := 0
 var maximum_pet_level := 1
@@ -256,6 +259,8 @@ func setup(
 		maxi(1, power)
 	)
 	skill_id = inferred_skill_id
+	effective_skill_rank = maxi(0, inferred_level)
+	_divine_damage_more = SkillRankResolver.more_multiplier(effective_skill_rank) if inferred_skill_id == "taoist.summon_divine_beast" else 1.0
 	skill_level = int(profile.get("skill_level", 0))
 	summon_level = int(profile.get("summon_level", skill_level))
 	summon_exp_level = int(profile.get("summon_exp_level", skill_level))
@@ -835,7 +840,8 @@ func _outgoing_damage_after_defense(target: EnemyActor) -> int:
 			return 0
 		var minimum := int(_outgoing_magic_stats.get("magic_defense_min", 0))
 		var maximum := int(_outgoing_magic_stats.get("magic_defense_max", minimum))
-		return maxi(0, raw_damage - _rng.randi_range(minimum, maximum))
+		var boosted_raw := raw_damage if effective_skill_rank <= 3 else roundi(float(raw_damage) * _divine_damage_more)
+		return maxi(0, boosted_raw - _rng.randi_range(minimum, maximum))
 	return 0
 
 
@@ -862,6 +868,10 @@ func _clear_pending_attack() -> void:
 	_pending_attack_target = null
 	_pending_attack_snapshot = {}
 	_pending_attack_release_remaining = 0.0
+
+
+func retire_for_rank_cap() -> void:
+	_expire()
 
 
 func _expire() -> void:
@@ -995,7 +1005,10 @@ func _owner_formation_anchor_screen_px() -> Vector2:
 		lateral_ground_gu
 		* typed_side
 		* RECALL_OFFSET_GU
+		* float(1 + floori(float(pet_slot_index) / 2.0))
 	)
+	if summon_id == "skeleton" and pet_slot_index % 2 == 1:
+		slot_offset_ground_gu -= owner_forward_ground_gu * RECALL_OFFSET_GU
 	return (
 		owner_player.global_position
 		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
@@ -1008,7 +1021,7 @@ func rest_formation_contract_snapshot() -> Dictionary:
 	return {
 		"contract_id": REST_FORMATION_CONTRACT_ID,
 		"collision_contract_id": COLLISION_INTERACTION_CONTRACT_ID,
-		"typed_slot_id": summon_id,
+		"typed_slot_id": "%s:%d" % [summon_id, pet_slot_index],
 		"direction_source": "owner_movement_facing",
 		"slot_offset_gu": RECALL_OFFSET_GU,
 		"expected_dual_separation_gu": RECALL_OFFSET_GU * 2.0,
@@ -1055,9 +1068,13 @@ func spatial_contract_snapshot() -> Dictionary:
 
 
 func synchronize_skill_rank(rank: int) -> bool:
-	var new_rank := maxi(skill_level, TaoistCombatMath.clamp_skill_level(rank))
+	var new_rank := maxi(skill_level, SkillRankResolver.formula_rank(rank))
+	var resolved_effective := maxi(new_rank, TaoistCombatMath.clamp_skill_level(rank))
+	var changed_more := resolved_effective != effective_skill_rank
+	effective_skill_rank = resolved_effective
+	_divine_damage_more = SkillRankResolver.more_multiplier(effective_skill_rank) if summon_id == "divine_beast" else 1.0
 	var new_cap := maxi(maximum_pet_level, TaoistCombatMath.maximum_summon_pet_level(new_rank))
-	if new_rank == skill_level and new_cap == maximum_pet_level:
+	if new_rank == skill_level and new_cap == maximum_pet_level and not changed_more:
 		return false
 	skill_level = new_rank
 	maximum_pet_level = new_cap
@@ -1847,6 +1864,8 @@ func persistence_snapshot() -> Dictionary:
 		"summon_id": summon_id,
 		"skill_id": skill_id,
 		"skill_rank": skill_level,
+		"pet_slot_index": pet_slot_index,
+		"effective_skill_rank": effective_skill_rank,
 		"owner_level": owner_level,
 		"current_hp": current_hp,
 		"max_hp": max_hp,
@@ -1882,6 +1901,9 @@ func restore_persistence_snapshot(snapshot: Dictionary) -> bool:
 	summon_id = restored_summon_id
 	skill_id = str(snapshot.get("skill_id", skill_id))
 	skill_level = maxi(0, int(snapshot.get("skill_rank", skill_level)))
+	pet_slot_index = maxi(0, int(snapshot.get("pet_slot_index", 0)))
+	effective_skill_rank = maxi(0, int(snapshot.get("effective_skill_rank", skill_level)))
+	_divine_damage_more = SkillRankResolver.more_multiplier(effective_skill_rank) if summon_id == "divine_beast" else 1.0
 	owner_level = maxi(1, int(snapshot.get("owner_level", owner_level)))
 	var restored_current_hp := maxi(0, int(snapshot.get("current_hp", current_hp)))
 	summon_exp_level = clampi(

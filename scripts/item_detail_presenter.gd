@@ -7,6 +7,8 @@ extends PanelContainer
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
+const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
+const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 var attribute_help: Node
 
@@ -392,6 +394,9 @@ func _strip_bbcode(value: String) -> String:
 
 
 static func format_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> String:
+	var black_iron_purity := EnhancementBlackIron.purity_for(item)
+	if black_iron_purity >= 0:
+		return "类别：矿石\n纯度：%d\n[color=#b58a45]乌黑色的矿石，天外陨石的碎片[/color]" % black_iron_purity
 	var kind := str(item.get("kind", ""))
 	var lines: Array[String] = []
 	var category := str(item.get("category", item.get("type", "")))
@@ -444,6 +449,9 @@ static func _stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
 	var containers: Array = [instance.get("modifiers", item.get("modifiers", []))]
 	if instance.has("drop_instance_contract_id"):
 		containers = [item.get("modifiers", []), instance.get("modifiers", [])]
+	var enhancement: Variant = instance.get("enhancement", null)
+	if EnhancementRules.validate_enhancement(enhancement, str(item.get("category", ""))):
+		containers.append((enhancement as Dictionary).get("forge", {}).get("modifiers", []))
 	for container: Variant in containers:
 		if not container is Array:
 			continue
@@ -572,10 +580,35 @@ static func _modifier_lines_from_container(container: Variant, omit_ranges := fa
 		if not MODIFIER_LABELS.has(stat):
 			continue
 		var label := str(MODIFIER_LABELS[stat])
+		if stat == "skill_level":
+			var parsed := EquipmentRulesScript.parse_skill_level_affix_entry(entry)
+			if str(parsed.get("status", "")) not in ["accepted", "legacy"]:
+				continue
+			var scope := str(parsed.get("canonical_scope", ""))
+			if str(parsed.get("status", "")) == "legacy":
+				var stable_id := SkillDataLoader.stable_skill_id(str(parsed.get("legacy_name", "")))
+				scope = "skill:" + stable_id if not stable_id.is_empty() else ""
+			label = _skill_level_scope_label(scope)
+			if label.is_empty():
+				continue
 		var operation := str(entry.get("op", "add"))
 		var value_text := _modifier_value_text(stat, operation, value)
 		result.append("%s %s" % [label, value_text])
 	return result
+
+
+static func _skill_level_scope_label(scope: String) -> String:
+	match scope:
+		"all": return "所有可突破技能等级"
+		"profession:warrior": return "战士可突破技能等级"
+		"profession:wizard": return "法师可突破技能等级"
+		"profession:taoist": return "道士可突破技能等级"
+	if scope.begins_with("skill:"):
+		var skill_id := scope.trim_prefix("skill:")
+		if SkillRankExtensionPolicy.can_extend(skill_id):
+			var display := SkillDataLoader.display_name(skill_id)
+			return "%s等级" % display if not display.is_empty() else ""
+	return ""
 
 
 static func _modifier_value_text(stat: String, operation: String, value: float) -> String:

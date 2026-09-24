@@ -79381,20 +79381,20 @@
 					"layoutRevision": 0,
 					"localRect": [
 						100.02503156662,
-						849.999979734421,
+						809.999979734421,
 						633.491866588593,
 						46.6666655540466
 					],
 					"logicalFontSize": 12,
 					"logicalRect": [
 						60.0,
-						510.0,
+						486.0,
 						380.0,
 						28.0
 					],
 					"normalized": [
 						0.12,
-						0.838815789473684,
+						0.799342105263158,
 						0.76,
 						0.0460526315789474
 					],
@@ -79405,7 +79405,7 @@
 					],
 					"rect": [
 						1015.25407040119,
-						943.333310842514,
+						903.333310842514,
 						633.491866588593,
 						46.6666655540466
 					],
@@ -81909,6 +81909,3078 @@
 						56.6666653156281
 					],
 					"text": "稀有物品出售确认",
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				}
+			}
+		},
+		"forge": {
+			"designSize": [
+				2033.84230852127,
+				1099.99997377396
+			],
+			"frameSafeInset": [
+				90.0225284099579,
+				156.666662931442,
+				90.0225284099579,
+				189.999995470047
+			],
+			"logicalDesignSize": [
+				1220.0,
+				660.0
+			],
+			"nodes": {
+				"BagPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						1160.29036617279,
+						79.9999980926514,
+						820.205258846283,
+						943.333310842514
+					],
+					"logicalRect": [
+						696.0,
+						48.0,
+						492.0,
+						566.0
+					],
+					"normalized": [
+						0.570491803278689,
+						0.0727272727272727,
+						0.40327868852459,
+						0.857575757575758
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						1475.36921560764,
+						129.999996900558,
+						820.205258846283,
+						943.333310842514
+					],
+					"textRevision": 0,
+					"themeVariation": "GothicInsetFrame",
+					"visible": true
+				},
+				"BagPanel/BagPagingHint": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						34.0075339257019,
+						723.000521906204,
+						760.190239906311,
+						46.6666655540466
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						20.3994140625,
+						433.800323486328,
+						456.0,
+						28.0
+					],
+					"normalized": [
+						0.0414622237042683,
+						0.766431666936976,
+						0.926829268292683,
+						0.049469964664311
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1509.37674953335,
+						853.000518806763,
+						760.190239906311,
+						46.6666655540466
+					],
+					"text": "首屏 1–30 格　·　拖动右侧滚条查看 31–100 格",
+					"textRevision": 0,
+					"themeVariation": "GothicMutedLabel",
+					"visible": true
+				},
+				"BagPanel/BagPanelDecoration": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						23.0000388696426,
+						37.0000067472456,
+						779.99998658058,
+						889.999978780746
+					],
+					"logicalRect": [
+						13.7965698242188,
+						22.2000045776367,
+						467.882873535156,
+						534.0
+					],
+					"normalized": [
+						0.0280418085858105,
+						0.0392226229286868,
+						0.950981450274708,
+						0.943462897526502
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1498.36925447729,
+						167.000003647804,
+						779.99998658058,
+						889.999978780746
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"BagPanel/BagSummary": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						364.102348182409,
+						91.6665881872195,
+						363.424281358719,
+						43.3332560062427
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						218.40673828125,
+						54.9999542236328,
+						218.0,
+						25.9999542236328
+					],
+					"normalized": [
+						0.443916134717988,
+						0.0971730639993513,
+						0.443089430894309,
+						0.0459363148827435
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1839.47156379005,
+						221.666585087778,
+						363.424281358719,
+						43.3332560062427
+					],
+					"text": "金币 0　负重 25/50",
+					"textRevision": 0,
+					"themeVariation": "GothicMutedLabel",
+					"visible": true
+				},
+				"BagPanel/BagTitle": {
+					"deleted": false,
+					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
+					"localRect": [
+						36.3391517625641,
+						33.0000042994816,
+						773.52691078186,
+						49.9999479452781
+					],
+					"logicalFontSize": 20,
+					"logicalRect": [
+						21.7980346679688,
+						19.8000030517578,
+						464.0,
+						29.9999694824219
+					],
+					"normalized": [
+						0.0443049485121316,
+						0.0349823375472753,
+						0.943089430894309,
+						0.053003479650922
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1511.70836737021,
+						163.00000120004,
+						773.52691078186,
+						49.9999479452781
+					],
+					"text": "综合背包",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"BagPanel/InventoryActions/AutoSortButton": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						77.9574363302745,
+						6.66666650772095,
+						298.397403327455,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						46.7627563476563,
+						4.0,
+						178.993637084961,
+						51.0
+					],
+					"normalized": [
+						0.101658165973166,
+						0.0833333333333333,
+						0.389116602358611,
+						1.0625
+					],
+					"parent": "BagPanel/InventoryActions",
+					"parentSize": [
+						766.858575344086,
+						79.9999980926514
+					],
+					"rect": [
+						1579.99999368902,
+						889.999978780746,
+						298.397403327455,
+						84.9999979734421
+					],
+					"text": "自动整理",
+					"textRevision": 0,
+					"themeVariation": "GothicInventoryActionGemButton",
+					"visible": true
+				},
+				"BagPanel/InventoryActions/DiscardButton": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						409.696644035008,
+						6.66666650772095,
+						298.397428765136,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						245.756469726563,
+						4.0,
+						178.99365234375,
+						51.0
+					],
+					"normalized": [
+						0.534253195057745,
+						0.0833333333333333,
+						0.389116635529891,
+						1.0625
+					],
+					"parent": "BagPanel/InventoryActions",
+					"parentSize": [
+						766.858575344086,
+						79.9999980926514
+					],
+					"rect": [
+						1911.73920139375,
+						889.999978780746,
+						298.397428765136,
+						84.9999979734421
+					],
+					"text": "丢弃",
+					"textRevision": 0,
+					"themeVariation": "GothicInventoryActionGemButton",
+					"visible": true
+				},
+				"BagPanel/InventoryScroll": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						109.630706900294,
+						134.999895056091,
+						619.999924108459,
+						579.999986171722
+					],
+					"logicalRect": [
+						65.761962890625,
+						80.9999389648438,
+						371.906860351563,
+						348.0
+					],
+					"normalized": [
+						0.133662526200457,
+						0.143109432800077,
+						0.755908252747078,
+						0.614840989399293
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1584.99992250794,
+						264.99989195665,
+						619.999924108459,
+						579.999986171722
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"CloseButton": {
+					"deleted": false,
+					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
+					"localRect": [
+						1897.14143204689,
+						13.3333330154419,
+						93.3566961288452,
+						93.3333311080933
+					],
+					"logicalFontSize": 24,
+					"logicalRect": [
+						1138.0,
+						8.0,
+						56.0,
+						56.0
+					],
+					"normalized": [
+						0.932786885245902,
+						0.0121212121212121,
+						0.0459016393442623,
+						0.0848484848484849
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						2212.22028148174,
+						63.333331823349,
+						93.3566961288452,
+						93.3333311080933
+					],
+					"text": "×",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentCloseButton",
+					"visible": true
+				},
+				"ForgeArtworkPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						573.476847648621,
+						246.666660785675,
+						566.808512210846,
+						449.999989271164
+					],
+					"logicalRect": [
+						344.0,
+						148.0,
+						340.0,
+						270.0
+					],
+					"normalized": [
+						0.281967213114754,
+						0.224242424242424,
+						0.278688524590164,
+						0.409090909090909
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						888.555697083473,
+						296.666659593582,
+						566.808512210846,
+						449.999989271164
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeArtworkPanel/ForgeImageInitial": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						121.444372941362,
+						24.9999994039536,
+						400.100126266479,
+						399.999990463257
+					],
+					"logicalRect": [
+						72.848388671875,
+						15.0,
+						240.0,
+						240.0
+					],
+					"normalized": [
+						0.214259966681985,
+						0.0555555555555556,
+						0.705882352941177,
+						0.888888888888889
+					],
+					"parent": "ForgeArtworkPanel",
+					"parentSize": [
+						566.808512210846,
+						449.999989271164
+					],
+					"rect": [
+						1010.00007002483,
+						321.666658997536,
+						400.100126266479,
+						399.999990463257
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeArtworkPanel/ForgeImageSuccess": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						121.444372941362,
+						24.9999994039536,
+						400.100126266479,
+						399.999990463257
+					],
+					"logicalRect": [
+						72.848388671875,
+						15.0,
+						240.0,
+						240.0
+					],
+					"normalized": [
+						0.214259966681985,
+						0.0555555555555556,
+						0.705882352941177,
+						0.888888888888889
+					],
+					"parent": "ForgeArtworkPanel",
+					"parentSize": [
+						566.808512210846,
+						449.999989271164
+					],
+					"rect": [
+						1010.00007002483,
+						321.666658997536,
+						400.100126266479,
+						399.999990463257
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": false
+				},
+				"ForgeArtworkPanel/ForgeImageFailure": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						121.444372941362,
+						24.9999994039536,
+						400.100126266479,
+						399.999990463257
+					],
+					"logicalRect": [
+						72.848388671875,
+						15.0,
+						240.0,
+						240.0
+					],
+					"normalized": [
+						0.214259966681985,
+						0.0555555555555556,
+						0.705882352941177,
+						0.888888888888889
+					],
+					"parent": "ForgeArtworkPanel",
+					"parentSize": [
+						566.808512210846,
+						449.999989271164
+					],
+					"rect": [
+						1010.00007002483,
+						321.666658997536,
+						400.100126266479,
+						399.999990463257
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": false
+				},
+				"ForgeButton": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						694.921220589982,
+						839.999979972839,
+						400.100126266479,
+						89.9999978542328
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						416.848388671875,
+						504.0,
+						240.0,
+						54.0
+					],
+					"normalized": [
+						0.341679007108094,
+						0.763636363636364,
+						0.19672131147541,
+						0.0818181818181818
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						1010.00007002483,
+						889.999978780746,
+						400.100126266479,
+						89.9999978542328
+					],
+					"text": "开始锻造",
+					"textRevision": 0,
+					"themeVariation": "GothicInventoryActionGemButton",
+					"visible": true
+				},
+				"ForgeChancePanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						614.921138478559,
+						649.999984502792,
+						566.808512210846,
+						249.999994039536
+					],
+					"logicalRect": [
+						368.8603515625,
+						390.0,
+						340.0,
+						150.0
+					],
+					"normalized": [
+						0.302344550461066,
+						0.590909090909091,
+						0.278688524590164,
+						0.227272727272727
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						929.999987913412,
+						699.999983310699,
+						566.808512210846,
+						249.999994039536
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeChancePanel/ChanceFrame/ForgeChanceText": {
+					"deleted": false,
+					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
+					"localRect": [
+						20.005006313324,
+						101.666664242744,
+						233.391740322113,
+						56.6666653156281
+					],
+					"logicalFontSize": 15,
+					"logicalRect": [
+						12.0,
+						61.0,
+						140.0,
+						34.0
+					],
+					"normalized": [
+						0.0731707317073171,
+						0.508333333333333,
+						0.853658536585366,
+						0.283333333333333
+					],
+					"parent": "ForgeChancePanel/ChanceFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						950.004994226736,
+						801.666647553444,
+						233.391740322113,
+						56.6666653156281
+					],
+					"text": "[center]—[/center]",
+					"textRevision": 0,
+					"themeVariation": "GothicDetailText",
+					"visible": true
+				},
+				"ForgeChancePanel/ChanceFrame/PlainButtonFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						68.3333317041397,
+						273.401752948761,
+						119.999997138977
+					],
+					"logicalRect": [
+						0.0,
+						41.0,
+						164.0,
+						72.0
+					],
+					"normalized": [
+						0.0,
+						0.341666666666667,
+						1.0,
+						0.6
+					],
+					"parent": "ForgeChancePanel/ChanceFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						929.999987913412,
+						768.333315014839,
+						273.401752948761,
+						119.999997138977
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeChancePanel/ChanceFrame/Title": {
+					"deleted": false,
+					"fontSize": 30,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3391740322113,
+						16.6666662693024,
+						226.723404884338,
+						49.99999880790709
+					],
+					"logicalFontSize": 18,
+					"logicalRect": [
+						14.0,
+						10.0,
+						136.0,
+						30
+					],
+					"normalized": [
+						0.0853658536585366,
+						0.0833333333333333,
+						0.829268292682927,
+						0.24999999999999997
+					],
+					"parent": "ForgeChancePanel/ChanceFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						953.339161945623,
+						716.666649580002,
+						226.723404884338,
+						49.99999880790709
+					],
+					"text": "成功率",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"ForgeChancePanel/FeeFrame/ForgeFeeText": {
+					"deleted": false,
+					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
+					"localRect": [
+						20.005006313324,
+						101.666664242744,
+						233.391740322113,
+						56.6666653156281
+					],
+					"logicalFontSize": 15,
+					"logicalRect": [
+						12.0,
+						61.0,
+						140.0,
+						34.0
+					],
+					"normalized": [
+						0.0731707317073171,
+						0.508333333333333,
+						0.853658536585366,
+						0.283333333333333
+					],
+					"parent": "ForgeChancePanel/FeeFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						1243.41175348882,
+						801.666647553444,
+						233.391740322113,
+						56.6666653156281
+					],
+					"text": "[center]—[/center]",
+					"textRevision": 0,
+					"themeVariation": "GothicDetailText",
+					"visible": true
+				},
+				"ForgeChancePanel/FeeFrame/PlainButtonFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						68.3333317041397,
+						273.401752948761,
+						119.999997138977
+					],
+					"logicalRect": [
+						0.0,
+						41.0,
+						164.0,
+						72.0
+					],
+					"normalized": [
+						0.0,
+						0.341666666666667,
+						1.0,
+						0.6
+					],
+					"parent": "ForgeChancePanel/FeeFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						1223.4067471755,
+						768.333315014839,
+						273.401752948761,
+						119.999997138977
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeChancePanel/FeeFrame/Title": {
+					"deleted": false,
+					"fontSize": 30,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3391740322113,
+						16.6666662693024,
+						226.723404884338,
+						49.99999880790709
+					],
+					"logicalFontSize": 18,
+					"logicalRect": [
+						14.0,
+						10.0,
+						136.0,
+						30
+					],
+					"normalized": [
+						0.0853658536585366,
+						0.0833333333333333,
+						0.829268292682927,
+						0.24999999999999997
+					],
+					"parent": "ForgeChancePanel/FeeFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						1246.74592120771,
+						716.666649580002,
+						226.723404884338,
+						49.99999880790709
+					],
+					"text": "锻造费",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"ForgeMaterialPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						104.92114920954,
+						229.999994516373,
+						500.125157833099,
+						449.999989271164
+					],
+					"logicalRect": [
+						62.9369354248047,
+						138.0,
+						300.0,
+						270.0
+					],
+					"normalized": [
+						0.0515876519875448,
+						0.209090909090909,
+						0.245901639344262,
+						0.409090909090909
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						419.999998644393,
+						279.99999332428,
+						500.125157833099,
+						449.999989271164
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						108.333283420572,
+						69.9999983310699,
+						283.333335850904,
+						333.333325386047
+					],
+					"logicalRect": [
+						64.9837036132813,
+						42.0,
+						169.957458496094,
+						200.0
+					],
+					"normalized": [
+						0.216612345377604,
+						0.155555555555556,
+						0.566524861653646,
+						0.740740740740741
+					],
+					"parent": "ForgeMaterialPanel",
+					"parentSize": [
+						500.125157833099,
+						449.999989271164
+					],
+					"rect": [
+						528.333307502646,
+						349.99999165535,
+						283.333335850904,
+						333.333325386047
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_0": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						0.0,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						0.0,
+						0.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.0,
+						0.0,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						528.333307502646,
+						349.99999165535,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_1": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						95.0000211942715,
+						0.0,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						56.9857482910156,
+						0.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.335294189471099,
+						0.0,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						623.333328696917,
+						349.99999165535,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_2": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						190.000042388543,
+						0.0,
+						93.3333443377232,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						113.971496582031,
+						0.0,
+						55.9859924316406,
+						64.0
+					],
+					"normalized": [
+						0.670588378942197,
+						0.0,
+						0.329411800617902,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						718.333349891189,
+						349.99999165535,
+						93.3333443377232,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_3": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						113.333330631256,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						0.0,
+						68.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.0,
+						0.34,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						528.333307502646,
+						463.333322286606,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_4": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						95.0000211942715,
+						113.333330631256,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						56.9857482910156,
+						68.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.335294189471099,
+						0.34,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						623.333328696917,
+						463.333322286606,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_5": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						190.000042388543,
+						113.333330631256,
+						93.3333443377232,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						113.971496582031,
+						68.0,
+						55.9859924316406,
+						64.0
+					],
+					"normalized": [
+						0.670588378942197,
+						0.34,
+						0.329411800617902,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						718.333349891189,
+						463.333322286606,
+						93.3333443377232,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_6": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						226.666661262512,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						0.0,
+						136.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.0,
+						0.68,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						528.333307502646,
+						576.666652917862,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_7": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						95.0000211942715,
+						226.666661262512,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						56.9857482910156,
+						136.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.335294189471099,
+						0.68,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						623.333328696917,
+						576.666652917862,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_8": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						190.000042388543,
+						226.666661262512,
+						93.3333443377232,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						113.971496582031,
+						136.0,
+						55.9859924316406,
+						64.0
+					],
+					"normalized": [
+						0.670588378942197,
+						0.68,
+						0.329411800617902,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						718.333349891189,
+						576.666652917862,
+						93.3333443377232,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialHint": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						33.3333845048801,
+						420.000040849049,
+						433.333337183736,
+						41.6666148106269
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						19.9950256347656,
+						252.000030517578,
+						259.934936523438,
+						24.9999694824219
+					],
+					"normalized": [
+						0.0666500854492187,
+						0.9333334463614,
+						0.866449788411458,
+						0.0925924795645255
+					],
+					"parent": "ForgeMaterialPanel",
+					"parentSize": [
+						500.125157833099,
+						449.999989271164
+					],
+					"rect": [
+						453.333357711592,
+						700.000034173328,
+						433.333337183736,
+						41.6666148106269
+					],
+					"text": "请依次放入需锻造装备与所需材料",
+					"textRevision": 0,
+					"themeVariation": "GothicMutedLabel",
+					"visible": true
+				},
+				"ForgeRulesPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						104.92114920954,
+						749.999982118607,
+						500.125157833099,
+						349.99999165535
+					],
+					"logicalRect": [
+						62.9369354248047,
+						450.0,
+						300.0,
+						210.0
+					],
+					"normalized": [
+						0.0515876519875448,
+						0.681818181818182,
+						0.245901639344262,
+						0.318181818181818
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						419.999998644393,
+						799.999980926514,
+						500.125157833099,
+						349.99999165535
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeRulesPanel/ForgeRulesText": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						26.6733417510986,
+						31.6667167743035,
+						446.778474330902,
+						116.666663885117
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						16.0,
+						19.0000305175781,
+						268.0,
+						70.0
+					],
+					"normalized": [
+						0.0533333333333333,
+						0.0904763357979911,
+						0.893333333333333,
+						0.333333333333333
+					],
+					"parent": "ForgeRulesPanel",
+					"parentSize": [
+						500.125157833099,
+						349.99999165535
+					],
+					"rect": [
+						446.673365833172,
+						831.666697700817,
+						446.778474330902,
+						116.666663885117
+					],
+					"text": "请在上方放入需要锻造的装备",
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeRulesPanel/ForgeRulesTitle": {
+					"deleted": false,
+					"fontSize": 30,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3391740322113,
+						-59.9999985694885,
+						453.446809768677,
+						49.99999880790709
+					],
+					"logicalFontSize": 18,
+					"logicalRect": [
+						14.0,
+						-36.0,
+						272.0,
+						30
+					],
+					"normalized": [
+						0.0466666666666667,
+						-0.171428571428571,
+						0.906666666666667,
+						0.142857142857143
+					],
+					"parent": "ForgeRulesPanel",
+					"parentSize": [
+						500.125157833099,
+						349.99999165535
+					],
+					"rect": [
+						443.339198114285,
+						739.999982357025,
+						453.446809768677,
+						49.99999880790709
+					],
+					"text": "材料需求",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"ForgeRulesPanel/PlainButtonFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						11.6695870161057,
+						-9.99999976158142,
+						470.000024526351,
+						199.999995231628
+					],
+					"logicalRect": [
+						7.0,
+						-6.0,
+						281.929443359375,
+						120.0
+					],
+					"normalized": [
+						0.0233333333333333,
+						-0.0285714285714286,
+						0.939764811197917,
+						0.571428571428571
+					],
+					"parent": "ForgeRulesPanel",
+					"parentSize": [
+						500.125157833099,
+						349.99999165535
+					],
+					"rect": [
+						431.669611098179,
+						789.999981164932,
+						470.000024526351,
+						199.999995231628
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeTab": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						132.533166825771,
+						149.999996423721,
+						213.386734008789,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						79.5,
+						90.0,
+						128.0,
+						51.0
+					],
+					"normalized": [
+						0.0651639344262295,
+						0.136363636363636,
+						0.104918032786885,
+						0.0772727272727273
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						447.612016260624,
+						199.999995231628,
+						213.386734008789,
+						84.9999979734421
+					],
+					"text": "锻造",
+					"textRevision": 0,
+					"themeVariation": "GothicShopTradeTabSelectedGemButton",
+					"visible": true
+				},
+				"SynthesisTab": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						372.593242585659,
+						149.999996423721,
+						213.386734008789,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						223.5,
+						90.0,
+						128.0,
+						51.0
+					],
+					"normalized": [
+						0.183196721311475,
+						0.136363636363636,
+						0.104918032786885,
+						0.0772727272727273
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						687.672092020512,
+						199.999995231628,
+						213.386734008789,
+						84.9999979734421
+					],
+					"text": "合成",
+					"textRevision": 0,
+					"themeVariation": "GothicShopTradeTabGemButton",
+					"visible": true
+				},
+				"TitleFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						633.491866588593,
+						16.6666662693024,
+						766.858575344086,
+						106.666664123535
+					],
+					"logicalRect": [
+						380.0,
+						10.0,
+						460.0,
+						64.0
+					],
+					"normalized": [
+						0.311475409836066,
+						0.0151515151515152,
+						0.377049180327869,
+						0.096969696969697
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						948.570716023445,
+						66.6666650772095,
+						766.858575344086,
+						106.666664123535
+					],
+					"textRevision": 0,
+					"themeVariation": "GothicTitleBar",
+					"visible": true
+				},
+				"TitleFrame/Title": {
+					"deleted": false,
+					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
+					"localRect": [
+						50.0125157833099,
+						24.9999994039536,
+						666.833543777466,
+						56.6666653156281
+					],
+					"logicalFontSize": 24,
+					"logicalRect": [
+						30.0,
+						15.0,
+						400.0,
+						34.0
+					],
+					"normalized": [
+						0.0652173913043478,
+						0.234375,
+						0.869565217391304,
+						0.53125
+					],
+					"parent": "TitleFrame",
+					"parentSize": [
+						766.858575344086,
+						106.666664123535
+					],
+					"rect": [
+						998.583231806755,
+						91.666664481163,
+						666.833543777466,
+						56.6666653156281
+					],
+					"text": "装备锻造",
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				}
+			}
+		},
+		"synthesis": {
+			"designSize": [
+				2033.84230852127,
+				1099.99997377396
+			],
+			"frameSafeInset": [
+				90.0225284099579,
+				156.666662931442,
+				90.0225284099579,
+				189.999995470047
+			],
+			"logicalDesignSize": [
+				1220.0,
+				660.0
+			],
+			"nodes": {
+				"BagPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						1160.29036617279,
+						79.9999980926514,
+						820.205258846283,
+						943.333310842514
+					],
+					"logicalRect": [
+						696.0,
+						48.0,
+						492.0,
+						566.0
+					],
+					"normalized": [
+						0.570491803278689,
+						0.0727272727272727,
+						0.40327868852459,
+						0.857575757575758
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						1475.36921560764,
+						129.999996900558,
+						820.205258846283,
+						943.333310842514
+					],
+					"textRevision": 0,
+					"themeVariation": "GothicInsetFrame",
+					"visible": true
+				},
+				"BagPanel/BagPagingHint": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						34.0075339257019,
+						723.000521906204,
+						760.190239906311,
+						46.6666655540466
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						20.3994140625,
+						433.800323486328,
+						456.0,
+						28.0
+					],
+					"normalized": [
+						0.0414622237042683,
+						0.766431666936976,
+						0.926829268292683,
+						0.049469964664311
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1509.37674953335,
+						853.000518806763,
+						760.190239906311,
+						46.6666655540466
+					],
+					"text": "首屏 1–30 格　·　拖动右侧滚条查看 31–100 格",
+					"textRevision": 0,
+					"themeVariation": "GothicMutedLabel",
+					"visible": true
+				},
+				"BagPanel/BagPanelDecoration": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						23.0000388696426,
+						37.0000067472456,
+						779.99998658058,
+						889.999978780746
+					],
+					"logicalRect": [
+						13.7965698242188,
+						22.2000045776367,
+						467.882873535156,
+						534.0
+					],
+					"normalized": [
+						0.0280418085858105,
+						0.0392226229286868,
+						0.950981450274708,
+						0.943462897526502
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1498.36925447729,
+						167.000003647804,
+						779.99998658058,
+						889.999978780746
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"BagPanel/BagSummary": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						364.102348182409,
+						91.6665881872195,
+						363.424281358719,
+						43.3332560062427
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						218.40673828125,
+						54.9999542236328,
+						218.0,
+						25.9999542236328
+					],
+					"normalized": [
+						0.443916134717988,
+						0.0971730639993513,
+						0.443089430894309,
+						0.0459363148827435
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1839.47156379005,
+						221.666585087778,
+						363.424281358719,
+						43.3332560062427
+					],
+					"text": "金币 0　负重 25/50",
+					"textRevision": 0,
+					"themeVariation": "GothicMutedLabel",
+					"visible": true
+				},
+				"BagPanel/BagTitle": {
+					"deleted": false,
+					"fontSize": 33.3333325386047,
+					"layoutRevision": 0,
+					"localRect": [
+						36.3391517625641,
+						33.0000042994816,
+						773.52691078186,
+						49.9999479452781
+					],
+					"logicalFontSize": 20,
+					"logicalRect": [
+						21.7980346679688,
+						19.8000030517578,
+						464.0,
+						29.9999694824219
+					],
+					"normalized": [
+						0.0443049485121316,
+						0.0349823375472753,
+						0.943089430894309,
+						0.053003479650922
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1511.70836737021,
+						163.00000120004,
+						773.52691078186,
+						49.9999479452781
+					],
+					"text": "综合背包",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"BagPanel/InventoryActions/AutoSortButton": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						77.9574363302745,
+						6.66666650772095,
+						298.397403327455,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						46.7627563476563,
+						4.0,
+						178.993637084961,
+						51.0
+					],
+					"normalized": [
+						0.101658165973166,
+						0.0833333333333333,
+						0.389116602358611,
+						1.0625
+					],
+					"parent": "BagPanel/InventoryActions",
+					"parentSize": [
+						766.858575344086,
+						79.9999980926514
+					],
+					"rect": [
+						1579.99999368902,
+						889.999978780746,
+						298.397403327455,
+						84.9999979734421
+					],
+					"text": "自动整理",
+					"textRevision": 0,
+					"themeVariation": "GothicInventoryActionGemButton",
+					"visible": true
+				},
+				"BagPanel/InventoryActions/DiscardButton": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						409.696644035008,
+						6.66666650772095,
+						298.397428765136,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						245.756469726563,
+						4.0,
+						178.99365234375,
+						51.0
+					],
+					"normalized": [
+						0.534253195057745,
+						0.0833333333333333,
+						0.389116635529891,
+						1.0625
+					],
+					"parent": "BagPanel/InventoryActions",
+					"parentSize": [
+						766.858575344086,
+						79.9999980926514
+					],
+					"rect": [
+						1911.73920139375,
+						889.999978780746,
+						298.397428765136,
+						84.9999979734421
+					],
+					"text": "丢弃",
+					"textRevision": 0,
+					"themeVariation": "GothicInventoryActionGemButton",
+					"visible": true
+				},
+				"BagPanel/InventoryScroll": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						109.630706900294,
+						134.999895056091,
+						619.999924108459,
+						579.999986171722
+					],
+					"logicalRect": [
+						65.761962890625,
+						80.9999389648438,
+						371.906860351563,
+						348.0
+					],
+					"normalized": [
+						0.133662526200457,
+						0.143109432800077,
+						0.755908252747078,
+						0.614840989399293
+					],
+					"parent": "BagPanel",
+					"parentSize": [
+						820.205258846283,
+						943.333310842514
+					],
+					"rect": [
+						1584.99992250794,
+						264.99989195665,
+						619.999924108459,
+						579.999986171722
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"CloseButton": {
+					"deleted": false,
+					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
+					"localRect": [
+						1897.14143204689,
+						13.3333330154419,
+						93.3566961288452,
+						93.3333311080933
+					],
+					"logicalFontSize": 24,
+					"logicalRect": [
+						1138.0,
+						8.0,
+						56.0,
+						56.0
+					],
+					"normalized": [
+						0.932786885245902,
+						0.0121212121212121,
+						0.0459016393442623,
+						0.0848484848484849
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						2212.22028148174,
+						63.333331823349,
+						93.3566961288452,
+						93.3333311080933
+					],
+					"text": "×",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentCloseButton",
+					"visible": true
+				},
+				"ForgeArtworkPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						573.476847648621,
+						246.666660785675,
+						566.808512210846,
+						449.999989271164
+					],
+					"logicalRect": [
+						344.0,
+						148.0,
+						340.0,
+						270.0
+					],
+					"normalized": [
+						0.281967213114754,
+						0.224242424242424,
+						0.278688524590164,
+						0.409090909090909
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						888.555697083473,
+						296.666659593582,
+						566.808512210846,
+						449.999989271164
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeArtworkPanel/SynthesisRecipeScroll": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						136.44429930537,
+						23.3333439032234,
+						400.000003554218,
+						333.333325386047
+					],
+					"logicalRect": [
+						81.8460922241211,
+						14.0000066757202,
+						239.93994140625,
+						200
+					],
+					"normalized": [
+						0.24072380065918,
+						0.0518518765767415,
+						0.705705710018382,
+						0.7407407407407407
+					],
+					"parent": "ForgeArtworkPanel",
+					"parentSize": [
+						566.808512210846,
+						449.999989271164
+					],
+					"rect": [
+						1024.99995823232,
+						319.999992370605,
+						400.000003554218,
+						333.333325386047
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeButton": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						694.921220589982,
+						839.999979972839,
+						400.100126266479,
+						89.9999978542328
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						416.848388671875,
+						504.0,
+						240.0,
+						54.0
+					],
+					"normalized": [
+						0.341679007108094,
+						0.763636363636364,
+						0.19672131147541,
+						0.0818181818181818
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						1010.00007002483,
+						889.999978780746,
+						400.100126266479,
+						89.9999978542328
+					],
+					"text": "开始合成",
+					"textRevision": 0,
+					"themeVariation": "GothicInventoryActionGemButton",
+					"visible": true
+				},
+				"ForgeChancePanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						614.921138478559,
+						649.999984502792,
+						566.808512210846,
+						249.999994039536
+					],
+					"logicalRect": [
+						368.8603515625,
+						390.0,
+						340.0,
+						150.0
+					],
+					"normalized": [
+						0.302344550461066,
+						0.590909090909091,
+						0.278688524590164,
+						0.227272727272727
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						929.999987913412,
+						699.999983310699,
+						566.808512210846,
+						249.999994039536
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeChancePanel/ChanceFrame/ForgeChanceText": {
+					"deleted": false,
+					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
+					"localRect": [
+						20.005006313324,
+						101.666664242744,
+						233.391740322113,
+						56.6666653156281
+					],
+					"logicalFontSize": 15,
+					"logicalRect": [
+						12.0,
+						61.0,
+						140.0,
+						34.0
+					],
+					"normalized": [
+						0.0731707317073171,
+						0.508333333333333,
+						0.853658536585366,
+						0.283333333333333
+					],
+					"parent": "ForgeChancePanel/ChanceFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						950.004994226736,
+						801.666647553444,
+						233.391740322113,
+						56.6666653156281
+					],
+					"text": "[center]—[/center]",
+					"textRevision": 0,
+					"themeVariation": "GothicDetailText",
+					"visible": true
+				},
+				"ForgeChancePanel/ChanceFrame/PlainButtonFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						68.3333317041397,
+						273.401752948761,
+						119.999997138977
+					],
+					"logicalRect": [
+						0.0,
+						41.0,
+						164.0,
+						72.0
+					],
+					"normalized": [
+						0.0,
+						0.341666666666667,
+						1.0,
+						0.6
+					],
+					"parent": "ForgeChancePanel/ChanceFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						929.999987913412,
+						768.333315014839,
+						273.401752948761,
+						119.999997138977
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeChancePanel/ChanceFrame/Title": {
+					"deleted": false,
+					"fontSize": 30,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3391740322113,
+						16.6666662693024,
+						226.723404884338,
+						49.99999880790709
+					],
+					"logicalFontSize": 18,
+					"logicalRect": [
+						14.0,
+						10.0,
+						136.0,
+						30
+					],
+					"normalized": [
+						0.0853658536585366,
+						0.0833333333333333,
+						0.829268292682927,
+						0.24999999999999997
+					],
+					"parent": "ForgeChancePanel/ChanceFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						953.339161945623,
+						716.666649580002,
+						226.723404884338,
+						49.99999880790709
+					],
+					"text": "成功率",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"ForgeChancePanel/FeeFrame/ForgeFeeText": {
+					"deleted": false,
+					"fontSize": 24.9999994039536,
+					"layoutRevision": 0,
+					"localRect": [
+						20.005006313324,
+						101.666664242744,
+						233.391740322113,
+						56.6666653156281
+					],
+					"logicalFontSize": 15,
+					"logicalRect": [
+						12.0,
+						61.0,
+						140.0,
+						34.0
+					],
+					"normalized": [
+						0.0731707317073171,
+						0.508333333333333,
+						0.853658536585366,
+						0.283333333333333
+					],
+					"parent": "ForgeChancePanel/FeeFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						1243.41175348882,
+						801.666647553444,
+						233.391740322113,
+						56.6666653156281
+					],
+					"text": "[center]—[/center]",
+					"textRevision": 0,
+					"themeVariation": "GothicDetailText",
+					"visible": true
+				},
+				"ForgeChancePanel/FeeFrame/PlainButtonFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						68.3333317041397,
+						273.401752948761,
+						119.999997138977
+					],
+					"logicalRect": [
+						0.0,
+						41.0,
+						164.0,
+						72.0
+					],
+					"normalized": [
+						0.0,
+						0.341666666666667,
+						1.0,
+						0.6
+					],
+					"parent": "ForgeChancePanel/FeeFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						1223.4067471755,
+						768.333315014839,
+						273.401752948761,
+						119.999997138977
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeChancePanel/FeeFrame/Title": {
+					"deleted": false,
+					"fontSize": 30,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3391740322113,
+						16.6666662693024,
+						226.723404884338,
+						49.99999880790709
+					],
+					"logicalFontSize": 18,
+					"logicalRect": [
+						14.0,
+						10.0,
+						136.0,
+						30
+					],
+					"normalized": [
+						0.0853658536585366,
+						0.0833333333333333,
+						0.829268292682927,
+						0.24999999999999997
+					],
+					"parent": "ForgeChancePanel/FeeFrame",
+					"parentSize": [
+						273.401752948761,
+						199.999995231628
+					],
+					"rect": [
+						1246.74592120771,
+						716.666649580002,
+						226.723404884338,
+						49.99999880790709
+					],
+					"text": "合成费",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"ForgeMaterialPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						104.92114920954,
+						229.999994516373,
+						500.125157833099,
+						449.999989271164
+					],
+					"logicalRect": [
+						62.9369354248047,
+						138.0,
+						300.0,
+						270.0
+					],
+					"normalized": [
+						0.0515876519875448,
+						0.209090909090909,
+						0.245901639344262,
+						0.409090909090909
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						419.999998644393,
+						279.99999332428,
+						500.125157833099,
+						449.999989271164
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						108.333283420572,
+						69.9999983310699,
+						283.333335850904,
+						333.333325386047
+					],
+					"logicalRect": [
+						64.9837036132813,
+						42.0,
+						169.957458496094,
+						200.0
+					],
+					"normalized": [
+						0.216612345377604,
+						0.155555555555556,
+						0.566524861653646,
+						0.740740740740741
+					],
+					"parent": "ForgeMaterialPanel",
+					"parentSize": [
+						500.125157833099,
+						449.999989271164
+					],
+					"rect": [
+						528.333307502646,
+						349.99999165535,
+						283.333335850904,
+						333.333325386047
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_0": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						0.0,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						0.0,
+						0.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.0,
+						0.0,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						528.333307502646,
+						349.99999165535,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_1": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						95.0000211942715,
+						0.0,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						56.9857482910156,
+						0.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.335294189471099,
+						0.0,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						623.333328696917,
+						349.99999165535,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_2": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						190.000042388543,
+						0.0,
+						93.3333443377232,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						113.971496582031,
+						0.0,
+						55.9859924316406,
+						64.0
+					],
+					"normalized": [
+						0.670588378942197,
+						0.0,
+						0.329411800617902,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						718.333349891189,
+						349.99999165535,
+						93.3333443377232,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_3": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						113.333330631256,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						0.0,
+						68.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.0,
+						0.34,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						528.333307502646,
+						463.333322286606,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_4": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						95.0000211942715,
+						113.333330631256,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						56.9857482910156,
+						68.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.335294189471099,
+						0.34,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						623.333328696917,
+						463.333322286606,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_5": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						190.000042388543,
+						113.333330631256,
+						93.3333443377232,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						113.971496582031,
+						68.0,
+						55.9859924316406,
+						64.0
+					],
+					"normalized": [
+						0.670588378942197,
+						0.34,
+						0.329411800617902,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						718.333349891189,
+						463.333322286606,
+						93.3333443377232,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_6": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						0.0,
+						226.666661262512,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						0.0,
+						136.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.0,
+						0.68,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						528.333307502646,
+						576.666652917862,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_7": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						95.0000211942715,
+						226.666661262512,
+						93.3333316188828,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						56.9857482910156,
+						136.0,
+						55.9859848022461,
+						64.0
+					],
+					"normalized": [
+						0.335294189471099,
+						0.68,
+						0.329411755727877,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						623.333328696917,
+						576.666652917862,
+						93.3333316188828,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_8": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						190.000042388543,
+						226.666661262512,
+						93.3333443377232,
+						106.666664123535
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						113.971496582031,
+						136.0,
+						55.9859924316406,
+						64.0
+					],
+					"normalized": [
+						0.670588378942197,
+						0.68,
+						0.329411800617902,
+						0.32
+					],
+					"parent": "ForgeMaterialPanel/ForgeMaterialGrid",
+					"parentSize": [
+						283.333335850904,
+						333.333325386047
+					],
+					"rect": [
+						718.333349891189,
+						576.666652917862,
+						93.3333443377232,
+						106.666664123535
+					],
+					"text": "",
+					"textRevision": 0,
+					"themeVariation": "GothicComponentSlotButton",
+					"visible": true
+				},
+				"ForgeMaterialPanel/ForgeMaterialHint": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						33.3333845048801,
+						420.000040849049,
+						433.333337183736,
+						41.6666148106269
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						19.9950256347656,
+						252.000030517578,
+						259.934936523438,
+						24.9999694824219
+					],
+					"normalized": [
+						0.0666500854492187,
+						0.9333334463614,
+						0.866449788411458,
+						0.0925924795645255
+					],
+					"parent": "ForgeMaterialPanel",
+					"parentSize": [
+						500.125157833099,
+						449.999989271164
+					],
+					"rect": [
+						453.333357711592,
+						700.000034173328,
+						433.333337183736,
+						41.6666148106269
+					],
+					"text": "请选择配方并放入所需材料",
+					"textRevision": 0,
+					"themeVariation": "GothicMutedLabel",
+					"visible": true
+				},
+				"ForgeRulesPanel": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						104.92114920954,
+						749.999982118607,
+						500.125157833099,
+						349.99999165535
+					],
+					"logicalRect": [
+						62.9369354248047,
+						450.0,
+						300.0,
+						210.0
+					],
+					"normalized": [
+						0.0515876519875448,
+						0.681818181818182,
+						0.245901639344262,
+						0.318181818181818
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						419.999998644393,
+						799.999980926514,
+						500.125157833099,
+						349.99999165535
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeRulesPanel/ForgeRulesText": {
+					"deleted": false,
+					"fontSize": 23.3333327770233,
+					"layoutRevision": 0,
+					"localRect": [
+						26.6733417510986,
+						31.6667167743035,
+						446.778474330902,
+						116.666663885117
+					],
+					"logicalFontSize": 14,
+					"logicalRect": [
+						16.0,
+						19.0000305175781,
+						268.0,
+						70.0
+					],
+					"normalized": [
+						0.0533333333333333,
+						0.0904763357979911,
+						0.893333333333333,
+						0.333333333333333
+					],
+					"parent": "ForgeRulesPanel",
+					"parentSize": [
+						500.125157833099,
+						349.99999165535
+					],
+					"rect": [
+						446.673365833172,
+						831.666697700817,
+						446.778474330902,
+						116.666663885117
+					],
+					"text": "请选择合成配方",
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeRulesPanel/ForgeRulesTitle": {
+					"deleted": false,
+					"fontSize": 30,
+					"layoutRevision": 0,
+					"localRect": [
+						23.3391740322113,
+						-59.9999985694885,
+						453.446809768677,
+						49.99999880790709
+					],
+					"logicalFontSize": 18,
+					"logicalRect": [
+						14.0,
+						-36.0,
+						272.0,
+						30
+					],
+					"normalized": [
+						0.0466666666666667,
+						-0.171428571428571,
+						0.906666666666667,
+						0.142857142857143
+					],
+					"parent": "ForgeRulesPanel",
+					"parentSize": [
+						500.125157833099,
+						349.99999165535
+					],
+					"rect": [
+						443.339198114285,
+						739.999982357025,
+						453.446809768677,
+						49.99999880790709
+					],
+					"text": "材料需求",
+					"textRevision": 0,
+					"themeVariation": "GothicSectionTitle",
+					"visible": true
+				},
+				"ForgeRulesPanel/PlainButtonFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						11.6695870161057,
+						-9.99999976158142,
+						470.000024526351,
+						199.999995231628
+					],
+					"logicalRect": [
+						7.0,
+						-6.0,
+						281.929443359375,
+						120.0
+					],
+					"normalized": [
+						0.0233333333333333,
+						-0.0285714285714286,
+						0.939764811197917,
+						0.571428571428571
+					],
+					"parent": "ForgeRulesPanel",
+					"parentSize": [
+						500.125157833099,
+						349.99999165535
+					],
+					"rect": [
+						431.669611098179,
+						789.999981164932,
+						470.000024526351,
+						199.999995231628
+					],
+					"textRevision": 0,
+					"themeVariation": "",
+					"visible": true
+				},
+				"ForgeTab": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						132.533166825771,
+						149.999996423721,
+						213.386734008789,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						79.5,
+						90.0,
+						128.0,
+						51.0
+					],
+					"normalized": [
+						0.0651639344262295,
+						0.136363636363636,
+						0.104918032786885,
+						0.0772727272727273
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						447.612016260624,
+						199.999995231628,
+						213.386734008789,
+						84.9999979734421
+					],
+					"text": "锻造",
+					"textRevision": 0,
+					"themeVariation": "GothicShopTradeTabGemButton",
+					"visible": true
+				},
+				"SynthesisTab": {
+					"deleted": false,
+					"fontSize": 26.6666660308838,
+					"layoutRevision": 0,
+					"localRect": [
+						372.593242585659,
+						149.999996423721,
+						213.386734008789,
+						84.9999979734421
+					],
+					"logicalFontSize": 16,
+					"logicalRect": [
+						223.5,
+						90.0,
+						128.0,
+						51.0
+					],
+					"normalized": [
+						0.183196721311475,
+						0.136363636363636,
+						0.104918032786885,
+						0.0772727272727273
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						687.672092020512,
+						199.999995231628,
+						213.386734008789,
+						84.9999979734421
+					],
+					"text": "合成",
+					"textRevision": 0,
+					"themeVariation": "GothicShopTradeTabSelectedGemButton",
+					"visible": true
+				},
+				"TitleFrame": {
+					"deleted": false,
+					"layoutRevision": 0,
+					"localRect": [
+						633.491866588593,
+						16.6666662693024,
+						766.858575344086,
+						106.666664123535
+					],
+					"logicalRect": [
+						380.0,
+						10.0,
+						460.0,
+						64.0
+					],
+					"normalized": [
+						0.311475409836066,
+						0.0151515151515152,
+						0.377049180327869,
+						0.096969696969697
+					],
+					"parent": ".",
+					"parentSize": [
+						2033.84230852127,
+						1099.99997377396
+					],
+					"rect": [
+						948.570716023445,
+						66.6666650772095,
+						766.858575344086,
+						106.666664123535
+					],
+					"textRevision": 0,
+					"themeVariation": "GothicTitleBar",
+					"visible": true
+				},
+				"TitleFrame/Title": {
+					"deleted": false,
+					"fontSize": 39.9999990463257,
+					"layoutRevision": 0,
+					"localRect": [
+						50.0125157833099,
+						24.9999994039536,
+						666.833543777466,
+						56.6666653156281
+					],
+					"logicalFontSize": 24,
+					"logicalRect": [
+						30.0,
+						15.0,
+						400.0,
+						34.0
+					],
+					"normalized": [
+						0.0652173913043478,
+						0.234375,
+						0.869565217391304,
+						0.53125
+					],
+					"parent": "TitleFrame",
+					"parentSize": [
+						766.858575344086,
+						106.666664123535
+					],
+					"rect": [
+						998.583231806755,
+						91.666664481163,
+						666.833543777466,
+						56.6666653156281
+					],
+					"text": "物品合成",
 					"textRevision": 0,
 					"themeVariation": "",
 					"visible": true

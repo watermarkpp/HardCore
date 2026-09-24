@@ -203,6 +203,14 @@ func dock_panel_selector(selector: Control) -> void:
 	inspector_column.move_child(selector, 2)
 
 
+func dock_context_toolbar(toolbar: Control) -> void:
+	if toolbar == null or inspector_column == null:
+		return
+	toolbar.reparent(inspector_column)
+	toolbar.position = Vector2.ZERO
+	inspector_column.move_child(toolbar, 3)
+
+
 func _number_field(parent: VBoxContainer, caption: String, callback: Callable) -> SpinBox:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
@@ -247,6 +255,14 @@ func _collect_controls(parent: Node) -> void:
 func _is_calibratable(control: Control) -> bool:
 	if control.name == "ModalFrameOverlay" or not control.visible:
 		return false
+	# The workbench temporarily hides the target root while loading a profile,
+	# but a hidden child section must not leak its visible descendants into the
+	# node picker or become the default selected calibration layer.
+	var parent := control.get_parent()
+	while parent != null and parent != target:
+		if parent is CanvasItem and not (parent as CanvasItem).visible:
+			return false
+		parent = parent.get_parent()
 	if bool(control.get_meta("calibration_internal_visual", false)):
 		return false
 	# Runtime collection members are data, not layout layers.  Keeping them out
@@ -591,28 +607,11 @@ func save_profile() -> void:
 		var control_path := str(target.get_path_to(control))
 		if _is_deferred_dynamic_saved_path(control_path):
 			continue
-		var parent_control := control.get_parent() as Control
-		var parent_size := parent_control.size if parent_control != null else Vector2.ZERO
-		var scale := _device_scale(control)
-		var global_rect := control.get_global_rect()
-		var entry := {
-			"parent": str(target.get_path_to(control.get_parent())),
-			"parentSize": [parent_size.x * scale.x, parent_size.y * scale.y],
-			"rect": [global_rect.position.x * scale.x, global_rect.position.y * scale.y, global_rect.size.x * scale.x, global_rect.size.y * scale.y],
-			"localRect": [control.position.x * scale.x, control.position.y * scale.y, control.size.x * scale.x, control.size.y * scale.y],
-			"logicalRect": [control.position.x, control.position.y, control.size.x, control.size.y],
-			"normalized": _normalized_rect(control.position, control.size, parent_size),
-			"themeVariation": str(control.theme_type_variation),
-			"visible": control.visible,
-			"deleted": not control.visible,
-			"layoutRevision": int(control.get_meta("calibration_layout_revision", 0)),
-			"textRevision": int(control.get_meta("calibration_text_revision", 0)),
-		}
-		if _supports_text(control):
-			entry["text"] = _control_text(control)
-			entry["fontSize"] = float(_control_font_size(control)) * scale.y
-			entry["logicalFontSize"] = _control_font_size(control)
-		nodes[control_path] = entry
+		nodes[control_path] = _saved_control_entry(control)
+	if profile_id == "forge":
+		if not _add_forge_artwork_entries(nodes):
+			status_label.text = "锻造图片不完整，未保存"
+			return
 	profiles[profile_id] = {
 		"designSize": [target.size.x * _device_scale(target).x, target.size.y * _device_scale(target).y],
 		"logicalDesignSize": [target.size.x, target.size.y],
@@ -627,6 +626,47 @@ func save_profile() -> void:
 	file.store_string(JSON.stringify(data, "\t"))
 	file.close()
 	status_label.text = "已保存：%s · %d 个控件" % [profile_id, nodes.size()]
+
+
+func _saved_control_entry(control: Control) -> Dictionary:
+	var parent_control := control.get_parent() as Control
+	var parent_size := parent_control.size if parent_control != null else Vector2.ZERO
+	var scale := _device_scale(control)
+	var global_rect := control.get_global_rect()
+	var entry := {
+		"parent": str(target.get_path_to(control.get_parent())),
+		"parentSize": [parent_size.x * scale.x, parent_size.y * scale.y],
+		"rect": [global_rect.position.x * scale.x, global_rect.position.y * scale.y, global_rect.size.x * scale.x, global_rect.size.y * scale.y],
+		"localRect": [control.position.x * scale.x, control.position.y * scale.y, control.size.x * scale.x, control.size.y * scale.y],
+		"logicalRect": [control.position.x, control.position.y, control.size.x, control.size.y],
+		"normalized": _normalized_rect(control.position, control.size, parent_size),
+		"themeVariation": str(control.theme_type_variation),
+		"visible": control.visible,
+		"deleted": not control.visible,
+		"layoutRevision": int(control.get_meta("calibration_layout_revision", 0)),
+		"textRevision": int(control.get_meta("calibration_text_revision", 0)),
+	}
+	if _supports_text(control):
+		entry["text"] = _control_text(control)
+		entry["fontSize"] = float(_control_font_size(control)) * scale.y
+		entry["logicalFontSize"] = _control_font_size(control)
+	return entry
+
+
+func _add_forge_artwork_entries(nodes: Dictionary) -> bool:
+	# Preview visibility selects an outcome; it never deletes the other two art
+	# layers. Read all three live controls so a stale or incomplete saved profile
+	# cannot erase an image or lose an independently calibrated rectangle.
+	for artwork_name: String in ["ForgeImageInitial", "ForgeImageSuccess", "ForgeImageFailure"]:
+		var artwork_path := "ForgeArtworkPanel/%s" % artwork_name
+		var artwork := target.get_node_or_null(NodePath(artwork_path)) as Control
+		if artwork == null:
+			push_error("forge calibration artwork missing: %s" % artwork_path)
+			return false
+		var entry := _saved_control_entry(artwork)
+		entry["deleted"] = false
+		nodes[artwork_path] = entry
+	return true
 
 
 func load_profile() -> void:
@@ -801,6 +841,7 @@ func _is_deferred_dynamic_saved_path(saved_path: String) -> bool:
 		# every refresh.  Their saved paths describe one transient data snapshot,
 		# not user-authored geometry, so never restore them into a later snapshot.
 		saved_path.begins_with("BagPanel/InventoryScroll/ItemGrid/")
+		or saved_path.begins_with("ForgeArtworkPanel/SynthesisRecipeScroll/SynthesisRecipeGrid/")
 		or
 		saved_path.begins_with("MapListPanel/MapListScroll/MapCards/")
 		or saved_path.begins_with("MapPreviewPanel/WorldTreeScroll/WorldTree/")

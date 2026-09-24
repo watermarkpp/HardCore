@@ -102,7 +102,7 @@ func _run() -> void:
 			assert(npc.npc_name == str(expectation[0]), "商人显示名没有按功能合并")
 			assert(npc.service_identity_id == str(expectation[1]), "商人稳定功能身份错误")
 		elif npc.npc_kind == "trainer":
-			assert(npc.npc_name == "强化商人" and npc.service_identity_id == NPCServiceIdentityScript.ENHANCEMENT_VENDOR_ID, "武馆教头没有合并为强化商人")
+			assert(npc.npc_name == "强化大师" and npc.service_identity_id == NPCServiceIdentityScript.ENHANCEMENT_VENDOR_ID, "训练 NPC 没有合并为强化大师")
 		elif npc.npc_kind == "quest":
 			assert(npc.npc_name == "老兵" and npc.service_identity_id == NPCServiceIdentityScript.VETERAN_ID, "地区老兵没有合并为老兵")
 		elif npc.npc_kind == "warehouse":

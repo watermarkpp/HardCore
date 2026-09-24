@@ -28,7 +28,7 @@ func _run() -> void:
 			>= 9.0 + enemy.combat_radius_gu - 0.001,
 			"怪物刷新在安全区内"
 		): return
-	var expected_names := ["杂货商", "铁匠", "书店老板", "强化商人", "老兵", "仓库管理员"]
+	var expected_names := ["杂货商", "铁匠", "书店老板", "强化大师", "老兵", "仓库管理员"]
 	var actual_names: Array[String] = []
 	for node: Node in get_tree().get_nodes_in_group("interactable"):
 		if node is NPCActor:

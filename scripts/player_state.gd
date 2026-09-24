@@ -11,6 +11,8 @@ const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progr
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
 const PricingServiceScript := preload("res://scripts/pricing_service.gd")
 const ItemDropInstanceRulesScript := preload("res://scripts/item_drop_instance_rules.gd")
+const EquipmentEnhancementRulesScript := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
+const EquipmentEnhancementServiceScript := preload("res://scripts/layers/runtime/equipment_enhancement_service.gd")
 const WorldMonsterRespawnStateScript := preload(
 	"res://scripts/world_monster_respawn_state.gd"
 )
@@ -46,7 +48,7 @@ const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
 	"skills.summon.persistence.runtime_state.v1"
 )
 const TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID := (
-	"skills.summon.persistence.runtime_states.v1"
+	"skills.taoist_main_pets.v3"
 )
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
@@ -173,7 +175,7 @@ var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
 var taoist_main_pet_runtime_states: Dictionary = {
 	"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-	"slots": {},
+	"groups": {"skeleton": [], "divine_beast": []},
 }
 var quest_states: Dictionary = {}
 var world_monster_respawn_state: Dictionary = (
@@ -212,6 +214,7 @@ var last_load_result: Dictionary = {
 var _save_blocked_profile_id := ""
 var _save_blocked_reason := ""
 var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _enhancement_service
 var _loot_batch_debug: Dictionary = {
 	"plan_scans": 0,
 	"initial_weight_scans": 0,
@@ -316,6 +319,8 @@ func reset_progress(emit_updates := true) -> void:
 	world_monster_respawn_state = WorldMonsterRespawnStateScript.empty_snapshot()
 	_consumed_shop_sell_quote_ids.clear()
 	_consumed_shop_buy_quote_ids.clear()
+	if _enhancement_service != null:
+		_enhancement_service.reset()
 	_shop_buy_quote_serial = 0
 	durability_event_commit_count = 0
 	temporary_item_buffs = {}
@@ -640,7 +645,7 @@ func _build_receive_result_for_template(
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		remaining -= moved
 	var weight_before := inventory_weight(base_inventory) if owned_batch_weight < 0 else owned_batch_weight
-	var weight_after := inventory_weight(next_inventory) if owned_batch_weight < 0 else mini(MAX_SAFE_WEIGHT, weight_before + inventory_weight([{"name": item_name, "count": amount}]))
+	var weight_after := inventory_weight(next_inventory) if owned_batch_weight < 0 else mini(MAX_SAFE_WEIGHT, weight_before + inventory_weight([{"name": item_name, "item_id": int(catalog_item.get("itemId", -1)), "count": amount}]))
 	var max_weight := max_inventory_weight()
 	# Compatibility rule: an old save may already exceed the new cap, but no
 	# operation may increase that burden. This also lets a swap/unequip preserve
@@ -1250,6 +1255,20 @@ func _shop_buy_result(success: bool, message: String, stock: Array, context: Dic
 	}
 
 
+func _forge_service():
+	if _enhancement_service == null:
+		_enhancement_service = EquipmentEnhancementServiceScript.new(self)
+	return _enhancement_service
+
+
+func quote_forge(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int) -> Dictionary:
+	return _forge_service().quote_forge(target_index, iron_index, accessory_a_index, accessory_b_index)
+
+
+func commit_forge(quote: Dictionary) -> Dictionary:
+	return _forge_service().commit_forge(quote)
+
+
 func sell_inventory_item(request: Dictionary) -> Dictionary:
 	if request.get("batch", null) is Array:
 		return sell_inventory_items(request.get("batch", []))
@@ -1608,6 +1627,7 @@ func _shop_sell_risk_flags(
 	if (
 		int(record.get("enhancement_level", record.get("upgrade_level", 0))) > 0
 		or int(record.get("refine_level", 0)) > 0
+		or EquipmentEnhancementRulesScript.forge_stage(record) > 0
 	):
 		flags.append("enhanced")
 	if int(record.get("weapon_luck", 0)) != 0 or int(record.get("weapon_curse", 0)) != 0:
@@ -2902,6 +2922,12 @@ func recalculate_stats(emit_profile_change := true) -> void:
 			result = ModifierEffectRuntime.apply_modifiers(result, drop_instance_modifiers, {
 				"profession": profession, "level": level, "slot": slot,
 			})
+		if equipped_value is Dictionary and equipped_value.has("enhancement"):
+			var enhancement: Variant = equipped_value.enhancement
+			if EquipmentEnhancementRulesScript.validate_enhancement(enhancement, str(item.get("category", ""))):
+				result = ModifierEffectRuntime.apply_modifiers(result, enhancement.forge.modifiers, {
+					"profession": profession, "level": level, "slot": slot,
+				})
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
@@ -2954,6 +2980,8 @@ func effective_skill_level(skill_name: String) -> int:
 	return _skill_progression.effective_rank(
 		stable_skill_id,
 		_equipment_skill_level_bonus(stable_skill_id)
+		if SkillRankExtensionPolicy.can_extend(stable_skill_id)
+		else 0
 	)
 
 
@@ -3018,6 +3046,10 @@ func canonical_skill_resource_context(stable_skill_id: String, current_mana: int
 		result["active_main_pet_summon_ids"] = (
 			_taoist_main_pet_runtime_state_slots().keys()
 		)
+		if requested_main_pet_summon_id == "skeleton":
+			var pet_groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+			result["active_skeleton_count"] = (pet_groups.get("skeleton", []) as Array).size()
+			result["effective_skill_rank"] = effective_skill_level(stable_skill_id)
 	## Dual defence: when both taoist.defense and taoist.magic_defense are
 	## learned (base rank 0 counts as learned in HardCore v2), any
 	## preflight/release quote must price the combination in one transaction
@@ -3130,7 +3162,8 @@ func _prewarm_loot_inventory_catalog(records: Array) -> void:
 	for raw_record: Variant in records:
 		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
 			continue
-		_loot_inventory_catalog_record(str((raw_record as Dictionary).get("name", "")))
+		var record: Dictionary = raw_record
+		_loot_inventory_catalog_record(int(record.get("item_id", -1)) if record.has("item_id") else str(record.get("name", "")))
 
 
 func inventory_weight(records: Array = inventory) -> int:
@@ -3144,7 +3177,7 @@ func inventory_weight(records: Array = inventory) -> int:
 		var item_name := str(record.get("name", ""))
 		if item_name.is_empty():
 			continue
-		var item: Dictionary = _loot_inventory_catalog_record(item_name)
+		var item: Dictionary = _loot_inventory_catalog_record(int(record.get("item_id", -1)) if record.has("item_id") else item_name)
 		if item.is_empty() or str(item.get("kind", "")) == "currency":
 			continue
 		var unit_weight := maxi(0, int(item.get("weight", 0)))
@@ -5467,12 +5500,8 @@ func load_save() -> void:
 		)
 		taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 		if not legacy_main_pet.is_empty():
-			var migrated_slots := (
-				taoist_main_pet_runtime_states["slots"] as Dictionary
-			)
-			migrated_slots[str(legacy_main_pet.get("summon_id", ""))] = (
-				legacy_main_pet
-			)
+			var migrated_groups := taoist_main_pet_runtime_states["groups"] as Dictionary
+			migrated_groups[str(legacy_main_pet.get("summon_id", ""))] = [legacy_main_pet]
 	quest_states = parsed.get("quest_states", {})
 	world_monster_respawn_state = (
 		WorldMonsterRespawnStateScript.normalize_snapshot(
@@ -5921,15 +5950,17 @@ func apply_taoist_main_pet_runtime_states(states: Dictionary) -> bool:
 	return true
 
 
-func clear_taoist_main_pet_runtime_state(summon_id: String) -> void:
+func clear_taoist_main_pet_runtime_state(summon_id: String, pet_slot_index: int = -1) -> void:
 	if summon_id not in ["skeleton", "divine_beast"]:
 		return
-	var slots := _taoist_main_pet_runtime_state_slots()
-	slots.erase(summon_id)
-	taoist_main_pet_runtime_states = {
-		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-		"slots": slots,
-	}
+	var groups := taoist_main_pet_runtime_states.get("groups", {}).duplicate(true) as Dictionary
+	var retained: Array = []
+	if pet_slot_index >= 0:
+		for snapshot: Variant in groups.get(summon_id, []):
+			if int((snapshot as Dictionary).get("pet_slot_index", 0)) != pet_slot_index:
+				retained.append(snapshot)
+	groups[summon_id] = retained
+	taoist_main_pet_runtime_states = {"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "groups": groups}
 
 
 func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
@@ -5937,8 +5968,9 @@ func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
 
 
 func taoist_main_pet_runtime_state_for_restore(summon_id: String) -> Dictionary:
-	var slots := _taoist_main_pet_runtime_state_slots()
-	var snapshot: Variant = slots.get(summon_id, {})
+	var groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+	var snapshots: Array = groups.get(summon_id, [])
+	var snapshot: Variant = snapshots[0] if not snapshots.is_empty() else {}
 	return (snapshot as Dictionary).duplicate(true) if snapshot is Dictionary else {}
 
 
@@ -5948,8 +5980,9 @@ func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
 	var captured: Variant = _taoist_main_pets_persistence_provider.call()
 	if not captured is Dictionary:
 		return
-	# The live provider is authoritative. Invalid/corrupt captured state fails
-	# closed to an empty two-slot document rather than retaining stale pets.
+	# The provider merges live actors with valid saved slots still waiting for a
+	# legal map birth tile. Invalid captured state fails closed to an empty
+	# document rather than retaining corrupt pets.
 	var normalized := _normalized_taoist_main_pet_runtime_states(
 		captured
 	)
@@ -5963,38 +5996,51 @@ func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
 func _empty_taoist_main_pet_runtime_states() -> Dictionary:
 	return {
 		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-		"slots": {},
+		"groups": {"skeleton": [], "divine_beast": []},
 	}
 
 
 func _taoist_main_pet_runtime_state_slots() -> Dictionary:
-	var slots: Variant = taoist_main_pet_runtime_states.get("slots", {})
-	return (slots as Dictionary).duplicate(true) if slots is Dictionary else {}
+	var groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+	var slots := {}
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var snapshots: Array = groups.get(summon_id, [])
+		if not snapshots.is_empty():
+			slots[summon_id] = snapshots[0]
+	return slots
 
 
 func _normalized_taoist_main_pet_runtime_states(states: Variant) -> Dictionary:
 	if not states is Dictionary:
 		return {}
 	var source := states as Dictionary
-	if (
-		str(source.get("contract_id", ""))
-		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
-	):
-		return {}
-	var raw_slots: Variant = source.get("slots", {})
-	if not raw_slots is Dictionary:
+	var contract_id := str(source.get("contract_id", ""))
+	if contract_id not in [TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "skills.summon.persistence.runtime_states.v1", "skills.taoist_main_pet.v2"]:
 		return {}
 	var result := _empty_taoist_main_pet_runtime_states()
-	var slots := result["slots"] as Dictionary
+	var groups := result["groups"] as Dictionary
+	var raw_groups: Variant = source.get("groups", {})
+	var raw_slots: Variant = source.get("slots", {})
 	for summon_id: String in ["skeleton", "divine_beast"]:
-		var normalized := _normalized_taoist_main_pet_runtime_state(
-			(raw_slots as Dictionary).get(summon_id, {})
+		var candidates: Array = []
+		if contract_id == TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID and raw_groups is Dictionary:
+			var entries: Variant = (raw_groups as Dictionary).get(summon_id, [])
+			if entries is Array:
+				candidates = entries
+		elif raw_slots is Dictionary:
+			candidates = [(raw_slots as Dictionary).get(summon_id, {})]
+		var seen := {}
+		for candidate: Variant in candidates:
+			var normalized := _normalized_taoist_main_pet_runtime_state(candidate)
+			var slot := int(normalized.get("pet_slot_index", 0))
+			if normalized.is_empty() or str(normalized.get("summon_id", "")) != summon_id or seen.has(slot) or slot < 0 or slot >= (8 if summon_id == "skeleton" else 1):
+				continue
+			normalized["pet_slot_index"] = slot
+			seen[slot] = true
+			(groups[summon_id] as Array).append(normalized)
+		(groups[summon_id] as Array).sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return int(a.get("pet_slot_index", 0)) < int(b.get("pet_slot_index", 0))
 		)
-		if (
-			not normalized.is_empty()
-			and str(normalized.get("summon_id", "")) == summon_id
-		):
-			slots[summon_id] = normalized
 	return result
 
 
@@ -6029,6 +6075,8 @@ func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
 	]:
 		return {}
 	var skill_rank := int(source.get("skill_rank", -1))
+	var pet_slot_index := int(source.get("pet_slot_index", 0))
+	var effective_rank := int(source.get("effective_skill_rank", skill_rank))
 	var owner_level := int(source.get("owner_level", 0))
 	var current_hp := int(source.get("current_hp", 0))
 	var max_hp := int(source.get("max_hp", 0))
@@ -6039,6 +6087,9 @@ func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
 	if (
 		skill_rank < 0
 		or skill_rank > 7
+		or pet_slot_index < 0
+		or effective_rank < 0
+		or effective_rank > 1000000
 		or owner_level <= 0
 		or current_hp <= 0
 		or max_hp <= 0
@@ -7700,6 +7751,8 @@ func select_character(profile_id: String) -> bool:
 	if not bool(last_load_result.get("success", false)):
 		active_profile_id = ""
 		return false
+	if _enhancement_service != null:
+		_enhancement_service.reset()
 	_autosave_elapsed = 0.0
 	return true
 

@@ -142,12 +142,11 @@ static func rank_record(skill_name_or_id: String, rank: int) -> Dictionary:
 		)
 		return result
 	## Effective ranks above the frozen 0..3 base follow the explicit
-	## skills.rank_extension.v1 policy (linear last-delta for MP, constant
-	## player-level requirement for base learning). Never a generic clamp.
+	## skills.rank_extension.v2: equipment ranks never change resource cost.
 	result["mp_cost"] = (
 		maxi(
 			0,
-			SkillRankResolverScript.linear_int(mp_costs, safe_rank)
+			SkillRankResolverScript.timing_int(mp_costs, safe_rank)
 		)
 		if not mp_costs.is_empty()
 		else 0
@@ -158,7 +157,7 @@ static func rank_record(skill_name_or_id: String, rank: int) -> Dictionary:
 	result.erase("proficiency_required_to_reach_rank")
 	result["rank_extension"] = {
 		"contract_id": SkillRankExtensionPolicyScript.CONTRACT_ID,
-		"semantics": ["linear_last_delta", "constant_player_level_requirement"],
+		"semantics": ["typed_effect_only", "rank3_resource_and_timing"],
 	}
 	return result
 

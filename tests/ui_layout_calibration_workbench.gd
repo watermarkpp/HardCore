@@ -35,12 +35,17 @@ const PANEL_SPECS := [
 	{"id": "character_hall", "label": "人物殿堂", "panel_property": "_character_hall_instance", "open_method": "_open_character_hall"},
 	{"id": "death_revival", "label": "死亡与复活", "panel_property": "death_revival_panel", "open_method": "show_death_screen"},
 	{"id": "confirmation_dialog", "label": "稀有物品确认弹窗", "panel_property": "_confirmation_instance", "open_method": "_open_confirmation_dialog"},
+	{"id": "forge", "label": "装备锻造", "panel_property": "enhancement_panel", "open_method": "open_enhancement_vendor"},
+	{"id": "synthesis", "label": "物品合成", "panel_property": "enhancement_panel", "open_method": "open_enhancement_vendor"},
 ]
 
 var inspector_window: Window
 var inspector_host: Control
 var calibration_canvas: CanvasLayer
 var panel_picker: OptionButton
+var forge_preview_row: VBoxContainer
+var forge_preview_picker: OptionButton
+var forge_animation_button: Button
 var overlay: Control
 var active_panel: Control
 var _character_hall_instance: Control
@@ -66,6 +71,10 @@ var _character_stats_preview_requested := false
 var _character_stats_capture_path := ""
 var _presentation_review_capture := false
 var _chassis_design_compare_requested := false
+var _forge_preview_requested := false
+var _forge_preview_capture_path := ""
+var _synthesis_preview_requested := false
+var _synthesis_preview_capture_path := ""
 var _chassis_design_compare_capture_dir := ""
 var _chassis_design_compare_windows: Array[Window] = []
 
@@ -84,6 +93,10 @@ func _ready() -> void:
 	_print_geometry()
 	if _chassis_design_compare_requested:
 		_start_chassis_design_compare.call_deferred()
+	if _forge_preview_requested:
+		_open_requested_forge_preview.call_deferred()
+	if _synthesis_preview_requested:
+		_open_requested_synthesis_preview.call_deferred()
 	if _level_up_preview_requested:
 		_start_requested_level_up_preview.call_deferred()
 	if _inventory_attribute_preview_requested:
@@ -141,6 +154,16 @@ func _parse_level_up_preview_args(user_args: PackedStringArray) -> void:
 			_inventory_attribute_preview_requested = true
 		elif argument == CHASSIS_DESIGN_COMPARE_ARG:
 			_chassis_design_compare_requested = true
+		elif argument == "--forge-preview":
+			_forge_preview_requested = true
+		elif argument.begins_with("--capture-forge-preview="):
+			_forge_preview_capture_path = _resolve_project_local_capture_path(argument.trim_prefix("--capture-forge-preview="))
+			_forge_preview_requested = true
+		elif argument == "--synthesis-preview":
+			_synthesis_preview_requested = true
+		elif argument.begins_with("--capture-synthesis-preview="):
+			_synthesis_preview_capture_path = _resolve_project_local_capture_path(argument.trim_prefix("--capture-synthesis-preview="))
+			_synthesis_preview_requested = true
 		elif argument.begins_with(CHASSIS_DESIGN_COMPARE_CAPTURE_ARG_PREFIX):
 			var capture_dir_raw := argument.trim_prefix(CHASSIS_DESIGN_COMPARE_CAPTURE_ARG_PREFIX).strip_edges()
 			var capture_dir := _resolve_project_local_capture_dir(capture_dir_raw)
@@ -357,13 +380,18 @@ func _build_native_inspector_window() -> void:
 	inspector_window.force_native = true
 	inspector_window.transient = false
 	inspector_window.always_on_top = true
-	inspector_window.close_requested.connect(inspector_window.hide)
+	inspector_window.close_requested.connect(_quit_calibrator)
 	add_child(inspector_window)
 	inspector_host = Control.new()
 	inspector_host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	inspector_window.add_child(inspector_host)
 	inspector_window.show()
 	_position_inspector_window()
+	get_window().close_requested.connect(_quit_calibrator)
+
+
+func _quit_calibrator() -> void:
+	get_tree().quit()
 
 
 func _position_inspector_window() -> void:
@@ -388,6 +416,72 @@ func _build_panel_picker() -> void:
 		panel_picker.add_item(spec["label"])
 	panel_picker.item_selected.connect(_show_panel)
 	inspector_host.add_child(panel_picker)
+	forge_preview_row = VBoxContainer.new()
+	forge_preview_row.name = "ForgePreviewControls"
+	forge_preview_row.add_theme_constant_override("separation", 8)
+	forge_preview_row.hide()
+	inspector_host.add_child(forge_preview_row)
+	forge_preview_picker = OptionButton.new()
+	forge_preview_picker.custom_minimum_size = Vector2(112, 42)
+	forge_preview_picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	forge_preview_picker.add_item("剑胚")
+	forge_preview_picker.add_item("成功")
+	forge_preview_picker.add_item("失败")
+	forge_preview_picker.item_selected.connect(_preview_forge_artwork)
+	forge_preview_row.add_child(forge_preview_picker)
+	forge_animation_button = Button.new()
+	forge_animation_button.name = "PlayForgeAnimation"
+	forge_animation_button.text = "▶ 播放锻造动画（3秒）"
+	forge_animation_button.custom_minimum_size = Vector2(0, 42)
+	forge_animation_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	forge_animation_button.tooltip_text = "预览三秒格子发光与每秒一次的锻造音效；不会消耗材料或金币。"
+	forge_animation_button.pressed.connect(_preview_forge_animation)
+	forge_preview_row.add_child(forge_animation_button)
+
+
+func _preview_forge_artwork(index: int) -> void:
+	if active_panel == null or not active_panel.has_method("preview_forge_artwork"):
+		return
+	active_panel.call("preview_forge_artwork", ["initial", "success", "failure"][index])
+	overlay.call("_refresh_selectable_nodes")
+	overlay.queue_redraw()
+
+
+func _preview_forge_animation() -> void:
+	if active_panel == null:
+		return
+	var method_name := "preview_synthesis_animation" if str(PANEL_SPECS[panel_picker.selected]["id"]) == "synthesis" else "preview_forge_animation"
+	if active_panel.has_method(method_name):
+		active_panel.call(method_name)
+
+
+func _open_requested_forge_preview() -> void:
+	await _show_panel(_panel_index("forge"))
+	if _forge_preview_capture_path.is_empty():
+		return
+	await RenderingServer.frame_post_draw
+	DirAccess.make_dir_recursive_absolute(_forge_preview_capture_path.get_base_dir())
+	var screenshot := get_viewport().get_texture().get_image()
+	assert(screenshot != null and screenshot.save_png(_forge_preview_capture_path) == OK)
+	print("UI_FORGE_PREVIEW_CAPTURE_PASS path=%s" % _forge_preview_capture_path)
+
+
+func _open_requested_synthesis_preview() -> void:
+	await _show_panel(_panel_index("synthesis"))
+	if _synthesis_preview_capture_path.is_empty():
+		return
+	await RenderingServer.frame_post_draw
+	DirAccess.make_dir_recursive_absolute(_synthesis_preview_capture_path.get_base_dir())
+	var screenshot := get_viewport().get_texture().get_image()
+	assert(screenshot != null and screenshot.save_png(_synthesis_preview_capture_path) == OK)
+	print("UI_SYNTHESIS_PREVIEW_CAPTURE_PASS path=%s" % _synthesis_preview_capture_path)
+
+
+func _panel_index(panel_id: String) -> int:
+	for index in PANEL_SPECS.size():
+		if str(PANEL_SPECS[index]["id"]) == panel_id:
+			return index
+	return -1
 
 
 func _build_production_game() -> void:
@@ -617,6 +711,7 @@ func _build_calibration_overlay() -> void:
 	calibration_canvas.add_child(overlay)
 	overlay.call("dock_inspector_to", inspector_host)
 	overlay.call("dock_panel_selector", panel_picker)
+	overlay.call("dock_context_toolbar", forge_preview_row)
 	overlay.call("set_device_coordinate_space", Vector2(DEVICE_PHYSICAL_SIZE))
 
 
@@ -624,12 +719,19 @@ func _show_panel(index: int) -> void:
 	if hud == null or index < 0 or index >= PANEL_SPECS.size():
 		return
 	var spec: Dictionary = PANEL_SPECS[index]
+	panel_picker.select(index)
 	hud.call("_close_modal_panels")
 	var system_menu := game.get("_system_menu_panel") as Control
 	if system_menu != null and system_menu.visible:
 		get_tree().paused = false
 		game.call("_hide_system_menu")
 	var profile_id := str(spec["id"])
+	forge_preview_row.visible = profile_id in ["forge", "synthesis"]
+	forge_preview_picker.visible = profile_id == "forge"
+	forge_animation_button.text = "▶ 播放合成动画（3秒）" if profile_id == "synthesis" else "▶ 播放锻造动画（3秒）"
+	forge_animation_button.tooltip_text = "预览三秒格子发光与一次合成音效；不会消耗材料或金币。" if profile_id == "synthesis" else "预览三秒格子发光与每秒一次的锻造音效；不会消耗材料或金币。"
+	if profile_id == "forge":
+		forge_preview_picker.select(0)
 	var death_panel := hud.get("death_revival_panel") as Control
 	if profile_id != "death_revival" and death_panel != null and death_panel.visible:
 		hud.call("close_death_screen")
@@ -718,6 +820,8 @@ func _show_panel(index: int) -> void:
 	else:
 		active_panel = hud.get(str(spec["panel_property"])) as Control
 	assert(active_panel != null and active_panel.visible, "production panel did not open: %s" % str(spec["id"]))
+	if profile_id in ["forge", "synthesis"]:
+		active_panel.call("_set_mode", profile_id)
 	# Keep freshly constructed production controls off-screen until the saved
 	# profile has retired/hidden stale layers. This prevents a one-frame flash
 	# of controls that the user already deleted in the calibration data.

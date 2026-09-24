@@ -4,6 +4,7 @@ const DPV2RepairV5 = preload("res://scripts/drop/dpv2_repair_v5_contract.gd")
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
+const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
 
 signal database_reloaded
 signal initial_load_finished(success: bool)
@@ -2499,6 +2500,8 @@ func _build_item_catalog() -> void:
 	for service_item: Variant in service_item_catalog.get("runtimeItems", []):
 		if not service_item is Dictionary:
 			continue
+		if int(service_item.get("serviceIndex", -1)) == 828 and str(service_item.get("name", "")) == "黑铁矿":
+			continue
 		var service_record: Dictionary = service_item.duplicate(true)
 		if str(service_record.get("name", "")) in ["沃玛号角", "祖玛头像"]:
 			service_record["kind"] = "quest_item"
@@ -2519,6 +2522,15 @@ func _build_item_catalog() -> void:
 	for authority_item: Variant in item_runtime_authority.get("newItems", []):
 		if authority_item is Dictionary:
 			_register_catalog_item((authority_item as Dictionary).duplicate(true))
+	# Purity is a stable numeric identity. Keep all eleven entries ID-addressed;
+	# a name-only lookup must never choose an arbitrary purity or the retired ore.
+	for black_iron: Dictionary in EnhancementBlackIron.records():
+		var iron_id := int(black_iron.itemId)
+		if _catalog_by_item_id.has(iron_id):
+			push_error("锻造黑铁矿 ID 与现有物品冲突：%d" % iron_id)
+			continue
+		_catalog_by_item_id[iron_id] = black_iron
+		item_catalog.append(black_iron)
 
 	var extra_names := {}
 	for drop: Variant in drops:
@@ -2536,7 +2548,7 @@ func _build_item_catalog() -> void:
 		extra_names[runtime_name] = true
 	for item_name: String in extra_names.keys():
 		var canonical_name := str(ITEM_ALIASES.get(item_name, item_name))
-		if item_name.is_empty() or _catalog_by_name.has(canonical_name):
+		if item_name.is_empty() or canonical_name == "黑铁矿" or _catalog_by_name.has(canonical_name):
 			continue
 		_register_catalog_item(_make_runtime_item(item_name, skill_names))
 	# Catalog category/kind is the player-facing canonical classification. Price
@@ -2555,6 +2567,8 @@ func _build_price_index() -> void:
 	for raw: Variant in service_item_catalog.get("serviceEquipmentReference", []):
 		_register_price_record(raw)
 	for raw: Variant in service_item_catalog.get("runtimeItems", []):
+		if raw is Dictionary and int(raw.get("serviceIndex", -1)) == 828 and str(raw.get("name", "")) == "黑铁矿":
+			continue
 		_register_price_record(raw)
 	for raw: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
 		_register_price_record(raw)

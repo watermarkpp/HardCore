@@ -450,8 +450,8 @@ func _verify_dual_defence_production() -> void:
 	)
 	assert(player.current_mp == pre_mp, "MP commits at release, not at input")
 	await get_tree().create_timer(1.0).timeout
-	## defense rank 3 MP 8 + magic_defense rank 5 MP 12 = 20 once.
-	assert(player.current_mp == pre_mp - 20)
+	## Both defense skills are EXCLUDED: injected rank 5 still costs rank-3 MP 8.
+	assert(player.current_mp == pre_mp - 16)
 	assert(player.defense_buff > 0 and player.mac_buff > 0)
 
 	## Production-observable combined plan metadata through the real executor.
@@ -466,11 +466,11 @@ func _verify_dual_defence_production() -> void:
 	var plan: Dictionary = execution.get("canonical_plan", {})
 	assert(plan.combined_skill_ids == ["taoist.magic_defense", "taoist.defense"])
 	var resource_cost: Dictionary = plan.get("resource_cost", {})
-	assert(int(resource_cost.get("mp_cost", 0)) == 20)
+	assert(int(resource_cost.get("mp_cost", 0)) == 16)
 	var components: Array = resource_cost.get("mp_components", [])
 	assert(components.size() == 2)
-	assert(int(components[0].get("rank", 0)) == 5)
-	assert(int(components[0].get("mp_cost", 0)) == 12)
+	assert(int(components[0].get("rank", 0)) == 3)
+	assert(int(components[0].get("mp_cost", 0)) == 8)
 	assert(int(components[1].get("rank", 0)) == 3)
 	assert(int(components[1].get("mp_cost", 0)) == 8)
 
@@ -488,7 +488,7 @@ func _verify_dual_defence_production() -> void:
 		== player.skill_cooldown_remaining_ms("taoist.magic_defense")
 	)
 	await get_tree().create_timer(1.0).timeout
-	assert(player.current_mp == pre_mp - 20)
+	assert(player.current_mp == pre_mp - 16)
 	assert(player.defense_buff > 0 and player.mac_buff > 0)
 
 	## Only one skill learned: normal single-price defence, no combined fields.

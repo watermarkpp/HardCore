@@ -47,14 +47,14 @@ func _ready() -> void:
 	assert(int(LegacyAdapter.get_skill("wizard.lightning", 3).get("skillLevel", -1)) == 3)
 	assert(_plan("wizard.lightning", 4).accepted)
 
-	# MP grows by the last rank delta.
+	# Rank 4+ strengthens effects, but resources stay at rank 3.
 	assert(ResourceService.quote(Loader.skill("wizard.lightning"), 3, {"mana": 100, "materials": {}}).mp_cost == 15)
-	assert(ResourceService.quote(Loader.skill("wizard.lightning"), 4, {"mana": 100, "materials": {}}).mp_cost == 17)
-	assert(ResourceService.quote(Loader.skill("wizard.lightning"), 5, {"mana": 100, "materials": {}}).mp_cost == 19)
+	assert(ResourceService.quote(Loader.skill("wizard.lightning"), 4, {"mana": 100, "materials": {}}).mp_cost == 15)
+	assert(ResourceService.quote(Loader.skill("wizard.lightning"), 5, {"mana": 100, "materials": {}}).mp_cost == 15)
 
 	# Cross-profession representative rank4/rank5 growth.
-	assert(is_equal_approx(float(_plan("warrior.fire_sword", 4).effects[0].damage_multiplier), 3.0))
-	assert(is_equal_approx(float(_plan("warrior.fire_sword", 5).effects[0].damage_multiplier), 3.4))
+	assert(is_equal_approx(float(_plan("warrior.fire_sword", 4).effects[0].damage_multiplier), 2.86))
+	assert(is_equal_approx(float(_plan("warrior.fire_sword", 5).effects[0].damage_multiplier), 3.146))
 	var slaying5 := Router.resolve_warrior_melee_modifiers({
 		"body_mode": "normal",
 		"basic_sword_learned": true,
@@ -64,33 +64,69 @@ func _ready() -> void:
 		"valid_melee_swing": true,
 		"slaying_proc_roll": 0,
 	})
-	assert(slaying5.slaying_proc and slaying5.slaying_proc_denominator == 2)
+	assert(slaying5.slaying_proc and slaying5.slaying_proc_denominator == 0)
 	assert(slaying5.flat_damage_bonus_after_body_formula == 12)
 	assert(slaying5.flat_accuracy_bonus == 14)
 	assert(slaying5.proficiency_events.is_empty())
+	assert(int(_plan("warrior.basic_swordsmanship", 4).effects[0].value) == 12)
+	assert(int(_plan("warrior.basic_swordsmanship", 5).effects[0].value) == 15)
+	assert(int(_plan("taoist.spiritual_warfare", 4).effects[0].value) == 11)
+	assert(int(_plan("taoist.spiritual_warfare", 5).effects[0].value) == 14)
+	assert(is_equal_approx(float(_plan("warrior.thrusting", 4).effects[0].multiplier), float(_plan("warrior.thrusting", 3).effects[0].multiplier) * 1.1))
+	assert(is_equal_approx(float(_plan("warrior.thrusting", 4).effects[1].multiplier), float(_plan("warrior.thrusting", 3).effects[1].multiplier) * 1.1))
 	var lightning3 := _plan("wizard.lightning", 3)
 	var lightning5 := _plan("wizard.lightning", 5)
 	assert(int(lightning5.effects[0].raw_power) > int(lightning3.effects[0].raw_power))
-	assert(is_equal_approx(float(_plan("wizard.magic_shield", 4).effects[0].damage_reduction), 0.75))
-	assert(is_equal_approx(float(_plan("wizard.magic_shield", 5).effects[0].damage_reduction), 0.75))
+	for skill_id: String in ["wizard.fireball", "wizard.hellfire", "wizard.great_fireball", "wizard.exploding_flame", "wizard.fire_wall", "wizard.laser", "wizard.hell_lightning", "wizard.ice_storm"]:
+		var rank3 := _plan(skill_id, 3)
+		var rank4 := _plan(skill_id, 4)
+		assert(rank3.accepted and rank4.accepted, skill_id)
+		assert(int(rank4.effects[0].raw_power) == roundi(float(rank3.effects[0].raw_power) * 1.1), skill_id)
+		assert(rank4.resource_quote.mp_cost == rank3.resource_quote.mp_cost, skill_id)
+	assert(int(lightning5.effects[0].raw_power_after_race) == roundi(float(lightning3.effects[0].raw_power_after_race) * 1.21))
+	var talisman3 := _plan("taoist.soul_fire_talisman", 3)
+	var talisman4 := _plan("taoist.soul_fire_talisman", 4)
+	assert(int(talisman4.effects[0].raw_power) == roundi(float(talisman3.effects[0].raw_power) * 1.1))
+	var heal_context := _context()
+	heal_context["hostile"] = false
+	var heal3 := _plan_with_context("taoist.healing", 3, heal_context)
+	var heal4 := _plan_with_context("taoist.healing", 4, heal_context)
+	assert(heal3.accepted and heal4.accepted)
+	assert(int(heal4.effects[0].raw_heal) == roundi(float(heal3.effects[0].raw_heal) * 1.1))
+	assert(heal4.resource_quote.mp_cost == heal3.resource_quote.mp_cost)
+	var mass_heal3 := _plan_with_context("taoist.mass_healing", 3, heal_context)
+	var mass_heal4 := _plan_with_context("taoist.mass_healing", 4, heal_context)
+	assert(mass_heal3.accepted and mass_heal4.accepted)
+	assert(int(mass_heal4.effects[0].raw_heal_per_target) == roundi(float(mass_heal3.effects[0].raw_heal_per_target) * 1.1))
+	for skill_id: String in ["warrior.wild_rush", "wizard.repulsion_ring", "wizard.temptation_light", "wizard.teleport", "wizard.magic_shield", "wizard.holy_word", "taoist.invisibility", "taoist.mass_invisibility", "taoist.magic_defense", "taoist.defense", "taoist.revelation", "taoist.entrapment"]:
+		var base := _plan(skill_id, 3)
+		var injected := _plan(skill_id, 5)
+		assert(base.accepted == injected.accepted, skill_id)
+		assert(base.get("reason", "") == injected.get("reason", ""), skill_id)
+		assert(base.get("effects", []) == injected.get("effects", []), skill_id)
+		assert(int(base.get("resource_quote", {}).get("mp_cost", 0)) == int(injected.get("resource_quote", {}).get("mp_cost", 0)), skill_id)
+	assert(is_equal_approx(float(_plan("wizard.magic_shield", 4).effects[0].damage_reduction), 0.6))
+	assert(is_equal_approx(float(_plan("wizard.magic_shield", 5).effects[0].damage_reduction), 0.6))
 	assert(int(_plan("taoist.poison", 5).effects[0].duration_seconds) == 30)
 	var summon5 := _plan("taoist.summon_skeleton", 5)
-	assert(int(summon5.effects[0].initial_pet_level) == 5)
+	assert(int(summon5.effects[0].initial_pet_level) == 3)
+	assert(int(summon5.effects[0].group_limit) == 2)
 	assert(int(summon5.effects[0].max_pet_level) == 7)
 	var summon100 := _plan("taoist.summon_divine_beast", 100)
-	assert(int(summon100.effects[0].initial_pet_level) == 7)
+	assert(int(summon100.effects[0].initial_pet_level) == 3)
 	assert(int(summon100.effects[0].max_pet_level) == 7)
 
 	# Probability-style success fields cap at 1.0.
-	assert(is_equal_approx(float(_plan("wizard.teleport", 5).effects[0].success_probability), 1.0))
+	assert(is_equal_approx(float(_plan("wizard.teleport", 5).effects[0].success_probability), 10.0 / 11.0))
 	assert(is_equal_approx(float(_plan("taoist.revelation", 5).effects[0].success_probability), 1.0))
 
 	# Combat-math safety boundaries.
 	assert(WarriorMath.slaying_proc_cycle(3) == 4)
-	assert(WarriorMath.slaying_proc_cycle(5) == 2)
-	assert(WarriorMath.slaying_proc_cycle(1000) == 2)
+	assert(WarriorMath.slaying_proc_cycle(5) == 4)
+	assert(WarriorMath.slaying_proc_cycle(1000) == 4)
+	assert(is_equal_approx(WarriorMath.slaying_proc_probability(5), 0.35))
 	assert(is_equal_approx(WarriorMath.fire_sword_multiplier(3), 2.6))
-	assert(is_equal_approx(WarriorMath.fire_sword_multiplier(5), 3.4))
+	assert(is_equal_approx(WarriorMath.fire_sword_multiplier(5), 3.146))
 	assert(WizardMath.teleport_succeeds(5, 10))
 	assert(not WizardMath.teleport_succeeds(1, 10))
 	assert(WizardMath.classic_get_power(8, 0, 3) == 8)
@@ -117,7 +153,7 @@ func _ready() -> void:
 	)
 	var plan5 := Router.build_canonical_plan(shield_request5, {})
 	assert(bool(plan5.get("rejection", {}).get("accepted", false)))
-	assert(int(plan5.get("effective_rank", -1)) == 5)
+	assert(int(plan5.get("effective_rank", -1)) == 3)
 	var hash5 := str(plan5.get("plan_hash", ""))
 	var plan5_actions := PlanContract._canonicalize(plan5.get("gameplay_actions", []))
 	var shield_request3 := shield_request5.duplicate(true)
@@ -125,29 +161,33 @@ func _ready() -> void:
 	var plan3 := Router.build_canonical_plan(shield_request3, {})
 	assert(bool(plan3.get("rejection", {}).get("accepted", false)))
 	assert(int(plan3.get("effective_rank", -1)) == 3)
-	assert(plan5_actions != PlanContract._canonicalize(plan3.get("gameplay_actions", [])))
+	assert(plan5_actions == PlanContract._canonicalize(plan3.get("gameplay_actions", [])))
 	assert(str(plan5.get("plan_hash", "")) == hash5)
 	assert(PlanContract.verify_immutable(plan5, hash5).valid)
 	# Mutating the original request after the plan is built changes nothing.
 	shield_request5["rank"] = 3
 	assert(str(plan5.get("plan_hash", "")) == hash5)
-	assert(int(plan5.get("effective_rank", -1)) == 5)
+	assert(int(plan5.get("effective_rank", -1)) == 3)
 
 	print(
-		"SKILL_RANK_EXTENSION_PLAN_PASS: rank>3 casts, linear MP/damage, "
-		+ "probability/reduction/denominator/summon caps, frozen effective rank"
+		"SKILL_RANK_EXTENSION_PLAN_PASS: typed rank>3 effects, rank3 resources, "
+		+ "excluded skills frozen and immutable canonical plans"
 	)
 	get_tree().quit()
 
 
 func _plan(skill_id: String, rank: int) -> Dictionary:
+	return _plan_with_context(skill_id, rank, _context())
+
+
+func _plan_with_context(skill_id: String, rank: int, context: Dictionary) -> Dictionary:
 	return Router._plan(Request.create(
 		skill_id,
 		rank,
 		40,
 		Vector2i.ZERO,
 		Vector2i.RIGHT,
-		_context(),
+		context,
 		_resources(),
 		31
 	))

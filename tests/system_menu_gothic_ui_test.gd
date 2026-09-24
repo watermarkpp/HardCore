@@ -38,6 +38,11 @@ func _run() -> void:
 	var modal_center: Vector2 = menu.modal.get_global_rect().get_center()
 	assert(absf(modal_center.x - menu.size.x * 0.5) <= 1.0 and absf(modal_center.y - menu.size.y * 0.5) <= 1.0, "暂停菜单数学上未相对完整屏幕居中")
 	assert(menu.current_page == "main" and menu.main_page.visible and not menu.settings_page.visible, "暂停菜单默认页面错误")
+	assert((menu.main_page.get_node("MainPageTitleFrame/Subtitle") as Label).text.is_empty(), "暂停状态标题重复显示")
+	assert((menu.main_page.get_node("PauseStatus/StatusLabel") as Label).text == "当前游戏进程已暂停", "暂停状态说明丢失")
+	var pause_footer := menu.main_page.get_node("Footer") as Label
+	assert(is_equal_approx(pause_footer.position.y, 486.0), "暂停菜单底部提示未避开装饰框")
+	assert(pause_footer.position.y > menu.save_exit_button.position.y + menu.save_exit_button.size.y, "底部提示压住保存并退出按钮")
 	assert(menu.continue_button.size.y >= 56, "继续游戏按钮触控区不足")
 	# 旧断言：variation == GothicComponentButton（旧普通按钮体系）。
 	# 新断言：当前用户已验收的暂停菜单宝石按钮体系 GothicSystemMenuGemButton，

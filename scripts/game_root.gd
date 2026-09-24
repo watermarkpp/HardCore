@@ -4230,9 +4230,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		_combat_spatial_index.clear_map(current_map_id)
 	# Preserve the live summon before zone_content is queued for deletion. The
 	# destination map restores the same gameplay state beside the owner.
-	PlayerState.apply_taoist_main_pet_runtime_states(
-		_capture_taoist_main_pet_runtime_states()
-	)
+	PlayerState.apply_taoist_main_pet_runtime_states(_capture_taoist_main_pet_runtime_states())
 	for node: Node in get_tree().get_nodes_in_group("zone_content"):
 		if is_instance_valid(node):
 			node.queue_free()
@@ -6796,7 +6794,15 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 	var definition := SkillDataLoaderScript.skill(stable_skill_id)
 	if definition.is_empty():
 		return &"rejected"
-	if _hostile_skill_blocked_by_safe_zone(definition):
+	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
+	var warrior_toggle := (
+		PlayerState.profession == "战士"
+		and stable_skill_id.begins_with("warrior.")
+		and bool(input_metadata.get("toggle", false))
+	)
+	# A warrior toggle only changes the next melee mode; it never targets or
+	# releases an attack at this input boundary.
+	if not warrior_toggle and _hostile_skill_blocked_by_safe_zone(definition):
 		if show_failure:
 			hud.show_error_message("安全区内无法对敌人释放技能")
 		return &"rejected"
@@ -6805,12 +6811,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 			hud.show_error_message("该技能已隐藏，无法使用")
 		return &"rejected"
 	_activate_magic_skill_domain()
-	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
-	if (
-		PlayerState.profession == "战士"
-		and stable_skill_id.begins_with("warrior.")
-		and bool(input_metadata.get("toggle", false))
-	):
+	if warrior_toggle:
 		# Warrior toggles only configure the next melee mode. They do not cast,
 		# spend MP, select a target, or commit cooldown/action state here. Keep
 		# Player.request_skill as the authority for dead/control/struck locks.
@@ -8436,6 +8437,10 @@ func _canonical_target_context(
 		"current_pet_count": get_tree().get_nodes_in_group("summons").size(),
 		"caster_max_hp": player.max_hp,
 	}
+	if stable_skill_id == "taoist.summon_skeleton":
+		var skeleton_slots := _owned_skeleton_slots()
+		context["active_skeleton_count"] = skeleton_slots.size()
+		context["next_skeleton_slot_index"] = _next_skeleton_slot_index(skeleton_slots)
 	var snapshot_origin_ground_gu := _canonical_screen_px_to_ground_gu(origin)
 	context["snapshot_coordinate_context"] = (
 		_canonical_snapshot_absolute_context(snapshot_origin_ground_gu)
@@ -8491,7 +8496,7 @@ func _canonical_target_context(
 		"taoist.summon_skeleton",
 		"taoist.summon_divine_beast",
 	]:
-		var summon_spawn_plan := _canonical_summon_spawn_plan(stable_skill_id)
+		var summon_spawn_plan := _canonical_summon_spawn_plan(stable_skill_id, null, int(context.get("next_skeleton_slot_index", 0)))
 		context["spawn_tile_valid"] = bool(
 			summon_spawn_plan.get("valid", false)
 		)
@@ -8734,6 +8739,9 @@ func _canonical_resource_context(stable_skill_id: String) -> Dictionary:
 		result["active_main_pet_summon_ids"] = (
 			_canonical_main_pet_summon_ids()
 		)
+		if requested_summon_id == "skeleton":
+			result["active_skeleton_count"] = _owned_skeleton_slots().size()
+		result["effective_skill_rank"] = PlayerState.effective_skill_level(stable_skill_id)
 	return result
 
 
@@ -10692,9 +10700,18 @@ func _apply_canonical_temptation(target: EnemyActor, effect: Dictionary) -> void
 
 func _synchronize_main_pet_skill_ranks() -> void:
 	for summon_id: String in ["skeleton", "divine_beast"]:
-		var summon := _canonical_main_pet(summon_id)
-		if summon != null:
+		for summon: SummonActor in _canonical_main_pets(summon_id):
 			_synchronize_pet_skill_rank(summon)
+	var skeletons := _canonical_main_pets("skeleton")
+	var limit := SkillRankResolver.skeleton_count(PlayerState.effective_skill_level("taoist.summon_skeleton"))
+	for i: int in range(skeletons.size() - 1, limit - 1, -1):
+		skeletons[i].retire_for_rank_cap()
+	var saved_groups: Dictionary = PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
+	for raw_snapshot: Variant in saved_groups.get("skeleton", []):
+		if raw_snapshot is Dictionary:
+			var slot := int((raw_snapshot as Dictionary).get("pet_slot_index", 0))
+			if slot >= limit:
+				PlayerState.clear_taoist_main_pet_runtime_state("skeleton", slot)
 
 
 func _synchronize_pet_skill_rank(summon: SummonActor) -> void:
@@ -10704,6 +10721,12 @@ func _synchronize_pet_skill_rank(summon: SummonActor) -> void:
 
 
 func _canonical_main_pet(summon_id: String = "") -> SummonActor:
+	var pets := _canonical_main_pets(summon_id)
+	return pets[0] if not pets.is_empty() else null
+
+
+func _canonical_main_pets(summon_id: String = "") -> Array[SummonActor]:
+	var result: Array[SummonActor] = []
 	for node: Node in get_tree().get_nodes_in_group("summons"):
 		if (
 			node is SummonActor
@@ -10718,8 +10741,29 @@ func _canonical_main_pet(summon_id: String = "") -> SummonActor:
 				SummonActor.SummonState.DEAD,
 			]
 		):
-			return node
-	return null
+			result.append(node)
+	result.sort_custom(func(a: SummonActor, b: SummonActor) -> bool:
+		return a.pet_slot_index < b.pet_slot_index
+	)
+	return result
+
+
+func _owned_skeleton_slots() -> Dictionary:
+	var used := {}
+	var saved_groups: Dictionary = PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
+	for raw_snapshot: Variant in saved_groups.get("skeleton", []):
+		if raw_snapshot is Dictionary:
+			used[int((raw_snapshot as Dictionary).get("pet_slot_index", 0))] = true
+	for summon: SummonActor in _canonical_main_pets("skeleton"):
+		used[summon.pet_slot_index] = true
+	return used
+
+
+func _next_skeleton_slot_index(used: Dictionary) -> int:
+	for slot: int in range(SkillRankExtensionPolicy.skeleton_count_cap()):
+		if not used.has(slot):
+			return slot
+	return 0
 
 
 func _canonical_main_pet_summon_ids() -> Array[String]:
@@ -10742,24 +10786,25 @@ static func _summon_id_for_skill(stable_skill_id: String) -> String:
 func _capture_taoist_main_pet_runtime_states() -> Dictionary:
 	var result := {
 		"contract_id": PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-		"slots": {},
+		"groups": {"skeleton": [], "divine_beast": []},
 	}
-	var slots := result["slots"] as Dictionary
-	# During initial bootstrap/map replacement there can be a short interval in
-	# which one or both old nodes are queued. Seed from the already captured
-	# document, then overwrite every currently live typed slot.
-	if _world_bootstrap_in_progress or _map_transition_in_progress:
-		var preserved := PlayerState.taoist_main_pet_runtime_states_for_restore()
-		var preserved_slots: Variant = preserved.get("slots", {})
-		if preserved_slots is Dictionary:
-			slots.merge((preserved_slots as Dictionary).duplicate(true), true)
+	var groups := result["groups"] as Dictionary
+	# A saved slot can remain pending when this map has no legal birth tile.
+	# Keep it across a partial restore and overwrite only matching live slots.
+	var preserved_groups: Dictionary = PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
 	for summon_id: String in ["skeleton", "divine_beast"]:
-		var summon := _canonical_main_pet(summon_id)
-		if summon == null or not summon.has_method("persistence_snapshot"):
-			continue
-		var snapshot: Variant = summon.persistence_snapshot()
-		if snapshot is Dictionary:
-			slots[summon_id] = (snapshot as Dictionary).duplicate(true)
+		var by_slot := {}
+		for raw_snapshot: Variant in preserved_groups.get(summon_id, []):
+			if raw_snapshot is Dictionary:
+				var snapshot := raw_snapshot as Dictionary
+				by_slot[int(snapshot.get("pet_slot_index", 0))] = snapshot.duplicate(true)
+		for summon: SummonActor in _canonical_main_pets(summon_id):
+			if summon.has_method("persistence_snapshot"):
+				by_slot[summon.pet_slot_index] = summon.persistence_snapshot()
+		var slot_indices: Array = by_slot.keys()
+		slot_indices.sort()
+		for slot: Variant in slot_indices:
+			(groups[summon_id] as Array).append(by_slot[slot])
 	return result
 
 
@@ -10777,7 +10822,7 @@ func _on_canonical_main_pet_state_changed(
 		and summon.owner_player == player
 		and bool(summon.get_meta("taoist_main_pet", false))
 	):
-		PlayerState.clear_taoist_main_pet_runtime_state(summon.summon_id)
+		PlayerState.clear_taoist_main_pet_runtime_state(summon.summon_id, summon.pet_slot_index)
 
 
 func _wire_canonical_main_pet_persistence(summon: SummonActor) -> void:
@@ -10790,53 +10835,68 @@ func _restore_persisted_taoist_main_pet_if_needed() -> bool:
 	if ProfessionRules.profession_id(PlayerState.profession) != "taoist":
 		return false
 	var restored_any := false
+	var saved_groups: Dictionary = (
+		PlayerState.taoist_main_pet_runtime_states_for_restore().get("groups", {})
+	)
 	for summon_id: String in ["skeleton", "divine_beast"]:
-		if _canonical_main_pet(summon_id) != null:
-			continue
-		var snapshot := PlayerState.taoist_main_pet_runtime_state_for_restore(
-			summon_id
-		)
-		if snapshot.is_empty() or not bool(snapshot.get("alive", false)):
-			continue
-		var stable_skill_id := str(snapshot.get("skill_id", ""))
-		if _summon_id_for_skill(stable_skill_id) != summon_id:
-			PlayerState.clear_taoist_main_pet_runtime_state(summon_id)
-			continue
-		var spawn_plan := _canonical_summon_spawn_plan(stable_skill_id)
-		if not bool(spawn_plan.get("valid", false)):
-			continue
-		var summon := SummonActor.new()
-		summon.setup(
-			player,
-			"神兽" if summon_id == "divine_beast" else "骷髅",
-			maxi(1, _canonical_primary_stat_roll("taoist")),
-			maxi(0, int(snapshot.get("skill_rank", 0))),
-			stable_skill_id,
-			maxi(1, int(snapshot.get("owner_level", PlayerState.level))),
-			int(snapshot.get("maximum_pet_level", -1))
-		)
-		if not summon.restore_persistence_snapshot(snapshot):
-			summon.free()
-			PlayerState.clear_taoist_main_pet_runtime_state(summon_id)
-			continue
-		_synchronize_pet_skill_rank(summon)
-		summon.set_meta("taoist_main_pet", true)
-		summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v2")
-		summon.configure_runtime_map_projection(
-			current_map_id,
-			Callable(self, "_canonical_ground_gu_to_screen_px"),
-			Callable(self, "_canonical_screen_px_to_ground_gu")
-		)
-		summon.configure_spatial_index(_combat_spatial_index)
-		summon.global_position = spawn_plan.get(
-			"position_screen_px", player.global_position
-		) as Vector2
-		summon.configure_spawn_release_footprint(
-			"restore:%s:%d" % [stable_skill_id, Time.get_ticks_msec()]
-		)
-		_wire_canonical_main_pet_persistence(summon)
-		add_child(summon)
-		restored_any = true
+		for raw_snapshot: Variant in saved_groups.get(summon_id, []):
+			if not raw_snapshot is Dictionary:
+				continue
+			var snapshot := raw_snapshot as Dictionary
+			var slot := int(snapshot.get("pet_slot_index", 0))
+			if not bool(snapshot.get("alive", false)):
+				continue
+			if summon_id == "skeleton" and slot >= SkillRankResolver.skeleton_count(
+				PlayerState.effective_skill_level("taoist.summon_skeleton")
+			):
+				PlayerState.clear_taoist_main_pet_runtime_state(summon_id, slot)
+				continue
+			var stable_skill_id := str(snapshot.get("skill_id", ""))
+			if _summon_id_for_skill(stable_skill_id) != summon_id:
+				PlayerState.clear_taoist_main_pet_runtime_state(summon_id, slot)
+				continue
+			var existing_slot := false
+			for pet: SummonActor in _canonical_main_pets(summon_id):
+				if pet.pet_slot_index == slot:
+					existing_slot = true
+			if existing_slot:
+				continue
+			var spawn_plan := _canonical_summon_spawn_plan(stable_skill_id, null, slot)
+			if not bool(spawn_plan.get("valid", false)):
+				continue
+			var summon := SummonActor.new()
+			summon.setup(
+				player,
+				"神兽" if summon_id == "divine_beast" else "骷髅",
+				maxi(1, _canonical_primary_stat_roll("taoist")),
+				maxi(0, int(snapshot.get("skill_rank", 0))),
+				stable_skill_id,
+				maxi(1, int(snapshot.get("owner_level", PlayerState.level))),
+				int(snapshot.get("maximum_pet_level", -1)),
+			)
+			if not summon.restore_persistence_snapshot(snapshot):
+				summon.free()
+				PlayerState.clear_taoist_main_pet_runtime_state(summon_id, slot)
+				continue
+			_synchronize_pet_skill_rank(summon)
+			summon.set_meta("taoist_main_pet", true)
+			summon.set_meta(
+				"taoist_main_pet_contract",
+				PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
+			)
+			summon.configure_runtime_map_projection(
+				current_map_id,
+				Callable(self, "_canonical_ground_gu_to_screen_px"),
+				Callable(self, "_canonical_screen_px_to_ground_gu"),
+			)
+			summon.configure_spatial_index(_combat_spatial_index)
+			summon.global_position = spawn_plan.get("position_screen_px", player.global_position) as Vector2
+			summon.configure_spawn_release_footprint(
+				"restore:%s:%d:%d" % [stable_skill_id, slot, Time.get_ticks_msec()]
+			)
+			_wire_canonical_main_pet_persistence(summon)
+			add_child(summon)
+			restored_any = true
 	if restored_any:
 		PlayerState.apply_taoist_main_pet_runtime_states(
 			_capture_taoist_main_pet_runtime_states()
@@ -11212,23 +11272,27 @@ func _apply_canonical_main_pet(
 		)
 	)
 	var existing := _canonical_main_pet(requested_summon_id)
+	var requested_slot := int(descriptor.get("pet_slot_index", 0))
 	if operation == "recall_existing_main_pet":
-		if existing == null or not _canonical_summon_position_is_valid(
-			spawn_ground_gu,
-			summon_radius_gu,
-			existing
-		):
+		for pet: SummonActor in _canonical_main_pets(requested_summon_id):
+			var recall_plan := _canonical_summon_spawn_plan(stable_skill_id, pet, pet.pet_slot_index)
+			if not bool(recall_plan.get("valid", false)):
+				continue
+			pet.global_position = recall_plan.get("position_screen_px") as Vector2
+			_synchronize_pet_skill_rank(pet)
+			pet.configure_spawn_release_footprint(release_id)
+		return
+	if not bool(descriptor.get("spawned", false)):
+		return
+	if requested_summon_id == "divine_beast" and existing != null:
+		return
+	if requested_summon_id == "skeleton":
+		var skeletons := _canonical_main_pets("skeleton")
+		if skeletons.size() >= SkillRankResolver.skeleton_count(PlayerState.effective_skill_level(stable_skill_id)):
 			return
-		existing.global_position = spawn_screen_px
-		_synchronize_pet_skill_rank(existing)
-		existing.configure_spawn_release_footprint(release_id)
-		existing.set_meta(
-			"canonical_spawn_footprint_snapshot",
-			spawn_snapshot.duplicate(true)
-		)
-		return
-	if existing != null or not bool(descriptor.get("spawned", false)):
-		return
+		for pet: SummonActor in skeletons:
+			if pet.pet_slot_index == requested_slot:
+				return
 	if not _canonical_summon_position_is_valid(
 		spawn_ground_gu,
 		summon_radius_gu,
@@ -11250,8 +11314,10 @@ func _apply_canonical_main_pet(
 		PlayerState.level,
 		int(descriptor.get("max_pet_level", -1))
 	)
+	summon.pet_slot_index = requested_slot
+	_synchronize_pet_skill_rank(summon)
 	summon.set_meta("taoist_main_pet", true)
-	summon.set_meta("taoist_main_pet_contract", "skills.taoist_main_pet.v2")
+	summon.set_meta("taoist_main_pet_contract", PlayerState.TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID)
 	summon.configure_runtime_map_projection(
 		current_map_id,
 		Callable(self, "_canonical_ground_gu_to_screen_px"),
@@ -11275,27 +11341,26 @@ func _relocate_main_pets_after_map_arrival() -> void:
 	# _load_zone restores pets before the caller installs its final arrival.
 	# Reuse the canonical legal-position search, excluding only the moving pet.
 	for summon_id: String in ["skeleton", "divine_beast"]:
-		var summon := _canonical_main_pet(summon_id)
-		if summon == null:
-			continue
-		summon.configure_runtime_map_projection(
-			current_map_id,
-			Callable(self, "_canonical_ground_gu_to_screen_px"),
-			Callable(self, "_canonical_screen_px_to_ground_gu"),
-		)
-		summon.configure_spatial_index(_combat_spatial_index)
-		var stable_skill_id := (
-			"taoist.summon_skeleton" if summon_id == "skeleton"
-			else "taoist.summon_divine_beast"
-		)
-		var plan := _canonical_summon_spawn_plan(stable_skill_id, summon)
-		if bool(plan.get("valid", false)):
-			summon.relocate_after_owner_teleport(plan.get("position_screen_px") as Vector2)
+		for summon: SummonActor in _canonical_main_pets(summon_id):
+			summon.configure_runtime_map_projection(
+				current_map_id,
+				Callable(self, "_canonical_ground_gu_to_screen_px"),
+				Callable(self, "_canonical_screen_px_to_ground_gu"),
+			)
+			summon.configure_spatial_index(_combat_spatial_index)
+			var stable_skill_id := (
+				"taoist.summon_skeleton" if summon_id == "skeleton"
+				else "taoist.summon_divine_beast"
+			)
+			var plan := _canonical_summon_spawn_plan(stable_skill_id, summon, summon.pet_slot_index)
+			if bool(plan.get("valid", false)):
+				summon.relocate_after_owner_teleport(plan.get("position_screen_px") as Vector2)
 
 
 func _canonical_summon_spawn_plan(
 	stable_skill_id: String,
 	ignored_summon: SummonActor = null,
+	pet_slot_index: int = 0,
 ) -> Dictionary:
 	if not is_instance_valid(player):
 		return {"valid": false, "reason": "player_unavailable"}
@@ -11322,7 +11387,9 @@ func _canonical_summon_spawn_plan(
 		)
 	)
 	var desired_ground_gu := (
-		player_ground_gu + side_direction_ground_gu * summon_offset_gu
+		player_ground_gu
+		+ side_direction_ground_gu * summon_offset_gu * float(1 + pet_slot_index / 2)
+		- facing_ground_gu * summon_offset_gu * float(pet_slot_index % 2)
 	)
 	var center_tile := Vector2i(
 		roundi(desired_ground_gu.x),

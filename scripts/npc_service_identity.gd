@@ -27,7 +27,7 @@ static func resolve(legacy_display_name: String, kind: String, stock_key: String
 		"repair":
 			return {"id": BLACKSMITH_ID, "display_name": "铁匠"}
 		"trainer":
-			return {"id": ENHANCEMENT_VENDOR_ID, "display_name": "强化商人"}
+			return {"id": ENHANCEMENT_VENDOR_ID, "display_name": "强化大师"}
 		"quest":
 			return {"id": VETERAN_ID, "display_name": "老兵"}
 		"warehouse":
@@ -42,7 +42,7 @@ static func resolve(legacy_display_name: String, kind: String, stock_key: String
 	if "书店" in legacy_name:
 		return {"id": BOOK_VENDOR_ID, "display_name": "书店老板"}
 	if "武馆教头" in legacy_name:
-		return {"id": ENHANCEMENT_VENDOR_ID, "display_name": "强化商人"}
+		return {"id": ENHANCEMENT_VENDOR_ID, "display_name": "强化大师"}
 	if "老兵" in legacy_name:
 		return {"id": VETERAN_ID, "display_name": "老兵"}
 	if "仓库管理员" in legacy_name:

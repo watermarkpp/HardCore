@@ -232,8 +232,9 @@ func _run() -> void:
 	var persisted_states: Dictionary = (
 		_game._capture_taoist_main_pet_runtime_states()
 	)
-	var persisted_slots: Dictionary = persisted_states.get("slots", {})
-	assert(persisted_slots.size() == 2)
+	var persisted_groups: Dictionary = persisted_states.get("groups", {})
+	assert((persisted_groups.get("skeleton", []) as Array).size() == 1)
+	assert((persisted_groups.get("divine_beast", []) as Array).size() == 1)
 	var restore_mp_before := _player.current_mp
 	var old_skeleton_id := replacement_skeleton.get_instance_id()
 	var old_divine_id := divine.get_instance_id()
@@ -248,8 +249,8 @@ func _run() -> void:
 	assert(restored_divine._combat_spatial_index == _game._combat_spatial_index)
 	assert(restored_skeleton.get_instance_id() != old_skeleton_id)
 	assert(restored_divine.get_instance_id() != old_divine_id)
-	assert(restored_skeleton.persistence_snapshot() == persisted_slots["skeleton"])
-	assert(restored_divine.persistence_snapshot() == persisted_slots["divine_beast"])
+	assert(restored_skeleton.persistence_snapshot() == persisted_groups["skeleton"][0])
+	assert(restored_divine.persistence_snapshot() == persisted_groups["divine_beast"][0])
 	var restored_skeleton_id := restored_skeleton.get_instance_id()
 	var restored_divine_id := restored_divine.get_instance_id()
 	await get_tree().process_frame

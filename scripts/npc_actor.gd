@@ -88,7 +88,7 @@ func interact(game: Node) -> void:
 		game.hud.open_shop(npc_name, active_stock, merchant_context)
 		interaction_succeeded = true
 	elif npc_kind == "trainer":
-		game.hud.open_skill_trainer(npc_name)
+		game.hud.open_enhancement_vendor(npc_name)
 		interaction_succeeded = true
 	elif npc_kind == "quest":
 		game.hud.open_quest(npc_name)

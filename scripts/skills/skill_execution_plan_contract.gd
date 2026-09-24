@@ -1008,6 +1008,7 @@ static func _descriptors_of_kind(
 						"max_pet_level": int(
 							effect.get("max_pet_level", -1)
 						),
+						"pet_slot_index": int(effect.get("pet_slot_index", 0)),
 						"skill_rank_is_pet_level": bool(
 							effect.get("skill_rank_is_pet_level", false)
 						),

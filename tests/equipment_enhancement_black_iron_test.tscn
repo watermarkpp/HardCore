@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/equipment_enhancement_black_iron_test.gd" id="1_black_iron"]
+
+[node name="EquipmentEnhancementBlackIronTest" type="Node"]
+script = ExtResource("1_black_iron")

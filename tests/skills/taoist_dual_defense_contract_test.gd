@@ -40,11 +40,11 @@ func _verify_dual_quote_single_transaction() -> void:
 			"partner_rank": 7,
 		},
 	}
-	## defense rank 5 = 8 + (8-6)*2 = 12; magic_defense rank 7 =
-	## 8 + (8-6)*4 = 16. Sum must be one quote.
+	## Both skills are EXCLUDED from rank extension. Even an injected rank 5/7
+	## must price and resolve as their frozen rank-3 values.
 	var quote := ResourceService.quote(defense, 5, resources, dual_context)
 	assert(quote.valid)
-	assert(quote.mp_cost == 28)
+	assert(quote.mp_cost == 16)
 	assert(quote.dual_defense)
 	assert(quote.material_free)
 	assert(quote.material_id == "" and quote.material_amount == 0)
@@ -53,20 +53,20 @@ func _verify_dual_quote_single_transaction() -> void:
 	assert(quote.combined_skill_ids == ["taoist.magic_defense", "taoist.defense"])
 	assert(quote.mp_components.size() == 2)
 	assert(quote.mp_components[0].skill_id == "taoist.magic_defense")
-	assert(quote.mp_components[0].rank == 7 and quote.mp_components[0].mp_cost == 16)
+	assert(quote.mp_components[0].rank == 3 and quote.mp_components[0].mp_cost == 8)
 	assert(quote.mp_components[1].skill_id == "taoist.defense")
-	assert(quote.mp_components[1].rank == 5 and quote.mp_components[1].mp_cost == 12)
+	assert(quote.mp_components[1].rank == 3 and quote.mp_components[1].mp_cost == 8)
 	var committed := ResourceService.committed_context(resources, quote)
-	assert(committed.mana == 999 - 28)
+	assert(committed.mana == 999 - 16)
 	assert(committed.materials.is_empty())
 	var insufficient := ResourceService.quote(
 		defense,
 		5,
-		{"mana": 27, "materials": {}},
+		{"mana": 15, "materials": {}},
 		dual_context
 	)
 	assert(not insufficient.valid and insufficient.reason == "insufficient_mana")
-	assert(insufficient.mp_cost == 28)
+	assert(insufficient.mp_cost == 16)
 
 
 func _verify_dual_quote_invalid_partner() -> void:
@@ -109,10 +109,10 @@ func _verify_dual_runtime_plan() -> void:
 	var ac_effect: Dictionary = plan.effects[1]
 	assert(mac_effect.stat == "MAC" and ac_effect.stat == "AC")
 	assert(mac_effect.skill_id == "taoist.magic_defense")
-	assert(mac_effect.rank == 7)
+	assert(mac_effect.rank == 3)
 	assert(mac_effect.buff_id == "buff.taoist.soul_shield_mac")
 	assert(ac_effect.skill_id == "taoist.defense")
-	assert(ac_effect.rank == 5)
+	assert(ac_effect.rank == 3)
 	assert(ac_effect.buff_id == "buff.taoist.blessed_armour_ac")
 	assert(mac_effect.value == 5 and ac_effect.value == 5)
 	assert(mac_effect.affected_count == 2 and ac_effect.affected_count == 2)
@@ -122,20 +122,18 @@ func _verify_dual_runtime_plan() -> void:
 	assert(plan.combined_skill_ids == ["taoist.magic_defense", "taoist.defense"])
 	assert(plan.combined_cast_contract_id == DUAL_DEFENSE_CONTRACT_ID)
 	var quote: Dictionary = plan.resource_quote
-	assert(quote.mp_cost == 28 and quote.dual_defense)
+	assert(quote.mp_cost == 16 and quote.dual_defense)
 	assert(quote.mp_components.size() == 2)
 	var geometry: Dictionary = plan.support_area_geometry
 	assert(geometry.shape == "chebyshev_area" and geometry.cell_count == 49)
 	assert(geometry.affected_count == 2)
 	assert(plan.geometry_cells.size() == 49)
 
-	## Per-skill durations: MAC uses magic_defense's effective rank, AC uses
-	## defense's effective rank, in a fixed MAC-then-AC order regardless of
-	## which skill was clicked.
+	## Both durations use rank 3, in the fixed MAC-then-AC order regardless
+	## of which skill was clicked.
 	var seed_rng := Rng.new(31)
-	var expected_mac_duration := _expected_duration(seed_rng, 7, 4)
-	var expected_ac_duration := _expected_duration(seed_rng, 5, 4)
-	assert(expected_mac_duration != expected_ac_duration)
+	var expected_mac_duration := _expected_duration(seed_rng, 3, 4)
+	var expected_ac_duration := _expected_duration(seed_rng, 3, 4)
 	assert(mac_effect.duration_seconds == expected_mac_duration)
 	assert(ac_effect.duration_seconds == expected_ac_duration)
 
@@ -147,10 +145,10 @@ func _verify_dual_runtime_plan() -> void:
 	var clicked_mac_plan := _plan("taoist.magic_defense", clicked_mac_context, 7)
 	assert(clicked_mac_plan.accepted)
 	assert(clicked_mac_plan.effects[0].stat == "MAC")
-	assert(clicked_mac_plan.effects[0].rank == 7)
+	assert(clicked_mac_plan.effects[0].rank == 3)
 	assert(clicked_mac_plan.effects[0].duration_seconds == expected_mac_duration)
 	assert(clicked_mac_plan.effects[1].stat == "AC")
-	assert(clicked_mac_plan.effects[1].rank == 5)
+	assert(clicked_mac_plan.effects[1].rank == 3)
 	assert(clicked_mac_plan.effects[1].duration_seconds == expected_ac_duration)
 
 
@@ -162,10 +160,10 @@ func _verify_canonical_plan_survival() -> void:
 	assert(plan.combined_skill_ids == ["taoist.magic_defense", "taoist.defense"])
 	assert(plan.combined_cast_contract_id == DUAL_DEFENSE_CONTRACT_ID)
 	var resource_cost: Dictionary = plan.resource_cost
-	assert(resource_cost.mp_cost == 28)
+	assert(resource_cost.mp_cost == 16)
 	assert(resource_cost.mp_components.size() == 2)
-	assert(resource_cost.mp_components[0].rank == 7)
-	assert(resource_cost.mp_components[1].rank == 5)
+	assert(resource_cost.mp_components[0].rank == 3)
+	assert(resource_cost.mp_components[1].rank == 3)
 	assert(resource_cost.combined_cast_contract_id == DUAL_DEFENSE_CONTRACT_ID)
 	var hash_before := str(plan.get("plan_hash", ""))
 	assert(PlanContract.verify_immutable(plan, hash_before).valid)

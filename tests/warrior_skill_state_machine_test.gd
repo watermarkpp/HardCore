@@ -158,7 +158,12 @@ func _run() -> void:
 	PlayerState.learned_skills = {"刺杀剑术": 3, "半月弯刀": 3, "野蛮冲撞": 3}
 	player.thrusting_enabled = true
 	player.half_moon_enabled = false
-	player.global_position = Vector2.ZERO
+	# The formal melee query uses the authored map's ground coordinates. Place
+	# the fixture at a legal outdoor tile, away from the town safe area.
+	game._set_player_world_position(
+		game._canonical_ground_gu_to_screen_px(Vector2(40.5, 13.5))
+	)
+	assert(not game._player_inside_active_safe_zone())
 	player.facing = Vector2.RIGHT
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:

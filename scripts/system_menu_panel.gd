@@ -90,7 +90,7 @@ func _build_main_page() -> void:
 	main_page.name = "MainPage"
 	main_page.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal.add_child(main_page)
-	main_title = _title_bar(main_page, "游戏菜单", "游戏已经暂停")
+	main_title = _title_bar(main_page, "游戏菜单", "")
 	var status := Panel.new()
 	status.name = "PauseStatus"
 	status.position = Vector2(72, 122)
@@ -124,7 +124,7 @@ func _build_main_page() -> void:
 	var footer := Label.new()
 	footer.name = "Footer"
 	footer.text = "ESC / Android 返回键：继续游戏"
-	footer.position = Vector2(60, 510)
+	footer.position = Vector2(60, 486)
 	footer.size = Vector2(380, 28)
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	footer.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
