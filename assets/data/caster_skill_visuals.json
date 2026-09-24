@@ -4068,14 +4068,14 @@
         ],
         "playback": "once",
         "native_bounds": [
-          -163,
-          -939,
-          153,
-          58
+          -156,
+          -890,
+          155,
+          54
         ],
         "native_extent": [
-          316,
-          997
+          311,
+          944
         ],
         "sequences": [
           {
@@ -4087,114 +4087,120 @@
                 "source_index": 10,
                 "source_offset": 126840,
                 "source_draw_offset": [
-                  -61,
-                  -920
+                  -65,
+                  -874
                 ],
                 "top_left_from_world_anchor": [
-                  -93,
-                  -936
+                  -97,
+                  -890
                 ],
                 "pixel_size": [
-                  148,
-                  958
+                  200,
+                  936
                 ],
                 "path": "assets/art/characters/caster_skill_frames/lightning/direction_00/frame_00.png",
-                "png_sha256": "903526f3c4998e8777d1f5a9c4c8176a405491cc5a97cf4e1ef5da2afc33a068"
+                "png_sha256": "9be1a6cb07fb7c615d4f4672bb42d0b400c37cee8793ca4001f623240917826a",
+                "user_override_apng_frame_index": 0
               },
               {
                 "frame_index": 1,
                 "source_index": 11,
                 "source_offset": 268632,
                 "source_draw_offset": [
-                  -89,
-                  -923
+                  -116,
+                  -873
                 ],
                 "top_left_from_world_anchor": [
-                  -121,
-                  -939
+                  -148,
+                  -889
                 ],
                 "pixel_size": [
-                  212,
-                  963
+                  300,
+                  943
                 ],
                 "path": "assets/art/characters/caster_skill_frames/lightning/direction_00/frame_01.png",
-                "png_sha256": "043df3d1aae33db257f6d59100076235c7747b6bcc59d2ede4206b734687682b"
+                "png_sha256": "eacbb53825d3e6718fdf60df2f5d9a99fcb04cf9e90798e1a980f7635a2e5627",
+                "user_override_apng_frame_index": 1
               },
               {
                 "frame_index": 2,
                 "source_index": 12,
                 "source_offset": 472796,
                 "source_draw_offset": [
-                  -96,
-                  -923
+                  -98,
+                  -874
                 ],
                 "top_left_from_world_anchor": [
-                  -128,
-                  -939
+                  -130,
+                  -890
                 ],
                 "pixel_size": [
-                  224,
-                  997
+                  251,
+                  937
                 ],
                 "path": "assets/art/characters/caster_skill_frames/lightning/direction_00/frame_02.png",
-                "png_sha256": "fe520dadc2e33b05e5e70a8173063bafd3e7bb8b97f59806a2503d19059dd4a4"
+                "png_sha256": "cb8edd09cf9fc4b53176177d1b215a82ad836350e159d515c6314a9de332eddb",
+                "user_override_apng_frame_index": 2
               },
               {
                 "frame_index": 3,
                 "source_index": 13,
                 "source_offset": 696132,
                 "source_draw_offset": [
-                  -131,
-                  -921
+                  -92,
+                  -874
                 ],
                 "top_left_from_world_anchor": [
-                  -163,
-                  -937
+                  -124,
+                  -890
                 ],
                 "pixel_size": [
-                  316,
-                  993
+                  260,
+                  941
                 ],
                 "path": "assets/art/characters/caster_skill_frames/lightning/direction_00/frame_03.png",
-                "png_sha256": "3eb38e23d9db8ab558c1d86c4c3df2e09912bc5212047f70cfc45c109110e223"
+                "png_sha256": "c1c06105d267dff3820c0c1f8604d1f1e9945fff86228bae8a30e204d737dff1",
+                "user_override_apng_frame_index": 3
               },
               {
                 "frame_index": 4,
                 "source_index": 14,
                 "source_offset": 1009928,
                 "source_draw_offset": [
-                  -84,
-                  -46
+                  -48,
+                  -874
                 ],
                 "top_left_from_world_anchor": [
-                  -116,
-                  -62
+                  -80,
+                  -890
                 ],
                 "pixel_size": [
-                  220,
-                  119
+                  158,
+                  931
                 ],
                 "path": "assets/art/characters/caster_skill_frames/lightning/direction_00/frame_04.png",
-                "png_sha256": "bc970ba31576f09a6ddfa7a327e06183a37b221e26dd202eba2b9045d3248c2f"
+                "png_sha256": "f8843f1463a9d706ce377ae8a57a36209aa53a34618a99dcec59d092e02bd126",
+                "user_override_apng_frame_index": 4
               },
               {
                 "frame_index": 5,
                 "source_index": 15,
                 "source_offset": 1036116,
                 "source_draw_offset": [
-                  7,
-                  -44
+                  -124,
+                  -86
                 ],
                 "top_left_from_world_anchor": [
-                  -25,
-                  -60
+                  -156,
+                  -102
                 ],
                 "pixel_size": [
-                  4,
-                  1
+                  311,
+                  124
                 ],
                 "path": "assets/art/characters/caster_skill_frames/lightning/direction_00/frame_05.png",
-                "png_sha256": "5a3fa1890a8f9dcf74d8eeb40cb836df41e80351410574ccec06180bb1ece6d0"
+                "png_sha256": "9efae15289c10d44da0cf22a0a97fb5af205c8e62793c9d7a6768d8a82edfbf3",
+                "user_override_apng_frame_index": 5
               }
             ]
           }
@@ -4226,7 +4232,38 @@
       "mapping_rule": "PlayScn mtThunder constructs Magic2 TThuderEffect at 10 and sets ExplosionFrame=6; inherited NextFrameTime=50",
       "mapping_confidence": "A",
       "pixel_confidence": "A",
-      "derived_status": "ready"
+      "derived_status": "ready",
+      "user_visual_override": {
+        "source_path": "assets/art/characters/caster_skill_sources/lightning/user_realistic_sharpened.apng",
+        "source_sha256": "9d6cd628da2981f21bc2cba38351e8bcfb60d182f1940f4304fb7c86df52a7a2",
+        "original_filename": "真实感雷电术动画_锐化版_透明背景.apng",
+        "source_canvas_pixels": [
+          724,
+          2172
+        ],
+        "runtime_canvas_pixels": [
+          316,
+          997
+        ],
+        "scaled_pixels": [
+          316,
+          948
+        ],
+        "scaled_canvas_position": [
+          0,
+          49
+        ],
+        "resampling": "LANCZOS RGBA; alpha bounding-box crop per frame",
+        "frame_order_apng_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "provenance_note": "User-authoritative visual replacement; original_path/source_index fields document replaced Magic2.wil slots. Skill timing and gameplay are unchanged."
+      }
     },
     "teleport": {
       "skill_ids": [
@@ -7491,7 +7528,7 @@
       },
       "animation": {
         "contract": "caster_skill_animation.v1",
-        "frame_time_ms": 40,
+        "frame_time_ms": 60,
         "frame_count": 6,
         "direction_count": 1,
         "direction_order": "canonical16: 0=up, 4=right, 8=down, 12=left; clockwise",
@@ -7655,7 +7692,13 @@
       "mapping_rule": "clEvent.pas ET_FIRE in the non-CUSTOMLIBFILE branch uses g_WMagicImages FIREBURNBASE=1630 + ((m_dwCurframe div 2) mod 6). The primary client.classic_raw_complete Data/Magic.wil distribution is that non-custom library layout. Run advances m_dwCurframe every 20 ms, so visible frames are 40 ms. EffectBase[20]=1620 is only the caster body ring and is not the ground fire.",
       "mapping_confidence": "A",
       "pixel_confidence": "A",
-      "derived_status": "ready"
+      "derived_status": "ready",
+      "runtime_timing_override": {
+        "source_path": "assets/data/caster_skill_visual_timing_overrides.json",
+        "source_sha256": "d68bd831158fdfaf5a81e3203777b839e730b40a4c245e648a8af52593eaec52",
+        "source_frame_time_ms": 40,
+        "runtime_frame_time_ms": 60
+      }
     },
     "laser": {
       "skill_ids": [

@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import shutil
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -22,8 +23,33 @@ OUTPUT = ROOT / "assets/data/caster_skill_visuals.json"
 PROFESSION_GROWTH = ROOT / "assets/data/vanilla_176/profession_growth.json"
 SKILL_SOURCE = ROOT / "assets/data/vanilla_176/skills_source_of_truth_v1.json"
 FRAME_ROOT = ROOT / "assets/art/characters/caster_skill_frames"
+TIMING_OVERRIDES_PATH = ROOT / "assets/data/caster_skill_visual_timing_overrides.json"
+TIMING_OVERRIDES = json.loads(TIMING_OVERRIDES_PATH.read_text(encoding="utf-8"))["overrides"]
 ICON_SIZE = 96
 CLASSIC_UNIT_HALF = (32, 16)
+
+
+def runtime_frame_time_ms(asset_id: str, source_frame_time_ms: int) -> int:
+    override = TIMING_OVERRIDES.get(asset_id)
+    if override is None:
+        return source_frame_time_ms
+    if int(override["source_frame_time_ms"]) != source_frame_time_ms:
+        raise ValueError(f"{asset_id}: source frame time changed under runtime override")
+    runtime_ms = int(override["runtime_frame_time_ms"])
+    if runtime_ms <= 0:
+        raise ValueError(f"{asset_id}: runtime frame time must be positive")
+    return runtime_ms
+
+
+def timing_override_record(asset_id: str, source_frame_time_ms: int) -> dict | None:
+    if asset_id not in TIMING_OVERRIDES:
+        return None
+    return {
+        "source_path": rel(TIMING_OVERRIDES_PATH),
+        "source_sha256": digest(TIMING_OVERRIDES_PATH),
+        "source_frame_time_ms": source_frame_time_ms,
+        "runtime_frame_time_ms": runtime_frame_time_ms(asset_id, source_frame_time_ms),
+    }
 
 
 @dataclass(frozen=True)
@@ -84,6 +110,8 @@ SPECS = {
         "PlayScn.NewMagic effect 21 sets MagExplosionBase=1660, NextFrameTime=80, "
         "ExplosionFrame=20",
     ),
+    # The client source is 40 ms. The user-approved runtime presentation is
+    # selected by caster_skill_visual_timing_overrides.json.
     "fire_wall": AnimationSpec(
         "Magic.wil", 1630, 6, ("wizard.fire_wall",), "ground_effect", 40,
         "clEvent.pas ET_FIRE in the non-CUSTOMLIBFILE branch uses g_WMagicImages "
@@ -541,7 +569,7 @@ def decode_phase(
     return {
         "contract": "caster_skill_animation.v1",
         "phase_id": phase_id,
-        "frame_time_ms": spec.frame_time_ms,
+        "frame_time_ms": runtime_frame_time_ms(asset_id, spec.frame_time_ms),
         "frame_count": spec.frame_count,
         "direction_count": spec.directions,
         "direction_order": "canonical16: 0=up, 4=right, 8=down, 12=left; clockwise",
@@ -659,7 +687,7 @@ def main() -> None:
 
         animation = {
             "contract": "caster_skill_animation.v1",
-            "frame_time_ms": spec.frame_time_ms,
+            "frame_time_ms": runtime_frame_time_ms(asset_id, spec.frame_time_ms),
             "frame_count": spec.frame_count,
             "direction_count": spec.directions,
             "direction_order": "canonical16: 0=up, 4=right, 8=down, 12=left; clockwise",
@@ -708,6 +736,9 @@ def main() -> None:
             "pixel_confidence": "A",
             "derived_status": "ready",
         }
+        override_record = timing_override_record(asset_id, spec.frame_time_ms)
+        if override_record is not None:
+            assets[asset_id]["runtime_timing_override"] = override_record
         for skill_id in spec.skill_ids:
             if skill_id in skill_coverage:
                 raise RuntimeError(f"duplicate visual coverage for {skill_id}")
@@ -836,5 +867,26 @@ def main() -> None:
     )
 
 
+def sync_runtime_timing_only() -> None:
+    """Update only timing metadata, preserving user-authored frame replacements."""
+    payload = json.loads(OUTPUT.read_text(encoding="utf-8"))
+    for asset_id in TIMING_OVERRIDES:
+        spec = SPECS[asset_id]
+        asset = payload["assets"][asset_id]
+        asset["animation"]["frame_time_ms"] = runtime_frame_time_ms(
+            asset_id, spec.frame_time_ms
+        )
+        asset["runtime_timing_override"] = timing_override_record(
+            asset_id, spec.frame_time_ms
+        )
+    OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"CASTER_RUNTIME_TIMING_SYNC_PASS assets={len(TIMING_OVERRIDES)}")
+
+
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:] == ["--sync-runtime-timing-only"]:
+        sync_runtime_timing_only()
+    elif len(sys.argv) == 1:
+        main()
+    else:
+        raise SystemExit("usage: build_caster_client_art.py [--sync-runtime-timing-only]")

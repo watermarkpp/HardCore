@@ -15,6 +15,8 @@ from vendor.extract_wil import decode_sprite, read_library
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "assets/data/caster_skill_visuals.json"
+TIMING_OVERRIDES_PATH = ROOT / "assets/data/caster_skill_visual_timing_overrides.json"
+TIMING_OVERRIDES = json.loads(TIMING_OVERRIDES_PATH.read_text(encoding="utf-8"))["overrides"]
 RAW_DATA = ROOT / "dev_art_sources/reference/mir2_client_raw/Data"
 CLIENT_RULES = ROOT / "dev_art_sources/reference/original_gameofmir/MirClient"
 SKILLS = ROOT / "assets/data/vanilla_176/skills_source_of_truth_v1.json"
@@ -185,12 +187,27 @@ def main() -> int:
         ) = expected
         asset = assets[asset_id]
         animation = asset["animation"]
+        timing_override = TIMING_OVERRIDES.get(asset_id)
+        runtime_milliseconds = milliseconds
+        if timing_override is not None:
+            if timing_override["source_frame_time_ms"] != milliseconds:
+                fail(f"{asset_id}: historical source timing differs from override")
+            runtime_milliseconds = timing_override["runtime_frame_time_ms"]
+            if asset.get("runtime_timing_override") != {
+                "source_path": str(TIMING_OVERRIDES_PATH.relative_to(ROOT)).replace("\\", "/"),
+                "source_sha256": digest(TIMING_OVERRIDES_PATH),
+                "source_frame_time_ms": milliseconds,
+                "runtime_frame_time_ms": runtime_milliseconds,
+            }:
+                fail(f"{asset_id}: runtime timing override provenance mismatch")
+        elif "runtime_timing_override" in asset:
+            fail(f"{asset_id}: undeclared runtime timing override")
         if asset["original_path"] != f"Data/{library_name}":
             fail(f"{asset_id}: library mismatch")
         if digest(RAW_DATA / library_name) != asset["source_sha256"]:
             fail(f"{asset_id}: primary WIL hash mismatch")
         if (
-            animation["frame_time_ms"] != milliseconds
+            animation["frame_time_ms"] != runtime_milliseconds
             or animation["playback"] != playback
             or asset["role"] != role
             or asset["render"]["attachment_policy"] != attachment
