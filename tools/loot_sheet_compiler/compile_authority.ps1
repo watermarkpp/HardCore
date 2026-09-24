@@ -402,6 +402,70 @@ Assert-ArmorDirective ($nonArmorBeforeSha -eq $nonArmorAfterSha) 'non-armor slot
 $armorDirectiveSha = ((Get-FileHash -LiteralPath $armorDirectivePath -Algorithm SHA256).Hash).ToLowerInvariant()
 $armorAudit = [ordered]@{ directive_id = [string]$armorDirective.directive_id; directive_sha256 = $armorDirectiveSha; before_slots = $armorBeforeTotal; after_slots = $armorAfterTotal; removed_slots = $armorRemoved; groups = $armorGroupKeys.Count; frozen_exception_slots = $armorExceptions.Count; non_armor_slots = $armorNonArmorAfter.Count; non_armor_before_sha256 = $nonArmorBeforeSha; non_armor_after_sha256 = $nonArmorAfterSha; remaining_slot_order_unchanged = $true }
 
+# New user-authored Boss material slots are appended after the frozen workbook
+# and armor correction. One ore slot is one independent trial; its purity is
+# selected only after that trial succeeds, in the runtime reward resolver.
+$bossMaterialPath = Join-Path $ProjectRoot 'assets/data/drop/boss_material_drop_directive_v1.json'
+$bossMaterial = Get-Content -LiteralPath $bossMaterialPath -Raw -Encoding UTF8 | ConvertFrom-Json
+$canonicalMonsters = Get-Content -LiteralPath (Join-Path $ProjectRoot 'assets/data/runtime/canonical_monster_catalog.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$canonicalBossById = @{}
+foreach ($entry in $canonicalMonsters.entries) {
+    if ([string]$entry.classification -eq 'boss') { $canonicalBossById[[int]$entry.monster_id] = $entry }
+}
+if ([string]$bossMaterial.schema -ne 'hardcore.drop.boss_material_directive.v1' -or
+    [string]$bossMaterial.directive_id -ne 'boss_materials.user.20260925.v1' -or
+    [int]$bossMaterial.black_iron_drop_token_id -ne 940000 -or
+    [int]$bossMaterial.ancient_relic_fragment_item_id -ne 950001 -or
+    [int]$bossMaterial.black_iron_purity_min -ne 10 -or
+    [int]$bossMaterial.black_iron_purity_max -ne 20 -or
+    [int]$bossMaterial.overflow_priority -ne 2000 -or
+    $bossMaterial.protected_drop -isnot [bool] -or
+    -not [bool]$bossMaterial.protected_drop) {
+    throw 'BOSS_MATERIAL_DIRECTIVE_REJECTED: contract or highest-protection policy mismatch'
+}
+$expectedBossIds = @(76, 124, 143, 160, 162, 163, 180, 193, 195, 208, 224, 235, 236, 237, 238, 239, 240)
+$bossMaterialById = @{}
+$bossMaterialSlots = 0
+foreach ($entry in $bossMaterial.bosses) {
+    $mid = [int]$entry.monster_id
+    if ($bossMaterialById.ContainsKey($mid) -or
+        -not $canonicalBossById.ContainsKey($mid) -or
+        -not $armorMonsters.ContainsKey($mid) -or
+        [string]$entry.monster_name -cne [string]$canonicalBossById[$mid].canonical_name -or
+        [string]$entry.monster_name -cne [string]$armorMonsters[$mid].monster_name -or
+        -not [bool]$canonicalBossById[$mid].runtime_allowed -or
+        [int]$entry.numerator -ne 1 -or
+        [int]$entry.denominator -notin @(1, 2, 4) -or
+        [int]$entry.slots_per_item -notin @(1, 2)) {
+        throw "BOSS_MATERIAL_DIRECTIVE_REJECTED: invalid Boss entry $mid"
+    }
+    $bossMaterialById[$mid] = $true
+    foreach ($material in @(@{ key = 'black_iron'; id = 940000 }, @{ key = 'relic_fragment'; id = 950001 })) {
+        for ($trial = 1; $trial -le [int]$entry.slots_per_item; $trial++) {
+            $uid = 'dpv2.user.boss_material.m{0}.{1}.{2:D2}' -f $mid, $material.key, $trial
+            if ($seenUids.ContainsKey($uid)) { throw "BOSS_MATERIAL_DIRECTIVE_REJECTED: duplicate slot $uid" }
+            $seenUids[$uid] = $true
+            $armorMonsters[$mid].slots.Add([ordered]@{
+                slot_uid = $uid
+                canonical_item_id = [int]$material.id
+                final_numerator = 1
+                final_denominator = [int]$entry.denominator
+                overflow_priority = 2000
+                protected_drop = $true
+                origin = 'boss_material_directive'
+            })
+            $bossMaterialSlots++
+        }
+    }
+}
+if ($bossMaterialById.Count -ne $expectedBossIds.Count -or $bossMaterialSlots -ne 42) {
+    throw 'BOSS_MATERIAL_DIRECTIVE_REJECTED: Boss or slot coverage mismatch'
+}
+foreach ($mid in $expectedBossIds) {
+    if (-not $bossMaterialById.ContainsKey($mid)) { throw "BOSS_MATERIAL_DIRECTIVE_REJECTED: missing Boss $mid" }
+}
+$bossMaterialSha = ((Get-FileHash -LiteralPath $bossMaterialPath -Algorithm SHA256).Hash).ToLowerInvariant()
+
 $out = [ordered]@{
     schema = "hardcore.dpv2.user_loot_sheet_authority.v1"
     authority_id = "dpv2.user_loot_sheet.v1"
@@ -414,6 +478,8 @@ $out = [ordered]@{
         overlay_source = [string]$overlayInput.source
         armor_single_slot_directive = "tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json"
         armor_single_slot_directive_sha256 = $armorDirectiveSha
+        boss_material_directive = 'assets/data/drop/boss_material_drop_directive_v1.json'
+        boss_material_directive_sha256 = $bossMaterialSha
         baseline_commit = "84ab22742eee1589ac105a8ff175da8623778f37"
         probability_contract = "sheet_E_is_final_per_slot_pre_rng_probability_no_spb_no_v5_no_denominator_policy_no_v80_no_v81_no_global_multiplier_no_gold_x5"
         gold_contract = "sheet_D_is_final_gold_amount"
@@ -424,9 +490,10 @@ $out = [ordered]@{
         new_equipment_slots = $stat.newSlots
         fate_blade_slots = $stat.fate
         user_directive_overlay_slots = $overlayApplied
+        boss_material_slots = $bossMaterialSlots
         armor_single_slot_removed_slots = $armorRemoved
         armor_single_slot_groups = $armorGroupKeys.Count
-        total_effective_slots = $armorAfterTotal
+        total_effective_slots = $armorAfterTotal + $bossMaterialSlots
         excluded_residue_rows = $stat.excludedResidue
         parser_excluded_residue_rows = $residueRows.Count
         residue_rows_source = "evidence/04_五张空表与七条残留.csv"
@@ -465,7 +532,7 @@ if (-not [string]::IsNullOrWhiteSpace($VerifyAgainstAuthority)) {
     } }
     $newSheet = @{}
     foreach ($m in $monstersOut) { foreach ($s in $m.slots) {
-        if ([string]$s.origin -ne 'user_directive_overlay') { $newSheet[[string]$s.slot_uid] = $s }
+        if ([string]$s.origin -ne 'user_directive_overlay' -and [string]$s.origin -ne 'boss_material_directive') { $newSheet[[string]$s.slot_uid] = $s }
     } }
     $diffs = @()
     foreach ($uid in $refSheet.Keys) {

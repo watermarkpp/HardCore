@@ -26,6 +26,7 @@ const VALID_ORIGINS := {
 	"new_equip": true,
 	"v81_fate_blade": true,
 	"user_directive_overlay": true,
+	"boss_material_directive": true,
 }
 
 var valid := false
@@ -39,6 +40,7 @@ var monster_count := 0
 var slot_count := 0
 var new_slot_count := 0
 var overlay_slot_count := 0
+var boss_material_slot_count := 0
 var empty_profile_ids: Array = []
 
 
@@ -127,6 +129,8 @@ func _init() -> void:
 				new_slot_count += 1
 			if str(slot2.get("origin", "")) == "user_directive_overlay":
 				overlay_slot_count += 1
+			if str(slot2.get("origin", "")) == "boss_material_directive":
+				boss_material_slot_count += 1
 	if monster_count == 0 or slot_count == 0:
 		load_error = "user_loot_sheet_authority_empty_compiled"
 		return
@@ -232,6 +236,7 @@ func _summary_matches(parsed: Dictionary) -> bool:
 		+ _exact_integer(summary.get("new_equipment_slots", null), 0, MAX_SHEET_INTEGER)
 		+ _exact_integer(summary.get("fate_blade_slots", null), 0, MAX_SHEET_INTEGER)
 		+ _exact_integer(summary.get("user_directive_overlay_slots", null), 0, MAX_SHEET_INTEGER)
+		+ _exact_integer(summary.get("boss_material_slots", 0), 0, MAX_SHEET_INTEGER)
 	)
 	if expected_monsters != monster_count:
 		load_error = (
@@ -252,6 +257,15 @@ func _summary_matches(parsed: Dictionary) -> bool:
 		load_error = (
 			"user_loot_sheet_authority_summary_overlay_mismatch:%d:%d"
 			% [expected_overlay, overlay_slot_count]
+		)
+		return false
+	var expected_boss_material := _exact_integer(
+		summary.get("boss_material_slots", 0), 0, MAX_SHEET_INTEGER
+	)
+	if expected_boss_material != boss_material_slot_count:
+		load_error = (
+			"user_loot_sheet_authority_summary_boss_material_mismatch:%d:%d"
+			% [expected_boss_material, boss_material_slot_count]
 		)
 		return false
 	var empty_sheets_value: Variant = summary.get("empty_sheets", null)

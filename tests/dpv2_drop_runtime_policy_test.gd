@@ -18,7 +18,7 @@ func _run() -> void:
 	_test_non_loot_and_zero_slot_profiles_fail_closed_without_fallback()
 	print(
 		"DPV2_DROP_RUNTIME_POLICY_PASS: user_loot_sheet=1 monsters=126 "
-		+ "sheet_slots=6042 baseline_identity_preserved=1 "
+		+ "sheet_slots=6084 baseline_identity_preserved=1 "
 		+ "baseline_compiled_enabled_slots=7611 ground_limit=15"
 	)
 	get_tree().quit(0)
@@ -80,7 +80,7 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 	var sheet_profile: Dictionary = service._sheet_authority.profile(76)
 	var sheet_slots: Array = sheet_profile.get("slots", [])
 	# User's single-slot armor directive removes the duplicate output126 trial.
-	assert(sheet_slots.size() == 84, "ID 76 sheet slot count drifted")
+	assert(sheet_slots.size() == 86, "ID 76 sheet slot count drifted")
 	var roll: Dictionary = service.roll_monster_drops(76, rng)
 	assert(str(roll.get("contract_id", "")) == "monster.loot.dpv2_direct_baseline.v2")
 	assert(str(roll.get("runtime_authority", {}).get("authority_id", "")) == "dpv2.user_loot_sheet.v1")
@@ -111,6 +111,7 @@ func _test_production_roll_is_direct_and_full_slot() -> void:
 			attempt_uid.begins_with("dpv2.direct.m76.")
 				or attempt_uid.begins_with("dpv2.user.sheet.m76.")
 				or attempt_uid == "dpv2.user.v81.m76.fate_blade"
+				or attempt_uid.begins_with("dpv2.user.boss_material.m76.")
 		)
 		assert(attempt.has("canonical_item_id"))
 		assert(attempt.has("base_numerator"))

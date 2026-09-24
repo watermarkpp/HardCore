@@ -1,6 +1,7 @@
 extends Node
 
 const DROP_CONTRACT_ID := "monster.loot.dpv2_direct_baseline.v2"
+const BossMaterialDropResolverScript := preload("res://scripts/drop/boss_material_drop_resolver.gd")
 const FEMALE_EQUIPMENT_DROP_OUTPUT_BY_ITEM_ID := {
 	117: "布衣(男)",
 	119: "轻型盔甲(男)",
@@ -80,6 +81,9 @@ func _lean_reward(slot: Dictionary) -> Dictionary:
 	return _lean_reward_by_slot_uid.get(slot_uid, {})
 
 func _production_reward(slot: Dictionary) -> Dictionary:
+	var item_id := int(slot.get("canonical_item_id", -1))
+	if BossMaterialDropResolverScript.owns(item_id):
+		return BossMaterialDropResolverScript.reward(item_id)
 	if _user_additions.owns(76, str(slot.get("slot_uid", ""))):
 		return _user_additions.reward(slot)
 	return GameData.dpv2_direct_resolve_slot_reward(slot)
@@ -368,6 +372,7 @@ func roll_monster_drops(
 			var item_record := _drop_output_item_record(
 				canonical_item_id,
 				original_name,
+				rng,
 			)
 			# Preserve the old output contract even if an identity row is
 			# unexpectedly unavailable. The parallel record is marked unresolved
@@ -404,7 +409,15 @@ func _drop_output_item_name(canonical_item_id: int, original_name: String) -> St
 func _drop_output_item_record(
 	canonical_item_id: int,
 	original_name: String,
+	rng: RandomNumberGenerator = null,
 ) -> Dictionary:
+	if BossMaterialDropResolverScript.owns(canonical_item_id):
+		var material_record := BossMaterialDropResolverScript.output_record(
+			canonical_item_id, original_name, rng
+		)
+		return material_record if not material_record.is_empty() else _unresolved_drop_item_record(
+			canonical_item_id, original_name, original_name
+		)
 	# Resolve one direct-drop identity without name/fuzzy ID guessing. The stable
 	# item_id is always the GameData catalog ID of the item actually picked up.
 	# The direct-table source ID is retained separately because the explicit

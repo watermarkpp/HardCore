@@ -10,11 +10,13 @@ const LootRuntimeScript := preload(
 	"res://scripts/layers/runtime/loot_runtime_service.gd"
 )
 const ProviderScript := preload("res://scripts/drop/user_loot_sheet_provider.gd")
+const BossMaterialResolver := preload("res://scripts/drop/boss_material_drop_resolver.gd")
 
 const EXPECTED_MONSTERS := 126
-const EXPECTED_SLOTS := 6042
+const EXPECTED_SLOTS := 6084
 const EXPECTED_NEW_SLOTS := 41
 const EXPECTED_OVERLAY := 168
+const EXPECTED_BOSS_MATERIAL_SLOTS := 42
 const EXPECTED_EMPTY := 5
 
 
@@ -28,6 +30,8 @@ func _run() -> void:
 	_test_probability_direct_read()
 	_test_fate_blade_identity()
 	_test_new_equipment_slots()
+	_test_boss_material_slots()
+	_test_boss_material_runtime()
 	_test_roll_smoke_live_monster()
 	_test_niumo_classification_elite()
 	print(
@@ -45,6 +49,7 @@ func _test_provider_load_contract() -> void:
 	assert(provider.slot_count == EXPECTED_SLOTS)
 	assert(provider.new_slot_count == EXPECTED_NEW_SLOTS)
 	assert(provider.overlay_slot_count == EXPECTED_OVERLAY)
+	assert(provider.boss_material_slot_count == EXPECTED_BOSS_MATERIAL_SLOTS)
 	assert(provider.empty_profile_ids.size() == EXPECTED_EMPTY)
 	assert(provider.authority_id == "dpv2.user_loot_sheet.v1")
 	assert(not str(provider.sheet_sha256).is_empty())
@@ -153,6 +158,107 @@ func _test_new_equipment_slots() -> void:
 	assert(new_count == EXPECTED_NEW_SLOTS)
 	# The m76 fate blade keeps the v81 identity branch through reward
 	# resolution (item 110 is absent from the frozen direct identity map).
+
+
+func _test_boss_material_slots() -> void:
+	var provider: Variant = ProviderScript.new()
+	var directive_path := "res://assets/data/drop/boss_material_drop_directive_v1.json"
+	var directive: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(directive_path))
+	var compiled: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ProviderScript.PATH))
+	assert(str(compiled.source.boss_material_directive_sha256) == FileAccess.get_sha256(directive_path))
+	var expected_boss_rates := {
+		76: [4, 1], 124: [4, 1], 195: [4, 1],
+		143: [2, 1], 208: [2, 1],
+		160: [1, 1], 193: [1, 1],
+		235: [2, 1], 236: [2, 1], 237: [2, 1],
+		238: [2, 1], 239: [2, 1], 240: [2, 1],
+		162: [1, 2], 163: [1, 2], 180: [1, 2], 224: [1, 2],
+	}
+	assert(directive.bosses.size() == expected_boss_rates.size())
+	var observed := {}
+	for boss: Dictionary in directive.bosses:
+		var monster_id := int(boss.monster_id)
+		assert(expected_boss_rates.has(monster_id) and not observed.has(monster_id))
+		observed[monster_id] = true
+		assert(int(boss.numerator) == 1)
+		assert(int(boss.denominator) == int(expected_boss_rates[monster_id][0]))
+		assert(int(boss.slots_per_item) == int(expected_boss_rates[monster_id][1]))
+		assert(GameData.canonical_monster_classification(monster_id) == "boss")
+		var material_slots: Array = provider.profile(monster_id).slots.filter(
+			func(slot: Dictionary) -> bool:
+				return str(slot.get("origin", "")) == "boss_material_directive"
+		)
+		assert(material_slots.size() == int(boss.slots_per_item) * 2)
+		var counts := {940000: 0, 950001: 0}
+		for slot: Dictionary in material_slots:
+			var item_id := int(slot.get("canonical_item_id", -1))
+			assert(counts.has(item_id))
+			counts[item_id] += 1
+			assert(int(slot.final_numerator) == 1)
+			assert(int(slot.final_denominator) == int(boss.denominator))
+			assert(bool(slot.protected_drop) and int(slot.overflow_priority) == 2000)
+			var probability: Dictionary = provider.probability(monster_id, str(slot.slot_uid))
+			assert(probability.ok and int(probability.final_denominator) == int(boss.denominator))
+		assert(counts[940000] == int(boss.slots_per_item))
+		assert(counts[950001] == int(boss.slots_per_item))
+	assert(observed.size() == 17)
+	for absent_id: int in [198, 199, 209]:
+		assert(provider.profile(absent_id).get("slots", []).filter(
+			func(slot: Dictionary) -> bool:
+				return str(slot.get("origin", "")) == "boss_material_directive"
+		).is_empty())
+
+
+func _test_boss_material_runtime() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress(false)
+	var service: Variant = LootRuntimeScript.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 20260925
+	var pickup_candidates: Array = []
+	for monster_id: int in [160, 193, 162, 163, 180, 224]:
+		var result: Dictionary = service.roll_monster_drops(monster_id, rng, true)
+		assert(result.reason.is_empty(), str(result.rejected_entries))
+		assert(result.ground_output_count <= 15)
+		var expected_each := 2 if monster_id in [162, 163, 180, 224] else 1
+		var material_attempts := {940000: 0, 950001: 0}
+		for attempt: Dictionary in result.attempts:
+			if not str(attempt.slot_uid).begins_with("dpv2.user.boss_material."):
+				continue
+			assert(attempt.draw_success and attempt.overflow == "selected")
+			material_attempts[int(attempt.canonical_item_id)] += 1
+		assert(material_attempts[940000] == expected_each)
+		assert(material_attempts[950001] == expected_each)
+		var ore_count := 0
+		var fragment_count := 0
+		for item_record: Dictionary in result.item_records:
+			var item_id := int(item_record.get("item_id", -1))
+			if item_id >= 940010 and item_id <= 940020:
+				ore_count += 1
+				assert(str(item_record.item_name) == "黑铁矿")
+				assert(int(item_record.output_record.purity) == item_id - 940000)
+			elif item_id == 950001:
+				fragment_count += 1
+				assert(str(item_record.item_name) == "远古圣物碎片")
+		assert(ore_count == expected_each and fragment_count == expected_each)
+		if monster_id == 224:
+			for item_record: Dictionary in result.item_records:
+				var picked_id := int(item_record.get("item_id", -1))
+				if (picked_id >= 940010 and picked_id <= 940020) or picked_id == 950001:
+					pickup_candidates.append(PlayerState.create_drop_item_instance(
+						item_record, "boss-material-test-%d" % pickup_candidates.size()
+					))
+	assert(pickup_candidates.size() == 4)
+	var pickup: Dictionary = PlayerState.receive_loot_batch_partial(pickup_candidates)
+	assert(int(pickup.get("success_count", -1)) == 4, str(pickup))
+	assert(PlayerState.inventory_weight() == 4)
+	var purity_ids := {}
+	for _trial in range(1100):
+		var ore: Dictionary = BossMaterialResolver.output_record(940000, "黑铁矿", rng)
+		assert(str(ore.get("identity_status", "")) == "resolved")
+		purity_ids[int(ore.get("item_id", -1))] = true
+	assert(purity_ids.size() == 11, "the one-slot ore output must cover purities 10–20")
+	service.free()
 
 
 func _test_roll_smoke_live_monster() -> void:

@@ -27,6 +27,16 @@ directory. Review the generated authority and run the relevant authority and
 runtime tests before a separately authorized production installation. Preparing
 inputs alone never writes a production table.
 
+The 2026-09-25 Boss material directive is
+`assets/data/drop/boss_material_drop_directive_v1.json`. The compiler appends
+its 42 independent slots after applying the frozen armor correction; it does
+not alter the 6042 pre-existing slots or the archived workbook. Each black
+iron slot uses token ID 940000 for a single probability draw. On a successful
+selected drop, runtime chooses one exact black iron item ID for purity 10–20
+with equal probability. Relic fragments use exact item ID 950001. Both new
+materials use the existing highest protected overflow tier (priority 2000)
+and still respect the 15-item ground cap.
+
 The optional compiler `-WorkbookPath` is an additional hash check of the same
 frozen workbook; it does not authorize importing a different workbook or replace
 the archived input preparation. `parse_xlsx.ps1` remains a historical extraction
