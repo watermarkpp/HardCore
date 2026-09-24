@@ -402,8 +402,8 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 	if AncientRelicFragmentScript.is_item(item):
 		return "类别：材料\n重量：1\n[color=#b58a45]%s[/color]" % str(item.get("description", ""))
 	var relic_id := int(item.get("itemId", -1))
-	if RelicSynthesisRulesScript.is_relic(relic_id):
-		return _format_relic_item(relic_id, instance)
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
+		return _format_relic_item(relic_id, instance, context)
 	var kind := str(item.get("kind", ""))
 	var lines: Array[String] = []
 	var category := str(item.get("category", item.get("type", "")))
@@ -447,14 +447,20 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 	return "\n".join(lines)
 
 
-static func _format_relic_item(item_id: int, instance: Dictionary) -> String:
-	var lines: Array[String] = ["类别：圣物", "部位：圣物槽"]
+static func _format_relic_item(item_id: int, instance: Dictionary, context: Dictionary = {}) -> String:
+	var badge := RelicSynthesisRulesScript.is_badge(item_id)
+	var lines: Array[String] = []
+	if badge:
+		lines.assign(["类别：徽章", "部位：徽章槽"])
+	else:
+		lines.assign(["类别：圣物", "部位：圣物槽"])
 	var roll: Dictionary = instance.get("relic_roll", {}) if instance.get("relic_roll", {}) is Dictionary else {}
 	if RelicSynthesisRulesScript.valid_instance(instance, item_id):
 		var skill_name := SkillDataLoader.display_name(str(roll.get("skill_id", "")))
 		lines.append("%s等级 +1" % skill_name)
 	else:
-		lines.append("随机技能等级 +1")
+		var skill_pool := str(context.get("recipe_profession", RelicSynthesisRulesScript.record_for_id(item_id).get("skillProfession", "")))
+		lines.append("随机%s技能等级 +1" % skill_pool)
 	match item_id:
 		950101:
 			lines.append("速度 +1")
@@ -464,11 +470,14 @@ static func _format_relic_item(item_id: int, instance: Dictionary) -> String:
 				var maxima: Dictionary = roll.get("heart_maxima", {})
 				lines.append("攻击 0-%d　魔法 0-%d　道术 0-%d" % [int(maxima.attack), int(maxima.magic), int(maxima.tao)])
 			else:
-				lines.append("攻击、魔法、道术各自随机 0-3～0-5")
+				lines.append("攻击 0-5　魔法 0-5　道术 0-5")
 			lines.append("攻击或使用技能时，20%几率三系面板伤害 +15%，持续10秒；结束后冷却15秒")
 		950103:
 			lines.append("幸运 +1")
 			lines.append("攻击或使用技能时，20%几率幸运 +2，持续10秒；结束后冷却15秒")
+		950201, 950202, 950203:
+			lines.append("防御 0-5　魔法防御 0-5")
+			lines.append("每秒恢复最大生命值的1%" if item_id == 950201 else "每秒恢复最大魔力值的1%")
 	lines.append("穿戴要求：35级")
 	return "\n".join(lines)
 

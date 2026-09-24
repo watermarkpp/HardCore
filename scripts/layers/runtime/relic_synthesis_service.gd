@@ -26,8 +26,8 @@ func reset() -> void:
 	_busy = false
 
 
-func quote_synthesis(item_id: int, material_indices: Array[int]) -> Dictionary:
-	var quote := _build_quote(item_id, material_indices)
+func quote_synthesis(item_id: int, material_indices: Array[int], profession := "") -> Dictionary:
+	var quote := _build_quote(item_id, material_indices, profession)
 	if not bool(quote.get("valid", false)):
 		return quote
 	_serial += 1
@@ -47,7 +47,7 @@ func commit_synthesis(quote: Dictionary) -> Dictionary:
 	var indices: Array[int] = []
 	for raw: Variant in quote.get("material_indices", []):
 		indices.append(int(raw))
-	var refreshed := _build_quote(int(quote.get("item_id", -1)), indices)
+	var refreshed := _build_quote(int(quote.get("item_id", -1)), indices, str(quote.get("skill_profession", "")))
 	if not bool(refreshed.get("valid", false)):
 		return refreshed
 	var expected := quote.duplicate(true)
@@ -63,7 +63,7 @@ func commit_synthesis(quote: Dictionary) -> Dictionary:
 		next_tray[index] = {}
 	var catalog := Rules.record_for_id(int(quote.item_id))
 	var output: Dictionary = _player.call("_make_item_instance", str(catalog.name), catalog, -1, false)
-	var rolled := Rules.roll_instance(int(quote.item_id), str(_player.profession), _rng)
+	var rolled := Rules.roll_instance(int(quote.item_id), str(quote.skill_profession), _rng)
 	if rolled.is_empty():
 		_busy = false
 		return _failure("圣物属性生成失败，材料未消耗。")
@@ -85,10 +85,14 @@ func commit_synthesis(quote: Dictionary) -> Dictionary:
 	return {"valid": true, "committed": true, "item_id": int(quote.item_id), "output": output.duplicate(true), "message": "合成成功：%s" % str(catalog.name)}
 
 
-func _build_quote(item_id: int, material_indices: Array[int]) -> Dictionary:
+func _build_quote(item_id: int, material_indices: Array[int], profession := "") -> Dictionary:
 	var catalog := Rules.record_for_id(item_id)
 	if catalog.is_empty() or material_indices.size() != Rules.FRAGMENT_COUNT:
-		return _failure("请选择圣物配方并放入4个远古圣物碎片。")
+		return _failure("请选择合成配方并放入4个远古圣物碎片。")
+	if profession.is_empty():
+		profession = str(_player.profession) if Rules.is_relic(item_id) else str(catalog.get("skillProfession", ""))
+	if profession not in Rules.recipe_professions(item_id):
+		return _failure("该配方的技能职业无效。")
 	if not _player.synthesis_tray[0].is_empty():
 		return _failure("请先取走合成格里的圣物。")
 	var seen := {}
@@ -108,6 +112,7 @@ func _build_quote(item_id: int, material_indices: Array[int]) -> Dictionary:
 		"valid": true,
 		"profile_id": str(_player.active_profile_id),
 		"item_id": item_id,
+		"skill_profession": profession,
 		"material_indices": material_indices.duplicate(),
 		"gold_cost": Rules.GOLD_COST,
 		"success_percent": 100,

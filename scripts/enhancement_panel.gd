@@ -82,8 +82,9 @@ func _ready() -> void:
 	add_child(_synthesis_audio)
 	_build_forge_tabs()
 	var recipe_entries: Array[Dictionary] = []
-	for relic: Dictionary in RelicRules.records():
-		recipe_entries.append({"item_id": int(relic.itemId), "title": str(relic.name), "icon": UIItemTextureCacheScript.texture_for(relic)})
+	for item: Dictionary in RelicRules.records():
+		for profession: String in RelicRules.recipe_professions(int(item.itemId)):
+			recipe_entries.append({"item_id": int(item.itemId), "profession": profession, "title": "%s · %s技能" % [str(item.name), profession], "icon": UIItemTextureCacheScript.texture_for(item)})
 	set_synthesis_recipe_previews(recipe_entries)
 	ForgeLayoutScript.apply_profile(self, "forge")
 	_show_forge_artwork("initial")
@@ -236,6 +237,17 @@ func _build_synthesis_recipe_grid() -> void:
 		slot.theme_type_variation = "GothicComponentSlotButton"
 		grid.add_child(slot)
 		UIActivationOnceScript.attach(slot, _on_synthesis_recipe_pressed.bind(index))
+		var class_label := Label.new()
+		class_label.name = "RecipeProfession"
+		class_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		class_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		class_label.add_theme_font_size_override("font_size", 11)
+		class_label.add_theme_color_override("font_color", Color("f3d395"))
+		class_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		class_label.add_theme_constant_override("outline_size", 3)
+		class_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(class_label)
+		class_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		synthesis_recipe_slots.append(slot)
 	synthesis_recipe_scroll.hide()
 
@@ -250,6 +262,7 @@ func set_synthesis_recipe_previews(entries: Array[Dictionary]) -> void:
 		_set_button_texture(slot, icon, Vector2(56, 56) if not entry.is_empty() else Vector2.ZERO)
 		slot.disabled = entry.is_empty()
 		slot.tooltip_text = str(entry.get("title", "暂无合成配方"))
+		(slot.get_node("RecipeProfession") as Label).text = str(entry.get("profession", "")).left(1)
 		UIItemSelectionVisualScript.apply(slot, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	if _mode == "synthesis":
 		_refresh_forge_information()
@@ -265,7 +278,7 @@ func _on_synthesis_recipe_pressed(index: int) -> void:
 	var recipe_id := int(_synthesis_recipe_previews[index].get("item_id", -1))
 	var item := RelicRules.record_for_id(recipe_id)
 	if not item.is_empty():
-		_show_presented_item(item, {}, synthesis_recipe_slots[index])
+		_show_presented_item(item, {}, synthesis_recipe_slots[index], {"recipe_profession": str(_synthesis_recipe_previews[index].get("profession", ""))})
 	_refresh_forge_information()
 
 
@@ -463,7 +476,8 @@ func _refresh_forge_information() -> void:
 					break
 		if material_slots.size() != RelicRules.FRAGMENT_COUNT:
 			return
-		_synthesis_quote = PlayerState.quote_relic_synthesis(int(_synthesis_recipe_previews[_selected_synthesis_recipe].get("item_id", -1)), material_slots)
+		var recipe: Dictionary = _synthesis_recipe_previews[_selected_synthesis_recipe]
+		_synthesis_quote = PlayerState.quote_relic_synthesis(int(recipe.get("item_id", -1)), material_slots, str(recipe.get("profession", "")))
 		forge_button.disabled = not bool(_synthesis_quote.get("valid", false))
 		return
 	rules_label.text = "材料需求：黑铁矿 ×1\n首饰 ×2" if not tray[4].is_empty() else "请在上方放入需要锻造的装备"

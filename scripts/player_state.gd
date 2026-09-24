@@ -580,7 +580,7 @@ func _build_receive_result_for_record(
 	var canonical_record := record.duplicate(true)
 	canonical_record["name"] = item_name
 	var relic_id := int(catalog_item.get("itemId", -1))
-	if RelicSynthesisRulesScript.is_relic(relic_id):
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
 		if record.has("relic_roll") and not RelicSynthesisRulesScript.valid_instance(record, relic_id):
 			return _receive_failure("invalid_item_instance", "圣物属性无效。")
 		if not record.has("relic_roll"):
@@ -599,7 +599,7 @@ func _build_receive_result_for_template(
 	if amount <= 0:
 		return _receive_failure("invalid_amount", "数量无效。")
 	var relic_id := int(catalog_item.get("itemId", -1))
-	if RelicSynthesisRulesScript.is_relic(relic_id):
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
 		if template.has("relic_roll") and not RelicSynthesisRulesScript.valid_instance(template, relic_id):
 			return _receive_failure("invalid_item_instance", "圣物属性无效。")
 		if not template.has("relic_roll"):
@@ -663,7 +663,7 @@ func _build_receive_result_for_template(
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		var moved := mini(remaining, max_stack) if is_stackable else 1
 		var new_record: Dictionary
-		if RelicSynthesisRulesScript.is_relic(int(catalog_item.get("itemId", -1))) and template.is_empty():
+		if RelicSynthesisRulesScript.is_synthesis_item(int(catalog_item.get("itemId", -1))) and template.is_empty():
 			new_record = _make_item_instance(item_name, catalog_item)
 		elif not template.is_empty():
 			new_record = template.duplicate(true)
@@ -939,14 +939,14 @@ func create_drop_item_instance(item_record: Dictionary, stable_drop_key: String)
 	var catalog := GameData.get_item_record({"item_id": item_id})
 	if catalog.is_empty() or int(catalog.get("itemId", -1)) != item_id:
 		return _invalid_drop_instance_record(result, "catalog_identity_missing")
-	if RelicSynthesisRulesScript.is_relic(item_id):
+	if RelicSynthesisRulesScript.is_synthesis_item(item_id):
 		if stable_drop_key.is_empty():
 			return _invalid_drop_instance_record(result, "instance_generation_failed")
 		var digest := ("relic:%d:%s" % [item_id, stable_drop_key]).sha256_text()
 		var relic_rng := RandomNumberGenerator.new()
 		relic_rng.seed = ("0x" + digest.substr(0, 15)).hex_to_int()
 		var instance := _make_item_instance(str(catalog.get("name", "")), catalog, 0, false)
-		instance.merge(RelicSynthesisRulesScript.roll_instance(item_id, profession, relic_rng), true)
+		instance.merge(RelicSynthesisRulesScript.roll_instance(item_id, "", relic_rng), true)
 		instance["instance_id"] = "relic:%d:%s" % [item_id, digest.substr(0, 24)]
 		if not RelicSynthesisRulesScript.valid_instance(instance, item_id):
 			return _invalid_drop_instance_record(result, "relic_roll_failed")
@@ -1324,8 +1324,8 @@ func _relic_service():
 	return _relic_synthesis_service
 
 
-func quote_relic_synthesis(item_id: int, material_indices: Array[int]) -> Dictionary:
-	return _relic_service().quote_synthesis(item_id, material_indices)
+func quote_relic_synthesis(item_id: int, material_indices: Array[int], profession := "") -> Dictionary:
+	return _relic_service().quote_synthesis(item_id, material_indices, profession)
 
 
 func commit_relic_synthesis(quote: Dictionary) -> Dictionary:
@@ -2078,7 +2078,7 @@ func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_s
 			instance["weapon_luck"] = 0
 			instance["weapon_curse"] = 0
 		var item_id := int(catalog_item.get("itemId", -1))
-		if roll_relic and RelicSynthesisRulesScript.is_relic(item_id):
+		if roll_relic and RelicSynthesisRulesScript.is_synthesis_item(item_id):
 			var rolled := RelicSynthesisRulesScript.roll_instance(item_id, profession, _relic_instance_rng)
 			instance.merge(rolled, true)
 	return instance
@@ -3039,6 +3039,15 @@ func recalculate_stats(emit_profile_change := true) -> void:
 				affix_input["modifiers"] = instance_modifiers.duplicate(true)
 			else:
 				affix_input["modifiers"] = instance_modifiers
+		if equipped_value is Dictionary and RelicSynthesisRulesScript.is_synthesis_item(int(item.get("itemId", -1))):
+			var roll: Dictionary = (equipped_value as Dictionary).get("relic_roll", {})
+			if not RelicSynthesisRulesScript.skill_ids_for(profession).has(str(roll.get("skill_id", ""))):
+				var active_modifiers: Array = []
+				for modifier: Variant in affix_input.get("modifiers", []):
+					if modifier is Dictionary and str(modifier.get("stat", "")) == "skill_level":
+						continue
+					active_modifiers.append(modifier)
+				affix_input["modifiers"] = active_modifiers
 		skill_level_affix_records.append(affix_input)
 		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
 		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
@@ -3634,7 +3643,7 @@ func _damage_equipment_durability_raw(
 	var equipped: Variant = equipment.get(slot, {})
 	if not equipped is Dictionary or equipped.is_empty():
 		return false
-	if RelicSynthesisRulesScript.is_relic(int((equipped as Dictionary).get("item_id", -1))):
+	if RelicSynthesisRulesScript.is_synthesis_item(int((equipped as Dictionary).get("item_id", -1))):
 		return false
 	_ensure_raw_durability_fields(equipped)
 	var old_value := int(equipped.get("durability_raw", 0))
@@ -4151,7 +4160,7 @@ func _validate_saved_item_records_uncached(value: Variant, capacity: int) -> boo
 		var record: Dictionary = raw_record
 		if record.is_empty():
 			continue
-		if record.has("drop_instance_contract_id") or RelicSynthesisRulesScript.is_relic(int(record.get("item_id", -1))):
+		if record.has("drop_instance_contract_id") or RelicSynthesisRulesScript.is_synthesis_item(int(record.get("item_id", -1))):
 			var instance_id := _validated_persisted_instance_id(record)
 			if instance_id == "#invalid" or seen_item_instance_ids.has(instance_id):
 				return false
@@ -4203,7 +4212,7 @@ func _validated_persisted_instance_id(record: Dictionary) -> String:
 	if record.has("drop_instance_contract_id"):
 		return _validated_drop_instance_id(record)
 	var item_id := int(record.get("item_id", -1))
-	if not RelicSynthesisRulesScript.is_relic(item_id):
+	if not RelicSynthesisRulesScript.is_synthesis_item(item_id):
 		return ""
 	if not RelicSynthesisRulesScript.valid_instance(record, item_id):
 		return "#invalid"
@@ -7194,11 +7203,11 @@ func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dic
 				kind != "equipment"
 				or not instance_value is Dictionary
 				or (
-					RelicSynthesisRulesScript.is_relic(canonical_item_id)
+					RelicSynthesisRulesScript.is_synthesis_item(canonical_item_id)
 					and not RelicSynthesisRulesScript.valid_instance(instance_value as Dictionary, canonical_item_id)
 				)
 				or (
-					not RelicSynthesisRulesScript.is_relic(canonical_item_id)
+					not RelicSynthesisRulesScript.is_synthesis_item(canonical_item_id)
 					and not ItemDropInstanceRulesScript.validate_instance(instance_value as Dictionary, catalog)
 				)
 			):

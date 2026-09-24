@@ -24,7 +24,7 @@ static var _loaded := false
 static func records() -> Array[Dictionary]:
 	_ensure_loaded()
 	var result: Array[Dictionary] = []
-	for item_id: int in [950101, 950102, 950103]:
+	for item_id: int in [950101, 950102, 950103, 950201, 950202, 950203]:
 		if _records_by_id.has(item_id):
 			result.append((_records_by_id[item_id] as Dictionary).duplicate(true))
 	return result
@@ -36,8 +36,26 @@ static func record_for_id(item_id: int) -> Dictionary:
 
 
 static func is_relic(item_id: int) -> bool:
-	_ensure_loaded()
-	return _records_by_id.has(item_id)
+	return item_id in [950101, 950102, 950103] and not record_for_id(item_id).is_empty()
+
+
+static func is_badge(item_id: int) -> bool:
+	return item_id in [950201, 950202, 950203] and not record_for_id(item_id).is_empty()
+
+
+static func is_synthesis_item(item_id: int) -> bool:
+	return item_id in [950101, 950102, 950103, 950201, 950202, 950203] and not record_for_id(item_id).is_empty()
+
+
+static func recipe_professions(item_id: int) -> Array[String]:
+	var result: Array[String] = []
+	if is_relic(item_id):
+		result.assign(["战士", "法师", "道士"])
+		return result
+	var record := record_for_id(item_id)
+	if not record.is_empty():
+		result.append(str(record.get("skillProfession", "")))
+	return result
 
 
 static func effect_for(item_id: int) -> String:
@@ -59,7 +77,15 @@ static func skill_ids_for(profession: String) -> Array[String]:
 
 static func roll_instance(item_id: int, profession: String, rng: RandomNumberGenerator) -> Dictionary:
 	var record := record_for_id(item_id)
-	var skill_ids := skill_ids_for(profession)
+	var allowed_professions := recipe_professions(item_id)
+	var skill_ids: Array[String] = []
+	if profession.is_empty() and is_relic(item_id):
+		for candidate: String in allowed_professions:
+			skill_ids.append_array(skill_ids_for(candidate))
+	elif is_badge(item_id):
+		skill_ids = skill_ids_for(allowed_professions[0])
+	elif profession in allowed_professions:
+		skill_ids = skill_ids_for(profession)
 	if record.is_empty() or skill_ids.is_empty() or rng == null:
 		return {}
 	var skill_id := skill_ids[rng.randi_range(0, skill_ids.size() - 1)]
@@ -67,7 +93,7 @@ static func roll_instance(item_id: int, profession: String, rng: RandomNumberGen
 	var heart_maxima := {}
 	if item_id == 950102:
 		for stat: String in ["attack", "magic", "tao"]:
-			var value := rng.randi_range(3, 5)
+			var value := 5
 			heart_maxima[stat] = value
 			modifiers.append({"stat": stat + "_max", "op": "add", "value": value})
 	return {
@@ -80,7 +106,7 @@ static func roll_instance(item_id: int, profession: String, rng: RandomNumberGen
 
 
 static func valid_instance(instance: Dictionary, item_id: int) -> bool:
-	if (not is_relic(item_id)
+	if (not is_synthesis_item(item_id)
 		or int(instance.get("item_id", -1)) != item_id
 		or str(instance.get("name", "")) != str(record_for_id(item_id).get("name", ""))
 		or int(instance.get("count", 0)) != 1):
@@ -90,7 +116,7 @@ static func valid_instance(instance: Dictionary, item_id: int) -> bool:
 		return false
 	var skill_id := str(roll.get("skill_id", ""))
 	var known := false
-	for profession: String in SKILL_NAMES:
+	for profession: String in recipe_professions(item_id):
 		if skill_ids_for(profession).has(skill_id):
 			known = true
 	if not known:
@@ -148,11 +174,12 @@ static func _ensure_loaded() -> void:
 		push_error("圣物合成合同字段不一致")
 		return
 	var raw_items: Variant = parsed.get("items", [])
-	if not raw_items is Array or raw_items.size() != 3:
+	if not raw_items is Array or raw_items.size() != 6:
 		push_error("圣物合成配方数量不正确")
 		return
-	var expected_names := {950101: "魔龙之眼", 950102: "魔龙之心", 950103: "幸运守护"}
-	var expected_effects := {950101: "speed", 950102: "damage", 950103: "luck"}
+	var expected_names := {950101: "魔龙之眼", 950102: "魔龙之心", 950103: "幸运守护", 950201: "勇气徽章", 950202: "智慧徽章", 950203: "信仰徽章"}
+	var expected_effects := {950101: "speed", 950102: "damage", 950103: "luck", 950201: "hp_regen", 950202: "mp_regen", 950203: "mp_regen"}
+	var badge_professions := {950201: "战士", 950202: "法师", 950203: "道士"}
 	for raw: Variant in raw_items:
 		if not raw is Dictionary:
 			_records_by_id.clear()
@@ -160,17 +187,20 @@ static func _ensure_loaded() -> void:
 		var item_id := int(raw.get("item_id", -1))
 		var inventory_icon := str(raw.get("inventory_icon", ""))
 		var ground_icon := str(raw.get("ground_icon", ""))
-		if (_records_by_id.has(item_id) or str(raw.get("name", "")) != str(expected_names.get(item_id, ""))
+		if (not expected_names.has(item_id) or _records_by_id.has(item_id)
+			or str(raw.get("name", "")) != str(expected_names[item_id])
 			or str(raw.get("effect", "")) != str(expected_effects.get(item_id, ""))
+			or str(raw.get("skill_profession", "")) != str(badge_professions.get(item_id, ""))
 			or not ResourceLoader.exists(inventory_icon) or not ResourceLoader.exists(ground_icon)):
 			_records_by_id.clear()
 			push_error("圣物身份或图标无效：%d" % item_id)
 			return
 		var record := {
-			"itemId": item_id, "name": str(raw.name), "kind": "equipment", "category": "圣物",
+			"itemId": item_id, "name": str(raw.name), "kind": "equipment", "category": "徽章" if badge_professions.has(item_id) else "圣物",
 			"weight": 0, "stackable": false, "maxStack": 1, "maxDurability": 1,
 			"requirementType": "level", "requirementValue": 35,
 			"relicEffect": str(raw.effect), "relicNoWear": true,
+			"skillProfession": str(badge_professions.get(item_id, "")),
 			"art": {
 				"inventoryIcon": {"path": inventory_icon, "displaySize": [56, 56]},
 				"groundIcon": {"path": ground_icon, "displaySize": [36, 36]},
@@ -181,4 +211,9 @@ static func _ensure_loaded() -> void:
 			record["attackSpeedTier"] = 1
 		elif item_id == 950103:
 			record["luck"] = 1
+		elif badge_professions.has(item_id):
+			record["defenseMin"] = 0
+			record["defenseMax"] = 5
+			record["mdefMin"] = 0
+			record["mdefMax"] = 5
 		_records_by_id[item_id] = record
