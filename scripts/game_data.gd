@@ -5,6 +5,7 @@ const DPV2RepairV5 = preload("res://scripts/drop/dpv2_repair_v5_contract.gd")
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
 const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
+const AncientRelicFragmentScript := preload("res://scripts/layers/rules/ancient_relic_fragment.gd")
 
 signal database_reloaded
 signal initial_load_finished(success: bool)
@@ -2531,6 +2532,12 @@ func _build_item_catalog() -> void:
 			continue
 		_catalog_by_item_id[iron_id] = black_iron
 		item_catalog.append(black_iron)
+	var relic_fragment := AncientRelicFragmentScript.record()
+	if not relic_fragment.is_empty():
+		if _catalog_by_item_id.has(AncientRelicFragmentScript.ITEM_ID) or _catalog_by_name.has(AncientRelicFragmentScript.ITEM_NAME):
+			push_error("远古圣物碎片身份与现有物品冲突：%d" % AncientRelicFragmentScript.ITEM_ID)
+		else:
+			_register_catalog_item(relic_fragment)
 
 	var extra_names := {}
 	for drop: Variant in drops:

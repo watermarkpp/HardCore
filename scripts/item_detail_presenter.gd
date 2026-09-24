@@ -8,6 +8,7 @@ extends PanelContainer
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
 const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
+const AncientRelicFragmentScript := preload("res://scripts/layers/rules/ancient_relic_fragment.gd")
 const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 var attribute_help: Node
@@ -397,6 +398,8 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 	var black_iron_purity := EnhancementBlackIron.purity_for(item)
 	if black_iron_purity >= 0:
 		return "类别：矿石\n纯度：%d\n[color=#b58a45]乌黑色的矿石，天外陨石的碎片[/color]" % black_iron_purity
+	if AncientRelicFragmentScript.is_item(item):
+		return "类别：材料\n重量：1\n[color=#b58a45]%s[/color]" % str(item.get("description", ""))
 	var kind := str(item.get("kind", ""))
 	var lines: Array[String] = []
 	var category := str(item.get("category", item.get("type", "")))
