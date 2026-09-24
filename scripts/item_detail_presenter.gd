@@ -9,6 +9,7 @@ const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
 const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
 const AncientRelicFragmentScript := preload("res://scripts/layers/rules/ancient_relic_fragment.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 var attribute_help: Node
@@ -400,6 +401,9 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		return "类别：矿石\n纯度：%d\n[color=#b58a45]乌黑色的矿石，天外陨石的碎片[/color]" % black_iron_purity
 	if AncientRelicFragmentScript.is_item(item):
 		return "类别：材料\n重量：1\n[color=#b58a45]%s[/color]" % str(item.get("description", ""))
+	var relic_id := int(item.get("itemId", -1))
+	if RelicSynthesisRulesScript.is_relic(relic_id):
+		return _format_relic_item(relic_id, instance)
 	var kind := str(item.get("kind", ""))
 	var lines: Array[String] = []
 	var category := str(item.get("category", item.get("type", "")))
@@ -440,6 +444,32 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		lines.append(description)
 	if lines.is_empty():
 		lines.append("暂无可显示属性")
+	return "\n".join(lines)
+
+
+static func _format_relic_item(item_id: int, instance: Dictionary) -> String:
+	var lines: Array[String] = ["类别：圣物", "部位：圣物槽"]
+	var roll: Dictionary = instance.get("relic_roll", {}) if instance.get("relic_roll", {}) is Dictionary else {}
+	if RelicSynthesisRulesScript.valid_instance(instance, item_id):
+		var skill_name := SkillDataLoader.display_name(str(roll.get("skill_id", "")))
+		lines.append("%s等级 +1" % skill_name)
+	else:
+		lines.append("随机技能等级 +1")
+	match item_id:
+		950101:
+			lines.append("速度 +1")
+			lines.append("攻击或使用技能时，20%几率速度 +2，持续10秒；结束后冷却15秒")
+		950102:
+			if RelicSynthesisRulesScript.valid_instance(instance, item_id):
+				var maxima: Dictionary = roll.get("heart_maxima", {})
+				lines.append("攻击 0-%d　魔法 0-%d　道术 0-%d" % [int(maxima.attack), int(maxima.magic), int(maxima.tao)])
+			else:
+				lines.append("攻击、魔法、道术各自随机 0-3～0-5")
+			lines.append("攻击或使用技能时，20%几率三系面板伤害 +15%，持续10秒；结束后冷却15秒")
+		950103:
+			lines.append("幸运 +1")
+			lines.append("攻击或使用技能时，20%几率幸运 +2，持续10秒；结束后冷却15秒")
+	lines.append("穿戴要求：35级")
 	return "\n".join(lines)
 
 

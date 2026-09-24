@@ -1096,7 +1096,7 @@ func update_item_quick_slots() -> void:
 			icon.texture = texture
 			icon.visible = texture != null
 			icon.modulate = Color(1, 1, 1, 0.45) if count <= 0 else Color.WHITE
-			_layout_native_item_icon(icon, texture, button.size)
+			_layout_native_item_icon(icon, texture, button.size, GameData.get_item_art_display_size(record))
 		if count_label != null:
 			count_label.text = str(count)
 			count_label.visible = true
@@ -1246,12 +1246,14 @@ func _on_item_quick_slot_popup_input(event: InputEvent) -> void:
 		_touch_scroll_support.call("_input", screen_event)
 
 
-func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2) -> void:
+func _layout_native_item_icon(icon: TextureRect, texture: Texture2D, bounds: Vector2, maximum_size := Vector2.ZERO) -> void:
 	if texture == null:
 		icon.position = bounds * 0.5
 		icon.size = Vector2.ZERO
 		return
 	icon.size = texture.get_size()
+	if maximum_size.x > 0.0 and maximum_size.y > 0.0:
+		icon.size *= minf(maximum_size.x / icon.size.x, maximum_size.y / icon.size.y)
 	icon.position = (bounds - icon.size) * 0.5
 
 
@@ -1300,7 +1302,7 @@ func _add_item_quick_slot_candidate(candidate: Dictionary, id: int, visual_row: 
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon.texture = texture
 	icon.visible = texture != null
-	_layout_native_item_icon(icon, texture, card.size)
+	_layout_native_item_icon(icon, texture, card.size, GameData.get_item_art_display_size(record))
 	card.add_child(icon)
 	var count_label := Label.new()
 	count_label.name = "Count"

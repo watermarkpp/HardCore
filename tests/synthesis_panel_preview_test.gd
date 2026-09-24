@@ -35,17 +35,15 @@ func _run() -> void:
 	assert(grid.size.y > scroll.size.y and scroll.get_v_scroll_bar().max_value > scroll.size.y, "40 recipe cells must be vertically scrollable")
 	for index in 40:
 		var cell := grid.get_child(index) as Button
-		assert(cell.size == InventoryPanelScript.BAG_CELL_SIZE and cell.disabled)
+		assert(cell.size == InventoryPanelScript.BAG_CELL_SIZE and cell.disabled == (index >= 3))
 		assert(cell.get_theme_stylebox("disabled") == panel.forge_slots[0].get_theme_stylebox("disabled"), "recipe cells must match inventory cells")
 	for art: TextureRect in panel.forge_artwork.values():
 		assert(not art.visible, "forge result art must be absent in synthesis mode")
 	assert(panel.forge_button.text == "开始合成" and panel.forge_button.disabled)
 	assert((panel.get_node("ForgeRulesPanel/ForgeRulesText") as Label).text == "请选择合成配方")
-	var entries: Array[Dictionary] = [{"title": "测试图标", "details": "测试材料 ×2", "icon": preload("res://assets/ui/forge/forge_initial.png")}]
-	panel.set_synthesis_recipe_previews(entries)
-	assert(not (grid.get_child(0) as Button).disabled)
 	panel.call("_on_synthesis_recipe_pressed", 0)
-	assert((panel.get_node("ForgeRulesPanel/ForgeRulesText") as Label).text == "测试材料 ×2")
+	assert((panel.get_node("ForgeRulesPanel/ForgeRulesText") as Label).text == "材料需求：远古圣物碎片 ×4")
+	assert(panel.chance_label.text.contains("100%") and panel.fee_label.text.contains("400000"))
 	var gold_before := PlayerState.gold
 	var inventory_before := PlayerState.inventory.duplicate(true)
 	panel.preview_synthesis_animation()
@@ -56,7 +54,28 @@ func _run() -> void:
 	assert(not panel._forging and not panel._synthesis_audio.playing)
 	assert(panel._synthesis_audio_plays_in_cycle == 1, "synthesis sound must play exactly once")
 	assert((panel._forge_glow_overlays[0] as Panel).modulate.a == 0.0)
-	assert(PlayerState.gold == gold_before and PlayerState.inventory == inventory_before, "UI preview must not commit a recipe")
+	assert(PlayerState.gold == gold_before and PlayerState.inventory == inventory_before and PlayerState.synthesis_tray == PlayerState._empty_workbench_tray(), "UI preview must not commit a recipe")
+	PlayerState.gold = 500000
+	for _fragment in 4:
+		assert(bool(PlayerState.receive("远古圣物碎片", 1, false).get("success", false)))
+	for material_slot: int in [2, 4, 6, 8]:
+		panel.selected_inventory_index = _fragment_index()
+		panel.call("_on_forge_slot_pressed", material_slot)
+		assert(not PlayerState.synthesis_tray[material_slot].is_empty())
+	assert(not panel.forge_button.disabled)
+	panel.forge_button.pressed.emit()
+	assert(panel._forging)
+	await get_tree().create_timer(3.1).timeout
+	assert(not panel._forging and int(PlayerState.synthesis_tray[0].get("item_id", -1)) == 950101)
+	panel.hide()
+	panel.show()
+	for frame in 3:
+		await get_tree().process_frame
+	assert(panel.forge_slots[0].get_node("CenteredPixelIcon").visible, "unclaimed relic disappeared when panel reopened")
+	panel.call("_on_forge_slot_pressed", 0)
+	assert(not PlayerState.synthesis_tray[0].is_empty(), "first click must show item detail")
+	panel.call("_on_forge_slot_pressed", 0)
+	assert(PlayerState.synthesis_tray[0].is_empty() and _relic_index() >= 0, "relic was not moved into the backpack")
 	panel.call("_set_mode", "forge")
 	for frame in 4:
 		await get_tree().process_frame
@@ -66,3 +85,17 @@ func _run() -> void:
 		assert(title.get_theme_font_size("font_size") == 18, "forge heading must render at 30 physical pixels")
 	print("SYNTHESIS_PANEL_PREVIEW_PASS")
 	get_tree().quit(0)
+
+
+func _fragment_index() -> int:
+	for index in PlayerState.inventory.size():
+		if str(PlayerState.inventory[index].get("name", "")) == "远古圣物碎片":
+			return index
+	return -1
+
+
+func _relic_index() -> int:
+	for index in PlayerState.inventory.size():
+		if int(PlayerState.inventory[index].get("item_id", -1)) == 950101:
+			return index
+	return -1

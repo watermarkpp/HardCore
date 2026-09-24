@@ -2,6 +2,7 @@ param(
     [switch]$MonsterGroundReview,
     [switch]$FixedAreaGroundSpikeReview,
     [switch]$WarriorSkillReview,
+    [switch]$RelicProcReview,
     [ValidateRange(1, 2147483647)]
     [int]$MonsterId
 )
@@ -33,6 +34,9 @@ elseif ($MonsterGroundReview) {
 }
 elseif ($WarriorSkillReview) {
     $UserArgs += '--warrior-skill-review'
+}
+elseif ($RelicProcReview) {
+    $UserArgs += '--relic-proc-review'
 }
 if ($PSBoundParameters.ContainsKey('MonsterId')) {
     $UserArgs += "--monster-id=$MonsterId"

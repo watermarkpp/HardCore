@@ -32,6 +32,12 @@
       "slots": ["圣物", "徽章"],
       "policy": "与其他非衣服装备相同，在正物理StruckDamage事件中各自独立1/8损耗同一raw值",
       "reason": "项目扩展槽不伪造鞋或腰带，采用明确且可测试的统一扩展规则"
+    },
+    {
+      "contractId": "equipment.relic_synthesis.v1",
+      "itemIds": [950101, 950102, 950103],
+      "policy": "三件合成圣物不磨损；仅这些精确物品 ID 覆盖圣物槽的通用规则",
+      "reason": "圣物装备不磨损的用户规则"
     }
   ],
   "explicitOverrides": [

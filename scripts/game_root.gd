@@ -15,11 +15,13 @@ const FRAME_TEXTURE_WARM_MAX_IN_FLIGHT := 4
 const TownMusicControllerScript := preload("res://scripts/town_music_controller.gd")
 const AudioRuntimeServiceScript := preload("res://scripts/audio_runtime_service.gd")
 const LevelUpEffectScript := preload("res://scripts/ui_level_up_preview.gd")
+const RelicProcEffectScript := preload("res://scripts/ui_relic_proc_effect.gd")
 const LootVisualEffectScript := preload("res://scripts/loot_visual_effect.gd")
 
 var _town_music_controller: Node
 var _audio_runtime_service: Node
 var _player_level_up_effect: Node2D
+var _player_relic_proc_effect: Node2D
 
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const UIErrorFeedbackScript := preload("res://scripts/ui_error_feedback.gd")
@@ -1577,6 +1579,11 @@ func _ready() -> void:
 	_player_level_up_effect.process_mode = Node.PROCESS_MODE_INHERIT
 	_player_level_up_effect.set_meta("preview_only", false)
 	_player_level_up_effect.set_meta("gameplay_event_source", "PlayerState.levels_gained")
+	_player_relic_proc_effect = RelicProcEffectScript.new()
+	_player_relic_proc_effect.name = "PlayerRelicProcEffect"
+	_player_relic_proc_effect.z_index = 0
+	player.add_child(_player_relic_proc_effect)
+	PlayerState.relic_proc_started.connect(_on_relic_proc_started)
 	PlayerState.levels_gained.connect(_on_player_levels_gained)
 	PlayerState.skills_changed.connect(_synchronize_main_pet_skill_ranks)
 	PlayerState.equipment_changed.connect(_synchronize_main_pet_skill_ranks)
@@ -2546,6 +2553,11 @@ func _on_player_levels_gained(previous_level: int, new_level: int) -> void:
 		_player_level_up_effect.replay(player.approved_ground_footpoint_local_px())
 	# R2: the level-up result joins the unified central notice layer.
 	hud.show_success_message("等级提升至 %d" % new_level)
+
+
+func _on_relic_proc_started(_item_id: int) -> void:
+	if is_instance_valid(player) and is_instance_valid(_player_relic_proc_effect):
+		_player_relic_proc_effect.replay(player.approved_ground_footpoint_local_px())
 
 
 func _update_town_music_presence() -> void:
@@ -7072,6 +7084,7 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	if not gameplay_input_is_enabled(): return
 	var context := player.consume_attack_context()
+	PlayerState.try_trigger_relic_proc()
 	var diagnostic := _pending_melee_diagnostic.duplicate(true)
 	_pending_melee_diagnostic.clear()
 	_active_physical_hit_diagnostics.clear()
@@ -7730,6 +7743,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 			hud.show_error_message("锁定目标已失效，技能未释放", 1.5)
 			return
 		_skill_cast_target = release_target
+	PlayerState.try_trigger_relic_proc()
 	var friendly_identity_release: Dictionary = release_geometry.get(
 		"friendly_identity_release",
 		{}
@@ -11056,6 +11070,9 @@ func _status_buff_entries() -> Array:
 	for buff: Dictionary in PlayerState.temporary_item_buffs.values():
 		if float(buff.remaining) <= 0.0: continue
 		entries.append({"id":"item:" + str(buff.buffGroup), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
+	var relic_proc := PlayerState.relic_proc_status()
+	if float(relic_proc.get("remaining", 0.0)) > 0.0:
+		entries.append({"id": "relic:%d" % int(relic_proc.get("item_id", -1)), "item_id": int(relic_proc.get("item_id", -1)), "remaining": float(relic_proc.remaining), "started_at": int(relic_proc.get("started_at_usec", 0))})
 	# Player 麻痹/中毒 no longer surface on the bottom HUD buff strip (R1.1):
 	# they present as fixed-slot dots on the status marker row under the
 	# player overhead HP bar (PlayerStatusMarkerStrip). Gameplay poison and

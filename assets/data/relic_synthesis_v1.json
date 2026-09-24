@@ -1,0 +1,13 @@
+{
+	"contract_id": "equipment.relic_synthesis.v1",
+	"fragment_item_id": 950001,
+	"fragment_count": 4,
+	"gold_cost": 400000,
+	"success_percent": 100,
+	"required_level": 35,
+	"items": [
+		{"item_id": 950101, "name": "魔龙之眼", "inventory_icon": "res://assets/art/items/custom/relics/dragon_eye_inventory.tres", "ground_icon": "res://assets/art/items/custom/relics/dragon_eye_ground.tres", "effect": "speed"},
+		{"item_id": 950102, "name": "魔龙之心", "inventory_icon": "res://assets/art/items/custom/relics/dragon_heart_inventory.tres", "ground_icon": "res://assets/art/items/custom/relics/dragon_heart_ground.tres", "effect": "damage"},
+		{"item_id": 950103, "name": "幸运守护", "inventory_icon": "res://assets/art/items/custom/relics/lucky_guardian_inventory.tres", "ground_icon": "res://assets/art/items/custom/relics/lucky_guardian_ground.tres", "effect": "luck"}
+	]
+}

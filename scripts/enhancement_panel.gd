@@ -9,8 +9,8 @@ const SynthesisSound := preload("res://assets/audio/ui/forge/synthesis.wav")
 const PlainWideButtonFrame := preload("res://assets/ui/forge/plain_286x72.png")
 const PlainSmallButtonFrame := preload("res://assets/ui/gothic_theme/v1/character_hall_exact_frames/plain_184x81.png")
 const ForgeLayoutScript := preload("res://scripts/ui_runtime_layout_overrides.gd")
-const BlackIronScript := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
 const ForgeGradeScript := preload("res://scripts/layers/rules/equipment_enhancement_grade.gd")
+const RelicRules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 
 const FORGE_SLOT_COUNT := 9
 const SYNTHESIS_RECIPE_COLUMNS := 4
@@ -28,6 +28,7 @@ const FORGE_SLOT_ROLES := {
 	4: "待锻造装备",
 	5: "首饰二",
 }
+const SYNTHESIS_INPUT_SLOTS := [1, 2, 3, 4, 5, 6, 7, 8]
 
 var forge_tab_button: Button
 var synthesis_tab_button: Button
@@ -44,9 +45,9 @@ var fee_label: RichTextLabel
 var rules_label: Label
 var _forging := false
 var _mode := "forge"
-var _forge_target_ref: Dictionary = {}
-var _forge_material_refs: Dictionary = {}
 var _forge_quote: Dictionary = {}
+var _synthesis_quote: Dictionary = {}
+var _selected_workbench_slot := -1
 var _forge_audio: AudioStreamPlayer
 var _synthesis_audio: AudioStreamPlayer
 var _forge_audio_plays_in_cycle := 0
@@ -80,6 +81,10 @@ func _ready() -> void:
 	_synthesis_audio.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_synthesis_audio)
 	_build_forge_tabs()
+	var recipe_entries: Array[Dictionary] = []
+	for relic: Dictionary in RelicRules.records():
+		recipe_entries.append({"item_id": int(relic.itemId), "title": str(relic.name), "icon": UIItemTextureCacheScript.texture_for(relic)})
+	set_synthesis_recipe_previews(recipe_entries)
 	ForgeLayoutScript.apply_profile(self, "forge")
 	_show_forge_artwork("initial")
 	_refresh_forge_information()
@@ -236,15 +241,13 @@ func _build_synthesis_recipe_grid() -> void:
 
 
 func set_synthesis_recipe_previews(entries: Array[Dictionary]) -> void:
-	# Presentation only. Recipe costs, output attributes, and transactions remain
-	# unconfigured until the authoritative synthesis rules are supplied.
 	_synthesis_recipe_previews = entries.slice(0, synthesis_recipe_slots.size())
 	_selected_synthesis_recipe = -1
 	for index in synthesis_recipe_slots.size():
 		var slot := synthesis_recipe_slots[index]
 		var entry: Dictionary = _synthesis_recipe_previews[index] if index < _synthesis_recipe_previews.size() else {}
 		var icon := entry.get("icon") as Texture2D
-		_set_button_texture(slot, icon)
+		_set_button_texture(slot, icon, Vector2(56, 56) if not entry.is_empty() else Vector2.ZERO)
 		slot.disabled = entry.is_empty()
 		slot.tooltip_text = str(entry.get("title", "暂无合成配方"))
 		UIItemSelectionVisualScript.apply(slot, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
@@ -256,9 +259,14 @@ func _on_synthesis_recipe_pressed(index: int) -> void:
 	if _mode != "synthesis" or _forging or index >= _synthesis_recipe_previews.size():
 		return
 	_selected_synthesis_recipe = index
+	_selected_workbench_slot = -1
 	for slot_index in synthesis_recipe_slots.size():
 		UIItemSelectionVisualScript.apply(synthesis_recipe_slots[slot_index], slot_index == index, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
-	rules_label.text = str(_synthesis_recipe_previews[index].get("details", "配方内容待提供"))
+	var recipe_id := int(_synthesis_recipe_previews[index].get("item_id", -1))
+	var item := RelicRules.record_for_id(recipe_id)
+	if not item.is_empty():
+		_show_presented_item(item, {}, synthesis_recipe_slots[index])
+	_refresh_forge_information()
 
 
 func _build_forge_information() -> void:
@@ -365,6 +373,7 @@ func _set_mode(mode: String) -> void:
 	if _forging or mode == _mode or mode not in ["forge", "synthesis"]:
 		return
 	_mode = mode
+	_selected_workbench_slot = -1
 	ForgeLayoutScript.apply_profile(self, mode)
 	synthesis_recipe_scroll.visible = mode == "synthesis"
 	if mode == "forge":
@@ -413,7 +422,7 @@ func preview_forge_animation() -> void:
 
 
 func preview_synthesis_animation() -> void:
-	# UI/audio preview only; no item, currency, or recipe transaction exists yet.
+	# UI/audio preview only; no item, currency, or recipe transaction occurs.
 	if _forging or _mode != "synthesis":
 		return
 	_play_synthesis_animation()
@@ -423,74 +432,61 @@ func _refresh_forge_information() -> void:
 	if rules_label == null or chance_label == null or fee_label == null or forge_button == null:
 		return
 	_forge_quote.clear()
+	_synthesis_quote.clear()
+	var tray: Array[Dictionary] = PlayerState.workbench_tray(_mode)
+	for index in forge_slots.size():
+		var slot := forge_slots[index]
+		var stack: Dictionary = tray[index]
+		var item := GameData.get_item_record(stack) if not stack.is_empty() else {}
+		_set_button_texture(slot, UIItemTextureCacheScript.texture_for_item(stack) if not stack.is_empty() else null, _item_icon_display_size(item, "inventoryIcon"))
+		_sync_forge_slot_visual(slot, not stack.is_empty())
+		if not stack.is_empty():
+			slot.tooltip_text = str(stack.get("name", "物品")) + "：点击查看，再点取回背包"
+		elif _mode == "forge":
+			slot.tooltip_text = str(FORGE_SLOT_ROLES.get(index, "空锻造格"))
+		else:
+			slot.tooltip_text = "合成结果" if index == 0 else "合成材料或暂存物品"
 	if _mode == "synthesis":
-		rules_label.text = "请选择合成配方" if _selected_synthesis_recipe < 0 else str(_synthesis_recipe_previews[_selected_synthesis_recipe].get("details", "配方内容待提供"))
-		chance_label.text = "[center]—[/center]"
-		fee_label.text = "[center]—[/center]"
+		rules_label.text = "请选择合成配方" if _selected_synthesis_recipe < 0 else "材料需求：远古圣物碎片 ×4"
+		chance_label.text = "[center]—[/center]" if _selected_synthesis_recipe < 0 else "[center]100%[/center]"
+		fee_label.text = "[center]—[/center]" if _selected_synthesis_recipe < 0 else "[center]400000[/center]"
 		forge_button.text = "开始合成"
 		forge_button.disabled = true
-		for index in forge_slots.size():
-			_set_button_texture(forge_slots[index], null)
-			_sync_forge_slot_visual(forge_slots[index], false)
+		if _selected_synthesis_recipe < 0 or not tray[0].is_empty():
+			return
+		var material_slots: Array[int] = []
+		for slot_index: int in SYNTHESIS_INPUT_SLOTS:
+			var stack: Dictionary = tray[slot_index]
+			if not stack.is_empty() and int(GameData.get_item_record(stack).get("itemId", -1)) == RelicRules.FRAGMENT_ID and int(stack.get("count", 1)) == 1:
+				material_slots.append(slot_index)
+				if material_slots.size() == RelicRules.FRAGMENT_COUNT:
+					break
+		if material_slots.size() != RelicRules.FRAGMENT_COUNT:
+			return
+		_synthesis_quote = PlayerState.quote_relic_synthesis(int(_synthesis_recipe_previews[_selected_synthesis_recipe].get("item_id", -1)), material_slots)
+		forge_button.disabled = not bool(_synthesis_quote.get("valid", false))
 		return
-	var target_index := _find_inventory_index_for_ref(_forge_target_ref)
-	if target_index < 0:
-		_forge_target_ref.clear()
-		_set_button_texture(forge_slots[4], null)
-		_sync_forge_slot_visual(forge_slots[4], false)
-		forge_slots[4].tooltip_text = "待锻造装备"
-		rules_label.text = "请在上方放入需要锻造的装备"
-	else:
-		var target_stack := _inventory_record(target_index)
-		var target_item := GameData.get_item_record(target_stack)
-		rules_label.text = "材料需求：黑铁矿 ×1\n首饰 ×2"
-		forge_slots[4].tooltip_text = str(target_item.get("name", "待锻造装备"))
-		_set_button_texture(forge_slots[4], UIItemTextureCacheScript.texture_for_item(target_stack))
-		_sync_forge_slot_visual(forge_slots[4], true)
-	for slot_index: int in [1, 3, 5]:
-		var material_ref: Dictionary = _forge_material_refs.get(slot_index, {})
-		var material_index := _find_inventory_index_for_ref(material_ref)
-		var material_slot := forge_slots[slot_index]
-		if material_index < 0:
-			_forge_material_refs.erase(slot_index)
-			_set_button_texture(material_slot, null)
-			_sync_forge_slot_visual(material_slot, false)
-			material_slot.tooltip_text = str(FORGE_SLOT_ROLES[slot_index])
-			continue
-		var material_stack := _inventory_record(material_index)
-		var material_item := GameData.get_item_record(material_stack)
-		material_slot.tooltip_text = str(material_item.get("name", FORGE_SLOT_ROLES[slot_index]))
-		_set_button_texture(material_slot, UIItemTextureCacheScript.texture_for_item(material_stack))
-		_sync_forge_slot_visual(material_slot, true)
+	rules_label.text = "材料需求：黑铁矿 ×1\n首饰 ×2" if not tray[4].is_empty() else "请在上方放入需要锻造的装备"
 	chance_label.text = "[center]—[/center]"
 	fee_label.text = "[center]—[/center]"
 	forge_button.text = "开始锻造"
-	var has_forbidden_accessory := false
+	forge_button.disabled = true
 	for slot_index: int in [3, 5]:
-		var material_index := _find_inventory_index_for_ref(_forge_material_refs.get(slot_index, {}))
-		if material_index < 0:
+		if tray[slot_index].is_empty():
 			continue
-		var item := GameData.get_item_record(_inventory_record(material_index))
-		if not ForgeGradeScript.can_use_as_accessory_material(int(item.get("itemId", -1))):
-			has_forbidden_accessory = true
-			break
-	if has_forbidden_accessory:
-		forge_button.disabled = false
-		return
-	var iron_index := _find_inventory_index_for_ref(_forge_material_refs.get(1, {}))
-	var accessory_a_index := _find_inventory_index_for_ref(_forge_material_refs.get(3, {}))
-	var accessory_b_index := _find_inventory_index_for_ref(_forge_material_refs.get(5, {}))
-	if target_index < 0 or iron_index < 0 or accessory_a_index < 0 or accessory_b_index < 0:
-		forge_button.disabled = true
-		return
-	_forge_quote = PlayerState.quote_forge(target_index, iron_index, accessory_a_index, accessory_b_index)
+		var accessory := GameData.get_item_record(tray[slot_index])
+		if not ForgeGradeScript.can_use_as_accessory_material(int(accessory.get("itemId", -1))):
+			forge_button.disabled = false
+			return
+	for slot_index: int in [4, 1, 3, 5]:
+		if tray[slot_index].is_empty():
+			return
+	_forge_quote = PlayerState.quote_forge_tray()
 	if not bool(_forge_quote.get("valid", false)):
-		forge_button.disabled = true
 		return
 	chance_label.text = "[center]%.2f%%[/center]" % [float(_forge_quote.final_success_bps) / 100.0]
 	fee_label.text = "[center]%d[/center]" % int(_forge_quote.gold_cost)
 	forge_button.disabled = false
-
 
 func _sync_forge_slot_visual(slot: Button, occupied: bool) -> void:
 	UIItemSelectionVisualScript.apply(slot, occupied, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
@@ -508,61 +504,35 @@ func _sync_forge_slot_visual(slot: Button, occupied: bool) -> void:
 func _on_forge_slot_pressed(index: int) -> void:
 	if _forging:
 		return
-	if _mode == "synthesis":
-		_show_error_message("合成配方尚未配置。")
-		return
-	if index == 4:
-		var current_index := _find_inventory_index_for_ref(_forge_target_ref)
-		var stack := _inventory_record(selected_inventory_index)
-		if current_index >= 0 and (stack.is_empty() or selected_inventory_index == current_index):
-			_show_forge_slot_detail(index, _inventory_record(current_index))
-			return
-		if stack.is_empty():
-			return
-		var item := GameData.get_item_record(stack)
-		if str(item.get("kind", "")) != "equipment" or str(item.get("category", "")) not in ["武器", "盔甲", "头盔"]:
-			_show_error_message("只能放入武器、衣服或头盔。")
-			return
-		var selected_ref := _inventory_selection_ref(selected_inventory_index, stack)
-		for material_ref: Variant in _forge_material_refs.values():
-			if material_ref is Dictionary and _same_selection_ref(selected_ref, material_ref):
-				_show_error_message("同一件物品不能放入多个锻造格。")
-				return
-		_forge_target_ref = selected_ref
+	var tray: Array[Dictionary] = PlayerState.workbench_tray(_mode)
+	var occupied: Dictionary = tray[index]
+	var selected_stack := _inventory_record(selected_inventory_index)
+	if not occupied.is_empty():
+		if _selected_workbench_slot == index and selected_stack.is_empty():
+			var take_result := PlayerState.take_workbench_item(_mode, index)
+			if bool(take_result.get("success", false)):
+				_show_success_message(str(take_result.get("message", "已取回物品")))
+				_selected_workbench_slot = -1
+				_hide_item_detail()
+			else:
+				_show_error_message(str(take_result.get("message", "无法取回物品。")))
+		else:
+			_selected_workbench_slot = index
+			_show_forge_slot_detail(index, occupied)
 		_refresh_forge_information()
-		_show_forge_slot_detail(index, stack)
 		return
-	if not FORGE_SLOT_ROLES.has(index):
-		_show_error_message("当前锻造仅需要装备、黑铁矿和两件首饰。")
+	_selected_workbench_slot = -1
+	if selected_stack.is_empty():
 		return
-	var current_ref: Dictionary = _forge_material_refs.get(index, {})
-	var current_index := _find_inventory_index_for_ref(current_ref)
-	var stack := _inventory_record(selected_inventory_index)
-	if current_index >= 0 and (stack.is_empty() or selected_inventory_index == current_index):
-		_show_forge_slot_detail(index, _inventory_record(current_index))
+	var place_result := PlayerState.place_workbench_item(_mode, index, selected_inventory_index)
+	if not bool(place_result.get("success", false)):
+		_show_error_message(str(place_result.get("message", "无法放入物品。")))
 		return
-	if stack.is_empty():
-		_show_error_message("请先在背包中选择%s。" % str(FORGE_SLOT_ROLES[index]))
-		return
-	var item := GameData.get_item_record(stack)
-	if index == 1 and BlackIronScript.purity_for(stack) < 0:
-		_show_error_message("请放入黑铁矿。")
-		return
-	if index != 1 and str(item.get("category", "")) not in ["戒指", "手镯", "项链"]:
-		_show_error_message("请放入首饰。")
-		return
-	var selected_ref := _inventory_selection_ref(selected_inventory_index, stack)
-	if _same_selection_ref(selected_ref, _forge_target_ref):
-		_show_error_message("同一件物品不能放入多个锻造格。")
-		return
-	for other_index: int in [1, 3, 5]:
-		if other_index != index and _same_selection_ref(selected_ref, _forge_material_refs.get(other_index, {})):
-			_show_error_message("同一件物品不能放入多个锻造格。")
-			return
-	_forge_material_refs[index] = selected_ref
+	_clear_inventory_selection_styles()
 	_refresh_forge_information()
-	_show_forge_slot_detail(index, stack)
-
+	_selected_workbench_slot = index
+	var placed: Array[Dictionary] = PlayerState.workbench_tray(_mode)
+	_show_forge_slot_detail(index, placed[index])
 
 func _show_forge_slot_detail(index: int, stack: Dictionary) -> void:
 	if stack.is_empty() or item_detail_presenter == null:
@@ -591,13 +561,26 @@ func _on_forge_pressed() -> void:
 	if _forging:
 		return
 	if _mode == "synthesis":
-		_show_error_message("合成配方尚未配置。")
+		if not bool(_synthesis_quote.get("valid", false)):
+			_show_error_message(str(_synthesis_quote.get("message", "请先选择配方并放入4个远古圣物碎片。")))
+			return
+		_forging = true
+		forge_button.disabled = true
+		var result := PlayerState.commit_relic_synthesis(_synthesis_quote)
+		if not bool(result.get("committed", false)):
+			_forging = false
+			_show_error_message(str(result.get("message", "合成失败，材料未消耗。")))
+			_refresh_forge_information()
+			return
+		_selected_workbench_slot = -1
+		await _play_synthesis_animation()
+		_show_success_message(str(result.get("message", "合成成功")))
 		return
 	for slot_index: int in [3, 5]:
-		var material_index := _find_inventory_index_for_ref(_forge_material_refs.get(slot_index, {}))
-		if material_index < 0:
+		var material: Dictionary = PlayerState.forge_tray[slot_index]
+		if material.is_empty():
 			continue
-		var item := GameData.get_item_record(_inventory_record(material_index))
+		var item := GameData.get_item_record(material)
 		if not ForgeGradeScript.can_use_as_accessory_material(int(item.get("itemId", -1))):
 			_show_error_message("%s不可以作为锻造材料" % str(item.get("name", "该物品")))
 			return

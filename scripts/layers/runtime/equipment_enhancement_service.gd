@@ -32,6 +32,14 @@ func reset() -> void:
 
 func quote_forge(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int) -> Dictionary:
 	var quote := _build_quote(target_index, iron_index, accessory_a_index, accessory_b_index)
+	return _issue_quote(quote)
+
+
+func quote_forge_tray() -> Dictionary:
+	return _issue_quote(_build_quote(4, 1, 3, 5, "tray"))
+
+
+func _issue_quote(quote: Dictionary) -> Dictionary:
 	if not bool(quote.get("valid", false)):
 		return quote
 	_serial += 1
@@ -48,7 +56,10 @@ func commit_forge(quote: Dictionary) -> Dictionary:
 		return _failure("锻造正在进行，请稍候。")
 	if quote_id.is_empty() or _consumed.has(quote_id) or not _issued.has(quote_id) or _issued[quote_id] != quote:
 		return _failure("锻造报价已失效，请重新选择材料。")
-	var refreshed := _build_quote(int(quote.target_index), int(quote.iron_index), int(quote.accessory_a_index), int(quote.accessory_b_index))
+	var source := str(quote.get("source", "inventory"))
+	if source not in ["inventory", "tray"]:
+		return _failure("锻造报价来源无效。")
+	var refreshed := _build_quote(int(quote.target_index), int(quote.iron_index), int(quote.accessory_a_index), int(quote.accessory_b_index), source)
 	if not bool(refreshed.get("valid", false)):
 		return refreshed
 	var expected := quote.duplicate(true)
@@ -60,9 +71,9 @@ func commit_forge(quote: Dictionary) -> Dictionary:
 	_enhancement_transaction_in_progress = true
 	_consumed[quote_id] = true
 	_issued.erase(quote_id)
-	var inventory_before: Array = _player.inventory.duplicate(true)
+	var collection_before: Array = (_player.forge_tray if source == "tray" else _player.inventory).duplicate(true)
 	var gold_before: int = _player.gold
-	var next_inventory := inventory_before.duplicate(true)
+	var next_inventory := collection_before.duplicate(true)
 	var target_index := int(quote.target_index)
 	var target: Dictionary = (next_inventory[target_index] as Dictionary).duplicate(true)
 	var catalog := GameData.get_item_record(target)
@@ -100,10 +111,16 @@ func commit_forge(quote: Dictionary) -> Dictionary:
 			next_inventory[material_index] = {}
 		else:
 			material["count"] = count - 1
-	_player.inventory = next_inventory
+	if source == "tray":
+		_player.forge_tray = next_inventory
+	else:
+		_player.inventory = next_inventory
 	_player.gold = gold_before - int(quote.gold_cost)
 	if not bool(_player.call("_commit_save")):
-		_player.inventory = inventory_before
+		if source == "tray":
+			_player.forge_tray = collection_before
+		else:
+			_player.inventory = collection_before
 		_player.gold = gold_before
 		_enhancement_transaction_in_progress = false
 		return _failure("锻造存档失败，装备、材料和金币均未改变。")
@@ -119,9 +136,9 @@ func commit_forge(quote: Dictionary) -> Dictionary:
 	}
 
 
-func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int) -> Dictionary:
+func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int, source := "inventory") -> Dictionary:
 	var indices := [target_index, iron_index, accessory_a_index, accessory_b_index]
-	var inventory: Array = _player.inventory
+	var inventory: Array = _player.forge_tray if source == "tray" else _player.inventory
 	var seen_indices := {}
 	for index: int in indices:
 		if index < 0 or index >= inventory.size() or seen_indices.has(index):
@@ -164,6 +181,7 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 		return _failure("锻造规则不可用。")
 	var result := {
 		"valid": true,
+		"source": source,
 		"profile_id": str(_player.active_profile_id),
 		"target_index": target_index,
 		"iron_index": iron_index,

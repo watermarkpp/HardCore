@@ -6,6 +6,7 @@ const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
 const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
 const AncientRelicFragmentScript := preload("res://scripts/layers/rules/ancient_relic_fragment.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 
 signal database_reloaded
 signal initial_load_finished(success: bool)
@@ -2374,6 +2375,14 @@ func _build_indexes() -> void:
 			if item_id >= 0:
 				_items_by_id[item_id] = entry
 	_build_item_catalog()
+	for relic: Dictionary in RelicSynthesisRulesScript.records():
+		var relic_id := int(relic.itemId)
+		var relic_name := str(relic.name)
+		if _items_by_id.has(relic_id) or _items_by_name.has(relic_name):
+			push_error("圣物身份与原有装备冲突：%d" % relic_id)
+			continue
+		_items_by_id[relic_id] = relic
+		_items_by_name[relic_name] = relic
 	_build_canonical_monster_runtime_drop_closure()
 
 
@@ -2538,6 +2547,12 @@ func _build_item_catalog() -> void:
 			push_error("远古圣物碎片身份与现有物品冲突：%d" % AncientRelicFragmentScript.ITEM_ID)
 		else:
 			_register_catalog_item(relic_fragment)
+	for relic: Dictionary in RelicSynthesisRulesScript.records():
+		var relic_id := int(relic.itemId)
+		if _catalog_by_item_id.has(relic_id) or _catalog_by_name.has(str(relic.name)):
+			push_error("圣物目录身份冲突：%d" % relic_id)
+			continue
+		_register_catalog_item(relic)
 
 	var extra_names := {}
 	for drop: Variant in drops:
@@ -3536,6 +3551,19 @@ func get_item_art_path(item_ref: Variant, field := "inventoryIcon") -> String:
 		return ""
 	var source: Variant = art.get(field, {})
 	return str(source.get("path", "")) if source is Dictionary else str(source)
+
+
+func get_item_art_display_size(item_ref: Variant, field := "inventoryIcon") -> Vector2:
+	var record := _item_record_for_read(item_ref)
+	var art: Variant = record.get("art", {})
+	var source: Variant = art.get(field, {}) if art is Dictionary else {}
+	if not source is Dictionary:
+		return Vector2.ZERO
+	var values: Variant = source.get("displaySize", [])
+	if not values is Array or (values as Array).size() != 2:
+		return Vector2.ZERO
+	var result := Vector2(float(values[0]), float(values[1]))
+	return result if result.x > 0.0 and result.y > 0.0 else Vector2.ZERO
 
 
 func get_item_rules_record(item_ref: Variant) -> Dictionary:

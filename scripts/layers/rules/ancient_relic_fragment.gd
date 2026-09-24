@@ -52,8 +52,8 @@ static func _ensure_loaded() -> void:
 		"useEffect": "none",
 		"usable": false,
 		"art": {
-			"inventoryIcon": {"path": inventory_icon},
-			"groundIcon": {"path": ground_icon},
+			"inventoryIcon": {"path": inventory_icon, "displaySize": [56, 56]},
+			"groundIcon": {"path": ground_icon, "displaySize": [36, 36]},
 		},
 		"source": {
 			"contract_id": CONTRACT_ID,
