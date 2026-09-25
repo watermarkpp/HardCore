@@ -64,6 +64,20 @@ static func normalize_snapshot(raw_snapshot: Variant) -> Dictionary:
 	return result
 
 
+## An elapsed deadline has the same spawn eligibility as an absent entry.
+## Keep future deadlines and the stable slot identity unchanged.
+static func compact_elapsed(raw_snapshot: Variant, now_unix: float) -> Dictionary:
+	var normalized := normalize_snapshot(raw_snapshot)
+	if not is_finite(now_unix) or now_unix <= 0.0:
+		return normalized
+	var entries: Dictionary = normalized["entries"]
+	for key: Variant in entries.keys():
+		var entry: Dictionary = entries[key]
+		if float(entry.get("respawn_at_unix", 0.0)) <= now_unix:
+			entries.erase(key)
+	return normalized
+
+
 static func entry_for(
 	snapshot: Variant,
 	runtime_map_id: int,

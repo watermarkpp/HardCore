@@ -5006,7 +5006,9 @@ func _prepare_character_save_payload() -> Dictionary:
 		"skill_button_assignments": skill_button_assignments_snapshot(),
 		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
-		"world_monster_respawn_state": world_monster_respawn_state.duplicate(true),
+		"world_monster_respawn_state": WorldMonsterRespawnStateScript.compact_elapsed(
+			world_monster_respawn_state, Time.get_unix_time_from_system()
+		),
 		"content_packages": ContentLayers.enabled_package_ids(),
 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": saved_map_id,
@@ -5522,8 +5524,9 @@ func load_save() -> void:
 			)
 	quest_states = parsed.get("quest_states", {})
 	world_monster_respawn_state = (
-		WorldMonsterRespawnStateScript.normalize_snapshot(
-			parsed.get("world_monster_respawn_state", {})
+		WorldMonsterRespawnStateScript.compact_elapsed(
+			parsed.get("world_monster_respawn_state", {}),
+			Time.get_unix_time_from_system()
 		)
 	)
 	saved_map_id = int(parsed.get("map_id", 910001))
@@ -5598,7 +5601,9 @@ func mark_monster_respawn_dead(
 	respawn_at_unix: float
 ) -> bool:
 	var next_state := WorldMonsterRespawnStateScript.with_deadline(
-		world_monster_respawn_state,
+		WorldMonsterRespawnStateScript.compact_elapsed(
+			world_monster_respawn_state, Time.get_unix_time_from_system()
+		),
 		runtime_map_id,
 		spawn_slot_id,
 		monster_id,

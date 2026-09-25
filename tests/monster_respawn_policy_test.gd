@@ -13,6 +13,7 @@ func _ready() -> void:
 	_test_ordinary_explicit_policy()
 	_test_legacy_seconds_fold_into_allowed_tiers()
 	_test_absolute_world_state()
+	_test_elapsed_deadlines_are_compacted()
 	_test_unstable_runtime_slot_is_rejected()
 	print("MONSTER_RESPAWN_POLICY_PASS checks=%d" % _checks)
 	get_tree().quit(0)
@@ -139,4 +140,16 @@ func _test_unstable_runtime_slot_is_rejected() -> void:
 		1234.0
 	)
 	assert((state.entries as Dictionary).is_empty())
+	_checks += 4
+
+
+func _test_elapsed_deadlines_are_compacted() -> void:
+	var state := WorldState.empty_snapshot()
+	state = WorldState.with_deadline(state, 401, "old:0", 64, Policy.NORMAL_CAVE, 1000.0)
+	state = WorldState.with_deadline(state, 402, "future:0", 65, Policy.BOSS, 2000.0)
+	var compacted := WorldState.compact_elapsed(state, 1000.0)
+	assert(WorldState.entry_for(compacted, 401, "old:0").is_empty())
+	assert(WorldState.entry_for(compacted, 402, "future:0").respawn_at_unix == 2000.0)
+	assert(not WorldState.entry_for(state, 401, "old:0").is_empty())
+	assert((compacted.entries as Dictionary).size() == 1)
 	_checks += 4
