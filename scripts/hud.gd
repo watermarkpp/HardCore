@@ -512,6 +512,7 @@ func _build_hidden_compatibility_info(root: Control) -> void:
 	notice_presenter = PlayerNoticePresenterScript.new()
 	notice_presenter.name = "PlayerNoticeOverlay"
 	root.add_child(notice_presenter)
+	_register_center_exempt(notice_presenter)
 	error_label = notice_presenter.prefix_label
 
 

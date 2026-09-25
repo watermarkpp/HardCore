@@ -17,8 +17,11 @@ func _run() -> void:
 		root.offset_right = -insets.y
 		hud._apply_center_alignment_delta((insets.y - insets.x) * 0.5)
 		hud.show_loot_batch(["金币 +123", "太阳水", "裁决之杖"])
+		hud.show_message("世界提示居中检查")
 		await get_tree().process_frame
 		var center := chassis.get_global_rect().get_center().x
+		if not is_equal_approx(hud.notice_presenter.get_global_rect().get_center().x, center):
+			failures.append("world notice center insets=%s" % insets)
 		for panel: Panel in hud.loot_feedback_layer.toast_panels:
 			if panel.visible and not is_equal_approx(panel.get_global_rect().get_center().x, center):
 				failures.append("pickup center %s insets=%s" % [panel.name, insets])
