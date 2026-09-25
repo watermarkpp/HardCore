@@ -29,6 +29,7 @@ const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const ActorBodyPolicyScript := preload("res://scripts/actor_body_policy.gd")
 const MonsterRangedProjectileEffectScript := preload(
 	"res://scripts/monster_ranged_projectile_effect.gd"
 )
@@ -332,6 +333,10 @@ var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_r
 	ArtSpec.MONSTER_COLLISION_RADIUS_PX
 )
 var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
+## HC-BODY-2TIER-1P5-V1: the validated two-tier body profile captured at setup
+## from the canonical identity entry. Resolved once, before spawn checks, the
+## physical shape and the spatial-index registration; never mutated per frame.
+var combat_body_profile: Dictionary = {}
 var environment_blocker: Node
 var _dying := false
 var _death_pending := false
@@ -566,6 +571,9 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 		"drop_profile_id": str(canonical_entry.get("drop_profile_id", "")),
 	}
 	monster_id = requested_id
+	# HC-BODY-2TIER-1P5-V1: capture the baked body profile through the formal
+	# identity entry. No name/suffix fallback exists for body data.
+	combat_body_profile = MonsterIdentityScript.body_profile(requested_id)
 	# M02A: primary_target is the searchable player reference. A current combat
 	# target exists only after the exact monster-id acquisition policy accepts it.
 	target = null
@@ -2303,20 +2311,28 @@ func _ready() -> void:
 	_initialize_spawn_facing_once()
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
-	combat_radius_gu = (
-		MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
-			ArtSpec.BOSS_COLLISION_RADIUS_PX
-		)
-		if is_boss
-		else MonsterUnitAdapterScript.collision_radius_gu(
-			behavior_profile,
-			ArtSpec.MONSTER_COLLISION_RADIUS_PX,
-		)
+	# HC-BODY-2TIER-1P5-V1: the body radius comes only from the validated
+	# two-tier policy profile baked into the canonical identity. The old
+	# is_boss 28 px constant and the behavior-config collisionRadius can no
+	# longer compete as radius authorities; legacy fixtures without a profile
+	# fail closed to the small tier with an explicit diagnostic meta.
+	var resolved_body := ActorBodyPolicyScript.validate_body_profile(
+		combat_body_profile
 	)
-	collision_radius_px = MonsterUnitAdapterScript.combat_radius_gu_to_footprint_radius_px(
-		combat_radius_gu
+	if resolved_body.is_empty():
+		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
+			ActorBodyPolicyScript.TIER_SMALL
+		)
+		set_meta("body_policy_fallback", "missing_or_invalid_profile")
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_body_policy_fallback"
+		)
+	else:
+		collision_radius_px = float(resolved_body["screen_radius_px"])
+	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+		collision_radius_px
 	)
-	collision.shape = WorldSpatialRules.actor_footprint_shape_px(collision_radius_px)
+	collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
 	add_child(collision)
 	if not is_boss:
 		_background_wakeup_timer = Timer.new()

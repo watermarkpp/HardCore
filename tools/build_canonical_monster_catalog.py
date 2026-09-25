@@ -40,6 +40,7 @@ DROP_AUTHORING_OVERLAY_PATH = (
     / "assets/data/canonical_monster_drop_authoring_overrides_v1.json"
 )
 COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
+BODY_POLICY_PATH = ROOT / "assets/data/actor_body_policy_v1.json"
 DETAIL_SOURCE_PATH = ROOT / "assets/data/monster_21cq_detail_source_v1.json"
 # Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
 # is no longer read by the generator and is intentionally absent from
@@ -1197,6 +1198,55 @@ def build_catalog() -> dict[str, Any]:
     service = load_json(SERVICE_PATH)
     behavior = load_json(BEHAVIOR_PATH)
     boss_rules = load_json(BOSS_RULE_PATH)
+    body_policy = load_json(BODY_POLICY_PATH)
+    body_policy_sha = sha256_file(BODY_POLICY_PATH)
+    body_tiers = body_policy.get("tier_radii", {})
+    body_large_ids = {
+        int(item)
+        for rule in body_policy.get("assignment_rules", [])
+        if isinstance(rule, dict) and rule.get("rule_id") == "named_large_elite_family"
+        for item in rule.get("monster_ids", [])
+        if isinstance(item, int)
+    }
+    body_large_radius_px = float(body_tiers["large"]["screen_radius_px"])
+    body_small_radius_px = float(body_tiers["small"]["screen_radius_px"])
+    body_max_ground_radius_gu = float(
+        body_policy.get("invariants", {}).get("max_body_ground_radius_gu", 0.50625)
+    )
+    iso_denominator = 32.0 * (2.0 ** 0.5)
+
+    def body_profile_for(
+        monster_id: int,
+        classification_name: str,
+    ) -> dict[str, Any]:
+        # HC-BODY-2TIER-1P5-V1: versioned two-tier footsole body assignment.
+        # The body tier is decoupled from boss identity: it only decides the
+        # physical footprint, never capabilities, ranges or damage channels.
+        if classification_name == "boss":
+            tier, rule_id = "large", "boss_large_body"
+        elif monster_id in body_large_ids:
+            tier, rule_id = "large", "named_large_elite_family"
+        else:
+            tier, rule_id = "small", "default_small"
+        screen_radius_px = (
+            body_large_radius_px if tier == "large" else body_small_radius_px
+        )
+        ground_radius_gu = screen_radius_px / iso_denominator
+        if not (0.0 < ground_radius_gu <= body_max_ground_radius_gu):
+            raise RuntimeError(
+                f"monster_id={monster_id} body tier={tier} radius {ground_radius_gu} GU "
+                f"violates the {body_max_ground_radius_gu} GU upper bound"
+            )
+        return {
+            "policy_id": str(body_policy.get("policy_id", "")),
+            "contract_id": str(body_policy.get("contract_id", "")),
+            "policy_sha256": body_policy_sha,
+            "tier": tier,
+            "assignment_rule": rule_id,
+            "screen_radius_px": screen_radius_px,
+            "ground_radius_gu": ground_radius_gu,
+        }
+
     detail_source = load_json(DETAIL_SOURCE_PATH)
     detail_by_id = validate_21cq_detail_source(detail_source)
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
@@ -1846,6 +1896,7 @@ def build_catalog() -> dict[str, Any]:
                 "runtime_projection": runtime_projection,
                 "behavior_profile": merged_behavior,
                 "boss_rule": behavior_extra["boss_rule"],
+                "body_profile": body_profile_for(monster_id, classification_name),
             },
             "appearance_profile_id": art_profile_id,
             "drop_profile_id": drop_profile_id,

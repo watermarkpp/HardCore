@@ -10,6 +10,7 @@ const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const ActorBodyPolicyScript := preload("res://scripts/actor_body_policy.gd")
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -346,7 +347,7 @@ func configure_spawn_release_footprint(source_release_id: String) -> void:
 	)
 	var spawn_combat_radius_gu := (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			21.0 if summon_id == "divine_beast" else 15.0
+			collision_radius_px
 		)
 	)
 	var spawn_center_ground_gu := (
@@ -593,15 +594,28 @@ func _ready() -> void:
 	max_slides = 6
 	_rng.randomize()
 	var collision := CollisionShape2D.new()
-	var shape := CircleShape2D.new()
-	collision_radius_px = 15.0 if summon_id == "skeleton" else 21.0
+	collision.name = "CollisionShape2D"
+	# HC-BODY-2TIER-1P5-V1: summons resolve their body from the same two-tier
+	# policy as monsters. The skeleton joins the small tier (dropping the old
+	# 15 px round shape), the divine beast joins the large tier (dropping the
+	# old 21 px round shape and its screen-circle vs isometric-convention
+	# mismatch). One shared 16-point isometric footsole shape, local transform
+	# identity, resolved once before any spawn footprint or index use.
+	collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
+		StringName(ActorBodyPolicyScript.summon_tier(summon_id))
+	)
+	if collision_radius_px <= 0.0:
+		# Unknown summon id: fail closed to the small tier with a diagnostic.
+		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
+			ActorBodyPolicyScript.TIER_SMALL
+		)
+		set_meta("body_policy_fallback", "unknown_summon_id")
 	combat_radius_gu = (
 		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
 			collision_radius_px
 		)
 	)
-	shape.radius = collision_radius_px
-	collision.shape = shape
+	collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
 	add_child(collision)
 	_install_visual()
 	_last_buff_draw_signature = _buff_draw_signature()
