@@ -747,6 +747,24 @@ $Suites.critical = @($Suites.critical + @(
     'tests/mse_collision_grid_alignment_test.tscn'
 ) | Select-Object -Unique)
 
+# September 25-26 HC-MONSTER-COMBAT-R1 + HC-BODY-2TIER-1P5-V1: the monster
+# attack timing boundaries, dual-direction struck presentation, non-positive
+# damage boundary, atomic death commit and the two-tier footsole body system
+# are permanent regression gates.
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r1/boss_interval_test.tscn',
+    'tests/hc_monster_combat_r1/player_visual_duration_test.tscn',
+    'tests/hc_monster_combat_r1/player_poison_reapply_test.tscn',
+    'tests/hc_monster_combat_r1/attack_presentation_backlog_test.tscn',
+    'tests/hc_monster_combat_r1/continuous_magic_walk_delay_test.tscn',
+    'tests/hc_monster_combat_r1/damage_boundary_test.tscn',
+    'tests/hc_monster_combat_r1/death_reentry_test.tscn',
+    'tests/hc_monster_combat_r1/actor_body_policy_contract_test.tscn',
+    'tests/hc_monster_combat_r1/actor_body_projection_test.tscn',
+    'tests/hc_monster_combat_r1/monster_melee_body_pair_test.tscn',
+    'tests/hc_monster_combat_r1/summon_body_spawn_consistency_test.tscn'
+) | Select-Object -Unique)
+
 # v93 CPU query correctness gates; the timed crowd matrix remains opt-in.
 $Suites.critical = @($Suites.critical + @(
     'tests/melee_blocked_query_order_test.tscn',
