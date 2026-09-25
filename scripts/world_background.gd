@@ -12,6 +12,7 @@ const RuntimeVisualGeometryScript := preload("res://scripts/map_editor/map_edito
 const WallRenderPlanRuntimeServiceScript := preload("res://scripts/map_editor/map_editor_wall_render_plan_runtime_service.gd")
 const MapEditorInstanceServiceScript := preload("res://scripts/map_editor/map_editor_instance_service.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
 # P1-004: texture atlases are now lazy-loaded.  Only the target map's
 # atlases are loaded when a map is built.  Old const names remain as
 # compat aliases that delegate to _region_atlas().
@@ -3273,6 +3274,7 @@ func _clear_source_collision_nodes() -> void:
 
 
 func _rebuild_source_collision_chunk(profile: Dictionary, focus_source: Vector2i) -> void:
+	var profile_started_usec := RuntimeDiagnosticsScript.timing_start()
 	_environment_collision_revision += 1
 	_clear_source_collision_nodes()
 	if _source_mask_image == null:
@@ -3303,6 +3305,10 @@ func _rebuild_source_collision_chunk(profile: Dictionary, focus_source: Vector2i
 		_source_collision_nodes.append(body)
 	else:
 		body.free()
+	var elapsed_usec := RuntimeDiagnosticsScript.timing_elapsed_usec(profile_started_usec)
+	if elapsed_usec > 0:
+		RuntimeDiagnosticsScript.increment_performance_counter(&"source_collision_rebuild_runs")
+		RuntimeDiagnosticsScript.record_performance_max(&"source_collision_rebuild_max_ms", float(elapsed_usec) / 1000.0)
 
 
 func _build_full_ground(profile: Dictionary) -> void:

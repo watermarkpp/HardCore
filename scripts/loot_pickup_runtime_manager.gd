@@ -73,6 +73,7 @@ func _queue_name_layout() -> void:
 	_flush_name_layout.call_deferred()
 
 func _flush_name_layout() -> void:
+	var profile_started_usec := RuntimeDiagnosticsScript.timing_start()
 	_name_layout_dirty = false
 	if not is_inside_tree(): return
 	var pickups: Array = []
@@ -81,6 +82,11 @@ func _flush_name_layout() -> void:
 		if is_instance_valid(pickup): pickups.append(pickup)
 	NameLayout.arrange(pickups)
 	name_layout_count += 1
+	var elapsed_usec := RuntimeDiagnosticsScript.timing_elapsed_usec(profile_started_usec)
+	if elapsed_usec > 0:
+		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_layout_runs")
+		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_layout_usec", elapsed_usec)
+		RuntimeDiagnosticsScript.record_performance_max(&"loot_name_layout_max_ms", float(elapsed_usec) / 1000.0)
 
 
 func configure_player(player: PlayerCharacter) -> void:

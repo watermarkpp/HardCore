@@ -6819,23 +6819,31 @@ func _warehouse_transfer_commit_validated(_inventory_before: Array, _warehouse_b
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
+	var gold_only := not candidates.is_empty()
+	for raw_candidate: Variant in candidates:
+		if not raw_candidate is Dictionary or not bool((raw_candidate as Dictionary).get("gold", false)):
+			gold_only = false
+			break
 	# working_inventory is the only copy mutated during planning. Keep the live
 	# array itself as the rollback snapshot; it remains untouched until commit.
 	var inventory_before := inventory
 	var gold_before := gold
-	var working_inventory := inventory.duplicate(true)
+	var working_inventory := inventory if gold_only else inventory.duplicate(true)
 	var working_gold := gold
-	var initial_weight := inventory_weight(inventory)
+	var initial_weight := 0 if gold_only else inventory_weight(inventory)
 	_loot_batch_debug["plan_scans"] = int(_loot_batch_debug.get("plan_scans", 0)) + 1
-	_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
+	if not gold_only:
+		_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
 	var working_weight := initial_weight
-	var maximum_weight := max_inventory_weight()
-	var occupied_count := inventory_occupied_count(working_inventory)
-	_loot_batch_debug["occupied_scans"] = int(_loot_batch_debug.get("occupied_scans", 0)) + 1
+	var maximum_weight := 0 if gold_only else max_inventory_weight()
+	var occupied_count := 0 if gold_only else inventory_occupied_count(working_inventory)
+	if not gold_only:
+		_loot_batch_debug["occupied_scans"] = int(_loot_batch_debug.get("occupied_scans", 0)) + 1
 	var free_slots: Array[int] = []
-	for slot_index in range(mini(working_inventory.size(), INVENTORY_CAPACITY)):
-		if not _inventory_slot_is_occupied(working_inventory[slot_index]):
-			free_slots.append(slot_index)
+	if not gold_only:
+		for slot_index in range(mini(working_inventory.size(), INVENTORY_CAPACITY)):
+			if not _inventory_slot_is_occupied(working_inventory[slot_index]):
+				free_slots.append(slot_index)
 	var free_slot_cursor := 0
 	var merge_slots_by_identity: Dictionary = {}
 	var outcomes: Array = []
