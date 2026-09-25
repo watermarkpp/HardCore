@@ -76,8 +76,14 @@ func _check_device_lab_feeder() -> void:
 	RuntimeDiagnostics.record_device_lab_frame_interval()
 	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", -1)) == frames_before)
 	OS.delay_msec(60)
+	RuntimeDiagnostics.record_performance_max(&"death_save_max_ms", 10.0)
 	RuntimeDiagnostics.record_device_lab_frame_interval()
 	assert(int(RuntimeDiagnostics.frame_sampling_snapshot().get("frame_count", -1)) == frames_before + 1)
+	var trace: Array = RuntimeDiagnostics.frame_sampling_snapshot().get("slow_frame_trace", [])
+	assert(not trace.is_empty())
+	var traced_events: Array = (trace.back() as Dictionary).get("events", [])
+	assert(not traced_events.is_empty())
+	assert(str((traced_events.back() as Dictionary).get("label", "")) == "death_save_max_ms")
 	# Boundary gap in the gated recorder is also discarded, not sampled.
 	RuntimeDiagnostics._device_lab_wall_usec_prev = Time.get_ticks_usec() - 6000000
 	RuntimeDiagnostics.record_device_lab_frame_interval()

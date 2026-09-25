@@ -22,6 +22,8 @@ const PERFORMANCE_SCHEMA_ID := "hardcore.monster_density_diagnostics.v1"
 ## enabled.  A 4096-entry ring covers the report's 20-30 second windows at
 ## normal frame rates without allowing a long-running process to grow memory.
 const FRAME_SAMPLE_CAPACITY := 4096
+const SLOW_FRAME_TRACE_CAPACITY := 32
+const SLOW_EVENT_TRACE_CAPACITY := 64
 const FRAME_THRESHOLD_MS := {
 	"over_16_67": 16.67,
 	"over_33_33": 33.33,
@@ -203,6 +205,8 @@ static var _performance_release_context := {
 	"skill_id": "",
 }
 static var _frame_samples: Array = []
+static var _recent_slow_events: Array[Dictionary] = []
+static var _slow_frame_trace: Array[Dictionary] = []
 static var _frame_sample_write_index := 0
 static var _frame_sample_count := 0
 static var _frame_sample_dropped_count := 0
@@ -388,6 +392,45 @@ static func record_performance_max(field: StringName, value: float) -> void:
 	_ensure_performance_window()
 	var key := str(field)
 	_performance_maxima[key] = maxf(float(_performance_maxima.get(key, 0.0)), value)
+	if key in [
+		"death_save_max_ms", "durability_save_max_ms",
+		"loot_prepare_max_ms", "loot_gold_commit_max_ms",
+		"loot_item_commit_max_ms", "monster_streaming_poll_max_ms",
+	] and value >= 3.0:
+		_note_slow_event(key, value)
+
+
+static func _note_slow_event(label: String, duration_ms: float) -> void:
+	if not performance_detail_enabled() or duration_ms < 3.0:
+		return
+	_recent_slow_events.append({
+		"end_usec": Time.get_ticks_usec(),
+		"label": label,
+		"duration_ms": duration_ms,
+	})
+	if _recent_slow_events.size() > SLOW_EVENT_TRACE_CAPACITY:
+		_recent_slow_events.pop_front()
+
+
+static func _trace_slow_frame(previous_usec: int, now_usec: int, gap_ms: float) -> void:
+	if not performance_detail_enabled() or gap_ms <= 33.33:
+		return
+	var events: Array[Dictionary] = []
+	for event: Dictionary in _recent_slow_events:
+		var ended_usec := int(event.get("end_usec", 0))
+		if ended_usec <= previous_usec or ended_usec > now_usec:
+			continue
+		events.append({
+			"label": str(event.get("label", "")),
+			"duration_ms": float(event.get("duration_ms", 0.0)),
+		})
+	_slow_frame_trace.append({
+		"window_ms": maxi(0, Time.get_ticks_msec() - _performance_window_started_msec),
+		"frame_ms": gap_ms,
+		"events": events,
+	})
+	if _slow_frame_trace.size() > SLOW_FRAME_TRACE_CAPACITY:
+		_slow_frame_trace.pop_front()
 
 
 ## Records one total idle-frame duration in milliseconds.  This is deliberately
@@ -472,6 +515,7 @@ static func record_device_lab_frame_interval() -> void:
 	if gap_ms > WALL_BOUNDARY_DISCARD_MS:
 		_device_lab_wall_boundary_discards += 1
 		return
+	_trace_slow_frame(prev, now_usec, gap_ms)
 	record_frame_time_ms(gap_ms)
 
 
@@ -574,6 +618,7 @@ static func frame_sampling_snapshot() -> Dictionary:
 			"thresholds": thresholds,
 			"gpu": gpu,
 		},
+		"slow_frame_trace": _slow_frame_trace.duplicate(true),
 		"gpu_frame_ms": gpu,
 	}
 
@@ -600,6 +645,8 @@ static func record_timing_usec(field: StringName, started_usec: int) -> int:
 	var elapsed := timing_elapsed_usec(started_usec)
 	if elapsed > 0:
 		increment_performance_counter(field, elapsed)
+		if elapsed >= 3000:
+			_note_slow_event(str(field), float(elapsed) / 1000.0)
 	return elapsed
 
 
@@ -622,6 +669,8 @@ static func end_timed_segment(duration_field: StringName, started_usec: int) -> 
 	if elapsed > 0:
 		var key := str(duration_field)
 		_performance_counters[key] = int(_performance_counters.get(key, 0)) + elapsed
+		if elapsed >= 3000:
+			_note_slow_event(key, float(elapsed) / 1000.0)
 	return elapsed
 
 
@@ -629,6 +678,8 @@ static func record_timing_ms(field: StringName, started_usec: int) -> float:
 	var elapsed := timing_elapsed_usec(started_usec)
 	if elapsed > 0:
 		add_performance_value(field, float(elapsed) / 1000.0)
+		if elapsed >= 3000:
+			_note_slow_event(str(field), float(elapsed) / 1000.0)
 	return float(elapsed) / 1000.0
 
 
@@ -679,6 +730,8 @@ static func reset_performance_window() -> Dictionary:
 	_performance_values.clear()
 	_performance_maxima.clear()
 	_frame_samples.clear()
+	_recent_slow_events.clear()
+	_slow_frame_trace.clear()
 	_frame_sample_write_index = 0
 	_frame_sample_count = 0
 	_frame_sample_dropped_count = 0
