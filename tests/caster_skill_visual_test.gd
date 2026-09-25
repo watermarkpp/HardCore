@@ -212,6 +212,12 @@ func _ready() -> void:
 
 func _assert_trial_screen_sprite(effect_sprite: Sprite2D) -> void:
 	assert(effect_sprite.material is ShaderMaterial)
+	if effect_sprite is CasterSkillAnimationPlayer and effect_sprite.skill_id == "wizard.fire_wall":
+		assert(effect_sprite._trial_screen_copy == null)
+		assert(effect_sprite._fire_wall_additive_sprite is Sprite2D)
+		assert(effect_sprite._fire_wall_additive_sprite.material is CanvasItemMaterial)
+		assert(effect_sprite._fire_wall_additive_sprite.material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD)
+		return
 	assert(effect_sprite.get_index() > 0)
 	var copy := effect_sprite.get_parent().get_child(effect_sprite.get_index() - 1)
 	assert(copy is BackBufferCopy)

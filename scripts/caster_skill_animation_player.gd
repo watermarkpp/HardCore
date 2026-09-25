@@ -2,6 +2,7 @@ class_name CasterSkillAnimationPlayer
 extends Sprite2D
 
 const TrialScreenShader := preload("res://assets/shaders/trial_magic_screen.gdshader")
+const FireWallMultiplyShader := preload("res://assets/shaders/fire_wall_screen_blend_multiply.gdshader")
 const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
 	"skills.caster.line_visual.forward_endpoint_uniform.v1"
 )
@@ -52,6 +53,7 @@ var _axis_cross_fit_active := false
 var _longitudinal_scale := 1.0
 var _target_cross_axis := Vector2.RIGHT
 var _trial_screen_copy: BackBufferCopy
+var _fire_wall_additive_sprite: Sprite2D
 
 
 func _ready() -> void:
@@ -60,7 +62,7 @@ func _ready() -> void:
 
 
 func _ensure_trial_screen_copy() -> void:
-	if material == null or not is_inside_tree() or get_parent() == null:
+	if material == null or is_instance_valid(_fire_wall_additive_sprite) or not is_inside_tree() or get_parent() == null:
 		return
 	if is_instance_valid(_trial_screen_copy):
 		_sync_trial_screen_copy_visibility()
@@ -115,14 +117,33 @@ func configure(
 	if is_instance_valid(_trial_screen_copy):
 		_trial_screen_copy.queue_free()
 		_trial_screen_copy = null
+	if is_instance_valid(_fire_wall_additive_sprite):
+		_fire_wall_additive_sprite.queue_free()
+		_fire_wall_additive_sprite = null
 	var original_path := str(profile.get("original_path", "")).to_lower()
 	if not profile.has("user_visual_override") and (
 		original_path.ends_with("magic.wil")
 		or original_path.ends_with("magic2.wil")
 	):
-		var trial_material := ShaderMaterial.new()
-		trial_material.shader = TrialScreenShader
-		material = trial_material
+		if skill_id == "wizard.fire_wall":
+			# Screen(B, S, a) = B * (1 - a*S) + a*S. Draw the
+			# multiplication and addition in order for each cell, avoiding
+			# a full-viewport BackBufferCopy per fire-wall visual.
+			var multiply_material := ShaderMaterial.new()
+			multiply_material.shader = FireWallMultiplyShader
+			material = multiply_material
+			_fire_wall_additive_sprite = Sprite2D.new()
+			_fire_wall_additive_sprite.name = "FireWallAdditive"
+			_fire_wall_additive_sprite.centered = centered
+			_fire_wall_additive_sprite.texture_filter = texture_filter
+			var additive_material := CanvasItemMaterial.new()
+			additive_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+			_fire_wall_additive_sprite.material = additive_material
+			add_child(_fire_wall_additive_sprite)
+		else:
+			var trial_material := ShaderMaterial.new()
+			trial_material.shader = TrialScreenShader
+			material = trial_material
 	_ensure_trial_screen_copy()
 	var animation := CasterSkillVisualRegistry.animation_profile(skill_id, phase_id)
 	if animation.get("contract", "") != "caster_skill_animation.v1":
@@ -611,6 +632,8 @@ func _apply_frame(frame_index: int) -> bool:
 	if loaded == null:
 		return false
 	texture = loaded
+	if is_instance_valid(_fire_wall_additive_sprite):
+		_fire_wall_additive_sprite.texture = loaded
 	_sync_trial_screen_copy_visibility()
 	if _axis_cross_fit_active:
 		_apply_axis_cross_transform(frame)
@@ -624,6 +647,8 @@ func _apply_frame(frame_index: int) -> bool:
 		float(top_left[0]) + float(loaded.get_width()) * 0.5,
 		float(top_left[1]) + float(loaded.get_height()) * 0.5
 	) + _sequence_anchor_rebase
+	if is_instance_valid(_fire_wall_additive_sprite):
+		_fire_wall_additive_sprite.offset = offset
 	skill_frame_changed.emit(frame_index)
 	return true
 

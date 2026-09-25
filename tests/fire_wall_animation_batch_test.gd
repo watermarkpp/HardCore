@@ -20,6 +20,8 @@ func _run() -> void:
 		_check(not cell.is_physics_processing(), "controller-owned cell must not run a second lifetime clock")
 		_check(not cell._sprite.is_processing(), "batched cell must not schedule an independent animation process")
 		_check(not cell._sprite.visual_loaded, "cold fixture must start pending")
+		_check(cell._sprite._trial_screen_copy == null, "fire wall must not copy the full viewport per cell")
+		_check(is_instance_valid(cell._sprite._fire_wall_additive_sprite), "fire wall cell must have its additive pass")
 	# Real resource residency is advanced deliberately; no fake animation frames.
 	for path: String in CasterSkillVisualRegistry.animation_sequence_paths("wizard.fire_wall", 0, ""):
 		CasterSkillVisualRegistry.retain_loaded_texture(path, load(path))
@@ -42,6 +44,8 @@ func _run() -> void:
 			var sprite: CasterSkillAnimationPlayer = cell._sprite
 			_check(sprite.visual_loaded and sprite.current_frame_index == expected, "all nine cells must commit the shared final frame")
 			_check(sprite.scale.is_equal_approx(original_scale), "frame changes must preserve the approved compressed height")
+			_check(sprite._fire_wall_additive_sprite.texture == sprite.texture, "both blend passes must use the same frame")
+			_check(sprite._fire_wall_additive_sprite.offset.is_equal_approx(sprite.offset), "both blend passes must keep the same anchor")
 			_check(str(cell.skill_footprint_snapshot.snapshot_id) == snapshots[index], "animation must not rebuild damage geometry")
 			_check(not sprite.is_processing(), "warm recovery must not re-enable independent scheduling")
 	_check(is_equal_approx(original_scale.y, GroundSkillEffect.FIRE_WALL_HEIGHT_SCALE), "height remains 0.6")
