@@ -39,10 +39,10 @@ func _run() -> void:
 
 	var enemy := EnemyActor.new()
 	# Name-only GameData.get_monster() is retired fail-closed; the canonical
-	# runtime entry must be fetched by monster id.  Monster 76 (沃玛教主) is a
-	# canonical boss whose sourced boss_rule carries the 300ms hit delay this
-	# end-to-end chain consumes (骷髅精灵 is canonical elite, not promotable).
-	enemy.setup(GameData.get_monster_by_id(76), player, true)
+	# runtime entry must be fetched by monster id. Monster 64 is an ordinary
+	# physical melee attacker. The former monster-76 fixture is a mixed magic
+	# delivery and cannot prove the player's physical struck chain.
+	enemy.setup(GameData.get_monster_by_id(64), player, false)
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_test_ground_to_screen")
@@ -65,21 +65,18 @@ func _run() -> void:
 	enemy.set_physics_process(false)
 	enemy.attack_min = threshold
 	enemy.attack_max = threshold
+	# Keep the real accuracy rule active while making this damage-chain fixture
+	# deterministic: every legal roll must hit the player's current agility.
+	enemy.accuracy = enemy._target_agility_for_monster_hit(player)
 	enemy._attack_timer = 0.0
 	assert(
-		is_equal_approx(enemy._attack_hit_delay, 0.3),
-		"端到端测试必须使用真实沃玛教主命中帧时序"
+		is_zero_approx(enemy._attack_hit_delay)
+		and str(enemy.attack_delivery_rule.get("kind", "")).is_empty(),
+		"端到端测试必须使用真实普通物理近战"
 	)
 
 	var hp_before := player.current_hp
 	assert(enemy._hc_try_start(player), "真实标准近战攻击必须能够启动")
-	assert(
-		enemy._pending_attack_time > 0.0 and player.current_hp == hp_before,
-		"Enemy 真实攻击没有先进入客户端命中帧等待"
-	)
-	enemy._physics_process(0.28)
-	assert(player.current_hp == hp_before, "Enemy 伤害在真实命中帧之前提前结算")
-	enemy._physics_process(0.03)
 	assert(
 		player.current_hp == hp_before - threshold,
 		"Enemy._deal_melee_hit 没有向 Player 提交精确最终伤害"
@@ -121,5 +118,5 @@ func _run() -> void:
 	assert(player.velocity.x > 0.0, "240ms 受击表现结束后输入没有恢复")
 
 	PlayerState.test_mode = true
-	print("PLAYER_ENEMY_STRUCK_CHAIN_E2E_PASS: Enemy hit frame -> damage -> 3 hit frames -> 100/240ms locks")
+	print("PLAYER_ENEMY_STRUCK_CHAIN_E2E_PASS: Enemy physical hit -> damage -> 3 hit frames -> 100/240ms locks")
 	get_tree().quit(0)

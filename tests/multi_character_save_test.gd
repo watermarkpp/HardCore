@@ -52,8 +52,24 @@ func _run() -> void:
 		field_ground_position_gu
 	)
 	assert(PlayerState.save_game())
+	var first_path := TEST_DIRECTORY + "/" + first_id + ".json"
+	var weapon_before := int((PlayerState.equipment["武器"] as Dictionary).get("durability_raw", 0))
+	assert(weapon_before > 4)
+	var wear_context := {"confirmed_hit": true, "damage": 1, "weapon_roll": 0, "weapon_strong": 0}
+	assert(PlayerState.apply_durability_event(PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT, wear_context).applied)
+	assert(PlayerState._durability_save_pending)
+	var saved_before_flush: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(first_path))
+	assert(int((saved_before_flush.equipment["武器"] as Dictionary).get("durability_raw", 0)) == weapon_before, "延迟耐久写盘发生在命中帧")
+	assert(PlayerState.save_game(), "直接存档未写入待存耐久")
+	assert(not PlayerState._durability_save_pending)
+	var saved_after_flush: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(first_path))
+	assert(int((saved_after_flush.equipment["武器"] as Dictionary).get("durability_raw", 0)) == weapon_before - 2, "直接存档遗漏耐久")
+	assert(PlayerState.apply_durability_event(PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT, wear_context).applied)
 
 	assert(PlayerState.create_character("红叶", warrior_name, "女").is_empty())
+	assert(not PlayerState._durability_save_pending, "切换角色后遗留旧角色待存耐久")
+	var saved_after_switch: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(first_path))
+	assert(int((saved_after_switch.equipment["武器"] as Dictionary).get("durability_raw", 0)) == weapon_before - 4, "创建角色时遗漏旧角色耐久")
 	var second_id: String = PlayerState.active_profile_id
 	assert(first_id != second_id, "profile ids must be unique")
 	assert(

@@ -2463,9 +2463,15 @@ func _physics_process_internal(delta: float) -> void:
 	_record_performance_counter(&"foreground_ai_ticks")
 	if is_instance_valid(target):
 		_record_performance_counter(&"engaged_enemy_count")
+	# The return gate has just checked the current player against the live safe
+	# zone context. Retarget may reuse that negative result in this same call;
+	# other targets and later ticks still perform their own authority query.
+	var safe_checked_player: Node2D = (
+		target if is_instance_valid(target) and target is PlayerCharacter else null
+	)
 	if _handle_safe_zone_target_return(physics_delta):
 		return
-	_retarget(delta)
+	_retarget(delta, safe_checked_player)
 	if _update_area_attack(delta):
 		if _movement_step_active:
 			_cancel_autonomous_step(true)
@@ -6799,11 +6805,11 @@ func _apply_health_stage_mechanics() -> void:
 		_attack_interval = float(rage.get("attackIntervalSeconds", _boss_base_attack_interval))
 
 
-func _retarget(delta := 0.0) -> void:
+func _retarget(delta := 0.0, safe_checked_player: Node2D = null) -> void:
 	var retarget_started_usec := RuntimeDiagnostics.begin_timed_segment(
 		&"enemy_retarget_calls"
 	)
-	_retarget_internal(delta)
+	_retarget_internal(delta, safe_checked_player)
 	RuntimeDiagnostics.end_timed_segment(
 		&"enemy_retarget_usec",
 		retarget_started_usec,
@@ -6812,7 +6818,7 @@ func _retarget(delta := 0.0) -> void:
 
 ## Inclusive target maintenance/selection body. Its duration is nested in the
 ## actor physics or background-tick total when called from those paths.
-func _retarget_internal(delta := 0.0) -> void:
+func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> void:
 	if _hc_standard_melee():
 		_hc_refresh_observation()
 		if _hc_damage_dirty:
@@ -6830,14 +6836,22 @@ func _retarget_internal(delta := 0.0) -> void:
 	# Release invalid, protected, or disengaged targets before the cadence gate.
 	# They can remain valid Godot Objects during a death presentation, and a
 	# Boss timer must never pin combat to an unusable target for several seconds.
-	if is_instance_valid(target) and (
-		not _target_candidate_is_live(target)
-		or _point_inside_safe_zone(target.global_position)
-		or _target_should_disengage(target)
+	var current_target_valid := is_instance_valid(target)
+	var current_target_live := current_target_valid and _target_candidate_is_live(target)
+	var current_target_safe := (
+		current_target_live
+		and not (safe_checked_player != null and target == safe_checked_player)
+		and _point_inside_safe_zone(target.global_position)
+	)
+	var current_target_disengaged := (
+		current_target_live and not current_target_safe and _target_should_disengage(target)
+	)
+	if current_target_valid and (
+		not current_target_live or current_target_safe or current_target_disengaged
 	):
-		var target_is_live := _target_candidate_is_live(target)
-		var target_is_safe := target_is_live and _point_inside_safe_zone(target.global_position)
-		var target_is_disengaged := target_is_live and _target_should_disengage(target)
+		var target_is_live := current_target_live
+		var target_is_safe := current_target_safe
+		var target_is_disengaged := current_target_disengaged
 		var disengage_reason := "target_invalid"
 		if target_is_safe:
 			disengage_reason = "safe_zone"

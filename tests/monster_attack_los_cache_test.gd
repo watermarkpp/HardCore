@@ -296,7 +296,9 @@ func _assert_release_rechecks() -> void:
     melee._pending_attack_time = 0.1
     melee._pending_attack_target = melee_player
     melee._pending_attack_damage = 7
-    melee._pending_attack_release_record = {}
+    # The production pending hit always carries the target combat epoch.
+    # An empty synthetic record is rejected before the LOS release gate.
+    melee._pending_attack_release_record = {"target_combat_epoch": melee_player.combat_epoch}
     melee._update_pending_attack(0.1)
     assert(melee_player.current_hp == melee_hp)
     assert(_counter("attack_los_evaluations") == melee_eval + 1)

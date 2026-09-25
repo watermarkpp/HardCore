@@ -96,21 +96,32 @@ func _run() -> void:
 	)
 	assert(minimum_loss.applied and minimum_loss.raw_loss == 2)
 	assert(int(weapon.durability_raw) == unchanged - 2, "Random(5)+2下界未按raw扣除")
-	assert(equipment_signals[0] == equipment_before + 1, "单事件重复发送equipment_changed")
-	assert(profile_signals[0] == profile_before + 1, "单事件重复发送profile_changed")
-	assert(PlayerState.durability_event_commit_count == commits_before + 1, "单事件没有且仅有一次存档提交")
+	var second_loss := PlayerState.apply_durability_event(
+		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
+		{"confirmed_hit": true, "damage": 10, "weapon_roll": 0, "weapon_strong": 0}
+	)
+	assert(second_loss.applied and int(weapon.durability_raw) == unchanged - 4, "合并写盘不得合并耐久损耗")
+	assert(equipment_signals[0] == equipment_before and profile_signals[0] == profile_before, "普通耐久损耗应合并界面刷新")
+	assert(PlayerState.durability_event_commit_count == commits_before and minimum_loss.save_pending, "普通耐久损耗不应在命中帧写盘")
+	PlayerState._advance_durability_runtime(PlayerState.DURABILITY_VISUAL_INTERVAL)
+	assert(equipment_signals[0] == equipment_before + 1 and profile_signals[0] == profile_before + 1, "耐久界面刷新未按间隔合并")
+	PlayerState._advance_durability_runtime(PlayerState.DURABILITY_SAVE_INTERVAL)
+	assert(PlayerState.durability_event_commit_count == commits_before + 1, "耐久未在有界间隔内存档")
 	var raw_before_failed_save := int(weapon.durability_raw)
 	PlayerState._test_force_atomic_write_failure = true
 	var failed_save := PlayerState.apply_durability_event(
 		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
 		{"confirmed_hit": true, "damage_type": "physical", "damage": 1, "weapon_roll": 0}
 	)
+	PlayerState._advance_durability_runtime(PlayerState.DURABILITY_SAVE_INTERVAL)
 	PlayerState._test_force_atomic_write_failure = false
-	assert(not bool(failed_save.applied) and bool(failed_save.get("rolled_back", false)), "耐久存档失败未回滚")
+	assert(bool(failed_save.applied) and PlayerState._durability_save_pending, "延迟写盘失败后应保留待存档耐久")
 	assert(
-		int(PlayerState.equipment["武器"].durability_raw) == raw_before_failed_save,
-		"耐久存档失败仍改变了raw耐久"
+		int(PlayerState.equipment["武器"].durability_raw) == raw_before_failed_save - 2,
+		"延迟写盘失败错误回滚了已生效的耐久"
 	)
+	PlayerState._advance_durability_runtime(PlayerState.DURABILITY_SAVE_INTERVAL)
+	assert(not PlayerState._durability_save_pending and PlayerState.durability_event_commit_count == commits_before + 2, "耐久存档失败后未成功重试")
 	weapon = PlayerState.equipment["武器"]
 
 	weapon.durability_raw = 5000
@@ -172,11 +183,17 @@ func _run() -> void:
 	var instance_id := str(weapon.instance_id)
 	weapon.durability_raw = 2
 	PlayerState._sync_durability_compatibility_fields(weapon)
+	equipment_before = equipment_signals[0]
+	profile_before = profile_signals[0]
 	PlayerState.apply_durability_event(
 		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
 		{"confirmed_hit": true, "damage": 1, "weapon_roll": 0}
 	)
 	assert(str(PlayerState.equipment["武器"].instance_id) == instance_id and int(weapon.durability_raw) == 0, "零耐久装备实例未保留")
+	assert(equipment_signals[0] == equipment_before + 1 and profile_signals[0] == profile_before + 1, "装备损坏未立即更新属性与界面")
+	commits_before = PlayerState.durability_event_commit_count
+	PlayerState.notification(NOTIFICATION_APPLICATION_PAUSED)
+	assert(not PlayerState._durability_save_pending and PlayerState.durability_event_commit_count == commits_before + 1, "切后台未立即写入待存耐久")
 	# The zero-durability authority contract (recalculate_stats skips equipment
 	# with no positive raw durability, player_state.gd:2820) leaves the base
 	# stat untouched: the generated growth table gives a level-1 warrior

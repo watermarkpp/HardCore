@@ -41,6 +41,8 @@ const PROFILE_INDEX_PATH := "user://character_profiles.json"
 const PROFILE_DIRECTORY := "user://characters"
 const TEST_ROSTER_RESET_MARKER_PATH := "user://test_roster_v2_reset.json"
 const AUTOSAVE_INTERVAL := 30.0
+const DURABILITY_SAVE_INTERVAL := 2.0
+const DURABILITY_VISUAL_INTERVAL := 0.5
 const WARRIOR_RUNTIME_CONTRACT_ID := "gameplay.warrior.skill_runtime.v2"
 const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
 	"skills.summon.persistence.runtime_state.v1"
@@ -193,6 +195,10 @@ var _blessing_oil_rng: RandomNumberGenerator
 var active_profile_id := ""
 var character_name := ""
 var _autosave_elapsed := 0.0
+var _durability_save_pending := false
+var _durability_save_elapsed := 0.0
+var _durability_visual_pending := false
+var _durability_visual_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
 var profile_directory := PROFILE_DIRECTORY
 var test_roster_reset_marker_path := TEST_ROSTER_RESET_MARKER_PATH
@@ -266,12 +272,39 @@ func _notification(what: int) -> void:
 
 func _process(delta: float) -> void:
 	advance_temporary_item_buffs(delta)
+	_advance_durability_runtime(delta)
 	if test_mode or active_profile_id.is_empty():
 		return
 	_autosave_elapsed += delta
 	if _autosave_elapsed >= AUTOSAVE_INTERVAL:
 		_autosave_elapsed = 0.0
-		save_game()
+		if _durability_save_pending:
+			_commit_save()
+		else:
+			save_game()
+
+
+func _advance_durability_runtime(delta: float) -> void:
+	if _durability_visual_pending:
+		_durability_visual_elapsed += delta
+		if _durability_visual_elapsed >= DURABILITY_VISUAL_INTERVAL:
+			_durability_visual_pending = false
+			_durability_visual_elapsed = 0.0
+			equipment_changed.emit()
+			profile_changed.emit()
+	if _durability_save_pending:
+		_durability_save_elapsed += delta
+		if _durability_save_elapsed >= DURABILITY_SAVE_INTERVAL:
+			# A failed write stays pending and is retried; pause/close also flushes it.
+			_durability_save_elapsed = 0.0
+			_commit_save(false)
+
+
+func _clear_pending_durability_runtime() -> void:
+	_durability_save_pending = false
+	_durability_save_elapsed = 0.0
+	_durability_visual_pending = false
+	_durability_visual_elapsed = 0.0
 
 
 func _ready() -> void:
@@ -288,6 +321,7 @@ func _ready() -> void:
 
 
 func reset_progress(emit_updates := true) -> void:
+	_clear_pending_durability_runtime()
 	level = 1
 	profession = "战士"
 	gender = "男"
@@ -3406,7 +3440,6 @@ func apply_durability_event(event_id: String, context := {}) -> Dictionary:
 	if int(event_context.get("damage", 1)) <= 0:
 		result["reason"] = "non_positive_damage"
 		return result
-	var equipment_before := equipment.duplicate(true)
 	var crossed_zero := false
 	match event_id:
 		DURABILITY_EVENT_WEAPON_PHYSICAL_HIT:
@@ -3474,26 +3507,22 @@ func apply_durability_event(event_id: String, context := {}) -> Dictionary:
 	if (result["changed_slots"] as Dictionary).is_empty():
 		result["reason"] = "no_durability_change"
 		return result
-	result["save_commits"] = 1
 	if crossed_zero:
 		recalculate_stats(false)
-	var save_started_usec := Time.get_ticks_usec()
-	result["save_committed"] = _commit_save()
-	_record_runtime_save_phases("durability_save", save_started_usec)
-	if not bool(result["save_committed"]):
-		equipment = equipment_before
-		recalculate_stats(false)
-		result["changed_slots"] = {}
-		result["raw_loss"] = 0
-		result["rolled_back"] = true
-		result["reason"] = "save_failed"
-		return result
-	equipment_changed.emit()
-	profile_changed.emit()
-	result["signal_batches"] = 1
-	durability_event_commit_count += 1
-	RuntimeDiagnostics.increment_performance_counter(&"durability_event_commits")
+	# Several physical hits may arrive during one combat interval. Keep the raw
+	# durability and broken-equipment stats authoritative immediately, but write
+	# one complete profile after the bounded interval or any other save boundary.
+	_durability_save_pending = true
+	if crossed_zero:
+		_durability_visual_pending = false
+		_durability_visual_elapsed = 0.0
+		equipment_changed.emit()
+		profile_changed.emit()
+		result["signal_batches"] = 1
+	else:
+		_durability_visual_pending = true
 	result["applied"] = true
+	result["save_pending"] = true
 	result["reason"] = ""
 	return result
 
@@ -4999,7 +5028,7 @@ func _prepare_character_save_payload() -> Dictionary:
 	return payload
 
 
-func save_game(update_profile_index := true) -> bool:
+func save_game(update_profile_index := true, finalize_pending_durability := true) -> bool:
 	var save_started_usec := Time.get_ticks_usec()
 	_last_save_phase_profile = {}
 	var payload := _prepare_character_save_payload()
@@ -5009,6 +5038,7 @@ func save_game(update_profile_index := true) -> bool:
 	var write_started_usec := Time.get_ticks_usec()
 	var write_success := _write_json_atomic(profile_path, payload)
 	_last_save_phase_profile["atomic_write_ms"] = float(Time.get_ticks_usec() - write_started_usec) / 1000.0
+	_last_save_phase_profile["atomic_detail"] = _atomic_write_phases.duplicate()
 	if not write_success:
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -5030,6 +5060,8 @@ func save_game(update_profile_index := true) -> bool:
 	}
 	if not index_updated:
 		push_warning("角色存档已写入，但角色索引更新失败：%s" % active_profile_id)
+	if finalize_pending_durability:
+		_finish_pending_durability_save(save_started_usec)
 	return true
 
 
@@ -5371,6 +5403,7 @@ func load_save() -> void:
 			_save_blocked_profile_id = active_profile_id
 			_save_blocked_reason = str(load_result.get("reason", "invalid_profile"))
 		return
+	_clear_pending_durability_runtime()
 	var parsed: Dictionary = load_result.get("data", {})
 	var projected_gold := _gold_load_projection(parsed)
 	if bool(projected_gold.needs_archive):
@@ -6233,6 +6266,7 @@ func _archive_current_test_profiles() -> Dictionary:
 	DirAccess.make_dir_recursive_absolute(source_absolute)
 	active_profile_id = ""
 	character_name = ""
+	_clear_pending_durability_runtime()
 	return {
 		"ok": true,
 		"archive_path": archive_root,
@@ -7416,6 +7450,8 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	var new_profile_id := _new_profile_id()
 	if new_profile_id.is_empty():
 		return "角色存档ID生成失败"
+	if _durability_save_pending and not _commit_save():
+		return "当前角色耐久存档失败，暂不能创建角色"
 	var previous_runtime := _creation_runtime_snapshot()
 	active_profile_id = new_profile_id
 	character_name = clean_name
@@ -7514,6 +7550,7 @@ func delete_character_profile(profile_id: String) -> Dictionary:
 		active_profile_id = ""
 		character_name = ""
 		_autosave_elapsed = 0.0
+		_clear_pending_durability_runtime()
 		result["active_profile_cleared"] = true
 		profile_changed.emit()
 	result["cleanup_complete"] = (result["cleanup_failures"] as Array).is_empty()
@@ -7710,6 +7747,8 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 func select_character(profile_id: String) -> bool:
 	if _warehouse_transaction_locked:
 		return false
+	if _durability_save_pending and not _commit_save():
+		return false
 	if not _valid_profile_storage_id(profile_id):
 		return false
 	if not _ensure_shared_warehouse_ready():
@@ -7726,6 +7765,7 @@ func select_character(profile_id: String) -> bool:
 		active_profile_id = ""
 		return false
 	_autosave_elapsed = 0.0
+	_clear_pending_durability_runtime()
 	return true
 
 
@@ -7794,8 +7834,8 @@ func _migrate_single_save_to_profile() -> void:
 	character_name = ""
 
 
-## Opt-in Device Lab timings for synchronous combat saves. The save still
-## completes at the same transaction boundary; regular play skips phase sampling.
+## Opt-in Device Lab timings at the actual save boundary; ordinary play skips
+## phase sampling even when a durability event has been queued for later write.
 func _record_runtime_save_phases(prefix: String, started_usec: int) -> void:
 	if not RuntimeDiagnostics.performance_detail_enabled():
 		return
@@ -7814,19 +7854,33 @@ func _record_runtime_save_phases(prefix: String, started_usec: int) -> void:
 	]:
 		RuntimeDiagnostics.record_performance_max(
 			StringName("%s_%s_max" % [prefix, phase_name]),
-			float(_atomic_write_phases.get(phase_name, 0.0))
+			float((_last_save_phase_profile.get("atomic_detail", {}) as Dictionary).get(phase_name, 0.0))
 		)
 
 
+func _finish_pending_durability_save(started_usec: int) -> void:
+	if not _durability_save_pending:
+		return
+	_durability_save_pending = false
+	_durability_save_elapsed = 0.0
+	durability_event_commit_count += 1
+	RuntimeDiagnostics.increment_performance_counter(&"durability_event_commits")
+	_record_runtime_save_phases("durability_save", started_usec)
+
+
 func _commit_save(update_profile_index := true) -> bool:
+	var started_usec := Time.get_ticks_usec()
 	var before_split := inventory
 	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
-	var started_usec := Time.get_ticks_usec()
 	if test_mode:
 		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
-	var success := save_game(update_profile_index) if not test_mode else not _test_force_atomic_write_failure
+	var success := save_game(update_profile_index, false) if not test_mode else not _test_force_atomic_write_failure
 	if not success:
 		inventory = before_split
+	else:
+		_finish_pending_durability_save(started_usec)
+	if success:
+		_autosave_elapsed = 0.0
 	_last_runtime_commit_profile = {
 		"duration_ms": float(Time.get_ticks_usec() - started_usec) / 1000.0,
 		"success": success,
