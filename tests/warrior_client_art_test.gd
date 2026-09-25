@@ -51,6 +51,9 @@ func _run() -> void:
 	visual.play_action("攻杀剑术", 0.51)
 	visual._process(0.19)
 	assert(effect_sprite.visible and not effect_line.visible, "攻杀没有使用客户端Magic.wil效果")
+	assert(effect_copy.copy_mode == BackBufferCopy.COPY_MODE_RECT)
+	assert(effect_copy.visible and effect_copy.rect.has_area())
+	assert(effect_copy.rect.has_point((effect_sprite.transform * effect_sprite.get_rect()).position))
 	assert(effect_sprite.texture.resource_path.ends_with("power_hit.png"), "攻杀效果图集错误")
 	assert(effect_sprite.region_rect.position == Vector2(visual.current_frame * 224, visual.current_direction * 224), "攻杀帧/方向区域错误")
 	assert(effect_sprite.position == -Vector2(86, 130) + Vector2(-32, -28), "技能特效没有与迁移后的战士脚点保持同一演员原点")
@@ -62,6 +65,8 @@ func _run() -> void:
 	var passive_proc_sprite := visual.get_node("PassiveProcSkillEffect") as Sprite2D
 	var passive_copy := visual.get_child(passive_proc_sprite.get_index() - 1)
 	assert(passive_proc_sprite.material is ShaderMaterial and passive_copy is BackBufferCopy)
+	assert(passive_copy.copy_mode == BackBufferCopy.COPY_MODE_RECT)
+	assert(passive_copy.visible and passive_copy.rect.has_area())
 	assert(
 		effect_sprite.visible
 		and effect_sprite.texture.resource_path.ends_with("wide_hit.png"),
@@ -89,6 +94,7 @@ func _run() -> void:
 	visual.play_action("野蛮冲撞", 0.51)
 	visual._process(0.19)
 	assert(not effect_sprite.visible and not effect_line.visible, "无正式素材的技能不应继续显示V形占位特效")
+	assert(not effect_copy.visible)
 	game.hud.update_warrior_states({
 		"slaying_auto": true,
 		"thrusting": true,

@@ -68,6 +68,9 @@ func _verify_six_frames_and_angle_samples() -> void:
 			assert(effect.formal_core_polygon_screen_offset_px() == expected_polygon_px)
 			assert(effect._formal_core_polygon != null)
 			assert(effect._formal_core_glow_layers.size() == 2)
+			assert(not effect._formal_core_polygon.visible)
+			for glow_layer: Polygon2D in effect._formal_core_glow_layers:
+				assert(not glow_layer.visible)
 			assert(
 				effect.get_meta("formal_line_visual_core_contract", "")
 				== CasterSkillVisualEffect.FORMAL_LINE_VISUAL_CORE_CONTRACT_ID

@@ -3,6 +3,7 @@ extends Node2D
 const ACTOR_COMPOSITE_SORT_CONTRACT := EquipmentRules.ACTOR_VISUAL_SORT_CONTRACT_ID
 const HelmetVisualV2 := preload("res://scripts/helmet_visual_v2.gd")
 const TrialScreenShader := preload("res://assets/shaders/trial_magic_screen.gdshader")
+const ScreenCopyRegion := preload("res://scripts/skill_screen_copy_region.gd")
 
 const WARRIOR_SKILL_COLORS := {
 	"攻杀剑术": Color(1.0, 0.82, 0.30, 0.95),
@@ -146,7 +147,7 @@ func _ready() -> void:
 	helmet_accent = _polygon_layer("HelmetAccent", PackedVector2Array([Vector2(-9, -72), Vector2(0, -78), Vector2(9, -72), Vector2(7, -65), Vector2(-7, -65)]))
 	skill_effect = _line_layer("SkillEffect", 5.0)
 	_trial_skill_screen_copy = BackBufferCopy.new()
-	_trial_skill_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	_trial_skill_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_RECT
 	_trial_skill_screen_copy.visible = false
 	add_child(_trial_skill_screen_copy)
 	skill_effect_sprite = Sprite2D.new()
@@ -161,7 +162,7 @@ func _ready() -> void:
 	skill_effect_sprite.material = trial_skill_material
 	add_child(skill_effect_sprite)
 	_trial_proc_screen_copy = BackBufferCopy.new()
-	_trial_proc_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	_trial_proc_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_RECT
 	_trial_proc_screen_copy.visible = false
 	add_child(_trial_proc_screen_copy)
 	passive_proc_effect_sprite = Sprite2D.new()
@@ -877,7 +878,7 @@ func _update_skill_effect() -> void:
 	var active := current_state == "action" and WARRIOR_SKILL_COLORS.has(_action_name)
 	var uses_client_effect := active and CLIENT_EFFECTS.has(_action_name)
 	skill_effect_sprite.visible = uses_client_effect
-	_trial_skill_screen_copy.visible = uses_client_effect
+	ScreenCopyRegion.sync(_trial_skill_screen_copy, skill_effect_sprite)
 	# The former three-point Line2D fallback was the V-shaped prototype effect.
 	# It must not be presented as a finished attack/skill animation.
 	skill_effect.visible = false
@@ -907,6 +908,7 @@ func _update_skill_effect() -> void:
 		if _action_name == "烈火剑法":
 			skill_effect_sprite.position += _fire_weapon_head_alignment()
 		skill_effect_sprite.modulate = Color.WHITE
+		ScreenCopyRegion.sync(_trial_skill_screen_copy, skill_effect_sprite)
 		return
 
 
@@ -922,7 +924,7 @@ func _update_passive_proc_effect(delta: float) -> void:
 		and CLIENT_EFFECTS.has(_passive_proc_effect_name)
 	)
 	passive_proc_effect_sprite.visible = active
-	_trial_proc_screen_copy.visible = active
+	ScreenCopyRegion.sync(_trial_proc_screen_copy, passive_proc_effect_sprite)
 	if not active:
 		_passive_proc_effect_name = ""
 		return
@@ -930,7 +932,7 @@ func _update_passive_proc_effect(delta: float) -> void:
 	var cell: Vector2i = effect.get("cell", Vector2i.ZERO)
 	if cell == Vector2i.ZERO or effect.get("assets", []).size() > 0:
 		passive_proc_effect_sprite.visible = false
-		_trial_proc_screen_copy.visible = false
+		ScreenCopyRegion.sync(_trial_proc_screen_copy, passive_proc_effect_sprite)
 		return
 	var progress := clampf(
 		1.0 - _passive_proc_effect_remaining / _passive_proc_effect_duration,
@@ -951,6 +953,7 @@ func _update_passive_proc_effect(delta: float) -> void:
 		+ CLIENT_EFFECT_ACTOR_OFFSET
 	)
 	passive_proc_effect_sprite.modulate = Color.WHITE
+	ScreenCopyRegion.sync(_trial_proc_screen_copy, passive_proc_effect_sprite)
 
 
 func _fire_weapon_head_alignment() -> Vector2:

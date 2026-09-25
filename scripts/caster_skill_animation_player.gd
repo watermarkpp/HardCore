@@ -2,6 +2,7 @@ class_name CasterSkillAnimationPlayer
 extends Sprite2D
 
 const TrialScreenShader := preload("res://assets/shaders/trial_magic_screen.gdshader")
+const ScreenCopyRegion := preload("res://scripts/skill_screen_copy_region.gd")
 const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
 	"skills.caster.line_visual.forward_endpoint_uniform.v1"
 )
@@ -55,8 +56,14 @@ var _trial_screen_copy: BackBufferCopy
 
 
 func _ready() -> void:
+	set_notify_local_transform(true)
 	_ensure_trial_screen_copy()
 	visibility_changed.connect(_sync_trial_screen_copy_visibility)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_LOCAL_TRANSFORM_CHANGED:
+		_sync_trial_screen_copy_visibility()
 
 
 func _ensure_trial_screen_copy() -> void:
@@ -69,7 +76,7 @@ func _ensure_trial_screen_copy() -> void:
 	# effects use the same screen formula as the browser experiment.
 	_trial_screen_copy = BackBufferCopy.new()
 	_trial_screen_copy.name = "TrialScreenBackdrop"
-	_trial_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	_trial_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_RECT
 	get_parent().add_child(_trial_screen_copy)
 	get_parent().move_child(_trial_screen_copy, get_index())
 	_sync_trial_screen_copy_visibility()
@@ -77,7 +84,7 @@ func _ensure_trial_screen_copy() -> void:
 
 func _sync_trial_screen_copy_visibility() -> void:
 	if is_instance_valid(_trial_screen_copy):
-		_trial_screen_copy.visible = visible and texture != null
+		ScreenCopyRegion.sync(_trial_screen_copy, self)
 
 
 func configure(
@@ -611,7 +618,6 @@ func _apply_frame(frame_index: int) -> bool:
 	if loaded == null:
 		return false
 	texture = loaded
-	_sync_trial_screen_copy_visibility()
 	if _axis_cross_fit_active:
 		_apply_axis_cross_transform(frame)
 	var anchor_field := (
@@ -624,6 +630,7 @@ func _apply_frame(frame_index: int) -> bool:
 		float(top_left[0]) + float(loaded.get_width()) * 0.5,
 		float(top_left[1]) + float(loaded.get_height()) * 0.5
 	) + _sequence_anchor_rebase
+	_sync_trial_screen_copy_visibility()
 	skill_frame_changed.emit(frame_index)
 	return true
 

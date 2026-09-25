@@ -33,6 +33,8 @@ const DEBUG_SKILL_VISUAL_GEOMETRY_CONTRACT_ID := (
 )
 const LASER_DECORATION_ALPHA := 0.46
 const HELLFIRE_DECORATION_ALPHA := 1.0
+## Keep the footprint nodes and snapshots so range shading can be restored here.
+const SHOW_SKILL_RANGE_SHADOW := false
 
 var skill_id := ""
 var phase_id := ""
@@ -642,6 +644,7 @@ func _install_formal_snapshot_visual_core() -> void:
 		var core_polygon := Polygon2D.new()
 		core_polygon.polygon = polygon_screen_offset_px
 		core_polygon.color = core_color
+		core_polygon.visible = SHOW_SKILL_RANGE_SHADOW
 		core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		_add_world_visual(core_polygon)
 		_formal_core_polygons.append(core_polygon)
@@ -666,6 +669,7 @@ func _install_formal_line_visual_core() -> void:
 	_formal_core_polygon = Polygon2D.new()
 	_formal_core_polygon.polygon = _formal_core_polygon_screen_offset_px
 	_formal_core_polygon.color = palette.outer_fill
+	_formal_core_polygon.visible = SHOW_SKILL_RANGE_SHADOW
 	_formal_core_polygon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	_add_world_visual(_formal_core_polygon)
 	_formal_core_polygons.append(_formal_core_polygon)
@@ -682,6 +686,7 @@ func _install_formal_line_visual_core() -> void:
 			float(layer_spec.lateral_scale)
 		)
 		glow_layer.color = layer_spec.color
+		glow_layer.visible = SHOW_SKILL_RANGE_SHADOW
 		glow_layer.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		_add_world_visual(glow_layer)
 		_formal_core_glow_layers.append(glow_layer)
