@@ -111,6 +111,12 @@ func _run() -> void:
 	add_child(target)
 	await get_tree().process_frame
 	enemy.target = target
+	# Deterministic fixture window: the bare Node2D target's liveness competes
+	# with boot-time async map registration inside the enemy's per-tick target
+	# policy, and the manual cache-clock choreography below must not race a
+	# physics-tick entry attempt. Freeze AI between the manual sections; the
+	# existing set_physics_process(true) at the attack section re-enables it.
+	enemy.set_physics_process(false)
 
 	# The target edge is a real gameplay entry even when the service is absent.
 	# Installing a service inside the one-second negative window must not cause a
@@ -126,11 +132,16 @@ func _run() -> void:
 	assert(probe.calls.is_empty(), "rejected entry must not retry within the same session")
 	enemy._audio_end_combat_session("explicit_disengage")
 	EnemyActor.set_audio_service_cache_clock_for_test(2000)
+	# Physics must be processing for the audio listenability gate to accept the
+	# manual one-shot combat entry below. The entry sequence itself stays
+	# synchronous, so no physics tick can interleave and consume the edge.
+	enemy.set_physics_process(true)
 	enemy._audio_try_enter_combat_session()
 
 	# Combat entry is one-shot and uses the runtime integer ID, not display text.
 	enemy._audio_try_enter_combat_session()
 	enemy._audio_try_enter_combat_session()
+	enemy.set_physics_process(false)
 	assert(_count(probe, "combat_prompt") == 1, "combat prompt must emit exactly once per session")
 	assert(
 		int(probe.calls[0].get("monster_id", -1)) == 21,

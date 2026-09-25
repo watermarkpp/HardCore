@@ -6333,6 +6333,17 @@ func _apply_damage_core(
 ) -> void:
 	if _dying or _death_pending:
 		return
+	# HC-MONSTER-COMBAT-R1 Task 7 (F06): the resolved-damage entry rejects
+	# non-positive amounts. A negative value must never heal through a damage
+	# path, and zero must not create threat, wake maintenance or struck work.
+	# Healing keeps its own dedicated entries with their own max-HP contract,
+	# and the ordinary physical minimum-1 rule stays owned by the attack layer
+	# that legitimately carries it (applied exactly once there).
+	if amount <= 0:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_damage_rejected_nonpositive"
+		)
+		return
 	_record_performance_counter(&"take_damage_calls")
 	_leave_background_deep_sleep()
 	var hp_before_damage := current_hp

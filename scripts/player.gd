@@ -916,6 +916,41 @@ func _apply_resolved_damage(
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
 	current_hp = maxi(0, current_hp - final_damage)
+	# HC-MONSTER-COMBAT-R1 Task 7 (F08): the lethal outcome is decided and
+	# committed atomically BEFORE any external notification can run. Stats,
+	# resources and durability listeners must observe a consistent dead state:
+	# the old window (HP already 0, _dead still false) allowed a synchronous
+	# listener to reenter take_damage() and commit a second full death
+	# lifecycle (duplicated epoch, gold loss and a second death coroutine).
+	var hp_after_damage := current_hp
+	var died_this_hit := false
+	if current_hp == 0:
+		var now_ms := Time.get_ticks_msec()
+		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
+			_last_revival_at_ms = now_ms
+			current_hp = max_hp
+			PlayerState.damage_special_effect_item("revival")
+			stats_changed.emit(current_hp, max_hp)
+			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+			queue_redraw()
+			return
+		died_this_hit = true
+		_dead = true
+		_monster_source_poison.clear()
+		# Formal death clears every poison lane: no poison may survive the
+		# revival boundary and keep ticking on the revived actor.
+		poison_time = 0.0
+		poison_damage = 0
+		combat_epoch += 1
+		reset_locomotion()
+		velocity = Vector2.ZERO
+		touch_vector = Vector2.ZERO
+		_pending_combat_action_active = false
+		_pending_combat_action_committed = false
+		_pending_combat_action_kind = ""
+		_pending_attack_context.clear()
+		_pending_skill_context.clear()
+		_queued_struck_reaction = false
 	if causes_struck and damage_type == "physical" and final_damage > 0:
 		var event_context: Dictionary = (
 			durability_context.duplicate(true)
@@ -935,7 +970,7 @@ func _apply_resolved_damage(
 	if (
 		causes_struck
 		and final_damage > 0
-		and current_hp > 0
+		and hp_after_damage > 0
 		and (
 			force_struck_reaction
 			or ProfessionRules.should_player_stagger(final_damage, max_hp)
@@ -954,31 +989,10 @@ func _apply_resolved_damage(
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
-	if current_hp == 0:
-		var now_ms := Time.get_ticks_msec()
-		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
-			_last_revival_at_ms = now_ms
-			current_hp = max_hp
-			PlayerState.damage_special_effect_item("revival")
-			stats_changed.emit(current_hp, max_hp)
-			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
-			return
-		_dead = true
-		_monster_source_poison.clear()
-		# Formal death clears every poison lane: no poison may survive the
-		# revival boundary and keep ticking on the revived actor.
-		poison_time = 0.0
-		poison_damage = 0
-		combat_epoch += 1
-		reset_locomotion()
-		velocity = Vector2.ZERO
-		touch_vector = Vector2.ZERO
-		_pending_combat_action_active = false
-		_pending_combat_action_committed = false
-		_pending_combat_action_kind = ""
-		_pending_attack_context.clear()
-		_pending_skill_context.clear()
-		_queued_struck_reaction = false
+	if died_this_hit:
+		# Deferred death presentation and notification only: the lifecycle
+		# decision was already committed atomically above, so this task owns no
+		# HP/durability/epoch responsibility and cannot be reentered.
 		visual.play_death()
 		PlayerState.lose_gold_percent(0.05)
 		await get_tree().create_timer(0.8).timeout
@@ -1573,6 +1587,11 @@ func defence_buff_snapshot() -> Dictionary:
 
 
 func apply_control(seconds: float) -> void:
+	# HC-MONSTER-COMBAT-R1 Task 7 (F07): a formally dead actor accepts no new
+	# control state, mirroring the existing apply_monster_poison() boundary.
+	# The full damage-receipt contract stays a separate work package.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return
 	control_time = maxf(control_time, seconds)
 	queue_redraw()
 
@@ -1582,6 +1601,12 @@ func apply_poison(tick_damage: int, seconds: float) -> void:
 	# being floored into a live poison (the old maxi(1, ...) floor created a
 	# damage value with no legal caller and could anchor residual strength).
 	if tick_damage <= 0 or seconds <= 0.0 or not is_finite(seconds):
+		return
+	# HC-MONSTER-COMBAT-R1 Task 7 (F07): a formally dead actor accepts no new
+	# poison, mirroring the existing apply_monster_poison() boundary so the
+	# killing hit cannot re-dirty the poison lanes the death commit just
+	# cleared. The full damage-receipt contract stays a separate work package.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
 		return
 	if poison_time <= 0.0:
 		# The previous cycle expired naturally: the new poison owns its own
