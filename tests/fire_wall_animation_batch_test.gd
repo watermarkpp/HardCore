@@ -26,16 +26,17 @@ func _run() -> void:
 	if field.has_method("_process"):
 		field.call("_process", 0.0)
 	var first: CasterSkillAnimationPlayer = field.visual_cells[0]._sprite
+	_check(is_equal_approx(first.animation_duration(), 0.36), "six fire wall frames must total 360 ms")
 	var original_scale := first.scale
 	var snapshots: Array[String] = []
 	for cell: GroundSkillVisualCell in field.visual_cells:
 		snapshots.append(str(cell.skill_footprint_snapshot.snapshot_id))
 	# Small steps, a long frame and wraparound all select the same final frame.
-	for clock_ms: float in [0.0, 40.0, 80.0, 200.0, 440.0, 1000.0]:
+	for clock_ms: float in [0.0, 59.0, 60.0, 119.0, 120.0, 359.0, 360.0, 1000.0]:
 		field._anim_clock_ms = clock_ms
 		if field.has_method("_process"):
 			field.call("_process", 0.0)
-		var expected := int(floor(fmod(clock_ms, first.animation_duration() * 1000.0) / 40.0))
+		var expected := int(floor(fmod(clock_ms, first.animation_duration() * 1000.0) / 60.0))
 		for index in range(field.visual_cells.size()):
 			var cell: GroundSkillVisualCell = field.visual_cells[index]
 			var sprite: CasterSkillAnimationPlayer = cell._sprite

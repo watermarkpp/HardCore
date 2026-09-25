@@ -11,13 +11,13 @@ const COMPLETION_GRACE_SECONDS := 0.05
 const MAGIC_SHIELD_SKILL_ID := "wizard.magic_shield"
 const MAGIC_SHIELD_VISUAL_GROUP := "wizard_magic_shield_persistent_visual"
 const MAGIC_SHIELD_VISUAL_CONTRACT_ID := (
-	"skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1"
+	"skills.wizard.magic_shield.primary_actor_footpoint_centered_in_front_of_body.v1"
 )
 const ACTOR_VISIBILITY_RENDER_CONTRACT_ID := (
 	"skills.effect.world_footpoint_y_sort.v2"
 )
 const ACTOR_VISIBILITY_Z_INDEX := 0
-const ATTACHMENT_DRAW_ORDER_BEHIND_ACTOR := "behind_attached_actor_same_footpoint"
+const ATTACHMENT_DRAW_ORDER_IN_FRONT_OF_ACTOR := "in_front_of_attached_actor_same_footpoint"
 const SINGLE_ACTIVE_LASER_VISUAL_GROUP := "wizard_laser_single_active_visual"
 const SINGLE_ACTIVE_LASER_VISUAL_CONTRACT_ID := (
 	"skills.wizard.laser.single_active_visual_per_caster.v1"
@@ -243,7 +243,7 @@ func _ready() -> void:
 	var entry := CasterSkillVisualRegistry.profile(skill_id)
 	visual_role = str(entry.get("role", ""))
 	# World walls and spell visuals share one footpoint-sorted plane. The visual
-	# proxy sorts just before a same-footpoint actor without changing geometry.
+	# proxy selects the actor-relative layer without changing gameplay geometry.
 	z_as_relative = true
 	z_index = ACTOR_VISIBILITY_Z_INDEX
 	set_meta(
@@ -340,7 +340,10 @@ func _add_world_visual(visual: Node2D) -> void:
 		add_child(visual)
 		return
 	if not is_instance_valid(_visual_sort_proxy):
-		_visual_sort_proxy = WorldRender.create_proxy(self)
+		_visual_sort_proxy = WorldRender.create_proxy(
+			self,
+			_attachment_draw_order == ATTACHMENT_DRAW_ORDER_IN_FRONT_OF_ACTOR
+		)
 	WorldRender.add_visual(_visual_sort_proxy, visual)
 
 

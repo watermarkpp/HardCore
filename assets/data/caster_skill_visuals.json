@@ -7491,7 +7491,7 @@
       },
       "animation": {
         "contract": "caster_skill_animation.v1",
-        "frame_time_ms": 40,
+        "frame_time_ms": 60,
         "frame_count": 6,
         "direction_count": 1,
         "direction_order": "canonical16: 0=up, 4=right, 8=down, 12=left; clockwise",
@@ -7655,7 +7655,13 @@
       "mapping_rule": "clEvent.pas ET_FIRE in the non-CUSTOMLIBFILE branch uses g_WMagicImages FIREBURNBASE=1630 + ((m_dwCurframe div 2) mod 6). The primary client.classic_raw_complete Data/Magic.wil distribution is that non-custom library layout. Run advances m_dwCurframe every 20 ms, so visible frames are 40 ms. EffectBase[20]=1620 is only the caster body ring and is not the ground fire.",
       "mapping_confidence": "A",
       "pixel_confidence": "A",
-      "derived_status": "ready"
+      "derived_status": "ready",
+      "runtime_timing_override": {
+        "source_path": "assets/data/caster_skill_visual_timing_overrides.json",
+        "source_sha256": "d68bd831158fdfaf5a81e3203777b839e730b40a4c245e648a8af52593eaec52",
+        "source_frame_time_ms": 40,
+        "runtime_frame_time_ms": 60
+      }
     },
     "laser": {
       "skill_ids": [
@@ -11055,12 +11061,12 @@
         "attachment_policy": "caster_actor",
         "playback_strategy": "frame_sequence",
         "pixel_snap": true,
-        "presentation_contract": "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1",
+        "presentation_contract": "skills.wizard.magic_shield.primary_actor_footpoint_centered_in_front_of_body.v1",
         "anchor_rebase_pixels": [
           7.5,
           0.0
         ],
-        "attachment_draw_order": "behind_attached_actor_same_footpoint"
+        "attachment_draw_order": "in_front_of_attached_actor_same_footpoint"
       },
       "distribution_id": "client.classic_raw_complete",
       "source_priority": {
