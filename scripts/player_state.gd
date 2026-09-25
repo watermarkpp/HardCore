@@ -957,7 +957,9 @@ func create_drop_item_instance(item_record: Dictionary, stable_drop_key: String)
 		var identity_value: Variant = result.get(identity_field)
 		if not _is_integral_json_number(identity_value) or int(identity_value) != item_id:
 			return _invalid_drop_instance_record(result, "conflicting_%s" % identity_field)
-	var catalog := GameData.get_item_record({"item_id": item_id})
+	# The instance rules consume identity, type and durability, never the large
+	# art/provenance payload. Multi-equipment drops should not deep-copy it.
+	var catalog := GameData.get_item_rules_record({"item_id": item_id})
 	if catalog.is_empty() or int(catalog.get("itemId", -1)) != item_id:
 		return _invalid_drop_instance_record(result, "catalog_identity_missing")
 	if str(catalog.get("kind", "")) != "equipment":

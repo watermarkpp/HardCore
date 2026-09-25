@@ -8,6 +8,7 @@ signal collection_rejected(item_name: String, message: String)
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const UIItemTextureCacheScript := preload("res://scripts/ui_item_texture_cache.gd")
 const LootVisualEffectScript := preload("res://scripts/loot_visual_effect.gd")
+const ItemNameStyleScript := preload("res://scripts/ui_item_name_style.gd")
 const COLLECTION_RADIUS_GU := 0.75
 const OVERWEIGHT_RETRY_COOLDOWN_SECONDS := 5.0
 
@@ -97,6 +98,8 @@ static func _ground_visual_descriptor_from_catalog_record(
 
 
 static func prewarm_item_names(names: Array) -> int:
+	LootVisualEffectScript.prewarm_authority()
+	ItemNameStyleScript.ensure_loaded()
 	var paths: Array[String] = []
 	for raw_name: Variant in names:
 		var path := str(ground_visual_descriptor(str(raw_name)).get("path", ""))
@@ -184,27 +187,30 @@ func _ready() -> void:
 		_visual_descriptor = ground_visual_descriptor(item_name)
 	var descriptor: Dictionary = _visual_descriptor
 	_configure_instance_visual()
+	var affix_highlighted := (
+		loot_visual_effect != null and loot_visual_effect.affix_highlighted
+	)
 	var icon_path := str(descriptor.get("path", ""))
-	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
+	var icon_texture := UIItemTextureCacheScript.texture_at_path(icon_path)
+	if icon_texture != null:
 		icon_sprite = Sprite2D.new()
 		icon_sprite.name = "ClientGroundIcon"
-		icon_sprite.texture = UIItemTextureCacheScript.texture_at_path(icon_path)
+		icon_sprite.texture = icon_texture
 		icon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		icon_sprite.position = Vector2(0, -5)
 		add_child(icon_sprite)
 	var label := Label.new()
-	label.text = "金币 %d" % gold_amount if gold_amount > 0 else ("★" if LootVisualEffectScript.affix_is_valid(item_record) else "") + item_name
+	label.text = "金币 %d" % gold_amount if gold_amount > 0 else ("★" if affix_highlighted else "") + item_name
 	label.position = Vector2(-48, -36)
 	label.size = Vector2(96, 24)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var template_item_color: Color = descriptor.get("label_color", Color(0.90, 0.82, 0.66))
-	var item_color := LootVisualEffectScript.label_color_for_record(
-		item_record,
-		template_item_color,
+	var item_color: Color = (
+		loot_visual_effect.get_meta("loot_visual_label_color", template_item_color)
+		if loot_visual_effect != null else template_item_color
 	)
 	label.add_theme_color_override("font_color", item_color)
-	var name_style := preload("res://scripts/ui_item_name_style.gd")
-	name_style.apply_label_style(label, name_style.describe({"item_id": LootVisualEffectScript.exact_item_id(item_record)}) if gold_amount <= 0 else {}, item_color)
+	ItemNameStyleScript.apply_label_style(label, ItemNameStyleScript.describe({"item_id": LootVisualEffectScript.exact_item_id(item_record)}) if gold_amount <= 0 else {}, item_color)
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	label.add_theme_constant_override("shadow_offset_x", 1)
 	label.add_theme_constant_override("shadow_offset_y", 1)
@@ -220,7 +226,7 @@ func _ready() -> void:
 	name_label.z_as_relative = false
 	name_label.z_index = 1
 	var catalog: Dictionary = item_record.get("output_record", {})
-	if gold_amount <= 0 and str(catalog.get("kind", "")) == "equipment" and not LootVisualEffectScript.affix_is_valid(item_record):
+	if gold_amount <= 0 and str(catalog.get("kind", "")) == "equipment" and not affix_highlighted:
 		_filter_threshold = LootPreferences.filter_threshold_for_item(LootVisualEffectScript.exact_item_id(item_record))
 	LootPreferences.filter_changed.connect(_apply_filter)
 	_apply_filter(LootPreferences.filter_level)

@@ -39,6 +39,10 @@ const EQUIPMENT_AUTHORITY_ITEM_TYPES := {
 static var _authority_loaded := false
 static var _authority_by_id: Dictionary = {}
 
+
+static func prewarm_authority() -> void:
+	_ensure_authority()
+
 var item_id := -1
 var item_tier := ""
 var beam_visible := false

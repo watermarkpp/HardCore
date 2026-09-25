@@ -34,6 +34,18 @@ func _run() -> void:
 	assert(fixed.is_finite() and fixed != desired)
 	assert(game._loot_ground_point_clear(fixed) and game._loot_world_segment_clear(anchor, fixed))
 	assert(game._resolve_loot_ground_position(desired, anchor) == fixed, "retry location must not draw random numbers")
+	var search: Dictionary = {}
+	var resumed: Dictionary = {}
+	var slices := 0
+	while slices < 51:
+		resumed = game._advance_loot_ground_position(
+			desired, anchor, search, Time.get_ticks_usec() - 100000, 1, false
+		)
+		slices += 1
+		if bool(resumed.get("complete", false)):
+			break
+	assert(bool(resumed.get("complete", false)) and resumed.get("position", Vector2.INF) == fixed)
+	assert(slices > 1, "blocked placement must yield between collision candidates")
 	wall.queue_free()
 	await get_tree().physics_frame
 	await get_tree().physics_frame

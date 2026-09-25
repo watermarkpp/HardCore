@@ -23,6 +23,11 @@ class FixtureGameRoot extends GameRootScript:
 			return desired_px
 		return super._resolve_loot_ground_position(desired_px, _death_origin)
 
+	func _advance_loot_ground_position(desired_px: Vector2, death_origin: Vector2, search: Dictionary, slice_started_usec: int, budget_usec: int, force_synchronous: bool) -> Dictionary:
+		if queue_only:
+			return {"complete": true, "position": desired_px, "progressed": true}
+		return super._advance_loot_ground_position(desired_px, death_origin, search, slice_started_usec, budget_usec, force_synchronous)
+
 const MAP_ID := 6317
 const GENERATION := 17
 const MONSTER_ID := 34

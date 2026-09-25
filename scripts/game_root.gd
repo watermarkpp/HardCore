@@ -169,7 +169,8 @@ const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
 const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
 const DEATH_DROP_WORK_BUDGET_USEC := 1200
 const DEATH_JOBS_MAX_PER_FRAME := 4
-const DROP_NODES_MAX_PER_FRAME := 8
+const DROP_NODES_MAX_PER_FRAME := 1
+const LOOT_FALLBACK_RADII := [0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0]
 const DEATH_QUEUE_MAX_RETRIES := 3
 const DEATH_QUEUE_RETRY_DELAY_MSEC := 100
 const DEATH_TERMINAL_LEDGER_MAX := 64
@@ -388,6 +389,7 @@ var _enemy_death_terminal_total_count := 0
 var _last_death_logout_failure: Dictionary = {}
 var _death_settled_jobs_last_batch := 0
 var _death_drop_work_budget_usec_override := -1
+var _last_drop_node_frame := -2
 var _death_jobs_max_per_frame_override := -1
 var _drop_nodes_max_per_frame_override := -1
 var _test_force_loot_materialization_failure_count := 0
@@ -12837,6 +12839,9 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	var budget_usec := _death_drop_work_budget_usec()
 	var jobs_limit := _death_jobs_max_per_frame()
 	var nodes_limit := _drop_nodes_max_per_frame()
+	if not force_synchronous and not PlayerState.test_mode:
+		# Keep large reward bursts off one render frame, even if a project override is higher.
+		nodes_limit = mini(nodes_limit, 1)
 	if force_synchronous:
 		budget_usec = 2147483647
 		jobs_limit = 2147483647
@@ -12925,6 +12930,13 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 			if not force_synchronous and not _death_retry_ready(death):
 				break
 			jobs_processed += 1
+		if (
+			not force_synchronous
+			and not PlayerState.test_mode
+			and int(death.get("remaining_request_count", 0)) > 0
+			and Engine.get_process_frames() - _last_drop_node_frame < 2
+		):
+			break
 		var materialization := _materialize_enemy_death_nodes(
 			death,
 			slice_started_usec,
@@ -13393,19 +13405,40 @@ func _materialize_enemy_death_nodes(
 			)
 			return {"complete": true, "progressed": true, "nodes": nodes}
 		var request: Dictionary = request_value
+		var placement_search: Dictionary = death.get("placement_search", {})
+		if int(placement_search.get("request_index", request_index)) != request_index:
+			placement_search = {}
+		placement_search["request_index"] = request_index
+		var placement := _advance_loot_ground_position(
+			request.get("position", death.get("death_position", Vector2.ZERO)),
+			death.get("death_position", Vector2.INF),
+			placement_search,
+			slice_started_usec,
+			budget_usec,
+			force_synchronous or PlayerState.test_mode,
+		)
+		if not bool(placement.get("complete", false)):
+			death["placement_search"] = placement_search
+			return {"complete": false, "progressed": true, "nodes": nodes}
+		death.erase("placement_search")
+		var resolved_position: Vector2 = placement.get("position", Vector2.INF)
 		var materialized := false
-		if request.has("gold_amount"):
+		if not resolved_position.is_finite():
+			materialized = false
+		elif request.has("gold_amount"):
 			materialized = _spawn_gold_loot(
 				int(request.get("gold_amount", 0)),
-				request.get("position", death.get("death_position", Vector2.ZERO)),
+				resolved_position,
 				death.get("death_position", Vector2.INF),
+				true,
 			)
 		else:
 			materialized = _spawn_loot(
 				str(request.get("item_name", "")),
-				request.get("position", death.get("death_position", Vector2.ZERO)),
+				resolved_position,
 				request.get("item_record", {}),
 				death.get("death_position", Vector2.INF),
+				true,
 			)
 		if not materialized:
 			death["remaining_requests"] = requests.slice(request_index)
@@ -13431,6 +13464,8 @@ func _materialize_enemy_death_nodes(
 			return {"complete": false, "progressed": true, "nodes": nodes}
 		request_index += 1
 		nodes += 1
+		if not force_synchronous and not PlayerState.test_mode:
+			_last_drop_node_frame = Engine.get_process_frames()
 		progressed = true
 		death["materialized_node_index"] = request_index
 		death["materialized_node_count"] = (
@@ -13580,7 +13615,11 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 	}
 
 
-func _loot_world_segment_clear(origin_px: Vector2, target_px: Vector2) -> bool:
+func _loot_world_segment_clear(
+	origin_px: Vector2,
+	target_px: Vector2,
+	reusable_query: PhysicsRayQueryParameters2D = null,
+) -> bool:
 	if not origin_px.is_finite() or not target_px.is_finite() or not is_instance_valid(background):
 		return false
 	var origin_gu := _canonical_screen_px_to_ground_gu(origin_px)
@@ -13590,38 +13629,92 @@ func _loot_world_segment_clear(origin_px: Vector2, target_px: Vector2) -> bool:
 	var space := get_world_2d().direct_space_state
 	if space == null:
 		return false
-	var query := PhysicsRayQueryParameters2D.create(origin_px, target_px, WorldSpatialRulesScript.WORLD_MASK)
+	var query := reusable_query
+	if query == null:
+		query = PhysicsRayQueryParameters2D.create(origin_px, target_px, WorldSpatialRulesScript.WORLD_MASK)
+	else:
+		query.from = origin_px
+		query.to = target_px
 	query.hit_from_inside = true
 	return space.intersect_ray(query).is_empty()
 
 
-func _loot_ground_point_clear(position_px: Vector2) -> bool:
+func _loot_ground_point_clear(
+	position_px: Vector2,
+	reusable_query: PhysicsShapeQueryParameters2D = null,
+) -> bool:
 	if not position_px.is_finite() or not is_instance_valid(background):
 		return false
 	if background.is_environment_actor_blocked(position_px, 6.0):
 		return false
-	var shape := CircleShape2D.new()
-	shape.radius = 5.0
-	var query := PhysicsShapeQueryParameters2D.new()
-	query.shape = shape
+	var query := reusable_query
+	if query == null:
+		var shape := CircleShape2D.new()
+		shape.radius = 5.0
+		query = PhysicsShapeQueryParameters2D.new()
+		query.shape = shape
 	query.transform = Transform2D(0.0, position_px)
 	query.collision_mask = WorldSpatialRulesScript.WORLD_MASK
 	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 
 func _resolve_loot_ground_position(desired_px: Vector2, death_origin := Vector2.INF) -> Vector2:
+	var search: Dictionary = {}
+	var result := _advance_loot_ground_position(
+		desired_px, death_origin, search, 0, 0, true
+	)
+	return result.get("position", Vector2.INF)
+
+
+func _advance_loot_ground_position(
+	desired_px: Vector2,
+	death_origin: Vector2,
+	search: Dictionary,
+	slice_started_usec: int,
+	budget_usec: int,
+	force_synchronous: bool,
+) -> Dictionary:
 	var anchor: Vector2 = death_origin if death_origin.is_finite() else desired_px
-	if _loot_ground_point_clear(desired_px) and _loot_world_segment_clear(anchor, desired_px):
-		return desired_px
-	# Stable bounded search: materialization retries never consume drop RNG.
-	# Every candidate remains connected to the death footpoint by WORLD geometry.
 	var anchor_gu := _canonical_screen_px_to_ground_gu(anchor)
-	for radius in [0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0]:
-		for direction in range(8 if radius > 0.0 else 1):
-			var candidate := _canonical_ground_gu_to_screen_px(anchor_gu + Vector2.from_angle(direction * TAU / 8.0) * radius)
-			if _loot_ground_point_clear(candidate) and _loot_world_segment_clear(anchor, candidate):
-				return candidate
-	return Vector2.INF
+	var reusable_point_query := search.get("point_query") as PhysicsShapeQueryParameters2D
+	if reusable_point_query == null:
+		var shape := CircleShape2D.new()
+		shape.radius = 5.0
+		reusable_point_query = PhysicsShapeQueryParameters2D.new()
+		reusable_point_query.shape = shape
+		search["point_query"] = reusable_point_query
+	var reusable_segment_query := search.get("segment_query") as PhysicsRayQueryParameters2D
+	if reusable_segment_query == null:
+		reusable_segment_query = PhysicsRayQueryParameters2D.create(
+			anchor, anchor, WorldSpatialRulesScript.WORLD_MASK
+		)
+		search["segment_query"] = reusable_segment_query
+	var candidate_index := int(search.get("candidate_index", -1))
+	var checked := 0
+	# Resume the original deterministic candidate order without repeating prior physics queries.
+	var fallback_count := 1 + (LOOT_FALLBACK_RADII.size() - 1) * 8
+	while candidate_index < fallback_count:
+		if (
+			not force_synchronous
+			and checked > 0
+			and Time.get_ticks_usec() - slice_started_usec >= budget_usec
+		):
+			search["candidate_index"] = candidate_index
+			return {"complete": false, "progressed": true}
+		var candidate := desired_px
+		if candidate_index >= 0:
+			var radius_index := 0 if candidate_index == 0 else 1 + int((candidate_index - 1) / 8)
+			var direction := 0 if candidate_index == 0 else (candidate_index - 1) % 8
+			candidate = _canonical_ground_gu_to_screen_px(
+				anchor_gu + Vector2.from_angle(direction * TAU / 8.0) * LOOT_FALLBACK_RADII[radius_index]
+			)
+		if _loot_ground_point_clear(candidate, reusable_point_query) and _loot_world_segment_clear(anchor, candidate, reusable_segment_query):
+			search.clear()
+			return {"complete": true, "position": candidate, "progressed": true}
+		candidate_index += 1
+		checked += 1
+	search.clear()
+	return {"complete": true, "position": Vector2.INF, "progressed": checked > 0}
 
 
 func _loot_collection_path_is_clear(pickup: LootPickup) -> bool:
@@ -13636,7 +13729,7 @@ func _loot_collection_path_is_clear(pickup: LootPickup) -> bool:
 	return _loot_world_segment_clear(player.global_position, pickup.global_position)
 
 
-func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary = {}, death_origin := Vector2.INF) -> bool:
+func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary = {}, death_origin := Vector2.INF, placement_resolved := false) -> bool:
 	# A formal but unresolved identity must never become an unrelated valid
 	# name-only item at collection time. Legacy callers still pass no record.
 	if not item_record.is_empty() and str(item_record.get("identity_status", "")) != "resolved":
@@ -13644,7 +13737,8 @@ func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary =
 	if _test_force_loot_materialization_failure_count > 0:
 		_test_force_loot_materialization_failure_count -= 1
 		return false
-	position = _resolve_loot_ground_position(position, death_origin)
+	if not placement_resolved:
+		position = _resolve_loot_ground_position(position, death_origin)
 	if not position.is_finite():
 		return false
 	var loot := LootPickup.new()
@@ -13672,11 +13766,12 @@ func _spawn_loot(item_name: String, position: Vector2, item_record: Dictionary =
 	return is_instance_valid(loot)
 
 
-func _spawn_gold_loot(amount: int, position: Vector2, death_origin := Vector2.INF) -> bool:
+func _spawn_gold_loot(amount: int, position: Vector2, death_origin := Vector2.INF, placement_resolved := false) -> bool:
 	if _test_force_loot_materialization_failure_count > 0:
 		_test_force_loot_materialization_failure_count -= 1
 		return false
-	position = _resolve_loot_ground_position(position, death_origin)
+	if not placement_resolved:
+		position = _resolve_loot_ground_position(position, death_origin)
 	if not position.is_finite():
 		return false
 	var loot := LootPickup.new()

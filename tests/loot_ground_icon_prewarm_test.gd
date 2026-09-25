@@ -33,7 +33,10 @@ func _run() -> void:
 	assert(lean.attempts.is_empty() and lean.slot_attempts.is_empty() and lean.debug.is_empty(), "lean retained audit views")
 	LootPickup.clear_descriptor_cache_for_test()
 	UIItemTextureCache.clear_for_test()
+	LootVisualEffect.reset_cache_for_test()
 	LootPickup.prewarm_item_names(names)
+	assert(LootVisualEffect._authority_loaded and not LootVisualEffect._authority_by_id.is_empty(), "drop tier authority stayed cold until loot spawn")
+	assert(UIItemNameStyle.ensure_loaded(), "item name style authority failed to prewarm")
 	for _frame in range(30):
 		UIItemTextureCache.poll_threaded_paths()
 		if UIItemTextureCache.threaded_pending_count() == 0: break
