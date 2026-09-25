@@ -1,6 +1,7 @@
 class_name CasterSkillAnimationPlayer
 extends Sprite2D
 
+const TrialScreenShader := preload("res://assets/shaders/trial_magic_screen.gdshader")
 const FORWARD_ENDPOINT_FIT_CONTRACT_ID := (
 	"skills.caster.line_visual.forward_endpoint_uniform.v1"
 )
@@ -50,6 +51,33 @@ var _sequence_anchor_rebase := Vector2.ZERO
 var _axis_cross_fit_active := false
 var _longitudinal_scale := 1.0
 var _target_cross_axis := Vector2.RIGHT
+var _trial_screen_copy: BackBufferCopy
+
+
+func _ready() -> void:
+	_ensure_trial_screen_copy()
+	visibility_changed.connect(_sync_trial_screen_copy_visibility)
+
+
+func _ensure_trial_screen_copy() -> void:
+	if material == null or not is_inside_tree() or get_parent() == null:
+		return
+	if is_instance_valid(_trial_screen_copy):
+		_sync_trial_screen_copy_visibility()
+		return
+	# Capture after earlier actors and spells in this sort lane so overlapping
+	# effects use the same screen formula as the browser experiment.
+	_trial_screen_copy = BackBufferCopy.new()
+	_trial_screen_copy.name = "TrialScreenBackdrop"
+	_trial_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+	get_parent().add_child(_trial_screen_copy)
+	get_parent().move_child(_trial_screen_copy, get_index())
+	_sync_trial_screen_copy_visibility()
+
+
+func _sync_trial_screen_copy_visibility() -> void:
+	if is_instance_valid(_trial_screen_copy):
+		_trial_screen_copy.visible = visible and texture != null
 
 
 func configure(
@@ -83,6 +111,19 @@ func configure(
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
 		return false
 	var profile := CasterSkillVisualRegistry.profile(skill_id)
+	material = null
+	if is_instance_valid(_trial_screen_copy):
+		_trial_screen_copy.queue_free()
+		_trial_screen_copy = null
+	var original_path := str(profile.get("original_path", "")).to_lower()
+	if not profile.has("user_visual_override") and (
+		original_path.ends_with("magic.wil")
+		or original_path.ends_with("magic2.wil")
+	):
+		var trial_material := ShaderMaterial.new()
+		trial_material.shader = TrialScreenShader
+		material = trial_material
+	_ensure_trial_screen_copy()
 	var animation := CasterSkillVisualRegistry.animation_profile(skill_id, phase_id)
 	if animation.get("contract", "") != "caster_skill_animation.v1":
 		return false
@@ -312,6 +353,8 @@ func _release_sequence_lease() -> void:
 
 
 func _exit_tree() -> void:
+	if is_instance_valid(_trial_screen_copy):
+		_trial_screen_copy.queue_free()
 	# R14-C5: looping/persistent effects hold the lease until node teardown;
 	# one-shot players release on completion. Reconfigure and exit both
 	# release here.
@@ -568,6 +611,7 @@ func _apply_frame(frame_index: int) -> bool:
 	if loaded == null:
 		return false
 	texture = loaded
+	_sync_trial_screen_copy_visibility()
 	if _axis_cross_fit_active:
 		_apply_axis_cross_transform(frame)
 	var anchor_field := (

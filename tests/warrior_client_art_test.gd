@@ -43,6 +43,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	var visual: Node2D = game.player.visual
 	var effect_sprite := visual.get_node("ClientSkillEffect") as Sprite2D
+	var effect_copy := visual.get_child(effect_sprite.get_index() - 1)
+	assert(effect_sprite.material is ShaderMaterial and effect_copy is BackBufferCopy)
 	var effect_line := visual.get_node("SkillEffect") as Line2D
 	var audio := visual.get_node("WeaponAudio") as AudioStreamPlayer2D
 	game.player.facing = Vector2.RIGHT
@@ -58,6 +60,8 @@ func _run() -> void:
 	visual.play_passive_proc_effect("攻杀剑术", 0.24)
 	visual._process(0.05)
 	var passive_proc_sprite := visual.get_node("PassiveProcSkillEffect") as Sprite2D
+	var passive_copy := visual.get_child(passive_proc_sprite.get_index() - 1)
+	assert(passive_proc_sprite.material is ShaderMaterial and passive_copy is BackBufferCopy)
 	assert(
 		effect_sprite.visible
 		and effect_sprite.texture.resource_path.ends_with("wide_hit.png"),

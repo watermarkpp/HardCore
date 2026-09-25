@@ -2,7 +2,7 @@ extends Node
 
 const OUTPUT_PATH := (
 	"res://outputs/visual_acceptance/magic_shield/"
-	+ "wizard_magic_shield_primary_footpoint_centered_behind_body.png"
+	+ "wizard_magic_shield_primary_footpoint_centered_in_front_of_body.png"
 )
 const CANVAS_SIZE := Vector2i(320, 280)
 const ACTOR_FOOTPOINT := Vector2(160.0, 205.0)
@@ -25,19 +25,18 @@ func _ready() -> void:
 	var shield := CasterSkillAnimationPlayer.new()
 	add_child(shield)
 	assert(shield.configure("wizard.magic_shield"))
-	shield._process(shield.animation_duration() + 0.01)
-	assert(shield.current_frame_index == shield.frame_count() - 1)
+	assert(shield.set_manual_frame(6))
+	assert(shield.current_frame_index == 6)
 
 	var canvas := Image.create(CANVAS_SIZE.x, CANVAS_SIZE.y, false, Image.FORMAT_RGBA8)
 	canvas.fill(Color("151b21"))
-	_blend_sprite_at_actor_footpoint(canvas, shield, ACTOR_FOOTPOINT)
-	# Draw the actual runtime body after the shield. This is the formal y-sort
-	# contract: same footpoint, shield behind, body unobstructed.
+	# The body's footpoint stays fixed; the transparent shield is drawn over it.
 	_blend_sprite_at_actor_footpoint(
 		canvas,
 		player.visual.sprite,
 		ACTOR_FOOTPOINT + player.visual.position
 	)
+	_blend_sprite_at_actor_footpoint(canvas, shield, ACTOR_FOOTPOINT)
 	var output_absolute := ProjectSettings.globalize_path(OUTPUT_PATH)
 	DirAccess.make_dir_recursive_absolute(output_absolute.get_base_dir())
 	assert(canvas.save_png(output_absolute) == OK)

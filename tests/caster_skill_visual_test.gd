@@ -93,6 +93,7 @@ func _ready() -> void:
 		add_child(projectile)
 		assert(projectile.skill_id == skill_id and projectile._sprite != null)
 		assert(projectile._sprite.visual_loaded)
+		_assert_trial_screen_sprite(projectile._sprite)
 		projectile.queue_free()
 	for skill_id: String in GroundSkillEffect.VISUAL_PATHS:
 		var area := GroundSkillEffect.new()
@@ -102,6 +103,7 @@ func _ready() -> void:
 		add_child(area)
 		assert(area.skill_id == skill_id and area._sprite != null)
 		assert(area._sprite.visual_loaded)
+		_assert_trial_screen_sprite(area._sprite)
 		area.queue_free()
 	for skill_id: String in CasterSkillVisualRegistry.active_skill_ids():
 		var profile := CasterSkillVisualRegistry.profile(skill_id)
@@ -111,7 +113,22 @@ func _ready() -> void:
 		visual.setup(Vector2.ZERO, skill_id, 72.0, 1.0)
 		add_child(visual)
 		assert(visual.skill_id == skill_id and visual.visual_loaded, "%s generic runtime visual did not load" % skill_id)
+		for effect_sprite: Sprite2D in visual._sprites:
+			_assert_trial_screen_sprite(effect_sprite)
 		visual.queue_free()
+	var first_storm := CasterSkillVisualEffect.new()
+	first_storm.setup(Vector2(160.0, 160.0), "wizard.ice_storm", 72.0, 2.0)
+	add_child(first_storm)
+	var second_storm := CasterSkillVisualEffect.new()
+	second_storm.setup(Vector2(160.0, 160.0), "wizard.ice_storm", 72.0, 2.0)
+	add_child(second_storm)
+	_assert_trial_screen_sprite(first_storm._sprites[0])
+	_assert_trial_screen_sprite(second_storm._sprites[0])
+	assert(first_storm._sprites[0].get_parent() != second_storm._sprites[0].get_parent())
+	assert(CasterSkillVisualRegistry.animation_profile("wizard.ice_storm").frame_count == 20)
+	assert(CasterSkillVisualRegistry.animation_profile("wizard.ice_storm").frame_time_ms == 80)
+	first_storm.queue_free()
+	second_storm.queue_free()
 
 	assert(CasterSkillVisualRegistry.direction_index(Vector2.UP) == 0)
 	assert(CasterSkillVisualRegistry.direction_index(Vector2.RIGHT) == 4)
@@ -157,14 +174,14 @@ func _ready() -> void:
 	assert(shield_visual.is_persistent_magic_shield_visual())
 	assert(shield_visual.get_meta(
 		"magic_shield_visual_contract", ""
-	) == "skills.wizard.magic_shield.primary_actor_footpoint_centered_behind_body.v1")
+	) == "skills.wizard.magic_shield.primary_actor_footpoint_centered_in_front_of_body.v1")
 	var shield_sprite: CasterSkillAnimationPlayer = shield_visual._sprites[0]
 	var shield_render := CasterSkillVisualRegistry.render_policy(
 		"wizard.magic_shield"
 	)
 	assert(shield_render.anchor_policy == "top_left_from_world_anchor")
 	assert(shield_render.anchor_rebase_pixels == [7.5, 0.0])
-	assert(shield_render.attachment_draw_order == "behind_attached_actor_same_footpoint")
+	assert(shield_render.attachment_draw_order == "in_front_of_attached_actor_same_footpoint")
 	assert(shield_sprite.fitted_visual_bounds().position == Vector2(-34.5, -80.0))
 	# Both sides of a half-pixel boundary preserve the exact actor and image
 	# footpoint. A compensated visual proxy shares the walls' world plane.
@@ -178,7 +195,7 @@ func _ready() -> void:
 		assert(is_equal_approx(shield_visual.global_position.x, owner_position.x))
 		assert(shield_visual.global_position.is_equal_approx(owner_position))
 		assert(shield_visual.z_index == shield_owner.z_index)
-		assert(shield_visual._visual_sort_proxy.global_position.y < shield_owner.global_position.y)
+		assert(shield_visual._visual_sort_proxy.global_position.y > shield_owner.global_position.y)
 		assert(shield_sprite.global_position.is_equal_approx(owner_position))
 	shield_sprite._process(shield_sprite.animation_duration() + 0.01)
 	shield_visual._process(0.1)
@@ -191,3 +208,11 @@ func _ready() -> void:
 	shield_owner.queue_free()
 	print("CASTER_SKILL_VISUAL_PASS: 26 exact primary-client animations/icons cover 26 active caster skills; one passive has no cast visual; zero fallbacks; male-only")
 	get_tree().quit(0)
+
+
+func _assert_trial_screen_sprite(effect_sprite: Sprite2D) -> void:
+	assert(effect_sprite.material is ShaderMaterial)
+	assert(effect_sprite.get_index() > 0)
+	var copy := effect_sprite.get_parent().get_child(effect_sprite.get_index() - 1)
+	assert(copy is BackBufferCopy)
+	assert(copy.copy_mode == BackBufferCopy.COPY_MODE_VIEWPORT)
