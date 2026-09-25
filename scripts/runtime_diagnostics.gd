@@ -107,6 +107,7 @@ const PERFORMANCE_COUNTER_FIELDS: Array[String] = [
 	"death_batch_count",
 	"death_batch_size_max",
 	"death_settlement_usec",
+	"durability_event_commits",
 	"death_resolve_active_usec",
 	"death_target_refresh_count",
 	"death_queue_state_transitions",

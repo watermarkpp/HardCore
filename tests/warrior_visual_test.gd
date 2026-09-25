@@ -31,6 +31,11 @@ func _run() -> void:
 	PlayerState.equipment["头盔"] = {"name": "黑铁头盔", "durability": 10}
 	PlayerState.equipment_changed.emit()
 	visual._process(0.01)
+	# A durability/XP profile signal must not discard unchanged appearance art.
+	visual._v2_layer_texture_cache["profile_signal_probe"] = true
+	PlayerState.profile_changed.emit()
+	assert(visual._v2_layer_texture_cache.has("profile_signal_probe"), "unchanged profile signal reloaded worn art")
+	visual._v2_layer_texture_cache.erase("profile_signal_probe")
 	assert(visual.get_node("ClientWeaponLayer").visible and not visual.get_node("WeaponAccent").visible, "client weapon layer did not replace placeholder accent")
 	var helmet_layer: Sprite2D = visual.get_node("ClientHelmetLayer")
 	var hair_layer: Sprite2D = visual.get_node("ClientHairLayer")

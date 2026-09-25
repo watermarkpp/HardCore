@@ -2172,7 +2172,9 @@ func record_kills_and_experience_batch(
 			"save_count": 0,
 		}
 	var save_started_usec := Time.get_ticks_usec()
-	if not _commit_save(level != level_before):
+	var save_committed := _commit_save(level != level_before)
+	_record_runtime_save_phases("death_save", save_started_usec)
+	if not save_committed:
 		_last_death_settlement_profile = {
 			"total_ms": float(Time.get_ticks_usec() - profile_started_usec) / 1000.0,
 			"save_ms": float(Time.get_ticks_usec() - save_started_usec) / 1000.0,
@@ -3475,7 +3477,9 @@ func apply_durability_event(event_id: String, context := {}) -> Dictionary:
 	result["save_commits"] = 1
 	if crossed_zero:
 		recalculate_stats(false)
+	var save_started_usec := Time.get_ticks_usec()
 	result["save_committed"] = _commit_save()
+	_record_runtime_save_phases("durability_save", save_started_usec)
 	if not bool(result["save_committed"]):
 		equipment = equipment_before
 		recalculate_stats(false)
@@ -3488,6 +3492,7 @@ func apply_durability_event(event_id: String, context := {}) -> Dictionary:
 	profile_changed.emit()
 	result["signal_batches"] = 1
 	durability_event_commit_count += 1
+	RuntimeDiagnostics.increment_performance_counter(&"durability_event_commits")
 	result["applied"] = true
 	result["reason"] = ""
 	return result
@@ -7787,6 +7792,30 @@ func _migrate_single_save_to_profile() -> void:
 		_remove_new_profile_files(active_profile_id)
 	active_profile_id = ""
 	character_name = ""
+
+
+## Opt-in Device Lab timings for synchronous combat saves. The save still
+## completes at the same transaction boundary; regular play skips phase sampling.
+func _record_runtime_save_phases(prefix: String, started_usec: int) -> void:
+	if not RuntimeDiagnostics.performance_detail_enabled():
+		return
+	RuntimeDiagnostics.record_performance_max(
+		StringName("%s_max_ms" % prefix),
+		float(Time.get_ticks_usec() - started_usec) / 1000.0
+	)
+	for phase_name: String in ["runtime_snapshot_ms", "atomic_write_ms"]:
+		RuntimeDiagnostics.record_performance_max(
+			StringName("%s_%s_max" % [prefix, phase_name]),
+			float(_last_save_phase_profile.get(phase_name, 0.0))
+		)
+	for phase_name: String in [
+		"serialize_validate_ms", "temp_write_flush_read_ms",
+		"previous_read_validate_ms", "rotate_promote_read_ms",
+	]:
+		RuntimeDiagnostics.record_performance_max(
+			StringName("%s_%s_max" % [prefix, phase_name]),
+			float(_atomic_write_phases.get(phase_name, 0.0))
+		)
 
 
 func _commit_save(update_profile_index := true) -> bool:

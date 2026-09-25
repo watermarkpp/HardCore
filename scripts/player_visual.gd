@@ -383,7 +383,7 @@ func health_bar_anchor() -> Vector2:
 
 func refresh_profession() -> void:
 	_update_visibility()
-	_refresh_equipment_visuals(true)
+	_refresh_equipment_visuals()
 
 
 func _update_visibility() -> void:
