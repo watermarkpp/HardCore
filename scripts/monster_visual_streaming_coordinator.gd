@@ -403,6 +403,7 @@ func _retire_stale_loaded_jobs() -> void:
 func poll_once(frame_id: int) -> Dictionary:
 	if frame_id == _last_streaming_poll_frame:
 		return map_prefetch_status()
+	var profile_started_usec := RuntimeDiagnostics.timing_start()
 	_last_streaming_poll_frame = frame_id
 	coordinator_poll_count += 1
 	heavy_poll_execution_count += 1
@@ -481,6 +482,9 @@ func poll_once(frame_id: int) -> Dictionary:
 		helper.free()
 	_poll_visual_residency()
 	_cleanup_invalid_subscribers()
+	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(profile_started_usec)
+	if elapsed_usec > 0:
+		RuntimeDiagnostics.record_performance_max(&"monster_streaming_poll_max_ms", float(elapsed_usec) / 1000.0)
 	return map_prefetch_status()
 
 

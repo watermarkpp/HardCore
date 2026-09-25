@@ -31,6 +31,13 @@ func _run() -> void:
 		PlayerState.loot_batch_debug_snapshot().catalog_lookups == 1,
 		"repeat pickup rebuilt an immutable catalog record"
 	)
+	PlayerState.test_transaction_debug_reset()
+	var gold_inventory_before := PlayerState.inventory.duplicate(true)
+	var gold_only_result := PlayerState.receive_loot_batch_partial([{"gold": true, "amount": 10}])
+	var gold_only_debug := PlayerState.loot_batch_debug_snapshot()
+	assert(gold_only_result.success and PlayerState.inventory == gold_inventory_before, "gold-only pickup changed inventory")
+	assert(gold_only_debug.initial_weight_scans == 0 and gold_only_debug.occupied_scans == 0,
+		"gold-only pickup scanned unrelated inventory weight or slots")
 	var before := PlayerState.inventory.duplicate(true)
 	var gold_before := PlayerState.gold
 	PlayerState._test_force_atomic_write_failure = true

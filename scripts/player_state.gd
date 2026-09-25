@@ -223,6 +223,8 @@ var _last_runtime_commit_profile: Dictionary = {}
 const SpecialConsumableStacks = preload("res://scripts/special_consumable_stacks.gd")
 const LootPreparedFile := preload("res://scripts/loot_prepared_file.gd")
 var _atomic_write_generation := 0
+var _validated_profile_path := ""
+var _validated_profile_bytes := PackedByteArray()
 var _atomic_write_phases: Dictionary = {}
 var _last_save_phase_profile: Dictionary = {}
 var _last_loot_batch_profile: Dictionary = {}
@@ -4309,14 +4311,18 @@ func _promote_verified_json(path: String, temporary: String, expected_bytes: Pac
 	var absolute_backup := ProjectSettings.globalize_path(backup)
 	var current_document: Dictionary
 	var current_validation: Dictionary
-	if validated_previous_bytes is PackedByteArray:
+	var known_previous_bytes: Variant = validated_previous_bytes
+	if known_previous_bytes == null and path == _validated_profile_path and not _validated_profile_bytes.is_empty():
+		known_previous_bytes = _validated_profile_bytes
+	if known_previous_bytes is PackedByteArray and _file_matches_validated_bytes(path, known_previous_bytes):
 		# A prepared transaction already validated this exact previous document.
-		# Byte comparison still detects every external change before rotation.
-		if not _file_matches_validated_bytes(path, validated_previous_bytes):
-			return false
+		# A successful earlier profile write is equally authoritative. Compare
+		# every byte before reusing it; external edits take the validation path.
 		current_document = {"exists": true, "valid": true}
 		current_validation = _validation_result(true)
 	else:
+		if validated_previous_bytes is PackedByteArray:
+			return false
 		current_document = _read_json_document(path)
 		current_validation = _validate_json_candidate(current_document.get("data", {}), validator)
 	if (
@@ -4362,6 +4368,9 @@ func _promote_verified_json(path: String, temporary: String, expected_bytes: Pac
 	_atomic_write_phases["rotate_promote_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
 	if verified:
 		_atomic_write_generation += 1
+		if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+			_validated_profile_path = path
+			_validated_profile_bytes = expected_bytes
 	else:
 		# A post-promotion mismatch must not leave valid-but-unexpected JSON as
 		# the next load's primary authority after this transaction reports failure.
@@ -6819,23 +6828,31 @@ func _warehouse_transfer_commit_validated(_inventory_before: Array, _warehouse_b
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dictionary:
 	var profile_started_usec := Time.get_ticks_usec()
+	var gold_only := not candidates.is_empty()
+	for raw_candidate: Variant in candidates:
+		if not raw_candidate is Dictionary or not bool((raw_candidate as Dictionary).get("gold", false)):
+			gold_only = false
+			break
 	# working_inventory is the only copy mutated during planning. Keep the live
 	# array itself as the rollback snapshot; it remains untouched until commit.
 	var inventory_before := inventory
 	var gold_before := gold
-	var working_inventory := inventory.duplicate(true)
+	var working_inventory := inventory if gold_only else inventory.duplicate(true)
 	var working_gold := gold
-	var initial_weight := inventory_weight(inventory)
+	var initial_weight := 0 if gold_only else inventory_weight(inventory)
 	_loot_batch_debug["plan_scans"] = int(_loot_batch_debug.get("plan_scans", 0)) + 1
-	_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
+	if not gold_only:
+		_loot_batch_debug["initial_weight_scans"] = int(_loot_batch_debug.get("initial_weight_scans", 0)) + 1
 	var working_weight := initial_weight
-	var maximum_weight := max_inventory_weight()
-	var occupied_count := inventory_occupied_count(working_inventory)
-	_loot_batch_debug["occupied_scans"] = int(_loot_batch_debug.get("occupied_scans", 0)) + 1
+	var maximum_weight := 0 if gold_only else max_inventory_weight()
+	var occupied_count := 0 if gold_only else inventory_occupied_count(working_inventory)
+	if not gold_only:
+		_loot_batch_debug["occupied_scans"] = int(_loot_batch_debug.get("occupied_scans", 0)) + 1
 	var free_slots: Array[int] = []
-	for slot_index in range(mini(working_inventory.size(), INVENTORY_CAPACITY)):
-		if not _inventory_slot_is_occupied(working_inventory[slot_index]):
-			free_slots.append(slot_index)
+	if not gold_only:
+		for slot_index in range(mini(working_inventory.size(), INVENTORY_CAPACITY)):
+			if not _inventory_slot_is_occupied(working_inventory[slot_index]):
+				free_slots.append(slot_index)
 	var free_slot_cursor := 0
 	var merge_slots_by_identity: Dictionary = {}
 	var outcomes: Array = []
@@ -7034,17 +7051,12 @@ func prepare_loot_save(candidates: Array) -> Dictionary:
 	payload["inventory"] = plan.inventory_after
 	payload["gold"] = plan.gold_after
 	var path := _profile_path(active_profile_id)
-	var text := JSON.stringify(payload)
-	var parsed: Variant = JSON.parse_string(text)
-	if not parsed is Dictionary or not bool(_validate_json_candidate(parsed, _json_validator_for_path(path)).get("valid", false)):
-		return {"immediate": _loot_save_failure(plan.outcomes)}
 	plan["profile_id"] = active_profile_id
 	plan["write_generation"] = _atomic_write_generation
 	plan["path"] = path
-	plan["bytes"] = text.to_utf8_buffer()
 	var writer := LootPreparedFile.new()
 	plan["writer"] = writer
-	writer.start(path + ".pickup-%d.tmp" % writer.get_instance_id(), plan.bytes)
+	writer.start_document(path + ".pickup-%d.tmp" % writer.get_instance_id(), payload)
 	return plan
 
 
@@ -7055,7 +7067,15 @@ func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
 		or inventory != plan.inventory_before or gold != int(plan.gold_before)):
 		plan.writer.cancel()
 		return {"retry": true, "reason": "newer_character_state"}
-	if not bool(state.success) or not _promote_verified_json(str(plan.path), str(plan.writer.path), plan.bytes):
+	if not bool(state.success):
+		plan.writer.cancel()
+		return _loot_save_failure(plan.outcomes)
+	var validated: Variant = state.get("document", {})
+	if not validated is Dictionary or not bool(_validate_json_candidate(validated, _json_validator_for_path(str(plan.path))).get("valid", false)):
+		plan.writer.cancel()
+		return _loot_save_failure(plan.outcomes)
+	plan["bytes"] = state.bytes
+	if not _promote_verified_json(str(plan.path), str(plan.writer.path), plan.bytes):
 		plan.writer.cancel()
 		return _loot_save_failure(plan.outcomes)
 	var inventory_changed_value: bool = inventory != plan.inventory_after

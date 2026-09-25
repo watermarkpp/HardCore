@@ -233,6 +233,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var profile_started_usec := RuntimeDiagnostics.timing_start()
 	var position_before_move := global_position
 	var was_struck_locked := _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0
 	_attack_timer = maxf(0.0, _attack_timer - delta)
@@ -351,6 +352,9 @@ func _physics_process(delta: float) -> void:
 		locomotion_distance_gu += actual_ground_motion_gu.length()
 		if locomotion_state == LOCOMOTION_WALK and locomotion_distance_gu >= WALK_TO_RUN_DISTANCE_GU:
 			locomotion_state = LOCOMOTION_RUN
+	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(profile_started_usec)
+	if elapsed_usec > 0:
+		RuntimeDiagnostics.record_performance_max(&"player_physics_max_ms", float(elapsed_usec) / 1000.0)
 
 
 func set_touch_vector(value: Vector2) -> void:

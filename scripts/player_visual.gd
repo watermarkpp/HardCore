@@ -69,6 +69,7 @@ var _weapon_action_textures: Dictionary = {}
 var _helmet_action_textures: Dictionary = {}
 var _appearance_texture_cache: Dictionary = {}
 var _v2_layer_texture_cache: Dictionary = {}
+var _equipment_visual_signature: Array = []
 var _body_action_frame_counts: Dictionary = {}
 var _weapon_action_frame_counts: Dictionary = {}
 var _helmet_action_frame_counts: Dictionary = {}
@@ -382,7 +383,7 @@ func health_bar_anchor() -> Vector2:
 
 func refresh_profession() -> void:
 	_update_visibility()
-	_refresh_equipment_visuals()
+	_refresh_equipment_visuals(true)
 
 
 func _update_visibility() -> void:
@@ -725,9 +726,21 @@ func _resolved_item_appearance(
 	return legacy if legacy is Dictionary else {}
 
 
-func _refresh_equipment_visuals() -> void:
+func _refresh_equipment_visuals(force := false) -> void:
 	if weapon_accent == null:
 		return
+	# Durability changes keep the worn items and their art. Avoid re-resolving
+	# every layer and clearing the texture cache on each confirmed physical hit.
+	var signature: Array = [PlayerState.profession, PlayerState.gender]
+	for slot: String in ["武器", "衣服", "头盔"]:
+		var record := _equipped_record(slot)
+		signature.append(record.get("item_id", -1))
+		signature.append(record.get("itemId", -1))
+		signature.append(record.get("name", ""))
+		signature.append(record.get("itemName", ""))
+	if not force and signature == _equipment_visual_signature:
+		return
+	_equipment_visual_signature = signature
 	var base_appearance := GameData.player_base_appearance(PlayerState.profession, PlayerState.gender)
 	_base_action_textures = _load_appearance_actions(base_appearance)
 	_formal_base_loaded = not _base_action_textures.is_empty()
@@ -868,7 +881,7 @@ func weapon_draws_behind(direction_row: int) -> bool:
 
 
 func _on_database_reloaded() -> void:
-	_refresh_equipment_visuals()
+	_refresh_equipment_visuals(true)
 
 
 func _update_skill_effect() -> void:

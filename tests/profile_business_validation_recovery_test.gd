@@ -16,6 +16,7 @@ func _run() -> void:
 	PlayerState.test_mode = false
 	_test_profile_primary_backup_matrix()
 	_test_future_profile_blocks_fallback_and_save()
+	_test_cached_profile_write_detects_external_change()
 	_test_profile_index_validation_and_recovery()
 	_test_profile_index_update_preserves_unloadable_entries()
 	_test_profile_scalar_validation_and_high_level_compatibility()
@@ -128,6 +129,31 @@ func _test_future_profile_blocks_fallback_and_save() -> void:
 	assert(FileAccess.get_file_as_string(profile_path) == future_text)
 	assert(FileAccess.get_file_as_string(profile_path + ".bak") == old_text)
 	assert(_quarantine_paths(profile_path).is_empty())
+
+
+func _test_cached_profile_write_detects_external_change() -> void:
+	_configure_case("cached_profile_write")
+	var profile_id := "cached_profile"
+	var path := PlayerState._profile_path(profile_id)
+	PlayerState.active_profile_id = profile_id
+	assert(PlayerState._write_json_atomic(path, _valid_profile(profile_id, 100)))
+	assert(PlayerState._write_json_atomic(path, _valid_profile(profile_id, 200)))
+	assert(int(PlayerState._read_json(path + ".bak").get("gold", -1)) == 100)
+
+	# Another writer may change the profile between saves. Byte mismatch must
+	# force business validation before the old file can replace the backup.
+	var future := _valid_profile(profile_id, 300)
+	future["save_version"] = PlayerState.SAVE_VERSION + 1
+	var future_text := JSON.stringify(future)
+	_write_raw(path, future_text)
+	assert(not PlayerState._write_json_atomic(path, _valid_profile(profile_id, 400)))
+	assert(FileAccess.get_file_as_string(path) == future_text)
+	assert(int(PlayerState._read_json(path + ".bak").get("gold", -1)) == 100)
+
+	# A valid external edit remains a valid backup for the next promotion.
+	_write_raw(path, JSON.stringify(_valid_profile(profile_id, 500)))
+	assert(PlayerState._write_json_atomic(path, _valid_profile(profile_id, 600)))
+	assert(int(PlayerState._read_json(path + ".bak").get("gold", -1)) == 500)
 
 
 func _test_profile_index_validation_and_recovery() -> void:
@@ -558,6 +584,8 @@ func _capture_state() -> void:
 		"locked": PlayerState._warehouse_transaction_locked,
 		"save_blocked_profile_id": PlayerState._save_blocked_profile_id,
 		"save_blocked_reason": PlayerState._save_blocked_reason,
+		"validated_profile_path": PlayerState._validated_profile_path,
+		"validated_profile_bytes": PlayerState._validated_profile_bytes,
 	}
 
 
@@ -575,3 +603,5 @@ func _restore_state() -> void:
 	PlayerState._warehouse_transaction_locked = bool(_saved.locked)
 	PlayerState._save_blocked_profile_id = str(_saved.save_blocked_profile_id)
 	PlayerState._save_blocked_reason = str(_saved.save_blocked_reason)
+	PlayerState._validated_profile_path = str(_saved.validated_profile_path)
+	PlayerState._validated_profile_bytes = _saved.validated_profile_bytes

@@ -1778,6 +1778,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	var full_process_started_usec := RuntimeDiagnostics.timing_start()
 	# Real frame pacing (perf-smoothness-r1 Phase A): `_process(delta)` is
 	# clamped by the engine (8/60 = 0.133s default) and was provably blind to
 	# real stalls (PERF-02 of the 2026-09-18 audit). Measure wall-clock time
@@ -1878,6 +1879,9 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("skill_%d" % (index + 1)):
 			_use_quick_slot(index)
 	RuntimeDiagnostics.record_timing_ms(&"process_ms", process_started_usec)
+	var full_process_usec := RuntimeDiagnostics.timing_elapsed_usec(full_process_started_usec)
+	if full_process_usec > 0:
+		RuntimeDiagnostics.record_performance_max(&"full_process_max_ms", float(full_process_usec) / 1000.0)
 
 
 func _constrain_player_foot_to_runtime_ground() -> bool:
@@ -13797,9 +13801,23 @@ func _flush_loot_collections(allow_background := false) -> Dictionary:
 		transaction_pending.append(candidate)
 		candidates.append(candidate.duplicate(true))
 	if allow_background and not PlayerState.test_mode and not candidates.is_empty():
+		var inventory_bucket := -1
+		if RuntimeDiagnostics.performance_timing_enabled():
+			var occupied_slots := 0
+			for item: Variant in PlayerState.inventory:
+				if item is Dictionary and not (item as Dictionary).is_empty():
+					occupied_slots += 1
+			inventory_bucket = mini(4, floori(float(occupied_slots) / 25.0))
+			RuntimeDiagnostics.set_performance_value(&"loot_inventory_occupied_last", float(occupied_slots))
+			RuntimeDiagnostics.increment_performance_counter(StringName("loot_prepare_bucket_%d_count" % inventory_bucket))
+		var prepare_started_usec := RuntimeDiagnostics.timing_start()
 		var plan := PlayerState.prepare_loot_save(candidates)
+		var prepare_usec := RuntimeDiagnostics.timing_elapsed_usec(prepare_started_usec)
+		if prepare_usec > 0:
+			RuntimeDiagnostics.record_performance_max(&"loot_prepare_max_ms", float(prepare_usec) / 1000.0)
+			RuntimeDiagnostics.record_performance_max(StringName("loot_prepare_bucket_%d_max_ms" % inventory_bucket), float(prepare_usec) / 1000.0)
 		if not plan.has("immediate"):
-			_prepared_loot_collection = {"plan": plan, "pending": transaction_pending, "candidate_count": pending.size(), "stale_count": stale_count}
+			_prepared_loot_collection = {"plan": plan, "pending": transaction_pending, "candidate_count": pending.size(), "stale_count": stale_count, "inventory_bucket": inventory_bucket}
 			return {"pending": true}
 		return _finish_loot_collection_outcomes(transaction_pending, plan.immediate, pending.size(), stale_count, profile_started_usec)
 	var result: Dictionary = (
@@ -13828,7 +13846,19 @@ func _poll_prepared_loot_collection(wait := false) -> Dictionary:
 		cohort.plan.writer.cancel()
 		result = {"retry": true, "reason": "pickup_origin_changed"}
 	else:
+		var commit_started_usec := RuntimeDiagnostics.timing_start()
 		result = PlayerState.finish_prepared_loot_save(cohort.plan, wait)
+		if not bool(result.get("pending", false)):
+			if cohort.plan.has("bytes"):
+				RuntimeDiagnostics.set_performance_value(&"loot_save_bytes_last", float((cohort.plan.bytes as PackedByteArray).size()))
+			var commit_usec := RuntimeDiagnostics.timing_elapsed_usec(commit_started_usec)
+			if commit_usec > 0:
+				var field := &"loot_gold_commit_max_ms" if int(cohort.plan.gold_after) != int(cohort.plan.gold_before) else &"loot_item_commit_max_ms"
+				RuntimeDiagnostics.record_performance_max(field, float(commit_usec) / 1000.0)
+				var inventory_bucket := int(cohort.get("inventory_bucket", -1))
+				if inventory_bucket >= 0:
+					RuntimeDiagnostics.increment_performance_counter(StringName("loot_commit_bucket_%d_count" % inventory_bucket))
+					RuntimeDiagnostics.record_performance_max(StringName("loot_commit_bucket_%d_max_ms" % inventory_bucket), float(commit_usec) / 1000.0)
 	if bool(result.get("pending", false)): return result
 	_prepared_loot_collection = {}
 	if bool(result.get("retry", false)):
@@ -13880,6 +13910,9 @@ func _finish_loot_collection_outcomes(transaction_pending: Array, result: Dictio
 		_audio_runtime_service.play_item_event("currency:gold", "loot_success", {"map_id": current_map_id})
 	if hud != null and not loot_feedback_names.is_empty():
 		hud.show_loot_batch(loot_feedback_names)
+	var feedback_usec := RuntimeDiagnostics.timing_elapsed_usec(transaction_finished_usec)
+	if feedback_usec > 0:
+		RuntimeDiagnostics.record_performance_max(&"loot_feedback_max_ms", float(feedback_usec) / 1000.0)
 	if CombatDiagnosticLogScript.capture_enabled():
 		print("[LootPickupProfile] ", JSON.stringify({
 			"candidate_count": candidate_count,
