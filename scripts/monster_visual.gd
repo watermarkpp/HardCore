@@ -120,6 +120,9 @@ var _canonical_struck_frame_count := 2
 # in the queue (the playing struck is dequeued first). It drives the vanilla
 # backlog 1.5x playback speed; it NEVER decides the action order anymore.
 var _pending_struck_count := 0
+# HC-MONSTER-COMBAT-R1 Task 3: presentation-side identity of the critical
+# attack currently owning the body. Purely diagnostic (no gameplay reads).
+var _attack_action_serial := 0
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
@@ -1018,6 +1021,62 @@ func play_attack(duration := 0.46) -> void:
 		_enqueue_presentation(PresentationAction.ATTACK, duration)
 		return
 	_start_attack_visual(duration)
+
+
+## HC-MONSTER-COMBAT-R1 Task 3 (F01): critical attack arbitration entry for
+## production combat transactions (contract
+## hardcore.monster.combat_presentation.r1). A newly accepted attack:
+## - starts immediately at its logic moment (same call, actor clock),
+## - is never queued behind a struck backlog and never dropped on overflow,
+## - merges waiting pure STRUCK feedback into at most one bounded item
+##   (presentation only: damage counts, delays and status judgements are
+##   untouched - they were already applied by the combat layer),
+## - is suppressed while a death presentation owns the body (frozen rule).
+## The legacy play_attack() FIFO above remains only for preview/test callers.
+func begin_attack_presentation(duration := 0.46) -> bool:
+	if _death_remaining > 0.0 or _death_pose_held:
+		return false
+	var merged := _merge_pending_struck_feedback()
+	if merged > 0:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_presentation_struck_merged", merged
+		)
+	_attack_action_serial += 1
+	_start_attack_visual(duration)
+	return true
+
+
+## Drains the presentation ring, collapsing stale pure-STRUCK items into the
+## single newest feedback item. Any pending presentation (including preview
+## attacks that a newer logical attack supersedes) is merged, never replayed.
+func _merge_pending_struck_feedback() -> int:
+	if _presentation_count <= 0:
+		return 0
+	var merged := 0
+	var kept_kind := -1
+	var kept_duration := 0.0
+	var kept_barrier := -1
+	for i in _presentation_count:
+		var idx := (_presentation_head + i) % PRESENTATION_QUEUE_CAPACITY
+		var kind: int = _presentation_kind[idx]
+		if kind == PresentationAction.STRUCK and kept_kind != PresentationAction.STRUCK:
+			kept_kind = kind
+			kept_duration = _presentation_duration[idx]
+			kept_barrier = _presentation_step_barrier[idx]
+		merged += 1
+	_presentation_head = 0
+	_presentation_tail = 0
+	_presentation_count = 0
+	_pending_struck_count = 0
+	if kept_kind == PresentationAction.STRUCK:
+		_presentation_kind[0] = kept_kind
+		_presentation_duration[0] = kept_duration
+		_presentation_step_barrier[0] = kept_barrier
+		_presentation_head = 0
+		_presentation_tail = 1
+		_presentation_count = 1
+		_pending_struck_count = 1
+	return merged
 
 
 func _start_attack_visual(duration: float) -> void:

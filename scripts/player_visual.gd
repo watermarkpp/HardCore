@@ -335,8 +335,13 @@ func play_action(animation_name: String, duration: float) -> void:
 		_action_remaining = duration
 		_action_duration = duration
 	else:
-		_action_remaining = maxf(_action_remaining, duration)
-		_action_duration = maxf(_action_duration, duration)
+		# HC-MONSTER-COMBAT-R1 Task 5 (F04): a new action owns its own clock.
+		# The historical maxf() let a finished long action (e.g. a 0.8s death)
+		# corrupt the frame progress of a later short attack. Production
+		# callers (attack, skill, revival-idle) each submit a fresh action with
+		# its own duration; none resubmits per-frame to extend.
+		_action_remaining = duration
+		_action_duration = duration
 	_elapsed = 0.0
 	_action_audio_played = false
 	if starts_reaction_action:

@@ -275,6 +275,11 @@ func _physics_process(delta: float) -> void:
 		# Periodic poison damage is not an RM_STRUCK hit in the reference server,
 		# so it must not refresh the movement/action lock.
 		take_damage(poison_damage, false)
+	elif poison_time <= 0.0 and poison_damage != 0:
+		# HC-MONSTER-COMBAT-R1 Task 6 (F05): a naturally expired old-channel
+		# poison converges its residual strength to zero, so a later weaker
+		# poison can never inherit the expired stronger tick.
+		poison_damage = 0
 	_update_monster_source_poison(delta)
 	if shield_time == 0.0:
 		damage_reduction = 0.0
@@ -1573,7 +1578,18 @@ func apply_control(seconds: float) -> void:
 
 
 func apply_poison(tick_damage: int, seconds: float) -> void:
-	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
+	# HC-MONSTER-COMBAT-R1 Task 6 (F05): invalid input is rejected instead of
+	# being floored into a live poison (the old maxi(1, ...) floor created a
+	# damage value with no legal caller and could anchor residual strength).
+	if tick_damage <= 0 or seconds <= 0.0 or not is_finite(seconds):
+		return
+	if poison_time <= 0.0:
+		# The previous cycle expired naturally: the new poison owns its own
+		# strength. Expired strength must never leak into the fresh cycle.
+		poison_damage = tick_damage
+	else:
+		# Both poisons still run: the stronger tick stays authoritative.
+		poison_damage = maxi(poison_damage, tick_damage)
 	poison_time = maxf(poison_time, seconds)
 	queue_redraw()
 

@@ -371,8 +371,14 @@ var _background_accumulated_delta := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
 var _boss_phase_two := false
-var _boss_phase_enabled := true
-var _boss_skill_enabled := true
+# HC-MONSTER-COMBAT-R1 Task 2 (F02 + review P1): boss capabilities are opt-in.
+# Only an exact-ID boss_rule may enable the skill or the phase mechanics.
+# Bosses without a rule must never inherit implicit defaults: the old `true`
+# defaults exposed the 4.84 GU fallback skill and, together with the hidden
+# 1.15/0.78 interval in _current_attack_interval(), a whole unsanctioned
+# attack path for ruleless bosses.
+var _boss_phase_enabled := false
+var _boss_skill_enabled := false
 var _boss_skill_direction_ground := Vector2.DOWN
 var _boss_skill_footprint_snapshot: Dictionary = {}
 var _last_boss_skill_hit := false
@@ -921,7 +927,14 @@ func _play_attack_animation(duration: float) -> void:
 	if not combat_enabled:
 		return
 	if visual != null:
-		visual.play_attack(duration)
+		# HC-MONSTER-COMBAT-R1 Task 3 (F01): production combat presentations
+		# enter the critical arbitration slot, so a legal attack can never be
+		# queued behind a struck backlog or silently dropped on overflow. The
+		# attack-start audio commits only when the presentation actually starts
+		# (same frame, same action); damage timing stays with the combat layer.
+		if visual.begin_attack_presentation(duration):
+			_audio_attack_started()
+		return
 	_audio_attack_started()
 
 
@@ -1596,6 +1609,7 @@ func _request_autonomous_step(
 		use_crowd_steering,
 		reason,
 		engagement_target,
+		now_ms,
 	)
 	if not started:
 		_clear_continuous_pursuit_intent()
@@ -1608,6 +1622,7 @@ func _begin_autonomous_step_without_cadence(
 	use_crowd_steering: bool,
 	reason: StringName,
 	engagement_target: Node2D = null,
+	now_ms_override := -1,
 ) -> bool:
 	# HC-POLY-R2
 	_hc_polygon_step_override = Vector2.INF
@@ -1616,6 +1631,18 @@ func _begin_autonomous_step_without_cadence(
 	if _movement_authority_failed_closed or stationary or dormant:
 		return false
 	if control_time > 0.0 or charm_time > 0.0:
+		return false
+	# HC-MONSTER-COMBAT-R1 Task 4 (F03): the shared next-segment gate. A
+	# direct-magic walk postponement must gate the NEXT autonomous segment even
+	# when the granted pursuit session bypasses cadence.evaluate(). The
+	# committed current step is never revoked here; only a new segment start is
+	# refused, and an already-expired postponement allows the step immediately.
+	if _movement_cadence != null and _movement_cadence.direct_magic_delay_blocks_next_step(
+		Time.get_ticks_msec() if now_ms_override < 0 else now_ms_override
+	):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_direct_magic_walk_delay_blocked_steps"
+		)
 		return false
 	if not desired_direction_ground_gu.is_finite():
 		return false
@@ -2178,6 +2205,9 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 
 
 func _apply_boss_rule() -> void:
+	# HC-MONSTER-COMBAT-R1 Task 2: re-applying a rule resets stale phase state
+	# so old phase-two/interval residue can never leak into a fresh binding.
+	_boss_phase_two = false
 	var timing: Dictionary = boss_rule.get("timing", {})
 	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
 		boss_rule,
@@ -3706,10 +3736,17 @@ func _target_magic_condition_met(offset_ground_gu: Vector2) -> bool:
 
 
 func _current_attack_interval() -> float:
+	# HC-MONSTER-COMBAT-R1 Task 2 (F02): the effective base interval comes only
+	# from the resolved identity chain (_attack_interval). A boss without an
+	# explicit boss_rule no longer falls back to the hidden 1.15/0.78 constants;
+	# an approved phase-two multiplier applies exactly once and only when the
+	# rule itself enabled phaseTwo.
 	if not boss_rule.is_empty():
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
-		return _attack_interval * (float(phase.get("attackIntervalMultiplier", 1.0)) if _boss_phase_two else 1.0)
-	return (0.78 if _boss_phase_two else 1.15) if is_boss else _attack_interval
+		return _attack_interval * (
+			float(phase.get("attackIntervalMultiplier", 1.0)) if _boss_phase_two else 1.0
+		)
+	return _attack_interval
 
 
 func _update_pending_attack(delta: float) -> void:
@@ -7476,6 +7513,10 @@ func draw_ellipse_shadow(radius_px: float, center_px := Vector2.ZERO) -> void:
 
 func _update_boss_skill(delta: float, distance_gu: float) -> void:
 	if not combat_enabled:
+		return
+	# HC-MONSTER-COMBAT-R1 Task 2: the entry itself validates the capability so
+	# no future call site can silently re-introduce the ruleless fallback skill.
+	if not _boss_skill_enabled:
 		return
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	var phase: Dictionary = boss_rule.get("phaseTwo", {})
