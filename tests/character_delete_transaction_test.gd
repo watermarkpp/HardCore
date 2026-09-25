@@ -34,6 +34,12 @@ func _run() -> void:
 	var preserved_bytes := FileAccess.get_file_as_bytes(preserved_path)
 	for suffix: String in [".tmp", ".corrupt.tmp"]:
 		_write_text(TEST_DIRECTORY + "/" + deleted_id + ".json" + suffix, "delete-sidecar" + suffix)
+	var deleted_clock_path := PlayerState._world_clock_path(deleted_id)
+	var deleted_event_path := PlayerState._death_event_path(deleted_id, 1)
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(deleted_clock_path.get_base_dir()))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(deleted_event_path.get_base_dir()))
+	_write_text(deleted_clock_path, "clock-sidecar")
+	_write_text(deleted_event_path, "death-event")
 	assert(FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json.bak"), "delete fixture backup missing")
 
 	var hall: Control = load("res://scenes/character_select.tscn").instantiate()
@@ -79,6 +85,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
 		assert(not FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json" + suffix), "deleted profile sidecar survived: %s" % suffix)
+	assert(not FileAccess.file_exists(deleted_clock_path))
+	assert(not FileAccess.file_exists(deleted_event_path))
 	assert(FileAccess.get_file_as_bytes(preserved_path) == preserved_bytes, "unrelated profile bytes changed")
 	assert(not _index_has(deleted_id), "deleted profile remains indexed")
 	# The ordinary writable fixture must complete all sidecar cleanup.  A future
