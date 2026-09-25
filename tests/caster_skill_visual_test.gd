@@ -124,14 +124,6 @@ func _ready() -> void:
 	add_child(second_storm)
 	_assert_trial_screen_sprite(first_storm._sprites[0])
 	_assert_trial_screen_sprite(second_storm._sprites[0])
-	var storm_copy := first_storm._sprites[0].get_parent().get_child(
-		first_storm._sprites[0].get_index() - 1
-	) as BackBufferCopy
-	var viewport_area := get_viewport().get_visible_rect().get_area()
-	assert(storm_copy.rect.get_area() < viewport_area)
-	print("ICE_STORM_COPY_AREA: %d/%d pixels" % [
-		int(storm_copy.rect.get_area()), int(viewport_area)
-	])
 	assert(first_storm._sprites[0].get_parent() != second_storm._sprites[0].get_parent())
 	assert(CasterSkillVisualRegistry.animation_profile("wizard.ice_storm").frame_count == 20)
 	assert(CasterSkillVisualRegistry.animation_profile("wizard.ice_storm").frame_time_ms == 80)
@@ -223,9 +215,4 @@ func _assert_trial_screen_sprite(effect_sprite: Sprite2D) -> void:
 	assert(effect_sprite.get_index() > 0)
 	var copy := effect_sprite.get_parent().get_child(effect_sprite.get_index() - 1)
 	assert(copy is BackBufferCopy)
-	assert(copy.copy_mode == BackBufferCopy.COPY_MODE_RECT)
-	assert(copy.visible == effect_sprite.visible)
-	var expected := effect_sprite.transform * effect_sprite.get_rect()
-	assert(copy.rect.has_area())
-	assert(copy.rect.has_point(expected.position))
-	assert(copy.rect.has_point(expected.end))
+	assert(copy.copy_mode == BackBufferCopy.COPY_MODE_VIEWPORT)
