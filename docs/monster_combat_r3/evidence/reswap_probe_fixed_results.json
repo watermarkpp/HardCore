@@ -1,0 +1,60 @@
+{
+  "source_commit": "2960bbe682b61306eed8f7c9fe0c6eb6c6accb9a",
+  "source_path": "tools/verify_catalog_reswap.py",
+  "source_git_blob": "b5f669317467ed79c86b59404f2b822f4a16f52d",
+  "source_matches_audited_blob": false,
+  "scope": "Original Python verifier executed on synthetic inputs; not a Godot/game/runtime test.",
+  "results": [
+    {
+      "case": "unchanged_positive_control",
+      "should_accept": true,
+      "exit_code": 0,
+      "accepted": true,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "entries_only_combat_tamper",
+      "should_accept": false,
+      "exit_code": 1,
+      "accepted": false,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "UNEXPECTED: new: entries[0] != entries_by_id[24]\nunexpected diff count: 1\n",
+      "stderr": ""
+    },
+    {
+      "case": "remove_all_source_bindings",
+      "should_accept": false,
+      "exit_code": 1,
+      "accepted": false,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "UNEXPECTED: sources table missing or empty\nUNEXPECTED: sources[assets/data/vanilla_176/monsters.json]\nunexpected diff count: 2\n",
+      "stderr": ""
+    },
+    {
+      "case": "exempt_id_unrelated_combat_evidence_tamper",
+      "should_accept": false,
+      "exit_code": 1,
+      "accepted": false,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "UNEXPECTED: entries_by_id[33].source_evidence\nunexpected diff count: 1\n",
+      "stderr": ""
+    },
+    {
+      "case": "by_id_combat_negative_control",
+      "should_accept": false,
+      "exit_code": 1,
+      "accepted": false,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "UNEXPECTED: entries_by_id[24].combat\nunexpected diff count: 1\n",
+      "stderr": ""
+    }
+  ],
+  "contract_failures": 0
+}

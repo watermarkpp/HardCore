@@ -1,0 +1,24 @@
+{
+  "contract_id": "hardcore.monster.combat.r3.reswap_rebuild_attestation.v1",
+  "date": "2026-09-27",
+  "verifier": "tools/verify_catalog_reswap.py",
+  "reproducer": "tools/reproduce_reswap_blindspots.py --expect-fixed",
+  "reproducer_result": "5/5 contract_satisfied, contract_failures=0",
+  "reproducer_evidence": "docs/monster_combat_r3/evidence/reswap_probe_fixed_results.json",
+  "rebuilds": {
+    "builder": "tools/build_canonical_monster_catalog.py --output <tmp>",
+    "rebuild_a_sha256": "DA56563D5956F2936A6F8EC1CD7C2A6E06CE5395DCB2FB1D641506410AEEACF3",
+    "rebuild_b_sha256": "DA56563D5956F2936A6F8EC1CD7C2A6E06CE5395DCB2FB1D641506410AEEACF3",
+    "byte_identical": true,
+    "identities": 156,
+    "runtime_allowed": 156,
+    "drop_rows": 7032
+  },
+  "published_vs_rebuild": {
+    "published": "assets/data/runtime/canonical_monster_catalog.json",
+    "verifier_exit": 0,
+    "unexpected_diff_count": 0,
+    "note": "the precise-exemption verifier accepts the real formal rebuild - no legitimate diff was harmed"
+  },
+  "scope": "Python verifier + builder executed locally; synthetic probe cases never touch production data."
+}

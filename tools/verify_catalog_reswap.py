@@ -2,6 +2,18 @@
 the formal generator rebuild. Allowed differences are enumerated; anything
 else fails the build-swap gate. Usage: python tools/verify_catalog_reswap.py
 <old> <new>
+
+HC-MONSTER-COMBAT-R3 W4 (R3-05): the three audited blind spots are closed.
+- BOTH views are gated: the entries array is not a free mirror of
+  entries_by_id; every row must equal its twin in BOTH files and a change to
+  either view fails the swap (entries_only_combat_tamper).
+- The source-binding table is part of the gate: dropping or rewriting a
+  provenance binding fails the swap; an empty table never passes
+  (remove_all_source_bindings).
+- The exempt-id carve-out is precise: only the drop_policy of an exempt id
+  may legitimately change in a formal rebuild. Combat stats and their source
+  evidence are never exempt, not on an exempt id
+  (exempt_id_unrelated_combat_evidence_tamper).
 """
 
 from __future__ import annotations
@@ -28,6 +40,20 @@ def load(path: str) -> dict:
     return normalize(json.loads(Path(path).read_text(encoding="utf-8")))
 
 
+def check_view_consistency(label: str, doc: dict, unexpected: list) -> None:
+    """R3 W4: in each file, entries rows and entries_by_id must agree."""
+    rows = doc.get("entries", [])
+    by_id = doc.get("entries_by_id", {})
+    row_keys = []
+    for index, row in enumerate(rows):
+        key = str(row.get("monster_id"))
+        row_keys.append(key)
+        if by_id.get(key) != row:
+            unexpected.append(f"{label}: entries[{index}] != entries_by_id[{key}]")
+    if set(by_id) != set(row_keys):
+        unexpected.append(f"{label}: entries/entries_by_id key sets differ")
+
+
 def main() -> int:
     old, new = load(sys.argv[1]), load(sys.argv[2])
     unexpected: list[str] = []
@@ -40,13 +66,19 @@ def main() -> int:
         if old.get(key) != new.get(key):
             unexpected.append(f"top-level {key}")
 
+    # R3 W4: the source-binding table is part of the gate.
     old_sources, new_sources = old.get("sources", {}), new.get("sources", {})
+    if not new_sources:
+        unexpected.append("sources table missing or empty")
     for path in sorted(set(old_sources) | set(new_sources)):
         a, b = old_sources.get(path), new_sources.get(path)
         if a != b:
-            print(f"sources diff: {path}\n  old={a}\n  new={b}")
+            unexpected.append(f"sources[{path}]")
 
-    old_by_id, new_by_id = old["entries_by_id"], new["entries_by_id"]
+    check_view_consistency("old", old, unexpected)
+    check_view_consistency("new", new, unexpected)
+
+    old_by_id, new_by_id = old.get("entries_by_id", {}), new.get("entries_by_id", {})
     if set(old_by_id) != set(new_by_id):
         unexpected.append("entries_by_id key set differs")
     for key in sorted(set(old_by_id) & set(new_by_id)):
@@ -54,16 +86,13 @@ def main() -> int:
         for field in sorted(set(a) | set(b)):
             if a.get(field) == b.get(field):
                 continue
+            # R3 W4: the exemption is precise - only the drop_policy of an
+            # exempt id may legitimately change in a formal rebuild. Combat
+            # stats and their source evidence are never exempt, not even on
+            # an exempt id.
             if field == "drop_policy" and key in exempt_ids:
                 continue
-            if field == "source_evidence" and key in exempt_ids:
-                continue
             unexpected.append(f"entries_by_id[{key}].{field}")
-    for key in sorted(set(old_by_id) & set(new_by_id)):
-        a, b = old_by_id[key], new_by_id[key]
-        for field in ("drop_policy", "source_evidence"):
-            if a.get(field) != b.get(field) and key not in exempt_ids:
-                unexpected.append(f"UNEXPECTED {field} change on {key}")
 
     for diff in unexpected:
         print("UNEXPECTED:", diff)
