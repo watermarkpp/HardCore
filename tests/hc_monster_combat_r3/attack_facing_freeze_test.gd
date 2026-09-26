@@ -87,7 +87,12 @@ func _run() -> void:
 	)
 	enemy.queue_free()
 
-	# --- Scene C: the boss combat-facing tracker respects the freeze ---
+	# --- Scene C: the boss combat-facing tracker keeps live-turning the LOGIC
+	# layer while the freeze stays overlay-only (R3 W7 correction of R3-03:
+	# "冻结朝向只给 overlay（身体仍读 actor.facing）" - corpse_king_boss_test's
+	# "bosses keep facing the player while pursuing/attacking" is the standing
+	# authority; the attack ROW stays on the commit facing, the actor.facing
+	# property keeps following the target).
 	var boss := EnemyActor.new()
 	boss.setup(GameData.get_monster_by_id(76), player, false)
 	boss.configure_runtime_map_projection(
@@ -104,14 +109,14 @@ func _run() -> void:
 	boss._attack_action_active = true
 	boss._hc_finalize_boss_facing()
 	_expect(
-		boss.facing == Vector2.RIGHT,
-		"an active action must freeze the boss combat-facing tracker",
+		boss.facing != Vector2.RIGHT,
+		"the boss combat-facing tracker keeps live-turning the logic layer even mid-action",
 	)
 	boss._attack_action_active = false
 	boss._hc_finalize_boss_facing()
 	_expect(
 		boss.facing != Vector2.RIGHT,
-		"outside the action window the tracker follows the target again",
+		"outside the action window the tracker still follows the target",
 	)
 	boss.queue_free()
 	player.queue_free()

@@ -2691,14 +2691,14 @@ func _physics_process_internal(delta: float) -> void:
 		contact_distance_gu,
 		engagement_distance_gu,
 	)
-	if _pending_attack_time >= 0.0:
-		velocity = Vector2.ZERO
-		# R3 W2 (R3-03): the committed action froze its facing; the pending
-		# wait must not live-turn the body before the facing update below.
-		_request_actor_redraw_if_dynamic()
-		return
+	# R3 W7 fix: the logical live-turn happens BEFORE the pending check again
+	# (original order). The R3-03 freeze stays overlay-only.
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
+	if _pending_attack_time >= 0.0:
+		velocity = Vector2.ZERO
+		_request_actor_redraw_if_dynamic()
+		return
 	if dormant:
 		var wake_range_gu := MonsterUnitAdapterScript.range_gu(
 			behavior_profile,
@@ -8126,12 +8126,14 @@ func _hc_release_id() -> String:
 
 func _hc_finalize_boss_facing() -> void:
 	# Movement owns movement_facing. This function only maintains combat facing.
-	# R3 W2 (R3-03): while an attack action owns the body its facing is frozen
-	# at the commit tick - the combat-facing tracker must not live-turn it.
+	# R3 W7 fix: the R3-03 freeze belongs to the OVERLAY only (the attack
+	# presentation draws its committed row). The logical actor.facing keeps
+	# following the target - corpse_king_boss_test's "bosses keep facing the
+	# player while pursuing/attacking" is the standing authority, so the
+	# combat-facing tracker must NOT be gated on _attack_action_active.
 	if (
 		not is_boss
 		or _pending_attack_time >= 0.0
-		or _attack_action_active
 		or _hc_last_start_tick == Engine.get_physics_frames()
 		or control_time > 0.0
 		or charm_time > 0.0
@@ -8185,9 +8187,31 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		return
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
-		# R3 W2 (R3-03): the committed action froze its facing at the commit
-		# tick (the release record and the overlay share it). The pending wait
-		# must not live-turn the body away from that frozen swing direction.
+		# R3 W7 fix: the R3-03 freeze belongs to the OVERLAY only - the attack
+		# presentation keeps drawing its committed row/facing. The LOGICAL
+		# actor.facing keeps live-turning toward the pending target while the
+		# hit frame waits (corpse_king_boss_test's standing "keep facing the
+		# player while pursuing/attacking" authority), so this restores the
+		# original live-turn that W2 removed too broadly.
+		var pending_target: Node2D = _pending_attack_target
+		if (
+			is_instance_valid(pending_target)
+			and not pending_target.is_queued_for_deletion()
+		):
+			var pending_offset_ground_gu: Vector2 = (
+				_ground_delta_gu_between_screen_positions(
+					global_position,
+					pending_target.global_position
+				)
+			)
+			if (
+				pending_offset_ground_gu.is_finite()
+				and pending_offset_ground_gu.length_squared()
+				> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+			):
+				facing = _screen_facing_for_ground_direction(
+					pending_offset_ground_gu
+				)
 		_request_actor_redraw_if_dynamic()
 		return
 	var offset := _ground_delta_gu_between_screen_positions(global_position, target.global_position)
