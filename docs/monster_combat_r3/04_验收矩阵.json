@@ -1,0 +1,146 @@
+{
+  "schema": "hardcore.monster.review.r3.acceptance.v1",
+  "reviewed_sha": "2960bbe682b61306eed8f7c9fe0c6eb6c6accb9a",
+  "overall": "CHANGES_REQUIRED",
+  "issues": [
+    {
+      "id": "R3-01",
+      "title": "攻击实时时钟与游戏时钟分裂，逻辑起点未消费",
+      "evidence_level": "S/C",
+      "priority": "P1",
+      "owner_task": "W1",
+      "acceptance": [
+        "暂停保留或一致取消",
+        "不同渲染节奏结果一致",
+        "冷恢复不重开旧动作"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-02",
+      "title": "父身份未绑定真实伤害，音频误消费旧帧/过期补声",
+      "evidence_level": "S/C",
+      "priority": "P1",
+      "owner_task": "W1/W2",
+      "acceptance": [
+        "真实pending/子release父身份",
+        "A帧不得消费B音频",
+        "预算拒绝不抹去逻辑阶段",
+        "无过期补声"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-03",
+      "title": "冻结朝向未接入身体，HC主通道仍隐式跟踪",
+      "evidence_level": "S",
+      "priority": "P1",
+      "owner_task": "W2",
+      "acceptance": [
+        "身体与overlay实际方向一致",
+        "逐delivery追踪政策保留",
+        "238/239/76绕圈回归"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-04",
+      "title": "身体rule/tier错配、拒绝实体仍暴露、孤儿碰撞节点",
+      "evidence_level": "S/C",
+      "priority": "P1",
+      "owner_task": "W3",
+      "acceptance": [
+        "两种自洽错配均拒绝",
+        "正式工厂拒绝不注册/不受伤/不掉落",
+        "正常禁战实体保留",
+        "重复拒绝无Node泄漏"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-05",
+      "title": "目录替换门三类实测漏检",
+      "evidence_level": "X",
+      "priority": "P1",
+      "owner_task": "W4",
+      "acceptance": [
+        "原Python5例正负对照",
+        "严格两视图与精确来源diff",
+        "两次正式重建一致",
+        "未授权字段零变化"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-06",
+      "title": "死亡回调跨生命及同步回调后尾部未复核",
+      "evidence_level": "S/C",
+      "priority": "P1",
+      "owner_task": "W5",
+      "acceptance": [
+        "复活后旧通知失效",
+        "第二次死亡不接收第一token",
+        "复活消耗与物理耐久恰一次",
+        "命中后副作用不跨代际"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-07",
+      "title": "全身份/Boss20起手/身体对仅局部或表现测试",
+      "evidence_level": "V",
+      "priority": "P1",
+      "owner_task": "W6",
+      "acceptance": [
+        "全ID生产能力普查",
+        "三Boss真实20次起手",
+        "真实多身体对碰撞与HP",
+        "双向受击与破坏性自检"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-08",
+      "title": "性能无真实宠物/AOE/群死，采样不是引擎逐帧",
+      "evidence_level": "S/V",
+      "priority": "P1",
+      "owner_task": "W7",
+      "acceptance": [
+        "负载计数符合名称",
+        "真实SceneTree帧",
+        "每条件至少3次配对",
+        "BASE与最终候选可比",
+        "记录噪声而不主观豁免"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-09",
+      "title": "相关旧失败仍批量外移",
+      "evidence_level": "V",
+      "priority": "P1",
+      "owner_task": "W6",
+      "acceptance": [
+        "逐路径根因/可达性/任务归属",
+        "相关生产故障关闭",
+        "旧断言合法更新并补边界",
+        "真正独立债务有排除依据"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    },
+    {
+      "id": "R3-10",
+      "title": "最终源码/原始证据/干净检出未闭环",
+      "evidence_level": "R/V",
+      "priority": "P1",
+      "owner_task": "W0/W7",
+      "acceptance": [
+        "原始runner实际字节可得",
+        "最终SOURCE_SHA与测试一致",
+        "干净检出Godot运行",
+        "保护域与证据SHA256"
+      ],
+      "implementation_status": "NOT_IMPLEMENTED_BY_REVIEWER"
+    }
+  ]
+}
