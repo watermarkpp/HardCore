@@ -207,13 +207,14 @@ func _ready() -> void:
 		"fixture: attack-start played once"
 	)
 
-	# Frame-skip: the visual jumps straight to frame 3 in one draw.
-	s5.visual.current_state = "attack"
-	s5.visual.current_frame = 3
+	# R3 W2 contract: the strike phase crossing is judged from the action's
+	# OWN logical age (combat clock), never from cached draw state. The
+	# fixture advances the owner's combat clock across the phase threshold.
+	s5._combat_action_time_s += 0.30
 	s5._audio_observe_visual_state()
 	assert(
 		fake_audio.played.size() == 2 and str(fake_audio.played[1]) == "attack_frame",
-		"a jumped frame must still fire the frame sound exactly once (got %s)"
+		"crossing the logical strike phase fires the frame sound exactly once (got %s)"
 			% str(fake_audio.played)
 	)
 	# Duplicate consumption: observing the same sequence again emits nothing.
@@ -223,32 +224,39 @@ func _ready() -> void:
 		"the frame sound must be consumed once per parent action (got %s)"
 			% str(fake_audio.played)
 	)
+	# The first action runs out to its natural end.
+	s5._combat_action_time_s += 0.30
+	s5.visual._advance_action_timers(0.30)
+	assert(
+		s5.visual._attack_remaining <= 0.0,
+		"fixture: the first action must have ended"
+	)
 
-	# Cold/hot recovery: a NEW action whose frames stream in too late.
+	# R3 W2 cold/hot contract: a NEW action whose frames stream in too late
+	# ends before its frame phase fired - the phase EXPIRES with the action;
+	# there is no post-action replay (the R2 recovery branch was removed).
 	s5._play_attack_animation(0.46)
 	var serial2: int = s5._audio_attack_sequence
 	assert(
 		serial2 == serial + 1,
 		"the next attack binds the next serial (identity chain)"
 	)
-	s5.visual.current_state = "attack"
-	s5.visual.current_frame = 0
-	s5._audio_observe_visual_state()
-	# Frames observed at 0, then the streaming consumes frames 1..3 between
-	# observations: the next draw sees the attack already over.
+	s5._combat_action_time_s += 0.10
+	s5.visual._advance_action_timers(0.10)
+	# Textures streamed so late that the next draw sees the attack already over.
+	s5._combat_action_time_s += 0.36
+	s5.visual._advance_action_timers(0.36)
 	s5.visual.current_state = "idle"
-	s5.visual.current_frame = 0
-	s5.visual._attack_remaining = 0.0
 	s5._audio_observe_visual_state()
 	assert(
-		fake_audio.played.size() == 4,
-		"cold/hot recovery fires the missed frame sound once (got %s)"
+		fake_audio.played.size() == 3 and str(fake_audio.played[2]) == "attack_start",
+		"an action that ends before its frame phase fires no late replay (got %s)"
 			% str(fake_audio.played)
 	)
 	s5._audio_observe_visual_state()
 	assert(
-		fake_audio.played.size() == 4,
-		"the recovered frame sound is never duplicated"
+		fake_audio.played.size() == 3,
+		"the expired phase is never replayed"
 	)
 
 	s5.queue_free()

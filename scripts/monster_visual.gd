@@ -457,6 +457,24 @@ func current_attack_action_id() -> int:
 	return _attack_action_id if _attack_remaining > 0.0 else -1
 
 
+## HC-MONSTER-COMBAT-R3 W2: the attack action's OWN logical age in seconds,
+## or -1 when no attack presentation owns the body. Phase crossings are
+## judged from this age, never from cached draw state.
+func attack_action_age_seconds() -> float:
+	return _attack_age_seconds() if _attack_remaining > 0.0 else -1.0
+
+
+## HC-MONSTER-COMBAT-R3 W2: the logical strike-frame phase boundary of the
+## CURRENT action. Derived from the action's own age and frame count - a
+## render frame cache from a previous action can never satisfy it.
+func attack_frame_phase_reached() -> bool:
+	if _attack_remaining <= 0.0:
+		return false
+	var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"attack"))
+	var threshold := _hc_m30_attack_duration * 2.0 / float(maxi(count, 4))
+	return _attack_age_seconds() >= threshold
+
+
 func _update_resource_residency() -> void:
 	if active_resources.is_empty():
 		if _inside_visual_distance_px(VISUAL_ACTIVATION_DISTANCE_PX):
@@ -477,7 +495,18 @@ func _update_animation_frame(delta: float) -> void:
 		current_state = "walk"
 	else:
 		current_state = "idle"
-	var visual_facing: Vector2 = actor.movement_facing if current_state == "walk" else actor.facing
+	# HC-MONSTER-COMBAT-R3 W2 (R3-03): one facing authority per delivery
+	# phase. While an attack presentation owns the body, the BODY row uses
+	# the same commit-facing the overlay froze - a live target turn during
+	# the action must not split the body row from the swing overlay. Walk
+	# keeps its own movement facing; every other state follows the actor.
+	var visual_facing: Vector2
+	if current_state == "attack" and _attack_facing_at_commit != Vector2.INF:
+		visual_facing = _attack_facing_at_commit
+	elif current_state == "walk":
+		visual_facing = actor.movement_facing
+	else:
+		visual_facing = actor.facing
 	current_direction = _direction_row(visual_facing)
 	refresh_selection_ring_direction()
 	if current_state != _last_state:

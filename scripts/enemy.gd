@@ -966,6 +966,19 @@ func _audio_attack_started(action_serial := -1) -> void:
 ## presentation is requested. The identity is a four-tuple anchored on the
 ## combat game clock: monotonic serial x source life x world generation, with
 ## `_attack_action_start_time_s` as the timing origin. Returns the serial.
+## HC-MONSTER-COMBAT-R3 W1/W2: the single combat action clock. Advanced ONLY
+## here (the Actor's own physics entry point calls it with exactly one physics
+## delta): pause freezes it, background fast-path ticks accumulate to the same
+## total. The active-action flag closes on the combat clock itself - it must
+## not outlive the action's logical window.
+func _advance_combat_action_clock(delta: float) -> void:
+	_combat_action_time_s += delta
+	if _attack_action_active and (
+		_combat_action_time_s - _attack_action_start_time_s
+	) >= _attack_action_duration_s:
+		_attack_action_active = false
+
+
 func _allocate_attack_action(duration: float) -> int:
 	_attack_logic_serial += 1
 	_attack_action_start_time_s = _combat_action_time_s
@@ -1018,58 +1031,30 @@ func _audio_observe_visual_state() -> void:
 	# R14-B5: only observe MonsterVisual while this attack sequence's frame
 	# audio is still pending. Once the frame sound has settled (or no accepted
 	# attack is running), return immediately without touching the visual node.
-	if (
-		_audio_attack_sequence <= 0
-		or not _audio_attack_start_accepted
-		or _audio_attack_frame_sequence == _audio_attack_sequence
-	):
+	if _audio_attack_sequence <= 0 or _audio_attack_frame_sequence == _audio_attack_sequence:
 		return
 	if visual == null or not is_instance_valid(visual):
 		return
-	var state := str(visual.current_state)
-	var frame := int(visual.current_frame)
-	if (
-		_audio_attack_start_accepted
-		and _audio_attack_sequence > 0
-		and state == "attack"
-		and (frame <= 1 or not _audio_attack_frame_ready)
-	):
-		# HC-MONSTER-COMBAT-R2 T3 frame-skip recovery: the render clock may
-		# jump straight from frame 0/1 to frame 3 in one delta. Observing the
-		# attack state at ANY frame readies the frame sound; a jumped frame no
-		# longer drops the hit sound.
-		_audio_attack_frame_ready = true
-		_audio_attack_presented_seen = true
-	if (
-		_audio_attack_start_accepted
-		and _audio_attack_sequence > 0
-		and _audio_attack_frame_ready
-		and state == "attack"
-		and frame >= 2
-		and _audio_attack_frame_sequence != _audio_attack_sequence
-	):
-		# MonsterVisual uses zero-based atlas frames; >=2 also survives a
-		# render/physics tick that advances across frame 3 without replaying it.
-		_audio_attack_frame_sequence = _audio_attack_sequence
-		_emit_monster_audio("attack_frame")
-	elif (
-		_audio_attack_start_accepted
-		and _audio_attack_sequence > 0
-		and _audio_attack_frame_sequence != _audio_attack_sequence
-		and _audio_attack_presented_seen
-		and state != "attack"
-		and is_instance_valid(visual)
-		and not visual.is_attack_presenting()
-	):
-		# HC-MONSTER-COMBAT-R2 T3 cold/hot recovery: the swing presented (the
-		# attack state was observed for this sequence) but its frame sound
-		# never fired - for example the textures streamed in so late that the
-		# frames were consumed between observations. Fire it once now; the
-		# sequence guard makes duplicate consumption impossible.
-		_audio_attack_frame_sequence = _audio_attack_sequence
-		_emit_monster_audio("attack_frame")
-	_audio_previous_visual_state = state
-	_audio_previous_visual_frame = frame
+	# HC-MONSTER-COMBAT-R3 W2: phase observation is bound to the CURRENT
+	# parent action. Cached draw state that belongs to another action (or a
+	# finished one) can never ready or commit THIS action's audio phases.
+	if visual.current_attack_action_id() != _audio_attack_sequence:
+		return
+	# R3 W2: the strike phase crossing comes from the action's OWN logical
+	# age, not from a drawn frame index. A rejected start sound does not
+	# erase the phase - the marking happens before the callback, exactly once.
+	if not visual.attack_frame_phase_reached():
+		return
+	_audio_attack_frame_ready = true
+	_audio_attack_presented_seen = true
+	_audio_attack_frame_sequence = _audio_attack_sequence
+	_emit_monster_audio("attack_frame")
+	# R3 W2: EXPIRY, not supplementary playback. If the action finishes before
+	# its frame phase fired, the phase expires with the action - there is no
+	# post-action attack_frame emission (the R2 branch that replayed the frame
+	# sound after the action ended was removed with its test contract).
+	_audio_previous_visual_state = str(visual.current_state)
+	_audio_previous_visual_frame = int(visual.current_frame)
 	_audio_previous_facing = facing
 
 
@@ -2549,7 +2534,7 @@ func _physics_process_internal(delta: float) -> void:
 	# frozen by engine pause (no tick runs at all) and stopped only by death.
 	# Every combat consumer (pending damage timing, presentation age, audio
 	# phase) reads this time; the wall clock is not a combat time source.
-	_combat_action_time_s += delta
+	_advance_combat_action_clock(delta)
 	_record_performance_counter(&"active_enemy_physics_count")
 	# Match the original server's object-cycle boundary: damage may reduce HP to
 	# zero during a multi-target release, but death teardown must not interrupt
@@ -2700,12 +2685,14 @@ func _physics_process_internal(delta: float) -> void:
 		contact_distance_gu,
 		engagement_distance_gu,
 	)
-	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
+		# R3 W2 (R3-03): the committed action froze its facing; the pending
+		# wait must not live-turn the body before the facing update below.
 		_request_actor_redraw_if_dynamic()
 		return
+	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if dormant:
 		var wake_range_gu := MonsterUnitAdapterScript.range_gu(
 			behavior_profile,
@@ -8124,9 +8111,12 @@ func _hc_release_id() -> String:
 
 func _hc_finalize_boss_facing() -> void:
 	# Movement owns movement_facing. This function only maintains combat facing.
+	# R3 W2 (R3-03): while an attack action owns the body its facing is frozen
+	# at the commit tick - the combat-facing tracker must not live-turn it.
 	if (
 		not is_boss
 		or _pending_attack_time >= 0.0
+		or _attack_action_active
 		or _hc_last_start_tick == Engine.get_physics_frames()
 		or control_time > 0.0
 		or charm_time > 0.0
@@ -8180,27 +8170,10 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		return
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
-
-		var pending_target: Node2D = _pending_attack_target
-		if (
-			is_instance_valid(pending_target)
-			and not pending_target.is_queued_for_deletion()
-		):
-			var pending_offset_ground_gu: Vector2 = (
-				_ground_delta_gu_between_screen_positions(
-					global_position,
-					pending_target.global_position
-				)
-			)
-			if (
-				pending_offset_ground_gu.is_finite()
-				and pending_offset_ground_gu.length_squared()
-				> GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
-			):
-				facing = _screen_facing_for_ground_direction(
-					pending_offset_ground_gu
-				)
-
+		# R3 W2 (R3-03): the committed action froze its facing at the commit
+		# tick (the release record and the overlay share it). The pending wait
+		# must not live-turn the body away from that frozen swing direction.
+		_request_actor_redraw_if_dynamic()
 		return
 	var offset := _ground_delta_gu_between_screen_positions(global_position, target.global_position)
 	var distance := offset.length()

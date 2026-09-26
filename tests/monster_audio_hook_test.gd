@@ -212,17 +212,23 @@ func _run() -> void:
 	)
 	enemy.set_physics_process(true)
 
-	# Accepted attack actions produce start once; visual frame 3 is observed
-	# separately and is not coupled to damage submission.
+	# Accepted attack actions produce start once; the strike phase crossing is
+	# observed from the action's OWN logical age (R3 W2), never from a cached
+	# drawn frame, and is not coupled to damage submission.
 	enemy._play_attack_animation(1.0)
 	assert(_count(probe, "attack_start") == 1, "attack_start missing")
-	enemy.visual.current_state = "attack"
-	enemy.visual.current_frame = 0
+	# Below the phase threshold: a cached draw state must not commit anything.
+	enemy._combat_action_time_s += 0.04
 	enemy._audio_observe_visual_state()
-	enemy.visual.current_frame = 2
+	assert(
+		_count(probe, "attack_frame") == 0,
+		"the strike phase must not fire before its logical threshold",
+	)
+	# Across the threshold: exactly one frame sound for this action.
+	enemy._combat_action_time_s += 0.56
 	enemy._audio_observe_visual_state()
 	enemy._audio_observe_visual_state()
-	assert(_count(probe, "attack_frame") == 1, "attack frame 3 must be one-shot per action")
+	assert(_count(probe, "attack_frame") == 1, "the strike phase must be one-shot per action")
 
 	# Monster hurt/death/ambient are outside the W4 production whitelist.
 	enemy.current_hp = 100
