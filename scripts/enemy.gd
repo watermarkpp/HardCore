@@ -408,6 +408,15 @@ var _audio_combat_session_serial := 0
 var _audio_owner_key := ""
 var _audio_attack_sequence := 0
 var _audio_attack_frame_sequence := -1
+# HC-MONSTER-COMBAT-R2 T3: true once the attack STATE was observed for the
+# current audio sequence; gates the cold/hot frame-sound recovery so a
+# monster without attack art stays silent.
+var _audio_attack_presented_seen := false
+# HC-MONSTER-COMBAT-R2 T3: parent action identity of the attack that committed
+# most recently. The presentation, the audio stream and the delayed release
+# all bind to this one serial and its logic start timestamp.
+var _attack_logic_serial := 0
+var _attack_logic_started_at_ms := 0
 var _audio_attack_frame_ready := false
 var _audio_attack_start_accepted := false
 var _audio_combat_epoch_target_instance_id := 0
@@ -919,13 +928,18 @@ func _audio_end_combat_session(reason := "explicit_disengage") -> void:
 	_audio_combat_entry_seen = false
 
 
-func _audio_attack_started() -> void:
+func _audio_attack_started(action_serial := -1) -> void:
 	if not combat_enabled:
 		return
-	_audio_attack_sequence += 1
+	# HC-MONSTER-COMBAT-R2 T3: the audio stream binds to the SAME parent
+	# action identity as the presentation. The enemy allocates the serial at
+	# the attack commit tick; presentation start and attack-start audio share
+	# it, so a superseded action can neither emit nor replay audio.
+	_audio_attack_sequence = action_serial if action_serial > 0 else _audio_attack_sequence + 1
 	_audio_attack_frame_sequence = -1
 	_audio_attack_frame_ready = false
 	_audio_attack_start_accepted = false
+	_audio_attack_presented_seen = false
 	# Attack start is emitted only by accepted actions below, never by target
 	# acquisition or an AI preview.
 	_audio_attack_start_accepted = _emit_monster_audio("attack_start")
@@ -934,16 +948,27 @@ func _audio_attack_started() -> void:
 func _play_attack_animation(duration: float) -> void:
 	if not combat_enabled:
 		return
+	# HC-MONSTER-COMBAT-R2 T3: one parent action identity per attack commit.
+	# The serial and the logic start timestamp are allocated HERE (the tick
+	# that also commits the damage release) and handed to the presentation and
+	# the audio stream; the swing facing is frozen at this tick.
+	_attack_logic_serial += 1
+	_attack_logic_started_at_ms = Time.get_ticks_msec()
 	if visual != null:
 		# HC-MONSTER-COMBAT-R1 Task 3 (F01): production combat presentations
 		# enter the critical arbitration slot, so a legal attack can never be
 		# queued behind a struck backlog or silently dropped on overflow. The
 		# attack-start audio commits only when the presentation actually starts
 		# (same frame, same action); damage timing stays with the combat layer.
-		if visual.begin_attack_presentation(duration):
-			_audio_attack_started()
+		if visual.begin_attack_presentation(
+			duration,
+			_attack_logic_serial,
+			_attack_logic_started_at_ms,
+			facing,
+		):
+			_audio_attack_started(_attack_logic_serial)
 		return
-	_audio_attack_started()
+	_audio_attack_started(_attack_logic_serial)
 
 
 func _audio_observe_visual_state() -> void:
@@ -964,9 +989,14 @@ func _audio_observe_visual_state() -> void:
 		_audio_attack_start_accepted
 		and _audio_attack_sequence > 0
 		and state == "attack"
-		and frame <= 1
+		and (frame <= 1 or not _audio_attack_frame_ready)
 	):
+		# HC-MONSTER-COMBAT-R2 T3 frame-skip recovery: the render clock may
+		# jump straight from frame 0/1 to frame 3 in one delta. Observing the
+		# attack state at ANY frame readies the frame sound; a jumped frame no
+		# longer drops the hit sound.
 		_audio_attack_frame_ready = true
+		_audio_attack_presented_seen = true
 	if (
 		_audio_attack_start_accepted
 		and _audio_attack_sequence > 0
@@ -977,6 +1007,22 @@ func _audio_observe_visual_state() -> void:
 	):
 		# MonsterVisual uses zero-based atlas frames; >=2 also survives a
 		# render/physics tick that advances across frame 3 without replaying it.
+		_audio_attack_frame_sequence = _audio_attack_sequence
+		_emit_monster_audio("attack_frame")
+	elif (
+		_audio_attack_start_accepted
+		and _audio_attack_sequence > 0
+		and _audio_attack_frame_sequence != _audio_attack_sequence
+		and _audio_attack_presented_seen
+		and state != "attack"
+		and is_instance_valid(visual)
+		and not visual.is_attack_presenting()
+	):
+		# HC-MONSTER-COMBAT-R2 T3 cold/hot recovery: the swing presented (the
+		# attack state was observed for this sequence) but its frame sound
+		# never fired - for example the textures streamed in so late that the
+		# frames were consumed between observations. Fire it once now; the
+		# sequence guard makes duplicate consumption impossible.
 		_audio_attack_frame_sequence = _audio_attack_sequence
 		_emit_monster_audio("attack_frame")
 	_audio_previous_visual_state = state
@@ -2714,7 +2760,15 @@ func _physics_process_internal(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
-	if is_boss and is_instance_valid(target):
+	if (
+		is_boss
+		and is_instance_valid(target)
+		and _pending_attack_time <= 0.0
+	):
+		# HC-MONSTER-COMBAT-R2 T3 facing policy: tracking is frozen while a
+		# committed attack's delayed release is in flight; the swing keeps the
+		# facing captured at its commit tick. Tracking resumes explicitly once
+		# the release resolves.
 		var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
 			global_position,
 			target.global_position,
@@ -3821,8 +3875,10 @@ func _update_pending_attack(delta: float) -> void:
 	)
 	if offset_ground_gu.length() > hit_distance_gu + GroundUnitSpace.EPSILON_GU:
 		return
-	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-		facing = _screen_facing_for_ground_direction(offset_ground_gu)
+	# HC-MONSTER-COMBAT-R2 T3 facing policy: the delayed release no longer
+	# re-faces the body here. The swing facing was frozen at the commit tick
+	# (and the presentation replays that exact facing); a release-time
+	# rotation was unassociated tracking inside the swing window.
 	_deal_melee_hit(
 		hit_target,
 		damage,
