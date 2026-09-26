@@ -137,6 +137,11 @@ var _pending_combat_action_kind := ""
 var _test_combat_time_ms := -1
 var _last_temporary_item_buff_revision := -1
 var _last_revival_at_ms := -60000
+# HC-MONSTER-COMBAT-R3 W5 (R3-06): the death lifecycle generation. Every
+# formal death opens a new generation; the deferred death notification task
+# captures its own generation and re-checks it after the await, so a revival
+# (or a later formal death) voids the old life's pending notification.
+var _death_lifecycle_generation := 0
 var _pending_potion_health := 0
 var _pending_potion_mana := 0
 var _potion_tick_remaining := 0.0
@@ -943,6 +948,10 @@ func _apply_resolved_damage(
 		else:
 			died_this_hit = true
 			_dead = true
+			# R3 W5 (R3-06): this formal death opens a new lifecycle
+			# generation; any deferred notification still pending from an
+			# earlier life is thereby voided (second-death case included).
+			_death_lifecycle_generation += 1
 			_monster_source_poison.clear()
 			# Formal death clears every poison lane: no poison may survive the
 			# revival boundary and keep ticking on the revived actor.
@@ -1000,10 +1009,17 @@ func _apply_resolved_damage(
 		# Deferred death presentation and notification only: the lifecycle
 		# decision was already committed atomically above, so this task owns no
 		# HP/durability/epoch responsibility and cannot be reentered.
+		# R3 W5: the notification is generation-stamped. Every synchronous
+		# callback above has completed; the only boundary left is the await.
+		# After it, the generation re-check voids a notification whose life
+		# was revived (or superseded by a later death) in the meantime.
+		var death_generation := _death_lifecycle_generation
 		visual.play_death()
 		PlayerState.lose_gold_percent(0.05)
 		await get_tree().create_timer(0.8).timeout
 		if not is_inside_tree():
+			return
+		if death_generation != _death_lifecycle_generation:
 			return
 		death_requested.emit()
 
@@ -1014,6 +1030,10 @@ func complete_death_revival() -> void:
 	## and rejects movement/combat until this explicit completion boundary.
 	if not _dead:
 		return
+	# R3 W5 (R3-06): the revival boundary advances the death lifecycle
+	# generation - a deferred notification still pending from the old life
+	# is voided and can never cross the revival boundary.
+	_death_lifecycle_generation += 1
 	current_hp = max_hp
 	current_mp = max_mp
 	_dead = false
