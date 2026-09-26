@@ -56,11 +56,55 @@ func _ready() -> void:
 			large_ids += 1
 		else:
 			small_ids += 1
-		# The runtime identity entry must expose the same baked profile.
+		# The runtime identity entry must expose the same baked profile
+		# (HC-MONSTER-COMBAT-R2 T2: exact float compare, not int truncation).
 		var runtime_profile: Dictionary = MonsterIdentityScript.body_profile(monster_id)
 		assert(
-			int(runtime_profile.get("screen_radius_px", -1.0)) == int(radius_px),
+			is_equal_approx(
+				float(runtime_profile.get("screen_radius_px", -1.0)), radius_px
+			),
 			"monster %d runtime body profile diverges from the catalog" % monster_id
+		)
+		# Identity-bound resolution: the baked profile must resolve for its own
+		# monster_id and its own classification, under the current policy bytes.
+		var classification := str(entry.get("classification", ""))
+		assert(
+			not ActorBodyPolicyScript.resolve_monster_body(
+				monster_id, classification, profile
+			).is_empty(),
+			"monster %d baked profile must resolve for its own identity" % monster_id
+		)
+		# A boss identity must not accept a default_small-stamped profile and a
+		# non-boss must not accept a boss_large_body stamp (ownership check).
+		var foreign_profile: Dictionary = profile.duplicate(true)
+		foreign_profile["assignment_rule"] = (
+			"default_small" if classification == "boss" else "boss_large_body"
+		)
+		assert(
+			ActorBodyPolicyScript.resolve_monster_body(
+				monster_id, classification, foreign_profile
+			).is_empty(),
+			"monster %d must reject a foreign assignment rule" % monster_id
+		)
+		# Stale policy provenance must reject even a structurally valid profile.
+		var stale_profile: Dictionary = profile.duplicate(true)
+		stale_profile["policy_sha256"] = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+		assert(
+			ActorBodyPolicyScript.resolve_monster_body(
+				monster_id, classification, stale_profile
+			).is_empty(),
+			"monster %d must reject a stale policy hash" % monster_id
+		)
+		# A radius that does not exactly equal the policy tier radius must reject.
+		var wrong_radius: Dictionary = profile.duplicate(true)
+		wrong_radius["screen_radius_px"] = (
+			15.5 if tier == "small" else 27.5
+		)
+		assert(
+			ActorBodyPolicyScript.resolve_monster_body(
+				monster_id, classification, wrong_radius
+			).is_empty(),
+			"monster %d must reject a non-policy tier radius" % monster_id
 		)
 	assert(large_ids == 27 and small_ids == 129, "tier assignment summary drifted: %d large / %d small" % [large_ids, small_ids])
 

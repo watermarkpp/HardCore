@@ -2314,26 +2314,38 @@ func _ready() -> void:
 	# HC-BODY-2TIER-1P5-V1: the body radius comes only from the validated
 	# two-tier policy profile baked into the canonical identity. The old
 	# is_boss 28 px constant and the behavior-config collisionRadius can no
-	# longer compete as radius authorities; legacy fixtures without a profile
-	# fail closed to the small tier with an explicit diagnostic meta.
-	var resolved_body := ActorBodyPolicyScript.validate_body_profile(
-		combat_body_profile
+	# longer compete as radius authorities.
+	# HC-MONSTER-COMBAT-R2 T2: resolution is identity-bound. A production
+	# profile must match the current policy bytes, the exact tier radius and
+	# the assignment rule owned by this monster_id. A rejected profile never
+	# falls back to the small tier to keep fighting: the enemy stays visible
+	# but combat is disabled, no fighting footsole is created, and the small
+	# radius below only feeds spawn-overlap push-out (placement hygiene).
+	var resolved_body := ActorBodyPolicyScript.resolve_monster_body(
+		monster_id, str(monster_data.get("classification", "")), combat_body_profile
 	)
-	if resolved_body.is_empty():
+	var body_rejected := resolved_body.is_empty()
+	if body_rejected:
 		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
 			ActorBodyPolicyScript.TIER_SMALL
 		)
-		set_meta("body_policy_fallback", "missing_or_invalid_profile")
+		set_meta("body_policy_rejected", true)
+		set_meta(
+			"body_policy_reject_reason",
+			"missing_or_invalid_or_foreign_body_profile"
+		)
+		combat_enabled = false
 		RuntimeDiagnostics.increment_performance_counter(
-			&"monster_body_policy_fallback"
+			&"monster_body_policy_rejected"
 		)
 	else:
 		collision_radius_px = float(resolved_body["screen_radius_px"])
 	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
 		collision_radius_px
 	)
-	collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
-	add_child(collision)
+	if not body_rejected:
+		collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
+		add_child(collision)
 	if not is_boss:
 		_background_wakeup_timer = Timer.new()
 		_background_wakeup_timer.name = "BackgroundAIWakeupTimer"

@@ -762,7 +762,15 @@ $Suites.critical = @($Suites.critical + @(
     'tests/hc_monster_combat_r1/actor_body_policy_contract_test.tscn',
     'tests/hc_monster_combat_r1/actor_body_projection_test.tscn',
     'tests/hc_monster_combat_r1/monster_melee_body_pair_test.tscn',
-    'tests/hc_monster_combat_r1/summon_body_spawn_consistency_test.tscn'
+    'tests/hc_monster_combat_r1/summon_body_spawn_consistency_test.tscn',
+    'tests/hc_monster_combat_r1/monster_crowd_scale_performance_probe_test.tscn'
+) | Select-Object -Unique)
+
+# September 26 HC-MONSTER-COMBAT-R2: identity-bound body resolution,
+# fail-closed rejection, attack presentation identity/logic clocks and the
+# R2 regression gates are permanent.
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r2/monster_body_rejection_test.tscn'
 ) | Select-Object -Unique)
 
 # v93 CPU query correctness gates; the timed crowd matrix remains opt-in.

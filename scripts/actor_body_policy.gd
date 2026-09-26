@@ -5,11 +5,14 @@ extends RefCounted
 ## Single validation/parse entry for the versioned body policy
 ## (assets/data/actor_body_policy_v1.json) and the per-monster body_profile
 ## baked into the canonical catalog by tools/build_canonical_monster_catalog.py
-## (applied to the checked-in catalog by tools/apply_actor_body_policy_v1.py).
+## (the formal generator is the only production writer; the R1 standalone
+## injector was retired in HC-MONSTER-COMBAT-R2 T2).
 ##
 ## This class owns:
 ## - strict validation of a body_profile (finite, positive, upper bound,
 ##   known tier, matching policy identity),
+## - identity-bound body resolution (policy hash, exact tier radius and
+##   assignment-rule ownership per monster_id),
 ## - the two authoritative tier radii and the frozen player radius,
 ## - the unified isometric footsole shape entry for monsters and summons.
 ##
@@ -29,6 +32,7 @@ const TIER_SMALL := &"small"
 const TIER_LARGE := &"large"
 
 static var _cached_policy: Dictionary = {}
+static var _cached_policy_sha := ""
 static var _cached_policy_failed := false
 
 
@@ -53,6 +57,10 @@ static func _load_policy() -> Dictionary:
 		_cached_policy_failed = true
 		return {}
 	_cached_policy = policy
+	# Provenance hash with the generator's lf_text normalization, so the
+	# baked body_profile.policy_sha256 is comparable byte-for-byte regardless
+	# of the checkout's line endings.
+	_cached_policy_sha = text.replace("\r\n", "\n").replace("\r", "\n").sha256_text()
 	return _cached_policy
 
 
@@ -131,6 +139,56 @@ static func validate_body_profile(profile: Variant) -> Dictionary:
 	if str(data.get("assignment_rule", "")).is_empty():
 		return {}
 	return data
+
+
+## HC-MONSTER-COMBAT-R2 T2: identity-bound body resolution. In addition to the
+## structural validation above, a production body must match the CURRENT
+## policy byte-for-byte in provenance and assignment: the recorded policy hash
+## (case-insensitive), the exact tier radius of the claimed tier, and the
+## assignment rule that this specific monster_id owns under the policy.
+## Any mismatch rejects the profile; production callers must refuse combat
+## instead of falling back to the small tier.
+static func resolve_monster_body(monster_id: int, classification: String, profile: Variant) -> Dictionary:
+	var data := validate_body_profile(profile)
+	if data.is_empty():
+		return {}
+	if String(data.get("policy_sha256", "")).to_lower() != _policy_sha256_lower():
+		return {}
+	var tier := StringName(str(data.get("tier", "")))
+	var expected_rule := _expected_assignment_rule(monster_id, classification)
+	if expected_rule.is_empty():
+		return {}
+	if StringName(str(data.get("assignment_rule", ""))) != StringName(expected_rule):
+		return {}
+	var expected_px := tier_screen_radius_px(tier)
+	if expected_px <= 0.0 or not is_equal_approx(float(data["screen_radius_px"]), expected_px):
+		return {}
+	return data
+
+
+static func _expected_assignment_rule(monster_id: int, classification: String) -> String:
+	var policy := _load_policy()
+	if policy.is_empty():
+		return ""
+	if classification == "boss":
+		return "boss_large_body"
+	for rule: Variant in policy.get("assignment_rules", []):
+		if not rule is Dictionary:
+			continue
+		var entry: Dictionary = rule
+		if str(entry.get("rule_id", "")) != "named_large_elite_family":
+			continue
+		for item: Variant in entry.get("monster_ids", []):
+			if item is int or item is float:
+				if int(item) == monster_id:
+					return "named_large_elite_family"
+	return "default_small"
+
+
+static func _policy_sha256_lower() -> String:
+	if _cached_policy_sha.is_empty() and not _cached_policy_failed:
+		_load_policy()
+	return _cached_policy_sha
 
 
 ## The single isometric footsole shape entry for monsters and summons. The
