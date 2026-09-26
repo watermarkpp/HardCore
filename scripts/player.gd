@@ -927,30 +927,37 @@ func _apply_resolved_damage(
 	if current_hp == 0:
 		var now_ms := Time.get_ticks_msec()
 		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
+			# HC-MONSTER-COMBAT-R2 T5: the automatic revival consumed the ring
+			# charge above, but this physical hit still owes exactly one
+			# incoming-struck durability event. The old early `return` skipped
+			# it, so the lethal hit that triggered the revival silently
+			# ignored equipment durability. Fall through instead: the common
+			# tail applies durability once, keeps the struck stagger
+			# presentation-gated (hp_after_damage was captured pre-revival,
+			# so a revived player does not stagger), and emits the revived
+			# stats exactly once at the end.
 			_last_revival_at_ms = now_ms
 			current_hp = max_hp
 			PlayerState.damage_special_effect_item("revival")
-			stats_changed.emit(current_hp, max_hp)
-			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 			queue_redraw()
-			return
-		died_this_hit = true
-		_dead = true
-		_monster_source_poison.clear()
-		# Formal death clears every poison lane: no poison may survive the
-		# revival boundary and keep ticking on the revived actor.
-		poison_time = 0.0
-		poison_damage = 0
-		combat_epoch += 1
-		reset_locomotion()
-		velocity = Vector2.ZERO
-		touch_vector = Vector2.ZERO
-		_pending_combat_action_active = false
-		_pending_combat_action_committed = false
-		_pending_combat_action_kind = ""
-		_pending_attack_context.clear()
-		_pending_skill_context.clear()
-		_queued_struck_reaction = false
+		else:
+			died_this_hit = true
+			_dead = true
+			_monster_source_poison.clear()
+			# Formal death clears every poison lane: no poison may survive the
+			# revival boundary and keep ticking on the revived actor.
+			poison_time = 0.0
+			poison_damage = 0
+			combat_epoch += 1
+			reset_locomotion()
+			velocity = Vector2.ZERO
+			touch_vector = Vector2.ZERO
+			_pending_combat_action_active = false
+			_pending_combat_action_committed = false
+			_pending_combat_action_kind = ""
+			_pending_attack_context.clear()
+			_pending_skill_context.clear()
+			_queued_struck_reaction = false
 	if causes_struck and damage_type == "physical" and final_damage > 0:
 		var event_context: Dictionary = (
 			durability_context.duplicate(true)

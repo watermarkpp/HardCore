@@ -770,7 +770,8 @@ $Suites.critical = @($Suites.critical + @(
 # fail-closed rejection, attack presentation identity/logic clocks and the
 # R2 regression gates are permanent.
 $Suites.critical = @($Suites.critical + @(
-    'tests/hc_monster_combat_r2/monster_body_rejection_test.tscn'
+    'tests/hc_monster_combat_r2/monster_body_rejection_test.tscn',
+    'tests/hc_monster_combat_r2/revival_durability_test.tscn'
 ) | Select-Object -Unique)
 
 # v93 CPU query correctness gates; the timed crowd matrix remains opt-in.
