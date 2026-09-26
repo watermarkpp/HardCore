@@ -11,6 +11,18 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 ## physical shape across respawn/re-spawn.
 
 
+func _configure_summon_map(summon: SummonActor) -> void:
+	summon.configure_runtime_map_projection(
+		9001,
+		Callable(self, "_test_ground_to_screen"),
+		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu
+	)
+
+
+func _test_ground_to_screen(value: Vector2) -> Vector2:
+	return GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(value)
+
+
 func _ready() -> void:
 	var owner := PlayerCharacter.new()
 	owner.current_hp = 100
@@ -19,11 +31,13 @@ func _ready() -> void:
 	var skeleton := SummonActor.new()
 	skeleton.setup(owner, "变异骷髅", 30, 3, "taoist.summon_skeleton", 26)
 	add_child(skeleton)
+	_configure_summon_map(skeleton)
 	await get_tree().process_frame
 
 	var beast := SummonActor.new()
 	beast.setup(owner, "神兽", 30, 3, "taoist.summon_divine_beast", 40)
 	add_child(beast)
+	_configure_summon_map(beast)
 	await get_tree().process_frame
 
 	var small_px := ActorBodyPolicyScript.tier_screen_radius_px(ActorBodyPolicyScript.TIER_SMALL)
@@ -59,32 +73,51 @@ func _ready() -> void:
 			)
 
 	# Spawn footprint consistency: the snapshot taken at spawn uses the same
-	# resolved combat radius as the physical body.
-	assert(
-		is_equal_approx(
-			float(skeleton.summon_spawn_footprint_snapshot.get("radius_gu", -1.0)),
-			float(skeleton.combat_radius_gu),
-		) or skeleton.summon_spawn_footprint_snapshot.is_empty(),
-		"skeleton spawn footprint radius must match the physical body"
-	)
-	assert(
-		is_equal_approx(
-			float(beast.summon_spawn_footprint_snapshot.get("radius_gu", -1.0)),
-			float(beast.combat_radius_gu),
-		) or beast.summon_spawn_footprint_snapshot.is_empty(),
-		"divine beast spawn footprint radius must match the physical body"
-	)
+	# resolved combat radius as the physical body. HC-MONSTER-COMBAT-R2 T6:
+	# the old "or snapshot.is_empty()" exemption is gone - a mapped summon
+	# must produce a REAL non-empty spawn snapshot.
+	for summon: SummonActor in [skeleton, beast]:
+		summon.configure_spawn_release_footprint(
+			"%s:release:census" % summon.skill_id
+		)
+		var snapshot: Dictionary = summon.summon_spawn_footprint_snapshot
+		assert(
+			not snapshot.is_empty(),
+			"a mapped summon must produce a real spawn footprint snapshot"
+		)
+		assert(
+			is_equal_approx(
+				float(snapshot.get("target_combat_radius_gu", -1.0)),
+				float(summon.combat_radius_gu),
+			),
+			"summon spawn footprint radius must match the physical body"
+		)
+		assert(
+			not str(snapshot.get("release_id", "")).is_empty(),
+			"the spawn snapshot must own its release id"
+		)
 
-	# Re-spawn consistency: re-entering the tree re-resolves the same body.
+	# Re-spawn consistency: re-entering the tree re-resolves the same body
+	# and a fresh real spawn snapshot.
 	var beast_radius_before := float(beast.collision_radius_px)
 	beast.queue_free()
 	var beast2 := SummonActor.new()
 	beast2.setup(owner, "神兽", 30, 3, "taoist.summon_divine_beast", 40)
 	add_child(beast2)
+	_configure_summon_map(beast2)
 	await get_tree().process_frame
 	assert(
 		is_equal_approx(float(beast2.collision_radius_px), beast_radius_before),
 		"a re-summoned divine beast must resolve the identical body"
+	)
+	beast2.configure_spawn_release_footprint("taoist.summon_divine_beast:release:census2")
+	assert(
+		not beast2.summon_spawn_footprint_snapshot.is_empty()
+		and is_equal_approx(
+			float(beast2.summon_spawn_footprint_snapshot.get("target_combat_radius_gu", -1.0)),
+			float(beast2.combat_radius_gu),
+		),
+		"a re-summoned divine beast must snapshot a real matching footprint"
 	)
 
 	skeleton.queue_free()
