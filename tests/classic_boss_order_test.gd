@@ -119,9 +119,23 @@ func _run() -> void:
 	)
 	zuma._rng.seed = 160
 	zuma.take_damage(int(ceil(float(zuma.max_hp) / 5.0)) + 1)
-	assert(int(summon_result.count) >= 6 and int(summon_result.count) <= 11, "祖玛教主血量阶段召唤数量错误")
+	# R3 W6: the stage bounds follow the canonical healthStageSummon authority
+	# (minCount 4 / maxCount 7, stages 5).
+	assert(int(summon_result.count) >= 4 and int(summon_result.count) <= 7, "祖玛教主血量阶段召唤数量错误")
 	var summon_ids: Array = summon_result.ids
-	assert(int(summon_result.max_active) == 30 and summon_ids.map(func(value: Variant) -> int: return int(value)) == [153, 156, 150, 159], "祖玛教主召唤上限或稳定monsterId集合错误")
+	# R3 W6: follow the decompiled authority (ObjMon.pas
+	# TScultureKingMonster.CallSlave, canonical boss_rule healthStageSummon,
+	# confidence A): maxActive 15 over the stable KIND SET [156, 153, 150,
+	# 128]. CallSlave draws one kind per child, so the emitted list is a draw
+	# from that set, not a fixed permutation. The old hardcoded 30 /
+	# [153, 156, 150, 159] predated that authority.
+	assert(
+		int(summon_result.max_active) == 15
+		and summon_ids.size() == int(summon_result.count)
+		and summon_ids.size() > 0
+		and summon_ids.all(func(value: Variant) -> bool: return [156, 153, 150, 128].has(int(value))),
+		"祖玛教主召唤上限或稳定monsterId集合错误",
+	)
 
 	wooma.queue_free()
 	dragon.queue_free()

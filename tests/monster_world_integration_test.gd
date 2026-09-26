@@ -33,7 +33,11 @@ func _run() -> void:
 		"canonical count contract drifted"
 	)
 	assert(int(counts.get("catalog_identity_count", 0)) == 156, "catalog identity count drifted")
-	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 153, "catalog runtime policy count drifted")
+	# R3 W6: the canonical catalog authority is 156/156 runtime-allowed (the
+	# R1 final-variant retirement rebuilt every identity as allowed; two
+	# formal rebuilds are byte-identical on 156). The hardcoded 153 predated
+	# that delivery.
+	assert(int(counts.get("catalog_runtime_allowed_count", 0)) == 156, "catalog runtime policy count drifted")
 	assert(
 		int(counts.get("runtime_spawnable_count", -1)) == GameData.monsters.size(),
 		"runtime spawnable count is not the GameData runtime view"
@@ -44,7 +48,10 @@ func _run() -> void:
 		- int(counts.get("runtime_spawnable_count", 0)),
 		"runtime rejection count drifted"
 	)
-	assert(int(counts.get("runtime_spawnable_count", 0)) == 153, "final runtime monster count drifted")
+	# R3 W6: the canonical authority is 156/156 runtime-allowed with zero
+	# runtime rejections (R1 final-variant retirement; two formal rebuilds
+	# byte-identical). The hardcoded 153 predated that delivery.
+	assert(int(counts.get("runtime_spawnable_count", 0)) == 156, "final runtime monster count drifted")
 	assert(int(counts.get("runtime_rejected_count", -1)) == 0, "final catalog retains runtime drop rejection")
 
 	for monster_id: int in [64, 66, 68, 70, 73, 76]:
