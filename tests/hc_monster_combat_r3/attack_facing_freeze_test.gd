@@ -43,6 +43,7 @@ func _run() -> void:
 	enemy.set_physics_process(false)
 	enemy.facing = Vector2.RIGHT
 	enemy._play_attack_animation(0.46)
+	enemy.visual._update_animation_frame(0.0)
 	var commit_direction: int = enemy.visual.current_direction
 	_expect(
 		enemy._attack_action_active,
