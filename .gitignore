@@ -37,6 +37,10 @@ Thumbs.db
 Desktop.ini
 tmp_laser*
 *_probe*.gd
+# HC-MONSTER-COMBAT-R2 T0: the crowd-scale performance probe is a delivered
+# test asset, not a local scratch probe; it must ship with its .tscn so a
+# clean checkout can run it. Exception is path-exact on purpose.
+!tests/hc_monster_combat_r1/monster_crowd_scale_performance_probe_test.gd
 assets/generated/
 tools/android-build/
 artifacts/
