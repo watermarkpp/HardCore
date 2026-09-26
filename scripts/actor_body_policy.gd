@@ -160,10 +160,34 @@ static func resolve_monster_body(monster_id: int, classification: String, profil
 		return {}
 	if StringName(str(data.get("assignment_rule", ""))) != StringName(expected_rule):
 		return {}
+	# HC-MONSTER-COMBAT-R3 W3 (R3-04): the assignment rule also PINS the tier.
+	# A profile that keeps the correct rule but swaps the tier (a boss rule
+	# carrying small radii, or default_small carrying large radii) contradicts
+	# the versioned policy and is rejected; callers must fail closed.
+	var rule_tier := _expected_rule_tier(expected_rule)
+	if rule_tier == StringName() or tier != rule_tier:
+		return {}
 	var expected_px := tier_screen_radius_px(tier)
 	if expected_px <= 0.0 or not is_equal_approx(float(data["screen_radius_px"]), expected_px):
 		return {}
 	return data
+
+
+static func _expected_rule_tier(rule_id: String) -> StringName:
+	var policy := _load_policy()
+	if policy.is_empty():
+		return StringName()
+	for rule: Variant in policy.get("assignment_rules", []):
+		if not rule is Dictionary:
+			continue
+		var entry: Dictionary = rule
+		if str(entry.get("rule_id", "")) != rule_id:
+			continue
+		var tier := StringName(str(entry.get("tier", "")))
+		if tier == TIER_SMALL or tier == TIER_LARGE:
+			return tier
+		return StringName()
+	return StringName()
 
 
 static func _expected_assignment_rule(monster_id: int, classification: String) -> String:

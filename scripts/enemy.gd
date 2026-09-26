@@ -2364,7 +2364,8 @@ func _ready() -> void:
 		queue_free()
 		return
 	MonsterVisualScript.configure_actor_y_sort_item(self, "actor_root")
-	add_to_group("enemies")
+	# R3 W3: the world group join moved below the body resolution - a
+	# body-policy-rejected actor must never become an "enemies" member.
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
 	# Crowd steering still chooses routes and reduces contention, while the
@@ -2383,18 +2384,19 @@ func _ready() -> void:
 		_audio_rng.randomize()
 		_audio_rng_initialized = true
 	_initialize_spawn_facing_once()
-	var collision := CollisionShape2D.new()
-	collision.name = "CollisionShape2D"
-	# HC-BODY-2TIER-1P5-V1: the body radius comes only from the validated
-	# two-tier policy profile baked into the canonical identity. The old
-	# is_boss 28 px constant and the behavior-config collisionRadius can no
-	# longer compete as radius authorities.
 	# HC-MONSTER-COMBAT-R2 T2: resolution is identity-bound. A production
 	# profile must match the current policy bytes, the exact tier radius and
 	# the assignment rule owned by this monster_id. A rejected profile never
 	# falls back to the small tier to keep fighting: the enemy stays visible
 	# but combat is disabled, no fighting footsole is created, and the small
 	# radius below only feeds spawn-overlap push-out (placement hygiene).
+	# HC-MONSTER-COMBAT-R3 W3 (R3-04): the body resolves BEFORE the world
+	# group joins. A rejected actor is not an "enemies" member - it is never
+	# targeted, never damaged, never drops loot; it only joins a diagnostic
+	# group so tooling can see it, and the reserved CollisionShape2D is freed
+	# instead of leaking as an orphan node.
+	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
 	var resolved_body := ActorBodyPolicyScript.resolve_monster_body(
 		monster_id, str(monster_data.get("classification", "")), combat_body_profile
 	)
@@ -2409,17 +2411,21 @@ func _ready() -> void:
 			"missing_or_invalid_or_foreign_body_profile"
 		)
 		combat_enabled = false
+		# R3 W3: the node was reserved before resolution; a rejected profile
+		# must not leak it as an orphan.
+		collision.free()
+		add_to_group("enemies_body_rejected")
 		RuntimeDiagnostics.increment_performance_counter(
 			&"monster_body_policy_rejected"
 		)
 	else:
 		collision_radius_px = float(resolved_body["screen_radius_px"])
+		collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
+		add_child(collision)
+		add_to_group("enemies")
 	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
 		collision_radius_px
 	)
-	if not body_rejected:
-		collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
-		add_child(collision)
 	if not is_boss:
 		_background_wakeup_timer = Timer.new()
 		_background_wakeup_timer.name = "BackgroundAIWakeupTimer"
@@ -6458,6 +6464,15 @@ func _apply_damage_core(
 	causes_struck: bool,
 ) -> void:
 	if _dying or _death_pending:
+		return
+	# HC-MONSTER-COMBAT-R3 W3 (R3-04): a body-policy-rejected actor is not a
+	# combat participant. It stays visible for diagnosis, but it takes no
+	# damage, builds no threat, wakes for nothing and can never die in combat
+	# - so it can never drop loot through the death pipeline either.
+	if bool(get_meta("body_policy_rejected", false)):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_damage_rejected_body_policy"
+		)
 		return
 	# HC-MONSTER-COMBAT-R1 Task 7 (F06): the resolved-damage entry rejects
 	# non-positive amounts. A negative value must never heal through a damage
