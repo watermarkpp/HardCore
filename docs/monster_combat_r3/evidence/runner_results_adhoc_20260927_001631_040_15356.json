@@ -1,0 +1,26 @@
+{
+  "total": 1,
+  "engine_log_errors": 0,
+  "failed": 0,
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "stale_death_notification_test",
+      "test_path": "tests/hc_monster_combat_r3/stale_death_notification_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 1,
+  "git_head": "c23d21d358aea7d011080316b5788c524d0332f4",
+  "generated_at": "2026-09-27T00:16:31.0402045+08:00"
+}

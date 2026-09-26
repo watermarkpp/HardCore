@@ -1,0 +1,315 @@
+{
+  "contract_id": "hardcore.monster.combat.r3.paired_load_realism.v1",
+  "engine_monitor": "Performance.TIME_PHYSICS_PROCESS over real SceneTree physics frames",
+  "frames_per_sample": 60,
+  "git_head": "",
+  "repeats_per_condition": 3,
+  "samples": [
+    {
+      "group": "small_swarm",
+      "median_p50_ms": 0.09,
+      "median_p95_ms": 0.09,
+      "median_p99_ms": 0.09,
+      "repeats": [
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.001,
+          "p95_ms": 0.001,
+          "p99_ms": 0.001,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.09,
+          "p95_ms": 0.09,
+          "p99_ms": 0.09,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.09,
+          "p95_ms": 0.09,
+          "p99_ms": 0.09,
+          "workload_valid": true
+        }
+      ],
+      "scale": 10,
+      "workload_valid": true
+    },
+    {
+      "group": "small_swarm",
+      "median_p50_ms": 0.128,
+      "median_p95_ms": 0.131,
+      "median_p99_ms": 0.131,
+      "repeats": [
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.128,
+          "p95_ms": 0.128,
+          "p99_ms": 0.128,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.131,
+          "p95_ms": 0.131,
+          "p99_ms": 0.131,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.128,
+          "p95_ms": 0.131,
+          "p99_ms": 0.131,
+          "workload_valid": true
+        }
+      ],
+      "scale": 20,
+      "workload_valid": true
+    },
+    {
+      "group": "small_swarm",
+      "median_p50_ms": 0.167,
+      "median_p95_ms": 0.167,
+      "median_p99_ms": 0.167,
+      "repeats": [
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.167,
+          "p95_ms": 0.167,
+          "p99_ms": 0.167,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.165,
+          "p95_ms": 0.167,
+          "p99_ms": 0.167,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.167,
+          "p95_ms": 0.167,
+          "p99_ms": 0.167,
+          "workload_valid": true
+        }
+      ],
+      "scale": 30,
+      "workload_valid": true
+    },
+    {
+      "group": "large_and_pet",
+      "median_p50_ms": 0.08,
+      "median_p95_ms": 0.087,
+      "median_p99_ms": 0.087,
+      "repeats": [
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.087,
+          "p95_ms": 0.167,
+          "p99_ms": 0.167,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.08,
+          "p95_ms": 0.087,
+          "p99_ms": 0.087,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.078,
+          "p95_ms": 0.08,
+          "p99_ms": 0.08,
+          "workload_valid": true
+        }
+      ],
+      "scale": 10,
+      "workload_valid": true
+    },
+    {
+      "group": "large_and_pet",
+      "median_p50_ms": 0.103,
+      "median_p95_ms": 0.105,
+      "median_p99_ms": 0.105,
+      "repeats": [
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.105,
+          "p95_ms": 0.105,
+          "p99_ms": 0.105,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.103,
+          "p95_ms": 0.105,
+          "p99_ms": 0.105,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.102,
+          "p95_ms": 0.103,
+          "p99_ms": 0.103,
+          "workload_valid": true
+        }
+      ],
+      "scale": 20,
+      "workload_valid": true
+    },
+    {
+      "group": "large_and_pet",
+      "median_p50_ms": 0.127,
+      "median_p95_ms": 0.129,
+      "median_p99_ms": 0.129,
+      "repeats": [
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.129,
+          "p95_ms": 0.129,
+          "p99_ms": 0.129,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.127,
+          "p95_ms": 0.129,
+          "p99_ms": 0.129,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 0,
+          "frames": 60,
+          "p50_ms": 0.126,
+          "p95_ms": 0.127,
+          "p99_ms": 0.127,
+          "workload_valid": true
+        }
+      ],
+      "scale": 30,
+      "workload_valid": true
+    },
+    {
+      "group": "aoe_mass_death",
+      "median_p50_ms": 0.091,
+      "median_p95_ms": 0.093,
+      "median_p99_ms": 0.093,
+      "repeats": [
+        {
+          "deaths_seen": 10,
+          "frames": 60,
+          "p50_ms": 0.093,
+          "p95_ms": 0.126,
+          "p99_ms": 0.126,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 10,
+          "frames": 60,
+          "p50_ms": 0.09,
+          "p95_ms": 0.093,
+          "p99_ms": 0.093,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 10,
+          "frames": 60,
+          "p50_ms": 0.091,
+          "p95_ms": 0.091,
+          "p99_ms": 0.091,
+          "workload_valid": true
+        }
+      ],
+      "scale": 10,
+      "workload_valid": true
+    },
+    {
+      "group": "aoe_mass_death",
+      "median_p50_ms": 0.128,
+      "median_p95_ms": 0.128,
+      "median_p99_ms": 0.128,
+      "repeats": [
+        {
+          "deaths_seen": 25,
+          "frames": 60,
+          "p50_ms": 0.128,
+          "p95_ms": 0.128,
+          "p99_ms": 0.128,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 25,
+          "frames": 60,
+          "p50_ms": 0.126,
+          "p95_ms": 0.128,
+          "p99_ms": 0.128,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 25,
+          "frames": 60,
+          "p50_ms": 0.128,
+          "p95_ms": 0.128,
+          "p99_ms": 0.128,
+          "workload_valid": true
+        }
+      ],
+      "scale": 20,
+      "workload_valid": true
+    },
+    {
+      "group": "aoe_mass_death",
+      "median_p50_ms": 0.165,
+      "median_p95_ms": 0.165,
+      "median_p99_ms": 0.165,
+      "repeats": [
+        {
+          "deaths_seen": 35,
+          "frames": 60,
+          "p50_ms": 0.165,
+          "p95_ms": 0.165,
+          "p99_ms": 0.165,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 35,
+          "frames": 60,
+          "p50_ms": 0.165,
+          "p95_ms": 0.165,
+          "p99_ms": 0.165,
+          "workload_valid": true
+        },
+        {
+          "deaths_seen": 35,
+          "frames": 60,
+          "p50_ms": 0.166,
+          "p95_ms": 0.166,
+          "p99_ms": 0.166,
+          "workload_valid": true
+        }
+      ],
+      "scale": 30,
+      "workload_valid": true
+    }
+  ]
+}

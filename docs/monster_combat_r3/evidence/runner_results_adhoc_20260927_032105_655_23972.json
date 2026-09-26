@@ -1,0 +1,41 @@
+{
+  "failed": 0,
+  "passed": 2,
+  "engine_log_errors": 0,
+  "git_head": "3e05e7035d0e4f58c36fb054f82e6b8c120dc4bc",
+  "total": 2,
+  "results": [
+    {
+      "test_name": "attack_facing_freeze_test",
+      "test_path": "tests/hc_monster_combat_r3/attack_facing_freeze_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_melee_body_pair_test",
+      "test_path": "tests/hc_monster_combat_r1/monster_melee_body_pair_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T03:21:05.6558762+08:00"
+}

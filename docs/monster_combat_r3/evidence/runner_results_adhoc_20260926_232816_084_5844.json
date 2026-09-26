@@ -1,0 +1,26 @@
+{
+  "failed": 1,
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "runtime_census_deep_test",
+      "test_path": "tests/hc_monster_combat_r2/runtime_census_deep_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "total": 1,
+  "engine_log_errors": 0,
+  "git_head": "3e022a28788867e31f61b8ef77efd530be9ef3c6",
+  "generated_at": "2026-09-26T23:28:16.0851725+08:00",
+  "passed": 0
+}

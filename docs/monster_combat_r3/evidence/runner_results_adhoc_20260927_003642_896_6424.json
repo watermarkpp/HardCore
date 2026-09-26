@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "passed": 1,
+  "generated_at": "2026-09-27T00:36:42.8962348+08:00",
+  "results": [
+    {
+      "test_name": "monster_cadence_runtime_integration_test",
+      "test_path": "tests/monster_cadence_runtime_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "6d5085bcdd3108d7262c02e4788b15ef5f5874bb",
+  "total": 1,
+  "failed": 0,
+  "engine_log_errors": 0
+}
