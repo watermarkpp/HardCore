@@ -1,5 +1,7 @@
 extends Node
 
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+
 const AudioServiceScript := preload("res://scripts/audio_runtime_service.gd")
 const EnemyScript := preload("res://scripts/enemy.gd")
 
@@ -20,6 +22,7 @@ func _run() -> void:
 	enemy.name = "W4ActorServiceFixture"
 	enemy.monster_id = 31
 	enemy.monster_data = {"monster_id": 31}
+	enemy.combat_body_profile = MonsterIdentityScript.body_profile(31)
 	enemy.display_name = "W4测试怪物"
 	enemy.max_hp = 100
 	enemy.current_hp = 100

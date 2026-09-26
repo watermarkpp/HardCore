@@ -35,7 +35,10 @@ func _run() -> void:
 		"sync test profile must be active"
 	)
 	_enemy.facing = Vector2.RIGHT
-	visual._attack_remaining = 0.5
+	# HC-MONSTER-COMBAT-R2 T3: the attack clock consumes the action's OWN age;
+	# starting through the version-stable primitive sets the duration, the
+	# elapsed zero point and the monotonic start stamp in one step.
+	visual._start_attack_visual(0.5)
 	visual._elapsed = 0.0
 	visual._process(0.016)
 	assert(visual.current_state == "attack", "attack action must engage")

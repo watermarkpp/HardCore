@@ -1,5 +1,7 @@
 extends Node
 
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+
 
 class AudioProbe extends Node:
 	var calls: Array[Dictionary] = []
@@ -67,6 +69,7 @@ func _assert_rejected_entry_is_one_shot(
 	actor.name = "RejectedEntry_%s" % case_name
 	actor.monster_id = 21
 	actor.monster_data = {"monster_id": 21}
+	actor.combat_body_profile = MonsterIdentityScript.body_profile(21)
 	actor.max_hp = 100
 	actor.current_hp = 100
 	actor.global_position = Vector2(48.0, 48.0)
@@ -100,6 +103,10 @@ func _run() -> void:
 	enemy.name = "MonsterAudioHookFixture"
 	enemy.monster_id = 21
 	enemy.monster_data = {"monster_id": 21}
+	# HC-MONSTER-COMBAT-R2 T2: a production identity binds its real baked body
+	# profile; a bare fixture without one is fail-closed rejected (combat
+	# disabled) and never reaches the audio service discovery path under test.
+	enemy.combat_body_profile = MonsterIdentityScript.body_profile(21)
 	enemy.display_name = "测试怪物"
 	enemy.max_hp = 100
 	enemy.current_hp = 100
