@@ -14,8 +14,10 @@
     "result": "1 PASS / 29 FAIL"
   },
   "r2_re_adjudication": {
-    "status": "PENDING_T7_FULL_CRITICAL",
-    "rule": "R2 full critical 失败集合逐项对照本登记表：仍失败且同断言同因 → 维持 BASELINE_EXISTING；失败点/原因/文本变化 → FAIL_CHANGED 人工审查；R1 基线 PASS 而 R2 失败 → REGRESSION 必修。"
+    "status": "DONE",
+    "rule": "R2 full critical 失败集合逐项对照本登记表：仍失败且同断言同因 → 维持 BASELINE_EXISTING；失败点/原因/文本变化 → FAIL_CHANGED 人工审查；R1 基线 PASS 而 R2 失败 → REGRESSION 必修。",
+    "evidence": "runner_results_critical_20260926_213740_693_4912.json (total=491 passed=457 failed=34)",
+    "outcome": "R1 的 29 项：28 项维持 BASELINE_EXISTING（同断言同因），bich_monster_visual 在 R2 链转 PASS，vertical_slice_loop PASS（负载抖动定性复证）。R2 critical 另暴露 6 项新失败，基线（R1 提交 9a399c24）复证 6/6 PASS → 全部为 R2 测试夹具回归，已在提交 aa25866a 修复并定向复跑 PASS（runner_results_adhoc_20260926_214506_675_18720.json / runner_results_adhoc_20260926_214753_858_3272.json）；bich_common_client_art 隔离 PASS 定性为序列负载敏感（runner_results_adhoc_20260926_214219_432_22688.json）。最终 R2 净失败 = 28 项既有基线，0 REGRESSION。"
   },
   "shared_root_causes": {
     "engine_log_gate": "caster_skill_animation_player.gd:75 ready 期 add_child（生产路径既有问题，与怪物包修改文件无调用链交集）",
@@ -23,41 +25,227 @@
     "authority_data_drift": "测试断言早于用户裁决的权威数据修正（A 级 ObjMon.pas maxActive 15 / 池[156,153,150,128]）"
   },
   "entries": [
-    {"test_path": "tests/caster_skill_visual_factory_entry_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "stdout 门禁：RID 泄漏", "root_cause": "rid_leak_stdout_gate"},
-    {"test_path": "tests/caster_skill_animation_routing_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/sky_strike_visual_contract_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/lightning_runtime_map_visual_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/canonical_skill_production_entry_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":185 火墙 canonical 真实入口被拒绝", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/canonical_snapshot_propagation_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/enemy_snapshot_v2_production_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":107 + :74", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/production_snapshot_no_legacy_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":133", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/canonical_snapshot_identity_production_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/skill_production_no_visual_plan_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/skill_production_profession_matrix_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/skill_production_descriptor_failure_parity_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/skill_runtime_no_visual_plan_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/complete_client_resource_catalog_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "缺 outputs/resource_catalog manifest 工件（工件未入库，非生产缺陷）", "root_cause": "missing_generated_artifact"},
-    {"test_path": "tests/warrior_skill_state_machine_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":33 半月首次开关被通用施法预检错误拒绝", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/live_attack_resolution_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":226 法师没有在释放帧创建正式投射物", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/melee_lock_fallback_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":83 刺杀连续轴近段未命中", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/all_monster_loading_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":40 ID=183 missing attack timing", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/monster_world_integration_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":36 catalog runtime policy count drifted", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/classic_boss_order_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":124 断言旧值 maxActive 30 / 池 [153,156,150,159]；权威已由用户裁决 maxActive 15 / 池[156,153,150,128]（A 级 ObjMon.pas），测试文件更新早于 7ffc1f3f 数据修正", "root_cause": "authority_data_drift"},
-    {"test_path": "tests/bich_monster_visual_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":78 钉耙猫 移动方向错误", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/monster_mfc1_attribute_timing_audit_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "ID 33/183/241 authority missing/auth=0", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/monster_cadence_runtime_integration_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":842 safe-zone 分支执行器断言", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/monster_special_delivery_runtime_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":100/:129 70 special melee exceeded its one-GU boundary", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/skills/warrior_thrust_defense_runtime_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":83（无文本 assert，同签名）", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/w6_visual_contract_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/combat_environment_request_integration_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": "engine-log 门禁族", "root_cause": "engine_log_gate"},
-    {"test_path": "tests/armor_single_slot_authority_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":23（无文本 assert，同签名）", "root_cause": "same_assertion_same_cause"},
-    {"test_path": "tests/repair_20260913/loot_async_durability_test.tscn", "r1_classification": "BASELINE_EXISTING", "failure_note": ":82 Cannot call method 'store_string' on a null value（同文本）", "root_cause": "same_assertion_same_cause"},
+    {
+      "test_path": "tests/caster_skill_visual_factory_entry_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "stdout 门禁：RID 泄漏",
+      "root_cause": "rid_leak_stdout_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/caster_skill_animation_routing_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/sky_strike_visual_contract_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/lightning_runtime_map_visual_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/canonical_skill_production_entry_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":185 火墙 canonical 真实入口被拒绝",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/enemy_snapshot_v2_production_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":107 + :74",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/production_snapshot_no_legacy_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":133",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/skill_production_no_visual_plan_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/skill_production_profession_matrix_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/skill_production_descriptor_failure_parity_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/skill_runtime_no_visual_plan_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/complete_client_resource_catalog_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "缺 outputs/resource_catalog manifest 工件（工件未入库，非生产缺陷）",
+      "root_cause": "missing_generated_artifact",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/warrior_skill_state_machine_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":33 半月首次开关被通用施法预检错误拒绝",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/live_attack_resolution_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":226 法师没有在释放帧创建正式投射物",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/melee_lock_fallback_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":83 刺杀连续轴近段未命中",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/all_monster_loading_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":40 ID=183 missing attack timing",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/monster_world_integration_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":36 catalog runtime policy count drifted",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/classic_boss_order_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":124 断言旧值 maxActive 30 / 池 [153,156,150,159]；权威已由用户裁决 maxActive 15 / 池[156,153,150,128]（A 级 ObjMon.pas），测试文件更新早于 7ffc1f3f 数据修正",
+      "root_cause": "authority_data_drift",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/bich_monster_visual_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":78 钉耙猫 移动方向错误",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "PASS (R2 full critical 转绿：bich_monster_visual 在 R2 链上通过)"
+    },
+    {
+      "test_path": "tests/monster_mfc1_attribute_timing_audit_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "ID 33/183/241 authority missing/auth=0",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/monster_cadence_runtime_integration_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":842 safe-zone 分支执行器断言",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/monster_special_delivery_runtime_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":100/:129 70 special melee exceeded its one-GU boundary",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/skills/warrior_thrust_defense_runtime_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":83（无文本 assert，同签名）",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/w6_visual_contract_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/combat_environment_request_integration_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": "engine-log 门禁族",
+      "root_cause": "engine_log_gate",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/armor_single_slot_authority_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":23（无文本 assert，同签名）",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
+    {
+      "test_path": "tests/repair_20260913/loot_async_durability_test.tscn",
+      "r1_classification": "BASELINE_EXISTING",
+      "failure_note": ":82 Cannot call method 'store_string' on a null value（同文本）",
+      "root_cause": "same_assertion_same_cause",
+      "r2_result": "BASELINE_EXISTING (R2 full critical 同断言同因 FAIL，断言文本逐项与 R1 一致)"
+    },
     {
       "test_path": "tests/vertical_slice_loop_test.tscn",
       "r1_classification": "FAIL_CHANGED",
       "failure_note": "critical 序列负载抖动：FAIL 仅 engine-log 门禁（world_background.gd:786 dummy-renderer RID 噪声 + [FRAME-STALL] 1.004s 长帧 + ObjectDB 泄漏警告），测试自印 VERTICAL_SLICE_LOOP_PASS；隔离复跑当前树 3/3 PASS 且 engine_log_errors=0（runner_results_adhoc_20260926_025758/025817/025836），基线隔离 PASS；world_background.gd 不在本包修改文件调用链内",
-      "root_cause": "suite_load_flakiness"
+      "root_cause": "suite_load_flakiness",
+      "r2_result": "PASS (R2 critical 复证负载抖动定性：R2 full critical 中 PASS)"
     }
   ],
-  "counts": {"BASELINE_EXISTING": 29, "FAIL_CHANGED": 1, "REGRESSION": 0}
+  "counts": {
+    "BASELINE_EXISTING": 29,
+    "FAIL_CHANGED": 1,
+    "REGRESSION": 0,
+    "r2_re_adjudicated": {
+      "BASELINE_EXISTING": 28,
+      "PASSED_IN_R2": 2,
+      "FIXTURE_REGRESSION_FIXED": 5,
+      "LOAD_SENSITIVITY": 1,
+      "REGRESSION_OPEN": 0
+    }
+  }
 }
