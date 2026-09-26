@@ -771,7 +771,13 @@ $Suites.critical = @($Suites.critical + @(
 # R2 regression gates are permanent.
 $Suites.critical = @($Suites.critical + @(
     'tests/hc_monster_combat_r2/monster_body_rejection_test.tscn',
-    'tests/hc_monster_combat_r2/revival_durability_test.tscn'
+    'tests/hc_monster_combat_r2/revival_durability_test.tscn',
+    'tests/hc_monster_combat_r2/attack_presentation_identity_test.tscn',
+    'tests/hc_monster_combat_r2/attack_clock_red_test.tscn',
+    'tests/hc_monster_combat_r2/direct_magic_step_chain_test.tscn',
+    'tests/hc_monster_combat_r2/player_struck_poison_chain_test.tscn',
+    'tests/hc_monster_combat_r2/monster_runtime_census_test.tscn',
+    'tests/hc_monster_combat_r2/large_body_swing_cadence_test.tscn'
 ) | Select-Object -Unique)
 
 # v93 CPU query correctness gates; the timed crowd matrix remains opt-in.
