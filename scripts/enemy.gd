@@ -417,6 +417,22 @@ var _audio_attack_presented_seen := false
 # all bind to this one serial and its logic start timestamp.
 var _attack_logic_serial := 0
 var _attack_logic_started_at_ms := 0
+# HC-MONSTER-COMBAT-R3 W1: the single combat action clock and the parent
+# action state. `_combat_action_time_s` advances ONLY inside the Actor's own
+# physics update (one entry point), so engine pause freezes it and any
+# project time scaling is already inside the delta. Every combat consumer -
+# pending damage timing, presentation age, audio phase - shares this time;
+# the wall clock (Time.get_ticks_msec) is no longer a production combat
+# time source.
+var _combat_action_time_s := 0.0
+var _attack_action_start_time_s := -1.0
+var _attack_action_duration_s := 0.0
+var _attack_action_source_life := -1
+var _attack_action_generation := -1
+var _attack_action_active := false
+# R3 W1: the most recent release record built at a real admission point,
+# including its parent action identity (review/verification handle).
+var _last_hc_release_record := {}
 var _audio_attack_frame_ready := false
 var _audio_attack_start_accepted := false
 var _audio_combat_epoch_target_instance_id := 0
@@ -945,30 +961,57 @@ func _audio_attack_started(action_serial := -1) -> void:
 	_audio_attack_start_accepted = _emit_monster_audio("attack_start")
 
 
-func _play_attack_animation(duration: float) -> void:
+## HC-MONSTER-COMBAT-R3 W1: the parent action identity is allocated at the
+## real admission point, BEFORE the release record is built and before any
+## presentation is requested. The identity is a four-tuple anchored on the
+## combat game clock: monotonic serial x source life x world generation, with
+## `_attack_action_start_time_s` as the timing origin. Returns the serial.
+func _allocate_attack_action(duration: float) -> int:
+	_attack_logic_serial += 1
+	_attack_action_start_time_s = _combat_action_time_s
+	_attack_action_duration_s = duration
+	_attack_action_source_life = _hc_life(self)
+	_attack_action_generation = int(get_meta("zone_generation", -1))
+	_attack_action_active = true
+	# Legacy wall-clock diagnostic only; production timing never reads this.
+	_attack_logic_started_at_ms = Time.get_ticks_msec()
+	return _attack_logic_serial
+
+
+func _combat_action_time_getter() -> float:
+	return _combat_action_time_s
+
+
+func _play_attack_animation(duration: float, parent_action_id := -1) -> void:
 	if not combat_enabled:
 		return
 	# HC-MONSTER-COMBAT-R2 T3: one parent action identity per attack commit.
-	# The serial and the logic start timestamp are allocated HERE (the tick
-	# that also commits the damage release) and handed to the presentation and
-	# the audio stream; the swing facing is frozen at this tick.
-	_attack_logic_serial += 1
-	_attack_logic_started_at_ms = Time.get_ticks_msec()
+	# R3 W1: the identity is normally ALREADY allocated by the real admission
+	# point (`_allocate_attack_action`); presentation only consumes it. When a
+	# caller skips the admission helper (legacy/preview paths), allocate here
+	# exactly once - never twice for the same logical action.
+	var allocated := parent_action_id
+	if allocated < 0 or not _attack_action_active:
+		allocated = _allocate_attack_action(duration)
 	if visual != null:
 		# HC-MONSTER-COMBAT-R1 Task 3 (F01): production combat presentations
 		# enter the critical arbitration slot, so a legal attack can never be
 		# queued behind a struck backlog or silently dropped on overflow. The
 		# attack-start audio commits only when the presentation actually starts
 		# (same frame, same action); damage timing stays with the combat layer.
+		# R3 W1: the visual's age authority is bound to the owner's combat
+		# game clock; the action start game time is handed over explicitly.
+		visual._combat_clock_s = Callable(self, "_combat_action_time_getter")
 		if visual.begin_attack_presentation(
 			duration,
-			_attack_logic_serial,
+			allocated,
 			_attack_logic_started_at_ms,
 			facing,
+			_attack_action_start_time_s,
 		):
-			_audio_attack_started(_attack_logic_serial)
+			_audio_attack_started(allocated)
 		return
-	_audio_attack_started(_attack_logic_serial)
+	_audio_attack_started(allocated)
 
 
 func _audio_observe_visual_state() -> void:
@@ -2500,6 +2543,13 @@ func _physics_process_internal(delta: float) -> void:
 	if _dying:
 		_record_performance_counter(&"death_physics_process_calls_after_begin")
 		return
+	# HC-MONSTER-COMBAT-R3 W1: the single combat action clock. Advanced by
+	# exactly one physics delta per Actor tick - including background
+	# fast-path ticks (their accumulated delta resumes to the same total),
+	# frozen by engine pause (no tick runs at all) and stopped only by death.
+	# Every combat consumer (pending damage timing, presentation age, audio
+	# phase) reads this time; the wall clock is not a combat time source.
+	_combat_action_time_s += delta
 	_record_performance_counter(&"active_enemy_physics_count")
 	# Match the original server's object-cycle boundary: damage may reduce HP to
 	# zero during a multi-target release, but death teardown must not interrupt
@@ -6325,6 +6375,11 @@ static func performance_diagnostics() -> Dictionary:
 func _can_use_background_ai() -> bool:
 	if _hc_damage_dirty or _hc_path_pending:
 		return false
+	# HC-MONSTER-COMBAT-R3 W1: an active combat action must never be parked
+	# on the low-frequency background path - its clock and consumers keep
+	# running at the physics rate until the action completes or is cancelled.
+	if _attack_action_active:
+		return false
 	if is_boss or not is_instance_valid(primary_target):
 		return false
 	if (
@@ -7976,6 +8031,10 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 	_hc_last_start_tick = tick
 	_hc_release_seq += 1
 	_hc_starts += 1
+	# HC-MONSTER-COMBAT-R3 W1: allocate the parent action identity HERE, the
+	# real admission point, before the release record exists; the record, the
+	# presentation and the audio stream all bind to it.
+	var parent_action_id := _allocate_attack_action(_attack_animation_duration)
 	# Special contact channels historically settle immediately; their legacy
 	# body-hit offset must not become a second gameplay delay through HC AI.
 	var hit_delay := _attack_hit_delay if str(attack_delivery_rule.get("kind", "")).is_empty() else 0.0
@@ -7991,7 +8050,15 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 		"parent_id": get_parent().get_instance_id() if get_parent() != null else 0,
 		"tolerance": DELAYED_HIT_TOLERANCE_GU if hit_delay > 0.0 else 0.0,
 		"damage": _rng.randi_range(attack_min, attack_max),
+		# R3 W1 parent action identity: one logical action owns every pending
+		# record and child release it produced.
+		"parent_action_id": parent_action_id,
+		"parent_source_life": _attack_action_source_life,
+		"parent_generation": _attack_action_generation,
+		"parent_start_game_time_s": _attack_action_start_time_s,
+		"parent_duration_s": _attack_action_duration_s,
 	}
+	_last_hc_release_record = record
 	_clear_autonomous_step_state()
 	# Keep the path/session. Only this local motion step is interrupted.
 	velocity = Vector2.ZERO
@@ -8008,7 +8075,9 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, hit_delay)
 	_hc_m30_attack_move_cutoff = maxf(0.0, _attack_timer - m30_clip)
 	_hc_m30_attack_pose_remaining = m30_clip
-	_play_attack_animation(m30_clip)
+	# R3 W1: the presentation consumes the identity allocated above; the
+	# visual clip may be shorter than the logical action duration.
+	_play_attack_animation(m30_clip, parent_action_id)
 	if hit_delay <= 0.0:
 		_hc_settle(record)
 	return true

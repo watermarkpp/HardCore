@@ -136,6 +136,14 @@ var _attack_facing_at_commit := Vector2.INF
 # Injectable monotonic millisecond clock (test seam). Production keeps the
 # engine clock; tests drive a fake clock to reproduce cross-frame boundaries.
 var _clock_ms: Callable = Callable()
+# HC-MONSTER-COMBAT-R3 W1: the production combat clock seam. The owning
+# EnemyActor binds this to its single game-time getter (seconds, advanced
+# only by the Actor's own physics update - pause freezes it, engine time
+# scaling is already inside the delta). When bound, the attack age is
+# `owner_game_time - action_start_game_time`; the wall clock is never
+# consulted for production combat timing. Unbound => legacy preview path.
+var _combat_clock_s: Callable = Callable()
+var _attack_action_start_game_time_s := 0.0
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
@@ -427,6 +435,13 @@ func _now_ms() -> int:
 
 
 func _attack_age_seconds() -> float:
+	# HC-MONSTER-COMBAT-R3 W1: production attack age consumes the OWNER's
+	# combat game clock (seconds, advanced only by the Actor's physics update;
+	# pause freezes it, engine time scaling is already inside the delta). The
+	# engine wall clock never participates in production timing - it remains
+	# only as the legacy preview path for unbound fixtures.
+	if _combat_clock_s.is_valid():
+		return maxf(0.0, float(_combat_clock_s.call()) - _attack_action_start_game_time_s)
 	return float(maxi(0, _now_ms() - _attack_started_at_ms)) / 1000.0
 
 
@@ -1084,9 +1099,14 @@ func begin_attack_presentation(
 	action_id := -1,
 	logic_started_at_ms := -1,
 	facing_at_commit := Vector2.INF,
+	logic_started_game_time_s := -1.0,
 ) -> bool:
 	if _death_remaining > 0.0 or _death_pose_held:
 		return false
+	# HC-MONSTER-COMBAT-R3 W1: idempotent re-begin of the SAME logical action
+	# must not reset the action age and must not re-trigger the start phase.
+	if _attack_remaining > 0.0 and action_id >= 0 and _attack_action_id == action_id:
+		return true
 	var merged := _merge_pending_struck_feedback()
 	if merged > 0:
 		RuntimeDiagnostics.increment_performance_counter(
@@ -1096,6 +1116,11 @@ func begin_attack_presentation(
 	_attack_action_id = action_id
 	_attack_logic_started_at_ms = logic_started_at_ms
 	_attack_facing_at_commit = facing_at_commit
+	# R3 W1: when the production caller provides the owner's combat game time
+	# at the action start, the age authority becomes the OWNER's clock and the
+	# wall-clock stamp is kept only as legacy diagnostics for preview paths.
+	if logic_started_game_time_s >= 0.0:
+		_attack_action_start_game_time_s = logic_started_game_time_s
 	_start_attack_visual(duration)
 	return true
 

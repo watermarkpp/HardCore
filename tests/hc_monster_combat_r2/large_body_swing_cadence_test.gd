@@ -31,9 +31,9 @@ func _ready() -> void:
 		enemy.set_meta("safe_zones", [])
 		add_child(enemy)
 		enemy.set_physics_process(false)
-		# The R2 logic clock consumes the action's own age against the injected
-		# monotonic clock; the test advances the clock between swings.
-		enemy.visual._clock_ms = Callable(self, "_clock")
+		# HC-MONSTER-COMBAT-R3 W1: the attack age authority is the OWNER's
+		# combat game clock; the test drives that clock between swings (the
+		# wall-clock seam is no longer a production combat time source).
 		assert(
 			enemy.combat_enabled and not enemy.has_meta("body_policy_rejected"),
 			"fixture: large identity %d must be body-accepted" % monster_id
@@ -55,7 +55,7 @@ func _ready() -> void:
 				"large identity %d swing %d must bind the audio stream"
 					% [monster_id, swing]
 			)
-			_fake_ms += 500
+			enemy._combat_action_time_s += 0.5
 			enemy.visual._advance_action_timers(0.5)
 			assert(
 				enemy.visual._attack_remaining == 0.0,
