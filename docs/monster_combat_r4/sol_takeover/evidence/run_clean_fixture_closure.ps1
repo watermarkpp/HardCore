@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$SourceHead, [string]$EvidenceName="clean_checkout_report_closure")
+param([Parameter(Mandatory=$true)][string]$SourceHead, [string]$EvidenceName="clean_checkout_report_closure", [switch]$ImportOnly)
 $ErrorActionPreference='Stop'
 $main='C:/Users/Administrator/Documents/HardCore'
 $clean='C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore'
@@ -37,6 +37,10 @@ $valid=$code -eq 0 -and $errors.Count -eq 0 -and $dirty.Count -eq 0 -and $change
 [ordered]@{source_head=$SourceHead;status=if($valid){'PASS'}else{'FAIL'};exit_code=$code;errors=@($errors.Line);changed_skill_sources=$changed;checked_skill_sources=$protection.sources.Count;tracked_dirty=$dirty;translations=$translations} | ConvertTo-Json -Depth 7 | Set-Content (Join-Path $ev 'import_verification.json') -Encoding utf8
 if(-not $valid){throw 'Independent import closure failed'}
 Write-Output 'CLEAN_IMPORT_CLOSURE_PASS'
+if($ImportOnly){
+  [ordered]@{source_head=$SourceHead;import='PASS';tests='NOT_RUN';reason='Explicit import-only preparation for separately recorded fixed paired workload'} | ConvertTo-Json | Set-Content (Join-Path $ev 'completion.json') -Encoding utf8
+  exit 0
+}
 $env:HARDCORE_AUDIT_LOG_ROOT=Join-Path $ev 'runner'
 $reportBefore=Test-Path (Join-Path $clean 'outputs/test_logs')
 $start=Get-Date

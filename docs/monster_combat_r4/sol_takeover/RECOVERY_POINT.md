@@ -242,3 +242,6 @@ R4性能仍open，继续F03/F05真实负载配对后再fullforge；未push/clean
 同源r4_after_f03实际17/17 PASS，normal exit0，engine_log_errors0，runner20260928_003003_300_6080；四ID自然20起手/真实终态、24追击、实际漏伤反例、D3、真实多目标/异步生命周期、召唤半径、地图117请求/四次真实READY到达、F05真实持久化。逐流水已复制owned evidence/raw。所有测试进程已结束；无functions wait cell。现场AGENTS保持用户原dirty。
 
 下一最窄闭环：身体准入仅执行一次，但can_receive_damage与damage core仍将诊断metadata当权威；R4新增get_meta出现在群怪阻挡窄相热查询。先扩已有body_rejected_query测试：删诊断marker后真正被拒actor依旧不能变为可攻击/扣HP，幂等准入也应保持拒绝。实际RED后才改typed owner verdict；不改身体半径/战斗钟/频率，再做针对性与相关回归及配对。尚未实际merge forge/push/archive/delete/APK；这些继续原授权顺序，最终停在打包前。
+
+## 00:50 body-pair collection completed
+Sourceec646:24/24 native exits normal, exact verifiers3x8 PASS. BODY_PAIR_REVIEW.md retains mixed/no consistent speed improvement and original performance FAIL. No active engine. Next test-only declared frame_only native pacing, R3BASE1381 unchanged; no production optimization fabricated. Fullforge still NOT_RUN pending R4, remote/cleanup/APK NOT_RUN. UserAGENTS untouched.

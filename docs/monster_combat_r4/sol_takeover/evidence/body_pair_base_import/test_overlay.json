@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "reason": "Collector rejected byte-different checkout line endings before any sample; explicit identical test-only overlay applied",
+  "base_head": "042e8a1b3fa44b4856fb87bc5f02aa6552a04edd",
+  "files": [
+    {
+      "path": "tools/run_godot_tests.ps1",
+      "before_sha256": "8977A40149C7A7D92A51B1EAB1489B25C4136672B5184524F25BC9AF04EC50CC",
+      "after_sha256": "78B301F42EABFC934F29239FC57EDDE98AEA05AF0AEEE5F5C4126EC1814EF09B",
+      "source_sha256": "78B301F42EABFC934F29239FC57EDDE98AEA05AF0AEEE5F5C4126EC1814EF09B"
+    },
+    {
+      "path": "tests/hc_monster_combat_r4/t6_real_load_probe.gd",
+      "before_sha256": "D52B2DAD58D70CE5970261BF64A6A61E2051CDF6FEB33D4F3A8AEA4517309B52",
+      "after_sha256": "CB47BECF81AE5F1E97F265E297D9AFF14126957DB349694F54D1519DA428B640",
+      "source_sha256": "CB47BECF81AE5F1E97F265E297D9AFF14126957DB349694F54D1519DA428B640"
+    },
+    {
+      "path": "tests/hc_monster_combat_r4/t6_real_load_probe.tscn",
+      "before_sha256": "CC44CD5D22711AC8F0D3CACCDBCBC78320A348E82A5AE480B72236C1FE872ACC",
+      "after_sha256": "DF961C4155D8E03ED61FC817ADFCA5A52FB6E3311A3DBAFB8403378C24F89444",
+      "source_sha256": "DF961C4155D8E03ED61FC817ADFCA5A52FB6E3311A3DBAFB8403378C24F89444"
+    }
+  ],
+  "tracked_status": [
+    " M tests/hc_monster_combat_r4/t6_real_load_probe.gd",
+    " M tests/hc_monster_combat_r4/t6_real_load_probe.tscn",
+    " M tools/run_godot_tests.ps1"
+  ]
+}
