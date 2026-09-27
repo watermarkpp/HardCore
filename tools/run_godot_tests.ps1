@@ -605,6 +605,30 @@ $Suites.critical = @($Suites.critical + @(
     'tests/skills/skill_semantic_contracts_test.tscn'
 ) | Select-Object -Unique)
 
+# 2026-09-27 R3/R4 monster-combat closure: the correctness scenes from the
+# monster-combat R3 audit and the R4 fixed-point closure join the formal
+# critical suite. paired_load_realism stays OUT until its INVALID_MEASUREMENT
+# unit/sampling rebuild lands (R4 T6); the natural_cadence_* fixtures stay
+# OUT while their natural-admission chain is still being wired (R4 T5).
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r3/attack_facing_freeze_test.tscn',
+    'tests/hc_monster_combat_r3/attack_game_clock_test.tscn',
+    'tests/hc_monster_combat_r3/attack_parent_release_identity_test.tscn',
+    'tests/hc_monster_combat_r3/audio_stale_frame_test.tscn',
+    'tests/hc_monster_combat_r3/body_rejection_world_isolation_test.tscn',
+    'tests/hc_monster_combat_r3/body_rule_tier_cross_test.tscn',
+    'tests/hc_monster_combat_r3/real_admission_census_test.tscn',
+    'tests/hc_monster_combat_r3/stale_death_notification_test.tscn',
+    'tests/hc_monster_combat_r4/attack_expiry_without_render_test.tscn',
+    'tests/hc_monster_combat_r4/attack_owner_idempotence_test.tscn',
+    'tests/hc_monster_combat_r4/body_rejected_factory_isolation_test.tscn',
+    'tests/hc_monster_combat_r4/body_rejected_query_contract_test.tscn',
+    'tests/hc_monster_combat_r4/double_generation_death_test.tscn',
+    'tests/hc_monster_combat_r4/perf_unit_determinism_test.tscn',
+    'tests/hc_monster_combat_r4/synchronous_revive_death_token_test.tscn',
+    'tests/audio_w4_actor_service_test.tscn'
+) | Select-Object -Unique)
+
 # September 9 closure: persist the new integration boundaries in critical.
 # Performance probes stay explicit because their sampling needs a controlled
 # machine window; they are not correctness gates for every ordinary test run.
