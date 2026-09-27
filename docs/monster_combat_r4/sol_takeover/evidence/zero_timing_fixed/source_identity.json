@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "sha256": "8BFDF7CF24C2ED9A9990DE2F632BA01666C0D4A647B13756F229CD5E5A9BE0CD",
+      "path": "scripts/enemy.gd"
+    },
+    {
+      "sha256": "BF1CADEF642547DEB7EBD9E29FC2BD255A46D00F2032E47E6F90FAEC14991211",
+      "path": "scripts/monster_attack_timing.gd"
+    },
+    {
+      "sha256": "63CB9DFA116BA436780CD54F76A1CC88A4B453CB63CF6F890E8CA6227352A058",
+      "path": "tests/hc_monster_combat_r4/explicit_zero_attack_timing_test.gd"
+    },
+    {
+      "sha256": "651A8D7EE9181EED58843235CA23FB45F8200D4674E315D50E54FEF01F3337B1",
+      "path": "tests/monster_mfc1_attribute_timing_audit_test.gd"
+    },
+    {
+      "sha256": "72C3CF34333D5750DDB42E31B000DDD4D1D94CFBE35C9B45D1101C13C173B7A2",
+      "path": "tests/all_monster_loading_test.gd"
+    },
+    {
+      "sha256": "E5B89DD2F6D2DD00FCF402E4BC69D172BA3A288D508396F1F9E3EE5FE67D80F1",
+      "path": "assets/data/monster_21cq_detail_source_v1.json"
+    },
+    {
+      "sha256": "09210446AB8E2D55D98968015846A34F6786EAF42826B54FB30C4C8426F100AE",
+      "path": "dev_art_sources/reference/original_gameofmir/M2Server/LocalDB.pas"
+    }
+  ],
+  "attack_interval_is_not_hit_delay": true,
+  "primary_raw_unchanged": true,
+  "base_head": "393a97fa9710e3604895cb8118f50fc353241587",
+  "native_loader_lines": "LocalDB.pas:1354,1362-1363"
+}

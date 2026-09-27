@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
+const AttackTimingScript := preload("res://scripts/monster_attack_timing.gd")
 # Exact transaction fault seam, callable only in an explicit test fixture.
 var test_attack_admission_hook := Callable()
 const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
@@ -1297,8 +1298,13 @@ func _apply_behavior_profile() -> void:
 	attack_range_gu = float(projection_gu.attack_range_gu)
 	aggro_radius_gu = float(projection_gu.aggro_radius_gu)
 	var timing: Dictionary = behavior_profile.get("timing", {})
-	if int(timing.get("attackIntervalMs", 0)) > 0:
-		_attack_interval = float(timing.get("attackIntervalMs")) / 1000.0
+	if timing.has("attackIntervalMs"):
+		var effective_attack_ms := AttackTimingScript.effective_interval_ms(timing.attackIntervalMs)
+		if effective_attack_ms < 0:
+			combat_enabled = false
+			push_error("Invalid canonical attack interval for monster_id=%d" % monster_id)
+		else:
+			_attack_interval = float(effective_attack_ms) / 1000.0
 	service_move_interval_ms = int(timing.get("moveIntervalMs", 0))
 	service_ai_code = int(behavior_profile.get("serviceBehavior", {}).get("aiCode", -1))
 	stationary = bool(behavior_profile.get("movement", {}).get("stationary", false))
@@ -2313,7 +2319,7 @@ func _apply_boss_rule() -> void:
 	move_speed_gu_per_sec = float(projection_gu.move_speed_gu_per_sec)
 	attack_range_gu = float(projection_gu.attack_range_gu)
 	aggro_radius_gu = float(projection_gu.aggro_radius_gu)
-	_attack_interval = float(timing.get("attackIntervalMs", 1550)) / 1000.0
+	_attack_interval = float(AttackTimingScript.effective_interval_ms(timing.get("attackIntervalMs", 1550))) / 1000.0
 	_attack_animation_duration = float(timing.get("attackAnimationMs", 460)) / 1000.0
 	_attack_hit_delay = float(timing.get("hitDelayMs", 0)) / 1000.0
 	var configured_delivery: Variant = boss_rule.get("attackDelivery", {})

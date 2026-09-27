@@ -2,6 +2,7 @@ extends Node
 
 const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
 const EnemyActorScript := preload("res://scripts/enemy.gd")
+const AttackTimingScript := preload("res://scripts/monster_attack_timing.gd")
 const CATALOG_PATH := "res://assets/data/runtime/canonical_monster_catalog.json"
 
 
@@ -37,7 +38,8 @@ func _run() -> void:
 				"name": "intentionally wrong display name",
 			})
 			assert(not profile.is_empty(), "allowed ID=%d has no canonical behavior profile" % monster_id)
-			assert(int(profile.get("timing", {}).get("attackIntervalMs", 0)) > 0, "ID=%d missing attack timing" % monster_id)
+			var attack_timing: Dictionary = profile.get("timing", {})
+			assert(attack_timing.has("attackIntervalMs") and AttackTimingScript.effective_interval_ms(attack_timing.attackIntervalMs) >= 200, "ID=%d missing or invalid attack timing" % monster_id)
 			assert(int(profile.get("serviceBehavior", {}).get("aiCode", -1)) >= 0, "ID=%d missing AI code" % monster_id)
 		else:
 			assert(MonsterIdentityScript.require_catalog_entry(monster_id, "runtime").is_empty(), "unresolved ID=%d must fail closed" % monster_id)

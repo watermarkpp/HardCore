@@ -1,0 +1,71 @@
+{
+  "failed": 0,
+  "generated_at": "2026-09-27T14:18:16.9963724+08:00",
+  "suite": "adhoc",
+  "git_head": "393a97fa9710e3604895cb8118f50fc353241587",
+  "passed": 4,
+  "engine_log_errors": 0,
+  "total": 4,
+  "results": [
+    {
+      "test_name": "explicit_zero_attack_timing_test",
+      "test_path": "tests/hc_monster_combat_r4/explicit_zero_attack_timing_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "all_monster_loading_test",
+      "test_path": "tests/all_monster_loading_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_mfc1_attribute_timing_audit_test",
+      "test_path": "tests/monster_mfc1_attribute_timing_audit_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "boss_interval_test",
+      "test_path": "tests/hc_monster_combat_r1/boss_interval_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

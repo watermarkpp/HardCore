@@ -75,3 +75,11 @@ ID79的正式line_magic走真实物理选敌/起手，冻结child后等待原600
 首轮真实释放目标后，音频选择与retarget在is_instance_valid前使用`is`，触发freed-instance错误；FAIL及timeout原日志保存async_line_red。只交换有效性与类型检查顺序后，positive/目标combat_epoch/来源世界代际/释放目标四案全部得到实际扣血/合法miss或真实拒绝，各child冻结身份完整。最终原始流水及身份在async_related。
 
 `evidence/async_related/runner_results_adhoc_20260927_141537_640_23964.json`：PASS 7/7，engine_log_errors=0、timeout=0。包含async line、真实双目标/生命周期、毒重挂、召唤身体与spawn footprint、召唤释放快照、主人传送、死亡掉落预算队列。最后一项是队列专项，其夹具覆盖落点解析，不能宣称正式火墙群死/地形落点负载已测；该负载仍待T6。
+
+## 显式零攻击间隔与默认值区分
+
+实际反例 `evidence/zero_timing_red/runner_results_adhoc_20260927_141630_907_5680.json`：183/241 raw=0却得到1.55秒默认，FAIL。核对原主服务端LocalDB.pas:1354直接加载ATTACK_SPD，1362-1363将小于200的值钳制200；加载规则不覆盖主源原始数值。增加MonsterAttackTiming的显式值解释（0/1/199→200，200及以上保持；缺失/负/字符串/小数非法），Enemy消费该解释，原21CQ/生成数据不变。不是添加200ms伤害延迟，也没有改变24/76/238/239既有正间隔。
+
+`evidence/zero_timing_fixed/runner_results_adhoc_20260927_141816_996_8632.json`：PASS 4/4，包含raw值保持、数学边界、完整loading、MFC1属性/时钟、Boss间隔。MFC1仍逐ID检查主源raw相等，独立期望按max(200, raw)，不以生产helper自证；loading仍要求字段存在和类型合法，不将缺失等同0。原服务端文件哈希、主源哈希、真实执行源码/测试哈希保留source_identity.json。
+
+这只关闭时间值错误，不为183一次自爆/241身份与零伤害用途补出未验证的行为。其现存profile无专属delivery、canonical AI有unresolved_project_fallback；能力表必须披露，不能称特殊实体族PASS。完整critical/性能/干净检出继续NOT_RUN。

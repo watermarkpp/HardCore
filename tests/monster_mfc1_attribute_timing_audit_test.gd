@@ -205,15 +205,16 @@ func _audit_all_monsters(
 		_check_int_attr(mid, "behavior_attack_interval_ms", bp_attack_ms, int(detail.get("attack_interval_ms", -1)))
 		_check_int_attr(mid, "behavior_move_interval_ms", int(bp_timing.get("moveIntervalMs", 0)), int(detail.get("move_interval_ms", -1)))
 		var boss_attack_ms := int(boss_rule.get("timing", {}).get("attackIntervalMs", 0))
-		if bp_attack_ms <= 0 and boss_attack_ms <= 0:
+		if not bp_timing.has("attackIntervalMs") or bp_attack_ms < 0:
 			_stats["attack_timing_authority_missing"] = int(_stats["attack_timing_authority_missing"]) + 1
 			_stats["formal_runtime_accidental_default"] = int(_stats["formal_runtime_accidental_default"]) + 1
 			_failures.append("atk_authority_missing:%d" % mid)
 			enemy.free()
 			continue
-		var expected_interval := float(bp_attack_ms) / 1000.0
+		# Independent service-loader expectation, raw 21CQ equality above remains.
+		var expected_interval := float(maxi(200, bp_attack_ms)) / 1000.0
 		if is_boss and not boss_rule.is_empty():
-			expected_interval = float(boss_attack_ms) / 1000.0 if boss_attack_ms > 0 else expected_interval
+			expected_interval = float(maxi(200, boss_attack_ms)) / 1000.0 if boss_rule.get("timing", {}).has("attackIntervalMs") else expected_interval
 		if absf(enemy._attack_interval - expected_interval) > 0.001:
 			_stats["attack_interval_mismatch"] = int(_stats["attack_interval_mismatch"]) + 1
 			_failures.append("atk_interval_mismatch:%d runtime=%f expected=%f" % [mid, enemy._attack_interval, expected_interval])
