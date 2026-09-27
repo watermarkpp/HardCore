@@ -430,6 +430,10 @@ var _attack_action_duration_s := 0.0
 var _attack_action_source_life := -1
 var _attack_action_generation := -1
 var _attack_action_active := false
+# R4 T3: body admission resolves once; the spawn factory may precheck it
+# before the node ever enters the tree or the world registries.
+var _body_admission_resolved := false
+var _body_collision_shape: CollisionShape2D = null
 # R3 W1: the most recent release record built at a real admission point,
 # including its parent action identity (review/verification handle).
 var _last_hc_release_record := {}
@@ -2365,6 +2369,48 @@ func _initialize_spawn_facing_once() -> void:
 	movement_facing = selected_facing
 
 
+## R4 T3: public, idempotent body admission. Resolves the final body ONCE
+## and returns true when the profile is rejected. The spawn factory calls
+## this BEFORE joining the scene / occupying the respawn slot / registering
+## the spatial index / the activity cache; _ready runs it exactly once if
+## no precheck happened, so a fixture that tampers with the profile after
+## setup is still resolved at tree entry.
+func resolve_body_for_admission() -> bool:
+	if _body_admission_resolved:
+		return bool(get_meta("body_policy_rejected", false))
+	_body_admission_resolved = true
+	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
+	var resolved_body := ActorBodyPolicyScript.resolve_monster_body(
+		monster_id, str(monster_data.get("classification", "")), combat_body_profile
+	)
+	var body_rejected := resolved_body.is_empty()
+	if body_rejected:
+		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
+			ActorBodyPolicyScript.TIER_SMALL
+		)
+		set_meta("body_policy_rejected", true)
+		set_meta(
+			"body_policy_reject_reason",
+			"missing_or_invalid_or_foreign_body_profile"
+		)
+		combat_enabled = false
+		# A rejected profile never leaks the reserved shape as an orphan.
+		collision.free()
+		add_to_group("enemies_body_rejected")
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_body_policy_rejected"
+		)
+		return true
+	collision_radius_px = float(resolved_body["screen_radius_px"])
+	collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
+	add_to_group("enemies")
+	# Kept for _ready to attach once the node can own children; the factory
+	# precheck path attaches nothing until the actor actually enters the tree.
+	_body_collision_shape = collision
+	return false
+
+
 func _ready() -> void:
 	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
 		queue_free()
@@ -2401,34 +2447,14 @@ func _ready() -> void:
 	# targeted, never damaged, never drops loot; it only joins a diagnostic
 	# group so tooling can see it, and the reserved CollisionShape2D is freed
 	# instead of leaking as an orphan node.
-	var collision := CollisionShape2D.new()
-	collision.name = "CollisionShape2D"
-	var resolved_body := ActorBodyPolicyScript.resolve_monster_body(
-		monster_id, str(monster_data.get("classification", "")), combat_body_profile
-	)
-	var body_rejected := resolved_body.is_empty()
-	if body_rejected:
-		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
-			ActorBodyPolicyScript.TIER_SMALL
-		)
-		set_meta("body_policy_rejected", true)
-		set_meta(
-			"body_policy_reject_reason",
-			"missing_or_invalid_or_foreign_body_profile"
-		)
-		combat_enabled = false
-		# R3 W3: the node was reserved before resolution; a rejected profile
-		# must not leak it as an orphan.
-		collision.free()
-		add_to_group("enemies_body_rejected")
-		RuntimeDiagnostics.increment_performance_counter(
-			&"monster_body_policy_rejected"
-		)
-	else:
-		collision_radius_px = float(resolved_body["screen_radius_px"])
-		collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
-		add_child(collision)
-		add_to_group("enemies")
+	# R4 T3: the resolution itself is a public idempotent admission step so
+	# the spawn factory can obtain the verdict BEFORE it joins the scene,
+	# occupies the respawn slot, registers the spatial index or the activity
+	# cache. _ready runs it exactly once; an earlier factory precheck wins.
+	resolve_body_for_admission()
+	if not bool(get_meta("body_policy_rejected", false)) and _body_collision_shape != null:
+		add_child(_body_collision_shape)
+		_body_collision_shape = null
 	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
 		collision_radius_px
 	)
@@ -6626,6 +6652,12 @@ func _apply_poison_tick_damage() -> void:
 
 
 func can_receive_damage() -> bool:
+	# R4 T3: a config-rejected body must not advertise damageability to any
+	# targeting/spatial consumer. The rejected actor keeps its diagnostic
+	# existence (no crash, no orphan) but is outside the combat world: the
+	# damage core guard already refuses HP, and the public query now agrees.
+	if bool(get_meta("body_policy_rejected", false)):
+		return false
 	return (
 		current_hp > 0
 		and not _death_pending
