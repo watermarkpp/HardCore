@@ -234,3 +234,11 @@ R4性能仍open，继续F03/F05真实负载配对后再fullforge；未push/clean
 实际8/8正常退出，AA+AB/BA/AB，原生20秒/600回调/固定输入，没有清时钟或冷却。t6_f03_focus summary与controller_phase_trace保存。AoE10候选死亡结算主线程计时31.1/33.4/33.8ms累计 vs基线187.6/191.6/216.0ms；callback P99 30.22/27.15/25.16ms vs42.17/44.03/44.96ms；>33.33ms5/5/5 vs10/10/11；>50ms0/2/1 vs4/2/3。实际存在活怪、受击、死亡、真实文件、原native随机抽取和显示，候选enemyphysics5436 vs基线5374/5362/5369，不是减少活怪或计算频率得出的改善。
 
 候选inclusive enemy CPU三配对delta +.0542/+.0597/-.0080ms，AA noise .1242ms，无三项持续同向超noise标记；不单凭较大noise称性能PASS。额外原生actor调用/LOS与原生分配身份stagger已保存，基线死亡57/58/58、候选56各，确认有异步终态/显示积压，未丢掉任何raw。队列/存档生命周期另有真实最终专项；效果和时钟不减负。旧00c FAIL记录保留，整体R4性能仍需完整9条件矩阵及最终审查。下一步当前固定源全面72样本，不改source/tests/tools/HEAD，不并发引擎或重任务；完成后定向原R4和forge串行整合。APK/远端/清理保持NOT_RUN。
+
+## 2026-09-28 00:30 当前精确恢复点
+
+固定9e7c2cb22d6d562a1f95221ef4f6bf5e35f18eb4完成t6_f03_full实际72/72正常退出，exact_execution_check PASS；性能验收仍FAIL/open：small30和large_pets20各三配对均超各自A/A噪声，AoE30虽不满足标记条件仍有mean增幅，原始有利/不利数据全部保留。PERFORMANCE_REVIEW_9e7.md及controller_phase_trace明确区分collection和acceptance。AoE10/20/30 P99三配对皆改善，不能据此称全部长帧已消失。
+
+同源r4_after_f03实际17/17 PASS，normal exit0，engine_log_errors0，runner20260928_003003_300_6080；四ID自然20起手/真实终态、24追击、实际漏伤反例、D3、真实多目标/异步生命周期、召唤半径、地图117请求/四次真实READY到达、F05真实持久化。逐流水已复制owned evidence/raw。所有测试进程已结束；无functions wait cell。现场AGENTS保持用户原dirty。
+
+下一最窄闭环：身体准入仅执行一次，但can_receive_damage与damage core仍将诊断metadata当权威；R4新增get_meta出现在群怪阻挡窄相热查询。先扩已有body_rejected_query测试：删诊断marker后真正被拒actor依旧不能变为可攻击/扣HP，幂等准入也应保持拒绝。实际RED后才改typed owner verdict；不改身体半径/战斗钟/频率，再做针对性与相关回归及配对。尚未实际merge forge/push/archive/delete/APK；这些继续原授权顺序，最终停在打包前。

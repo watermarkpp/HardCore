@@ -1,0 +1,28 @@
+{
+  "failed": 0,
+  "passed": 1,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-27T23:56:56.2011102+08:00",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "t6_real_load_probe",
+      "test_path": "tests/hc_monster_combat_r4/t6_real_load_probe.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:57:32.1446881Z",
+      "native_exit_observed_utc": "2026-09-27T15:56:54.7213719Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1,
+  "git_head": "9e7c2cb22d6d562a1f95221ef4f6bf5e35f18eb4"
+}
