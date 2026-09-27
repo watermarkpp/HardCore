@@ -1,7 +1,9 @@
 param(
     [string]$BaseRoot = 'C:/Users/Administrator/.codex/worktrees/r4-fixed-baseline/HardCore',
     [string]$CandidateRoot = 'C:/Users/Administrator/Documents/HardCore',
-    [string]$OutputRoot = 'C:/Users/Administrator/Documents/HardCore/docs/monster_combat_r4/sol_takeover/evidence/t6_pairs'
+    [string]$OutputRoot = 'C:/Users/Administrator/Documents/HardCore/docs/monster_combat_r4/sol_takeover/evidence/t6_pairs',
+    [ValidateSet('small','large_pets','aoe_death_loot')][string[]]$Modes = @('small','large_pets','aoe_death_loot'),
+    [ValidateSet(10,20,30)][int[]]$Scales = @(10,20,30)
 )
 $ErrorActionPreference = 'Stop'
 $probe = 'tests/hc_monster_combat_r4/t6_real_load_probe.gd'
@@ -25,7 +27,7 @@ $identity = [ordered]@{
     hot_mode='PlayerState.test_mode=false; unique isolated profile initialized through real save_game(false); native death clocks, drop throttling and background loot enabled. Bootstrap alone uses test_mode.'
     runner_sha256=(Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/run_godot_tests.ps1')).Hash
     engine_sha256=(Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/godot-4.7/Godot_v4.7-stable_win64_console.exe')).Hash
-    scene_timeout_seconds=60; heavy_reason='600 paired physics/process callbacks can span 1200 ticks (20s) plus full native bootstrap/warmup and teardown'; modes=@('small','large_pets','aoe_death_loot'); scales=@(10,20,30); frames=600; seed=20260927
+    scene_timeout_seconds=60; heavy_reason='600 paired physics/process callbacks can span 1200 ticks (20s) plus full native bootstrap/warmup and teardown'; modes=$Modes; scales=$Scales; frames=600; seed=20260927
     aa_per_condition=2; ab_pairs_per_condition=3; order='AA then AB/BA/AB, one process at a time'
     cache='Independent already-imported trees; fresh engine process per sample; same shared read-only source art and engine; OS file cache not forcibly purged'
     measurement='Desktop headless callback intervals and script CPU only; engine monitor averages not per-frame P95; GPU and device NOT_RUN'
@@ -74,8 +76,8 @@ function Invoke-Sample([string]$Side,[string]$Mode,[int]$Scale,[string]$Phase,[i
     if ((& git -C $root rev-parse HEAD).Trim() -ne $env:HARDCORE_R4_LOAD_HEAD) {throw 'Source changed during sample'}
     Write-Output "T6_SAMPLE_COMPLETE $label"
 }
-foreach ($mode in @('small','large_pets','aoe_death_loot')) {
-    foreach ($scale in @(10,20,30)) {
+foreach ($mode in $Modes) {
+    foreach ($scale in $Scales) {
         foreach ($round in @(1,2)) {Invoke-Sample 'BASE' $mode $scale 'AA' $round}
         foreach ($round in @(1,2,3)) {
             $order=if ($round -eq 2) {@('CAND','BASE')} else {@('BASE','CAND')}

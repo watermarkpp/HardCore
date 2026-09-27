@@ -83,6 +83,7 @@ var seen_deaths := {}
 var corpse_refs: Array[WeakRef] = []
 var spawn_seed_inputs: Array = []
 var actor_seed_inputs: Array = []
+var scheduler_identity_inputs: Array = []
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -269,6 +270,9 @@ func _run() -> void:
 		"equipment_identity_inputs": game.t6_item_identity_inputs.duplicate(true),
 		"canonical_cast_inputs": game.t6_cast_seed_inputs.duplicate(true),
 		"canonical_seed_policy": "native hash boundary with fixed time input and fixed test profile token; serial increment unchanged"}
+	# Observe allocation-dependent staggering without clearing/resetting clocks,
+	# actor IDs or cooldowns to make work counts artificially equal.
+	result["scheduler_identity_inputs"] = scheduler_identity_inputs
 	get_tree().node_added.disconnect(_pin_spawn_inputs)
 	FileAccess.open("res://outputs/test_logs/r4_t6_load.json", FileAccess.WRITE).store_string(JSON.stringify(result, "  "))
 	game.queue_free()
@@ -288,6 +292,11 @@ func _spawn(slot: int) -> EnemyActor:
 	actor._rng.seed = SEED + serial
 	_check(actor._spawn_facing_seed_override_active, "spawn_seed_hook_not_before_ready")
 	actor_seed_inputs.append({"kind": "enemy", "ordinal": serial, "seed": str(actor._rng.seed), "initial_state": str(actor._rng.state)})
+	scheduler_identity_inputs.append({"ordinal": serial, "native_instance_id": str(actor.get_instance_id()),
+		"mod7": posmod(actor.get_instance_id(), 7), "mod11": posmod(actor.get_instance_id(), 11),
+		"mod13": posmod(actor.get_instance_id(), 13), "retarget_timer": actor._retarget_timer,
+		"crowd_timer": actor._crowd_steering_timer, "background_timer": actor._background_ai_timer,
+		"environment_timer": actor._environment_guard_timer})
 	actor.died.connect(_on_death)
 	if mode != "aoe_death_loot":
 		actor.max_hp = 1000000
