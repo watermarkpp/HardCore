@@ -929,6 +929,12 @@ func _apply_resolved_damage(
 	# lifecycle (duplicated epoch, gold loss and a second death coroutine).
 	var hp_after_damage := current_hp
 	var died_this_hit := false
+	# R4 T2: the death lifecycle token is FROZEN at the moment the lethal
+	# result commits - before any durability/stats/resources broadcast. A
+	# synchronous listener that revives (or kills again) advances the live
+	# generation, and the deferred tail below must judge against the frozen
+	# value it captured, never against the live one.
+	var committed_death_generation := -1
 	if current_hp == 0:
 		var now_ms := Time.get_ticks_msec()
 		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
@@ -952,6 +958,10 @@ func _apply_resolved_damage(
 			# generation; any deferred notification still pending from an
 			# earlier life is thereby voided (second-death case included).
 			_death_lifecycle_generation += 1
+			# R4 T2: freeze THIS death's token right here, before any
+			# durability/stats/resources callback can run (a synchronous
+			# listener may revive or kill again inside those callbacks).
+			committed_death_generation = _death_lifecycle_generation
 			_monster_source_poison.clear()
 			# Formal death clears every poison lane: no poison may survive the
 			# revival boundary and keep ticking on the revived actor.
@@ -1006,20 +1016,28 @@ func _apply_resolved_damage(
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
 	if died_this_hit:
-		# Deferred death presentation and notification only: the lifecycle
-		# decision was already committed atomically above, so this task owns no
-		# HP/durability/epoch responsibility and cannot be reentered.
-		# R3 W5: the notification is generation-stamped. Every synchronous
-		# callback above has completed; the only boundary left is the await.
-		# After it, the generation re-check voids a notification whose life
-		# was revived (or superseded by a later death) in the meantime.
-		var death_generation := _death_lifecycle_generation
-		visual.play_death()
+		# R4 T2: the economics of THIS death settle exactly once at the death
+		# boundary, independent of any revival a synchronous listener may
+		# already have performed - cancelling the cancellable presentation
+		# must never skip a committed economic event.
 		PlayerState.lose_gold_percent(0.05)
+		# Re-check the FROZEN token after every synchronous external callback
+		# before touching presentation: a listener that revived inside the
+		# stats broadcast has already advanced the generation, and the death
+		# presentation/notification must never bind to the new life.
+		if committed_death_generation != _death_lifecycle_generation:
+			return
+		# Deferred death presentation and notification only: the lifecycle
+		# decision was already committed atomically above, so this task owns
+		# no HP/durability/epoch responsibility and cannot be reentered.
+		# R3 W5: the notification is generation-stamped. After the await, the
+		# generation re-check voids a notification whose life was revived (or
+		# superseded by a later death) in the meantime.
+		visual.play_death()
 		await get_tree().create_timer(0.8).timeout
 		if not is_inside_tree():
 			return
-		if death_generation != _death_lifecycle_generation:
+		if committed_death_generation != _death_lifecycle_generation:
 			return
 		death_requested.emit()
 
