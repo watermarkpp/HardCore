@@ -34,6 +34,9 @@ for row in runs:
             errors.append(label+":native_exit")
     if sample["production_hot_test_mode"] is not False or sample["isolated_profile_namespace"] != ROOT.name or sample["random_input_version"] != identity["random_input_version"]:
         errors.append(label+":input_mode")
+    detail = identity.get("observation_detail_mode", "full")
+    if detail == "frame_only" and (sample.get("observation_detail_mode") != detail or sample.get("enemy_cpu_attribution") != "NOT_RUN" or any(f.get("enemy_inclusive_cpu_ms") is not None for f in sample["frames"])):
+        errors.append(label+":observation_mode")
     inputs = sample["random_inputs"]
     if inputs["drop_session"] != "20260927000000000000000000000000" or inputs["player_seed"] != 20260928 or inputs["durability_seed"] != 20260929:
         errors.append(label+":seed")

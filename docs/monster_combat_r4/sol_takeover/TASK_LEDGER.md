@@ -15,7 +15,7 @@
 | D3 八向边界/横移/墙/受击/身体/暂停/迟绘 | PASS | 96边界，真实运动/压力，真实双目标与合法身体；headless不等于GPU/听感 |
 | 受击、休眠、死亡复活、毒、盾、召唤回归 | PASS | mp_and_struck 11/11、async_related 7/7、召唤半径正式矩阵8/8；取消攻击观察3/3、实际销毁/重入5/5；最终同SHA关键集合仍待执行 |
 | 两快照失败与历史直接相关失败、33/183/241来源 | PASS | 独立反例证明显式0被误读为缺失，依原服务端加载200ms下限修复，zero_timing_fixed 4/4；historical_final_pairs固定同25集合实际CAND25/25，原BASE25FAIL；最终完整回归仍待执行。183/241特殊实体行为仍NOT_RUN，不能以时间加载PASS替代 |
-| T6 有效负载 A/A 噪声、3 A/B、600热帧、冷首技能 | NOT_RUN | v4固定全部Actor与canonical请求seed、正式热态test_mode=false/真实初始化存档；先full critical后72轮最终配对，旧数据降级保留 |
+| T6 有效负载 A/A 噪声、3 A/B、600热帧、冷首技能 | FAIL | 固定9e7完整72/72采集PASS，性能small30/pets20持续超噪声及AoE30增幅仍待关闭；ec646身体修复补充24/24仅证明采集与混合结果，未虚构性能通过。当前9803原R3BASE的frame_only对照串行执行；CPU归因NOT_RUN，旧原始失败保留 |
 | 正式注册、实际执行集合、最终 full critical | NOT_RUN | 稳定后执行，timeout 不以 marker 覆盖 |
 | 完整回归新发现：死亡退出角色前置 | PASS | f888全量524/525，旧首次创建具体错误MISSING；副本实际重名拒绝RED证明缺前置机制。独立真实账号/创建落盘索引检查GREEN，安全退出与掉落7/7；完整最终重跑仍NOT_RUN |
 | 验收器完整身份缺失反例 | PASS | 六个真实验收缺口RED→GREEN：四父字段缺失、UNKNOWN、非整数生命代际。显式字段/类型检查，不改生产伤害；真实归属相关回归运行中 |
@@ -32,3 +32,12 @@
 真实ID79的600ms待投递在禁战、控制、死亡时被既有所有者取消，旧观察漏掉child终态（cancel_source_red）。现在仅在原取消点记录真实拒绝，default OFF先检查后返回；不执行第二次结算、不改变伤害或时钟。cancel_final 3/3正常退出，包含取消反例、异步line及观察完整性。
 
 召唤planner、release snapshot和main-pet创建统一使用既定身体政策，旧15/21px查询半径已移除；正式创建拒绝半径不匹配快照。summon_radius_chain 8/8含真实职业矩阵及对外伤害。
+
+## 最新串行完成与未完成项
+
+- PASS：F03真实后台死亡/拾取/周期文件事务、v1/v2存档回放与角色代际、实际退出及mapcancel，原生10项与501槽规模探针；F05结算与掉落显示分离、真实持久化4项反例回归。最终累计源码集合尚待整合后复验。
+- PASS：用户要求的其他正式地图传送检查：67地图132端点，117真实travel_request接受/15arrival_only拒绝；抉择/密道三图7缺配置与2单向声明正式精确发布，真实READY四到达及guard反例，未改人工几何/碰撞/spawn。不是117次实机走图；DEVICE NOT_RUN。
+- PASS：ec646身体准入只读诊断不再成为权威，实际删marker原生扣血RED→typed verdict GREEN9项，未改半径/公式/时钟。
+- FAIL：原R4性能接纳尚未关闭；测试采集PASS不等于性能PASS。
+- NOT_RUN：forge完整七提交实际合入、整合跨系统真实反例、最终full critical/独立clean/protection、push及临时树退休。
+- NOT_RUN：APK/安装/改版本；依用户最终要求停在打包之前。
