@@ -1,0 +1,209 @@
+diff --git a/tests/death_queue_lifecycle_rework_test.gd b/tests/death_queue_lifecycle_rework_test.gd
+index ce2654eb4..771e7c211 100644
+--- a/tests/death_queue_lifecycle_rework_test.gd
++++ b/tests/death_queue_lifecycle_rework_test.gd
+@@ -41,6 +41,7 @@ var _checks := 0
+ var _in_tree_game: Node
+ var _async_game: Node
+ var _async_enemies: Array[EnemyActor] = []
++var _saved_persistence: Dictionary = {}
+ 
+ 
+ func _ready() -> void:
+@@ -48,13 +49,23 @@ func _ready() -> void:
+ 
+ 
+ func _run() -> void:
++	_configure_isolated_persistence()
+ 	PlayerState.test_mode = true
++	PlayerState._test_force_atomic_write_failure = false
+ 	PlayerState.reset_progress()
+-	PlayerState.create_character(
++	var creation_result := PlayerState.create_character(
+ 		"R3X4%06d" % (Time.get_ticks_msec() % 1000000),
+ 		"战士",
+ 		"男",
+ 	)
++	print("DEATH_QUEUE_CREATION_RESULT error=%s active=%s" % [creation_result, PlayerState.active_profile_id])
++	_expect(creation_result.is_empty(), "real character creation failed: %s active=%s" % [creation_result, PlayerState.active_profile_id])
++	if not creation_result.is_empty():
++		_finish()
++		return
++	_expect(not PlayerState.active_profile_id.is_empty(), "created character has no active profile")
++	_expect(FileAccess.file_exists(PlayerState._profile_path(PlayerState.active_profile_id)), "created character profile was not persisted")
++	_expect(bool(PlayerState.last_save_result.get("profile_index_updated", false)), "created character was not indexed")
+ 	PlayerState._test_force_atomic_write_failure = false
+ 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
+ 	RuntimeDiagnostics.reset_performance_window()
+@@ -63,6 +74,58 @@ func _run() -> void:
+ 	_finish()
+ 
+ 
++func _configure_isolated_persistence() -> void:
++	# Exercise real account/profile writes without depending on other scenes'
++	# names, migration records or deliberately rejected save fixtures.
++	_saved_persistence = {
++		"profile_directory": PlayerState.profile_directory,
++		"profile_index_path": PlayerState.profile_index_path,
++		"shared_warehouse_path": PlayerState.shared_warehouse_path,
++		"transaction_path": PlayerState.shared_warehouse_transaction_log_path,
++		"test_mode": PlayerState.test_mode,
++		"active_profile_id": PlayerState.active_profile_id,
++		"warehouse_inventory": PlayerState.warehouse_inventory.duplicate(true),
++		"shared_initialized": PlayerState._shared_warehouse_initialized,
++		"warehouse_locked": PlayerState._warehouse_transaction_locked,
++		"persistence_in_progress": PlayerState._persistence_transaction_in_progress,
++		"save_blocked_profile_id": PlayerState._save_blocked_profile_id,
++		"save_blocked_reason": PlayerState._save_blocked_reason,
++		"write_failure": PlayerState._test_force_atomic_write_failure,
++	}
++	var sandbox := "user://death_queue_lifecycle/%d_%d" % [Time.get_ticks_usec(), OS.get_process_id()]
++	PlayerState.profile_directory = sandbox.path_join("characters")
++	PlayerState.profile_index_path = sandbox.path_join("profiles.json")
++	PlayerState.shared_warehouse_path = sandbox.path_join("shared.json")
++	PlayerState.shared_warehouse_transaction_log_path = sandbox.path_join("shared.transaction.json")
++	var directory_result := DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
++	_expect(directory_result == OK, "could not create isolated persistence directory")
++	PlayerState.active_profile_id = ""
++	PlayerState.warehouse_inventory = []
++	PlayerState._shared_warehouse_initialized = false
++	PlayerState._warehouse_transaction_locked = false
++	PlayerState._persistence_transaction_in_progress = false
++	PlayerState._save_blocked_profile_id = ""
++	PlayerState._save_blocked_reason = ""
++
++
++func _restore_persistence() -> void:
++	if _saved_persistence.is_empty():
++		return
++	PlayerState.profile_directory = str(_saved_persistence.profile_directory)
++	PlayerState.profile_index_path = str(_saved_persistence.profile_index_path)
++	PlayerState.shared_warehouse_path = str(_saved_persistence.shared_warehouse_path)
++	PlayerState.shared_warehouse_transaction_log_path = str(_saved_persistence.transaction_path)
++	PlayerState.active_profile_id = str(_saved_persistence.active_profile_id)
++	PlayerState.warehouse_inventory = (_saved_persistence.warehouse_inventory as Array).duplicate(true)
++	PlayerState._shared_warehouse_initialized = bool(_saved_persistence.shared_initialized)
++	PlayerState._warehouse_transaction_locked = bool(_saved_persistence.warehouse_locked)
++	PlayerState._persistence_transaction_in_progress = bool(_saved_persistence.persistence_in_progress)
++	PlayerState._save_blocked_profile_id = str(_saved_persistence.save_blocked_profile_id)
++	PlayerState._save_blocked_reason = str(_saved_persistence.save_blocked_reason)
++	PlayerState._test_force_atomic_write_failure = bool(_saved_persistence.write_failure)
++	PlayerState.test_mode = bool(_saved_persistence.test_mode)
++
++
+ func _test_in_tree_logout_and_origin_guard() -> void:
+ 	_in_tree_game = FixtureGameRoot.new()
+ 	_in_tree_game.queue_only = false
+@@ -473,7 +536,7 @@ func _finish() -> void:
+ 	if is_instance_valid(_in_tree_game):
+ 		_in_tree_game.free()
+ 	RuntimeDiagnostics.set_device_lab_performance_enabled(false)
+-	PlayerState.test_mode = false
++	_restore_persistence()
+ 	if not _failures.is_empty():
+ 		print(
+ 			"DEATH_QUEUE_LIFECYCLE_REWORK_FAIL checks=%d failures=%d %s"
+diff --git a/tests/hc_monster_combat_r4/damage_attribution_verifier.gd b/tests/hc_monster_combat_r4/damage_attribution_verifier.gd
+index fe12a56bb..95d25202e 100644
+--- a/tests/hc_monster_combat_r4/damage_attribution_verifier.gd
++++ b/tests/hc_monster_combat_r4/damage_attribution_verifier.gd
+@@ -6,6 +6,35 @@ const UNKNOWN := "UNKNOWN"
+ const ID_FIELDS := ["source_instance_id", "source_life", "parent_action_id", "runtime_map_id", "zone_generation"]
+ const CHILD_FIELDS := ["release_id", "child_effect_id", "victim_instance_id", "victim_life", "victim_generation", "admission_release_id"]
+ 
++static func _integer_fields(record: Dictionary, fields: Array) -> bool:
++	for field: String in fields:
++		if not record.has(field) or typeof(record[field]) != TYPE_INT:
++			return false
++	return true
++
++static func _valid_admission(start: Dictionary) -> bool:
++	return (
++		str(start.get("source_identity", "")) != UNKNOWN
++		and typeof(start.get("release_id")) == TYPE_STRING
++		and not str(start.release_id).is_empty()
++		and _integer_fields(start, ["source_instance_id", "source_life", "parent_action_id", "map_id", "generation", "target_id", "target_life", "target_generation"])
++		and int(start.source_instance_id) > 0 and int(start.source_life) >= 0
++		and int(start.parent_action_id) > 0
++		and int(start.target_id) > 0 and int(start.target_life) >= 0
++	)
++
++static func _valid_child_identity(child: Dictionary) -> bool:
++	if str(child.get("source_identity", "")) == UNKNOWN:
++		return false
++	if not _integer_fields(child, ID_FIELDS + ["victim_instance_id", "victim_life", "victim_generation"]):
++		return false
++	for field: String in ["release_id", "child_effect_id", "admission_release_id"]:
++		if typeof(child.get(field)) != TYPE_STRING or str(child[field]).is_empty():
++			return false
++	# Explicit integer world-generation sentinels are allowed for standalone
++	# fixtures, but absent fields and fractional lifecycle IDs are never proof.
++	return int(child.source_instance_id) > 0 and int(child.source_life) >= 0 and int(child.parent_action_id) > 0 and int(child.victim_instance_id) > 0 and int(child.victim_life) >= 0
++
+ static func verdict(events: Array, terminal_events: Array, under_test_instance_id: int) -> Dictionary:
+ 	var own: Array = []
+ 	var foreign: Array = []
+@@ -51,7 +80,7 @@ static func audit_releases(starts: Array, events: Array, terminals: Array, sourc
+ 		failures.append("observer_overflow")
+ 	for start: Dictionary in starts:
+ 		var rid := str(start.get("release_id", ""))
+-		if rid.is_empty() or parents.has(rid) or int(start.get("source_instance_id", -1)) != source_id:
++		if not _valid_admission(start) or parents.has(rid) or int(start.get("source_instance_id", -1)) != source_id:
+ 			failures.append("invalid_admission identity=%s" % rid)
+ 			continue
+ 		parents[rid] = start
+@@ -59,6 +88,9 @@ static func audit_releases(starts: Array, events: Array, terminals: Array, sourc
+ 	for child: Dictionary in deliveries:
+ 		if int(child.get("source_instance_id", -1)) != source_id:
+ 			continue
++		if not _valid_child_identity(child):
++			failures.append("invalid_delivery_identity key=%s" % _child_key(child))
++			continue
+ 		var rid := str(child.get("admission_release_id", ""))
+ 		if not parents.has(rid) or not _same(child, _parent(parents[rid]), ID_FIELDS):
+ 			failures.append("orphan_delivery key=%s" % _child_key(child))
+@@ -73,6 +105,9 @@ static func audit_releases(starts: Array, events: Array, terminals: Array, sourc
+ 		var source: Dictionary = event.get("source", {})
+ 		if int(source.get("source_instance_id", -1)) != source_id:
+ 			continue
++		if not _valid_child_identity(source):
++			failures.append("invalid_result_identity key=%s" % _child_key(source))
++			continue
+ 		var rid := str(source.get("admission_release_id", source.get("release_id", "")))
+ 		if not parents.has(rid) or not _same(source, _parent(parents[rid]), ID_FIELDS):
+ 			failures.append("unowned_result key=%s" % _child_key(source))
+diff --git a/tests/hc_monster_combat_r4/observer_integrity_test.gd b/tests/hc_monster_combat_r4/observer_integrity_test.gd
+index 9ae57c1b0..5951b7aa4 100644
+--- a/tests/hc_monster_combat_r4/observer_integrity_test.gd
++++ b/tests/hc_monster_combat_r4/observer_integrity_test.gd
+@@ -49,6 +49,30 @@ func _ready() -> void:
+ 	var write := {"source": child, "mutation_id": 1, "victim_instance_id": victim.get_instance_id(), "victim_life": 2, "victim_generation": -1, "resolved_damage": 7, "hp_before": 100, "hp_after": 93, "actual_hp_delta": 7}
+ 	audit = Verifier.audit_releases([start], [write], [], 12, [child])
+ 	_check(audit.failures.is_empty(), "valid_identity_rejected")
++	# Omission on both sides must not turn default sentinel values into a
++	# complete parent identity. This preserves the intact positive above.
++	for fields: Array in [["source_life", "source_life"], ["parent_action_id", "parent_action_id"], ["map_id", "runtime_map_id"], ["generation", "zone_generation"]]:
++		var incomplete_start := start.duplicate(true)
++		incomplete_start.erase(fields[0])
++		var incomplete_child := child.duplicate(true)
++		incomplete_child[fields[1]] = -1
++		var incomplete_write := write.duplicate(true)
++		incomplete_write.source = incomplete_child
++		audit = Verifier.audit_releases([incomplete_start], [incomplete_write], [], 12, [incomplete_child])
++		_check(not audit.failures.is_empty(), "incomplete_parent_identity_accepted_" + str(fields[0]))
++	var unknown_child := child.duplicate(true)
++	unknown_child.source_identity = "UNKNOWN"
++	var unknown_write := write.duplicate(true)
++	unknown_write.source = unknown_child
++	audit = Verifier.audit_releases([start], [unknown_write], [], 12, [unknown_child])
++	_check(not audit.failures.is_empty(), "explicit_unknown_completed_owned_release")
++	var fractional_child := child.duplicate(true)
++	fractional_child.victim_life = 2.5
++	var fractional_write := write.duplicate(true)
++	fractional_write.source = fractional_child
++	fractional_write.victim_life = 2.5
++	audit = Verifier.audit_releases([start], [fractional_write], [], 12, [fractional_child])
++	_check(not audit.failures.is_empty(), "fractional_target_life_accepted")
+ 	var rejection_source := child.duplicate(true)
+ 	rejection_source.child_effect_id = "admission"
+ 	var rejection := {"source": rejection_source, "terminal_kind": "rejected", "rejection_reason": "target_gone"}

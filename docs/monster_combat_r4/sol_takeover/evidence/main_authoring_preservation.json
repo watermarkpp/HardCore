@@ -1,0 +1,167 @@
+{
+  "source_head": "f88825cc74ba624bffc6600710b7d27b72a9a52a",
+  "status": "PASS",
+  "paths": [
+    {
+      "path": "assets/art/characters/caster_skill_frames",
+      "pre_takeover_git_object": "c0b21ef39c46b4c06611726782335ef6d4671fe4",
+      "current_git_object": "c0b21ef39c46b4c06611726782335ef6d4671fe4",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/art/characters/warrior/effects",
+      "pre_takeover_git_object": "588f91c14bf2575ef5e851348f726a4513b4a882",
+      "current_git_object": "588f91c14bf2575ef5e851348f726a4513b4a882",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/caster_skill_visuals.json",
+      "pre_takeover_git_object": "375b8013a9d862b33045e5671e7760f41c5038d4",
+      "current_git_object": "375b8013a9d862b33045e5671e7760f41c5038d4",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/equipment_attribute_master.json",
+      "pre_takeover_git_object": "fd8262dbc67bd65b978f63e38da728a84e2ecf37",
+      "current_git_object": "fd8262dbc67bd65b978f63e38da728a84e2ecf37",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+      "pre_takeover_git_object": "bd0ad5abff6fd1e8b13d324a507b66c505867f60",
+      "current_git_object": "bd0ad5abff6fd1e8b13d324a507b66c505867f60",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/art/items",
+      "pre_takeover_git_object": "00ec74f6e81ed36f4fa26154498cbff6efc1cdb8",
+      "current_git_object": "00ec74f6e81ed36f4fa26154498cbff6efc1cdb8",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/art/maps",
+      "pre_takeover_git_object": "d1bf6f9fd0c5d04ae9a795674939eacd7b41c9a8",
+      "current_git_object": "d1bf6f9fd0c5d04ae9a795674939eacd7b41c9a8",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/maps",
+      "pre_takeover_git_object": "c46ea4b3146096113ae793236a87e4ceceb7812d",
+      "current_git_object": "c46ea4b3146096113ae793236a87e4ceceb7812d",
+      "status": "PASS"
+    },
+    {
+      "path": "map_editor_workspace",
+      "pre_takeover_git_object": "7ab9fd882bfe068a385deae7b2db56e287a10b4d",
+      "current_git_object": "7ab9fd882bfe068a385deae7b2db56e287a10b4d",
+      "status": "PASS"
+    },
+    {
+      "path": "assets/shaders/trial_magic_screen.gdshader",
+      "pre_takeover_git_object": "0931ea83117dff80855011d09e415dfd58483f33",
+      "current_git_object": "0931ea83117dff80855011d09e415dfd58483f33",
+      "status": "PASS"
+    }
+  ],
+  "timings": {
+    "fire_wall": {
+      "frame_count": 6,
+      "frame_time_ms": 60,
+      "direction_count": 1,
+      "native_bounds": [
+        -49,
+        -171,
+        24,
+        8
+      ],
+      "render": {
+        "contract": "caster_skill_render.v2",
+        "scale_mode": "source_pixels",
+        "source_scale": 1.0,
+        "fit_extent": 0.0,
+        "anchor_policy": "top_left_from_world_anchor",
+        "attachment_policy": "world_anchor",
+        "playback_strategy": "frame_sequence",
+        "pixel_snap": true
+      }
+    },
+    "ice_storm": {
+      "frame_count": 20,
+      "frame_time_ms": 80,
+      "direction_count": 1,
+      "native_bounds": [
+        -144,
+        -150,
+        127,
+        72
+      ],
+      "render": {
+        "contract": "caster_skill_render.v2",
+        "scale_mode": "source_pixels",
+        "source_scale": 1.0,
+        "fit_extent": 0.0,
+        "anchor_policy": "top_left_from_world_anchor",
+        "attachment_policy": "world_anchor",
+        "playback_strategy": "frame_sequence",
+        "pixel_snap": true
+      }
+    },
+    "lightning": {
+      "frame_count": 6,
+      "frame_time_ms": 50,
+      "direction_count": 1,
+      "native_bounds": [
+        -163,
+        -939,
+        153,
+        58
+      ],
+      "render": {
+        "contract": "caster_skill_render.v2",
+        "scale_mode": "source_pixels",
+        "source_scale": 1.0,
+        "presentation_contract": "skills.wizard.lightning.slender_axis.v1",
+        "source_scale_x": 0.62,
+        "source_scale_y": 1.0,
+        "fit_extent": 0.0,
+        "anchor_policy": "top_left_from_world_anchor",
+        "attachment_policy": "world_anchor",
+        "playback_strategy": "frame_sequence",
+        "pixel_snap": true
+      }
+    },
+    "laser": {
+      "frame_count": 6,
+      "frame_time_ms": 50,
+      "direction_count": 16,
+      "native_bounds": [
+        -527,
+        -405,
+        517,
+        296
+      ],
+      "render": {
+        "contract": "caster_skill_render.v2",
+        "scale_mode": "source_pixels",
+        "source_scale": 1.0,
+        "fit_extent": 0.0,
+        "anchor_policy": "top_left_from_world_anchor",
+        "attachment_policy": "caster_actor",
+        "playback_strategy": "frame_sequence",
+        "pixel_snap": true,
+        "geometry_alignment_contract": "skills.caster.geometry_visual_alignment.v1",
+        "axis_fit_contract": "skills.caster.line_visual.frame_alpha_cross_affine.v3",
+        "fit_mode": "sequence_longitudinal_and_per_frame_alpha_cross_extent",
+        "visual_cross_extent_contract": "sqrt_iso_cell_screen_area_direction_invariant",
+        "movement_lock_to_primary_visual": true
+      }
+    }
+  },
+  "manual_visual_recovery": {
+    "commit": "f88825cc74ba624bffc6600710b7d27b72a9a52a",
+    "approved_shift_px": 28,
+    "archives_preserved": true,
+    "range_and_pixels_unchanged": true
+  },
+  "precedence": "Current user main authoring content frozen; timestamps are evidence, not standalone authority. Professional branch contributes scoped monster work only."
+}

@@ -1,0 +1,26 @@
+{
+  "git_head": "f88825cc74ba624bffc6600710b7d27b72a9a52a",
+  "passed": 0,
+  "failed": 1,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "observer_integrity_test",
+      "test_path": "tests/hc_monster_combat_r4/observer_integrity_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "generated_at": "2026-09-27T18:37:33.7328891+08:00",
+  "total": 1,
+  "suite": "adhoc"
+}

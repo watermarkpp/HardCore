@@ -6,6 +6,35 @@ const UNKNOWN := "UNKNOWN"
 const ID_FIELDS := ["source_instance_id", "source_life", "parent_action_id", "runtime_map_id", "zone_generation"]
 const CHILD_FIELDS := ["release_id", "child_effect_id", "victim_instance_id", "victim_life", "victim_generation", "admission_release_id"]
 
+static func _integer_fields(record: Dictionary, fields: Array) -> bool:
+	for field: String in fields:
+		if not record.has(field) or typeof(record[field]) != TYPE_INT:
+			return false
+	return true
+
+static func _valid_admission(start: Dictionary) -> bool:
+	return (
+		str(start.get("source_identity", "")) != UNKNOWN
+		and typeof(start.get("release_id")) == TYPE_STRING
+		and not str(start.release_id).is_empty()
+		and _integer_fields(start, ["source_instance_id", "source_life", "parent_action_id", "map_id", "generation", "target_id", "target_life", "target_generation"])
+		and int(start.source_instance_id) > 0 and int(start.source_life) >= 0
+		and int(start.parent_action_id) > 0
+		and int(start.target_id) > 0 and int(start.target_life) >= 0
+	)
+
+static func _valid_child_identity(child: Dictionary) -> bool:
+	if str(child.get("source_identity", "")) == UNKNOWN:
+		return false
+	if not _integer_fields(child, ID_FIELDS + ["victim_instance_id", "victim_life", "victim_generation"]):
+		return false
+	for field: String in ["release_id", "child_effect_id", "admission_release_id"]:
+		if typeof(child.get(field)) != TYPE_STRING or str(child[field]).is_empty():
+			return false
+	# Explicit integer world-generation sentinels are allowed for standalone
+	# fixtures, but absent fields and fractional lifecycle IDs are never proof.
+	return int(child.source_instance_id) > 0 and int(child.source_life) >= 0 and int(child.parent_action_id) > 0 and int(child.victim_instance_id) > 0 and int(child.victim_life) >= 0
+
 static func verdict(events: Array, terminal_events: Array, under_test_instance_id: int) -> Dictionary:
 	var own: Array = []
 	var foreign: Array = []
@@ -51,13 +80,16 @@ static func audit_releases(starts: Array, events: Array, terminals: Array, sourc
 		failures.append("observer_overflow")
 	for start: Dictionary in starts:
 		var rid := str(start.get("release_id", ""))
-		if rid.is_empty() or parents.has(rid) or int(start.get("source_instance_id", -1)) != source_id:
+		if not _valid_admission(start) or parents.has(rid) or int(start.get("source_instance_id", -1)) != source_id:
 			failures.append("invalid_admission identity=%s" % rid)
 			continue
 		parents[rid] = start
 		per_release[rid] = {"children": [], "terminals": [], "mutations": [], "count": 0, "amount": 0}
 	for child: Dictionary in deliveries:
 		if int(child.get("source_instance_id", -1)) != source_id:
+			continue
+		if not _valid_child_identity(child):
+			failures.append("invalid_delivery_identity key=%s" % _child_key(child))
 			continue
 		var rid := str(child.get("admission_release_id", ""))
 		if not parents.has(rid) or not _same(child, _parent(parents[rid]), ID_FIELDS):
@@ -72,6 +104,9 @@ static func audit_releases(starts: Array, events: Array, terminals: Array, sourc
 	for event: Dictionary in events + terminals:
 		var source: Dictionary = event.get("source", {})
 		if int(source.get("source_instance_id", -1)) != source_id:
+			continue
+		if not _valid_child_identity(source):
+			failures.append("invalid_result_identity key=%s" % _child_key(source))
 			continue
 		var rid := str(source.get("admission_release_id", source.get("release_id", "")))
 		if not parents.has(rid) or not _same(source, _parent(parents[rid]), ID_FIELDS):

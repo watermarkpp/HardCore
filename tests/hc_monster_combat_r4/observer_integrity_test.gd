@@ -49,6 +49,30 @@ func _ready() -> void:
 	var write := {"source": child, "mutation_id": 1, "victim_instance_id": victim.get_instance_id(), "victim_life": 2, "victim_generation": -1, "resolved_damage": 7, "hp_before": 100, "hp_after": 93, "actual_hp_delta": 7}
 	audit = Verifier.audit_releases([start], [write], [], 12, [child])
 	_check(audit.failures.is_empty(), "valid_identity_rejected")
+	# Omission on both sides must not turn default sentinel values into a
+	# complete parent identity. This preserves the intact positive above.
+	for fields: Array in [["source_life", "source_life"], ["parent_action_id", "parent_action_id"], ["map_id", "runtime_map_id"], ["generation", "zone_generation"]]:
+		var incomplete_start := start.duplicate(true)
+		incomplete_start.erase(fields[0])
+		var incomplete_child := child.duplicate(true)
+		incomplete_child[fields[1]] = -1
+		var incomplete_write := write.duplicate(true)
+		incomplete_write.source = incomplete_child
+		audit = Verifier.audit_releases([incomplete_start], [incomplete_write], [], 12, [incomplete_child])
+		_check(not audit.failures.is_empty(), "incomplete_parent_identity_accepted_" + str(fields[0]))
+	var unknown_child := child.duplicate(true)
+	unknown_child.source_identity = "UNKNOWN"
+	var unknown_write := write.duplicate(true)
+	unknown_write.source = unknown_child
+	audit = Verifier.audit_releases([start], [unknown_write], [], 12, [unknown_child])
+	_check(not audit.failures.is_empty(), "explicit_unknown_completed_owned_release")
+	var fractional_child := child.duplicate(true)
+	fractional_child.victim_life = 2.5
+	var fractional_write := write.duplicate(true)
+	fractional_write.source = fractional_child
+	fractional_write.victim_life = 2.5
+	audit = Verifier.audit_releases([start], [fractional_write], [], 12, [fractional_child])
+	_check(not audit.failures.is_empty(), "fractional_target_life_accepted")
 	var rejection_source := child.duplicate(true)
 	rejection_source.child_effect_id = "admission"
 	var rejection := {"source": rejection_source, "terminal_kind": "rejected", "rejection_reason": "target_gone"}

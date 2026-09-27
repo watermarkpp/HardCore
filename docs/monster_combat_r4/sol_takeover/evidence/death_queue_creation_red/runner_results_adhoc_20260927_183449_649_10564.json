@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-09-27T18:34:49.6498675+08:00",
+  "total": 1,
+  "failed": 0,
+  "suite": "adhoc",
+  "git_head": "f88825cc74ba624bffc6600710b7d27b72a9a52a",
+  "engine_log_errors": 0,
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "death_queue_lifecycle_rework_test",
+      "test_path": "tests/death_queue_lifecycle_rework_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

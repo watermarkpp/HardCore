@@ -1,0 +1,14 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] clear_environment (res://scripts/world_background.gd:786)
+       [1] _rebuild_environment (res://scripts/world_background.gd:764)
+       [2] set_zone_data (res://scripts/world_background.gd:850)
+       [3] _load_zone (res://scripts/game_root.gd:4277)
+       [4] _complete_portal_travel (res://scripts/game_root.gd:3213)
+       [5] travel_via_portal (res://scripts/game_root.gd:3203)
+       [6] _travel_via_portal (res://tests/vertical_slice_loop_test.gd:123)
+       [7] _run (res://tests/vertical_slice_loop_test.gd:33)
+       [8] _settle (res://tests/vertical_slice_loop_test.gd:165)
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

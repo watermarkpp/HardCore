@@ -1,0 +1,14 @@
+{
+  "source_and_edited_docs": "PASS",
+  "full_staged": "FAIL",
+  "blocking": false,
+  "paths": [
+    "docs/monster_combat_r4/sol_takeover/evidence/death_queue_creation_red/executed_patch.diff",
+    "docs/monster_combat_r4/sol_takeover/evidence/death_queue_duplicate_red/executed_patch.diff",
+    "docs/monster_combat_r4/sol_takeover/evidence/final_critical_after_import/runner/game_root_r3x6_targeting_broadphase_test.godot.log",
+    "docs/monster_combat_r4/sol_takeover/evidence/final_critical_after_import/runner/game_root_r3x6_targeting_broadphase_test.stdout.log",
+    "docs/monster_combat_r4/sol_takeover/evidence/presence_and_death_green/executed_patch.diff",
+    "docs/monster_combat_r4/sol_takeover/evidence/verifier_presence_red/executed_patch.diff"
+  ],
+  "classification": "Only faithfully saved Git patch context indentation and pre-existing producer trailing spaces in original test stdout/engine logs. Helper EOF fixed; source/doc checks pass."
+}

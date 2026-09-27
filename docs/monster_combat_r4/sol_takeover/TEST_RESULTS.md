@@ -1,5 +1,17 @@
 # R4 实际执行结果（持续更新）
 
+## 最新完整运行与收口反例
+
+f88825cc正式critical实际执行集合525/525唯一场景，missing/extra均0；runner正常结束，**524 PASS、1 FAIL、engine_log_errors=0**。原始目录 `evidence/final_critical_after_import` 保留，不将该运行改成PASS。
+
+死亡退出失败：193实际检查1失败，活动角色为空、保存not_attempted；真实死亡已经COMMITTED，奖励已提交。旧夹具忽略角色创建返回值，用默认共享账号和基于进程毫秒的名字。首次实际创建错误未记录，标MISSING；不能倒推一定是重名或仓库。保存账号副本的诊断重跑本身PASS，`death_queue_creation_red`名称不能代替实际结果。随后在副本上用已存在的测试角色名调用真实create_character，得到“角色名已存在”、空活动档和检查FAIL，`death_queue_duplicate_red`准确证明缺前置机制。
+
+修复只涉及测试：四个持久化路径独立、恢复原路径/状态；真实创建返回值、活动ID、档案落盘和索引更新显式检查。全部原死亡、旧世界取消、三次失败重试拒绝、32实际死亡和RNG断言保留。`presence_and_death_green`实际7/7、错误0，生命周期测试本次197检查PASS。未放松生产save_safe_logout的活动档要求，未改人物存档格式。
+
+最后的验收器检查暴露六个缺口：四种缺父字段的两侧一致默认值、明确UNKNOWN来源、2.5生命代际均可通过。`verifier_presence_red`正常退出1，六条失败精确匹配；修复显式必填整数字段与字符串身份、拒绝UNKNOWN，保留独立fixture明确声明的整数代际sentinel。完整身份/合法多目标正例、原9错身份、重复和溢出断言保持；最窄GREEN通过。此组是验收元数据单元反例，不能替代发生在真实写入路径的伤害故障反例。
+
+真实归属相关回归 `presence_related_green`实际7/7、错误0：真实丢伤/替补/重复/减伤/嵌套、20全漏、MP、合法多目标/死亡复活、异步line、原取消与来源销毁。最窄与相关合计14次正常PASS；不以元数据单元替代真实故障。完整最终critical、独立103场景和72轮有效性能配对仍NOT_RUN，固定源码提交后继续最终门禁。
+
 ## 观察与伤害身份闭环
 
 执行源基于本地候选 `227a9c945f3bb21e4fbe51d38e10bbde4b0d8f9d` 加本轮未提交修复。实际源码与测试文件哈希在 `evidence/observation_final/r4_observation_final/source_identity.json`；以文件哈希识别这次执行，不将基线HEAD当作无dirty源码证明。

@@ -1,0 +1,21 @@
+diff --git a/tests/death_queue_lifecycle_rework_test.gd b/tests/death_queue_lifecycle_rework_test.gd
+index ce2654eb4..6d498a67d 100644
+--- a/tests/death_queue_lifecycle_rework_test.gd
++++ b/tests/death_queue_lifecycle_rework_test.gd
+@@ -50,11 +50,15 @@ func _ready() -> void:
+ func _run() -> void:
+ 	PlayerState.test_mode = true
+ 	PlayerState.reset_progress()
+-	PlayerState.create_character(
++	var creation_result := PlayerState.create_character(
+ 		"R3X4%06d" % (Time.get_ticks_msec() % 1000000),
+ 		"战士",
+ 		"男",
+ 	)
++	_expect(creation_result.is_empty(), "real character creation failed: %s active=%s" % [creation_result, PlayerState.active_profile_id])
++	if not creation_result.is_empty():
++		_finish()
++		return
+ 	PlayerState._test_force_atomic_write_failure = false
+ 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
+ 	RuntimeDiagnostics.reset_performance_window()

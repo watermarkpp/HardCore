@@ -1,0 +1,8 @@
+WARNING: 音量设置尚未保存，原设置/备份仍保留。错误码：7
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://scripts/audio_preferences.gd:161)
+       [1] flush (res://scripts/audio_preferences.gd:121)
+       [2] _assert_save_failure_keeps_dirty_and_data (res://tests/ui_r5_audio_config_strict_test.gd:196)
+       [3] _run (res://tests/ui_r5_audio_config_strict_test.gd:29)
+       [4] _assert_zero_levels_and_restore (res://tests/ui_r5_audio_config_strict_test.gd:172)

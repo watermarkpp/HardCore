@@ -41,6 +41,7 @@ var _checks := 0
 var _in_tree_game: Node
 var _async_game: Node
 var _async_enemies: Array[EnemyActor] = []
+var _saved_persistence: Dictionary = {}
 
 
 func _ready() -> void:
@@ -48,19 +49,81 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	_configure_isolated_persistence()
 	PlayerState.test_mode = true
+	PlayerState._test_force_atomic_write_failure = false
 	PlayerState.reset_progress()
-	PlayerState.create_character(
+	var creation_result := PlayerState.create_character(
 		"R3X4%06d" % (Time.get_ticks_msec() % 1000000),
 		"战士",
 		"男",
 	)
+	print("DEATH_QUEUE_CREATION_RESULT error=%s active=%s" % [creation_result, PlayerState.active_profile_id])
+	_expect(creation_result.is_empty(), "real character creation failed: %s active=%s" % [creation_result, PlayerState.active_profile_id])
+	if not creation_result.is_empty():
+		_finish()
+		return
+	_expect(not PlayerState.active_profile_id.is_empty(), "created character has no active profile")
+	_expect(FileAccess.file_exists(PlayerState._profile_path(PlayerState.active_profile_id)), "created character profile was not persisted")
+	_expect(bool(PlayerState.last_save_result.get("profile_index_updated", false)), "created character was not indexed")
 	PlayerState._test_force_atomic_write_failure = false
 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 	RuntimeDiagnostics.reset_performance_window()
 	await _test_in_tree_logout_and_origin_guard()
 	await _test_async_real_deaths_and_rng_parity()
 	_finish()
+
+
+func _configure_isolated_persistence() -> void:
+	# Exercise real account/profile writes without depending on other scenes'
+	# names, migration records or deliberately rejected save fixtures.
+	_saved_persistence = {
+		"profile_directory": PlayerState.profile_directory,
+		"profile_index_path": PlayerState.profile_index_path,
+		"shared_warehouse_path": PlayerState.shared_warehouse_path,
+		"transaction_path": PlayerState.shared_warehouse_transaction_log_path,
+		"test_mode": PlayerState.test_mode,
+		"active_profile_id": PlayerState.active_profile_id,
+		"warehouse_inventory": PlayerState.warehouse_inventory.duplicate(true),
+		"shared_initialized": PlayerState._shared_warehouse_initialized,
+		"warehouse_locked": PlayerState._warehouse_transaction_locked,
+		"persistence_in_progress": PlayerState._persistence_transaction_in_progress,
+		"save_blocked_profile_id": PlayerState._save_blocked_profile_id,
+		"save_blocked_reason": PlayerState._save_blocked_reason,
+		"write_failure": PlayerState._test_force_atomic_write_failure,
+	}
+	var sandbox := "user://death_queue_lifecycle/%d_%d" % [Time.get_ticks_usec(), OS.get_process_id()]
+	PlayerState.profile_directory = sandbox.path_join("characters")
+	PlayerState.profile_index_path = sandbox.path_join("profiles.json")
+	PlayerState.shared_warehouse_path = sandbox.path_join("shared.json")
+	PlayerState.shared_warehouse_transaction_log_path = sandbox.path_join("shared.transaction.json")
+	var directory_result := DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory))
+	_expect(directory_result == OK, "could not create isolated persistence directory")
+	PlayerState.active_profile_id = ""
+	PlayerState.warehouse_inventory = []
+	PlayerState._shared_warehouse_initialized = false
+	PlayerState._warehouse_transaction_locked = false
+	PlayerState._persistence_transaction_in_progress = false
+	PlayerState._save_blocked_profile_id = ""
+	PlayerState._save_blocked_reason = ""
+
+
+func _restore_persistence() -> void:
+	if _saved_persistence.is_empty():
+		return
+	PlayerState.profile_directory = str(_saved_persistence.profile_directory)
+	PlayerState.profile_index_path = str(_saved_persistence.profile_index_path)
+	PlayerState.shared_warehouse_path = str(_saved_persistence.shared_warehouse_path)
+	PlayerState.shared_warehouse_transaction_log_path = str(_saved_persistence.transaction_path)
+	PlayerState.active_profile_id = str(_saved_persistence.active_profile_id)
+	PlayerState.warehouse_inventory = (_saved_persistence.warehouse_inventory as Array).duplicate(true)
+	PlayerState._shared_warehouse_initialized = bool(_saved_persistence.shared_initialized)
+	PlayerState._warehouse_transaction_locked = bool(_saved_persistence.warehouse_locked)
+	PlayerState._persistence_transaction_in_progress = bool(_saved_persistence.persistence_in_progress)
+	PlayerState._save_blocked_profile_id = str(_saved_persistence.save_blocked_profile_id)
+	PlayerState._save_blocked_reason = str(_saved_persistence.save_blocked_reason)
+	PlayerState._test_force_atomic_write_failure = bool(_saved_persistence.write_failure)
+	PlayerState.test_mode = bool(_saved_persistence.test_mode)
 
 
 func _test_in_tree_logout_and_origin_guard() -> void:
@@ -473,7 +536,7 @@ func _finish() -> void:
 	if is_instance_valid(_in_tree_game):
 		_in_tree_game.free()
 	RuntimeDiagnostics.set_device_lab_performance_enabled(false)
-	PlayerState.test_mode = false
+	_restore_persistence()
 	if not _failures.is_empty():
 		print(
 			"DEATH_QUEUE_LIFECYCLE_REWORK_FAIL checks=%d failures=%d %s"

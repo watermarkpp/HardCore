@@ -1,8 +1,26 @@
 # 精确续接点（R4 未完成）
 
-## 最新恢复点优先（17:10；以下旧会话只作历史）
+## 最新闭环覆盖（18:44）
 
-当前主树 `codex/integration` HEAD `257d50bd006b02c606b964c44fa947f92efc48e3`。无工程代理、无推送/APK/安装/版本/删树。用户最新明确：主树技能和其他人工调整领先 v93；旧专业树只在对应怪物/UI 范围领先。修改时间只是线索，结合提交、内容、哈希与人工裁决；不得整文件覆盖主树。
+4198已正常结束：f888全量实际525唯一场景，524PASS/1FAIL/engine错误0，executed_set PASS(仅集合，不是整套)。49402按FAIL停止，旧clean/perf NOT_RUN。两个会话均已结束，当前无Godot。
+
+死亡测试首次创建错误没有旧日志，标MISSING。诊断副本重跑PASS（目录death_queue_creation_red名称不代表结果）；主动选择副本已存在R3X4测试名字调用真实create得到重名拒绝/active空/检查FAIL，证明忽略创建结果机制，不伪称原首次一定重名。最终fixture改独立四持久化路径+真实创建返回/活动档/文件/索引检查，恢复原状态；生产save guard完全不动。
+
+身份缺失最窄六条真实RED：四父字段缺失两边以-1匹配、明确UNKNOWN、2.5目标生命均被旧verifier接受。只修测试验收器必填/整数字段/字符串ID/UNKNOWN拒绝，保留明确整数world sentinel和原合法多目标正例。当前三个修改测试与源码hash/完整diff在presence_and_death_green；7最窄及7真实归属相关全部PASS/errors0，会话39044/86455已结束。没有生产/素材/时钟更改。
+
+下一步精确stage三个测试及本次owned sol_takeover文档/原始证据，审差异后提交闭环；AGENTS/原无关untracked/自动UID一律不stage。然后normal pristine detached switch更新clean树至新SHA，main与BASE probe/runner须相同字节；启动新final_critical_after_closure 525，同HEAD不得改源/测试/runner/commit。新finish_verification_final.ps1 -SourceHead <提交SHA> -WaitForCritical只串行收集，等full PASS才独立clean import及103场景、v4全部72配对，任一失败停下；旧脚本与旧FAIL保留。新helper/103计划均已写，PS AST PASS，尚NOT_RUN。它不能自动裁决performance_acceptance；controller须复核AA噪声与3对。
+
+最终保护脚本/生成static/远端fetch/证据索引SHA256/最终审查仍要完成；远端integration、APK、设备、删除任何树均仍未授权。
+
+## 最新失败覆盖（完整回归仍在运行）
+
+会话4198在f88825cc上发现 `death_queue_lifecycle_rework_test` 实际FAIL：193检查中1项失败。真实待处理死亡已经COMMITTED/reward committed，但安全退出写角色档失败；日志 `active=`，`last_save_result.reason=not_attempted`。测试忽略 `create_character` 返回值并使用共享默认测试账号目录。只能先标为角色前置条件缺失候选，尚未证明具体创建失败原因；不能绕过生产save guard或弱化死亡断言。Windows GameData已同步加载，不能凭空认定数据未加载。
+
+4198继续收集其余结果，禁止改生产/测试/runner/HEAD；49402只等待completion，在完整FAIL后必须停止，独立clean/performance仍NOT_RUN。完整结束后先给原测试增加创建返回值/真实活动档诊断，保留RED；再根据证据修测试持久化隔离或生产根因，最窄与相关回归后提交稳定源码，重新最终完整critical。当前独立clean98计划须补这项直接相关死亡退出测试；后续更新clean至最终SHA并保留原失败运行。所有旧原始流水保留。
+
+## 最新恢复点优先（17:26；以下旧会话只作历史）
+
+当前主树 `codex/integration` HEAD `f88825cc74ba624bffc6600710b7d27b72a9a52a`。无工程代理、无推送/APK/安装/版本/删树。用户最新明确：主树技能和其他人工调整领先 v93；旧专业树只在对应怪物/UI 范围领先。修改时间只是线索，结合提交、内容、哈希与人工裁决；不得整文件覆盖主树。
 
 旧完整 critical 会话51334已主动终止以处理用户视觉裁决，留下 interrupted_checkpoint，整体 NOT_RUN。它的16方向极光预览 FAIL 不可抹掉。
 
@@ -10,11 +28,13 @@
 
 固定BASE原两激光测试2/2 PASS。根因随后证明：main实际PNG相同，但96laser ctex全部是旧图，source_md5全部不匹配。完整609精确技能PNG缓存384过期。外部 `D:/HardCoreAudit/r4-takeover-20260927-123453/skill-import-cache-before` 备份1920项。导入会话52269正常exit0已结束；609源SHA256及mtime_ns全部未变，93translation全部未变，609缓存全部有效、96laser ctex与独立BASE相同。`skill_import_refresh/verification.json` 实际PASS。没有重做素材/改范围/尺寸/时序。
 
-**现在运行会话14111**：定向11场景，日志 `evidence/laser_import_fresh_regression/runner`，第一16方向已PASS。禁止并发Godot。完成后裁定所有exit/error/timeout，提交本独立视觉恢复与导入证据/新增测试/注册（expectedcritical现在525）。AGENTS用户dirty、其他无关untracked/所有自动uid保留，不stage。
+定向会话14111已实际11/11 PASS，engine错误0/正常退出。独立视觉恢复与缓存证据/注册已提交 f88825cc。当前**运行会话4198**：正式 `critical` 525场景，日志 `evidence/final_critical_after_import/runner`，source/tree/runner/expectedlist identity已保存。目前已过技能/输入/快照/安全退出/持续地面与火墙组，无新增失败；仍NOT_RUN（完整结论），等待实际completion/runner JSON。用write_stdin轮询4198，禁止并发Godot，不改生产/测试/runner或提交HEAD。AGENTS用户dirty、其他无关untracked/所有自动uid保留，不stage。
 
-新增clean managed tree `C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore` 当前257d，仅Godot/dev源只读junction，尚无import/test；bootstrap detached .Trim错误保留，等价预检已留证。最终source提交后安全更新该已知pristine detached checkout；不得复制main缓存/catalog audit生成物。
+**串行收集会话49402**已启动 `evidence/finish_verification.ps1 -WaitForCritical`。当前只等4198的completion文件，不启动第二Godot；之后精确核对525实际集合及退出结果，复制本次写出的R4原流水。全部通过才独立clean import（93translation只恢复精确备份，609源SHA保持、tracked clean门），再98专项，再最终v4 72配对并汇总。任一FAIL/MISSING门就停止，纯收集不自动性能验收/提交/推送/APK。查看verification_pipeline_state.json与write_stdin49402确认阶段。当前主树与BASE runner/probe完全同字节，t6_runner_overlay_final.json。性能阶段禁止另一engine/import/重哈希/commit。
 
-余项仍未完成：最终完整critical525；最终v4有效负载72配对 `t6_pairs_final_v4`（正式test_mode=false、真实save/profile/drop预算，无FAILED、固定nativecastseed，BASE同字节probe；不要重哈希/提交/并发engine污染采样）；独立clean import/direct相关回归；最终保护13611+4152hash/源生成检查/远端fetch/差异和台账。旧T6 v1/v2/v3/v4失败均保留，不冒充最终无退化。PERFORMANCE_RESULTS为NOT_RUN草稿。
+新增clean managed tree `C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore` 已核验pristine后用普通detached switch更新到f88825cc，仅Godot/dev源只读junction，尚无import/test；bootstrap detached .Trim错误保留，等价预检已留证。93tracked translation已外部精确备份，`clean_checkout/translation_backup.json`。计划98直接相关critical/R1-R4/历史/视觉场景，`planned_tests.json`；完整client catalog是独立生成审计manifest前置MISSING，不复制main缓存伪造clean PASS。
+
+余项仍未完成：最终完整critical525；独立clean import/98相关回归（先clean可避免后续源码修复作废perf）；最终v4有效负载72配对 `t6_pairs_final_v4`（正式test_mode=false、真实save/profile/drop预算，无FAILED、固定nativecastseed，BASE同字节probe；不要重哈希/提交/并发engine污染采样）；最终保护13611+4152hash/远端fetch/差异和台账。当前final_static_checks三个源生成/精确ID/targeting实际PASS156记录，main_authoring_preservation十个冻结资源域Git对象与接管前f5相同。`final_protection_check.py`已准备但NOT_RUN，等性能窗口外执行。旧T6 v1/v2/v3/v4失败均保留，不冒充最终无退化。PERFORMANCE_RESULTS为NOT_RUN草稿。
 
 ## 当前身份与正在执行
 

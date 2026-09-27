@@ -1,0 +1,18 @@
+{
+  "source_head": "f88825cc74ba624bffc6600710b7d27b72a9a52a",
+  "files": [
+    {
+      "path": "tests/death_queue_lifecycle_rework_test.gd",
+      "sha256": "622C45679B480C590187E3D4B120E79485D11574070E413DD4CB1442D8C9D8B7"
+    },
+    {
+      "path": "tests/hc_monster_combat_r4/observer_integrity_test.gd",
+      "sha256": "4A549075F2A9E76816AF1D56C0921E5A0FCFB676B8DA8DFC4FA1F0583EA6AD3B"
+    },
+    {
+      "path": "tests/hc_monster_combat_r4/damage_attribution_verifier.gd",
+      "sha256": "3E07544A664603870AACCA3EB377D818C76326726EB56CAC84C83B39BAEA79F6"
+    }
+  ],
+  "scope": "Test fixture and verifier only; production damage/save untouched"
+}
