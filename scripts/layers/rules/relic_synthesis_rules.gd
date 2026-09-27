@@ -211,9 +211,4 @@ static func _ensure_loaded() -> void:
 			record["attackSpeedTier"] = 1
 		elif item_id == 950103:
 			record["luck"] = 1
-		elif badge_professions.has(item_id):
-			record["defenseMin"] = 0
-			record["defenseMax"] = 5
-			record["mdefMin"] = 0
-			record["mdefMax"] = 5
 		_records_by_id[item_id] = record

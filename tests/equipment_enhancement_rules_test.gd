@@ -17,8 +17,20 @@ func _ready() -> void:
 		var quote: Dictionary = Rules.quote_probability("盔甲", stage, 20, 3, 3, 3)
 		assert(int(quote.final_success_bps) == armor_best[stage - 1])
 		assert(Rules.quote_probability("头盔", stage, 20, 3, 3, 3) == quote)
-		assert(Rules.forge_gold_cost("盔甲", stage) > 0)
+		assert(Rules.forge_gold_cost("盔甲", stage) == [100000, 250000, 500000][stage - 1])
+		assert(Rules.forge_gold_cost("头盔", stage) == Rules.forge_gold_cost("盔甲", stage))
 		armor_chain *= float(quote.final_success_bps) / 10000.0
+	for category: String in ["盔甲", "头盔"]:
+		assert(Rules.max_stage(category) == 3)
+		assert(Rules.quote_probability(category, 4, 20, 3, 3, 3).is_empty())
+		assert(Rules.forge_gold_cost(category, 4) == -1)
+		assert(Rules.validate_enhancement({
+			"contract_id": Rules.CONTRACT_ID,
+			"forge": {"stage": 3, "history": ["defense_max", "defense_max", "defense_max"], "modifiers": [
+				{"stat": "defense_max", "op": "add", "value": 3},
+				{"stat": "magic_defense_max", "op": "add", "value": 3},
+			]},
+		}, category))
 	assert(absf(weapon_chain - 0.15) < 0.0002)
 	assert(absf(armor_chain - 0.15) < 0.0002)
 	assert(Rules.quote_probability("武器", 7, 10, 2, 1, 1).final_success_bps == 3581)

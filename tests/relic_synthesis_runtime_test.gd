@@ -55,7 +55,9 @@ func _run() -> void:
 		var rolled := Rules.roll_instance(item_id, "战士", rng)
 		assert(Rules.valid_instance(rolled, item_id))
 		assert(Rules.skill_ids_for(expected_profession).has(str(rolled.relic_roll.skill_id)))
-		assert(int(Rules.record_for_id(item_id).defenseMax) == 5 and int(Rules.record_for_id(item_id).mdefMax) == 5)
+		var badge_record := Rules.record_for_id(item_id)
+		for field: String in ["defenseMin", "defenseMax", "mdefMin", "mdefMax"]:
+			assert(not badge_record.has(field), "badge must not grant fixed defense: %d/%s" % [item_id, field])
 	var seen_drop_professions := {}
 	for sample in 60:
 		var catalog := GameData.get_item_record({"item_id": 950101})
@@ -171,8 +173,10 @@ func _test_class_choice_and_badge_recovery() -> void:
 	badge.merge(Rules.roll_instance(950201, "战士", rng), true)
 	assert(bool(PlayerState.receive_record(badge, false).get("success", false)))
 	var defense_before := int(PlayerState.computed_stats.get("defense_max", 0))
+	var magic_defense_before := int(PlayerState.computed_stats.get("magic_defense_max", 0))
 	assert(PlayerState.equip_inventory_index(_item_index(950201)).begins_with("已装备"))
-	assert(int(PlayerState.computed_stats.get("defense_max", 0)) == defense_before + 5)
+	assert(int(PlayerState.computed_stats.get("defense_max", 0)) == defense_before)
+	assert(int(PlayerState.computed_stats.get("magic_defense_max", 0)) == magic_defense_before)
 	var badge_durability := int(PlayerState.equipment["徽章"].durability_raw)
 	PlayerState.damage_equipment_durability("徽章", 100)
 	assert(int(PlayerState.equipment["徽章"].durability_raw) == badge_durability)

@@ -44,6 +44,7 @@ func _ready() -> void:
 	assert(int(target_after.enhancement.forge.stage) == int(result.stage_after))
 	assert(not bool(service.commit_forge(quote).get("committed", false)))
 	_test_w7_success_and_failure()
+	_test_armor_and_helmet_success_and_failure()
 	print("EQUIPMENT_ENHANCEMENT_TRANSACTION_PASS")
 	get_tree().quit(0)
 
@@ -78,6 +79,49 @@ func _test_w7_success_and_failure() -> void:
 	assert(GameData.validate_item_drop_instance(after_failure))
 	for field: String in ["instance_id", "drop_key_digest", "modifiers", "drop_affix", "durability_raw", "max_durability_raw", "weapon_luck", "weapon_curse"]:
 		assert(after_failure.get(field) == original.get(field), "failed forge changed natural field %s" % field)
+
+
+func _test_armor_and_helmet_success_and_failure() -> void:
+	for target_id: int in [116, 146]:
+		PlayerState.reset_progress(false)
+		var item := GameData.get_item_record({"item_id": target_id})
+		var original := DropInstance.create_instance(item, "forge-armor-helmet:%d" % target_id)
+		assert(not original.is_empty())
+		assert(bool(PlayerState.receive_record(original, false).success))
+		for _attempt in 2:
+			for material_id: int in [940020, 233, 234]:
+				var material := GameData.get_item_record({"item_id": material_id})
+				assert(bool(PlayerState.receive_record({"item_id": material_id, "name": str(material.name)}, false).success))
+		PlayerState.gold = 1000000
+		var service := Service.new(PlayerState)
+		var target := _index_for_id(target_id)
+		var first := service.quote_forge(target, _index_for_id(940020), _index_for_id(233), _index_for_id(234))
+		assert(bool(first.get("valid", false)), str(first.get("message", "")))
+		assert(int(first.final_success_bps) == 5769 and int(first.gold_cost) == 100000)
+		service.configure_rng(_rng_for_outcome(int(first.final_success_bps), true))
+		var success := service.commit_forge(first)
+		assert(bool(success.committed) and bool(success.forge_succeeded) and int(success.stage_after) == 1)
+		var forged: Dictionary = PlayerState.inventory[target]
+		assert(GameData.validate_item_drop_instance(forged))
+		assert(forged.enhancement.forge.history == ["defense_max"])
+		assert(forged.enhancement.forge.modifiers.size() == 2)
+		var bonus_by_stat := {}
+		for modifier: Dictionary in forged.enhancement.forge.modifiers:
+			assert(str(modifier.op) == "add")
+			bonus_by_stat[str(modifier.stat)] = int(modifier.value)
+		assert(bonus_by_stat == {"defense_max": 1, "magic_defense_max": 1})
+		var second := service.quote_forge(target, _index_for_id(940020), _index_for_id(233), _index_for_id(234))
+		assert(bool(second.get("valid", false)), str(second.get("message", "")))
+		assert(int(second.final_success_bps) == 5326 and int(second.gold_cost) == 250000)
+		service.configure_rng(_rng_for_outcome(int(second.final_success_bps), false))
+		var failure := service.commit_forge(second)
+		assert(bool(failure.committed) and not bool(failure.forge_succeeded) and int(failure.stage_after) == 0)
+		var after_failure: Dictionary = PlayerState.inventory[target]
+		assert(GameData.validate_item_drop_instance(after_failure))
+		assert(after_failure.enhancement.forge.history.is_empty() and after_failure.enhancement.forge.modifiers.is_empty())
+		for field: String in ["instance_id", "drop_key_digest", "modifiers", "drop_affix", "durability_raw", "max_durability_raw"]:
+			assert(after_failure.get(field) == original.get(field), "armor/helmet forge changed natural field %s" % field)
+		assert(PlayerState.gold == 650000)
 
 
 func _rng_for_outcome(threshold: int, want_success: bool) -> RandomNumberGenerator:
