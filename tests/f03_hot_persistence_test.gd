@@ -49,7 +49,19 @@ func _measure_existing_table(size: int) -> void:
 		_expect(state.mark_monster_respawn_dead(913203, "existing:%d" % index, 64, "normal_cave", deadline), "existing deadline rejected")
 	_expect(state.save_game(false), "initial real world/profile baseline must commit")
 	_expect(state.mark_monster_respawn_dead(913203, "new-death", 64, "normal_cave", deadline), "new deadline rejected")
-	var settled: Dictionary = state.record_kills_and_experience_batch([{"monster_name": "", "experience": 1}], true)
+	state.synchronous_atomic_entries.clear()
+	var death_started := Time.get_ticks_usec()
+	var death_request := state.prepare_death_settlement([{"monster_name": "", "experience": 1}], {})
+	var death_prepare_usec := Time.get_ticks_usec() - death_started
+	var settled: Dictionary = {"pending": true}
+	var poll_max_usec := 0
+	while bool(settled.get("pending", false)):
+		var poll_started := Time.get_ticks_usec()
+		settled = state.finish_prepared_death_settlement(death_request)
+		poll_max_usec = maxi(poll_max_usec, Time.get_ticks_usec() - poll_started)
+		if bool(settled.get("pending", false)):
+			await get_tree().process_frame
+	_expect(state.synchronous_atomic_entries.is_empty(), "native death must not enter synchronous file persistence")
 	_expect(bool(settled.get("success", false)), "real compatibility death settlement must commit")
 	var event_path := state._death_event_path(state.active_profile_id, 1)
 	var bytes := FileAccess.get_file_as_bytes(event_path)
@@ -77,7 +89,7 @@ func _measure_existing_table(size: int) -> void:
 		_expect(bool(state.last_load_result.get("success", false)), "uncheckpointed world must recover through its journal")
 		_expect(absf(float(state.monster_respawn_entry(913203, "new-death").get("respawn_at_unix", 0.0)) - deadline) < 0.0001, "recovered deadline must match its native persisted value")
 		_expect(state.gold == 7 and state.experience == 1, "recovery must retain XP and exactly one pickup")
-	measurements.append({"existing_slots": size, "event_bytes": bytes.size(), "pickup_prepare_usec": preparation_usec, "prepare_sync_atomic_entries": prepare_sync_entries})
+	measurements.append({"existing_slots": size, "event_bytes": bytes.size(), "death_prepare_usec": death_prepare_usec, "death_poll_max_usec": poll_max_usec, "pickup_prepare_usec": preparation_usec, "prepare_sync_atomic_entries": prepare_sync_entries})
 	state.free()
 
 

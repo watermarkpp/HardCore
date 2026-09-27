@@ -1,0 +1,28 @@
+{
+  "git_head": "5279888ca8f7125ddcc18a80afd5ab184ce94e45",
+  "generated_at": "2026-09-27T23:37:43.0500972+08:00",
+  "results": [
+    {
+      "test_name": "f03_hot_persistence_test",
+      "test_path": "tests/f03_hot_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:38:06.5321809Z",
+      "native_exit_observed_utc": "2026-09-27T15:37:41.6677140Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0,
+  "failed": 0,
+  "total": 1,
+  "passed": 1,
+  "suite": "adhoc"
+}

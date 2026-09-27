@@ -217,6 +217,7 @@ var _durability_save_elapsed := 0.0
 var _durability_mutation_revision := 0
 var _world_mutation_revision := 0
 var _background_save: Dictionary = {}
+var _background_death: Dictionary = {}
 var _durability_visual_pending := false
 var _durability_visual_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
@@ -2211,15 +2212,8 @@ func record_kill_and_experience(monster_name: String, amount: int) -> Dictionary
 ## Atomic same-frame death settlement: every kill advances quests in stable
 ## event order, all experience is applied, and the complete result is persisted
 ## by exactly one save commit.
-func record_kills_and_experience_batch(
-	kills: Array,
-	force_save := false,
-) -> Dictionary:
-	_before_state_transaction()
-	var profile_started_usec := Time.get_ticks_usec()
-	var quests_before := quest_states.duplicate(true)
-	var experience_before := experience
-	var level_before := level
+func _plan_kill_rewards(kills: Array) -> Dictionary:
+	var quests_after := quest_states.duplicate(true)
 	var quest_changed := false
 	var gained := 0
 	var accepted_kill_count := 0
@@ -2233,8 +2227,8 @@ func record_kills_and_experience_batch(
 			continue
 		accepted_kill_count += 1
 		gained += kill_experience
-		for quest_id: String in quest_states.keys():
-			var state: Dictionary = quest_states[quest_id]
+		for quest_id: String in quests_after.keys():
+			var state: Dictionary = quests_after[quest_id]
 			if str(state.get("status", "")) != "active":
 				continue
 			var quest := GameData.get_bich_quest(quest_id)
@@ -2245,20 +2239,148 @@ func record_kills_and_experience_batch(
 			for objective_name: String in requirements.keys():
 				if not _quest_monster_matches(monster_name, objective_name):
 					continue
-				progress[objective_name] = mini(
-					int(requirements[objective_name]),
-					int(progress.get(objective_name, 0)) + 1
-				)
+				progress[objective_name] = mini(int(requirements[objective_name]), int(progress.get(objective_name, 0)) + 1)
 				quest_changed = true
 			state["progress"] = progress
 			if _quest_objectives_complete(quest, state):
 				state["status"] = "ready"
+	var next_level := level
+	var next_experience := experience + gained
+	var transitions: Array[Dictionary] = []
 	if gained > 0:
-		experience += gained
-		while experience >= experience_to_next_level():
-			experience -= experience_to_next_level()
-			level += 1
-			recalculate_stats(false)
+		while next_experience >= _experience_to_next_level_for_level(next_level):
+			next_experience -= _experience_to_next_level_for_level(next_level)
+			next_level += 1
+			transitions.append({"level": next_level, "experience": next_experience})
+	return {"quests_after": quests_after, "quest_changed": quest_changed,
+		"experience_gained": gained, "kill_count": accepted_kill_count,
+		"level_after": next_level, "experience_after": next_experience, "transitions": transitions}
+
+
+func _apply_kill_reward_plan(plan: Dictionary) -> void:
+	quest_states = plan.quests_after
+	for transition: Dictionary in plan.transitions:
+		experience = int(transition.experience)
+		level = int(transition.level)
+		recalculate_stats(false)
+	experience = int(plan.experience_after)
+	level = int(plan.level_after)
+
+
+func prepare_death_settlement(kills: Array, world_upserts: Dictionary, origin_guard := Callable()) -> Dictionary:
+	# No mutation, RNG or filesystem IO before submitting this detached event.
+	if not _background_death.is_empty() or _json_persistence.pending_count() > 0:
+		return {"pending": true, "reason": "prior_persistence_request"}
+	if test_mode or not _valid_profile_storage_id(active_profile_id) or active_profile_id == _save_blocked_profile_id or _world_clock_snapshot_sequence < 0:
+		return {"immediate": {"success": false, "reason": "death_baseline_unavailable"}}
+	for key: Variant in world_upserts:
+		if not key is String or not WorldClockDelta.valid_world_entry(key, world_upserts[key]):
+			return {"immediate": {"success": false, "reason": "invalid_respawn_delta"}}
+	var plan := _plan_kill_rewards(kills)
+	plan["quests_before"] = quest_states.duplicate(true)
+	plan["experience_before"] = experience
+	plan["level_before"] = level
+	plan["captured_changes"] = _world_clock_changes.duplicate(true)
+	plan["upserts"] = world_upserts.duplicate(true)
+	var affected_before: Dictionary = {}
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	for key: String in world_upserts:
+		affected_before[key] = entries.get(key, null).duplicate(true) if entries.get(key, null) is Dictionary else null
+	plan["affected_before"] = affected_before
+	plan["origin_guard"] = origin_guard
+	plan["requires_origin_guard"] = origin_guard.is_valid()
+	plan["completed"] = false
+	plan["completion"] = {}
+	plan["started_usec"] = Time.get_ticks_usec()
+	var next_sequence := _death_event_sequence + 1
+	var path := _death_event_path(active_profile_id, next_sequence, _world_clock_generation)
+	var identity := {"path": path, "profile_id": active_profile_id, "world_clock_generation": _world_clock_generation,
+		"sequence": next_sequence, "required_file": ProjectSettings.globalize_path(_world_clock_path(active_profile_id, _world_clock_generation))}
+	plan["identity"] = identity
+	var changes: Dictionary = plan.captured_changes.duplicate(true)
+	changes.merge(world_upserts, true)
+	var document := WorldMonsterClockLedgerScript.delta_death_event_document(active_profile_id, next_sequence,
+		int(plan.level_after), int(plan.experience_after), plan.quests_after, changes, _world_clock_generation)
+	_background_death = plan
+	var job := _json_persistence.submit(path, identity, document, _json_validator_for_path(path),
+		_death_request_context_matches.bind(plan), true, null, _complete_background_death.bind(plan))
+	if job == null:
+		_background_death = {}
+		return {"immediate": {"success": false, "reason": "death_request_rejected"}}
+	var writer := JsonPreparedRequest.new()
+	writer.configure(_json_persistence, job)
+	plan["writer"] = writer
+	return plan
+
+
+func _death_request_context_matches(identity: Dictionary, plan: Dictionary) -> bool:
+	return (_background_save_context_matches(identity) and int(identity.sequence) == _death_event_sequence + 1
+		and level == int(plan.level_before) and experience == int(plan.experience_before) and quest_states == plan.quests_before
+		and (not bool(plan.requires_origin_guard) or (plan.origin_guard.is_valid() and bool(plan.origin_guard.call()))))
+
+
+func finish_prepared_death_settlement(plan: Dictionary, wait := false) -> Dictionary:
+	if bool(plan.get("completed", false)):
+		return plan.completion
+	_json_persistence.finish(plan.writer.job, wait)
+	return plan.completion if bool(plan.get("completed", false)) else {"pending": true}
+
+
+func _complete_background_death(receipt: Dictionary, plan: Dictionary) -> void:
+	var success := bool(receipt.get("success", false))
+	plan["completed"] = true
+	plan["completion"] = {"success": success, "reason": str(receipt.get("reason", "")),
+		"quest_changed": bool(plan.quest_changed) if success else false,
+		"experience_gained": int(plan.experience_gained) if success else 0,
+		"kill_count": int(plan.kill_count), "save_count": 1}
+	if _background_death == plan:
+		_background_death = {}
+	if not success:
+		return # No live reward or respawn state was applied speculatively.
+	_record_background_json_receipt(receipt)
+	if not _background_save_context_matches(plan.identity):
+		plan.completion["active_state_applied"] = false
+		plan.completion["saved_profile_id"] = plan.identity.profile_id
+		return # A durable old-role receipt must never mutate a different role.
+	_death_event_sequence = int(plan.identity.sequence)
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	for key: String in plan.upserts:
+		if entries.get(key, null) == plan.affected_before[key]:
+			entries[key] = (plan.upserts[key] as Dictionary).duplicate(true)
+			RuntimeDiagnostics.increment_performance_counter(&"respawn_state_updates")
+	world_monster_respawn_state["entries"] = entries
+	for key: Variant in plan.captured_changes:
+		if _world_clock_changes.has(key) and _world_clock_changes[key] == plan.captured_changes[key]:
+			_world_clock_changes.erase(key)
+	_world_clock_dirty = true
+	_world_mutation_revision += 1
+	_apply_kill_reward_plan(plan)
+	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": true, "reason": "", "path": plan.identity.path}
+	_last_death_settlement_profile = {"total_ms": float(Time.get_ticks_usec() - int(plan.started_usec)) / 1000.0,
+		"success": true, "background": true, "kill_count": int(plan.kill_count)}
+	# Entire receipt is consumed before any potentially reentrant signal.
+	if bool(plan.quest_changed):
+		quests_changed.emit()
+	if int(plan.experience_gained) > 0:
+		profile_changed.emit()
+	if int(plan.level_before) != level:
+		levels_gained.emit(int(plan.level_before), level)
+
+
+func record_kills_and_experience_batch(
+	kills: Array,
+	force_save := false,
+) -> Dictionary:
+	_before_state_transaction()
+	var profile_started_usec := Time.get_ticks_usec()
+	var quests_before := quest_states.duplicate(true)
+	var experience_before := experience
+	var level_before := level
+	var reward_plan := _plan_kill_rewards(kills)
+	var quest_changed := bool(reward_plan.quest_changed)
+	var gained := int(reward_plan.experience_gained)
+	var accepted_kill_count := int(reward_plan.kill_count)
+	_apply_kill_reward_plan(reward_plan)
 	if not quest_changed and gained <= 0 and not force_save:
 		return {
 			"success": true,
@@ -2342,14 +2464,18 @@ func apply_death_experience_penalty() -> int:
 
 
 func experience_to_next_level() -> int:
+	return _experience_to_next_level_for_level(level)
+
+
+func _experience_to_next_level_for_level(target_level: int) -> int:
 	var source_experience: int
 	if GameData != null and not GameData.service_reference.is_empty():
-		source_experience = GameData.service_exp_to_next_level(level)
-	elif VERIFIED_EXPERIENCE_1_TO_22.has(level):
-		source_experience = int(VERIFIED_EXPERIENCE_1_TO_22[level])
+		source_experience = GameData.service_exp_to_next_level(target_level)
+	elif VERIFIED_EXPERIENCE_1_TO_22.has(target_level):
+		source_experience = int(VERIFIED_EXPERIENCE_1_TO_22[target_level])
 	else:
 		# 23级以上尚未完成多源核验，暂沿用保守占位曲线并在验收报告中标记。
-		source_experience = 300000 + maxi(0, level - 22) * 100000
+		source_experience = 300000 + maxi(0, target_level - 22) * 100000
 	return _gameplay_experience_threshold(source_experience)
 
 

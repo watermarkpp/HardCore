@@ -217,3 +217,6 @@ HEAD前项a899c0ac..；本项准备本地提交，源为Json job/service/handle 
 
 ## 23:18 F05显示头阻塞窄闭环
 本地准备提交 F05 最早未结算/最早显示消费者，不重排任务或显示、保留原native roll批次顺序，原生真实IO RED→GREEN4/4。已结束所有测试会话。下一步独立实现PlayerState异步死亡请求与GameRoot待持久化状态/退出/代际真实反例；仍同步helper兼容，不对现有RNG/伤害/时钟进行重构。R4性能/门户/forge/最终gate/push/cleanup/APK仍未完。
+
+## 23:38 恢复点：异步死亡实现已专项通过
+准备提交 scripts/game_root.gd/player_state.gd/json_persistence_job.gd +两新正式注册测试+更新规模测试。真实最终10/10及规模1/1 PASS，所有runner已正常退出。前526...之后实际当前HEAD5279888ca8f7125ddcc18a80afd5ab184ce94e45。用户AGENTS不stage，原untracked保留。下一步门户窄RED→exact3 authoring正式发布→行为/保护回归；R4性能残余仍需归因/配对后才能forgemerge。未push/清理/APK。新death原始失败及全部成功日志保留。

@@ -1,0 +1,62 @@
+{
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "f03_async_death_receipt_test",
+      "test_path": "tests/f03_async_death_receipt_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:21:58.4823698Z",
+      "native_exit_observed_utc": "2026-09-27T15:21:33.2662243Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "f03_world_delta_compatibility_test",
+      "test_path": "tests/f03_world_delta_compatibility_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:22:04.6783380Z",
+      "native_exit_observed_utc": "2026-09-27T15:21:39.4197182Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "death_drop_budget_queue_test",
+      "test_path": "tests/death_drop_budget_queue_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:22:10.9026926Z",
+      "native_exit_observed_utc": "2026-09-27T15:21:49.5123665Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "5279888ca8f7125ddcc18a80afd5ab184ce94e45",
+  "generated_at": "2026-09-27T23:21:50.8653274+08:00",
+  "total": 3,
+  "passed": 3,
+  "failed": 0,
+  "suite": "adhoc"
+}

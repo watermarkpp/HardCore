@@ -141,6 +141,8 @@ func _perform(stage: String) -> void:
 
 
 func _prepare() -> Dictionary:
+	if identity.has("required_file") and not FileAccess.file_exists(str(identity.required_file)):
+		return {"success": false, "reason": "required_baseline_missing"}
 	if _preencoded:
 		if not _matches_bytes(_temporary, _bytes):
 			return {"success": false, "reason": "prepared_bytes_changed"}
@@ -176,6 +178,9 @@ func _prepare() -> Dictionary:
 
 
 func _promote() -> Dictionary:
+	if identity.has("required_file") and not FileAccess.file_exists(str(identity.required_file)):
+		_remove_temporary()
+		return {"success": false, "reason": "required_baseline_missing"}
 	if not bool(_approval.get("candidate_valid", false)):
 		_remove_temporary()
 		return {"success": false, "reason": "candidate_not_approved"}

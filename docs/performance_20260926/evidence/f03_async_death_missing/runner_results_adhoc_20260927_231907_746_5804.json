@@ -1,0 +1,28 @@
+{
+  "git_head": "5279888ca8f7125ddcc18a80afd5ab184ce94e45",
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "f03_async_death_receipt_test",
+      "test_path": "tests/f03_async_death_receipt_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:19:31.9602280Z",
+      "native_exit_observed_utc": "2026-09-27T15:19:06.5609686Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "suite": "adhoc",
+  "failed": 1,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-27T23:19:07.7465088+08:00",
+  "total": 1
+}

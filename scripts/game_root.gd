@@ -176,6 +176,8 @@ const DEATH_QUEUE_MAX_RETRIES := 3
 const DEATH_QUEUE_RETRY_DELAY_MSEC := 100
 const DEATH_TERMINAL_LEDGER_MAX := 64
 const DEATH_STATE_QUEUED := "QUEUED"
+const DEATH_STATE_PERSISTING := "PERSISTING"
+const WorldClockDeltaScript := preload("res://scripts/world_clock_delta.gd")
 const DEATH_STATE_SETTLING := "SETTLING"
 const DEATH_STATE_PLANNED := "PLANNED"
 const DEATH_STATE_MATERIALIZING := "MATERIALIZING"
@@ -381,6 +383,7 @@ var _last_taoist_buff_hint_text := ""
 var _melee_diagnostic_serial := 0
 var _pending_melee_diagnostic: Dictionary = {}
 var _pending_enemy_deaths: Array[Dictionary] = []
+var _prepared_enemy_death_settlement: Dictionary = {}
 var _enemy_death_flush_queued := false
 var _enemy_death_pipeline_running := false
 var _enemy_death_target_refresh_pending := false
@@ -1722,6 +1725,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	_poll_prepared_enemy_death_settlement(true)
 	if PlayerState.skills_changed.is_connected(_synchronize_main_pet_skill_ranks):
 		PlayerState.skills_changed.disconnect(_synchronize_main_pet_skill_ranks)
 	if PlayerState.equipment_changed.is_connected(_synchronize_main_pet_skill_ranks):
@@ -12840,10 +12844,10 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	if _enemy_death_pipeline_running:
 		return false
 	_enemy_death_pipeline_running = true
-	var progressed := false
 	# Scheduling is production behavior, independent of diagnostic sampling.
 	# Diagnostic timers return zero when disabled (the normal gameplay case).
 	var slice_started_usec := Time.get_ticks_usec()
+	var progressed := _poll_prepared_enemy_death_settlement(force_synchronous)
 	var budget_usec := _death_drop_work_budget_usec()
 	var jobs_limit := _death_jobs_max_per_frame()
 	var nodes_limit := _drop_nodes_max_per_frame()
@@ -12866,7 +12870,7 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	if _pending_enemy_deaths.is_empty():
 		_enemy_death_pipeline_running = false
 		return progressed
-	var jobs_processed := 0
+	var jobs_processed := _death_settled_jobs_last_batch
 	var nodes_processed := 0
 	var unsettled_index := _first_unsettled_death_index()
 	if unsettled_index >= 0 and str(_pending_enemy_deaths[unsettled_index].get("state", "")) == DEATH_STATE_RETRY:
@@ -12887,7 +12891,7 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 			# Settlement and display consume one canonical queue independently.
 			# Reserve one work slot for an older display so new deaths cannot starve it.
 			var display_reserved := 1 if unsettled_index > 0 and not force_synchronous else 0
-			if _settle_pending_enemy_death_batch(maxi(1, jobs_limit - jobs_processed - display_reserved)):
+			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed - display_reserved, force_synchronous or PlayerState.test_mode):
 				jobs_processed += _death_settled_jobs_last_batch
 				progressed = true
 				_compact_enemy_death_queue()
@@ -12916,12 +12920,14 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 				break
 			if jobs_processed >= jobs_limit:
 				break
-			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
+			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed, force_synchronous or PlayerState.test_mode):
 				jobs_processed += _death_settled_jobs_last_batch
 				progressed = true
 				_compact_enemy_death_queue()
 				continue
 			break
+		if state == DEATH_STATE_PERSISTING:
+			break # A real file receipt is pending; no reward roll or display yet.
 		if state == DEATH_STATE_SETTLING:
 			if jobs_processed >= jobs_limit:
 				break
@@ -13110,6 +13116,9 @@ func _death_origin_matches_current(death: Dictionary) -> bool:
 
 
 func _cancel_pending_enemy_deaths_for_generation_change() -> void:
+	if not _prepared_enemy_death_settlement.is_empty():
+		_prepared_enemy_death_settlement.plan.writer.cancel()
+		_poll_prepared_enemy_death_settlement(true)
 	if _pending_enemy_deaths.is_empty():
 		return
 	for death: Dictionary in _pending_enemy_deaths:
@@ -13130,15 +13139,41 @@ func _cancel_pending_enemy_deaths_for_generation_change() -> void:
 
 func _first_unsettled_death_index() -> int:
 	for index: int in range(_pending_enemy_deaths.size()):
-		if str(_pending_enemy_deaths[index].get("state", "")) in [DEATH_STATE_QUEUED, DEATH_STATE_RETRY]:
+		if str(_pending_enemy_deaths[index].get("state", "")) in [DEATH_STATE_QUEUED, DEATH_STATE_RETRY, DEATH_STATE_PERSISTING]:
 			return index
 	return -1
 
 
+func _death_settlement_origins_valid(batch: Array[Dictionary]) -> bool:
+	for death: Dictionary in batch:
+		if not _death_origin_matches_current(death):
+			return false
+	return true
+
+
+func _poll_prepared_enemy_death_settlement(wait := false) -> bool:
+	_death_settled_jobs_last_batch = 0
+	if _prepared_enemy_death_settlement.is_empty():
+		return false
+	var cohort := _prepared_enemy_death_settlement
+	var settlement := PlayerState.finish_prepared_death_settlement(cohort.plan, wait)
+	if bool(settlement.get("pending", false)):
+		return false
+	_prepared_enemy_death_settlement = {}
+	_death_settled_jobs_last_batch = (cohort.batch as Array).size()
+	var started_usec := RuntimeDiagnostics.timing_start()
+	_finish_enemy_death_settlement_batch(cohort.batch, settlement)
+	RuntimeDiagnostics.record_timing_usec(&"death_settlement_usec", started_usec)
+	return true
+
+
 func _settle_pending_enemy_death_batch(
 	max_deaths := DEATH_JOBS_MAX_PER_FRAME,
+	force_synchronous := true,
 ) -> bool:
 	_death_settled_jobs_last_batch = 0
+	if not _prepared_enemy_death_settlement.is_empty():
+		return false
 	if _pending_enemy_deaths.is_empty():
 		return false
 	if max_deaths <= 0:
@@ -13193,10 +13228,13 @@ func _settle_pending_enemy_death_batch(
 	)
 	var settlements: Array = []
 	var respawn_state_before: Dictionary = (
-		PlayerState.world_clock_mutation_snapshot()
+		PlayerState.world_clock_mutation_snapshot() if force_synchronous else {}
 	)
+	var world_upserts: Dictionary = {}
 	for death: Dictionary in batch:
-		var respawn_preparation := _prepare_queued_enemy_respawn(death)
+		var respawn_preparation := _prepare_queued_enemy_respawn(death, force_synchronous)
+		if respawn_preparation.has("world_entry"):
+			world_upserts[str(respawn_preparation.world_key)] = respawn_preparation.world_entry
 		death["respawn_preparation"] = respawn_preparation
 		var respawn: Dictionary = death.get("respawn", {})
 		respawn["preparation"] = respawn_preparation
@@ -13206,6 +13244,21 @@ func _settle_pending_enemy_death_batch(
 			"experience": int(death.get("experience", 0)),
 		})
 	var settlement_started_usec := RuntimeDiagnostics.timing_start()
+	if not force_synchronous:
+		var plan := PlayerState.prepare_death_settlement(settlements, world_upserts, _death_settlement_origins_valid.bind(batch))
+		if bool(plan.get("pending", false)) and not plan.has("writer"):
+			for death: Dictionary in batch:
+				_set_enemy_death_state(death, DEATH_STATE_QUEUED)
+			_death_settled_jobs_last_batch = 0
+			return false
+		if plan.has("immediate"):
+			_finish_enemy_death_settlement_batch(batch, plan.immediate)
+			return true
+		for death: Dictionary in batch:
+			_set_enemy_death_state(death, DEATH_STATE_PERSISTING)
+		_prepared_enemy_death_settlement = {"batch": batch, "plan": plan}
+		RuntimeDiagnostics.record_timing_usec(&"death_prepare_usec", settlement_started_usec)
+		return true
 	var settlement := PlayerState.record_kills_and_experience_batch(
 		settlements,
 		true,
@@ -13213,11 +13266,24 @@ func _settle_pending_enemy_death_batch(
 	RuntimeDiagnostics.record_timing_usec(
 		&"death_settlement_usec", settlement_started_usec
 	)
+	_finish_enemy_death_settlement_batch(batch, settlement, respawn_state_before)
+	return true
+
+
+func _finish_enemy_death_settlement_batch(batch: Array[Dictionary], settlement: Dictionary, respawn_state_before: Dictionary = {}) -> void:
+	if bool(settlement.get("success", false)) and not bool(settlement.get("active_state_applied", true)):
+		for death: Dictionary in batch:
+			death["transaction_result"] = settlement.duplicate(true)
+			death["last_error"] = "settlement_saved_for_inactive_role"
+			_set_enemy_death_state(death, DEATH_STATE_CANCELLED)
+		_compact_enemy_death_queue()
+		return
 	if not bool(settlement.get("success", false)):
 		# Respawn state, quest progress and experience are one save boundary. A
 		# failed save restores the pre-attempt state, and the death item remains
 		# observable for retry/terminal handling; no drop roll is performed.
-		PlayerState.restore_world_clock_mutation(respawn_state_before)
+		if not respawn_state_before.is_empty():
+			PlayerState.restore_world_clock_mutation(respawn_state_before)
 		for death: Dictionary in batch:
 			death["transaction_result"] = settlement.duplicate(true)
 			death["last_error"] = str(settlement.get("reason", "save_failed"))
@@ -13236,11 +13302,11 @@ func _settle_pending_enemy_death_batch(
 					&"death_queue_retry_count"
 				)
 		_compact_enemy_death_queue()
-		return true
+		return
 	for death: Dictionary in batch:
 		death["transaction_result"] = settlement.duplicate(true)
 		_plan_enemy_death_item(death)
-	return true
+	return
 
 
 var _drop_instance_session_key := Crypto.new().generate_random_bytes(16).hex_encode()
@@ -13584,7 +13650,7 @@ func _resolve_queued_enemy_death(
 	}
 
 
-func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
+func _prepare_queued_enemy_respawn(death: Dictionary, apply_world := true) -> Dictionary:
 	if not bool(death.get("respawn_enabled", true)):
 		return {"valid": true, "enabled": false}
 	var monster_id := int(death.get("monster_id", -1))
@@ -13612,12 +13678,14 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 		spawn_context.get("respawn_runtime_map_id", current_map_id)
 	)
 	var spawn_slot_id := str(spawn_context.get("spawn_slot_id", ""))
-	var respawn_marked := PlayerState.mark_monster_respawn_dead(
-		respawn_runtime_map_id,
-		spawn_slot_id,
-		monster_id,
-		str(policy.get("policy_id", "")),
-		Time.get_unix_time_from_system() + respawn_wait_seconds
+	var world_entry := {"runtime_map_id": respawn_runtime_map_id, "spawn_slot_id": spawn_slot_id.strip_edges(),
+		"monster_id": monster_id, "policy_id": str(policy.get("policy_id", "")),
+		"respawn_at_unix": Time.get_unix_time_from_system() + respawn_wait_seconds}
+	var world_key := "%d|%s" % [respawn_runtime_map_id, spawn_slot_id.strip_edges()]
+	var respawn_marked := (
+		PlayerState.mark_monster_respawn_dead(respawn_runtime_map_id, spawn_slot_id, monster_id,
+			str(policy.get("policy_id", "")), float(world_entry.respawn_at_unix))
+		if apply_world else WorldClockDeltaScript.valid_world_entry(world_key, world_entry)
 	)
 	if not respawn_marked:
 		push_error(
@@ -13625,7 +13693,8 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 			% [monster_id, respawn_runtime_map_id, spawn_slot_id]
 		)
 		return {"valid": false, "reason": "unstable_respawn_slot"}
-	RuntimeDiagnostics.increment_performance_counter(&"respawn_state_updates")
+	if apply_world:
+		RuntimeDiagnostics.increment_performance_counter(&"respawn_state_updates")
 	spawn_context["respawn_policy_id"] = str(policy.get("policy_id", ""))
 	spawn_context["spawn_classification"] = spawn_classification
 	spawn_context["respawn_base_seconds"] = respawn_wait_seconds
@@ -13635,6 +13704,8 @@ func _prepare_queued_enemy_respawn(death: Dictionary) -> Dictionary:
 		"enabled": true,
 		"wait_seconds": respawn_wait_seconds,
 		"spawn_context": spawn_context,
+		"world_key": world_key,
+		"world_entry": world_entry,
 	}
 
 
