@@ -1,6 +1,7 @@
 class_name PlayerCharacter
 extends CharacterBody2D
 
+const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
 )
@@ -880,6 +881,12 @@ func _apply_resolved_damage(
 	durability_context := {},
 	force_struck_reaction := false,
 ) -> void:
+	# R4 T5-P2: explicit-test-switch fault injection point. With recording
+	# disabled this is a single boolean read and the damage path is the
+	# unchanged production path.
+	if DamageLedgerObserverScript.recording_enabled and DamageLedgerObserverScript.suppress_next_hit:
+		DamageLedgerObserverScript.record_hp_mutation(self, amount, current_hp, current_hp, damage_type)
+		return
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/UI selection/respawn transition is active must not repeat
 	# durability, gold loss, signals or schedule another death coroutine.
@@ -920,7 +927,13 @@ func _apply_resolved_damage(
 			var unpaid_mp := shield_mp_cost - current_mp
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
+	# R4 T5-P2: the unique player HP write site records the raw mutation
+	# with the resolved delivery identity and real before/after values.
+	var hp_before_ledger := current_hp
 	current_hp = maxi(0, current_hp - final_damage)
+	DamageLedgerObserverScript.record_hp_mutation(
+		self, final_damage, hp_before_ledger, current_hp, damage_type
+	)
 	# HC-MONSTER-COMBAT-R1 Task 7 (F08): the lethal outcome is decided and
 	# committed atomically BEFORE any external notification can run. Stats,
 	# resources and durability listeners must observe a consistent dead state:

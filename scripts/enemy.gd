@@ -2,6 +2,7 @@ class_name EnemyActor
 extends CharacterBody2D
 
 const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
+const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
 var _hc_m30_attack_move_cutoff: float = INF # R4 compatibility diagnostic only
 var _hc_m30_attack_pose_remaining: float = 0.0
@@ -4605,6 +4606,22 @@ func _settle_monster_special_victim(
 			"release_id": str(record.get("release_id", "")),
 			"damage_owner": "enemy.monster_special_cell_release",
 		}
+		# R4 T5-P2: the mixed-defense delivery pushes its real identity for
+		# the synchronous call so the HP write resolves to THIS release.
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.push_source({
+				"source_instance_id": get_instance_id(),
+				"source_life": _hc_life(self),
+				"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
+				"release_id": str(record.get("release_id", "")),
+				"child_effect_id": "mixed_defense_%s" % str(delivery_contract.get("kind", "")),
+				"victim_instance_id": victim.get_instance_id(),
+				"victim_life": _hc_life(victim),
+				"runtime_map_id": runtime_map_id,
+				"zone_generation": int(get_meta("zone_generation", -1)),
+				"raw_roll": int(physical_damage) + int(magic_damage),
+				"action_game_time_s": _attack_action_start_time_s,
+			})
 		mixed_context.make_read_only()
 		var resolution_value: Variant = victim.call(
 			"take_monster_mixed_damage",
@@ -4612,6 +4629,8 @@ func _settle_monster_special_victim(
 			magic_damage,
 			mixed_context,
 		)
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.pop_source()
 		if resolution_value is Dictionary:
 			last_magic_attack_resolution = (
 				resolution_value as Dictionary
@@ -5139,11 +5158,29 @@ func _deal_special_magic_melee_hit(
 		)
 	):
 		return
+	var ledger_ctx := {}
+	if DamageLedgerObserverScript.recording_enabled:
+		ledger_ctx = {
+			"source_instance_id": get_instance_id(),
+			"source_life": _hc_life(self),
+			"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
+			"release_id": str(_hc_release_id()),
+			"child_effect_id": "magic_defense_direct",
+			"victim_instance_id": hit_target.get_instance_id(),
+			"victim_life": _hc_life(hit_target),
+			"runtime_map_id": runtime_map_id,
+			"zone_generation": int(get_meta("zone_generation", -1)),
+			"raw_roll": maxi(0, dealt_damage),
+			"action_game_time_s": _attack_action_start_time_s,
+		}
+		DamageLedgerObserverScript.push_source(ledger_ctx)
 	var raw_resolution: Variant = hit_target.call(
 		"take_direct_spell_damage",
 		"",
 		maxi(0, dealt_damage),
 	)
+	if DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.pop_source()
 	if not raw_resolution is Dictionary:
 		last_magic_attack_resolution = {
 			"success": false,
@@ -5301,11 +5338,59 @@ func _apply_attack_damage(
 	forced_control_roll := -1,
 	ranged := false,
 ) -> void:
+	# R4 T5-P2: the concrete damage dispatch pushes THIS delivery's real
+	# identity onto the observer source stack for the duration of the
+	# synchronous call and pops it unconditionally afterwards - early
+	# returns inside the victim therefore cannot leak identity, and a
+	# nested delivery from another source layers correctly on the stack.
+	# With recording disabled the push/pop are single boolean reads.
+	var ledger_ctx := {}
+	if DamageLedgerObserverScript.recording_enabled:
+		ledger_ctx = {
+			"source_instance_id": get_instance_id(),
+			"source_life": _hc_life(self),
+			"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
+			"release_id": str(_hc_release_id()),
+			"child_effect_id": "melee_direct" if not ranged else "ranged_direct",
+			"victim_instance_id": hit_target.get_instance_id(),
+			"victim_life": _hc_life(hit_target),
+			"runtime_map_id": runtime_map_id,
+			"zone_generation": int(get_meta("zone_generation", -1)),
+			"raw_roll": dealt_damage,
+			"action_game_time_s": _attack_action_start_time_s,
+		}
+		DamageLedgerObserverScript.push_source(ledger_ctx)
+	_apply_attack_damage_impl(
+		hit_target,
+		dealt_damage,
+		use_accuracy,
+		forced_roll,
+		force_struck_reaction,
+		forced_control_roll,
+		ranged,
+	)
+	if DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.pop_source()
+
+
+func _apply_attack_damage_impl(
+	hit_target: Node2D,
+	dealt_damage: int,
+	use_accuracy := true,
+	forced_roll := -1,
+	force_struck_reaction := false,
+	forced_control_roll := -1,
+	ranged := false,
+) -> void:
 	if not combat_enabled:
 		return
 	if use_accuracy and not _monster_physical_hit_succeeds(hit_target, forced_roll):
 		# A miss consumes the existing attack event/timer and damage roll but
-		# submits no damage or on-hit side effects.
+		# submits no damage or on-hit side effects. Reported as a REAL
+		# terminal from the branch itself, never inferred by an observer.
+		DamageLedgerObserverScript.record_terminal(
+			DamageLedgerObserverScript.current_source(), "miss", "accuracy_roll_failed"
+		)
 		return
 	if ranged and hit_target is PlayerCharacter:
 		var result := (hit_target as PlayerCharacter).take_ranged_damage(dealt_damage, true, force_struck_reaction)
@@ -8176,10 +8261,18 @@ func _hc_settle(record: Dictionary) -> void:
 		or victim.get_parent() == null or int(record.target_parent_id) != victim.get_parent().get_instance_id()
 	):
 		_hc_last_reason = "RELEASE_LIFECYCLE_REJECTED"
+		DamageLedgerObserverScript.record_terminal(
+			{"source_instance_id": get_instance_id(), "source_life": _hc_life(self), "parent_action_id": record.get("parent_action_id", -1), "release_id": str(record.get("release_id", ""))},
+			"rejected", "RELEASE_LIFECYCLE_REJECTED",
+		)
 		return
 	# Release settlement always rechecks WORLD without the navigation cache.
 	_hc_last_reason = _hc_access(victim, float(record.tolerance), true)
 	if _hc_last_reason != "CLEAR":
+		DamageLedgerObserverScript.record_terminal(
+			{"source_instance_id": get_instance_id(), "source_life": _hc_life(self), "parent_action_id": record.get("parent_action_id", -1), "release_id": str(record.get("release_id", ""))},
+			"rejected", _hc_last_reason,
+		)
 		return
 	_hc_settlements += 1
 	_hc_active_release_id = str(record.release_id)
