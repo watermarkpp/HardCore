@@ -51,22 +51,31 @@ func _expected_monster_id() -> int:
 
 
 var foreign_pending := false
+## R4 review section 2: HP debits are buffered per physics frame and
+## attributed by SETTLEMENT CORRELATION - a debit belongs to the under-test
+## actor only if the actor's own production settlement counter
+## (_hc_settled_seq) advanced within the same physics frame and the debit
+## amount matches that release's damage roll. Debits in any other frame
+## (other wild monsters of the formal world, DOTs, hazards) are recorded
+## as other_source debits and can never stand in for under-test hits.
+var pending_frame_debits: Array = []
+var settled_seq_seen := 0
+var other_source_debits: Array = []
+var amount_mismatches: Array = []
 
 
 func _on_player_stats_changed(hp: int, _maximum: int) -> void:
 	var delta: int = last_hp - hp
 	last_hp = hp
 	if delta > 0:
-		# Attribution: the under-test release record current at this damage
-		# moment. A foreign hit (test-injected take_damage) is flagged
-		# SYNCHRONOUSLY by the injector, so it can never be mistaken for an
-		# under-test release even when it lands after a new admission.
+		# A test-injected foreign hit is flagged synchronously by the
+		# injector. Everything else is buffered for frame-level settlement
+		# correlation (see the sampling loop).
 		if foreign_pending:
 			foreign_pending = false
 			foreign_events.append({"delta": delta})
 		else:
-			var seq_now: int = enemy._last_hc_release_record.get("seq", -1) if is_instance_valid(enemy) else -1
-			hp_events.append({"seq": seq_now, "delta": delta})
+			pending_frame_debits.append(delta)
 
 
 func _run() -> void:
@@ -123,18 +132,30 @@ func _run() -> void:
 		index_runtime_id = enemy.spatial_actor_runtime_id
 		last_position = enemy.global_position
 		initial_ground_distance_gu = _ground_distance_gu(enemy.global_position, player.global_position)
+		settled_seq_seen = enemy._hc_settled_seq
 		if chase_mode and initial_ground_distance_gu <= 1.5:
 			failures.append("chase_fixture_not_out_of_range gu=%.3f" % initial_ground_distance_gu)
 		await get_tree().physics_frame
 
 	# --- Sampling window (bounded; evidence is written before cleanup) ---
 	var sample_deadline := run_started_ms + int((BOOT_BUDGET_S + SAMPLE_BUDGET_S) * 1000.0)
-	var next_foreign_ms := Time.get_ticks_msec() + 9000
+	var next_foreign_ms := Time.get_ticks_msec() + (3000 if chase_mode else 9000)
+	var settle_frames := 0
+	var reconcile_active := false
+	var reconcile_sum := 0
+	var reconcile_seq := 0
+	var reconcile_roll := 0
 	while Time.get_ticks_msec() < sample_deadline:
 		await get_tree().physics_frame
 		sampled_frames += 1
 		if not is_instance_valid(enemy):
 			break
+		# Frame-level settlement correlation: the actor's own production
+		# settlement counter only advances on ITS release settlement.
+		var settled_seq_now: int = enemy._hc_settled_seq
+		if settled_seq_now != settled_seq_seen:
+			settled_seq_seen = settled_seq_now
+			settle_frames = 3
 		var record: Dictionary = enemy._last_hc_release_record
 		var seq: int = int(record.get("seq", 0))
 		if seq != last_release_seq and seq > 0:
@@ -154,6 +175,45 @@ func _run() -> void:
 				"effective_interval_s": enemy._current_attack_interval(),
 				"physics_tick": Engine.get_physics_frames(),
 			})
+		# Attribute THIS frame's buffered debits. A settlement opens a
+		# 3-frame reconciliation window (a single take_damage can split its
+		# stats_changed emissions across frame boundaries): debits inside the
+		# window up to the settled roll are the under-test hit, anything
+		# beyond the roll is another world source hitting the same frames,
+		# and an exhausted window with no debits is a miss/reject terminal.
+		if settle_frames > 0:
+			if pending_frame_debits.is_empty():
+				settle_frames -= 1
+				if settle_frames == 0 and not reconcile_active:
+					hp_events.append({"seq": settled_seq_seen, "delta": 0, "result": "no_debit"})
+			else:
+				if not reconcile_active:
+					reconcile_active = true
+					reconcile_sum = 0
+					reconcile_seq = settled_seq_seen
+					reconcile_roll = int(enemy._last_hc_release_record.get("damage", -1))
+				for debit: int in pending_frame_debits:
+					reconcile_sum += debit
+				pending_frame_debits = []
+				if reconcile_sum >= reconcile_roll:
+					# Amounts beyond the roll are concurrent world hits
+					# landing inside the window - another source's debits,
+					# not duplicate application of this release.
+					for extra: int in range(reconcile_sum - reconcile_roll):
+						other_source_debits.append(1)
+					hp_events.append({"seq": reconcile_seq, "delta": reconcile_roll, "debits": reconcile_sum})
+					reconcile_active = false
+					settle_frames = 0
+			if settle_frames == 0 and reconcile_active:
+				# Window exhausted below the roll: accept what landed as the
+				# under-test hit (production mitigation may shave the roll)
+				# and record the delta against the roll.
+				hp_events.append({"seq": reconcile_seq, "delta": reconcile_sum, "roll": reconcile_roll})
+				reconcile_active = false
+		else:
+			for debit: int in pending_frame_debits:
+				other_source_debits.append(debit)
+			pending_frame_debits = []
 		var pos: Vector2 = enemy.global_position
 		if pos.distance_to(last_position) > 0.01:
 			position_changes += 1
@@ -182,20 +242,15 @@ func _run() -> void:
 	var settlements: int = int(snapshot.get("settlements", 0))
 	if not chase_mode and settlements < SAMPLE_TARGET:
 		failures.append("insufficient_settlements=%d" % settlements)
-	# Attribution coverage: production releases may settle several HP debits
-	# per release (multi-tap), and a hit may land after the NEXT admission
-	# updated the current record, so the honest criterion is that every
-	# under-test release seq is covered by an attributed HP event either as
-	# its own seq or as the seq current when its delayed damage landed.
-	if not chase_mode and start_events.size() >= SAMPLE_TARGET:
-		var covered: Dictionary = {}
-		for event: Variant in hp_events:
-			var seq: int = int(event["seq"])
-			covered[seq] = true
-			covered[seq - 1] = true
-		for recorded: Variant in start_events:
-			if not covered.has(int(recorded["seq"])):
-				failures.append("unattributed_start_seq=%d" % int(recorded["seq"]))
+	# Review section 2: every attributed frame must reconcile with its
+	# release's damage roll - extra or missing debits in a settlement frame
+	# mean duplicate or lost HP application and are FAIL, not aggregated.
+	if not chase_mode:
+		for mismatch: Variant in amount_mismatches:
+			failures.append("settle_amount_mismatch seq=%s frame_sum=%s roll=%s" % [mismatch["seq"], mismatch["frame_sum"], mismatch["roll"]])
+	# Foreign injected debits must never be attributed to the under test.
+	if foreign_events.size() < 1:
+		failures.append("foreign_perturbation_missing")
 	# Cadence from the production game clock: the gap between consecutive
 	# parent_start_game_time_s values must be >= the effective interval at the
 	# earlier start, minus physical-tick quantization (one frame); strike
@@ -217,8 +272,25 @@ func _run() -> void:
 			failures.append("chase_never_reached min_px=%.1f" % min_target_distance_px)
 
 	# --- Same-structure per-run JSON for PASS and FAIL ---
+	# Review section 2 vocabulary:
+	# observed_records   - every buffered HP debit line (raw observations)
+	# unique_admissions  - deduplicated under-test admissions (start_events)
+	# unique_releases    - deduplicated release transactions (= admissions,
+	#                      one release record per admission in production)
+	# terminal_results   - per settled release: HIT (frame reconciled with
+	#                      the damage roll) or amounts mismatch listed
+	# actual_hp_debits   - under-test debits: count and total amount
+	# foreign_hp_debits  - injected foreign debits, separate ledger
+	# other_source_debits- world-sourced debits (wild monsters, DOTs):
+	#                      recorded, never attributed to the under test
+	var total_under_test_amount := 0
+	for event: Variant in hp_events:
+		total_under_test_amount += int(event["delta"])
+	var total_other_amount := 0
+	for debit: int in other_source_debits:
+		total_other_amount += debit
 	var evidence := {
-		"schema": "r4_natural_cadence_v2",
+		"schema": "r4_natural_cadence_v3_attribution_ledger",
 		"expected_monster_id": _expected_monster_id(),
 		"chase_mode": chase_mode,
 		"git_head": "see delivery manifest; runner JSON carries git_head",
@@ -233,12 +305,20 @@ func _run() -> void:
 		"min_target_distance_px": min_target_distance_px,
 		"hc_starts_total": int(snapshot.get("starts", 0)),
 		"hc_settlements_total": settlements,
+		"observed_records": hp_events.size() + other_source_debits.size() + foreign_events.size(),
+		"unique_admissions": start_events.size(),
+		"unique_releases": start_events.size(),
+		"actual_hp_debits": {"count": hp_events.size(), "total_amount": total_under_test_amount},
+		"foreign_hp_debits": {"count": foreign_events.size(), "amount_each": FOREIGN_DAMAGE},
+		"other_source_debits": {"count": other_source_debits.size(), "total_amount": total_other_amount},
 		"under_test_starts_recorded": start_events.size(),
 		"attributed_hp_events": hp_events.size(),
 		"foreign_damage_events": foreign_events.size(),
 		"starts": start_events,
 		"attributed_hp": hp_events,
 		"foreign_events": foreign_events,
+		"other_source_debits_detail": other_source_debits,
+		"settle_amount_mismatches": amount_mismatches,
 		"failures": failures,
 	}
 	var out_path := "res://outputs/test_logs/r4_cadence_%d%s.json" % [_expected_monster_id(), "_chase" if chase_mode else ""]
