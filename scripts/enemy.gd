@@ -8225,12 +8225,16 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 	velocity = Vector2.ZERO
 	_attack_timer = _current_attack_interval()
 	_refresh_target_focus()
-	var direction := _ground_delta_gu_between_screen_positions(global_position, hit_target.global_position)
+	# Admission/presentation callbacks can remove the target synchronously.
+	# The frozen release still reaches the normal lifecycle rejection below.
+	var direction := Vector2.ZERO
+	if is_instance_valid(hit_target):
+		direction = _ground_delta_gu_between_screen_positions(global_position, hit_target.global_position)
 	if direction.length_squared() > GroundUnitSpace.EPSILON_GU:
 		facing = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(direction).normalized()
 	if hit_delay > 0.0:
 		_pending_attack_time = hit_delay
-		_pending_attack_target = hit_target
+		_pending_attack_target = hit_target if is_instance_valid(hit_target) else null
 		_pending_attack_damage = int(record.damage)
 		_pending_attack_release_record = record
 	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, hit_delay)

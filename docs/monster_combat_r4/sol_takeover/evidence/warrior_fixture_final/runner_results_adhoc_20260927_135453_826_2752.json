@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "failed": 0,
+  "generated_at": "2026-09-27T13:54:53.8271002+08:00",
+  "results": [
+    {
+      "test_name": "warrior_skill_state_machine_test",
+      "test_path": "tests/warrior_skill_state_machine_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "626bbb0ac9c5297c9ba0971ee238541669be1bb3",
+  "passed": 1,
+  "engine_log_errors": 0,
+  "total": 1
+}

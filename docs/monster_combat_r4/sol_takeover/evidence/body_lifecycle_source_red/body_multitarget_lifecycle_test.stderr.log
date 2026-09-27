@@ -1,0 +1,7 @@
+SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'previously freed'.
+   at: EnemyActor._hc_try_start (res://scripts/enemy.gd:8228)
+   GDScript backtrace (most recent call first):
+       [0] _hc_try_start (res://scripts/enemy.gd:8228)
+       [1] _admitted_lifecycle (res://tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.gd:90)
+       [2] _run (res://tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.gd:12)
+       [3] _admitted_lifecycle (res://tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.gd:105)

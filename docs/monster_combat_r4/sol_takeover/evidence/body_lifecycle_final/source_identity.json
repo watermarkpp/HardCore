@@ -1,0 +1,31 @@
+{
+  "runner_note": "Body final used these source/test contents. Runner later added formal test registration only.",
+  "dirty_source": true,
+  "base_head": "626bbb0ac9c5297c9ba0971ee238541669be1bb3",
+  "files": [
+    {
+      "path": "scripts/enemy.gd",
+      "sha256": "867F2E51D6F0C429427461FB37C0BA8C00D807C08660CA35BDB3A725F39D132D"
+    },
+    {
+      "path": "scripts/player.gd",
+      "sha256": "EA2B126455A98379F3C44205E5674F35A689C1238DEF4E33809A04C36EAF0C8C"
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "sha256": "B1B9BBA1652FC730891140283A0DE0A1865F7254104101063BC5EBFE0AD08D92"
+    },
+    {
+      "path": "scripts/damage_ledger_observer.gd",
+      "sha256": "1EBB0A8DA080A25107E8FB947BAA3CC239F4FF7674E1474B743B3E194E6EC17C"
+    },
+    {
+      "path": "tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.gd",
+      "sha256": "1698F086D8268162A0AC3265CB8A903EA13D73224FF9684A345BD5A7729EAED8"
+    },
+    {
+      "path": "tests/hc_monster_combat_r4/damage_attribution_verifier.gd",
+      "sha256": "08FA4AC241B9D2F9DA3B44C778C51A08468C93876AA631823A2BB88F2380855D"
+    }
+  ]
+}

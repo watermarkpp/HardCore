@@ -37,7 +37,7 @@ func _run() -> void:
 	var enemy_position: Vector2 = game._canonical_ground_gu_to_screen_px(
 		FIXTURE_ENEMY_GROUND_POSITION
 	)
-	var player_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(2.0, 0.0)
+	var player_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(1.499, 0.0)
 	var player_position: Vector2 = game._canonical_ground_gu_to_screen_px(player_ground)
 	assert(enemy_position.is_finite() and player_position.is_finite(), "no-legacy snapshot fixture needs a finite map projection")
 	assert(
@@ -65,7 +65,6 @@ func _run() -> void:
 			and enemy.spatial_actor_runtime_id > 0,
 		"no-legacy snapshot fixture must use the formal mapped spawn"
 	)
-	enemy.attack_range_gu = 2.0
 	var player_node: PlayerCharacter = game.player
 	game._set_player_world_position(player_position)
 	player_node.set_physics_process(false)

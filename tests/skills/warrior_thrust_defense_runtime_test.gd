@@ -1,5 +1,7 @@
 extends Node
 
+const FormalWorldFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+
 const WarriorMeleeGeometryScript := preload(
 	"res://scripts/skills/warrior_melee_geometry.gd"
 )
@@ -28,8 +30,8 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await FormalWorldFixture.wait_for_formal_world(self, game, "skills/warrior_thrust_defense_runtime_test")
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5)))
 	game.process_mode = Node.PROCESS_MODE_DISABLED
 	var enemies: Array[EnemyActor] = []
 	for candidate: Node in get_tree().get_nodes_in_group("enemies"):

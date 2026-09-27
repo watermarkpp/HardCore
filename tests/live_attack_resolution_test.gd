@@ -1,5 +1,7 @@
 extends Node
 
+const FormalWorldFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+
 const ReleaseGeometry := preload("res://scripts/skills/combat_release_geometry.gd")
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 
@@ -17,8 +19,8 @@ func _run() -> void:
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await FormalWorldFixture.wait_for_formal_world(self, game, "live_attack_resolution_test")
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5)))
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			_move_enemy(

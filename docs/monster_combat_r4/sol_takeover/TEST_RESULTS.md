@@ -55,3 +55,15 @@ MP反例先在真实Player伤害入口得到FAIL：20伤害/AC0的实际HP和MP�
 精确更新四项Python反例、完整生成check、144条精确Race/12条DATA_HOLD的targeting绑定测试：PASS。Cadence禁运行测试改为显式禁用副本，而非假设如今已允许运行的33仍禁用；保留IMMOBILE/不发grant断言，runner正常退出PASS。
 
 完整运行时审计仍为FAIL：MFC1及all_monster_loading对183/241显式0攻击间隔报缺失。原始FAIL保留evidence/authority_red。183源Race117/TExplosionSpider为一次自爆类；241候选Race120实际指TSoccerBall，与其21CQ名并不能证明飞火攻击规则。当前普通Enemy正间隔fallback仍未正确区分这两种用途，不能伪造正间隔或删断言变绿。这两项属于来源/生产语义阻断，继续核对。canonical目录PASS；移动缺失/速度fallback错误在新审计为0。
+
+## D3运动、真实受击、身体及生命周期
+
+`evidence/d3_motion_related/runner_results_adhoc_20260927_135806_576_10868.json`：PASS 8/8，完整退出、引擎错误0。24/76/238/239通过真实玩家touch运动横移、绕圈，接着承受真实火墙/爆裂火焰伤害；每种产生约9GU运动、10或11次受击，持续受击阶段分别2/6/4/4次新起手。所有真实admission/delivery/HP/terminal使用同一验收器；活动身体动作及音频请求父ID一致。真实暂停12个process帧冻结战斗钟；恢复后继续。关闭表现更新时攻击自然过期，恢复表现不会复活动作。另含索引桶边界、拒绝工厂/查询、死亡双代际及动作幂等回归。停止绘制和headless身份检查不构成实际GPU/听感验收。
+
+`evidence/body_lifecycle_final/runner_results_adhoc_20260927_140936_293_7992.json`：PASS 4/4，引擎错误0。生产Enemy→实际骷髅/神兽（24/76/238）检查合法身体、形状半径和真实伤害。76实际同格玩家+骷髅得到两个明确child，各自唯一终态。238真实准入后同步死亡复活、目标切换地图代际、来源切图及目标释放，旧攻击没有伤害新生命；全部得到真实拒绝。
+
+最初夹具错误地假设238存在伤害pending，把表现延迟当伤害延迟，并把16.2/16.8当同格（正式格子按round而非floor）。原FAIL保留body_lifecycle_red及body_lifecycle_fixture_red；第一轮逐场stdout已被后续默认同名日志覆盖，标MISSING，原runner及流水仍保存。修正后暴露实际生产错误：准入回调可释放目标，但后续仍读取global_position；原报错/timeout完整保存body_lifecycle_source_red。最小修复检查有效性，冻结record仍进TARGET_UNAVAILABLE拒绝。没有增加伤害延迟或吞事件。异步投递跨代际尚NOT_RUN，不能把本同步例称作异步验证。
+
+## 当前历史25项复核
+
+`evidence/historical_current_red/runner_results_adhoc_20260927_135051_727_24196.json`：18 PASS、7 FAIL。production_snapshot夹具2GU改合法1.499；warrior_skill_state_machine、live_attack_resolution、melee_lock_fallback、warrior_thrust_defense的正式世界未就绪/世界坐标错误，使用既有FormalWorldFixture等待正式世界，并走官方坐标设置。原玩法/身份/伤害断言保持。第一轮修正4 PASS、warrior仍FAIL（旧几何块使用屏幕ZERO）；保留historical_fixture_red，修正该块到正式地图锚点后原断言PASS（warrior_fixture_final）。当前合并证据为23项PASS、183/241两项FAIL；最终同SHA25项集合复核尚NOT_RUN，不将组合历史结果当最终完整回归。

@@ -629,6 +629,8 @@ $Suites.critical = @($Suites.critical + @(
     'tests/hc_monster_combat_r4/observer_integrity_test.tscn',
     'tests/hc_monster_combat_r4/mp_payment_observation_test.tscn',
     'tests/hc_monster_combat_r4/d3_boundary_runtime_test.tscn',
+    'tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.tscn',
+    'tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.tscn',
     'tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn',
     'tests/hc_monster_combat_r4/all_damage_lost_test.tscn',
     'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',
@@ -977,6 +979,7 @@ foreach ($testPath in $SelectedTests) {
     # pursuit/detour physics (~36 seconds). Keep ordinary scenes at 30 seconds.
     $HeavyR4Scenes = @(
         'tests/hc_monster_ai/runtime_test.tscn',
+        'tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.tscn',
         'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',
         'tests/hc_monster_combat_r4/natural_cadence_76_test.tscn',
         'tests/hc_monster_combat_r4/natural_cadence_238_test.tscn',

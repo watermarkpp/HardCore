@@ -1,5 +1,7 @@
 extends Node
 
+const FormalWorldFixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
+
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
 const WarriorMeleeGeometry := preload("res://scripts/skills/warrior_melee_geometry.gd")
 
@@ -18,8 +20,8 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await FormalWorldFixture.wait_for_formal_world(self, game, "warrior_skill_state_machine_test")
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5)))
 	var player: PlayerCharacter = game.player
 	player.set_combat_seed(176)
 	player.current_mp = 40
@@ -158,7 +160,8 @@ func _run() -> void:
 	PlayerState.learned_skills = {"刺杀剑术": 3, "半月弯刀": 3, "野蛮冲撞": 3}
 	player.thrusting_enabled = true
 	player.half_moon_enabled = false
-	player.global_position = Vector2.ZERO
+	var fixture_origin: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5))
+	game._set_player_world_position(fixture_origin)
 	player.facing = Vector2.RIGHT
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:
@@ -174,7 +177,7 @@ func _run() -> void:
 		game,
 		player,
 		"主目标",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu * 1.25
 		),
 		1
@@ -183,7 +186,7 @@ func _run() -> void:
 		game,
 		player,
 		"第二格目标",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu * 2.25
 		),
 		1
@@ -192,7 +195,7 @@ func _run() -> void:
 		game,
 		player,
 		"侧后目标",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			-attack_direction_gu * 1.0
 		),
 		1
@@ -201,7 +204,7 @@ func _run() -> void:
 	var second_hp := second.current_hp
 	var unrelated_hp := unrelated.current_hp
 	player._pending_attack_context = {"mode": "thrust", "skill_level": 3}
-	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 100)
+	game._on_player_attack(fixture_origin, Vector2.RIGHT, 100)
 	assert(second.current_hp == second_hp - 100, "三级刺杀没有对第二格造成100%伤害")
 	assert(unrelated.current_hp == unrelated_hp, "刺杀错误命中背后目标")
 
@@ -226,7 +229,7 @@ func _run() -> void:
 		game,
 		player,
 		"半月左前",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu.rotated(deg_to_rad(-45.0)) * 1.2
 		),
 		1
@@ -235,7 +238,7 @@ func _run() -> void:
 		game,
 		player,
 		"半月右前",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu * 1.2
 		),
 		1
@@ -244,7 +247,7 @@ func _run() -> void:
 		game,
 		player,
 		"半月右侧",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu.rotated(deg_to_rad(45.0)) * 1.2
 		),
 		1
@@ -257,7 +260,7 @@ func _run() -> void:
 		game,
 		player,
 		"半月左侧拒绝",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu.rotated(deg_to_rad(-61.0)) * 1.2
 		),
 		1
@@ -266,7 +269,7 @@ func _run() -> void:
 		game,
 		player,
 		"半月右侧拒绝",
-		GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
+		fixture_origin + GroundUnitSpace.ground_delta_gu_to_screen_delta_px(
 			attack_direction_gu.rotated(deg_to_rad(61.0)) * 1.2
 		),
 		1
@@ -275,7 +278,7 @@ func _run() -> void:
 	half_outside_right.combat_radius_gu = 0.0
 	player.half_moon_enabled = true
 	player._pending_attack_context = {"mode": "half_moon", "skill_level": 3}
-	game._on_player_attack(Vector2.ZERO, Vector2.RIGHT, 130)
+	game._on_player_attack(fixture_origin, Vector2.RIGHT, 130)
 	for secondary: EnemyActor in [half_a, half_c]:
 		assert(secondary.current_hp == secondary.max_hp - 50, "半月±45°侧向没有按5/13伤害结算")
 	assert(half_b.current_hp == half_b.max_hp - 130, "半月中心没有按主扇区伤害结算")

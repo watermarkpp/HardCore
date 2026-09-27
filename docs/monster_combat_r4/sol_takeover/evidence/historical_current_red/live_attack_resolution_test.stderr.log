@@ -1,0 +1,5 @@
+SCRIPT ERROR: Assertion failed: 法师没有在释放帧创建正式投射物
+   at: _verify_caster_projectile_release (res://tests/live_attack_resolution_test.gd:226)
+   GDScript backtrace (most recent call first):
+       [0] _verify_caster_projectile_release (res://tests/live_attack_resolution_test.gd:226)
+       [1] _run (res://tests/live_attack_resolution_test.gd:124)

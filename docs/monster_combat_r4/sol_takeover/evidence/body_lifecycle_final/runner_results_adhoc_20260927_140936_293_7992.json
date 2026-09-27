@@ -1,0 +1,71 @@
+{
+  "results": [
+    {
+      "test_name": "body_multitarget_lifecycle_test",
+      "test_path": "tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "observer_integrity_test",
+      "test_path": "tests/hc_monster_combat_r4/observer_integrity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_mixed_damage_atomic_test",
+      "test_path": "tests/monster_mixed_damage_atomic_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_special_delivery_runtime_test",
+      "test_path": "tests/monster_special_delivery_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 4,
+  "passed": 4,
+  "generated_at": "2026-09-27T14:09:36.2932266+08:00",
+  "git_head": "626bbb0ac9c5297c9ba0971ee238541669be1bb3",
+  "suite": "adhoc",
+  "failed": 0,
+  "engine_log_errors": 0
+}
