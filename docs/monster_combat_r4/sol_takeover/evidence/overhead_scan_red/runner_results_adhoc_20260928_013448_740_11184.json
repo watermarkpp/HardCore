@@ -1,0 +1,28 @@
+{
+  "failed": 1,
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "overhead_property_scan_test",
+      "test_path": "tests/hc_monster_combat_r4/overhead_property_scan_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T17:35:10.0850352Z",
+      "native_exit_observed_utc": "2026-09-27T17:34:47.5801040Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "suite": "adhoc",
+  "git_head": "3705228893d26105ddaa404464eb3df755871510",
+  "generated_at": "2026-09-28T01:34:48.7410460+08:00",
+  "engine_log_errors": 0,
+  "total": 1
+}

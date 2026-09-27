@@ -179,6 +179,15 @@ static func _actor_monster_id(actor: Node) -> int:
 
 
 static func _has_property(object: Object, property_name: String) -> bool:
+	# Production overheads own a typed EnemyActor. These declared fields do
+	# not require allocating its complete property descriptor list on every
+	# label/rank refresh. Keep reflection for generic/legacy node callers.
+	if object is EnemyActor and (
+		property_name == "monster_id"
+		or property_name == "monster_data"
+		or property_name == "display_name"
+	):
+		return true
 	for property_info: Dictionary in object.get_property_list():
 		if str(property_info.get("name", "")) == property_name:
 			return true

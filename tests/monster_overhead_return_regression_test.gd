@@ -32,7 +32,13 @@ func _run() -> void:
 
 	enemy.target = null
 	var return_direction := enemy.global_position.direction_to(enemy.get_meta("spawn_position"))
-	enemy._return_to_spawn()
+	# Return shares the canonical movement cadence (ID31: 1500ms). Wait for
+	# its natural grant; neither reset its clock nor assume immediate motion.
+	var return_deadline := Time.get_ticks_msec() + 4000
+	while enemy.actual_ground_motion_gu.length() <= GroundUnitSpace.EPSILON_GU and Time.get_ticks_msec() < return_deadline:
+		await get_tree().physics_frame
+		enemy._return_to_spawn()
+	assert(enemy.actual_ground_motion_gu.length() > GroundUnitSpace.EPSILON_GU, "return cadence never produced actual ground motion")
 	assert(enemy.facing.dot(return_direction) > 0.99, "return combat facing points away from spawn")
 	assert(enemy.movement_facing.dot(return_direction) > 0.99, "return walk animation kept stale pursuit facing")
 	enemy.visual._process(0.05)

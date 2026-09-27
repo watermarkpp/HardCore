@@ -1,0 +1,752 @@
+[
+  {
+    "matrix": "final_owner_full_small30_absolute",
+    "condition": {
+      "mode": "small",
+      "scale": 30,
+      "status": "PASS",
+      "aa_absolute_cpu_noise_ms": 0.26413499999999956,
+      "base_mean_cpu_ms": 8.444073333333334,
+      "candidate_mean_cpu_ms": 8.533278888888889,
+      "paired_cpu_deltas_ms": [
+        -0.14747166666666622,
+        -0.1309166666666659,
+        0.5460049999999992
+      ],
+      "sustained_above_aa_noise_regression": false
+    },
+    "pairs": [
+      {
+        "pair": 1,
+        "p99": [
+          30.474369999999997,
+          29.973659999999988
+        ],
+        "over33": [
+          2,
+          3
+        ],
+        "over50": [
+          0,
+          0
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            18000,
+            18000
+          ],
+          "enemy_physics_usec": [
+            5084116,
+            4995633
+          ],
+          "enemy_movement_strategy_calls": [
+            5596,
+            5897
+          ],
+          "enemy_movement_strategy_usec": [
+            777149,
+            817989
+          ],
+          "environment_guard_batches": [
+            13647,
+            12435
+          ],
+          "attack_los_evaluations": [
+            13084,
+            12634
+          ],
+          "attack_los_usec": [
+            205278,
+            202273
+          ],
+          "death_settlement_usec": [
+            0,
+            0
+          ],
+          "drop_roll_usec": [
+            0,
+            0
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          23,
+          28
+        ],
+        "hp": [
+          22,
+          24
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "native_plans": [
+          0,
+          0
+        ],
+        "created_nodes": [
+          0,
+          0
+        ]
+      },
+      {
+        "pair": 2,
+        "p99": [
+          34.93869999999998,
+          31.958619999999996
+        ],
+        "over33": [
+          10,
+          2
+        ],
+        "over50": [
+          0,
+          0
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            18000,
+            18000
+          ],
+          "enemy_physics_usec": [
+            5105854,
+            5027304
+          ],
+          "enemy_movement_strategy_calls": [
+            5740,
+            5964
+          ],
+          "enemy_movement_strategy_usec": [
+            784152,
+            815686
+          ],
+          "environment_guard_batches": [
+            13825,
+            13141
+          ],
+          "attack_los_evaluations": [
+            13024,
+            12746
+          ],
+          "attack_los_usec": [
+            205715,
+            201376
+          ],
+          "death_settlement_usec": [
+            0,
+            0
+          ],
+          "drop_roll_usec": [
+            0,
+            0
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          23,
+          26
+        ],
+        "hp": [
+          18,
+          19
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "native_plans": [
+          0,
+          0
+        ],
+        "created_nodes": [
+          0,
+          0
+        ]
+      },
+      {
+        "pair": 3,
+        "p99": [
+          28.78622,
+          32.42499999999997
+        ],
+        "over33": [
+          0,
+          6
+        ],
+        "over50": [
+          0,
+          0
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            18000,
+            18000
+          ],
+          "enemy_physics_usec": [
+            5009362,
+            5336965
+          ],
+          "enemy_movement_strategy_calls": [
+            5788,
+            5831
+          ],
+          "enemy_movement_strategy_usec": [
+            789707,
+            843905
+          ],
+          "environment_guard_batches": [
+            12969,
+            14326
+          ],
+          "attack_los_evaluations": [
+            12859,
+            13051
+          ],
+          "attack_los_usec": [
+            202867,
+            210608
+          ],
+          "death_settlement_usec": [
+            0,
+            0
+          ],
+          "drop_roll_usec": [
+            0,
+            0
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          26,
+          21
+        ],
+        "hp": [
+          22,
+          20
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "native_plans": [
+          0,
+          0
+        ],
+        "created_nodes": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "matrix": "final_owner_full_pets20",
+    "condition": {
+      "mode": "large_pets",
+      "scale": 20,
+      "status": "PASS",
+      "aa_absolute_cpu_noise_ms": 0.35471333333333277,
+      "base_mean_cpu_ms": 6.21607,
+      "candidate_mean_cpu_ms": 6.430288888888889,
+      "paired_cpu_deltas_ms": [
+        0.36972333333333385,
+        0.26688500000000026,
+        0.006048333333333211
+      ],
+      "sustained_above_aa_noise_regression": false
+    },
+    "pairs": [
+      {
+        "pair": 1,
+        "p99": [
+          25.881339999999998,
+          27.674819999999997
+        ],
+        "over33": [
+          0,
+          0
+        ],
+        "over50": [
+          0,
+          0
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            12000,
+            12000
+          ],
+          "enemy_physics_usec": [
+            3733811,
+            3955645
+          ],
+          "enemy_movement_strategy_calls": [
+            3069,
+            2450
+          ],
+          "enemy_movement_strategy_usec": [
+            658661,
+            403043
+          ],
+          "environment_guard_batches": [
+            5407,
+            7860
+          ],
+          "attack_los_evaluations": [
+            11290,
+            11817
+          ],
+          "attack_los_usec": [
+            177392,
+            190971
+          ],
+          "death_settlement_usec": [
+            0,
+            0
+          ],
+          "drop_roll_usec": [
+            0,
+            0
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          67,
+          54
+        ],
+        "hp": [
+          348,
+          272
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "native_plans": [
+          0,
+          0
+        ],
+        "created_nodes": [
+          0,
+          0
+        ]
+      },
+      {
+        "pair": 2,
+        "p99": [
+          25.24711,
+          27.91548
+        ],
+        "over33": [
+          0,
+          0
+        ],
+        "over50": [
+          0,
+          0
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            12000,
+            12000
+          ],
+          "enemy_physics_usec": [
+            3757270,
+            3917401
+          ],
+          "enemy_movement_strategy_calls": [
+            3072,
+            2406
+          ],
+          "enemy_movement_strategy_usec": [
+            609068,
+            386860
+          ],
+          "environment_guard_batches": [
+            5331,
+            7976
+          ],
+          "attack_los_evaluations": [
+            11558,
+            11827
+          ],
+          "attack_los_usec": [
+            184827,
+            188049
+          ],
+          "death_settlement_usec": [
+            0,
+            0
+          ],
+          "drop_roll_usec": [
+            0,
+            0
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          68,
+          54
+        ],
+        "hp": [
+          386,
+          272
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "native_plans": [
+          0,
+          0
+        ],
+        "created_nodes": [
+          0,
+          0
+        ]
+      },
+      {
+        "pair": 3,
+        "p99": [
+          26.647979999999997,
+          26.59903
+        ],
+        "over33": [
+          0,
+          0
+        ],
+        "over50": [
+          0,
+          0
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            12000,
+            12000
+          ],
+          "enemy_physics_usec": [
+            3697845,
+            3701474
+          ],
+          "enemy_movement_strategy_calls": [
+            3153,
+            2388
+          ],
+          "enemy_movement_strategy_usec": [
+            643397,
+            375757
+          ],
+          "environment_guard_batches": [
+            5313,
+            7035
+          ],
+          "attack_los_evaluations": [
+            11241,
+            11553
+          ],
+          "attack_los_usec": [
+            176383,
+            178433
+          ],
+          "death_settlement_usec": [
+            0,
+            0
+          ],
+          "drop_roll_usec": [
+            0,
+            0
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          68,
+          60
+        ],
+        "hp": [
+          338,
+          272
+        ],
+        "deaths": [
+          0,
+          0
+        ],
+        "native_plans": [
+          0,
+          0
+        ],
+        "created_nodes": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "matrix": "final_owner_full_aoe30",
+    "condition": {
+      "mode": "aoe_death_loot",
+      "scale": 30,
+      "status": "PASS",
+      "aa_absolute_cpu_noise_ms": 0.5639133333333337,
+      "base_mean_cpu_ms": 8.743729444444444,
+      "candidate_mean_cpu_ms": 7.9413100000000005,
+      "paired_cpu_deltas_ms": [
+        -2.485545,
+        -0.044171666666667164,
+        0.12245833333333334
+      ],
+      "sustained_above_aa_noise_regression": false
+    },
+    "pairs": [
+      {
+        "pair": 1,
+        "p99": [
+          80.33191,
+          64.71279999999996
+        ],
+        "over33": [
+          37,
+          23
+        ],
+        "over50": [
+          13,
+          10
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            17920,
+            16883
+          ],
+          "enemy_physics_usec": [
+            5777236,
+            4285909
+          ],
+          "enemy_movement_strategy_calls": [
+            1224,
+            779
+          ],
+          "enemy_movement_strategy_usec": [
+            1420367,
+            225121
+          ],
+          "environment_guard_batches": [
+            13433,
+            12716
+          ],
+          "attack_los_evaluations": [
+            13496,
+            13261
+          ],
+          "attack_los_usec": [
+            228275,
+            218231
+          ],
+          "death_settlement_usec": [
+            400936,
+            95564
+          ],
+          "drop_roll_usec": [
+            88805,
+            91567
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          1,
+          8
+        ],
+        "hp": [
+          0,
+          7
+        ],
+        "deaths": [
+          143,
+          139
+        ],
+        "native_plans": [
+          143,
+          139
+        ],
+        "created_nodes": [
+          104,
+          107
+        ]
+      },
+      {
+        "pair": 2,
+        "p99": [
+          82.69858999999995,
+          71.82593999999996
+        ],
+        "over33": [
+          42,
+          31
+        ],
+        "over50": [
+          10,
+          10
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            17581,
+            17037
+          ],
+          "enemy_physics_usec": [
+            5176460,
+            5149957
+          ],
+          "enemy_movement_strategy_calls": [
+            975,
+            1014
+          ],
+          "enemy_movement_strategy_usec": [
+            1067643,
+            1102899
+          ],
+          "environment_guard_batches": [
+            12794,
+            12800
+          ],
+          "attack_los_evaluations": [
+            12940,
+            12976
+          ],
+          "attack_los_usec": [
+            215381,
+            216673
+          ],
+          "death_settlement_usec": [
+            493895,
+            91637
+          ],
+          "drop_roll_usec": [
+            83925,
+            87605
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          2,
+          2
+        ],
+        "hp": [
+          3,
+          0
+        ],
+        "deaths": [
+          151,
+          151
+        ],
+        "native_plans": [
+          151,
+          151
+        ],
+        "created_nodes": [
+          102,
+          113
+        ]
+      },
+      {
+        "pair": 3,
+        "p99": [
+          79.56591,
+          72.91033
+        ],
+        "over33": [
+          27,
+          42
+        ],
+        "over50": [
+          10,
+          10
+        ],
+        "phases": {
+          "enemy_physics_calls": [
+            17235,
+            16895
+          ],
+          "enemy_physics_usec": [
+            4785017,
+            4858492
+          ],
+          "enemy_movement_strategy_calls": [
+            1089,
+            973
+          ],
+          "enemy_movement_strategy_usec": [
+            849295,
+            884189
+          ],
+          "environment_guard_batches": [
+            11798,
+            12493
+          ],
+          "attack_los_evaluations": [
+            13111,
+            12815
+          ],
+          "attack_los_usec": [
+            218084,
+            212004
+          ],
+          "death_settlement_usec": [
+            498680,
+            89397
+          ],
+          "drop_roll_usec": [
+            87407,
+            85496
+          ],
+          "drop_placement_usec": [
+            0,
+            0
+          ]
+        },
+        "starts": [
+          7,
+          4
+        ],
+        "hp": [
+          7,
+          0
+        ],
+        "deaths": [
+          151,
+          151
+        ],
+        "native_plans": [
+          151,
+          151
+        ],
+        "created_nodes": [
+          113,
+          113
+        ]
+      }
+    ]
+  }
+]

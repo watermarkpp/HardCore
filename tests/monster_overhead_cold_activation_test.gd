@@ -2,6 +2,7 @@ extends Node
 
 
 const MonsterOverheadScript := preload("res://scripts/monster_overhead.gd")
+const Coordinator := preload("res://scripts/monster_visual_streaming_coordinator.gd")
 const SAMPLE_MONSTER_IDS := [21, 24, 28, 76]
 const ACTIONS := ["idle", "walk", "attack", "hit", "death"]
 const REQUIRED_BODY_MARGIN := 8.0
@@ -19,10 +20,14 @@ func _run() -> void:
 	add_child(player)
 	player.set_physics_process(false)
 	player.global_position = Vector2.ZERO
+	var coordinator := Coordinator.new()
+	MonsterVisual.set_streaming_coordinator(coordinator)
 
 	for monster_id: int in SAMPLE_MONSTER_IDS:
 		MonsterVisual.reset_client_resource_cache()
 		MonsterVisual.set_synchronous_loading_for_tests(false)
+		# Map prefetch owns the generation before a visual subscribes to it.
+		var prefetch := coordinator.begin_map_prefetch([monster_id])
 		var enemy := EnemyActor.new()
 		enemy.setup({
 			"monsterId": monster_id,
@@ -37,10 +42,9 @@ func _run() -> void:
 
 		var initial_fallback_y: float = enemy.overhead.position.y
 		assert(not enemy.visual.uses_final_art(), "monsterId=%d did not begin on the cold async path" % monster_id)
-		var prefetch := MonsterVisual.begin_map_prefetch([monster_id])
 		var deadline_msec := Time.get_ticks_msec() + ASYNC_DEADLINE_MSEC
 		while not bool(prefetch.complete) and Time.get_ticks_msec() < deadline_msec:
-			prefetch = MonsterVisual.poll_streaming()
+			prefetch = coordinator.poll_once(Engine.get_process_frames())
 			await get_tree().process_frame
 		assert(bool(prefetch.complete) and int(prefetch.failed) == 0, "monsterId=%d async profile failed: %s" % [monster_id, prefetch])
 
@@ -53,9 +57,12 @@ func _run() -> void:
 
 		enemy.queue_free()
 		await get_tree().process_frame
-		MonsterVisual.release_map_pins()
+		coordinator.release_map_pins()
 
 	MonsterVisual.reset_client_resource_cache()
+	MonsterVisual.set_streaming_coordinator(null)
+	player.queue_free()
+	await get_tree().process_frame
 	print("MONSTER_OVERHEAD_COLD_ACTIVATION_PASS small/medium/large/boss async profiles adopt stable per-monster body crowns")
 	get_tree().quit(0)
 

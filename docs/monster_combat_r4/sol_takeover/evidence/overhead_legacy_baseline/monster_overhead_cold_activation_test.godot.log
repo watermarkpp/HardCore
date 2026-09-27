@@ -1,0 +1,12 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Static function "begin_map_prefetch()" not found in base "MonsterVisual".
+   at: GDScript::reload (res://tests/monster_overhead_cold_activation_test.gd:40)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "prefetch" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/monster_overhead_cold_activation_test.gd:40)
+SCRIPT ERROR: Parse Error: Static function "poll_streaming()" not found in base "MonsterVisual".
+   at: GDScript::reload (res://tests/monster_overhead_cold_activation_test.gd:43)
+SCRIPT ERROR: Parse Error: Static function "release_map_pins()" not found in base "MonsterVisual".
+   at: GDScript::reload (res://tests/monster_overhead_cold_activation_test.gd:56)
+ERROR: Failed to load script "res://tests/monster_overhead_cold_activation_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

@@ -39,5 +39,7 @@
 - PASS：用户要求的其他正式地图传送检查：67地图132端点，117真实travel_request接受/15arrival_only拒绝；抉择/密道三图7缺配置与2单向声明正式精确发布，真实READY四到达及guard反例，未改人工几何/碰撞/spawn。不是117次实机走图；DEVICE NOT_RUN。
 - PASS：ec646身体准入只读诊断不再成为权威，实际删marker原生扣血RED→typed verdict GREEN9项，未改半径/公式/时钟。
 - FAIL：原R4性能接纳尚未关闭；测试采集PASS不等于性能PASS。
+- PASS：实际血条4次完整属性枚举反例关闭，三身份名字/标记保持且200次查询约320ms降至1.3ms。原生返程/冷加载旧夹具失败在旧formatter重现，依真实1500ms节拍和coordinator所有者适配，保留全部原断言，最终4/4。
+- PASS：370522与原R3的固定full观察24/24完成、每条件8/8精确核验；当前无三对持续超AA警告但小怪pair3/宠物前两对的不利结果保留，不以较大噪声改写旧FAIL。下一步新源码完整创建路径对照。
 - NOT_RUN：forge完整七提交实际合入、整合跨系统真实反例、最终full critical/独立clean/protection、push及临时树退休。
 - NOT_RUN：APK/安装/改版本；依用户最终要求停在打包之前。

@@ -1,0 +1,45 @@
+{
+  "passed": 0,
+  "total": 2,
+  "git_head": "3705228893d26105ddaa404464eb3df755871510",
+  "results": [
+    {
+      "test_name": "monster_overhead_return_regression_test",
+      "test_path": "tests/monster_overhead_return_regression_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T17:39:55.4217007Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "monster_overhead_cold_activation_test",
+      "test_path": "tests/monster_overhead_cold_activation_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T17:40:02.0353551Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 5,
+      "engine_log_failure_count": 5,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+    }
+  ],
+  "generated_at": "2026-09-28T01:39:34.5869567+08:00",
+  "suite": "adhoc",
+  "failed": 2,
+  "engine_log_errors": 6
+}
