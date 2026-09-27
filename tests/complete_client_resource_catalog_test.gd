@@ -1,10 +1,14 @@
 extends Node
 
-const CATALOG_PATH := "res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json"
+const CATALOG_PATH := "res://tests/fixtures/complete_client_frame_catalog/manifest.json"
+const CATALOG_PROVENANCE_PATH := "res://tests/fixtures/complete_client_frame_catalog/provenance.json"
 const HELMET_SOURCE_PATH := "res://assets/art/characters/warrior/wear/helmet/black_iron_helmet.source.json"
 
 
 func _ready() -> void:
+	var provenance := _read_json(CATALOG_PROVENANCE_PATH)
+	assert(str(provenance.get("contract_id", "")) == "hardcore.complete_client_catalog.test_fixture.v1", "catalog fixture provenance missing")
+	assert(FileAccess.get_sha256(CATALOG_PATH) == str(provenance.get("manifest_sha256", "")), "frozen catalog fixture bytes changed")
 	var catalog := _read_json(CATALOG_PATH)
 	assert(int(catalog.get("libraryCount", 0)) == 122, "complete client library count changed")
 	assert(int(catalog.get("indexedFramesScanned", 0)) == 962251, "complete client frame scan is incomplete")

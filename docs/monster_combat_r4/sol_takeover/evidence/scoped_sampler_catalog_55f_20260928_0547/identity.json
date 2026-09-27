@@ -1,0 +1,17 @@
+{
+  "started_at": "2026-09-28T05:47:11.3811293+08:00",
+  "tests": [
+    "tests/hc_monster_combat_r4/native_physics_sampling_test.tscn",
+    "tests/complete_client_resource_catalog_test.tscn",
+    "tests/hc_monster_combat_r4/perf_unit_determinism_test.tscn"
+  ],
+  "inputs": {
+    "tests/hc_monster_combat_r4/native_physics_sampling_test.gd": "6BB4751BBF489E1D9A2A0F77A5EDF40CDE7E5C7919B550F0204762754349C346",
+    "tests/hc_monster_combat_r4/t6_real_load_probe.gd": "00E8C0B0C8AF8897E9F11BEE63A03E3CA4839AE78B10A23F784D2A60D2B05C23",
+    "tests/complete_client_resource_catalog_test.gd": "E5B6065E3C7F9A5079C5F76161014AB8844FE4EEEDCB6F805C850C1E3436647A",
+    "tests/fixtures/complete_client_frame_catalog/manifest.json": "602EAD7AF15BB8ED7F3114A6C51F24B60F911774AEDFE0152A8BB7C7FD60D9F6",
+    "tests/fixtures/complete_client_frame_catalog/provenance.json": "86EB68D4023BC992408EDFEDFDB968C75B3BD6A863C4B50D66708408E3BC5EB2",
+    "tools/run_godot_tests.ps1": "E824070BA9F5F14CFFD1A268D15DE6EE0AB8194F6A384C6F24DCFBC159C15B8E"
+  },
+  "source_head": "55f32c34728eae0407bc3654b5c8f9ad339bc0ac"
+}

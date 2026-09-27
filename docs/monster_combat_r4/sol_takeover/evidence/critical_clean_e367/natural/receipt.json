@@ -1,0 +1,89 @@
+{
+  "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+  "scope": "Five completed natural scenes, unchanged raw reports; whole critical acceptance NOT_RUN until native runner completion",
+  "rows": [
+    {
+      "file": "r4_cadence_24.json",
+      "sha256": "294E388FBC4061E308D910605774AB3F57CFA7982C5B8294B27F014E83D32853",
+      "starts": 20,
+      "attributed": 20,
+      "terminals": 0,
+      "failures": [],
+      "zero_debit_releases": []
+    },
+    {
+      "file": "r4_cadence_76.json",
+      "sha256": "24DDCD24A6382CEDFB22939B713DD50BC663E14161519FCBDD113521E976E575",
+      "starts": 20,
+      "attributed": 19,
+      "terminals": 1,
+      "failures": [],
+      "zero_debit_releases": [
+        {
+          "admission_id": "monster:76:instance:475785074448:ordinary_melee:release:13",
+          "children": [
+            "monster:76:instance:475785074448:mixed_target_tile:release:14|monster:76:instance:475785074448:mixed_target_tile:release:14:target:254980130427|254980130427|1"
+          ],
+          "terminal_kinds": [
+            "miss"
+          ],
+          "reasons": [
+            "mixed_magic_evaded"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "r4_cadence_238.json",
+      "sha256": "BF5C09A61362E0863DE542568E148D0E88B60D9DD47DB76A01457F7A34406B33",
+      "starts": 20,
+      "attributed": 20,
+      "terminals": 0,
+      "failures": [],
+      "zero_debit_releases": []
+    },
+    {
+      "file": "r4_cadence_239.json",
+      "sha256": "03C9BD705E1CA8FAC9F3B7EDF401A463D572044B6BDE9BD6BB8D82C03A9605E4",
+      "starts": 20,
+      "attributed": 18,
+      "terminals": 2,
+      "failures": [],
+      "zero_debit_releases": [
+        {
+          "admission_id": "monster:239:instance:475801851664:ordinary_melee:release:11",
+          "children": [
+            "monster:239:instance:475801851664:mixed_target_tile:release:12|monster:239:instance:475801851664:mixed_target_tile:release:12:target:254980130427|254980130427|1"
+          ],
+          "terminal_kinds": [
+            "miss"
+          ],
+          "reasons": [
+            "mixed_magic_evaded"
+          ]
+        },
+        {
+          "admission_id": "monster:239:instance:475801851664:ordinary_melee:release:15",
+          "children": [
+            "monster:239:instance:475801851664:mixed_target_tile:release:16|monster:239:instance:475801851664:mixed_target_tile:release:16:target:254980130427|254980130427|1"
+          ],
+          "terminal_kinds": [
+            "miss"
+          ],
+          "reasons": [
+            "mixed_magic_evaded"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "r4_cadence_24_chase.json",
+      "sha256": "AF000C58F7FE83F40E542A0CA4BE707A36A4556CE23216B67945990D8C02AF23",
+      "starts": 1,
+      "attributed": 1,
+      "terminals": 0,
+      "failures": [],
+      "zero_debit_releases": []
+    }
+  ]
+}

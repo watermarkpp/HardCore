@@ -1,0 +1,23 @@
+{
+  "contract_id": "hardcore.complete_client_catalog.test_fixture.v1",
+  "purpose": "Frozen historical resource scan metadata for a portable regression; not a runtime art authority.",
+  "source_manifest": "outputs/resource_catalog/complete_client_frame_catalog/manifest.json",
+  "manifest_sha256": "602ead7af15bb8ed7f3114a6c51f24b60f911774aedfe0152a8bb7c7fd60d9f6",
+  "source_database_sha256": "4c96ed1aae5ecb1e2660a2a58ae0007e17a87a2ce049d4b16d1925d327ea380a",
+  "source_database_bytes": 178380800,
+  "generator": "tools/scan_complete_client_headwear.py",
+  "generator_git_blob": "77273eb041e671090fc21e1b57f09b1a3c2ad857",
+  "generator_sha256": "23c95c2c969e13754134e47375c4dcbb38b4c94307d688884973956bd666f42a",
+  "library_rows_verified": 122,
+  "library_aggregate": [
+    122,
+    962251,
+    962250,
+    332460
+  ],
+  "frame_aggregate": [
+    962251,
+    962250
+  ],
+  "head_candidate_rows": 332460
+}
