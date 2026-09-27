@@ -1,0 +1,8 @@
+ERROR: Parse JSON failed. Error at line 0: Expected key
+   at: parse_string (core/io/json.cpp:629)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/f03_periodic_background_save_test.gd:63)
+SCRIPT ERROR: Trying to assign value of type 'Nil' to a variable of type 'Dictionary'.
+   at: _run (res://tests/f03_periodic_background_save_test.gd:63)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/f03_periodic_background_save_test.gd:63)

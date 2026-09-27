@@ -27,6 +27,9 @@ var _task_id := -1
 var _owns_temporary := false
 var _worker_thread_ids: Array[int] = []
 var _stage_usec: Dictionary = {}
+var cleanup_directory := ""
+var cleanup_through_sequence := 0
+const WorldState := preload("res://scripts/world_monster_respawn_state.gd")
 
 
 func configure(absolute_target: String, request_identity: Dictionary, payload: Dictionary, create_only := false) -> void:
@@ -61,6 +64,11 @@ func configure_temporary(absolute_temporary: String) -> void:
 	assert(_task_id < 0 and not _preencoded)
 	_temporary = absolute_temporary
 	path = _temporary
+
+
+func configure_snapshot(snapshot: Dictionary) -> void:
+	assert(_task_id < 0 and not _owns_temporary)
+	_snapshot = snapshot.duplicate(true)
 
 
 func stage_result(wait := false) -> Dictionary:
@@ -104,6 +112,8 @@ func _perform(stage: String) -> void:
 		result = {"success": false, "reason": "cancelled", "discarded": _remove_temporary()}
 	elif _cancelled():
 		result = {"success": false, "reason": "cancelled", "discarded": _remove_temporary()}
+	elif stage == "PRUNE":
+		result = _prune_checkpointed_events()
 	elif stage == "PREPARE":
 		result = _prepare()
 	elif stage == "READ_PREVIOUS":
@@ -139,6 +149,8 @@ func _prepare() -> Dictionary:
 			return {"success": false, "reason": "prepared_document_invalid"}
 		_parsed = existing
 		return {"success": true, "reason": "", "document": _parsed, "bytes": _bytes}
+	if identity.has("compact_world_at_unix"):
+		_snapshot["world_state"] = WorldState.compact_elapsed(_snapshot.world_state, float(identity.compact_world_at_unix))
 	var serialized := JSON.stringify(_snapshot)
 	_snapshot = {}
 	var candidate: Variant = _parse_document(serialized)
@@ -282,3 +294,23 @@ static func _parse_document(value: String) -> Variant:
 	if parser.parse(value) != OK or not parser.data is Dictionary:
 		return null
 	return parser.data
+
+
+func _prune_checkpointed_events() -> Dictionary:
+	var removed := 0
+	var directory := DirAccess.open(cleanup_directory)
+	if directory == null:
+		return {"success": true, "removed": 0}
+	directory.list_dir_begin()
+	var name := directory.get_next()
+	while not name.is_empty():
+		if not directory.current_is_dir() and name.ends_with(".json"):
+			var sequence_text := name.get_basename()
+			if sequence_text.is_valid_int():
+				var sequence := int(sequence_text)
+				if sequence > 0 and sequence <= cleanup_through_sequence and name == "%012d.json" % sequence:
+					if DirAccess.remove_absolute(cleanup_directory.path_join(name)) == OK:
+						removed += 1
+		name = directory.get_next()
+	directory.list_dir_end()
+	return {"success": true, "removed": removed}

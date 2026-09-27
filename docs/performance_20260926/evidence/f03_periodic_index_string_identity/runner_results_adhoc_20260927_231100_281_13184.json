@@ -1,0 +1,62 @@
+{
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-27T23:11:00.2815941+08:00",
+  "git_head": "a899c0fb782ae188066dd2eabb1c5c567bfe04cc",
+  "passed": 3,
+  "total": 3,
+  "results": [
+    {
+      "test_name": "f03_periodic_background_save_test",
+      "test_path": "tests/f03_periodic_background_save_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:11:11.7233331Z",
+      "native_exit_observed_utc": "2026-09-27T15:10:46.3498604Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "f03_background_writer_test",
+      "test_path": "tests/f03_background_writer_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:11:17.8589327Z",
+      "native_exit_observed_utc": "2026-09-27T15:10:52.5819241Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "f03_ordered_cleanup_test",
+      "test_path": "tests/f03_ordered_cleanup_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:11:24.0631663Z",
+      "native_exit_observed_utc": "2026-09-27T15:10:58.7799771Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "failed": 0
+}

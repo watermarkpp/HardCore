@@ -6,6 +6,7 @@ var _service: RefCounted
 var job: RefCounted
 var path := ""
 var _cancelled := false
+var terminal_result := false
 
 func configure(service: RefCounted, request: RefCounted) -> void:
 	_service = service
@@ -13,7 +14,7 @@ func configure(service: RefCounted, request: RefCounted) -> void:
 	path = job.path
 
 func result(wait := false) -> Dictionary:
-	return _service.finish(job, wait) if _cancelled else _service.finish_preparation(job, wait)
+	return _service.finish(job, wait) if _cancelled or terminal_result else _service.finish_preparation(job, wait)
 
 func cancel() -> bool:
 	var accepted: bool = _service.cancel(job)

@@ -1,0 +1,62 @@
+{
+  "results": [
+    {
+      "test_name": "f03_periodic_background_save_test",
+      "test_path": "tests/f03_periodic_background_save_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T15:05:09.1459474Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "f03_ordered_cleanup_test",
+      "test_path": "tests/f03_ordered_cleanup_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:05:14.1552811Z",
+      "native_exit_observed_utc": "2026-09-27T15:04:48.8904420Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "f03_background_writer_test",
+      "test_path": "tests/f03_background_writer_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:05:20.4265223Z",
+      "native_exit_observed_utc": "2026-09-27T15:04:55.1534839Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 1,
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T23:04:56.6398497+08:00",
+  "total": 3,
+  "passed": 2,
+  "git_head": "a899c0fb782ae188066dd2eabb1c5c567bfe04cc",
+  "engine_log_errors": 1
+}

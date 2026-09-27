@@ -1,0 +1,28 @@
+{
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "f03_ordered_cleanup_test",
+      "test_path": "tests/f03_ordered_cleanup_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:00:28.7842575Z",
+      "native_exit_observed_utc": "2026-09-27T15:00:03.5823954Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "generated_at": "2026-09-27T23:00:04.7756738+08:00",
+  "failed": 1,
+  "total": 1,
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "git_head": "a899c0fb782ae188066dd2eabb1c5c567bfe04cc"
+}

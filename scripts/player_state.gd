@@ -17,9 +17,6 @@ const WorldMonsterRespawnStateScript := preload(
 const WorldMonsterClockLedgerScript := preload(
 	"res://scripts/world_monster_clock_ledger.gd"
 )
-const WorldClockEventCleanupScript := preload(
-	"res://scripts/world_clock_event_cleanup.gd"
-)
 
 signal profile_changed
 signal inventory_changed
@@ -217,6 +214,9 @@ var character_name := ""
 var _autosave_elapsed := 0.0
 var _durability_save_pending := false
 var _durability_save_elapsed := 0.0
+var _durability_mutation_revision := 0
+var _world_mutation_revision := 0
+var _background_save: Dictionary = {}
 var _durability_visual_pending := false
 var _durability_visual_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
@@ -303,11 +303,8 @@ func _process(delta: float) -> void:
 		return
 	_autosave_elapsed += delta
 	if _autosave_elapsed >= AUTOSAVE_INTERVAL:
-		_autosave_elapsed = 0.0
-		if _durability_save_pending:
-			_commit_save()
-		else:
-			save_game()
+		if _start_background_save(true):
+			_autosave_elapsed = 0.0
 
 
 func _advance_durability_runtime(delta: float) -> void:
@@ -323,7 +320,10 @@ func _advance_durability_runtime(delta: float) -> void:
 		if _durability_save_elapsed >= DURABILITY_SAVE_INTERVAL:
 			# A failed write stays pending and is retried; pause/close also flushes it.
 			_durability_save_elapsed = 0.0
-			_commit_save(false)
+			if test_mode:
+				_commit_save(false)
+			else:
+				_start_background_save(false)
 
 
 func _clear_pending_durability_runtime() -> void:
@@ -3587,6 +3587,7 @@ func apply_durability_event(event_id: String, context := {}) -> Dictionary:
 	# durability and broken-equipment stats authoritative immediately, but write
 	# one complete profile after the bounded interval or any other save boundary.
 	_durability_save_pending = true
+	_durability_mutation_revision += 1
 	if crossed_zero:
 		_durability_visual_pending = false
 		_durability_visual_elapsed = 0.0
@@ -4583,15 +4584,21 @@ func _start_world_clock_cleanup(request: Dictionary) -> void:
 	var generation: Variant = request.get("generation", "")
 	if not _valid_profile_storage_id(profile_id) or not WorldMonsterClockLedgerScript.valid_generation(generation):
 		return
-	_clock_cleanup_worker = WorldClockEventCleanupScript.new()
-	_clock_cleanup_worker.start(
+	var job := _json_persistence.submit_cleanup(
 		_death_event_directory(profile_id, generation),
+		request,
 		int(request.get("through_sequence", 0)),
 	)
+	if job == null:
+		_clock_cleanup_pending = request
+		return
+	_clock_cleanup_worker = JsonPreparedRequest.new()
+	_clock_cleanup_worker.configure(_json_persistence, job)
+	_clock_cleanup_worker.terminal_result = true
 
 
 func _advance_world_clock_cleanup() -> void:
-	if _clock_cleanup_worker == null or not bool(_clock_cleanup_worker.result().finished):
+	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
 		return
 	_clock_cleanup_worker = null
 	if not _clock_cleanup_pending.is_empty():
@@ -6101,6 +6108,7 @@ func mark_monster_respawn_dead(
 	world_monster_respawn_state["entries"] = entries
 	_world_clock_changes[key] = entry.duplicate(true)
 	_world_clock_dirty = true
+	_world_mutation_revision += 1
 	return true
 
 
@@ -6111,6 +6119,7 @@ func clear_monster_respawn_slot(runtime_map_id: int, spawn_slot_id: String) -> v
 		entries.erase(key)
 		_world_clock_changes[key] = null
 		_world_clock_dirty = true
+		_world_mutation_revision += 1
 
 
 func world_clock_mutation_snapshot() -> Dictionary:
@@ -6122,6 +6131,7 @@ func restore_world_clock_mutation(snapshot: Dictionary) -> void:
 	world_monster_respawn_state = (snapshot["state"] as Dictionary).duplicate(true)
 	_world_clock_changes = (snapshot["changes"] as Dictionary).duplicate(true)
 	_world_clock_dirty = bool(snapshot["dirty"])
+	_world_mutation_revision += 1
 
 
 
@@ -8522,6 +8532,132 @@ func _finish_pending_durability_save(started_usec: int) -> void:
 	durability_event_commit_count += 1
 	RuntimeDiagnostics.increment_performance_counter(&"durability_event_commits")
 	_record_runtime_save_phases("durability_save", started_usec)
+
+
+func _background_save_context_matches(identity: Dictionary) -> bool:
+	return str(identity.profile_id) == active_profile_id and str(identity.world_clock_generation) == _world_clock_generation
+
+
+func _start_background_save(update_profile_index := true) -> bool:
+	if not _background_save.is_empty():
+		_background_save.update_index = bool(_background_save.update_index) or update_profile_index
+		return true # One immutable save in flight; later wear remains pending.
+	if _json_persistence.pending_count() > 0:
+		return false # Do not snapshot ahead of another owner's accepted receipt.
+	var started_usec := Time.get_ticks_usec()
+	var payload := _prepare_character_save_payload(false)
+	if payload.is_empty():
+		return false
+	var path := _profile_path(active_profile_id)
+	var identity := {"path": path, "profile_id": active_profile_id,
+		"world_clock_generation": _world_clock_generation, "sequence": _death_event_sequence}
+	var plan := {"identity": identity, "payload": payload.duplicate(true),
+		"index_path": profile_index_path, "update_index": update_profile_index,
+		"index_entry": {"id": active_profile_id, "name": character_name, "profession": profession,
+			"gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())},
+		"durability_revision": _durability_mutation_revision, "world_revision": _world_mutation_revision,
+		"inventory_before": inventory.duplicate(true), "started_usec": started_usec,
+		"profile_written": false, "completed": false}
+	plan.payload.inventory = SpecialConsumableStacks.split_available(plan.payload.inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	_background_save = plan
+	if _world_clock_dirty or _world_clock_snapshot_sequence != _death_event_sequence or _world_clock_backup_sequence < _world_clock_snapshot_sequence:
+		var clock_path := _world_clock_path(active_profile_id, _world_clock_generation)
+		var clock_identity := identity.duplicate(true)
+		clock_identity.path = clock_path
+		clock_identity["compact_world_at_unix"] = Time.get_unix_time_from_system()
+		var document := WorldMonsterClockLedgerScript.snapshot_document(active_profile_id, _death_event_sequence, world_monster_respawn_state, _world_clock_generation)
+		var job := _json_persistence.submit(clock_path, clock_identity, document, _json_validator_for_path(clock_path), _background_save_context_matches,
+			false, null, _complete_background_checkpoint.bind(plan))
+		if job == null:
+			_finish_background_save(plan, false, false)
+			return false
+	else:
+		_submit_background_profile(plan)
+	return true
+
+
+func _complete_background_checkpoint(receipt: Dictionary, plan: Dictionary) -> void:
+	if not bool(receipt.get("success", false)) or not _background_save_context_matches(plan.identity):
+		_finish_background_save(plan, false, false)
+		return
+	_record_background_json_receipt(receipt)
+	var sequence := int(plan.identity.sequence)
+	_world_clock_backup_sequence = _backup_sequence_after_promotion(str(receipt.identity.path), _world_clock_snapshot_sequence, sequence, "sequence")
+	_world_clock_snapshot_sequence = sequence
+	if sequence == _death_event_sequence and int(plan.world_revision) == _world_mutation_revision:
+		_world_clock_dirty = false
+	_submit_background_profile(plan)
+
+
+func _submit_background_profile(plan: Dictionary) -> void:
+	var path := str(plan.identity.path)
+	var job := _json_persistence.submit(path, plan.identity, plan.payload, _json_validator_for_path(path), _background_save_context_matches,
+		false, _validated_profile_bytes if path == _validated_profile_path else null, _complete_background_profile.bind(plan))
+	if job == null:
+		_finish_background_save(plan, false, false)
+
+
+func _complete_background_profile(receipt: Dictionary, plan: Dictionary) -> void:
+	if not bool(receipt.get("success", false)) or not _background_save_context_matches(plan.identity):
+		_finish_background_save(plan, false, false)
+		return
+	_record_background_json_receipt(receipt)
+	var sequence := int(plan.identity.sequence)
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(str(plan.identity.path), _profile_saved_death_event_sequence, sequence, "death_event_sequence")
+	_profile_saved_death_event_sequence = sequence
+	_active_profile_legacy_warehouse_pending = false
+	plan.profile_written = true
+	if inventory == plan.inventory_before:
+		inventory = plan.payload.inventory
+	if int(plan.durability_revision) == _durability_mutation_revision:
+		_finish_pending_durability_save(int(plan.started_usec))
+	if not bool(plan.update_index):
+		_finish_background_save(plan, true, true)
+		return
+	var identity: Dictionary = plan.identity.duplicate(true)
+	identity.path = plan.index_path
+	identity["entry"] = plan.index_entry
+	var job := _json_persistence.submit(str(plan.index_path), identity, {}, _json_validator_for_path(str(plan.index_path)),
+		_background_save_context_matches, false, null, _complete_background_index.bind(plan), false, null, "", false, _merge_background_profile_index)
+	if job == null:
+		plan.index_failure = "index_request_rejected"
+		_finish_background_save(plan, true, false)
+
+
+func _merge_background_profile_index(document: Dictionary, identity: Dictionary) -> Dictionary:
+	var profiles: Array = document.get("profiles", []).duplicate(true)
+	var found := false
+	for entry: Dictionary in profiles:
+		if str(entry.id) == str(identity.profile_id):
+			entry.merge(identity.entry, true)
+			found = true
+	if not found:
+		profiles.append(identity.entry.duplicate(true))
+	return {"version": 1, "profiles": profiles}
+
+
+func _complete_background_index(receipt: Dictionary, plan: Dictionary) -> void:
+	plan.index_failure = str(receipt.get("reason", ""))
+	if bool(receipt.get("success", false)) and _background_save_context_matches(plan.identity):
+		_record_background_json_receipt(receipt)
+	_finish_background_save(plan, true, bool(receipt.get("success", false)))
+
+
+func _finish_background_save(plan: Dictionary, success: bool, index_updated: bool) -> void:
+	plan.completed = true
+	plan.success = success
+	if _background_save == plan:
+		_background_save = {}
+	if not _background_save_context_matches(plan.identity):
+		return
+	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": success,
+		"reason": "" if success else "background_save_failed", "path": plan.identity.path,
+		"profile_index_updated": index_updated, "profile_index_skipped": not bool(plan.update_index),
+		"profile_index_failure": str(plan.get("index_failure", ""))}
+	if success:
+		_queue_world_clock_cleanup()
+	_last_runtime_commit_profile = {"duration_ms": float(Time.get_ticks_usec() - int(plan.started_usec)) / 1000.0,
+		"success": success, "profile_index_skipped": not bool(plan.update_index), "background": true}
 
 
 func _commit_save(update_profile_index := true) -> bool:

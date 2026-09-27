@@ -130,6 +130,19 @@ func _run() -> void:
 	collision.run_stage("DISCARD")
 	collision.stage_result(true)
 	assert(FileAccess.get_file_as_bytes(collision.path) == foreign_bytes)
+	# The index-style update reads in the worker, derives on main, and refuses
+	# to overwrite an external edit made after that first read.
+	_write(path, {"value": 170, "preserved": "other-owner"})
+	var updated: RefCounted = service.submit(path, {"profile_id": current_profile}, {}, _validate, _guard, false, null, Callable(), false, null, "", false, _increment_update)
+	await _finish(service, updated)
+	assert(updated.response.success and _read(path).value == 171 and _read(path).preserved == "other-owner")
+	var changed: RefCounted = service.submit(path, {"profile_id": current_profile}, {}, _validate, _guard, false, null, Callable(), false, null, "", false, _increment_update)
+	assert(changed.stage_result(true).result.success)
+	service.pump() # Derive from the original read; the external file is newer.
+	_write(path, {"value": 190, "preserved": "external"})
+	await _finish(service, changed)
+	assert(not changed.response.success and changed.response.reason == "update_source_changed")
+	assert(_read(path).value == 190 and _read(path).preserved == "external")
 	print("F03_WRITER_METRICS " + JSON.stringify({"validation_calls": approvals, "nonblocking_poll_usec": polling_usec}))
 	print("F03_BACKGROUND_WRITER_PASS")
 	get_tree().quit(0)
@@ -168,3 +181,8 @@ func _write_text(path: String, value: String) -> void:
 	assert(file != null)
 	file.store_string(value)
 	file.close()
+
+func _increment_update(document: Dictionary, _identity: Dictionary) -> Dictionary:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	document.value = int(document.value) + 1
+	return document

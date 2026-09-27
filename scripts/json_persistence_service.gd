@@ -7,7 +7,7 @@ const MAX_PENDING_REQUESTS := 64
 var _queue: Array[Dictionary] = []
 
 
-func submit(target: String, identity: Dictionary, snapshot: Dictionary, validator: Callable, guard := Callable(), create_only := false, known_previous_bytes: Variant = null, on_complete := Callable(), prepare_only := false, prepared_bytes: Variant = null, temporary := "", require_known_previous := false) -> RefCounted:
+func submit(target: String, identity: Dictionary, snapshot: Dictionary, validator: Callable, guard := Callable(), create_only := false, known_previous_bytes: Variant = null, on_complete := Callable(), prepare_only := false, prepared_bytes: Variant = null, temporary := "", require_known_previous := false, document_update := Callable()) -> RefCounted:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain coordinator is main-thread owned")
 	if _queue.size() >= MAX_PENDING_REQUESTS or not _plain_json_value(snapshot) or not _plain_json_value(identity):
 		return null
@@ -26,7 +26,8 @@ func submit(target: String, identity: Dictionary, snapshot: Dictionary, validato
 		"known_previous_bytes": known_previous_bytes,
 		"require_known_previous": require_known_previous,
 		"allow_promotion": not prepare_only,
-		"phase": "NEW",
+		"phase": "NEW_UPDATE" if document_update.is_valid() else "NEW",
+		"document_update": document_update,
 		"candidate": {},
 		"failure": {},
 	})
@@ -38,6 +39,18 @@ func pending_count() -> int:
 	return _queue.size()
 
 
+func submit_cleanup(directory: String, identity: Dictionary, through_sequence: int) -> RefCounted:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if _queue.size() >= MAX_PENDING_REQUESTS or through_sequence <= 0 or not _plain_json_value(identity):
+		return null
+	var job := Job.new()
+	job.cleanup_directory = ProjectSettings.globalize_path(directory)
+	job.cleanup_through_sequence = through_sequence
+	_queue.append({"job": job, "identity": identity.duplicate(true), "phase": "NEW_CLEANUP", "on_complete": Callable()})
+	pump()
+	return job
+
+
 func pump(wait := false) -> bool:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain approval and completion stay on main")
 	if _queue.is_empty():
@@ -45,6 +58,14 @@ func pump(wait := false) -> bool:
 	var entry: Dictionary = _queue[0]
 	var job: RefCounted = entry.job
 	var phase := str(entry.phase)
+	if phase == "NEW_UPDATE":
+		job.run_stage("READ_PREVIOUS")
+		entry.phase = "READ_UPDATE"
+		return true
+	if phase == "NEW_CLEANUP":
+		job.run_stage("PRUNE")
+		entry.phase = "PRUNING"
+		return true
 	if phase == "PREPARED":
 		if job.cancellation_requested():
 			_fail(entry, {"success": false, "reason": "cancelled"})
@@ -65,6 +86,9 @@ func pump(wait := false) -> bool:
 	if not bool(completed.finished):
 		return false
 	var result: Dictionary = completed.result
+	if phase == "PRUNING":
+		_complete(entry, result)
+		return true
 	if phase == "DISPOSING":
 		var failure: Dictionary = entry.failure
 		failure["discarded"] = bool(result.get("discarded", false))
@@ -72,6 +96,34 @@ func pump(wait := false) -> bool:
 		return true
 	if not bool(result.get("success", false)):
 		_fail(entry, result)
+		return true
+	if phase == "READ_UPDATE":
+		var source: Dictionary = {}
+		var previous: Dictionary = result.previous
+		var backup: Dictionary = result.backup
+		var previous_validation := _validate(entry.validator, previous.document) if bool(previous.syntax_valid) else {"valid": false}
+		if bool(previous_validation.get("terminal", false)):
+			_fail(entry, {"success": false, "reason": "previous_terminal"})
+			return true
+		if bool(previous_validation.valid):
+			source = previous.document
+		elif bool(backup.exists):
+			var backup_validation := _validate(entry.validator, backup.document) if bool(backup.syntax_valid) else {"valid": false}
+			if not bool(backup_validation.valid):
+				_fail(entry, {"success": false, "reason": "update_source_backup_invalid"})
+				return true
+			source = backup.document
+		elif bool(previous.exists):
+			_fail(entry, {"success": false, "reason": "update_source_invalid"})
+			return true
+		var updated: Variant = entry.document_update.call(source.duplicate(true), entry.identity.duplicate(true))
+		if not updated is Dictionary or not _plain_json_value(updated):
+			_fail(entry, {"success": false, "reason": "update_snapshot_invalid"})
+			return true
+		entry.update_previous = previous
+		entry.update_backup = backup
+		job.configure_snapshot(updated)
+		entry.phase = "NEW"
 		return true
 	if phase == "PREPARING":
 		if job.cancellation_requested():
@@ -92,6 +144,11 @@ func pump(wait := false) -> bool:
 			return true
 		var previous: Dictionary = result.previous
 		var backup: Dictionary = result.backup
+		if entry.has("update_previous") and (
+			bool(previous.exists) != bool(entry.update_previous.exists) or previous.bytes != entry.update_previous.bytes
+			or bool(backup.exists) != bool(entry.update_backup.exists) or backup.bytes != entry.update_backup.bytes):
+			_fail(entry, {"success": false, "reason": "update_source_changed"})
+			return true
 		if bool(entry.require_known_previous) and (not entry.known_previous_bytes is PackedByteArray or not bool(previous.exists) or previous.bytes != entry.known_previous_bytes):
 			_fail(entry, {"success": false, "reason": "validated_previous_bytes_changed"})
 			return true
@@ -142,7 +199,8 @@ func drain() -> void:
 func authorize(job: RefCounted) -> void:
 	for entry: Dictionary in _queue:
 		if entry.job == job:
-			entry.allow_promotion = true
+			if entry.has("allow_promotion"):
+				entry.allow_promotion = true
 			return
 
 
