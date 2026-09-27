@@ -188,6 +188,7 @@ var world_monster_respawn_state: Dictionary = (
 	WorldMonsterRespawnStateScript.empty_snapshot()
 )
 var _death_event_sequence := 0
+var _world_clock_generation := ""
 var _profile_saved_death_event_sequence := 0
 var _profile_backup_death_event_sequence := 0
 var _world_clock_snapshot_sequence := -1
@@ -246,6 +247,7 @@ var _atomic_write_generation := 0
 var _validated_profile_path := ""
 var _validated_profile_bytes := PackedByteArray()
 var _atomic_write_phases: Dictionary = {}
+var _last_json_promotion: Dictionary = {}
 var _last_save_phase_profile: Dictionary = {}
 var _last_loot_batch_profile: Dictionary = {}
 var _last_death_settlement_profile: Dictionary = {}
@@ -366,6 +368,7 @@ func reset_progress(emit_updates := true) -> void:
 	quest_states = {}
 	world_monster_respawn_state = WorldMonsterRespawnStateScript.empty_snapshot()
 	_death_event_sequence = 0
+	_world_clock_generation = ""
 	_profile_saved_death_event_sequence = 0
 	_profile_backup_death_event_sequence = 0
 	_world_clock_snapshot_sequence = -1
@@ -3743,7 +3746,9 @@ func _world_clock_directory() -> String:
 	return profile_directory.path_join("world_clocks")
 
 
-func _world_clock_path(profile_id: String) -> String:
+func _world_clock_path(profile_id: String, generation := "") -> String:
+	if not generation.is_empty():
+		return _world_clock_directory().path_join(profile_id).path_join(generation + ".json")
 	return _world_clock_directory().path_join(profile_id + ".json")
 
 
@@ -3751,12 +3756,14 @@ func _death_event_root() -> String:
 	return profile_directory.path_join("death_events")
 
 
-func _death_event_directory(profile_id: String) -> String:
+func _death_event_directory(profile_id: String, generation := "") -> String:
+	if not generation.is_empty():
+		return _death_event_root().path_join(profile_id).path_join(generation)
 	return _death_event_root().path_join(profile_id)
 
 
-func _death_event_path(profile_id: String, sequence: int) -> String:
-	return _death_event_directory(profile_id).path_join("%012d.json" % sequence)
+func _death_event_path(profile_id: String, sequence: int, generation := "") -> String:
+	return _death_event_directory(profile_id, generation).path_join("%012d.json" % sequence)
 
 
 var _json_parse_snapshots: Dictionary = {}
@@ -4077,6 +4084,14 @@ func _validate_profile_document_status(
 	allow_missing_identity: bool
 ) -> Dictionary:
 	var document_version := -1
+	if not WorldMonsterClockLedgerScript.valid_generation(document.get("world_clock_generation", "")):
+		return _validation_result(false, "invalid_world_clock_generation")
+	if document.has("world_clock_generation") and not document.has("death_event_sequence"):
+		return _validation_result(false, "world_clock_generation_without_sequence")
+	if document.has("death_event_sequence"):
+		var sequence: Variant = document.death_event_sequence
+		if not _is_integral_json_number(sequence) or int(sequence) < 0:
+			return _validation_result(false, "invalid_death_event_sequence")
 	if document.has("save_version"):
 		var version_value: Variant = document.get("save_version")
 		if not _is_integral_json_number(version_value) or int(version_value) < 0:
@@ -4242,6 +4257,14 @@ func _json_validator_for_path(path: String) -> Callable:
 		return Callable(self, "_validate_shared_warehouse_document_status")
 	if path in [SAVE_PATH, LEGACY_SAVE_PATH]:
 		return Callable(self, "_validate_profile_document_status").bind("", true)
+	if path.get_base_dir().get_base_dir() == _world_clock_directory() and path.ends_with(".json"):
+		return Callable(self, "_validate_world_clock_document_status").bind(
+			path.get_base_dir().get_file(), path.get_file().get_basename()
+		)
+	if path.get_base_dir().get_base_dir().get_base_dir() == _death_event_root() and path.ends_with(".json"):
+		return Callable(self, "_validate_death_event_document_status").bind(
+			path.get_base_dir().get_base_dir().get_file(), path.get_file().get_basename(), path.get_base_dir().get_file()
+		)
 	if path.get_base_dir() == _world_clock_directory() and path.ends_with(".json"):
 		return Callable(self, "_validate_world_clock_document_status").bind(path.get_file().get_basename())
 	if path.get_base_dir().get_base_dir() == _death_event_root() and path.ends_with(".json"):
@@ -4251,13 +4274,15 @@ func _json_validator_for_path(path: String) -> Callable:
 	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
 		var expected_profile_id := path.get_file().get_basename()
 		return Callable(self, "_validate_profile_document_status").bind(expected_profile_id, false)
+	if path.get_base_dir() == profile_directory and path.ends_with(".json.bak"):
+		return Callable(self, "_validate_profile_document_status").bind(path.get_file().trim_suffix(".json.bak"), false)
 	return Callable()
 
 
-func _validate_world_clock_document_status(document: Dictionary, profile_id: String) -> Dictionary:
+func _validate_world_clock_document_status(document: Dictionary, profile_id: String, generation := "") -> Dictionary:
 	return _validation_result(
 		_valid_profile_storage_id(profile_id)
-		and WorldMonsterClockLedgerScript.valid_snapshot(document, profile_id),
+		and WorldMonsterClockLedgerScript.valid_snapshot(document, profile_id, generation),
 		"invalid_world_clock_snapshot",
 	)
 
@@ -4266,12 +4291,13 @@ func _validate_death_event_document_status(
 	document: Dictionary,
 	profile_id: String,
 	sequence_text: String,
+	generation := "",
 ) -> Dictionary:
 	return _validation_result(
 		_valid_profile_storage_id(profile_id)
 		and sequence_text.is_valid_int()
 		and WorldMonsterClockLedgerScript.valid_death_event(
-			document, profile_id, int(sequence_text)
+			document, profile_id, int(sequence_text), generation
 		),
 		"invalid_death_event",
 	)
@@ -4282,7 +4308,8 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
 	if not _valid_profile_storage_id(profile_id):
 		return {"ok": false, "reason": "invalid_profile_id"}
 	var snapshot: Dictionary = {}
-	var clock_path := _world_clock_path(profile_id)
+	var generation := str(profile_document.get("world_clock_generation", ""))
+	var clock_path := _world_clock_path(profile_id, generation)
 	if FileAccess.file_exists(clock_path) or FileAccess.file_exists(clock_path + ".bak"):
 		var clock_read := _read_json_with_status(clock_path)
 		if not bool(clock_read.get("success", false)):
@@ -4292,7 +4319,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
 	var world_sequence := int(snapshot.get("sequence", 0))
 	var minimum_sequence := mini(profile_sequence, world_sequence)
 	var events: Array = []
-	var event_directory := _death_event_directory(profile_id)
+	var event_directory := _death_event_directory(profile_id, generation)
 	if DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(event_directory)):
 		var directory := DirAccess.open(event_directory)
 		if directory == null:
@@ -4312,7 +4339,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
 		directory.list_dir_end()
 		sequences.sort()
 		for sequence: int in sequences:
-			var event_read := _read_json_with_status(_death_event_path(profile_id, sequence))
+			var event_read := _read_json_with_status(_death_event_path(profile_id, sequence, generation))
 			if not bool(event_read.get("success", false)):
 				return {"ok": false, "reason": "death_event_unavailable"}
 			events.append(event_read.get("data", {}))
@@ -4328,6 +4355,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
 		and bool(_validate_profile_document_status(
 			profile_backup.get("data", {}), profile_id, false
 		).get("valid", false))
+		and profile_backup.data.get("world_clock_generation", "") == generation
 	):
 		profile_backup_sequence = int(
 			(profile_backup.get("data", {}) as Dictionary).get("death_event_sequence", 0)
@@ -4337,7 +4365,7 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
 	if (
 		bool(world_backup.get("valid", false))
 		and WorldMonsterClockLedgerScript.valid_snapshot(
-			world_backup.get("data", {}), profile_id
+			world_backup.get("data", {}), profile_id, generation
 		)
 	):
 		world_backup_sequence = int(
@@ -4349,12 +4377,12 @@ func _read_world_clock_replay(profile_document: Dictionary) -> Dictionary:
 
 
 func _archive_legacy_world_clock_profile(profile_document: Dictionary) -> String:
-	if test_mode or not profile_document.has("world_monster_respawn_state") or profile_document.has("death_event_sequence"):
+	if test_mode or profile_document.has("death_event_sequence"):
 		return ""
 	var profile_id := str(profile_document.get("profile_id", ""))
 	if not _valid_profile_storage_id(profile_id):
 		return ""
-	var directory := profile_directory.path_join("clock_migration_backups")
+	var directory := profile_directory.path_join("clock_import_backups")
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
 		return ""
 	var digest := _shared_digest(profile_document)
@@ -4363,6 +4391,88 @@ func _archive_legacy_world_clock_profile(profile_document: Dictionary) -> String
 		var prior := _read_json_document(path)
 		return path if bool(prior.get("valid", false)) and _shared_digest(prior.get("data", {})) == digest else ""
 	return path if _write_json_atomic(path, profile_document) else ""
+
+
+func _prepare_world_clock_profile(document: Dictionary) -> Dictionary:
+	if test_mode:
+		return {"ok": true, "data": document}
+	if document.has("death_event_sequence"):
+		# An interrupted import may have promoted the primary but not its backup.
+		# Finish that boundary before any new death may commit to this generation.
+		if document.has("world_clock_import_source") and not _complete_world_clock_import_backup(document):
+			return {"ok": false, "reason": "world_clock_import_backup_failed"}
+		return {"ok": true, "data": document}
+	var profile_id := str(document.get("profile_id", ""))
+	var digest := _shared_digest(document)
+	var replay := WorldMonsterClockLedgerScript.replay(document, {}, [])
+	# The first clock implementation archived a legacy source but left the
+	# primary unmarked until the next save. Preserve any committed events from
+	# that exact, evidenced forward migration. New imports use a different
+	# archive directory so retrying a failed import cannot manufacture this proof.
+	var prior_archive_path := profile_directory.path_join("clock_migration_backups").path_join("%s-%s.json" % [profile_id, digest])
+	if FileAccess.file_exists(prior_archive_path):
+		var prior := _read_json_document(prior_archive_path)
+		if not bool(prior.get("valid", false)) or _shared_digest(prior.get("data", {})) != digest:
+			return {"ok": false, "reason": "legacy_clock_archive_invalid"}
+		replay = _read_world_clock_replay(document)
+	if not bool(replay.get("ok", false)):
+		return replay
+	var archive := _archive_legacy_world_clock_profile(document)
+	if archive.is_empty():
+		return {"ok": false, "reason": "world_clock_migration_archive_failed"}
+	# A distinct namespace prevents an old writer's sequence-less checkpoint
+	# from being joined to previous (possibly already compacted) death events.
+	var generation := Crypto.new().generate_random_bytes(16).hex_encode()
+	var clock_path := _world_clock_path(profile_id, generation)
+	if FileAccess.file_exists(clock_path):
+		return {"ok": false, "reason": "world_clock_import_identity_collision"}
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(clock_path.get_base_dir())) != OK:
+		return {"ok": false, "reason": "world_clock_import_directory_failed"}
+	var clock := WorldMonsterClockLedgerScript.snapshot_document(profile_id, 0, replay.world_state, generation)
+	if not _write_json_atomic(clock_path, clock):
+		return {"ok": false, "reason": "world_clock_import_snapshot_failed"}
+	var converted := document.duplicate(true)
+	converted.erase("world_monster_respawn_state")
+	converted["level"] = replay.level
+	converted["experience"] = replay.experience
+	converted["quest_states"] = replay.quest_states
+	converted["death_event_sequence"] = 0
+	converted["world_clock_generation"] = generation
+	converted["world_clock_import_source"] = digest
+	# World first, then primary, then matching recovery checkpoint. No gameplay
+	# runs until all three succeed. Original character data remains archived.
+	if not _write_json_atomic(_profile_path(profile_id), converted):
+		return {"ok": false, "reason": "world_clock_import_profile_failed"}
+	if not _complete_world_clock_import_backup(converted):
+		return {"ok": false, "reason": "world_clock_import_backup_failed"}
+	return {"ok": true, "data": converted, "archive": archive}
+
+
+func _complete_world_clock_import_backup(document: Dictionary) -> bool:
+	var profile_id := str(document.get("profile_id", ""))
+	var generation := str(document.get("world_clock_generation", ""))
+	if generation.is_empty() or not WorldMonsterClockLedgerScript.valid_generation(generation):
+		return false
+	var clock := _read_json_with_status(_world_clock_path(profile_id, generation))
+	if not bool(clock.get("success", false)):
+		return false
+	var backup_path := _profile_path(profile_id) + ".bak"
+	var backup := _read_json_document(backup_path)
+	if bool(backup.get("valid", false)):
+		var prior: Dictionary = backup.data
+		if not bool(_validate_profile_document_status(prior, profile_id, false).valid):
+			return false
+		if prior.has("death_event_sequence"):
+			return prior.get("world_clock_generation", "") == generation
+		if _shared_digest(prior) != str(document.get("world_clock_import_source", "")):
+			return false
+	elif bool(backup.get("exists", false)):
+		return false
+	# This is only the import's sequence-zero backup conversion. Never promote
+	# an arbitrary older checkpoint to a later cleanup watermark.
+	if int(document.get("death_event_sequence", -1)) != 0:
+		return false
+	return _write_json_atomic(backup_path, document)
 
 
 func _checkpoint_world_clock() -> bool:
@@ -4376,21 +4486,22 @@ func _checkpoint_world_clock() -> bool:
 		and _world_clock_backup_sequence >= _world_clock_snapshot_sequence
 	):
 		return true
-	var directory := _world_clock_directory()
+	var clock_path := _world_clock_path(active_profile_id, _world_clock_generation)
+	var directory := clock_path.get_base_dir()
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
 		return false
 	var compacted := WorldMonsterRespawnStateScript.compact_elapsed(
 		world_monster_respawn_state, Time.get_unix_time_from_system()
 	)
 	var document := WorldMonsterClockLedgerScript.snapshot_document(
-		active_profile_id, _death_event_sequence, compacted
+		active_profile_id, _death_event_sequence, compacted, _world_clock_generation
 	)
 	var previous_sequence := _world_clock_snapshot_sequence
-	if not _write_json_atomic(_world_clock_path(active_profile_id), document):
+	if not _write_json_atomic(clock_path, document):
 		return false
 	_world_clock_snapshot_sequence = _death_event_sequence
-	_world_clock_backup_sequence = (
-		previous_sequence if previous_sequence >= 0 else _death_event_sequence
+	_world_clock_backup_sequence = _backup_sequence_after_promotion(
+		clock_path, previous_sequence, _death_event_sequence, "sequence"
 	)
 	_world_clock_dirty = false
 	return true
@@ -4408,6 +4519,7 @@ func _queue_world_clock_cleanup() -> void:
 		return
 	var request := {
 		"profile_id": active_profile_id,
+		"generation": _world_clock_generation,
 		"through_sequence": through_sequence,
 	}
 	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
@@ -4418,11 +4530,12 @@ func _queue_world_clock_cleanup() -> void:
 
 func _start_world_clock_cleanup(request: Dictionary) -> void:
 	var profile_id := str(request.get("profile_id", ""))
-	if not _valid_profile_storage_id(profile_id):
+	var generation: Variant = request.get("generation", "")
+	if not _valid_profile_storage_id(profile_id) or not WorldMonsterClockLedgerScript.valid_generation(generation):
 		return
 	_clock_cleanup_worker = WorldClockEventCleanupScript.new()
 	_clock_cleanup_worker.start(
-		_death_event_directory(profile_id),
+		_death_event_directory(profile_id, generation),
 		int(request.get("through_sequence", 0)),
 	)
 
@@ -4444,15 +4557,15 @@ func _commit_death_event() -> bool:
 		active_profile_id.is_empty()
 		or active_profile_id == _save_blocked_profile_id
 		or _world_clock_snapshot_sequence < 0
-		or not FileAccess.file_exists(_world_clock_path(active_profile_id))
+		or not FileAccess.file_exists(_world_clock_path(active_profile_id, _world_clock_generation))
 	):
 		return false
 	var next_sequence := _death_event_sequence + 1
-	var path := _death_event_path(active_profile_id, next_sequence)
+	var path := _death_event_path(active_profile_id, next_sequence, _world_clock_generation)
 	if FileAccess.file_exists(path):
 		return false
 	if DirAccess.make_dir_recursive_absolute(
-		ProjectSettings.globalize_path(_death_event_directory(active_profile_id))
+		ProjectSettings.globalize_path(_death_event_directory(active_profile_id, _world_clock_generation))
 	) != OK:
 		return false
 	var document := WorldMonsterClockLedgerScript.death_event_document(
@@ -4464,6 +4577,7 @@ func _commit_death_event() -> bool:
 		WorldMonsterRespawnStateScript.compact_elapsed(
 			world_monster_respawn_state, Time.get_unix_time_from_system()
 		),
+		_world_clock_generation,
 	)
 	_last_save_phase_profile["runtime_snapshot_ms"] = (
 		float(Time.get_ticks_usec() - started_usec) / 1000.0
@@ -4635,6 +4749,7 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 
 
 func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
+	_last_json_promotion = {}
 	var validator := _json_validator_for_path(path)
 	var backup := path + ".bak"
 	var phase_usec := Time.get_ticks_usec()
@@ -4699,6 +4814,14 @@ func _promote_verified_json(path: String, temporary: String, expected_bytes: Pac
 	var verified := _file_matches_validated_bytes(path, expected_bytes)
 	_atomic_write_phases["rotate_promote_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
 	if verified:
+		_last_json_promotion = {
+			"path": path,
+			"backup_rotated": moved_valid_main,
+			"backup_exists": FileAccess.file_exists(backup),
+			"previous_sequence": (current_document.get("data", {}) as Dictionary).get("sequence", -1),
+			"previous_death_sequence": (current_document.get("data", {}) as Dictionary).get("death_event_sequence", -1),
+			"previous_generation": (current_document.get("data", {}) as Dictionary).get("world_clock_generation", "") if current_document.has("data") else null,
+		}
 		_atomic_write_generation += 1
 		if path.get_base_dir() == profile_directory and path.ends_with(".json"):
 			_validated_profile_path = path
@@ -4713,6 +4836,37 @@ func _promote_verified_json(path: String, temporary: String, expected_bytes: Pac
 			elif not quarantine_path.is_empty():
 				DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
 	return verified
+
+
+func _backup_sequence_after_promotion(path: String, previous_sequence: int, current_sequence: int, field: String) -> int:
+	# A corrupt primary is quarantined without rotating the valid old backup.
+	# Only a verified rotation can advance its cleanup watermark to the previous
+	# primary. The byte-validated profile fast path already owns that sequence.
+	if str(_last_json_promotion.get("path", "")) != path:
+		return -1
+	if not bool(_last_json_promotion.get("backup_exists", false)):
+		return current_sequence
+	if bool(_last_json_promotion.get("backup_rotated", false)):
+		# The byte-validated fast path does not parse the prior generation. Null
+		# is unknown, not the legacy namespace: retain its known older watermark.
+		var recorded_generation: Variant = _last_json_promotion.get("previous_generation")
+		if field == "death_event_sequence" and recorded_generation != null and recorded_generation != _world_clock_generation:
+			return current_sequence # Another generation retains its own journal.
+		var key := "previous_sequence" if field == "sequence" else "previous_death_sequence"
+		var recorded := int(_last_json_promotion.get(key, -1))
+		return recorded if recorded >= 0 else previous_sequence
+	# Exceptional recovery path only: inspect the backup actually preserved.
+	# Unknown/invalid backups hold back cleanup instead of deleting evidence.
+	var backup := _read_json_document(path + ".bak")
+	if not bool(backup.get("valid", false)):
+		return -1
+	var document: Dictionary = backup.get("data", {})
+	if not bool(_validate_json_candidate(document, _json_validator_for_path(path)).get("valid", false)):
+		return -1
+	if field == "death_event_sequence" and document.get("world_clock_generation", "") != _world_clock_generation:
+		return current_sequence
+	var sequence: Variant = document.get(field, 0 if field == "death_event_sequence" else -1)
+	return int(sequence) if _is_integral_json_number(sequence) and int(sequence) >= 0 else -1
 
 
 func _file_matches_validated_bytes(path: String, expected: PackedByteArray) -> bool:
@@ -5312,6 +5466,7 @@ func _prepare_character_save_payload() -> Dictionary:
 		"warrior_runtime_state": warrior_runtime_state,
 		"quest_states": quest_states,
 		"death_event_sequence": _death_event_sequence,
+		"world_clock_generation": _world_clock_generation,
 		"content_packages": ContentLayers.enabled_package_ids(),
 		"content_schema_version": CURRENT_CONTENT_SCHEMA_VERSION,
 		"map_id": saved_map_id,
@@ -5358,10 +5513,8 @@ func save_game(update_profile_index := true, finalize_pending_durability := true
 			"path": profile_path,
 		}
 		return false
-	_profile_backup_death_event_sequence = (
-		_profile_saved_death_event_sequence
-		if FileAccess.file_exists(profile_path + ".bak")
-		else _death_event_sequence
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
+		profile_path, _profile_saved_death_event_sequence, _death_event_sequence, "death_event_sequence"
 	)
 	_profile_saved_death_event_sequence = _death_event_sequence
 	_active_profile_legacy_warehouse_pending = false
@@ -5723,6 +5876,16 @@ func load_save() -> void:
 		return
 	_clear_pending_durability_runtime()
 	var parsed: Dictionary = load_result.get("data", {})
+	var imported := _prepare_world_clock_profile(parsed)
+	if not bool(imported.get("ok", false)):
+		last_load_result["success"] = false
+		last_load_result["reason"] = str(imported.get("reason", "world_clock_import_failed"))
+		_save_blocked_profile_id = active_profile_id
+		_save_blocked_reason = str(last_load_result.reason)
+		return
+	parsed = imported.get("data", parsed)
+	if imported.has("archive"):
+		last_load_result["world_clock_migration_archive"] = imported.archive
 	var world_replay := _read_world_clock_replay(parsed)
 	if not bool(world_replay.get("ok", false)):
 		last_load_result["success"] = false
@@ -5730,19 +5893,6 @@ func load_save() -> void:
 		_save_blocked_profile_id = active_profile_id
 		_save_blocked_reason = str(last_load_result["reason"])
 		return
-	if (
-		not test_mode
-		and parsed.has("world_monster_respawn_state")
-		and not parsed.has("death_event_sequence")
-	):
-		var archive_path := _archive_legacy_world_clock_profile(parsed)
-		if archive_path.is_empty():
-			last_load_result["success"] = false
-			last_load_result["reason"] = "world_clock_migration_archive_failed"
-			_save_blocked_profile_id = active_profile_id
-			_save_blocked_reason = "world_clock_migration_archive_failed"
-			return
-		last_load_result["world_clock_migration_archive"] = archive_path
 	var projected_gold := _gold_load_projection(parsed)
 	if bool(projected_gold.needs_archive):
 		var archive_root := profile_directory.get_base_dir().path_join("gold_migrations")
@@ -5866,6 +6016,7 @@ func load_save() -> void:
 		)
 	)
 	_death_event_sequence = int(world_replay.get("latest_sequence", 0))
+	_world_clock_generation = str(parsed.get("world_clock_generation", ""))
 	_profile_saved_death_event_sequence = int(world_replay.get("source_profile_sequence", 0))
 	_profile_backup_death_event_sequence = int(world_replay.get(
 		"profile_backup_sequence", _profile_saved_death_event_sequence
@@ -7483,10 +7634,8 @@ func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
 	if not _promote_verified_json(str(plan.path), str(plan.writer.path), plan.bytes):
 		plan.writer.cancel()
 		return _loot_save_failure(plan.outcomes)
-	_profile_backup_death_event_sequence = (
-		_profile_saved_death_event_sequence
-		if FileAccess.file_exists(str(plan.path) + ".bak")
-		else _death_event_sequence
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
+		str(plan.path), _profile_saved_death_event_sequence, _death_event_sequence, "death_event_sequence"
 	)
 	_profile_saved_death_event_sequence = _death_event_sequence
 	_queue_world_clock_cleanup()
@@ -7911,7 +8060,7 @@ func delete_character_profile(profile_id: String) -> Dictionary:
 		result["reason"] = "profile_index_write_failed"
 		return result
 	var base_path := _profile_path(profile_id)
-	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp", ".bak.bak", ".bak.tmp"]:
 		var path := base_path + suffix
 		if not FileAccess.file_exists(path):
 			continue
@@ -8042,15 +8191,38 @@ func _remove_profile_world_clock_files(
 ) -> void:
 	if not _valid_profile_storage_id(profile_id):
 		return
+	var generations: Dictionary = {}
+	var clock_directory := _world_clock_directory().path_join(profile_id)
+	var clocks := DirAccess.open(clock_directory)
+	if clocks != null:
+		for name: String in clocks.get_files():
+			var generation := name.trim_suffix(".corrupt.tmp").trim_suffix(".tmp").trim_suffix(".bak").trim_suffix(".json")
+			if not generation.is_empty() and WorldMonsterClockLedgerScript.valid_generation(generation):
+				generations[generation] = true
+	var events := DirAccess.open(_death_event_directory(profile_id))
+	if events != null:
+		for generation: String in events.get_directories():
+			if WorldMonsterClockLedgerScript.valid_generation(generation):
+				generations[generation] = true
+	for generation: String in generations:
+		_remove_profile_clock_generation_files(profile_id, generation, removed, failures)
+	if clocks != null and DirAccess.remove_absolute(ProjectSettings.globalize_path(clock_directory)) != OK:
+		failures.append(clock_directory)
+	_remove_profile_clock_generation_files(profile_id, "", removed, failures)
+
+
+func _remove_profile_clock_generation_files(
+	profile_id: String, generation: String, removed: Array, failures: Array
+) -> void:
 	for suffix: String in ["", ".bak", ".tmp", ".corrupt.tmp"]:
-		var path := _world_clock_path(profile_id) + suffix
+		var path := _world_clock_path(profile_id, generation) + suffix
 		if not FileAccess.file_exists(path):
 			continue
 		if DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK:
 			removed.append(path)
 		elif FileAccess.file_exists(path):
 			failures.append(path)
-	var event_path := _death_event_directory(profile_id)
+	var event_path := _death_event_directory(profile_id, generation)
 	var directory := DirAccess.open(event_path)
 	if directory == null:
 		return
@@ -8100,6 +8272,14 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"warrior_runtime_state": warrior_runtime_state.duplicate(true),
 		"taoist_main_pet_runtime_states": taoist_main_pet_runtime_states.duplicate(true),
 		"quest_states": quest_states.duplicate(true),
+		"world_monster_respawn_state": world_monster_respawn_state.duplicate(true),
+		"death_event_sequence": _death_event_sequence,
+		"world_clock_generation": _world_clock_generation,
+		"profile_saved_death_event_sequence": _profile_saved_death_event_sequence,
+		"profile_backup_death_event_sequence": _profile_backup_death_event_sequence,
+		"world_clock_snapshot_sequence": _world_clock_snapshot_sequence,
+		"world_clock_backup_sequence": _world_clock_backup_sequence,
+		"world_clock_dirty": _world_clock_dirty,
 		"saved_map_id": saved_map_id,
 		"saved_position": saved_position,
 		"saved_ground_position_gu": saved_ground_position_gu,
@@ -8142,6 +8322,14 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	warrior_runtime_state = (snapshot.get("warrior_runtime_state", {}) as Dictionary).duplicate(true)
 	taoist_main_pet_runtime_states = (snapshot.get("taoist_main_pet_runtime_states", {}) as Dictionary).duplicate(true)
 	quest_states = (snapshot.get("quest_states", {}) as Dictionary).duplicate(true)
+	world_monster_respawn_state = (snapshot.get("world_monster_respawn_state", WorldMonsterRespawnStateScript.empty_snapshot()) as Dictionary).duplicate(true)
+	_death_event_sequence = int(snapshot.get("death_event_sequence", 0))
+	_world_clock_generation = str(snapshot.get("world_clock_generation", ""))
+	_profile_saved_death_event_sequence = int(snapshot.get("profile_saved_death_event_sequence", 0))
+	_profile_backup_death_event_sequence = int(snapshot.get("profile_backup_death_event_sequence", 0))
+	_world_clock_snapshot_sequence = int(snapshot.get("world_clock_snapshot_sequence", -1))
+	_world_clock_backup_sequence = int(snapshot.get("world_clock_backup_sequence", -1))
+	_world_clock_dirty = bool(snapshot.get("world_clock_dirty", true))
 	saved_map_id = int(snapshot.get("saved_map_id", 910001))
 	saved_position = snapshot.get("saved_position", Vector2.ZERO)
 	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)

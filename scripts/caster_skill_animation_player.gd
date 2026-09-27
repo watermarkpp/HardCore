@@ -67,13 +67,16 @@ func _ensure_trial_screen_copy() -> void:
 	if is_instance_valid(_trial_screen_copy):
 		_sync_trial_screen_copy_visibility()
 		return
-	# Capture after earlier actors and spells in this sort lane so overlapping
-	# effects use the same screen formula as the browser experiment.
+	# Own the copy as a child drawn immediately before this sprite. Adding a
+	# sibling during _ready can fail while the parent enters its children.
+	# The same relative Z lane preserves capture after earlier world items.
 	_trial_screen_copy = BackBufferCopy.new()
 	_trial_screen_copy.name = "TrialScreenBackdrop"
 	_trial_screen_copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
-	get_parent().add_child(_trial_screen_copy)
-	get_parent().move_child(_trial_screen_copy, get_index())
+	_trial_screen_copy.z_as_relative = true
+	_trial_screen_copy.z_index = 0
+	_trial_screen_copy.show_behind_parent = true
+	add_child(_trial_screen_copy)
 	_sync_trial_screen_copy_visibility()
 
 
@@ -115,6 +118,7 @@ func configure(
 	var profile := CasterSkillVisualRegistry.profile(skill_id)
 	material = null
 	if is_instance_valid(_trial_screen_copy):
+		_trial_screen_copy.hide()
 		_trial_screen_copy.queue_free()
 		_trial_screen_copy = null
 	if is_instance_valid(_fire_wall_additive_sprite):
@@ -374,8 +378,6 @@ func _release_sequence_lease() -> void:
 
 
 func _exit_tree() -> void:
-	if is_instance_valid(_trial_screen_copy):
-		_trial_screen_copy.queue_free()
 	# R14-C5: looping/persistent effects hold the lease until node teardown;
 	# one-shot players release on completion. Reconfigure and exit both
 	# release here.

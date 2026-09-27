@@ -1,0 +1,31 @@
+{
+	"creation_runtime_rollback": {
+		"after": {
+			"event_sequence": 0,
+			"world_sequence": -1
+		},
+		"before": {
+			"event_sequence": 1,
+			"world_sequence": 0
+		},
+		"next_death_commit_success": false
+	},
+	"old_version_resave_then_return": {
+		"contract_id": "player_state.save_result.v1",
+		"path": "user://sol6_recovery_audit_3949628/characters/legacy_resave.json",
+		"reason": "death_event_gap",
+		"success": false
+	},
+	"save_after_corrupt_primary": {
+		"actual_backup_sequence": 1.0,
+		"required_event_still_exists": false,
+		"subsequent_recovery": {
+			"contract_id": "player_state.save_result.v1",
+			"path": "user://sol6_recovery_audit_3949628/characters/corrupt_primary.json",
+			"quarantine_path": "user://sol6_recovery_audit_3949628/characters/corrupt_primary.json.quarantine.4069306",
+			"reason": "death_event_gap",
+			"success": false
+		},
+		"tracked_backup_sequence": 2
+	}
+}

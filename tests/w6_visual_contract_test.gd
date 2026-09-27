@@ -142,10 +142,21 @@ func _test_sky_strike_world_sort_contract() -> void:
 		"lightning world footpoint render contract missing",
 	)
 	var drawable_body_lane_verified := false
+	var backdrop_refs: Array[WeakRef] = []
 	for child: Node in sky.get_children():
 		if child is CasterSkillAnimationPlayer:
 			var drawable := child as CasterSkillAnimationPlayer
 			drawable_body_lane_verified = drawable.z_as_relative and drawable.z_index == 0 and not drawable.show_behind_parent
+			var backdrop: BackBufferCopy = drawable._trial_screen_copy
+			assert(is_instance_valid(backdrop), "lightning backdrop must exist before first draw")
+			assert(backdrop.get_parent() == drawable, "drawable must own its backdrop lifecycle")
+			assert(backdrop.is_inside_tree(), "lightning backdrop must be attached immediately")
+			assert(backdrop.show_behind_parent and backdrop.z_as_relative and backdrop.z_index == 0, "copy must run immediately before its own drawable in the same Z lane")
+			assert(backdrop.copy_mode == BackBufferCopy.COPY_MODE_VIEWPORT)
+			backdrop_refs.append(weakref(backdrop))
+			drawable.hide()
+			assert(not backdrop.is_visible_in_tree())
+			drawable.show()
 	assert(drawable_body_lane_verified, "lightning drawable did not stay behind same-footpoint body")
 	var metadata: Dictionary = sky.sky_strike_visual_debug_metadata()
 	assert(bool(metadata.get("world_footpoint_y_sort", false)), "lightning metadata lost world y-sort")
@@ -156,6 +167,8 @@ func _test_sky_strike_world_sort_contract() -> void:
 	assert(sky.global_position.y < 512.0 and is_equal_approx(sky.global_position.y, 511.99), "lightning sort proxy left target footpoint")
 	assert(is_equal_approx(float(sky.get_meta("sky_strike_world_footpoint_sort_y", -1.0)), 512.0), "lightning did not track target footpoint Y")
 	sky.free()
+	for backdrop_ref: WeakRef in backdrop_refs:
+		assert(backdrop_ref.get_ref() == null, "freeing the effect must free its backdrop immediately")
 	owner.free()
 	target.free()
 

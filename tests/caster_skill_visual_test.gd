@@ -218,7 +218,9 @@ func _assert_trial_screen_sprite(effect_sprite: Sprite2D) -> void:
 		assert(effect_sprite._fire_wall_additive_sprite.material is CanvasItemMaterial)
 		assert(effect_sprite._fire_wall_additive_sprite.material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD)
 		return
-	assert(effect_sprite.get_index() > 0)
-	var copy := effect_sprite.get_parent().get_child(effect_sprite.get_index() - 1)
+	assert(effect_sprite is CasterSkillAnimationPlayer)
+	var copy: BackBufferCopy = effect_sprite._trial_screen_copy
 	assert(copy is BackBufferCopy)
+	assert(copy.get_parent() == effect_sprite and copy.is_inside_tree())
+	assert(copy.show_behind_parent and copy.z_as_relative and copy.z_index == 0)
 	assert(copy.copy_mode == BackBufferCopy.COPY_MODE_VIEWPORT)

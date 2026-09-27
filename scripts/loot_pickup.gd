@@ -216,9 +216,8 @@ func _ready() -> void:
 	label.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(label)
 	name_label = label
-	# Measure the real text plate once: the layout authority and the drawn
-	# label must share the same rectangle, and long names must not silently
-	# overflow the tested box.
+	# Measure text once so even a long name is centered on its own icon.
+	# Neighboring names may overlap; they never move this label.
 	name_plate_size = Vector2(maxf(48.0, label.get_minimum_size().x) + 8.0, 24.0)
 	label.size = name_plate_size
 	label.position = name_label_home_position()
@@ -241,24 +240,12 @@ func name_label_home_position() -> Vector2:
 	return Vector2(-name_plate_size.x * 0.5, -36.0)
 
 
-## Only the event-driven ground-name layout writes offsets. Zero keeps the
-## label at its home position above its own icon.
+## Name placement keeps a fixed home above this item's icon. The setter also
+## lets an explicit placement pass clear an obsolete displacement.
 func set_name_label_display_offset(offset: Vector2) -> void:
 	name_label_display_offset = offset
 	if is_instance_valid(name_label):
 		name_label.position = name_label_home_position() + offset
-
-
-## Local-space rect of this pickup's ground icon. The name layout treats
-## OTHER pickups' icon rects as association obstacles: a name plate must
-## never cover another item's icon.
-func ground_icon_rect_local() -> Rect2:
-	var icon_size := Vector2(24, 24)
-	if is_instance_valid(icon_sprite) and icon_sprite.texture != null:
-		var texture_size := icon_sprite.texture.get_size()
-		if texture_size.x > 1.0 and texture_size.y > 1.0:
-			icon_size = Vector2(minf(texture_size.x, 48.0), minf(texture_size.y, 48.0))
-	return Rect2(Vector2(0, -5) - icon_size * 0.5, icon_size)
 
 
 func _apply_filter(level: int) -> void:

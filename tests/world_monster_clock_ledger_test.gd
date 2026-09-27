@@ -45,5 +45,13 @@ func _ready() -> void:
 	assert(not Ledger.replay(profile, {}, []).ok)
 	var behind_world := Ledger.snapshot_document("clock_test", 1, first_world)
 	assert(not Ledger.replay(profile, behind_world, []).ok)
+	var isolated := profile.duplicate(true)
+	isolated["world_clock_generation"] = "0123456789abcdef0123456789abcdef"
+	assert(not Ledger.replay(isolated, snapshot, []).ok, "same sequence in another generation is not the same event history")
+	isolated["death_event_sequence"] = 0
+	assert(not Ledger.replay(isolated, {}, []).ok, "a generation marker requires its durable baseline even at sequence zero")
+	assert(not Ledger.valid_generation("../other_profile"))
+	assert(not Ledger.valid_generation(12))
+	assert(Ledger.valid_generation("0123456789abcdef0123456789abcdef"))
 	print("WORLD_MONSTER_CLOCK_LEDGER_PASS")
 	get_tree().quit(0)

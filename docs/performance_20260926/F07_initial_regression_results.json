@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-09-26T09:14:55.2327567+08:00",
+  "results": [
+    {
+      "test_name": "w6_visual_contract_test",
+      "test_path": "tests/w6_visual_contract_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "caster_skill_visual_test",
+      "test_path": "tests/caster_skill_visual_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 14,
+      "engine_log_failure_count": 14,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_14;engine_log_failures_14"
+    },
+    {
+      "test_name": "skill_visual_cold_lifecycle_test",
+      "test_path": "tests/skill_visual_cold_lifecycle_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "fire_wall_animation_batch_test",
+      "test_path": "tests/fire_wall_animation_batch_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 4,
+  "engine_log_errors": 14,
+  "git_head": "f5d6308f53162509bffd30f6981987cbfe80fa68",
+  "failed": 1,
+  "passed": 3,
+  "suite": "adhoc"
+}

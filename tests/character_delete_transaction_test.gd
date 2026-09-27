@@ -40,6 +40,14 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(deleted_event_path.get_base_dir()))
 	_write_text(deleted_clock_path, "clock-sidecar")
 	_write_text(deleted_event_path, "death-event")
+	var generation := "0123456789abcdef0123456789abcdef"
+	var deleted_generation_clock := PlayerState._world_clock_path(deleted_id, generation)
+	var deleted_generation_event := PlayerState._death_event_path(deleted_id, 1, generation)
+	var preserved_generation_clock := PlayerState._world_clock_path(preserved_id, generation)
+	for extra_path: String in [deleted_generation_clock, deleted_generation_event, preserved_generation_clock]:
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(extra_path.get_base_dir()))
+		_write_text(extra_path, "generation-sidecar")
+	_write_text(TEST_DIRECTORY + "/" + deleted_id + ".json.bak.bak", "legacy-import-backup")
 	assert(FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json.bak"), "delete fixture backup missing")
 
 	var hall: Control = load("res://scenes/character_select.tscn").instantiate()
@@ -87,6 +95,10 @@ func _run() -> void:
 		assert(not FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json" + suffix), "deleted profile sidecar survived: %s" % suffix)
 	assert(not FileAccess.file_exists(deleted_clock_path))
 	assert(not FileAccess.file_exists(deleted_event_path))
+	assert(not FileAccess.file_exists(deleted_generation_clock))
+	assert(not FileAccess.file_exists(deleted_generation_event))
+	assert(not FileAccess.file_exists(TEST_DIRECTORY + "/" + deleted_id + ".json.bak.bak"))
+	assert(FileAccess.get_file_as_string(preserved_generation_clock) == "generation-sidecar")
 	assert(FileAccess.get_file_as_bytes(preserved_path) == preserved_bytes, "unrelated profile bytes changed")
 	assert(not _index_has(deleted_id), "deleted profile remains indexed")
 	# The ordinary writable fixture must complete all sidecar cleanup.  A future

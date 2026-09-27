@@ -12,8 +12,7 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const LootPickupScript := preload("res://scripts/loot_pickup.gd")
 const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
 const NameLayout := preload("res://scripts/loot_name_layout.gd")
-var _name_layout_dirty := false
-var name_layout_count := 0
+var name_placement_count := 0
 
 const CONTRACT_ID := "hardcore.loot.runtime_manager.map_scoped.v1"
 const COLLECTION_RADIUS_GU := 0.75
@@ -65,28 +64,17 @@ func _on_filter_changed(_level: int) -> void:
 	# Labels are updated by pickups synchronously. Resume auto-collection on
 	# the next frame, after all signal subscribers have applied the new filter.
 	_fail_safe_remaining = 0.0
-	_queue_name_layout()
 
-func _queue_name_layout() -> void:
-	if _name_layout_dirty: return
-	_name_layout_dirty = true
-	_flush_name_layout.call_deferred()
 
-func _flush_name_layout() -> void:
+func _place_new_pickup_name(pickup: LootPickup) -> void:
 	var profile_started_usec := RuntimeDiagnosticsScript.timing_start()
-	_name_layout_dirty = false
-	if not is_inside_tree(): return
-	var pickups: Array = []
-	for ref: WeakRef in _registered_pickups.values():
-		var pickup: Variant = ref.get_ref()
-		if is_instance_valid(pickup): pickups.append(pickup)
-	NameLayout.arrange(pickups)
-	name_layout_count += 1
+	NameLayout.place_at_home(pickup)
+	name_placement_count += 1
 	var elapsed_usec := RuntimeDiagnosticsScript.timing_elapsed_usec(profile_started_usec)
 	if elapsed_usec > 0:
-		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_layout_runs")
-		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_layout_usec", elapsed_usec)
-		RuntimeDiagnosticsScript.record_performance_max(&"loot_name_layout_max_ms", float(elapsed_usec) / 1000.0)
+		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_placements")
+		RuntimeDiagnosticsScript.increment_performance_counter(&"loot_name_placement_usec", elapsed_usec)
+		RuntimeDiagnosticsScript.record_performance_max(&"loot_name_placement_max_ms", float(elapsed_usec) / 1000.0)
 
 
 func configure_player(player: PlayerCharacter) -> void:
@@ -173,7 +161,7 @@ func register_pickup(pickup: LootPickup) -> bool:
 		return false
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_registers")
 	_registered_pickups[pickup_id] = weakref(pickup)
-	_queue_name_layout()
+	_place_new_pickup_name(pickup)
 	_registered_pickup_maps[pickup_id] = _runtime_map_id
 	_expiry_queue.append({"pickup": weakref(pickup), "deadline": _ground_age + GROUND_LIFETIME_SECONDS})
 	pickup.set_collection_manager(self)
@@ -214,7 +202,6 @@ func unregister_pickup(pickup_or_id: Variant) -> void:
 	_spatial_index.unregister(pickup_id)
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_unregisters")
 	_registered_pickups.erase(pickup_id)
-	_queue_name_layout()
 	_registered_pickup_maps.erase(pickup_id)
 	_previous_candidate_ids.erase(pickup_id)
 	_logout_blocked_pickup_ids.erase(pickup_id)
@@ -224,7 +211,6 @@ func update_pickup_position(pickup: LootPickup) -> bool:
 	if not is_instance_valid(pickup):
 		return false
 	var ground_position := _screen_position_to_ground(pickup.global_position)
-	_queue_name_layout()
 	return _spatial_index.update_pickup(pickup.get_instance_id(), ground_position)
 
 
@@ -496,7 +482,6 @@ func _on_pickup_tree_exiting(pickup_id: int) -> void:
 	_spatial_index.unregister(pickup_id)
 	RuntimeDiagnosticsScript.increment_performance_counter(&"loot_spatial_unregisters")
 	_registered_pickups.erase(pickup_id)
-	_queue_name_layout()
 	_registered_pickup_maps.erase(pickup_id)
 	_previous_candidate_ids.erase(pickup_id)
 	_logout_blocked_pickup_ids.erase(pickup_id)

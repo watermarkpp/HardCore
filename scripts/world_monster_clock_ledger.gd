@@ -7,11 +7,12 @@ const SNAPSHOT_CONTRACT_ID := "monster.world_clock.snapshot.v1"
 const EVENT_CONTRACT_ID := "monster.world_clock.death_event.v1"
 
 
-static func snapshot_document(profile_id: String, sequence: int, state: Dictionary) -> Dictionary:
+static func snapshot_document(profile_id: String, sequence: int, state: Dictionary, generation := "") -> Dictionary:
 	return {
 		"contract_id": SNAPSHOT_CONTRACT_ID,
 		"profile_id": profile_id,
 		"sequence": sequence,
+		"world_clock_generation": generation,
 		"world_state": state.duplicate(true),
 	}
 
@@ -23,9 +24,11 @@ static func death_event_document(
 	experience: int,
 	quest_states: Dictionary,
 	world_state: Dictionary,
+	generation := "",
 ) -> Dictionary:
 	return {
 		"contract_id": EVENT_CONTRACT_ID,
+		"world_clock_generation": generation,
 		"profile_id": profile_id,
 		"sequence": sequence,
 		"level": level,
@@ -56,25 +59,42 @@ static func valid_world_state(value: Variant) -> bool:
 	return true
 
 
-static func valid_snapshot(value: Variant, expected_profile_id: String) -> bool:
+static func valid_generation(value: Variant) -> bool:
+	if not value is String:
+		return false
+	if value.is_empty():
+		return true # Pre-generation journals remain in their original namespace.
+	if value.length() != 32:
+		return false
+	for character in value:
+		if not character in "0123456789abcdef":
+			return false
+	return true
+
+
+static func valid_snapshot(value: Variant, expected_profile_id: String, generation := "") -> bool:
 	if not value is Dictionary:
 		return false
 	var document: Dictionary = value
 	return (
 		str(document.get("contract_id", "")) == SNAPSHOT_CONTRACT_ID
 		and str(document.get("profile_id", "")) == expected_profile_id
+		and valid_generation(generation)
+		and document.get("world_clock_generation", "") == generation
 		and _nonnegative_sequence(document.get("sequence", null))
 		and valid_world_state(document.get("world_state", null))
 	)
 
 
-static func valid_death_event(value: Variant, expected_profile_id: String, expected_sequence: int) -> bool:
+static func valid_death_event(value: Variant, expected_profile_id: String, expected_sequence: int, generation := "") -> bool:
 	if not value is Dictionary:
 		return false
 	var document: Dictionary = value
 	return (
 		str(document.get("contract_id", "")) == EVENT_CONTRACT_ID
 		and str(document.get("profile_id", "")) == expected_profile_id
+		and valid_generation(generation)
+		and document.get("world_clock_generation", "") == generation
 		and _nonnegative_sequence(document.get("sequence", null))
 		and int(document.get("sequence", -1)) == expected_sequence
 		and _nonnegative_sequence(document.get("level", null))
@@ -91,6 +111,9 @@ static func replay(
 	events: Array,
 ) -> Dictionary:
 	var profile_id := str(profile_document.get("profile_id", ""))
+	var generation: Variant = profile_document.get("world_clock_generation", "")
+	if not valid_generation(generation):
+		return {"ok": false, "reason": "invalid_world_clock_generation"}
 	var profile_sequence_value: Variant = profile_document.get("death_event_sequence", 0)
 	if profile_id.is_empty() or not _nonnegative_sequence(profile_sequence_value):
 		return {"ok": false, "reason": "invalid_profile_sequence"}
@@ -98,6 +121,8 @@ static func replay(
 	var world_sequence := 0
 	var world_state: Dictionary
 	if world_snapshot.is_empty():
+		if not generation.is_empty():
+			return {"ok": false, "reason": "world_snapshot_missing"}
 		if profile_sequence > 0 and not profile_document.has("world_monster_respawn_state"):
 			return {"ok": false, "reason": "world_snapshot_missing"}
 		var legacy: Variant = profile_document.get("world_monster_respawn_state", WorldState.empty_snapshot())
@@ -105,7 +130,7 @@ static func replay(
 			return {"ok": false, "reason": "invalid_legacy_world_state"}
 		world_state = (legacy as Dictionary).duplicate(true)
 	else:
-		if not valid_snapshot(world_snapshot, profile_id):
+		if not valid_snapshot(world_snapshot, profile_id, generation):
 			return {"ok": false, "reason": "invalid_world_snapshot"}
 		world_sequence = int(world_snapshot["sequence"])
 		world_state = (world_snapshot["world_state"] as Dictionary).duplicate(true)
@@ -128,7 +153,7 @@ static func replay(
 			return {"ok": false, "reason": "invalid_death_event"}
 		var event: Dictionary = raw_event
 		var sequence := int(event.get("sequence", -1))
-		if sequence <= previous or not valid_death_event(event, profile_id, sequence):
+		if sequence <= previous or not valid_death_event(event, profile_id, sequence, generation):
 			return {"ok": false, "reason": "invalid_death_event"}
 		if sequence != previous + 1:
 			return {"ok": false, "reason": "death_event_gap"}

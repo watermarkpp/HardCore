@@ -1,0 +1,53 @@
+{
+	"legacy_resave_after_new_checkpoint": {
+		"ok": false,
+		"reason": "death_event_gap"
+	},
+	"name_layout_existing_100_add_15": {
+		"new_one_per_two_frames_fifteen_layouts_p50_ms": 54.397,
+		"new_single_layout_peak_p50_ms": 4.064,
+		"old_8_per_frame_two_layouts_p50_ms": 7.446
+	},
+	"world_clock": [
+		{
+			"event_bytes": 394,
+			"event_max_ms": 9.029,
+			"event_p50_ms": 7.947,
+			"future_deadlines": 1,
+			"mark_max_ms": 0.042,
+			"mark_p50_ms": 0.035,
+			"prepare_after_death_max_ms": 9.455,
+			"prepare_after_death_p50_ms": 8.903
+		},
+		{
+			"event_bytes": 7674,
+			"event_max_ms": 10.344,
+			"event_p50_ms": 9.662,
+			"future_deadlines": 51,
+			"mark_max_ms": 0.465,
+			"mark_p50_ms": 0.456,
+			"prepare_after_death_max_ms": 11.532,
+			"prepare_after_death_p50_ms": 10.788
+		},
+		{
+			"event_bytes": 29774,
+			"event_max_ms": 15.734,
+			"event_p50_ms": 13.272,
+			"future_deadlines": 201,
+			"mark_max_ms": 1.962,
+			"mark_p50_ms": 1.764,
+			"prepare_after_death_max_ms": 16.073,
+			"prepare_after_death_p50_ms": 14.843
+		},
+		{
+			"event_bytes": 74174,
+			"event_max_ms": 21.207,
+			"event_p50_ms": 18.236,
+			"future_deadlines": 501,
+			"mark_max_ms": 4.386,
+			"mark_p50_ms": 4.31,
+			"prepare_after_death_max_ms": 22.883,
+			"prepare_after_death_p50_ms": 22.081
+		}
+	]
+}
