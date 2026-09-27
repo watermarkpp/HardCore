@@ -16,4 +16,12 @@ path=root/rel
 before=hashlib.sha256(path.read_bytes()).hexdigest()
 if before!=expected:
     path.write_bytes(canonical)
-print(json.dumps({'status':'PASS','path':rel,'attribute':attribute,'before':before,'expected':expected,'final':hashlib.sha256(path.read_bytes()).hexdigest(),'source':'independent Git HEAD blob + exact checkout attribute; no Main-file/cache copy'},ensure_ascii=False))
+head_blob=subprocess.check_output(['git','-C',str(root),'rev-parse',f'HEAD:{rel}'],text=True).strip()
+index_before=subprocess.check_output(['git','-C',str(root),'rev-parse',f':{rel}'],text=True).strip()
+if index_before!=head_blob:
+    raise SystemExit('Uncommitted directive index content; refusing refresh')
+subprocess.check_call(['git','-C',str(root),'add','--',rel])
+index_after=subprocess.check_output(['git','-C',str(root),'rev-parse',f':{rel}'],text=True).strip()
+if index_after!=head_blob:
+    raise SystemExit('Exact EOL index refresh changed Git content')
+print(json.dumps({'status':'PASS','path':rel,'attribute':attribute,'before':before,'expected':expected,'final':hashlib.sha256(path.read_bytes()).hexdigest(),'head_blob':head_blob,'index_before':index_before,'index_after':index_after,'source':'independent Git HEAD blob + exact checkout attribute; identical-content index refresh; no Main-file/cache copy'},ensure_ascii=False))

@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 EVIDENCE = Path(__file__).resolve().parent
-SOURCE = "6407fddaaa9ac3e1e388ff866758d91610ea26fd"
+SOURCE = "00c189b538cc2873f5420f0a3493939f570f5ef2"
 CRITICAL_SOURCE = "3b21c115da6b8d5ed57e706432912dafcb377748"
 
 
@@ -44,14 +44,14 @@ def check_set(directory, expected, source):
 
 
 def main():
-    pipeline = read(EVIDENCE / "verification_pipeline_report_closure.json")
+    pipeline = read(EVIDENCE / "verification_pipeline_native_exit_final.json")
     if any(pipeline.get(key) != "PASS" for key in (
         "critical", "clean_import", "clean_tests", "performance_matrix"
     )):
         raise SystemExit("Final collection not complete; no gate result written")
     critical = check_set(EVIDENCE / "final_critical_after_closure", read(EVIDENCE / "expected_critical_paths.json"), CRITICAL_SOURCE)
     plan = read(EVIDENCE / "clean_checkout_final/planned_tests.json")
-    clean = check_set(EVIDENCE / "clean_checkout_report_closure", plan["paths"], SOURCE)
+    clean = check_set(EVIDENCE / "clean_checkout_native_exit_final", plan["paths"], SOURCE)
     matrix = EVIDENCE / "t6_pairs_final_v5"
     identity, runs = read(matrix / "identity.json"), read(matrix / "runs.json")
     invalid_samples = []

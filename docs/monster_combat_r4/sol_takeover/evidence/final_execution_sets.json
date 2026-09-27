@@ -1,0 +1,35 @@
+{
+  "source_head": "00c189b538cc2873f5420f0a3493939f570f5ef2",
+  "critical_source_head": "3b21c115da6b8d5ed57e706432912dafcb377748",
+  "critical": {
+    "status": "PASS",
+    "runner": "runner_results_critical_20260927_201329_001_20132.json",
+    "source_head": "3b21c115da6b8d5ed57e706432912dafcb377748",
+    "expected": 525,
+    "actual": 525,
+    "unique": 525,
+    "missing": [],
+    "extra": [],
+    "invalid_results": []
+  },
+  "clean": {
+    "status": "PASS",
+    "runner": "runner_results_adhoc_20260927_214047_718_9008.json",
+    "source_head": "00c189b538cc2873f5420f0a3493939f570f5ef2",
+    "expected": 103,
+    "actual": 103,
+    "unique": 103,
+    "missing": [],
+    "extra": [],
+    "invalid_results": []
+  },
+  "performance_collection": {
+    "status": "PASS",
+    "count": 72,
+    "invalid_samples": []
+  },
+  "source_worktree_difference_exit_code": 0,
+  "performance_acceptance": "NOT_RUN",
+  "note": "Exact execution sets, normal exits and fixed source identities only. Controller must review paired CPU/noise and tail latency separately. Device/GPU NOT_RUN.",
+  "status": "PASS"
+}
