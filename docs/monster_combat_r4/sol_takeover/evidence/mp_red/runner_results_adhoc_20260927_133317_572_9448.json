@@ -1,0 +1,26 @@
+{
+  "git_head": "6d14a8e06b7bd32e45b3b1a03b02a94dd53ea8db",
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-27T13:33:17.5729400+08:00",
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "mp_payment_observation_test",
+      "test_path": "tests/hc_monster_combat_r4/mp_payment_observation_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "passed": 0,
+  "suite": "adhoc",
+  "total": 1
+}

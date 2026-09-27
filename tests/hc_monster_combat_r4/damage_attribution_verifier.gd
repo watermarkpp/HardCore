@@ -91,6 +91,11 @@ static func audit_releases(starts: Array, events: Array, terminals: Array, sourc
 		completed[key] = int(completed.get(key, 0)) + 1
 		if int(completed[key]) > 1:
 			failures.append("duplicate_apply key=%s count=%d" % [key, int(completed[key])])
+		var mp_before := int(event.get("mp_before", -1))
+		var mp_after := int(event.get("mp_after", -1))
+		if mp_before >= 0 or mp_after >= 0:
+			if mp_before < 0 or mp_after < 0 or mp_after > mp_before or int(event.get("actual_mp_delta", -1)) != mp_before - mp_after:
+				failures.append("invalid_mp_payment key=%s" % key)
 		if is_write:
 			var delta := int(event.get("actual_hp_delta", -1))
 			if event.get("victim_instance_id") != source.get("victim_instance_id") or event.get("victim_life") != source.get("victim_life") or event.get("victim_generation") != source.get("victim_generation") or delta <= 0 or int(event.get("hp_before", -1)) - int(event.get("hp_after", -1)) != delta or int(event.get("hp_after", -1)) != maxi(0, int(event.get("hp_before", -1)) - int(event.get("resolved_damage", -1))):

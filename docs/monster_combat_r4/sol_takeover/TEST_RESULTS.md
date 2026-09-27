@@ -39,3 +39,11 @@ monster_mixed_damage_atomic、ranged_magic_evasion、monster_special_delivery_ru
 这里的音频检查证明身份与请求阶段接线，headless没有声卡听感或GPU绘制验收。D3横移/绕圈、真实持续受击压力、身体敌对组合及暂停迟绘组合仍需执行，不把边界矩阵当作完整D3。
 
 最终full critical、同SHA干净检出、性能配对与D3完整矩阵：**NOT_RUN**。本地候选尚未达到最终审查条件。
+
+## MP支付与受击相关回归
+
+MP反例先在真实Player伤害入口得到FAIL：20伤害/AC0的实际HP和MP结果均正确，原观察行没有MP前后值。`evidence/mp_red` 保存FAIL流水与runner。修复只记录实际MP支付前后值，支付公式、随机数和扣费位置保持。
+
+`r4_mp_and_struck/runner_results_adhoc_20260927_133540_000_5220.json`：PASS 11/11，timeout=0，engine_log_errors=0。包含MP支付、观察器等价性、混合伤害原子性、怪物受击、休眠伤害唤醒、玩家/怪物受击链、玩家释放顺序、毒与受击、魔法盾换图生命周期、召唤受击、同步复活死亡通知。固定输入20伤害/50MP支付30MP而零HP损伤；10MP不足时扣完MP并扣13HP。独立期望核验，MP元数据没有用resolved伤害金额推断来源。
+
+原始Windows日志/JSON在专项evidence目录用Git属性保留实际CRLF字节；格式检查允许CR-at-EOL，保留真实运行输出，不改原始PASS/FAIL内容。旧候选Markdown尾空格仍单列历史格式FAIL，不能与本轮源码检查混称全绿。

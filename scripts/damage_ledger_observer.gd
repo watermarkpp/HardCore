@@ -49,7 +49,7 @@ static func record_delivery(source: Dictionary) -> void:
 		return
 	deliveries.append(frozen_source(source))
 
-static func record_hp_mutation(victim: Node, resolved_damage: int, hp_before: int, hp_after: int, damage_type: String, source: Variant = null) -> void:
+static func record_hp_mutation(victim: Node, resolved_damage: int, hp_before: int, hp_after: int, damage_type: String, source: Variant = null, mp_before := -1, mp_after := -1) -> void:
 	if not recording_enabled or not _reserve():
 		return
 	mutation_seq += 1
@@ -61,16 +61,21 @@ static func record_hp_mutation(victim: Node, resolved_damage: int, hp_before: in
 		"resolved_damage": resolved_damage, "hp_before": hp_before,
 		"hp_after": hp_after, "actual_hp_delta": hp_before - hp_after,
 		"damage_type": damage_type, "physics_tick": Engine.get_physics_frames(),
+		"mp_before": mp_before, "mp_after": mp_after,
+		"actual_mp_delta": mp_before - mp_after if mp_before >= 0 and mp_after >= 0 else -1,
 	}
 	row.make_read_only()
 	events.append(row)
 
-static func record_terminal(source: Variant, kind: String, reason: String) -> void:
+static func record_terminal(source: Variant, kind: String, reason: String, hp_before := -1, hp_after := -1, mp_before := -1, mp_after := -1) -> void:
 	if not recording_enabled or not _reserve():
 		return
 	var row := {
 		"source": frozen_source(source), "terminal_kind": kind,
 		"rejection_reason": reason, "physics_tick": Engine.get_physics_frames(),
+		"hp_before": hp_before, "hp_after": hp_after,
+		"mp_before": mp_before, "mp_after": mp_after,
+		"actual_mp_delta": mp_before - mp_after if mp_before >= 0 and mp_after >= 0 else -1,
 	}
 	row.make_read_only()
 	terminal_events.append(row)

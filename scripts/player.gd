@@ -894,14 +894,14 @@ func _resolve_direct_spell_magic_defense(
 	return maxi(0, incoming_damage - roll)
 
 
-func _commit_observed_hp_write(amount: int, damage_type: String, delivery_identity: Variant) -> void:
+func _commit_observed_hp_write(amount: int, damage_type: String, delivery_identity: Variant, mp_before := -1, mp_after := -1) -> void:
 	var hp_before := current_hp
 	current_hp = maxi(0, current_hp - amount)
 	if DamageLedgerObserverScript.recording_enabled:
 		if hp_before > current_hp:
-			DamageLedgerObserverScript.record_hp_mutation(self, amount, hp_before, current_hp, damage_type, delivery_identity)
+			DamageLedgerObserverScript.record_hp_mutation(self, amount, hp_before, current_hp, damage_type, delivery_identity, mp_before, mp_after)
 		else:
-			DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "shield_absorbed_all")
+			DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "shield_absorbed_all", hp_before, current_hp, mp_before, mp_after)
 
 
 func _apply_resolved_damage(
@@ -943,6 +943,7 @@ func _apply_resolved_damage(
 			shield_time = 0.0
 			damage_reduction = 0.0
 			shield_initial_duration = 0.0
+	var mp_before_damage := current_mp
 	if PlayerState.has_special_effect("magic_shield") and current_mp > 0:
 		var shield_mp_cost := int(round(final_damage * 1.5))
 		if current_mp >= shield_mp_cost:
@@ -952,6 +953,7 @@ func _apply_resolved_damage(
 			var unpaid_mp := shield_mp_cost - current_mp
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
+	var mp_after_damage := current_mp
 	# Faults are actual writes owned by an explicit test fixture, independent
 	# of observation. Production always executes the original single write.
 	var write_count := 1
@@ -959,9 +961,9 @@ func _apply_resolved_damage(
 		write_count = clampi(int(test_damage_write_hook.call(self, delivery_identity, final_damage)), 0, 2)
 	if write_count == 0:
 		return
-	_commit_observed_hp_write(final_damage, damage_type, delivery_identity)
+	_commit_observed_hp_write(final_damage, damage_type, delivery_identity, mp_before_damage, mp_after_damage)
 	if write_count == 2:
-		_commit_observed_hp_write(final_damage, damage_type, delivery_identity)
+		_commit_observed_hp_write(final_damage, damage_type, delivery_identity, mp_after_damage, mp_after_damage)
 	# HC-MONSTER-COMBAT-R1 Task 7 (F08): the lethal outcome is decided and
 	# committed atomically BEFORE any external notification can run. Stats,
 	# resources and durability listeners must observe a consistent dead state:

@@ -1,2 +1,2 @@
-*.log -text
-*.json -text
+*.log -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+*.json -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
