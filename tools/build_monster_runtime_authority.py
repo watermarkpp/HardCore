@@ -8,6 +8,7 @@ and keeps compatibility projections visibly separate from classic authority.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
@@ -803,81 +804,7 @@ def build_payload() -> dict[str, Any]:
             }
         )
 
-    classification_counts: dict[str, int] = {}
-    runtime_classification_counts: dict[str, int] = {}
-    for item in records:
-        classification = str(item["classification"])
-        classification_counts[classification] = classification_counts.get(classification, 0) + 1
-        if item["runtime_allowed"]:
-            runtime_classification_counts[classification] = (
-                runtime_classification_counts.get(classification, 0) + 1
-            )
-
-    counts = {
-        "canonical_identities": len(records),
-        "runtime_allowed": sum(1 for item in records if item["runtime_allowed"]),
-        "classification": classification_counts,
-        "runtime_classification": runtime_classification_counts,
-        "stationary": sum(1 for item in records if item["special"]["stationary"]),
-        "static_dormant": sum(
-            1
-            for item in records
-            if item["special"]["dormant"] and item["behavior_profile_id"] != "touch_dragon"
-        ),
-        "dormant": sum(1 for item in records if item["special"]["dormant"]),
-        "ranged": sum(1 for item in records if item["special"]["ranged"]),
-        "special_attack": sum(1 for item in records if item["special"]["special_attack"]),
-        "classic_db_non_routed_exact_candidates": sum(
-            1
-            for item in records
-            if item["movement"]["classic_176_non_routed_candidate"] is not None
-        ),
-        "walk_interval_data_hold": sum(
-            1 for item in records if item["movement"]["walk_interval_status"] == "DATA_HOLD"
-        ),
-        "walk_step_data_hold": sum(
-            1 for item in records if item["movement"]["walk_step_status"] == "DATA_HOLD"
-        ),
-        "walk_wait_data_hold": sum(
-            1 for item in records if item["movement"]["walk_wait_status"] == "DATA_HOLD"
-        ),
-        "movement_locked": sum(
-            1 for item in records if item["movement"]["movement_source_status"] == "LOCKED"
-        ),
-        "movement_accepted_candidate": sum(
-            1
-            for item in records
-            if item["movement"]["movement_source_status"] == "ACCEPTED_CANDIDATE"
-        ),
-        "movement_compatibility_hold": sum(
-            1
-            for item in records
-            if item["movement"]["movement_source_status"] == "COMPATIBILITY_HOLD"
-        ),
-        "targeting_exact_class_bindings": sum(
-            1
-            for item in records
-            if item["targeting"]["class_binding_status"] == "CANDIDATE"
-        ),
-        "targeting_class_binding_data_hold": sum(
-            1
-            for item in records
-            if item["targeting"]["class_binding_status"] == "DATA_HOLD"
-        ),
-        "targeting_view_range_data_hold": sum(
-            1
-            for item in records
-            if item["targeting"]["view_range_status"] == "DATA_HOLD"
-        ),
-        "targeting_view_range_distribution": {
-            str(view_range): sum(
-                1
-                for item in records
-                if item["targeting"]["view_range_cells"] == view_range
-            )
-            for view_range in (5, 6, 7, 8, 9, 12, 16)
-        },
-    }
+    counts = summarize_records(records)
 
     return {
         "schema_version": 1,
@@ -1012,6 +939,86 @@ def build_payload() -> dict[str, Any]:
     }
 
 
+def summarize_records(records: list[dict[str, Any]]) -> dict[str, Any]:
+    classification_counts: dict[str, int] = {}
+    runtime_classification_counts: dict[str, int] = {}
+    for item in records:
+        classification = str(item["classification"])
+        classification_counts[classification] = classification_counts.get(classification, 0) + 1
+        if item["runtime_allowed"]:
+            runtime_classification_counts[classification] = (
+                runtime_classification_counts.get(classification, 0) + 1
+            )
+
+    counts = {
+        "canonical_identities": len(records),
+        "runtime_allowed": sum(1 for item in records if item["runtime_allowed"]),
+        "classification": classification_counts,
+        "runtime_classification": runtime_classification_counts,
+        "stationary": sum(1 for item in records if item["special"]["stationary"]),
+        "static_dormant": sum(
+            1
+            for item in records
+            if item["special"]["dormant"] and item["behavior_profile_id"] != "touch_dragon"
+        ),
+        "dormant": sum(1 for item in records if item["special"]["dormant"]),
+        "ranged": sum(1 for item in records if item["special"]["ranged"]),
+        "special_attack": sum(1 for item in records if item["special"]["special_attack"]),
+        "classic_db_non_routed_exact_candidates": sum(
+            1
+            for item in records
+            if item["movement"]["classic_176_non_routed_candidate"] is not None
+        ),
+        "walk_interval_data_hold": sum(
+            1 for item in records if item["movement"]["walk_interval_status"] == "DATA_HOLD"
+        ),
+        "walk_step_data_hold": sum(
+            1 for item in records if item["movement"]["walk_step_status"] == "DATA_HOLD"
+        ),
+        "walk_wait_data_hold": sum(
+            1 for item in records if item["movement"]["walk_wait_status"] == "DATA_HOLD"
+        ),
+        "movement_locked": sum(
+            1 for item in records if item["movement"]["movement_source_status"] == "LOCKED"
+        ),
+        "movement_accepted_candidate": sum(
+            1
+            for item in records
+            if item["movement"]["movement_source_status"] == "ACCEPTED_CANDIDATE"
+        ),
+        "movement_compatibility_hold": sum(
+            1
+            for item in records
+            if item["movement"]["movement_source_status"] == "COMPATIBILITY_HOLD"
+        ),
+        "targeting_exact_class_bindings": sum(
+            1
+            for item in records
+            if item["targeting"]["class_binding_status"] == "CANDIDATE"
+        ),
+        "targeting_class_binding_data_hold": sum(
+            1
+            for item in records
+            if item["targeting"]["class_binding_status"] == "DATA_HOLD"
+        ),
+        "targeting_view_range_data_hold": sum(
+            1
+            for item in records
+            if item["targeting"]["view_range_status"] == "DATA_HOLD"
+        ),
+        "targeting_view_range_distribution": {
+            str(view_range): sum(
+                1
+                for item in records
+                if item["targeting"]["view_range_cells"] == view_range
+            )
+            for view_range in (5, 6, 7, 8, 9, 12, 16)
+        },
+    }
+
+    return counts
+
+
 def validate(payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     catalog = read_json(CATALOG_PATH)
@@ -1041,6 +1048,8 @@ def validate(payload: dict[str, Any]) -> list[str]:
             errors.append(f"monster_id={monster_id} canonical_name drift")
         if record.get("classification") != expected.get("classification"):
             errors.append(f"monster_id={monster_id} classification drift")
+        if record.get("runtime_allowed") != expected.get("runtime_allowed"):
+            errors.append(f"monster_id={monster_id} canonical runtime eligibility drift")
         movement = dict(record.get("movement", {}))
         interval_authority = dict(movement.get("interval_authority", {}))
         if interval_authority.get("authority") != "user_authoritative_override":
@@ -1262,7 +1271,7 @@ def validate(payload: dict[str, Any]) -> list[str]:
         errors.append("targeting_class_binding_data_hold must be 12")
     if summary.get("targeting_view_range_data_hold") != 12:
         errors.append("targeting_view_range_data_hold must be 12")
-    expected_distribution = {"5": 78, "6": 9, "7": 34, "8": 0, "9": 20, "12": 1, "16": 2}
+    expected_distribution = summarize_records(records)["targeting_view_range_distribution"]
     if summary.get("targeting_view_range_distribution") != expected_distribution:
         errors.append("targeting_view_range_distribution drift")
     by_id = {int(item.get("monster_id", -1)): item for item in records}
@@ -1299,11 +1308,40 @@ def validate(payload: dict[str, Any]) -> list[str]:
     return errors
 
 
+def select_exact_targets(
+    expected: dict[str, Any], actual: dict[str, Any], monster_ids: list[int]
+) -> dict[str, Any]:
+    """Regenerate exact IDs while preserving every other authored/runtime row."""
+    if not monster_ids or len(set(monster_ids)) != len(monster_ids):
+        raise ValueError("target IDs must be nonempty and unique")
+    expected_by_id = {int(row["monster_id"]): row for row in expected["records"]}
+    actual_by_id = {int(row["monster_id"]): row for row in actual["records"]}
+    if set(actual_by_id) != set(expected_by_id):
+        raise ValueError("target-only update requires identical canonical ID sets")
+    if any(mid not in expected_by_id for mid in monster_ids):
+        raise ValueError("unknown exact target monster ID")
+    result = copy.deepcopy(actual)
+    selected = set(monster_ids)
+    result["records"] = [
+        copy.deepcopy(expected_by_id[int(row["monster_id"])])
+        if int(row["monster_id"]) in selected else row
+        for row in result["records"]
+    ]
+    result["summary"] = summarize_records(result["records"])
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--monster-ids", nargs="+", type=int,
+                        help="Regenerate/check these exact IDs; all other records are preserved")
     args = parser.parse_args()
     expected = build_payload()
+    if args.monster_ids:
+        if not OUTPUT.exists():
+            parser.error("target-only generation requires an existing authority output")
+        expected = select_exact_targets(expected, read_json(OUTPUT), args.monster_ids)
     if args.check:
         if not OUTPUT.exists():
             print("MONSTER_RUNTIME_AUTHORITY_CHECK_FAIL output missing")

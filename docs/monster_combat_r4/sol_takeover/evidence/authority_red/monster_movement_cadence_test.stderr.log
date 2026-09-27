@@ -1,0 +1,6 @@
+SCRIPT ERROR: Assertion failed.
+   at: _test_runtime_disabled_fails_closed (res://tests/monster_movement_cadence_test.gd:289)
+   GDScript backtrace (most recent call first):
+       [0] _test_runtime_disabled_fails_closed (res://tests/monster_movement_cadence_test.gd:289)
+       [1] _run (res://tests/monster_movement_cadence_test.gd:25)
+       [2] _ready (res://tests/monster_movement_cadence_test.gd:11)

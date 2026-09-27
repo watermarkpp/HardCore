@@ -1,0 +1,26 @@
+{
+  "engine_log_errors": 0,
+  "failed": 0,
+  "suite": "adhoc",
+  "git_head": "8d20ea4b969ab3893a8246ad43890606f1f8cf0d",
+  "results": [
+    {
+      "test_name": "monster_movement_cadence_test",
+      "test_path": "tests/monster_movement_cadence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "passed": 1,
+  "generated_at": "2026-09-27T13:45:30.3544157+08:00",
+  "total": 1
+}

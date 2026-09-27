@@ -47,3 +47,11 @@ MP反例先在真实Player伤害入口得到FAIL：20伤害/AC0的实际HP和MP�
 `r4_mp_and_struck/runner_results_adhoc_20260927_133540_000_5220.json`：PASS 11/11，timeout=0，engine_log_errors=0。包含MP支付、观察器等价性、混合伤害原子性、怪物受击、休眠伤害唤醒、玩家/怪物受击链、玩家释放顺序、毒与受击、魔法盾换图生命周期、召唤受击、同步复活死亡通知。固定输入20伤害/50MP支付30MP而零HP损伤；10MP不足时扣完MP并扣13HP。独立期望核验，MP元数据没有用resolved伤害金额推断来源。
 
 原始Windows日志/JSON在专项evidence目录用Git属性保留实际CRLF字节；格式检查允许CR-at-EOL，保留真实运行输出，不改原始PASS/FAIL内容。旧候选Markdown尾空格仍单列历史格式FAIL，不能与本轮源码检查混称全绿。
+
+## 来源生成一致性闭环（攻击零值仍有阻断）
+
+主源33/183/241移动间隔2500/500/400ms均存在；旧生成物runtime_allowed=false产生0速度。正式生成器增加精确ID更新入口，明确选中44条已审差异；另外112条及顶层来源头信息保持相同。9条过时分类修到现存canonical分类；32条profile/special元数据跟上已集成候选。逐字段差异：evidence/authority_generation/exact_target_diff.json。没有修改21CQ、地图、素材或掉落源。
+
+精确更新四项Python反例、完整生成check、144条精确Race/12条DATA_HOLD的targeting绑定测试：PASS。Cadence禁运行测试改为显式禁用副本，而非假设如今已允许运行的33仍禁用；保留IMMOBILE/不发grant断言，runner正常退出PASS。
+
+完整运行时审计仍为FAIL：MFC1及all_monster_loading对183/241显式0攻击间隔报缺失。原始FAIL保留evidence/authority_red。183源Race117/TExplosionSpider为一次自爆类；241候选Race120实际指TSoccerBall，与其21CQ名并不能证明飞火攻击规则。当前普通Enemy正间隔fallback仍未正确区分这两种用途，不能伪造正间隔或删断言变绿。这两项属于来源/生产语义阻断，继续核对。canonical目录PASS；移动缺失/速度fallback错误在新审计为0。

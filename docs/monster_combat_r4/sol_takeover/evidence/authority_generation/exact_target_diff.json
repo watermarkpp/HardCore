@@ -1,0 +1,1212 @@
+{
+  "schema": "r4_authority_exact_targets_v1",
+  "selected_ids": [
+    18,
+    33,
+    42,
+    46,
+    50,
+    60,
+    62,
+    76,
+    77,
+    79,
+    103,
+    104,
+    128,
+    145,
+    146,
+    160,
+    164,
+    166,
+    168,
+    170,
+    172,
+    174,
+    178,
+    182,
+    183,
+    185,
+    186,
+    194,
+    218,
+    222,
+    224,
+    226,
+    227,
+    228,
+    229,
+    230,
+    231,
+    232,
+    233,
+    234,
+    235,
+    236,
+    239,
+    241
+  ],
+  "unchanged_record_count": 112,
+  "changes": {
+    "18": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_spit_spider"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "directional_spit_map"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "33": [
+      {
+        "field": "movement.base_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 0.4
+      },
+      {
+        "field": "movement.current_runtime_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 0.4
+      },
+      {
+        "field": "movement.speed_derivation.base_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 0.4
+      },
+      {
+        "field": "movement.speed_derivation.runtime_allowed",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "runtime_allowed",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "42": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_archer_projectile"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "physical_projectile"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "46": [
+      {
+        "field": "behavior_profile_id",
+        "before": "cave_maggot",
+        "after": "w1_gas_cave_maggot_46"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "gas_adjacent"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "50": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "axe_skeleton"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "physical_projectile"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "60": [
+      {
+        "field": "behavior_profile_id",
+        "before": "dung",
+        "after": "w1_gas_dung_60"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "gas_adjacent"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "62": [
+      {
+        "field": "behavior_profile_id",
+        "before": "dark_warrior",
+        "after": "w1_thorn_dark_projectile_62"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "physical_projectile"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "76": [
+      {
+        "field": "behavior_profile_id",
+        "before": "wooma_boss",
+        "after": "w1_mixed_cow_king_76"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "mixed_target_tile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "77": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_mixed_cow_king_variants"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "mixed_target_tile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "79": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_line_lighting_zombi_79"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "line_magic"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "103": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_spit_spider"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "directional_spit_map"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "104": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_spit_spider"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "directional_spit_map"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "128": [
+      {
+        "field": "behavior_profile_id",
+        "before": "moth_control",
+        "after": "w1_gas_moth_128_168"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "gas_adjacent"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "145": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_archer_projectile"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "physical_projectile"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "146": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_spit_elf_warrior_146"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "directional_spit_map"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "160": [
+      {
+        "field": "behavior_profile_id",
+        "before": "zuma_boss",
+        "after": "w1_mixed_sculture_king_160"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "mixed_target_tile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "164": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "166": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 6,
+        "after": 7
+      }
+    ],
+    "168": [
+      {
+        "field": "behavior_profile_id",
+        "before": "moth_control",
+        "after": "w1_gas_moth_128_168"
+      },
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "gas_adjacent"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      }
+    ],
+    "170": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "172": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "174": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_thorn_dark_projectile_174"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "physical_projectile"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "178": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "182": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      }
+    ],
+    "183": [
+      {
+        "field": "movement.base_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 2.0
+      },
+      {
+        "field": "movement.current_runtime_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 2.0
+      },
+      {
+        "field": "movement.speed_derivation.base_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 2.0
+      },
+      {
+        "field": "movement.speed_derivation.runtime_allowed",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "runtime_allowed",
+        "before": false,
+        "after": true
+      }
+    ],
+    "185": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_spit_spider"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "directional_spit_map"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "186": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_archer_projectile"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "physical_projectile"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "194": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_guard_archer_194"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "guard_direct_projectile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "218": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "222": [
+      {
+        "field": "classification",
+        "before": "ordinary",
+        "after": "elite"
+      },
+      {
+        "field": "special.elite",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_applied",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "targeting.classification_floor_authority",
+        "before": null,
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.classification_floor_source",
+        "before": null,
+        "after": "user.authority.monster_classification_view_floor.2026-08-30"
+      },
+      {
+        "field": "targeting.classification_floor_view_range_cells",
+        "before": null,
+        "after": 7
+      },
+      {
+        "field": "targeting.effective_view_range_authority",
+        "before": "B_CANDIDATE",
+        "after": "HUMAN_FROZEN"
+      },
+      {
+        "field": "targeting.effective_view_range_rule",
+        "before": "class_derived_view_range_cells",
+        "after": "max(class_derived_view_range_cells, classification_floor_view_range_cells)"
+      },
+      {
+        "field": "targeting.view_range_cells",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "224": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_electronic_scolpion_target_magic"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "target_magic"
+      },
+      {
+        "field": "special.ranged",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "226": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "227": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "228": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "229": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "230": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "231": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "232": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "233": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "234": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_fixed_noncombat"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "special.special_classification",
+        "before": null,
+        "after": "fixed_noncombat"
+      }
+    ],
+    "235": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_mixed_cow_king_variants"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "mixed_target_tile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "236": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_mixed_cow_king_variants"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "mixed_target_tile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "239": [
+      {
+        "field": "behavior_profile_id",
+        "before": null,
+        "after": "w1_mixed_cow_king_variants"
+      },
+      {
+        "field": "special.attack_delivery_kind",
+        "before": null,
+        "after": "mixed_target_tile"
+      },
+      {
+        "field": "special.special_attack",
+        "before": false,
+        "after": true
+      }
+    ],
+    "241": [
+      {
+        "field": "movement.base_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 2.5
+      },
+      {
+        "field": "movement.current_runtime_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 2.5
+      },
+      {
+        "field": "movement.speed_derivation.base_move_speed_gu_per_sec",
+        "before": 0.0,
+        "after": 2.5
+      },
+      {
+        "field": "movement.speed_derivation.runtime_allowed",
+        "before": false,
+        "after": true
+      },
+      {
+        "field": "runtime_allowed",
+        "before": false,
+        "after": true
+      }
+    ]
+  },
+  "summary_changes": [
+    {
+      "field": "classification.elite",
+      "before": 29,
+      "after": 38
+    },
+    {
+      "field": "classification.ordinary",
+      "before": 75,
+      "after": 66
+    },
+    {
+      "field": "ranged",
+      "before": 5,
+      "after": 12
+    },
+    {
+      "field": "runtime_allowed",
+      "before": 153,
+      "after": 156
+    },
+    {
+      "field": "runtime_classification.elite",
+      "before": 28,
+      "after": 38
+    },
+    {
+      "field": "runtime_classification.ordinary",
+      "before": 74,
+      "after": 66
+    },
+    {
+      "field": "runtime_classification.special",
+      "before": 24,
+      "after": 25
+    },
+    {
+      "field": "special_attack",
+      "before": 12,
+      "after": 45
+    },
+    {
+      "field": "targeting_view_range_distribution.5",
+      "before": 78,
+      "after": 71
+    },
+    {
+      "field": "targeting_view_range_distribution.6",
+      "before": 9,
+      "after": 8
+    },
+    {
+      "field": "targeting_view_range_distribution.7",
+      "before": 34,
+      "after": 42
+    }
+  ]
+}

@@ -65,7 +65,7 @@ CORRECTED_EXACT = {
     227: 6,
     234: 6,
 }
-EXPECTED_DISTRIBUTION = {"5": 78, "6": 9, "7": 34, "8": 0, "9": 20, "12": 1, "16": 2}
+CATALOG_PATH = ROOT / "assets/data/runtime/canonical_monster_catalog.json"
 CLASSIFICATION_FLOORS = {"elite": 7, "boss": 9}
 CLASSIFICATION_FLOOR_AUTHORITY = "HUMAN_FROZEN"
 CLASSIFICATION_FLOOR_SOURCE = "user.authority.monster_classification_view_floor.2026-08-30"
@@ -80,6 +80,8 @@ def load(path: Path) -> dict:
 authority = load(AUTHORITY_PATH)
 movement = load(MOVEMENT_PATH)
 detail = load(DETAIL_PATH)
+canonical_by_id = {int(row["monster_id"]): row for row in load(CATALOG_PATH)["entries"]}
+expected_distribution = {str(value): 0 for value in (5, 6, 7, 8, 9, 12, 16)}
 authority_by_id = {int(item["monster_id"]): item for item in authority["records"]}
 movement_by_id = {int(item["monster_id"]): item for item in movement["records"]}
 detail_by_id = {int(item["monster_id"]): item for item in detail["records"]}
@@ -93,8 +95,10 @@ exact_races: set[int] = set()
 for monster_id, movement_record in movement_by_id.items():
     targeting = authority_by_id[monster_id]["targeting"]
     authority_record = authority_by_id[monster_id]
-    classification = authority_record["classification"]
-    runtime_allowed = bool(authority_record["runtime_allowed"])
+    classification = canonical_by_id[monster_id]["classification"]
+    runtime_allowed = bool(canonical_by_id[monster_id]["runtime_allowed"])
+    assert authority_record["classification"] == classification
+    assert authority_record["runtime_allowed"] == runtime_allowed
     expected_floor = (
         CLASSIFICATION_FLOORS.get(classification) if runtime_allowed else None
     )
@@ -125,6 +129,7 @@ for monster_id, movement_record in movement_by_id.items():
             expected_floor if expected_floor is not None else expected_view,
         )
         assert targeting["view_range_cells"] == expected_effective_view
+        expected_distribution[str(expected_effective_view)] += 1
         assert targeting["classification_floor_applied"] == (
             expected_floor is not None and expected_floor > expected_view
         )
@@ -185,7 +190,7 @@ actual_holds = {
     if record["targeting"]["acquisition_status"] == "DATA_HOLD"
 }
 assert actual_holds == HOLD_IDS
-assert authority["summary"]["targeting_view_range_distribution"] == EXPECTED_DISTRIBUTION
+assert authority["summary"]["targeting_view_range_distribution"] == expected_distribution
 assert authority["summary"]["targeting_exact_class_bindings"] == 144
 assert authority["summary"]["targeting_class_binding_data_hold"] == 12
 assert authority["summary"]["targeting_view_range_data_hold"] == 12

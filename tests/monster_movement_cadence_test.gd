@@ -285,8 +285,9 @@ func _test_invalid_authority_fails_closed() -> void:
 
 
 func _test_runtime_disabled_fails_closed() -> void:
-	var disabled := _record(33)
-	assert(not bool(disabled.get("runtime_allowed", true)))
+	var disabled := _record(33).duplicate(true)
+	# Test an explicit disabled input; ID 33 is now formally runtime-allowed.
+	disabled["runtime_allowed"] = false
 	var cadence := Cadence.new(disabled)
 	var result := cadence.evaluate(999999)
 	assert(result.decision == Cadence.DECISION_IMMOBILE)
