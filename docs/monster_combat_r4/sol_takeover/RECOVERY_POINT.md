@@ -245,3 +245,6 @@ R4性能仍open，继续F03/F05真实负载配对后再fullforge；未push/clean
 
 ## 00:50 body-pair collection completed
 Sourceec646:24/24 native exits normal, exact verifiers3x8 PASS. BODY_PAIR_REVIEW.md retains mixed/no consistent speed improvement and original performance FAIL. No active engine. Next test-only declared frame_only native pacing, R3BASE1381 unchanged; no production optimization fabricated. Fullforge still NOT_RUN pending R4, remote/cleanup/APK NOT_RUN. UserAGENTS untouched.
+
+## Frame-only observation extension validated
+Test-only probe/collector DetailMode optional, defaultfull preserved. Native frame_only small30 smoke600callbacks PASS23actualHPloss/26starts, all30living, per-actorCPU600null/NOT_RUN; defaultfull pets20 smokePASS realpetdamage and CPU present. Productionunchanged. Next fixed originalR3BASE1381 vs currentcandidate,16samples small30/pets20 frame_only. NoAoEframeonly waiver; original72full &24bodymixed remainperformanceFAIL. Freeze source/HEAD during16.

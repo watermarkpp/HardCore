@@ -73,6 +73,7 @@ var casts: Array = []
 var serial := 0
 var mode := ""
 var scale := 0
+var detail_mode := "full"
 var totals := {}
 var previous_counters := {}
 var retired_starts := 0
@@ -102,6 +103,11 @@ func _run() -> void:
 	# settlement. Padding only the actor would be clamped back to source HP.
 	PlayerState.computed_stats["max_hp"] = 1000000
 	PlayerState.computed_stats["max_mp"] = 1000000
+	detail_mode = OS.get_environment("HARDCORE_R4_LOAD_DETAIL")
+	if detail_mode.is_empty():
+		detail_mode = RuntimeDiagnostics.DEVICE_LAB_DETAIL_FULL
+	assert(RuntimeDiagnostics.set_device_lab_detail_mode(detail_mode), "invalid observation detail")
+	assert(detail_mode == "full" or mode != "aoe_death_loot", "frame_only AoE requires native roll counters; unsupported")
 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 	var started := Time.get_ticks_usec()
 	game = SeededGameRoot.new()
@@ -221,7 +227,7 @@ func _run() -> void:
 		frames.append({"tick": Engine.get_physics_frames(), "physics_callback_interval_ms": float(now - previous_usec) / 1000.0,
 			"engine_process_monitor_ms": float(Performance.get_monitor(Performance.TIME_PROCESS)) * 1000.0,
 			"engine_physics_monitor_ms": float(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)) * 1000.0,
-			"enemy_inclusive_cpu_ms": float(enemy_delta) / 1000.0,
+			"enemy_inclusive_cpu_ms": float(enemy_delta) / 1000.0 if detail_mode == "full" else null,
 			"live_count": living, "corpse_count": corpses, "memory_bytes": Performance.get_monitor(Performance.MEMORY_STATIC)})
 		_check(living == scale, "load_count_mismatch:%d:%d" % [frame, living])
 		_check(not game.player._dead and game.player.max_hp == 1000000, "survivability_input_changed:%d" % frame)
@@ -257,6 +263,9 @@ func _run() -> void:
 		"counters_last_window": RuntimeDiagnostics.performance_counters(), "failures": failures,
 		"source_head": OS.get_environment("HARDCORE_R4_LOAD_HEAD"), "label": OS.get_environment("HARDCORE_R4_LOAD_LABEL"),
 		"gpu": "NOT_RUN", "device": "NOT_RUN", "measurement": "real physics callback spacing and engine monitors; inclusive CPU segments are not additive and monitors are not GPU time"}
+	result["observation_detail_mode"] = RuntimeDiagnostics.device_lab_detail_mode()
+	result["enemy_cpu_attribution"] = "PASS" if detail_mode == "full" else "NOT_RUN"
+	_check(RuntimeDiagnostics.device_lab_detail_mode() == detail_mode, "observation_detail_changed")
 	result["random_input_version"] = "all_gameplay_actors_spawn_casts_drop_identities_production_hot.v5"
 	result["production_hot_test_mode"] = PlayerState.test_mode
 	result["isolated_profile_id"] = PlayerState.active_profile_id
@@ -318,6 +327,8 @@ func _on_death(actor: EnemyActor, _data: Dictionary) -> void:
 	corpse_refs.append(weakref(actor))
 
 func _sample_counters() -> void:
+	if detail_mode != "full":
+		return
 	var current := RuntimeDiagnostics.performance_counters()
 	for field: String in RuntimeDiagnostics.PERFORMANCE_COUNTER_FIELDS:
 		if field.ends_with("_max"):

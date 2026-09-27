@@ -4,9 +4,11 @@ param(
     [string]$OutputRoot = 'C:/Users/Administrator/Documents/HardCore/docs/monster_combat_r4/sol_takeover/evidence/t6_pairs',
     [ValidatePattern('^[0-9a-f]{40}$')][string]$ExpectedBaseHead = '1381d2838a3736f4a06699dd24a8cf4a10714950',
     [ValidateSet('small','large_pets','aoe_death_loot')][string[]]$Modes = @('small','large_pets','aoe_death_loot'),
-    [ValidateSet(10,20,30)][int[]]$Scales = @(10,20,30)
+    [ValidateSet(10,20,30)][int[]]$Scales = @(10,20,30),
+    [ValidateSet('full','frame_only')][string]$DetailMode = 'full'
 )
 $ErrorActionPreference = 'Stop'
+if ($DetailMode -eq 'frame_only' -and $Modes -contains 'aoe_death_loot') {throw 'Frame-only AoE unsupported: requires native roll counters'}
 $probe = 'tests/hc_monster_combat_r4/t6_real_load_probe.gd'
 if ((Get-FileHash -LiteralPath (Join-Path $BaseRoot 'tools/run_godot_tests.ps1')).Hash -ne (Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/run_godot_tests.ps1')).Hash) {throw 'Runner test overlay differs'}
 $baseHead = (& git -C $BaseRoot rev-parse HEAD).Trim()
@@ -23,7 +25,7 @@ foreach ($dataPath in @('assets/data/drop/dpv2_user_loot_sheet_authority_v1.json
 }
 $identity = [ordered]@{
     base_head=$baseHead; candidate_head=$candidateHead; probe_sha256=$probeHash
-    expected_base_head=$ExpectedBaseHead
+    expected_base_head=$ExpectedBaseHead; observation_detail_mode=$DetailMode
     random_input_version='all_gameplay_actors_spawn_casts_drop_identities_production_hot.v5'
     shared_input_sha256=$sharedInputs
     hot_mode='PlayerState.test_mode=false; unique isolated profile initialized through real save_game(false); native death clocks, drop throttling and background loot enabled. Bootstrap alone uses test_mode.'
@@ -47,6 +49,7 @@ function Invoke-Sample([string]$Side,[string]$Mode,[int]$Scale,[string]$Phase,[i
     if (Test-Path -LiteralPath $dest) {throw "Evidence path already exists: $dest"}
     New-Item -ItemType Directory -Path $dest | Out-Null
     $env:HARDCORE_R4_LOAD_NAMESPACE=Split-Path -Leaf $OutputRoot
+    $env:HARDCORE_R4_LOAD_DETAIL=$DetailMode
     $env:HARDCORE_R4_LOAD_MODE=$Mode
     $env:HARDCORE_R4_LOAD_COUNT=[string]$Scale
     $env:HARDCORE_R4_LOAD_HEAD=if ($Side -eq 'BASE') {$baseHead} else {$candidateHead}
@@ -61,6 +64,8 @@ function Invoke-Sample([string]$Side,[string]$Mode,[int]$Scale,[string]$Phase,[i
     if ($exitCode -ne 0) {throw "Invalid load sample: $label"}
     $data=Get-Content -LiteralPath (Join-Path $dest 'load.json') -Raw | ConvertFrom-Json
     if ($data.label -ne $label -or $data.frames.Count -ne 600 -or $data.failures.Count -ne 0) {throw "Stale/invalid result: $label"}
+    if ($data.observation_detail_mode -ne $DetailMode) {throw 'Observation detail differs'}
+    if ($DetailMode -eq 'frame_only' -and ($data.enemy_cpu_attribution -ne 'NOT_RUN' -or @($data.frames | Where-Object {$null -ne $_.enemy_inclusive_cpu_ms}).Count -ne 0)) {throw 'Frame-only CPU attribution must be absent'}
     if ($data.production_hot_test_mode -ne $false -or $data.isolated_profile_id -ne "r4-t6-$label") {throw 'Production hot-path isolation contract failed'}
     if ($data.random_input_version -ne 'all_gameplay_actors_spawn_casts_drop_identities_production_hot.v5' -or $data.random_inputs.player_seed -ne 20260928 -or $data.random_inputs.durability_seed -ne 20260929) {throw 'Random inputs not pinned'}
     if ($data.random_inputs.drop_session -ne '20260927000000000000000000000000') {throw 'Drop session input not pinned'}
