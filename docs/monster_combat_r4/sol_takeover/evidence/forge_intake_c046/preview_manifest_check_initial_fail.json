@@ -1,0 +1,1528 @@
+{
+  "status": "FAIL",
+  "main_head": "c0461f25ab2d02f2ea304dcf43be36cb868ab9d0",
+  "forge_head": "da41da3642123c180723ef03dec193ef1fc4cb1b",
+  "preview_tree": "2cd9c40169fcb41bd403f5a33103d411a9667c82",
+  "manifest_source_head": "9dcdcb7e31ee61f4e2d5d477a7b789bf28a22706",
+  "files": 180,
+  "shared": 10,
+  "unchanged_nonshared": 170,
+  "errors": [
+    "assets/data/audio/audio_bindings.source.json:manifest_source",
+    "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json:manifest_source",
+    "assets/data/equipment_durability_rules.json:manifest_source",
+    "assets/data/equipment_enhancement_grade_v1.json:manifest_source",
+    "assets/data/ui/item_name_rarity_policy_v2.json:manifest_source",
+    "assets/data/ui/item_name_rarity_v1.json:manifest_source",
+    "map_editor_workspace/bich_province/bich_province.editor.json:manifest_source",
+    "map_editor_workspace/brm_2/brm_2.editor.json:manifest_source",
+    "map_editor_workspace/cyd_1/cyd_1.editor.json:manifest_source",
+    "map_editor_workspace/mengzhong_province/mengzhong_province.editor.json:manifest_source",
+    "map_editor_workspace/world_bich_province/world_bich_province.editor.json:manifest_source",
+    "map_editor_workspace/world_cangyue_island/world_cangyue_island.editor.json:manifest_source",
+    "map_editor_workspace/world_mengzhong_province/world_mengzhong_province.editor.json:manifest_source",
+    "map_editor_workspace/world_white_day_gate/world_white_day_gate.editor.json:manifest_source",
+    "scripts/drop/user_loot_sheet_provider.gd:manifest_source",
+    "scripts/game_data.gd:manifest_source",
+    "scripts/game_root.gd:manifest_source",
+    "scripts/hud.gd:manifest_source",
+    "scripts/inventory_panel.gd:manifest_source",
+    "scripts/item_detail_docked_presenter.gd:manifest_source",
+    "scripts/item_detail_presenter.gd:manifest_source",
+    "scripts/item_drop_instance_rules.gd:manifest_source",
+    "scripts/layers/runtime/loot_runtime_service.gd:manifest_source",
+    "scripts/loot_pickup.gd:manifest_source",
+    "scripts/npc_actor.gd:manifest_source",
+    "scripts/npc_service_identity.gd:manifest_source",
+    "scripts/player.gd:manifest_source",
+    "scripts/player_state.gd:manifest_source",
+    "scripts/region_content.gd:manifest_source",
+    "scripts/skill_panel.gd:manifest_source",
+    "scripts/skills/formulas/mir2_skill_formula.gd:manifest_source",
+    "scripts/skills/runtimes/taoist_skill_runtime.gd:manifest_source",
+    "scripts/skills/runtimes/warrior_skill_runtime.gd:manifest_source",
+    "scripts/skills/runtimes/wizard_skill_runtime.gd:manifest_source",
+    "scripts/skills/skill_data_loader.gd:manifest_source",
+    "scripts/skills/skill_execution_plan_contract.gd:manifest_source",
+    "scripts/skills/skill_rank_extension_policy.gd:manifest_source",
+    "scripts/skills/skill_rank_resolver.gd:manifest_source",
+    "scripts/skills/skill_resource_service.gd:manifest_source",
+    "scripts/skills/skill_runtime_router.gd:manifest_source",
+    "scripts/summon_actor.gd:manifest_source",
+    "scripts/system_menu_panel.gd:manifest_source",
+    "scripts/ui_item_name_style.gd:manifest_source",
+    "scripts/ui_layout_calibration_overlay.gd:manifest_source",
+    "scripts/warrior_combat_math.gd:manifest_source",
+    "tests/armor_single_slot_authority_test.gd:manifest_source",
+    "tests/canonical_summon_integration_test.gd:manifest_source",
+    "tests/dpv2_drop_runtime_policy_test.gd:manifest_source",
+    "tests/equipment_skill_level_affix_test.gd:manifest_source",
+    "tests/gothic_bich_camp_test.gd:manifest_source",
+    "tests/implemented_map_runtime_projection_test.gd:manifest_source",
+    "tests/live_attack_resolution_test.gd:manifest_source",
+    "tests/melee_lock_fallback_test.gd:manifest_source",
+    "tests/player_movement_respawn_test.gd:manifest_source",
+    "tests/rv15_provider_validation_counterexamples_test.gd:manifest_source",
+    "tests/skill_effective_rank_integration_test.gd:manifest_source",
+    "tests/skill_panel_combat_unit_test.gd:manifest_source",
+    "tests/skills/skill_rank_extension_plan_test.gd:manifest_source",
+    "tests/skills/skill_rank_extension_policy_test.gd:manifest_source",
+    "tests/skills/taoist_dual_defense_contract_test.gd:manifest_source",
+    "tests/summon_outgoing_defense_production_test.gd:manifest_source",
+    "tests/system_menu_gothic_ui_test.gd:manifest_source",
+    "tests/taoist_support_production_integration_test.gd:manifest_source",
+    "tests/ui_layout_calibration_workbench.gd:manifest_source",
+    "tests/ui_visual_acceptance_lab_test.gd:manifest_source",
+    "tests/user_loot_sheet_authority_test.gd:manifest_source",
+    "tests/warrior_skill_state_machine_test.gd:manifest_source",
+    "tools/build_item_name_rarity.py:manifest_source",
+    "tools/launch_ui_layout_calibrator.ps1:manifest_source",
+    "tools/loot_sheet_compiler/README.md:manifest_source",
+    "tools/loot_sheet_compiler/compile_authority.ps1:manifest_source",
+    "tools/run_visual_acceptance_lab.ps1:manifest_source",
+    "tools/visual_acceptance_lab/visual_acceptance_lab.gd:manifest_source"
+  ],
+  "rows": [
+    {
+      "path": "assets/art/effects/relic_proc_skull.png",
+      "source_sha256": "4643abd83de19a102ad75154c4ae57c0175f2f05070528171d3be4f740d4ffe4",
+      "preview_sha256": "4643abd83de19a102ad75154c4ae57c0175f2f05070528171d3be4f740d4ffe4",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/ancient_relic_fragment/ground_icon.tres",
+      "source_sha256": "45b0f00294c143031fb8e39ef6de0a7ed31257beb1e197aff35e3d607bafda67",
+      "preview_sha256": "45b0f00294c143031fb8e39ef6de0a7ed31257beb1e197aff35e3d607bafda67",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/ancient_relic_fragment/inventory_icon.tres",
+      "source_sha256": "056a2012e3360dac5fa1ce75d2175fd9ab225da75a6f24b6c8ebaa665ecbfcad",
+      "preview_sha256": "056a2012e3360dac5fa1ce75d2175fd9ab225da75a6f24b6c8ebaa665ecbfcad",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/ancient_relic_fragment/source.png",
+      "source_sha256": "abf8d1eb23715fbf8c04e1ae85e79e21c5f4f2a741d25bddaf0fd4bbead6b455",
+      "preview_sha256": "abf8d1eb23715fbf8c04e1ae85e79e21c5f4f2a741d25bddaf0fd4bbead6b455",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/blue_badge_ground.tres",
+      "source_sha256": "76fb83e61c18c009a9c65fe59b2d4ee69e8ec7f363f94c1231e3dc2b1ba46c1d",
+      "preview_sha256": "76fb83e61c18c009a9c65fe59b2d4ee69e8ec7f363f94c1231e3dc2b1ba46c1d",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/blue_badge_inventory.tres",
+      "source_sha256": "47367d499b91a62462d127f0af56d77559cd6e22ea7182f7a6bcad409e649303",
+      "preview_sha256": "47367d499b91a62462d127f0af56d77559cd6e22ea7182f7a6bcad409e649303",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/blue_badge_source.png",
+      "source_sha256": "a38d9461a090b4fb41117ecf0cb582887d5428782850f23d0018e5f0b2174bf9",
+      "preview_sha256": "a38d9461a090b4fb41117ecf0cb582887d5428782850f23d0018e5f0b2174bf9",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/courage_badge_ground.tres",
+      "source_sha256": "2eaed465d9814fd1444d080acb23bacec934683cd5ace43cb573b0e12cfee8bb",
+      "preview_sha256": "2eaed465d9814fd1444d080acb23bacec934683cd5ace43cb573b0e12cfee8bb",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/courage_badge_inventory.tres",
+      "source_sha256": "c628f385089cf1e9ff7e4536ebc40be8d6b58e54bfd58d9208ec87c646f152fc",
+      "preview_sha256": "c628f385089cf1e9ff7e4536ebc40be8d6b58e54bfd58d9208ec87c646f152fc",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/courage_badge_source.png",
+      "source_sha256": "683ae3d7a2c5877ee9bfe02d5c8ece2245e4f21e3c3064033641e1d6bb2911dc",
+      "preview_sha256": "683ae3d7a2c5877ee9bfe02d5c8ece2245e4f21e3c3064033641e1d6bb2911dc",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/dragon_eye_ground.tres",
+      "source_sha256": "a85c56bd255ccfca78dbd1cfa4132825f8f17fa0e203ec1b3bad1ac5b8fa1b7f",
+      "preview_sha256": "a85c56bd255ccfca78dbd1cfa4132825f8f17fa0e203ec1b3bad1ac5b8fa1b7f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/dragon_eye_heart_source.png",
+      "source_sha256": "28ddbaa3af3cdd7e1fc34bb50762dba64ea4b0b4d5e5f6ebc3042bde0685af2c",
+      "preview_sha256": "28ddbaa3af3cdd7e1fc34bb50762dba64ea4b0b4d5e5f6ebc3042bde0685af2c",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/dragon_eye_inventory.tres",
+      "source_sha256": "2596ff4ecc37310aa273dec5b3d5fb319fc651a5551b1be7a5c3ac30011f923e",
+      "preview_sha256": "2596ff4ecc37310aa273dec5b3d5fb319fc651a5551b1be7a5c3ac30011f923e",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/dragon_heart_ground.tres",
+      "source_sha256": "bf7a233438b97e79834a61ac8fa72bfd0406eb113499fe5dd06de14a686a7636",
+      "preview_sha256": "bf7a233438b97e79834a61ac8fa72bfd0406eb113499fe5dd06de14a686a7636",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/dragon_heart_inventory.tres",
+      "source_sha256": "fc053b3eac5895ab574fd5486c85f56c98cca140f343841ef1d407e91004e497",
+      "preview_sha256": "fc053b3eac5895ab574fd5486c85f56c98cca140f343841ef1d407e91004e497",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/lucky_guardian_ground.tres",
+      "source_sha256": "58ab41f94deebe39e47122f07367cd5f1ddac7b36d46cbb374ebb6ff20e9f661",
+      "preview_sha256": "58ab41f94deebe39e47122f07367cd5f1ddac7b36d46cbb374ebb6ff20e9f661",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/lucky_guardian_inventory.tres",
+      "source_sha256": "aebaabef37ca47544e8fcd7ea7af247accc23f0cd76eb25b6cfba2c04266567a",
+      "preview_sha256": "aebaabef37ca47544e8fcd7ea7af247accc23f0cd76eb25b6cfba2c04266567a",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/art/items/custom/relics/lucky_guardian_source.png",
+      "source_sha256": "e291b9932ed1faf0574dbeb01799bbfed670ce8437c0d3facf0349e1559bb7a3",
+      "preview_sha256": "e291b9932ed1faf0574dbeb01799bbfed670ce8437c0d3facf0349e1559bb7a3",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/audio/ui/forge/forging.wav",
+      "source_sha256": "f46a078814d8945874a438b9e7e67591c138a191a056d5f7f68979eea57a75d7",
+      "preview_sha256": "f46a078814d8945874a438b9e7e67591c138a191a056d5f7f68979eea57a75d7",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/audio/ui/forge/synthesis.wav",
+      "source_sha256": "e3f758c9cd3c59e5476647a43f695b7e27ad5eed13f5cdd00d595d3f611686ed",
+      "preview_sha256": "e3f758c9cd3c59e5476647a43f695b7e27ad5eed13f5cdd00d595d3f611686ed",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/ancient_relic_fragment_v1.json",
+      "source_sha256": "1884a6763748651a3aa2c3cbe17f7e1b4c92b5e0ac035a1ae6fe75409e38e410",
+      "preview_sha256": "1884a6763748651a3aa2c3cbe17f7e1b4c92b5e0ac035a1ae6fe75409e38e410",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/audio/audio_bindings.source.json",
+      "source_sha256": "b4e35a30d51cce68b6ef745b0594b4c5cd165cfc40fa1be16ce5d95d76a5413c",
+      "preview_sha256": "b4e35a30d51cce68b6ef745b0594b4c5cd165cfc40fa1be16ce5d95d76a5413c",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/drop/boss_material_drop_directive_v1.json",
+      "source_sha256": "7165e530ee89978c9d115a024a9b2bf39e56d60c3bb9f7946ab4a817717fc73e",
+      "preview_sha256": "7165e530ee89978c9d115a024a9b2bf39e56d60c3bb9f7946ab4a817717fc73e",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/drop/dpv2_user_loot_sheet_authority_v1.json",
+      "source_sha256": "02e01b65f697bd052689f1b84beb65c62ac8e931533a07a132827342d598fd81",
+      "preview_sha256": "02e01b65f697bd052689f1b84beb65c62ac8e931533a07a132827342d598fd81",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/equipment_durability_rules.json",
+      "source_sha256": "3ad44f9ccccd49631542cadb7789a3d572b9519ae6b29bcd0b529760771f192a",
+      "preview_sha256": "3ad44f9ccccd49631542cadb7789a3d572b9519ae6b29bcd0b529760771f192a",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/equipment_enhancement_black_iron_v1.json",
+      "source_sha256": "7f2032d1503e5a767b18de1a9397957af0891ec84d06a318e44c291ec386700f",
+      "preview_sha256": "7f2032d1503e5a767b18de1a9397957af0891ec84d06a318e44c291ec386700f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/equipment_enhancement_grade_v1.json",
+      "source_sha256": "23fd13422ce85d79885b01bb7f6588bb8616aef64f9fb5b66e7b79a41147c53d",
+      "preview_sha256": "23fd13422ce85d79885b01bb7f6588bb8616aef64f9fb5b66e7b79a41147c53d",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/equipment_enhancement_rules_v1.json",
+      "source_sha256": "27e58d363bd0594063dcb39bfdc0fd04ed10a63dda18f2f9910f10599ce23e1f",
+      "preview_sha256": "27e58d363bd0594063dcb39bfdc0fd04ed10a63dda18f2f9910f10599ce23e1f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/equipment_skill_level_affix_rollout_v1.json",
+      "source_sha256": "a952f1b5d68eeb82b0d380a419bc748339bd9596f363b11a1b8428f93b75a272",
+      "preview_sha256": "a952f1b5d68eeb82b0d380a419bc748339bd9596f363b11a1b8428f93b75a272",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/relic_synthesis_v1.json",
+      "source_sha256": "f8efddd1fa57f76c9f82bfe3733735633ebd9b65f6f8d21ef0dd7b98e988425b",
+      "preview_sha256": "f8efddd1fa57f76c9f82bfe3733735633ebd9b65f6f8d21ef0dd7b98e988425b",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/ui/item_name_rarity_policy_v2.json",
+      "source_sha256": "6d76654cb4d2675d807f7ddb7e91eb5933b545ca4fac8c118e108a3887f6b437",
+      "preview_sha256": "6d76654cb4d2675d807f7ddb7e91eb5933b545ca4fac8c118e108a3887f6b437",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/ui/item_name_rarity_v1.json",
+      "source_sha256": "8bf715cc5b5fac782ca8f36e8762c20673f39fe31e155de355dd3f06cf74e848",
+      "preview_sha256": "8bf715cc5b5fac782ca8f36e8762c20673f39fe31e155de355dd3f06cf74e848",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/ui/manual_layout_overrides.json",
+      "source_sha256": "c2896ba7f044c7d228024c2e8d941061df33c8bec16778e42256c448551122b2",
+      "preview_sha256": "c2896ba7f044c7d228024c2e8d941061df33c8bec16778e42256c448551122b2",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/data/vanilla_176/skill_rank_extension_policy.json",
+      "source_sha256": "80d8e064c6cbc2f85f5e2ddf59d237d1b636563a14a3fc0afaaee00d8e320726",
+      "preview_sha256": "80d8e064c6cbc2f85f5e2ddf59d237d1b636563a14a3fc0afaaee00d8e320726",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/ui/forge/forge_failure.png",
+      "source_sha256": "b847a241aa50116c587b306b3b190dcc0cdbbe3e13c7aa324cc11a226d38d216",
+      "preview_sha256": "b847a241aa50116c587b306b3b190dcc0cdbbe3e13c7aa324cc11a226d38d216",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/ui/forge/forge_initial.png",
+      "source_sha256": "5fa75d7719e650e431f3566644db4b66ee95cbb2b46f7ea6f1e797b62b966e36",
+      "preview_sha256": "5fa75d7719e650e431f3566644db4b66ee95cbb2b46f7ea6f1e797b62b966e36",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/ui/forge/forge_success.png",
+      "source_sha256": "bd51307fd6a9b76b2a16ec557e6fd4d0748b866d2e608c13c03c3e72b623c01f",
+      "preview_sha256": "bd51307fd6a9b76b2a16ec557e6fd4d0748b866d2e608c13c03c3e72b623c01f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "assets/ui/forge/plain_286x72.png",
+      "source_sha256": "14d504c6ff6a0436c7030437ad3495aa8cba46f61ea4ca9b499fcb89057aedc9",
+      "preview_sha256": "14d504c6ff6a0436c7030437ad3495aa8cba46f61ea4ca9b499fcb89057aedc9",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "docs/forge/skill_rank_v2_readiness_20260924.md",
+      "source_sha256": "b97e7cbdf45f5b97d084174f318c3cc35f43e3e79bf8102cf271f94255d0ec8b",
+      "preview_sha256": "b97e7cbdf45f5b97d084174f318c3cc35f43e3e79bf8102cf271f94255d0ec8b",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/bich_province/bich_province.editor.json",
+      "source_sha256": "8a91334e56076abb755061486d707863a2cfa525a20cf446b247d5f692ddac30",
+      "preview_sha256": "8a91334e56076abb755061486d707863a2cfa525a20cf446b247d5f692ddac30",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/brm_2/brm_2.editor.json",
+      "source_sha256": "149b5e4928022928ff91f4e1a6948e3534c6c0db5ee72c4744df7f1cf503b4b3",
+      "preview_sha256": "149b5e4928022928ff91f4e1a6948e3534c6c0db5ee72c4744df7f1cf503b4b3",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/cyd_1/cyd_1.editor.json",
+      "source_sha256": "399a7b963fcab7ba0fed95c13aeff1a0b6411bb583a223fe20b7ad9ad2d62ada",
+      "preview_sha256": "399a7b963fcab7ba0fed95c13aeff1a0b6411bb583a223fe20b7ad9ad2d62ada",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/mengzhong_province/mengzhong_province.editor.json",
+      "source_sha256": "a71fa4e7243a5ba60df819643d4d31af23118425e34e6544cd4ae357a2020a88",
+      "preview_sha256": "a71fa4e7243a5ba60df819643d4d31af23118425e34e6544cd4ae357a2020a88",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/world_bich_province/world_bich_province.editor.json",
+      "source_sha256": "9a148ba1d90bb0cbe1de9d0b9d52b73d0999a9455b9317d404ef017f6fe219cc",
+      "preview_sha256": "9a148ba1d90bb0cbe1de9d0b9d52b73d0999a9455b9317d404ef017f6fe219cc",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/world_cangyue_island/world_cangyue_island.editor.json",
+      "source_sha256": "5340c087f835a58643e3aa1fe70d4e3b3d1868575a11195e100c3cc836b2e0c8",
+      "preview_sha256": "5340c087f835a58643e3aa1fe70d4e3b3d1868575a11195e100c3cc836b2e0c8",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/world_mengzhong_province/world_mengzhong_province.editor.json",
+      "source_sha256": "821e5bf80b94322db3aa08b9e15552661264a462a9691df65a81948df77d63bf",
+      "preview_sha256": "821e5bf80b94322db3aa08b9e15552661264a462a9691df65a81948df77d63bf",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "map_editor_workspace/world_white_day_gate/world_white_day_gate.editor.json",
+      "source_sha256": "904704e0c2287329741c2048de679923cc6984d20f29f7ac7570781f7d74851f",
+      "preview_sha256": "904704e0c2287329741c2048de679923cc6984d20f29f7ac7570781f7d74851f",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/drop/boss_material_drop_resolver.gd",
+      "source_sha256": "8951ccfb00bc39fa8f6f52e8e4c3d5908427a7a1018f1d19adeb1d3b044fe1bc",
+      "preview_sha256": "8951ccfb00bc39fa8f6f52e8e4c3d5908427a7a1018f1d19adeb1d3b044fe1bc",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/drop/user_loot_sheet_provider.gd",
+      "source_sha256": "847ad0a46262bcb57497e1b454d36b578a285397c0b4a9ca9cbee26c61989302",
+      "preview_sha256": "847ad0a46262bcb57497e1b454d36b578a285397c0b4a9ca9cbee26c61989302",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/enhancement_panel.gd",
+      "source_sha256": "d56736588c5b1aaddd3dac64c1838249d4c1f114483196f8c4a8decf3cad6c8a",
+      "preview_sha256": "d56736588c5b1aaddd3dac64c1838249d4c1f114483196f8c4a8decf3cad6c8a",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/enhancement_panel.gd.uid",
+      "source_sha256": "abbef94bf5614f68b52fac2bd244145379e29e8d34619bba1ba7b256c67c2d5f",
+      "preview_sha256": "abbef94bf5614f68b52fac2bd244145379e29e8d34619bba1ba7b256c67c2d5f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/game_data.gd",
+      "source_sha256": "8103015447a9c36ba70183385e4308ae12984acdbaf4c18f7338dce6d4cbce2b",
+      "preview_sha256": "8103015447a9c36ba70183385e4308ae12984acdbaf4c18f7338dce6d4cbce2b",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/game_root.gd",
+      "source_sha256": "7d8c4f4428d2cf226117436d9da6818251de3f638343200dd27b1867e0ba2dce",
+      "preview_sha256": "6ffdaf6ed591e3a1f052b45add37ba188baec27d502f51e75381996226741827",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/hud.gd",
+      "source_sha256": "5f16552d3f7d1b05f223e208b0379010d96e375754f27353cd21be463c3c3bfe",
+      "preview_sha256": "ff076fa289076f4ef76df0e145e9bcc2f8cf337f8262fbc80f4214312a2e7e67",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/inventory_panel.gd",
+      "source_sha256": "9ff6727e7224325438ba782e3fdf5a2d6d29b5dabe9f454508b6d8ba73e2f201",
+      "preview_sha256": "9ff6727e7224325438ba782e3fdf5a2d6d29b5dabe9f454508b6d8ba73e2f201",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/item_detail_docked_presenter.gd",
+      "source_sha256": "05dea839ff830f26620629adb48851c610296d3b2fd9f599f9703290960feac2",
+      "preview_sha256": "05dea839ff830f26620629adb48851c610296d3b2fd9f599f9703290960feac2",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/item_detail_presenter.gd",
+      "source_sha256": "df1f37fb7f438a57f4afc68fad25dc313c8a7a041186d721ab27dc333e38f322",
+      "preview_sha256": "df1f37fb7f438a57f4afc68fad25dc313c8a7a041186d721ab27dc333e38f322",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/item_drop_instance_rules.gd",
+      "source_sha256": "a41a0259b50a302340d3333fe374ea174b7b8916b46d56a1b984ba12e9913fd3",
+      "preview_sha256": "a41a0259b50a302340d3333fe374ea174b7b8916b46d56a1b984ba12e9913fd3",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/ancient_relic_fragment.gd",
+      "source_sha256": "595ec91651769ce6fcbf1f218dee1f5f03fd4981b755a3f57a163be09d48aa78",
+      "preview_sha256": "595ec91651769ce6fcbf1f218dee1f5f03fd4981b755a3f57a163be09d48aa78",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/ancient_relic_fragment.gd.uid",
+      "source_sha256": "78f6ffba0e389c9b7d415f307d62c95763e6333d67ff5faea8dee8d297849927",
+      "preview_sha256": "78f6ffba0e389c9b7d415f307d62c95763e6333d67ff5faea8dee8d297849927",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_black_iron.gd",
+      "source_sha256": "9b4f71dbbe8a585cd33b318d76d09dd729ea80d1bb6798b506bca93148a443c5",
+      "preview_sha256": "9b4f71dbbe8a585cd33b318d76d09dd729ea80d1bb6798b506bca93148a443c5",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_black_iron.gd.uid",
+      "source_sha256": "540da67503962aa888a8db3154e7ed171e513f0687390b12a07cf21019ab3e78",
+      "preview_sha256": "540da67503962aa888a8db3154e7ed171e513f0687390b12a07cf21019ab3e78",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_grade.gd",
+      "source_sha256": "bc06ee740e5fc1bcf0561741dff9405d6088571f0020c594c62d35d9affab388",
+      "preview_sha256": "bc06ee740e5fc1bcf0561741dff9405d6088571f0020c594c62d35d9affab388",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_grade.gd.uid",
+      "source_sha256": "2f1f777101dd553169ad1e71dfdbb95a77e3e38af941708dce3e01051278d003",
+      "preview_sha256": "2f1f777101dd553169ad1e71dfdbb95a77e3e38af941708dce3e01051278d003",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_rules.gd",
+      "source_sha256": "0c439c612cb31d5175d0c2784cbb2e1bbfd16e7f162db3a980e0887140aa6eb0",
+      "preview_sha256": "0c439c612cb31d5175d0c2784cbb2e1bbfd16e7f162db3a980e0887140aa6eb0",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_enhancement_rules.gd.uid",
+      "source_sha256": "6c2ddef61d0695655c6f6c73957dd32bfaf92d83d7e87103cf98686de7f92537",
+      "preview_sha256": "6c2ddef61d0695655c6f6c73957dd32bfaf92d83d7e87103cf98686de7f92537",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_skill_level_affix_rollout.gd",
+      "source_sha256": "880e1d28d9c35e4251136145010611113d6fefab0b8b3b35cd0286aef243efc9",
+      "preview_sha256": "880e1d28d9c35e4251136145010611113d6fefab0b8b3b35cd0286aef243efc9",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/equipment_skill_level_affix_rollout.gd.uid",
+      "source_sha256": "914322e1a11ea2069a1ac43e42600820b88e6c6f0ded4a9a0378cddf3fb36589",
+      "preview_sha256": "914322e1a11ea2069a1ac43e42600820b88e6c6f0ded4a9a0378cddf3fb36589",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/relic_synthesis_rules.gd",
+      "source_sha256": "ec48f4fd4372aa17849a2d6571af06c97bc0a66c2070f33b3d45b4d0c41391e9",
+      "preview_sha256": "ec48f4fd4372aa17849a2d6571af06c97bc0a66c2070f33b3d45b4d0c41391e9",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/rules/relic_synthesis_rules.gd.uid",
+      "source_sha256": "54ff4ced2e3c55706f64d327150c34b0562e53bc44f99c78083c3558136d3d41",
+      "preview_sha256": "54ff4ced2e3c55706f64d327150c34b0562e53bc44f99c78083c3558136d3d41",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/runtime/equipment_enhancement_service.gd",
+      "source_sha256": "6712142f586702b962382ace3aa94ddc5fffcca472752ef87ed40bb567bf007f",
+      "preview_sha256": "6712142f586702b962382ace3aa94ddc5fffcca472752ef87ed40bb567bf007f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/runtime/equipment_enhancement_service.gd.uid",
+      "source_sha256": "1b23cab5c05b442312a75267c34920f994a6d56111c4cde175fc4444c1e63a93",
+      "preview_sha256": "1b23cab5c05b442312a75267c34920f994a6d56111c4cde175fc4444c1e63a93",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/runtime/loot_runtime_service.gd",
+      "source_sha256": "09272e528186e165f97dc6acf603adc8031531701f785637fbcd9ffda768661a",
+      "preview_sha256": "09272e528186e165f97dc6acf603adc8031531701f785637fbcd9ffda768661a",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/runtime/relic_synthesis_service.gd",
+      "source_sha256": "5510ce490f77e882587de31dfa7f2c8648ae28b73444bb171ee570d80fda148c",
+      "preview_sha256": "5510ce490f77e882587de31dfa7f2c8648ae28b73444bb171ee570d80fda148c",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/layers/runtime/relic_synthesis_service.gd.uid",
+      "source_sha256": "e28b71b65a188c4830f17a97072db2e9de7af45f38d8673558132040d6986bcb",
+      "preview_sha256": "e28b71b65a188c4830f17a97072db2e9de7af45f38d8673558132040d6986bcb",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/loot_pickup.gd",
+      "source_sha256": "6f81445ac64f12a8281ef6deaa1376ad8c5d2cd9fc8f9337ab0e06eec8b783ed",
+      "preview_sha256": "deff14ff66384a106b78394d30ef645a15fdcfc64d29c6240bfeb58354089e0c",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/npc_actor.gd",
+      "source_sha256": "95caf287f93b440d3368956172b1fcaa5c05386ee853762a0e1473c78395a353",
+      "preview_sha256": "95caf287f93b440d3368956172b1fcaa5c05386ee853762a0e1473c78395a353",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/npc_service_identity.gd",
+      "source_sha256": "929f989943b8064e794bb9d5f9900785e2821263ec6bcf6aefabdb5ef70a9857",
+      "preview_sha256": "929f989943b8064e794bb9d5f9900785e2821263ec6bcf6aefabdb5ef70a9857",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/player.gd",
+      "source_sha256": "cbf91c4370d9d6c29f7cf3ae2492ee9a66979bac864b4572a45a28a689c50653",
+      "preview_sha256": "2a55b2d5c807ffcdd2307302191f8dc42c56b3bbd99543f3261c9a547535f2b8",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "source_sha256": "cdc6a5ec04152893cc2e9c7ef710c2ceded5313d004a8be1c283d0d521f4b801",
+      "preview_sha256": "2238feb76647b547300d6296ccca8de6ff23243a4b18034a18742d973c81c575",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/region_content.gd",
+      "source_sha256": "25a26131da4b2b69d0f32f43842aafe9a069e5ec53103a6bf5a8372f1cafcb4a",
+      "preview_sha256": "25a26131da4b2b69d0f32f43842aafe9a069e5ec53103a6bf5a8372f1cafcb4a",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skill_panel.gd",
+      "source_sha256": "0e7404569ca833ae796cb6241e3030b06dd27916667ecc8eb09ac0fcec15a261",
+      "preview_sha256": "0e7404569ca833ae796cb6241e3030b06dd27916667ecc8eb09ac0fcec15a261",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/formulas/mir2_skill_formula.gd",
+      "source_sha256": "a68d9e3abacabd9edc9fb3f61c77289870b89344d5ee938e7ad224cfe207ecaf",
+      "preview_sha256": "a68d9e3abacabd9edc9fb3f61c77289870b89344d5ee938e7ad224cfe207ecaf",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/runtimes/taoist_skill_runtime.gd",
+      "source_sha256": "8dd8de415b80715bb6e4274d96771a78b0b867a101f92eb16172d1f6f57a090e",
+      "preview_sha256": "8dd8de415b80715bb6e4274d96771a78b0b867a101f92eb16172d1f6f57a090e",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/runtimes/warrior_skill_runtime.gd",
+      "source_sha256": "15173b74db4e152f6294c9363dbabb3e524962608f3f9be9a270ee14b57501e8",
+      "preview_sha256": "15173b74db4e152f6294c9363dbabb3e524962608f3f9be9a270ee14b57501e8",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/runtimes/wizard_skill_runtime.gd",
+      "source_sha256": "084ff18e59c461e4ba93a6c789ede6c49515b93e86a2f7ce8d6454dd6fbb2de9",
+      "preview_sha256": "084ff18e59c461e4ba93a6c789ede6c49515b93e86a2f7ce8d6454dd6fbb2de9",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/skill_data_loader.gd",
+      "source_sha256": "9670b624b3ecfe570f1d169591804cc90525e8ab6ff3d86e658479d6f5a112b4",
+      "preview_sha256": "9670b624b3ecfe570f1d169591804cc90525e8ab6ff3d86e658479d6f5a112b4",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/skill_execution_plan_contract.gd",
+      "source_sha256": "31f01520375d03db8c6ed177969e36223de05b8b6cddfab350abdfb915212bd8",
+      "preview_sha256": "48471b522f824b0143d07b279a7955343c7de83ddff94849f03dfcbdf88211dc",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/skills/skill_rank_extension_policy.gd",
+      "source_sha256": "06fc6474205f139c86eed2b018e7cea13810c4ca123b3476d44fa6908f96fbd6",
+      "preview_sha256": "06fc6474205f139c86eed2b018e7cea13810c4ca123b3476d44fa6908f96fbd6",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/skill_rank_resolver.gd",
+      "source_sha256": "9c2db81aac13066cabb494f96a79f64d5ce9fa416e2d32852f5bfba00fae1dd8",
+      "preview_sha256": "9c2db81aac13066cabb494f96a79f64d5ce9fa416e2d32852f5bfba00fae1dd8",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/skill_resource_service.gd",
+      "source_sha256": "0ef7aa57b54f5254062f50f481b0f7d7beea38527cc9c80cef1a61ef7b298202",
+      "preview_sha256": "0ef7aa57b54f5254062f50f481b0f7d7beea38527cc9c80cef1a61ef7b298202",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/skills/skill_runtime_router.gd",
+      "source_sha256": "81e4b477650bbd50093229846c57f089faa49cd64ca3dccc3bbddfc9aa3b431a",
+      "preview_sha256": "81e4b477650bbd50093229846c57f089faa49cd64ca3dccc3bbddfc9aa3b431a",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "source_sha256": "bf10969654060d356e8d958394912d9b637dd9040e01060fe9361d0630472825",
+      "preview_sha256": "21f184366f719dacd8c63984123abe6b5281a870b5845ab1f22a00d99e610758",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "scripts/system_menu_panel.gd",
+      "source_sha256": "175d524a80c6dd8964356eb4574b117c8f78e5d2b2f1b9c50ce3b863b30883b7",
+      "preview_sha256": "175d524a80c6dd8964356eb4574b117c8f78e5d2b2f1b9c50ce3b863b30883b7",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/ui_item_name_style.gd",
+      "source_sha256": "a1fa27059ccc41ea6f239db7135ac356950a474511f79b24dd926c065f47c259",
+      "preview_sha256": "a1fa27059ccc41ea6f239db7135ac356950a474511f79b24dd926c065f47c259",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/ui_layout_calibration_overlay.gd",
+      "source_sha256": "7fdd5e0d4b86ce31872a1fbd05f5cbcc2ca0d2e78babcdafaeba62dc3b3d1a96",
+      "preview_sha256": "7fdd5e0d4b86ce31872a1fbd05f5cbcc2ca0d2e78babcdafaeba62dc3b3d1a96",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/ui_relic_proc_effect.gd",
+      "source_sha256": "1bc9a9f05e116a2437e773e8338d6f508ec30dca6f835c22028dc629f22f5f89",
+      "preview_sha256": "1bc9a9f05e116a2437e773e8338d6f508ec30dca6f835c22028dc629f22f5f89",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/ui_relic_proc_effect.gd.uid",
+      "source_sha256": "57b1d05f97858bd91052566aa05a533d3aa1cbb9a1547118ea2f15cd3552b76f",
+      "preview_sha256": "57b1d05f97858bd91052566aa05a533d3aa1cbb9a1547118ea2f15cd3552b76f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/ui_runtime_layout_overrides.gd",
+      "source_sha256": "ec8eeb12e99189e9887c99e81e8369c4733df125ce89f822b5d654f5ca070839",
+      "preview_sha256": "ec8eeb12e99189e9887c99e81e8369c4733df125ce89f822b5d654f5ca070839",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "scripts/warrior_combat_math.gd",
+      "source_sha256": "60fe5294ef18fbb17b21b90652e090a540d080f2c366fe95625850cacb365bb5",
+      "preview_sha256": "60fe5294ef18fbb17b21b90652e090a540d080f2c366fe95625850cacb365bb5",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/ancient_relic_fragment_test.gd",
+      "source_sha256": "66a9acf0a73afa0603ffeca56ba9a9b26bc5bf92b6c01ea4943b4cc6a6be6a15",
+      "preview_sha256": "66a9acf0a73afa0603ffeca56ba9a9b26bc5bf92b6c01ea4943b4cc6a6be6a15",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/ancient_relic_fragment_test.gd.uid",
+      "source_sha256": "d4c47afa2cfbafc40f5d710ed7309c95a4376064de16d274fc40fbff008d71a7",
+      "preview_sha256": "d4c47afa2cfbafc40f5d710ed7309c95a4376064de16d274fc40fbff008d71a7",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/ancient_relic_fragment_test.tscn",
+      "source_sha256": "5075cde199cc906d21a7368de0b53f71af6cec694c04ce81ba43ee1e62928535",
+      "preview_sha256": "5075cde199cc906d21a7368de0b53f71af6cec694c04ce81ba43ee1e62928535",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/armor_single_slot_authority_test.gd",
+      "source_sha256": "754395da2016c895276e5c1f60bb45682be44945db865280158e7bbd6326f2d8",
+      "preview_sha256": "754395da2016c895276e5c1f60bb45682be44945db865280158e7bbd6326f2d8",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/canonical_summon_integration_test.gd",
+      "source_sha256": "f4075d0974efc49b09c9c87ee4598ba89fbefbfc061873fea117ae7a1bb11a8f",
+      "preview_sha256": "f4075d0974efc49b09c9c87ee4598ba89fbefbfc061873fea117ae7a1bb11a8f",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/dpv2_drop_runtime_policy_test.gd",
+      "source_sha256": "7a144452db1a42b8e9c15e9964b0b80bdbfb03f46ff8c50817a79798fb797519",
+      "preview_sha256": "7a144452db1a42b8e9c15e9964b0b80bdbfb03f46ff8c50817a79798fb797519",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_black_iron_test.gd",
+      "source_sha256": "2f514561c1c427ec578e68377d1d06f32d95aa0cc9ad1b36ed2168d58a8009e6",
+      "preview_sha256": "2f514561c1c427ec578e68377d1d06f32d95aa0cc9ad1b36ed2168d58a8009e6",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_black_iron_test.gd.uid",
+      "source_sha256": "d5222b40b2ff38970f4041478105eda8e3e84cd89c67d2c4ef65efc1fbc1ec10",
+      "preview_sha256": "d5222b40b2ff38970f4041478105eda8e3e84cd89c67d2c4ef65efc1fbc1ec10",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_black_iron_test.tscn",
+      "source_sha256": "216fa5240385f4150be98381ceb24a9b78e52408501f49d2cf463e9d42498105",
+      "preview_sha256": "216fa5240385f4150be98381ceb24a9b78e52408501f49d2cf463e9d42498105",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_display_test.gd",
+      "source_sha256": "7a76e124a35029b007456b01c86a06eb7f31fe0d94cf2fa30633bf56ba82f611",
+      "preview_sha256": "7a76e124a35029b007456b01c86a06eb7f31fe0d94cf2fa30633bf56ba82f611",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_display_test.gd.uid",
+      "source_sha256": "175c0f19e538bc290ec702e15c998b0d0e4b6ab44bde806d2e5a79ff7351e06e",
+      "preview_sha256": "175c0f19e538bc290ec702e15c998b0d0e4b6ab44bde806d2e5a79ff7351e06e",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_display_test.tscn",
+      "source_sha256": "47e78f147eff001d03304b9c667f6ce55bf0c9d28e2bddf4061e2ab2efca3e0d",
+      "preview_sha256": "47e78f147eff001d03304b9c667f6ce55bf0c9d28e2bddf4061e2ab2efca3e0d",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_grade_test.gd",
+      "source_sha256": "fcb239154eebd836b21486df15e6dffe8ab9467f1471a5cf80753a03443a9f3d",
+      "preview_sha256": "fcb239154eebd836b21486df15e6dffe8ab9467f1471a5cf80753a03443a9f3d",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_grade_test.gd.uid",
+      "source_sha256": "294541b12106bff4d5fcb58be0e3b276491e0830fd9afd31194d749383fdc1ba",
+      "preview_sha256": "294541b12106bff4d5fcb58be0e3b276491e0830fd9afd31194d749383fdc1ba",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_grade_test.tscn",
+      "source_sha256": "3128a1a23ffe5df89c6f3bc67690a858f55a2b62d872bddf7ef3710f413dcf3c",
+      "preview_sha256": "3128a1a23ffe5df89c6f3bc67690a858f55a2b62d872bddf7ef3710f413dcf3c",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_material_notice_test.gd",
+      "source_sha256": "348e9f8e7cf65a0317f35c0d64f360420a84939c4e28861c2b4b08f9e6ec1392",
+      "preview_sha256": "348e9f8e7cf65a0317f35c0d64f360420a84939c4e28861c2b4b08f9e6ec1392",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_material_notice_test.gd.uid",
+      "source_sha256": "74b36e3ecbb2eee2bbfc4982714f1d61efe957477584f338e7302625d8252528",
+      "preview_sha256": "74b36e3ecbb2eee2bbfc4982714f1d61efe957477584f338e7302625d8252528",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_material_notice_test.tscn",
+      "source_sha256": "84c21ccb50e0a8cad4b7663054078a63347925523cc66299581d49124229c188",
+      "preview_sha256": "84c21ccb50e0a8cad4b7663054078a63347925523cc66299581d49124229c188",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_panel_flow_test.gd",
+      "source_sha256": "a0ea3e35afb91158bcab96e6a4c22b02226c880423d2dba7d933029cb1e10555",
+      "preview_sha256": "a0ea3e35afb91158bcab96e6a4c22b02226c880423d2dba7d933029cb1e10555",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_panel_flow_test.gd.uid",
+      "source_sha256": "5f3c4059d9af916a92b66118b5a38dabeedd0a762fde202a0ddc136c7ff66710",
+      "preview_sha256": "5f3c4059d9af916a92b66118b5a38dabeedd0a762fde202a0ddc136c7ff66710",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_panel_flow_test.tscn",
+      "source_sha256": "1f21fe90f5f01cfcacb160c66d1142007dc0f14f3ce14eaaf7671f849c4f23b1",
+      "preview_sha256": "1f21fe90f5f01cfcacb160c66d1142007dc0f14f3ce14eaaf7671f849c4f23b1",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_rules_test.gd",
+      "source_sha256": "ad5f97dd8cf39e7ba7040754688b5dcb5dafb2c3b91e5e391415ef71e15d2c92",
+      "preview_sha256": "ad5f97dd8cf39e7ba7040754688b5dcb5dafb2c3b91e5e391415ef71e15d2c92",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_rules_test.gd.uid",
+      "source_sha256": "f369127c7f13cb337eeaa0e1ee277c719bfbf18484d206f7e189f8c7ba305c67",
+      "preview_sha256": "f369127c7f13cb337eeaa0e1ee277c719bfbf18484d206f7e189f8c7ba305c67",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_rules_test.tscn",
+      "source_sha256": "9984674f956a49d0b0155a52bd62b2f8a949bec05f84e15a5bb6e8ff995eaa53",
+      "preview_sha256": "9984674f956a49d0b0155a52bd62b2f8a949bec05f84e15a5bb6e8ff995eaa53",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_transaction_test.gd",
+      "source_sha256": "ef249c4a9fa28d633506b068e7cf4a4a7ea6febe2c4776522148e43fccb2643a",
+      "preview_sha256": "ef249c4a9fa28d633506b068e7cf4a4a7ea6febe2c4776522148e43fccb2643a",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_transaction_test.gd.uid",
+      "source_sha256": "fdb85d1b1b609bec7ae6837abe24a605258680c040c264d7aebe97bf502e9a8c",
+      "preview_sha256": "fdb85d1b1b609bec7ae6837abe24a605258680c040c264d7aebe97bf502e9a8c",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_enhancement_transaction_test.tscn",
+      "source_sha256": "bab7ba1e2432972fa82d57614955ad1a3bc8f36e7a13a59142431ee289c094bb",
+      "preview_sha256": "bab7ba1e2432972fa82d57614955ad1a3bc8f36e7a13a59142431ee289c094bb",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_skill_level_affix_rollout_test.gd",
+      "source_sha256": "6bf78ca77dfe46e50d5feff8f4f6e812d2601ed98ed995b3665f9f1e0d689490",
+      "preview_sha256": "6bf78ca77dfe46e50d5feff8f4f6e812d2601ed98ed995b3665f9f1e0d689490",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_skill_level_affix_rollout_test.gd.uid",
+      "source_sha256": "7449ad9f3fefe635a98d00f9ef698bd2c7baf15c16cf92b62314a23100a151b6",
+      "preview_sha256": "7449ad9f3fefe635a98d00f9ef698bd2c7baf15c16cf92b62314a23100a151b6",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_skill_level_affix_rollout_test.tscn",
+      "source_sha256": "ad2b576a97e28327c8d9e95b4ead3f18da10e95e396ad699bb3d91d0f9a87759",
+      "preview_sha256": "ad2b576a97e28327c8d9e95b4ead3f18da10e95e396ad699bb3d91d0f9a87759",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/equipment_skill_level_affix_test.gd",
+      "source_sha256": "5d72f59501bc3a4de21195095b783300bcca922d59216ed2e9921e79161a2b99",
+      "preview_sha256": "5d72f59501bc3a4de21195095b783300bcca922d59216ed2e9921e79161a2b99",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/fixtures/skill_rank_zero_three_baseline_78a79797.json",
+      "source_sha256": "4a465218e0ad3c392e58ff98eef8385407e14e3708b4c6da49f3a5c2036a6635",
+      "preview_sha256": "4a465218e0ad3c392e58ff98eef8385407e14e3708b4c6da49f3a5c2036a6635",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_calibrator_save_test.gd",
+      "source_sha256": "1bd666aaf177c2aacf4527b52f6d95fecc1d8725c38400f171f112473f006696",
+      "preview_sha256": "1bd666aaf177c2aacf4527b52f6d95fecc1d8725c38400f171f112473f006696",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_calibrator_save_test.gd.uid",
+      "source_sha256": "2faa240d18ad9df5758171b4256bebd1291cadb74db5ac9df59a60ce1f724b07",
+      "preview_sha256": "2faa240d18ad9df5758171b4256bebd1291cadb74db5ac9df59a60ce1f724b07",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_calibrator_save_test.tscn",
+      "source_sha256": "1652b75fde3be577c86180d4e7b5b913537b05baebcaa9407e17558822fbc78f",
+      "preview_sha256": "1652b75fde3be577c86180d4e7b5b913537b05baebcaa9407e17558822fbc78f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_hud_target_occlusion_test.gd",
+      "source_sha256": "dd093a4a2704e977c8b85710f1149c1ea3b6b3ffc1637ea8c330ab6675bc287f",
+      "preview_sha256": "dd093a4a2704e977c8b85710f1149c1ea3b6b3ffc1637ea8c330ab6675bc287f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_hud_target_occlusion_test.gd.uid",
+      "source_sha256": "05c23302b67af89f7907e676b0ece4553226bc0ede60f7c2e1f1869f971ca57a",
+      "preview_sha256": "05c23302b67af89f7907e676b0ece4553226bc0ede60f7c2e1f1869f971ca57a",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_hud_target_occlusion_test.tscn",
+      "source_sha256": "50118f34c1c57a8a3dc91538f536516c525b37a9aeb3e2b9912799af3aaf5a1e",
+      "preview_sha256": "50118f34c1c57a8a3dc91538f536516c525b37a9aeb3e2b9912799af3aaf5a1e",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_panel_layout_test.gd",
+      "source_sha256": "c69436ff6946ed52fa5cf74ece7f03df7c4e1ded6a5be72b69e0b315abd45f2b",
+      "preview_sha256": "c69436ff6946ed52fa5cf74ece7f03df7c4e1ded6a5be72b69e0b315abd45f2b",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_panel_layout_test.gd.uid",
+      "source_sha256": "71bc5a86005ba03742a4fc929a838172c7b398f7862c7f3f183d1445d48b486b",
+      "preview_sha256": "71bc5a86005ba03742a4fc929a838172c7b398f7862c7f3f183d1445d48b486b",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/forge_panel_layout_test.tscn",
+      "source_sha256": "c2ebe6f41ca37c5215756d0afa901ec642b04bf76b9873d04ffe28551792afbd",
+      "preview_sha256": "c2ebe6f41ca37c5215756d0afa901ec642b04bf76b9873d04ffe28551792afbd",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/gothic_bich_camp_test.gd",
+      "source_sha256": "441e9e0896098b98109338d0ee6fd5f5fe50bbb446fcbea0ac9021e3c5a390b8",
+      "preview_sha256": "441e9e0896098b98109338d0ee6fd5f5fe50bbb446fcbea0ac9021e3c5a390b8",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/implemented_map_runtime_projection_test.gd",
+      "source_sha256": "c3f5a4c9e2147d9f0bc36dabc54d8e4ebb327d9f673d46d4d205f6cb8e91dde9",
+      "preview_sha256": "c3f5a4c9e2147d9f0bc36dabc54d8e4ebb327d9f673d46d4d205f6cb8e91dde9",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/live_attack_resolution_test.gd",
+      "source_sha256": "d5e785559e8588f0e9299fc477dd58f844181b9de8b99157ada8b9b7b945b3ab",
+      "preview_sha256": "99facc5aa481d666c0e879f0eddb59b85e6816559b106061059f9bf5dac673e3",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "tests/melee_lock_fallback_test.gd",
+      "source_sha256": "475c419a059f5d53ec441c599a1b1bc2f9f58c19e4b720b7615bb3c663535010",
+      "preview_sha256": "46f874eeb9a39be15b71f88036d77f9ef1841a576fb64ca2acba154b8ce20c8f",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "tests/player_movement_respawn_test.gd",
+      "source_sha256": "0cdb917a788875f56dfde08c08c2823995b625e6e9cc23136b7301b47c093cd6",
+      "preview_sha256": "0cdb917a788875f56dfde08c08c2823995b625e6e9cc23136b7301b47c093cd6",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/relic_synthesis_runtime_test.gd",
+      "source_sha256": "6bfedc483978ce0a192317113e242618fd03eb4cb682e2f12eb59e32566899db",
+      "preview_sha256": "6bfedc483978ce0a192317113e242618fd03eb4cb682e2f12eb59e32566899db",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/relic_synthesis_runtime_test.gd.uid",
+      "source_sha256": "4c2c6e1d662f9911bd392d0ca79c3bd39a9235d8b70f69cdd86e78a50cf85161",
+      "preview_sha256": "4c2c6e1d662f9911bd392d0ca79c3bd39a9235d8b70f69cdd86e78a50cf85161",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/relic_synthesis_runtime_test.tscn",
+      "source_sha256": "68fb3a4fb573bcf916d9138328ca09422e47e0ab9158c5aacc2b0fba6f9291e6",
+      "preview_sha256": "68fb3a4fb573bcf916d9138328ca09422e47e0ab9158c5aacc2b0fba6f9291e6",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/rv15_provider_validation_counterexamples_test.gd",
+      "source_sha256": "6f73e75029555b5570865350fbbc824bf976c14e4518d3a821b67bcb40b6762b",
+      "preview_sha256": "6f73e75029555b5570865350fbbc824bf976c14e4518d3a821b67bcb40b6762b",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skeleton_multi_performance_test.gd",
+      "source_sha256": "bbf7319babcc41603eec00dd515b7c5ce980512573dae565ce29b1419f684b60",
+      "preview_sha256": "bbf7319babcc41603eec00dd515b7c5ce980512573dae565ce29b1419f684b60",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skeleton_multi_performance_test.gd.uid",
+      "source_sha256": "b7ae47fd1f7975c89797cc4ff3c3baeb7b34504916dbf0f1afe8dbd62373f22d",
+      "preview_sha256": "b7ae47fd1f7975c89797cc4ff3c3baeb7b34504916dbf0f1afe8dbd62373f22d",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skeleton_multi_performance_test.tscn",
+      "source_sha256": "201bc4f3de8478b523cc767c9e383835e9ef3316b715d6fd6ca60c55573aa097",
+      "preview_sha256": "201bc4f3de8478b523cc767c9e383835e9ef3316b715d6fd6ca60c55573aa097",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skeleton_multi_summon_contract_test.gd",
+      "source_sha256": "354f08db37614f80946942b78aca74f95d91cff7b2aeb39884ed06d67005d34a",
+      "preview_sha256": "354f08db37614f80946942b78aca74f95d91cff7b2aeb39884ed06d67005d34a",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skeleton_multi_summon_contract_test.gd.uid",
+      "source_sha256": "7bee6d677506c4ac5be11f8dff2bc13ca900f33f368ea5f9e33ed67234c5db08",
+      "preview_sha256": "7bee6d677506c4ac5be11f8dff2bc13ca900f33f368ea5f9e33ed67234c5db08",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skeleton_multi_summon_contract_test.tscn",
+      "source_sha256": "6e7b279c7dcaa90e17a2d63a48575bc01b2b9108c1d1b40026594218ac230bb5",
+      "preview_sha256": "6e7b279c7dcaa90e17a2d63a48575bc01b2b9108c1d1b40026594218ac230bb5",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skill_effective_rank_integration_test.gd",
+      "source_sha256": "343bbe5dc53a3244d63b2ec82bba446cd3b2ae7c601666b7d5c5bcac41e0c5a2",
+      "preview_sha256": "343bbe5dc53a3244d63b2ec82bba446cd3b2ae7c601666b7d5c5bcac41e0c5a2",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skill_panel_combat_unit_test.gd",
+      "source_sha256": "58cb08035f915a261eb0f4a908aeb34638fa1da667e3e6ce52a9cc6fe5997175",
+      "preview_sha256": "58cb08035f915a261eb0f4a908aeb34638fa1da667e3e6ce52a9cc6fe5997175",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skills/skill_rank_extension_plan_test.gd",
+      "source_sha256": "a087f10f1a3947f0b4fedb16f6edac35a436cabc2a3d7fb4f81390702d9e2591",
+      "preview_sha256": "a087f10f1a3947f0b4fedb16f6edac35a436cabc2a3d7fb4f81390702d9e2591",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skills/skill_rank_extension_policy_test.gd",
+      "source_sha256": "5fe3492f30d1699d1a9c8ed9bbcad1cfd6ca9cc19bea78dc1ce42513acc58839",
+      "preview_sha256": "5fe3492f30d1699d1a9c8ed9bbcad1cfd6ca9cc19bea78dc1ce42513acc58839",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skills/skill_rank_zero_three_matrix_test.gd",
+      "source_sha256": "6ad5a8b5f1fc35089d21e4fd97fcc1ea18c2d0b29d99b93ef3d3e752a0ccf1f1",
+      "preview_sha256": "6ad5a8b5f1fc35089d21e4fd97fcc1ea18c2d0b29d99b93ef3d3e752a0ccf1f1",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skills/skill_rank_zero_three_matrix_test.gd.uid",
+      "source_sha256": "534cc4f84f55fa9df229952fdb80972a61f96ea386a3d6b20a1e0f4fac179984",
+      "preview_sha256": "534cc4f84f55fa9df229952fdb80972a61f96ea386a3d6b20a1e0f4fac179984",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skills/skill_rank_zero_three_matrix_test.tscn",
+      "source_sha256": "d0445b2e33f83912b7d3dfabe60a864c46312beb86fdb30abda3f802faa549c5",
+      "preview_sha256": "d0445b2e33f83912b7d3dfabe60a864c46312beb86fdb30abda3f802faa549c5",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/skills/taoist_dual_defense_contract_test.gd",
+      "source_sha256": "c576de4392ba26cb6b394df95bc22fc683252bfd86626c29299fc0297522b378",
+      "preview_sha256": "c576de4392ba26cb6b394df95bc22fc683252bfd86626c29299fc0297522b378",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/summon_outgoing_defense_production_test.gd",
+      "source_sha256": "868ad0cc4d0a4281787e750b9e131149f08d322b68a98bb4b811226c02968e69",
+      "preview_sha256": "868ad0cc4d0a4281787e750b9e131149f08d322b68a98bb4b811226c02968e69",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/synthesis_panel_preview_test.gd",
+      "source_sha256": "b924b4ae469f2882c55bfe0053e02d0c0d8ecaea5b2f240bbdf1a9ddbb12dc5f",
+      "preview_sha256": "b924b4ae469f2882c55bfe0053e02d0c0d8ecaea5b2f240bbdf1a9ddbb12dc5f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/synthesis_panel_preview_test.gd.uid",
+      "source_sha256": "631e2755c4ff3fc85e2f5fb1d630bd222109a9fb9e179feeec60924da0a8eb8f",
+      "preview_sha256": "631e2755c4ff3fc85e2f5fb1d630bd222109a9fb9e179feeec60924da0a8eb8f",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/synthesis_panel_preview_test.tscn",
+      "source_sha256": "0541da233721d27aabdddffd59c2b40d1761bfe98721705f67e1adedb6da8cdf",
+      "preview_sha256": "0541da233721d27aabdddffd59c2b40d1761bfe98721705f67e1adedb6da8cdf",
+      "manifest_valid": true,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/system_menu_gothic_ui_test.gd",
+      "source_sha256": "e0a157ef34e504f7ef18837c5dce65849d1ad31d387d814e45682ea9cdf9824e",
+      "preview_sha256": "e0a157ef34e504f7ef18837c5dce65849d1ad31d387d814e45682ea9cdf9824e",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/taoist_support_production_integration_test.gd",
+      "source_sha256": "16aae1cfd5e96abebc1a6e360b25536fe705943a04d3160fa8a3b05d73be9ce9",
+      "preview_sha256": "16aae1cfd5e96abebc1a6e360b25536fe705943a04d3160fa8a3b05d73be9ce9",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/ui_layout_calibration_workbench.gd",
+      "source_sha256": "072bb916e20b50235b61b21e17c5c55a24d7f2719192582230fc97754e6a9223",
+      "preview_sha256": "072bb916e20b50235b61b21e17c5c55a24d7f2719192582230fc97754e6a9223",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/ui_visual_acceptance_lab_test.gd",
+      "source_sha256": "1b9973d80a137f82b78b336ead38186c9c758e4228b55509d61b630a2d7ea93e",
+      "preview_sha256": "1b9973d80a137f82b78b336ead38186c9c758e4228b55509d61b630a2d7ea93e",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/user_loot_sheet_authority_test.gd",
+      "source_sha256": "21ccf4f8a988dbb8c65b1026ff6003fc70a24d71044986e31f69ffcb537afdf8",
+      "preview_sha256": "21ccf4f8a988dbb8c65b1026ff6003fc70a24d71044986e31f69ffcb537afdf8",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tests/warrior_skill_state_machine_test.gd",
+      "source_sha256": "32dd0f72936b16225da54c571f99e72b95576a6c9d78976d2341285d8b1fe3b6",
+      "preview_sha256": "88c66fe2974645f260d58bc85f6b99854f792421add0beb8cb88e50b3bd231f3",
+      "manifest_valid": false,
+      "shared_with_main": true,
+      "preview_equals_forge": false
+    },
+    {
+      "path": "tools/build_item_name_rarity.py",
+      "source_sha256": "9304a5e8b8b11bb5b14cbc9d6e0325c4e99ace320823925827d1bd452785ce09",
+      "preview_sha256": "9304a5e8b8b11bb5b14cbc9d6e0325c4e99ace320823925827d1bd452785ce09",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tools/launch_ui_layout_calibrator.ps1",
+      "source_sha256": "26c8ad4caebc90816445252072bd6db0005481bcc19ae6b6e22ebe55f39bb6df",
+      "preview_sha256": "26c8ad4caebc90816445252072bd6db0005481bcc19ae6b6e22ebe55f39bb6df",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/README.md",
+      "source_sha256": "43c2118de3a841764031bedbd1fe8ad42d0e0059f1d114cbbdb941cb098113c9",
+      "preview_sha256": "43c2118de3a841764031bedbd1fe8ad42d0e0059f1d114cbbdb941cb098113c9",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tools/loot_sheet_compiler/compile_authority.ps1",
+      "source_sha256": "f3ea4b6c2dd8d0470182cf8a47ae6a49d14c13704346a16baadc7d5e47442d76",
+      "preview_sha256": "f3ea4b6c2dd8d0470182cf8a47ae6a49d14c13704346a16baadc7d5e47442d76",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tools/run_visual_acceptance_lab.ps1",
+      "source_sha256": "404f5722c58aa7fe84d5ba37fce6898cbc3faa3d1b5a75f32e764de6bbf19e14",
+      "preview_sha256": "404f5722c58aa7fe84d5ba37fce6898cbc3faa3d1b5a75f32e764de6bbf19e14",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    },
+    {
+      "path": "tools/visual_acceptance_lab/visual_acceptance_lab.gd",
+      "source_sha256": "201f2c9c1db0f1c15f02bb0b75c2d65ae8e5be94c74d0a19af120f4b027d688b",
+      "preview_sha256": "201f2c9c1db0f1c15f02bb0b75c2d65ae8e5be94c74d0a19af120f4b027d688b",
+      "manifest_valid": false,
+      "shared_with_main": false,
+      "preview_equals_forge": true
+    }
+  ],
+  "scope": "Git-object-only manifest and preview inventory. Conflict markers and automatic merge semantics remain unaccepted; no worktree/index/HEAD mutation and no integration claim."
+}

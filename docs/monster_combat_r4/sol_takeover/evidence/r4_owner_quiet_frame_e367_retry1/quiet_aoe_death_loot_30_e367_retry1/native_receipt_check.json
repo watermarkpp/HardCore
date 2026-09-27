@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "label": "aoe_death_loot-30-AA-1-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 44,
+      "native_nodes_created": 109,
+      "terminal_count": 152,
+      "pending_at_end": 0
+    },
+    {
+      "label": "aoe_death_loot-30-AA-2-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 50,
+      "native_nodes_created": 110,
+      "terminal_count": 146,
+      "pending_at_end": 0
+    },
+    {
+      "label": "aoe_death_loot-30-AB-1-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 47,
+      "native_nodes_created": 113,
+      "terminal_count": 153,
+      "pending_at_end": 0
+    },
+    {
+      "label": "aoe_death_loot-30-AB-1-CAND",
+      "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 49,
+      "native_nodes_created": 108,
+      "terminal_count": 137,
+      "pending_at_end": 2
+    },
+    {
+      "label": "aoe_death_loot-30-AB-2-CAND",
+      "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 52,
+      "native_nodes_created": 97,
+      "terminal_count": 129,
+      "pending_at_end": 10
+    },
+    {
+      "label": "aoe_death_loot-30-AB-2-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 45,
+      "native_nodes_created": 113,
+      "terminal_count": 151,
+      "pending_at_end": 0
+    },
+    {
+      "label": "aoe_death_loot-30-AB-3-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 45,
+      "native_nodes_created": 113,
+      "terminal_count": 151,
+      "pending_at_end": 0
+    },
+    {
+      "label": "aoe_death_loot-30-AB-3-CAND",
+      "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+      "terminal_receipts": 64,
+      "materialized_nodes_in_retained_receipts": 55,
+      "native_nodes_created": 102,
+      "terminal_count": 131,
+      "pending_at_end": 7
+    }
+  ],
+  "scope": "Real terminal transaction acknowledgement and native materialization verified. The terminal ledger is bounded; retained receipts are a subset, not all historical deaths. Pending work at sampling end is retained and is not declared settled."
+}

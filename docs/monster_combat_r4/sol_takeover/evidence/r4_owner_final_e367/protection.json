@@ -1,0 +1,162 @@
+{
+  "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+  "status": "PASS",
+  "approved_portal_commit": "c9172af201831b9401f5cfcda1aa31804dc41178",
+  "portal_identity_errors": [],
+  "protected_count": 13611,
+  "protected_changes": [
+    {
+      "path": "assets/data/canonical_monster_classification_v1.json",
+      "before": "f2c2b96a84500460e53483daaf10cc1063f4c75becf20b1dc75af493ad7b885f",
+      "after": "b692de3bdda7ce89fde1dbcad377cfc0925c9aaade52ed1e011188e1b7af8c48"
+    },
+    {
+      "path": "assets/data/monster_runtime_authority_v1.json",
+      "before": "fa536723dc76afcf5ec07318bd42d509ab9390c4a4c2430d9a2581e33ac82a42",
+      "after": "61bbff6be99fa3a0cc94f8689086cc97327b4004ef90e8ed47bfe150c1536702"
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "before": "8cd8254758e7f573b7d6cbbd31eb0fc7aad8cff699d73b01a1ffc21fd6521a5b",
+      "after": "628a544ab76948169f7e2bbf0fbf725b9b835ca477ed5f8b9c479e818574dae5"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_choice_land.runtime.json",
+      "before": "de076c0bf2b91d7a6f634480a0a61155331da4bc7dc8bb4451e5956f15e4ccab",
+      "after": "2d2f502e64cab1db66454941a4964ef493b1080945240837e0132f91bf0488da"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_choice_land.visual.json",
+      "before": "46476313d8af1a07f9da6f2dc722e36f7b9940f2c8fa8f935af64dba928f9a84",
+      "after": "8c534b3c8a090b2e0a95ca494196217c095639f3cca3c4e42b75a15b2d7230c8"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.runtime.json",
+      "before": "31bd7344c0a0f940590cc9ed88fb0e7650422f8de192a2c7aa1adfaf39227041",
+      "after": "e014b831a4ca6ecd29e10d526230809404df5d825933472cedfc9b25ab9f1535"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.visual.json",
+      "before": "f418ad7214e0fb72bd33d558cf967b0260a33193051e64df6b7028daa77fd4d9",
+      "after": "6fb5437addde6cdd6ade1b8588af47ff27694ab84d777ca0935046690a0d8f58"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.runtime.json",
+      "before": "69d05413fc4b270a63c012e670f8f5cc20e39f0461fd5889f4d8a86db68d541c",
+      "after": "768123e70a8e2ad8ee29886d2d36db57dc400c0c5eaad682ee2c4af34499dfb5"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/chiyue_valley_secret_passage_b.visual.json",
+      "before": "9eb83b2e43d596aa86850150cada7a9cdc9b0b3b3271030f7f7b5565f887ec86",
+      "after": "ad715f6eb7b1d5595d06b8bb7d52fa5ac2c75fc284399e9a43728b6cc2af5577"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/map_runtime_release_registry.json",
+      "before": "3d22d3b0f794c735b642d77a850713e6af4334613e4d28bba1d120a79bdd29b4",
+      "after": "0f7ba788af5d6ac197b20e6ae431f14e18468d97b5807408e1e2c86db7b9b363"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/chiyue_choice_land.wall_render_plan.json",
+      "before": "7f1fe22d69c311176f84feef93c871b610e58ad534a59d7c93fa0dc69554df0d",
+      "after": "d74aee39d44515ffdd8fc1353b8d7823c38b36c2cf639e6db10d19ff829489b1"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/chiyue_valley_secret_passage_a.wall_render_plan.json",
+      "before": "d3dd106bf8e8285a4585ae5d02b6ef0fcce95a2dffdabdfce7fb336f9ee244b0",
+      "after": "6d02affdb9f24db033f057fbb295fc598a7b06c7c51a22cecdb68f0384da38a1"
+    },
+    {
+      "path": "assets/data/runtime/map_editor/wall_render_plans/chiyue_valley_secret_passage_b.wall_render_plan.json",
+      "before": "82afb6b09b04a26dd11d47edd09897111985b3aa3b9e1e0e70b2a583f0ff6038",
+      "after": "22ba5aefeebe138f5c76a7768760526853e709ab6f8015750fea2a2cf2ccd57f"
+    },
+    {
+      "path": "assets/data/special_normal_monster_spawn_authority_v1.json",
+      "before": "336a290e1a3a5a65197e5696680bbd5708b41056cda0179659f6afabbda05c3e",
+      "after": "260545b5dbeb4c221b13eec3ca4f852a38eaab38841654cee39b48512d48ef66"
+    },
+    {
+      "path": "map_editor_workspace/chiyue_choice_land/chiyue_choice_land.editor.json",
+      "before": "f16d1e9a46bdacbc22ff965607253b4022fe050f8af2f8e3725e5938f8ac8ac2",
+      "after": "d2e3328ca422b3670fcdfaf2d2cfc3878d3f635918ac58fb91f98343f1f85eec"
+    },
+    {
+      "path": "map_editor_workspace/chiyue_valley_secret_passage_a/chiyue_valley_secret_passage_a.editor.json",
+      "before": "762ad2794a07b89f8ddac7cd10848e9d7c69762daf1f8d4c513016a199a63b4a",
+      "after": "450f157f8120be68c3aaf0dcc4359cf11f92be656a00c5fafff7e7a25ec5a307"
+    },
+    {
+      "path": "map_editor_workspace/chiyue_valley_secret_passage_b/chiyue_valley_secret_passage_b.editor.json",
+      "before": "df51c399393e58b730e2cd4092cc2ad336375e42618d65e9d16b17b8abcc7734",
+      "after": "a54dfe540f62e894d38a57d52f309fdad7797182df8fa901408a81b102bc80ba"
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "before": "68a146a48c8e52479dac0dfdf74ab01c6d0279d3cadf1919390d7e29360b8ecf",
+      "after": "0204b3a6f78c19397767f50ddd47964e3d80678f53e2fccd07f4de7465e0c5a3"
+    },
+    {
+      "path": "scripts/player_visual.gd",
+      "before": "77ed7cbce2c0def0850024c323051c1358ae106b5699815522ce040f5092d8bd",
+      "after": "7d425b86b3e8cda6ef2c2141a74cfb81ea9735709be9ab159e255d57d33221ec"
+    }
+  ],
+  "protected_missing": [],
+  "unexpected_protected_changes": [],
+  "dirty_backup_count": 229,
+  "dirty_backup_failures": [],
+  "original_save_count": 4152,
+  "save_backup_failures": [],
+  "current_isolated_runtime_fixture_changes": [
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/character_profiles.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/character_profiles.json.bak",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/hc_r3_reset_release.editor.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/hc_r3_reset_release.editor.json.bak",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/hc_r3_reset_release_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_build_candidate_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_crash_registry_a.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_crash_registry_b.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_future_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_publish_promotes_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_rollback_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_sibling_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3_test_release_registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/shared_warehouse.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/nonce_history.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790064733_before_rollback_rollback_test.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790064733_roundtrip_checkpoint.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790064733_ui_inventory_ui_checkpoint_apply.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790064733_ui_undo_ui_checkpoint_restore.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790073349_before_rollback_rollback_test.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790073349_roundtrip_checkpoint.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790073349_ui_inventory_ui_checkpoint_apply.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790073349_ui_undo_ui_checkpoint_restore.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790086189_before_rollback_rollback_test.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790086189_roundtrip_checkpoint.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790086189_ui_inventory_ui_checkpoint_apply.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/checkpoints/1790086189_ui_undo_ui_checkpoint_restore.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/outbox/result_local_1790129267_10210004.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/outbox/result_local_1790129267_10251601.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/device_lab/outbox/result_local_1790129267_10278392.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/equipment_luck_test_profiles/blessing_luck_save.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/hc_r3_formal/hc_r3_reset_release.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/item_drop_instance_persistence/characters/world_clocks/p.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/item_drop_instance_persistence/characters/world_clocks/p.json.bak",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_crash_formal_a/p0_3r_crash_a.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_crash_formal_b/p0_3r_crash_b.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_formal/a/p0_3r_release_a.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_formal/b/p0_3r_release_b.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_formal/c/p0_3r_release_c.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_formal/gate/future_test_map.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/chiyue_choice_land.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/chiyue_valley_secret_passage_a.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/chiyue_valley_secret_passage_b.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/mengzhong_zuma_leader_home.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/p0_3r_identity_probe.runtime.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/registry.json",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/p0_3r_identity_isolation/registry.json.pre_publish",
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/takeover_async_loot/characters/async_probe.json"
+  ],
+  "user_AGENTS_unchanged": true,
+  "scope": "Original authoring hashes and all pre-takeover copies; isolated test userdata changes reported separately. No device save touched."
+}

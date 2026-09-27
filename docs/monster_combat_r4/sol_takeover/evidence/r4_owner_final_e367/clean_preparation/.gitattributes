@@ -1,0 +1,5 @@
+# Preserve the exact pre-switch backup bytes used by preserved_manifest.json.
+*.gd -text whitespace=cr-at-eol
+*.tscn -text whitespace=cr-at-eol
+*.ps1 -text whitespace=cr-at-eol
+*.uid -text whitespace=cr-at-eol

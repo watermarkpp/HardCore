@@ -1,0 +1,8 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/loot_pickup.gd:223)
+       [1] _spawn_loot (res://scripts/game_root.gd:13848)
+       [2] _materialize_enemy_death_nodes (res://scripts/game_root.gd:13525)
+       [3] _pump_enemy_death_work_queue (res://scripts/game_root.gd:12958)
+       [4] _process (res://scripts/game_root.gd:1830)

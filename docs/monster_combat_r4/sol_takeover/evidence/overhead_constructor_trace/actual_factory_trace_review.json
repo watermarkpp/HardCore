@@ -1,0 +1,146 @@
+[
+  {
+    "side": "BASE",
+    "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+    "status": "PASS",
+    "intervals": [
+      {
+        "tick": 109,
+        "interval_ms": 100.129,
+        "spawns": 15,
+        "actual_factory_region_ms": 58.534
+      },
+      {
+        "tick": 226,
+        "interval_ms": 96.795,
+        "spawns": 16,
+        "actual_factory_region_ms": 63.233
+      },
+      {
+        "tick": 241,
+        "interval_ms": 69.231,
+        "spawns": 15,
+        "actual_factory_region_ms": 59.143
+      },
+      {
+        "tick": 346,
+        "interval_ms": 93.944,
+        "spawns": 15,
+        "actual_factory_region_ms": 59.425
+      },
+      {
+        "tick": 371,
+        "interval_ms": 85.975,
+        "spawns": 15,
+        "actual_factory_region_ms": 59.569
+      },
+      {
+        "tick": 466,
+        "interval_ms": 82.021,
+        "spawns": 15,
+        "actual_factory_region_ms": 61.1
+      },
+      {
+        "tick": 503,
+        "interval_ms": 95.999,
+        "spawns": 15,
+        "actual_factory_region_ms": 61.286
+      },
+      {
+        "tick": 586,
+        "interval_ms": 88.985,
+        "spawns": 15,
+        "actual_factory_region_ms": 64.436
+      },
+      {
+        "tick": 637,
+        "interval_ms": 90.597,
+        "spawns": 15,
+        "actual_factory_region_ms": 60.604
+      },
+      {
+        "tick": 706,
+        "interval_ms": 86.816,
+        "spawns": 15,
+        "actual_factory_region_ms": 60.526
+      }
+    ],
+    "over50": 10,
+    "deaths": 151,
+    "plans": 151,
+    "created_nodes": 113,
+    "scope": "Fixture sustained30 replacements; actual inherited factory plus deterministic audit tail. Elapsed wall time, not isolated OS CPU. Native production due-respawn scheduling is not exercised by this probe."
+  },
+  {
+    "side": "CAND",
+    "source_head": "c0461f25ab2d02f2ea304dcf43be36cb868ab9d0",
+    "status": "PASS",
+    "intervals": [
+      {
+        "tick": 109,
+        "interval_ms": 48.505,
+        "spawns": 15,
+        "actual_factory_region_ms": 31.072
+      },
+      {
+        "tick": 226,
+        "interval_ms": 65.505,
+        "spawns": 15,
+        "actual_factory_region_ms": 31.667
+      },
+      {
+        "tick": 234,
+        "interval_ms": 39.309,
+        "spawns": 15,
+        "actual_factory_region_ms": 31.519
+      },
+      {
+        "tick": 346,
+        "interval_ms": 40.933,
+        "spawns": 15,
+        "actual_factory_region_ms": 31.358
+      },
+      {
+        "tick": 356,
+        "interval_ms": 45.048,
+        "spawns": 15,
+        "actual_factory_region_ms": 31.357
+      },
+      {
+        "tick": 466,
+        "interval_ms": 43.773,
+        "spawns": 14,
+        "actual_factory_region_ms": 29.365
+      },
+      {
+        "tick": 476,
+        "interval_ms": 43.052,
+        "spawns": 14,
+        "actual_factory_region_ms": 29.607
+      },
+      {
+        "tick": 586,
+        "interval_ms": 43.529,
+        "spawns": 14,
+        "actual_factory_region_ms": 30.524
+      },
+      {
+        "tick": 597,
+        "interval_ms": 46.121,
+        "spawns": 14,
+        "actual_factory_region_ms": 29.609
+      },
+      {
+        "tick": 706,
+        "interval_ms": 54.77,
+        "spawns": 15,
+        "actual_factory_region_ms": 33.377
+      }
+    ],
+    "over50": 2,
+    "deaths": 146,
+    "plans": 144,
+    "created_nodes": 102,
+    "scope": "Fixture sustained30 replacements; actual inherited factory plus deterministic audit tail. Elapsed wall time, not isolated OS CPU. Native production due-respawn scheduling is not exercised by this probe."
+  }
+]

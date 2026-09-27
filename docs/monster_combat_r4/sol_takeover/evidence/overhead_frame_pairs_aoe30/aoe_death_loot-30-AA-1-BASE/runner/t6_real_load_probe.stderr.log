@@ -1,0 +1,9 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _move_with_spatial_rules (res://scripts/enemy.gd:3378)
+       [1] _advance_autonomous_step_internal (res://scripts/enemy.gd:2231)
+       [2] _advance_autonomous_step (res://scripts/enemy.gd:2137)
+       [3] _hc_tick_melee (res://scripts/enemy.gd:8291)
+       [4] _physics_process_internal (res://scripts/enemy.gd:2677)
+       [5] _physics_process (res://scripts/enemy.gd:2524)
