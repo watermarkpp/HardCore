@@ -1,0 +1,283 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "directory": "scoped_sampler_catalog_55f_20260928_0547",
+      "total": 3,
+      "passed": 2,
+      "failed": 1,
+      "engine_log_errors": 2
+    },
+    {
+      "directory": "scoped_sampler_warehouse_red_55f_20260928_0548",
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "engine_log_errors": 4
+    },
+    {
+      "directory": "warehouse_receipt_red_55f_20260928_0550",
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "engine_log_errors": 0
+    },
+    {
+      "directory": "warehouse_receipt_green_55f_20260928_0551",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "engine_log_errors": 0
+    },
+    {
+      "directory": "warehouse_receipt_regression_55f_20260928_0552",
+      "total": 9,
+      "passed": 9,
+      "failed": 0,
+      "engine_log_errors": 0
+    }
+  ],
+  "raw": [
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/native_physics_sampling_test.stdout.log",
+      "bytes": 73,
+      "sha256": "bb3bcf7181e550fe37f9235c4aecf24a81b757eddfeff554d88e7974feb2ed1d"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/native_physics_sampling_test.stderr.log",
+      "bytes": 397,
+      "sha256": "e2a4a865a97f77194cff29c4425bd71f6ae217c0753bb2260ffd27da5027bfc5"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/native_physics_sampling_test.godot.log",
+      "bytes": 464,
+      "sha256": "ca1875a18aec439175f03da47912e6f959f7b62266c92a31cc2c6db521191be0"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/complete_client_resource_catalog_test.stdout.log",
+      "bytes": 212,
+      "sha256": "5645331df63505ab21b8a861e68ef00b3aef84a353ad68ba26366edd05d43c3c"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/complete_client_resource_catalog_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/complete_client_resource_catalog_test.godot.log",
+      "bytes": 208,
+      "sha256": "480a081987860347ad1ab97c364f772e97178f24595a35b101f483860feb6b20"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/perf_unit_determinism_test.stdout.log",
+      "bytes": 259,
+      "sha256": "17f16869db20c3519443c79e0c459c1f7847fe21df0dc8868ccd83ce558eef63"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/perf_unit_determinism_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "scoped_sampler_catalog_55f_20260928_0547/runner/perf_unit_determinism_test.godot.log",
+      "bytes": 255,
+      "sha256": "0cd71dde01ad19ffbef448f441c1793eec5012f3fe7cd32097e5bdccf52d43b8"
+    },
+    {
+      "path": "scoped_sampler_warehouse_red_55f_20260928_0548/runner/native_physics_sampling_test.stdout.log",
+      "bytes": 354,
+      "sha256": "55fa4efa7e5b4562a26bddced3a837d9e121a78d68fb17ae01def7368c316104"
+    },
+    {
+      "path": "scoped_sampler_warehouse_red_55f_20260928_0548/runner/native_physics_sampling_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "scoped_sampler_warehouse_red_55f_20260928_0548/runner/native_physics_sampling_test.godot.log",
+      "bytes": 350,
+      "sha256": "125e548a8942e2cc55fbd5a5ca536e45e8a1989f95cd5a7510915f7c32be63a3"
+    },
+    {
+      "path": "scoped_sampler_warehouse_red_55f_20260928_0548/runner/f03_warehouse_receipt_boundary_test.stdout.log",
+      "bytes": 210,
+      "sha256": "8dfe61e6fccd22bc047d923fdcbc0987408d1f9621036340331e71e77f595d8c"
+    },
+    {
+      "path": "scoped_sampler_warehouse_red_55f_20260928_0548/runner/f03_warehouse_receipt_boundary_test.stderr.log",
+      "bytes": 1456,
+      "sha256": "790d3e958ae88e35665c4a9448e36ca64691e3a62330f6c4f54e530b939e1368"
+    },
+    {
+      "path": "scoped_sampler_warehouse_red_55f_20260928_0548/runner/f03_warehouse_receipt_boundary_test.godot.log",
+      "bytes": 1642,
+      "sha256": "732976b6d18657cd561fe53f293803cc3acb77b446a6a1e388b7ba2aa15ae070"
+    },
+    {
+      "path": "warehouse_receipt_red_55f_20260928_0550/runner/f03_warehouse_receipt_boundary_test.stdout.log",
+      "bytes": 210,
+      "sha256": "deac17e39b275d8223a601c8f70ab96994389de4bc5c15a6db3f1323e08c7f14"
+    },
+    {
+      "path": "warehouse_receipt_red_55f_20260928_0550/runner/f03_warehouse_receipt_boundary_test.stderr.log",
+      "bytes": 543,
+      "sha256": "e7541942c31ac57e6e290dfcbea28ba1e7d969b1280def2c269f2d628c0520df"
+    },
+    {
+      "path": "warehouse_receipt_red_55f_20260928_0550/runner/f03_warehouse_receipt_boundary_test.godot.log",
+      "bytes": 743,
+      "sha256": "f14fae24a4b13b1d052d837d29bac3717c43393a5704aaff011e723dcde8ffdd"
+    },
+    {
+      "path": "warehouse_receipt_green_55f_20260928_0551/runner/f03_warehouse_receipt_boundary_test.stdout.log",
+      "bytes": 210,
+      "sha256": "8dfe61e6fccd22bc047d923fdcbc0987408d1f9621036340331e71e77f595d8c"
+    },
+    {
+      "path": "warehouse_receipt_green_55f_20260928_0551/runner/f03_warehouse_receipt_boundary_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_green_55f_20260928_0551/runner/f03_warehouse_receipt_boundary_test.godot.log",
+      "bytes": 206,
+      "sha256": "b73da2414970cb239a6dc633156edc7b6d0cb43d86a0436c334459da78c9947c"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_warehouse_receipt_boundary_test.stdout.log",
+      "bytes": 210,
+      "sha256": "8dfe61e6fccd22bc047d923fdcbc0987408d1f9621036340331e71e77f595d8c"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_warehouse_receipt_boundary_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_warehouse_receipt_boundary_test.godot.log",
+      "bytes": 206,
+      "sha256": "b73da2414970cb239a6dc633156edc7b6d0cb43d86a0436c334459da78c9947c"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/shared_warehouse_transaction_test.stdout.log",
+      "bytes": 213,
+      "sha256": "46eaff9a7456a33cb9f61db2d7537e9b23a7559e156b85d2205526944044c2a2"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/shared_warehouse_transaction_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/shared_warehouse_transaction_test.godot.log",
+      "bytes": 209,
+      "sha256": "cebbc86b48fbaf6a47c7a6130e294233c1fba87cc580a8586f32523e7e0ea3fc"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/shared_warehouse_migration_test.stdout.log",
+      "bytes": 211,
+      "sha256": "cae7ce497c9c1bb39281488d665908da82851735302284e4dd553f75c5f09eae"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/shared_warehouse_migration_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/shared_warehouse_migration_test.godot.log",
+      "bytes": 207,
+      "sha256": "bdc457512545404768a95e474be1afbc55942d24d41ceab222ca117ebdc44f04"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/warehouse_prepared_transaction_test.stdout.log",
+      "bytes": 804,
+      "sha256": "95b41eb8da71eef09f3e3791cd2affe116a314372cc04b19dbf66f1c0ec0f4f3"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/warehouse_prepared_transaction_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/warehouse_prepared_transaction_test.godot.log",
+      "bytes": 800,
+      "sha256": "cb50e5d3f7fc553087102640ee364021988b7ca6b292f4deaf1aaa3b57b05271"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/bank_prepared_transaction_test.stdout.log",
+      "bytes": 1233,
+      "sha256": "93025f045d134cd6cc1ead3733c3c0669cff497f626cb3cb0c667ddb08ed2153"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/bank_prepared_transaction_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/bank_prepared_transaction_test.godot.log",
+      "bytes": 1229,
+      "sha256": "f2b75189bcd22419069147f63bf1c363b9788a7b4a8989ab1849505172bd5a55"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_pickup_receipt_lifecycle_test.stdout.log",
+      "bytes": 208,
+      "sha256": "1c559f534650331b418e94d9926db0182cc6138dd9d645db78520dfd8a6bf63b"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_pickup_receipt_lifecycle_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_pickup_receipt_lifecycle_test.godot.log",
+      "bytes": 204,
+      "sha256": "e099a7dbd87046dc5fee1576563f7e2601bcd3d793cee267b1b3d218c94bc70b"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_native_pickup_lifecycle_test.stdout.log",
+      "bytes": 3744,
+      "sha256": "6afe4ae7d128d1dcfea6adae6264c45f8b3c3c6e763a063529e702d052497e5e"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_native_pickup_lifecycle_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_native_pickup_lifecycle_test.godot.log",
+      "bytes": 3735,
+      "sha256": "4ee59aec86b84fd5ffe7a927b1dfd9cd817f8eb6a847fd51fd784fe824ca0bcc"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_ordered_cleanup_test.stdout.log",
+      "bytes": 199,
+      "sha256": "7b81da92eba653aefa7a80aedab7eabf48809a021a74cf8c932f19479f2a35ea"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_ordered_cleanup_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_ordered_cleanup_test.godot.log",
+      "bytes": 195,
+      "sha256": "35bbe44e8a38e4c6b510296efd6473e493bce52a7ea5421902f6e8f780fdfa15"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_hot_persistence_test.stdout.log",
+      "bytes": 830,
+      "sha256": "5e67bd71514c2171003d30add31571867710448115fc88ac8f48a041da112883"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_hot_persistence_test.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "warehouse_receipt_regression_55f_20260928_0552/runner/f03_hot_persistence_test.godot.log",
+      "bytes": 825,
+      "sha256": "f96140ee12e561e5be3dd5f75bd43892188354bfcf642359770d86886a2354ce"
+    }
+  ],
+  "scope": "Scoped native outcomes and real warehouse RED/GREEN only; whole-project and performance acceptance remain separate."
+}

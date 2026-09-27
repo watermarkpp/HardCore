@@ -5717,6 +5717,7 @@ func deposit_to_warehouse(inventory_index: int, warehouse_slot: int) -> Dictiona
 
 ## Moves one selected batch with one two-file persistence transaction.
 func deposit_to_warehouse_batch(inventory_indices: Array, warehouse_slots: Array, prepare_only := false) -> Dictionary:
+	_before_state_transaction()
 	var requested := inventory_indices.size()
 	var result := {
 		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,
@@ -5824,6 +5825,7 @@ func withdraw_from_warehouse(warehouse_slot: int) -> Dictionary:
 
 ## Moves the largest valid prefix with one two-file persistence transaction.
 func withdraw_from_warehouse_batch(warehouse_slots: Array, prepare_only := false) -> Dictionary:
+	_before_state_transaction()
 	var requested := warehouse_slots.size()
 	var result := {
 		"contract_id": WAREHOUSE_TRANSFER_CONTRACT_ID,

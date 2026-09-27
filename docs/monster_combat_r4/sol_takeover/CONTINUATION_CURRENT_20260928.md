@@ -4,11 +4,32 @@
 
 ## 当前活跃执行
 
+### 最新恢复点（原04:17执行已结束，不得按下方旧段重跑）
+
+- 52922 已结束：e367 独立完整回归 546 实际项，545 PASS / 1 FAIL；exact_execution_check.json collection PASS / acceptance FAIL，无集合/源码漂移。唯一失败为缺少 ignored 资源扫描清单。1638 测试原始日志与导入/包装器日志全部已入库并保留原始字节。
+- 18f71f608fe99a6f770dcab08d0f8b4da4043533：portable catalog fixture 与原断言/来源 SHA，目标测试实际 GREEN。dd7c9655faeef1b79ae59a1f6d85bc1bbc3490066：全部原始日志保存。10de9f4feda5797707b4544879c49c396c8146d9：原生连续tick探针及真实慢帧反例、两有效负载 smoke，均 GREEN；首轮测试类型/API错误原始 FAIL 保留。
+- 本次 F03 新闭环：公开 warehouse direct deposit/withdraw 旧PROMOTE未ACK时的实际物品归属反例原生 RED（正常退出1/0引擎错误）；仅两处 batch 入口加既有 before-state barrier；同一四格 GREEN、9项相关回归 GREEN。见 warehouse_receipt_regression_55f_20260928_0552/CLOSURE.md 与 scoped_closure_receipt.json。不是新存档格式或自动存档频率修改。
+- 新 formal critical 注册共548（原546 + native sampler + warehouse receipt）。最终该源码 full/clean 尚 NOT_RUN；不能把先前e367完整回归冒用为新源码完整通过。
+- 当前没有活跃 Godot；下一步先重新保护/同步 BASE 三项 overlay，核对共同字节与 BASE1381生产未变，随后在固定提交执行真实 AA2 + AB/BA/AB3 性能矩阵。旧性能接纳 FAIL 仍保留，不能以 sampler 修复直接关闭CPU警告。
+- 主树 AGENTS 和原始 untracked 仍保持；未push、未实际merge锻造、未删除树、未APK。退休 inventory37GB仅为只读候选清单，需另行保存/哈希必要ignored内容。
+
 - exec session **52922**：独立目录 C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore 固定e367，`tools/run_godot_tests.ps1 -Suite critical -TimeoutSeconds 30`，重R4沿现有60s规则。
 - evidence/critical_clean_e367：正式headless import正常退出且无错误；expected_paths.json实际546；identity.json含源码tree/runner/engine/用户目录/导入后状态。
 - 日志和用户数据独立；等completion.json、实际正常退出、精确集合546、全部原始stdout/stderr/Godot及引擎错误核对。不能因中间PASS宣布完成。
 - 此目录源文件/Git/用户数据在执行结束前禁止修改；不要并行启动性能测量。
 - 完成后使用 evidence/verify_full_critical.py 验证实际546集合/次序/正常退出/原始日志/固定源码及工作目录。其未完成拒绝分支已实际执行，返回NOT_RUN且未写裁定；完整 verifier 尚未运行，不能记PASS。
+
+## 05:00 本地待验证变更（尚未提交）
+
+- 当前主树 HEAD 为 docs-only `55f32c34728eae0407bc3654b5c8f9ad339bc0ac`。生产源码/素材仍 e367，独立完整回归继续固定 e367；本地测试改动不能冒用它的结果。
+- 旧 quiet_full_aoe_e367_20260928_0410 八份流水，经新 verify_native_physics_cadence.py 实际验证全部 FAIL：600 条记录跨越约618–674原生物理tick，signal后再等process的旧探针跳过catch-up tick。原CPU警告保留，尚未证明这就是唯一根因。
+- t6_real_load_probe 改用最高末位优先级测试节点逐次观察原生physics回调，另记有界process间隔；native_physics_sampling_test 增加真实50ms idle阻塞反例，pairs/summary工具要求600连续tick。生产actor时钟/频率/代码未改；PowerShell/Python静态解析PASS，原生Godot NOT_RUN，等当前完整回归结束后执行。
+- 当前完整回归实际 FAIL：complete_client_resource_catalog_test 缺少 ignored outputs/resource_catalog/.../manifest.json。未跳过或削弱断言，独立检出保持不动。新 exporter 从既有正式manifest及只读SQLite逐122行/962251帧/332460候选核验后导出同字节测试fixture，实际出口PASS；新portable fixture测试原生Godot NOT_RUN。不重新搜索头盔或重建任何美术。
+- 本地新增/修改路径仅上述 tests/tools 与原始证据。原dirty AGENTS、untracked素材/工具/UID保持；这些新增路径须精确stage，禁止add-all。
+- 新增 f03_warehouse_receipt_boundary_test.gd/.tscn，四格真实IO候选反例（deposit/withdraw × direct/prepared），先让旧拾取真正PROMOTE且未主线程ACK，再调用公开存取路径，检查金币、唯一实例、live/disk一致。源码显示 deposit/withdraw 批量入口在副本前缺 `_before_state_transaction`；底层同步写才 drain 可能太迟。当前只补测试，未动生产；原生RED/GREEN均 NOT_RUN，等当前full结束。与后续锻造四入口缺barrier是同类，但不能用此替代各自真实证明。
+- retirement_intake_bc55/inventory_needed_ignored.py 完成23树限定目录只读清单，v2还检查每层祖先联接，82658文件约37.2GB、0读取错误；不读文件内容、不沿联接、不扫描导入/Gradle中间缓存，未backup/删除。v1原始清单保留；主树本身27.6GB包含历史备份且不在退休范围，其他树约7.9GB需后续保留/哈希。清单不代表清理许可。
+- prepare_native_sampler_overlay.py 已实际保护并替换 BASE 的三项测试文件（probe/scene/runner），D:/HardCoreAudit/native-sampler-overlay-before-20260928-0525 保留原始字节及两个index/working patch；BASE HEAD1381不变、生产diff为空、共同字节PASS。后续若修改probe/runner，必须重新核对双方共同哈希；不能直接运行已有陈旧身份矩阵。
+- native clean full 已完成四个20起手：24/238各20扣血；76为19扣血+真实release13→child14 mixed_magic_evaded；239为18扣血+真实release11→child12、release15→child16 mixed_magic_evaded。24射程外追击1次实际自然起手/扣血保持。五份原始报告复制到 critical_clean_e367/natural，哈希和零扣血逐release原因见receipt.json；这不替代整个546集合的最终正常退出核验。
 
 ## 已完成
 

@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-09-28T05:50:00.6804382+08:00",
+  "total": 1,
+  "failed": 0,
+  "passed": 1,
+  "git_head": "55f32c34728eae0407bc3654b5c8f9ad339bc0ac",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "f03_warehouse_receipt_boundary_test",
+      "test_path": "tests/f03_warehouse_receipt_boundary_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T21:50:24.0945515Z",
+      "native_exit_observed_utc": "2026-09-27T21:49:59.1541404Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0
+}

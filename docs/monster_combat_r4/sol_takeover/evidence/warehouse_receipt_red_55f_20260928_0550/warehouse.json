@@ -1,0 +1,170 @@
+{
+  "failures": [
+    "deposit_direct: live inventory differs from the transfer",
+    "deposit_direct: live and durable item ownership differ",
+    "deposit_direct: unique item duplicated or lost",
+    "withdraw_direct: live inventory differs from the transfer",
+    "withdraw_direct: live and durable item ownership differ",
+    "withdraw_direct: unique item duplicated or lost"
+  ],
+  "observations": [
+    {
+      "disk_gold": 17.0,
+      "disk_inventory_ids": [],
+      "disk_warehouse_ids": [
+        "drop:v1:81:404806d5f716e11f7e91c5fe"
+      ],
+      "gold": 17,
+      "inventory_ids": [
+        "drop:v1:81:404806d5f716e11f7e91c5fe"
+      ],
+      "label": "deposit_direct",
+      "receipt": {
+        "outcomes": [
+          {
+            "amount": 17,
+            "gold": true,
+            "success": true
+          }
+        ],
+        "saved": true,
+        "success": true,
+        "success_count": 1
+      },
+      "result": {
+        "complete": true,
+        "completed_source_indices": [
+          0
+        ],
+        "completed_warehouse_slots": [
+          0
+        ],
+        "contract_id": "gameplay.warehouse.transfer_authority.v1",
+        "message": "已存入仓库。",
+        "operation": "deposit",
+        "remaining": 0,
+        "requested": 1,
+        "success": true,
+        "transferred": 1
+      },
+      "warehouse_ids": [
+        "drop:v1:81:404806d5f716e11f7e91c5fe"
+      ]
+    },
+    {
+      "disk_gold": 17.0,
+      "disk_inventory_ids": [
+        "drop:v1:81:3c2e34e276739b7464395c55"
+      ],
+      "disk_warehouse_ids": [],
+      "gold": 17,
+      "inventory_ids": [],
+      "label": "withdraw_direct",
+      "receipt": {
+        "outcomes": [
+          {
+            "amount": 17,
+            "gold": true,
+            "success": true
+          }
+        ],
+        "saved": true,
+        "success": true,
+        "success_count": 1
+      },
+      "result": {
+        "complete": true,
+        "completed_warehouse_slots": [
+          0
+        ],
+        "contract_id": "gameplay.warehouse.transfer_authority.v1",
+        "message": "已取出仓库物品。",
+        "operation": "withdraw",
+        "remaining": 0,
+        "requested": 1,
+        "success": true,
+        "transferred": 1
+      },
+      "warehouse_ids": []
+    },
+    {
+      "disk_gold": 17.0,
+      "disk_inventory_ids": [],
+      "disk_warehouse_ids": [
+        "drop:v1:81:0e1c1bc02fef73ea3cb8f46a"
+      ],
+      "gold": 17,
+      "inventory_ids": [],
+      "label": "deposit_prepared",
+      "receipt": {
+        "outcomes": [
+          {
+            "amount": 17,
+            "gold": true,
+            "success": true
+          }
+        ],
+        "saved": true,
+        "success": true,
+        "success_count": 1
+      },
+      "result": {
+        "complete": true,
+        "completed_source_indices": [
+          0
+        ],
+        "completed_warehouse_slots": [
+          0
+        ],
+        "contract_id": "gameplay.warehouse.transfer_authority.v1",
+        "message": "已存入仓库，共1件物品。",
+        "operation": "deposit",
+        "remaining": 0,
+        "requested": 1,
+        "success": true,
+        "transferred": 1
+      },
+      "warehouse_ids": [
+        "drop:v1:81:0e1c1bc02fef73ea3cb8f46a"
+      ]
+    },
+    {
+      "disk_gold": 17.0,
+      "disk_inventory_ids": [
+        "drop:v1:81:7d115d526f0643712d794709"
+      ],
+      "disk_warehouse_ids": [],
+      "gold": 17,
+      "inventory_ids": [
+        "drop:v1:81:7d115d526f0643712d794709"
+      ],
+      "label": "withdraw_prepared",
+      "receipt": {
+        "outcomes": [
+          {
+            "amount": 17,
+            "gold": true,
+            "success": true
+          }
+        ],
+        "saved": true,
+        "success": true,
+        "success_count": 1
+      },
+      "result": {
+        "complete": true,
+        "completed_warehouse_slots": [
+          0
+        ],
+        "contract_id": "gameplay.warehouse.transfer_authority.v1",
+        "message": "已取出仓库物品，共1件。",
+        "operation": "withdraw",
+        "remaining": 0,
+        "requested": 1,
+        "success": true,
+        "transferred": 1
+      },
+      "warehouse_ids": []
+    }
+  ]
+}

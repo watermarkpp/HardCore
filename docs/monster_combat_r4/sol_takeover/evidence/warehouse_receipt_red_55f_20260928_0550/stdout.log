@@ -1,0 +1,14 @@
+[FAIL] f03_warehouse_receipt_boundary_test - missing_pass_marker;non_zero_exit_code_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL deposit_direct: live inventory differs from the transfer
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL deposit_direct: live and durable item ownership differ
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL deposit_direct: unique item duplicated or lost
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL withdraw_direct: live inventory differs from the transfer
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL withdraw_direct: live and durable item ownership differ
+F03_WAREHOUSE_RECEIPT_BOUNDARY_FAIL withdraw_direct: unique item duplicated or lost
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore\docs\monster_combat_r4\sol_takeover\evidence\warehouse_receipt_red_55f_20260928_0550\runner\runner_results_adhoc_20260928_054922_013_23716.json
+TEST_SUMMARY suite=adhoc passed=0 failed=1 engine_log_errors=0
+FAILED_TESTS=f03_warehouse_receipt_boundary_test (missing_pass_marker;non_zero_exit_code_1)

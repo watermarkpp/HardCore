@@ -4,6 +4,8 @@
 
 PASS：67 张正式地图、132 个门点的作者合同及游戏实际使用的 18px 人物碰撞足迹查询。117 个有效出入口、15 个仅到达门点，目标身份、目标坐标、双向关系、单向到达规则和返回保护全部通过。没有新增门点或移动任何门点。
 
+覆盖范围另经生产入口核对：map_runtime_release_registry.json 实际67项，与 map_identity_registry.json 的正式地图对应；GameRoot._load_zone 与 _spawn_database_zone_content 均使用 MapEditorRuntimeBridge.is_formal_playable 门禁。GameData 的209项包含历史/待建设身份，不能把离线 RegionContent 参考出口混入正式传送验收，或为“全地图”而重新启用这些旧路径。本次覆盖全部正式发布地图。
+
 找到并修复两项实际问题：
 
 1. 山谷密道 A/B 的 map_exit_000002 已声明单向连接，却仍标为 bidirectional_endpoint。正式工具的准备阶段会修复内存副本，因此游戏目标已有效；直接编辑器发布会拒绝原作者数据。本次只更正两个 portal_role 和各自作者 revision，全部其他作者字节保留。
