@@ -38,6 +38,14 @@ all three new AoE full-detail CPU deltas are positive, although no three-pair
 regression exceeds its own 0.673ms BASE A/A spread. An increase in A/A noise
 is not proof that CPU improved.
 
+The new AoE phase counters place +0.415/+0.189/−0.061ms per callback in the
+movement-strategy segment and +0.365/+0.227/−0.043ms in its nested
+move-and-slide segment; death settlement saves 0.503/0.603/0.578ms per
+callback. These segments overlap and execution counts differ (movement
+strategy calls CAND−BASE +224/−252/−127); they cannot be summed into a
+causal explanation or used to justify changing the protected collision and
+combat behavior.
+
 ## Decision and limits
 
 - `PASS`: desktop native severe-long-frame target for this fixed candidate:

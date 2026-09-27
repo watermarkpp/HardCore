@@ -2,7 +2,10 @@
 
 ## 06:20 新恢复点（覆盖下方旧“当前活跃执行”）
 
-- 主树当前源码与证据候选 `1b74e698728af725595118d0a30ab59c0f0ac58b`；用户 dirty `AGENTS.md` 和原始 untracked 保留。c917 全图正式传送扫描已闭环，67 图/132端点，9原生测试通过，山谷密道 A/B 两点修复；无需重扫或重新批量发布地图。
+- 06:33 新干净检出 `C:/Users/Administrator/.codex/worktrees/r4-candidate-clean/HardCore` 固定 `fd5e2a32ee50cc8ed9cede05c39397fb2d43ef56`；正式548项 `critical_clean_fd5_20260928` 已经 headless import 正常完成，run_fixed_clean_critical.ps1 的外层 exec session `84496` 正在跑。identity.json 的expected548、源tree、runner/engine SHA 已落盘；尚未有 completion，不能判PASS。旧 e367 独立检出保留。运行期间不修改此固定检出/runner/测试。
+- 7提交锻造 tip `da41da3642123c180723ef03dec193ef1fc4cb1b` 仍未合入。fd5 的 merge-tree 预览仍为5处冲突：loot_pickup、player_state、live_attack_resolution、melee_lock_fallback、warrior_skill_state_machine。player_state 冲突须同时保留 `_advance_durability_runtime` 与 `advance_relic_proc`，存档单宠迁移要写新 `groups`，但 `quest_states` 仍从新世界重放读取。loot_pickup 保留已缓存一次的icon texture并加入新尺寸缩放，旧名字避让函数/测试不得覆盖当前“各自图标上方、不重排”合同。三旧战士测试保留 FormalWorldFixture 和主树的38.5,13.5真实场景，运行后按正式行为裁定。
+- 锻造四个公开写入口为 `commit_forge`、`commit_relic_synthesis`、`place_workbench_item`、`take_workbench_item`；F03旧拾取PROMOTE未ACK回执必须在事务快照/报价RNG前确认。已核对锻造交接原始19/19旧树专项结果，但它不能代替集成后复验。圣物ID/count强转、同实例ID失效时proc早返回、多宠旧格式恢复等要真实RED→修复。用户dirty AGENTS SHA `D267703E2DC8B72459EA5B01C8D9535516DF7BAE2C03D690CF1D938A225E9AFF`，仍未修改。
+- 已测试的性能候选源码 `1b74e698728af725595118d0a30ab59c0f0ac58b`，其后证据提交 `fd5e2a32ee50cc8ed9cede05c39397fb2d43ef56` 无生产改动；用户 dirty `AGENTS.md` 和原始 untracked 保留。c917 全图正式传送扫描已闭环，67 图/132端点，9原生测试通过，山谷密道 A/B 两点修复；无需重扫或重新批量发布地图。
 - 固定 BASE1381/CAND1b74、同字节原生连续600 tick 探针、相同正式输入，完成 small30、AoE+死亡+掉落30、large30+双召唤的各8份 full 样本，以及 large30+双召唤8份 frame_only 样本。32/32 实际收集 PASS；原始逐帧JSON/日志、源码身份和runner结果在四个 native_t6_*_1b74 目录。新 `PERFORMANCE_1B74_REVIEW.md` 判定：桌面严重长帧目标PASS，但CPU与召唤场景小幅P99并非全改善；GPU和手机NOT_RUN。旧e367 FAIL保留为历史，不冒用。
 - 下一步精确stage本轮证据与说明并本地提交；然后在新的干净固定检出运行正式548项完整回归，核对最终退出、实际集合、原始日志。既有 e367 独立检出保留为历史，不改它。完整门禁通过后才实际集成7提交锻造链、完成其RED/GREEN及最终全套验证、正常push，逐树审查后安全退休。**仍停在APK之前**。
 
