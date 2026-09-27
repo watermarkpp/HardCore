@@ -27,6 +27,7 @@ const WorldSpatialRulesScript := preload(
 )
 
 const CONTRACT_ID := "skill_execution_plan.v1"
+const ActorBodyPolicyScript := preload("res://scripts/actor_body_policy.gd")
 const RESULT_CONTRACT_ID := "skill_execution_result.v1"
 const PLAN_VERSION := 1
 const CANONICAL_PLANNER_ID := "canonical_planner.v1"
@@ -500,11 +501,10 @@ static func build_release_snapshot(
 				descriptor.get("template_id", "")
 			)
 			break
-		var summon_radius_gu := (
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				21.0 if summon_template_id == "divine_beast" else 15.0
-			)
-		)
+		var summon_radius_px := ActorBodyPolicyScript.tier_screen_radius_px(StringName(ActorBodyPolicyScript.summon_tier(summon_template_id)))
+		if summon_radius_px <= 0.0:
+			return {}
+		var summon_radius_gu := WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(summon_radius_px)
 		var summon_context := (
 			SkillFootprintSnapshotScript.make_absolute_runtime_context(
 				map_id,

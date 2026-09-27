@@ -87,3 +87,9 @@ ID79的正式line_magic走真实物理选敌/起手，冻结child后等待原600
 ## 既有性能夹具接口适配
 
 三个既有Enemy探针override补可选release_record并转交真实super；原断言不变。HARDCORE_REV07_SCENARIOS=open_pursuit、默认各自count集合，runner_results_adhoc_20260927_141951_497_10660.json为PASS 3/3、engine0。其余scenario本轮NOT_RUN，不能将该有限接口回归当T6。原始输出在evidence/adapter_regressions。
+
+## 召唤出生半径的跨系统闭环
+
+最窄生产planner查询参数反例：骷髅0.331456GU/神兽0.464039GU，与既定实际0.353553/0.5GU不符（summon_planner_red）。修planner后，正式技能释放snapshot仍用旧半径，再得到独立FAIL（summon_snapshot_radius_red）。最终planner、plan snapshot及main-pet创建校验均使用同一ActorBodyPolicy，不改变身体档位、范围、攻击公式或候选落点排序；来源未知模板fail closed，消费端拒绝半径不符的snapshot。
+
+runner_results_adhoc_20260927_143209_147_20248.json：PASS 8/8，engine0，完整退出。含最窄反例、召唤形状、释放、主人传送、正式职业矩阵、golden plan parity、V2召唤生产与实际对外伤害。原始证据和源码身份在evidence/summon_radius_chain。

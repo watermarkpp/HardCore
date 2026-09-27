@@ -1,0 +1,26 @@
+{
+  "failed": 1,
+  "total": 1,
+  "results": [
+    {
+      "test_name": "summon_planner_radius_test",
+      "test_path": "tests/hc_monster_combat_r4/summon_planner_radius_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T14:27:04.5386898+08:00",
+  "passed": 0,
+  "git_head": "ddb9fd043cefd03fb3c6ca6bfc7d0fefe9f1e1d2",
+  "engine_log_errors": 0
+}

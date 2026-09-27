@@ -19,4 +19,4 @@
 
 183/241的原始攻击间隔0已按原服务端加载规则处理，raw没有改。它们当前profile没有专属delivery、AI元数据仍是unresolved_project_fallback；183自爆语义和241具体用途没有实际行为证据，仍NOT_RUN。不得因为loading/MFC1通过就对这两种特殊用途标PASS，也不得按名字给241绑定火焰类。
 
-下一待核对点：GameRoot._canonical_summon_spawn_plan仍使用15/21px估算出生半径，而运行时骷髅16px、神兽0.5GU。正式planner与实际身体是否一致需最窄反例，属于D3召唤出生合同直接相关，未验前不称召唤链完整闭环。
+召唤出生半径接口已完成RED→GREEN：GameRoot规划查询、SkillExecutionPlanContract释放快照和实际创建校验读取同一ActorBodyPolicy。旧15/21px半径已移除，运行时骷髅16px、神兽0.5GU保持。8项相关回归通过（evidence/summon_radius_chain）；性能中宠物真实参战负载仍NOT_RUN。

@@ -1,6 +1,7 @@
 extends Node2D
 
 const BICH_RUNTIME_MAP_ID := 910001
+const ActorBodyPolicyScript := preload("res://scripts/actor_body_policy.gd")
 const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
 const INITIAL_WORLD_BOOTSTRAP_TIMEOUT_MSEC := 60000
 ## perf-smoothness-r1 Phase C (audit 20260918): the loading window owns ONE
@@ -11217,16 +11218,13 @@ func _apply_canonical_main_pet(
 	if not spawn_ground_gu.is_finite():
 		return
 	var spawn_screen_px := _canonical_ground_gu_to_screen_px(spawn_ground_gu)
-	var summon_radius_gu := float(
-		spawn_snapshot.get(
-			"target_combat_radius_gu",
-			WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-				21.0
-				if requested_summon_id == "divine_beast"
-				else 15.0
-			)
-		)
-	)
+	var summon_radius_px := ActorBodyPolicyScript.tier_screen_radius_px(StringName(ActorBodyPolicyScript.summon_tier(requested_summon_id)))
+	if summon_radius_px <= 0.0:
+		return
+	var summon_radius_gu := WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(summon_radius_px)
+	var snapshot_radius := float(spawn_snapshot.get("target_combat_radius_gu", -1.0))
+	if not is_finite(snapshot_radius) or absf(snapshot_radius - summon_radius_gu) > GroundUnitSpaceScript.EPSILON_GU:
+		return
 	var existing := _canonical_main_pet(requested_summon_id)
 	if operation == "recall_existing_main_pet":
 		if existing == null or not _canonical_summon_position_is_valid(
@@ -11362,13 +11360,11 @@ func _canonical_summon_spawn_plan(
 			return a.y < b.y
 		return a.x < b.x
 	)
-	var summon_radius_gu := (
-		WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(
-			21.0
-			if stable_skill_id == "taoist.summon_divine_beast"
-			else 15.0
-		)
-	)
+	var summon_tier := ActorBodyPolicyScript.summon_tier(_summon_id_for_skill(stable_skill_id))
+	var summon_radius_px := ActorBodyPolicyScript.tier_screen_radius_px(StringName(summon_tier))
+	if summon_radius_px <= 0.0:
+		return {"valid": false, "reason": "unknown_summon_body_policy"}
+	var summon_radius_gu := WorldSpatialRulesScript.actor_combat_radius_gu_from_screen_radius_px(summon_radius_px)
 	for candidate_tile: Vector2i in candidates:
 		var candidate_ground_gu := Vector2(candidate_tile)
 		if not _canonical_summon_position_is_valid(
