@@ -1334,6 +1334,7 @@ func _hold_combat_disabled() -> void:
 		_hc_cancel_path()
 	velocity = Vector2.ZERO
 	actual_ground_motion_gu = Vector2.ZERO
+	_observe_pending_attack_cancellation("COMBAT_DISABLED")
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0
@@ -2904,6 +2905,7 @@ func _handle_safe_zone_target_return(physics_delta: float) -> bool:
 	target = null
 	_target_stable_remaining_seconds = 0.0
 	_retarget_timer = 0.0
+	_observe_pending_attack_cancellation("TARGET_ENTERED_SAFE_ZONE")
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0
@@ -6857,6 +6859,7 @@ func _begin_death() -> void:
 	set_physics_process(false)
 	velocity = Vector2.ZERO
 	_cancel_autonomous_step(true)
+	_observe_pending_attack_cancellation("SOURCE_DIED")
 	_pending_attack_time = -1.0
 	_pending_attack_target = null
 	_pending_attack_damage = 0
@@ -6915,6 +6918,7 @@ func apply_control(seconds: float) -> void:
 	# not an obsolete anchor captured before teleport/knockback resolution.
 	if seconds > 0.0:
 		_control_anchor_ground_gu = _screen_position_px_to_ground_position_gu(global_position)
+		_observe_pending_attack_cancellation("SOURCE_CONTROLLED")
 		_pending_attack_time = -1.0
 		_pending_attack_target = null
 		_pending_attack_damage = 0
@@ -7206,6 +7210,7 @@ func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> voi
 		_audio_end_combat_session(disengage_reason)
 		if target_is_safe:
 			_hc_forget(target)
+			_observe_pending_attack_cancellation("TARGET_ENTERED_SAFE_ZONE")
 			_pending_attack_time = -1.0
 			_pending_attack_target = null
 			_pending_attack_damage = 0
@@ -8194,9 +8199,22 @@ func _delivery_observation_identity(record: Variant, victim: Node, child: String
 	})
 
 func _hc_life(node: Node) -> int:
-	if node is PlayerCharacter and is_instance_valid(node):
+	if is_instance_valid(node) and node is PlayerCharacter:
 		return (node as PlayerCharacter).combat_epoch
 	return int(node.get_meta("hc_combat_life_epoch", 0)) if is_instance_valid(node) else -1
+
+## Observe the real owner-side cancellation before its pending record is
+## discarded. This owns neither settlement nor gameplay state; OFF is O(1).
+func _observe_pending_attack_cancellation(reason: String) -> void:
+	if not DamageLedgerObserverScript.recording_enabled or _pending_attack_release_record.is_empty():
+		return
+	var record := _pending_attack_release_record
+	if str(record.get("kind", "")) == "hc_standard_melee":
+		DamageLedgerObserverScript.record_terminal(_delivery_observation_identity(record, null, "admission"), "rejected", reason)
+	else:
+		for child: Dictionary in record.get("victims", []):
+			if child.has("observation_identity"):
+				DamageLedgerObserverScript.record_terminal(child.observation_identity, "rejected", reason)
 
 func _hc_try_start(hit_target: Node2D) -> bool:
 	if not combat_enabled:
@@ -8277,6 +8295,8 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 
 func _hc_settle(record: Dictionary) -> void:
 	if not combat_enabled:
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.record_terminal(_delivery_observation_identity(record, null, "admission"), "rejected", "COMBAT_DISABLED")
 		return
 	var seq := int(record.get("seq", 0))
 	if seq <= _hc_settled_seq:
