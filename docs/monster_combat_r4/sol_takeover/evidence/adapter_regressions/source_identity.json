@@ -1,0 +1,20 @@
+{
+  "interpretation": "Interface regression only; not the R4 T6 600 frame comparison",
+  "files": [
+    {
+      "path": "tests/hc_monster_ai/m30_sampling_copy.gd",
+      "sha256": "462B1BDD88755C8093123B797D8ECA0790F446DC12397F7DDBAD7C1A8D516068"
+    },
+    {
+      "path": "tests/hc_monster_ai/performance_comparison_test.gd",
+      "sha256": "CD141DCFB1E6CF28C97BCED9AFAADC45D000F039B293A62018613900D21530FB"
+    },
+    {
+      "path": "tests/r6_3_1/m30_counts_12_15_test.gd",
+      "sha256": "6DBF9139952720A5618BA72961732B0E6A3A194710EF4D6CA90EA030541CCE28"
+    }
+  ],
+  "executed_production_parent": "393a97fa9710e3604895cb8118f50fc353241587 plus zero timing patch",
+  "base_head": "c69edaed9b387dd7f59d20ae9d61e68bb49af18c",
+  "scenario": "open_pursuit"
+}

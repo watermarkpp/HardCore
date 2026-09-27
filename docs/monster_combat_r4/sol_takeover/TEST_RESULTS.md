@@ -83,3 +83,7 @@ ID79的正式line_magic走真实物理选敌/起手，冻结child后等待原600
 `evidence/zero_timing_fixed/runner_results_adhoc_20260927_141816_996_8632.json`：PASS 4/4，包含raw值保持、数学边界、完整loading、MFC1属性/时钟、Boss间隔。MFC1仍逐ID检查主源raw相等，独立期望按max(200, raw)，不以生产helper自证；loading仍要求字段存在和类型合法，不将缺失等同0。原服务端文件哈希、主源哈希、真实执行源码/测试哈希保留source_identity.json。
 
 这只关闭时间值错误，不为183一次自爆/241身份与零伤害用途补出未验证的行为。其现存profile无专属delivery、canonical AI有unresolved_project_fallback；能力表必须披露，不能称特殊实体族PASS。完整critical/性能/干净检出继续NOT_RUN。
+
+## 既有性能夹具接口适配
+
+三个既有Enemy探针override补可选release_record并转交真实super；原断言不变。HARDCORE_REV07_SCENARIOS=open_pursuit、默认各自count集合，runner_results_adhoc_20260927_141951_497_10660.json为PASS 3/3、engine0。其余scenario本轮NOT_RUN，不能将该有限接口回归当T6。原始输出在evidence/adapter_regressions。

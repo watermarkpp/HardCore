@@ -64,6 +64,7 @@ class ProbePlayer:
 		causes_struck: bool = true,
 		durability_context := {},
 		force_struck_reaction := false,
+		delivery_identity: Variant = null,
 	) -> void:
 		probe_damage_calls += 1
 		probe_damage_total += maxi(0, amount)
@@ -72,6 +73,7 @@ class ProbePlayer:
 			causes_struck,
 			durability_context,
 			force_struck_reaction,
+			delivery_identity,
 		)
 
 
@@ -81,9 +83,9 @@ class ProbeEnemy:
 	var probe_attack_starts := 0
 	var probe_damage_applications := 0
 
-	func _play_attack_animation(duration: float) -> void:
+	func _play_attack_animation(duration: float, parent_action_id := -1) -> void:
 		probe_attack_starts += 1
-		super._play_attack_animation(duration)
+		super._play_attack_animation(duration, parent_action_id)
 
 	func _apply_attack_damage(
 		hit_target: Node2D,
@@ -93,6 +95,7 @@ class ProbeEnemy:
 		force_struck_reaction := false,
 		forced_control_roll := -1,
 		ranged := false,
+		release_record: Variant = null,
 	) -> void:
 		probe_damage_applications += 1
 		super._apply_attack_damage(
@@ -103,6 +106,7 @@ class ProbeEnemy:
 			force_struck_reaction,
 			forced_control_roll,
 			ranged,
+			release_record,
 		)
 
 

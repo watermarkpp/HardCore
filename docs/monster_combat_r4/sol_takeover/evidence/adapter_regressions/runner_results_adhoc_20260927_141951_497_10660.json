@@ -1,0 +1,56 @@
+{
+  "total": 3,
+  "suite": "adhoc",
+  "failed": 0,
+  "passed": 3,
+  "git_head": "393a97fa9710e3604895cb8118f50fc353241587",
+  "generated_at": "2026-09-27T14:19:51.4977555+08:00",
+  "results": [
+    {
+      "test_name": "m30_sampling_copy",
+      "test_path": "tests/hc_monster_ai/m30_sampling_copy.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "performance_comparison_test",
+      "test_path": "tests/hc_monster_ai/performance_comparison_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "m30_counts_12_15_test",
+      "test_path": "tests/r6_3_1/m30_counts_12_15_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0
+}
