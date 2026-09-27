@@ -829,6 +829,15 @@ $Suites.critical = @($Suites.critical + @(
     'tests/polygon_query_streaming_test.tscn'
 ) | Select-Object -Unique)
 
+# F03 world-clock delta and real persistence/old-character recovery gates.
+$Suites.critical = @($Suites.critical + @(
+    'tests/world_monster_clock_ledger_test.tscn',
+    'tests/world_monster_clock_persistence_test.tscn',
+    'tests/world_monster_clock_legacy_migration_test.tscn',
+    'tests/f03_hot_persistence_test.tscn',
+    'tests/f03_world_delta_compatibility_test.tscn'
+) | Select-Object -Unique)
+
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
 $FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'

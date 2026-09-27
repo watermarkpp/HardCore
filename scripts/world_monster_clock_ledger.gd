@@ -2,9 +2,11 @@ class_name WorldMonsterClockLedger
 extends RefCounted
 
 const WorldState := preload("res://scripts/world_monster_respawn_state.gd")
+const Delta := preload("res://scripts/world_clock_delta.gd")
 
 const SNAPSHOT_CONTRACT_ID := "monster.world_clock.snapshot.v1"
 const EVENT_CONTRACT_ID := "monster.world_clock.death_event.v1"
+const DELTA_EVENT_CONTRACT_ID := "monster.world_clock.death_event.v2"
 
 
 static func snapshot_document(profile_id: String, sequence: int, state: Dictionary, generation := "") -> Dictionary:
@@ -35,6 +37,22 @@ static func death_event_document(
 		"experience": experience,
 		"quest_states": quest_states.duplicate(true),
 		"world_state": world_state.duplicate(true),
+	}
+
+
+static func delta_death_event_document(
+	profile_id: String, sequence: int, level: int, experience: int,
+	quest_states: Dictionary, changes: Dictionary, generation := "",
+) -> Dictionary:
+	return {
+		"contract_id": DELTA_EVENT_CONTRACT_ID,
+		"world_clock_generation": generation,
+		"profile_id": profile_id, "sequence": sequence,
+		"level": level, "experience": experience,
+		# Non-death quest transactions may share the same journal sequence.
+		# Keep the reward snapshot so backup replay cannot resurrect old quests.
+		"quest_states": quest_states.duplicate(true),
+		"world_delta": Delta.patch_from_changes(changes),
 	}
 
 
@@ -91,7 +109,7 @@ static func valid_death_event(value: Variant, expected_profile_id: String, expec
 		return false
 	var document: Dictionary = value
 	return (
-		str(document.get("contract_id", "")) == EVENT_CONTRACT_ID
+		str(document.get("contract_id", "")) in [EVENT_CONTRACT_ID, DELTA_EVENT_CONTRACT_ID]
 		and str(document.get("profile_id", "")) == expected_profile_id
 		and valid_generation(generation)
 		and document.get("world_clock_generation", "") == generation
@@ -101,7 +119,11 @@ static func valid_death_event(value: Variant, expected_profile_id: String, expec
 		and int(document.get("level", 0)) > 0
 		and _nonnegative_sequence(document.get("experience", null))
 		and document.get("quest_states", null) is Dictionary
-		and valid_world_state(document.get("world_state", null))
+		and (
+			valid_world_state(document.get("world_state", null))
+			if document.get("contract_id", "") == EVENT_CONTRACT_ID
+			else Delta.valid_world_patch(document.get("world_delta", null))
+		)
 	)
 
 
@@ -163,7 +185,10 @@ static func replay(
 			result["experience"] = int(event["experience"])
 			result["quest_states"] = (event["quest_states"] as Dictionary).duplicate(true)
 		if sequence > world_sequence:
-			result["world_state"] = (event["world_state"] as Dictionary).duplicate(true)
+			if event["contract_id"] == EVENT_CONTRACT_ID:
+				result["world_state"] = (event["world_state"] as Dictionary).duplicate(true)
+			else:
+				Delta.apply_patch_owned(result["world_state"]["entries"], event["world_delta"])
 		result["latest_sequence"] = sequence
 	if previous < maxi(profile_sequence, world_sequence):
 		return {"ok": false, "reason": "death_event_gap"}

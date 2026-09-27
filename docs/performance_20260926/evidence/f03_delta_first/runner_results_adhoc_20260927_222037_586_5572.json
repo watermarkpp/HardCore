@@ -1,0 +1,62 @@
+{
+  "suite": "adhoc",
+  "failed": 1,
+  "git_head": "00c189b538cc2873f5420f0a3493939f570f5ef2",
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-27T22:20:37.5868864+08:00",
+  "passed": 2,
+  "total": 3,
+  "results": [
+    {
+      "test_name": "f03_hot_persistence_test",
+      "test_path": "tests/f03_hot_persistence_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T14:20:48.3680308Z",
+      "native_exit_observed_utc": "2026-09-27T14:20:23.3651912Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    },
+    {
+      "test_name": "world_monster_clock_ledger_test",
+      "test_path": "tests/world_monster_clock_ledger_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T14:20:54.5520905Z",
+      "native_exit_observed_utc": "2026-09-27T14:20:29.3283878Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "world_monster_clock_persistence_test",
+      "test_path": "tests/world_monster_clock_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T14:21:00.8054846Z",
+      "native_exit_observed_utc": "2026-09-27T14:20:36.0875714Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

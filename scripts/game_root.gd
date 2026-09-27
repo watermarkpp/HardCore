@@ -13176,7 +13176,7 @@ func _settle_pending_enemy_death_batch(
 	)
 	var settlements: Array = []
 	var respawn_state_before: Dictionary = (
-		PlayerState.monster_respawn_state_for_restore()
+		PlayerState.world_clock_mutation_snapshot()
 	)
 	for death: Dictionary in batch:
 		var respawn_preparation := _prepare_queued_enemy_respawn(death)
@@ -13200,7 +13200,7 @@ func _settle_pending_enemy_death_batch(
 		# Respawn state, quest progress and experience are one save boundary. A
 		# failed save restores the pre-attempt state, and the death item remains
 		# observable for retry/terminal handling; no drop roll is performed.
-		PlayerState.world_monster_respawn_state = respawn_state_before
+		PlayerState.restore_world_clock_mutation(respawn_state_before)
 		for death: Dictionary in batch:
 			death["transaction_result"] = settlement.duplicate(true)
 			death["last_error"] = str(settlement.get("reason", "save_failed"))

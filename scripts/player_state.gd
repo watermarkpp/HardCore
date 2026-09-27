@@ -187,6 +187,8 @@ var quest_states: Dictionary = {}
 var world_monster_respawn_state: Dictionary = (
 	WorldMonsterRespawnStateScript.empty_snapshot()
 )
+const WorldClockDelta := preload("res://scripts/world_clock_delta.gd")
+var _world_clock_changes: Dictionary = {}
 var _death_event_sequence := 0
 var _world_clock_generation := ""
 var _profile_saved_death_event_sequence := 0
@@ -367,6 +369,7 @@ func reset_progress(emit_updates := true) -> void:
 	taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 	quest_states = {}
 	world_monster_respawn_state = WorldMonsterRespawnStateScript.empty_snapshot()
+	_world_clock_changes.clear()
 	_death_event_sequence = 0
 	_world_clock_generation = ""
 	_profile_saved_death_event_sequence = 0
@@ -4504,6 +4507,10 @@ func _checkpoint_world_clock() -> bool:
 		clock_path, previous_sequence, _death_event_sequence, "sequence"
 	)
 	_world_clock_dirty = false
+	# The first durable baseline has no older snapshot to replay from.
+	# Later checkpoints must retain unjournaled changes needed by backups.
+	if previous_sequence < 0:
+		_world_clock_changes.clear()
 	return true
 
 
@@ -4568,16 +4575,9 @@ func _commit_death_event() -> bool:
 		ProjectSettings.globalize_path(_death_event_directory(active_profile_id, _world_clock_generation))
 	) != OK:
 		return false
-	var document := WorldMonsterClockLedgerScript.death_event_document(
-		active_profile_id,
-		next_sequence,
-		level,
-		experience,
-		quest_states,
-		WorldMonsterRespawnStateScript.compact_elapsed(
-			world_monster_respawn_state, Time.get_unix_time_from_system()
-		),
-		_world_clock_generation,
+	var document := WorldMonsterClockLedgerScript.delta_death_event_document(
+		active_profile_id, next_sequence, level, experience, quest_states,
+		_world_clock_changes, _world_clock_generation,
 	)
 	_last_save_phase_profile["runtime_snapshot_ms"] = (
 		float(Time.get_ticks_usec() - started_usec) / 1000.0
@@ -4597,6 +4597,7 @@ func _commit_death_event() -> bool:
 		}
 		return false
 	_death_event_sequence = next_sequence
+	_world_clock_changes.clear()
 	_world_clock_dirty = true
 	last_save_result = {
 		"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -5380,7 +5381,7 @@ func _write_shared_warehouse(records: Array) -> bool:
 	return _write_shared_warehouse_document_atomic(document)
 
 
-func _prepare_character_save_payload() -> Dictionary:
+func _prepare_character_save_payload(checkpoint_world := true) -> Dictionary:
 	if _warehouse_transaction_locked and not _persistence_transaction_in_progress:
 		last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked"}
 		return {}
@@ -5406,7 +5407,7 @@ func _prepare_character_save_payload() -> Dictionary:
 			"load_failure_reason": _save_blocked_reason,
 		}
 		return {}
-	if not _checkpoint_world_clock():
+	if (checkpoint_world or _world_clock_snapshot_sequence < 0) and not _checkpoint_world_clock():
 		last_save_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
 			"success": false,
@@ -6015,6 +6016,7 @@ func load_save() -> void:
 			Time.get_unix_time_from_system()
 		)
 	)
+	_world_clock_changes.clear()
 	_death_event_sequence = int(world_replay.get("latest_sequence", 0))
 	_world_clock_generation = str(parsed.get("world_clock_generation", ""))
 	_profile_saved_death_event_sequence = int(world_replay.get("source_profile_sequence", 0))
@@ -6096,51 +6098,52 @@ func monster_respawn_entry(
 	runtime_map_id: int,
 	spawn_slot_id: String
 ) -> Dictionary:
-	return WorldMonsterRespawnStateScript.entry_for(
-		world_monster_respawn_state,
-		runtime_map_id,
-		spawn_slot_id
-	)
+	var key := WorldMonsterRespawnStateScript.slot_key(runtime_map_id, spawn_slot_id)
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	var raw: Variant = entries.get(key, {})
+	return (raw as Dictionary).duplicate(true) if WorldClockDelta.valid_world_entry(key, raw) else {}
 
 
 func mark_monster_respawn_dead(
-	runtime_map_id: int,
-	spawn_slot_id: String,
-	monster_id: int,
-	policy_id: String,
-	respawn_at_unix: float
+	runtime_map_id: int, spawn_slot_id: String, monster_id: int,
+	policy_id: String, respawn_at_unix: float,
 ) -> bool:
-	var next_state := WorldMonsterRespawnStateScript.with_deadline(
-		WorldMonsterRespawnStateScript.compact_elapsed(
-			world_monster_respawn_state, Time.get_unix_time_from_system()
-		),
-		runtime_map_id,
-		spawn_slot_id,
-		monster_id,
-		policy_id,
-		respawn_at_unix
-	)
-	if WorldMonsterRespawnStateScript.entry_for(
-		next_state,
-		runtime_map_id,
-		spawn_slot_id
-	).is_empty():
+	var key := WorldMonsterRespawnStateScript.slot_key(runtime_map_id, spawn_slot_id)
+	var entry := {
+		"runtime_map_id": runtime_map_id, "spawn_slot_id": spawn_slot_id.strip_edges(),
+		"monster_id": monster_id, "policy_id": policy_id, "respawn_at_unix": respawn_at_unix,
+	}
+	if key.is_empty() or not WorldClockDelta.valid_world_entry(key, entry):
 		return false
-	world_monster_respawn_state = next_state
+	# Loaded states are normalized at the persistence boundary. Mutations own
+	# one validated slot; they do not rebuild the full historical table.
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	entries[key] = entry
+	world_monster_respawn_state["entries"] = entries
+	_world_clock_changes[key] = entry.duplicate(true)
 	_world_clock_dirty = true
 	return true
 
 
-func clear_monster_respawn_slot(
-	runtime_map_id: int,
-	spawn_slot_id: String
-) -> void:
-	world_monster_respawn_state = WorldMonsterRespawnStateScript.without_slot(
-		world_monster_respawn_state,
-		runtime_map_id,
-		spawn_slot_id
-	)
-	_world_clock_dirty = true
+func clear_monster_respawn_slot(runtime_map_id: int, spawn_slot_id: String) -> void:
+	var key := WorldMonsterRespawnStateScript.slot_key(runtime_map_id, spawn_slot_id)
+	var entries: Dictionary = world_monster_respawn_state.get("entries", {})
+	if not key.is_empty() and entries.has(key):
+		entries.erase(key)
+		_world_clock_changes[key] = null
+		_world_clock_dirty = true
+
+
+func world_clock_mutation_snapshot() -> Dictionary:
+	return {"state": world_monster_respawn_state.duplicate(true),
+		"changes": _world_clock_changes.duplicate(true), "dirty": _world_clock_dirty}
+
+
+func restore_world_clock_mutation(snapshot: Dictionary) -> void:
+	world_monster_respawn_state = (snapshot["state"] as Dictionary).duplicate(true)
+	_world_clock_changes = (snapshot["changes"] as Dictionary).duplicate(true)
+	_world_clock_dirty = bool(snapshot["dirty"])
+
 
 
 func apply_quick_slot_assignment(result: Dictionary) -> bool:
@@ -7602,13 +7605,15 @@ func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dic
 func prepare_loot_save(candidates: Array) -> Dictionary:
 	var plan := receive_loot_batch_partial(candidates, true)
 	if not bool(plan.get("prepared", false)): return {"immediate": plan}
-	var payload := _prepare_character_save_payload()
+	var payload := _prepare_character_save_payload(false)
 	if payload.is_empty(): return {"immediate": _loot_save_failure(plan.outcomes)}
 	payload["inventory"] = plan.inventory_after
 	payload["gold"] = plan.gold_after
 	var path := _profile_path(active_profile_id)
 	plan["profile_id"] = active_profile_id
 	plan["write_generation"] = _atomic_write_generation
+	plan["death_event_sequence"] = _death_event_sequence
+	plan["world_clock_generation"] = _world_clock_generation
 	plan["path"] = path
 	var writer := LootPreparedFile.new()
 	plan["writer"] = writer
@@ -7635,9 +7640,9 @@ func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
 		plan.writer.cancel()
 		return _loot_save_failure(plan.outcomes)
 	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
-		str(plan.path), _profile_saved_death_event_sequence, _death_event_sequence, "death_event_sequence"
+		str(plan.path), _profile_saved_death_event_sequence, int(plan.death_event_sequence), "death_event_sequence"
 	)
-	_profile_saved_death_event_sequence = _death_event_sequence
+	_profile_saved_death_event_sequence = int(plan.death_event_sequence)
 	_queue_world_clock_cleanup()
 	var inventory_changed_value: bool = inventory != plan.inventory_after
 	var gold_changed: bool = gold != int(plan.gold_after)
@@ -8280,6 +8285,7 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"world_clock_snapshot_sequence": _world_clock_snapshot_sequence,
 		"world_clock_backup_sequence": _world_clock_backup_sequence,
 		"world_clock_dirty": _world_clock_dirty,
+		"world_clock_changes": _world_clock_changes.duplicate(true),
 		"saved_map_id": saved_map_id,
 		"saved_position": saved_position,
 		"saved_ground_position_gu": saved_ground_position_gu,
@@ -8330,6 +8336,7 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	_world_clock_snapshot_sequence = int(snapshot.get("world_clock_snapshot_sequence", -1))
 	_world_clock_backup_sequence = int(snapshot.get("world_clock_backup_sequence", -1))
 	_world_clock_dirty = bool(snapshot.get("world_clock_dirty", true))
+	_world_clock_changes = (snapshot.get("world_clock_changes", {}) as Dictionary).duplicate(true)
 	saved_map_id = int(snapshot.get("saved_map_id", 910001))
 	saved_position = snapshot.get("saved_position", Vector2.ZERO)
 	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)

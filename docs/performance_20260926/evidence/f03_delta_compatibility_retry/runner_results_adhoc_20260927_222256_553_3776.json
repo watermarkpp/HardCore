@@ -1,0 +1,28 @@
+{
+  "total": 1,
+  "git_head": "00c189b538cc2873f5420f0a3493939f570f5ef2",
+  "generated_at": "2026-09-27T22:22:56.5531868+08:00",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "f03_world_delta_compatibility_test",
+      "test_path": "tests/f03_world_delta_compatibility_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T14:23:20.2704091Z",
+      "native_exit_observed_utc": "2026-09-27T14:22:55.0529367Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "engine_log_errors": 0,
+  "passed": 1
+}
