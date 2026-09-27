@@ -67,3 +67,11 @@ MP反例先在真实Player伤害入口得到FAIL：20伤害/AC0的实际HP和MP�
 ## 当前历史25项复核
 
 `evidence/historical_current_red/runner_results_adhoc_20260927_135051_727_24196.json`：18 PASS、7 FAIL。production_snapshot夹具2GU改合法1.499；warrior_skill_state_machine、live_attack_resolution、melee_lock_fallback、warrior_thrust_defense的正式世界未就绪/世界坐标错误，使用既有FormalWorldFixture等待正式世界，并走官方坐标设置。原玩法/身份/伤害断言保持。第一轮修正4 PASS、warrior仍FAIL（旧几何块使用屏幕ZERO）；保留historical_fixture_red，修正该块到正式地图锚点后原断言PASS（warrior_fixture_final）。当前合并证据为23项PASS、183/241两项FAIL；最终同SHA25项集合复核尚NOT_RUN，不将组合历史结果当最终完整回归。
+
+## 真正异步 line 投递与直接相关回归
+
+ID79的正式line_magic走真实物理选敌/起手，冻结child后等待原600ms投递，不调用settlement、不改pending/冷却/时钟。旧legacy特殊格子入口没有传观察root；现在由真实调用点接收刚分配的父动作ID，在观察开启时记录root并传给实际child，关闭时不构造字典，也不新增游戏serial。没有读取最近HC release或异步全局上下文。
+
+首轮真实释放目标后，音频选择与retarget在is_instance_valid前使用`is`，触发freed-instance错误；FAIL及timeout原日志保存async_line_red。只交换有效性与类型检查顺序后，positive/目标combat_epoch/来源世界代际/释放目标四案全部得到实际扣血/合法miss或真实拒绝，各child冻结身份完整。最终原始流水及身份在async_related。
+
+`evidence/async_related/runner_results_adhoc_20260927_141537_640_23964.json`：PASS 7/7，engine_log_errors=0、timeout=0。包含async line、真实双目标/生命周期、毒重挂、召唤身体与spawn footprint、召唤释放快照、主人传送、死亡掉落预算队列。最后一项是队列专项，其夹具覆盖落点解析，不能宣称正式火墙群死/地形落点负载已测；该负载仍待T6。

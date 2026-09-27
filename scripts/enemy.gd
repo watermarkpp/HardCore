@@ -761,7 +761,7 @@ func _audio_target_changed(next_target: Node2D) -> void:
 func _audio_player_target() -> Node:
 	if is_instance_valid(primary_target):
 		return primary_target
-	if target is PlayerCharacter and is_instance_valid(target):
+	if is_instance_valid(target) and target is PlayerCharacter:
 		return target
 	return null
 
@@ -2819,12 +2819,15 @@ func _physics_process_internal(delta: float) -> void:
 			# hand it to the presentation instead of letting the parent-less
 			# path allocate implicitly.
 			var legacy_melee_duration := maxf(_attack_animation_duration, 0.62)
-			_play_attack_animation(legacy_melee_duration, _allocate_attack_action(legacy_melee_duration))
+			var legacy_parent_action := _allocate_attack_action(legacy_melee_duration)
+			_play_attack_animation(legacy_melee_duration, legacy_parent_action)
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
 			if _uses_special_magic_melee_delivery():
 				_deal_special_magic_melee_hit(target, dealt_damage)
 			elif _uses_monster_special_cell_delivery():
-				_launch_monster_special_cell_delivery(target, dealt_damage)
+				var contact_observation: Variant = _observe_special_contact_admission(target, dealt_damage, legacy_parent_action)
+				if not _launch_monster_special_cell_delivery(target, dealt_damage, contact_observation):
+					DamageLedgerObserverScript.record_terminal(_delivery_observation_identity(contact_observation, target, "admission"), "rejected", "SPECIAL_DELIVERY_NOT_DISPATCHED")
 			elif _uses_physical_projectile_delivery():
 				_launch_physical_projectile(target, dealt_damage)
 			elif (
@@ -4159,6 +4162,25 @@ func _valid_special_integer_number(
 		and numeric <= float(maximum)
 	)
 
+
+func _observe_special_contact_admission(victim: Node2D, damage: int, parent_action: int) -> Variant:
+	if not DamageLedgerObserverScript.recording_enabled or not is_instance_valid(victim):
+		return null
+	# Observe this actual legacy admission. Do not consult the latest HC release
+	# or allocate a new gameplay serial for an observation-only root identity.
+	var record := {
+		"kind": "legacy_special_contact", "seq": parent_action,
+		"release_id": "monster:%d:instance:%d:contact_action:%d" % [monster_id, get_instance_id(), parent_action],
+		"source_instance_id": get_instance_id(), "source_life": _hc_life(self),
+		"target_id": victim.get_instance_id(), "target_life": _hc_life(victim),
+		"target_generation": int(victim.get_meta("zone_generation", -1)),
+		"map_id": runtime_map_id, "generation": int(get_meta("zone_generation", -1)),
+		"parent_action_id": parent_action, "parent_start_game_time_s": _attack_action_start_time_s,
+		"damage": damage, "physics_tick": Engine.get_physics_frames(),
+		"effective_interval_s": _current_attack_interval(),
+	}
+	DamageLedgerObserverScript.record_admission(record)
+	return record
 
 func _launch_monster_special_cell_delivery(
 	hit_target: Node2D,
@@ -7213,7 +7235,7 @@ func _retarget_internal(delta := 0.0, safe_checked_player: Node2D = null) -> voi
 	# Once a real blocker has taken over pursuit, retain it only while it remains
 	# inside the same live/contact contract. This prevents a high player threat
 	# from flipping the target back every decision tick.
-	if target is SummonActor:
+	if is_instance_valid(target) and target is SummonActor:
 		var current_summon := target as SummonActor
 		var current_summon_distance_gu := _ground_delta_gu_between_screen_positions(
 			global_position,

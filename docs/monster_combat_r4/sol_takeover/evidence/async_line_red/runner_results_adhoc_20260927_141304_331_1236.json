@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-09-27T14:13:04.3321469+08:00",
+  "suite": "adhoc",
+  "failed": 1,
+  "total": 1,
+  "results": [
+    {
+      "test_name": "async_line_lifecycle_test",
+      "test_path": "tests/hc_monster_combat_r4/async_line_lifecycle_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 16,
+      "engine_log_failure_count": 16,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_16;engine_log_failures_16"
+    }
+  ],
+  "git_head": "09902e3a4a3f47b64d96b961cb73f226807f7c5e",
+  "passed": 0,
+  "engine_log_errors": 16
+}
