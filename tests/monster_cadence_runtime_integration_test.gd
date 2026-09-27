@@ -839,7 +839,19 @@ func _test_safe_zone_return_uses_cadence() -> void:
 	_force_cadence_ready(enemy)
 	enemy._physics_process(1.0 / 60.0)
 	assert(enemy._movement_step_active, "safe-zone return must start after cadence grant")
-	assert(enemy._movement_step_reason == &"safe_zone_return", "safe-zone branch must use the shared autonomous-step executor")
+	# R3 W6: the safe-zone handler commits the retreat DECISION immediately
+	# (it clears the target and closes the combat session in the same tick,
+	# even while the cadence is still waiting). On the granted tick the target
+	# is already gone, so the movement runs through the shared autonomous-step
+	# executor as the ordinary return-to-spawn step. The contract under test
+	# is "the shared executor owns the movement", which both reason labels
+	# satisfy; requiring the literal safe_zone_return label on the second tick
+	# contradicted the committed-decision behavior.
+	assert(
+		enemy._movement_step_reason == &"return_to_spawn"
+		or enemy._movement_step_reason == &"safe_zone_return",
+		"safe-zone retreat must continue through the shared autonomous-step executor",
+	)
 
 	_checks += 3
 

@@ -605,6 +605,30 @@ $Suites.critical = @($Suites.critical + @(
     'tests/skills/skill_semantic_contracts_test.tscn'
 ) | Select-Object -Unique)
 
+# 2026-09-27 R3/R4 monster-combat closure: the correctness scenes from the
+# monster-combat R3 audit and the R4 fixed-point closure join the formal
+# critical suite. paired_load_realism stays OUT until its INVALID_MEASUREMENT
+# unit/sampling rebuild lands (R4 T6); the natural_cadence_* fixtures stay
+# OUT while their natural-admission chain is still being wired (R4 T5).
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r3/attack_facing_freeze_test.tscn',
+    'tests/hc_monster_combat_r3/attack_game_clock_test.tscn',
+    'tests/hc_monster_combat_r3/attack_parent_release_identity_test.tscn',
+    'tests/hc_monster_combat_r3/audio_stale_frame_test.tscn',
+    'tests/hc_monster_combat_r3/body_rejection_world_isolation_test.tscn',
+    'tests/hc_monster_combat_r3/body_rule_tier_cross_test.tscn',
+    'tests/hc_monster_combat_r3/real_admission_census_test.tscn',
+    'tests/hc_monster_combat_r3/stale_death_notification_test.tscn',
+    'tests/hc_monster_combat_r4/attack_expiry_without_render_test.tscn',
+    'tests/hc_monster_combat_r4/attack_owner_idempotence_test.tscn',
+    'tests/hc_monster_combat_r4/body_rejected_factory_isolation_test.tscn',
+    'tests/hc_monster_combat_r4/body_rejected_query_contract_test.tscn',
+    'tests/hc_monster_combat_r4/double_generation_death_test.tscn',
+    'tests/hc_monster_combat_r4/perf_unit_determinism_test.tscn',
+    'tests/hc_monster_combat_r4/synchronous_revive_death_token_test.tscn',
+    'tests/audio_w4_actor_service_test.tscn'
+) | Select-Object -Unique)
+
 # September 9 closure: persist the new integration boundaries in critical.
 # Performance probes stay explicit because their sampling needs a controlled
 # machine window; they are not correctness gates for every ordinary test run.
@@ -745,6 +769,39 @@ $Suites.critical = @($Suites.critical + @(
     'tests/equipment_skill_level_affix_test.tscn',
     'tests/world_background_staged_map_build_test.tscn',
     'tests/mse_collision_grid_alignment_test.tscn'
+) | Select-Object -Unique)
+
+# September 25-26 HC-MONSTER-COMBAT-R1 + HC-BODY-2TIER-1P5-V1: the monster
+# attack timing boundaries, dual-direction struck presentation, non-positive
+# damage boundary, atomic death commit and the two-tier footsole body system
+# are permanent regression gates.
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r1/boss_interval_test.tscn',
+    'tests/hc_monster_combat_r1/player_visual_duration_test.tscn',
+    'tests/hc_monster_combat_r1/player_poison_reapply_test.tscn',
+    'tests/hc_monster_combat_r1/attack_presentation_backlog_test.tscn',
+    'tests/hc_monster_combat_r1/continuous_magic_walk_delay_test.tscn',
+    'tests/hc_monster_combat_r1/damage_boundary_test.tscn',
+    'tests/hc_monster_combat_r1/death_reentry_test.tscn',
+    'tests/hc_monster_combat_r1/actor_body_policy_contract_test.tscn',
+    'tests/hc_monster_combat_r1/actor_body_projection_test.tscn',
+    'tests/hc_monster_combat_r1/monster_melee_body_pair_test.tscn',
+    'tests/hc_monster_combat_r1/summon_body_spawn_consistency_test.tscn',
+    'tests/hc_monster_combat_r1/monster_crowd_scale_performance_probe_test.tscn'
+) | Select-Object -Unique)
+
+# September 26 HC-MONSTER-COMBAT-R2: identity-bound body resolution,
+# fail-closed rejection, attack presentation identity/logic clocks and the
+# R2 regression gates are permanent.
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r2/monster_body_rejection_test.tscn',
+    'tests/hc_monster_combat_r2/revival_durability_test.tscn',
+    'tests/hc_monster_combat_r2/attack_presentation_identity_test.tscn',
+    'tests/hc_monster_combat_r2/attack_clock_red_test.tscn',
+    'tests/hc_monster_combat_r2/direct_magic_step_chain_test.tscn',
+    'tests/hc_monster_combat_r2/player_struck_poison_chain_test.tscn',
+    'tests/hc_monster_combat_r2/monster_runtime_census_test.tscn',
+    'tests/hc_monster_combat_r2/large_body_swing_cadence_test.tscn'
 ) | Select-Object -Unique)
 
 # v93 CPU query correctness gates; the timed crowd matrix remains opt-in.

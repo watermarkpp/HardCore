@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-09-27T00:34:10.6653964+08:00",
+  "results": [
+    {
+      "test_name": "classic_boss_order_test",
+      "test_path": "tests/classic_boss_order_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_world_integration_test",
+      "test_path": "tests/monster_world_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "failed": 0,
+  "git_head": "6d5085bcdd3108d7262c02e4788b15ef5f5874bb",
+  "passed": 2,
+  "total": 2
+}

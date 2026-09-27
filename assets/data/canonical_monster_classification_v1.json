@@ -172,7 +172,11 @@
       "resolution": "exact_id_map_spawn_audit",
       "notes": "exact-ID 地图刷新证据；正常生态分类",
       "placement_policy_resolution": "p3_promoted_from_exact_id_map_spawn_audit",
-      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate"
+      "placement_policy_evidence": "existing exact monster_id map-spawn audit proves this identity is a formal map-spawn candidate",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+      }
     },
     "34": {
       "classification": "ordinary",
@@ -1402,7 +1406,11 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_stats_crosscheck",
-      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录"
+      "notes": "exact-ID 属性交叉核验；与母体同生态并行记录",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+      }
     },
     "184": {
       "classification": "ordinary",
@@ -1963,7 +1971,11 @@
       "placement_kind": "",
       "placement_allowed": false,
       "resolution": "exact_id_user_adjudicated",
-      "notes": "用户裁决"
+      "notes": "用户裁决",
+      "drop_exemption": {
+        "allowed": true,
+        "reason": "user_loot_sheet_sole_drop_authority_lists_no_rows_for_this_identity"
+      }
     }
   }
 }

@@ -1,0 +1,493 @@
+{
+  "actual_hp_debits": {
+    "count": 20,
+    "total_amount": 63
+  },
+  "attributed_hp": [
+    {
+      "debits": 3,
+      "delta": 3,
+      "seq": 1
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 2
+    },
+    {
+      "debits": 2,
+      "delta": 2,
+      "seq": 3
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 4
+    },
+    {
+      "debits": 3,
+      "delta": 3,
+      "seq": 5
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 6
+    },
+    {
+      "debits": 2,
+      "delta": 2,
+      "seq": 7
+    },
+    {
+      "debits": 2,
+      "delta": 2,
+      "seq": 8
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 9
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 10
+    },
+    {
+      "debits": 3,
+      "delta": 3,
+      "seq": 11
+    },
+    {
+      "debits": 3,
+      "delta": 3,
+      "seq": 12
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 13
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 14
+    },
+    {
+      "debits": 2,
+      "delta": 2,
+      "seq": 15
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 16
+    },
+    {
+      "debits": 2,
+      "delta": 2,
+      "seq": 17
+    },
+    {
+      "debits": 4,
+      "delta": 4,
+      "seq": 18
+    },
+    {
+      "debits": 2,
+      "delta": 2,
+      "seq": 19
+    },
+    {
+      "debits": 3,
+      "delta": 3,
+      "seq": 20
+    }
+  ],
+  "attributed_hp_events": 20,
+  "chase_mode": false,
+  "enemy_position_changes": 0,
+  "expected_monster_id": 24,
+  "failures": [],
+  "fixture_safe_zone_hit": false,
+  "foreign_damage_events": 4,
+  "foreign_events": [
+    {
+      "delta": 7
+    },
+    {
+      "delta": 7
+    },
+    {
+      "delta": 7
+    },
+    {
+      "delta": 7
+    }
+  ],
+  "foreign_hp_debits": {
+    "amount_each": 7,
+    "count": 4
+  },
+  "git_head": "see delivery manifest; runner JSON carries git_head",
+  "hc_settlements_total": 20,
+  "hc_starts_total": 20,
+  "index_runtime_id": 83,
+  "initial_ground_distance_gu": 1.18880271911621,
+  "min_target_distance_px": 53.7990112304688,
+  "observed_records": 60,
+  "other_source_debits": {
+    "count": 36,
+    "total_amount": 114
+  },
+  "other_source_debits_detail": [
+    5,
+    1,
+    4,
+    4,
+    3,
+    2,
+    1,
+    4,
+    2,
+    2,
+    1,
+    2,
+    4,
+    4,
+    1,
+    3,
+    4,
+    3,
+    4,
+    4,
+    4,
+    2,
+    3,
+    3,
+    5,
+    4,
+    4,
+    4,
+    4,
+    3,
+    5,
+    3,
+    5,
+    4,
+    1,
+    2
+  ],
+  "sampled_physics_frames": 2877,
+  "schema": "r4_natural_cadence_v3_attribution_ledger",
+  "settle_amount_mismatches": [],
+  "spawn_ok": true,
+  "spawned_monster_id": 24,
+  "starts": [
+    {
+      "damage": 3,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 1,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 0.0166666666666667,
+      "physics_tick": 25,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:1",
+      "seq": 1,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 2,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 2.53333333333333,
+      "physics_tick": 176,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:2",
+      "seq": 2,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 2,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 3,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 5.04999999999999,
+      "physics_tick": 327,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:3",
+      "seq": 3,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 4,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 7.56666666666665,
+      "physics_tick": 478,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:4",
+      "seq": 4,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 3,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 5,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 10.0833333333334,
+      "physics_tick": 629,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:5",
+      "seq": 5,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 6,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 12.6000000000002,
+      "physics_tick": 780,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:6",
+      "seq": 6,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 2,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 7,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 15.116666666667,
+      "physics_tick": 931,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:7",
+      "seq": 7,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 2,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 8,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 17.6333333333336,
+      "physics_tick": 1082,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:8",
+      "seq": 8,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 9,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 20.1500000000001,
+      "physics_tick": 1233,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:9",
+      "seq": 9,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 10,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 22.6666666666667,
+      "physics_tick": 1384,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:10",
+      "seq": 10,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 3,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 11,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 25.1833333333332,
+      "physics_tick": 1535,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:11",
+      "seq": 11,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 3,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 12,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 27.6999999999997,
+      "physics_tick": 1686,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:12",
+      "seq": 12,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 13,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 30.2166666666662,
+      "physics_tick": 1837,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:13",
+      "seq": 13,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 14,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 32.7333333333328,
+      "physics_tick": 1988,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:14",
+      "seq": 14,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 2,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 15,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 35.2499999999993,
+      "physics_tick": 2139,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:15",
+      "seq": 15,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 16,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 37.7666666666658,
+      "physics_tick": 2290,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:16",
+      "seq": 16,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 2,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 17,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 40.2833333333323,
+      "physics_tick": 2441,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:17",
+      "seq": 17,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 4,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 18,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 42.7999999999989,
+      "physics_tick": 2592,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:18",
+      "seq": 18,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 2,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 19,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 45.3166666666654,
+      "physics_tick": 2743,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:19",
+      "seq": 19,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    },
+    {
+      "damage": 3,
+      "effective_interval_s": 2.5,
+      "generation": 1,
+      "map_id": 910001,
+      "parent_action_id": 20,
+      "parent_duration_s": 0.46,
+      "parent_start_game_time_s": 47.8333333333319,
+      "physics_tick": 2894,
+      "release_id": "monster:24:instance:469543950089:ordinary_melee:release:20",
+      "seq": 20,
+      "source_life": 1,
+      "target_id": 250383173239,
+      "target_life": 1
+    }
+  ],
+  "under_test_starts_recorded": 20,
+  "unique_admissions": 20,
+  "unique_releases": 20,
+  "world_ready": true
+}

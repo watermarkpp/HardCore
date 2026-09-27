@@ -1,0 +1,1422 @@
+{
+  "deliverable": "HC-BODY-2TIER-1P5-V1 per-ID body tier table (first deliverable)",
+  "policy_id": "actor_body_policy_v1",
+  "policy_sha256": "d499993967b8146f1c6ff17510da6b77fff318ca4233d8ddd3cef843a61e2003",
+  "catalog_path": "assets/data/runtime/canonical_monster_catalog.json",
+  "summary": {
+    "total": 156,
+    "large": 27,
+    "small": 129,
+    "large_rule_counts": {
+      "boss_large_body": 20,
+      "named_large_elite_family": 7
+    },
+    "note": "large_elite families are exactly the HC-BODY-2TIER-1P5-V1 section 5.2 named families; elites are not bulk-upgraded"
+  },
+  "rows": [
+    {
+      "monster_id": 18,
+      "canonical_name": "毒蜘蛛",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 19,
+      "canonical_name": "蛤蟆",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 21,
+      "canonical_name": "稻草人",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 24,
+      "canonical_name": "多钩猫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 26,
+      "canonical_name": "钉耙猫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 28,
+      "canonical_name": "森林雪人",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 30,
+      "canonical_name": "食人花",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 31,
+      "canonical_name": "多钩猫王",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 32,
+      "canonical_name": "钉耙猫王",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 33,
+      "canonical_name": "雪人王",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 34,
+      "canonical_name": "半兽人",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 36,
+      "canonical_name": "半兽战士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 38,
+      "canonical_name": "半兽勇士",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 39,
+      "canonical_name": "半兽勇士1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 41,
+      "canonical_name": "半兽勇士9",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 42,
+      "canonical_name": "半兽统领",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 43,
+      "canonical_name": "山洞蝙蝠",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 45,
+      "canonical_name": "蝎子",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 46,
+      "canonical_name": "洞蛆",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 47,
+      "canonical_name": "骷髅",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 50,
+      "canonical_name": "掷斧骷髅",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 52,
+      "canonical_name": "骷髅战士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 54,
+      "canonical_name": "骷髅战将",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 55,
+      "canonical_name": "骷髅战将0",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 56,
+      "canonical_name": "骷髅精灵",
+      "classification": "elite",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 57,
+      "canonical_name": "骷髅精灵1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 59,
+      "canonical_name": "骷髅精灵9",
+      "classification": "version_difference",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 60,
+      "canonical_name": "粪虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 62,
+      "canonical_name": "暗黑战士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 64,
+      "canonical_name": "沃玛战士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 66,
+      "canonical_name": "沃玛勇士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 68,
+      "canonical_name": "沃玛战将",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 70,
+      "canonical_name": "火焰沃玛",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 73,
+      "canonical_name": "沃玛卫士",
+      "classification": "elite",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 74,
+      "canonical_name": "沃玛卫士1",
+      "classification": "elite",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 75,
+      "canonical_name": "沃玛卫士2",
+      "classification": "elite",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 76,
+      "canonical_name": "沃玛教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 77,
+      "canonical_name": "沃玛教主1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 78,
+      "canonical_name": "沃玛教主9",
+      "classification": "version_difference",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 79,
+      "canonical_name": "僵尸1",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 81,
+      "canonical_name": "僵尸2",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 83,
+      "canonical_name": "僵尸3",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 85,
+      "canonical_name": "僵尸4",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 87,
+      "canonical_name": "僵尸5",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 89,
+      "canonical_name": "尸王",
+      "classification": "elite",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 90,
+      "canonical_name": "尸王1",
+      "classification": "special",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 91,
+      "canonical_name": "尸王2",
+      "classification": "elite",
+      "tier": "large",
+      "assignment_rule": "named_large_elite_family",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 92,
+      "canonical_name": "红蛇",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 94,
+      "canonical_name": "虎蛇",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 96,
+      "canonical_name": "羊",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 97,
+      "canonical_name": "猎鹰",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 100,
+      "canonical_name": "狼",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 101,
+      "canonical_name": "盔甲虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 103,
+      "canonical_name": "威思而小虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 104,
+      "canonical_name": "沙虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 105,
+      "canonical_name": "多角虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 107,
+      "canonical_name": "巨型多角虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 110,
+      "canonical_name": "蜈蚣",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 112,
+      "canonical_name": "黑色恶蛆",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 114,
+      "canonical_name": "跳跳蜂",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 116,
+      "canonical_name": "巨型蠕虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 118,
+      "canonical_name": "钳虫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 120,
+      "canonical_name": "邪恶钳虫",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 121,
+      "canonical_name": "邪恶钳虫1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 122,
+      "canonical_name": "邪恶钳虫2",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 123,
+      "canonical_name": "邪恶钳虫9",
+      "classification": "version_difference",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 124,
+      "canonical_name": "触龙神",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 126,
+      "canonical_name": "角蝇",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 127,
+      "canonical_name": "蝙蝠",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 128,
+      "canonical_name": "楔蛾",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 129,
+      "canonical_name": "红野猪",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 131,
+      "canonical_name": "红野猪3",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 132,
+      "canonical_name": "黑野猪",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 133,
+      "canonical_name": "黑野猪0",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 134,
+      "canonical_name": "黑野猪3",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 135,
+      "canonical_name": "白野猪",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 136,
+      "canonical_name": "白野猪0",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 137,
+      "canonical_name": "白野猪1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 138,
+      "canonical_name": "蝎蛇",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 140,
+      "canonical_name": "蝎蛇3",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 141,
+      "canonical_name": "邪恶毒蛇",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 142,
+      "canonical_name": "邪恶毒蛇1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 143,
+      "canonical_name": "石墓尸王",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 144,
+      "canonical_name": "蜜蜂",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 145,
+      "canonical_name": "变异骷髅0",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 146,
+      "canonical_name": "神兽0",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 147,
+      "canonical_name": "神兽2",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 148,
+      "canonical_name": "大老鼠",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 150,
+      "canonical_name": "祖玛弓箭手",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 152,
+      "canonical_name": "祖玛弓箭手3",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 153,
+      "canonical_name": "祖玛雕像",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 155,
+      "canonical_name": "祖玛雕像3",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 156,
+      "canonical_name": "祖玛卫士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 157,
+      "canonical_name": "祖玛卫士0",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 158,
+      "canonical_name": "祖玛卫士3",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 159,
+      "canonical_name": "祖玛卫士00",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 160,
+      "canonical_name": "祖玛教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 161,
+      "canonical_name": "祖玛教主9",
+      "classification": "version_difference",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 162,
+      "canonical_name": "双头血魔",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 163,
+      "canonical_name": "双头金刚",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 164,
+      "canonical_name": "血巨人",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 166,
+      "canonical_name": "血僵尸",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 168,
+      "canonical_name": "月魔蜘蛛",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 170,
+      "canonical_name": "黑锷蜘蛛",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 172,
+      "canonical_name": "钢牙蜘蛛",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 174,
+      "canonical_name": "暴牙蜘蛛",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 176,
+      "canonical_name": "天狼蜘蛛",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 178,
+      "canonical_name": "花吻蜘蛛",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 180,
+      "canonical_name": "赤月恶魔",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 182,
+      "canonical_name": "幻影蜘蛛",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 183,
+      "canonical_name": "爆裂蜘蛛",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 185,
+      "canonical_name": "剧毒蜘蛛",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 186,
+      "canonical_name": "鹰卫",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 187,
+      "canonical_name": "虎卫",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 188,
+      "canonical_name": "虹魔猪卫",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 189,
+      "canonical_name": "虹魔猪卫0",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 190,
+      "canonical_name": "虹魔猪卫9",
+      "classification": "version_difference",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 191,
+      "canonical_name": "虹魔蝎卫",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 192,
+      "canonical_name": "虹魔蝎卫0",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 193,
+      "canonical_name": "虹魔教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 194,
+      "canonical_name": "恶魔弓箭手",
+      "classification": "non_hostile",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 195,
+      "canonical_name": "千年树妖",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 196,
+      "canonical_name": "恶灵僵尸",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 198,
+      "canonical_name": "恶灵尸王",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 199,
+      "canonical_name": "恶灵尸王0",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 200,
+      "canonical_name": "骷髅锤兵",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 202,
+      "canonical_name": "骷髅长枪兵",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 204,
+      "canonical_name": "骷髅刀斧手",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 206,
+      "canonical_name": "骷髅弓箭手",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 208,
+      "canonical_name": "黄泉教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 209,
+      "canonical_name": "黄泉教主0",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 210,
+      "canonical_name": "牛头魔",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 212,
+      "canonical_name": "牛魔战士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 214,
+      "canonical_name": "牛魔斗士",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 216,
+      "canonical_name": "牛魔侍卫",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 218,
+      "canonical_name": "牛魔将军",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 220,
+      "canonical_name": "牛魔法师",
+      "classification": "ordinary",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 222,
+      "canonical_name": "牛魔祭司",
+      "classification": "elite",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 224,
+      "canonical_name": "牛魔王",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 225,
+      "canonical_name": "暗之牛魔王",
+      "classification": "version_difference",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 226,
+      "canonical_name": "宝箱",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 227,
+      "canonical_name": "宝箱1",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 228,
+      "canonical_name": "宝箱2",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 229,
+      "canonical_name": "宝箱3",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 230,
+      "canonical_name": "宝箱4",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 231,
+      "canonical_name": "宝箱5",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 232,
+      "canonical_name": "宝箱6",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 233,
+      "canonical_name": "宝箱7",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 234,
+      "canonical_name": "宝箱8",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    },
+    {
+      "monster_id": 235,
+      "canonical_name": "暗之双头血魔",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 236,
+      "canonical_name": "暗之双头金刚",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 237,
+      "canonical_name": "暗之黄泉教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 238,
+      "canonical_name": "暗之骷髅精灵",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 239,
+      "canonical_name": "暗之沃玛教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 240,
+      "canonical_name": "暗之虹魔教主",
+      "classification": "boss",
+      "tier": "large",
+      "assignment_rule": "boss_large_body",
+      "screen_radius_px": 22.627416997969522,
+      "ground_radius_gu": 0.5
+    },
+    {
+      "monster_id": 241,
+      "canonical_name": "飞火流星",
+      "classification": "special",
+      "tier": "small",
+      "assignment_rule": "default_small",
+      "screen_radius_px": 16.0,
+      "ground_radius_gu": 0.35355339059327373
+    }
+  ]
+}

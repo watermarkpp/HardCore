@@ -95,9 +95,19 @@ func _assert_flame_wooma_magic_melee() -> void:
 	assert(is_equal_approx(float(attacker.last_magic_attack_resolution.get("presentation_delay_seconds", 0.0)), 0.3))
 
 	player.current_hp = hp_before
+	# R3 W6: identity 70 rides the HC standard melee admission, so its magic
+	# melee resolves inside the UNIFIED 1.5 GU start reach (the R1 frozen
+	# contract: ordinary contact melee keeps one unified start reach). The old
+	# 1.0-GU boundary predated that delivery; outside 1.5 + EPS it must not
+	# resolve.
 	player.global_position = _ground_to_screen(Vector2(1.01, 0.0))
 	attacker._deal_special_magic_melee_hit(player, 20)
-	assert(player.current_hp == hp_before, "70 special melee exceeded its one-GU boundary")
+	assert(player.current_hp < hp_before, "70 magic melee must resolve inside the unified 1.5 GU reach")
+
+	player.current_hp = hp_before
+	player.global_position = _ground_to_screen(Vector2(1.51, 0.0))
+	attacker._deal_special_magic_melee_hit(player, 20)
+	assert(player.current_hp == hp_before, "70 special melee exceeded the unified 1.5 GU boundary")
 
 	attacker.queue_free()
 	player.queue_free()

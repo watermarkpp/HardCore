@@ -1,6 +1,7 @@
 class_name PlayerCharacter
 extends CharacterBody2D
 
+const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
 )
@@ -137,6 +138,11 @@ var _pending_combat_action_kind := ""
 var _test_combat_time_ms := -1
 var _last_temporary_item_buff_revision := -1
 var _last_revival_at_ms := -60000
+# HC-MONSTER-COMBAT-R3 W5 (R3-06): the death lifecycle generation. Every
+# formal death opens a new generation; the deferred death notification task
+# captures its own generation and re-checks it after the await, so a revival
+# (or a later formal death) voids the old life's pending notification.
+var _death_lifecycle_generation := 0
 var _pending_potion_health := 0
 var _pending_potion_mana := 0
 var _potion_tick_remaining := 0.0
@@ -275,6 +281,11 @@ func _physics_process(delta: float) -> void:
 		# Periodic poison damage is not an RM_STRUCK hit in the reference server,
 		# so it must not refresh the movement/action lock.
 		take_damage(poison_damage, false)
+	elif poison_time <= 0.0 and poison_damage != 0:
+		# HC-MONSTER-COMBAT-R1 Task 6 (F05): a naturally expired old-channel
+		# poison converges its residual strength to zero, so a later weaker
+		# poison can never inherit the expired stronger tick.
+		poison_damage = 0
 	_update_monster_source_poison(delta)
 	if shield_time == 0.0:
 		damage_reduction = 0.0
@@ -870,6 +881,12 @@ func _apply_resolved_damage(
 	durability_context := {},
 	force_struck_reaction := false,
 ) -> void:
+	# R4 T5-P2: explicit-test-switch fault injection point. With recording
+	# disabled this is a single boolean read and the damage path is the
+	# unchanged production path.
+	if DamageLedgerObserverScript.recording_enabled and DamageLedgerObserverScript.suppress_next_hit:
+		DamageLedgerObserverScript.record_hp_mutation(self, amount, current_hp, current_hp, damage_type)
+		return
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/UI selection/respawn transition is active must not repeat
 	# durability, gold loss, signals or schedule another death coroutine.
@@ -910,7 +927,69 @@ func _apply_resolved_damage(
 			var unpaid_mp := shield_mp_cost - current_mp
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
+	# R4 T5-P2: the unique player HP write site records the raw mutation
+	# with the resolved delivery identity and real before/after values.
+	var hp_before_ledger := current_hp
 	current_hp = maxi(0, current_hp - final_damage)
+	DamageLedgerObserverScript.record_hp_mutation(
+		self, final_damage, hp_before_ledger, current_hp, damage_type
+	)
+	# HC-MONSTER-COMBAT-R1 Task 7 (F08): the lethal outcome is decided and
+	# committed atomically BEFORE any external notification can run. Stats,
+	# resources and durability listeners must observe a consistent dead state:
+	# the old window (HP already 0, _dead still false) allowed a synchronous
+	# listener to reenter take_damage() and commit a second full death
+	# lifecycle (duplicated epoch, gold loss and a second death coroutine).
+	var hp_after_damage := current_hp
+	var died_this_hit := false
+	# R4 T2: the death lifecycle token is FROZEN at the moment the lethal
+	# result commits - before any durability/stats/resources broadcast. A
+	# synchronous listener that revives (or kills again) advances the live
+	# generation, and the deferred tail below must judge against the frozen
+	# value it captured, never against the live one.
+	var committed_death_generation := -1
+	if current_hp == 0:
+		var now_ms := Time.get_ticks_msec()
+		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
+			# HC-MONSTER-COMBAT-R2 T5: the automatic revival consumed the ring
+			# charge above, but this physical hit still owes exactly one
+			# incoming-struck durability event. The old early `return` skipped
+			# it, so the lethal hit that triggered the revival silently
+			# ignored equipment durability. Fall through instead: the common
+			# tail applies durability once, keeps the struck stagger
+			# presentation-gated (hp_after_damage was captured pre-revival,
+			# so a revived player does not stagger), and emits the revived
+			# stats exactly once at the end.
+			_last_revival_at_ms = now_ms
+			current_hp = max_hp
+			PlayerState.damage_special_effect_item("revival")
+			queue_redraw()
+		else:
+			died_this_hit = true
+			_dead = true
+			# R3 W5 (R3-06): this formal death opens a new lifecycle
+			# generation; any deferred notification still pending from an
+			# earlier life is thereby voided (second-death case included).
+			_death_lifecycle_generation += 1
+			# R4 T2: freeze THIS death's token right here, before any
+			# durability/stats/resources callback can run (a synchronous
+			# listener may revive or kill again inside those callbacks).
+			committed_death_generation = _death_lifecycle_generation
+			_monster_source_poison.clear()
+			# Formal death clears every poison lane: no poison may survive the
+			# revival boundary and keep ticking on the revived actor.
+			poison_time = 0.0
+			poison_damage = 0
+			combat_epoch += 1
+			reset_locomotion()
+			velocity = Vector2.ZERO
+			touch_vector = Vector2.ZERO
+			_pending_combat_action_active = false
+			_pending_combat_action_committed = false
+			_pending_combat_action_kind = ""
+			_pending_attack_context.clear()
+			_pending_skill_context.clear()
+			_queued_struck_reaction = false
 	if causes_struck and damage_type == "physical" and final_damage > 0:
 		var event_context: Dictionary = (
 			durability_context.duplicate(true)
@@ -930,7 +1009,7 @@ func _apply_resolved_damage(
 	if (
 		causes_struck
 		and final_damage > 0
-		and current_hp > 0
+		and hp_after_damage > 0
 		and (
 			force_struck_reaction
 			or ProfessionRules.should_player_stagger(final_damage, max_hp)
@@ -949,35 +1028,29 @@ func _apply_resolved_damage(
 	stats_changed.emit(current_hp, max_hp)
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
 	queue_redraw()
-	if current_hp == 0:
-		var now_ms := Time.get_ticks_msec()
-		if PlayerState.has_special_effect("revival") and now_ms - _last_revival_at_ms >= 60000:
-			_last_revival_at_ms = now_ms
-			current_hp = max_hp
-			PlayerState.damage_special_effect_item("revival")
-			stats_changed.emit(current_hp, max_hp)
-			resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
-			return
-		_dead = true
-		_monster_source_poison.clear()
-		# Formal death clears every poison lane: no poison may survive the
-		# revival boundary and keep ticking on the revived actor.
-		poison_time = 0.0
-		poison_damage = 0
-		combat_epoch += 1
-		reset_locomotion()
-		velocity = Vector2.ZERO
-		touch_vector = Vector2.ZERO
-		_pending_combat_action_active = false
-		_pending_combat_action_committed = false
-		_pending_combat_action_kind = ""
-		_pending_attack_context.clear()
-		_pending_skill_context.clear()
-		_queued_struck_reaction = false
-		visual.play_death()
+	if died_this_hit:
+		# R4 T2: the economics of THIS death settle exactly once at the death
+		# boundary, independent of any revival a synchronous listener may
+		# already have performed - cancelling the cancellable presentation
+		# must never skip a committed economic event.
 		PlayerState.lose_gold_percent(0.05)
+		# Re-check the FROZEN token after every synchronous external callback
+		# before touching presentation: a listener that revived inside the
+		# stats broadcast has already advanced the generation, and the death
+		# presentation/notification must never bind to the new life.
+		if committed_death_generation != _death_lifecycle_generation:
+			return
+		# Deferred death presentation and notification only: the lifecycle
+		# decision was already committed atomically above, so this task owns
+		# no HP/durability/epoch responsibility and cannot be reentered.
+		# R3 W5: the notification is generation-stamped. After the await, the
+		# generation re-check voids a notification whose life was revived (or
+		# superseded by a later death) in the meantime.
+		visual.play_death()
 		await get_tree().create_timer(0.8).timeout
 		if not is_inside_tree():
+			return
+		if committed_death_generation != _death_lifecycle_generation:
 			return
 		death_requested.emit()
 
@@ -988,6 +1061,10 @@ func complete_death_revival() -> void:
 	## and rejects movement/combat until this explicit completion boundary.
 	if not _dead:
 		return
+	# R3 W5 (R3-06): the revival boundary advances the death lifecycle
+	# generation - a deferred notification still pending from the old life
+	# is voided and can never cross the revival boundary.
+	_death_lifecycle_generation += 1
 	current_hp = max_hp
 	current_mp = max_mp
 	_dead = false
@@ -1568,12 +1645,34 @@ func defence_buff_snapshot() -> Dictionary:
 
 
 func apply_control(seconds: float) -> void:
+	# HC-MONSTER-COMBAT-R1 Task 7 (F07): a formally dead actor accepts no new
+	# control state, mirroring the existing apply_monster_poison() boundary.
+	# The full damage-receipt contract stays a separate work package.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return
 	control_time = maxf(control_time, seconds)
 	queue_redraw()
 
 
 func apply_poison(tick_damage: int, seconds: float) -> void:
-	poison_damage = maxi(poison_damage, maxi(1, tick_damage))
+	# HC-MONSTER-COMBAT-R1 Task 6 (F05): invalid input is rejected instead of
+	# being floored into a live poison (the old maxi(1, ...) floor created a
+	# damage value with no legal caller and could anchor residual strength).
+	if tick_damage <= 0 or seconds <= 0.0 or not is_finite(seconds):
+		return
+	# HC-MONSTER-COMBAT-R1 Task 7 (F07): a formally dead actor accepts no new
+	# poison, mirroring the existing apply_monster_poison() boundary so the
+	# killing hit cannot re-dirty the poison lanes the death commit just
+	# cleared. The full damage-receipt contract stays a separate work package.
+	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return
+	if poison_time <= 0.0:
+		# The previous cycle expired naturally: the new poison owns its own
+		# strength. Expired strength must never leak into the fresh cycle.
+		poison_damage = tick_damage
+	else:
+		# Both poisons still run: the stronger tick stays authoritative.
+		poison_damage = maxi(poison_damage, tick_damage)
 	poison_time = maxf(poison_time, seconds)
 	queue_redraw()
 

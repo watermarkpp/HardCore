@@ -1,5 +1,7 @@
 extends Node
 
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+
 
 class AudioProbe extends Node:
 	var calls: Array[Dictionary] = []
@@ -67,6 +69,7 @@ func _assert_rejected_entry_is_one_shot(
 	actor.name = "RejectedEntry_%s" % case_name
 	actor.monster_id = 21
 	actor.monster_data = {"monster_id": 21}
+	actor.combat_body_profile = MonsterIdentityScript.body_profile(21)
 	actor.max_hp = 100
 	actor.current_hp = 100
 	actor.global_position = Vector2(48.0, 48.0)
@@ -100,6 +103,10 @@ func _run() -> void:
 	enemy.name = "MonsterAudioHookFixture"
 	enemy.monster_id = 21
 	enemy.monster_data = {"monster_id": 21}
+	# HC-MONSTER-COMBAT-R2 T2: a production identity binds its real baked body
+	# profile; a bare fixture without one is fail-closed rejected (combat
+	# disabled) and never reaches the audio service discovery path under test.
+	enemy.combat_body_profile = MonsterIdentityScript.body_profile(21)
 	enemy.display_name = "测试怪物"
 	enemy.max_hp = 100
 	enemy.current_hp = 100
@@ -111,6 +118,12 @@ func _run() -> void:
 	add_child(target)
 	await get_tree().process_frame
 	enemy.target = target
+	# Deterministic fixture window: the bare Node2D target's liveness competes
+	# with boot-time async map registration inside the enemy's per-tick target
+	# policy, and the manual cache-clock choreography below must not race a
+	# physics-tick entry attempt. Freeze AI between the manual sections; the
+	# existing set_physics_process(true) at the attack section re-enables it.
+	enemy.set_physics_process(false)
 
 	# The target edge is a real gameplay entry even when the service is absent.
 	# Installing a service inside the one-second negative window must not cause a
@@ -126,11 +139,16 @@ func _run() -> void:
 	assert(probe.calls.is_empty(), "rejected entry must not retry within the same session")
 	enemy._audio_end_combat_session("explicit_disengage")
 	EnemyActor.set_audio_service_cache_clock_for_test(2000)
+	# Physics must be processing for the audio listenability gate to accept the
+	# manual one-shot combat entry below. The entry sequence itself stays
+	# synchronous, so no physics tick can interleave and consume the edge.
+	enemy.set_physics_process(true)
 	enemy._audio_try_enter_combat_session()
 
 	# Combat entry is one-shot and uses the runtime integer ID, not display text.
 	enemy._audio_try_enter_combat_session()
 	enemy._audio_try_enter_combat_session()
+	enemy.set_physics_process(false)
 	assert(_count(probe, "combat_prompt") == 1, "combat prompt must emit exactly once per session")
 	assert(
 		int(probe.calls[0].get("monster_id", -1)) == 21,
@@ -194,17 +212,23 @@ func _run() -> void:
 	)
 	enemy.set_physics_process(true)
 
-	# Accepted attack actions produce start once; visual frame 3 is observed
-	# separately and is not coupled to damage submission.
+	# Accepted attack actions produce start once; the strike phase crossing is
+	# observed from the action's OWN logical age (R3 W2), never from a cached
+	# drawn frame, and is not coupled to damage submission.
 	enemy._play_attack_animation(1.0)
 	assert(_count(probe, "attack_start") == 1, "attack_start missing")
-	enemy.visual.current_state = "attack"
-	enemy.visual.current_frame = 0
+	# Below the phase threshold: a cached draw state must not commit anything.
+	enemy._combat_action_time_s += 0.04
 	enemy._audio_observe_visual_state()
-	enemy.visual.current_frame = 2
+	assert(
+		_count(probe, "attack_frame") == 0,
+		"the strike phase must not fire before its logical threshold",
+	)
+	# Across the threshold: exactly one frame sound for this action.
+	enemy._combat_action_time_s += 0.56
 	enemy._audio_observe_visual_state()
 	enemy._audio_observe_visual_state()
-	assert(_count(probe, "attack_frame") == 1, "attack frame 3 must be one-shot per action")
+	assert(_count(probe, "attack_frame") == 1, "the strike phase must be one-shot per action")
 
 	# Monster hurt/death/ambient are outside the W4 production whitelist.
 	enemy.current_hp = 100

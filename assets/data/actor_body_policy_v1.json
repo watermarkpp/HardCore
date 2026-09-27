@@ -1,0 +1,57 @@
+{
+  "policy_id": "actor_body_policy_v1",
+  "contract_id": "hardcore.actor.body_policy.v1",
+  "design_reference": "HC-BODY-2TIER-1P5-V1 (HardCore_两档碰撞与1.5GU近战_整改设计_20260925.md)",
+  "version": 1,
+  "tier_radii": {
+    "small": {
+      "screen_radius_px": 16.0,
+      "comment": "ground radius = 16/(32*sqrt(2)) ~= 0.3535533906 GU via WorldSpatialRules iso conversion"
+    },
+    "large": {
+      "screen_radius_px": 22.627416997969522,
+      "comment": "ground radius = 0.5 GU exactly; iso screen radius = 0.5*32*sqrt(2)"
+    }
+  },
+  "player": {
+    "screen_radius_px": 18.0,
+    "frozen": true,
+    "comment": "player body size is explicitly preserved by the design; not tier-managed"
+  },
+  "summon_tiers": {
+    "skeleton": "small",
+    "divine_beast": "large"
+  },
+  "assignment_rules": [
+    {
+      "rule_id": "boss_large_body",
+      "when_classification": "boss",
+      "tier": "large",
+      "comment": "body tier only; never grants boss capabilities or ranges"
+    },
+    {
+      "rule_id": "named_large_elite_family",
+      "tier": "large",
+      "monster_ids": [56, 73, 74, 75, 89, 90, 91],
+      "source": "HC-BODY-2TIER-1P5-V1 section 5.2 named families: 普通骷髅精灵(56), 沃玛卫士(73,74,75), 尸王(89,90,91); same-body numbered variants included; not all elites are large"
+    },
+    {
+      "rule_id": "default_small",
+      "when": "no other rule matched",
+      "tier": "small",
+      "comment": "explicit versioned default rule; new IDs are rule-assigned and appear in the per-ID build table, never silently unclassified"
+    }
+  ],
+  "contact_gap_margin_gu": 0.05,
+  "invariants": {
+    "max_body_ground_radius_gu": 0.50625,
+    "comment": "ra + rt + 0.4375 + 0.05 <= 1.5 for every managed pair; large tier = 0.5 GU satisfies this"
+  },
+  "unknown_id_policy": "reject_at_build",
+  "legacy_collision_radius_role": "historical_source_only",
+  "notes": [
+    "The large tier expresses a bigger footsole footprint; it must never be derived from sprite canvas size at runtime.",
+    "Player 18px body, attack ranges, skill shapes, damage, defence, aggro and map data are out of scope for this policy.",
+    "Per-ID assignment is emitted into canonical_monster_catalog.json combat.body_profile by tools/build_canonical_monster_catalog.py; the generator is the only path that bakes body data."
+  ]
+}

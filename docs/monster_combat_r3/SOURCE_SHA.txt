@@ -1,0 +1,16 @@
+# R3 交付 SHA 登记（SOURCE 与 DOCUMENT 分开）
+
+SOURCE_SHA（交付源码，push 目标）：
+- 分支 codex/monster-combat-r1-20260925
+- 本地交付 HEAD（源码最后提交）：3e05e7035d0e4f58c36fb054f82e6b8c120dc4bc
+- 本地交付 HEAD（含文档）：1381d2838a3736f4a06699dd24a8cf4a10714950
+- 远端核对（git ls-remote origin 同分支）：
+  1381d2838a3736f4a06699dd24a8cf4a10714950 ✓ 一致（推送 2960bbe68..1381d2838，13 个 R3 提交）
+
+DOCUMENT_SHA（本交付文档目录快照，push 前的本地登记）：
+- docs/monster_combat_r3/ 提交所在提交：见 git log -- docs/monster_combat_r3
+- 证据清单：DELIVERY_MANIFEST.sha256（45 项）
+
+BASE    f5d6308f53162509bffd30f6981987cbfe80fa68
+R1      9a399c242c51dd4068d2dc155829449f6159c3f1
+R2      2960bbe682b61306eed8f7c9fe0c6eb6c6accb9a

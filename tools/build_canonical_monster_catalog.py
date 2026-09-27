@@ -40,6 +40,7 @@ DROP_AUTHORING_OVERLAY_PATH = (
     / "assets/data/canonical_monster_drop_authoring_overrides_v1.json"
 )
 COMBAT_SOURCE_PATH = ROOT / "assets/data/canonical_monster_combat_source_v1.json"
+BODY_POLICY_PATH = ROOT / "assets/data/actor_body_policy_v1.json"
 DETAIL_SOURCE_PATH = ROOT / "assets/data/monster_21cq_detail_source_v1.json"
 # Retired: canonical_monster_drop_overrides_v1.json (Crystal Wooma equivalence)
 # is no longer read by the generator and is intentionally absent from
@@ -364,7 +365,12 @@ def validate_special_normal_authority(
 
     expected_sources = {
         "assets/data/vanilla_176/monsters.json": "C3CD33787BF537C648B456D99B933FAE8CCBD336AD07D55BB14BC393D2E614C0",
-        "assets/data/canonical_monster_classification_v1.json": "BD7DD9DE8ED9995220BE94C9A095A2FB1FE2A8862FAA31EDE976A53173FCAF76",
+        # R2 T2 provenance refresh: commit 2b4ef9ef (RV15 user-directed elite
+        # migration) changed only the top-level exact_id_overrides of the
+        # classification file; the special-normal records section stayed
+        # byte-identical per-ID, so the recorded evidence hash is refreshed to
+        # the current authoritative file instead of pinning stale bytes.
+        "assets/data/canonical_monster_classification_v1.json": "8800A609B173C88E448542CEA743BD3A86860F99ED701FD8B6460A8E340DDEC9",
     }
     source_rows = authority.get("authority", {}).get("sources", [])
     source_by_path = {
@@ -1197,6 +1203,55 @@ def build_catalog() -> dict[str, Any]:
     service = load_json(SERVICE_PATH)
     behavior = load_json(BEHAVIOR_PATH)
     boss_rules = load_json(BOSS_RULE_PATH)
+    body_policy = load_json(BODY_POLICY_PATH)
+    body_policy_sha = sha256_file(BODY_POLICY_PATH)
+    body_tiers = body_policy.get("tier_radii", {})
+    body_large_ids = {
+        int(item)
+        for rule in body_policy.get("assignment_rules", [])
+        if isinstance(rule, dict) and rule.get("rule_id") == "named_large_elite_family"
+        for item in rule.get("monster_ids", [])
+        if isinstance(item, int)
+    }
+    body_large_radius_px = float(body_tiers["large"]["screen_radius_px"])
+    body_small_radius_px = float(body_tiers["small"]["screen_radius_px"])
+    body_max_ground_radius_gu = float(
+        body_policy.get("invariants", {}).get("max_body_ground_radius_gu", 0.50625)
+    )
+    iso_denominator = 32.0 * (2.0 ** 0.5)
+
+    def body_profile_for(
+        monster_id: int,
+        classification_name: str,
+    ) -> dict[str, Any]:
+        # HC-BODY-2TIER-1P5-V1: versioned two-tier footsole body assignment.
+        # The body tier is decoupled from boss identity: it only decides the
+        # physical footprint, never capabilities, ranges or damage channels.
+        if classification_name == "boss":
+            tier, rule_id = "large", "boss_large_body"
+        elif monster_id in body_large_ids:
+            tier, rule_id = "large", "named_large_elite_family"
+        else:
+            tier, rule_id = "small", "default_small"
+        screen_radius_px = (
+            body_large_radius_px if tier == "large" else body_small_radius_px
+        )
+        ground_radius_gu = screen_radius_px / iso_denominator
+        if not (0.0 < ground_radius_gu <= body_max_ground_radius_gu):
+            raise RuntimeError(
+                f"monster_id={monster_id} body tier={tier} radius {ground_radius_gu} GU "
+                f"violates the {body_max_ground_radius_gu} GU upper bound"
+            )
+        return {
+            "policy_id": str(body_policy.get("policy_id", "")),
+            "contract_id": str(body_policy.get("contract_id", "")),
+            "policy_sha256": body_policy_sha,
+            "tier": tier,
+            "assignment_rule": rule_id,
+            "screen_radius_px": screen_radius_px,
+            "ground_radius_gu": ground_radius_gu,
+        }
+
     detail_source = load_json(DETAIL_SOURCE_PATH)
     detail_by_id = validate_21cq_detail_source(detail_source)
     classification_ids = load_json(CLASSIFICATION_ID_PATH)
@@ -1846,6 +1901,7 @@ def build_catalog() -> dict[str, Any]:
                 "runtime_projection": runtime_projection,
                 "behavior_profile": merged_behavior,
                 "boss_rule": behavior_extra["boss_rule"],
+                "body_profile": body_profile_for(monster_id, classification_name),
             },
             "appearance_profile_id": art_profile_id,
             "drop_profile_id": drop_profile_id,
@@ -1951,6 +2007,7 @@ def build_catalog() -> dict[str, Any]:
         CLASSIFICATION_ID_PATH,
         POLICY_PATH,
         SPECIAL_NORMAL_AUTHORITY_PATH,
+        BODY_POLICY_PATH,
         DROP_SOURCE_PATH,
         DROP_AUTHORING_OVERLAY_PATH,
         COMBAT_SOURCE_PATH,
@@ -2600,6 +2657,87 @@ def build_spawn_and_summons(catalog: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def assert_identity_and_body_views(catalog: dict[str, Any]) -> None:
+    """HC-MONSTER-COMBAT-R2 T2: fail closed unless both catalog identity views
+    agree and every baked body_profile is exactly the policy assignment for
+    its own monster_id. This is the formal guard that replaces the retired
+    standalone injector: a missing index row, an index key that disagrees
+    with the embedded identity, or a body stamped with a foreign assignment
+    can no longer reach the published artifact.
+    """
+    entries = catalog.get("entries")
+    by_id = catalog.get("entries_by_id")
+    if not isinstance(entries, list) or not isinstance(by_id, dict):
+        raise RuntimeError("identity views: entries/entries_by_id missing")
+    policy = load_json(BODY_POLICY_PATH)
+    policy_sha = sha256_file(BODY_POLICY_PATH)
+    tiers = policy.get("tier_radii", {})
+    large_ids = {
+        int(item)
+        for rule in policy.get("assignment_rules", [])
+        if isinstance(rule, dict) and rule.get("rule_id") == "named_large_elite_family"
+        for item in rule.get("monster_ids", [])
+        if isinstance(item, int)
+    }
+    large_px = float(tiers["large"]["screen_radius_px"])
+    small_px = float(tiers["small"]["screen_radius_px"])
+    iso_denominator = 32.0 * (2.0 ** 0.5)
+    if len(entries) != len(by_id):
+        raise RuntimeError(
+            f"identity views: entries={len(entries)} but entries_by_id={len(by_id)}"
+        )
+    seen: set[int] = set()
+    for entry in entries:
+        monster_id = int(entry["monster_id"])
+        if monster_id in seen:
+            raise RuntimeError(f"identity views: duplicate monster_id={monster_id}")
+        seen.add(monster_id)
+        mirror = by_id.get(str(monster_id))
+        if mirror is None:
+            raise RuntimeError(f"identity views: monster_id={monster_id} missing index row")
+        if int(mirror.get("monster_id", -1)) != monster_id:
+            raise RuntimeError(
+                f"identity views: index key {monster_id} disagrees with embedded "
+                f"monster_id={mirror.get('monster_id')}"
+            )
+        combat = entry.get("combat", {})
+        profile = combat.get("body_profile")
+        mirror_profile = (mirror.get("combat", {}) or {}).get("body_profile")
+        if not isinstance(profile, dict):
+            raise RuntimeError(f"monster_id={monster_id} has no baked body_profile")
+        if profile != mirror_profile:
+            raise RuntimeError(
+                f"monster_id={monster_id} body_profile differs between identity views"
+            )
+        classification = str(entry.get("classification", ""))
+        if classification == "boss":
+            expected_tier, expected_rule = "large", "boss_large_body"
+        elif monster_id in large_ids:
+            expected_tier, expected_rule = "large", "named_large_elite_family"
+        else:
+            expected_tier, expected_rule = "small", "default_small"
+        if profile.get("policy_sha256") != policy_sha:
+            raise RuntimeError(f"monster_id={monster_id} body policy hash is stale")
+        if profile.get("tier") != expected_tier or profile.get("assignment_rule") != expected_rule:
+            raise RuntimeError(
+                f"monster_id={monster_id} assignment {profile.get('tier')}/"
+                f"{profile.get('assignment_rule')} violates policy ownership "
+                f"(expected {expected_tier}/{expected_rule})"
+            )
+        expected_px = large_px if expected_tier == "large" else small_px
+        if float(profile.get("screen_radius_px", -1.0)) != expected_px:
+            raise RuntimeError(
+                f"monster_id={monster_id} tier radius is not the policy radius"
+            )
+        expected_gu = expected_px / iso_denominator
+        if abs(float(profile.get("ground_radius_gu", -1.0)) - expected_gu) > 1e-9:
+            raise RuntimeError(
+                f"monster_id={monster_id} ground radius is not the isometric conversion"
+            )
+    if set(by_id.keys()) != {str(i) for i in seen}:
+        raise RuntimeError("identity views: index holds foreign or stale keys")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="validate generated output without writing")
@@ -2611,6 +2749,8 @@ def main() -> int:
     args = parser.parse_args()
     try:
         catalog = build_spawn_and_summons(load_json(args.base_catalog)) if args.spawn_and_summons_only else build_catalog()
+        if not args.spawn_and_summons_only:
+            assert_identity_and_body_views(catalog)
         errors = [] if args.spawn_and_summons_only else validate_catalog(catalog) + validate_generator_contract()
         if errors:
             for error in errors:

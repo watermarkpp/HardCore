@@ -1,0 +1,161 @@
+{
+  "contract_id": "hardcore.monster.combat.r2.coverage.v1",
+  "fixed_objects": {
+    "repo": "watermarkpp/HardCore",
+    "base_sha": "f5d6308f53162509bffd30f6981987cbfe80fa68",
+    "r1_sha": "9a399c242c51dd4068d2dc155829449f6159c3f1",
+    "branch": "codex/monster-combat-r1-20260925",
+    "worktree": "C:\\Users\\Administrator\\Documents\\HardCore-worktrees\\mct-r1-f5d6308f"
+  },
+  "requirement_coverage": [
+    {
+      "id": "R2-01",
+      "requirement": "复活耐久恰一次：复活触发的致死击必须照常结算被击装备耐久（R1 代码把致死击的 struck 分支整体跳过，耐久少扣恰一次）",
+      "production_change": "scripts/player.gd _apply_resolved_damage 复活分支 fall-through（耐久/受击结算先于死亡提交）",
+      "tests": [
+        "tests/hc_monster_combat_r2/revival_durability_test.tscn"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_192727_804_16500.json（R1 代码 durability_raw=4000）",
+        "green": "runner_results_adhoc_20260926_192700（R2 代码 durability_raw=3995）"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-02",
+      "requirement": "攻击动作身份/逻辑时钟/朝向/音频阶段：一次攻击提交 = 一个父动作身份（serial+logic started_ms+commit facing），表现/音频/延迟释放同源；逻辑时钟年龄制；音频跳帧恢复+冷热兜底",
+      "production_change": "scripts/enemy.gd _attack_logic_serial/_audio_attack_started(serial) + scripts/monster_visual.gd begin_attack_presentation(4 参数)/_clock_ms/年龄制/朝向冻结",
+      "tests": [
+        "tests/hc_monster_combat_r2/attack_presentation_identity_test.tscn",
+        "tests/hc_monster_combat_r2/attack_clock_red_test.tscn"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_194619_247_6064.json（R1 代码行为级：新攻击被跨帧 delta 归零 remaining=0.000000）",
+        "green": "runner_results_adhoc_20260926_194626_668_6064.json + runner_results_adhoc_20260926_194450_609_22612.json"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-03",
+      "requirement": "保留最新受击 + 持续背压：合并等待中的纯 STRUCK 保留最新项；满载队列在入队时就地收缩而非等下次攻击清理",
+      "production_change": "scripts/monster_visual.gd _merge_pending_struck_feedback 保留最新 + _enqueue_presentation 满载就地收缩（计数器 monster_presentation_struck_backpressure_collapsed）",
+      "tests": [
+        "tests/hc_monster_combat_r2/attack_presentation_identity_test.tscn（最新受击+背压场景）"
+      ],
+      "red_green_evidence": {
+        "red": "R1 代码保留最旧（0.16s）而非最新（0.39s）；同测试中该断言在 R1 代码上 FAIL（stash 行为级复证）",
+        "green": "runner_results_adhoc_20260926_194450_609_22612.json"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-04",
+      "requirement": "直击法术延期真实整段位移：延期不得取消在步、后继段（含绕过 cadence 的追击续段入口）必须等延期放行",
+      "production_change": "无生产改动（R1 F03 生产实现正确）；本轮补行为级整合验证",
+      "tests": [
+        "tests/hc_monster_combat_r2/direct_magic_step_chain_test.tscn"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_195119_049_20864.json（测试首版错误假设放行点=延期地板 1600ms；权威语义 now - walk_tick > walk_interval 严格 > → 放行点 2001ms）",
+        "green": "runner_results_adhoc_20260926_195903_464_9088.json 所在批次（同批次 direct_magic PASS）"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-05",
+      "requirement": "全允许 ID 真实 setup/ready 普查 runtime_census + 调用点矩阵 + 真实 Boss 20 起手（238/239/76）",
+      "production_change": "无生产改动（普查验证）",
+      "tests": [
+        "tests/hc_monster_combat_r2/monster_runtime_census_test.tscn",
+        "tests/hc_monster_combat_r2/large_body_swing_cadence_test.tscn"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_200138_361_9816.json（首版把 fixed_noncombat 宝箱族 226-234 误判为拒绝——普查真实发现合同禁战与身体拒绝的区分需求）",
+        "green": "runner_results_adhoc_20260926_200445_444_5336.json（156 全集：147 战斗 + 9 合同禁战）+ runner_results_adhoc_20260926_200421_826_10164.json（238/239/76 × 20 起手）"
+      },
+      "delivery_class_matrix": "_play_attack_animation 交付类共用入口：melee(2672)/area(5418)/special(5665,7630)/m30(7955)，全部经 begin_attack_presentation→_audio_attack_started 同一身份链",
+      "status": "DONE"
+    },
+    {
+      "id": "R2-06",
+      "requirement": "29+1 失败逐项裁决 failure_register",
+      "production_change": "无生产改动",
+      "tests": [],
+      "evidence": "docs/monster_combat_r2/failure_register.json（29 BASELINE_EXISTING + 1 FAIL_CHANGED 负载抖动 + 0 REGRESSION，R1 证据链 + R2 重裁决规则；R2 full critical 后逐项回填）",
+      "status": "DONE"
+    },
+    {
+      "id": "R2-07",
+      "requirement": "召唤出生快照严格化：删除 'or snapshot.is_empty() 也通过' 豁免",
+      "production_change": "无生产改动（FREEZE-P0.1 拒绝路径保留）；测试严格化 + 真实运行时地图投影",
+      "tests": [
+        "tests/hc_monster_combat_r1/summon_body_spawn_consistency_test.tscn（修改）"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_200705_588_5232.json（快照字段断言首版用错字段名 radius_gu，权威字段 target_combat_radius_gu）",
+        "green": "runner_results_adhoc_20260926_200815_631_2016.json"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-08",
+      "requirement": "真实身体对：8 方向 × 1.499/1.500/1.501 GU 运动/碰撞/停点/攻击矩阵",
+      "production_change": "无生产改动（真实门验证）",
+      "tests": [
+        "tests/hc_monster_combat_r2/body_pair_eight_direction_test.tscn"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_201008_056_15004.json（首版断言 1.5 边界排除；权威冻结比较器为 distance <= reach + EPS=1e-4，边界含 EPS 接受）+ runner_results_adhoc_20260926_201052_437_2628.json（格步进停点模型非权威，改生产接触权威）",
+        "green": "runner_results_adhoc_20260926_201329_491_3492.json"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-09",
+      "requirement": "人物动作衔接（双受击队列恰一次）+ 毒自然过期 + 复活后全帧字段有效性（Sol 包 Task5/6 行为）",
+      "production_change": "无生产改动（行为级验证）",
+      "tests": [
+        "tests/hc_monster_combat_r2/player_struck_poison_chain_test.tscn"
+      ],
+      "red_green_evidence": {
+        "red": "runner_results_adhoc_20260926_195301_994_6116.json（首版 19 HP 夹具被毒 tick 击杀——死亡清毒通道的生产行为；夹具需 200 HP 生存跨全程）",
+        "green": "runner_results_adhoc_20260926_195903_464_9088.json"
+      },
+      "status": "DONE"
+    },
+    {
+      "id": "R2-10",
+      "requirement": "≥3 组基线/候选 10/20/30 配对性能（large+宠物+AOE/群死，P50/P95/P99）",
+      "production_change": "无生产改动（采样交付）",
+      "tests": [
+        "tests/hc_monster_combat_r2/paired_perf_probe_test.tscn"
+      ],
+      "evidence": {
+        "baseline": "outputs/test_logs/r2_paired_perf_baseline_R1.json（R1 提交 9a399c24，基线树 runner_results_adhoc_20260926_201817_021_2636.json）",
+        "candidate": "outputs/test_logs/r2_paired_perf_9028.json（R2 链 2ba6dadf，runner_results_adhoc_20260926_201710_412_3900.json）",
+        "conclusion": "性能中性：P50 差异 -2.8%..+11.3%（最小档采样噪声），n=30 全档持平或更优"
+      },
+      "status": "DONE"
+    }
+  ],
+  "r2_git_chain": [
+    "ab7b0bc0 T0 探针脚本交付+.gitignore 例外",
+    "3d3b845e T0 账本/基线/证据归档",
+    "22086d04 T2 身体生成链+注入器退役+语义重生成",
+    "c4be5126 T5 复活耐久恰一次",
+    "66204ba8 T3 攻击身份/逻辑时钟/朝向/音频/最新受击/背压",
+    "930cec43 T4 直击法术位移链+双受击/毒自然过期验证",
+    "49ae4879 T1 全集普查+Boss 20 起手",
+    "ad981dce T6 快照严格化+八方向身体对+failure_register",
+    "2ba6dadf T7 配对性能探针"
+  ],
+  "protected_paths_zero_diff": [
+    "AGENTS.md",
+    "project.godot",
+    "scripts/game_root.gd",
+    "scripts/game_data.gd",
+    "scripts/region_content.gd"
+  ],
+  "full_critical_r2": "DONE: runner_results_critical_20260926_213740_693_4912.json — git_head=2ba6dadf（性能探针提交，修复提交 aa25866a 之前）total=491 passed=457 failed=34。失败构成：28 项 R1 既有基线（failure_register 逐项维持 BASELINE_EXISTING）+ 5 项 R2 夹具回归（T3 逻辑时钟/T2 身份绑定 fixture 对齐，提交 aa25866a 修复，定向复跑全 PASS）+ 1 项序列负载敏感（bich_common_client_art 隔离 PASS）。REGRESSION_OPEN=0。R1 登记的 vertical_slice_loop 与 bich_monster_visual 在 R2 链转 PASS。",
+  "r2_final_head": "aa25866a（fixture 回归修复后）"
+}

@@ -1,0 +1,71 @@
+{
+  "results": [
+    {
+      "test_name": "revival_durability_test",
+      "test_path": "tests/hc_monster_combat_r2/revival_durability_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "death_reentry_test",
+      "test_path": "tests/hc_monster_combat_r1/death_reentry_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "death_queue_lifecycle_rework_test",
+      "test_path": "tests/death_queue_lifecycle_rework_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "player_enemy_struck_chain_e2e_test",
+      "test_path": "tests/player_enemy_struck_chain_e2e_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-27T00:17:25.7636021+08:00",
+  "failed": 0,
+  "suite": "adhoc",
+  "total": 4,
+  "git_head": "c23d21d358aea7d011080316b5788c524d0332f4",
+  "engine_log_errors": 0,
+  "passed": 4
+}

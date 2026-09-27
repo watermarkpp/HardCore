@@ -97,6 +97,22 @@ static func appearance_profile(id: int) -> Dictionary:
 	return {}
 
 
+## HC-BODY-2TIER-1P5-V1: the validated two-tier body profile baked into the
+## canonical catalog. Exposed through the existing formal identity entry only;
+## there is intentionally no name/suffix fallback path for body data.
+static func body_profile(id: int) -> Dictionary:
+	var entry := catalog_entry(id)
+	if entry.is_empty():
+		return {}
+	var combat: Variant = entry.get("combat", {})
+	if not combat is Dictionary:
+		return {}
+	var profile: Variant = (combat as Dictionary).get("body_profile", {})
+	if not profile is Dictionary:
+		return {}
+	return profile
+
+
 static func drop_profile(id: int) -> Dictionary:
 	var key := _id_key(id)
 	if key.is_empty():

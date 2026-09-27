@@ -43,6 +43,11 @@ var walk_count := 0
 var walk_wait_locked := false
 var walk_tick_ms := 0
 var walk_wait_tick_ms := 0
+# HC-MONSTER-COMBAT-R1 Task 4 (F03): absolute floor (ms) of the NEXT walk
+# grant after the most recent direct-magic postponement, i.e.
+# postponed walk_tick_ms + walk_interval_ms. -1 = no active postponement.
+# Read by the shared next-segment gate for entries that bypass evaluate().
+var direct_magic_walk_floor_ms := -1
 var last_evaluated_ms := -1
 var configured := false
 var failed_closed := true
@@ -312,6 +317,7 @@ func reset(now_ms: Variant) -> bool:
 	walk_wait_locked = false
 	walk_tick_ms = reset_tick
 	walk_wait_tick_ms = reset_tick
+	direct_magic_walk_floor_ms = -1
 	last_evaluated_ms = reset_tick - 1
 	last_error_code = ""
 	last_error_reason = ""
@@ -327,8 +333,28 @@ func reset(now_ms: Variant) -> bool:
 func postpone_walk_tick_ms(delay_ms: int) -> bool:
 	if not configured or authority_violation:
 		return false
-	walk_tick_ms += maxi(0, delay_ms)
+	var applied := maxi(0, delay_ms)
+	walk_tick_ms += applied
+	if applied > 0:
+		# Freeze the vanilla next-grant floor for the shared next-segment gate.
+		# evaluate() keeps enforcing the same rule through walk_tick_ms; this
+		# floor exists for entries that must consume the postponement without
+		# consuming a cadence grant (continuous pursuit continuation).
+		direct_magic_walk_floor_ms = walk_tick_ms + walk_interval_ms
 	return true
+
+
+## HC-MONSTER-COMBAT-R1 Task 4 (F03): read-only gate for the next autonomous
+## segment. Returns true while the most recent direct-magic postponement still
+## blocks the next walk grant (now_ms <= postponed tick + interval, mirroring
+## evaluate()'s strict `now - walk_tick_ms > walk_interval_ms`). It consumes no
+## grant, mutates no counter and never revokes a committed current step. An
+## expired floor (or no postponement) allows the next segment immediately -
+## the delay is never re-anchored into a fresh full wait.
+func direct_magic_delay_blocks_next_step(now_ms: int) -> bool:
+	if not configured or authority_violation:
+		return false
+	return direct_magic_walk_floor_ms >= 0 and now_ms <= direct_magic_walk_floor_ms
 
 
 func state_snapshot() -> Dictionary:
@@ -402,6 +428,7 @@ func _reset_state() -> void:
 	walk_wait_locked = false
 	walk_tick_ms = 0
 	walk_wait_tick_ms = 0
+	direct_magic_walk_floor_ms = -1
 	last_evaluated_ms = -1
 	configured = false
 	failed_closed = true

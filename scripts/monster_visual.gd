@@ -84,6 +84,9 @@ var _has_authored_client_art := false
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
+# R4 T1: strike-phase threshold frozen at action admission from the canonical
+# frame metadata; hot/cold resource residency cannot move the boundary.
+var _attack_strike_threshold_s := 0.0
 var _hit_remaining := 0.0
 # R1.2 vanilla presentation FIFO (review closure): struck and attack
 # presentation events queue in strict arrival order - exactly the original
@@ -120,6 +123,30 @@ var _canonical_struck_frame_count := 2
 # in the queue (the playing struck is dequeued first). It drives the vanilla
 # backlog 1.5x playback speed; it NEVER decides the action order anymore.
 var _pending_struck_count := 0
+# HC-MONSTER-COMBAT-R1 Task 3: presentation-side identity of the critical
+# attack currently owning the body. Purely diagnostic (no gameplay reads).
+var _attack_action_serial := 0
+# HC-MONSTER-COMBAT-R2 T3: the attack presentation is bound to the LOGIC
+# release that started it - the enemy allocates the parent action id and its
+# logic start timestamp at the same tick that commits the damage release, and
+# the visual replays that exact action. The presentation age is consumed from
+# the action's own start timestamp (logic clock), never by subtracting one
+# whole render delta that may predate the attack start.
+var _attack_action_id := -1
+var _attack_logic_started_at_ms := -1
+var _attack_started_at_ms := 0
+var _attack_facing_at_commit := Vector2.INF
+# Injectable monotonic millisecond clock (test seam). Production keeps the
+# engine clock; tests drive a fake clock to reproduce cross-frame boundaries.
+var _clock_ms: Callable = Callable()
+# HC-MONSTER-COMBAT-R3 W1: the production combat clock seam. The owning
+# EnemyActor binds this to its single game-time getter (seconds, advanced
+# only by the Actor's own physics update - pause freezes it, engine time
+# scaling is already inside the delta). When bound, the attack age is
+# `owner_game_time - action_start_game_time`; the wall clock is never
+# consulted for production combat timing. Unbound => legacy preview path.
+var _combat_clock_s: Callable = Callable()
+var _attack_action_start_game_time_s := 0.0
 var _death_remaining := 0.0
 var _death_pose_held := false
 var _action_duration := 0.0
@@ -376,7 +403,16 @@ func _process(delta: float) -> void:
 
 func _advance_action_timers(delta: float) -> void:
 	var death_was_playing := _death_remaining > 0.0
-	_attack_remaining = maxf(0.0, _attack_remaining - delta)
+	# HC-MONSTER-COMBAT-R2 T3: the attack presentation consumes its OWN age.
+	# The render delta may span time before the attack started (for example a
+	# 0.50 s frame that contains a 0.46 s attack that began 0.01 s before the
+	# draw); subtracting that whole delta from a fresh action zeroed it. The
+	# attack's remaining time is `duration - age(now - action start)` instead.
+	if _attack_remaining > 0.0:
+		_attack_remaining = maxf(
+			0.0,
+			_hc_m30_attack_duration - _attack_age_seconds()
+		)
 	# Only a struck that already STARTED counts down. With a backlog (>= 2)
 	# pending presentation events the original client plays frame time at 2/3
 	# speed, i.e. the countdown runs at 1.5x until the backlog drains
@@ -395,6 +431,65 @@ func _advance_action_timers(delta: float) -> void:
 		# Keep the final frame continuously. The owner timer later extends this as
 		# the corpse hold; there must never be a one-frame idle flash in between.
 		_death_pose_held = true
+
+
+func _now_ms() -> int:
+	return int(_clock_ms.call()) if _clock_ms.is_valid() else Time.get_ticks_msec()
+
+
+func _attack_age_seconds() -> float:
+	# HC-MONSTER-COMBAT-R3 W1: production attack age consumes the OWNER's
+	# combat game clock (seconds, advanced only by the Actor's physics update;
+	# pause freezes it, engine time scaling is already inside the delta). The
+	# engine wall clock never participates in production timing - it remains
+	# only as the legacy preview path for unbound fixtures.
+	if _combat_clock_s.is_valid():
+		return maxf(0.0, float(_combat_clock_s.call()) - _attack_action_start_game_time_s)
+	return float(maxi(0, _now_ms() - _attack_started_at_ms)) / 1000.0
+
+
+## R4 T1: action validity is the OWNER's logical window, never the draw
+## cache. `_attack_remaining` only updates when the rendering process
+## advances, and several physics frames can pass without a draw; with the
+## owner's combat clock bound, the action lives on [start, start+duration)
+## of that clock and expires by pure logic even without any render advance.
+func _attack_logic_active() -> bool:
+	if _combat_clock_s.is_valid():
+		return _attack_age_seconds() < _hc_m30_attack_duration
+	return _attack_remaining > 0.0
+
+
+## True while an attack presentation owns the body (logic-clock authoritative).
+func is_attack_presenting() -> bool:
+	return _attack_logic_active()
+
+
+## Parent action identity of the attack presentation currently owning the
+## body, or -1. Bound by the enemy at the same tick that commits the damage
+## release (HC-MONSTER-COMBAT-R2 T3). R4 T1: an expired action never exposes
+## its identity just because no draw has refreshed the cached remaining time.
+func current_attack_action_id() -> int:
+	return _attack_action_id if _attack_logic_active() else -1
+
+
+## HC-MONSTER-COMBAT-R3 W2: the attack action's OWN logical age in seconds,
+## or -1 when no attack presentation owns the body. Phase crossings are
+## judged from this age, never from cached draw state.
+func attack_action_age_seconds() -> float:
+	return _attack_age_seconds() if _attack_logic_active() else -1.0
+
+
+## HC-MONSTER-COMBAT-R3 W2 + R4 T1: the logical strike-frame phase of the
+## CURRENT action. The threshold was frozen at action admission from the
+## canonical frame metadata (hot/cold residency cannot move it mid-action),
+## and the window is bounded by the action's own end - a stale cache from a
+## previous action can never satisfy it, and an expired action can never
+## keep it true.
+func attack_frame_phase_reached() -> bool:
+	if not _attack_logic_active():
+		return false
+	var age := _attack_age_seconds()
+	return age >= _attack_strike_threshold_s and age < _hc_m30_attack_duration
 
 
 func _update_resource_residency() -> void:
@@ -417,7 +512,18 @@ func _update_animation_frame(delta: float) -> void:
 		current_state = "walk"
 	else:
 		current_state = "idle"
-	var visual_facing: Vector2 = actor.movement_facing if current_state == "walk" else actor.facing
+	# HC-MONSTER-COMBAT-R3 W2 (R3-03): one facing authority per delivery
+	# phase. While an attack presentation owns the body, the BODY row uses
+	# the same commit-facing the overlay froze - a live target turn during
+	# the action must not split the body row from the swing overlay. Walk
+	# keeps its own movement facing; every other state follows the actor.
+	var visual_facing: Vector2
+	if current_state == "attack" and _attack_facing_at_commit != Vector2.INF:
+		visual_facing = _attack_facing_at_commit
+	elif current_state == "walk":
+		visual_facing = actor.movement_facing
+	else:
+		visual_facing = actor.facing
 	current_direction = _direction_row(visual_facing)
 	refresh_selection_ring_direction()
 	if current_state != _last_state:
@@ -1020,16 +1126,123 @@ func play_attack(duration := 0.46) -> void:
 	_start_attack_visual(duration)
 
 
+## HC-MONSTER-COMBAT-R1 Task 3 (F01): critical attack arbitration entry for
+## production combat transactions (contract
+## hardcore.monster.combat_presentation.r1). A newly accepted attack:
+## - starts immediately at its logic moment (same call, actor clock),
+## - is never queued behind a struck backlog and never dropped on overflow,
+## - merges waiting pure STRUCK feedback into at most one bounded item that
+##   keeps the NEWEST struck (presentation only: damage counts, delays and
+##   status judgements are untouched - they were already applied by the
+##   combat layer),
+## - is suppressed while a death presentation owns the body (frozen rule).
+## HC-MONSTER-COMBAT-R2 T3: the production caller binds the parent action
+## identity - action_id, the logic start timestamp and the facing captured at
+## the same commit tick. Legacy/preview callers may omit them (sentinels).
+## The legacy play_attack() FIFO above remains only for preview/test callers.
+func begin_attack_presentation(
+	duration := 0.46,
+	action_id := -1,
+	logic_started_at_ms := -1,
+	facing_at_commit := Vector2.INF,
+	logic_started_game_time_s := -1.0,
+) -> bool:
+	if _death_remaining > 0.0 or _death_pose_held:
+		return false
+	# HC-MONSTER-COMBAT-R3 W1 + R4 T1: an idempotent re-begin of the SAME
+	# logical action must not reset the action age and must not re-trigger
+	# the start phase - and the caller must be able to TELL, so this returns
+	# false (accepted, nothing new started) instead of true. A same-id retry
+	# whose action has already expired is likewise rejected outright: the
+	# caller may not resurrect an expired action into a fresh presentation.
+	if action_id >= 0 and _attack_action_id == action_id:
+		return false
+	var merged := _merge_pending_struck_feedback()
+	if merged > 0:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_presentation_struck_merged", merged
+		)
+	_attack_action_serial += 1
+	_attack_action_id = action_id
+	_attack_logic_started_at_ms = logic_started_at_ms
+	_attack_facing_at_commit = facing_at_commit
+	# R3 W1: when the production caller provides the owner's combat game time
+	# at the action start, the age authority becomes the OWNER's clock and the
+	# wall-clock stamp is kept only as legacy diagnostics for preview paths.
+	if logic_started_game_time_s >= 0.0:
+		_attack_action_start_game_time_s = logic_started_game_time_s
+	_start_attack_visual(duration)
+	return true
+
+
+## Drains the presentation ring, collapsing stale pure-STRUCK items into the
+## single newest feedback item. HC-MONSTER-COMBAT-R2 T3: the kept item is the
+## NEWEST struck (the contract always said so; the R1 loop actually kept the
+## oldest because it never overwrote the first match). Any pending
+## presentation (including preview attacks that a newer logical attack
+## supersedes) is merged, never replayed.
+func _merge_pending_struck_feedback() -> int:
+	if _presentation_count <= 0:
+		return 0
+	var merged := 0
+	var kept_kind := -1
+	var kept_duration := 0.0
+	var kept_barrier := -1
+	for i in _presentation_count:
+		var idx := (_presentation_head + i) % PRESENTATION_QUEUE_CAPACITY
+		var kind: int = _presentation_kind[idx]
+		if kind == PresentationAction.STRUCK:
+			# Overwrite on every struck: iteration runs oldest -> newest, so
+			# the loop lands on the NEWEST struck item.
+			kept_kind = kind
+			kept_duration = _presentation_duration[idx]
+			kept_barrier = _presentation_step_barrier[idx]
+		merged += 1
+	_presentation_head = 0
+	_presentation_tail = 0
+	_presentation_count = 0
+	_pending_struck_count = 0
+	if kept_kind == PresentationAction.STRUCK:
+		_presentation_kind[0] = kept_kind
+		_presentation_duration[0] = kept_duration
+		_presentation_step_barrier[0] = kept_barrier
+		_presentation_head = 0
+		_presentation_tail = 1
+		_presentation_count = 1
+		_pending_struck_count = 1
+	return merged
+
+
 func _start_attack_visual(duration: float) -> void:
 	_hc_m30_walk.interrupt_pose()
+	# HC-MONSTER-COMBAT-R2 T3: the logic clock starts NOW (the action's own
+	# age authority). A later render delta can never predate this timestamp.
+	_attack_started_at_ms = _now_ms()
+	# R4 T1: the strike phase threshold is frozen at action admission from
+	# the canonical frame metadata. Hot/cold resource residency can never
+	# move the phase boundary mid-action; residency only decides whether the
+	# overlay is drawn, never when the phase becomes true.
+	var frame_count_for_phase := maxi(
+		1,
+		MonsterAnimationPolicy.frame_count(active_resources, &"attack")
+	)
+	_attack_strike_threshold_s = duration * 2.0 / float(maxi(frame_count_for_phase, 4))
 	if visible and not SourceFrames.profile_for_id(actor.monster_id).is_empty() and actor.monster_id != 224:
 		var overlay := AttackOverlay.new()
-		var direction8 := _direction_row(actor.facing)
+		# Facing policy: the swing direction is frozen at the commit tick. The
+		# commit facing is authoritative for the 8-direction row; the 16-step
+		# refinement still aims once at the target line captured at start (a
+		# per-start aim, not a per-frame track).
+		var commit_facing := (
+			_attack_facing_at_commit
+			if _attack_facing_at_commit != Vector2.INF
+			else actor.facing
+		)
+		var direction8 := _direction_row(commit_facing)
 		var direction16 := direction8 * 2
 		if is_instance_valid(actor.target):
 			direction16 = ProjectileVisual._direction16_for_line(actor.global_position, actor.target.global_position)
-		var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"attack"))
-		overlay.setup(actor.monster_id, direction8, direction16, duration / float(count), Vector2(actor_ground_offset))
+		overlay.setup(actor.monster_id, direction8, direction16, duration / float(frame_count_for_phase), Vector2(actor_ground_offset))
 		add_child(overlay)
 	_attack_remaining = duration
 	_hc_m30_attack_duration = float(duration)
@@ -1037,9 +1250,20 @@ func _start_attack_visual(duration: float) -> void:
 	_elapsed = 0.0
 
 
-## O(1) FIFO append. On overflow (fixed capacity exhausted) the NEWEST event
-## is dropped and counted - the actions already queued keep their order.
+## O(1) FIFO append. HC-MONSTER-COMBAT-R2 T3 sustained backpressure: when the
+## ring is full and struck items are waiting, the waiting struck items
+## collapse into the single NEWEST one right here (the same newest-kept
+## contract as the attack-time merge) instead of waiting for the next attack
+## to clean up; only a backlog with no struck item left still drops the
+## newest event and counts the overflow.
 func _enqueue_presentation(kind: PresentationAction, duration: float, step_barrier := -1) -> void:
+	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY and _pending_struck_count > 0:
+		var collapsed := _merge_pending_struck_feedback()
+		if collapsed > 1:
+			RuntimeDiagnostics.increment_performance_counter(
+				&"monster_presentation_struck_backpressure_collapsed",
+				collapsed - 1
+			)
 	if _presentation_count >= PRESENTATION_QUEUE_CAPACITY:
 		RuntimeDiagnostics.increment_performance_counter(
 			&"monster_presentation_queue_overflow"
@@ -1085,6 +1309,10 @@ func _try_start_next_presentation() -> void:
 		_pending_struck_count -= 1
 		_start_struck_visual(duration)
 	else:
+		# A queued (legacy/preview) attack carries no parent action identity.
+		_attack_action_id = -1
+		_attack_logic_started_at_ms = -1
+		_attack_facing_at_commit = Vector2.INF
 		_start_attack_visual(duration)
 
 

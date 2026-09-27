@@ -1,5 +1,7 @@
 extends Node
 
+const MonsterIdentityScript := preload("res://scripts/monster_identity.gd")
+
 const AudioServiceScript := preload("res://scripts/audio_runtime_service.gd")
 const EnemyScript := preload("res://scripts/enemy.gd")
 
@@ -20,6 +22,7 @@ func _run() -> void:
 	enemy.name = "W4ActorServiceFixture"
 	enemy.monster_id = 31
 	enemy.monster_data = {"monster_id": 31}
+	enemy.combat_body_profile = MonsterIdentityScript.body_profile(31)
 	enemy.display_name = "W4测试怪物"
 	enemy.max_hp = 100
 	enemy.current_hp = 100
@@ -51,10 +54,13 @@ func _run() -> void:
 	enemy._play_attack_animation(1.0)
 	var after_attack_start: Dictionary = service.metrics_snapshot()
 	assert(int(after_attack_start.get("monster_attack_admitted", 0)) == 1, "真实Enemy攻击动作必须启动攻击声")
-	enemy.visual.current_state = "attack"
-	enemy.visual.current_frame = 0
-	enemy._audio_observe_visual_state()
-	enemy.visual.current_frame = 2
+	# R4 T1: the strike phase is judged from the action's OWN logical age on
+	# the owner's combat clock (threshold frozen at admission from canonical
+	# frame metadata), never from a hand-set drawn frame index. Advancing
+	# past the frozen threshold while staying inside the action readies the
+	# one frame sound; the same manual frame manipulation that R3 removed can
+	# no longer fabricate a phase.
+	enemy._advance_combat_action_clock(0.6)
 	enemy._audio_observe_visual_state()
 	assert(int(service.metrics_snapshot().get("played", 0)) >= 3, "真实服务应播放提示、攻击起点和攻击帧")
 

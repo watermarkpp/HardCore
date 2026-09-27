@@ -2,6 +2,7 @@ class_name EnemyActor
 extends CharacterBody2D
 
 const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
+const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
 const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
 var _hc_m30_attack_move_cutoff: float = INF # R4 compatibility diagnostic only
 var _hc_m30_attack_pose_remaining: float = 0.0
@@ -29,6 +30,7 @@ const RuntimeCombatSpatialIndexScript := preload(
 	"res://scripts/runtime_combat_spatial_index.gd"
 )
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
+const ActorBodyPolicyScript := preload("res://scripts/actor_body_policy.gd")
 const MonsterRangedProjectileEffectScript := preload(
 	"res://scripts/monster_ranged_projectile_effect.gd"
 )
@@ -332,6 +334,10 @@ var combat_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_r
 	ArtSpec.MONSTER_COLLISION_RADIUS_PX
 )
 var collision_radius_px := float(ArtSpec.MONSTER_COLLISION_RADIUS_PX)
+## HC-BODY-2TIER-1P5-V1: the validated two-tier body profile captured at setup
+## from the canonical identity entry. Resolved once, before spawn checks, the
+## physical shape and the spatial-index registration; never mutated per frame.
+var combat_body_profile: Dictionary = {}
 var environment_blocker: Node
 var _dying := false
 var _death_pending := false
@@ -371,8 +377,14 @@ var _background_accumulated_delta := 0.0
 var _boss_skill_cooldown := 3.0
 var _boss_warning := 0.0
 var _boss_phase_two := false
-var _boss_phase_enabled := true
-var _boss_skill_enabled := true
+# HC-MONSTER-COMBAT-R1 Task 2 (F02 + review P1): boss capabilities are opt-in.
+# Only an exact-ID boss_rule may enable the skill or the phase mechanics.
+# Bosses without a rule must never inherit implicit defaults: the old `true`
+# defaults exposed the 4.84 GU fallback skill and, together with the hidden
+# 1.15/0.78 interval in _current_attack_interval(), a whole unsanctioned
+# attack path for ruleless bosses.
+var _boss_phase_enabled := false
+var _boss_skill_enabled := false
 var _boss_skill_direction_ground := Vector2.DOWN
 var _boss_skill_footprint_snapshot: Dictionary = {}
 var _last_boss_skill_hit := false
@@ -397,6 +409,35 @@ var _audio_combat_session_serial := 0
 var _audio_owner_key := ""
 var _audio_attack_sequence := 0
 var _audio_attack_frame_sequence := -1
+# HC-MONSTER-COMBAT-R2 T3: true once the attack STATE was observed for the
+# current audio sequence; gates the cold/hot frame-sound recovery so a
+# monster without attack art stays silent.
+var _audio_attack_presented_seen := false
+# HC-MONSTER-COMBAT-R2 T3: parent action identity of the attack that committed
+# most recently. The presentation, the audio stream and the delayed release
+# all bind to this one serial and its logic start timestamp.
+var _attack_logic_serial := 0
+var _attack_logic_started_at_ms := 0
+# HC-MONSTER-COMBAT-R3 W1: the single combat action clock and the parent
+# action state. `_combat_action_time_s` advances ONLY inside the Actor's own
+# physics update (one entry point), so engine pause freezes it and any
+# project time scaling is already inside the delta. Every combat consumer -
+# pending damage timing, presentation age, audio phase - shares this time;
+# the wall clock (Time.get_ticks_msec) is no longer a production combat
+# time source.
+var _combat_action_time_s := 0.0
+var _attack_action_start_time_s := -1.0
+var _attack_action_duration_s := 0.0
+var _attack_action_source_life := -1
+var _attack_action_generation := -1
+var _attack_action_active := false
+# R4 T3: body admission resolves once; the spawn factory may precheck it
+# before the node ever enters the tree or the world registries.
+var _body_admission_resolved := false
+var _body_collision_shape: CollisionShape2D = null
+# R3 W1: the most recent release record built at a real admission point,
+# including its parent action identity (review/verification handle).
+var _last_hc_release_record := {}
 var _audio_attack_frame_ready := false
 var _audio_attack_start_accepted := false
 var _audio_combat_epoch_target_instance_id := 0
@@ -560,6 +601,9 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 		"drop_profile_id": str(canonical_entry.get("drop_profile_id", "")),
 	}
 	monster_id = requested_id
+	# HC-BODY-2TIER-1P5-V1: capture the baked body profile through the formal
+	# identity entry. No name/suffix fallback exists for body data.
+	combat_body_profile = MonsterIdentityScript.body_profile(requested_id)
 	# M02A: primary_target is the searchable player reference. A current combat
 	# target exists only after the exact monster-id acquisition policy accepts it.
 	target = null
@@ -905,61 +949,123 @@ func _audio_end_combat_session(reason := "explicit_disengage") -> void:
 	_audio_combat_entry_seen = false
 
 
-func _audio_attack_started() -> void:
+func _audio_attack_started(action_serial := -1) -> void:
 	if not combat_enabled:
 		return
-	_audio_attack_sequence += 1
+	# HC-MONSTER-COMBAT-R2 T3: the audio stream binds to the SAME parent
+	# action identity as the presentation. The enemy allocates the serial at
+	# the attack commit tick; presentation start and attack-start audio share
+	# it, so a superseded action can neither emit nor replay audio.
+	_audio_attack_sequence = action_serial if action_serial > 0 else _audio_attack_sequence + 1
 	_audio_attack_frame_sequence = -1
 	_audio_attack_frame_ready = false
 	_audio_attack_start_accepted = false
+	_audio_attack_presented_seen = false
 	# Attack start is emitted only by accepted actions below, never by target
 	# acquisition or an AI preview.
 	_audio_attack_start_accepted = _emit_monster_audio("attack_start")
 
 
-func _play_attack_animation(duration: float) -> void:
+## HC-MONSTER-COMBAT-R3 W1: the parent action identity is allocated at the
+## real admission point, BEFORE the release record is built and before any
+## presentation is requested. The identity is a four-tuple anchored on the
+## combat game clock: monotonic serial x source life x world generation, with
+## `_attack_action_start_time_s` as the timing origin. Returns the serial.
+## HC-MONSTER-COMBAT-R3 W1/W2: the single combat action clock. Advanced ONLY
+## here (the Actor's own physics entry point calls it with exactly one physics
+## delta): pause freezes it, background fast-path ticks accumulate to the same
+## total. The active-action flag closes on the combat clock itself - it must
+## not outlive the action's logical window.
+func _advance_combat_action_clock(delta: float) -> void:
+	_combat_action_time_s += delta
+	if _attack_action_active and (
+		_combat_action_time_s - _attack_action_start_time_s
+	) >= _attack_action_duration_s:
+		_attack_action_active = false
+
+
+func _allocate_attack_action(duration: float) -> int:
+	_attack_logic_serial += 1
+	_attack_action_start_time_s = _combat_action_time_s
+	_attack_action_duration_s = duration
+	_attack_action_source_life = _hc_life(self)
+	_attack_action_generation = int(get_meta("zone_generation", -1))
+	_attack_action_active = true
+	# Legacy wall-clock diagnostic only; production timing never reads this.
+	_attack_logic_started_at_ms = Time.get_ticks_msec()
+	return _attack_logic_serial
+
+
+func _combat_action_time_getter() -> float:
+	return _combat_action_time_s
+
+
+func _play_attack_animation(duration: float, parent_action_id := -1) -> void:
 	if not combat_enabled:
 		return
+	# HC-MONSTER-COMBAT-R2 T3: one parent action identity per attack commit.
+	# R3 W1: the identity is normally ALREADY allocated by the real admission
+	# point (`_allocate_attack_action`); presentation only consumes it.
+	# R4 T1: a caller passing a parent key must own a STILL-ACTIVE action of
+	# exactly this serial - an expired/cancelled/foreign key is rejected
+	# outright and may never be resurrected into a fresh allocation, and a
+	# same-key retry is an idempotent re-present (the visual returns "no new
+	# start", so the start audio is NOT resubmitted and the consumed phase
+	# state survives). Only parent-less legacy/preview callers allocate here.
+	var allocated := parent_action_id
+	if allocated < 0:
+		allocated = _allocate_attack_action(duration)
+	elif not _attack_action_active or allocated != _attack_logic_serial:
+		return
 	if visual != null:
-		visual.play_attack(duration)
-	_audio_attack_started()
+		# HC-MONSTER-COMBAT-R1 Task 3 (F01): production combat presentations
+		# enter the critical arbitration slot, so a legal attack can never be
+		# queued behind a struck backlog or silently dropped on overflow. The
+		# attack-start audio commits only when the presentation actually starts
+		# (same frame, same action); damage timing stays with the combat layer.
+		# R3 W1: the visual's age authority is bound to the owner's combat
+		# game clock; the action start game time is handed over explicitly.
+		visual._combat_clock_s = Callable(self, "_combat_action_time_getter")
+		if visual.begin_attack_presentation(
+			duration,
+			allocated,
+			_attack_logic_started_at_ms,
+			facing,
+			_attack_action_start_time_s,
+		):
+			_audio_attack_started(allocated)
+		return
+	_audio_attack_started(allocated)
 
 
 func _audio_observe_visual_state() -> void:
 	# R14-B5: only observe MonsterVisual while this attack sequence's frame
 	# audio is still pending. Once the frame sound has settled (or no accepted
 	# attack is running), return immediately without touching the visual node.
-	if (
-		_audio_attack_sequence <= 0
-		or not _audio_attack_start_accepted
-		or _audio_attack_frame_sequence == _audio_attack_sequence
-	):
+	if _audio_attack_sequence <= 0 or _audio_attack_frame_sequence == _audio_attack_sequence:
 		return
 	if visual == null or not is_instance_valid(visual):
 		return
-	var state := str(visual.current_state)
-	var frame := int(visual.current_frame)
-	if (
-		_audio_attack_start_accepted
-		and _audio_attack_sequence > 0
-		and state == "attack"
-		and frame <= 1
-	):
-		_audio_attack_frame_ready = true
-	if (
-		_audio_attack_start_accepted
-		and _audio_attack_sequence > 0
-		and _audio_attack_frame_ready
-		and state == "attack"
-		and frame >= 2
-		and _audio_attack_frame_sequence != _audio_attack_sequence
-	):
-		# MonsterVisual uses zero-based atlas frames; >=2 also survives a
-		# render/physics tick that advances across frame 3 without replaying it.
-		_audio_attack_frame_sequence = _audio_attack_sequence
-		_emit_monster_audio("attack_frame")
-	_audio_previous_visual_state = state
-	_audio_previous_visual_frame = frame
+	# HC-MONSTER-COMBAT-R3 W2: phase observation is bound to the CURRENT
+	# parent action. Cached draw state that belongs to another action (or a
+	# finished one) can never ready or commit THIS action's audio phases.
+	if visual.current_attack_action_id() != _audio_attack_sequence:
+		return
+	# R3 W2: the strike phase crossing comes from the action's OWN logical
+	# age, not from a drawn frame index. A rejected start sound does not
+	# erase the phase - the marking happens before the callback, exactly once.
+	if not visual.attack_frame_phase_reached():
+		return
+	_audio_attack_frame_ready = true
+	_audio_attack_presented_seen = true
+	_audio_attack_frame_sequence = _audio_attack_sequence
+	_emit_monster_audio("attack_frame")
+	# R3 W2: EXPIRY, not supplementary playback. If the action finishes before
+	# its frame phase fired, the phase expires with the action - there is no
+	# post-action attack_frame emission (the R2 branch that replayed the frame
+	# sound after the action ended was removed with its test contract).
+	_audio_previous_visual_state = str(visual.current_state)
+	_audio_previous_visual_frame = int(visual.current_frame)
 	_audio_previous_facing = facing
 
 
@@ -1596,6 +1702,7 @@ func _request_autonomous_step(
 		use_crowd_steering,
 		reason,
 		engagement_target,
+		now_ms,
 	)
 	if not started:
 		_clear_continuous_pursuit_intent()
@@ -1608,6 +1715,7 @@ func _begin_autonomous_step_without_cadence(
 	use_crowd_steering: bool,
 	reason: StringName,
 	engagement_target: Node2D = null,
+	now_ms_override := -1,
 ) -> bool:
 	# HC-POLY-R2
 	_hc_polygon_step_override = Vector2.INF
@@ -1616,6 +1724,18 @@ func _begin_autonomous_step_without_cadence(
 	if _movement_authority_failed_closed or stationary or dormant:
 		return false
 	if control_time > 0.0 or charm_time > 0.0:
+		return false
+	# HC-MONSTER-COMBAT-R1 Task 4 (F03): the shared next-segment gate. A
+	# direct-magic walk postponement must gate the NEXT autonomous segment even
+	# when the granted pursuit session bypasses cadence.evaluate(). The
+	# committed current step is never revoked here; only a new segment start is
+	# refused, and an already-expired postponement allows the step immediately.
+	if _movement_cadence != null and _movement_cadence.direct_magic_delay_blocks_next_step(
+		Time.get_ticks_msec() if now_ms_override < 0 else now_ms_override
+	):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_direct_magic_walk_delay_blocked_steps"
+		)
 		return false
 	if not desired_direction_ground_gu.is_finite():
 		return false
@@ -2178,6 +2298,9 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 
 
 func _apply_boss_rule() -> void:
+	# HC-MONSTER-COMBAT-R1 Task 2: re-applying a rule resets stale phase state
+	# so old phase-two/interval residue can never leak into a fresh binding.
+	_boss_phase_two = false
 	var timing: Dictionary = boss_rule.get("timing", {})
 	var projection_gu := MonsterUnitAdapterScript.runtime_projection_gu(
 		boss_rule,
@@ -2247,12 +2370,68 @@ func _initialize_spawn_facing_once() -> void:
 	movement_facing = selected_facing
 
 
+## R4 T3: public, idempotent body admission. Resolves the final body ONCE
+## and returns true when the profile is rejected. The spawn factory calls
+## this BEFORE joining the scene / occupying the respawn slot / registering
+## the spatial index / the activity cache; _ready runs it exactly once if
+## no precheck happened, so a fixture that tampers with the profile after
+## setup is still resolved at tree entry.
+func resolve_body_for_admission() -> bool:
+	if _body_admission_resolved:
+		return bool(get_meta("body_policy_rejected", false))
+	_body_admission_resolved = true
+	var collision := CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
+	var resolved_body := ActorBodyPolicyScript.resolve_monster_body(
+		monster_id, str(monster_data.get("classification", "")), combat_body_profile
+	)
+	var body_rejected := resolved_body.is_empty()
+	if body_rejected:
+		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
+			ActorBodyPolicyScript.TIER_SMALL
+		)
+		# R4 T3-A: the GU radius stays consistent with the fallback pixel
+		# radius that only feeds spawn-overlap push-out (placement hygiene).
+		combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+			collision_radius_px
+		)
+		set_meta("body_policy_rejected", true)
+		set_meta(
+			"body_policy_reject_reason",
+			"missing_or_invalid_or_foreign_body_profile"
+		)
+		combat_enabled = false
+		# A rejected profile never leaks the reserved shape as an orphan.
+		collision.free()
+		add_to_group("enemies_body_rejected")
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_body_policy_rejected"
+		)
+		return true
+	# R4 T3-A: ALL formal radii are decided here, in ONE place, BEFORE the
+	# spawn factory registers the actor into the spatial index - the factory
+	# reads enemy.combat_radius_gu for index.register(), so the large-tier
+	# bodies (0.5GU) must already carry their final GU radius at that point
+	# (the old order left the default 16px-derived value in the index).
+	collision_radius_px = float(resolved_body["screen_radius_px"])
+	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+		collision_radius_px
+	)
+	collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
+	add_to_group("enemies")
+	# Kept for _ready to attach once the node can own children; the factory
+	# precheck path attaches nothing until the actor actually enters the tree.
+	_body_collision_shape = collision
+	return false
+
+
 func _ready() -> void:
 	if monster_id < 0 or bool(get_meta("canonical_rejected", false)):
 		queue_free()
 		return
 	MonsterVisualScript.configure_actor_y_sort_item(self, "actor_root")
-	add_to_group("enemies")
+	# R3 W3: the world group join moved below the body resolution - a
+	# body-policy-rejected actor must never become an "enemies" member.
 	input_pickable = true
 	collision_layer = WorldSpatialRulesScript.ENEMY_LAYER
 	# Crowd steering still chooses routes and reduces contention, while the
@@ -2271,23 +2450,36 @@ func _ready() -> void:
 		_audio_rng.randomize()
 		_audio_rng_initialized = true
 	_initialize_spawn_facing_once()
-	var collision := CollisionShape2D.new()
-	collision.name = "CollisionShape2D"
-	combat_radius_gu = (
-		MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
-			ArtSpec.BOSS_COLLISION_RADIUS_PX
-		)
-		if is_boss
-		else MonsterUnitAdapterScript.collision_radius_gu(
-			behavior_profile,
-			ArtSpec.MONSTER_COLLISION_RADIUS_PX,
-		)
+	# HC-MONSTER-COMBAT-R2 T2: resolution is identity-bound. A production
+	# profile must match the current policy bytes, the exact tier radius and
+	# the assignment rule owned by this monster_id. A rejected profile never
+	# falls back to the small tier to keep fighting: the enemy stays visible
+	# but combat is disabled, no fighting footsole is created, and the small
+	# radius below only feeds spawn-overlap push-out (placement hygiene).
+	# HC-MONSTER-COMBAT-R3 W3 (R3-04): the body resolves BEFORE the world
+	# group joins. A rejected actor is not an "enemies" member - it is never
+	# targeted, never damaged, never drops loot; it only joins a diagnostic
+	# group so tooling can see it, and the reserved CollisionShape2D is freed
+	# instead of leaking as an orphan node.
+	# R4 T3: the resolution itself is a public idempotent admission step so
+	# the spawn factory can obtain the verdict BEFORE it joins the scene,
+	# occupies the respawn slot, registers the spatial index or the activity
+	# cache. _ready runs it exactly once; an earlier factory precheck wins.
+	resolve_body_for_admission()
+	if not bool(get_meta("body_policy_rejected", false)) and _body_collision_shape != null:
+		add_child(_body_collision_shape)
+		_body_collision_shape = null
+	# R4 T3-A: the GU radius was already derived from the FINAL pixel radius
+	# inside the successful admission resolution (before the spawn factory
+	# registers the actor into the spatial index). _ready must never produce
+	# a second, different value - it only verifies consistency.
+	var ready_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+		collision_radius_px
 	)
-	collision_radius_px = MonsterUnitAdapterScript.combat_radius_gu_to_footprint_radius_px(
-		combat_radius_gu
+	assert(
+		is_equal_approx(combat_radius_gu, ready_radius_gu),
+		"body admission GU radius must match the final pixel radius"
 	)
-	collision.shape = WorldSpatialRules.actor_footprint_shape_px(collision_radius_px)
-	add_child(collision)
 	if not is_boss:
 		_background_wakeup_timer = Timer.new()
 		_background_wakeup_timer.name = "BackgroundAIWakeupTimer"
@@ -2396,6 +2588,13 @@ func _physics_process_internal(delta: float) -> void:
 	if _dying:
 		_record_performance_counter(&"death_physics_process_calls_after_begin")
 		return
+	# HC-MONSTER-COMBAT-R3 W1: the single combat action clock. Advanced by
+	# exactly one physics delta per Actor tick - including background
+	# fast-path ticks (their accumulated delta resumes to the same total),
+	# frozen by engine pause (no tick runs at all) and stopped only by death.
+	# Every combat consumer (pending damage timing, presentation age, audio
+	# phase) reads this time; the wall clock is not a combat time source.
+	_advance_combat_action_clock(delta)
 	_record_performance_counter(&"active_enemy_physics_count")
 	# Match the original server's object-cycle boundary: damage may reduce HP to
 	# zero during a multi-target release, but death teardown must not interrupt
@@ -2546,6 +2745,8 @@ func _physics_process_internal(delta: float) -> void:
 		contact_distance_gu,
 		engagement_distance_gu,
 	)
+	# R3 W7 fix: the logical live-turn happens BEFORE the pending check again
+	# (original order). The R3-03 freeze stays overlay-only.
 	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		facing = _screen_facing_for_ground_direction(offset_ground_gu)
 	if _pending_attack_time >= 0.0:
@@ -2611,7 +2812,12 @@ func _physics_process_internal(delta: float) -> void:
 		if _attack_timer <= 0.0:
 			_attack_timer = _current_attack_interval()
 			_refresh_target_focus()
-			_play_attack_animation(maxf(_attack_animation_duration, 0.62))
+			# R4 T1: the legacy melee branch owns its admission like every
+			# other delivery family - allocate the parent action here and
+			# hand it to the presentation instead of letting the parent-less
+			# path allocate implicitly.
+			var legacy_melee_duration := maxf(_attack_animation_duration, 0.62)
+			_play_attack_animation(legacy_melee_duration, _allocate_attack_action(legacy_melee_duration))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
 			if _uses_special_magic_melee_delivery():
 				_deal_special_magic_melee_hit(target, dealt_damage)
@@ -2656,7 +2862,15 @@ func _physics_process_internal(delta: float) -> void:
 		else:
 			velocity = Vector2.ZERO
 			actual_ground_motion_gu = Vector2.ZERO
-	if is_boss and is_instance_valid(target):
+	if (
+		is_boss
+		and is_instance_valid(target)
+		and _pending_attack_time <= 0.0
+	):
+		# HC-MONSTER-COMBAT-R2 T3 facing policy: tracking is frozen while a
+		# committed attack's delayed release is in flight; the swing keeps the
+		# facing captured at its commit tick. Tracking resumes explicitly once
+		# the release resolves.
 		var fresh_offset_ground_gu := _ground_delta_gu_between_screen_positions(
 			global_position,
 			target.global_position,
@@ -3706,10 +3920,17 @@ func _target_magic_condition_met(offset_ground_gu: Vector2) -> bool:
 
 
 func _current_attack_interval() -> float:
+	# HC-MONSTER-COMBAT-R1 Task 2 (F02): the effective base interval comes only
+	# from the resolved identity chain (_attack_interval). A boss without an
+	# explicit boss_rule no longer falls back to the hidden 1.15/0.78 constants;
+	# an approved phase-two multiplier applies exactly once and only when the
+	# rule itself enabled phaseTwo.
 	if not boss_rule.is_empty():
 		var phase: Dictionary = boss_rule.get("phaseTwo", {})
-		return _attack_interval * (float(phase.get("attackIntervalMultiplier", 1.0)) if _boss_phase_two else 1.0)
-	return (0.78 if _boss_phase_two else 1.15) if is_boss else _attack_interval
+		return _attack_interval * (
+			float(phase.get("attackIntervalMultiplier", 1.0)) if _boss_phase_two else 1.0
+		)
+	return _attack_interval
 
 
 func _update_pending_attack(delta: float) -> void:
@@ -3756,8 +3977,10 @@ func _update_pending_attack(delta: float) -> void:
 	)
 	if offset_ground_gu.length() > hit_distance_gu + GroundUnitSpace.EPSILON_GU:
 		return
-	if offset_ground_gu.length_squared() > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
-		facing = _screen_facing_for_ground_direction(offset_ground_gu)
+	# HC-MONSTER-COMBAT-R2 T3 facing policy: the delayed release no longer
+	# re-faces the body here. The swing facing was frozen at the commit tick
+	# (and the presentation replays that exact facing); a release-time
+	# rotation was unassociated tracking inside the swing window.
 	_deal_melee_hit(
 		hit_target,
 		damage,
@@ -4383,6 +4606,22 @@ func _settle_monster_special_victim(
 			"release_id": str(record.get("release_id", "")),
 			"damage_owner": "enemy.monster_special_cell_release",
 		}
+		# R4 T5-P2: the mixed-defense delivery pushes its real identity for
+		# the synchronous call so the HP write resolves to THIS release.
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.push_source({
+				"source_instance_id": get_instance_id(),
+				"source_life": _hc_life(self),
+				"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
+				"release_id": str(record.get("release_id", "")),
+				"child_effect_id": "mixed_defense_%s" % str(delivery_contract.get("kind", "")),
+				"victim_instance_id": victim.get_instance_id(),
+				"victim_life": _hc_life(victim),
+				"runtime_map_id": runtime_map_id,
+				"zone_generation": int(get_meta("zone_generation", -1)),
+				"raw_roll": int(physical_damage) + int(magic_damage),
+				"action_game_time_s": _attack_action_start_time_s,
+			})
 		mixed_context.make_read_only()
 		var resolution_value: Variant = victim.call(
 			"take_monster_mixed_damage",
@@ -4390,6 +4629,8 @@ func _settle_monster_special_victim(
 			magic_damage,
 			mixed_context,
 		)
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.pop_source()
 		if resolution_value is Dictionary:
 			last_magic_attack_resolution = (
 				resolution_value as Dictionary
@@ -4917,11 +5158,29 @@ func _deal_special_magic_melee_hit(
 		)
 	):
 		return
+	var ledger_ctx := {}
+	if DamageLedgerObserverScript.recording_enabled:
+		ledger_ctx = {
+			"source_instance_id": get_instance_id(),
+			"source_life": _hc_life(self),
+			"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
+			"release_id": str(_hc_release_id()),
+			"child_effect_id": "magic_defense_direct",
+			"victim_instance_id": hit_target.get_instance_id(),
+			"victim_life": _hc_life(hit_target),
+			"runtime_map_id": runtime_map_id,
+			"zone_generation": int(get_meta("zone_generation", -1)),
+			"raw_roll": maxi(0, dealt_damage),
+			"action_game_time_s": _attack_action_start_time_s,
+		}
+		DamageLedgerObserverScript.push_source(ledger_ctx)
 	var raw_resolution: Variant = hit_target.call(
 		"take_direct_spell_damage",
 		"",
 		maxi(0, dealt_damage),
 	)
+	if DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.pop_source()
 	if not raw_resolution is Dictionary:
 		last_magic_attack_resolution = {
 			"success": false,
@@ -5079,11 +5338,59 @@ func _apply_attack_damage(
 	forced_control_roll := -1,
 	ranged := false,
 ) -> void:
+	# R4 T5-P2: the concrete damage dispatch pushes THIS delivery's real
+	# identity onto the observer source stack for the duration of the
+	# synchronous call and pops it unconditionally afterwards - early
+	# returns inside the victim therefore cannot leak identity, and a
+	# nested delivery from another source layers correctly on the stack.
+	# With recording disabled the push/pop are single boolean reads.
+	var ledger_ctx := {}
+	if DamageLedgerObserverScript.recording_enabled:
+		ledger_ctx = {
+			"source_instance_id": get_instance_id(),
+			"source_life": _hc_life(self),
+			"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
+			"release_id": str(_hc_release_id()),
+			"child_effect_id": "melee_direct" if not ranged else "ranged_direct",
+			"victim_instance_id": hit_target.get_instance_id(),
+			"victim_life": _hc_life(hit_target),
+			"runtime_map_id": runtime_map_id,
+			"zone_generation": int(get_meta("zone_generation", -1)),
+			"raw_roll": dealt_damage,
+			"action_game_time_s": _attack_action_start_time_s,
+		}
+		DamageLedgerObserverScript.push_source(ledger_ctx)
+	_apply_attack_damage_impl(
+		hit_target,
+		dealt_damage,
+		use_accuracy,
+		forced_roll,
+		force_struck_reaction,
+		forced_control_roll,
+		ranged,
+	)
+	if DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.pop_source()
+
+
+func _apply_attack_damage_impl(
+	hit_target: Node2D,
+	dealt_damage: int,
+	use_accuracy := true,
+	forced_roll := -1,
+	force_struck_reaction := false,
+	forced_control_roll := -1,
+	ranged := false,
+) -> void:
 	if not combat_enabled:
 		return
 	if use_accuracy and not _monster_physical_hit_succeeds(hit_target, forced_roll):
 		# A miss consumes the existing attack event/timer and damage roll but
-		# submits no damage or on-hit side effects.
+		# submits no damage or on-hit side effects. Reported as a REAL
+		# terminal from the branch itself, never inferred by an observer.
+		DamageLedgerObserverScript.record_terminal(
+			DamageLedgerObserverScript.current_source(), "miss", "accuracy_roll_failed"
+		)
 		return
 	if ranged and hit_target is PlayerCharacter:
 		var result := (hit_target as PlayerCharacter).take_ranged_damage(dealt_damage, true, force_struck_reaction)
@@ -5350,7 +5657,9 @@ func _update_area_magic_delivery(delta: float) -> void:
 	)
 	# Only the authored monster body attack is presented. There is no
 	# unproven client warning circle or independent projectile/effect.
-	_play_attack_animation(maxf(_attack_animation_duration, _area_magic_warning))
+	# R4 T1: admission ownership stays with this release point.
+	var target_magic_duration := maxf(_attack_animation_duration, _area_magic_warning)
+	_play_attack_animation(target_magic_duration, _allocate_attack_action(target_magic_duration))
 
 
 func _create_area_magic_footprint_snapshot() -> Dictionary:
@@ -5597,10 +5906,12 @@ func _update_area_attack(delta: float) -> bool:
 					candidate_snapshot,
 				)
 			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
-			_play_attack_animation(maxf(
+			# R4 T1: admission ownership stays with this release point.
+			var area_attack_duration := maxf(
 				_area_attack_visual_duration(),
 				_area_attack_warning,
-			))
+			)
+			_play_attack_animation(area_attack_duration, _allocate_attack_action(area_attack_duration))
 	return true
 
 
@@ -6204,6 +6515,11 @@ static func performance_diagnostics() -> Dictionary:
 func _can_use_background_ai() -> bool:
 	if _hc_damage_dirty or _hc_path_pending:
 		return false
+	# HC-MONSTER-COMBAT-R3 W1: an active combat action must never be parked
+	# on the low-frequency background path - its clock and consumers keep
+	# running at the physics rate until the action completes or is cancelled.
+	if _attack_action_active:
+		return false
 	if is_boss or not is_instance_valid(primary_target):
 		return false
 	if (
@@ -6295,6 +6611,26 @@ func _apply_damage_core(
 	causes_struck: bool,
 ) -> void:
 	if _dying or _death_pending:
+		return
+	# HC-MONSTER-COMBAT-R3 W3 (R3-04): a body-policy-rejected actor is not a
+	# combat participant. It stays visible for diagnosis, but it takes no
+	# damage, builds no threat, wakes for nothing and can never die in combat
+	# - so it can never drop loot through the death pipeline either.
+	if bool(get_meta("body_policy_rejected", false)):
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_damage_rejected_body_policy"
+		)
+		return
+	# HC-MONSTER-COMBAT-R1 Task 7 (F06): the resolved-damage entry rejects
+	# non-positive amounts. A negative value must never heal through a damage
+	# path, and zero must not create threat, wake maintenance or struck work.
+	# Healing keeps its own dedicated entries with their own max-HP contract,
+	# and the ordinary physical minimum-1 rule stays owned by the attack layer
+	# that legitimately carries it (applied exactly once there).
+	if amount <= 0:
+		RuntimeDiagnostics.increment_performance_counter(
+			&"monster_damage_rejected_nonpositive"
+		)
 		return
 	_record_performance_counter(&"take_damage_calls")
 	_leave_background_deep_sleep()
@@ -6422,6 +6758,12 @@ func _apply_poison_tick_damage() -> void:
 
 
 func can_receive_damage() -> bool:
+	# R4 T3: a config-rejected body must not advertise damageability to any
+	# targeting/spatial consumer. The rejected actor keeps its diagnostic
+	# existence (no crash, no orphan) but is outside the combat world: the
+	# damage core guard already refuses HP, and the public query now agrees.
+	if bool(get_meta("body_policy_rejected", false)):
+		return false
 	return (
 		current_hp > 0
 		and not _death_pending
@@ -7477,6 +7819,10 @@ func draw_ellipse_shadow(radius_px: float, center_px := Vector2.ZERO) -> void:
 func _update_boss_skill(delta: float, distance_gu: float) -> void:
 	if not combat_enabled:
 		return
+	# HC-MONSTER-COMBAT-R1 Task 2: the entry itself validates the capability so
+	# no future call site can silently re-introduce the ruleless fallback skill.
+	if not _boss_skill_enabled:
+		return
 	var special: Dictionary = boss_rule.get("specialSkill", {})
 	var phase: Dictionary = boss_rule.get("phaseTwo", {})
 	var skill_radius_gu := MonsterUnitAdapterScript.range_gu(
@@ -7547,7 +7893,9 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 			_next_spatial_release_id("boss_special"),
 		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
-		_play_attack_animation(float(special.get("animationSeconds", _attack_animation_duration)))
+		# R4 T1: admission ownership stays with this release point.
+		var boss_special_duration := float(special.get("animationSeconds", _attack_animation_duration))
+		_play_attack_animation(boss_special_duration, _allocate_attack_action(boss_special_duration))
 
 
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
@@ -7840,6 +8188,10 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 	_hc_last_start_tick = tick
 	_hc_release_seq += 1
 	_hc_starts += 1
+	# HC-MONSTER-COMBAT-R3 W1: allocate the parent action identity HERE, the
+	# real admission point, before the release record exists; the record, the
+	# presentation and the audio stream all bind to it.
+	var parent_action_id := _allocate_attack_action(_attack_animation_duration)
 	# Special contact channels historically settle immediately; their legacy
 	# body-hit offset must not become a second gameplay delay through HC AI.
 	var hit_delay := _attack_hit_delay if str(attack_delivery_rule.get("kind", "")).is_empty() else 0.0
@@ -7855,7 +8207,15 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 		"parent_id": get_parent().get_instance_id() if get_parent() != null else 0,
 		"tolerance": DELAYED_HIT_TOLERANCE_GU if hit_delay > 0.0 else 0.0,
 		"damage": _rng.randi_range(attack_min, attack_max),
+		# R3 W1 parent action identity: one logical action owns every pending
+		# record and child release it produced.
+		"parent_action_id": parent_action_id,
+		"parent_source_life": _attack_action_source_life,
+		"parent_generation": _attack_action_generation,
+		"parent_start_game_time_s": _attack_action_start_time_s,
+		"parent_duration_s": _attack_action_duration_s,
 	}
+	_last_hc_release_record = record
 	_clear_autonomous_step_state()
 	# Keep the path/session. Only this local motion step is interrupted.
 	velocity = Vector2.ZERO
@@ -7872,7 +8232,9 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 	var m30_clip: float = HCM30WalkPhaseScript.attack_clip_seconds(_attack_animation_duration, _attack_timer, hit_delay)
 	_hc_m30_attack_move_cutoff = maxf(0.0, _attack_timer - m30_clip)
 	_hc_m30_attack_pose_remaining = m30_clip
-	_play_attack_animation(m30_clip)
+	# R3 W1: the presentation consumes the identity allocated above; the
+	# visual clip may be shorter than the logical action duration.
+	_play_attack_animation(m30_clip, parent_action_id)
 	if hit_delay <= 0.0:
 		_hc_settle(record)
 	return true
@@ -7899,10 +8261,18 @@ func _hc_settle(record: Dictionary) -> void:
 		or victim.get_parent() == null or int(record.target_parent_id) != victim.get_parent().get_instance_id()
 	):
 		_hc_last_reason = "RELEASE_LIFECYCLE_REJECTED"
+		DamageLedgerObserverScript.record_terminal(
+			{"source_instance_id": get_instance_id(), "source_life": _hc_life(self), "parent_action_id": record.get("parent_action_id", -1), "release_id": str(record.get("release_id", ""))},
+			"rejected", "RELEASE_LIFECYCLE_REJECTED",
+		)
 		return
 	# Release settlement always rechecks WORLD without the navigation cache.
 	_hc_last_reason = _hc_access(victim, float(record.tolerance), true)
 	if _hc_last_reason != "CLEAR":
+		DamageLedgerObserverScript.record_terminal(
+			{"source_instance_id": get_instance_id(), "source_life": _hc_life(self), "parent_action_id": record.get("parent_action_id", -1), "release_id": str(record.get("release_id", ""))},
+			"rejected", _hc_last_reason,
+		)
 		return
 	_hc_settlements += 1
 	_hc_active_release_id = str(record.release_id)
@@ -7919,6 +8289,11 @@ func _hc_release_id() -> String:
 
 func _hc_finalize_boss_facing() -> void:
 	# Movement owns movement_facing. This function only maintains combat facing.
+	# R3 W7 fix: the R3-03 freeze belongs to the OVERLAY only (the attack
+	# presentation draws its committed row). The logical actor.facing keeps
+	# following the target - corpse_king_boss_test's "bosses keep facing the
+	# player while pursuing/attacking" is the standing authority, so the
+	# combat-facing tracker must NOT be gated on _attack_action_active.
 	if (
 		not is_boss
 		or _pending_attack_time >= 0.0
@@ -7975,7 +8350,12 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		return
 	if _pending_attack_time >= 0.0:
 		velocity = Vector2.ZERO
-
+		# R3 W7 fix: the R3-03 freeze belongs to the OVERLAY only - the attack
+		# presentation keeps drawing its committed row/facing. The LOGICAL
+		# actor.facing keeps live-turning toward the pending target while the
+		# hit frame waits (corpse_king_boss_test's standing "keep facing the
+		# player while pursuing/attacking" authority), so this restores the
+		# original live-turn that W2 removed too broadly.
 		var pending_target: Node2D = _pending_attack_target
 		if (
 			is_instance_valid(pending_target)
@@ -7995,7 +8375,7 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 				facing = _screen_facing_for_ground_direction(
 					pending_offset_ground_gu
 				)
-
+		_request_actor_redraw_if_dynamic()
 		return
 	var offset := _ground_delta_gu_between_screen_positions(global_position, target.global_position)
 	var distance := offset.length()

@@ -37,7 +37,23 @@ func _check(condition: bool, label: String) -> void:
 	_checks += 1
 
 
+var _fake_ms := 0
+
+
+func _fake_clock() -> int:
+	return _fake_ms
+
+
+## HC-MONSTER-COMBAT-R2 T3: the attack presentation consumes its OWN age
+## against the injected monotonic clock, so the fixture advances the clock
+## with every simulated delta (struck timers stay render-delta driven).
+func _advance(delta: float) -> void:
+	_fake_ms += int(round(delta * 1000.0))
+	_visual._advance_action_timers(delta)
+
+
 func _make_fixture(monster_level: int) -> void:
+	_fake_ms = 0
 	_enemy = DummyEnemy.new()
 	add_child(_enemy)
 	_enemy.level = monster_level
@@ -60,6 +76,7 @@ func _make_fixture(monster_level: int) -> void:
 	# residency. The fixture simulates a 3-frame ActStruck monster (the
 	# real-catalog load path is tested separately against monster 241).
 	_visual._canonical_struck_frame_count = 3
+	_visual._clock_ms = Callable(self, "_fake_clock")
 
 
 func _dispose_fixture() -> void:
@@ -92,7 +109,7 @@ func _test_idle_struck_starts_fully() -> void:
 	_visual.queue_struck(43)
 	_check(_visual.pending_struck_count() == 1, "idle queue increments pending")
 	_check(_visual._hit_remaining == 0.0, "queued struck must not burn before start")
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(_visual.pending_struck_count() == 0, "started struck consumes one pending")
 	# Lv43 => 80ms/frame, hit has 3 frames => 0.24s total. The start tick
 	# assigns the full duration; the countdown begins on the next tick.
@@ -110,7 +127,7 @@ func _test_struck_during_attack_waits_then_plays_fully() -> void:
 	await _make_fixture(43)
 	_visual.play_attack(0.5)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.1)
+	_advance(0.1)
 	_check(_visual._attack_remaining > 0.0, "attack still playing")
 	_check(_visual.pending_struck_count() == 1, "struck during attack stays queued")
 	_check(_visual._hit_remaining == 0.0, "queued struck must not burn while attacking")
@@ -118,14 +135,14 @@ func _test_struck_during_attack_waits_then_plays_fully() -> void:
 	_check(_visual.current_state == "attack", "attack priority is preserved")
 	# Finish the attack: the queued struck starts on the very tick the attack
 	# clock reaches zero, with its FULL duration.
-	_visual._advance_action_timers(0.45)
+	_advance(0.45)
 	_check(_visual._attack_remaining <= 0.0, "attack finished")
 	_check(_visual.pending_struck_count() == 0, "queued struck starts as the attack ends")
 	_check(
 		is_equal_approx(_visual._hit_remaining, 0.24),
 		"post-attack struck plays the complete duration, not a leftover"
 	)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "hit", "struck becomes visible after attack")
 	_check(_visual.current_frame == 0, "post-attack struck starts at frame 0")
@@ -136,12 +153,12 @@ func _test_struck_during_committed_step_waits() -> void:
 	await _make_fixture(43)
 	_enemy._movement_step_active = true
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.05)
+	_advance(0.05)
 	_check(_visual.pending_struck_count() == 1, "committed step keeps the struck queued")
 	_check(_visual._hit_remaining == 0.0, "no background burn during a committed step")
 	# The step completes normally; the struck then plays from frame 0.
 	_enemy._movement_step_active = false
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(_visual.pending_struck_count() == 0, "struck starts after the step completes")
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "hit", "no recoil-while-sliding: struck plays after arrival")
@@ -154,11 +171,11 @@ func _test_struck_during_committed_step_waits() -> void:
 func _test_struck_when_idle_starts_despite_visible_walk() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(_visual.pending_struck_count() == 0, "idle-arrival struck starts immediately")
 	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck plays its full duration")
 	_enemy.velocity = Vector2(120.0, 0.0)
-	_visual._advance_action_timers(0.05)
+	_advance(0.05)
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "hit", "later walk does not flip the presentation")
 	_enemy.velocity = Vector2.ZERO
@@ -175,14 +192,14 @@ func _test_epoch_barrier_releases_after_committed_step() -> void:
 	_enemy._movement_step_active = true
 	_enemy._movement_step_epoch += 1
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.05)
+	_advance(0.05)
 	_check(_visual.pending_struck_count() == 1, "struck waits for its own step A")
 	_check(_visual._hit_remaining == 0.0, "no background burn during step A")
 	# Step A completes; the pursuit immediately starts step B (new epoch).
 	_enemy._movement_step_active = false
 	_enemy._movement_step_epoch += 1
 	_enemy._movement_step_active = true
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(_visual.pending_struck_count() == 0, "struck released even though step B is walking")
 	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck plays its full duration during step B")
 	_check(_enemy._movement_step_active, "gameplay step B keeps moving (no hard-stun)")
@@ -207,7 +224,7 @@ func _test_canonical_struck_duration_is_residency_independent() -> void:
 	# Simulate released/cold residency: no active resources at all.
 	_visual.active_resources = {}
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(
 		is_equal_approx(_visual._hit_remaining, 0.48),
 		"cold-activation struck still resolves 6 x 80ms (not the 2-frame fallback)"
@@ -220,15 +237,15 @@ func _test_canonical_struck_duration_is_residency_independent() -> void:
 func _test_backlog_speed_uses_full_fifo_depth() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck playing with an empty queue")
 	_visual.play_attack(0.5)
 	_visual.queue_struck(43)
 	_check(_visual._presentation_count == 2, "FIFO holds [ATTACK, STRUCK] behind the playing struck")
 	# Depth 2 => 1.5x: a 0.1s delta burns 0.15s of the playing struck.
-	_visual._advance_action_timers(0.1)
+	_advance(0.1)
 	_check(is_equal_approx(_visual._hit_remaining, 0.09), "playing struck accelerates on total FIFO depth (2/3 frame time)")
-	_visual._advance_action_timers(0.6)
+	_advance(0.6)
 	_check(_visual._hit_remaining == 0.0, "queue drains fully afterwards")
 	await _dispose_fixture()
 
@@ -237,18 +254,18 @@ func _test_backlog_acceleration_and_drain() -> void:
 	await _make_fixture(43)
 	for _i: int in range(5):
 		_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(_visual.pending_struck_count() == 4, "one struck started, four queued")
 	# With a backlog >= 2 the countdown runs at 1.5x: 0.1s delta burns 0.15s.
 	var before := _visual._hit_remaining
-	_visual._advance_action_timers(0.1)
+	_advance(0.1)
 	_check(
 		is_equal_approx(_visual._hit_remaining, before - 0.15),
 		"backlog countdown runs at 1.5x (frame time x 2/3)"
 	)
 	# Drain the whole backlog without any stuck state.
 	for _i: int in range(40):
-		_visual._advance_action_timers(0.05)
+		_advance(0.05)
 	_check(_visual.pending_struck_count() == 0, "backlog drains fully")
 	_check(_visual._hit_remaining <= 0.0, "last struck finished")
 	await _dispose_fixture()
@@ -260,7 +277,7 @@ func _test_death_clears_pending() -> void:
 		_visual.queue_struck(43)
 	_visual.play_death()
 	_check(_visual.pending_struck_count() == 0, "death clears the struck backlog")
-	_visual._advance_action_timers(0.05)
+	_advance(0.05)
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "death", "death keeps the highest priority")
 	_check(_visual.pending_struck_count() == 0, "no struck starts after death")
@@ -274,16 +291,16 @@ func _test_death_clears_pending() -> void:
 func _test_attack_presentation_waits_for_started_struck() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck is the current action")
 	_visual.play_attack(0.5)
 	_check(_visual._attack_remaining == 0.0, "attack presentation must not preempt a playing struck")
-	_visual._advance_action_timers(0.1)
+	_advance(0.1)
 	_check(is_equal_approx(_visual._hit_remaining, 0.14), "struck keeps burning while the attack waits")
 	_check(_visual._attack_remaining == 0.0, "attack presentation stays parked during the struck")
 	# The struck drains; the parked attack presentation starts on that tick
 	# with its FULL duration (same start-tick rule as a struck start).
-	_visual._advance_action_timers(0.2)
+	_advance(0.2)
 	_check(_visual._hit_remaining == 0.0, "struck finished completely (no background loss)")
 	_check(is_equal_approx(_visual._attack_remaining, 0.5), "attack presentation starts after the struck with full duration")
 	_visual._update_animation_frame(0.0)
@@ -296,19 +313,19 @@ func _test_attack_presentation_waits_for_started_struck() -> void:
 func _test_backlog_drains_before_pending_attack_starts() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_visual.queue_struck(43)
 	_visual.queue_struck(43)
 	_check(_visual.pending_struck_count() == 2, "two struck queued behind the playing one")
 	_visual.play_attack(0.5)
-	_visual._advance_action_timers(0.3)
+	_advance(0.3)
 	_check(_visual.pending_struck_count() == 1, "backlog struck started instead of the parked attack")
 	_check(_visual._attack_remaining == 0.0, "attack presentation still waits behind the backlog")
-	_visual._advance_action_timers(0.5)
+	_advance(0.5)
 	_check(_visual.pending_struck_count() == 0, "backlog drained")
 	# The last queued struck only started on the previous tick; give it its
 	# full duration before the parked attack presentation may start.
-	_visual._advance_action_timers(0.3)
+	_advance(0.3)
 	_check(_visual._hit_remaining == 0.0, "last struck finished")
 	_check(_visual._attack_remaining > 0.0, "parked attack presentation starts after the backlog drains")
 	await _dispose_fixture()
@@ -320,17 +337,17 @@ func _test_backlog_drains_before_pending_attack_starts() -> void:
 func _test_fifo_attack_between_strucks() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck A is the current action")
 	_visual.play_attack(0.5)
 	_visual.queue_struck(43)
 	_check(_visual.pending_struck_count() == 1, "struck C queued behind attack B")
-	_visual._advance_action_timers(0.3)
+	_advance(0.3)
 	_check(_visual._hit_remaining == 0.0, "struck A finished")
 	_check(is_equal_approx(_visual._attack_remaining, 0.5), "attack B starts before the later struck C")
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "attack", "FIFO: attack B plays, struck C waits")
-	_visual._advance_action_timers(0.6)
+	_advance(0.6)
 	_check(_visual._attack_remaining == 0.0, "attack B finished")
 	_check(_visual._hit_remaining > 0.0, "struck C starts after attack B")
 	_visual._update_animation_frame(0.0)
@@ -344,15 +361,15 @@ func _test_fifo_attack_between_strucks() -> void:
 func _test_multiple_attack_requests_keep_order() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_visual.play_attack(0.3)
 	_visual.play_attack(0.2)
-	_visual._advance_action_timers(0.3)
+	_advance(0.3)
 	_check(_visual._hit_remaining == 0.0, "struck A finished")
 	_check(is_equal_approx(_visual._attack_remaining, 0.3), "attack B starts with its own duration")
-	_visual._advance_action_timers(0.35)
+	_advance(0.35)
 	_check(is_equal_approx(_visual._attack_remaining, 0.2), "attack C keeps its own duration (no merge)")
-	_visual._advance_action_timers(0.3)
+	_advance(0.3)
 	_check(_visual._attack_remaining == 0.0 and _visual._hit_remaining == 0.0, "presentation FIFO drained fully")
 	await _dispose_fixture()
 
@@ -365,10 +382,10 @@ func _test_multiple_attack_requests_keep_order() -> void:
 func _test_walk_grant_does_not_flip_playing_struck() -> void:
 	await _make_fixture(43)
 	_visual.queue_struck(43)
-	_visual._advance_action_timers(0.016)
+	_advance(0.016)
 	_check(is_equal_approx(_visual._hit_remaining, 0.24), "struck started before the walk grant")
 	_enemy.velocity = Vector2(120.0, 0.0)
-	_visual._advance_action_timers(0.05)
+	_advance(0.05)
 	_visual._update_animation_frame(0.0)
 	_check(_visual.current_state == "hit", "walk grant does not flip the presentation away from the struck")
 	_check(is_equal_approx(_visual._hit_remaining, 0.19), "walk grant neither cancels nor accelerates the struck clock")
@@ -380,9 +397,15 @@ func _test_queue_is_counter_only_and_capped() -> void:
 	await _make_fixture(43)
 	for _i: int in range(300):
 		_visual.queue_struck(43)
+	# HC-MONSTER-COMBAT-R2 T3 sustained-backpressure contract: a full ring with
+	# waiting struck items collapses IN PLACE at enqueue time (newest kept), so
+	# a sustained stream no longer parks the FIFO at full capacity - it stays
+	# strictly BOUNDED instead. The malformed-input guard this test locks is
+	# the bound itself: the counter may never exceed the fixed capacity.
+	var parked: int = _visual.pending_struck_count()
 	_check(
-		_visual.pending_struck_count() == MonsterVisual.PRESENTATION_QUEUE_CAPACITY,
-		"malformed-input guard caps the presentation FIFO at its fixed capacity"
+		parked > 0 and parked <= MonsterVisual.PRESENTATION_QUEUE_CAPACITY,
+		"malformed-input guard keeps the presentation FIFO strictly bounded"
 	)
 	_check(_visual._hit_remaining == 0.0, "mass queueing still does not start a burn")
 	await _dispose_fixture()

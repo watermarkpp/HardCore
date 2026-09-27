@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-09-27T00:07:26.6368696+08:00",
+  "passed": 3,
+  "failed": 0,
+  "total": 3,
+  "git_head": "57f9cb70969a9115ac5ea2b32b460850168e2bfe",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "body_rule_tier_cross_test",
+      "test_path": "tests/hc_monster_combat_r3/body_rule_tier_cross_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "actor_body_policy_contract_test",
+      "test_path": "tests/hc_monster_combat_r1/actor_body_policy_contract_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "actor_body_projection_test",
+      "test_path": "tests/hc_monster_combat_r1/actor_body_projection_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

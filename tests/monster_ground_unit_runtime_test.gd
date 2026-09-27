@@ -144,12 +144,19 @@ func _verify_boss_cone_uses_ground_direction(enemy: EnemyActor) -> void:
 	enemy.attack_max = 1
 	enemy.boss_rule = {
 		"specialSkill": {
+			# HC-MONSTER-COMBAT-R1 Task 2: capabilities are opt-in under the
+			# explicit rule contract (hardcore boss skill switch), matching the
+			# warning-projection fixture below. Geometry assertions unchanged.
+			"enabled": true,
 			"shape": "cone",
 			"radius_gu": 5.0,
 			"coneHalfAngleRadians": HALF_ANGLE,
 			"damageMultiplier": 1,
 		},
 	}
+	# This is a geometry unit fixture: it drives _update_boss_skill() directly
+	# without _apply_boss_rule(), so the opt-in capability flag is pinned here.
+	enemy._boss_skill_enabled = true
 	for direction_index in range(16):
 		var center_direction_ground := Vector2.from_angle(TAU * float(direction_index) / 16.0)
 		var inside_probe := CombatTarget.new()

@@ -1,0 +1,60 @@
+{
+  "source_commit": "2960bbe682b61306eed8f7c9fe0c6eb6c6accb9a",
+  "source_path": "tools/verify_catalog_reswap.py",
+  "source_git_blob": "7c6251500bb0b206e1b2acf93ae8f852477032bf",
+  "source_matches_audited_blob": true,
+  "scope": "Original Python verifier executed on synthetic inputs; not a Godot/game/runtime test.",
+  "results": [
+    {
+      "case": "unchanged_positive_control",
+      "should_accept": true,
+      "exit_code": 0,
+      "accepted": true,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "entries_only_combat_tamper",
+      "should_accept": false,
+      "exit_code": 0,
+      "accepted": true,
+      "contract_satisfied": false,
+      "input_files_unchanged": true,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "remove_all_source_bindings",
+      "should_accept": false,
+      "exit_code": 0,
+      "accepted": true,
+      "contract_satisfied": false,
+      "input_files_unchanged": true,
+      "stdout": "sources diff: assets/data/vanilla_176/monsters.json\n  old={'sha256': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'role': 'generator_input'}\n  new=None\nunexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "exempt_id_unrelated_combat_evidence_tamper",
+      "should_accept": false,
+      "exit_code": 0,
+      "accepted": true,
+      "contract_satisfied": false,
+      "input_files_unchanged": true,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "by_id_combat_negative_control",
+      "should_accept": false,
+      "exit_code": 1,
+      "accepted": false,
+      "contract_satisfied": true,
+      "input_files_unchanged": true,
+      "stdout": "UNEXPECTED: entries_by_id[24].combat\nunexpected diff count: 1\n",
+      "stderr": ""
+    }
+  ],
+  "contract_failures": 3
+}

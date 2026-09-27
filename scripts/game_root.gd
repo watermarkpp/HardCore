@@ -4995,6 +4995,16 @@ func _spawn_enemy(
 				clear_persisted_respawn_after_spawn = true
 	var enemy := EnemyActor.new()
 	enemy.setup(monster_data, player, is_boss)
+	# R4 T3: the body admission verdict is obtained synchronously BEFORE the
+	# world registers anything. A config-rejected profile never occupies the
+	# spatial index, the activity cache or the respawn slot: the spawn
+	# transaction fails atomically (bounded diagnostic, node freed) instead
+	# of leaving a half-registered invulnerable candidate behind. Legal
+	# non-combat chests keep their own contract untouched.
+	if enemy.resolve_body_for_admission():
+		_staged_actor_spawn_failure_reason = "body_policy_rejected"
+		enemy.free()
+		return null
 	enemy.configure_runtime_map_projection(
 		current_map_id,
 		Callable(self, "_canonical_ground_gu_to_screen_px"),
