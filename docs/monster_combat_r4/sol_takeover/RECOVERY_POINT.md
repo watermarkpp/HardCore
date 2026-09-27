@@ -1,5 +1,21 @@
 # 精确续接点（R4 未完成）
 
+## 最新恢复点优先（17:10；以下旧会话只作历史）
+
+当前主树 `codex/integration` HEAD `257d50bd006b02c606b964c44fa947f92efc48e3`。无工程代理、无推送/APK/安装/版本/删树。用户最新明确：主树技能和其他人工调整领先 v93；旧专业树只在对应怪物/UI 范围领先。修改时间只是线索，结合提交、内容、哈希与人工裁决；不得整文件覆盖主树。
+
+旧完整 critical 会话51334已主动终止以处理用户视觉裁决，留下 interrupted_checkpoint，整体 NOT_RUN。它的16方向极光预览 FAIL 不可抹掉。
+
+归档 `c8dbbb67b553ecde78f4172a3f29e1466c8f30e2` 找到原28像素整束上移/方向遮挡，用户已批准恢复。原两个文件补丁已精确应用；新独立21方向x6帧平移测试及四beam回归5/5 PASS。原全包络测试先仍 FAIL，不放宽断言。
+
+固定BASE原两激光测试2/2 PASS。根因随后证明：main实际PNG相同，但96laser ctex全部是旧图，source_md5全部不匹配。完整609精确技能PNG缓存384过期。外部 `D:/HardCoreAudit/r4-takeover-20260927-123453/skill-import-cache-before` 备份1920项。导入会话52269正常exit0已结束；609源SHA256及mtime_ns全部未变，93translation全部未变，609缓存全部有效、96laser ctex与独立BASE相同。`skill_import_refresh/verification.json` 实际PASS。没有重做素材/改范围/尺寸/时序。
+
+**现在运行会话14111**：定向11场景，日志 `evidence/laser_import_fresh_regression/runner`，第一16方向已PASS。禁止并发Godot。完成后裁定所有exit/error/timeout，提交本独立视觉恢复与导入证据/新增测试/注册（expectedcritical现在525）。AGENTS用户dirty、其他无关untracked/所有自动uid保留，不stage。
+
+新增clean managed tree `C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore` 当前257d，仅Godot/dev源只读junction，尚无import/test；bootstrap detached .Trim错误保留，等价预检已留证。最终source提交后安全更新该已知pristine detached checkout；不得复制main缓存/catalog audit生成物。
+
+余项仍未完成：最终完整critical525；最终v4有效负载72配对 `t6_pairs_final_v4`（正式test_mode=false、真实save/profile/drop预算，无FAILED、固定nativecastseed，BASE同字节probe；不要重哈希/提交/并发engine污染采样）；独立clean import/direct相关回归；最终保护13611+4152hash/源生成检查/远端fetch/差异和台账。旧T6 v1/v2/v3/v4失败均保留，不冒充最终无退化。PERFORMANCE_RESULTS为NOT_RUN草稿。
+
 ## 当前身份与正在执行
 
 2026-09-27，本地主树 `codex/integration`，HEAD `6cd4ed215ba689b9cf1f920693df87604bde2f41`。唯一主控，无工程子代理，无远端推送/APK/安装/清树。
@@ -66,3 +82,12 @@ HEAD27009bcf已关闭实际来源销毁观察缺口：free/queue_free真实待�
 T6v2原72完成但技能nativewall-time独立seed遗漏；v3修seed，三smokePASS仍test_mode绕过正式队列，不作最终perf。v4正式热态test_mode=false首BASE失败no_real_death_drop_work（真实死亡56但未初始化worldclock/save_failed）；原RAW保留。现在独立profile目录+真实save_game(false)初始化，BASEAoE10与CAND AoE10/双宠10实际PASS，CAND55roll/54commit/40nodes、失败队列0；每回调活怪10/600帧。新增gate拒绝任一FAILED terminal，最近两行gate只是静态新增，待最终矩阵执行。两树探针当前byte相同、只测试overlay没有BASE生产回填；v4保存每次canonicalseed，固定nativehash时间/测试profile输入，serial不改。主协议新seed和真实热态/profile/共享掉落装备catalog哈希门。
 
 11tscn EOF已精确trim仅空行；源码diffcheck PASS。工作树另有未提交common自然probe14PASS、三个比較脚本、总结tools、大量原始证据/docs；用户AGENTS等原untracked留原。没有运行任何Godot，所有exec会话已结束。下一步：明确stage/commit稳定code/tests/tools与已闭合证据（.log被ignore，需-f精确本次evidence根，不丢raw）；先full critical524以捕捉可能SOURCE回归，再最终v4矩阵72（固定HEAD，quiet不重哈希/commit）、原R4直接clean checkout独立import/userdata；末尾保护hash/正式生成check/最终diff/台账/远端fetch。该顺序避免fullcritical源修复后再次使perf源码过期。仍未推远端integration、无APK/安装/删树。
+
+## 16:34用户视觉保护补充
+
+完整critical当前laser_direction_visual_extent_test旧V1/16方向预览发生端点/extent1px断言FAIL；正式beam范围、绝对地形截断等现已PASS。用户明确极光电影动画位置曾专门手调，遇到类似冲突必须先询问，禁止误伤。该失败原始日志保留；尚未改极光位置/尺寸/素材或测试断言，任何此类修改先取得用户裁决。可继续只读确认与R4的关系、固定BASE同场景复现，不能把人工位置自动认成bug或自动改旧预期来凑全绿。完整critical会话51334仍在运行（HEAD257d50bd，预期524）；最终性能/clean仍NOT_RUN。
+
+## 用户补充：极光电影整体平移意图与只读核对
+
+用户说明旧发射点位于人物脚点，曾将整束动画向头部方向平移；该意图冻结，保留长度、宽度、方向及玩法范围。当前未修改其视觉源码/素材/测试预期。
+只读发现：laser_direction_visual_extent_test以地面snapshot origin/end测量可见像素，纯整体平移应使start/end误差增加相同的投影量，不改变extent_err。当前表E extent_err=-4.8px、SE=-37.5px，不能仅用上移解释所有失败。当前beam渲染路径尚未找到明确的头部整体平移字段或其历史落地记录；不把用户意图与尚未核实的当前实现混为一谈。正式范围/地形截断已PASS，固定BASE同预览实际复现仍待fullcritical结束后串行执行。必须保留失败，不修改断言以凑绿。

@@ -1,0 +1,29 @@
+{
+  "archive_commit": "c8dbbb67b553ecde78f4172a3f29e1466c8f30e2",
+  "candidate_head": "257d50bd006b02c606b964c44fa947f92efc48e3",
+  "archive_is_candidate_ancestor": false,
+  "files": [
+    {
+      "path": "scripts/caster_skill_beam_visual_effect.gd",
+      "archive_blob_sha256": "5d7c6b29733677a3fd2669b22a76ba6e1e76183285cec773507acaae22d49aee",
+      "current_worktree_sha256": "d6799801bf61cdb302e09b67ff2d17cfd61a287dcd4a2750f6a1c05e42da26d3",
+      "pre_takeover_git_blob_sha256": "d9ee3a34bcbcbda179596ee32b105058a683d97f3516112f51ae3aea6f09acab",
+      "archive_has_chest_lift": true,
+      "current_has_chest_lift": false,
+      "pre_takeover_has_chest_lift": false
+    },
+    {
+      "path": "tests/wizard_line_presentation_alignment_test.gd",
+      "archive_blob_sha256": "e3311d331eb2fb03c26d347fee0e04490672becdefbfa3ad302d9a00aca6c0d8",
+      "current_worktree_sha256": "d9e16082f14b23fcd53c7a507646e215ca61794f5326880916cea3dcbb923c33",
+      "pre_takeover_git_blob_sha256": "9827c604b326dd5085a2c45c854d38003a08405b015cee50d6b6130100d634fc",
+      "archive_has_chest_lift": true,
+      "current_has_chest_lift": false,
+      "pre_takeover_has_chest_lift": false
+    }
+  ],
+  "shift_pixels": 28,
+  "scope": "Uniform drawable translation plus directional world sort. Gameplay origin, formula, range and source frames unchanged.",
+  "restoration_status": "NOT_RUN",
+  "user_decision": "BLOCKED: pending asynchronous choice; no visual source/test changes applied."
+}

@@ -1,0 +1,115 @@
+diff --git a/scripts/caster_skill_beam_visual_effect.gd b/scripts/caster_skill_beam_visual_effect.gd
+index 7fddc4ffd..61708a234 100644
+--- a/scripts/caster_skill_beam_visual_effect.gd
++++ b/scripts/caster_skill_beam_visual_effect.gd
+@@ -8,6 +8,8 @@ const DEFAULT_BEAM_LENGTH_PX := 72.0
+ const DEFAULT_SINGLE_ACTIVE_SCOPE := "caster_skill"
+ const DEFAULT_SINGLE_ACTIVE_GROUP := "beam"
+ const SINGLE_ACTIVE_BEAM_GROUP_PREFIX := "caster_skill_beam_single_active"
++const LASER_CHEST_LIFT_PX := 28.0
++const LASER_FRONT_SORT_BIAS_PX := 0.02
+ 
+ var _visual_profile: Dictionary = {}
+ var _lifecycle_mode := "continuous"
+@@ -59,6 +61,8 @@ func setup(
+ 
+ func _ready() -> void:
+     super._ready()
++    if skill_id == "wizard.laser" and visual_loaded:
++        _place_laser_at_chest_height()
+     # Merge lifecycle metadata instead of overwriting -- setup() may have
+     # already written snapshot-driven diagnostics (requested_beam_length_px,
+     # beam_length_source) that must be preserved for contract verification.
+@@ -96,10 +100,44 @@ func _install_single() -> void:
+     _apply_beam_width_scale(sprite)
+     sprite.self_modulate = Color(1.0, 1.0, 1.0, 1.0)  # Beam: full opacity; formal core polygon handles low-alpha overlay
+     sprite.set_process(true)
+-    _add_world_visual(sprite)
++    if skill_id == "wizard.laser":
++        # The animation player rebuilds its transform on every frame. Keep the
++        # chest offset on a parent so all six source frames retain one origin.
++        var chest_visual := Node2D.new()
++        chest_visual.name = "LaserChestVisual"
++        _add_world_visual(chest_visual)
++        chest_visual.add_child(sprite)
++    else:
++        _add_world_visual(sprite)
+     _sprites.append(sprite)
+ 
+ 
++func _place_laser_at_chest_height() -> void:
++    if not is_instance_valid(_visual_sort_proxy):
++        return
++    # The Y-sort key remains at the caster's footpoint. A forward/downward
++    # cast is drawn over that actor; a backward/upward cast stays behind it.
++    var sort_bias := (
++        LASER_FRONT_SORT_BIAS_PX if _beam_axis_screen_px.y >= 0.0 else 0.0
++    )
++    _visual_sort_proxy.position.y += sort_bias
++    var drawables: Array[Node2D] = []
++    for polygon: Polygon2D in _formal_core_polygons:
++        drawables.append(polygon)
++    for glow: Polygon2D in _formal_core_glow_layers:
++        drawables.append(glow)
++    if not _sprites.is_empty():
++        var chest_visual := _sprites[0].get_parent() as Node2D
++        if is_instance_valid(chest_visual):
++            drawables.append(chest_visual)
++    for drawable: Node2D in drawables:
++        drawable.position.y -= LASER_CHEST_LIFT_PX + sort_bias
++    # The opt-in geometry debug overlay still reports the unchanged ground
++    # footprint; only the production beam art is lifted.
++    if is_instance_valid(_debug_geometry_overlay):
++        _debug_geometry_overlay.position.y -= sort_bias
++
++
+ func beam_debug_metadata() -> Dictionary:
+     return _beam_debug_metadata.duplicate(true)
+ 
+diff --git a/tests/wizard_line_presentation_alignment_test.gd b/tests/wizard_line_presentation_alignment_test.gd
+index e8f2fc5e2..7ada2ff8e 100644
+--- a/tests/wizard_line_presentation_alignment_test.gd
++++ b/tests/wizard_line_presentation_alignment_test.gd
+@@ -14,6 +14,7 @@ const MIRROR_ANGLES_DEG: Array[float] = [191.0, 210.0, 233.0, 260.0, 327.0]
+ const MAX_AXIS_ERROR_DEG := 1.0
+ const MAX_GROUND_ERROR_GU := 0.10
+ const EPSILON_PX := 0.02
++const LASER_CHEST_LIFT_PX := 28.0
+ 
+ 
+ func _ready() -> void:
+@@ -75,8 +76,34 @@ func _verify_laser_arbitrary_angle_visible_envelope_alignment() -> void:
+ 		assert(effect._sprites.size() == 1)
+ 		var sprite := effect._sprites[0] as CasterSkillAnimationPlayer
+ 		assert(sprite != null)
++		# Only the drawable rises to chest height. The effect and its Y-sort
++		# key remain at the caster's ground footpoint.
++		assert(effect.global_position.is_equal_approx(Vector2.ZERO))
++		assert(effect.y_sort_enabled and effect.z_index == 0)
++		assert(effect._visual_sort_proxy != null)
++		var expected_sort_y := 0.01 if target_axis.y >= 0.0 else -0.01
++		assert(
++			absf(effect._visual_sort_proxy.global_position.y - expected_sort_y) <= 0.001
++		)
++		assert(effect._formal_core_polygon != null)
++		assert(
++			(effect._formal_core_polygon.global_position - effect.global_position).distance_to(
++				Vector2(0.0, -LASER_CHEST_LIFT_PX)
++			) <= EPSILON_PX
++		)
++		for glow: Polygon2D in effect._formal_core_glow_layers:
++			assert(
++				(glow.global_position - effect.global_position).distance_to(
++					Vector2(0.0, -LASER_CHEST_LIFT_PX)
++				) <= EPSILON_PX
++			)
+ 		for frame_index: int in range(sprite.frame_count()):
+ 			assert(sprite.set_manual_frame(frame_index))
++			assert(
++				(sprite.global_position - effect.global_position).distance_to(
++					Vector2(0.0, -LASER_CHEST_LIFT_PX)
++				) <= EPSILON_PX
++			)
+ 			var visible := _visible_projection_intervals(
+ 				sprite, target_axis, target_cross
+ 			)

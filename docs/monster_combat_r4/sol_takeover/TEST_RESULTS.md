@@ -121,3 +121,11 @@ r3_radius_pairs在原R3生产树叠加相同的最窄查询/snapshot探针：BAS
 source_destroyed_final实际5/5 PASS，engine_log_errors=0，正常退出：free/queue_free独立唯一SOURCE_DESTROYED终态、短暂移出再入对照、既有禁战/控制/死亡取消、异步line、观察完整性、实际多目标/代际。正式critical已注册新增场景，预期集合524。该结果不替代最终full critical。
 
 historical_final_pairs完成原25同集合：固定R3 BASE实际0/25 PASS、CAND6cd4ed21实际25/25 PASS；CAND无timeout、engine_log_errors=0。两项snapshot及其他23项原始assert/错误均保留，逐断言裁定另列。T6 v2虽然72实际runner通过，但canonical请求用wall-time独立种子，技能/宠物的完整同种子合同FAIL；原始数据保留并标DATASET_REVIEW，不作最终性能判定。测试v3固定native请求seed边界，生产随机语义不改，最终同源码性能待执行。
+
+## 主树人工技能调整保护与过期导入修复
+
+用户明确批准恢复归档 c8dbbb67b 原极光电影28像素整体上移和方向遮挡；按两份原差异精确应用，不用旧分支整文件覆盖当前主树。原完整critical未结束，中断记录保留为NOT_RUN，预览失败原日志保留。
+
+固定BASE原laser_direction_visual_extent及wizard_line_presentation_alignment实际2/2 PASS。主树96帧PNG相同但96导入source_md5错误，缓存仍对应旧图；全609技能范围有384过期。导入前1920项外部备份，导入exit0后609源SHA256及mtime_ns、93tracked translation全部保持；609导入有效、96laser缓存与独立BASE字节相同。未修改技能尺寸、帧时、锚点、玩法范围或原游戏混合。
+
+`laser_import_fresh_regression/runner/runner_results_adhoc_20260927_170650_087_24560.json`：11/11 PASS，engine_log_errors=0、timeout=0、正常退出。两项原预览/包络断言完整通过；新laser_chest_translation实际21方向x6帧126项整体位移、snapshot保持和层级通过；四项beam范围/空地/地形截断/单活跃，火墙controller/lifecycle及两个warrior视觉回归全部通过。此次根因属于缓存过期，不是以旧脚点预期覆盖人工素材；最终完整critical525仍待新sourceSHA执行。

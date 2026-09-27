@@ -227,6 +227,7 @@ $Suites = @{
 $Suites.caster_visual_critical = @(
     'tests/caster_skill_visual_factory_entry_test.tscn',
     'tests/laser_direction_visual_extent_test.tscn',
+    'tests/laser_chest_translation_test.tscn',
     'tests/caster_skill_animation_routing_test.tscn',
     'tests/wizard_geometry_visual_alignment_test.tscn',
     'tests/sky_strike_visual_contract_test.tscn',

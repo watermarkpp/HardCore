@@ -1,0 +1,15 @@
+{
+  "status": "NOT_RUN",
+  "reason": "Interrupted after user approved restoration of archived laser chest translation; final complete suite must be re-run at restored source HEAD. Prior per-scene raw evidence retained; no midpoint marker promoted to full PASS.",
+  "head": "257d50bd006b02c606b964c44fa947f92efc48e3",
+  "interrupted_at": "2026-09-27T16:51:01.9712520+08:00",
+  "owned_process_ids": [
+    3960,
+    18624,
+    10836,
+    7240,
+    9448
+  ],
+  "stdout_log_count": 135,
+  "preserved_failure": "laser_direction_visual_extent_test"
+}

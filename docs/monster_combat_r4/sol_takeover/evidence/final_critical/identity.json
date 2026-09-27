@@ -1,0 +1,10 @@
+{
+  "head": "257d50bd006b02c606b964c44fa947f92efc48e3",
+  "tree": "2fa320509a9f2cb83853bb5d2e27205b1e0a8ae0",
+  "runner_sha256": "7D2937A72D8FAC931065FEE8C2A0BC1C4F32B6F194821B5B39ED84655AE88CB9",
+  "expected_paths_sha256": "E213D4F0B0AEC930D90EFDD95E2C663471D27374E8C83DC39112E014AD6B3D6C",
+  "expected_count": 524,
+  "tracked_dirty": "AGENTS.md",
+  "command": "tools/run_godot_tests.ps1 -Suite critical -TimeoutSeconds 30; declared heavy R4 cases60s",
+  "started_at": "2026-09-27T16:30:05.4675416+08:00"
+}

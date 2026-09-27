@@ -1,0 +1,41 @@
+{
+  "failed": 0,
+  "engine_log_errors": 0,
+  "passed": 2,
+  "git_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+  "generated_at": "2026-09-27T16:55:12.9411666+08:00",
+  "suite": "adhoc",
+  "total": 2,
+  "results": [
+    {
+      "test_name": "laser_direction_visual_extent_test",
+      "test_path": "tests/laser_direction_visual_extent_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "wizard_line_presentation_alignment_test",
+      "test_path": "tests/wizard_line_presentation_alignment_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

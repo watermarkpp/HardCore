@@ -5,6 +5,7 @@
   "tests/circular_touch_button_lifecycle_test.tscn",
   "tests/caster_skill_visual_factory_entry_test.tscn",
   "tests/laser_direction_visual_extent_test.tscn",
+  "tests/laser_chest_translation_test.tscn",
   "tests/caster_skill_animation_routing_test.tscn",
   "tests/wizard_geometry_visual_alignment_test.tscn",
   "tests/sky_strike_visual_contract_test.tscn",
@@ -390,6 +391,7 @@
   "tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.tscn",
   "tests/hc_monster_combat_r4/async_line_lifecycle_test.tscn",
   "tests/hc_monster_combat_r4/cancelled_release_observation_test.tscn",
+  "tests/hc_monster_combat_r4/source_destroyed_pending_test.tscn",
   "tests/hc_monster_combat_r4/explicit_zero_attack_timing_test.tscn",
   "tests/hc_monster_combat_r4/runtime_capability_inventory_test.tscn",
   "tests/hc_monster_combat_r4/summon_planner_radius_test.tscn",
@@ -521,6 +523,5 @@
   "tests/hc_monster_combat_r2/monster_runtime_census_test.tscn",
   "tests/hc_monster_combat_r2/large_body_swing_cadence_test.tscn",
   "tests/melee_blocked_query_order_test.tscn",
-  "tests/polygon_query_streaming_test.tscn",
-  "tests/hc_monster_combat_r4/source_destroyed_pending_test.tscn"
+  "tests/polygon_query_streaming_test.tscn"
 ]

@@ -19,6 +19,7 @@
 | 正式注册、实际执行集合、最终 full critical | NOT_RUN | 稳定后执行，timeout 不以 marker 覆盖 |
 | 最终 SHA 干净检出与保护哈希 | NOT_RUN | 缓存/用户数据独立，保留未解决失败 |
 | 最终审查、原始证据索引、SHA256、远端状态 | NOT_RUN | 未更新远端 integration，未打包 |
+| 用户极光原28px整体上移/方向遮挡恢复、主树素材保护 | PASS | 用户明确批准恢复归档原补丁；独立平移126帧与原两包络及beam/火墙/warrior共11专项实际PASS。609源PNG SHA和mtime、93translation不变；384过期缓存刷新后609全部有效。最终完整critical仍待执行 |
 
 ## 续接约束
 

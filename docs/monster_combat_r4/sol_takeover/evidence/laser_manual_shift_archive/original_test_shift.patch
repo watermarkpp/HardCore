@@ -1,0 +1,47 @@
+diff --git a/tests/wizard_line_presentation_alignment_test.gd b/tests/wizard_line_presentation_alignment_test.gd
+index e8f2fc5e2..7ada2ff8e 100644
+--- a/tests/wizard_line_presentation_alignment_test.gd
++++ b/tests/wizard_line_presentation_alignment_test.gd
+@@ -14,6 +14,7 @@ const MIRROR_ANGLES_DEG: Array[float] = [191.0, 210.0, 233.0, 260.0, 327.0]
+ const MAX_AXIS_ERROR_DEG := 1.0
+ const MAX_GROUND_ERROR_GU := 0.10
+ const EPSILON_PX := 0.02
++const LASER_CHEST_LIFT_PX := 28.0
+ 
+ 
+ func _ready() -> void:
+@@ -75,8 +76,34 @@ func _verify_laser_arbitrary_angle_visible_envelope_alignment() -> void:
+ 		assert(effect._sprites.size() == 1)
+ 		var sprite := effect._sprites[0] as CasterSkillAnimationPlayer
+ 		assert(sprite != null)
++		# Only the drawable rises to chest height. The effect and its Y-sort
++		# key remain at the caster's ground footpoint.
++		assert(effect.global_position.is_equal_approx(Vector2.ZERO))
++		assert(effect.y_sort_enabled and effect.z_index == 0)
++		assert(effect._visual_sort_proxy != null)
++		var expected_sort_y := 0.01 if target_axis.y >= 0.0 else -0.01
++		assert(
++			absf(effect._visual_sort_proxy.global_position.y - expected_sort_y) <= 0.001
++		)
++		assert(effect._formal_core_polygon != null)
++		assert(
++			(effect._formal_core_polygon.global_position - effect.global_position).distance_to(
++				Vector2(0.0, -LASER_CHEST_LIFT_PX)
++			) <= EPSILON_PX
++		)
++		for glow: Polygon2D in effect._formal_core_glow_layers:
++			assert(
++				(glow.global_position - effect.global_position).distance_to(
++					Vector2(0.0, -LASER_CHEST_LIFT_PX)
++				) <= EPSILON_PX
++			)
+ 		for frame_index: int in range(sprite.frame_count()):
+ 			assert(sprite.set_manual_frame(frame_index))
++			assert(
++				(sprite.global_position - effect.global_position).distance_to(
++					Vector2(0.0, -LASER_CHEST_LIFT_PX)
++				) <= EPSILON_PX
++			)
+ 			var visible := _visible_projection_intervals(
+ 				sprite, target_axis, target_cross
+ 			)

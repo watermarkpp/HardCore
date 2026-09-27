@@ -1,0 +1,53 @@
+{
+  "head": "257d50bd006b02c606b964c44fa947f92efc48e3",
+  "git_root": "C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore",
+  "detached": true,
+  "tracked_dirty": "",
+  "checks": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "852005C225EC314CBA1CDA5D407CFA6BA0E49F5B065EF9FA7EDE513239E33440",
+      "characters": 8822
+    },
+    {
+      "path": "PROJECT_CURRENT_STATUS.md",
+      "sha256": "B170DA23285CC5BB66CEF67DA7B054EAD43222AE61F726AC5D8D9E99EC5215C6",
+      "characters": 21469
+    },
+    {
+      "path": "PROJECT_INDEX.md",
+      "sha256": "6D4D5049EACFE17047417AAD396B7004A3CB4DB268019226620579AB39326EC5",
+      "characters": 8590
+    },
+    {
+      "path": "PROJECT_CORE_CONTRACTS.md",
+      "sha256": "7FB023305CA826EA9769D8E6912F564182EFD45E373B7EB3AB2CEA5A098F5806",
+      "characters": 3388
+    },
+    {
+      "path": "docs/agent_rules/integration.md",
+      "sha256": "FE4EBDEADE185E97BB48C3954C6A5FB26C4C9952CA35535A08DCC84FAA9267F1",
+      "characters": 819
+    },
+    {
+      "path": "assets/data/agent/integration_baseline.json",
+      "sha256": "CC87539D2C29D9956E8C56BD7735870D0A8329FB100B3C9FAA9BDB0019E25272",
+      "characters": 2119
+    },
+    {
+      "path": "docs/CODEX_CONTEXT_SNAPSHOT.compact.json",
+      "sha256": "0F0B89A4EE7DD006EEABFFF56639C3B731D1118CFE38201AC439A5C3AAB8669C",
+      "characters": 1736
+    },
+    {
+      "path": "assets/data/agent/worktree_ownership.json",
+      "sha256": "A542139A5702C9E2138849BF409AE9C5B433C209B6BAFC5CA951BF46A5C7FDA2",
+      "characters": 1370
+    }
+  ],
+  "bootstrap_status": "FAIL",
+  "bootstrap_reason": "Detached HEAD: branch --show-current outputs null; legacy bootstrap .Trim fails before remaining checks. Tool preserved; no whitelist bypass modification.",
+  "generated_rule_matrix_present": true,
+  "dependencies": "Only read-only source-art and engine junctions. Import/userdata/cache remain independent. No local outputs manifest copied.",
+  "tested_status": "NOT_RUN"
+}
