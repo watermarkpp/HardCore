@@ -1,0 +1,11 @@
+[FAIL] native_physics_sampling_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+SCRIPT ERROR: Parse Error: Cannot infer the type of "skipped" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/hc_monster_combat_r4/native_physics_sampling_test.gd:63)
+ERROR: Failed to load script "res://tests/hc_monster_combat_r4/native_physics_sampling_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+[PASS] complete_client_resource_catalog_test
+[PASS] perf_unit_determinism_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore\docs\monster_combat_r4\sol_takeover\evidence\scoped_sampler_catalog_55f_20260928_0547\runner\runner_results_adhoc_20260928_054728_125_21760.json
+TEST_SUMMARY suite=adhoc passed=2 failed=1 engine_log_errors=2
+FAILED_TESTS=native_physics_sampling_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2)

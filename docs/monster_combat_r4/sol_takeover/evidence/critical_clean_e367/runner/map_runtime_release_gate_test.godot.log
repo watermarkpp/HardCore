@@ -1,0 +1,904 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+GATE_DEBUG 990123 artifact=true reason= load_ok=true errors=[]
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.429,"start_ms":62.977},"build_bottom_chassis":{"duration_ms":18.242,"start_ms":36.554},"build_combat_controls":{"duration_ms":7.606,"start_ms":54.796},"build_hidden_compatibility_info":{"duration_ms":7.175,"start_ms":25.001},"build_item_quick_slot_menu":{"duration_ms":0.575,"start_ms":62.402},"build_loading_transition":{"duration_ms":1.246,"start_ms":63.406},"build_loot_feedback":{"duration_ms":0.743,"start_ms":32.787},"build_right_utility_stack":{"duration_ms":3.024,"start_ms":33.53},"build_target_bar":{"duration_ms":0.611,"start_ms":32.176},"initial_state_sync":{"duration_ms":0.446,"start_ms":64.662},"root_and_theme":{"duration_ms":24.982,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.019,"start_ms":24.982},"wire_player_state_signals":{"duration_ms":0.01,"start_ms":64.652}},"total_ms":65.11}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.009,"init_to_enter_tree":0.056},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.13,"start_ms":0.724},"bootstrap_dispatch":{"duration_ms":0.115,"start_ms":617.832},"camera_construct_and_attach":{"duration_ms":0.037,"start_ms":59.602},"hud_attach_and_ready":{"duration_ms":505.615,"start_ms":59.702},"hud_construct":{"duration_ms":0.032,"start_ms":59.639},"hud_post_ready_setup":{"duration_ms":1.759,"start_ms":565.317},"hud_signal_wiring":{"duration_ms":0.031,"start_ms":59.671},"player_construct_wire_attach_restore":{"duration_ms":58.748,"start_ms":0.854},"pre_background_setup":{"duration_ms":0.659,"start_ms":0.065},"system_menu_build":{"duration_ms":50.756,"start_ms":567.076}},"total_ms":617.949}
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+[MapTransition] FAILED reason=ready_contract_failed policy=post_arrival_safe_home
+[MapTransition] recovery state dead=false hp=19
+[MapTransition] safe-home recovery transition started
+MAP_RUNTIME_RELEASE_GATE_PASS

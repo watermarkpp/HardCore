@@ -1,0 +1,5 @@
+WARNING: 音量设置尚未保存，原设置/备份仍保留。错误码：20
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://scripts/audio_preferences.gd:161)
+       [1] _run (res://tests/ui_r5_audio_test.gd:54)
