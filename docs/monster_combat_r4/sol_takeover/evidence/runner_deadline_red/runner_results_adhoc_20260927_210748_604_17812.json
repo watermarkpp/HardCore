@@ -1,0 +1,41 @@
+{
+  "total": 2,
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "case9_exit_before_deadline",
+      "test_path": "tests/runner_fixtures/case9_exit_before_deadline.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": 0,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_30s"
+    },
+    {
+      "test_name": "case10_exit_after_deadline",
+      "test_path": "tests/runner_fixtures/case10_exit_after_deadline.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_30s;non_zero_exit_code_-1"
+    }
+  ],
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "failed": 2,
+  "generated_at": "2026-09-27T21:07:48.6043078+08:00"
+}

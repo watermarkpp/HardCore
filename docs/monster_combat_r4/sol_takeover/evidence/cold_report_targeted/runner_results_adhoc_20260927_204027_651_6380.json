@@ -1,0 +1,41 @@
+{
+  "suite": "adhoc",
+  "total": 2,
+  "failed": 0,
+  "engine_log_errors": 0,
+  "passed": 2,
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "results": [
+    {
+      "test_name": "cancelled_release_observation_test",
+      "test_path": "tests/hc_monster_combat_r4/cancelled_release_observation_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "mp_payment_observation_test",
+      "test_path": "tests/hc_monster_combat_r4/mp_payment_observation_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-27T20:40:27.6517464+08:00"
+}

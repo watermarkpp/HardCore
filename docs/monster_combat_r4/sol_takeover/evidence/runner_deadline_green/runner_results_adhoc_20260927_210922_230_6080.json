@@ -1,0 +1,28 @@
+{
+  "passed": 0,
+  "generated_at": "2026-09-27T21:09:22.2303935+08:00",
+  "suite": "adhoc",
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "results": [
+    {
+      "test_name": "case6_engine_log_fatal",
+      "test_path": "tests/runner_fixtures/case6_engine_log_fatal.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T13:09:46.2764205Z",
+      "native_exit_observed_utc": "2026-09-27T13:09:20.7276630Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "engine_log_errors": 1,
+  "failed": 1,
+  "total": 1
+}

@@ -1,0 +1,149 @@
+{
+  "cases": [
+    {
+      "audit": {
+        "failures": [],
+        "per_release": {
+          "fixed-mp-input": {
+            "amount": 0,
+            "children": [
+              "fixed-mp-input|physical|115897009696|0"
+            ],
+            "count": 0,
+            "mutations": [],
+            "terminals": [
+              {
+                "actual_mp_delta": 30,
+                "hp_after": 1000,
+                "hp_before": 1000,
+                "mp_after": 20,
+                "mp_before": 50,
+                "physics_tick": 0,
+                "rejection_reason": "shield_absorbed_all",
+                "source": {
+                  "admission_release_id": "fixed-mp-input",
+                  "child_effect_id": "physical",
+                  "parent_action_id": 1,
+                  "release_id": "fixed-mp-input",
+                  "runtime_map_id": 9001,
+                  "source_instance_id": 12,
+                  "source_life": 1,
+                  "victim_generation": -1,
+                  "victim_instance_id": 115897009696,
+                  "victim_life": 0,
+                  "zone_generation": 1
+                },
+                "terminal_kind": "mitigated"
+              }
+            ]
+          }
+        }
+      },
+      "events": [],
+      "initial_mp": 50,
+      "terminals": [
+        {
+          "actual_mp_delta": 30,
+          "hp_after": 1000,
+          "hp_before": 1000,
+          "mp_after": 20,
+          "mp_before": 50,
+          "physics_tick": 0,
+          "rejection_reason": "shield_absorbed_all",
+          "source": {
+            "admission_release_id": "fixed-mp-input",
+            "child_effect_id": "physical",
+            "parent_action_id": 1,
+            "release_id": "fixed-mp-input",
+            "runtime_map_id": 9001,
+            "source_instance_id": 12,
+            "source_life": 1,
+            "victim_generation": -1,
+            "victim_instance_id": 115897009696,
+            "victim_life": 0,
+            "zone_generation": 1
+          },
+          "terminal_kind": "mitigated"
+        }
+      ]
+    },
+    {
+      "audit": {
+        "failures": [],
+        "per_release": {
+          "fixed-mp-input": {
+            "amount": 13,
+            "children": [
+              "fixed-mp-input|physical|115897009696|0"
+            ],
+            "count": 1,
+            "mutations": [
+              {
+                "actual_hp_delta": 13,
+                "actual_mp_delta": 10,
+                "damage_type": "physical",
+                "hp_after": 987,
+                "hp_before": 1000,
+                "mp_after": 0,
+                "mp_before": 10,
+                "mutation_id": 1,
+                "physics_tick": 0,
+                "resolved_damage": 13,
+                "source": {
+                  "admission_release_id": "fixed-mp-input",
+                  "child_effect_id": "physical",
+                  "parent_action_id": 1,
+                  "release_id": "fixed-mp-input",
+                  "runtime_map_id": 9001,
+                  "source_instance_id": 12,
+                  "source_life": 1,
+                  "victim_generation": -1,
+                  "victim_instance_id": 115897009696,
+                  "victim_life": 0,
+                  "zone_generation": 1
+                },
+                "victim_generation": -1,
+                "victim_instance_id": 115897009696,
+                "victim_life": 0
+              }
+            ],
+            "terminals": []
+          }
+        }
+      },
+      "events": [
+        {
+          "actual_hp_delta": 13,
+          "actual_mp_delta": 10,
+          "damage_type": "physical",
+          "hp_after": 987,
+          "hp_before": 1000,
+          "mp_after": 0,
+          "mp_before": 10,
+          "mutation_id": 1,
+          "physics_tick": 0,
+          "resolved_damage": 13,
+          "source": {
+            "admission_release_id": "fixed-mp-input",
+            "child_effect_id": "physical",
+            "parent_action_id": 1,
+            "release_id": "fixed-mp-input",
+            "runtime_map_id": 9001,
+            "source_instance_id": 12,
+            "source_life": 1,
+            "victim_generation": -1,
+            "victim_instance_id": 115897009696,
+            "victim_life": 0,
+            "zone_generation": 1
+          },
+          "victim_generation": -1,
+          "victim_instance_id": 115897009696,
+          "victim_life": 0
+        }
+      ],
+      "initial_mp": 10,
+      "terminals": []
+    }
+  ],
+  "failures": []
+}

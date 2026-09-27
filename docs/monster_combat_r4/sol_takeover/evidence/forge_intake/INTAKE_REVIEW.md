@@ -1,0 +1,21 @@
+# 锻造接收预检（尚未实际合并）
+
+主树固定源码 3b21c115da6b8d5ed57e706432912dafcb377748；锻造固定 da41da3642123c180723ef03dec193ef1fc4cb1b；共同祖先78a797973409c0ce47590b928f3d26ff067fe567。远端已重新fetch核对。用户明确批准等当前R4固定门禁完成后串行整合、推送及统一APK；不删树。对方已确认无未提交功能/配置/人工校准，69自动UID保留。时间记录只是版本线索，以提交差异、生产消费者和行为合同作最终裁决。
+
+prospective merge-tree仅创建预览对象5313b3f962e949685a1ac5c92d1e77a26a96f845，没有更改工作树/index/HEAD。检测10双方改动路径、5内容冲突。以下为待真实整合后验证的决策，不是已验收的结果：
+
+- loot_pickup：保留main一次取纹理/空纹理正确处理、名称固定自身图标上方且允许重叠；并入forge新增material/relic显示尺寸。旧ground_icon_rect_local用于全局重排的API已由main移除，不能把旧重排机制复活；核对新UI是否仍有消费后再裁定该API是否需要独立保留。
+- player_state _process：保留main延迟耐久刷新，加入relic真实倒计时，不能二选一。
+- player_state旧宠物迁移：加入新groups/多宠槽位，保留main的world_replay任务和世界时钟/死亡记录读取。不能恢复旧人物档承载全部世界数据的路径。
+- 三近战夹具：保留main等待正式world-ready和38.5/13.5合法点（该点已经当前正式检查通过）；核对forge安全区断言意图，保留主树1.5GU准入和所有真实战斗断言，不能换回两帧假设。
+- 五自动合并共享文件仍须逐hunk检查：game_root、hud、player、skill_execution_plan_contract、summon_actor。自动合并不等于行为验收。主树28px激光整体平移、B原始技能混合、冷缓存刷新、世界提示居中、掉落固定名、R4纯观察和召唤半径保留。
+
+八个地图authoring差异仅NPC显示名“强化商人→强化大师”，坐标/碰撞/spawn未变。全部新增180源/图片/音效/校准/测试文件按forge source_manifest核验；生成掉落按primary正式工具验证，仅17Boss/42新材料槽范围，原有槽和15件限制不得丢失。普通装备技能词条enabled=false、圣物徽章直接掉落未配置继续保留。
+
+合入后必须实际执行交接19场景及未纳入交接结果的forge_hud_target_occlusion/equipment_skill_level_affix_rollout、新旧存档/多宠/固定掉落/UI/正式地图NPC/技能渲染/R4归属相关回归，正式注册新增critical场景，固定集成源码最终完整验收。APK走isolated build，保留签名/包ID和源码版本配置，使用既有build参数注入测试包版本并KeepStage，不删除既有工作树。不安装手机，DEVICE TEST保持NOT_RUN直到用户另行实机确认。
+
+## 新发现的精确候选（整合后先反例，不在当前固定R4源码上改动）
+
+forge player_state._sync_relic_proc_equipment在每次process/relic状态查询时，对item_id缺失的装备调用GameData.get_item_record(equipped)；后者duplicate(true)复制整个catalog记录。新圣物valid_instance明确要求instance.item_id精确等于稳定ID（relic_synthesis_rules.gd:108-112），没有ID的记录不能成为有效新圣物，这条名称/整记录查找对正确新实例没有用途。如果已激活圣物的同instance_id记录丢失item_id，名称查找仍恢复旧ID，且“同identity+ID”的早返回会跳过valid_instance，存在继续保留旧proc状态的路径。整合后用真实PlayerState/真实proc激活建立RED，缺ID应无proc，且不能用名字重新获取新圣物身份；确认后精确去掉该冗余fallback，保留旧普通装备加载/属性机制，不引入每帧全实例验证。相关测试必须保留正常新实例、proc期限/冷却、换装及老角色回归。当前只读候选，尚未运行反例、未称最终缺陷已修。
+
+同一新增实例校验还使用int(instance.item_id)/int(instance.count)直接比较，应在整合后用真实校验及保存入口复核小数/字符串身份反例。JSON解析后的整值float属于合法运输形态，不能粗暴只接收TYPE_INT；应拒绝非整值或非数值身份、保留整数和整值float。不能单凭静态候选称已FAIL，也不能修改既有普通物品/朋友旧存档兼容路径。先加最窄新圣物实例反例，正常roll/落盘回读实例保持PASS，再决定精确规则修复。

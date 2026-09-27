@@ -1,0 +1,26 @@
+{
+  "source_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "case": "natural_cadence_24_test",
+  "runner_exit": 0,
+  "engine_processes": [
+    {
+      "id": 3872,
+      "name": "Godot_v4.7-stable_win64",
+      "image_path": "C:\\Users\\Administrator\\.codex\\worktrees\\r4-clean-verification\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe",
+      "started_utc": "2026-09-27T13:05:22.9752337Z",
+      "first_observed_utc": "2026-09-27T13:05:23.0442858Z",
+      "last_alive_utc": "2026-09-27T13:06:21.5940606Z",
+      "first_absent_utc": "2026-09-27T13:06:21.7087830Z"
+    },
+    {
+      "id": 14784,
+      "name": "Godot_v4.7-stable_win64_console",
+      "image_path": "C:\\Users\\Administrator\\.codex\\worktrees\\r4-clean-verification\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe",
+      "started_utc": "2026-09-27T13:05:22.9616409Z",
+      "first_observed_utc": "2026-09-27T13:05:23.0442858Z",
+      "last_alive_utc": "2026-09-27T13:06:21.5940606Z",
+      "first_absent_utc": "2026-09-27T13:06:21.7087830Z"
+    }
+  ],
+  "note": "Independent process observations; first_absent is upper bound on actual native exit. PASS marker alone is not evidence of exit."
+}

@@ -8,6 +8,8 @@ New-Item -ItemType Directory -Path $ev | Out-Null
 if(@(& git -C $clean status --porcelain=v1 -uno).Count -ne 0){throw 'Clean checkout has tracked changes'}
 & git -C $clean switch --detach $SourceHead
 if($LASTEXITCODE -ne 0){throw 'Safe detached switch failed'}
+& python (Join-Path $main 'docs/monster_combat_r4/sol_takeover/evidence/materialize_bound_directive.py') $clean | Set-Content (Join-Path $ev 'directive_checkout.json') -Encoding utf8
+if($LASTEXITCODE -ne 0){throw 'Bound directive checkout failed'}
 $plan=Get-Content (Join-Path $main 'docs/monster_combat_r4/sol_takeover/evidence/clean_checkout_final/planned_tests.json') -Raw | ConvertFrom-Json
 [ordered]@{source_head=$SourceHead;count=$plan.count;paths=$plan.paths;prior_import='clean_checkout_final/import: FAIL 16 BOM parser errors, 609 source hashes preserved, tracked-clean; cache independent';started_at=(Get-Date -Format o)} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $ev 'identity.json') -Encoding utf8
 $env:APPDATA=Join-Path $clean '.godot/runtime_appdata'

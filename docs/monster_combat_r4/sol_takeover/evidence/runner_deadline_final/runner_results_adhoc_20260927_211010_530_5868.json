@@ -1,0 +1,28 @@
+{
+  "passed": 0,
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T21:10:10.5302060+08:00",
+  "total": 1,
+  "failed": 1,
+  "engine_log_errors": 1,
+  "results": [
+    {
+      "test_name": "case2_pass_then_assert",
+      "test_path": "tests/runner_fixtures/case2_pass_then_assert.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T13:10:35.6445660Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ]
+}

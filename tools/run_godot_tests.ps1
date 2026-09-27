@@ -1033,7 +1033,28 @@ foreach ($testPath in $SelectedTests) {
             $wrapperExitWithoutChildSince = $null
         }
     }
-    # Q0-A 3.1: reaching the deadline is a timeout regardless of the PASS marker.
+    # The native process must finish within its budget. A last-moment exit
+    # may still be inside the wrapper handoff confirmation window above.
+    # Finish only that confirmation after the deadline; never allow a live
+    # engine additional execution time, and never infer exit from PASS text.
+    if (-not $earlyFailure -and -not $naturalExit -and $null -ne $wrapperExitWithoutChildSince) {
+        $confirmationDeadline = $wrapperExitWithoutChildSince.AddMilliseconds(1000)
+        while ([DateTime]::UtcNow -lt $confirmationDeadline) {
+            if (-not $process.HasExited -or @(Get-NewGodotProcesses).Count -gt 0) {
+                $wrapperExitWithoutChildSince = $null
+                break
+            }
+            Start-Sleep -Milliseconds 100
+        }
+        if (
+            $null -ne $wrapperExitWithoutChildSince -and
+            $wrapperExitWithoutChildSince -lt $deadline -and
+            $process.HasExited -and @(Get-NewGodotProcesses).Count -eq 0
+        ) {
+            $naturalExit = $true
+        }
+    }
+    # Q0-A 3.1: a live process at the deadline times out regardless of PASS.
     $timedOut = -not $earlyFailure -and -not $naturalExit -and [DateTime]::UtcNow -ge $deadline
     if ($timedOut) {
         Stop-TestProcessTree -ProcessId $process.Id
@@ -1102,6 +1123,8 @@ foreach ($testPath in $SelectedTests) {
         process_exited = $processExited
         wrapper_exit_code = $wrapperExitCode
         child_process_exit_state = $childProcessExitState
+        execution_deadline_utc = $deadline.ToString('o')
+        native_exit_observed_utc = if ($null -ne $wrapperExitWithoutChildSince) { $wrapperExitWithoutChildSince.ToString('o') } else { $null }
         effective_exit_code = $finalEffectiveExitCode
         timeout = $timedOut
         stdout_failure_count = $stdoutFailureCount

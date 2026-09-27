@@ -1,0 +1,73 @@
+{
+  "source_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "status": "FAIL",
+  "actual": 103,
+  "passed": 99,
+  "failed": 4,
+  "actual_exit": 1,
+  "failures": [
+    {
+      "test_name": "all_damage_lost_test",
+      "test_path": "tests/hc_monster_combat_r4/all_damage_lost_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": 0,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_60s"
+    },
+    {
+      "test_name": "natural_cadence_24_test",
+      "test_path": "tests/hc_monster_combat_r4/natural_cadence_24_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": 0,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_60s"
+    },
+    {
+      "test_name": "natural_cadence_76_test",
+      "test_path": "tests/hc_monster_combat_r4/natural_cadence_76_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": 0,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_60s"
+    },
+    {
+      "test_name": "armor_single_slot_authority_test",
+      "test_path": "tests/armor_single_slot_authority_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "clean_import": "PASS",
+  "performance_matrix": "NOT_RUN",
+  "note": "No 72-pair performance matrix launched; original4 failures retained. Three PASS markers with timeout remain FAIL. Armor directive raw-byte provenance mismatch independently verified mainCRLF98,373B bound7d6630... vs cleanLF95,006B13f068..., existing .gitattributes wrongly eol=lf. Native exit timing diagnostic pending."
+}

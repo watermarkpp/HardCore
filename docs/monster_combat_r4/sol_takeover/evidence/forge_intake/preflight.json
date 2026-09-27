@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "note": "Read-only intake inventory; modification times are evidence clues, never automatic overwrite authority. No merge performed.",
+  "base": "78a797973409c0ce47590b928f3d26ff067fe567",
+  "main_source": "3b21c115da6b8d5ed57e706432912dafcb377748",
+  "forge_tip": "da41da3642123c180723ef03dec193ef1fc4cb1b",
+  "remote_main": "f5d6308f53162509bffd30f6981987cbfe80fa68",
+  "remote_forge": "da41da3642123c180723ef03dec193ef1fc4cb1b",
+  "forge_changed_count": 240,
+  "intersection_count": 10,
+  "shared_paths": [
+    {
+      "path": "scripts/game_root.gd",
+      "main_last_commit": "7fe0688fc67b2f5f13bfce0c18444a8afdb1e320 2026-09-27T14:33:04+08:00 fix(summon): align spawn query release snapshot and actual body radii",
+      "forge_last_commit": "77409079d0c361fdf3b3afde8939809c034d5c13 2026-09-24T23:14:52+08:00 Implement relic synthesis and persistent workbench trays",
+      "main_blob": "e77b84cf5f591cbeee69f309619a4bbd0bae4957",
+      "forge_blob": "439c531faae17e2f0e2be6abeb2dc26bd45c594d"
+    },
+    {
+      "path": "scripts/hud.gd",
+      "main_last_commit": "047bbb715614e8a421e50015d815ca217beb78f4 2026-09-25T12:05:06+08:00 fix(ui): align world notices with player screen center",
+      "forge_last_commit": "77409079d0c361fdf3b3afde8939809c034d5c13 2026-09-24T23:14:52+08:00 Implement relic synthesis and persistent workbench trays",
+      "main_blob": "f9aba278e0945334e8795592a659e03d27ac0dd7",
+      "forge_blob": "31510900a2332812bd025a62d231ed29302723cc"
+    },
+    {
+      "path": "scripts/loot_pickup.gd",
+      "main_last_commit": "0c10a07a81105f5ed470ef7379b3eadd46879221 2026-09-27T12:37:29+08:00 fix: preserve validated save recovery and fixed loot name repairs before R4 takeover",
+      "forge_last_commit": "77409079d0c361fdf3b3afde8939809c034d5c13 2026-09-24T23:14:52+08:00 Implement relic synthesis and persistent workbench trays",
+      "main_blob": "5d2c23caaf981764f7e95ac77d5d6680f7d03b1a",
+      "forge_blob": "9ea7ef9e5e374bd23487601d847dab61744a56ae"
+    },
+    {
+      "path": "scripts/player.gd",
+      "main_last_commit": "8d20ea4b969ab3893a8246ad43890606f1f8cf0d 2026-09-27T13:38:41+08:00 fix: observe actual MP shield payment without altering damage ownership",
+      "forge_last_commit": "2359aedc6ab131c4f4aab9bd71ef762e627999f0 2026-09-25T02:17:12+08:00 Add class-targeted relic recipes and three badges",
+      "main_blob": "f9795cdcc77d6609399647d65f5a0f6690208fe5",
+      "forge_blob": "e60290c759a036a9ffca1041673f6f84c06acafb"
+    },
+    {
+      "path": "scripts/player_state.gd",
+      "main_last_commit": "0c10a07a81105f5ed470ef7379b3eadd46879221 2026-09-27T12:37:29+08:00 fix: preserve validated save recovery and fixed loot name repairs before R4 takeover",
+      "forge_last_commit": "2359aedc6ab131c4f4aab9bd71ef762e627999f0 2026-09-25T02:17:12+08:00 Add class-targeted relic recipes and three badges",
+      "main_blob": "feb429e30b0fb6bc62f996d201cad03bf3ef9c7d",
+      "forge_blob": "f42e9e472d43bc093cb11d1e4325a6d9cb3465d1"
+    },
+    {
+      "path": "scripts/skills/skill_execution_plan_contract.gd",
+      "main_last_commit": "7fe0688fc67b2f5f13bfce0c18444a8afdb1e320 2026-09-27T14:33:04+08:00 fix(summon): align spawn query release snapshot and actual body radii",
+      "forge_last_commit": "df62a5468b31a464d28a7a405cd302c9d1327ffa 2026-09-24T15:33:34+08:00 feat: prepare forge UI and typed skill rank extension",
+      "main_blob": "e34ab62957a45156dd04beb0312e3cd97355c76a",
+      "forge_blob": "216058d103e5fa164113f9a12f9b6ed383359b2f"
+    },
+    {
+      "path": "scripts/summon_actor.gd",
+      "main_last_commit": "156649ac258f47ab4cd5be2f42c797c191c84a57 2026-09-27T13:28:01+08:00 fix: make R4 damage observation pure and bind explicit immutable delivery identities",
+      "forge_last_commit": "df62a5468b31a464d28a7a405cd302c9d1327ffa 2026-09-24T15:33:34+08:00 feat: prepare forge UI and typed skill rank extension",
+      "main_blob": "07748767a04cc126f8c7249a493e004f7e05e024",
+      "forge_blob": "bd1395011fb53b31418c79f723082246b9c03507"
+    },
+    {
+      "path": "tests/live_attack_resolution_test.gd",
+      "main_last_commit": "09902e3a4a3f47b64d96b961cb73f226807f7c5e 2026-09-27T14:11:14+08:00 fix(monster): reject released admission targets and prove real D3 lifecycles",
+      "forge_last_commit": "df62a5468b31a464d28a7a405cd302c9d1327ffa 2026-09-24T15:33:34+08:00 feat: prepare forge UI and typed skill rank extension",
+      "main_blob": "c3917d97024d0f106ef81f527dc5dcf117709e10",
+      "forge_blob": "0502e7c3a5d3c89c3a892b354e50e811b21ec1b2"
+    },
+    {
+      "path": "tests/melee_lock_fallback_test.gd",
+      "main_last_commit": "09902e3a4a3f47b64d96b961cb73f226807f7c5e 2026-09-27T14:11:14+08:00 fix(monster): reject released admission targets and prove real D3 lifecycles",
+      "forge_last_commit": "df62a5468b31a464d28a7a405cd302c9d1327ffa 2026-09-24T15:33:34+08:00 feat: prepare forge UI and typed skill rank extension",
+      "main_blob": "db9e92aac43168cd43ee9e6956d0a2271ddcfa76",
+      "forge_blob": "3bed1190961e25dd568572030b58bc2e6077ab05"
+    },
+    {
+      "path": "tests/warrior_skill_state_machine_test.gd",
+      "main_last_commit": "09902e3a4a3f47b64d96b961cb73f226807f7c5e 2026-09-27T14:11:14+08:00 fix(monster): reject released admission targets and prove real D3 lifecycles",
+      "forge_last_commit": "df62a5468b31a464d28a7a405cd302c9d1327ffa 2026-09-24T15:33:34+08:00 feat: prepare forge UI and typed skill rank extension",
+      "main_blob": "ed6814748899dc644dec52c7c05288966dc159e3",
+      "forge_blob": "3770c3cabb88c7cda2e531c81e26797df200b418"
+    }
+  ]
+}

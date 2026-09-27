@@ -1,0 +1,28 @@
+{
+  "failed": 1,
+  "engine_log_errors": 0,
+  "passed": 0,
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "results": [
+    {
+      "test_name": "case4_pass_then_hang",
+      "test_path": "tests/runner_fixtures/case4_pass_then_hang.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T13:10:48.2270106Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_30s;non_zero_exit_code_-1"
+    }
+  ],
+  "generated_at": "2026-09-27T21:10:49.1209400+08:00",
+  "suite": "adhoc",
+  "total": 1
+}

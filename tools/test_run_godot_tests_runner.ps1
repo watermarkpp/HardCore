@@ -19,6 +19,15 @@ $Cases = @(
     @{ name = 'runner_engine_log_safe_logout_error_fixture'; path = 'tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn'; expect = 'FAIL'; reason_token = 'engine_log_failures' }
 )
 
+# These two fixtures use the engine's real 30-second lifetime boundary.
+# Preserve support for shorter developer runs of the original eight cases.
+if ($FixtureTimeoutSeconds -eq 30) {
+    $Cases += @(
+        @{ name = 'case9_exit_before_deadline'; path = 'tests/runner_fixtures/case9_exit_before_deadline.tscn'; expect = 'PASS'; reason_token = '' },
+        @{ name = 'case10_exit_after_deadline'; path = 'tests/runner_fixtures/case10_exit_after_deadline.tscn'; expect = 'FAIL'; reason_token = 'timeout' }
+    )
+}
+
 function Invoke-RunnerChild([string[]]$Arguments) {
     $commandArguments = @(
         '-NoProfile',

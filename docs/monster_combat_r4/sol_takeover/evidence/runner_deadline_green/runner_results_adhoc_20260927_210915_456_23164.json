@@ -1,0 +1,28 @@
+{
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "case5_no_pass_exit_zero",
+      "test_path": "tests/runner_fixtures/case5_no_pass_exit_zero.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T13:09:39.7923179Z",
+      "native_exit_observed_utc": "2026-09-27T13:09:14.4025815Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker"
+    }
+  ],
+  "suite": "adhoc",
+  "failed": 1,
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "total": 1,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-27T21:09:15.4565354+08:00"
+}

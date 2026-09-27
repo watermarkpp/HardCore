@@ -1,0 +1,28 @@
+{
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "failed": 1,
+  "passed": 0,
+  "suite": "adhoc",
+  "engine_log_errors": 2,
+  "generated_at": "2026-09-27T21:11:05.7575538+08:00",
+  "results": [
+    {
+      "test_name": "case7_parse_error",
+      "test_path": "tests/runner_fixtures/case7_parse_error.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T13:11:33.2430339Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    }
+  ],
+  "total": 1
+}

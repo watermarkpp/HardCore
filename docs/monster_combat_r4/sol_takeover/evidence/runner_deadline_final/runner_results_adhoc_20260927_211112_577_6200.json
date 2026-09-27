@@ -1,0 +1,28 @@
+{
+  "engine_log_errors": 1,
+  "passed": 0,
+  "results": [
+    {
+      "test_name": "runner_engine_log_safe_logout_error_fixture",
+      "test_path": "tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T13:11:36.6086476Z",
+      "native_exit_observed_utc": "2026-09-27T13:11:11.0499439Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "git_head": "6407fddaaa9ac3e1e388ff866758d91610ea26fd",
+  "total": 1,
+  "generated_at": "2026-09-27T21:11:12.5773312+08:00",
+  "failed": 1,
+  "suite": "adhoc"
+}
