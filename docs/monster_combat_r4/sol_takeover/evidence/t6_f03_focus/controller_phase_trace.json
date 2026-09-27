@@ -1,0 +1,923 @@
+[
+  {
+    "pair": 1,
+    "phases": {
+      "enemy_physics_calls": [
+        5374,
+        5436
+      ],
+      "foreground_ai_ticks": [
+        5348,
+        5409
+      ],
+      "enemy_retarget_calls": [
+        5383,
+        5440
+      ],
+      "enemy_retarget_usec": [
+        104479,
+        106537
+      ],
+      "enemy_projection_calls": [
+        7691,
+        7813
+      ],
+      "enemy_projection_usec": [
+        72205,
+        73841
+      ],
+      "safe_zone_queries": [
+        7578,
+        7704
+      ],
+      "safe_zone_usec": [
+        156290,
+        159597
+      ],
+      "attack_los_evaluations": [
+        4098,
+        4173
+      ],
+      "attack_los_usec": [
+        74147,
+        74414
+      ],
+      "death_settlement_usec": [
+        187613,
+        31085
+      ],
+      "drop_roll_usec": [
+        34716,
+        29829
+      ]
+    },
+    "starts": [
+      15,
+      16
+    ],
+    "deaths": [
+      57,
+      56
+    ],
+    "native_initial_scheduler": [
+      [
+        {
+          "background_timer": 0.2,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0818181818181818,
+          "mod11": 9,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "481271223992",
+          "ordinal": 1,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.433333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "482965721986",
+          "ordinal": 2,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.166666666666667,
+          "crowd_timer": 0.0142857142857143,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 8,
+          "mod7": 1,
+          "native_instance_id": "483318044308",
+          "ordinal": 3,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.4,
+          "crowd_timer": 0.0571428571428571,
+          "environment_timer": 0.0909090909090909,
+          "mod11": 10,
+          "mod13": 11,
+          "mod7": 4,
+          "native_instance_id": "483670365826",
+          "ordinal": 4,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.133333333333333,
+          "crowd_timer": 0.0,
+          "environment_timer": 0.0818181818181818,
+          "mod11": 9,
+          "mod13": 1,
+          "mod7": 0,
+          "native_instance_id": "484022687344",
+          "ordinal": 5,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.366666666666667,
+          "crowd_timer": 0.0428571428571429,
+          "environment_timer": 0.0727272727272727,
+          "mod11": 8,
+          "mod13": 4,
+          "mod7": 3,
+          "native_instance_id": "484375008862",
+          "ordinal": 6,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.1,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0636363636363636,
+          "mod11": 7,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "484727330380",
+          "ordinal": 7,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.333333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0636363636363636,
+          "mod11": 7,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "485079651888",
+          "ordinal": 8,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.0666666666666667,
+          "crowd_timer": 0.0285714285714286,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 3,
+          "mod7": 2,
+          "native_instance_id": "485431973406",
+          "ordinal": 9,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.3,
+          "crowd_timer": 0.0714285714285714,
+          "environment_timer": 0.0454545454545455,
+          "mod11": 5,
+          "mod13": 6,
+          "mod7": 5,
+          "native_instance_id": "485784294924",
+          "ordinal": 10,
+          "retarget_timer": 0.0
+        }
+      ],
+      [
+        {
+          "background_timer": 0.2,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0363636363636364,
+          "mod11": 4,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "501018007230",
+          "ordinal": 1,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.433333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "502712505224",
+          "ordinal": 2,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.166666666666667,
+          "crowd_timer": 0.0142857142857143,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 8,
+          "mod7": 1,
+          "native_instance_id": "503064827546",
+          "ordinal": 3,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.4,
+          "crowd_timer": 0.0571428571428571,
+          "environment_timer": 0.0454545454545455,
+          "mod11": 5,
+          "mod13": 11,
+          "mod7": 4,
+          "native_instance_id": "503417149064",
+          "ordinal": 4,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.133333333333333,
+          "crowd_timer": 0.0,
+          "environment_timer": 0.0363636363636364,
+          "mod11": 4,
+          "mod13": 1,
+          "mod7": 0,
+          "native_instance_id": "503769470582",
+          "ordinal": 5,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.366666666666667,
+          "crowd_timer": 0.0428571428571429,
+          "environment_timer": 0.0272727272727273,
+          "mod11": 3,
+          "mod13": 4,
+          "mod7": 3,
+          "native_instance_id": "504121792100",
+          "ordinal": 6,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.1,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0181818181818182,
+          "mod11": 2,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "504474113618",
+          "ordinal": 7,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.333333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0181818181818182,
+          "mod11": 2,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "504826435126",
+          "ordinal": 8,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.0666666666666667,
+          "crowd_timer": 0.0285714285714286,
+          "environment_timer": 0.00909090909090909,
+          "mod11": 1,
+          "mod13": 3,
+          "mod7": 2,
+          "native_instance_id": "505178756644",
+          "ordinal": 9,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.3,
+          "crowd_timer": 0.0714285714285714,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 6,
+          "mod7": 5,
+          "native_instance_id": "505531078162",
+          "ordinal": 10,
+          "retarget_timer": 0.0
+        }
+      ]
+    ],
+    "callback": [
+      {
+        "callback_interval_p99_ms": 42.16581999999999,
+        "callbacks_over_33_33_ms": 10,
+        "callbacks_over_50_ms": 4,
+        "memory_peak_bytes": 1074867801.0,
+        "deaths_committed": 55,
+        "drop_rolls": 56,
+        "drop_nodes": 42
+      },
+      {
+        "callback_interval_p99_ms": 30.22087999999999,
+        "callbacks_over_33_33_ms": 5,
+        "callbacks_over_50_ms": 0,
+        "memory_peak_bytes": 1077981948.0,
+        "deaths_committed": 51,
+        "drop_rolls": 51,
+        "drop_nodes": 43
+      }
+    ]
+  },
+  {
+    "pair": 2,
+    "phases": {
+      "enemy_physics_calls": [
+        5362,
+        5436
+      ],
+      "foreground_ai_ticks": [
+        5337,
+        5409
+      ],
+      "enemy_retarget_calls": [
+        5373,
+        5440
+      ],
+      "enemy_retarget_usec": [
+        101183,
+        103219
+      ],
+      "enemy_projection_calls": [
+        7708,
+        7823
+      ],
+      "enemy_projection_usec": [
+        69942,
+        72447
+      ],
+      "safe_zone_queries": [
+        7594,
+        7714
+      ],
+      "safe_zone_usec": [
+        151907,
+        155988
+      ],
+      "attack_los_evaluations": [
+        4038,
+        4166
+      ],
+      "attack_los_usec": [
+        69797,
+        72380
+      ],
+      "death_settlement_usec": [
+        191561,
+        33381
+      ],
+      "drop_roll_usec": [
+        40566,
+        32035
+      ]
+    },
+    "starts": [
+      14,
+      16
+    ],
+    "deaths": [
+      58,
+      56
+    ],
+    "native_initial_scheduler": [
+      [
+        {
+          "background_timer": 0.2,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0818181818181818,
+          "mod11": 9,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "481271223992",
+          "ordinal": 1,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.433333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "482965721986",
+          "ordinal": 2,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.166666666666667,
+          "crowd_timer": 0.0142857142857143,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 8,
+          "mod7": 1,
+          "native_instance_id": "483318044308",
+          "ordinal": 3,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.4,
+          "crowd_timer": 0.0571428571428571,
+          "environment_timer": 0.0909090909090909,
+          "mod11": 10,
+          "mod13": 11,
+          "mod7": 4,
+          "native_instance_id": "483670365826",
+          "ordinal": 4,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.133333333333333,
+          "crowd_timer": 0.0,
+          "environment_timer": 0.0818181818181818,
+          "mod11": 9,
+          "mod13": 1,
+          "mod7": 0,
+          "native_instance_id": "484022687344",
+          "ordinal": 5,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.366666666666667,
+          "crowd_timer": 0.0428571428571429,
+          "environment_timer": 0.0727272727272727,
+          "mod11": 8,
+          "mod13": 4,
+          "mod7": 3,
+          "native_instance_id": "484375008862",
+          "ordinal": 6,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.1,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0636363636363636,
+          "mod11": 7,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "484727330380",
+          "ordinal": 7,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.333333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0636363636363636,
+          "mod11": 7,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "485079651888",
+          "ordinal": 8,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.0666666666666667,
+          "crowd_timer": 0.0285714285714286,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 3,
+          "mod7": 2,
+          "native_instance_id": "485431973406",
+          "ordinal": 9,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.3,
+          "crowd_timer": 0.0714285714285714,
+          "environment_timer": 0.0454545454545455,
+          "mod11": 5,
+          "mod13": 6,
+          "mod7": 5,
+          "native_instance_id": "485784294924",
+          "ordinal": 10,
+          "retarget_timer": 0.0
+        }
+      ],
+      [
+        {
+          "background_timer": 0.2,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0363636363636364,
+          "mod11": 4,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "501018007230",
+          "ordinal": 1,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.433333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "502712505224",
+          "ordinal": 2,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.166666666666667,
+          "crowd_timer": 0.0142857142857143,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 8,
+          "mod7": 1,
+          "native_instance_id": "503064827546",
+          "ordinal": 3,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.4,
+          "crowd_timer": 0.0571428571428571,
+          "environment_timer": 0.0454545454545455,
+          "mod11": 5,
+          "mod13": 11,
+          "mod7": 4,
+          "native_instance_id": "503417149064",
+          "ordinal": 4,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.133333333333333,
+          "crowd_timer": 0.0,
+          "environment_timer": 0.0363636363636364,
+          "mod11": 4,
+          "mod13": 1,
+          "mod7": 0,
+          "native_instance_id": "503769470582",
+          "ordinal": 5,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.366666666666667,
+          "crowd_timer": 0.0428571428571429,
+          "environment_timer": 0.0272727272727273,
+          "mod11": 3,
+          "mod13": 4,
+          "mod7": 3,
+          "native_instance_id": "504121792100",
+          "ordinal": 6,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.1,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0181818181818182,
+          "mod11": 2,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "504474113618",
+          "ordinal": 7,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.333333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0181818181818182,
+          "mod11": 2,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "504826435126",
+          "ordinal": 8,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.0666666666666667,
+          "crowd_timer": 0.0285714285714286,
+          "environment_timer": 0.00909090909090909,
+          "mod11": 1,
+          "mod13": 3,
+          "mod7": 2,
+          "native_instance_id": "505178756644",
+          "ordinal": 9,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.3,
+          "crowd_timer": 0.0714285714285714,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 6,
+          "mod7": 5,
+          "native_instance_id": "505531078162",
+          "ordinal": 10,
+          "retarget_timer": 0.0
+        }
+      ]
+    ],
+    "callback": [
+      {
+        "callback_interval_p99_ms": 44.03081999999999,
+        "callbacks_over_33_33_ms": 10,
+        "callbacks_over_50_ms": 2,
+        "memory_peak_bytes": 1078086573.0,
+        "deaths_committed": 55,
+        "drop_rolls": 57,
+        "drop_nodes": 42
+      },
+      {
+        "callback_interval_p99_ms": 27.14768999999997,
+        "callbacks_over_33_33_ms": 5,
+        "callbacks_over_50_ms": 2,
+        "memory_peak_bytes": 1077979780.0,
+        "deaths_committed": 51,
+        "drop_rolls": 51,
+        "drop_nodes": 43
+      }
+    ]
+  },
+  {
+    "pair": 3,
+    "phases": {
+      "enemy_physics_calls": [
+        5369,
+        5436
+      ],
+      "foreground_ai_ticks": [
+        5342,
+        5409
+      ],
+      "enemy_retarget_calls": [
+        5377,
+        5440
+      ],
+      "enemy_retarget_usec": [
+        105063,
+        102580
+      ],
+      "enemy_projection_calls": [
+        7618,
+        7821
+      ],
+      "enemy_projection_usec": [
+        71117,
+        70906
+      ],
+      "safe_zone_queries": [
+        7504,
+        7712
+      ],
+      "safe_zone_usec": [
+        154537,
+        154047
+      ],
+      "attack_los_evaluations": [
+        4150,
+        4176
+      ],
+      "attack_los_usec": [
+        74538,
+        71772
+      ],
+      "death_settlement_usec": [
+        215994,
+        33846
+      ],
+      "drop_roll_usec": [
+        34263,
+        32461
+      ]
+    },
+    "starts": [
+      16,
+      16
+    ],
+    "deaths": [
+      58,
+      56
+    ],
+    "native_initial_scheduler": [
+      [
+        {
+          "background_timer": 0.2,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0818181818181818,
+          "mod11": 9,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "481271223992",
+          "ordinal": 1,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.433333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "482965721986",
+          "ordinal": 2,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.166666666666667,
+          "crowd_timer": 0.0142857142857143,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 8,
+          "mod7": 1,
+          "native_instance_id": "483318044308",
+          "ordinal": 3,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.4,
+          "crowd_timer": 0.0571428571428571,
+          "environment_timer": 0.0909090909090909,
+          "mod11": 10,
+          "mod13": 11,
+          "mod7": 4,
+          "native_instance_id": "483670365826",
+          "ordinal": 4,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.133333333333333,
+          "crowd_timer": 0.0,
+          "environment_timer": 0.0818181818181818,
+          "mod11": 9,
+          "mod13": 1,
+          "mod7": 0,
+          "native_instance_id": "484022687344",
+          "ordinal": 5,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.366666666666667,
+          "crowd_timer": 0.0428571428571429,
+          "environment_timer": 0.0727272727272727,
+          "mod11": 8,
+          "mod13": 4,
+          "mod7": 3,
+          "native_instance_id": "484375008862",
+          "ordinal": 6,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.1,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0636363636363636,
+          "mod11": 7,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "484727330380",
+          "ordinal": 7,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.333333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0636363636363636,
+          "mod11": 7,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "485079651888",
+          "ordinal": 8,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.0666666666666667,
+          "crowd_timer": 0.0285714285714286,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 3,
+          "mod7": 2,
+          "native_instance_id": "485431973406",
+          "ordinal": 9,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.3,
+          "crowd_timer": 0.0714285714285714,
+          "environment_timer": 0.0454545454545455,
+          "mod11": 5,
+          "mod13": 6,
+          "mod7": 5,
+          "native_instance_id": "485784294924",
+          "ordinal": 10,
+          "retarget_timer": 0.0
+        }
+      ],
+      [
+        {
+          "background_timer": 0.2,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0363636363636364,
+          "mod11": 4,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "501018007230",
+          "ordinal": 1,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.433333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "502712505224",
+          "ordinal": 2,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.166666666666667,
+          "crowd_timer": 0.0142857142857143,
+          "environment_timer": 0.0545454545454546,
+          "mod11": 6,
+          "mod13": 8,
+          "mod7": 1,
+          "native_instance_id": "503064827546",
+          "ordinal": 3,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.4,
+          "crowd_timer": 0.0571428571428571,
+          "environment_timer": 0.0454545454545455,
+          "mod11": 5,
+          "mod13": 11,
+          "mod7": 4,
+          "native_instance_id": "503417149064",
+          "ordinal": 4,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.133333333333333,
+          "crowd_timer": 0.0,
+          "environment_timer": 0.0363636363636364,
+          "mod11": 4,
+          "mod13": 1,
+          "mod7": 0,
+          "native_instance_id": "503769470582",
+          "ordinal": 5,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.366666666666667,
+          "crowd_timer": 0.0428571428571429,
+          "environment_timer": 0.0272727272727273,
+          "mod11": 3,
+          "mod13": 4,
+          "mod7": 3,
+          "native_instance_id": "504121792100",
+          "ordinal": 6,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.1,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0181818181818182,
+          "mod11": 2,
+          "mod13": 7,
+          "mod7": 6,
+          "native_instance_id": "504474113618",
+          "ordinal": 7,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.333333333333333,
+          "crowd_timer": 0.0857142857142857,
+          "environment_timer": 0.0181818181818182,
+          "mod11": 2,
+          "mod13": 0,
+          "mod7": 6,
+          "native_instance_id": "504826435126",
+          "ordinal": 8,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.0666666666666667,
+          "crowd_timer": 0.0285714285714286,
+          "environment_timer": 0.00909090909090909,
+          "mod11": 1,
+          "mod13": 3,
+          "mod7": 2,
+          "native_instance_id": "505178756644",
+          "ordinal": 9,
+          "retarget_timer": 0.0
+        },
+        {
+          "background_timer": 0.3,
+          "crowd_timer": 0.0714285714285714,
+          "environment_timer": 0.0,
+          "mod11": 0,
+          "mod13": 6,
+          "mod7": 5,
+          "native_instance_id": "505531078162",
+          "ordinal": 10,
+          "retarget_timer": 0.0
+        }
+      ]
+    ],
+    "callback": [
+      {
+        "callback_interval_p99_ms": 44.95815999999999,
+        "callbacks_over_33_33_ms": 11,
+        "callbacks_over_50_ms": 3,
+        "memory_peak_bytes": 1074331509.0,
+        "deaths_committed": 57,
+        "drop_rolls": 58,
+        "drop_nodes": 39
+      },
+      {
+        "callback_interval_p99_ms": 25.164999999999957,
+        "callbacks_over_33_33_ms": 5,
+        "callbacks_over_50_ms": 1,
+        "memory_peak_bytes": 1077976620.0,
+        "deaths_committed": 51,
+        "drop_rolls": 51,
+        "drop_nodes": 43
+      }
+    ]
+  }
+]

@@ -229,3 +229,8 @@ HEAD前项a899c0ac..；本项准备本地提交，源为Json job/service/handle 
 实际5/5正常退出PASS，portal_green runner20260927_234457_579_4796：全67正式图/132端点（117实际travel_request成功+15拒绝），四次真实READY arrival，既有双向/缺落点/兄弟publish。独立只读all_map_audit_and_protection.json PASS：其他64 registry entry逐字段相等，三图design/ground/instances/collision除catalog版本哈希/非门户semantics逐字段相等，authoring非门点层及元数据除revision相等。补全源A精度文本保留，未编辑像素、碰撞或spawn。其他正式图未发现同类配置缺陷。不是117次设备实走验收：device NOT_RUN。
 
 R4性能仍open，继续F03/F05真实负载配对后再fullforge；未push/cleanup/APK。
+
+## F03 重点原生负载配对（源36451d41）
+实际8/8正常退出，AA+AB/BA/AB，原生20秒/600回调/固定输入，没有清时钟或冷却。t6_f03_focus summary与controller_phase_trace保存。AoE10候选死亡结算主线程计时31.1/33.4/33.8ms累计 vs基线187.6/191.6/216.0ms；callback P99 30.22/27.15/25.16ms vs42.17/44.03/44.96ms；>33.33ms5/5/5 vs10/10/11；>50ms0/2/1 vs4/2/3。实际存在活怪、受击、死亡、真实文件、原native随机抽取和显示，候选enemyphysics5436 vs基线5374/5362/5369，不是减少活怪或计算频率得出的改善。
+
+候选inclusive enemy CPU三配对delta +.0542/+.0597/-.0080ms，AA noise .1242ms，无三项持续同向超noise标记；不单凭较大noise称性能PASS。额外原生actor调用/LOS与原生分配身份stagger已保存，基线死亡57/58/58、候选56各，确认有异步终态/显示积压，未丢掉任何raw。队列/存档生命周期另有真实最终专项；效果和时钟不减负。旧00c FAIL记录保留，整体R4性能仍需完整9条件矩阵及最终审查。下一步当前固定源全面72样本，不改source/tests/tools/HEAD，不并发引擎或重任务；完成后定向原R4和forge串行整合。APK/远端/清理保持NOT_RUN。
