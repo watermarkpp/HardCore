@@ -43,6 +43,10 @@ for row in runs:
     deaths = inputs["death_identity_inputs"]
     if row["mode"] == "aoe_death_loot" and (len(deaths) != sample["death_signals"] or len({d["fixed_key"] for d in deaths}) != len(deaths) or not inputs["equipment_identity_inputs"]):
         errors.append(label+":death_inputs")
+    if row["mode"] == "aoe_death_loot" and detail == "frame_only":
+        plans=sample.get("native_planned_death_keys", {})
+        if not plans or sample.get("native_loot_nodes_created", 0)<=0 or not set(plans).issubset({d["fixed_key"] for d in deaths}) or any(not isinstance(v,int) or v<0 for v in plans.values()):
+            errors.append(label+":native_plan_node_evidence")
     for d in deaths:
         if d["fixed_key"] != f'death:{int(d["map_id"])}:{int(d["generation"])}:{int(d["sequence"])}:{int(d["spawn_ordinal"])}':
             errors.append(label+":death_identity")

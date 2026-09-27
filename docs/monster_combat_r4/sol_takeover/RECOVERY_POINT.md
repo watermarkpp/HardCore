@@ -251,3 +251,6 @@ Test-only probe/collector DetailMode optional, defaultfull preserved. Native fra
 
 ## 01:00 frame-only16 completed
 42380 normalexit0, exact checks2x8 PASS, FRAME_PACING_REVIEW.md raw tails/mean/workload. No sustained mean pacing regression; petsP99+1-2ms retained. OverallperformanceFAIL/open: AoEframeonlystillNOT_RUN, need nativeplan/drop node observations instead of disabling fullcounter checks. OriginalR3radius/summonbug concrete trace explains necessary work differences but doesnot assignalltiming. No active engine; HEAD9803. Mainowned docshelpers/ledger staged next; userAGENTS remainsuntouched. Forge/push/cleanup/APKNOT_RUN.
+
+## NativeAoE observation validated
+AoEframeonly30 smoke151nativeplans/117nodes/151deaths PASS; defaultfullAoE10 smoke directobservations equaldetailedroll/nodecounts PASS. Noactiveengine; nextcommit thenoriginalR3BASE1381 testoverlay +8AA/AB/BA/AB AoE30 frameonly. FreezeHEAD/source; originalfullcounterassertsunchanged, frameonlyactualplan/nodeproof+identities instead. Forge/push/cleanup/APKstillNOT_RUN.

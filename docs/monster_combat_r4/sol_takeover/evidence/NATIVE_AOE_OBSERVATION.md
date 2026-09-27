@@ -1,0 +1,5 @@
+# Actual AoE observation boundary
+
+frame_only AoE30 smoke:600callbacks,151 death signals/replacements,151 actual completed native plans,117 actual LootPickup node_added events, no failures; per-actor CPU null/NOT_RUN. Default-full AoE10 smoke retains existing detailed roll/commit/node assertions plus native observations; normal exit PASS. Native completed-plan count equals detailed drop_roll_count and native created-node count equals detailed drop_node_spawn_count in the smoke. No observer HP mutation, dropped ledger rows, damage filtering, formula/RNG/clock changes or BASE production edits.
+
+Test subclass observes native super return/state, and existing SceneTree.node_added signal observes actual LootPickup objects. Observation-only counters reset at the hot measurement boundary; gameplay state never resets. Full observation assertions remain enabled in full mode; frame_only uses actual native plans/nodes and saved affix identities. Original full and body-only evidence is retained. This extension does not itself close performance acceptance.

@@ -8,7 +8,6 @@ param(
     [ValidateSet('full','frame_only')][string]$DetailMode = 'full'
 )
 $ErrorActionPreference = 'Stop'
-if ($DetailMode -eq 'frame_only' -and $Modes -contains 'aoe_death_loot') {throw 'Frame-only AoE unsupported: requires native roll counters'}
 $probe = 'tests/hc_monster_combat_r4/t6_real_load_probe.gd'
 if ((Get-FileHash -LiteralPath (Join-Path $BaseRoot 'tools/run_godot_tests.ps1')).Hash -ne (Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/run_godot_tests.ps1')).Hash) {throw 'Runner test overlay differs'}
 $baseHead = (& git -C $BaseRoot rev-parse HEAD).Trim()
@@ -70,6 +69,7 @@ function Invoke-Sample([string]$Side,[string]$Mode,[int]$Scale,[string]$Phase,[i
     if ($data.random_input_version -ne 'all_gameplay_actors_spawn_casts_drop_identities_production_hot.v5' -or $data.random_inputs.player_seed -ne 20260928 -or $data.random_inputs.durability_seed -ne 20260929) {throw 'Random inputs not pinned'}
     if ($data.random_inputs.drop_session -ne '20260927000000000000000000000000') {throw 'Drop session input not pinned'}
     if ($Mode -eq 'aoe_death_loot') {
+        if ($data.native_loot_nodes_created -le 0 -or @($data.native_planned_death_keys.PSObject.Properties).Count -le 0) {throw 'No actual planned deaths/materialized loot'}
         $deathInputs=@($data.random_inputs.death_identity_inputs)
         if ($deathInputs.Count -ne $data.death_signals -or @($deathInputs.fixed_key | Sort-Object -Unique).Count -ne $deathInputs.Count -or @($data.random_inputs.equipment_identity_inputs).Count -eq 0) {throw 'Death/affix identity input incomplete'}
     }

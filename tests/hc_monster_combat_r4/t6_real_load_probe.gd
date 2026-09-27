@@ -16,6 +16,7 @@ class SeededGameRoot extends "res://scripts/game_root.gd":
 	var t6_cast_seed_inputs: Array = []
 	var t6_death_identity_inputs: Array = []
 	var t6_item_identity_inputs: Array = []
+	var t6_planned_death_keys := {}
 
 	# The native callback enqueues a unique identity and schedules deferred work.
 	# Pin this input while still QUEUED, before any transaction or affix consumer.
@@ -40,7 +41,8 @@ class SeededGameRoot extends "res://scripts/game_root.gd":
 	# Observe the actual native result; no filtering, rerolling or payload writes.
 	func _plan_enemy_death_item(death: Dictionary) -> bool:
 		var completed := super._plan_enemy_death_item(death)
-		if str(death.state) == DEATH_STATE_PLANNED:
+		if completed and str(death.state) == DEATH_STATE_PLANNED:
+			t6_planned_death_keys[str(death.death_key)] = (death.drop_plan.requests as Array).size()
 			var item_index := 0
 			for request: Dictionary in death.drop_plan.requests:
 				if not request.has("item_record"):
@@ -74,6 +76,7 @@ var serial := 0
 var mode := ""
 var scale := 0
 var detail_mode := "full"
+var native_loot_nodes_created := 0
 var totals := {}
 var previous_counters := {}
 var retired_starts := 0
@@ -107,7 +110,6 @@ func _run() -> void:
 	if detail_mode.is_empty():
 		detail_mode = RuntimeDiagnostics.DEVICE_LAB_DETAIL_FULL
 	assert(RuntimeDiagnostics.set_device_lab_detail_mode(detail_mode), "invalid observation detail")
-	assert(detail_mode == "full" or mode != "aoe_death_loot", "frame_only AoE requires native roll counters; unsupported")
 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 	var started := Time.get_ticks_usec()
 	game = SeededGameRoot.new()
@@ -176,6 +178,9 @@ func _run() -> void:
 	if mode == "aoe_death_loot":
 		_cast("wizard.fire_wall")
 	var cold_casts := casts.duplicate(true)
+	# Observation-only boundaries, never gameplay counters or combat clocks.
+	native_loot_nodes_created = 0
+	game.t6_planned_death_keys.clear()
 	RuntimeDiagnostics.reset_performance_window()
 	previous_counters = RuntimeDiagnostics.performance_counters()
 	var hp_start: int = game.player.current_hp
@@ -250,7 +255,9 @@ func _run() -> void:
 	if mode == "large_pets":
 		_check(pets.size() == 2 and pet_attacks > 0 and pet_damage > 0, "pets_not_actually_attacking")
 	if mode == "aoe_death_loot":
-		_check(deaths > 0 and replacements > 0 and death_signals > 0 and int(totals.get("drop_roll_count", 0)) > 0 and int(totals.get("death_queue_committed_count", 0)) > 0 and int(totals.get("drop_node_spawn_count", 0)) > 0, "no_real_death_drop_work")
+		_check(deaths > 0 and replacements > 0 and death_signals > 0 and not game.t6_planned_death_keys.is_empty() and native_loot_nodes_created > 0, "no_native_death_plan_or_materialized_loot")
+		if detail_mode == "full":
+			_check(int(totals.get("drop_roll_count", 0)) > 0 and int(totals.get("death_queue_committed_count", 0)) > 0 and int(totals.get("drop_node_spawn_count", 0)) > 0, "no_real_death_drop_work")
 	var final_death_queue: Dictionary = game.death_work_queue_snapshot()
 	for terminal: Dictionary in final_death_queue.get("terminal", []):
 		_check(str(terminal.get("state", "")) != "FAILED", "production_death_transaction_failed:" + str(terminal.get("last_error", "")))
@@ -263,6 +270,8 @@ func _run() -> void:
 		"counters_last_window": RuntimeDiagnostics.performance_counters(), "failures": failures,
 		"source_head": OS.get_environment("HARDCORE_R4_LOAD_HEAD"), "label": OS.get_environment("HARDCORE_R4_LOAD_LABEL"),
 		"gpu": "NOT_RUN", "device": "NOT_RUN", "measurement": "real physics callback spacing and engine monitors; inclusive CPU segments are not additive and monitors are not GPU time"}
+	result["native_planned_death_keys"] = game.t6_planned_death_keys.duplicate()
+	result["native_loot_nodes_created"] = native_loot_nodes_created
 	result["observation_detail_mode"] = RuntimeDiagnostics.device_lab_detail_mode()
 	result["enemy_cpu_attribution"] = "PASS" if detail_mode == "full" else "NOT_RUN"
 	_check(RuntimeDiagnostics.device_lab_detail_mode() == detail_mode, "observation_detail_changed")
@@ -313,6 +322,8 @@ func _spawn(slot: int) -> EnemyActor:
 	return actor
 
 func _pin_spawn_inputs(node: Node) -> void:
+	if node is LootPickup:
+		native_loot_nodes_created += 1
 	if node is EnemyActor and str(node.get_meta("spawn_slot_id", "")).begins_with("t6:"):
 		var actor := node as EnemyActor
 		actor.set_spawn_facing_seed_for_test(SEED + 20000 + serial)
