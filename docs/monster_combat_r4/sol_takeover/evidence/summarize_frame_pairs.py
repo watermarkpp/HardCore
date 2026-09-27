@@ -9,11 +9,15 @@ def percentile(values, q):
 
 def sample(root, label):
     x=read(root/label/"load.json"); intervals=[f["physics_callback_interval_ms"] for f in x["frames"]]
+    process_intervals=[f["process_callback_interval_ms"] for f in x["process_callbacks"] if f["process_callback_interval_ms"] is not None]
     assert x["observation_detail_mode"]=="frame_only" and x["enemy_cpu_attribution"]=="NOT_RUN"
     assert all(f["enemy_inclusive_cpu_ms"] is None for f in x["frames"])
+    assert process_intervals and not x["process_sample_overflow"]
     return dict(label=label, head=x["source_head"], interval_mean_ms=statistics.mean(intervals),
       interval_p95_ms=percentile(intervals,.95), interval_p99_ms=percentile(intervals,.99),
       callbacks_over_33_33_ms=sum(v>33.33 for v in intervals), callbacks_over_50_ms=sum(v>50 for v in intervals),
+      process_callback_count=len(process_intervals), process_interval_p99_ms=percentile(process_intervals,.99),
+      process_callbacks_over_50_ms=sum(v>50 for v in process_intervals),
       death_signals=x["death_signals"], planned_deaths=len(x.get("native_planned_death_keys",{})), created_loot_nodes=x.get("native_loot_nodes_created"), starts=x["starts_surviving_actors"], hp_loss=x["player_hp_delta"], pet_damage=x["pet_actual_damage"],
       live_min=min(f["live_count"] for f in x["frames"]),live_max=max(f["live_count"] for f in x["frames"]),
       engine_physics_monitor_mean_ms=statistics.mean(f["engine_physics_monitor_ms"] for f in x["frames"]),
@@ -31,5 +35,5 @@ for mode in identity["modes"]:
       mean_interval_deltas_ms=[p["candidate"]["interval_mean_ms"]-p["base"]["interval_mean_ms"] for p in pairs])
     rows.append(row)
     print(prefix, 'AA',row['aa_mean_interval_difference_ms'],'deltas',row['mean_interval_deltas_ms'])
-    for p in pairs: print({k:[p["base"][k],p["candidate"][k]] for k in ['interval_p99_ms','callbacks_over_33_33_ms','callbacks_over_50_ms','engine_physics_monitor_mean_ms','starts','hp_loss','pet_damage','death_signals','planned_deaths','created_loot_nodes']})
+    for p in pairs: print({k:[p["base"][k],p["candidate"][k]] for k in ['interval_p99_ms','process_interval_p99_ms','callbacks_over_33_33_ms','callbacks_over_50_ms','process_callbacks_over_50_ms','engine_physics_monitor_mean_ms','starts','hp_loss','pet_damage','death_signals','planned_deaths','created_loot_nodes']})
 (root/"frame_summary.json").write_text(json.dumps(dict(status="PASS",conditions=rows, scope="Collection only; per-actor CPU attribution, GPU and device NOT_RUN. Engine window monitors have means only, never frame percentiles. Original full-observation warnings remain separately retained."),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")

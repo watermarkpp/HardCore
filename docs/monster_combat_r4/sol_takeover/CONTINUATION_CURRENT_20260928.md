@@ -1,5 +1,11 @@
 # 精确恢复点 2026-09-28
 
+## 06:20 新恢复点（覆盖下方旧“当前活跃执行”）
+
+- 主树当前源码与证据候选 `1b74e698728af725595118d0a30ab59c0f0ac58b`；用户 dirty `AGENTS.md` 和原始 untracked 保留。c917 全图正式传送扫描已闭环，67 图/132端点，9原生测试通过，山谷密道 A/B 两点修复；无需重扫或重新批量发布地图。
+- 固定 BASE1381/CAND1b74、同字节原生连续600 tick 探针、相同正式输入，完成 small30、AoE+死亡+掉落30、large30+双召唤的各8份 full 样本，以及 large30+双召唤8份 frame_only 样本。32/32 实际收集 PASS；原始逐帧JSON/日志、源码身份和runner结果在四个 native_t6_*_1b74 目录。新 `PERFORMANCE_1B74_REVIEW.md` 判定：桌面严重长帧目标PASS，但CPU与召唤场景小幅P99并非全改善；GPU和手机NOT_RUN。旧e367 FAIL保留为历史，不冒用。
+- 下一步精确stage本轮证据与说明并本地提交；然后在新的干净固定检出运行正式548项完整回归，核对最终退出、实际集合、原始日志。既有 e367 独立检出保留为历史，不改它。完整门禁通过后才实际集成7提交锻造链、完成其RED/GREEN及最终全套验证、正常push，逐树审查后安全退休。**仍停在APK之前**。
+
 唯一工程主控、串行执行。主目录 C:/Users/Administrator/Documents/HardCore，codex/integration 已有 docs/evidence-only 提交 bc55d71ff6bd05f2f664af6d581e0bec57074be0；功能源码仍为 e367150b0c46c040e67b4ebd1b750ccd1ff5a536。后续 docs-only 提交以实际 `git rev-parse HEAD` 为准。用户dirty AGENTS.md与原始untracked保持，禁止add-all/清理/重置。
 
 ## 当前活跃执行

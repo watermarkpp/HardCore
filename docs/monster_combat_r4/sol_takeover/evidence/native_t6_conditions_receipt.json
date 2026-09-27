@@ -1,0 +1,533 @@
+{
+  "collection_status": "PASS",
+  "performance_acceptance": "NOT_RUN",
+  "candidate_head": "1b74e698728af725595118d0a30ab59c0f0ac58b",
+  "base_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+  "rows": [
+    {
+      "mode": "aoe_death_loot",
+      "scale": 30,
+      "aa_cpu_noise_ms": 0.6728100000000001,
+      "sustained_cpu_above_aa_noise": false,
+      "pairs": [
+        {
+          "base": "aoe_death_loot-30-AB-1-BASE",
+          "candidate": "aoe_death_loot-30-AB-1-CAND",
+          "enemy_cpu_delta_ms": 0.5443316666666664,
+          "physics_p99_delta_ms": -30.194799999999923,
+          "process_p99_delta_ms": -12.83018999999991,
+          "physics_over_50_delta": -7,
+          "process_over_50_delta": -3,
+          "base_deaths": 124,
+          "candidate_deaths": 126,
+          "base_drop_nodes": 100,
+          "candidate_drop_nodes": 99,
+          "base_native_process_callbacks": 1020,
+          "candidate_native_process_callbacks": 1214
+        },
+        {
+          "base": "aoe_death_loot-30-AB-2-BASE",
+          "candidate": "aoe_death_loot-30-AB-2-CAND",
+          "enemy_cpu_delta_ms": 0.788056666666666,
+          "physics_p99_delta_ms": -35.865299999999934,
+          "process_p99_delta_ms": -18.27221999999977,
+          "physics_over_50_delta": -5,
+          "process_over_50_delta": -4,
+          "base_deaths": 131,
+          "candidate_deaths": 125,
+          "base_drop_nodes": 106,
+          "candidate_drop_nodes": 97,
+          "base_native_process_callbacks": 1113,
+          "candidate_native_process_callbacks": 1223
+        },
+        {
+          "base": "aoe_death_loot-30-AB-3-BASE",
+          "candidate": "aoe_death_loot-30-AB-3-CAND",
+          "enemy_cpu_delta_ms": 0.27163333333333384,
+          "physics_p99_delta_ms": -40.60642999999998,
+          "process_p99_delta_ms": -19.908489999999667,
+          "physics_over_50_delta": -5,
+          "process_over_50_delta": -4,
+          "base_deaths": 133,
+          "candidate_deaths": 127,
+          "base_drop_nodes": 99,
+          "candidate_drop_nodes": 101,
+          "base_native_process_callbacks": 1094,
+          "candidate_native_process_callbacks": 1238
+        }
+      ],
+      "directory": "native_t6_aoe30_1b74_20260928_0556"
+    },
+    {
+      "mode": "small",
+      "scale": 30,
+      "aa_cpu_noise_ms": 0.15746333333333418,
+      "sustained_cpu_above_aa_noise": false,
+      "pairs": [
+        {
+          "base": "small-30-AB-1-BASE",
+          "candidate": "small-30-AB-1-CAND",
+          "enemy_cpu_delta_ms": -0.038259999999999295,
+          "physics_p99_delta_ms": -1.3333700000000022,
+          "process_p99_delta_ms": -0.7943799999999932,
+          "physics_over_50_delta": 0,
+          "process_over_50_delta": 0,
+          "base_deaths": 0,
+          "candidate_deaths": 0,
+          "base_drop_nodes": 0,
+          "candidate_drop_nodes": 0,
+          "base_native_process_callbacks": 1416,
+          "candidate_native_process_callbacks": 1413
+        },
+        {
+          "base": "small-30-AB-2-BASE",
+          "candidate": "small-30-AB-2-CAND",
+          "enemy_cpu_delta_ms": -0.12714166666666493,
+          "physics_p99_delta_ms": -2.9226899999999887,
+          "process_p99_delta_ms": -5.405589999999986,
+          "physics_over_50_delta": 0,
+          "process_over_50_delta": 0,
+          "base_deaths": 0,
+          "candidate_deaths": 0,
+          "base_drop_nodes": 0,
+          "candidate_drop_nodes": 0,
+          "base_native_process_callbacks": 1384,
+          "candidate_native_process_callbacks": 1386
+        },
+        {
+          "base": "small-30-AB-3-BASE",
+          "candidate": "small-30-AB-3-CAND",
+          "enemy_cpu_delta_ms": -0.2406649999999999,
+          "physics_p99_delta_ms": -4.177459999999989,
+          "process_p99_delta_ms": -3.708560000000002,
+          "physics_over_50_delta": 0,
+          "process_over_50_delta": 0,
+          "base_deaths": 0,
+          "candidate_deaths": 0,
+          "base_drop_nodes": 0,
+          "candidate_drop_nodes": 0,
+          "base_native_process_callbacks": 1411,
+          "candidate_native_process_callbacks": 1433
+        }
+      ],
+      "directory": "native_t6_small30_1b74_20260928_0604"
+    },
+    {
+      "mode": "large_pets",
+      "scale": 30,
+      "aa_cpu_noise_ms": 0.5881883333333331,
+      "sustained_cpu_above_aa_noise": false,
+      "pairs": [
+        {
+          "base": "large_pets-30-AB-1-BASE",
+          "candidate": "large_pets-30-AB-1-CAND",
+          "enemy_cpu_delta_ms": -0.6027366666666669,
+          "physics_p99_delta_ms": 8.38756,
+          "process_p99_delta_ms": 8.176449999999985,
+          "physics_over_50_delta": 0,
+          "process_over_50_delta": 0,
+          "base_deaths": 0,
+          "candidate_deaths": 0,
+          "base_drop_nodes": 0,
+          "candidate_drop_nodes": 0,
+          "base_native_process_callbacks": 1328,
+          "candidate_native_process_callbacks": 1294
+        },
+        {
+          "base": "large_pets-30-AB-2-BASE",
+          "candidate": "large_pets-30-AB-2-CAND",
+          "enemy_cpu_delta_ms": -0.40226666666666766,
+          "physics_p99_delta_ms": 11.005919999999996,
+          "process_p99_delta_ms": 8.46935999999993,
+          "physics_over_50_delta": 0,
+          "process_over_50_delta": 0,
+          "base_deaths": 0,
+          "candidate_deaths": 0,
+          "base_drop_nodes": 0,
+          "candidate_drop_nodes": 0,
+          "base_native_process_callbacks": 1309,
+          "candidate_native_process_callbacks": 1295
+        },
+        {
+          "base": "large_pets-30-AB-3-BASE",
+          "candidate": "large_pets-30-AB-3-CAND",
+          "enemy_cpu_delta_ms": -0.2733049999999988,
+          "physics_p99_delta_ms": 4.504010000000001,
+          "process_p99_delta_ms": 3.998359999999991,
+          "physics_over_50_delta": 0,
+          "process_over_50_delta": 0,
+          "base_deaths": 0,
+          "candidate_deaths": 0,
+          "base_drop_nodes": 0,
+          "candidate_drop_nodes": 0,
+          "base_native_process_callbacks": 1305,
+          "candidate_native_process_callbacks": 1275
+        }
+      ],
+      "directory": "native_t6_large_pets30_1b74_20260928_0604"
+    }
+  ],
+  "raw": [
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AA-1-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3719,
+      "sha256": "65b5c469bd134fd77827d123b55bcc565e9d81fc56c02c5622eeeaea6da749d0"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AA-1-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AA-1-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3728,
+      "sha256": "ebc055186b8e2ea7b954a67ec9fd739fee10e42b2c0b75bc07764082a948391b"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AA-2-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3691,
+      "sha256": "88f4b86a6814d24541480f3e7c364b9d486164166d770e90b36e106ad39ba193"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AA-2-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AA-2-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3700,
+      "sha256": "d2bb5bc45d7a86beed3c3491a6432a252e037b56039e7bc8d70d319a62f7d3fa"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-1-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 4171,
+      "sha256": "dd9642fd6ba1ac09196cd55b3e2c27aea68466acaacd70688d5508e3d9d62dea"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-1-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 489,
+      "sha256": "2428f60ef46cd34896a2d3e6f5ee18251c0cdee41dc5e4e1ac6ce927b26bdb8d"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-1-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3805,
+      "sha256": "865721bc17f627d2e5edeca8c5369d84de0dbe93b69fa1f561fe6202c143baf8"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-1-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3691,
+      "sha256": "904841c22f37cbc166f27b0b845a6c6e0341394464145a80fb511c723339e63c"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-1-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-1-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3700,
+      "sha256": "95489a7b15daa5ab03e87775b5e93016b60a25de41bd95b1fd29f6600c041567"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-2-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3700,
+      "sha256": "407e1030541f146b06ab6d14c575a1532097b01082b9c74e4a4fc148b850f383"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-2-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-2-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3709,
+      "sha256": "6da08cce1add9194e918b41043b113e98d372f074322dfdc4fff524bd7c679b2"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-2-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3695,
+      "sha256": "2179c2a8b7b24b134e5af5e8baba0ea2ae017985f57117e9aa63a31069da3a51"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-2-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-2-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3704,
+      "sha256": "b7629d9dbc90d901a837f8418c4169e758d530d992b79f423e8fd8e2940fa451"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-3-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3684,
+      "sha256": "821db6d027401bc20bd9221b00031397bf5b638578e3ad209fb818dabcbab486"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-3-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-3-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3693,
+      "sha256": "44af2844c31e4f139e2dbf47b85df4c8fb144b344a847a0ca744b009c1ac3a1d"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-3-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3692,
+      "sha256": "45428491c85f679e12d7811eea909c2e94e942de997ef4fcf8eb796a8b4ed371"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-3-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_aoe30_1b74_20260928_0556/aoe_death_loot-30-AB-3-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3701,
+      "sha256": "efe8bbb14b0075b56ca3097fa4542c257fa30e361828d831905fc83ecde5bfce"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AA-1-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3690,
+      "sha256": "a93c9275e7c9625e53657436cba05a2f8a264b5cd267eab00f93b0a380991cdc"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AA-1-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AA-1-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3699,
+      "sha256": "60b60a145237bfb6959a470b80415498f7b2eb1d095c55dbe22c7ad0811f024a"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AA-2-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3690,
+      "sha256": "323d8270fbb9604c1ccfb4a2ecb1afdf4e69e325dc26a2a362a469e4a70ade82"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AA-2-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AA-2-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3699,
+      "sha256": "916920e0c2a5f046da0aa7abdbe1dc949eb62f9d94310c5a59e3558e16d549c2"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-1-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3686,
+      "sha256": "c0b2548cdc09c611c1917dfba4ea2ccdbaa325099d16c86f0abf62a7e2d8ad30"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-1-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-1-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3695,
+      "sha256": "4cab5f3b2b3350f38c387164ff234828c4cb84ace1622d2fbe8102c773674c1f"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-1-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3910,
+      "sha256": "21b78895234f683cabf77e2f5effa8ab432552eea4fc518eaf3a7cca01aa2103"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-1-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 225,
+      "sha256": "55b2e83668b378fa4881a96f2b501f1cdd4ca5f9bfbacdaf7bff2b66cb26d015"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-1-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3804,
+      "sha256": "6281150b12646dc9d75cf3fac32e6e3e36e148ec50e505c866d9efa7be3c1126"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-2-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3703,
+      "sha256": "552c20a515efe53fc571f11486789a38df11ebd7216d3b0c2fb68d35cf087980"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-2-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-2-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3712,
+      "sha256": "5a94046db7145826e473f263aa8114e083e06c1787dc924d5cdd960ce7966eb5"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-2-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3690,
+      "sha256": "aff40305f2e3afcdb9dc962bc98dbce0c7229ba6cadc5490bf35cea5fd77fa5c"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-2-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-2-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3699,
+      "sha256": "ff24f31a6e12079d73d16ddc98392162721ab49cfe29a21260d49b30c990fca3"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-3-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3916,
+      "sha256": "01e9c3d9c50621d8f89b5939ce0fc2101b17ed23599844961c6b9892f27f4a6f"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-3-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 232,
+      "sha256": "553294af962300e27b1da57bea629fd05926f29018e4bef1fd65f66a037629d1"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-3-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3697,
+      "sha256": "705ead38d838054531eb230e2b3d6a8e8b576db9027c5c1342da5ec2b78b493e"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-3-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3686,
+      "sha256": "9b6991ebed8b5810d6439d293718636d7abf77cef913fb07ea3ddb599c4a2e9f"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-3-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_large_pets30_1b74_20260928_0604/large_pets-30-AB-3-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3695,
+      "sha256": "c470381a4c9dd3261428c7f8be79402f2c3605eae686895dceac8a436a2e7e6d"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AA-1-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3686,
+      "sha256": "f0a4d101dfcb27415590e409f5c8b426ef08a0845c958174a1dbd5efab13a635"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AA-1-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AA-1-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3695,
+      "sha256": "26f2939c7c761a4c75d0cb1451a8500e8023d55ded63a85bc8e52aa2b1fcd027"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AA-2-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3695,
+      "sha256": "22b9d09392855b67d52a885cc2ccc8c681f1f4989be87f45f5d547b1bbb0ed78"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AA-2-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AA-2-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3704,
+      "sha256": "8935937a2f05cb2b50734c913cb8a5224af24a6afb42eaecbbfd735238ca63d2"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-1-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3694,
+      "sha256": "89b5c46f77cb79037420c45777e83ce3800c12c35de7a28ba2709b3c414c66b6"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-1-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-1-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3703,
+      "sha256": "247c837e43367aa52ab940e9bb175c3a48e7c12dcbe504091bec232598af9c65"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-1-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3690,
+      "sha256": "8d761f1ea491e564d4314700de43ee0e3c213ca899d830988d15114b9caebc78"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-1-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-1-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3699,
+      "sha256": "8270341c893f6d8dcf7a0697200e234803bf741a9a85ae17f5e228204f4c2f46"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-2-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3693,
+      "sha256": "3dd314335daa73fa2631a92191d0359b34c9b4edf8f44d842478375f5b9bec21"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-2-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-2-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3702,
+      "sha256": "8b02ef8ef3ca13dee4f8ff87c14c3bed3008304d4bc92ff5c45b33d189847adf"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-2-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3696,
+      "sha256": "52223d077d2458eb3b7c74be05b80605b1d8bbd6dadcbd0fff8fee834d708414"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-2-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-2-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3705,
+      "sha256": "01d26e1536eceaf38e5897345429c9b9a198ae480db4b84413dce1ea23b4b1a8"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-3-BASE/runner/t6_real_load_probe.godot.log",
+      "bytes": 3693,
+      "sha256": "a9d5afd6bf2c0f9e3e0004b3df12c26308293e57755eeea1d8533b3fab05d2a0"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-3-BASE/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-3-BASE/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3702,
+      "sha256": "0c047d299bda378e646971a1c1a4bf7848c2b208e5c99a07f137d940cc302ef3"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-3-CAND/runner/t6_real_load_probe.godot.log",
+      "bytes": 3693,
+      "sha256": "e13027f3078f573b4aad1d4b7addfdb1d3622d33c64d478308290657c461a767"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-3-CAND/runner/t6_real_load_probe.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native_t6_small30_1b74_20260928_0604/small-30-AB-3-CAND/runner/t6_real_load_probe.stdout.log",
+      "bytes": 3702,
+      "sha256": "e136f860d092604886c4c0d731281283f055b5f3196e1efd4551733f29c55bdc"
+    }
+  ],
+  "scope": "Desktop native physics/process callback observations; genuine work counts disclosed. Human performance ruling follows."
+}
