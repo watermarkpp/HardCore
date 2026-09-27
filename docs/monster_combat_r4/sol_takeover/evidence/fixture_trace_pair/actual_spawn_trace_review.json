@@ -1,0 +1,138 @@
+[
+  {
+    "side": "BASE",
+    "head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+    "status": "PASS",
+    "long_callbacks": [
+      {
+        "tick": 109,
+        "interval_ms": 96.522,
+        "spawns": 15,
+        "fixture_spawn_ms": 56.377
+      },
+      {
+        "tick": 226,
+        "interval_ms": 93.296,
+        "spawns": 16,
+        "fixture_spawn_ms": 61.219
+      },
+      {
+        "tick": 241,
+        "interval_ms": 65.995,
+        "spawns": 15,
+        "fixture_spawn_ms": 56.173
+      },
+      {
+        "tick": 346,
+        "interval_ms": 89.804,
+        "spawns": 15,
+        "fixture_spawn_ms": 57.008
+      },
+      {
+        "tick": 371,
+        "interval_ms": 94.355,
+        "spawns": 15,
+        "fixture_spawn_ms": 56.84
+      },
+      {
+        "tick": 466,
+        "interval_ms": 95.434,
+        "spawns": 15,
+        "fixture_spawn_ms": 56.885
+      },
+      {
+        "tick": 503,
+        "interval_ms": 79.271,
+        "spawns": 15,
+        "fixture_spawn_ms": 56.489
+      },
+      {
+        "tick": 586,
+        "interval_ms": 84.08,
+        "spawns": 15,
+        "fixture_spawn_ms": 57.714
+      },
+      {
+        "tick": 634,
+        "interval_ms": 80.387,
+        "spawns": 15,
+        "fixture_spawn_ms": 58.603
+      },
+      {
+        "tick": 706,
+        "interval_ms": 82.973,
+        "spawns": 15,
+        "fixture_spawn_ms": 56.698
+      }
+    ],
+    "scope": "Actual bounded diagnostic trace only, not a performance acceptance matrix"
+  },
+  {
+    "side": "CAND",
+    "head": "8f0b45316ee621e2a234ef025f3529fcadb3893d",
+    "status": "PASS",
+    "long_callbacks": [
+      {
+        "tick": 110,
+        "interval_ms": 75.616,
+        "spawns": 15,
+        "fixture_spawn_ms": 58.123
+      },
+      {
+        "tick": 226,
+        "interval_ms": 67.36,
+        "spawns": 15,
+        "fixture_spawn_ms": 58.78
+      },
+      {
+        "tick": 239,
+        "interval_ms": 69.407,
+        "spawns": 15,
+        "fixture_spawn_ms": 59.453
+      },
+      {
+        "tick": 346,
+        "interval_ms": 72.729,
+        "spawns": 15,
+        "fixture_spawn_ms": 58.451
+      },
+      {
+        "tick": 368,
+        "interval_ms": 67.888,
+        "spawns": 15,
+        "fixture_spawn_ms": 59.166
+      },
+      {
+        "tick": 466,
+        "interval_ms": 68.618,
+        "spawns": 15,
+        "fixture_spawn_ms": 58.539
+      },
+      {
+        "tick": 497,
+        "interval_ms": 77.403,
+        "spawns": 15,
+        "fixture_spawn_ms": 69.382
+      },
+      {
+        "tick": 586,
+        "interval_ms": 90.612,
+        "spawns": 15,
+        "fixture_spawn_ms": 57.823
+      },
+      {
+        "tick": 628,
+        "interval_ms": 67.242,
+        "spawns": 15,
+        "fixture_spawn_ms": 57.875
+      },
+      {
+        "tick": 706,
+        "interval_ms": 85.866,
+        "spawns": 15,
+        "fixture_spawn_ms": 59.681
+      }
+    ],
+    "scope": "Actual bounded diagnostic trace only, not a performance acceptance matrix"
+  }
+]

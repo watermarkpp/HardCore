@@ -254,3 +254,6 @@ Test-only probe/collector DetailMode optional, defaultfull preserved. Native fra
 
 ## NativeAoE observation validated
 AoEframeonly30 smoke151nativeplans/117nodes/151deaths PASS; defaultfullAoE10 smoke directobservations equaldetailedroll/nodecounts PASS. Noactiveengine; nextcommit thenoriginalR3BASE1381 testoverlay +8AA/AB/BA/AB AoE30 frameonly. FreezeHEAD/source; originalfullcounterassertsunchanged, frameonlyactualplan/nodeproof+identities instead. Forge/push/cleanup/APKstillNOT_RUN.
+
+## 01:15 fixed frame-only and actual fixture attribution complete
+AoEframeonly8/8 nativePASS/mean3pairsbetter/P99~68vs84; >33 countsmixed/>50~10each retained. Separate real2traces show longcallbacks each15synchronousfixture replacements~58-69ms. Production_respawn_later directconstructor remains explicit candidate risk, not auto-dismissed asbaseline. Trace optionaldefaultOFF sourcefixture dirty validatednativeBASE/CAND; commit allownedproof next. ONEcurrentfixed full-attribution24 againstoriginalR3BASE1381 stillneeded toclose old72flags afteractualtypedbodyownerfix;24body compared042 onlycannotreplace. Noactiveengine. Forge/push/archive/APKNOT_RUN.

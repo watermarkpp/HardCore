@@ -77,6 +77,8 @@ var mode := ""
 var scale := 0
 var detail_mode := "full"
 var native_loot_nodes_created := 0
+var trace_fixture_spawns := false
+var fixture_spawn_events: Array = []
 var totals := {}
 var previous_counters := {}
 var retired_starts := 0
@@ -93,6 +95,7 @@ func _ready() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	trace_fixture_spawns = OS.get_environment("HARDCORE_R4_LOAD_FIXTURE_TRACE") == "1"
 	mode = OS.get_environment("HARDCORE_R4_LOAD_MODE")
 	scale = int(OS.get_environment("HARDCORE_R4_LOAD_COUNT"))
 	assert(MODES.has(mode) and SCALES.has(scale), "pin one valid T6 condition")
@@ -229,7 +232,7 @@ func _run() -> void:
 		var now := Time.get_ticks_usec()
 		var enemy_usec := RuntimeDiagnostics.performance_counter(&"enemy_physics_usec")
 		var enemy_delta := enemy_usec - previous_enemy_usec if enemy_usec >= previous_enemy_usec else enemy_usec
-		frames.append({"tick": Engine.get_physics_frames(), "physics_callback_interval_ms": float(now - previous_usec) / 1000.0,
+		frames.append({"sample_start_usec": previous_usec if trace_fixture_spawns else null, "sample_end_usec": now if trace_fixture_spawns else null, "tick": Engine.get_physics_frames(), "physics_callback_interval_ms": float(now - previous_usec) / 1000.0,
 			"engine_process_monitor_ms": float(Performance.get_monitor(Performance.TIME_PROCESS)) * 1000.0,
 			"engine_physics_monitor_ms": float(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)) * 1000.0,
 			"enemy_inclusive_cpu_ms": float(enemy_delta) / 1000.0 if detail_mode == "full" else null,
@@ -270,6 +273,8 @@ func _run() -> void:
 		"counters_last_window": RuntimeDiagnostics.performance_counters(), "failures": failures,
 		"source_head": OS.get_environment("HARDCORE_R4_LOAD_HEAD"), "label": OS.get_environment("HARDCORE_R4_LOAD_LABEL"),
 		"gpu": "NOT_RUN", "device": "NOT_RUN", "measurement": "real physics callback spacing and engine monitors; inclusive CPU segments are not additive and monitors are not GPU time"}
+	result["fixture_spawn_trace_enabled"] = trace_fixture_spawns
+	result["fixture_spawn_events"] = fixture_spawn_events
 	result["native_planned_death_keys"] = game.t6_planned_death_keys.duplicate()
 	result["native_loot_nodes_created"] = native_loot_nodes_created
 	result["observation_detail_mode"] = RuntimeDiagnostics.device_lab_detail_mode()
@@ -301,6 +306,7 @@ func _run() -> void:
 	get_tree().quit(0 if failures.is_empty() else 1)
 
 func _spawn(slot: int) -> EnemyActor:
+	var fixture_start_usec := Time.get_ticks_usec() if trace_fixture_spawns else 0
 	serial += 1
 	var angle := TAU * float(slot) / float(scale)
 	var ground := CENTER + Vector2.from_angle(angle) * (3.5 if mode != "aoe_death_loot" else 2.0)
@@ -319,6 +325,9 @@ func _spawn(slot: int) -> EnemyActor:
 	if mode != "aoe_death_loot":
 		actor.max_hp = 1000000
 		actor.current_hp = actor.max_hp
+	if trace_fixture_spawns:
+		assert(fixture_spawn_events.size() < 20000, "bounded fixture trace overflow")
+		fixture_spawn_events.append({"ordinal": serial, "tick": Engine.get_physics_frames(), "start_usec": fixture_start_usec, "end_usec": Time.get_ticks_usec()})
 	return actor
 
 func _pin_spawn_inputs(node: Node) -> void:
