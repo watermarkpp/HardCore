@@ -59,7 +59,7 @@ func _run() -> void:
 	var failed := PlayerState.prepare_loot_save([{"gold":true,"amount":23}])
 	failed.writer.result(true)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(failed.writer.path))
-	assert(not PlayerState.finish_prepared_loot_save(failed).get("success",true))
+	assert(not (await _finish_async(failed)).get("success",true))
 	assert(FileAccess.get_file_as_bytes(path) == newer_bytes)
 	# A valid-but-different temporary JSON must fail exact-byte readback and
 	# restore the old primary, not become a new authoritative save on restart.
@@ -70,7 +70,7 @@ func _run() -> void:
 	var corrupt_file := FileAccess.open(corrupt.writer.path, FileAccess.WRITE)
 	corrupt_file.store_string(JSON.stringify(tampered))
 	corrupt_file.close()
-	assert(not PlayerState.finish_prepared_loot_save(corrupt).get("success",true))
+	assert(not (await _finish_async(corrupt)).get("success",true))
 	assert(FileAccess.get_file_as_bytes(path) == newer_bytes)
 	# Cancellation never makes its private temporary document recoverable as a save.
 	var cancelled := PlayerState.prepare_loot_save([{"gold":true,"amount":29}])
@@ -88,3 +88,14 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	print("LOOT_ASYNC_DURABILITY_PASS real_saves=24 conflict=PASS failure=PASS cancel=PASS no_speculative_credit=true")
 	get_tree().quit()
+
+
+func _finish_async(plan: Dictionary) -> Dictionary:
+	var deadline := Time.get_ticks_msec() + 5000
+	var result: Dictionary = {"pending": true}
+	while bool(result.get("pending", false)):
+		assert(Time.get_ticks_msec() < deadline, "background promotion must reach a real terminal")
+		result = PlayerState.finish_prepared_loot_save(plan)
+		if bool(result.get("pending", false)):
+			await get_tree().process_frame
+	return result

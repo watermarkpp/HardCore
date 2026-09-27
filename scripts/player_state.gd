@@ -198,6 +198,9 @@ var _world_clock_backup_sequence := -1
 var _world_clock_dirty := true
 var _clock_cleanup_worker: RefCounted
 var _clock_cleanup_pending: Dictionary = {}
+const JsonPersistenceService := preload("res://scripts/json_persistence_service.gd")
+var _json_persistence := JsonPersistenceService.new()
+const JsonPreparedRequest := preload("res://scripts/json_prepared_request.gd")
 var saved_map_id := 910001
 var saved_position := Vector2.ZERO
 var saved_ground_position_gu := Vector2.ZERO
@@ -283,12 +286,16 @@ var temporary_item_buff_revision := 0
 
 
 func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		_before_state_transaction()
+		return
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_CLOSE_REQUEST]:
 		if _warehouse_active_preparation != null: _warehouse_active_preparation.cancel()
 		_commit_save()
 
 
 func _process(delta: float) -> void:
+	_json_persistence.pump()
 	_advance_world_clock_cleanup()
 	advance_temporary_item_buffs(delta)
 	_advance_durability_runtime(delta)
@@ -340,6 +347,7 @@ func _ready() -> void:
 
 
 func reset_progress(emit_updates := true) -> void:
+	_before_state_transaction()
 	_clear_pending_durability_runtime()
 	level = 1
 	profession = "战士"
@@ -407,6 +415,7 @@ func reset_progress(emit_updates := true) -> void:
 
 
 func select_profession(value: String) -> String:
+	_before_state_transaction()
 	if not ProfessionRules.is_valid_profession(value):
 		return "无效职业：%s" % value
 	if profession == value:
@@ -493,6 +502,7 @@ func select_profession(value: String) -> String:
 
 
 func set_later_content_enabled(enabled: bool) -> void:
+	_before_state_transaction()
 	later_content_enabled = enabled
 	ContentLayers.set_expansion_enabled("later_176_content", enabled)
 	profile_changed.emit()
@@ -520,6 +530,7 @@ func can_receive_record(record: Dictionary) -> bool:
 
 
 func receive(item_name: String, amount := 1, commit := true) -> Dictionary:
+	_before_state_transaction()
 	var before_inventory := inventory.duplicate(true)
 	var before_gold := gold
 	var result := _build_receive_result(item_name, amount, inventory)
@@ -548,6 +559,7 @@ func _add_item_without_commit(item_name: String, amount: int) -> bool:
 
 
 func receive_record(record: Dictionary, commit := true) -> Dictionary:
+	_before_state_transaction()
 	var before_inventory := inventory.duplicate(true)
 	var before_gold := gold
 	var result := _build_receive_result_for_record(record, inventory, true)
@@ -754,6 +766,7 @@ func can_receive_batch(rewards: Array) -> bool:
 
 
 func receive_batch(rewards: Array, commit := true) -> Dictionary:
+	_before_state_transaction()
 	var before_inventory := inventory.duplicate(true)
 	var before_gold := gold
 	var result := _build_receive_batch_result(rewards, inventory)
@@ -822,6 +835,7 @@ func _gold_load_projection(document: Dictionary) -> Dictionary:
 
 
 func add_gold(amount: Variant) -> bool:
+	_before_state_transaction()
 	if not can_credit_gold(amount):
 		return false
 	var previous := gold
@@ -834,6 +848,7 @@ func add_gold(amount: Variant) -> bool:
 
 
 func spend_gold(amount: int) -> bool:
+	_before_state_transaction()
 	if amount < 0 or gold < amount:
 		return false
 	var previous := gold
@@ -933,6 +948,7 @@ func _shared_gold_plan(deposit: bool, transaction_id: String, transaction_sequen
 
 
 func transfer_shared_gold(deposit: bool, transaction_id: String, transaction_sequence: int = -1) -> Dictionary:
+	_before_state_transaction()
 	var ready := _bank_request_preflight(transaction_id, transaction_sequence)
 	if not bool(ready.success): return ready
 	var plan := _shared_gold_plan(deposit, transaction_id, transaction_sequence, _read_json(shared_warehouse_path), _read_json(_profile_path(active_profile_id)))
@@ -1055,6 +1071,7 @@ func _trim_inventory_empty_tail(records: Array = inventory) -> void:
 
 
 func remove_item(item_name: String, amount := 1) -> bool:
+	_before_state_transaction()
 	if amount <= 0 or not has_item(item_name, amount):
 		return false
 	var inventory_before := inventory.duplicate(true)
@@ -1087,6 +1104,7 @@ func remove_item(item_name: String, amount := 1) -> bool:
 
 
 func _consume_inventory_index(index: int, amount := 1) -> bool:
+	_before_state_transaction()
 	var inventory_before := inventory.duplicate(true)
 	if not _consume_inventory_index_without_commit(index, amount):
 		return false
@@ -1116,6 +1134,7 @@ func _consume_inventory_index_without_commit(index: int, amount := 1) -> bool:
 
 
 func destroy_inventory_indices(indices: Array) -> Dictionary:
+	_before_state_transaction()
 	var targets: Array[int] = []
 	for raw_index: Variant in indices:
 		var index := int(raw_index)
@@ -1138,6 +1157,7 @@ func destroy_inventory_indices(indices: Array) -> Dictionary:
 
 
 func sort_inventory_deterministic() -> Dictionary:
+	_before_state_transaction()
 	var inventory_before := inventory.duplicate(true)
 	var working_inventory := SpecialConsumableStacks.split_available(inventory.duplicate(true), INVENTORY_CAPACITY, INVENTORY_CAPACITY)
 	var decorated: Array = []
@@ -1261,6 +1281,7 @@ func _build_shop_buy_quotes(stock: Array, context: Dictionary, quote_serial: int
 
 
 func buy_shop_item(request: Dictionary, stock: Array, context := {}) -> Dictionary:
+	_before_state_transaction()
 	var stock_index := int(request.get("stock_index", -1))
 	if stock_index < 0 or stock_index >= stock.size():
 		return _shop_buy_result(false, "购买商品已经变化，请重新选择。", stock, context)
@@ -1316,6 +1337,7 @@ func _shop_buy_result(success: bool, message: String, stock: Array, context: Dic
 
 
 func sell_inventory_item(request: Dictionary) -> Dictionary:
+	_before_state_transaction()
 	if request.get("batch", null) is Array:
 		return sell_inventory_items(request.get("batch", []))
 	var merchant_id := str(request.get("merchant_id", ""))
@@ -1376,6 +1398,7 @@ func sell_inventory_item(request: Dictionary) -> Dictionary:
 
 
 func sell_inventory_items(requests: Array) -> Dictionary:
+	_before_state_transaction()
 	var result := {"contract_id": SHOP_SELL_CONTRACT_ID, "success": false, "message": "批量出售失败。", "quotes": {}}
 	if requests.is_empty():
 		result["message"] = "没有可出售物品。"
@@ -1781,6 +1804,7 @@ func use_inventory_index(index: int) -> String:
 ## "message" is always player-readable Chinese; "reason" is a machine token
 ## for diagnostics only and never reaches the player UI.
 func use_inventory_index_result(index: int) -> Dictionary:
+	_before_state_transaction()
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return _use_item_failure("no_item_selected", "请先选择物品")
 	var item_name := str(inventory[index].get("name", ""))
@@ -1871,6 +1895,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 
 
 func _use_weapon_repair_oil_item_result(index: int, full_repair: bool) -> Dictionary:
+	_before_state_transaction()
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return _use_item_failure("insufficient_items", "物品数量不足")
 	var weapon_value: Variant = equipment.get("武器", {})
@@ -1910,6 +1935,7 @@ func apply_weapon_repair_oil(full_repair: bool) -> String:
 ## Structured repair-oil contract (R1.1 closure): {"success", "reason",
 ## "message"} with a player-readable Chinese message in every branch.
 func apply_weapon_repair_oil_result(full_repair: bool) -> Dictionary:
+	_before_state_transaction()
 	var weapon_value: Variant = equipment.get("武器", {})
 	if not weapon_value is Dictionary or weapon_value.is_empty():
 		return _use_item_failure("weapon_required", "需要先装备武器")
@@ -2029,6 +2055,7 @@ func _apply_blessing_oil_effect_with_rolls(
 
 
 func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
+	_before_state_transaction()
 	if rng == null:
 		return "祝福油随机源尚未就绪"
 	var weapon_value: Variant = equipment.get("武器", {})
@@ -2045,6 +2072,7 @@ func apply_blessing_oil(rng: RandomNumberGenerator) -> String:
 
 
 func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int, upper_stage_roll := -1) -> String:
+	_before_state_transaction()
 	var equipment_before := equipment.duplicate(true)
 	var effect_result := _apply_blessing_oil_effect_with_rolls(unlucky_roll, success_roll, upper_stage_roll)
 	if not bool(effect_result.get("ok", false)):
@@ -2063,6 +2091,7 @@ func use_blessing_oil_inventory_index(
 	index: int,
 	rng: RandomNumberGenerator
 ) -> Dictionary:
+	_before_state_transaction()
 	if rng == null:
 		return {"ok": false, "reason": "rng_unavailable", "message": "祝福油随机源尚未就绪"}
 	if (
@@ -2092,6 +2121,7 @@ func use_blessing_oil_inventory_index_with_rolls(
 	success_roll: int,
 	upper_stage_roll := -1
 ) -> Dictionary:
+	_before_state_transaction()
 	var oil_catalog := GameData.get_item_record("祝福油")
 	if (
 		str(oil_catalog.get("useEffect", "")) != "blessing_oil"
@@ -2136,6 +2166,7 @@ func use_blessing_oil_inventory_index_with_rolls(
 
 
 func lose_gold_percent(rate: float) -> int:
+	_before_state_transaction()
 	var lost := mini(gold, int(round(gold * clampf(rate, 0.0, 1.0))))
 	gold -= lost
 	profile_changed.emit()
@@ -2144,6 +2175,7 @@ func lose_gold_percent(rate: float) -> int:
 
 
 func add_experience(amount: int) -> void:
+	_before_state_transaction()
 	var gained := maxi(0, amount)
 	if gained <= 0:
 		return
@@ -2183,6 +2215,7 @@ func record_kills_and_experience_batch(
 	kills: Array,
 	force_save := false,
 ) -> Dictionary:
+	_before_state_transaction()
 	var profile_started_usec := Time.get_ticks_usec()
 	var quests_before := quest_states.duplicate(true)
 	var experience_before := experience
@@ -2292,6 +2325,7 @@ func record_kills_and_experience_batch(
 ## deterministic integer behaviour and the clamp prevents negative values.
 ## The caller must invoke this once per formal death.
 func apply_death_experience_penalty() -> int:
+	_before_state_transaction()
 	var previous_experience := experience
 	var current_experience := maxi(0, int(experience))
 	var level_requirement := maxi(1, int(experience_to_next_level()))
@@ -2355,6 +2389,7 @@ func unequip_to_inventory_slot(slot: String, inventory_slot: int, expected_insta
 
 
 func equip_inventory_index(index: int, preferred_slot := "") -> String:
+	_before_state_transaction()
 	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return "请先选择物品"
@@ -2447,6 +2482,7 @@ func equip_inventory_index(index: int, preferred_slot := "") -> String:
 
 
 func unequip_slot(slot: String, destination_slot := -1) -> String:
+	_before_state_transaction()
 	_last_equipment_transaction_result = {"success": false, "reason": "rejected", "revision": equipment_transaction_revision}
 	if slot not in EQUIPMENT_SLOTS:
 		return "无效装备槽"
@@ -2501,6 +2537,7 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 ## "message" is always player-readable Chinese; "reason" is a machine token
 ## for diagnostics only and never reaches the player UI.
 func _learn_skill_result(skill_name: String, inventory_index := -1) -> Dictionary:
+	_before_state_transaction()
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if stable_skill_id.is_empty():
 		return _use_item_failure("skill_data_missing", "技能数据不存在")
@@ -2595,6 +2632,7 @@ func is_skill_learned(skill_name: String) -> bool:
 
 
 func accept_quest(quest_id: String) -> String:
+	_before_state_transaction()
 	var quest := GameData.get_bich_quest(quest_id)
 	if quest.is_empty():
 		return "未知任务"
@@ -2614,6 +2652,7 @@ func accept_quest(quest_id: String) -> String:
 
 
 func abandon_quest(quest_id: String) -> Dictionary:
+	_before_state_transaction()
 	var result := {
 		"contract_id": QUEST_ABANDON_CONTRACT_ID,
 		"quest_id": quest_id,
@@ -2639,6 +2678,7 @@ func abandon_quest(quest_id: String) -> Dictionary:
 
 
 func sort_warehouse(page := 0) -> Dictionary:
+	_before_state_transaction()
 	var result := {
 		"contract_id": WAREHOUSE_SORT_CONTRACT_ID,
 		"success": false,
@@ -2685,6 +2725,7 @@ func sort_warehouse(page := 0) -> Dictionary:
 
 
 func record_kill(monster_name: String) -> void:
+	_before_state_transaction()
 	var changed := false
 	for quest_id: String in quest_states.keys():
 		var state: Dictionary = quest_states[quest_id]
@@ -2710,6 +2751,7 @@ func record_kill(monster_name: String) -> void:
 
 
 func claim_quest(quest_id: String) -> String:
+	_before_state_transaction()
 	if not quest_states.has(quest_id):
 		return "尚未接受任务"
 	var state: Dictionary = quest_states[quest_id]
@@ -3634,6 +3676,7 @@ func _repair_plan(context := {}) -> Dictionary:
 
 
 func repair_all_equipment(context := {}) -> String:
+	_before_state_transaction()
 	context = _authoritative_merchant_context(context)
 	if not PricingServiceScript.merchant_supports_full_equipment_repair(context):
 		return "该商人不提供维修服务"
@@ -4718,125 +4761,61 @@ func _read_json(path: String) -> Dictionary:
 
 
 func _write_json_atomic(path: String, data: Dictionary) -> bool:
-	var phase_usec := Time.get_ticks_usec()
 	_atomic_write_phases = {}
+	_last_json_promotion = {}
 	if test_mode and _test_force_atomic_write_failure:
 		return false
-	# Validate the serialized JSON representation once. Both disk readbacks
-	# below must match these exact validated bytes, so promotion does not need
-	# a second identical parse and inventory/affix validation pass.
-	var serialized := JSON.stringify(data)
-	var parsed: Variant = JSON.parse_string(serialized)
-	var validator := _json_validator_for_path(path)
-	if not parsed is Dictionary or not bool(_validate_json_candidate(parsed, validator).get("valid", false)):
+	var request := _json_persistence.submit(
+		path, {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation},
+		data, _json_validator_for_path(path), Callable(), false,
+		_validated_profile_bytes if path == _validated_profile_path else null,
+		_record_background_json_receipt, false, null, path + ".tmp",
+	)
+	if request == null:
 		return false
-	_atomic_write_phases["serialize_validate_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
-	phase_usec = Time.get_ticks_usec()
-	var expected_bytes := serialized.to_utf8_buffer()
-	var temporary := path + ".tmp"
-	var file := FileAccess.open(temporary, FileAccess.WRITE)
-	if file == null:
-		return false
-	file.store_buffer(expected_bytes)
-	file.flush()
-	file.close()
-	# Never move the current profile until all bytes of the validated temporary
-	# document have been read back. Valid-but-different JSON is also rejected.
-	if not _file_matches_validated_bytes(temporary, expected_bytes):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
-		return false
-	_atomic_write_phases["temp_write_flush_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
-	return _promote_verified_json(path, temporary, expected_bytes)
+	return bool(_json_persistence.finish(request, true).get("success", false))
 
 
 func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
 	_last_json_promotion = {}
-	var validator := _json_validator_for_path(path)
-	var backup := path + ".bak"
-	var phase_usec := Time.get_ticks_usec()
-	var absolute_path := ProjectSettings.globalize_path(path)
-	var absolute_temp := ProjectSettings.globalize_path(temporary)
-	var absolute_backup := ProjectSettings.globalize_path(backup)
-	var current_document: Dictionary
-	var current_validation: Dictionary
-	var known_previous_bytes: Variant = validated_previous_bytes
-	if known_previous_bytes == null and path == _validated_profile_path and not _validated_profile_bytes.is_empty():
-		known_previous_bytes = _validated_profile_bytes
-	if known_previous_bytes is PackedByteArray and _file_matches_validated_bytes(path, known_previous_bytes):
-		# A prepared transaction already validated this exact previous document.
-		# A successful earlier profile write is equally authoritative. Compare
-		# every byte before reusing it; external edits take the validation path.
-		current_document = {"exists": true, "valid": true}
-		current_validation = _validation_result(true)
-	else:
-		if validated_previous_bytes is PackedByteArray:
-			return false
-		current_document = _read_json_document(path)
-		current_validation = _validate_json_candidate(current_document.get("data", {}), validator)
-	if (
-		bool(current_document.get("valid", false))
-		and bool(current_validation.get("terminal", false))
-	):
-		DirAccess.remove_absolute(absolute_temp)
+	var request := _json_persistence.submit(
+		path, {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation},
+		{}, _json_validator_for_path(path), Callable(), false,
+		validated_previous_bytes if validated_previous_bytes != null else (
+			_validated_profile_bytes if path == _validated_profile_path else null
+		), _record_background_json_receipt, false, expected_bytes, temporary,
+		validated_previous_bytes is PackedByteArray,
+	)
+	if request == null:
 		return false
-	_atomic_write_phases["previous_read_validate_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
-	phase_usec = Time.get_ticks_usec()
-	var moved_valid_main := false
-	var quarantine_path := ""
-	if bool(current_document.get("exists", false)):
-		if (
-			bool(current_document.get("valid", false))
-			and bool(current_validation.get("valid", false))
-		):
-			if (
-				FileAccess.file_exists(backup)
-				and DirAccess.remove_absolute(absolute_backup) != OK
-			):
-				DirAccess.remove_absolute(absolute_temp)
-				return false
-			if DirAccess.rename_absolute(absolute_path, absolute_backup) != OK:
-				DirAccess.remove_absolute(absolute_temp)
-				return false
-			moved_valid_main = true
-		else:
-			# Keep the exact rejected bytes as evidence, and never rotate them over
-			# a known-good backup.
-			quarantine_path = _next_quarantine_path(path)
-			if DirAccess.rename_absolute(absolute_path, ProjectSettings.globalize_path(quarantine_path)) != OK:
-				DirAccess.remove_absolute(absolute_temp)
-				return false
-	var promote_result := DirAccess.rename_absolute(absolute_temp, absolute_path)
-	if promote_result != OK:
-		if moved_valid_main:
-			DirAccess.rename_absolute(absolute_backup, absolute_path)
-		elif not quarantine_path.is_empty():
-			DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
-		return false
-	var verified := _file_matches_validated_bytes(path, expected_bytes)
-	_atomic_write_phases["rotate_promote_read_ms"] = float(Time.get_ticks_usec() - phase_usec) / 1000.0
-	if verified:
-		_last_json_promotion = {
-			"path": path,
-			"backup_rotated": moved_valid_main,
-			"backup_exists": FileAccess.file_exists(backup),
-			"previous_sequence": (current_document.get("data", {}) as Dictionary).get("sequence", -1),
-			"previous_death_sequence": (current_document.get("data", {}) as Dictionary).get("death_event_sequence", -1),
-			"previous_generation": (current_document.get("data", {}) as Dictionary).get("world_clock_generation", "") if current_document.has("data") else null,
-		}
-		_atomic_write_generation += 1
-		if path.get_base_dir() == profile_directory and path.ends_with(".json"):
-			_validated_profile_path = path
-			_validated_profile_bytes = expected_bytes
-	else:
-		# A post-promotion mismatch must not leave valid-but-unexpected JSON as
-		# the next load's primary authority after this transaction reports failure.
-		var rejected_path := ProjectSettings.globalize_path(_next_quarantine_path(path))
-		if DirAccess.rename_absolute(absolute_path, rejected_path) == OK:
-			if moved_valid_main:
-				DirAccess.rename_absolute(absolute_backup, absolute_path)
-			elif not quarantine_path.is_empty():
-				DirAccess.rename_absolute(ProjectSettings.globalize_path(quarantine_path), absolute_path)
-	return verified
+	return bool(_json_persistence.finish(request, true).get("success", false))
+
+
+func _record_background_json_receipt(receipt: Dictionary) -> void:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if not bool(receipt.get("success", false)):
+		return
+	var path := str(receipt.identity.path)
+	var previous: Dictionary = receipt.get("previous_document", {})
+	_last_json_promotion = {
+		"path": path, "backup_rotated": bool(receipt.backup_rotated),
+		"backup_exists": bool(receipt.backup_exists),
+		"backup_valid": bool(receipt.backup_valid),
+		"backup_document": receipt.get("backup_document", {}),
+		"previous_sequence": previous.get("sequence", -1),
+		"previous_death_sequence": previous.get("death_event_sequence", -1),
+		"previous_generation": previous.get("world_clock_generation", ""),
+	}
+	var phases: Dictionary = receipt.get("worker_stage_usec", {})
+	_atomic_write_phases = {
+		"worker_prepare_ms": float(phases.get("PREPARE", 0)) / 1000.0,
+		"worker_previous_read_ms": float(phases.get("READ_PREVIOUS", 0)) / 1000.0,
+		"worker_promote_ms": float(phases.get("PROMOTE", 0)) / 1000.0,
+	}
+	_atomic_write_generation += 1
+	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
+		_validated_profile_path = path
+		_validated_profile_bytes = receipt.bytes
 
 
 func _backup_sequence_after_promotion(path: String, previous_sequence: int, current_sequence: int, field: String) -> int:
@@ -4858,12 +4837,9 @@ func _backup_sequence_after_promotion(path: String, previous_sequence: int, curr
 		return recorded if recorded >= 0 else previous_sequence
 	# Exceptional recovery path only: inspect the backup actually preserved.
 	# Unknown/invalid backups hold back cleanup instead of deleting evidence.
-	var backup := _read_json_document(path + ".bak")
-	if not bool(backup.get("valid", false)):
+	if not bool(_last_json_promotion.get("backup_valid", false)):
 		return -1
-	var document: Dictionary = backup.get("data", {})
-	if not bool(_validate_json_candidate(document, _json_validator_for_path(path)).get("valid", false)):
-		return -1
+	var document: Dictionary = _last_json_promotion.get("backup_document", {})
 	if field == "death_event_sequence" and document.get("world_clock_generation", "") != _world_clock_generation:
 		return current_sequence
 	var sequence: Variant = document.get(field, 0 if field == "death_event_sequence" else -1)
@@ -5496,6 +5472,7 @@ func _prepare_character_save_payload(checkpoint_world := true) -> Dictionary:
 
 
 func save_game(update_profile_index := true, finalize_pending_durability := true) -> bool:
+	_before_state_transaction()
 	var save_started_usec := Time.get_ticks_usec()
 	_last_save_phase_profile = {}
 	var payload := _prepare_character_save_payload()
@@ -5555,6 +5532,7 @@ func device_lab_active_save_document() -> Dictionary:
 ## reloads every normalized runtime field.  A failed write/load restores the
 ## complete previous document before returning.
 func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
+	_before_state_transaction()
 	var result := {
 		"ok": false,
 		"contractId": DEVICE_LAB_SAVE_CONTRACT_ID,
@@ -5843,6 +5821,7 @@ func _emit_device_lab_state_changed() -> void:
 
 
 func load_save() -> void:
+	_before_state_transaction()
 	if active_profile_id.is_empty():
 		last_load_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -6147,6 +6126,7 @@ func restore_world_clock_mutation(snapshot: Dictionary) -> void:
 
 
 func apply_quick_slot_assignment(result: Dictionary) -> bool:
+	_before_state_transaction()
 	if not bool(result.get("ok", false)):
 		return false
 	if result.get("assignments", null) is Dictionary:
@@ -6188,6 +6168,7 @@ func apply_quick_slot_assignment(result: Dictionary) -> bool:
 
 
 func apply_skill_button_assignment(result: Dictionary) -> bool:
+	_before_state_transaction()
 	if not bool(result.get("ok", false)):
 		return false
 	var change: Dictionary = result.get("change", {})
@@ -7386,6 +7367,8 @@ func _warehouse_transfer_commit_validated(_inventory_before: Array, _warehouse_b
 ## Partial atomic pickup transaction. Each candidate is simulated in order;
 ## failures do not prevent later candidates from being attempted.
 func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dictionary:
+	if not prepare_only:
+		_before_state_transaction()
 	var profile_started_usec := Time.get_ticks_usec()
 	var gold_only := not candidates.is_empty()
 	for raw_candidate: Variant in candidates:
@@ -7604,9 +7587,11 @@ func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dic
 
 func prepare_loot_save(candidates: Array) -> Dictionary:
 	var plan := receive_loot_batch_partial(candidates, true)
-	if not bool(plan.get("prepared", false)): return {"immediate": plan}
+	if not bool(plan.get("prepared", false)):
+		return {"immediate": plan}
 	var payload := _prepare_character_save_payload(false)
-	if payload.is_empty(): return {"immediate": _loot_save_failure(plan.outcomes)}
+	if payload.is_empty():
+		return {"immediate": _loot_save_failure(plan.outcomes)}
 	payload["inventory"] = plan.inventory_after
 	payload["gold"] = plan.gold_after
 	var path := _profile_path(active_profile_id)
@@ -7615,35 +7600,78 @@ func prepare_loot_save(candidates: Array) -> Dictionary:
 	plan["death_event_sequence"] = _death_event_sequence
 	plan["world_clock_generation"] = _world_clock_generation
 	plan["path"] = path
-	var writer := LootPreparedFile.new()
+	plan["completed"] = false
+	plan["completion"] = {}
+	var identity := {
+		"profile_id": active_profile_id, "path": path,
+		"world_clock_generation": _world_clock_generation,
+		"sequence": _death_event_sequence, "write_generation": _atomic_write_generation,
+		"inventory_before": plan.inventory_before.duplicate(true), "gold_before": plan.gold_before,
+	}
+	var request := _json_persistence.submit(
+		path, identity, payload, _json_validator_for_path(path), _loot_request_context_matches,
+		false, _validated_profile_bytes if path == _validated_profile_path else null,
+		_complete_background_loot.bind(plan), true,
+	)
+	if request == null:
+		return {"immediate": _loot_save_failure(plan.outcomes)}
+	var writer := JsonPreparedRequest.new()
+	writer.configure(_json_persistence, request)
 	plan["writer"] = writer
-	writer.start_document(path + ".pickup-%d.tmp" % writer.get_instance_id(), payload)
 	return plan
 
 
-func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
-	var state: Dictionary = plan.writer.result(wait)
-	if not bool(state.finished): return {"pending": true}
-	if (str(plan.profile_id) != active_profile_id or int(plan.write_generation) != _atomic_write_generation
-		or inventory != plan.inventory_before or gold != int(plan.gold_before)):
-		plan.writer.cancel()
-		return {"retry": true, "reason": "newer_character_state"}
-	if not bool(state.success):
-		plan.writer.cancel()
-		return _loot_save_failure(plan.outcomes)
-	var validated: Variant = state.get("document", {})
-	if not validated is Dictionary or not bool(_validate_json_candidate(validated, _json_validator_for_path(str(plan.path))).get("valid", false)):
-		plan.writer.cancel()
-		return _loot_save_failure(plan.outcomes)
-	plan["bytes"] = state.bytes
-	if not _promote_verified_json(str(plan.path), str(plan.writer.path), plan.bytes):
-		plan.writer.cancel()
-		return _loot_save_failure(plan.outcomes)
-	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
-		str(plan.path), _profile_saved_death_event_sequence, int(plan.death_event_sequence), "death_event_sequence"
+func _loot_request_context_matches(identity: Dictionary) -> bool:
+	return (
+		str(identity.profile_id) == active_profile_id
+		and str(identity.world_clock_generation) == _world_clock_generation
+		and int(identity.write_generation) == _atomic_write_generation
+		and inventory == identity.inventory_before and gold == int(identity.gold_before)
 	)
-	_profile_saved_death_event_sequence = int(plan.death_event_sequence)
-	_queue_world_clock_cleanup()
+
+
+func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
+	if bool(plan.get("completed", false)):
+		return plan.completion
+	var request: RefCounted = plan.writer.job
+	_json_persistence.finish(request, wait)
+	return plan.completion if bool(plan.get("completed", false)) else {"pending": true}
+
+
+func _complete_background_loot(receipt: Dictionary, plan: Dictionary) -> void:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
+	if bool(plan.get("completed", false)):
+		return
+	if not bool(receipt.get("success", false)):
+		var reason := str(receipt.get("reason", ""))
+		plan["completion"] = (
+			{"retry": true, "reason": "newer_character_state"}
+			if reason in ["request_context_changed", "unapproved_preparation_cancelled_at_barrier", "cancelled"]
+			else _loot_save_failure(plan.outcomes)
+		)
+		plan["completed"] = true
+		return
+	# Promotion has an irreversible durable receipt. All state/watermarks must
+	# be committed before signals can reenter another inventory transaction.
+	_record_background_json_receipt(receipt)
+	plan["bytes"] = receipt.bytes
+	if (str(receipt.identity.profile_id) != active_profile_id
+		or str(receipt.identity.world_clock_generation) != _world_clock_generation):
+		# A durable receipt belongs to the frozen role. Unexpected external
+		# lifecycle changes must never apply its reward or watermarks to another.
+		var old_owner_successes := 0
+		for outcome: Dictionary in plan.outcomes:
+			if bool(outcome.get("success", false)):
+				old_owner_successes += 1
+		plan["completion"] = {"success": true, "saved": true, "outcomes": plan.outcomes,
+			"success_count": old_owner_successes, "active_state_applied": false,
+			"saved_profile_id": receipt.identity.profile_id}
+		plan["completed"] = true
+		return
+	_profile_backup_death_event_sequence = _backup_sequence_after_promotion(
+		str(plan.path), _profile_saved_death_event_sequence, int(receipt.identity.sequence), "death_event_sequence"
+	)
+	_profile_saved_death_event_sequence = int(receipt.identity.sequence)
 	var inventory_changed_value: bool = inventory != plan.inventory_after
 	var gold_changed: bool = gold != int(plan.gold_after)
 	inventory = plan.inventory_after
@@ -7651,13 +7679,26 @@ func finish_prepared_loot_save(plan: Dictionary, wait := false) -> Dictionary:
 	_active_profile_legacy_warehouse_pending = false
 	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": true, "reason": "", "path": plan.path, "profile_index_updated": true, "profile_index_skipped": true}
 	last_receive_result = {"success": true, "outcomes": plan.outcomes}
-	if inventory_changed_value: inventory_changed.emit()
-	if gold_changed: profile_changed.emit()
 	var successes := 0
 	for outcome: Dictionary in plan.outcomes:
-		if bool(outcome.get("success", false)): successes += 1
+		if bool(outcome.get("success", false)):
+			successes += 1
 	_loot_batch_debug["save_commits"] = int(_loot_batch_debug.get("save_commits", 0)) + 1
-	return {"success": true, "saved": true, "outcomes": plan.outcomes, "success_count": successes}
+	plan["completion"] = {"success": true, "saved": true, "outcomes": plan.outcomes, "success_count": successes}
+	plan["completed"] = true
+	_queue_world_clock_cleanup()
+	if inventory_changed_value:
+		inventory_changed.emit()
+	if gold_changed:
+		profile_changed.emit()
+
+
+func _before_state_transaction() -> void:
+	# Explicit transaction/lifecycle boundaries consume already-committing
+	# receipts and cancel unapproved preparations BEFORE taking a rollback copy.
+	# Normal hot-path polling does not invoke this synchronous compatibility gate.
+	if _json_persistence.pending_count() > 0:
+		_json_persistence.drain()
 
 
 func _loot_save_failure(outcomes: Array) -> Dictionary:
@@ -7957,6 +7998,7 @@ func _default_world_position_fields() -> Dictionary:
 
 
 func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:
+	_before_state_transaction()
 	if _warehouse_transaction_locked:
 		return "仓库事务恢复中，暂不能创建角色"
 	if not _ensure_shared_warehouse_ready():
@@ -8011,6 +8053,7 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 
 
 func delete_character_profile(profile_id: String) -> Dictionary:
+	_before_state_transaction()
 	if _warehouse_transaction_locked:
 		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked", "profile_id": profile_id}
 	if not _ensure_shared_warehouse_ready():
@@ -8357,6 +8400,7 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 
 
 func select_character(profile_id: String) -> bool:
+	_before_state_transaction()
 	if _warehouse_transaction_locked:
 		return false
 	if _durability_save_pending and not _commit_save():

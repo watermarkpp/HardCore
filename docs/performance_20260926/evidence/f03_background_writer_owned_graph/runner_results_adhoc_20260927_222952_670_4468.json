@@ -1,0 +1,28 @@
+{
+  "git_head": "0353d0ac739a731c92d341d240e089dbdc8ea34a",
+  "generated_at": "2026-09-27T22:29:52.6705634+08:00",
+  "suite": "adhoc",
+  "passed": 1,
+  "results": [
+    {
+      "test_name": "f03_background_writer_test",
+      "test_path": "tests/f03_background_writer_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T14:30:16.1751497Z",
+      "native_exit_observed_utc": "2026-09-27T14:29:51.1189852Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1,
+  "engine_log_errors": 0,
+  "failed": 0
+}

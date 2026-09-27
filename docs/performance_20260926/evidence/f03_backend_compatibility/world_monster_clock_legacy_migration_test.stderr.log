@@ -1,0 +1,14 @@
+SCRIPT ERROR: Assertion failed.
+   at: _test_interrupted_import (res://tests/world_monster_clock_legacy_migration_test.gd:188)
+   GDScript backtrace (most recent call first):
+       [0] _test_interrupted_import (res://tests/world_monster_clock_legacy_migration_test.gd:188)
+       [1] _ready (res://tests/world_monster_clock_legacy_migration_test.gd:79)
+       [2] _test_old_writer_roundtrip (res://tests/world_monster_clock_legacy_migration_test.gd:159)
+       [3] _drain_cleanup (res://tests/world_monster_clock_legacy_migration_test.gd:91)
+SCRIPT ERROR: Assertion failed.
+   at: _test_interrupted_import (res://tests/world_monster_clock_legacy_migration_test.gd:188)
+   GDScript backtrace (most recent call first):
+       [0] _test_interrupted_import (res://tests/world_monster_clock_legacy_migration_test.gd:188)
+       [1] _ready (res://tests/world_monster_clock_legacy_migration_test.gd:80)
+       [2] _test_old_writer_roundtrip (res://tests/world_monster_clock_legacy_migration_test.gd:159)
+       [3] _drain_cleanup (res://tests/world_monster_clock_legacy_migration_test.gd:91)

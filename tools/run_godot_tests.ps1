@@ -835,7 +835,10 @@ $Suites.critical = @($Suites.critical + @(
     'tests/world_monster_clock_persistence_test.tscn',
     'tests/world_monster_clock_legacy_migration_test.tscn',
     'tests/f03_hot_persistence_test.tscn',
-    'tests/f03_world_delta_compatibility_test.tscn'
+    'tests/f03_world_delta_compatibility_test.tscn',
+    'tests/f03_background_writer_test.tscn',
+    'tests/f03_pickup_receipt_lifecycle_test.tscn',
+    'tests/f03_native_pickup_lifecycle_test.tscn'
 ) | Select-Object -Unique)
 
 # PASS is granted only when every gate below is satisfied. A PASS marker never

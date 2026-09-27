@@ -1727,8 +1727,10 @@ func _exit_tree() -> void:
 	if PlayerState.equipment_changed.is_connected(_synchronize_main_pet_skill_ranks):
 		PlayerState.equipment_changed.disconnect(_synchronize_main_pet_skill_ranks)
 	if not _prepared_loot_collection.is_empty():
-		_prepared_loot_collection.plan.writer.cancel()
-		_prepared_loot_collection.plan.writer.result(true)
+		if _prepared_loot_collection.plan.writer.cancel():
+			_prepared_loot_collection.plan.writer.result(true)
+		else:
+			PlayerState.finish_prepared_loot_save(_prepared_loot_collection.plan, true)
 		_prepared_loot_collection.clear()
 	if is_instance_valid(_audio_runtime_service):
 		_audio_runtime_service.stop_all_audio("world_exited")
@@ -13944,8 +13946,12 @@ func _poll_prepared_loot_collection(wait := false) -> Dictionary:
 			break
 	var result: Dictionary
 	if not valid:
-		cohort.plan.writer.cancel()
-		result = {"retry": true, "reason": "pickup_origin_changed"}
+		if cohort.plan.writer.cancel():
+			result = {"retry": true, "reason": "pickup_origin_changed"}
+		else:
+			# Approval preceded the origin change and the durable commit already
+			# started. Consume its exact receipt; never report a false cancellation.
+			result = PlayerState.finish_prepared_loot_save(cohort.plan, true)
 	else:
 		var commit_started_usec := RuntimeDiagnostics.timing_start()
 		result = PlayerState.finish_prepared_loot_save(cohort.plan, wait)

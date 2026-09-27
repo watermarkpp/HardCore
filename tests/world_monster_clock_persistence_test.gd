@@ -110,7 +110,7 @@ func _test_preserved_backup_recovery(mode: String) -> void:
 		while not bool(plan.writer.result().finished):
 			await get_tree().process_frame
 		_corrupt(path)
-		assert(PlayerState.finish_prepared_loot_save(plan).success)
+		assert(PlayerState.finish_prepared_loot_save(plan, true).success)
 	else:
 		_corrupt(path)
 		assert(PlayerState.save_game(false))

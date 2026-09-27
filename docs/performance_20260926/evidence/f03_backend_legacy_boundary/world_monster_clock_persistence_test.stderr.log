@@ -1,0 +1,5 @@
+SCRIPT ERROR: Assertion failed: backup and retained journal must recover: world
+   at: _test_preserved_backup_recovery (res://tests/world_monster_clock_persistence_test.gd:125)
+   GDScript backtrace (most recent call first):
+       [0] _test_preserved_backup_recovery (res://tests/world_monster_clock_persistence_test.gd:125)
+       [1] _drain_cleanup (res://tests/world_monster_clock_persistence_test.gd:81)

@@ -1,0 +1,62 @@
+{
+  "suite": "adhoc",
+  "passed": 1,
+  "git_head": "0353d0ac739a731c92d341d240e089dbdc8ea34a",
+  "generated_at": "2026-09-27T22:40:25.2419006+08:00",
+  "total": 3,
+  "engine_log_errors": 2,
+  "results": [
+    {
+      "test_name": "f03_hot_persistence_test",
+      "test_path": "tests/f03_hot_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T14:40:35.8321650Z",
+      "native_exit_observed_utc": "2026-09-27T14:40:12.3377805Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "loot_async_durability_test",
+      "test_path": "tests/repair_20260913/loot_async_durability_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T14:40:43.8530680Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    },
+    {
+      "test_name": "world_monster_clock_persistence_test",
+      "test_path": "tests/world_monster_clock_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T14:40:49.7947943Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "failed": 2
+}
