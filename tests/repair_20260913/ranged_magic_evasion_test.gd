@@ -4,9 +4,9 @@ class Probe extends PlayerCharacter:
 	var commits := 0
 	var poisons := 0
 	var controls := 0
-	func _apply_resolved_damage(amount: int, causes_struck: bool, damage_type := "physical", durability_context := {}, force_struck_reaction := false) -> void:
+	func _apply_resolved_damage(amount: int, causes_struck: bool, damage_type := "physical", durability_context := {}, force_struck_reaction := false, delivery_identity: Variant = null) -> void:
 		commits += 1
-		super._apply_resolved_damage(amount,causes_struck,damage_type,durability_context,force_struck_reaction)
+		super._apply_resolved_damage(amount,causes_struck,damage_type,durability_context,force_struck_reaction,delivery_identity)
 	func apply_poison(_damage: int, _duration: float) -> void: poisons += 1
 	func apply_control(_duration: float) -> void: controls += 1
 	func is_in_safe_zone() -> bool: return false

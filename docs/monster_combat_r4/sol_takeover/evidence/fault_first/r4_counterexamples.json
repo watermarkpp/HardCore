@@ -1,0 +1,2973 @@
+{
+  "cross_life_reject": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:24:instance:551886526213:ordinary_melee:release:1": {
+          "amount": 4,
+          "children": [
+            "monster:24:instance:551886526213:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 4,
+              "damage_type": "physical",
+              "hp_after": 99994,
+              "hp_before": 99998,
+              "mutation_id": 2,
+              "physics_tick": 1209,
+              "resolved_damage": 4,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 4,
+                "release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 551886526213,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:551886526213:ordinary_melee:release:2": {
+          "amount": 3,
+          "children": [
+            "monster:24:instance:551886526213:ordinary_melee:release:2|melee_direct|263519733367|2"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 3,
+              "damage_type": "physical",
+              "hp_after": 99983,
+              "hp_before": 99986,
+              "mutation_id": 5,
+              "physics_tick": 1360,
+              "resolved_damage": 3,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 3,
+                "release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 551886526213,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 2,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 2
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 19.6166666666668,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:6",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 6,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:6",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 551886526213,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 20.1500000000001,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:9",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 9,
+        "raw_roll": 4,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:9",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 22.1333333333334,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:7",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 7,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:7",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 551886526213,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [
+      "real_terminal_branch_not_reached"
+    ],
+    "fault_facts": [
+      {
+        "amount": 4,
+        "mode": "cross_life_reject",
+        "physics_tick": 1209,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 551886526213,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99998,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 1202,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 19.6166666666668,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:6",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 6,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:6",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99994,
+        "hp_before": 99998,
+        "mutation_id": 2,
+        "physics_tick": 1209,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 551886526213,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99990,
+        "hp_before": 99994,
+        "mutation_id": 3,
+        "physics_tick": 1236,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 20.1500000000001,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:9",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 9,
+          "raw_roll": 4,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:9",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99986,
+        "hp_before": 99990,
+        "mutation_id": 4,
+        "physics_tick": 1353,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 22.1333333333334,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:7",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 7,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:7",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99983,
+        "hp_before": 99986,
+        "mutation_id": 5,
+        "physics_tick": 1360,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 551886526213,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2
+      }
+    ],
+    "starts": [
+      {
+        "damage": 4,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 1209,
+        "release_id": "monster:24:instance:551886526213:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 551886526213,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 3,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 1360,
+        "release_id": "monster:24:instance:551886526213:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 551886526213,
+        "source_life": 1,
+        "target_combat_epoch": 2,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 2,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "duplicate_apply": {
+    "audit": {
+      "failures": [
+        "duplicate_apply key=monster:24:instance:510446802693:ordinary_melee:release:1|melee_direct|263519733367|1 count=2"
+      ],
+      "per_release": {
+        "monster:24:instance:510446802693:ordinary_melee:release:1": {
+          "amount": 4,
+          "children": [
+            "monster:24:instance:510446802693:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 2,
+          "mutations": [
+            {
+              "actual_hp_delta": 2,
+              "damage_type": "physical",
+              "hp_after": 99998,
+              "hp_before": 100000,
+              "mutation_id": 1,
+              "physics_tick": 537,
+              "resolved_damage": 2,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 2,
+                "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 510446802693,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            },
+            {
+              "actual_hp_delta": 2,
+              "damage_type": "physical",
+              "hp_after": 99996,
+              "hp_before": 99998,
+              "mutation_id": 2,
+              "physics_tick": 537,
+              "resolved_damage": 2,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 2,
+                "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 510446802693,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:510446802693:ordinary_melee:release:2": {
+          "amount": 4,
+          "children": [
+            "monster:24:instance:510446802693:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 4,
+              "damage_type": "physical",
+              "hp_after": 99984,
+              "hp_before": 99988,
+              "mutation_id": 5,
+              "physics_tick": 688,
+              "resolved_damage": 4,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 4,
+                "release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 510446802693,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 510446802693,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 9.55000000000005,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 10.0833333333334,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:5",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 5,
+        "raw_roll": 4,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:5",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 510446802693,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [
+      {
+        "amount": 2,
+        "mode": "duplicate_apply",
+        "physics_tick": 537,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 510446802693,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99998,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 537,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 510446802693,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99996,
+        "hp_before": 99998,
+        "mutation_id": 2,
+        "physics_tick": 537,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 510446802693,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99992,
+        "hp_before": 99996,
+        "mutation_id": 3,
+        "physics_tick": 598,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 9.55000000000005,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99988,
+        "hp_before": 99992,
+        "mutation_id": 4,
+        "physics_tick": 632,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 10.0833333333334,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:5",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 5,
+          "raw_roll": 4,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:5",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99984,
+        "hp_before": 99988,
+        "mutation_id": 5,
+        "physics_tick": 688,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 510446802693,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 2,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 537,
+        "release_id": "monster:24:instance:510446802693:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 510446802693,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 4,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 688,
+        "release_id": "monster:24:instance:510446802693:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 510446802693,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "legal_miss": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:76:instance:561952855813:ordinary_melee:release:1": {
+          "amount": 0,
+          "children": [
+            "monster:76:instance:561952855813:mixed_target_tile:release:2|monster:76:instance:561952855813:mixed_target_tile:release:2:target:263519733367|263519733367|2"
+          ],
+          "count": 0,
+          "mutations": [],
+          "terminals": [
+            {
+              "physics_tick": 1361,
+              "rejection_reason": "mixed_magic_evaded",
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:76:instance:561952855813:ordinary_melee:release:1",
+                "child_effect_id": "monster:76:instance:561952855813:mixed_target_tile:release:2:target:263519733367",
+                "parent_action_id": 1,
+                "raw_roll": 41,
+                "release_id": "monster:76:instance:561952855813:mixed_target_tile:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 561952855813,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 2,
+                "zone_generation": 1
+              },
+              "terminal_kind": "miss"
+            }
+          ]
+        },
+        "monster:76:instance:561952855813:ordinary_melee:release:3": {
+          "amount": 0,
+          "children": [
+            "monster:76:instance:561952855813:mixed_target_tile:release:4|monster:76:instance:561952855813:mixed_target_tile:release:4:target:263519733367|263519733367|2"
+          ],
+          "count": 0,
+          "mutations": [],
+          "terminals": [
+            {
+              "physics_tick": 1512,
+              "rejection_reason": "mixed_magic_evaded",
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:76:instance:561952855813:ordinary_melee:release:3",
+                "child_effect_id": "monster:76:instance:561952855813:mixed_target_tile:release:4:target:263519733367",
+                "parent_action_id": 2,
+                "raw_roll": 35,
+                "release_id": "monster:76:instance:561952855813:mixed_target_tile:release:4",
+                "runtime_map_id": 910001,
+                "source_instance_id": 561952855813,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 2,
+                "zone_generation": 1
+              },
+              "terminal_kind": "miss"
+            }
+          ]
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:76:instance:561952855813:ordinary_melee:release:1",
+        "child_effect_id": "monster:76:instance:561952855813:mixed_target_tile:release:2:target:263519733367",
+        "parent_action_id": 1,
+        "raw_roll": 41,
+        "release_id": "monster:76:instance:561952855813:mixed_target_tile:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 561952855813,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 22.6666666666667,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:10",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 10,
+        "raw_roll": 2,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:10",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 24.6499999999999,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:8",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 8,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:8",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:76:instance:561952855813:ordinary_melee:release:3",
+        "child_effect_id": "monster:76:instance:561952855813:mixed_target_tile:release:4:target:263519733367",
+        "parent_action_id": 2,
+        "raw_roll": 35,
+        "release_id": "monster:76:instance:561952855813:mixed_target_tile:release:4",
+        "runtime_map_id": 910001,
+        "source_instance_id": 561952855813,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [],
+    "raw_events": [
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99998,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 1387,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 22.6666666666667,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:10",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 10,
+          "raw_roll": 2,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:10",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2
+      },
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99996,
+        "hp_before": 99998,
+        "mutation_id": 2,
+        "physics_tick": 1504,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 24.6499999999999,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:8",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 8,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:8",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 2
+      }
+    ],
+    "starts": [
+      {
+        "damage": 41,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.6,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 1361,
+        "release_id": "monster:76:instance:561952855813:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 561952855813,
+        "source_life": 1,
+        "target_combat_epoch": 2,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 2,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 35,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.6,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 1512,
+        "release_id": "monster:76:instance:561952855813:ordinary_melee:release:3",
+        "seq": 2,
+        "source_instance_id": 561952855813,
+        "source_life": 1,
+        "target_combat_epoch": 2,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 2,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": [
+      {
+        "physics_tick": 1361,
+        "rejection_reason": "mixed_magic_evaded",
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:76:instance:561952855813:ordinary_melee:release:1",
+          "child_effect_id": "monster:76:instance:561952855813:mixed_target_tile:release:2:target:263519733367",
+          "parent_action_id": 1,
+          "raw_roll": 41,
+          "release_id": "monster:76:instance:561952855813:mixed_target_tile:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 561952855813,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "terminal_kind": "miss"
+      },
+      {
+        "physics_tick": 1512,
+        "rejection_reason": "mixed_magic_evaded",
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:76:instance:561952855813:ordinary_melee:release:3",
+          "child_effect_id": "monster:76:instance:561952855813:mixed_target_tile:release:4:target:263519733367",
+          "parent_action_id": 2,
+          "raw_roll": 35,
+          "release_id": "monster:76:instance:561952855813:mixed_target_tile:release:4",
+          "runtime_map_id": 910001,
+          "source_instance_id": 561952855813,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 2,
+          "zone_generation": 1
+        },
+        "terminal_kind": "miss"
+      }
+    ]
+  },
+  "legal_reject": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:24:instance:541283325701:ordinary_melee:release:1": {
+          "amount": 2,
+          "children": [
+            "monster:24:instance:541283325701:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 2,
+              "damage_type": "physical",
+              "hp_after": 99998,
+              "hp_before": 100000,
+              "mutation_id": 1,
+              "physics_tick": 1046,
+              "resolved_damage": 2,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 2,
+                "release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 541283325701,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:541283325701:ordinary_melee:release:2": {
+          "amount": 4,
+          "children": [
+            "monster:24:instance:541283325701:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 4,
+              "damage_type": "physical",
+              "hp_after": 99987,
+              "hp_before": 99991,
+              "mutation_id": 4,
+              "physics_tick": 1197,
+              "resolved_damage": 4,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 4,
+                "release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 541283325701,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 541283325701,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 17.1000000000003,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:5",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 5,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:5",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 17.6333333333336,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:8",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 8,
+        "raw_roll": 3,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:8",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 541283325701,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [
+      "real_terminal_branch_not_reached"
+    ],
+    "fault_facts": [
+      {
+        "amount": 2,
+        "mode": "legal_reject",
+        "physics_tick": 1046,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 541283325701,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99998,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 1046,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 541283325701,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99994,
+        "hp_before": 99998,
+        "mutation_id": 2,
+        "physics_tick": 1051,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 17.1000000000003,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:5",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 5,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:5",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99991,
+        "hp_before": 99994,
+        "mutation_id": 3,
+        "physics_tick": 1085,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 17.6333333333336,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:8",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 8,
+          "raw_roll": 3,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:8",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99987,
+        "hp_before": 99991,
+        "mutation_id": 4,
+        "physics_tick": 1197,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 541283325701,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 2,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 1046,
+        "release_id": "monster:24:instance:541283325701:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 541283325701,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 4,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 1197,
+        "release_id": "monster:24:instance:541283325701:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 541283325701,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "lost_damage_substituted": {
+    "audit": {
+      "failures": [
+        "release_missing_terminal release_id=monster:24:instance:501521323781:ordinary_melee:release:1 child=monster:24:instance:501521323781:ordinary_melee:release:1|melee_direct|263519733367|1"
+      ],
+      "per_release": {
+        "monster:24:instance:501521323781:ordinary_melee:release:1": {
+          "amount": 0,
+          "children": [
+            "monster:24:instance:501521323781:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 0,
+          "mutations": [],
+          "terminals": []
+        },
+        "monster:24:instance:501521323781:ordinary_melee:release:2": {
+          "amount": 3,
+          "children": [
+            "monster:24:instance:501521323781:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 3,
+              "damage_type": "physical",
+              "hp_after": 99985,
+              "hp_before": 99988,
+              "mutation_id": 4,
+              "physics_tick": 523,
+              "resolved_damage": 3,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 3,
+                "release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 501521323781,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:501521323781:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:501521323781:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 501521323781,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 7.03333333333331,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 7.56666666666665,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:4",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 4,
+        "raw_roll": 5,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:4",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 501521323781,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [
+      {
+        "amount": 4,
+        "mode": "lost_damage_substituted",
+        "physics_tick": 372,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:501521323781:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:501521323781:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 501521323781,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99996,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 372,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "foreign:monster:24:instance:501521323781:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 4,
+          "release_id": "foreign:monster:24:instance:501521323781:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": -999,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99993,
+        "hp_before": 99996,
+        "mutation_id": 2,
+        "physics_tick": 447,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 7.03333333333331,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 5,
+        "damage_type": "physical",
+        "hp_after": 99988,
+        "hp_before": 99993,
+        "mutation_id": 3,
+        "physics_tick": 481,
+        "resolved_damage": 5,
+        "source": {
+          "action_game_time_s": 7.56666666666665,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:4",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 4,
+          "raw_roll": 5,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:4",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99985,
+        "hp_before": 99988,
+        "mutation_id": 4,
+        "physics_tick": 523,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 501521323781,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 4,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 372,
+        "release_id": "monster:24:instance:501521323781:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 501521323781,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 3,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 523,
+        "release_id": "monster:24:instance:501521323781:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 501521323781,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "nested_foreign": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:24:instance:531200218885:ordinary_melee:release:1": {
+          "amount": 2,
+          "children": [
+            "monster:24:instance:531200218885:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 2,
+              "damage_type": "physical",
+              "hp_after": 99996,
+              "hp_before": 99998,
+              "mutation_id": 2,
+              "physics_tick": 874,
+              "resolved_damage": 2,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 2,
+                "release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 531200218885,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:531200218885:ordinary_melee:release:2": {
+          "amount": 4,
+          "children": [
+            "monster:24:instance:531200218885:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 4,
+              "damage_type": "physical",
+              "hp_after": 99988,
+              "hp_before": 99992,
+              "mutation_id": 5,
+              "physics_tick": 1025,
+              "resolved_damage": 4,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 4,
+                "release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 531200218885,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 531200218885,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 14.5833333333336,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:4",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 4,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:4",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 15.116666666667,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:7",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 7,
+        "raw_roll": 1,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:7",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 531200218885,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [
+      {
+        "amount": 2,
+        "mode": "nested_foreign",
+        "physics_tick": 874,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 531200218885,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99998,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 874,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "foreign:monster:24:instance:531200218885:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "foreign:monster:24:instance:531200218885:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": -999,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99996,
+        "hp_before": 99998,
+        "mutation_id": 2,
+        "physics_tick": 874,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 531200218885,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99993,
+        "hp_before": 99996,
+        "mutation_id": 3,
+        "physics_tick": 900,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 14.5833333333336,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:4",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 4,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:4",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 1,
+        "damage_type": "physical",
+        "hp_after": 99992,
+        "hp_before": 99993,
+        "mutation_id": 4,
+        "physics_tick": 934,
+        "resolved_damage": 1,
+        "source": {
+          "action_game_time_s": 15.116666666667,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:7",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 7,
+          "raw_roll": 1,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:7",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 4,
+        "damage_type": "physical",
+        "hp_after": 99988,
+        "hp_before": 99992,
+        "mutation_id": 5,
+        "physics_tick": 1025,
+        "resolved_damage": 4,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 531200218885,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 2,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 874,
+        "release_id": "monster:24:instance:531200218885:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 531200218885,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 4,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 1025,
+        "release_id": "monster:24:instance:531200218885:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 531200218885,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "nested_unknown": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:24:instance:520580241157:ordinary_melee:release:1": {
+          "amount": 3,
+          "children": [
+            "monster:24:instance:520580241157:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 3,
+              "damage_type": "physical",
+              "hp_after": 99994,
+              "hp_before": 99997,
+              "mutation_id": 2,
+              "physics_tick": 710,
+              "resolved_damage": 3,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 3,
+                "release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 520580241157,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:520580241157:ordinary_melee:release:2": {
+          "amount": 2,
+          "children": [
+            "monster:24:instance:520580241157:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 2,
+              "damage_type": "physical",
+              "hp_after": 99985,
+              "hp_before": 99987,
+              "mutation_id": 5,
+              "physics_tick": 861,
+              "resolved_damage": 2,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 2,
+                "release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 520580241157,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 520580241157,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 12.0666666666668,
+        "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:3",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 3,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:472278635869:ordinary_melee:release:3",
+        "runtime_map_id": 910001,
+        "source_instance_id": 472278635869,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 12.6000000000002,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:6",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 6,
+        "raw_roll": 5,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:6",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 2,
+        "release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 520580241157,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [
+      {
+        "amount": 3,
+        "mode": "nested_unknown",
+        "physics_tick": 710,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 520580241157,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99997,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 710,
+        "resolved_damage": 3,
+        "source": {
+          "source_identity": "UNKNOWN"
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99994,
+        "hp_before": 99997,
+        "mutation_id": 2,
+        "physics_tick": 710,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 520580241157,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99992,
+        "hp_before": 99994,
+        "mutation_id": 3,
+        "physics_tick": 749,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 12.0666666666668,
+          "admission_release_id": "monster:24:instance:472278635869:ordinary_melee:release:3",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 3,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:472278635869:ordinary_melee:release:3",
+          "runtime_map_id": 910001,
+          "source_instance_id": 472278635869,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 5,
+        "damage_type": "physical",
+        "hp_after": 99987,
+        "hp_before": 99992,
+        "mutation_id": 4,
+        "physics_tick": 783,
+        "resolved_damage": 5,
+        "source": {
+          "action_game_time_s": 12.6000000000002,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:6",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 6,
+          "raw_roll": 5,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:6",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 2,
+        "damage_type": "physical",
+        "hp_after": 99985,
+        "hp_before": 99987,
+        "mutation_id": 5,
+        "physics_tick": 861,
+        "resolved_damage": 2,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 2,
+          "release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 520580241157,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 3,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 710,
+        "release_id": "monster:24:instance:520580241157:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 520580241157,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 2,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 861,
+        "release_id": "monster:24:instance:520580241157:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 520580241157,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "positive_control": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:24:instance:484073019141:ordinary_melee:release:1": {
+          "amount": 3,
+          "children": [
+            "monster:24:instance:484073019141:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 3,
+              "damage_type": "physical",
+              "hp_after": 99996,
+              "hp_before": 99999,
+              "mutation_id": 2,
+              "physics_tick": 32,
+              "resolved_damage": 3,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 3,
+                "release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 484073019141,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:484073019141:ordinary_melee:release:2": {
+          "amount": 3,
+          "children": [
+            "monster:24:instance:484073019141:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 3,
+              "damage_type": "physical",
+              "hp_after": 99992,
+              "hp_before": 99995,
+              "mutation_id": 4,
+              "physics_tick": 183,
+              "resolved_damage": 3,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 3,
+                "release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 484073019141,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 1,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 484073019141,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 1,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 484073019141,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [
+      {
+        "amount": 3,
+        "mode": "positive_control",
+        "physics_tick": 32,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 484073019141,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 1,
+        "damage_type": "physical",
+        "hp_after": 99999,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 28,
+        "resolved_damage": 1,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 1,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99996,
+        "hp_before": 99999,
+        "mutation_id": 2,
+        "physics_tick": 32,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 484073019141,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 1,
+        "damage_type": "physical",
+        "hp_after": 99995,
+        "hp_before": 99996,
+        "mutation_id": 3,
+        "physics_tick": 179,
+        "resolved_damage": 1,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 1,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 3,
+        "damage_type": "physical",
+        "hp_after": 99992,
+        "hp_before": 99995,
+        "mutation_id": 4,
+        "physics_tick": 183,
+        "resolved_damage": 3,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 484073019141,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 3,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 32,
+        "release_id": "monster:24:instance:484073019141:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 484073019141,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 3,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 183,
+        "release_id": "monster:24:instance:484073019141:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 484073019141,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  },
+  "real_reduction": {
+    "audit": {
+      "failures": [],
+      "per_release": {
+        "monster:24:instance:493552146181:ordinary_melee:release:1": {
+          "amount": 1,
+          "children": [
+            "monster:24:instance:493552146181:ordinary_melee:release:1|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 1,
+              "damage_type": "physical",
+              "hp_after": 99999,
+              "hp_before": 100000,
+              "mutation_id": 1,
+              "physics_tick": 198,
+              "resolved_damage": 1,
+              "source": {
+                "action_game_time_s": 0.0166666666666667,
+                "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 1,
+                "raw_roll": 4,
+                "release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+                "runtime_map_id": 910001,
+                "source_instance_id": 493552146181,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        },
+        "monster:24:instance:493552146181:ordinary_melee:release:2": {
+          "amount": 1,
+          "children": [
+            "monster:24:instance:493552146181:ordinary_melee:release:2|melee_direct|263519733367|1"
+          ],
+          "count": 1,
+          "mutations": [
+            {
+              "actual_hp_delta": 1,
+              "damage_type": "physical",
+              "hp_after": 99997,
+              "hp_before": 99998,
+              "mutation_id": 3,
+              "physics_tick": 349,
+              "resolved_damage": 1,
+              "source": {
+                "action_game_time_s": 2.53333333333333,
+                "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+                "child_effect_id": "melee_direct",
+                "parent_action_id": 2,
+                "raw_roll": 3,
+                "release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+                "runtime_map_id": 910001,
+                "source_instance_id": 493552146181,
+                "source_life": 1,
+                "victim_generation": -1,
+                "victim_instance_id": 263519733367,
+                "victim_life": 1,
+                "zone_generation": 1
+              },
+              "victim_generation": -1,
+              "victim_instance_id": 263519733367,
+              "victim_life": 1
+            }
+          ],
+          "terminals": []
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "action_game_time_s": 0.0166666666666667,
+        "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 1,
+        "raw_roll": 4,
+        "release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+        "runtime_map_id": 910001,
+        "source_instance_id": 493552146181,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 5.04999999999999,
+        "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:3",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 3,
+        "raw_roll": 4,
+        "release_id": "monster:19:instance:476305167863:ordinary_melee:release:3",
+        "runtime_map_id": 910001,
+        "source_instance_id": 476305167863,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      },
+      {
+        "action_game_time_s": 2.53333333333333,
+        "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+        "child_effect_id": "melee_direct",
+        "parent_action_id": 2,
+        "raw_roll": 3,
+        "release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+        "runtime_map_id": 910001,
+        "source_instance_id": 493552146181,
+        "source_life": 1,
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1,
+        "zone_generation": 1
+      }
+    ],
+    "failures": [],
+    "fault_facts": [
+      {
+        "amount": 1,
+        "mode": "real_reduction",
+        "physics_tick": 198,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 493552146181,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        }
+      }
+    ],
+    "raw_events": [
+      {
+        "actual_hp_delta": 1,
+        "damage_type": "physical",
+        "hp_after": 99999,
+        "hp_before": 100000,
+        "mutation_id": 1,
+        "physics_tick": 198,
+        "resolved_damage": 1,
+        "source": {
+          "action_game_time_s": 0.0166666666666667,
+          "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 1,
+          "raw_roll": 4,
+          "release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+          "runtime_map_id": 910001,
+          "source_instance_id": 493552146181,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 1,
+        "damage_type": "physical",
+        "hp_after": 99998,
+        "hp_before": 99999,
+        "mutation_id": 2,
+        "physics_tick": 330,
+        "resolved_damage": 1,
+        "source": {
+          "action_game_time_s": 5.04999999999999,
+          "admission_release_id": "monster:19:instance:476305167863:ordinary_melee:release:3",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 3,
+          "raw_roll": 4,
+          "release_id": "monster:19:instance:476305167863:ordinary_melee:release:3",
+          "runtime_map_id": 910001,
+          "source_instance_id": 476305167863,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      },
+      {
+        "actual_hp_delta": 1,
+        "damage_type": "physical",
+        "hp_after": 99997,
+        "hp_before": 99998,
+        "mutation_id": 3,
+        "physics_tick": 349,
+        "resolved_damage": 1,
+        "source": {
+          "action_game_time_s": 2.53333333333333,
+          "admission_release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+          "child_effect_id": "melee_direct",
+          "parent_action_id": 2,
+          "raw_roll": 3,
+          "release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+          "runtime_map_id": 910001,
+          "source_instance_id": 493552146181,
+          "source_life": 1,
+          "victim_generation": -1,
+          "victim_instance_id": 263519733367,
+          "victim_life": 1,
+          "zone_generation": 1
+        },
+        "victim_generation": -1,
+        "victim_instance_id": 263519733367,
+        "victim_life": 1
+      }
+    ],
+    "starts": [
+      {
+        "damage": 4,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 1,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 0.0166666666666667,
+        "physics_tick": 198,
+        "release_id": "monster:24:instance:493552146181:ordinary_melee:release:1",
+        "seq": 1,
+        "source_instance_id": 493552146181,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      },
+      {
+        "damage": 3,
+        "effective_interval_s": 2.5,
+        "generation": 1,
+        "kind": "hc_standard_melee",
+        "map_id": 910001,
+        "parent_action_id": 2,
+        "parent_duration_s": 0.46,
+        "parent_generation": 1,
+        "parent_id": 263066748448,
+        "parent_source_life": 1,
+        "parent_start_game_time_s": 2.53333333333333,
+        "physics_tick": 349,
+        "release_id": "monster:24:instance:493552146181:ordinary_melee:release:2",
+        "seq": 2,
+        "source_instance_id": 493552146181,
+        "source_life": 1,
+        "target_combat_epoch": 1,
+        "target_generation": -1,
+        "target_id": 263519733367,
+        "target_life": 1,
+        "target_parent_id": 263066748448,
+        "tolerance": 0.0
+      }
+    ],
+    "terminal_events": []
+  }
+}

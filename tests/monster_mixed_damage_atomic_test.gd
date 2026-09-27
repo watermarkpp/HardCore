@@ -3,16 +3,16 @@ extends Node
 
 class PlayerProbe extends PlayerCharacter:
 	var commits := 0
-	func _apply_resolved_damage(amount: int, causes_struck: bool, damage_type := "physical", durability_context := {}, force_struck_reaction := false) -> void:
+	func _apply_resolved_damage(amount: int, causes_struck: bool, damage_type := "physical", durability_context := {}, force_struck_reaction := false, delivery_identity: Variant = null) -> void:
 		commits += 1
-		super._apply_resolved_damage(amount, causes_struck, damage_type, durability_context, force_struck_reaction)
+		super._apply_resolved_damage(amount, causes_struck, damage_type, durability_context, force_struck_reaction, delivery_identity)
 
 
 class SummonProbe extends SummonActor:
 	var commits := 0
-	func _apply_resolved_damage(amount: int, causes_struck := true) -> void:
+	func _apply_resolved_damage(amount: int, causes_struck := true, delivery_identity: Variant = null) -> void:
 		commits += 1
-		super._apply_resolved_damage(amount, causes_struck)
+		super._apply_resolved_damage(amount, causes_struck, delivery_identity)
 
 
 func _ready() -> void:

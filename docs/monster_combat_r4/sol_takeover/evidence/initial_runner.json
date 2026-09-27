@@ -1,0 +1,56 @@
+{
+  "suite": "adhoc",
+  "total": 3,
+  "generated_at": "2026-09-27T12:41:40.3021538+08:00",
+  "passed": 1,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "damage_attribution_counterexamples_test",
+      "test_path": "tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "natural_cadence_76_test",
+      "test_path": "tests/hc_monster_combat_r4/natural_cadence_76_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": 1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_60s;non_zero_exit_code_1"
+    },
+    {
+      "test_name": "natural_cadence_239_test",
+      "test_path": "tests/hc_monster_combat_r4/natural_cadence_239_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "git_head": "227a9c945f3bb21e4fbe51d38e10bbde4b0d8f9d",
+  "failed": 2
+}

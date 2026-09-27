@@ -2,6 +2,8 @@ class_name PlayerCharacter
 extends CharacterBody2D
 
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
+# Explicit test-only seam; the observer never controls gameplay writes.
+var test_damage_write_hook := Callable()
 const PlayerGroundRuntimeDiagnosticOverlayScript := preload(
 	"res://scripts/player_ground_runtime_diagnostic_overlay.gd"
 )
@@ -710,10 +712,13 @@ func take_damage(
 	causes_struck: bool = true,
 	durability_context := {},
 	force_struck_reaction := false,
+	delivery_identity: Variant = null,
 ) -> void:
 	if _dead or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "player_combat_isolated")
 		return
 	if amount <= 0:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "non_positive_physical_damage")
 		return
 	var absorbed := (_rng.randi_range(defense_min, defense_max) if defense_max >= defense_min else defense_min) + defense_buff
 	_apply_resolved_damage(
@@ -722,6 +727,7 @@ func take_damage(
 		"physical",
 		durability_context,
 		force_struck_reaction,
+		delivery_identity,
 	)
 
 
@@ -730,13 +736,16 @@ func _resolve_incoming_evasion(amount: int, forced_roll := -1) -> Dictionary:
 	return CombatResolutionRules.resolve_magic_damage_for_target_stats("", amount, PlayerState.computed_stats, roll, true)
 
 
-func take_ranged_damage(amount: int, causes_struck := true, force_struck_reaction := false, forced_evasion_roll := -1) -> Dictionary:
+func take_ranged_damage(amount: int, causes_struck := true, force_struck_reaction := false, forced_evasion_roll := -1, delivery_identity: Variant = null) -> Dictionary:
 	if _dead or amount <= 0 or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
 		return {"applied_damage": 0, "final_damage": 0, "success": false}
 	var result := _resolve_incoming_evasion(amount, forced_evasion_roll)
 	var hp_before := current_hp
 	if not bool(result.magic_evaded):
-		take_damage(amount, causes_struck, {}, force_struck_reaction)
+		take_damage(amount, causes_struck, {}, force_struck_reaction, delivery_identity)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "miss", "ranged_magic_evaded")
 	result["applied_damage"] = maxi(0, hp_before - current_hp)
 	result["final_damage"] = int(result.applied_damage)
 	result["success"] = true
@@ -747,17 +756,22 @@ func take_monster_mixed_damage(
 	physical_raw: int,
 	magic_raw: int,
 	context: Dictionary,
+	delivery_identity: Variant = null,
 ) -> Dictionary:
 	# ObjBase.HitMagAttackTarget resolves AC and MAC, sums both channels, then
 	# calls StruckDamage once. Keep the existing common shield/death pipeline
 	# atomic; separate take_damage / take_direct_spell_damage calls are unsafe.
 	if _dead or current_hp <= 0 or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
 		return {"success": false, "applied_damage": 0, "failure_reason": "player_combat_isolated"}
 	if physical_raw < 0 or magic_raw < 0:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
 		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
 	# This is one incoming release, so avoid both components with one roll.
 	var evasion := _resolve_incoming_evasion(physical_raw + magic_raw)
 	if bool(evasion.magic_evaded):
+		if DamageLedgerObserverScript.recording_enabled:
+			DamageLedgerObserverScript.record_terminal(delivery_identity, "miss", "mixed_magic_evaded")
 		evasion.merge({"success": true, "applied_damage": 0, "pipeline_input": 0, "physical_damage": 0, "magic_damage": 0, "final_damage": 0, "release_id": str(context.get("release_id", ""))})
 		return evasion
 	var ac_roll := (
@@ -777,8 +791,10 @@ func take_monster_mixed_damage(
 	var hp_before := current_hp
 	if total > 0:
 		_apply_resolved_damage(
-			total, true, "physical" if physical_damage > 0 else "magic", context,
+			total, true, "physical" if physical_damage > 0 else "magic", context, false, delivery_identity,
 		)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "mixed_defense_zero")
 	return {
 		"success": true, "runtime_contract": "monster_mixed_damage.v1",
 		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
@@ -793,9 +809,11 @@ func take_direct_spell_damage(
 	raw_damage: int,
 	anti_magic_roll := -1,
 	magic_defense_roll := -1,
-	causes_struck := true
+	causes_struck := true,
+	delivery_identity: Variant = null,
 ) -> Dictionary:
 	if _dead or combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "incoming_damage_rejected")
 		return {"applied_damage": 0, "final_damage": 0, "failure_reason": "player_combat_isolated"}
 	var stable_skill_id := ProfessionRules.skill_id(skill_id)
 	var target_stats: Dictionary = PlayerState.computed_stats
@@ -854,7 +872,9 @@ func take_direct_spell_damage(
 	resolution["physical_defense_bypassed"] = true
 	var hp_before := current_hp
 	if int(resolution.final_damage) > 0:
-		_apply_resolved_damage(int(resolution.final_damage), causes_struck, "magic")
+		_apply_resolved_damage(int(resolution.final_damage), causes_struck, "magic", {}, false, delivery_identity)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "miss" if bool(resolution.get("magic_evaded", false)) else "mitigated", "direct_spell_evaded" if bool(resolution.get("magic_evaded", false)) else "direct_spell_zero")
 	resolution["player_pipeline_input"] = int(resolution.final_damage)
 	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
 	return resolution
@@ -874,19 +894,24 @@ func _resolve_direct_spell_magic_defense(
 	return maxi(0, incoming_damage - roll)
 
 
+func _commit_observed_hp_write(amount: int, damage_type: String, delivery_identity: Variant) -> void:
+	var hp_before := current_hp
+	current_hp = maxi(0, current_hp - amount)
+	if DamageLedgerObserverScript.recording_enabled:
+		if hp_before > current_hp:
+			DamageLedgerObserverScript.record_hp_mutation(self, amount, hp_before, current_hp, damage_type, delivery_identity)
+		else:
+			DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "shield_absorbed_all")
+
+
 func _apply_resolved_damage(
 	amount: int,
 	causes_struck: bool,
 	damage_type := "physical",
 	durability_context := {},
 	force_struck_reaction := false,
+	delivery_identity: Variant = null,
 ) -> void:
-	# R4 T5-P2: explicit-test-switch fault injection point. With recording
-	# disabled this is a single boolean read and the damage path is the
-	# unchanged production path.
-	if DamageLedgerObserverScript.recording_enabled and DamageLedgerObserverScript.suppress_next_hit:
-		DamageLedgerObserverScript.record_hp_mutation(self, amount, current_hp, current_hp, damage_type)
-		return
 	# Death is a single lifecycle transition.  Damage arriving while the death
 	# animation/UI selection/respawn transition is active must not repeat
 	# durability, gold loss, signals or schedule another death coroutine.
@@ -927,13 +952,16 @@ func _apply_resolved_damage(
 			var unpaid_mp := shield_mp_cost - current_mp
 			current_mp = 0
 			final_damage = int(round(unpaid_mp / 1.5))
-	# R4 T5-P2: the unique player HP write site records the raw mutation
-	# with the resolved delivery identity and real before/after values.
-	var hp_before_ledger := current_hp
-	current_hp = maxi(0, current_hp - final_damage)
-	DamageLedgerObserverScript.record_hp_mutation(
-		self, final_damage, hp_before_ledger, current_hp, damage_type
-	)
+	# Faults are actual writes owned by an explicit test fixture, independent
+	# of observation. Production always executes the original single write.
+	var write_count := 1
+	if PlayerState.test_mode and test_damage_write_hook.is_valid():
+		write_count = clampi(int(test_damage_write_hook.call(self, delivery_identity, final_damage)), 0, 2)
+	if write_count == 0:
+		return
+	_commit_observed_hp_write(final_damage, damage_type, delivery_identity)
+	if write_count == 2:
+		_commit_observed_hp_write(final_damage, damage_type, delivery_identity)
 	# HC-MONSTER-COMBAT-R1 Task 7 (F08): the lethal outcome is decided and
 	# committed atomically BEFORE any external notification can run. Stats,
 	# resources and durability listeners must observe a consistent dead state:

@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 const HCM30ContextTokenScript := preload("res://scripts/monster_ai_package/m30/context_token.gd")
 const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
+# Exact transaction fault seam, callable only in an explicit test fixture.
+var test_attack_admission_hook := Callable()
 const HCM30WalkPhaseScript := preload("res://scripts/monster_ai_package/m30/walk_phase.gd")
 var _hc_m30_attack_move_cutoff: float = INF # R4 compatibility diagnostic only
 var _hc_m30_attack_pose_remaining: float = 0.0
@@ -4161,6 +4163,7 @@ func _valid_special_integer_number(
 func _launch_monster_special_cell_delivery(
 	hit_target: Node2D,
 	rolled_damage: int,
+	parent_release: Variant = null,
 ) -> bool:
 	if (
 		not combat_enabled
@@ -4199,6 +4202,7 @@ func _launch_monster_special_cell_delivery(
 		rolled_damage,
 		release_serial,
 		delivery_contract,
+		parent_release,
 	)
 	if victim_records.is_empty():
 		return false
@@ -4425,6 +4429,7 @@ func _freeze_monster_special_delivery_records(
 	rolled_damage: int,
 	release_serial: int,
 	delivery_contract: Dictionary,
+	parent_release: Variant = null,
 ) -> Array[Dictionary]:
 	var records: Array[Dictionary] = []
 	var release_id := str(snapshot.get("release_id", ""))
@@ -4459,6 +4464,14 @@ func _freeze_monster_special_delivery_records(
 			"footprint_snapshot": snapshot,
 			"delivery_contract": delivery_contract,
 		}
+		if DamageLedgerObserverScript.recording_enabled and parent_release is Dictionary:
+			var identity: Dictionary = _delivery_observation_identity(parent_release, victim, str(record.release_target_id)).duplicate(true)
+			identity.release_id = release_id
+			identity.victim_instance_id = target_id
+			identity.victim_life = int(record.target_life)
+			identity.victim_generation = int(record.target_generation)
+			record["observation_identity"] = DamageLedgerObserverScript.frozen_source(identity)
+			DamageLedgerObserverScript.record_delivery(record.observation_identity)
 		record.make_read_only()
 		records.append(record)
 	records.make_read_only()
@@ -4476,6 +4489,9 @@ func _settle_monster_special_cell_release(release_record: Dictionary) -> void:
 		or _dying
 		or current_hp <= 0
 	):
+		if DamageLedgerObserverScript.recording_enabled:
+			for child: Dictionary in release_record.get("victims", []):
+				DamageLedgerObserverScript.record_terminal(child.get("observation_identity"), "rejected", "SPECIAL_SOURCE_LIFECYCLE_REJECTED")
 		return
 	var victims_value: Variant = release_record.get("victims", null)
 	if not victims_value is Array:
@@ -4497,9 +4513,11 @@ func _settle_monster_special_cell_release(release_record: Dictionary) -> void:
 			continue
 		var raw_victim: Object = instance_from_id(target_instance_id)
 		if not raw_victim is Node2D:
+			DamageLedgerObserverScript.record_terminal(victim_record.get("observation_identity"), "rejected", "SPECIAL_TARGET_GONE")
 			continue
 		var victim := raw_victim as Node2D
 		if not _monster_special_release_target_is_valid(victim, victim_record):
+			DamageLedgerObserverScript.record_terminal(victim_record.get("observation_identity"), "rejected", "SPECIAL_TARGET_LIFECYCLE_OR_WORLD_REJECTED")
 			continue
 		_settle_monster_special_victim(victim, victim_record)
 
@@ -4592,6 +4610,7 @@ func _settle_monster_special_victim(
 		bool(delivery_contract.get("use_accuracy", false))
 		and not _monster_special_accuracy_succeeds(victim, delivery_contract)
 	):
+		DamageLedgerObserverScript.record_terminal(record.get("observation_identity"), "miss", "special_accuracy_failed")
 		return
 	if kind == "mixed_target_tile":
 		var physical_damage := int(floor(
@@ -4606,31 +4625,12 @@ func _settle_monster_special_victim(
 			"release_id": str(record.get("release_id", "")),
 			"damage_owner": "enemy.monster_special_cell_release",
 		}
-		# R4 T5-P2: the mixed-defense delivery pushes its real identity for
-		# the synchronous call so the HP write resolves to THIS release.
-		if DamageLedgerObserverScript.recording_enabled:
-			DamageLedgerObserverScript.push_source({
-				"source_instance_id": get_instance_id(),
-				"source_life": _hc_life(self),
-				"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
-				"release_id": str(record.get("release_id", "")),
-				"child_effect_id": "mixed_defense_%s" % str(delivery_contract.get("kind", "")),
-				"victim_instance_id": victim.get_instance_id(),
-				"victim_life": _hc_life(victim),
-				"runtime_map_id": runtime_map_id,
-				"zone_generation": int(get_meta("zone_generation", -1)),
-				"raw_roll": int(physical_damage) + int(magic_damage),
-				"action_game_time_s": _attack_action_start_time_s,
-			})
 		mixed_context.make_read_only()
-		var resolution_value: Variant = victim.call(
-			"take_monster_mixed_damage",
-			physical_damage,
-			magic_damage,
-			mixed_context,
-		)
-		if DamageLedgerObserverScript.recording_enabled:
-			DamageLedgerObserverScript.pop_source()
+		var resolution_value: Variant
+		if victim is PlayerCharacter or victim is SummonActor:
+			resolution_value = victim.take_monster_mixed_damage(physical_damage, magic_damage, mixed_context, record.get("observation_identity"))
+		else:
+			resolution_value = victim.call("take_monster_mixed_damage", physical_damage, magic_damage, mixed_context)
 		if resolution_value is Dictionary:
 			last_magic_attack_resolution = (
 				resolution_value as Dictionary
@@ -4648,7 +4648,7 @@ func _settle_monster_special_victim(
 			victim,
 			raw_damage,
 			bool(delivery_contract.get("use_accuracy", false)),
-			-1, false, -1, true,
+			-1, false, -1, true, record,
 		)
 		return
 	var magic_damage := raw_damage
@@ -4657,7 +4657,7 @@ func _settle_monster_special_victim(
 			float(magic_damage)
 			* float(delivery_contract.get("undead_multiplier", 1.0))
 		))
-	if not _apply_monster_special_magic_damage(victim, magic_damage, kind):
+	if not _apply_monster_special_magic_damage(victim, magic_damage, kind, record):
 		return
 	if kind in ["directional_spit_map", "gas_adjacent"]:
 		_apply_monster_special_status(victim, kind, delivery_contract)
@@ -4667,13 +4667,14 @@ func _apply_monster_special_magic_damage(
 	victim: Node2D,
 	raw_damage: int,
 	kind: String,
+	release_record: Variant = null,
 ) -> bool:
-	var raw_resolution: Variant = victim.call(
-		"take_direct_spell_damage",
-		"",
-		maxi(0, raw_damage),
-		-1,
-	)
+	var raw_resolution: Variant
+	if victim is PlayerCharacter or victim is SummonActor:
+		var identity: Variant = release_record.get("observation_identity") if release_record is Dictionary else null
+		raw_resolution = victim.take_direct_spell_damage("", maxi(0, raw_damage), -1, -1, true, identity)
+	else:
+		raw_resolution = victim.call("take_direct_spell_damage", "", maxi(0, raw_damage), -1)
 	if not raw_resolution is Dictionary:
 		return false
 	last_magic_attack_resolution = (raw_resolution as Dictionary).duplicate(true)
@@ -5122,6 +5123,7 @@ func _emit_target_magic_descriptor(release_record: Dictionary) -> void:
 func _deal_special_magic_melee_hit(
 	hit_target: Node2D,
 	dealt_damage: int,
+	release_record: Variant = null,
 ) -> void:
 	# TMagCowMonster applies its magic-defense damage immediately. The source
 	# RM_STRUCK message is a 300ms body presentation notification, not a delayed
@@ -5158,29 +5160,14 @@ func _deal_special_magic_melee_hit(
 		)
 	):
 		return
-	var ledger_ctx := {}
-	if DamageLedgerObserverScript.recording_enabled:
-		ledger_ctx = {
-			"source_instance_id": get_instance_id(),
-			"source_life": _hc_life(self),
-			"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
-			"release_id": str(_hc_release_id()),
-			"child_effect_id": "magic_defense_direct",
-			"victim_instance_id": hit_target.get_instance_id(),
-			"victim_life": _hc_life(hit_target),
-			"runtime_map_id": runtime_map_id,
-			"zone_generation": int(get_meta("zone_generation", -1)),
-			"raw_roll": maxi(0, dealt_damage),
-			"action_game_time_s": _attack_action_start_time_s,
-		}
-		DamageLedgerObserverScript.push_source(ledger_ctx)
-	var raw_resolution: Variant = hit_target.call(
-		"take_direct_spell_damage",
-		"",
-		maxi(0, dealt_damage),
-	)
-	if DamageLedgerObserverScript.recording_enabled:
-		DamageLedgerObserverScript.pop_source()
+	var ledger_ctx: Variant = _delivery_observation_identity(release_record, hit_target, "magic_defense_direct")
+	if ledger_ctx is Dictionary:
+		DamageLedgerObserverScript.record_delivery(ledger_ctx)
+	var raw_resolution: Variant
+	if hit_target is PlayerCharacter or hit_target is SummonActor:
+		raw_resolution = hit_target.take_direct_spell_damage("", maxi(0, dealt_damage), -1, -1, true, ledger_ctx)
+	else:
+		raw_resolution = hit_target.call("take_direct_spell_damage", "", maxi(0, dealt_damage))
 	if not raw_resolution is Dictionary:
 		last_magic_attack_resolution = {
 			"success": false,
@@ -5205,6 +5192,7 @@ func _deal_melee_hit(
 	dealt_damage: int,
 	center_tolerance_gu := 0.0,
 	force_los_recheck := false,
+	release_record: Variant = null,
 ) -> void:
 	if not combat_enabled or not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
@@ -5288,7 +5276,7 @@ func _deal_melee_hit(
 	_last_attack_footprint_snapshot = snapshot
 	if not _snapshot_intersects_target(snapshot, hit_target):
 		return
-	_apply_attack_damage(hit_target, dealt_damage)
+	_apply_attack_damage(hit_target, dealt_damage, true, -1, false, -1, false, release_record)
 
 
 func _target_agility_for_monster_hit(hit_target: Node2D) -> int:
@@ -5337,40 +5325,17 @@ func _apply_attack_damage(
 	force_struck_reaction := false,
 	forced_control_roll := -1,
 	ranged := false,
+	release_record: Variant = null,
 ) -> void:
-	# R4 T5-P2: the concrete damage dispatch pushes THIS delivery's real
-	# identity onto the observer source stack for the duration of the
-	# synchronous call and pops it unconditionally afterwards - early
-	# returns inside the victim therefore cannot leak identity, and a
-	# nested delivery from another source layers correctly on the stack.
-	# With recording disabled the push/pop are single boolean reads.
-	var ledger_ctx := {}
+	var ledger_ctx: Variant = null
 	if DamageLedgerObserverScript.recording_enabled:
-		ledger_ctx = {
-			"source_instance_id": get_instance_id(),
-			"source_life": _hc_life(self),
-			"parent_action_id": _last_hc_release_record.get("parent_action_id", -1),
-			"release_id": str(_hc_release_id()),
-			"child_effect_id": "melee_direct" if not ranged else "ranged_direct",
-			"victim_instance_id": hit_target.get_instance_id(),
-			"victim_life": _hc_life(hit_target),
-			"runtime_map_id": runtime_map_id,
-			"zone_generation": int(get_meta("zone_generation", -1)),
-			"raw_roll": dealt_damage,
-			"action_game_time_s": _attack_action_start_time_s,
-		}
-		DamageLedgerObserverScript.push_source(ledger_ctx)
-	_apply_attack_damage_impl(
-		hit_target,
-		dealt_damage,
-		use_accuracy,
-		forced_roll,
-		force_struck_reaction,
-		forced_control_roll,
-		ranged,
-	)
-	if DamageLedgerObserverScript.recording_enabled:
-		DamageLedgerObserverScript.pop_source()
+		if release_record is Dictionary and release_record.has("observation_identity"):
+			ledger_ctx = release_record.observation_identity
+		else:
+			ledger_ctx = _delivery_observation_identity(release_record, hit_target, "ranged_direct" if ranged else "melee_direct")
+			if ledger_ctx is Dictionary:
+				DamageLedgerObserverScript.record_delivery(ledger_ctx)
+	_apply_attack_damage_impl(hit_target, dealt_damage, use_accuracy, forced_roll, force_struck_reaction, forced_control_roll, ranged, ledger_ctx)
 
 
 func _apply_attack_damage_impl(
@@ -5381,6 +5346,7 @@ func _apply_attack_damage_impl(
 	force_struck_reaction := false,
 	forced_control_roll := -1,
 	ranged := false,
+	ledger_ctx: Variant = null,
 ) -> void:
 	if not combat_enabled:
 		return
@@ -5389,15 +5355,21 @@ func _apply_attack_damage_impl(
 		# submits no damage or on-hit side effects. Reported as a REAL
 		# terminal from the branch itself, never inferred by an observer.
 		DamageLedgerObserverScript.record_terminal(
-			DamageLedgerObserverScript.current_source(), "miss", "accuracy_roll_failed"
+			ledger_ctx, "miss", "accuracy_roll_failed"
 		)
 		return
 	if ranged and hit_target is PlayerCharacter:
-		var result := (hit_target as PlayerCharacter).take_ranged_damage(dealt_damage, true, force_struck_reaction)
+		var result := (hit_target as PlayerCharacter).take_ranged_damage(dealt_damage, true, force_struck_reaction, -1, ledger_ctx)
 		if not bool(result.get("success", false)) or bool(result.get("magic_evaded", false)):
 			return
 	elif force_struck_reaction and hit_target is PlayerCharacter:
-		(hit_target as PlayerCharacter).take_damage(dealt_damage, true, {}, true)
+		(hit_target as PlayerCharacter).take_damage(dealt_damage, true, {}, true, ledger_ctx)
+	elif hit_target is PlayerCharacter:
+		hit_target.take_damage(dealt_damage, true, {}, false, ledger_ctx)
+	elif hit_target is SummonActor:
+		hit_target.take_damage(dealt_damage, null, -1, ledger_ctx)
+	elif hit_target is EnemyActor and ledger_ctx is Dictionary:
+		hit_target.take_damage(dealt_damage, null, {}, ledger_ctx)
 	else:
 		hit_target.take_damage(dealt_damage)
 	apply_life_steal(dealt_damage)
@@ -6570,8 +6542,9 @@ func take_damage(
 	amount: int,
 	attacker: Node2D = null,
 	damage_context: Dictionary = {},
+	delivery_identity: Variant = null,
 ) -> void:
-	_apply_damage_core(amount, attacker, damage_context, true)
+	_apply_damage_core(amount, attacker, damage_context, true, delivery_identity)
 
 
 ## Proximity is not the only authored wake condition for static dormant
@@ -6609,6 +6582,7 @@ func _apply_damage_core(
 	attacker: Node2D,
 	damage_context: Dictionary,
 	causes_struck: bool,
+	delivery_identity: Variant = null,
 ) -> void:
 	if _dying or _death_pending:
 		return
@@ -6639,6 +6613,8 @@ func _apply_damage_core(
 		_add_threat(attacker, float(maxi(1,amount))*5.0+25.0)
 	current_hp = maxi(0, current_hp - amount)
 	var actual_damage := hp_before_damage - current_hp
+	if DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_hp_mutation(self, amount, hp_before_damage, current_hp, "monster_damage", delivery_identity)
 	if (
 		actual_damage > 0 and attacker is SummonActor
 		and (attacker as SummonActor).owner_player == primary_target
@@ -8170,6 +8146,25 @@ func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
 			return false
 	return true
 
+func _delivery_observation_identity(record: Variant, victim: Node, child: String) -> Variant:
+	if not DamageLedgerObserverScript.recording_enabled or not record is Dictionary:
+		return null
+	return DamageLedgerObserverScript.frozen_source({
+		"source_instance_id": int(record.get("source_instance_id", get_instance_id())),
+		"source_life": int(record.get("source_life", -1)),
+		"parent_action_id": int(record.get("parent_action_id", -1)),
+		"release_id": str(record.get("release_id", "")),
+		"admission_release_id": str(record.get("release_id", "")),
+		"child_effect_id": child,
+		"victim_instance_id": int(record.get("target_id", record.get("target_instance_id", 0))),
+		"victim_life": int(record.get("target_life", -1)),
+		"victim_generation": int(record.get("target_generation", -1)),
+		"runtime_map_id": int(record.get("map_id", record.get("runtime_map_id", -1))),
+		"zone_generation": int(record.get("generation", -1)),
+		"raw_roll": int(record.get("damage", 0)),
+		"action_game_time_s": float(record.get("parent_start_game_time_s", -1.0)),
+	})
+
 func _hc_life(node: Node) -> int:
 	if node is PlayerCharacter and is_instance_valid(node):
 		return (node as PlayerCharacter).combat_epoch
@@ -8216,6 +8211,15 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 		"parent_duration_s": _attack_action_duration_s,
 	}
 	_last_hc_release_record = record
+	if DamageLedgerObserverScript.recording_enabled:
+		var admission := record.duplicate(true)
+		admission.erase("target")
+		admission["source_instance_id"] = get_instance_id()
+		admission["effective_interval_s"] = _current_attack_interval()
+		admission["physics_tick"] = Engine.get_physics_frames()
+		DamageLedgerObserverScript.record_admission(admission)
+	if PlayerState.test_mode and test_attack_admission_hook.is_valid():
+		test_attack_admission_hook.call(record.duplicate(true))
 	_clear_autonomous_step_state()
 	# Keep the path/session. Only this local motion step is interrupted.
 	velocity = Vector2.ZERO
@@ -8249,6 +8253,7 @@ func _hc_settle(record: Dictionary) -> void:
 	var ref: WeakRef = record.get("target")
 	var victim: Node2D = ref.get_ref() as Node2D if ref != null else null
 	if not _hc_target_usable(victim) or get_parent() == null:
+		DamageLedgerObserverScript.record_terminal(_delivery_observation_identity(record, victim, "admission"), "rejected", "TARGET_UNAVAILABLE")
 		return
 	if (
 		int(record.map_id) != runtime_map_id
@@ -8262,7 +8267,7 @@ func _hc_settle(record: Dictionary) -> void:
 	):
 		_hc_last_reason = "RELEASE_LIFECYCLE_REJECTED"
 		DamageLedgerObserverScript.record_terminal(
-			{"source_instance_id": get_instance_id(), "source_life": _hc_life(self), "parent_action_id": record.get("parent_action_id", -1), "release_id": str(record.get("release_id", ""))},
+			_delivery_observation_identity(record, victim, "admission"),
 			"rejected", "RELEASE_LIFECYCLE_REJECTED",
 		)
 		return
@@ -8270,18 +8275,19 @@ func _hc_settle(record: Dictionary) -> void:
 	_hc_last_reason = _hc_access(victim, float(record.tolerance), true)
 	if _hc_last_reason != "CLEAR":
 		DamageLedgerObserverScript.record_terminal(
-			{"source_instance_id": get_instance_id(), "source_life": _hc_life(self), "parent_action_id": record.get("parent_action_id", -1), "release_id": str(record.get("release_id", ""))},
+			_delivery_observation_identity(record, victim, "admission"),
 			"rejected", _hc_last_reason,
 		)
 		return
 	_hc_settlements += 1
 	_hc_active_release_id = str(record.release_id)
 	if _uses_special_magic_melee_delivery():
-		_deal_special_magic_melee_hit(victim, int(record.damage))
+		_deal_special_magic_melee_hit(victim, int(record.damage), record)
 	elif _uses_monster_special_cell_delivery():
-		_launch_monster_special_cell_delivery(victim, int(record.damage))
+		if not _launch_monster_special_cell_delivery(victim, int(record.damage), record):
+			DamageLedgerObserverScript.record_terminal(_delivery_observation_identity(record, victim, "admission"), "rejected", "SPECIAL_DELIVERY_NOT_DISPATCHED")
 	else:
-		_deal_melee_hit(victim, int(record.damage), float(record.tolerance), true)
+		_deal_melee_hit(victim, int(record.damage), float(record.tolerance), true, record)
 	_hc_active_release_id = ""
 
 func _hc_release_id() -> String:

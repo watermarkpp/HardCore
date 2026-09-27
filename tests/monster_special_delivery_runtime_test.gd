@@ -12,14 +12,15 @@ class DeterministicMagicPlayer:
 		raw_damage: int,
 		anti_magic_roll := -1,
 		magic_defense_roll := -1,
-		causes_struck := true
+		causes_struck := true,
+		delivery_identity: Variant = null,
 	) -> Dictionary:
 		# Keep the real player evasion/MAC/HP pipeline, fixing only its random
 		# input so delivery assertions cannot fail on a valid 10% evasion.
 		return super.take_direct_spell_damage(
 			skill_id, raw_damage,
 			anti_magic_roll if anti_magic_roll >= 0 else incoming_magic_roll,
-			magic_defense_roll, causes_struck)
+			magic_defense_roll, causes_struck, delivery_identity)
 
 class MagicTarget:
 	extends Node2D

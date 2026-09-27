@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal summon_state_changed(previous_state: int, current_state: int)
 
+const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
+
 const SummonVisualRegistryScript := preload("res://scripts/summon_visual_registry.gd")
 const WarriorCombatMathScript := preload("res://scripts/warrior_combat_math.gd")
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
@@ -1325,6 +1327,7 @@ func take_damage(
 	amount: int,
 	source_or_defense_roll: Variant = null,
 	defense_roll := -1,
+	delivery_identity: Variant = null,
 ) -> void:
 	## The runtime service supplies the source actor as the second argument. A
 	## numeric second argument is also accepted as a deterministic test hook;
@@ -1338,19 +1341,23 @@ func take_damage(
 		physical_defence_bonus(),
 		resolved_roll,
 	)
-	_apply_resolved_damage(maxi(1, amount - absorbed))
+	_apply_resolved_damage(maxi(1, amount - absorbed), true, delivery_identity)
 
 
 func take_monster_mixed_damage(
 	physical_raw: int,
 	magic_raw: int,
 	context: Dictionary,
+	delivery_identity: Variant = null,
 ) -> Dictionary:
 	if current_hp <= 0 or state in [SummonState.DEAD, SummonState.EXPIRED]:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "summon_dead")
 		return {"success": false, "applied_damage": 0, "failure_reason": "summon_dead"}
 	if is_instance_valid(owner_player) and owner_player.combat_transition_is_active():
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "owner_combat_isolated")
 		return {"success": false, "applied_damage": 0, "failure_reason": "owner_combat_isolated"}
 	if physical_raw < 0 or magic_raw < 0:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "invalid_mixed_damage")
 		return {"success": false, "applied_damage": 0, "failure_reason": "invalid_mixed_damage"}
 	var ac_roll := _roll_defense(ac_min, ac_max, physical_defence_bonus(), -1)
 	var mac_roll := _roll_defense(mac_min, mac_max, magic_defence_bonus(), -1)
@@ -1359,7 +1366,9 @@ func take_monster_mixed_damage(
 	var total := physical_damage + magic_damage
 	var hp_before := current_hp
 	if total > 0:
-		_apply_resolved_damage(total)
+		_apply_resolved_damage(total, true, delivery_identity)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "summon_mixed_zero")
 	return {
 		"success": true, "runtime_contract": "monster_mixed_damage.v1",
 		"physical_defense_roll": ac_roll, "magic_defense_roll": mac_roll,
@@ -1385,6 +1394,7 @@ func take_direct_spell_damage(
 	anti_magic_roll := -1,
 	magic_defense_roll := -1,
 	causes_struck := true,
+	delivery_identity: Variant = null,
 ) -> Dictionary:
 	## Boss target-magic, special-magic melee and area-magic all settle through
 	## this same direct-spell contract. Summons currently have no anti-magic
@@ -1425,7 +1435,9 @@ func take_direct_spell_damage(
 	resolution["physical_defense_bypassed"] = true
 	var hp_before := current_hp
 	if int(resolution.get("final_damage", 0)) > 0:
-		_apply_resolved_damage(int(resolution.final_damage))
+		_apply_resolved_damage(int(resolution.final_damage), true, delivery_identity)
+	elif DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "mitigated", "summon_spell_zero")
 	resolution["summon_pipeline_input"] = int(resolution.final_damage)
 	resolution["applied_damage"] = maxi(0, hp_before - current_hp)
 	return resolution
@@ -1478,11 +1490,14 @@ func restore_health(amount: int) -> int:
 	return actual_restored
 
 
-func _apply_resolved_damage(amount: int, causes_struck := true) -> void:
+func _apply_resolved_damage(amount: int, causes_struck := true, delivery_identity: Variant = null) -> void:
 	if state in [SummonState.DEAD, SummonState.EXPIRED]:
+		DamageLedgerObserverScript.record_terminal(delivery_identity, "rejected", "summon_dead_or_expired")
 		return
 	var hp_before := current_hp
 	current_hp = maxi(0, current_hp - maxi(1, amount))
+	if DamageLedgerObserverScript.recording_enabled:
+		DamageLedgerObserverScript.record_hp_mutation(self, maxi(1, amount), hp_before, current_hp, "summon_damage", delivery_identity)
 	if current_hp == 0:
 		_set_state(SummonState.DEAD)
 		_audio_death_once()

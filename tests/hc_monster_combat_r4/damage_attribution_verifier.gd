@@ -1,108 +1,112 @@
 extends RefCounted
 
-## R4 T5-P1/P3: the ONE attribution verdict shared by the natural cadence
-## base and every fault counterexample. It consumes ONLY the raw observer
-## ledger (real HP-write events with resolved delivery identity and real
-## terminal events from the real branches). No time-window correlation, no
-## roll clipping, no inference of sources from amounts.
-
+## One identity based verifier. Admission owns declared children; amounts only
+## check committed HP arithmetic, never infer or replace a delivery source.
 const UNKNOWN := "UNKNOWN"
-
+const ID_FIELDS := ["source_instance_id", "source_life", "parent_action_id", "runtime_map_id", "zone_generation"]
+const CHILD_FIELDS := ["release_id", "child_effect_id", "victim_instance_id", "victim_life", "victim_generation", "admission_release_id"]
 
 static func verdict(events: Array, terminal_events: Array, under_test_instance_id: int) -> Dictionary:
-	var under_test: Array = []
-	var suppressed: Array = []
+	var own: Array = []
 	var foreign: Array = []
 	var unknown: Array = []
-	for event: Variant in events:
+	var own_amount := 0
+	var foreign_amount := 0
+	for event: Dictionary in events:
 		var source: Dictionary = event.get("source", {})
-		if event.get("suppressed", false):
-			suppressed.append(event)
-			continue
-		var identity: String = str(source.get("source_identity", "")) if source.has("source_identity") else str(source.get("source_instance_id", -1))
-		if identity == UNKNOWN:
+		if source.is_empty() or str(source.get("source_identity", "")) == UNKNOWN:
 			unknown.append(event)
 		elif int(source.get("source_instance_id", -1)) == under_test_instance_id:
-			under_test.append(event)
+			own.append(event)
+			own_amount += int(event.get("actual_hp_delta", 0))
 		else:
 			foreign.append(event)
-	var failures: Array = []
-	# Raw counts and amounts stay SEPARATE. No de-duplication of repeated
-	# writes; no splitting of N points into N fake events.
-	var under_test_amount := 0
-	for event: Variant in under_test:
-		under_test_amount += int(event.get("actual_hp_delta", 0))
-	var foreign_amount := 0
-	for event: Variant in foreign:
-		foreign_amount += int(event.get("actual_hp_delta", 0))
-	# Every dispatched under-test release must have a REAL terminal: an
-	# applied mutation, a real miss, or a real rejection. Missing both is
-	# MISSING and fails - a no-debit observation is never auto-promoted to
-	# a legal miss.
-	var missing_terminals := 0
-	if not suppressed.is_empty() or under_test.is_empty():
-		# Suppressed or empty ledgers still need per-release judgement;
-		# the caller supplies the dispatched release count.
-		pass
-	return {
-		"under_test_mutations": under_test,
-		"under_test_amount": under_test_amount,
-		"suppressed_events": suppressed,
-		"foreign_mutations": foreign,
-		"foreign_amount": foreign_amount,
-		"unknown_mutations": unknown,
-		"terminal_events": terminal_events,
-		"missing_terminals": missing_terminals,
-		"failures": failures,
-	}
+			foreign_amount += int(event.get("actual_hp_delta", 0))
+	return {"under_test_mutations": own, "under_test_amount": own_amount,
+		"foreign_mutations": foreign, "foreign_amount": foreign_amount,
+		"unknown_mutations": unknown, "terminal_events": terminal_events,
+		"suppressed_events": [], "failures": []}
 
+static func _parent(start: Dictionary) -> Dictionary:
+	return {"source_instance_id": start.get("source_instance_id", -1),
+		"source_life": start.get("source_life", -1), "parent_action_id": start.get("parent_action_id", -1),
+		"runtime_map_id": start.get("map_id", -1), "zone_generation": start.get("generation", -1)}
 
-## Release-level audit: every dispatched release (from the admission ledger)
-## must own at least one real applied mutation OR one real terminal event
-## from its own source identity. Repeated mutations for the same
-## child_effect_key are reported, never silently deduplicated.
-static func audit_releases(
-	start_events: Array,
-	events: Array,
-	terminal_events: Array,
-	under_test_instance_id: int,
-) -> Dictionary:
+static func _same(a: Dictionary, b: Dictionary, fields: Array) -> bool:
+	for field: String in fields:
+		if not a.has(field) or not b.has(field) or a[field] != b[field]:
+			return false
+	return true
+
+static func _child_key(source: Dictionary) -> String:
+	return "%s|%s|%s|%s" % [source.get("release_id", ""), source.get("child_effect_id", ""), source.get("victim_instance_id", -1), source.get("victim_life", -1)]
+
+static func audit_releases(starts: Array, events: Array, terminals: Array, source_id: int, deliveries: Array = [], overflowed := false) -> Dictionary:
 	var failures: Array = []
 	var per_release: Dictionary = {}
-	for event: Variant in events:
+	var parents: Dictionary = {}
+	var expected: Dictionary = {}
+	var completed: Dictionary = {}
+	if overflowed:
+		failures.append("observer_overflow")
+	for start: Dictionary in starts:
+		var rid := str(start.get("release_id", ""))
+		if rid.is_empty() or parents.has(rid) or int(start.get("source_instance_id", -1)) != source_id:
+			failures.append("invalid_admission identity=%s" % rid)
+			continue
+		parents[rid] = start
+		per_release[rid] = {"children": [], "terminals": [], "mutations": [], "count": 0, "amount": 0}
+	for child: Dictionary in deliveries:
+		if int(child.get("source_instance_id", -1)) != source_id:
+			continue
+		var rid := str(child.get("admission_release_id", ""))
+		if not parents.has(rid) or not _same(child, _parent(parents[rid]), ID_FIELDS):
+			failures.append("orphan_delivery key=%s" % _child_key(child))
+			continue
+		var key := _child_key(child)
+		if expected.has(key) or str(child.get("child_effect_id", "")).is_empty() or int(child.get("victim_instance_id", 0)) <= 0 or int(child.get("victim_life", -1)) < 0:
+			failures.append("invalid_delivery key=%s" % key)
+			continue
+		expected[key] = child
+		per_release[rid].children.append(key)
+	for event: Dictionary in events + terminals:
 		var source: Dictionary = event.get("source", {})
-		if int(source.get("source_instance_id", -1)) != under_test_instance_id:
+		if int(source.get("source_instance_id", -1)) != source_id:
 			continue
-		if event.get("suppressed", false):
+		var rid := str(source.get("admission_release_id", source.get("release_id", "")))
+		if not parents.has(rid) or not _same(source, _parent(parents[rid]), ID_FIELDS):
+			failures.append("unowned_result key=%s" % _child_key(source))
 			continue
-		var key := "%s|%s" % [str(source.get("release_id", "")), str(source.get("child_effect_id", ""))]
-		if not per_release.has(key):
-			per_release[key] = {"mutations": [], "count": 0, "amount": 0}
-		per_release[key]["count"] += 1
-		per_release[key]["amount"] += int(event.get("actual_hp_delta", 0))
-		per_release[key]["mutations"].append(event)
-	for start: Variant in start_events:
-		var release_id := str(start.get("release_id", ""))
-		var matched: bool = false
-		for key: String in per_release:
-			if key.begins_with(release_id + "|"):
-				matched = true
-				break
-		var terminal_matched := false
-		for terminal: Variant in terminal_events:
-			var tsource: Dictionary = terminal.get("source", {})
-			if str(tsource.get("release_id", "")) == release_id:
-				terminal_matched = true
-				break
-		if not matched and not terminal_matched:
-			failures.append("release_missing_terminal release_id=%s" % release_id)
-	# Repeats are legal only per distinct child_effect_id; the same
-	# child_effect key firing twice on one release is a duplicate apply.
-	for key: String in per_release:
-		var entry: Dictionary = per_release[key]
-		if int(entry["count"]) > 1:
-			failures.append("duplicate_apply key=%s count=%d" % [key, int(entry["count"])])
-	return {
-		"per_release": per_release,
-		"failures": failures,
-	}
+		var key := _child_key(source)
+		var is_write := event.has("mutation_id")
+		if is_write or str(source.get("child_effect_id", "")) != "admission":
+			if not expected.has(key) or not _same(source, expected[key], ID_FIELDS + CHILD_FIELDS):
+				failures.append("undeclared_or_mismatched_child key=%s" % key)
+				continue
+		else:
+			var start: Dictionary = parents[rid]
+			if source.get("release_id") != rid or source.get("admission_release_id") != rid or source.get("victim_instance_id") != start.get("target_id") or source.get("victim_life") != start.get("target_life") or source.get("victim_generation") != start.get("target_generation") or not per_release[rid].children.is_empty():
+				failures.append("invalid_admission_terminal key=%s" % key)
+				continue
+		completed[key] = int(completed.get(key, 0)) + 1
+		if int(completed[key]) > 1:
+			failures.append("duplicate_apply key=%s count=%d" % [key, int(completed[key])])
+		if is_write:
+			var delta := int(event.get("actual_hp_delta", -1))
+			if event.get("victim_instance_id") != source.get("victim_instance_id") or event.get("victim_life") != source.get("victim_life") or event.get("victim_generation") != source.get("victim_generation") or delta <= 0 or int(event.get("hp_before", -1)) - int(event.get("hp_after", -1)) != delta or int(event.get("hp_after", -1)) != maxi(0, int(event.get("hp_before", -1)) - int(event.get("resolved_damage", -1))):
+				failures.append("invalid_hp_mutation key=%s" % key)
+			per_release[rid].mutations.append(event)
+			per_release[rid].count += 1
+			per_release[rid].amount += delta
+		else:
+			if str(event.get("terminal_kind", "")) not in ["miss", "rejected", "mitigated"] or str(event.get("rejection_reason", "")).is_empty():
+				failures.append("invalid_terminal key=%s" % key)
+			per_release[rid].terminals.append(event)
+	for rid: String in per_release:
+		var entry: Dictionary = per_release[rid]
+		if entry.children.is_empty() and entry.terminals.is_empty():
+			failures.append("release_missing_terminal release_id=%s" % rid)
+		for key: String in entry.children:
+			if not completed.has(key):
+				failures.append("release_missing_terminal release_id=%s child=%s" % [rid, key])
+	return {"per_release": per_release, "failures": failures}

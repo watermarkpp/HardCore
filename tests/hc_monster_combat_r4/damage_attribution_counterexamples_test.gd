@@ -1,189 +1,134 @@
 extends Node
 
-## R4 T5-P1: damage-attribution counterexamples driven through ONE shared
-## verifier (damage_attribution_verifier.gd). Faults act on REAL HP writes
-## via the explicit-test-switch observer (suppress/duplicate at the victim's
-## unique HP write site); the verifier never reads the fault flags to decide
-## pass or fail. Production damage formulas/timing/RNG are untouched; the
-## observer costs one boolean read when disabled.
-
-const DamageLedgerObserverScript := preload("res://scripts/damage_ledger_observer.gd")
+const Observer := preload("res://scripts/damage_ledger_observer.gd")
 const Verifier := preload("res://tests/hc_monster_combat_r4/damage_attribution_verifier.gd")
-
+const Fault := preload("res://tests/hc_monster_combat_r4/damage_write_fault_fixture.gd")
 var game: Node
 var player: PlayerCharacter
 var enemy: EnemyActor
-
+var all_lost_only := false
 
 func _ready() -> void:
 	_run.call_deferred()
-
 
 func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	game = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var deadline := Time.get_ticks_msec() + 8000
-	while Time.get_ticks_msec() < deadline:
+	var boot_deadline := Time.get_ticks_msec() + 8000
+	while Time.get_ticks_msec() < boot_deadline:
+		await get_tree().process_frame
 		if int(game.get("current_map_id")) >= 0 and bool(game.call("gameplay_input_is_enabled")):
 			break
-		await get_tree().process_frame
 	player = game.player
 	player.set_physics_process(false)
 	player.max_hp = 100000
+	var results: Dictionary = {}
+	var cases: Array = ["all_damage_lost"] if all_lost_only else ["positive_control", "real_reduction", "lost_damage_substituted", "duplicate_apply", "nested_unknown", "nested_foreign", "legal_reject", "cross_life_reject", "legal_miss"]
+	for name: String in cases:
+		results[name] = await _case(name)
+		print("ATTR_CASE ", name, " -> ", results[name].failures)
+	Observer.recording_enabled = false
+	player.test_damage_write_hook = Callable()
+	var failed := false
+	for result: Dictionary in results.values():
+		failed = failed or not result.failures.is_empty()
+	var path := "res://outputs/test_logs/r4_counterexamples%s.json" % ("_all_lost" if all_lost_only else "")
+	FileAccess.open(path, FileAccess.WRITE).store_string(JSON.stringify(results, "  "))
+	if failed:
+		printerr("R4_ATTR_COUNTEREXAMPLES_FAIL ", path)
+	else:
+		print("R4_ATTR_ALL_LOST_PASS" if all_lost_only else "R4_ATTR_COUNTEREXAMPLES_PASS")
+	get_tree().quit(1 if failed else 0)
+
+func _case(name: String) -> Dictionary:
+	var failures: Array = []
 	player.current_hp = player.max_hp
-	player.defense_min = 0
-	player.defense_max = 0
+	player.defense_min = 3 if name == "real_reduction" else 0
+	player.defense_max = player.defense_min
+	PlayerState.computed_stats["anti_magic_points"] = 10 if name == "legal_miss" else 0
 	var fixture: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(40.5, 13.5))
 	player.global_position = fixture
 	game._set_player_world_position(fixture)
-
-	var case_results: Dictionary = {}
-	for case_name: String in [
-		"positive_control",
-		"lost_damage_substituted",
-		"duplicate_apply",
-		"all_damage_lost",
-		"legal_reject_terminal",
-	]:
-		DamageLedgerObserverScript.recording_enabled = true
-		DamageLedgerObserverScript.reset()
-		var failures: Array = await _run_case(case_name)
-		DamageLedgerObserverScript.recording_enabled = false
-		case_results[case_name] = failures
-		printerr("ATTR_CASE %s -> %s" % [case_name, "PASS" if failures.is_empty() else str(failures)])
-	# Restore the zero-defense positive-control precondition.
-	player.defense_min = 0
-	player.defense_max = 0
-	DamageLedgerObserverScript.recording_enabled = false
-	var all_ok := true
-	for case_name: String in case_results:
-		if not (case_results[case_name] as Array).is_empty():
-			all_ok = false
-	if is_instance_valid(enemy):
-		enemy.free()
-	game.queue_free()
-	if not all_ok:
-		printerr("R4_ATTR_COUNTEREXAMPLES_FAIL: %s" % [str(case_results)])
-		get_tree().quit(1)
-		return
-	print("R4_ATTR_COUNTEREXAMPLES_PASS: shared verifier catches lost/substituted, duplicated and fully-lost damage, accepts the positive control and the real reject terminal")
-	get_tree().quit(0)
-
-
-func _spawn_enemy() -> EnemyActor:
-	return game._spawn_enemy(
-		GameData.get_monster_by_id(24),
-		player.global_position + Vector2(30.0, 0.0),
-		false,
-		-1.0,
-		{"respawn_enabled": false, "spawn_slot_id": "test:r4-attribution-counterexample"},
-	)
-
-
-func _run_case(case_name: String) -> Array:
-	var failures: Array = []
-	enemy = _spawn_enemy()
+	Observer.recording_enabled = true
+	Observer.reset()
+	enemy = game._spawn_enemy(GameData.get_monster_by_id(76 if name == "legal_miss" else 24), fixture + Vector2(30.0, 0.0), false, -1.0, {"respawn_enabled": false, "spawn_slot_id": "test:r4-attribution"})
 	if enemy == null:
-		return ["spawn_failed"]
-	var under_test_id := enemy.get_instance_id()
-	var start_events: Array = []
-	var last_seq := 0
-	var sample_until := Time.get_ticks_msec() + 16000
-	var moved_for_reject := false
-	while Time.get_ticks_msec() < sample_until:
+		return {"failures": ["spawn_failed"]}
+	var source_id := enemy.get_instance_id()
+	var fault := Fault.new()
+	fault.mode = name
+	fault.source_id = source_id
+	fault.target_id = player.get_instance_id()
+	player.test_damage_write_hook = fault.write_count
+	var starts: Array = []
+	var n := 20 if all_lost_only else 2
+	var deadline := Time.get_ticks_msec() + (52000 if all_lost_only else 16000)
+	var rejection_injections := [0]
+	if name in ["legal_reject", "cross_life_reject"]:
+		enemy.test_attack_admission_hook = func(record: Dictionary) -> void:
+			if rejection_injections[0] > 0 or int(record.target_id) != player.get_instance_id():
+				return
+			rejection_injections[0] += 1
+			if name == "legal_reject":
+				player.global_position = fixture + Vector2(300.0, 0.0)
+			else:
+				if not player.begin_combat_transition("r4-lifecycle-counterexample") or not player.finish_combat_transition("r4-lifecycle-counterexample"):
+					failures.append("real_lifecycle_transition_failed")
+	while Time.get_ticks_msec() < deadline:
 		await get_tree().physics_frame
-		if not is_instance_valid(enemy):
+		starts = []
+		for admission: Dictionary in Observer.admissions:
+			if int(admission.source_instance_id) == source_id:
+				starts.append(admission)
+		if rejection_injections[0] > 0 and not starts.is_empty() and enemy._hc_settled_seq >= int(starts[0].seq):
+			player.global_position = fixture
+		if starts.size() >= n and enemy._hc_settled_seq >= int(starts.back().seq):
 			break
-		var record: Dictionary = enemy._last_hc_release_record
-		var seq: int = int(record.get("seq", 0))
-		if seq != last_seq and seq > 0:
-			last_seq = seq
-			start_events.append({
-				"release_id": str(record.get("release_id", "")),
-				"damage": int(record.get("damage", 0)),
-			})
-		match case_name:
-			"lost_damage_substituted":
-				# The under-test release has ALREADY entered its concrete
-				# damage call; suppress exactly the next REAL HP write. A
-				# second REAL wild source hits in the same world - the
-				# verifier must still report the under-test release MISSING.
-				if start_events.size() == 1:
-					DamageLedgerObserverScript.suppress_next_hit = true
-			"duplicate_apply":
-				if start_events.size() == 1:
-					DamageLedgerObserverScript.duplicate_next_hit = true
-			"all_damage_lost":
-				if start_events.size() >= 1:
-					DamageLedgerObserverScript.suppress_next_hit = true
-			"legal_reject_terminal":
-				# A REAL rejection branch: move the player just past the
-				# 1.5GU admission reach right after the first admission so
-				# the settlement's own distance/world recheck rejects for
-				# real, before the AI can close the gap again.
-				if start_events.size() == 1 and not moved_for_reject:
-					moved_for_reject = true
-					var far: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(44.5, 13.5))
-					player.global_position = far
-					game._set_player_world_position(far)
-		if start_events.size() >= 3 and (case_name != "legal_reject_terminal" or start_events.size() >= 3):
-			break
-	var ledger := Verifier.verdict(
-		DamageLedgerObserverScript.events,
-		DamageLedgerObserverScript.terminal_events,
-		under_test_id,
-	)
-	var audit := Verifier.audit_releases(
-		start_events,
-		DamageLedgerObserverScript.events,
-		DamageLedgerObserverScript.terminal_events,
-		under_test_id,
-	)
-	match case_name:
-		"positive_control":
-			if ledger["under_test_mutations"].is_empty():
-				failures.append("no_under_test_hit")
-			if int(ledger["under_test_amount"]) <= 0:
-				failures.append("no_under_test_amount")
-			if not ledger["unknown_mutations"].is_empty():
-				failures.append("unknown_source_present")
-			for f: Variant in audit["failures"]:
-				failures.append(str(f))
-		"lost_damage_substituted":
-			# The suppressed release must be MISSING (no mutation AND no
-			# legal terminal): a foreign hit can never stand in for it.
-			if ledger["suppressed_events"].size() < 1:
-				failures.append("injection_did_not_reach_real_write")
-			if audit["failures"].is_empty():
-				failures.append("verifier_failed_to_catch_lost_damage")
-		"duplicate_apply":
-			var dup_found := false
-			for f: Variant in audit["failures"]:
-				if str(f).begins_with("duplicate_apply"):
-					dup_found = true
-			if not dup_found:
-				failures.append("verifier_failed_to_catch_duplicate_apply")
-		"all_damage_lost":
-			if ledger["under_test_mutations"].is_empty() and audit["failures"].is_empty():
-				failures.append("twenty_no_debit_releases_accepted")
-		"legal_reject_terminal":
-			# Real mitigation branch: with a real defense value the applied
-			# mutations legitimately land BELOW the raw roll. The verifier
-			# must accept them as real applied terminals (HP below roll is
-			# not auto-promoted to lost damage) while keeping raw amounts.
-			player.defense_min = 3
-			player.defense_max = 3
-			if ledger["under_test_mutations"].is_empty():
-				failures.append("no_under_test_hit_under_mitigation")
-			for f: Variant in audit["failures"]:
-				failures.append(str(f))
-	if enemy != null and is_instance_valid(enemy):
-		enemy.free()
-	if is_instance_valid(player):
-		player.global_position = game._canonical_ground_gu_to_screen_px(Vector2(40.5, 13.5))
-		game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(40.5, 13.5)))
-	return failures
+	var audit := Verifier.audit_releases(starts, Observer.events, Observer.terminal_events, source_id, Observer.deliveries, Observer.overflowed)
+	var ledger := Verifier.verdict(Observer.events, Observer.terminal_events, source_id)
+	if starts.size() < n:
+		failures.append("insufficient_natural_starts=%d expected=%d" % [starts.size(), n])
+	var expected_fail := name in ["lost_damage_substituted", "duplicate_apply", "all_damage_lost"]
+	if expected_fail:
+		if fault.injected != (n if all_lost_only else 1):
+			failures.append("fault_did_not_reach_exact_real_write count=%d" % fault.injected)
+		var reason := "duplicate_apply" if name == "duplicate_apply" else "release_missing_terminal"
+		var matching := 0
+		for f: String in audit.failures:
+			if f.begins_with(reason):
+				matching += 1
+		if matching != (n if all_lost_only else 1):
+			failures.append("verifier_wrong_failure_count=%d expected=%d" % [matching, n if all_lost_only else 1])
+		if all_lost_only and not ledger.under_test_mutations.is_empty():
+			failures.append("all_lost_has_actual_debit")
+	else:
+		failures.append_array(audit.failures)
+	if name == "real_reduction":
+		for e: Dictionary in ledger.under_test_mutations:
+			if int(e.actual_hp_delta) != maxi(1, int(e.source.raw_roll) - 3):
+				failures.append("reduction_not_real")
+		if ledger.under_test_mutations.size() != n:
+			failures.append("reduction_samples_missing")
+	if name in ["lost_damage_substituted", "nested_unknown", "nested_foreign"]:
+		if fault.foreign_writes != 1:
+			failures.append("nested_real_writer_missing")
+		var rows: Array = ledger.unknown_mutations if name == "nested_unknown" else ledger.foreign_mutations
+		var found := false
+		for row: Dictionary in rows:
+			if int(row.physics_tick) == int(fault.facts[0].physics_tick) and int(row.actual_hp_delta) == int(fault.facts[0].amount):
+				found = true
+		if not found:
+			failures.append("same_tick_same_amount_replacement_not_applied")
+	if name in ["legal_miss", "legal_reject", "cross_life_reject"]:
+		var found := false
+		for terminal: Dictionary in Observer.terminal_events:
+			if int(terminal.source.get("source_instance_id", -1)) == source_id:
+				found = true
+		if not found:
+			failures.append("real_terminal_branch_not_reached")
+	var result := {"starts": starts.duplicate(true), "deliveries": Observer.deliveries.duplicate(true), "raw_events": Observer.events.duplicate(true), "terminal_events": Observer.terminal_events.duplicate(true), "audit": audit, "fault_facts": fault.facts, "failures": failures}
+	player.test_damage_write_hook = Callable()
+	enemy.free()
+	return result

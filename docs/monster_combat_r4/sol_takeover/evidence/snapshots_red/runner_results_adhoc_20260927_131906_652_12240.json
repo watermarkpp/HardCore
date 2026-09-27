@@ -1,0 +1,56 @@
+{
+  "git_head": "227a9c945f3bb21e4fbe51d38e10bbde4b0d8f9d",
+  "passed": 1,
+  "failed": 2,
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T13:19:06.6522652+08:00",
+  "total": 3,
+  "results": [
+    {
+      "test_name": "enemy_snapshot_v2_production_test",
+      "test_path": "tests/enemy_snapshot_v2_production_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    },
+    {
+      "test_name": "canonical_snapshot_identity_production_test",
+      "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "caster_skill_visual_factory_entry_test",
+      "test_path": "tests/caster_skill_visual_factory_entry_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 2,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "stdout_failures_2"
+    }
+  ],
+  "engine_log_errors": 2
+}

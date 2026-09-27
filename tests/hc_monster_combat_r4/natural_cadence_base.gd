@@ -4,7 +4,7 @@ extends Node
 ## per-damage attribution on real physics frames. The fixture never writes
 ## _attack_timer / _pending_attack_time / _hc_last_start_tick and never calls
 ## _physics_process / _advance_combat_action_clock. Diagnostics read ONLY
-## production state (_last_hc_release_record, _hc_starts/_hc_settlements,
+## production admissions, deliveries, and _hc_starts/_hc_settlements;
 ## _current_attack_interval, parent_start_game_time_s) - no second damage
 ## owner, no extra per-frame admission or world queries.
 
@@ -14,9 +14,9 @@ const VerifierScript := preload("res://tests/hc_monster_combat_r4/damage_attribu
 
 const SAMPLE_TARGET := 20
 const BOOT_BUDGET_S := 8.0
-## Total scene budget stays within the 60s heavy-scene cap: boot (8) +
-## sampling (48) + evidence write + cleanup <= 60. Boot typically takes
-## ~2s, so the full 48s sampling window is available in practice.
+## Twenty 2.5s natural intervals need about 48s of sampling. The runner's
+## 60s wall budget includes autoloads, boot and cleanup; phase timings and
+## the runner exit status must both pass. A printed marker is insufficient.
 const SAMPLE_BUDGET_S := 48.0
 const FOREIGN_DAMAGE := 7
 
@@ -33,15 +33,12 @@ var position_changes := 0
 var last_position := Vector2.INF
 var min_target_distance_px := INF
 var start_events: Array = []
-var last_release_seq := 0
 var hp_events: Array = []
-var foreign_events: Array = [] # legacy cursor, unused by v4 ledger
 var last_hp := 0
 var boot_ok := false
 var spawn_ok := false
 var safe_zone_hit := false
 var initial_ground_distance_gu := 0.0
-var effective_intervals: Array = []
 
 
 func _ready() -> void:
@@ -90,6 +87,9 @@ func _run() -> void:
 	game._set_player_world_position(fixture_screen)
 	last_hp = player.current_hp
 
+	DamageLedgerObserverScript.recording_enabled = true
+	DamageLedgerObserverScript.reset()
+	var boot_finished_ms := Time.get_ticks_msec()
 	# Stationary mode: spawn within admission reach. Chase mode: spawn
 	# OUTSIDE the 1.5GU center-admission reach and require real movement.
 	var spawn_offset_px := 30.0 if not chase_mode else 200.0
@@ -114,12 +114,8 @@ func _run() -> void:
 			failures.append("chase_fixture_not_out_of_range gu=%.3f" % initial_ground_distance_gu)
 		await get_tree().physics_frame
 
-	# --- Sampling window (bounded; evidence is written before cleanup) ---
-	# R4 T5-P3: attribution consumes the REAL ledger from the victim's HP
-	# write site (DamageLedgerObserver), resolved by delivery identity - no
-	# time-window correlation, no roll clipping, no inference.
-	DamageLedgerObserverScript.recording_enabled = true
-	DamageLedgerObserverScript.reset()
+	# Sample real admissions and their committed terminal results.
+	var sampling_started_ms := Time.get_ticks_msec()
 	var sample_deadline := run_started_ms + int((BOOT_BUDGET_S + SAMPLE_BUDGET_S) * 1000.0)
 	var next_foreign_ms := Time.get_ticks_msec() + (3000 if chase_mode else 9000)
 	while Time.get_ticks_msec() < sample_deadline:
@@ -127,25 +123,10 @@ func _run() -> void:
 		sampled_frames += 1
 		if not is_instance_valid(enemy):
 			break
-		var record: Dictionary = enemy._last_hc_release_record
-		var seq: int = int(record.get("seq", 0))
-		if seq != last_release_seq and seq > 0:
-			last_release_seq = seq
-			start_events.append({
-				"seq": seq,
-				"release_id": str(record.get("release_id", "")),
-				"parent_action_id": int(record.get("parent_action_id", -1)),
-				"parent_start_game_time_s": float(record.get("parent_start_game_time_s", -1.0)),
-				"parent_duration_s": float(record.get("parent_duration_s", -1.0)),
-				"source_life": int(record.get("source_life", -1)),
-				"target_id": int(record.get("target_id", 0)),
-				"target_life": int(record.get("target_life", -1)),
-				"map_id": int(record.get("map_id", -1)),
-				"generation": int(record.get("generation", -1)),
-				"damage": int(record.get("damage", 0)),
-				"effective_interval_s": enemy._current_attack_interval(),
-				"physics_tick": Engine.get_physics_frames(),
-			})
+		start_events = []
+		for admission: Dictionary in DamageLedgerObserverScript.admissions:
+			if int(admission.source_instance_id) == enemy.get_instance_id():
+				start_events.append(admission)
 		var pos: Vector2 = enemy.global_position
 		if pos.distance_to(last_position) > 0.01:
 			position_changes += 1
@@ -163,8 +144,11 @@ func _run() -> void:
 			player.take_damage(FOREIGN_DAMAGE)
 		var target_count := 1 if chase_mode else SAMPLE_TARGET
 		if start_events.size() >= target_count:
-			break
+			var live_audit := VerifierScript.audit_releases(start_events, DamageLedgerObserverScript.events, DamageLedgerObserverScript.terminal_events, enemy.get_instance_id(), DamageLedgerObserverScript.deliveries, DamageLedgerObserverScript.overflowed)
+			if live_audit.failures.is_empty():
+				break
 
+	var sampling_finished_ms := Time.get_ticks_msec()
 	# --- Assertions ---
 	var snapshot: Dictionary = enemy.hc_package_policy_snapshot() if is_instance_valid(enemy) else {}
 	var target_count := 1 if chase_mode else SAMPLE_TARGET
@@ -179,12 +163,12 @@ func _run() -> void:
 		DamageLedgerObserverScript.events,
 		DamageLedgerObserverScript.terminal_events,
 		under_test_id,
+		DamageLedgerObserverScript.deliveries,
+		DamageLedgerObserverScript.overflowed,
 	)
 	hp_events = ledger["under_test_mutations"]
 	if start_events.size() < target_count:
 		failures.append("insufficient_starts=%d" % start_events.size())
-	if hp_events.size() < target_count:
-		failures.append("insufficient_attributed_hits=%d" % hp_events.size())
 	var settlements: int = int(snapshot.get("settlements", 0))
 	if not chase_mode and settlements < SAMPLE_TARGET:
 		failures.append("insufficient_settlements=%d" % settlements)
@@ -242,7 +226,8 @@ func _run() -> void:
 		if not event.get("suppressed", false):
 			raw_amount += int(event.get("actual_hp_delta", 0))
 	var evidence := {
-		"schema": "r4_natural_cadence_v4_real_write_ledger",
+		"schema": "r4_natural_cadence_v5_explicit_delivery",
+		"phase_timing_ms": {"ready_engine_ms": run_started_ms, "boot_ms": boot_finished_ms - run_started_ms, "sampling_ms": sampling_finished_ms - sampling_started_ms},
 		"expected_monster_id": _expected_monster_id(),
 		"chase_mode": chase_mode,
 		"git_head": "see delivery manifest; runner JSON carries git_head",
@@ -271,16 +256,26 @@ func _run() -> void:
 		"foreign_detail": foreign_mutations,
 		"unknown_detail": unknown_mutations,
 		"terminal_events": DamageLedgerObserverScript.terminal_events,
+		"declared_deliveries": DamageLedgerObserverScript.deliveries,
+		"per_release": audit.per_release,
+		"overflowed": DamageLedgerObserverScript.overflowed,
 		"audit_failures": audit["failures"],
 		"raw_events": raw_events,
 		"failures": failures,
 	}
 	var out_path := "res://outputs/test_logs/r4_cadence_%d%s.json" % [_expected_monster_id(), "_chase" if chase_mode else ""]
+	var write_started_ms := Time.get_ticks_msec()
 	FileAccess.open(out_path, FileAccess.WRITE).store_string(JSON.stringify(evidence, "  "))
+	evidence.phase_timing_ms["initial_evidence_write_ms"] = Time.get_ticks_msec() - write_started_ms
 
-	# Quit directly: synchronously tearing down the whole formal world inside
-	# the scene budget cost more time than the 60s cap leaves after the 56s
-	# sampling plan, so the process exit is left to the runner.
+	var cleanup_started_ms := Time.get_ticks_msec()
+	DamageLedgerObserverScript.recording_enabled = false
+	game.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	evidence.phase_timing_ms["cleanup_ms"] = Time.get_ticks_msec() - cleanup_started_ms
+	evidence.phase_timing_ms["quit_requested_engine_ms"] = Time.get_ticks_msec()
+	FileAccess.open(out_path, FileAccess.WRITE).store_string(JSON.stringify(evidence, "  "))
 	if not failures.is_empty():
 		printerr("R4_NATURAL_CADENCE_FAIL: monster=%d %s evidence=%s" % [_expected_monster_id(), str(failures), out_path])
 		get_tree().quit(1)

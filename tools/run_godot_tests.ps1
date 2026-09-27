@@ -608,8 +608,8 @@ $Suites.critical = @($Suites.critical + @(
 # 2026-09-27 R3/R4 monster-combat closure: the correctness scenes from the
 # monster-combat R3 audit and the R4 fixed-point closure join the formal
 # critical suite. paired_load_realism stays OUT until its INVALID_MEASUREMENT
-# unit/sampling rebuild lands (R4 T6); the natural_cadence_* fixtures stay
-# OUT while their natural-admission chain is still being wired (R4 T5).
+# unit/sampling rebuild lands (R4 T6). The explicit-identity correctness
+# fixtures below include the real natural cadence and fault gates.
 $Suites.critical = @($Suites.critical + @(
     'tests/hc_monster_combat_r3/attack_facing_freeze_test.tscn',
     'tests/hc_monster_combat_r3/attack_game_clock_test.tscn',
@@ -626,6 +626,14 @@ $Suites.critical = @($Suites.critical + @(
     'tests/hc_monster_combat_r4/double_generation_death_test.tscn',
     'tests/hc_monster_combat_r4/perf_unit_determinism_test.tscn',
     'tests/hc_monster_combat_r4/synchronous_revive_death_token_test.tscn',
+    'tests/hc_monster_combat_r4/observer_integrity_test.tscn',
+    'tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn',
+    'tests/hc_monster_combat_r4/all_damage_lost_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_76_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_238_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_239_test.tscn',
+    'tests/hc_monster_combat_r4/natural_cadence_24_chase_test.tscn',
     'tests/audio_w4_actor_service_test.tscn'
 ) | Select-Object -Unique)
 
@@ -953,7 +961,7 @@ foreach ($testPath in $SelectedTests) {
     $stdout = Join-Path $LogRoot "$testName.stdout.log"
     $stderr = Join-Path $LogRoot "$testName.stderr.log"
     $engineLog = Join-Path $LogRoot "$testName.godot.log"
-    $engineLogArgument = "outputs/test_logs/$testName.godot.log"
+    $engineLogArgument = $engineLog
     Remove-Item -LiteralPath $stdout, $stderr, $engineLog -Force -ErrorAction SilentlyContinue
     # Q0-A 3.2: run through cmd.exe so the final process object exposes the
     # effective exit code (the Godot console wrapper forwards the engine code,
@@ -965,7 +973,16 @@ foreach ($testPath in $SelectedTests) {
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
     # This scene intentionally observes 6 real 4-second attack windows plus
     # pursuit/detour physics (~36 seconds). Keep ordinary scenes at 30 seconds.
-    $TestTimeoutSeconds = if ($testPath -eq 'tests/hc_monster_ai/runtime_test.tscn') { [Math]::Max(60, $TimeoutSeconds) } else { $TimeoutSeconds }
+    $HeavyR4Scenes = @(
+        'tests/hc_monster_ai/runtime_test.tscn',
+        'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',
+        'tests/hc_monster_combat_r4/natural_cadence_76_test.tscn',
+        'tests/hc_monster_combat_r4/natural_cadence_238_test.tscn',
+        'tests/hc_monster_combat_r4/natural_cadence_239_test.tscn',
+        'tests/hc_monster_combat_r4/all_damage_lost_test.tscn',
+        'tests/hc_monster_combat_r4/damage_attribution_counterexamples_test.tscn'
+    )
+    $TestTimeoutSeconds = if ($testPath -in $HeavyR4Scenes) { [Math]::Max(60, $TimeoutSeconds) } else { $TimeoutSeconds }
     $deadline = [DateTime]::UtcNow.AddSeconds($TestTimeoutSeconds)
     $wrapperExitWithoutChildSince = $null
     $earlyFailure = $false
