@@ -120,6 +120,15 @@ func _ready() -> void:
 	if not runtime_errors.is_empty():
 		_fail("published runtime identity invalid:%s" % str(runtime_errors), 13)
 		return
+	# Match the editor's post-publication step: even a portal-only revision
+	# changes runtime bytes and invalidates an existing derived wall plan.
+	var wall_plan_path := "res://assets/data/runtime/map_editor/wall_render_plans/%s.wall_render_plan.json" % map_key
+	if FileAccess.file_exists(wall_plan_path):
+		var wall_publisher := preload("res://scripts/map_editor/map_editor_wall_render_publish_service.gd").new()
+		var wall_result := wall_publisher.publish_map(map_key)
+		if wall_result.has("error"):
+			_fail("runtime published; derived wall publication failed:%s" % str(wall_result.error), 14)
+			return
 	var runtime_layers: Dictionary = runtime.get("semantics", {})
 	print(
 		"PUBLISH_SINGLE_FORMAL_MAP_RELEASE_PASS map=%s runtime_map_id=%d monster_spawn=%d boss_spawn=%d build_sha256=%s approval_revision=%d"

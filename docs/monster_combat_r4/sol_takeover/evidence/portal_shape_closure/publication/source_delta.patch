@@ -1,0 +1,65 @@
+diff --git a/map_editor_workspace/chiyue_valley_secret_passage_a/chiyue_valley_secret_passage_a.editor.json b/map_editor_workspace/chiyue_valley_secret_passage_a/chiyue_valley_secret_passage_a.editor.json
+index 5095c7c67..438c99fc5 100644
+--- a/map_editor_workspace/chiyue_valley_secret_passage_a/chiyue_valley_secret_passage_a.editor.json
++++ b/map_editor_workspace/chiyue_valley_secret_passage_a/chiyue_valley_secret_passage_a.editor.json
+@@ -47,7 +47,7 @@
+     "collision_authority": "hc_polygon_v1",
+     "content_policy": "empty_layers",
+     "created_by": "human_codex_shared_tool",
+-    "revision": 77,
++    "revision": 78,
+     "runtime_approved": false,
+     "source_editor_schema_version": 4.0,
+     "template_kind": "custom_empty_map",
+@@ -2406,7 +2406,7 @@
+         "one_way": true,
+         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+         "portal_contract_id": "unified_map_portal_endpoint_v1",
+-        "portal_role": "bidirectional_endpoint",
++        "portal_role": "one_way_endpoint",
+         "portal_visual_footprint_tiles": [
+           1.0,
+           1.0
+diff --git a/map_editor_workspace/chiyue_valley_secret_passage_b/chiyue_valley_secret_passage_b.editor.json b/map_editor_workspace/chiyue_valley_secret_passage_b/chiyue_valley_secret_passage_b.editor.json
+index 8916c20a0..7a295710d 100644
+--- a/map_editor_workspace/chiyue_valley_secret_passage_b/chiyue_valley_secret_passage_b.editor.json
++++ b/map_editor_workspace/chiyue_valley_secret_passage_b/chiyue_valley_secret_passage_b.editor.json
+@@ -47,7 +47,7 @@
+     "collision_authority": "hc_polygon_v1",
+     "content_policy": "empty_layers",
+     "created_by": "human_codex_shared_tool",
+-    "revision": 65,
++    "revision": 66,
+     "runtime_approved": false,
+     "source_editor_schema_version": 4.0,
+     "template_kind": "custom_empty_map",
+@@ -2366,7 +2366,7 @@
+         "one_way": true,
+         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
+         "portal_contract_id": "unified_map_portal_endpoint_v1",
+-        "portal_role": "bidirectional_endpoint",
++        "portal_role": "one_way_endpoint",
+         "portal_visual_footprint_tiles": [
+           1.0,
+           1.0
+diff --git a/tools/map_editor/publish_single_formal_map_release.gd b/tools/map_editor/publish_single_formal_map_release.gd
+index e8caa4b08..87637da4d 100644
+--- a/tools/map_editor/publish_single_formal_map_release.gd
++++ b/tools/map_editor/publish_single_formal_map_release.gd
+@@ -120,6 +120,15 @@ func _ready() -> void:
+ 	if not runtime_errors.is_empty():
+ 		_fail("published runtime identity invalid:%s" % str(runtime_errors), 13)
+ 		return
++	# Match the editor's post-publication step: even a portal-only revision
++	# changes runtime bytes and invalidates an existing derived wall plan.
++	var wall_plan_path := "res://assets/data/runtime/map_editor/wall_render_plans/%s.wall_render_plan.json" % map_key
++	if FileAccess.file_exists(wall_plan_path):
++		var wall_publisher := preload("res://scripts/map_editor/map_editor_wall_render_publish_service.gd").new()
++		var wall_result := wall_publisher.publish_map(map_key)
++		if wall_result.has("error"):
++			_fail("runtime published; derived wall publication failed:%s" % str(wall_result.error), 14)
++			return
+ 	var runtime_layers: Dictionary = runtime.get("semantics", {})
+ 	print(
+ 		"PUBLISH_SINGLE_FORMAL_MAP_RELEASE_PASS map=%s runtime_map_id=%d monster_spawn=%d boss_spawn=%d build_sha256=%s approval_revision=%d"
+

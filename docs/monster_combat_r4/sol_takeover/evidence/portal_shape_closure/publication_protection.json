@@ -1,0 +1,85 @@
+{
+  "status": "PASS",
+  "failures": [],
+  "rows": [
+    {
+      "map": "chiyue_choice_land",
+      "runtime_changes": [],
+      "visual_changes": [],
+      "wall_changes": [
+        "/source_runtime_json_sha256"
+      ],
+      "registry_changes": [
+        "/approval_revision"
+      ]
+    },
+    {
+      "map": "chiyue_valley_secret_passage_a",
+      "runtime_changes": [
+        "/build_sha256",
+        "/source/revision",
+        "/source/candidate_binding/authoring_sha256",
+        "/source/candidate_binding/document_sha256",
+        "/source/candidate_binding/document_revision"
+      ],
+      "visual_changes": [
+        "/source_editor_document_sha256"
+      ],
+      "wall_changes": [
+        "/source_runtime_json_sha256"
+      ],
+      "registry_changes": [
+        "/ui_presentation/runtime_build_sha256",
+        "/approval_revision",
+        "/approved_build_sha256"
+      ]
+    },
+    {
+      "map": "chiyue_valley_secret_passage_b",
+      "runtime_changes": [
+        "/build_sha256",
+        "/source/revision",
+        "/source/candidate_binding/authoring_sha256",
+        "/source/candidate_binding/document_sha256",
+        "/source/candidate_binding/document_revision"
+      ],
+      "visual_changes": [
+        "/source_editor_document_sha256"
+      ],
+      "wall_changes": [
+        "/source_runtime_json_sha256"
+      ],
+      "registry_changes": [
+        "/ui_presentation/runtime_build_sha256",
+        "/approval_revision",
+        "/approved_build_sha256"
+      ]
+    }
+  ],
+  "protected_sibling_maps": 64,
+  "protected_sibling_wall_plans": 57,
+  "protected_wall_pngs": 390,
+  "native_publications": [
+    {
+      "map": "chiyue_choice_land",
+      "directory": "publication_retry1",
+      "native_status": "PASS",
+      "original_wrapper_status": "FAIL",
+      "stdout_sha256": "e80dad7a5b1a6a4bfa995149019da67ebb144b06abba2900c9209b929ba6d393"
+    },
+    {
+      "map": "chiyue_valley_secret_passage_a",
+      "directory": "publication_remaining",
+      "native_status": "PASS",
+      "original_wrapper_status": "PASS",
+      "stdout_sha256": "3544c1108e88a8beac42190610dfa9cb57cab4e83d9088e025cdc860a25e6e21"
+    },
+    {
+      "map": "chiyue_valley_secret_passage_b",
+      "directory": "publication_remaining",
+      "native_status": "PASS",
+      "original_wrapper_status": "PASS",
+      "stdout_sha256": "76f1dc87e4eb0f3e53b2b2454e9031de3bcb7a75f02dca2969b98314a6a58be9"
+    }
+  ]
+}

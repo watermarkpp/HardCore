@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "reason": "Initial JSON serialization changed two equivalent decimal spellings in A; before native publication restore exact original bytes except approved role and revision. Original working byte hashes verified against c046 LF/CRLF clean representation. Writer now uses exact byte edits.",
+  "rows": [
+    {
+      "path": "map_editor_workspace/chiyue_valley_secret_passage_a/chiyue_valley_secret_passage_a.editor.json",
+      "initial_reserialized_sha256": "f940a332c30c146080be863d8adb3b39dd5ecd32877a894eebe06a82b3fa09d9",
+      "corrected_exact_patch_sha256": "450f157f8120be68c3aaf0dcc4359cf11f92be656a00c5fafff7e7a25ec5a307",
+      "original_work_bytes_sha256_verified": "5258f32ae32a4f944d065f8e26b130209cdf5767da14454b4f33be2e55fac309"
+    },
+    {
+      "path": "map_editor_workspace/chiyue_valley_secret_passage_b/chiyue_valley_secret_passage_b.editor.json",
+      "initial_reserialized_sha256": "a54dfe540f62e894d38a57d52f309fdad7797182df8fa901408a81b102bc80ba",
+      "corrected_exact_patch_sha256": "a54dfe540f62e894d38a57d52f309fdad7797182df8fa901408a81b102bc80ba",
+      "original_work_bytes_sha256_verified": "b636a5e7019c5e17882416285286dffe2f7c1de271f8631d548d32c1cef4c484"
+    }
+  ]
+}

@@ -23,13 +23,9 @@ const Bridge := preload(
 const REGISTRY_PATH := (
 	"res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
 )
-## R2-W2 finding C5: two half-applied one_way exits (mode=one_way but the
-## role/flag/reason still say bidirectional, no pair id, no reverse exit).
-## Pinned so any growth or fix of the set is detected.
-const KNOWN_ONE_WAY_SHAPE_VIOLATIONS := [
-	[916004, 916006],
-	[916005, 916007],
-]
+## C5's two incomplete one-way endpoints were repaired through authoring
+## and formal publication. Every released endpoint must now satisfy the
+## complete role/flag/mode/reason contract; no defect is whitelisted.
 ## R2-W2 finding: world_bich_province ground manifest drifted from the visual
 ## provenance hash in the 9944265c editor sync; pinned until refreshed.
 const KNOWN_GROUND_MANIFEST_PROVENANCE_DRIFT := ["world_bich_province"]
@@ -169,7 +165,7 @@ func _run() -> void:
 			var mode := str(exit_point.get("connection_mode", "bidirectional"))
 			var role := str(exit_point.get("portal_role", ""))
 			if mode == "one_way" or role == "one_way_endpoint":
-				# Shape compliance is asserted once via the pinned set below.
+				# Shape compliance is asserted for the full released set below.
 				continue
 			if role == "arrival_only_endpoint":
 				continue
@@ -197,11 +193,12 @@ func _run() -> void:
 	expect(violations.is_empty(), "; ".join(PackedStringArray(violations)))
 	var shape_violations := _one_way_shape_violations(maps)
 	expect(
-		shape_violations == KNOWN_ONE_WAY_SHAPE_VIOLATIONS,
-		"one_way shape violations must match the pinned C5 set, got %s" % [
+		shape_violations.is_empty(),
+		"every released one-way endpoint must be contract-shaped, got %s" % [
 			str(shape_violations)
 		]
 	)
+	_one_way_shape_counterexamples()
 	var drifted := provenance_drift.filter(
 		func(key: String) -> bool: return not KNOWN_GROUND_MANIFEST_PROVENANCE_DRIFT.has(key)
 	)
@@ -229,13 +226,30 @@ func _one_way_shape_violations(maps: Array) -> Array:
 		var runtime := _read_json(str(entry.get("runtime_path", "")))
 		var semantics: Dictionary = runtime.get("semantics", {})
 		for exit_point: Dictionary in semantics.get("map_exit_points", []):
-			if str(exit_point.get("connection_mode", "")) != "one_way":
+			if str(exit_point.get("connection_mode", "")) != "one_way" and str(exit_point.get("portal_role", "")) != "one_way_endpoint" and not bool(exit_point.get("one_way", false)):
 				continue
-			if str(exit_point.get("portal_role", "")) != "one_way_endpoint" \
-					or not bool(exit_point.get("one_way", false)):
+			if not _one_way_shape_valid(exit_point):
 				found.append([map_id, int(exit_point.get("target_map_id", -1))])
 	found.sort()
 	return found
+
+
+func _one_way_shape_valid(endpoint: Dictionary) -> bool:
+	return str(endpoint.get("connection_mode", "")) == "one_way" \
+		and str(endpoint.get("portal_role", "")) == "one_way_endpoint" \
+		and endpoint.get("one_way", null) is bool and endpoint.get("one_way", false) \
+		and endpoint.get("explicit_one_way_reason", null) is String \
+		and not str(endpoint.get("explicit_one_way_reason", "")).strip_edges().is_empty()
+
+
+func _one_way_shape_counterexamples() -> void:
+	var runtime := _read_json("res://assets/data/runtime/map_editor/chiyue_valley_secret_passage_a.runtime.json")
+	var positive: Dictionary = runtime.semantics.map_exit_points[1]
+	expect(_one_way_shape_valid(positive), "real released one-way positive control")
+	for fault: Dictionary in [{"one_way": false}, {"portal_role": "bidirectional_endpoint"}, {"connection_mode": "bidirectional"}, {"explicit_one_way_reason": " \t "}]:
+		var broken := positive.duplicate(true)
+		broken.merge(fault, true)
+		expect(not _one_way_shape_valid(broken), "one-way malformed shape accepted: %s" % fault)
 
 
 func _isolation_check(released_count: int) -> void:

@@ -1,0 +1,1603 @@
+{
+  "endpoints": 132,
+  "failures": [
+    "chiyue_valley_secret_passage_a authoring policy: [\"one_way_portal_role_required:map_exit_000002\"]",
+    "chiyue_valley_secret_passage_b authoring policy: [\"one_way_portal_role_required:map_exit_000002\"]"
+  ],
+  "maps": 67,
+  "rows": [
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_bich_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910001,
+      "tile": [
+        5.0,
+        6.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_bich_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910001,
+      "tile": [
+        72.0,
+        9.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_bich_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910001,
+      "tile": [
+        9.0,
+        71.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_bich_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000004",
+      "runtime_map_id": 910001,
+      "tile": [
+        40.0,
+        72.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_bich_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000005",
+      "runtime_map_id": 910001,
+      "tile": [
+        71.0,
+        71.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_snake_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910002,
+      "tile": [
+        24.0,
+        43.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_snake_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910002,
+      "tile": [
+        23.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_snake_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910002,
+      "tile": [
+        46.0,
+        13.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_mengzhong_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910003,
+      "tile": [
+        39.0,
+        78.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_mengzhong_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910003,
+      "tile": [
+        7.0,
+        79.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_mengzhong_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910003,
+      "tile": [
+        8.0,
+        8.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_mengzhong_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000004",
+      "runtime_map_id": 910003,
+      "tile": [
+        79.0,
+        78.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_mengzhong_province",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000005",
+      "runtime_map_id": 910003,
+      "tile": [
+        79.0,
+        8.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_wooma_forest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910004,
+      "tile": [
+        48.0,
+        6.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_wooma_forest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910004,
+      "tile": [
+        6.0,
+        6.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_wooma_forest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910004,
+      "tile": [
+        47.0,
+        48.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_wooma_forest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000004",
+      "runtime_map_id": 910004,
+      "tile": [
+        6.0,
+        49.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_wooma_forest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000005",
+      "runtime_map_id": 910004,
+      "tile": [
+        50.0,
+        28.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_wooma_forest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000006",
+      "runtime_map_id": 910004,
+      "tile": [
+        4.0,
+        31.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_fengmo_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910005,
+      "tile": [
+        40.0,
+        40.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_fengmo_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910005,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_fengmo_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910005,
+      "tile": [
+        43.0,
+        26.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_white_day_gate",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910006,
+      "tile": [
+        40.0,
+        41.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_white_day_gate",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910006,
+      "tile": [
+        6.0,
+        6.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_white_day_gate",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910006,
+      "tile": [
+        41.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_cangyue_island",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 910007,
+      "tile": [
+        6.0,
+        6.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_cangyue_island",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 910007,
+      "tile": [
+        44.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "world_cangyue_island",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 910007,
+      "tile": [
+        41.0,
+        41.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_orc_tomb_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 911001,
+      "tile": [
+        32.0,
+        2.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_orc_tomb_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 911001,
+      "tile": [
+        3.0,
+        35.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_orc_tomb_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 911002,
+      "tile": [
+        32.0,
+        2.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_orc_tomb_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 911002,
+      "tile": [
+        3.0,
+        35.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_orc_tomb_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 911003,
+      "tile": [
+        3.0,
+        35.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_mine_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 911101,
+      "tile": [
+        3.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_mine_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 911101,
+      "tile": [
+        47.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_mine_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 911102,
+      "tile": [
+        3.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_mine_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 911102,
+      "tile": [
+        47.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "bich_corpse_king_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 911103,
+      "tile": [
+        3.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "snake_mine_passage_1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 912001,
+      "tile": [
+        4.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "snake_mine_passage_1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 912001,
+      "tile": [
+        46.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "snake_mine_passage_2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 912002,
+      "tile": [
+        46.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "snake_mine_passage_2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 912002,
+      "tile": [
+        4.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "snake_unknown_dark_palace",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 912003,
+      "tile": [
+        21.0,
+        40.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913001,
+      "tile": [
+        4.0,
+        47.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913001,
+      "tile": [
+        22.0,
+        22.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913002,
+      "tile": [
+        4.0,
+        47.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913002,
+      "tile": [
+        22.0,
+        22.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913003,
+      "tile": [
+        4.0,
+        47.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913003,
+      "tile": [
+        22.0,
+        22.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913004,
+      "tile": [
+        4.0,
+        47.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_tomb_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913004,
+      "tile": [
+        22.0,
+        22.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913101,
+      "tile": [
+        44.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913101,
+      "tile": [
+        32.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913102,
+      "tile": [
+        44.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913102,
+      "tile": [
+        32.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913103,
+      "tile": [
+        44.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913103,
+      "tile": [
+        32.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913104,
+      "tile": [
+        44.0,
+        46.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_temple_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913104,
+      "tile": [
+        32.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_pavilion",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913105,
+      "tile": [
+        30.0,
+        28.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_pavilion",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913105,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_zuma_leader_home",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913106,
+      "tile": [
+        15.0,
+        41.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_death_valley_dungeon",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913201,
+      "tile": [
+        4.0,
+        42.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_death_valley_dungeon",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913201,
+      "tile": [
+        42.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_coffin_room",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913202,
+      "tile": [
+        4.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_stone_coffin_room",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913202,
+      "tile": [
+        26.0,
+        26.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_dark_area",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913203,
+      "tile": [
+        25.0,
+        57.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_dark_area",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913203,
+      "tile": [
+        26.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_between_life_and_death",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913204,
+      "tile": [
+        25.0,
+        57.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_between_life_and_death",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913204,
+      "tile": [
+        26.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_terror_space",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913205,
+      "tile": [
+        25.0,
+        57.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_terror_space",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913205,
+      "tile": [
+        26.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_thin_sky_passage",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913206,
+      "tile": [
+        25.0,
+        57.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_thin_sky_passage",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 913206,
+      "tile": [
+        26.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "mengzhong_death_coffin",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 913207,
+      "tile": [
+        25.0,
+        57.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_forked_path",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914001,
+      "tile": [
+        3.0,
+        14.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_forked_path",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914001,
+      "tile": [
+        60.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_light_corridor",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914002,
+      "tile": [
+        19.0,
+        19.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_light_corridor",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914002,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_thunder_road",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914003,
+      "tile": [
+        19.0,
+        19.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_thunder_road",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914003,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_bazhe_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914004,
+      "tile": [
+        19.0,
+        19.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_bazhe_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914004,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_zonghengdao",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914005,
+      "tile": [
+        19.0,
+        19.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_zonghengdao",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914005,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_mohun_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914006,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_mohun_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914006,
+      "tile": [
+        19.0,
+        19.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_purgatory_corridor",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914007,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_purgatory_corridor",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 914007,
+      "tile": [
+        19.0,
+        19.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "fengmo_final_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 914008,
+      "tile": [
+        59.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "wooma_temple_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 915001,
+      "tile": [
+        19.0,
+        1.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "wooma_temple_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 915001,
+      "tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "wooma_temple_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 915002,
+      "tile": [
+        19.0,
+        1.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "wooma_temple_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 915002,
+      "tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "wooma_temple_boss_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 915003,
+      "tile": [
+        20.0,
+        41.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916001,
+      "tile": [
+        22.0,
+        118.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_valley",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 916001,
+      "tile": [
+        23.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_valley_square",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916002,
+      "tile": [
+        48.0,
+        90.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_valley_square",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 916002,
+      "tile": [
+        45.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_choice_land",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916003,
+      "tile": [
+        48.0,
+        90.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_choice_land",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 916003,
+      "tile": [
+        45.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_choice_land",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000003",
+      "runtime_map_id": 916003,
+      "tile": [
+        87.0,
+        40.0
+      ]
+    },
+    {
+      "authoring_errors": [
+        "one_way_portal_role_required:map_exit_000002"
+      ],
+      "blocked": false,
+      "map_key": "chiyue_valley_secret_passage_a",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916004,
+      "tile": [
+        22.0,
+        118.0
+      ]
+    },
+    {
+      "authoring_errors": [
+        "one_way_portal_role_required:map_exit_000002"
+      ],
+      "blocked": false,
+      "map_key": "chiyue_valley_secret_passage_a",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 916004,
+      "tile": [
+        23.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [
+        "one_way_portal_role_required:map_exit_000002"
+      ],
+      "blocked": false,
+      "map_key": "chiyue_valley_secret_passage_b",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916005,
+      "tile": [
+        22.0,
+        118.0
+      ]
+    },
+    {
+      "authoring_errors": [
+        "one_way_portal_role_required:map_exit_000002"
+      ],
+      "blocked": false,
+      "map_key": "chiyue_valley_secret_passage_b",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 916005,
+      "tile": [
+        23.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_demon_altar",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916006,
+      "tile": [
+        14.0,
+        55.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "chiyue_red_moon_lair",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 916007,
+      "tile": [
+        4.0,
+        4.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917001,
+      "tile": [
+        77.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917001,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917002,
+      "tile": [
+        77.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917002,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917003,
+      "tile": [
+        77.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917003,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917004,
+      "tile": [
+        77.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917004,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bone_cave_f5",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917005,
+      "tile": [
+        77.0,
+        15.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917101,
+      "tile": [
+        76.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f1",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917101,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917102,
+      "tile": [
+        76.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f2",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917102,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917103,
+      "tile": [
+        76.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f3",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917103,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917104,
+      "tile": [
+        76.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_f4",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000002",
+      "runtime_map_id": 917104,
+      "tile": [
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "cangyue_bull_temple_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 917105,
+      "tile": [
+        76.0,
+        23.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "hidden_confusion_hall",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 918001,
+      "tile": [
+        27.0,
+        6.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "hidden_hellfire",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 918002,
+      "tile": [
+        14.0,
+        26.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "hidden_fallen_graveyard",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 918003,
+      "tile": [
+        25.0,
+        25.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "hidden_death_temple",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 918004,
+      "tile": [
+        14.0,
+        25.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "hidden_abyss_domain",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 918005,
+      "tile": [
+        24.0,
+        24.0
+      ]
+    },
+    {
+      "authoring_errors": [],
+      "blocked": false,
+      "map_key": "hidden_pincer_nest",
+      "player_radius_px": 18.0,
+      "portal_id": "map_exit_000001",
+      "runtime_map_id": 918006,
+      "tile": [
+        24.0,
+        24.0
+      ]
+    }
+  ],
+  "scope": "Real formal loader, authoring policy and production 18px footprint queries; not 132 physical walks or device acceptance."
+}
