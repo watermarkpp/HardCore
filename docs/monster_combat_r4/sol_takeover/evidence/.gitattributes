@@ -1,2 +1,3 @@
-*.log -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+# Captured native output is bound by raw SHA, including engine trailing spaces.
+*.log -text -whitespace
 *.json -text whitespace=blank-at-eol,space-before-tab,cr-at-eol

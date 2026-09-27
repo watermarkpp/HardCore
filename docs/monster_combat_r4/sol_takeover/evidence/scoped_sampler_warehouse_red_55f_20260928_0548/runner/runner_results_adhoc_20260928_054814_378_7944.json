@@ -1,0 +1,45 @@
+{
+  "engine_log_errors": 4,
+  "suite": "adhoc",
+  "total": 2,
+  "passed": 1,
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "native_physics_sampling_test",
+      "test_path": "tests/hc_monster_combat_r4/native_physics_sampling_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T21:48:25.1728368Z",
+      "native_exit_observed_utc": "2026-09-27T21:48:07.9849134Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "f03_warehouse_receipt_boundary_test",
+      "test_path": "tests/f03_warehouse_receipt_boundary_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-27T21:48:39.5133062Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 4,
+      "engine_log_failure_count": 4,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_4;engine_log_failures_4"
+    }
+  ],
+  "git_head": "55f32c34728eae0407bc3654b5c8f9ad339bc0ac",
+  "generated_at": "2026-09-28T05:48:14.3789373+08:00"
+}

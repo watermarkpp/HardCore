@@ -2,11 +2,16 @@ extends Node
 
 ## Identical test-only overlay for fixed R3 BASE and CAND. Engine physics owns
 ## all motion, attack clocks and effect/loot queues. One condition per process.
+## Sample at the end of every native physics callback. An idle-frame await can
+## skip catch-up ticks and make a fixed number of rows cover different work.
+signal native_physics_boundary
 const SCALES := [10, 20, 30]
 const MODES := ["small", "large_pets", "aoe_death_loot"]
 const SAMPLE_FRAMES := 600
 const SEED := 20260927
 const CENTER := Vector2(40.5, 13.5)
+const OBSERVER_PRIORITY := 1000000
+const PROCESS_SAMPLE_CAPACITY := 4096
 
 # Only the test random-input boundary differs from the production main scene
 # (whose root is a childless GameRoot Node2D). All cast/physics/queue code is
@@ -90,9 +95,33 @@ var corpse_refs: Array[WeakRef] = []
 var spawn_seed_inputs: Array = []
 var actor_seed_inputs: Array = []
 var scheduler_identity_inputs: Array = []
+var process_callbacks: Array = []
+var measuring_callbacks := false
+var previous_process_usec := 0
+var process_sample_overflow := false
 
 func _ready() -> void:
+	process_physics_priority = OBSERVER_PRIORITY
+	process_priority = OBSERVER_PRIORITY
+	set_physics_process(false)
 	_run.call_deferred()
+
+func _physics_process(_delta: float) -> void:
+	# Test observer only. All production actors keep their original priority,
+	# clocks and callbacks; the signal resumes after their native physics work.
+	native_physics_boundary.emit()
+
+func _process(_delta: float) -> void:
+	if not measuring_callbacks:
+		return
+	var now := Time.get_ticks_usec()
+	if process_callbacks.size() < PROCESS_SAMPLE_CAPACITY:
+		process_callbacks.append({"frame": Engine.get_process_frames(),
+			"tick": Engine.get_physics_frames(),
+			"process_callback_interval_ms": float(now - previous_process_usec) / 1000.0 if previous_process_usec > 0 else null})
+	else:
+		process_sample_overflow = true
+	previous_process_usec = now
 
 func _run() -> void:
 	trace_fixture_spawns = OS.get_environment("HARDCORE_R4_LOAD_FIXTURE_TRACE") == "1"
@@ -175,9 +204,15 @@ func _run() -> void:
 	# A real death transaction requires the initial formal world-clock snapshot.
 	# Save through the normal API before sampling; do not fake its sequence.
 	assert(PlayerState.save_game(false), "isolated production profile initialization failed: " + str(PlayerState.last_save_result))
+	set_physics_process(true)
+	var warm_ticks: Array[int] = []
 	for _warm in range(90):
-		await get_tree().physics_frame
-		await get_tree().process_frame
+		await native_physics_boundary
+		warm_ticks.append(Engine.get_physics_frames())
+	_check(warm_ticks.back() - warm_ticks.front() + 1 == 90, "warm_physics_ticks_skipped")
+	# Keep the cold cast outside the physics observer, at the same native
+	# idle-signal boundary used by the prior probe. Sampling starts afterwards.
+	await get_tree().process_frame
 	if mode == "aoe_death_loot":
 		_cast("wizard.fire_wall")
 	var cold_casts := casts.duplicate(true)
@@ -194,9 +229,12 @@ func _run() -> void:
 		initial_positions.append(actor.global_position)
 		previous_hp[actor.get_instance_id()] = actor.current_hp
 	var tick_start := Engine.get_physics_frames()
+	# The first native process callback establishes its own interval origin.
+	previous_process_usec = 0
+	measuring_callbacks = true
 	for frame in range(SAMPLE_FRAMES):
-		await get_tree().physics_frame
-		await get_tree().process_frame
+		await native_physics_boundary
+		_check(Engine.get_physics_frames() == tick_start + frame + 1, "native_physics_boundary_skipped:%d" % frame)
 		_sample_counters()
 		var living := 0
 		var corpses := 0
@@ -242,6 +280,8 @@ func _run() -> void:
 		_check(not PlayerState.test_mode, "production_hot_mode_bypassed:%d" % frame)
 		previous_usec = now
 		previous_enemy_usec = enemy_usec
+	measuring_callbacks = false
+	set_physics_process(false)
 	var actual_starts := retired_starts
 	var moved := 0
 	for i in range(actors.size()):
@@ -253,7 +293,8 @@ func _run() -> void:
 	for pet: SummonActor in pets:
 		if is_instance_valid(pet):
 			pet_attacks += pet._audio_attack_sequence
-	_check(frames.size() == SAMPLE_FRAMES and Engine.get_physics_frames() - tick_start >= SAMPLE_FRAMES, "insufficient_real_hot_frames")
+	_check(frames.size() == SAMPLE_FRAMES and Engine.get_physics_frames() - tick_start == SAMPLE_FRAMES, "native_hot_physics_count_mismatch")
+	_check(not process_sample_overflow and process_callbacks.size() >= 3, "process_callback_samples_missing_or_overflow")
 	_check((actual_starts > 0 and hp_start > game.player.current_hp) or deaths > 0 or pet_damage > 0, "inactive_workload")
 	if mode == "large_pets":
 		_check(pets.size() == 2 and pet_attacks > 0 and pet_damage > 0, "pets_not_actually_attacking")
@@ -296,6 +337,12 @@ func _run() -> void:
 	# Observe allocation-dependent staggering without clearing/resetting clocks,
 	# actor IDs or cooldowns to make work counts artificially equal.
 	result["scheduler_identity_inputs"] = scheduler_identity_inputs
+	result["sampling_boundary_version"] = "consecutive_native_physics_end.v1"
+	result["warm_physics_ticks"] = warm_ticks
+	result["hot_physics_tick_start"] = tick_start
+	result["process_callbacks"] = process_callbacks
+	result["process_sample_overflow"] = process_sample_overflow
+	result["sampling_boundary_note"] = "Consecutive native physics ticks and independent native process intervals. Engine monitors remain window values; no gameplay clocks or actor callbacks are driven by the observer."
 	get_tree().node_added.disconnect(_pin_spawn_inputs)
 	FileAccess.open("res://outputs/test_logs/r4_t6_load.json", FileAccess.WRITE).store_string(JSON.stringify(result, "  "))
 	game.queue_free()

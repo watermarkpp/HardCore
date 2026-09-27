@@ -1,0 +1,928 @@
+{
+  "status": "FAIL",
+  "scope": "Consecutive native physics identities; historical collection and performance verdicts remain unchanged.",
+  "actual_samples": 8,
+  "failures": 8,
+  "rows": [
+    {
+      "label": "aoe_death_loot-30-AA-1-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 668,
+      "skipped_physics_tick_count": 68,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 107,
+          "tick": 112
+        },
+        {
+          "index": 2,
+          "previous_tick": 112,
+          "tick": 117
+        },
+        {
+          "index": 3,
+          "previous_tick": 117,
+          "tick": 121
+        },
+        {
+          "index": 4,
+          "previous_tick": 121,
+          "tick": 123
+        },
+        {
+          "index": 108,
+          "previous_tick": 226,
+          "tick": 230
+        },
+        {
+          "index": 109,
+          "previous_tick": 230,
+          "tick": 233
+        },
+        {
+          "index": 122,
+          "previous_tick": 245,
+          "tick": 249
+        },
+        {
+          "index": 123,
+          "previous_tick": 249,
+          "tick": 252
+        },
+        {
+          "index": 124,
+          "previous_tick": 252,
+          "tick": 254
+        },
+        {
+          "index": 217,
+          "previous_tick": 346,
+          "tick": 350
+        },
+        {
+          "index": 218,
+          "previous_tick": 350,
+          "tick": 353
+        },
+        {
+          "index": 219,
+          "previous_tick": 353,
+          "tick": 355
+        },
+        {
+          "index": 222,
+          "previous_tick": 357,
+          "tick": 359
+        },
+        {
+          "index": 241,
+          "previous_tick": 377,
+          "tick": 380
+        },
+        {
+          "index": 242,
+          "previous_tick": 380,
+          "tick": 384
+        },
+        {
+          "index": 243,
+          "previous_tick": 384,
+          "tick": 387
+        },
+        {
+          "index": 323,
+          "previous_tick": 466,
+          "tick": 470
+        },
+        {
+          "index": 324,
+          "previous_tick": 470,
+          "tick": 473
+        },
+        {
+          "index": 361,
+          "previous_tick": 509,
+          "tick": 511
+        },
+        {
+          "index": 362,
+          "previous_tick": 511,
+          "tick": 515
+        },
+        {
+          "index": 363,
+          "previous_tick": 515,
+          "tick": 518
+        },
+        {
+          "index": 364,
+          "previous_tick": 518,
+          "tick": 520
+        },
+        {
+          "index": 431,
+          "previous_tick": 586,
+          "tick": 590
+        },
+        {
+          "index": 432,
+          "previous_tick": 590,
+          "tick": 593
+        },
+        {
+          "index": 433,
+          "previous_tick": 593,
+          "tick": 595
+        },
+        {
+          "index": 482,
+          "previous_tick": 643,
+          "tick": 647
+        },
+        {
+          "index": 483,
+          "previous_tick": 647,
+          "tick": 650
+        },
+        {
+          "index": 484,
+          "previous_tick": 650,
+          "tick": 652
+        },
+        {
+          "index": 490,
+          "previous_tick": 657,
+          "tick": 659
+        },
+        {
+          "index": 538,
+          "previous_tick": 706,
+          "tick": 710
+        },
+        {
+          "index": 539,
+          "previous_tick": 710,
+          "tick": 713
+        },
+        {
+          "index": 540,
+          "previous_tick": 713,
+          "tick": 715
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AA-2-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 659,
+      "skipped_physics_tick_count": 59,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 107,
+          "tick": 111
+        },
+        {
+          "index": 2,
+          "previous_tick": 111,
+          "tick": 116
+        },
+        {
+          "index": 3,
+          "previous_tick": 116,
+          "tick": 120
+        },
+        {
+          "index": 110,
+          "previous_tick": 226,
+          "tick": 229
+        },
+        {
+          "index": 111,
+          "previous_tick": 229,
+          "tick": 232
+        },
+        {
+          "index": 122,
+          "previous_tick": 242,
+          "tick": 246
+        },
+        {
+          "index": 123,
+          "previous_tick": 246,
+          "tick": 249
+        },
+        {
+          "index": 221,
+          "previous_tick": 346,
+          "tick": 350
+        },
+        {
+          "index": 222,
+          "previous_tick": 350,
+          "tick": 353
+        },
+        {
+          "index": 242,
+          "previous_tick": 372,
+          "tick": 376
+        },
+        {
+          "index": 243,
+          "previous_tick": 376,
+          "tick": 379
+        },
+        {
+          "index": 331,
+          "previous_tick": 466,
+          "tick": 470
+        },
+        {
+          "index": 332,
+          "previous_tick": 470,
+          "tick": 473
+        },
+        {
+          "index": 333,
+          "previous_tick": 473,
+          "tick": 475
+        },
+        {
+          "index": 362,
+          "previous_tick": 503,
+          "tick": 508
+        },
+        {
+          "index": 363,
+          "previous_tick": 508,
+          "tick": 512
+        },
+        {
+          "index": 438,
+          "previous_tick": 586,
+          "tick": 590
+        },
+        {
+          "index": 439,
+          "previous_tick": 590,
+          "tick": 593
+        },
+        {
+          "index": 440,
+          "previous_tick": 593,
+          "tick": 595
+        },
+        {
+          "index": 482,
+          "previous_tick": 636,
+          "tick": 640
+        },
+        {
+          "index": 483,
+          "previous_tick": 640,
+          "tick": 643
+        },
+        {
+          "index": 547,
+          "previous_tick": 706,
+          "tick": 711
+        },
+        {
+          "index": 548,
+          "previous_tick": 711,
+          "tick": 714
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AB-1-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 662,
+      "skipped_physics_tick_count": 62,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 106,
+          "tick": 109
+        },
+        {
+          "index": 2,
+          "previous_tick": 109,
+          "tick": 114
+        },
+        {
+          "index": 3,
+          "previous_tick": 114,
+          "tick": 118
+        },
+        {
+          "index": 112,
+          "previous_tick": 226,
+          "tick": 230
+        },
+        {
+          "index": 113,
+          "previous_tick": 230,
+          "tick": 233
+        },
+        {
+          "index": 122,
+          "previous_tick": 241,
+          "tick": 245
+        },
+        {
+          "index": 123,
+          "previous_tick": 245,
+          "tick": 248
+        },
+        {
+          "index": 124,
+          "previous_tick": 248,
+          "tick": 250
+        },
+        {
+          "index": 221,
+          "previous_tick": 346,
+          "tick": 350
+        },
+        {
+          "index": 222,
+          "previous_tick": 350,
+          "tick": 353
+        },
+        {
+          "index": 242,
+          "previous_tick": 372,
+          "tick": 376
+        },
+        {
+          "index": 243,
+          "previous_tick": 376,
+          "tick": 379
+        },
+        {
+          "index": 244,
+          "previous_tick": 379,
+          "tick": 381
+        },
+        {
+          "index": 330,
+          "previous_tick": 466,
+          "tick": 471
+        },
+        {
+          "index": 331,
+          "previous_tick": 471,
+          "tick": 475
+        },
+        {
+          "index": 362,
+          "previous_tick": 505,
+          "tick": 509
+        },
+        {
+          "index": 363,
+          "previous_tick": 509,
+          "tick": 512
+        },
+        {
+          "index": 364,
+          "previous_tick": 512,
+          "tick": 515
+        },
+        {
+          "index": 436,
+          "previous_tick": 586,
+          "tick": 590
+        },
+        {
+          "index": 437,
+          "previous_tick": 590,
+          "tick": 593
+        },
+        {
+          "index": 482,
+          "previous_tick": 637,
+          "tick": 642
+        },
+        {
+          "index": 483,
+          "previous_tick": 642,
+          "tick": 644
+        },
+        {
+          "index": 484,
+          "previous_tick": 644,
+          "tick": 646
+        },
+        {
+          "index": 489,
+          "previous_tick": 650,
+          "tick": 652
+        },
+        {
+          "index": 544,
+          "previous_tick": 706,
+          "tick": 710
+        },
+        {
+          "index": 545,
+          "previous_tick": 710,
+          "tick": 713
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AB-1-CAND",
+      "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 614,
+      "skipped_physics_tick_count": 14,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 107,
+          "tick": 109
+        },
+        {
+          "index": 2,
+          "previous_tick": 109,
+          "tick": 112
+        },
+        {
+          "index": 3,
+          "previous_tick": 112,
+          "tick": 114
+        },
+        {
+          "index": 4,
+          "previous_tick": 114,
+          "tick": 116
+        },
+        {
+          "index": 116,
+          "previous_tick": 227,
+          "tick": 229
+        },
+        {
+          "index": 122,
+          "previous_tick": 234,
+          "tick": 236
+        },
+        {
+          "index": 234,
+          "previous_tick": 347,
+          "tick": 349
+        },
+        {
+          "index": 242,
+          "previous_tick": 356,
+          "tick": 358
+        },
+        {
+          "index": 352,
+          "previous_tick": 467,
+          "tick": 469
+        },
+        {
+          "index": 363,
+          "previous_tick": 479,
+          "tick": 481
+        },
+        {
+          "index": 470,
+          "previous_tick": 587,
+          "tick": 589
+        },
+        {
+          "index": 482,
+          "previous_tick": 600,
+          "tick": 602
+        },
+        {
+          "index": 588,
+          "previous_tick": 707,
+          "tick": 709
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AB-2-CAND",
+      "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 611,
+      "skipped_physics_tick_count": 11,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 106,
+          "tick": 108
+        },
+        {
+          "index": 2,
+          "previous_tick": 108,
+          "tick": 111
+        },
+        {
+          "index": 3,
+          "previous_tick": 111,
+          "tick": 113
+        },
+        {
+          "index": 117,
+          "previous_tick": 226,
+          "tick": 228
+        },
+        {
+          "index": 122,
+          "previous_tick": 232,
+          "tick": 234
+        },
+        {
+          "index": 236,
+          "previous_tick": 347,
+          "tick": 349
+        },
+        {
+          "index": 354,
+          "previous_tick": 466,
+          "tick": 468
+        },
+        {
+          "index": 473,
+          "previous_tick": 586,
+          "tick": 588
+        },
+        {
+          "index": 482,
+          "previous_tick": 596,
+          "tick": 598
+        },
+        {
+          "index": 591,
+          "previous_tick": 706,
+          "tick": 708
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AB-2-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 662,
+      "skipped_physics_tick_count": 62,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 106,
+          "tick": 110
+        },
+        {
+          "index": 2,
+          "previous_tick": 110,
+          "tick": 114
+        },
+        {
+          "index": 3,
+          "previous_tick": 114,
+          "tick": 117
+        },
+        {
+          "index": 4,
+          "previous_tick": 117,
+          "tick": 119
+        },
+        {
+          "index": 112,
+          "previous_tick": 226,
+          "tick": 230
+        },
+        {
+          "index": 113,
+          "previous_tick": 230,
+          "tick": 233
+        },
+        {
+          "index": 114,
+          "previous_tick": 233,
+          "tick": 235
+        },
+        {
+          "index": 115,
+          "previous_tick": 235,
+          "tick": 237
+        },
+        {
+          "index": 122,
+          "previous_tick": 243,
+          "tick": 248
+        },
+        {
+          "index": 123,
+          "previous_tick": 248,
+          "tick": 251
+        },
+        {
+          "index": 124,
+          "previous_tick": 251,
+          "tick": 253
+        },
+        {
+          "index": 218,
+          "previous_tick": 346,
+          "tick": 350
+        },
+        {
+          "index": 219,
+          "previous_tick": 350,
+          "tick": 353
+        },
+        {
+          "index": 220,
+          "previous_tick": 353,
+          "tick": 355
+        },
+        {
+          "index": 223,
+          "previous_tick": 357,
+          "tick": 359
+        },
+        {
+          "index": 242,
+          "previous_tick": 377,
+          "tick": 382
+        },
+        {
+          "index": 243,
+          "previous_tick": 382,
+          "tick": 384
+        },
+        {
+          "index": 326,
+          "previous_tick": 466,
+          "tick": 470
+        },
+        {
+          "index": 327,
+          "previous_tick": 470,
+          "tick": 473
+        },
+        {
+          "index": 362,
+          "previous_tick": 507,
+          "tick": 511
+        },
+        {
+          "index": 363,
+          "previous_tick": 511,
+          "tick": 514
+        },
+        {
+          "index": 436,
+          "previous_tick": 586,
+          "tick": 590
+        },
+        {
+          "index": 437,
+          "previous_tick": 590,
+          "tick": 593
+        },
+        {
+          "index": 482,
+          "previous_tick": 637,
+          "tick": 641
+        },
+        {
+          "index": 483,
+          "previous_tick": 641,
+          "tick": 644
+        },
+        {
+          "index": 488,
+          "previous_tick": 648,
+          "tick": 650
+        },
+        {
+          "index": 545,
+          "previous_tick": 706,
+          "tick": 711
+        },
+        {
+          "index": 546,
+          "previous_tick": 711,
+          "tick": 714
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AB-3-BASE",
+      "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 664,
+      "skipped_physics_tick_count": 64,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 106,
+          "tick": 109
+        },
+        {
+          "index": 2,
+          "previous_tick": 109,
+          "tick": 114
+        },
+        {
+          "index": 3,
+          "previous_tick": 114,
+          "tick": 118
+        },
+        {
+          "index": 112,
+          "previous_tick": 226,
+          "tick": 230
+        },
+        {
+          "index": 113,
+          "previous_tick": 230,
+          "tick": 233
+        },
+        {
+          "index": 122,
+          "previous_tick": 241,
+          "tick": 244
+        },
+        {
+          "index": 123,
+          "previous_tick": 244,
+          "tick": 247
+        },
+        {
+          "index": 124,
+          "previous_tick": 247,
+          "tick": 249
+        },
+        {
+          "index": 222,
+          "previous_tick": 346,
+          "tick": 350
+        },
+        {
+          "index": 223,
+          "previous_tick": 350,
+          "tick": 353
+        },
+        {
+          "index": 224,
+          "previous_tick": 353,
+          "tick": 355
+        },
+        {
+          "index": 225,
+          "previous_tick": 355,
+          "tick": 357
+        },
+        {
+          "index": 233,
+          "previous_tick": 364,
+          "tick": 366
+        },
+        {
+          "index": 242,
+          "previous_tick": 374,
+          "tick": 378
+        },
+        {
+          "index": 243,
+          "previous_tick": 378,
+          "tick": 381
+        },
+        {
+          "index": 244,
+          "previous_tick": 381,
+          "tick": 383
+        },
+        {
+          "index": 328,
+          "previous_tick": 466,
+          "tick": 470
+        },
+        {
+          "index": 329,
+          "previous_tick": 470,
+          "tick": 473
+        },
+        {
+          "index": 362,
+          "previous_tick": 505,
+          "tick": 509
+        },
+        {
+          "index": 363,
+          "previous_tick": 509,
+          "tick": 512
+        },
+        {
+          "index": 364,
+          "previous_tick": 512,
+          "tick": 515
+        },
+        {
+          "index": 436,
+          "previous_tick": 586,
+          "tick": 590
+        },
+        {
+          "index": 437,
+          "previous_tick": 590,
+          "tick": 593
+        },
+        {
+          "index": 438,
+          "previous_tick": 593,
+          "tick": 596
+        },
+        {
+          "index": 482,
+          "previous_tick": 639,
+          "tick": 643
+        },
+        {
+          "index": 483,
+          "previous_tick": 643,
+          "tick": 646
+        },
+        {
+          "index": 544,
+          "previous_tick": 706,
+          "tick": 711
+        },
+        {
+          "index": 545,
+          "previous_tick": 711,
+          "tick": 715
+        }
+      ]
+    },
+    {
+      "label": "aoe_death_loot-30-AB-3-CAND",
+      "source_head": "e367150b0c46c040e67b4ebd1b750ccd1ff5a536",
+      "status": "FAIL",
+      "samples": 600,
+      "actual_physics_tick_span": 611,
+      "skipped_physics_tick_count": 11,
+      "nonconsecutive_boundaries": [
+        {
+          "index": 1,
+          "previous_tick": 106,
+          "tick": 109
+        },
+        {
+          "index": 2,
+          "previous_tick": 109,
+          "tick": 112
+        },
+        {
+          "index": 3,
+          "previous_tick": 112,
+          "tick": 115
+        },
+        {
+          "index": 4,
+          "previous_tick": 115,
+          "tick": 117
+        },
+        {
+          "index": 114,
+          "previous_tick": 226,
+          "tick": 228
+        },
+        {
+          "index": 233,
+          "previous_tick": 346,
+          "tick": 348
+        },
+        {
+          "index": 242,
+          "previous_tick": 356,
+          "tick": 358
+        },
+        {
+          "index": 351,
+          "previous_tick": 466,
+          "tick": 468
+        }
+      ]
+    }
+  ]
+}

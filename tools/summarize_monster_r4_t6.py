@@ -19,7 +19,7 @@ def summarize(path):
     cpu = [f["enemy_inclusive_cpu_ms"] for f in frames]
     intervals = [f["physics_callback_interval_ms"] for f in frames]
     counters = data["counter_deltas"]
-    return {
+    result = {
         "label": data["label"], "head": data["source_head"],
         "enemy_cpu_mean_per_callback_ms": statistics.mean(cpu),
         "enemy_cpu_p95_per_callback_ms": percentile(cpu, .95),
@@ -43,6 +43,22 @@ def summarize(path):
         "queries": {k: v for k, v in counters.items() if any(x in k for x in ("query", "queries", "candidates", "path_expansions", "attack_los_"))},
         "failures": data["failures"],
     }
+    if data.get("sampling_boundary_version") == "consecutive_native_physics_end.v1":
+        ticks = [frame["tick"] for frame in frames]
+        assert len(ticks) == 600 and ticks == list(range(data["hot_physics_tick_start"] + 1, data["hot_physics_tick_start"] + 601))
+        process_samples = data["process_callbacks"]
+        assert len(process_samples) >= 3 and not data["process_sample_overflow"]
+        assert process_samples[0]["process_callback_interval_ms"] is None
+        process_intervals = [frame["process_callback_interval_ms"] for frame in process_samples[1:]]
+        assert all(value is not None and value >= 0 for value in process_intervals)
+        result["sampling_boundary_version"] = data["sampling_boundary_version"]
+        result["process_callback_count"] = len(process_intervals)
+        result["process_callback_interval_mean_ms"] = statistics.mean(process_intervals)
+        result["process_callback_interval_p95_ms"] = percentile(process_intervals, .95)
+        result["process_callback_interval_p99_ms"] = percentile(process_intervals, .99)
+        result["process_callbacks_over_33_33_ms"] = sum(value > 33.33 for value in process_intervals)
+        result["process_callbacks_over_50_ms"] = sum(value > 50 for value in process_intervals)
+    return result
 
 
 def main():

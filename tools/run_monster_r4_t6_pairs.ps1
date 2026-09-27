@@ -30,7 +30,8 @@ $identity = [ordered]@{
     hot_mode='PlayerState.test_mode=false; unique isolated profile initialized through real save_game(false); native death clocks, drop throttling and background loot enabled. Bootstrap alone uses test_mode.'
     runner_sha256=(Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/run_godot_tests.ps1')).Hash
     engine_sha256=(Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/godot-4.7/Godot_v4.7-stable_win64_console.exe')).Hash
-    scene_timeout_seconds=60; heavy_reason='600 paired physics/process callbacks can span 1200 ticks (20s) plus full native bootstrap/warmup and teardown'; modes=$Modes; scales=$Scales; frames=600; seed=20260927
+    scene_timeout_seconds=60; heavy_reason='600 consecutive native physics ticks plus full native bootstrap/warmup and teardown'; modes=$Modes; scales=$Scales; frames=600; seed=20260927
+    sampling_boundary_version='consecutive_native_physics_end.v1'
     aa_per_condition=2; ab_pairs_per_condition=3; order='AA then AB/BA/AB, one process at a time'
     cache='Independent already-imported trees; fresh engine process per sample; same shared read-only source art and engine; OS file cache not forcibly purged'
     measurement='Desktop headless callback intervals and script CPU only; engine monitor averages not per-frame P95; GPU and device NOT_RUN'
@@ -63,6 +64,11 @@ function Invoke-Sample([string]$Side,[string]$Mode,[int]$Scale,[string]$Phase,[i
     if ($exitCode -ne 0) {throw "Invalid load sample: $label"}
     $data=Get-Content -LiteralPath (Join-Path $dest 'load.json') -Raw | ConvertFrom-Json
     if ($data.label -ne $label -or $data.frames.Count -ne 600 -or $data.failures.Count -ne 0) {throw "Stale/invalid result: $label"}
+    if ($data.sampling_boundary_version -ne $identity.sampling_boundary_version -or $data.process_sample_overflow -or $data.process_callbacks.Count -lt 3) {throw 'Native callback observation missing'}
+    if ($null -ne $data.process_callbacks[0].process_callback_interval_ms) {throw 'First native process boundary must establish its own interval origin'}
+    for ($sampleIndex=0; $sampleIndex -lt 600; $sampleIndex++) {
+        if ([long]$data.frames[$sampleIndex].tick -ne [long]$data.hot_physics_tick_start + $sampleIndex + 1) {throw 'Skipped or duplicated native physics tick'}
+    }
     if ($data.observation_detail_mode -ne $DetailMode) {throw 'Observation detail differs'}
     if ($DetailMode -eq 'frame_only' -and ($data.enemy_cpu_attribution -ne 'NOT_RUN' -or @($data.frames | Where-Object {$null -ne $_.enemy_inclusive_cpu_ms}).Count -ne 0)) {throw 'Frame-only CPU attribution must be absent'}
     if ($data.production_hot_test_mode -ne $false -or $data.isolated_profile_id -ne "r4-t6-$label") {throw 'Production hot-path isolation contract failed'}
