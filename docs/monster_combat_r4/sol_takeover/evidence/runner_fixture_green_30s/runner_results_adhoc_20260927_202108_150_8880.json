@@ -1,0 +1,26 @@
+{
+  "total": 1,
+  "passed": 0,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "case3_pass_then_nonzero_exit",
+      "test_path": "tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 7,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 7,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "non_zero_exit_code_7"
+    }
+  ],
+  "failed": 1,
+  "git_head": "3b21c115da6b8d5ed57e706432912dafcb377748",
+  "generated_at": "2026-09-27T20:21:08.1506721+08:00",
+  "suite": "adhoc"
+}

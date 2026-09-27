@@ -1,0 +1,54 @@
+{
+  "status": "NOT_RUN",
+  "files": [
+    {
+      "path": "tests/runner_fixtures/case1_pass.tscn",
+      "before_sha256": "ab1ee983bd90ce48044ee526ef8bba0fd31e1b44cac88df60a73816fcd90a6a3",
+      "after_sha256": "9f9dd2750b1933b8f7f020315adc748bd7c0792382ffb4418dd0b376306fb68d",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/case2_pass_then_assert.tscn",
+      "before_sha256": "a41eca204f6c6b2ca0f016052e82fa0c51ae166bac63c95e80971069f8031e5e",
+      "after_sha256": "73e3106acb9c54edacfb4ec9dd2adeb251470ce9b821a7276c8e875da0cdd530",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn",
+      "before_sha256": "92f9a7a07bb91f396ed6b844dfdab05ce09781fe33a1ba9739bcdb467a3d73da",
+      "after_sha256": "bbbd2245f799fa2777209f94cddc096169b3126fbb01768abc9e438a6d6a5591",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/case4_pass_then_hang.tscn",
+      "before_sha256": "ab55de08f20086179f77d3bf14fda9d8f916b5ba0084dfa5c0b0f277e0774e31",
+      "after_sha256": "3bbf475d3bc848fdfe3f2e540fa935416c3da0c3757cf93fa1fea97a6454b91a",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/case5_no_pass_exit_zero.tscn",
+      "before_sha256": "7e705185d31da03ab38fbca852a40f7f9d1a4c383e25d058f6c0fc215a4e422a",
+      "after_sha256": "7ed30094d5bb855bb3ea2dc5fd60291bdb22fd8cc9180dcbca648d857ad3ac63",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/case6_engine_log_fatal.tscn",
+      "before_sha256": "462062e11e19730d57663cc88f9a0f6085edc678f09845e2ba7961c9f463cb29",
+      "after_sha256": "8f295e8cd24b407a99cf044e93a8613f721a3877f4c2cd752bc4d4a136d0707a",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/case7_parse_error.tscn",
+      "before_sha256": "754bd9ed19d268ba1964387b910c2d1fd03bfc10d768d96287d0d43187a69162",
+      "after_sha256": "2d3ac293ea2232a3d52e055fa6f3d52077c8a9e7a246f81a7c3b5045b8ee245b",
+      "change": "remove UTF8 BOM only"
+    },
+    {
+      "path": "tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn",
+      "before_sha256": "baa848f5771f93d66b8117491125b282265cafb4ef1e09949f17ce4ff8cbb04a",
+      "after_sha256": "cb6eb79d22fe9fbb71c96d1632eb0825fb9360c613bb87cd52815cf353f18c75",
+      "change": "remove UTF8 BOM only"
+    }
+  ],
+  "import_exclusion": "intentional failure fixtures are loaded explicitly by runner self-test; editor should not pre-import them"
+}

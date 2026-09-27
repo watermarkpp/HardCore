@@ -1,5 +1,5 @@
 param(
-    [int]$FixtureTimeoutSeconds = 3
+    [int]$FixtureTimeoutSeconds = 30
 )
 
 $ErrorActionPreference = 'Stop'

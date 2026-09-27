@@ -1,0 +1,26 @@
+{
+  "git_head": "3b21c115da6b8d5ed57e706432912dafcb377748",
+  "generated_at": "2026-09-27T20:20:04.0022306+08:00",
+  "results": [
+    {
+      "test_name": "case4_pass_then_hang",
+      "test_path": "tests/runner_fixtures/case4_pass_then_hang.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;timeout_3s;non_zero_exit_code_-1"
+    }
+  ],
+  "passed": 0,
+  "suite": "adhoc",
+  "total": 1,
+  "engine_log_errors": 0,
+  "failed": 1
+}

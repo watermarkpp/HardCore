@@ -1,0 +1,21 @@
+{
+  "critical_source": "3b21c115da6b8d5ed57e706432912dafcb377748",
+  "changed_paths": [
+    "tests/hc_monster_combat_r4/t6_real_load_probe.gd",
+    "tests/runner_fixtures/.gdignore",
+    "tests/runner_fixtures/case1_pass.tscn",
+    "tests/runner_fixtures/case2_pass_then_assert.tscn",
+    "tests/runner_fixtures/case3_pass_then_nonzero_exit.tscn",
+    "tests/runner_fixtures/case4_pass_then_hang.tscn",
+    "tests/runner_fixtures/case5_no_pass_exit_zero.tscn",
+    "tests/runner_fixtures/case6_engine_log_fatal.tscn",
+    "tests/runner_fixtures/case7_parse_error.tscn",
+    "tests/runner_fixtures/runner_engine_log_safe_logout_error_fixture.tscn",
+    "tools/run_monster_r4_t6_pairs.ps1",
+    "tools/test_run_godot_tests_runner.ps1"
+  ],
+  "critical_member_changes": [],
+  "critical_paths_count": 525,
+  "production_diff_exit": 0,
+  "note": "Only test identity overlay, intentional runner failure fixtures and runner self-test budget changed after full525. Actual clean103 and v5 performance still required."
+}

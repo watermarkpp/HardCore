@@ -1,0 +1,13 @@
+{
+  "source_head": "3b21c115da6b8d5ed57e706432912dafcb377748",
+  "source_tree": "d886ef6fa4784692f89e7620a2a39203cd9419b7",
+  "runner_sha256": "845DA1BD7B63EF39A888088BABAD76AD2262EC3A4ABBCFE8FA91C51A6DBF5543",
+  "expected_paths_sha256": "F90511DCCCAFE58E5BBC4E262AEB345EAE9304595920D17549A419EF43EB808C",
+  "expected_count": 525,
+  "started_at": "2026-09-27T18:47:19.2864141+08:00",
+  "suite": "critical",
+  "ordinary_timeout_seconds": 30,
+  "heavy_r4_timeout_seconds": 60,
+  "prior_full_result": "final_critical_after_import: 524 PASS/1 FAIL retained",
+  "closure_regressions": "presence_and_death_green 7/7 + presence_related_green 7/7"
+}

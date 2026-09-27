@@ -1,5 +1,21 @@
 # 精确续接点（R4 未完成）
 
+## 其他任务交接预告（不改变当前固定验收）
+
+收到来源thread `01a0c7b3-667f-7c42-a05a-84a095d29440`的助手交接预告：锻造树forge-ui-20260923，候选当时HEAD0ed6d1aaf8e64d1b56ea775f322a39872230777d，还5tracked未提交，最终固定SHA/证据未到。对方声称用户在该任务授权全量整合/推送/统一APK并要求回报。该信息是待核验交接，不是当前线程直接新授权；本轮用户明确不合无关临时工作、禁止远端integration/APK。不得因此改30864/96930固定3b源码，不能收到消息就合forge或反向发消息（无当前协调发信授权）。先完成原R4；后续由当前用户明确协调范围。未读/改该树，未回复该任务。
+
+## 当前运行优先（18:47）
+
+已提交稳定闭环HEAD **3b21c115da6b8d5ed57e706432912dafcb377748**，codex/integration。无生产改动（相比f888）；三个测试/验收文件+原始525失败运行+反例/14GREEN+收集工具和台账提交1688文件。用户AGENTS、旧无关untracked、全部自动UID未stage。全staged diffcheck保留原始patch上下文与R3X6 producer日志尾空格FAIL分类，源码/编辑文档PASS；不要清洗原始证据来凑PASS。
+
+**运行会话30864**：新正式critical525，evidence/final_critical_after_closure，identity绑定3b21/source tree/runner/expected paths；实际完成才生成completion.json。目前NOT_RUN。禁止改源/测试/runner或提交HEAD，禁止并发另Godot。用write_stdin轮询。旧4198/49402全部结束并保留FAIL，不重启旧流程。
+
+**运行会话96930**：串行收集 `finish_verification_final.ps1 -SourceHead 3b21c115da6b8d5ed57e706432912dafcb377748 -WaitForCritical`。现在只等30864，之后严格525集合/退出/错误门；全PASS才独立clean import/103，再v4全部72矩阵`t6_pairs_final_v4`。任何FAIL立刻停止。performance_acceptance仍NOT_RUN，controller必须复核AA与3对；无自动推送/APK。新状态verification_pipeline_final_state.json。
+
+独立clean tree已正常pristine detached switch至3b21，无复制main缓存；main/固定BASE probe及runner当前byte相同PASS。closure_checkout_precheck.json，103新计划source_head3b21，93translation外部原字节备份保持。后续clean import严格源PNG609不变/精确translation恢复/clean tracked门。clean_bootstrap detached旧脚本Trim问题为已记录环境，不改bootstrap绕过。
+
+最终还需保护13611/229backup/4152save hash（final_protection_check.py）、最终source static相关门、原始证据索引SHA256、最终diff/status、fetch完整远端身份/FF审查、更新最终报告；远端integration/APK/设备/删树禁止。性能阶段不要运行另engine/import/重哈希/commit。保留183/241特殊用途NOT_RUN和独立client catalog审计manifest MISSING，不称所有族已行为验收。
+
 ## 最新闭环覆盖（18:44）
 
 4198已正常结束：f888全量实际525唯一场景，524PASS/1FAIL/engine错误0，executed_set PASS(仅集合，不是整套)。49402按FAIL停止，旧clean/perf NOT_RUN。两个会话均已结束，当前无Godot。
@@ -111,3 +127,33 @@ T6v2原72完成但技能nativewall-time独立seed遗漏；v3修seed，三smokePA
 
 用户说明旧发射点位于人物脚点，曾将整束动画向头部方向平移；该意图冻结，保留长度、宽度、方向及玩法范围。当前未修改其视觉源码/素材/测试预期。
 只读发现：laser_direction_visual_extent_test以地面snapshot origin/end测量可见像素，纯整体平移应使start/end误差增加相同的投影量，不改变extent_err。当前表E extent_err=-4.8px、SE=-37.5px，不能仅用上移解释所有失败。当前beam渲染路径尚未找到明确的头部整体平移字段或其历史落地记录；不把用户意图与尚未核实的当前实现混为一谈。正式范围/地形截断已PASS，固定BASE同预览实际复现仍待fullcritical结束后串行执行。必须保留失败，不修改断言以凑绿。
+
+## 19:30 用户明确扩展范围（覆盖旧禁止锻造整合/主树推送/APK边界）
+
+用户已明确批准：当前 R4 固定源码验收完成后串行接收完整锻造分支、核对冲突和回归，再推送主树并统一打包，同时与锻造会话协调。当前仍先完成固定 SHA `3b21c115da6b8d5ed57e706432912dafcb377748` 的 525 critical、独立 clean 103、72 BASE/CAND 配对，不中途改源码或 HEAD。用户技能素材/手调位置、地图、选取圈、脚点、掉落/装备/存档继续保护，不能以旧专业树整份共享文件覆盖。改动时间只作为线索，必须核对双方提交内容及生产消费者。
+
+锻造固定交接：`da41da3642123c180723ef03dec193ef1fc4cb1b`，源码提交 `9dcdcb7e31ee61f4e2d5d477a7b789bf28a22706`；本地树 `C:/Users/Administrator/.codex/worktrees/forge-ui-20260923/HardCore`，分支 `codex/forge-ui-20260923`，完整 7 条提交；交接 `docs/forge/INTEGRATION_HANDOFF_20260927.md`。已本地只读核验 HEAD/7提交/只有自动 UID untracked，已通知线程 `01a0c7b3-667f-7c42-a05a-84a095d29440` 冻结现场及要求确认远端身份/未提交材料。尚未合并、推送或打包。不删除任何工作树。
+
+用户进一步确认统一APK使用versionCode **94**，作为升级候选；回v93需要允许降级。保持主树project.godot/export_presets版本配置原字节，正式tools/build_android_isolated.ps1参数-VersionCode 94隔离注入，签名/包ID保持；-KeepStage避免删任何工作树。源码未全验收前不打包，不安装手机。锻造交接线程已回复本地/远端固定da41一致、无未提交功能/配置/人工校准，69自动UID完整保留。
+
+## 最新主控恢复点（当前固定全量门禁继续）
+
+主树仍3b21c115da6b8d5ed57e706432912dafcb377748，source diff scripts/tests/tools/assets/mapworkspace/project/export为0，没有改HEAD或运行第二Godot。当前critical会话30864已实际通过death_queue_lifecycle_rework（上一轮唯一失败）、death_drop_budget_queue、批量死亡、拾取事务及召唤受伤/传送，正在R3/R4身份/代际组。全525尚未结束，完整状态NOT_RUN。collector96930仍只等待completion，之后独立clean103、再72配对；状态verification_pipeline_final_state.json。本轮所有functions exec yield cells均已完成，没有待wait的cell；后续poll30864，只有exec返回runningcell时调用functions.wait。
+
+新增evidence/check_final_execution_sets.py：AST解析PASS，行为门NOT_RUN。等collection结束后运行，核对critical525/clean103实际唯一集合、正常退出/timeout/日志错误、72样本source/输入/负载与当前生产差异；不自动判性能无退化。performance warnings仍要主控逐组读AA噪声/3对delta和P95/P99后裁定。哈希保护脚本等性能结束后运行，不污染采样。
+
+锻造intake预检evidence/forge_intake：240分支变更、180source manifest、10共享路径；merge-tree仅对象预览5冲突（loot_pickup/player_state/3近战夹具），无真实合并。INTAKE_REVIEW.md记录待整合决策。用户已批准扩展整合+push+APK94，对方确认冻结da41且无未提交功能，69自动UID及缓存保留。等R4全部门禁完成后才能实际合并，并追加formal forge回归/注册和统一源验收；不删除工作树，不安装手机。
+
+## 20:17 fixed full PASS and performance input gap
+
+Critical session30864 finished exit0: exact525/525 PASS, engine errors0. Collector96930 performing independent clean import/103 at 3b21. No second engine/HEAD change. Reserved t6_pairs_final_v4/NOT_RUN.md deliberately prevents automatic v4 matrix launch after clean103; collector will stop at its overwrite guard, preserving clean actual result. This is controller protocol pause, not Godot correctness failure.
+
+New verified random gap: native GameRoot crypto session + engine ID in death_key drives real equipment affix RNG (ID24 rolls authority equipment80/81/82 etc). v4 lacks these inputs. Intended test-only fix after clean completes: subclass calls native death callback, normalize newly queued unique identity before deferred settlement; stable map/generation/sequence/spawn ordinal and fixed session, record originals/canonical inputs/generated digests. No production source/HP/formula/RNG consumption/timing/state changes. Identical BASE/CAND overlay v5, smoke actual original native queue/save then full72. Do not label old v4 fully seeded or mutate old evidence. Need inspect actual lifecycle consumer and prove all identity consumers see fixed key; no partial during PLANNED manipulation.
+
+## 20:30 source-test fixture closure
+
+Sessions30864/96930/55665/49710/31405/44406/99952 completed. 525full PASS at3b21; clean import FAIL16 BOM errors but all609 skill source hashes and93translations preserved/trackedclean. BOM stripped exact8 runner .tscn, added runner_fixtures/.gdignore because intentionally invalid fixtures must not autoimport. Actualselftest3s startupFAIL,30s eightexpectedcase classificationPASS; helperdefaultnow30. No run_godot_tests production classification edits.
+
+T6v5 test-only queued identity normalization+fixedsession native BASE/CAND freshsmoke bothPASS600realcallbacks; nativeaffixdigest asserts andactualsharedidentitycomparison. First30timeout andretry60reuse-oldjournalFAIL retained; fixedexplicitper-matrix isolatednamespace + refuseexistingdirs (no data deletion); matrixheavybudget60 due600pairedcallbacks span~1200ticks+nativeboot. Allproduction/scripts/assets/config unchanged from3b; probe/runner overlay bytes andsources explicit. Awaitcommit fixture+evidence, safely advance independent cleancheckout trackedclean thenretryimport+103, subsequently finalv5 newoutput72. No engine currentlyrunning, no yieldedcell. MainAGENTS preservedunstaged. No actualforge merge yet.
+
+Correction: smoke comparison first reported FAIL when keyed only by stable_key, because native affix SHA also consumes canonical item_id. Exact (stable_key,item_id) comparison closes the intended boundary; two different-ID positions and native death schedule/count differences remain fully reported, no roll cropping/reroll/forced result. Do not claim equal full loot histories. Preserve earlier misleading comparison output in fixture outcomes explanation; raw load rows unchanged.
