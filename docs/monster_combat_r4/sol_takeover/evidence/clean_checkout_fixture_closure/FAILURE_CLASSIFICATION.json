@@ -1,0 +1,18 @@
+{
+  "source_head": "f706f2322cad022526c94e474a686f7c8567128b",
+  "status": "FAIL",
+  "classification": "test runner report directory precondition missing",
+  "actual_completed_report_errors": [
+    "async_line_lifecycle_test.stderr.log",
+    "body_multitarget_lifecycle_test.stderr.log",
+    "cancelled_release_observation_test.stderr.log",
+    "d3_boundary_runtime_test.stderr.log",
+    "d3_motion_pressure_runtime_test.stderr.log",
+    "mp_payment_observation_test.stderr.log",
+    "runtime_capability_inventory_test.stderr.log",
+    "source_destroyed_pending_test.stderr.log"
+  ],
+  "additional_render_error_candidate": "cancelled_release_observation_test: dummy texture null at player_visual.gd229; preserve and retry cold, not classified away",
+  "actual_execution_set": "MISSING: controller stopped invalid batch, no final runner summary",
+  "fix": "create own project report dir regardless external evidence root; no assertion/classification changes"
+}

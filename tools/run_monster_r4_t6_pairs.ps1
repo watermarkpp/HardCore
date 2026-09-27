@@ -5,6 +5,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $probe = 'tests/hc_monster_combat_r4/t6_real_load_probe.gd'
+if ((Get-FileHash -LiteralPath (Join-Path $BaseRoot 'tools/run_godot_tests.ps1')).Hash -ne (Get-FileHash -LiteralPath (Join-Path $CandidateRoot 'tools/run_godot_tests.ps1')).Hash) {throw 'Runner test overlay differs'}
 $baseHead = (& git -C $BaseRoot rev-parse HEAD).Trim()
 $candidateHead = (& git -C $CandidateRoot rev-parse HEAD).Trim()
 $probeHash = (Get-FileHash -LiteralPath (Join-Path $CandidateRoot $probe) -Algorithm SHA256).Hash

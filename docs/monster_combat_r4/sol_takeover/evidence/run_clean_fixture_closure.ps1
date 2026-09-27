@@ -1,8 +1,8 @@
-param([Parameter(Mandatory=$true)][string]$SourceHead)
+param([Parameter(Mandatory=$true)][string]$SourceHead, [string]$EvidenceName="clean_checkout_report_closure")
 $ErrorActionPreference='Stop'
 $main='C:/Users/Administrator/Documents/HardCore'
 $clean='C:/Users/Administrator/.codex/worktrees/r4-clean-verification/HardCore'
-$ev=Join-Path $main 'docs/monster_combat_r4/sol_takeover/evidence/clean_checkout_fixture_closure'
+$ev=Join-Path (Join-Path $main 'docs/monster_combat_r4/sol_takeover/evidence') $EvidenceName
 if(Test-Path -LiteralPath $ev){throw 'Refusing overwrite'}
 New-Item -ItemType Directory -Path $ev | Out-Null
 if(@(& git -C $clean status --porcelain=v1 -uno).Count -ne 0){throw 'Clean checkout has tracked changes'}
@@ -36,11 +36,12 @@ $valid=$code -eq 0 -and $errors.Count -eq 0 -and $dirty.Count -eq 0 -and $change
 if(-not $valid){throw 'Independent import closure failed'}
 Write-Output 'CLEAN_IMPORT_CLOSURE_PASS'
 $env:HARDCORE_AUDIT_LOG_ROOT=Join-Path $ev 'runner'
+$reportBefore=Test-Path (Join-Path $clean 'outputs/test_logs')
 $start=Get-Date
 & (Join-Path $clean 'tools/run_godot_tests.ps1') -TestPaths @($plan.paths) -TimeoutSeconds 30
 $exitCode=$LASTEXITCODE
 $raw=Join-Path $ev 'raw';New-Item -ItemType Directory -Path $raw | Out-Null
 foreach($f in @(Get-ChildItem (Join-Path $clean 'outputs/test_logs') -Filter 'r4_*.json' -File)){if($f.LastWriteTime -ge $start){Copy-Item -LiteralPath $f.FullName -Destination (Join-Path $raw $f.Name)}}
-[ordered]@{source_head=$SourceHead;exit_code=$exitCode;finished_at=(Get-Date -Format o);tracked_status=@(& git -C $clean status --porcelain=v1 -uno)} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $ev 'completion.json') -Encoding utf8
+[ordered]@{source_head=$SourceHead;exit_code=$exitCode;finished_at=(Get-Date -Format o);project_report_directory_before_runner=$reportBefore;project_report_directory_after_runner=(Test-Path (Join-Path $clean 'outputs/test_logs'));tracked_status=@(& git -C $clean status --porcelain=v1 -uno)} | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $ev 'completion.json') -Encoding utf8
 if($exitCode -ne 0){throw 'Clean regression failure'}
 Write-Output 'CLEAN_REGRESSION_CLOSURE_PASS count=103'

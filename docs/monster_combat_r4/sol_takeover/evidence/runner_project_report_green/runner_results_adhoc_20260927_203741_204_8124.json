@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T20:37:41.2050456+08:00",
+  "git_head": "f706f2322cad022526c94e474a686f7c8567128b",
+  "results": [
+    {
+      "test_name": "case4_pass_then_hang",
+      "test_path": "tests/runner_fixtures/case4_pass_then_hang.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": true,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;timeout_30s;non_zero_exit_code_-1"
+    }
+  ],
+  "total": 1,
+  "failed": 1,
+  "passed": 0,
+  "engine_log_errors": 0
+}

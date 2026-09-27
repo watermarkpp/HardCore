@@ -1,0 +1,24 @@
+{
+  "status": "FAIL",
+  "source_head": "f706f2322cad022526c94e474a686f7c8567128b",
+  "reason": "cold project report directory absent with external runner log root",
+  "completed_failures": [
+    "mp_payment_observation_test",
+    "d3_boundary_runtime_test"
+  ],
+  "collector_pid": 7516,
+  "owned_engine_processes": [
+    {
+      "ProcessId": 420,
+      "ParentProcessId": 6360,
+      "CommandLine": "\"C:\\Users\\Administrator\\.codex\\worktrees\\r4-clean-verification\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64_console.exe\"  --headless --log-file \"C:\\Users\\Administrator\\Documents\\HardCore\\docs\\monster_combat_r4\\sol_takeover\\evidence\\clean_checkout_fixture_closure\\runner\\summon_planner_radius_test.godot.log\" --path . \"tests/hc_monster_combat_r4/summon_planner_radius_test.tscn\" "
+    },
+    {
+      "ProcessId": 4988,
+      "ParentProcessId": 420,
+      "CommandLine": "C:\\Users\\Administrator\\.codex\\worktrees\\r4-clean-verification\\HardCore\\tools\\godot-4.7\\Godot_v4.7-stable_win64.exe --headless --log-file \"C:\\Users\\Administrator\\Documents\\HardCore\\docs\\monster_combat_r4\\sol_takeover\\evidence\\clean_checkout_fixture_closure\\runner\\summon_planner_radius_test.godot.log\" --path . \"tests/hc_monster_combat_r4/summon_planner_radius_test.tscn\" "
+    }
+  ],
+  "action": "stop owned invalid clean batch before source fix; partial evidence retained; full103 retry required",
+  "at": "2026-09-27T20:35:55.6678543+08:00"
+}

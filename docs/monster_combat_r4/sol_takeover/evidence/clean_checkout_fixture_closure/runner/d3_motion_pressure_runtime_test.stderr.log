@@ -1,0 +1,5 @@
+SCRIPT ERROR: Cannot call method 'store_string' on a null value.
+   at: _run (res://tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.gd:28)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.gd:28)
+       [1] _real_pause_and_late_draw (res://tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.gd:141)

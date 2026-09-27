@@ -901,6 +901,10 @@ function Stop-TestProcessTree([int]$ProcessId) {
 if (-not (Test-Path -LiteralPath $Godot)) {
     throw "Godot不存在：$Godot"
 }
+# Test scenes write structured reports to the project-local report directory.
+# Keep it available even when console/engine evidence is routed externally.
+$ProjectReportRoot = Join-Path $ProjectRoot 'outputs\test_logs'
+New-Item -ItemType Directory -Path $ProjectReportRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $LogRoot -Force | Out-Null
 
 function Get-WorktreeGodotProcesses {
