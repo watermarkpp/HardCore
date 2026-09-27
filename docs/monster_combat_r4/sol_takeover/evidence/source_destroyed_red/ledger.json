@@ -1,0 +1,241 @@
+{
+  "failures": [
+    "free:[\"release_missing_terminal release_id=monster:79:instance:134989481672:contact_action:1 child=monster:79:instance:134989481672:line_magic:release:1|monster:79:instance:134989481672:line_magic:release:1:target:130358969942|130358969942|0\"]",
+    "free:no_unique_actual_cancellation",
+    "queue_free:[\"release_missing_terminal release_id=monster:79:instance:138881795784:contact_action:1 child=monster:79:instance:138881795784:line_magic:release:1|monster:79:instance:138881795784:line_magic:release:1:target:130358969942|130358969942|0\"]",
+    "queue_free:no_unique_actual_cancellation"
+  ],
+  "rows": [
+    {
+      "admissions": [
+        {
+          "damage": 12,
+          "effective_interval_s": 3.0,
+          "generation": 1,
+          "kind": "legacy_special_contact",
+          "map_id": 9001,
+          "parent_action_id": 1,
+          "parent_start_game_time_s": 0.0333333333333333,
+          "physics_tick": 33,
+          "release_id": "monster:79:instance:134989481672:contact_action:1",
+          "seq": 1,
+          "source_instance_id": 134989481672,
+          "source_life": 1,
+          "target_generation": 1,
+          "target_id": 130358969942,
+          "target_life": 0
+        }
+      ],
+      "audit": {
+        "failures": [
+          "release_missing_terminal release_id=monster:79:instance:134989481672:contact_action:1 child=monster:79:instance:134989481672:line_magic:release:1|monster:79:instance:134989481672:line_magic:release:1:target:130358969942|130358969942|0"
+        ],
+        "per_release": {
+          "monster:79:instance:134989481672:contact_action:1": {
+            "amount": 0,
+            "children": [
+              "monster:79:instance:134989481672:line_magic:release:1|monster:79:instance:134989481672:line_magic:release:1:target:130358969942|130358969942|0"
+            ],
+            "count": 0,
+            "mutations": [],
+            "terminals": []
+          }
+        }
+      },
+      "case": "free",
+      "deliveries": [
+        {
+          "action_game_time_s": 0.0333333333333333,
+          "admission_release_id": "monster:79:instance:134989481672:contact_action:1",
+          "child_effect_id": "monster:79:instance:134989481672:line_magic:release:1:target:130358969942",
+          "parent_action_id": 1,
+          "raw_roll": 12,
+          "release_id": "monster:79:instance:134989481672:line_magic:release:1",
+          "runtime_map_id": 9001,
+          "source_instance_id": 134989481672,
+          "source_life": 1,
+          "victim_generation": 1,
+          "victim_instance_id": 130358969942,
+          "victim_life": 0,
+          "zone_generation": 1
+        }
+      ],
+      "events": [],
+      "terminals": []
+    },
+    {
+      "admissions": [
+        {
+          "damage": 16,
+          "effective_interval_s": 3.0,
+          "generation": 1,
+          "kind": "legacy_special_contact",
+          "map_id": 9001,
+          "parent_action_id": 1,
+          "parent_start_game_time_s": 0.0333333333333333,
+          "physics_tick": 116,
+          "release_id": "monster:79:instance:138881795784:contact_action:1",
+          "seq": 1,
+          "source_instance_id": 138881795784,
+          "source_life": 1,
+          "target_generation": 1,
+          "target_id": 130358969942,
+          "target_life": 0
+        }
+      ],
+      "audit": {
+        "failures": [
+          "release_missing_terminal release_id=monster:79:instance:138881795784:contact_action:1 child=monster:79:instance:138881795784:line_magic:release:1|monster:79:instance:138881795784:line_magic:release:1:target:130358969942|130358969942|0"
+        ],
+        "per_release": {
+          "monster:79:instance:138881795784:contact_action:1": {
+            "amount": 0,
+            "children": [
+              "monster:79:instance:138881795784:line_magic:release:1|monster:79:instance:138881795784:line_magic:release:1:target:130358969942|130358969942|0"
+            ],
+            "count": 0,
+            "mutations": [],
+            "terminals": []
+          }
+        }
+      },
+      "case": "queue_free",
+      "deliveries": [
+        {
+          "action_game_time_s": 0.0333333333333333,
+          "admission_release_id": "monster:79:instance:138881795784:contact_action:1",
+          "child_effect_id": "monster:79:instance:138881795784:line_magic:release:1:target:130358969942",
+          "parent_action_id": 1,
+          "raw_roll": 16,
+          "release_id": "monster:79:instance:138881795784:line_magic:release:1",
+          "runtime_map_id": 9001,
+          "source_instance_id": 138881795784,
+          "source_life": 1,
+          "victim_generation": 1,
+          "victim_instance_id": 130358969942,
+          "victim_life": 0,
+          "zone_generation": 1
+        }
+      ],
+      "events": [],
+      "terminals": []
+    },
+    {
+      "admissions": [
+        {
+          "damage": 13,
+          "effective_interval_s": 3.0,
+          "generation": 1,
+          "kind": "legacy_special_contact",
+          "map_id": 9001,
+          "parent_action_id": 1,
+          "parent_start_game_time_s": 0.0333333333333333,
+          "physics_tick": 200,
+          "release_id": "monster:79:instance:142103021315:contact_action:1",
+          "seq": 1,
+          "source_instance_id": 142103021315,
+          "source_life": 1,
+          "target_generation": 1,
+          "target_id": 130358969942,
+          "target_life": 0
+        }
+      ],
+      "audit": {
+        "failures": [],
+        "per_release": {
+          "monster:79:instance:142103021315:contact_action:1": {
+            "amount": 13,
+            "children": [
+              "monster:79:instance:142103021315:line_magic:release:1|monster:79:instance:142103021315:line_magic:release:1:target:130358969942|130358969942|0"
+            ],
+            "count": 1,
+            "mutations": [
+              {
+                "actual_hp_delta": 13,
+                "actual_mp_delta": 0,
+                "damage_type": "magic",
+                "hp_after": 99987,
+                "hp_before": 100000,
+                "mp_after": 15,
+                "mp_before": 15,
+                "mutation_id": 1,
+                "physics_tick": 236,
+                "resolved_damage": 13,
+                "source": {
+                  "action_game_time_s": 0.0333333333333333,
+                  "admission_release_id": "monster:79:instance:142103021315:contact_action:1",
+                  "child_effect_id": "monster:79:instance:142103021315:line_magic:release:1:target:130358969942",
+                  "parent_action_id": 1,
+                  "raw_roll": 13,
+                  "release_id": "monster:79:instance:142103021315:line_magic:release:1",
+                  "runtime_map_id": 9001,
+                  "source_instance_id": 142103021315,
+                  "source_life": 1,
+                  "victim_generation": 1,
+                  "victim_instance_id": 130358969942,
+                  "victim_life": 0,
+                  "zone_generation": 1
+                },
+                "victim_generation": 1,
+                "victim_instance_id": 130358969942,
+                "victim_life": 0
+              }
+            ],
+            "terminals": []
+          }
+        }
+      },
+      "case": "transient_exit_return",
+      "deliveries": [
+        {
+          "action_game_time_s": 0.0333333333333333,
+          "admission_release_id": "monster:79:instance:142103021315:contact_action:1",
+          "child_effect_id": "monster:79:instance:142103021315:line_magic:release:1:target:130358969942",
+          "parent_action_id": 1,
+          "raw_roll": 13,
+          "release_id": "monster:79:instance:142103021315:line_magic:release:1",
+          "runtime_map_id": 9001,
+          "source_instance_id": 142103021315,
+          "source_life": 1,
+          "victim_generation": 1,
+          "victim_instance_id": 130358969942,
+          "victim_life": 0,
+          "zone_generation": 1
+        }
+      ],
+      "events": [
+        {
+          "actual_hp_delta": 13,
+          "actual_mp_delta": 0,
+          "damage_type": "magic",
+          "hp_after": 99987,
+          "hp_before": 100000,
+          "mp_after": 15,
+          "mp_before": 15,
+          "mutation_id": 1,
+          "physics_tick": 236,
+          "resolved_damage": 13,
+          "source": {
+            "action_game_time_s": 0.0333333333333333,
+            "admission_release_id": "monster:79:instance:142103021315:contact_action:1",
+            "child_effect_id": "monster:79:instance:142103021315:line_magic:release:1:target:130358969942",
+            "parent_action_id": 1,
+            "raw_roll": 13,
+            "release_id": "monster:79:instance:142103021315:line_magic:release:1",
+            "runtime_map_id": 9001,
+            "source_instance_id": 142103021315,
+            "source_life": 1,
+            "victim_generation": 1,
+            "victim_instance_id": 130358969942,
+            "victim_life": 0,
+            "zone_generation": 1
+          },
+          "victim_generation": 1,
+          "victim_instance_id": 130358969942,
+          "victim_life": 0
+        }
+      ],
+      "terminals": []
+    }
+  ]
+}

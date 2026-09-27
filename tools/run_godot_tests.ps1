@@ -633,6 +633,7 @@ $Suites.critical = @($Suites.critical + @(
     'tests/hc_monster_combat_r4/body_multitarget_lifecycle_test.tscn',
     'tests/hc_monster_combat_r4/async_line_lifecycle_test.tscn',
     'tests/hc_monster_combat_r4/cancelled_release_observation_test.tscn',
+    'tests/hc_monster_combat_r4/source_destroyed_pending_test.tscn',
     'tests/hc_monster_combat_r4/explicit_zero_attack_timing_test.tscn',
     'tests/hc_monster_combat_r4/runtime_capability_inventory_test.tscn',
     'tests/hc_monster_combat_r4/summon_planner_radius_test.tscn',

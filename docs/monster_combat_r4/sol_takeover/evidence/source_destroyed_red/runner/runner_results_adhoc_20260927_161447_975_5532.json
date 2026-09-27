@@ -1,0 +1,26 @@
+{
+  "passed": 0,
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "total": 1,
+  "git_head": "6cd4ed215ba689b9cf1f920693df87604bde2f41",
+  "results": [
+    {
+      "test_name": "source_destroyed_pending_test",
+      "test_path": "tests/hc_monster_combat_r4/source_destroyed_pending_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "generated_at": "2026-09-27T16:14:47.9759512+08:00",
+  "failed": 1
+}

@@ -1,0 +1,6 @@
+{
+  "head": "6cd4ed215ba689b9cf1f920693df87604bde2f41",
+  "enemy_sha256": "CFE72D0FCC90B94AE60FC99F1E878A7FC372D61114235E7F2B206B07039C2DCB",
+  "test_sha256": "DF3BD57D5E8346CBF05A178EF64DFBBE1716288B6AEE6A0F281C39C9086C107A",
+  "source_patch": "diff --git a/scripts/enemy.gd b/scripts/enemy.gd\nindex 9ab43964d..15cd98b60 100644\n--- a/scripts/enemy.gd\n+++ b/scripts/enemy.gd\n@@ -5506,6 +5506,13 @@ func configure_spatial_index(\n \t_target_ground_cache_projection = Callable()\n \n \n+func _notification(what: int) -> void:\n+\tif what == NOTIFICATION_PREDELETE:\n+\t\t# The source-owned pending will cease to exist with this Node. A tree\n+\t\t# exit/reparent alone may resume it, so observe only actual destruction.\n+\t\t_observe_pending_attack_cancellation(\"SOURCE_DESTROYED\")\n+\n+\n func _exit_tree() -> void:\n \t_clear_attack_los_cache()\n \t_cancel_autonomous_step(true)"
+}

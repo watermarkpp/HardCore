@@ -5506,6 +5506,13 @@ func configure_spatial_index(
 	_target_ground_cache_projection = Callable()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		# The source-owned pending will cease to exist with this Node. A tree
+		# exit/reparent alone may resume it, so observe only actual destruction.
+		_observe_pending_attack_cancellation("SOURCE_DESTROYED")
+
+
 func _exit_tree() -> void:
 	_clear_attack_los_cache()
 	_cancel_autonomous_step(true)
