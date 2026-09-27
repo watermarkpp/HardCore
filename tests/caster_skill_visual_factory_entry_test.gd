@@ -54,5 +54,11 @@ func _ready() -> void:
 	assert(not (hl is CasterSkillSkyStrikeVisualEffect), "hell_lightning must NOT be SkyStrike")
 	print("PASS: wizard.hell_lightning → not SkyStrike")
 	
+	# Factory results are unattached nodes owned by this caller. They still
+	# own rendering resources and must be released before engine shutdown.
+	lt.free()
+	hl.free()
+	owner.queue_free()
+	await get_tree().process_frame
 	print("CASTER_SKILL_VISUAL_FACTORY_ENTRY_TEST_PASS")
 	get_tree().quit(0)

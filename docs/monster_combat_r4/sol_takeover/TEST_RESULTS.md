@@ -30,4 +30,12 @@ monster_mixed_damage_atomic、ranged_magic_evasion、monster_special_delivery_ru
 - canonical_snapshot_identity_production：**PASS**。当前正式技能入口可传播身份。历史失败未自动定为无关；保留当前原始运行结果。
 - caster_skill_visual_factory_entry：**FAIL**。SkyStrike/Beam/非SkyStrike断言全部成立，未加入树的创建结果未free，退出泄漏资源；需修资源清理。现存 `skill_visual_profiles.json` 确实声明SkyStrike，不能根据旧报告推测其应删除，也不动用户已验收的Magic素材。
 
+## 快照修复与 D3 边界
+
+`r4_d3_and_snapshot/runner_results_adhoc_20260927_132930_884_24216.json`：PASS 4/4，无引擎错误、正常退出。怪物快照夹具改到1.499GU，移除无效的2GU source-range覆盖；V2、严格消费者、跨地图拒绝和legacy计数断言未削弱。视觉工厂创建的两个未入树节点明确free后退出，原类型断言保持。
+
+`r4_d3_four_ids/runner_results_adhoc_20260927_133031_891_5604.json`：PASS 1/1。24/76/238/239各八方向×1.499/1.500/1.501GU，96组真实准入检查；64组合法起手都有实际伤害或正式终态、身体父动作ID和音频动作ID绑定，32组射程外拒绝没有消耗冷却或扣血。每例新建生产Actor，不清计时、不手动播放攻击、不调用虚拟physics tick。另用真实WORLD层StaticBody验证墙体阻挡与删除后准入；碰撞修订号走既有缓存失效接口。逐案原始账本在 `evidence/d3_four_ids/r4_d3_boundary.json`。
+
+这里的音频检查证明身份与请求阶段接线，headless没有声卡听感或GPU绘制验收。D3横移/绕圈、真实持续受击压力、身体敌对组合及暂停迟绘组合仍需执行，不把边界矩阵当作完整D3。
+
 最终full critical、同SHA干净检出、性能配对与D3完整矩阵：**NOT_RUN**。本地候选尚未达到最终审查条件。

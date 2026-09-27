@@ -25,7 +25,9 @@ func _run() -> void:
 	var enemy_position: Vector2 = game._canonical_ground_gu_to_screen_px(
 		FIXTURE_ENEMY_GROUND_POSITION
 	)
-	var target_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(2.0, 0.0)
+	# Snapshot consumers must be reached through the frozen 1.5GU admission
+	# geometry. Setting a compatibility source range cannot widen that gate.
+	var target_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(1.499, 0.0)
 	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(target_ground)
 	assert(enemy_position.is_finite() and target_position.is_finite(), "enemy snapshot fixture needs a finite map projection")
 	assert(
@@ -53,7 +55,6 @@ func _run() -> void:
 			and enemy.spatial_actor_runtime_id > 0,
 		"enemy snapshot fixture must use the formal mapped spawn"
 	)
-	enemy.attack_range_gu = 2.0
 	var player_node: PlayerCharacter = PlayerCharacter.new()
 	add_child(player_node)
 	player_node.set_physics_process(false)

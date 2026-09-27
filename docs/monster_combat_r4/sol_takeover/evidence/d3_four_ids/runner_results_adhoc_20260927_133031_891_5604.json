@@ -1,0 +1,26 @@
+{
+  "suite": "adhoc",
+  "failed": 0,
+  "passed": 1,
+  "engine_log_errors": 0,
+  "git_head": "156649ac258f47ab4cd5be2f42c797c191c84a57",
+  "total": 1,
+  "results": [
+    {
+      "test_name": "d3_boundary_runtime_test",
+      "test_path": "tests/hc_monster_combat_r4/d3_boundary_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-27T13:30:31.8920065+08:00"
+}

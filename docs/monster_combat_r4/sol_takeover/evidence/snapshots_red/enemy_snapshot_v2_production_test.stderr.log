@@ -1,0 +1,9 @@
+SCRIPT ERROR: Assertion failed: enemy melee must be schema V2
+   at: _assert_v2 (res://tests/enemy_snapshot_v2_production_test.gd:107)
+   GDScript backtrace (most recent call first):
+       [0] _assert_v2 (res://tests/enemy_snapshot_v2_production_test.gd:107)
+       [1] _run (res://tests/enemy_snapshot_v2_production_test.gd:64)
+SCRIPT ERROR: Assertion failed: same-map enemy snapshot must pass the strict consumer
+   at: _run (res://tests/enemy_snapshot_v2_production_test.gd:74)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/enemy_snapshot_v2_production_test.gd:74)
