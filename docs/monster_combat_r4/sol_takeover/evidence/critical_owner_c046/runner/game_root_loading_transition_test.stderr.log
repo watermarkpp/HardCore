@@ -1,0 +1,7 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] request_threaded_paths (res://scripts/ui_item_texture_cache.gd:58)
+       [1] _start_catalog_icon_prewarm (res://scripts/hud.gd:2036)
+WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

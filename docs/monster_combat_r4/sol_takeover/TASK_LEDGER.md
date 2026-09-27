@@ -7,6 +7,12 @@
 - PASS：9 项定向回归，60 张墙体绑定，4 次真实 READY 到达；64 其他地图、57 其他墙体计划、390 PNG 不变。证据见 evidence/portal_shape_closure/CLOSURE.md。
 - 当前 c046 固定完整回归实际 542 项：539 PASS / 3 FAIL。两项地图/墙体失败在本闭环关闭；classic_boss_order 的真实合法魔法闪避前置仍待反例核验。旧完整 FAIL 原始结果保留，最终完整回归尚未通过。
 
+## 2026-09-28 Boss 与实际注册闭环
+
+- PASS：默认 1 点魔闪、0 点和 10 点三个真实自然攻击，实际 roll=0、HP变化=0/30/0，释放目标/身份与结算守恒核验；旧无条件成功断言的合法反例已证明。
+- 原成功命中夹具固定采样前的真实魔闪/MAC，不改生产公式；6/6 相关回归正常退出、无超时、引擎错误 0。证据见 evidence/classic_boss_closure/CLOSURE.md。
+- 两个独立 R4 身体索引测试和 Boss 自然结算测试已正式注册。旧 c046 的 3 FAIL 都有定向闭环，但旧完整结果仍 FAIL，最终当前源码 full critical 尚 NOT_RUN。
+
 | 项目 | 状态 | 当前证据 / 下一步 |
 | --- | --- | --- |
 | 现场、fetch、完整 SHA、备份、保护独有内容 | PASS | TAKEOVER.md / 外部 manifest |

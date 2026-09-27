@@ -46,6 +46,12 @@ func _run() -> void:
 	player.defense_min = 0
 	player.defense_max = 0
 	player.damage_reduction = 0.0
+	# This fixture asserts a successful hit, not an evasion sample. Incoming
+	# magic reads compiled stats (not the actor's physical defence fields).
+	# Pin its real preconditions before either release or HP sampling.
+	PlayerState.computed_stats["anti_magic_points"] = 0
+	PlayerState.computed_stats["magic_defense_min"] = 0
+	PlayerState.computed_stats["magic_defense_max"] = 0
 
 	var wooma := _boss(76, "本地化沃玛首领", player)
 	await get_tree().process_frame
@@ -103,6 +109,8 @@ func _run() -> void:
 	)
 	assert(player.current_hp < hp_before, "触龙神范围攻击没有结算主目标伤害")
 	assert(str(dragon.last_magic_attack_resolution.get("delivery_kind", "")) == "area_magic")
+	assert(not bool(dragon.last_magic_attack_resolution.get("magic_evaded", true)), "成功命中夹具不能发生魔法闪避")
+	assert(int(dragon.last_magic_attack_resolution.get("applied_damage", 0)) == hp_before - player.current_hp, "真实范围投递与HP变化必须一致")
 
 	player.global_position = open_field_center_px + Vector2(400, 0)
 	var zuma := _boss(160, "本地化祖玛首领", player)

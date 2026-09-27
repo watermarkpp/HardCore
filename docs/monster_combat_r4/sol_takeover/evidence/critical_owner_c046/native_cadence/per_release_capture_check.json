@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "source_head": "c0461f25ab2d02f2ea304dcf43be36cb868ab9d0",
+  "checks": "Captured native verifier outputs and explicit per-release identity/count/amount consistency; no frame-window attribution. Unknown and foreign mutations retained. Formal runner completion still separate.",
+  "rows": [
+    {
+      "label": "24",
+      "native_starts": 20,
+      "per_release_terminals": 20,
+      "native_attributed_hp_events": 20,
+      "unknown_mutations": {
+        "count": 4,
+        "note": "identity-less debits (test injector / unattributed writers), never relabeled"
+      },
+      "foreign_events": 36,
+      "audit_failures": []
+    },
+    {
+      "label": "76",
+      "native_starts": 20,
+      "per_release_terminals": 20,
+      "native_attributed_hp_events": 20,
+      "unknown_mutations": {
+        "count": 4,
+        "note": "identity-less debits (test injector / unattributed writers), never relabeled"
+      },
+      "foreign_events": 35,
+      "audit_failures": []
+    },
+    {
+      "label": "238",
+      "native_starts": 20,
+      "per_release_terminals": 20,
+      "native_attributed_hp_events": 20,
+      "unknown_mutations": {
+        "count": 2,
+        "note": "identity-less debits (test injector / unattributed writers), never relabeled"
+      },
+      "foreign_events": 21,
+      "audit_failures": []
+    },
+    {
+      "label": "239",
+      "native_starts": 20,
+      "per_release_terminals": 20,
+      "native_attributed_hp_events": 20,
+      "unknown_mutations": {
+        "count": 2,
+        "note": "identity-less debits (test injector / unattributed writers), never relabeled"
+      },
+      "foreign_events": 21,
+      "audit_failures": []
+    },
+    {
+      "label": "24_chase",
+      "native_starts": 1,
+      "per_release_terminals": 1,
+      "native_attributed_hp_events": 1,
+      "unknown_mutations": {
+        "count": 1,
+        "note": "identity-less debits (test injector / unattributed writers), never relabeled"
+      },
+      "foreign_events": 3,
+      "audit_failures": []
+    }
+  ],
+  "errors": []
+}

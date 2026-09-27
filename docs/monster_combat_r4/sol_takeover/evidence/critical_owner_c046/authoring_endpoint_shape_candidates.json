@@ -1,0 +1,27 @@
+{
+  "status": "NOT_RUN",
+  "scope": "Read-only field candidates; native production policy validation remains required",
+  "maps": 67,
+  "endpoints": 132,
+  "one_way": 15,
+  "candidates": [
+    {
+      "map_key": "chiyue_valley_secret_passage_a",
+      "runtime_map_id": 916004,
+      "semantic_id": "map_exit_000002",
+      "target_map_id": 916006.0,
+      "bad_fields": [
+        "portal_role"
+      ]
+    },
+    {
+      "map_key": "chiyue_valley_secret_passage_b",
+      "runtime_map_id": 916005,
+      "semantic_id": "map_exit_000002",
+      "target_map_id": 916007.0,
+      "bad_fields": [
+        "portal_role"
+      ]
+    }
+  ]
+}

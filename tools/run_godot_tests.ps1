@@ -851,6 +851,13 @@ $Suites.critical = @($Suites.critical + @(
     'tests/portal_all_map_authoring_footprint_test.tscn'
 ) | Select-Object -Unique)
 
+# Independent R4 body-index boundaries and real Boss hit/miss outcomes.
+$Suites.critical = @($Suites.critical + @(
+    'tests/hc_monster_combat_r4/body_radius_bucket_boundary_test.tscn',
+    'tests/hc_monster_combat_r4/body_radius_index_consistency_test.tscn',
+    'tests/classic_boss_area_magic_outcomes_test.tscn'
+) | Select-Object -Unique)
+
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
 $FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'

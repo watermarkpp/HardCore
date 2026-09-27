@@ -1,0 +1,4 @@
+ERROR: MAP_RELEASE_IDENTITY_MATRIX: one_way shape violations must match the pinned C5 set, got []
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/map_release_identity_matrix_test.gd:217)
