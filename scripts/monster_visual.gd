@@ -84,6 +84,9 @@ var _has_authored_client_art := false
 var _elapsed := 0.0
 var _last_state := ""
 var _attack_remaining := 0.0
+# R4 T1: strike-phase threshold frozen at action admission from the canonical
+# frame metadata; hot/cold resource residency cannot move the boundary.
+var _attack_strike_threshold_s := 0.0
 var _hit_remaining := 0.0
 # R1.2 vanilla presentation FIFO (review closure): struck and attack
 # presentation events queue in strict arrival order - exactly the original
@@ -445,34 +448,48 @@ func _attack_age_seconds() -> float:
 	return float(maxi(0, _now_ms() - _attack_started_at_ms)) / 1000.0
 
 
+## R4 T1: action validity is the OWNER's logical window, never the draw
+## cache. `_attack_remaining` only updates when the rendering process
+## advances, and several physics frames can pass without a draw; with the
+## owner's combat clock bound, the action lives on [start, start+duration)
+## of that clock and expires by pure logic even without any render advance.
+func _attack_logic_active() -> bool:
+	if _combat_clock_s.is_valid():
+		return _attack_age_seconds() < _hc_m30_attack_duration
+	return _attack_remaining > 0.0
+
+
 ## True while an attack presentation owns the body (logic-clock authoritative).
 func is_attack_presenting() -> bool:
-	return _attack_remaining > 0.0
+	return _attack_logic_active()
 
 
 ## Parent action identity of the attack presentation currently owning the
 ## body, or -1. Bound by the enemy at the same tick that commits the damage
-## release (HC-MONSTER-COMBAT-R2 T3).
+## release (HC-MONSTER-COMBAT-R2 T3). R4 T1: an expired action never exposes
+## its identity just because no draw has refreshed the cached remaining time.
 func current_attack_action_id() -> int:
-	return _attack_action_id if _attack_remaining > 0.0 else -1
+	return _attack_action_id if _attack_logic_active() else -1
 
 
 ## HC-MONSTER-COMBAT-R3 W2: the attack action's OWN logical age in seconds,
 ## or -1 when no attack presentation owns the body. Phase crossings are
 ## judged from this age, never from cached draw state.
 func attack_action_age_seconds() -> float:
-	return _attack_age_seconds() if _attack_remaining > 0.0 else -1.0
+	return _attack_age_seconds() if _attack_logic_active() else -1.0
 
 
-## HC-MONSTER-COMBAT-R3 W2: the logical strike-frame phase boundary of the
-## CURRENT action. Derived from the action's own age and frame count - a
-## render frame cache from a previous action can never satisfy it.
+## HC-MONSTER-COMBAT-R3 W2 + R4 T1: the logical strike-frame phase of the
+## CURRENT action. The threshold was frozen at action admission from the
+## canonical frame metadata (hot/cold residency cannot move it mid-action),
+## and the window is bounded by the action's own end - a stale cache from a
+## previous action can never satisfy it, and an expired action can never
+## keep it true.
 func attack_frame_phase_reached() -> bool:
-	if _attack_remaining <= 0.0:
+	if not _attack_logic_active():
 		return false
-	var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"attack"))
-	var threshold := _hc_m30_attack_duration * 2.0 / float(maxi(count, 4))
-	return _attack_age_seconds() >= threshold
+	var age := _attack_age_seconds()
+	return age >= _attack_strike_threshold_s and age < _hc_m30_attack_duration
 
 
 func _update_resource_residency() -> void:
@@ -1132,10 +1149,14 @@ func begin_attack_presentation(
 ) -> bool:
 	if _death_remaining > 0.0 or _death_pose_held:
 		return false
-	# HC-MONSTER-COMBAT-R3 W1: idempotent re-begin of the SAME logical action
-	# must not reset the action age and must not re-trigger the start phase.
-	if _attack_remaining > 0.0 and action_id >= 0 and _attack_action_id == action_id:
-		return true
+	# HC-MONSTER-COMBAT-R3 W1 + R4 T1: an idempotent re-begin of the SAME
+	# logical action must not reset the action age and must not re-trigger
+	# the start phase - and the caller must be able to TELL, so this returns
+	# false (accepted, nothing new started) instead of true. A same-id retry
+	# whose action has already expired is likewise rejected outright: the
+	# caller may not resurrect an expired action into a fresh presentation.
+	if action_id >= 0 and _attack_action_id == action_id:
+		return false
 	var merged := _merge_pending_struck_feedback()
 	if merged > 0:
 		RuntimeDiagnostics.increment_performance_counter(
@@ -1197,6 +1218,15 @@ func _start_attack_visual(duration: float) -> void:
 	# HC-MONSTER-COMBAT-R2 T3: the logic clock starts NOW (the action's own
 	# age authority). A later render delta can never predate this timestamp.
 	_attack_started_at_ms = _now_ms()
+	# R4 T1: the strike phase threshold is frozen at action admission from
+	# the canonical frame metadata. Hot/cold resource residency can never
+	# move the phase boundary mid-action; residency only decides whether the
+	# overlay is drawn, never when the phase becomes true.
+	var frame_count_for_phase := maxi(
+		1,
+		MonsterAnimationPolicy.frame_count(active_resources, &"attack")
+	)
+	_attack_strike_threshold_s = duration * 2.0 / float(maxi(frame_count_for_phase, 4))
 	if visible and not SourceFrames.profile_for_id(actor.monster_id).is_empty() and actor.monster_id != 224:
 		var overlay := AttackOverlay.new()
 		# Facing policy: the swing direction is frozen at the commit tick. The
@@ -1212,8 +1242,7 @@ func _start_attack_visual(duration: float) -> void:
 		var direction16 := direction8 * 2
 		if is_instance_valid(actor.target):
 			direction16 = ProjectileVisual._direction16_for_line(actor.global_position, actor.target.global_position)
-		var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"attack"))
-		overlay.setup(actor.monster_id, direction8, direction16, duration / float(count), Vector2(actor_ground_offset))
+		overlay.setup(actor.monster_id, direction8, direction16, duration / float(frame_count_for_phase), Vector2(actor_ground_offset))
 		add_child(overlay)
 	_attack_remaining = duration
 	_hc_m30_attack_duration = float(duration)

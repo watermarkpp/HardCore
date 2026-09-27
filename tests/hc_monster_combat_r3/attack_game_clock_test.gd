@@ -89,7 +89,14 @@ func _run() -> void:
 	var accepted: bool = enemy.visual.begin_attack_presentation(
 		0.46, enemy._attack_logic_serial, -1, Vector2.INF, enemy._attack_action_start_time_s
 	)
-	_expect(accepted, "idempotent re-begin must be accepted")
+	# R4 T1 contract update: an idempotent re-begin returns FALSE - it is
+	# accepted (nothing resets, no new serial, no fresh start event) but it
+	# is explicitly NOT a new presentation start, so the actor side cannot
+	# mistake it for one and resubmit the start audio.
+	_expect(
+		not accepted,
+		"idempotent re-begin must report 'no new start' (false) while keeping the action",
+	)
 	_expect(
 		enemy.visual._attack_action_serial == visual_serial_before,
 		"idempotent re-begin must not allocate a new visual serial",

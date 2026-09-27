@@ -1000,12 +1000,18 @@ func _play_attack_animation(duration: float, parent_action_id := -1) -> void:
 		return
 	# HC-MONSTER-COMBAT-R2 T3: one parent action identity per attack commit.
 	# R3 W1: the identity is normally ALREADY allocated by the real admission
-	# point (`_allocate_attack_action`); presentation only consumes it. When a
-	# caller skips the admission helper (legacy/preview paths), allocate here
-	# exactly once - never twice for the same logical action.
+	# point (`_allocate_attack_action`); presentation only consumes it.
+	# R4 T1: a caller passing a parent key must own a STILL-ACTIVE action of
+	# exactly this serial - an expired/cancelled/foreign key is rejected
+	# outright and may never be resurrected into a fresh allocation, and a
+	# same-key retry is an idempotent re-present (the visual returns "no new
+	# start", so the start audio is NOT resubmitted and the consumed phase
+	# state survives). Only parent-less legacy/preview callers allocate here.
 	var allocated := parent_action_id
-	if allocated < 0 or not _attack_action_active:
+	if allocated < 0:
 		allocated = _allocate_attack_action(duration)
+	elif not _attack_action_active or allocated != _attack_logic_serial:
+		return
 	if visual != null:
 		# HC-MONSTER-COMBAT-R1 Task 3 (F01): production combat presentations
 		# enter the critical arbitration slot, so a legal attack can never be
@@ -2758,7 +2764,12 @@ func _physics_process_internal(delta: float) -> void:
 		if _attack_timer <= 0.0:
 			_attack_timer = _current_attack_interval()
 			_refresh_target_focus()
-			_play_attack_animation(maxf(_attack_animation_duration, 0.62))
+			# R4 T1: the legacy melee branch owns its admission like every
+			# other delivery family - allocate the parent action here and
+			# hand it to the presentation instead of letting the parent-less
+			# path allocate implicitly.
+			var legacy_melee_duration := maxf(_attack_animation_duration, 0.62)
+			_play_attack_animation(legacy_melee_duration, _allocate_attack_action(legacy_melee_duration))
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
 			if _uses_special_magic_melee_delivery():
 				_deal_special_magic_melee_hit(target, dealt_damage)
@@ -5514,7 +5525,9 @@ func _update_area_magic_delivery(delta: float) -> void:
 	)
 	# Only the authored monster body attack is presented. There is no
 	# unproven client warning circle or independent projectile/effect.
-	_play_attack_animation(maxf(_attack_animation_duration, _area_magic_warning))
+	# R4 T1: admission ownership stays with this release point.
+	var target_magic_duration := maxf(_attack_animation_duration, _area_magic_warning)
+	_play_attack_animation(target_magic_duration, _allocate_attack_action(target_magic_duration))
 
 
 func _create_area_magic_footprint_snapshot() -> Dictionary:
@@ -5761,10 +5774,12 @@ func _update_area_attack(delta: float) -> bool:
 					candidate_snapshot,
 				)
 			_area_attack_warning = maxf(0.001, float(area_attack_rule.get("hitDelaySeconds", 0.2)))
-			_play_attack_animation(maxf(
+			# R4 T1: admission ownership stays with this release point.
+			var area_attack_duration := maxf(
 				_area_attack_visual_duration(),
 				_area_attack_warning,
-			))
+			)
+			_play_attack_animation(area_attack_duration, _allocate_attack_action(area_attack_duration))
 	return true
 
 
@@ -7740,7 +7755,9 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 			_next_spatial_release_id("boss_special"),
 		)
 		_boss_warning = maxf(0.001, float(special.get("warningSeconds", 0.85)))
-		_play_attack_animation(float(special.get("animationSeconds", _attack_animation_duration)))
+		# R4 T1: admission ownership stays with this release point.
+		var boss_special_duration := float(special.get("animationSeconds", _attack_animation_duration))
+		_play_attack_animation(boss_special_duration, _allocate_attack_action(boss_special_duration))
 
 
 func _boss_skill_targets(radius_gu: float, snapshot := {}) -> Array[Node2D]:
