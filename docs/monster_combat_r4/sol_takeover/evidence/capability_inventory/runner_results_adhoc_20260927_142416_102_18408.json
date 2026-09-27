@@ -1,0 +1,26 @@
+{
+  "git_head": "c8b0f4f850f3ec2ed97684afa6044b0a4d87d904",
+  "suite": "adhoc",
+  "generated_at": "2026-09-27T14:24:16.1023003+08:00",
+  "total": 1,
+  "engine_log_errors": 0,
+  "results": [
+    {
+      "test_name": "runtime_capability_inventory_test",
+      "test_path": "tests/hc_monster_combat_r4/runtime_capability_inventory_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "passed": 1
+}

@@ -1,0 +1,26 @@
+{
+  "failed": 1,
+  "engine_log_errors": 1,
+  "generated_at": "2026-09-27T14:23:46.5389533+08:00",
+  "total": 1,
+  "results": [
+    {
+      "test_name": "runtime_capability_inventory_test",
+      "test_path": "tests/hc_monster_combat_r4/runtime_capability_inventory_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "suite": "adhoc",
+  "passed": 0,
+  "git_head": "c8b0f4f850f3ec2ed97684afa6044b0a4d87d904"
+}
