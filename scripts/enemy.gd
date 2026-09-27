@@ -437,6 +437,7 @@ var _attack_action_active := false
 # R4 T3: body admission resolves once; the spawn factory may precheck it
 # before the node ever enters the tree or the world registries.
 var _body_admission_resolved := false
+var _body_admission_rejected := false
 var _body_collision_shape: CollisionShape2D = null
 # R3 W1: the most recent release record built at a real admission point,
 # including its parent action identity (review/verification handle).
@@ -2387,7 +2388,7 @@ func _initialize_spawn_facing_once() -> void:
 ## setup is still resolved at tree entry.
 func resolve_body_for_admission() -> bool:
 	if _body_admission_resolved:
-		return bool(get_meta("body_policy_rejected", false))
+		return _body_admission_rejected
 	_body_admission_resolved = true
 	var collision := CollisionShape2D.new()
 	collision.name = "CollisionShape2D"
@@ -2395,6 +2396,7 @@ func resolve_body_for_admission() -> bool:
 		monster_id, str(monster_data.get("classification", "")), combat_body_profile
 	)
 	var body_rejected := resolved_body.is_empty()
+	_body_admission_rejected = body_rejected
 	if body_rejected:
 		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
 			ActorBodyPolicyScript.TIER_SMALL
@@ -2475,7 +2477,7 @@ func _ready() -> void:
 	# occupies the respawn slot, registers the spatial index or the activity
 	# cache. _ready runs it exactly once; an earlier factory precheck wins.
 	resolve_body_for_admission()
-	if not bool(get_meta("body_policy_rejected", false)) and _body_collision_shape != null:
+	if not _body_admission_rejected and _body_collision_shape != null:
 		add_child(_body_collision_shape)
 		_body_collision_shape = null
 	# R4 T3-A: the GU radius was already derived from the FINAL pixel radius
@@ -6627,7 +6629,7 @@ func _apply_damage_core(
 	# combat participant. It stays visible for diagnosis, but it takes no
 	# damage, builds no threat, wakes for nothing and can never die in combat
 	# - so it can never drop loot through the death pipeline either.
-	if bool(get_meta("body_policy_rejected", false)):
+	if _body_admission_rejected:
 		RuntimeDiagnostics.increment_performance_counter(
 			&"monster_damage_rejected_body_policy"
 		)
@@ -6775,7 +6777,10 @@ func can_receive_damage() -> bool:
 	# targeting/spatial consumer. The rejected actor keeps its diagnostic
 	# existence (no crash, no orphan) but is outside the combat world: the
 	# damage core guard already refuses HP, and the public query now agrees.
-	if bool(get_meta("body_policy_rejected", false)):
+	# The resolved verdict belongs to the actor. The metadata marker is only
+	# diagnostic; repeated spatial queries need no metadata lookup, and removing
+	# diagnostics cannot re-admit a body rejected at construction.
+	if _body_admission_rejected:
 		return false
 	return (
 		current_hp > 0

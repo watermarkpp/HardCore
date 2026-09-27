@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "test_name": "body_rejected_query_contract_test",
+      "test_path": "tests/hc_monster_combat_r4/body_rejected_query_contract_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T16:31:50.3496875Z",
+      "native_exit_observed_utc": "2026-09-27T16:31:26.6910821Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "git_head": "042e8a1b3fa44b4856fb87bc5f02aa6552a04edd",
+  "failed": 1,
+  "engine_log_errors": 0,
+  "total": 1,
+  "passed": 0,
+  "generated_at": "2026-09-28T00:31:27.8798768+08:00",
+  "suite": "adhoc"
+}

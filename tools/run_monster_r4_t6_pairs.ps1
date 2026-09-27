@@ -2,6 +2,7 @@ param(
     [string]$BaseRoot = 'C:/Users/Administrator/.codex/worktrees/r4-fixed-baseline/HardCore',
     [string]$CandidateRoot = 'C:/Users/Administrator/Documents/HardCore',
     [string]$OutputRoot = 'C:/Users/Administrator/Documents/HardCore/docs/monster_combat_r4/sol_takeover/evidence/t6_pairs',
+    [ValidatePattern('^[0-9a-f]{40}$')][string]$ExpectedBaseHead = '1381d2838a3736f4a06699dd24a8cf4a10714950',
     [ValidateSet('small','large_pets','aoe_death_loot')][string[]]$Modes = @('small','large_pets','aoe_death_loot'),
     [ValidateSet(10,20,30)][int[]]$Scales = @(10,20,30)
 )
@@ -12,7 +13,7 @@ $baseHead = (& git -C $BaseRoot rev-parse HEAD).Trim()
 $candidateHead = (& git -C $CandidateRoot rev-parse HEAD).Trim()
 $probeHash = (Get-FileHash -LiteralPath (Join-Path $CandidateRoot $probe) -Algorithm SHA256).Hash
 if ((Get-FileHash -LiteralPath (Join-Path $BaseRoot $probe) -Algorithm SHA256).Hash -ne $probeHash) {throw 'Probe overlay differs'}
-if ($baseHead -ne '1381d2838a3736f4a06699dd24a8cf4a10714950') {throw 'Fixed BASE drift'}
+if ($baseHead -ne $ExpectedBaseHead) {throw 'Fixed BASE drift'}
 New-Item -ItemType Directory -Force -Path $OutputRoot | Out-Null
 $sharedInputs=[ordered]@{}
 foreach ($dataPath in @('assets/data/drop/dpv2_user_loot_sheet_authority_v1.json','assets/data/equipment_attribute_master.json','assets/data/runtime/canonical_monster_catalog.json','scripts/drop/user_loot_sheet_provider.gd')) {
@@ -22,6 +23,7 @@ foreach ($dataPath in @('assets/data/drop/dpv2_user_loot_sheet_authority_v1.json
 }
 $identity = [ordered]@{
     base_head=$baseHead; candidate_head=$candidateHead; probe_sha256=$probeHash
+    expected_base_head=$ExpectedBaseHead
     random_input_version='all_gameplay_actors_spawn_casts_drop_identities_production_hot.v5'
     shared_input_sha256=$sharedInputs
     hot_mode='PlayerState.test_mode=false; unique isolated profile initialized through real save_game(false); native death clocks, drop throttling and background loot enabled. Bootstrap alone uses test_mode.'

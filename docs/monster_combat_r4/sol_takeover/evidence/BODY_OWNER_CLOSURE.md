@@ -1,0 +1,9 @@
+# Body admission owner and hot damageability query
+
+Actual RED, runner20260928_003127_879_11732: a truly rejected identity24 had its diagnostic `body_policy_rejected` metadata removed. Idempotent admission then returned accepted, `can_receive_damage()` returned true and native `take_damage(50)` changed HP. The metadata was the state owner in three independent consumers, despite the one-time admission contract. No ledger rows were filtered and no HP fault was injected.
+
+The actor now retains its immutable admission verdict in a typed boolean set at the same native body resolution. Repeated admission, shape attachment, damage core and damageability consume that verdict. Metadata remains diagnostic. Body radii, factory rejection, index admission, damage/RNG formulas and all clocks are unchanged. The frequent body-blocking narrow phase also avoids its added metadata lookup per candidate; performance benefit remains NOT_RUN until paired collection.
+
+Actual GREEN9/9, runner20260928_003358_751_4736, native normal exits, engine qualified errors0: the real diagnostic-removal counterexample, factory isolation, prior rejection and world isolation, index-radius and bucket boundaries, real multiple victims/lifecycles, D3 motion pressure and observer integrity. Final fixed-source cumulative gates remain required.
+
+Follow-up will use the existing independent clean checkout at exact pre-fix source042e8a1b3fa44b4856fb87bc5f02aa6552a04edd, plus candidate body fix, to isolate this change from prior R3/R4/F03 behavior differences. Shared inputs, runner/probe/engine bytes, real native workload and all exit gates stay enforced. The collector's optional exact ExpectedBaseHead parameter retains the original R3 default; it permits an explicit additional before/after source without weakening SHA checks. The original72 samples and unresolved flags remain preserved. No clocks or actor IDs are reset.

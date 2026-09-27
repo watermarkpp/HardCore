@@ -17,9 +17,16 @@ func _ready() -> void:
 	var hp_before: int = rejected.current_hp
 	rejected.take_damage(50)
 	var hp_changed := rejected.current_hp != hp_before
+	# Diagnostics are not an authority to resurrect a rejected combat body.
+	# Its one-time admission verdict must survive tooling removing the marker.
+	rejected.remove_meta("body_policy_rejected")
+	var verdict_lost := not rejected.resolve_body_for_admission()
+	var diagnostic_removal_allowed_damage := rejected.can_receive_damage()
+	rejected.take_damage(50)
+	var diagnostic_removal_changed_hp := rejected.current_hp != hp_before
 	rejected.queue_free()
-	if not was_rejected or advertised_damageability or hp_changed:
-		printerr("R4_BODY_QUERY: rejected=%s can_receive_damage=%s hp_changed=%s" % [was_rejected, advertised_damageability, hp_changed])
+	if not was_rejected or advertised_damageability or hp_changed or verdict_lost or diagnostic_removal_allowed_damage or diagnostic_removal_changed_hp:
+		printerr("R4_BODY_QUERY: rejected=%s can_receive_damage=%s hp_changed=%s verdict_lost=%s diagnostic_removal_damageable=%s diagnostic_removal_hp_changed=%s" % [was_rejected, advertised_damageability, hp_changed, verdict_lost, diagnostic_removal_allowed_damage, diagnostic_removal_changed_hp])
 		get_tree().quit(1)
 		return
 	print("R4_BODY_REJECTED_QUERY_CONTRACT_PASS")
