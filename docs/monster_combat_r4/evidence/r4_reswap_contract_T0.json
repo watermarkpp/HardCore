@@ -1,0 +1,81 @@
+{
+  "scope": "exact-original-Python-verifier on synthetic temporary files; not Godot or production catalog",
+  "verifier_git_blob": "b5f669317467ed79c86b59404f2b822f4a16f52d",
+  "audited_head": "2aede2fba4cf312a7251cc3db0c395a92428c5a9",
+  "total": 8,
+  "contract_satisfied": 5,
+  "results": [
+    {
+      "case": "unchanged_positive_control",
+      "expected_accept": true,
+      "observed_accept": true,
+      "contract_satisfied": true,
+      "exit_code": 0,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "old_blindspot_entries_only_hp",
+      "expected_accept": false,
+      "observed_accept": false,
+      "contract_satisfied": true,
+      "exit_code": 1,
+      "stdout": "UNEXPECTED: new: entries[0] != entries_by_id[33]\nunexpected diff count: 1\n",
+      "stderr": ""
+    },
+    {
+      "case": "old_blindspot_sources_removed",
+      "expected_accept": false,
+      "observed_accept": false,
+      "contract_satisfied": true,
+      "exit_code": 1,
+      "stdout": "UNEXPECTED: sources table missing or empty\nUNEXPECTED: sources[fixture.json]\nunexpected diff count: 2\n",
+      "stderr": ""
+    },
+    {
+      "case": "old_blindspot_combat_evidence",
+      "expected_accept": false,
+      "observed_accept": false,
+      "contract_satisfied": true,
+      "exit_code": 1,
+      "stdout": "UNEXPECTED: entries_by_id[33].source_evidence\nunexpected diff count: 1\n",
+      "stderr": ""
+    },
+    {
+      "case": "both_views_hp_negative_control",
+      "expected_accept": false,
+      "observed_accept": false,
+      "contract_satisfied": true,
+      "exit_code": 1,
+      "stdout": "UNEXPECTED: entries_by_id[33].combat\nunexpected diff count: 1\n",
+      "stderr": ""
+    },
+    {
+      "case": "duplicate_identical_entry",
+      "expected_accept": false,
+      "observed_accept": true,
+      "contract_satisfied": false,
+      "exit_code": 0,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "both_inputs_empty_identity_views",
+      "expected_accept": false,
+      "observed_accept": true,
+      "contract_satisfied": false,
+      "exit_code": 0,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    },
+    {
+      "case": "exempt_id_drop_policy_deleted",
+      "expected_accept": false,
+      "observed_accept": true,
+      "contract_satisfied": false,
+      "exit_code": 0,
+      "stdout": "unexpected diff count: 0\n",
+      "stderr": ""
+    }
+  ]
+}

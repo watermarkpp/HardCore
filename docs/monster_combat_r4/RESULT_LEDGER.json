@@ -1,0 +1,93 @@
+{
+  "contract_id": "hardcore.monster.combat.r4.result_ledger.v1",
+  "baseline": {
+    "integration": "f5d6308f53162509bffd30f6981987cbfe80fa68",
+    "r3_test_source": "3e05e7035d0e4f58c36fb054f82e6b8c120dc4bc",
+    "r3_delivery_head": "2aede2fba4cf312a7251cc3db0c395a92428c5a9",
+    "worktree": "mct-r1-f5d6308f",
+    "dirty_at_start": 0
+  },
+  "entries": [
+    {
+      "id": "T0-RED-1",
+      "finding": "F03 expired action still exposes phase and replays strike audio without render",
+      "test": "tests/hc_monster_combat_r4/attack_expiry_without_render_test.tscn",
+      "observed": "expired action id=1 phase=true strike_count=1",
+      "expected": "no active id and no expired strike audio",
+      "result": "RED",
+      "kind": "behavioral",
+      "evidence": "outputs/test_logs/runner_results_adhoc_20260927_080541_492_7988.json",
+      "task": "T1"
+    },
+    {
+      "id": "T0-RED-2",
+      "finding": "F04 same-owner retry replays the full audio event sequence",
+      "test": "tests/hc_monster_combat_r4/attack_owner_idempotence_test.tscn",
+      "observed": "before=2 after=4 events=[attack_start, attack_frame, attack_start, attack_frame]",
+      "expected": "no re-allocation, no replayed phase for a still-valid key",
+      "result": "RED",
+      "kind": "behavioral",
+      "evidence": "outputs/test_logs/runner_results_adhoc_20260927_080541_492_7988.json",
+      "task": "T1"
+    },
+    {
+      "id": "T0-RED-3",
+      "finding": "F02 synchronous revival inside stats broadcast binds the stale death tail to the new life",
+      "test": "tests/hc_monster_combat_r4/synchronous_revive_death_token_test.tscn",
+      "observed": "revived_at_return=true stale_death_notifications=1",
+      "expected": "token captured before any broadcast; stale tail cannot emit after revival",
+      "result": "RED",
+      "kind": "behavioral",
+      "evidence": "outputs/test_logs/runner_results_adhoc_20260927_080541_492_7988.json",
+      "task": "T2"
+    },
+    {
+      "id": "T0-RED-4",
+      "finding": "F05 body-rejected actor remains damageable by public query",
+      "test": "tests/hc_monster_combat_r4/body_rejected_query_contract_test.tscn",
+      "observed": "rejected=true can_receive_damage=true hp_changed=false",
+      "expected": "public damageable/targetable queries reject config-rejected bodies",
+      "result": "RED",
+      "kind": "behavioral",
+      "evidence": "outputs/test_logs/runner_results_adhoc_20260927_080541_492_7988.json",
+      "task": "T3"
+    },
+    {
+      "id": "T0-VERIFIER-1",
+      "finding": "F08 verifier still accepts duplicate identical identity rows",
+      "probe": "tools/hc_monster_combat_r4/probe_r3_verifier.py",
+      "observed": "duplicate_identical_entry accepted",
+      "expected": "rejected",
+      "result": "RED",
+      "kind": "python",
+      "evidence": "outputs/test_logs/r4_reswap_contract_T0.json",
+      "task": "T4"
+    },
+    {
+      "id": "T0-VERIFIER-2",
+      "finding": "F08 verifier still accepts empty identity views with non-empty sources",
+      "probe": "tools/hc_monster_combat_r4/probe_r3_verifier.py",
+      "observed": "both_inputs_empty_identity_views accepted",
+      "expected": "structural failure",
+      "result": "RED",
+      "kind": "python",
+      "evidence": "outputs/test_logs/r4_reswap_contract_T0.json",
+      "task": "T4"
+    },
+    {
+      "id": "T0-VERIFIER-3",
+      "finding": "F08 verifier still accepts deletion of the whole ID33 drop_policy block",
+      "probe": "tools/hc_monster_combat_r4/probe_r3_verifier.py",
+      "observed": "exempt_id_drop_policy_deleted accepted",
+      "expected": "rejected; no whole-block exemption",
+      "result": "RED",
+      "kind": "python",
+      "evidence": "outputs/test_logs/r4_reswap_contract_T0.json",
+      "task": "T4"
+    }
+  ],
+  "preserved_from_r3": [
+    "5/5 previously fixed verifier samples still satisfy (positive control + entries-only HP + sources removed + combat evidence + both-views HP)",
+    "R1/R2/R3 retained fixes: 1.5GU center admission, two-tier bodies, empty boss-rule cadence, combat game clock, body commit-facing row, latest-strike, rule-to-tier, revival durability, rejected-damage core guard, await-window stale death guard"
+  ]
+}
