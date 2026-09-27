@@ -2389,6 +2389,11 @@ func resolve_body_for_admission() -> bool:
 		collision_radius_px = ActorBodyPolicyScript.tier_screen_radius_px(
 			ActorBodyPolicyScript.TIER_SMALL
 		)
+		# R4 T3-A: the GU radius stays consistent with the fallback pixel
+		# radius that only feeds spawn-overlap push-out (placement hygiene).
+		combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+			collision_radius_px
+		)
 		set_meta("body_policy_rejected", true)
 		set_meta(
 			"body_policy_reject_reason",
@@ -2402,7 +2407,15 @@ func resolve_body_for_admission() -> bool:
 			&"monster_body_policy_rejected"
 		)
 		return true
+	# R4 T3-A: ALL formal radii are decided here, in ONE place, BEFORE the
+	# spawn factory registers the actor into the spatial index - the factory
+	# reads enemy.combat_radius_gu for index.register(), so the large-tier
+	# bodies (0.5GU) must already carry their final GU radius at that point
+	# (the old order left the default 16px-derived value in the index).
 	collision_radius_px = float(resolved_body["screen_radius_px"])
+	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+		collision_radius_px
+	)
 	collision.shape = ActorBodyPolicyScript.footsole_shape_px(collision_radius_px)
 	add_to_group("enemies")
 	# Kept for _ready to attach once the node can own children; the factory
@@ -2455,8 +2468,16 @@ func _ready() -> void:
 	if not bool(get_meta("body_policy_rejected", false)) and _body_collision_shape != null:
 		add_child(_body_collision_shape)
 		_body_collision_shape = null
-	combat_radius_gu = MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
+	# R4 T3-A: the GU radius was already derived from the FINAL pixel radius
+	# inside the successful admission resolution (before the spawn factory
+	# registers the actor into the spatial index). _ready must never produce
+	# a second, different value - it only verifies consistency.
+	var ready_radius_gu := MonsterUnitAdapterScript.footprint_radius_px_to_combat_radius_gu(
 		collision_radius_px
+	)
+	assert(
+		is_equal_approx(combat_radius_gu, ready_radius_gu),
+		"body admission GU radius must match the final pixel radius"
 	)
 	if not is_boss:
 		_background_wakeup_timer = Timer.new()
