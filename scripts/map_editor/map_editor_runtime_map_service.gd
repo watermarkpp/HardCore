@@ -104,6 +104,8 @@ static func validate_runtime(runtime: Dictionary, raw_text := "") -> Array[Strin
 				errors.append("runtime_arrival_only_target_enabled")
 			continue
 		if not bool(map_exit.get("target_configured", false)):
+			if PortalRuntimeService.has_formal_target(map_exit):
+				errors.append("runtime_linked_portal_target_not_configured")
 			continue
 		if str(map_exit.get("portal_contract_id", "")) == PortalRuntimeService.PORTAL_CONTRACT_ID:
 			for field: String in [

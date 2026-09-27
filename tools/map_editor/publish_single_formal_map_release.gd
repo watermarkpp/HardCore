@@ -12,6 +12,9 @@ const FORMAL_TARGET_COUNTS := {
 	"world_wooma_forest": Vector2i(50, 4),
 	"bich_orc_tomb_f1": Vector2i(40, 0),
 	"mengzhong_zuma_leader_home": Vector2i(4, 6),
+	"chiyue_choice_land": Vector2i(52, 2),
+	"chiyue_valley_secret_passage_a": Vector2i(41, 0),
+	"chiyue_valley_secret_passage_b": Vector2i(44, 0),
 }
 const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 const REGISTRY_PATH := "res://assets/data/runtime/map_editor/map_runtime_release_registry.json"
@@ -72,7 +75,8 @@ func _ready() -> void:
 		map_key,
 		runtime_map_id,
 		raw_document,
-		identity_maps as Array
+		identity_maps as Array,
+		map_key in ["chiyue_choice_land", "chiyue_valley_secret_passage_a", "chiyue_valley_secret_passage_b"]
 	)
 	if not bool(prepared.get("ok", false)):
 		publisher.free()

@@ -188,7 +188,8 @@ func prepare_formal_document(
 	map_key: String,
 	runtime_map_id: int,
 	raw_document: Dictionary,
-	identity_maps: Array
+	identity_maps: Array,
+	preserve_authored_spawn_layout := false
 ) -> Dictionary:
 	## Shared in-memory preparation for full and exact single-map release.
 	## Authoring JSON is never rewritten by this preparation step.
@@ -212,7 +213,10 @@ func prepare_formal_document(
 	if display_name.is_empty():
 		return {"ok": false, "errors": ["display_name_missing"]}
 	document["display_name"] = display_name
-	_canonicalize_spawn_layers(document)
+	# Focused portal republication must retain the latest formal placement IDs
+	# and authored lanes. The full legacy-wave migration is a separate operation.
+	if not preserve_authored_spawn_layout:
+		_canonicalize_spawn_layers(document)
 	_normalize_portal_units(document)
 	_bind_portal_network(document, identity_maps)
 	ContentCatalog.canonicalize_document_npc_labels(document)

@@ -31,7 +31,7 @@
     "collision_authority": "hc_polygon_v1",
     "content_policy": "empty_layers",
     "created_by": "human_codex_shared_tool",
-    "revision": 22,
+    "revision": 23,
     "runtime_approved": false,
     "runtime_approved_revision": 3.0,
     "source_editor_schema_version": 4.0,
@@ -3290,7 +3290,8 @@
           90
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": true,
+        "target_configured": true
       },
       {
         "arrival_locks_current_portal": true,
@@ -3338,7 +3339,8 @@
           5
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": true,
+        "target_configured": true
       },
       {
         "arrival_locks_current_portal": true,
@@ -3386,7 +3388,8 @@
           40
         ],
         "travel_request_single_flight": true,
-        "trigger_on_enter": true
+        "trigger_on_enter": true,
+        "target_configured": true
       }
     ],
     "monster_spawn": [

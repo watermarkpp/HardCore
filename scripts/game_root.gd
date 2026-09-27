@@ -3237,7 +3237,7 @@ func _complete_portal_travel(
 		_portal_guard_state,
 		_portal_guard_key(target_map_id, target_portal_id),
 		Time.get_ticks_msec(),
-		target_tile
+		arrival_ground_gu
 	)
 	return true
 

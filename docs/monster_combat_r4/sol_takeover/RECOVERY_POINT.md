@@ -220,3 +220,12 @@ HEAD前项a899c0ac..；本项准备本地提交，源为Json job/service/handle 
 
 ## 23:38 恢复点：异步死亡实现已专项通过
 准备提交 scripts/game_root.gd/player_state.gd/json_persistence_job.gd +两新正式注册测试+更新规模测试。真实最终10/10及规模1/1 PASS，所有runner已正常退出。前526...之后实际当前HEAD5279888ca8f7125ddcc18a80afd5ab184ce94e45。用户AGENTS不stage，原untracked保留。下一步门户窄RED→exact3 authoring正式发布→行为/保护回归；R4性能残余仍需归因/配对后才能forgemerge。未push/清理/APK。新death原始失败及全部成功日志保留。
+
+## 门户闭环与全67地图扩展检查
+两个真实RED均非timeout：正式网络 travel_request拒绝choice出口；真实GameRoot到达中心后走1GU错误提前解锁。修复7个authoring target_configured、A/B各1个one_way字段/原因，源revision+1，正式Build Candidate→Validate→Publish仅3目标。完整发布准备会把44个已人工保存的普通放置移到另一lane并被formal身份门拒绝；精确portal发布新增保留authoring layout模式，不放松candidate/runtime身份校验，保持52/2、41/0、44/0和所有稳定槽位。
+
+门禁新增：已绑定正式目标却缺配置的出口在authoring/runtime/network validation显式失败，真正未链接编辑器占位仍允许编辑，arrival_only仍拒绝travel。防重入保存实际tile-center ground position，保持1.5GU/3秒/fresh/single-flight。
+
+实际5/5正常退出PASS，portal_green runner20260927_234457_579_4796：全67正式图/132端点（117实际travel_request成功+15拒绝），四次真实READY arrival，既有双向/缺落点/兄弟publish。独立只读all_map_audit_and_protection.json PASS：其他64 registry entry逐字段相等，三图design/ground/instances/collision除catalog版本哈希/非门户semantics逐字段相等，authoring非门点层及元数据除revision相等。补全源A精度文本保留，未编辑像素、碰撞或spawn。其他正式图未发现同类配置缺陷。不是117次设备实走验收：device NOT_RUN。
+
+R4性能仍open，继续F03/F05真实负载配对后再fullforge；未push/cleanup/APK。

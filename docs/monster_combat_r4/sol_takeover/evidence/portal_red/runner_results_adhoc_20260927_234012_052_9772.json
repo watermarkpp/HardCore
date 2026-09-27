@@ -1,0 +1,45 @@
+{
+  "git_head": "10ce89bab1702654e38be6ca0390e5e042ca0bbe",
+  "total": 2,
+  "results": [
+    {
+      "test_name": "map_identity_portal_network_test",
+      "test_path": "tests/map_identity_portal_network_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:40:41.4135040Z",
+      "native_exit_observed_utc": "2026-09-27T15:39:54.8422251Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    },
+    {
+      "test_name": "portal_actual_arrival_guard_test",
+      "test_path": "tests/portal_actual_arrival_guard_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-27T15:40:55.9000649Z",
+      "native_exit_observed_utc": "2026-09-27T15:40:10.8883298Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "engine_log_errors": 0,
+  "failed": 2,
+  "generated_at": "2026-09-27T23:40:12.0521735+08:00",
+  "suite": "adhoc",
+  "passed": 0
+}

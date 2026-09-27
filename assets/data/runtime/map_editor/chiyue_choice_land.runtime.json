@@ -1,5 +1,5 @@
 {
-  "build_sha256": "e6b3fae50c6f71d2a533f04445d3df4cb971e4583a9e4f0d995d484ce6d7f7ce",
+  "build_sha256": "ec659582cbb4bd8875564d9bff0151124a60d9e07c82fc4ba5320623522ad687",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -8449,7 +8449,7 @@
     "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
     "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "navigation": {
-      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "canonical_catalog_sha256": "628a544ab76948169f7e2bbf0fbf725b9b835ca477ed5f8b9c479e818574dae5",
       "clearance_gu": 0.025,
       "contract_id": "hc.polygon_nav_faces.v1",
       "profiles": [
@@ -53155,6 +53155,7 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
         "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000001.chiyue_valley_square.map_exit_000002",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
@@ -53163,6 +53164,7 @@
         "exit_id": "map_exit_000001",
         "kind": "map_exit",
         "linked_visual_instance_id": "inst_000210",
+        "official_connection_id": "portal.chiyue_choice_land.map_exit_000001",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -53184,6 +53186,8 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000001",
         "semantic_role": "map_portal_endpoint",
+        "source_map_key": "chiyue_choice_land",
+        "target_configured": true,
         "target_entrance_id": "map_exit_000002",
         "target_map_id": 916002.0,
         "target_map_key": "chiyue_valley_square",
@@ -53203,6 +53207,7 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
         "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000002.chiyue_valley_secret_passage_a.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
@@ -53211,6 +53216,7 @@
         "exit_id": "map_exit_000002",
         "kind": "map_exit",
         "linked_visual_instance_id": "inst_000211",
+        "official_connection_id": "portal.chiyue_choice_land.map_exit_000002",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -53232,6 +53238,8 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000002",
         "semantic_role": "map_portal_endpoint",
+        "source_map_key": "chiyue_choice_land",
+        "target_configured": true,
         "target_entrance_id": "map_exit_000001",
         "target_map_id": 916004.0,
         "target_map_key": "chiyue_valley_secret_passage_a",
@@ -53251,6 +53259,7 @@
         "arrival_locks_current_portal": true,
         "arrival_reentry_policy_id": "portal_arrival_guard_v2",
         "blocks_movement": false,
+        "connection_direction": "forward",
         "connection_mode": "bidirectional",
         "connection_pair_id": "portal_pair.chiyue_choice_land.map_exit_000003.chiyue_valley_secret_passage_b.map_exit_000001",
         "connection_policy_id": "map_connection_unified_bidirectional_v2",
@@ -53259,6 +53268,7 @@
         "exit_id": "map_exit_000003",
         "kind": "map_exit",
         "linked_visual_instance_id": "inst_000212",
+        "official_connection_id": "portal.chiyue_choice_land.map_exit_000003",
         "one_way": false,
         "portal_anchor_contract_id": "linked_visual_footprint_center_v1",
         "portal_contract_id": "unified_map_portal_endpoint_v1",
@@ -53280,6 +53290,8 @@
         "runtime_export": true,
         "semantic_id": "map_exit_000003",
         "semantic_role": "map_portal_endpoint",
+        "source_map_key": "chiyue_choice_land",
+        "target_configured": true,
         "target_entrance_id": "map_exit_000001",
         "target_map_id": 916005.0,
         "target_map_key": "chiyue_valley_secret_passage_b",
@@ -55711,12 +55723,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "2a9b4124c38b2226c7d484c17e3267b60c2e33c63d13f9d3779a04638aceb136",
+      "authoring_sha256": "cecc461d3076e2d4df31830a3315e9ee74ef733ad08ea489637f7f86f22b66c5",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
-      "document_revision": 22.0,
-      "document_sha256": "19bffeb9fdeff2bd4206e93041fa925beae49210bb98279c045ab4834bc2bcc3",
+      "document_revision": 23.0,
+      "document_sha256": "1611288a2d67d2037b3deb50d07f8e5b5d19274bed5b7451676b2616ca964eab",
       "ground_manifest_sha256": "6bf7f8f2c49211ffe3055639cbe80e0cd9886b720f56c233e7ee6b124e6cb966",
-      "ground_state_sha256": "92174445444af0e96383205fb7359cc3a3a5e79284eef0e149fb83714cd7e687",
+      "ground_state_sha256": "a0a54991c285225106f87eb820648ccfcd4caf28717770480886d8fc85eb4fda",
       "map_key": "chiyue_choice_land",
       "runtime_map_id": 916003.0
     },
@@ -55724,7 +55736,7 @@
     "display_name": "抉择之地",
     "editor_schema_version": 5.0,
     "map_id": "chiyue_choice_land",
-    "revision": 22.0,
+    "revision": 23.0,
     "runtime_map_id": 916003.0
   },
   "unit_contract_id": "combat.unit.gu_gs_px.v1",

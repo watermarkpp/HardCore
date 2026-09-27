@@ -62,6 +62,8 @@ static func validate_network(
 			if bool(endpoint.get("arrival_only", false)):
 				continue
 			if not bool(endpoint.get("target_configured", false)):
+				if has_formal_target(endpoint):
+					errors.append("linked_portal_target_not_configured:%s" % portal_id)
 				continue
 			var target_map_key := str(endpoint.get("target_map_key", ""))
 			if not runtimes_by_map_key.has(target_map_key):
@@ -88,6 +90,15 @@ static func validate_network(
 				errors.append("target_portal_not_reciprocal:%s" % portal_id)
 			_validate_guard(endpoint, portal_id, errors)
 	return errors
+
+
+static func has_formal_target(endpoint: Dictionary) -> bool:
+	# Unlinked editor placeholders remain legal. A formally bound target cannot
+	# silently become a visible but unusable portal after a map publication.
+	return (str(endpoint.get("portal_contract_id", "")) == PORTAL_CONTRACT_ID
+		and not str(endpoint.get("target_map_key", "")).is_empty()
+		and not str(endpoint.get("target_portal_id", "")).is_empty()
+		and int(endpoint.get("target_map_id", -1)) > 0)
 
 
 static func _validate_guard(

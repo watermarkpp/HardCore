@@ -1,6 +1,7 @@
 extends Node
 
 const Bridge := preload("res://scripts/layers/runtime/map_editor_runtime_bridge.gd")
+const Portal := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const IDENTITY_PATH := "res://assets/data/map_design/map_identity_registry.json"
 const NETWORK_PATH := "res://assets/data/map_design/map_portal_network.json"
 
@@ -68,7 +69,14 @@ func _ready() -> void:
 			assert(not bool(endpoint.get("target_configured", true)))
 			assert(not bool(endpoint.get("trigger_on_enter", true)))
 			assert(int(endpoint.get("target_map_id", 0)) == -1)
+			assert(not Portal.travel_request(endpoint).ok)
 			continue
+		var request := Portal.travel_request(endpoint)
+		if not request.ok:
+			printerr("MAP_IDENTITY_PORTAL_NETWORK_FAIL runtime travel refused active endpoint: %s %s" % [key, request])
+			get_tree().quit(1)
+			return
+		assert(bool(endpoint.get("one_way", false)) == (mode == "one_way"))
 		var target_map_key := str(endpoint.get("target_map_key", ""))
 		var target_portal_id := str(endpoint.get("target_portal_id", ""))
 		var target_key := "%s::%s" % [target_map_key, target_portal_id]
@@ -109,6 +117,20 @@ func _ready() -> void:
 	assert(fork_targets.keys().size() == 2)
 	assert(fork_targets.has("world_fengmo_valley"))
 	assert(fork_targets.has("fengmo_light_corridor"))
+	assert(Portal.validate_network(documents).is_empty(), "all runtime consumers must accept the formal network")
+	var broken := documents.duplicate(true)
+	var broken_endpoint := Portal.endpoint_by_id(broken.chiyue_choice_land, "map_exit_000002")
+	broken_endpoint.erase("target_configured")
+	assert("linked_portal_target_not_configured:map_exit_000002" in Portal.validate_network(broken))
+	var policy := preload("res://scripts/map_editor/map_editor_connection_policy_service.gd")
+	var source := _read_json("res://map_editor_workspace/chiyue_choice_land/chiyue_choice_land.editor.json")
+	assert(policy.validate_document(source).is_empty())
+	var source_endpoint: Dictionary = source.layers.map_exit_points[1]
+	source_endpoint.erase("target_configured")
+	assert("linked_portal_target_not_configured:map_exit_000002" in policy.validate_document(source))
+	# A genuinely unlinked editor placeholder remains editable and non-travelable.
+	var placeholder := {"layers": {"map_exit_points": [{"semantic_id": "unlinked", "target_configured": false}]}}
+	assert(policy.validate_document(placeholder).is_empty())
 
 	await get_tree().process_frame
 	print("MAP_IDENTITY_PORTAL_NETWORK_PASS maps=67 endpoints=132 pairs=51 one_way=15 arrival=15")

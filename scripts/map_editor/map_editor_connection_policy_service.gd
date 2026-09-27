@@ -267,6 +267,11 @@ static func validate_document(document: Dictionary) -> Array[String]:
 			_validate_arrival_only(endpoint, semantic_id, errors)
 			continue
 		if not bool(endpoint.get("target_configured", false)):
+			if (str(endpoint.get("portal_contract_id", "")) == PORTAL_CONTRACT_ID
+				and not str(endpoint.get("target_map_key", "")).is_empty()
+				and not str(endpoint.get("target_portal_id", "")).is_empty()
+				and int(endpoint.get("target_map_id", -1)) > 0):
+				errors.append("linked_portal_target_not_configured:%s" % semantic_id)
 			continue
 		var policy_id := str(endpoint.get("connection_policy_id", ""))
 		if policy_id == LEGACY_POLICY_ID:
