@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/hc_monster_combat_r4/r3_common_natural_probe.gd" id="1"]
+
+[node name="R3CommonNaturalProbe" type="Node"]
+script = ExtResource("1")

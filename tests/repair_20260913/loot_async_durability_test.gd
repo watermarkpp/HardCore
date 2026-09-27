@@ -78,7 +78,11 @@ func _run() -> void:
 	cancelled.writer.result(true)
 	assert(not FileAccess.file_exists(cancelled.writer.path))
 	assert(FileAccess.get_file_as_bytes(path) == newer_bytes)
-	var out := FileAccess.open("res://outputs/takeover_20260913/loot_async_timings.json",FileAccess.WRITE)
+	# The report directory is generated state and is absent in a clean checkout.
+	var report_directory := "res://outputs/takeover_20260913"
+	assert(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(report_directory)) == OK)
+	var out := FileAccess.open(report_directory.path_join("loot_async_timings.json"),FileAccess.WRITE)
+	assert(out != null, "cannot open durability evidence report")
 	out.store_string(JSON.stringify(timings,"  "))
 	out.close()
 	PlayerState.test_mode = true

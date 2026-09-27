@@ -7,6 +7,18 @@ const MODES := ["small", "large_pets", "aoe_death_loot"]
 const SAMPLE_FRAMES := 600
 const SEED := 20260927
 const CENTER := Vector2(40.5, 13.5)
+
+# Only the test random-input boundary differs from the production main scene
+# (whose root is a childless GameRoot Node2D). All cast/physics/queue code is
+# inherited unchanged. Production uses wall time in this seed boundary.
+class SeededGameRoot extends "res://scripts/game_root.gd":
+	var t6_cast_seed_inputs: Array = []
+	func _next_canonical_seed() -> int:
+		_canonical_cast_serial += 1
+		var value := hash([20260927, _canonical_cast_serial, "r4_t6_fixed"])
+		t6_cast_seed_inputs.append({"serial": _canonical_cast_serial, "seed": value})
+		return value
+
 var game: Node
 var actors: Array[EnemyActor] = []
 var pets: Array[SummonActor] = []
@@ -26,6 +38,8 @@ var previous_hp := {}
 var death_signals := 0
 var seen_deaths := {}
 var corpse_refs: Array[WeakRef] = []
+var spawn_seed_inputs: Array = []
+var actor_seed_inputs: Array = []
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -46,7 +60,8 @@ func _run() -> void:
 	PlayerState.computed_stats["max_mp"] = 1000000
 	RuntimeDiagnostics.set_device_lab_performance_enabled(true)
 	var started := Time.get_ticks_usec()
-	game = load("res://scenes/main.tscn").instantiate()
+	game = SeededGameRoot.new()
+	game.name = "GameRoot"
 	add_child(game)
 	var deadline := Time.get_ticks_msec() + 10000
 	while Time.get_ticks_msec() < deadline:
@@ -62,6 +77,12 @@ func _run() -> void:
 			game._combat_spatial_index.unregister(node.spatial_actor_runtime_id)
 			node.free()
 	game._rng.seed = SEED
+	seed(SEED)
+	game.player._rng.seed = SEED + 1
+	PlayerState._durability_rng.seed = SEED + 2
+	# SceneTree node_added is before _ready. Pin spawn-facing and audio through
+	# existing test hooks without replacing the formal GameRoot factory.
+	get_tree().node_added.connect(_pin_spawn_inputs)
 	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(CENTER))
 	game.player.set_physics_process(false)
 	game.player.max_hp = 1000000
@@ -76,10 +97,25 @@ func _run() -> void:
 			_check(pet != null, "formal_pet_missing:" + skill)
 			if pet != null:
 				pets.append(pet)
+				pet._rng.seed = SEED + 10000 + pets.size()
+				actor_seed_inputs.append({"kind": "pet", "ordinal": pets.size(), "seed": str(pet._rng.seed), "initial_state": str(pet._rng.state)})
 				pet.max_hp = 1000000
 				pet.current_hp = pet.max_hp
 	for i in range(scale):
 		actors.append(_spawn(i))
+	# Bootstrap isolation must not bypass production hot-path death throttling
+	# or asynchronous loot transactions. Each process owns a distinct profile
+	# under the runner's isolated userdata, never an existing player's save.
+	PlayerState.active_profile_id = "r4-t6-" + OS.get_environment("HARDCORE_R4_LOAD_LABEL")
+	var isolated_root := "user://r4_t6/" + OS.get_environment("HARDCORE_R4_LOAD_LABEL")
+	PlayerState.profile_directory = isolated_root.path_join("characters")
+	PlayerState.profile_index_path = isolated_root.path_join("profiles.json")
+	PlayerState.character_name = "R4T6"
+	assert(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PlayerState.profile_directory)) == OK)
+	PlayerState.test_mode = false
+	# A real death transaction requires the initial formal world-clock snapshot.
+	# Save through the normal API before sampling; do not fake its sequence.
+	assert(PlayerState.save_game(false), "isolated production profile initialization failed: " + str(PlayerState.last_save_result))
 	for _warm in range(90):
 		await get_tree().physics_frame
 		await get_tree().process_frame
@@ -141,6 +177,7 @@ func _run() -> void:
 			"live_count": living, "corpse_count": corpses, "memory_bytes": Performance.get_monitor(Performance.MEMORY_STATIC)})
 		_check(living == scale, "load_count_mismatch:%d:%d" % [frame, living])
 		_check(not game.player._dead and game.player.max_hp == 1000000, "survivability_input_changed:%d" % frame)
+		_check(not PlayerState.test_mode, "production_hot_mode_bypassed:%d" % frame)
 		previous_usec = now
 		previous_enemy_usec = enemy_usec
 	var actual_starts := retired_starts
@@ -160,16 +197,29 @@ func _run() -> void:
 		_check(pets.size() == 2 and pet_attacks > 0 and pet_damage > 0, "pets_not_actually_attacking")
 	if mode == "aoe_death_loot":
 		_check(deaths > 0 and replacements > 0 and death_signals > 0 and int(totals.get("drop_roll_count", 0)) > 0 and int(totals.get("death_queue_committed_count", 0)) > 0 and int(totals.get("drop_node_spawn_count", 0)) > 0, "no_real_death_drop_work")
+	var final_death_queue: Dictionary = game.death_work_queue_snapshot()
+	for terminal: Dictionary in final_death_queue.get("terminal", []):
+		_check(str(terminal.get("state", "")) != "FAILED", "production_death_transaction_failed:" + str(terminal.get("last_error", "")))
 	var result := {"mode": mode, "scale": scale, "seed": SEED, "frames": frames, "boot_ms": boot_ms, "cold_casts": cold_casts,
 		"casts": casts, "starts_surviving_actors": actual_starts, "moving_surviving_actors": moved, "player_hp_delta": hp_start - game.player.current_hp,
 		"pet_count": pets.size(), "pet_attack_starts": pet_attacks, "pet_actual_damage": pet_damage, "deaths": deaths, "death_signals": death_signals, "replacements": replacements, "counter_deltas": totals,
 		"counters_last_window": RuntimeDiagnostics.performance_counters(), "failures": failures,
 		"source_head": OS.get_environment("HARDCORE_R4_LOAD_HEAD"), "label": OS.get_environment("HARDCORE_R4_LOAD_LABEL"),
 		"gpu": "NOT_RUN", "device": "NOT_RUN", "measurement": "real physics callback spacing and engine monitors; inclusive CPU segments are not additive and monitors are not GPU time"}
+	result["random_input_version"] = "all_gameplay_actors_spawn_casts_production_hot.v4"
+	result["production_hot_test_mode"] = PlayerState.test_mode
+	result["isolated_profile_id"] = PlayerState.active_profile_id
+	result["death_queue_at_end"] = final_death_queue
+	result["random_inputs"] = {"game_root_seed": SEED, "global_seed": SEED, "player_seed": SEED + 1,
+		"durability_seed": SEED + 2, "actors": actor_seed_inputs, "spawn_hooks": spawn_seed_inputs,
+		"canonical_cast_inputs": game.t6_cast_seed_inputs.duplicate(true),
+		"canonical_seed_policy": "native hash boundary with fixed time input and fixed test profile token; serial increment unchanged"}
+	get_tree().node_added.disconnect(_pin_spawn_inputs)
 	FileAccess.open("res://outputs/test_logs/r4_t6_load.json", FileAccess.WRITE).store_string(JSON.stringify(result, "  "))
 	game.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
+	PlayerState.test_mode = true
 	print("R4_T6_LOAD_PASS" if failures.is_empty() else "R4_T6_LOAD_FAIL " + str(failures))
 	get_tree().quit(0 if failures.is_empty() else 1)
 
@@ -181,11 +231,20 @@ func _spawn(slot: int) -> EnemyActor:
 		{"respawn_enabled": false, "spawn_slot_id": "t6:%d" % serial})
 	assert(actor != null and actor.combat_enabled and actor.spatial_actor_runtime_id > 0, "formal load actor rejected")
 	actor._rng.seed = SEED + serial
+	_check(actor._spawn_facing_seed_override_active, "spawn_seed_hook_not_before_ready")
+	actor_seed_inputs.append({"kind": "enemy", "ordinal": serial, "seed": str(actor._rng.seed), "initial_state": str(actor._rng.state)})
 	actor.died.connect(_on_death)
 	if mode != "aoe_death_loot":
 		actor.max_hp = 1000000
 		actor.current_hp = actor.max_hp
 	return actor
+
+func _pin_spawn_inputs(node: Node) -> void:
+	if node is EnemyActor and str(node.get_meta("spawn_slot_id", "")).begins_with("t6:"):
+		var actor := node as EnemyActor
+		actor.set_spawn_facing_seed_for_test(SEED + 20000 + serial)
+		actor.set_audio_seed_for_test(SEED + 30000 + serial)
+		spawn_seed_inputs.append({"ordinal": serial, "facing_seed": SEED + 20000 + serial, "audio_seed": SEED + 30000 + serial})
 
 func _on_death(actor: EnemyActor, _data: Dictionary) -> void:
 	var id := actor.get_instance_id()

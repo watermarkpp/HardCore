@@ -1,0 +1,22 @@
+ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+   at: add_child (scene/main/node.cpp:1721)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:75)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9247)
+       [3] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8802)
+       [4] _execute_canonical_skill (res://scripts/game_root.gd:7978)
+       [5] _visual_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:99)
+       [6] _run (res://tests/skill_production_descriptor_failure_parity_test.gd:44)
+ERROR: Child is not a child of this node.
+   at: move_child (scene/main/node.cpp:506)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:76)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9247)
+       [3] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8802)
+       [4] _execute_canonical_skill (res://scripts/game_root.gd:7978)
+       [5] _visual_failure_case (res://tests/skill_production_descriptor_failure_parity_test.gd:99)
+       [6] _run (res://tests/skill_production_descriptor_failure_parity_test.gd:44)
+WARNING: 3 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)

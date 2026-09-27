@@ -1,0 +1,1015 @@
+{
+  "base_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+  "candidate_head": "6cd4ed215ba689b9cf1f920693df87604bde2f41",
+  "rows": [
+    {
+      "test_path": "tests/caster_skill_visual_factory_entry_test.tscn",
+      "base_runner_result": {
+        "test_name": "caster_skill_visual_factory_entry_test",
+        "test_path": "tests/caster_skill_visual_factory_entry_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 2,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "FAIL",
+        "reason": "stdout_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "caster_skill_visual_factory_entry_test",
+        "test_path": "tests/caster_skill_visual_factory_entry_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: 1 RID allocations of type 'N13RendererDummy15MaterialStorage13DummyMaterialE' were leaked at exit.",
+        "ERROR: 1 RID allocations of type 'N13RendererDummy15MaterialStorage11DummyShaderE' were leaked at exit.",
+        "ERROR: 1 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.",
+        "ERROR: 5 resources still in use at exit (run with --verbose for details)."
+      ],
+      "classification": "fixture resource ownership",
+      "resolution": "Unattached factory nodes were not freed at exit; preserve type assertions and release caller-owned resources.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/caster_skill_animation_routing_test.tscn",
+      "base_runner_result": {
+        "test_name": "caster_skill_animation_routing_test",
+        "test_path": "tests/caster_skill_animation_routing_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "caster_skill_animation_routing_test",
+        "test_path": "tests/caster_skill_animation_routing_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/sky_strike_visual_contract_test.tscn",
+      "base_runner_result": {
+        "test_name": "sky_strike_visual_contract_test",
+        "test_path": "tests/sky_strike_visual_contract_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 12,
+        "engine_log_failure_count": 12,
+        "result": "FAIL",
+        "reason": "stderr_failures_12;engine_log_failures_12"
+      },
+      "candidate_runner_result": {
+        "test_name": "sky_strike_visual_contract_test",
+        "test_path": "tests/sky_strike_visual_contract_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/lightning_runtime_map_visual_test.tscn",
+      "base_runner_result": {
+        "test_name": "lightning_runtime_map_visual_test",
+        "test_path": "tests/lightning_runtime_map_visual_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 6,
+        "engine_log_failure_count": 6,
+        "result": "FAIL",
+        "reason": "stderr_failures_6;engine_log_failures_6"
+      },
+      "candidate_runner_result": {
+        "test_name": "lightning_runtime_map_visual_test",
+        "test_path": "tests/lightning_runtime_map_visual_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node.",
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/canonical_skill_production_entry_test.tscn",
+      "base_runner_result": {
+        "test_name": "canonical_skill_production_entry_test",
+        "test_path": "tests/canonical_skill_production_entry_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "canonical_skill_production_entry_test",
+        "test_path": "tests/canonical_skill_production_entry_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+      "base_runner_result": {
+        "test_name": "canonical_snapshot_propagation_test",
+        "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "canonical_snapshot_propagation_test",
+        "test_path": "tests/canonical_snapshot_propagation_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/enemy_snapshot_v2_production_test.tscn",
+      "base_runner_result": {
+        "test_name": "enemy_snapshot_v2_production_test",
+        "test_path": "tests/enemy_snapshot_v2_production_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "enemy_snapshot_v2_production_test",
+        "test_path": "tests/enemy_snapshot_v2_production_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: enemy melee must be schema V2",
+        "SCRIPT ERROR: Assertion failed: same-map enemy snapshot must pass the strict consumer"
+      ],
+      "classification": "fixture geometry",
+      "resolution": "2GU fixture cannot admit through frozen 1.5GU center gate; set 1.499GU, retain V2, strict same-map, cross-map rejection and no-legacy assertions.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/production_snapshot_no_legacy_test.tscn",
+      "base_runner_result": {
+        "test_name": "production_snapshot_no_legacy_test",
+        "test_path": "tests/production_snapshot_no_legacy_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "production_snapshot_no_legacy_test",
+        "test_path": "tests/production_snapshot_no_legacy_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: production snapshot must be schema V2"
+      ],
+      "classification": "fixture geometry",
+      "resolution": "Same 2GU admission error; remove artificial compatibility range override, keep strict schema/no-legacy checks.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+      "base_runner_result": {
+        "test_name": "canonical_snapshot_identity_production_test",
+        "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "canonical_snapshot_identity_production_test",
+        "test_path": "tests/canonical_snapshot_identity_production_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/skill_production_no_visual_plan_test.tscn",
+      "base_runner_result": {
+        "test_name": "skill_production_no_visual_plan_test",
+        "test_path": "tests/skill_production_no_visual_plan_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "skill_production_no_visual_plan_test",
+        "test_path": "tests/skill_production_no_visual_plan_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/skill_production_profession_matrix_test.tscn",
+      "base_runner_result": {
+        "test_name": "skill_production_profession_matrix_test",
+        "test_path": "tests/skill_production_profession_matrix_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "skill_production_profession_matrix_test",
+        "test_path": "tests/skill_production_profession_matrix_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/skill_production_descriptor_failure_parity_test.tscn",
+      "base_runner_result": {
+        "test_name": "skill_production_descriptor_failure_parity_test",
+        "test_path": "tests/skill_production_descriptor_failure_parity_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "skill_production_descriptor_failure_parity_test",
+        "test_path": "tests/skill_production_descriptor_failure_parity_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/skill_runtime_no_visual_plan_test.tscn",
+      "base_runner_result": {
+        "test_name": "skill_runtime_no_visual_plan_test",
+        "test_path": "tests/skill_runtime_no_visual_plan_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "skill_runtime_no_visual_plan_test",
+        "test_path": "tests/skill_runtime_no_visual_plan_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/complete_client_resource_catalog_test.tscn",
+      "base_runner_result": {
+        "test_name": "complete_client_resource_catalog_test",
+        "test_path": "tests/complete_client_resource_catalog_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "complete_client_resource_catalog_test",
+        "test_path": "tests/complete_client_resource_catalog_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: file is missing: res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json",
+        "SCRIPT ERROR: Assertion failed: complete client library count changed"
+      ],
+      "classification": "generated audit prerequisite",
+      "resolution": "BASE lacks outputs/resource_catalog manifest. CAND passes using existing local audit artifact, not a production repair. Independent helmet/catalog audit; clean R4 source tests must not copy this cache to claim reproducibility.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/warrior_skill_state_machine_test.tscn",
+      "base_runner_result": {
+        "test_name": "warrior_skill_state_machine_test",
+        "test_path": "tests/warrior_skill_state_machine_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "warrior_skill_state_machine_test",
+        "test_path": "tests/warrior_skill_state_machine_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: 半月首次开关被通用施法预检错误拒绝"
+      ],
+      "classification": "fixture formal-world readiness",
+      "resolution": "Wait actual world readiness and use official mapped position, including the later geometry block; preserve toggle/resource/cooldown assertions.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/live_attack_resolution_test.tscn",
+      "base_runner_result": {
+        "test_name": "live_attack_resolution_test",
+        "test_path": "tests/live_attack_resolution_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "live_attack_resolution_test",
+        "test_path": "tests/live_attack_resolution_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: 法师没有在释放帧创建正式投射物"
+      ],
+      "classification": "fixture formal-world readiness",
+      "resolution": "Wait formal world, use official mapped ground anchor instead of screen ZERO; preserve release-frame projectile and tracking checks.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/melee_lock_fallback_test.tscn",
+      "base_runner_result": {
+        "test_name": "melee_lock_fallback_test",
+        "test_path": "tests/melee_lock_fallback_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "melee_lock_fallback_test",
+        "test_path": "tests/melee_lock_fallback_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: 刺杀连续轴近段未命中"
+      ],
+      "classification": "fixture mapped geometry",
+      "resolution": "Use formal ready world and mapped anchor; retain continuous-axis near/far hit expectations.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/all_monster_loading_test.tscn",
+      "base_runner_result": {
+        "test_name": "all_monster_loading_test",
+        "test_path": "tests/all_monster_loading_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "all_monster_loading_test",
+        "test_path": "tests/all_monster_loading_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: ID=183 missing attack timing"
+      ],
+      "classification": "production explicit-zero interpretation",
+      "resolution": "Raw183/241=0 exists; original native loader floors valid integer ATTACK_SPD to200ms. Preserve raw/type checks; missing remains invalid.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/monster_mfc1_attribute_timing_audit_test.tscn",
+      "base_runner_result": {
+        "test_name": "monster_mfc1_attribute_timing_audit_test",
+        "test_path": "tests/monster_mfc1_attribute_timing_audit_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": true,
+        "wrapper_exit_code": 1,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "monster_mfc1_attribute_timing_audit_test",
+        "test_path": "tests/monster_mfc1_attribute_timing_audit_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: MFC1_AUDIT_FAILED mv_speed_runtime_vs_auth:33 runtime=1.812500 auth=0.000000;mv_speed_runtime_vs_auth:183 runtime=1.812500 auth=0.000000;atk_authority_missing:183;mv_speed_runtime_vs_auth:241 runtime=1.812500 auth=0.000000;atk_authority_missing:241"
+      ],
+      "classification": "production generation/loading",
+      "resolution": "Formal exact-ID generator repairs33/183/241 movement authority; explicit0 attack parsed with native200ms floor and independent expected formula. Special entity behaviors remain NOT_RUN.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/skills/warrior_thrust_defense_runtime_test.tscn",
+      "base_runner_result": {
+        "test_name": "warrior_thrust_defense_runtime_test",
+        "test_path": "tests/skills/warrior_thrust_defense_runtime_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "warrior_thrust_defense_runtime_test",
+        "test_path": "tests/skills/warrior_thrust_defense_runtime_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed."
+      ],
+      "classification": "fixture mapped geometry",
+      "resolution": "Wait formal world and official position; retain actual damage/defense assertions.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/w6_visual_contract_test.tscn",
+      "base_runner_result": {
+        "test_name": "w6_visual_contract_test",
+        "test_path": "tests/w6_visual_contract_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "w6_visual_contract_test",
+        "test_path": "tests/w6_visual_contract_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/combat_environment_request_integration_test.tscn",
+      "base_runner_result": {
+        "test_name": "combat_environment_request_integration_test",
+        "test_path": "tests/combat_environment_request_integration_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 2,
+        "engine_log_failure_count": 2,
+        "result": "FAIL",
+        "reason": "stderr_failures_2;engine_log_failures_2"
+      },
+      "candidate_runner_result": {
+        "test_name": "combat_environment_request_integration_test",
+        "test_path": "tests/combat_environment_request_integration_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.",
+        "ERROR: Child is not a child of this node."
+      ],
+      "classification": "production visual initialization lifecycle",
+      "resolution": "Old _ready adds BackBufferCopy as sibling while parent is busy; preserved local fix0c10 owns it as child behind effect with same relative lane. Original gameplay/identity assertions unchanged.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/audio_w4_actor_service_test.tscn",
+      "base_runner_result": {
+        "test_name": "audio_w4_actor_service_test",
+        "test_path": "tests/audio_w4_actor_service_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "audio_w4_actor_service_test",
+        "test_path": "tests/audio_w4_actor_service_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed: 真实服务应播放提示、攻击起点和攻击帧"
+      ],
+      "classification": "obsolete presentation fixture",
+      "resolution": "Rendered frame assignment no longer advances authoritative audio action age; exercise owning combat-clock age and retain real service sound-count assertions. This isolated fixture is not a natural-cadence proof.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/armor_single_slot_authority_test.tscn",
+      "base_runner_result": {
+        "test_name": "armor_single_slot_authority_test",
+        "test_path": "tests/armor_single_slot_authority_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "armor_single_slot_authority_test",
+        "test_path": "tests/armor_single_slot_authority_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Assertion failed."
+      ],
+      "classification": "authoring artifact identity",
+      "resolution": "BASE compiler directive digest differs from current shared compiled authority metadata. Current directive matches unchanged primary loot/equipment data; original identity/slot/group assertions retained. No loot authority regeneration in R4.",
+      "current_blocking_failure": false
+    },
+    {
+      "test_path": "tests/repair_20260913/loot_async_durability_test.tscn",
+      "base_runner_result": {
+        "test_name": "loot_async_durability_test",
+        "test_path": "tests/repair_20260913/loot_async_durability_test.tscn",
+        "pass_marker_found": false,
+        "process_exited": false,
+        "wrapper_exit_code": -1,
+        "child_process_exit_state": "forced_termination",
+        "effective_exit_code": -1,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 1,
+        "engine_log_failure_count": 1,
+        "result": "FAIL",
+        "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+      },
+      "candidate_runner_result": {
+        "test_name": "loot_async_durability_test",
+        "test_path": "tests/repair_20260913/loot_async_durability_test.tscn",
+        "pass_marker_found": true,
+        "process_exited": true,
+        "wrapper_exit_code": 0,
+        "child_process_exit_state": "exited",
+        "effective_exit_code": 0,
+        "timeout": false,
+        "stdout_failure_count": 0,
+        "stderr_failure_count": 0,
+        "engine_log_failure_count": 0,
+        "result": "PASS",
+        "reason": ""
+      },
+      "literal_base_signatures": [
+        "SCRIPT ERROR: Cannot call method 'store_string' on a null value."
+      ],
+      "classification": "generated report directory",
+      "resolution": "BASE completed save assertions then failed opening absent generated report directory. Original CAND PASS used existing directory; now fixture creates it and asserts file open. Clean-checkout test still required.",
+      "current_blocking_failure": false
+    }
+  ],
+  "status": "PASS",
+  "scope": "Actual same25 historical runner outcomes with per-assertion classification. Does not replace final critical or clean checkout; cached audit prerequisite explicitly distinguished."
+}

@@ -1,0 +1,5 @@
+# Dataset review
+
+72/72 actual runners completed normally. v2 fixes actor/global/durability/spawn-facing/audio seeds, but the native canonical request still hashes Time.get_ticks_msec() into its own seed. This is not controlled by GameRoot._rng. Accordingly the skill/pet modes FAIL the full same-random-input acceptance contract. Raw results remain unchanged; summary PASS means complete data collection only.
+
+The aoe10 CPU warning (mean +0.03019 ms; all three deltas above the first two BASE samples' 0.015765 ms difference) remains a measured warning, not dismissed as noise. Same starts/HP/deaths but 34 versus 38 materialized drop nodes and differing death-queue completion counts require qualified load interpretation. It cannot establish a final-source regression or its absence. v3 fixes the native seed-input boundary in the test subclass only, records every actual canonical seed, and will remeasure after the remaining source-lifecycle closure. Original BASE production remains unchanged.

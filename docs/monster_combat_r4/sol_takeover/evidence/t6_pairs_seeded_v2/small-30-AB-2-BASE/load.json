@@ -1,0 +1,6662 @@
+{
+  "boot_ms": 5052.868,
+  "casts": [],
+  "cold_casts": [],
+  "counter_deltas": {
+    "active_enemy_physics_count": 18000,
+    "active_loot_pickups": 0,
+    "actor_redraw_requests": 0,
+    "actor_redraw_requests_from_damage": 0,
+    "aoe_candidate_usec": 0,
+    "aoe_damage_target_count": 0,
+    "aoe_exact_intersection_tests": 0,
+    "aoe_exact_phase_usec": 0,
+    "aoe_full_enemy_group_scans": 0,
+    "aoe_max_single_release_candidate_usec": 0,
+    "aoe_nested_cell_enemy_scans": 0,
+    "aoe_query_plan_builds": 0,
+    "aoe_release_count": 0,
+    "aoe_selected_targets": 0,
+    "aoe_snapshot_validation_calls": 0,
+    "aoe_spatial_candidates": 0,
+    "aoe_spatial_queries": 0,
+    "attack_los_cache_hits": 0,
+    "attack_los_evaluations": 13059,
+    "attack_los_map_samples": 153203,
+    "attack_los_physics_rays": 13059,
+    "attack_los_requests": 13059,
+    "attack_los_usec": 206481,
+    "background_ai_evaluations": 0,
+    "background_deep_sleep_entries": 0,
+    "background_deep_sleep_wakeups": 0,
+    "background_fast_path_skips": 0,
+    "crowd_full_group_scans": 0,
+    "crowd_grid_actor_scans": 0,
+    "crowd_grid_builds": 0,
+    "crowd_index_candidates": 12,
+    "crowd_queries": 1,
+    "crowd_query_candidates": 12,
+    "crowd_steering_evaluations": 1,
+    "crowd_usec": 88,
+    "death_batch_count": 0,
+    "death_batch_size_max": 0.0,
+    "death_begin_calls": 0,
+    "death_jobs_per_frame_max": 0.0,
+    "death_pending_marks": 0,
+    "death_physics_process_calls_after_begin": 0,
+    "death_queue_cancelled_count": 0,
+    "death_queue_committed_count": 0,
+    "death_queue_failed_count": 0,
+    "death_queue_materialization_failures": 0,
+    "death_queue_retry_count": 0,
+    "death_queue_state_transitions": 0,
+    "death_resolve_active_usec": 0,
+    "death_same_release_unregistrations": 0,
+    "death_settlement_usec": 0,
+    "death_target_refresh_count": 0,
+    "death_work_frames": 0,
+    "direct_spell_full_monster_data_duplicates": 0,
+    "direct_spell_resolution_count": 0,
+    "direct_spell_resolution_usec": 0,
+    "direct_spell_stats_snapshot_count": 0,
+    "draw_calls": 0,
+    "drop_node_spawn_count": 0,
+    "drop_node_spawn_usec": 0,
+    "drop_nodes_per_frame_max": 0.0,
+    "drop_queue_depth_max": 0.0,
+    "drop_queue_oldest_age_ms": 0,
+    "drop_request_count": 0,
+    "drop_roll_count": 0,
+    "drop_roll_usec": 0,
+    "drop_work_frames": 0,
+    "durability_event_commits": 0,
+    "enemy_background_tick_calls": 0,
+    "enemy_background_tick_usec": 0,
+    "enemy_environment_guard_calls": 817,
+    "enemy_environment_guard_usec": 32342,
+    "enemy_movement_strategy_calls": 5735,
+    "enemy_movement_strategy_usec": 783299,
+    "enemy_physics_calls": 18000,
+    "enemy_physics_usec": 5111643,
+    "enemy_projection_calls": 42560,
+    "enemy_projection_usec": 340204,
+    "enemy_retarget_calls": 18000,
+    "enemy_retarget_usec": 293740,
+    "enemy_terrain_path_accepted": 0,
+    "enemy_terrain_path_budget_rejections": 0,
+    "enemy_terrain_path_calls": 0,
+    "enemy_terrain_path_expansions": 0,
+    "enemy_terrain_path_expansions_max": 0.0,
+    "enemy_terrain_path_usec": 0,
+    "enemy_visual_update_calls": 18000,
+    "enemy_visual_update_usec": 65074,
+    "engaged_enemy_count": 18000,
+    "environment_guard_batches": 14106,
+    "environment_point_samples": 0,
+    "environment_query_usec": 439158,
+    "foreground_ai_ticks": 18000,
+    "hit_animation_requests": 0,
+    "lethal_damage_count": 0,
+    "loot_collection_authority_checks": 0,
+    "loot_collection_candidates": 0,
+    "loot_collection_global_checks": 0,
+    "loot_collection_origin_rejections": 0,
+    "loot_collection_spatial_queries": 96,
+    "loot_fallback_redraw_requests": 0,
+    "loot_manager_collection_requests": 0,
+    "loot_manager_exact_range_checks": 0,
+    "loot_manager_fail_safe_checks": 96,
+    "loot_manager_full_scans": 0,
+    "loot_manager_player_events": 0,
+    "loot_manager_registration_checks": 0,
+    "loot_manager_retry_checks": 0,
+    "loot_manager_visual_registry_entries": 0,
+    "loot_manager_visual_registry_scans": 0,
+    "loot_manager_visual_updates": 0,
+    "loot_pickup_process_calls": 0,
+    "loot_spatial_candidates": 0,
+    "loot_spatial_full_scans": 0,
+    "loot_spatial_queries": 96,
+    "loot_spatial_registers": 0,
+    "loot_spatial_unregisters": 0,
+    "loot_visual_updates": 0,
+    "monster_direct_magic_walk_delay_count": 0,
+    "monster_dot_no_struck_count": 0,
+    "monster_magic_mine_struck_count": 0,
+    "monster_presentation_queue_overflow": 0,
+    "monster_struck_event_count": 0,
+    "monster_struck_visual_pending_max": 0.0,
+    "move_and_slide_usec": 158352,
+    "moving_enemy_count": 5683,
+    "overhead_health_refreshes": 0,
+    "physics_moves": 5683,
+    "physics_process_ms": 2,
+    "process_ms": 261,
+    "render_primitives": 0,
+    "respawn_state_updates": 0,
+    "retarget_decisions": 1371,
+    "retarget_full_scans": 39,
+    "retarget_target_candidates": 39,
+    "retarget_target_group_scans": 39,
+    "safe_zone_global_actor_scans": 0,
+    "safe_zone_queries": 42536,
+    "safe_zone_usec": 774602,
+    "take_damage_calls": 0,
+    "take_damage_usec": 0,
+    "texture_mem": 0,
+    "unexpected_sync_loot_texture_loads": 0,
+    "video_mem": 0,
+    "visual_animation_updates": 42750,
+    "visual_render_state_changes": 3679
+  },
+  "counters_last_window": {
+    "active_enemy_physics_count": 18000,
+    "active_loot_pickups": 0,
+    "actor_redraw_requests": 0,
+    "actor_redraw_requests_from_damage": 0,
+    "aoe_candidate_usec": 0,
+    "aoe_damage_target_count": 0,
+    "aoe_exact_intersection_tests": 0,
+    "aoe_exact_phase_usec": 0,
+    "aoe_full_enemy_group_scans": 0,
+    "aoe_max_single_release_candidate_usec": 0,
+    "aoe_nested_cell_enemy_scans": 0,
+    "aoe_query_plan_builds": 0,
+    "aoe_release_count": 0,
+    "aoe_selected_targets": 0,
+    "aoe_snapshot_validation_calls": 0,
+    "aoe_spatial_candidates": 0,
+    "aoe_spatial_queries": 0,
+    "attack_los_cache_hits": 0,
+    "attack_los_evaluations": 13059,
+    "attack_los_map_samples": 153203,
+    "attack_los_physics_rays": 13059,
+    "attack_los_requests": 13059,
+    "attack_los_usec": 206481,
+    "background_ai_evaluations": 0,
+    "background_deep_sleep_entries": 0,
+    "background_deep_sleep_wakeups": 0,
+    "background_fast_path_skips": 0,
+    "crowd_full_group_scans": 0,
+    "crowd_grid_actor_scans": 0,
+    "crowd_grid_builds": 0,
+    "crowd_index_candidates": 12,
+    "crowd_queries": 1,
+    "crowd_query_candidates": 12,
+    "crowd_steering_evaluations": 1,
+    "crowd_usec": 88,
+    "death_batch_count": 0,
+    "death_batch_size_max": 0,
+    "death_begin_calls": 0,
+    "death_jobs_per_frame_max": 0,
+    "death_pending_marks": 0,
+    "death_physics_process_calls_after_begin": 0,
+    "death_queue_cancelled_count": 0,
+    "death_queue_committed_count": 0,
+    "death_queue_failed_count": 0,
+    "death_queue_materialization_failures": 0,
+    "death_queue_retry_count": 0,
+    "death_queue_state_transitions": 0,
+    "death_resolve_active_usec": 0,
+    "death_same_release_unregistrations": 0,
+    "death_settlement_usec": 0,
+    "death_target_refresh_count": 0,
+    "death_work_frames": 0,
+    "direct_spell_full_monster_data_duplicates": 0,
+    "direct_spell_resolution_count": 0,
+    "direct_spell_resolution_usec": 0,
+    "direct_spell_stats_snapshot_count": 0,
+    "draw_calls": 0,
+    "drop_node_spawn_count": 0,
+    "drop_node_spawn_usec": 0,
+    "drop_nodes_per_frame_max": 0,
+    "drop_queue_depth_max": 0,
+    "drop_queue_oldest_age_ms": 0,
+    "drop_request_count": 0,
+    "drop_roll_count": 0,
+    "drop_roll_usec": 0,
+    "drop_work_frames": 0,
+    "durability_event_commits": 0,
+    "enemy_background_tick_calls": 0,
+    "enemy_background_tick_usec": 0,
+    "enemy_environment_guard_calls": 817,
+    "enemy_environment_guard_usec": 32342,
+    "enemy_movement_strategy_calls": 5735,
+    "enemy_movement_strategy_usec": 783299,
+    "enemy_physics_calls": 18000,
+    "enemy_physics_usec": 5111643,
+    "enemy_projection_calls": 42560,
+    "enemy_projection_usec": 340204,
+    "enemy_retarget_calls": 18000,
+    "enemy_retarget_usec": 293740,
+    "enemy_terrain_path_accepted": 0,
+    "enemy_terrain_path_budget_rejections": 0,
+    "enemy_terrain_path_calls": 0,
+    "enemy_terrain_path_expansions": 0,
+    "enemy_terrain_path_expansions_max": 0,
+    "enemy_terrain_path_usec": 0,
+    "enemy_visual_update_calls": 18000,
+    "enemy_visual_update_usec": 65074,
+    "engaged_enemy_count": 18000,
+    "environment_guard_batches": 14106,
+    "environment_point_samples": 0,
+    "environment_query_usec": 439158,
+    "foreground_ai_ticks": 18000,
+    "full_process_max_ms": 0.408,
+    "hit_animation_requests": 0,
+    "lethal_damage_count": 0,
+    "loot_collection_authority_checks": 0,
+    "loot_collection_candidates": 0,
+    "loot_collection_global_checks": 0,
+    "loot_collection_origin_rejections": 0,
+    "loot_collection_spatial_queries": 96,
+    "loot_fallback_redraw_requests": 0,
+    "loot_manager_collection_requests": 0,
+    "loot_manager_exact_range_checks": 0,
+    "loot_manager_fail_safe_checks": 96,
+    "loot_manager_full_scans": 0,
+    "loot_manager_player_events": 0,
+    "loot_manager_registration_checks": 0,
+    "loot_manager_retry_checks": 0,
+    "loot_manager_visual_registry_entries": 0,
+    "loot_manager_visual_registry_scans": 0,
+    "loot_manager_visual_updates": 0,
+    "loot_pickup_process_calls": 0,
+    "loot_spatial_candidates": 0,
+    "loot_spatial_full_scans": 0,
+    "loot_spatial_queries": 96,
+    "loot_spatial_registers": 0,
+    "loot_spatial_unregisters": 0,
+    "loot_visual_updates": 0,
+    "monster_direct_magic_walk_delay_count": 0,
+    "monster_dot_no_struck_count": 0,
+    "monster_magic_mine_struck_count": 0,
+    "monster_presentation_queue_overflow": 0,
+    "monster_streaming_poll_max_ms": 0.13,
+    "monster_struck_event_count": 0,
+    "monster_struck_visual_pending_max": 0,
+    "move_and_slide_usec": 158352,
+    "moving_enemy_count": 5683,
+    "overhead_health_refreshes": 0,
+    "physics_moves": 5683,
+    "physics_process_ms": 2.34399999999999,
+    "process_ms": 261.35,
+    "render_primitives": 0,
+    "respawn_state_updates": 0,
+    "retarget_decisions": 1371,
+    "retarget_full_scans": 39,
+    "retarget_target_candidates": 39,
+    "retarget_target_group_scans": 39,
+    "safe_zone_global_actor_scans": 0,
+    "safe_zone_queries": 42536,
+    "safe_zone_usec": 774602,
+    "take_damage_calls": 0,
+    "take_damage_usec": 0,
+    "texture_mem": 0,
+    "unexpected_sync_loot_texture_loads": 0,
+    "video_mem": 0,
+    "visual_animation_updates": 42750,
+    "visual_render_state_changes": 3679
+  },
+  "death_signals": 0,
+  "deaths": 0,
+  "device": "NOT_RUN",
+  "failures": [],
+  "frames": [
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.845,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034198068.0,
+      "physics_callback_interval_ms": 21.319,
+      "tick": 106
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.614,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034198696.0,
+      "physics_callback_interval_ms": 12.542,
+      "tick": 107
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.99,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034201712.0,
+      "physics_callback_interval_ms": 21.041,
+      "tick": 108
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.198,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034203344.0,
+      "physics_callback_interval_ms": 13.992,
+      "tick": 109
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.0,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034215252.0,
+      "physics_callback_interval_ms": 22.525,
+      "tick": 110
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.71,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034237140.0,
+      "physics_callback_interval_ms": 15.474,
+      "tick": 111
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.374,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034261380.0,
+      "physics_callback_interval_ms": 14.54,
+      "tick": 112
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.197,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034277804.0,
+      "physics_callback_interval_ms": 20.545,
+      "tick": 113
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.167,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034297728.0,
+      "physics_callback_interval_ms": 10.758,
+      "tick": 114
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.433,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034322548.0,
+      "physics_callback_interval_ms": 23.024,
+      "tick": 115
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.034,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034327324.0,
+      "physics_callback_interval_ms": 10.306,
+      "tick": 116
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.975,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034328984.0,
+      "physics_callback_interval_ms": 13.721,
+      "tick": 117
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 15.091,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034336124.0,
+      "physics_callback_interval_ms": 27.901,
+      "tick": 118
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.49,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034329912.0,
+      "physics_callback_interval_ms": 8.991,
+      "tick": 119
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.807,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034335892.0,
+      "physics_callback_interval_ms": 24.611,
+      "tick": 120
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.086,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034331112.0,
+      "physics_callback_interval_ms": 8.019,
+      "tick": 121
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.313,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034336196.0,
+      "physics_callback_interval_ms": 19.099,
+      "tick": 122
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.734,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034333668.0,
+      "physics_callback_interval_ms": 17.112,
+      "tick": 123
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.864,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034333392.0,
+      "physics_callback_interval_ms": 11.915,
+      "tick": 124
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.251,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034341888.0,
+      "physics_callback_interval_ms": 31.139,
+      "tick": 125
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.73,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034341320.0,
+      "physics_callback_interval_ms": 13.327,
+      "tick": 126
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.129,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034336284.0,
+      "physics_callback_interval_ms": 7.702,
+      "tick": 127
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.024,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034341392.0,
+      "physics_callback_interval_ms": 25.602,
+      "tick": 128
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.32,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034341024.0,
+      "physics_callback_interval_ms": 10.085,
+      "tick": 129
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.079,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034340300.0,
+      "physics_callback_interval_ms": 19.53,
+      "tick": 130
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.247,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034351184.0,
+      "physics_callback_interval_ms": 24.052,
+      "tick": 131
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.945,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034347004.0,
+      "physics_callback_interval_ms": 12.375,
+      "tick": 132
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.897,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034345668.0,
+      "physics_callback_interval_ms": 8.449,
+      "tick": 133
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.491,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034345960.0,
+      "physics_callback_interval_ms": 12.953,
+      "tick": 134
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.653,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034350860.0,
+      "physics_callback_interval_ms": 18.016,
+      "tick": 135
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.537,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034344144.0,
+      "physics_callback_interval_ms": 10.663,
+      "tick": 136
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.0,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034345648.0,
+      "physics_callback_interval_ms": 12.24,
+      "tick": 137
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.698,
+      "engine_physics_monitor_ms": 3.913,
+      "engine_process_monitor_ms": 0.869,
+      "live_count": 30,
+      "memory_bytes": 1034352480.0,
+      "physics_callback_interval_ms": 29.44,
+      "tick": 138
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.886,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034349228.0,
+      "physics_callback_interval_ms": 12.441,
+      "tick": 139
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.527,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034348404.0,
+      "physics_callback_interval_ms": 8.951,
+      "tick": 140
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.801,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034348552.0,
+      "physics_callback_interval_ms": 19.972,
+      "tick": 141
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.282,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034350936.0,
+      "physics_callback_interval_ms": 18.33,
+      "tick": 142
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.674,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034351088.0,
+      "physics_callback_interval_ms": 18.065,
+      "tick": 143
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.617,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034350340.0,
+      "physics_callback_interval_ms": 11.747,
+      "tick": 144
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 19.457,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034363736.0,
+      "physics_callback_interval_ms": 27.701,
+      "tick": 145
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.835,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034355728.0,
+      "physics_callback_interval_ms": 14.978,
+      "tick": 146
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.111,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034355940.0,
+      "physics_callback_interval_ms": 13.013,
+      "tick": 147
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.079,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034360760.0,
+      "physics_callback_interval_ms": 25.743,
+      "tick": 148
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.908,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034363156.0,
+      "physics_callback_interval_ms": 10.611,
+      "tick": 149
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.159,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034362112.0,
+      "physics_callback_interval_ms": 12.053,
+      "tick": 150
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 19.125,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034373180.0,
+      "physics_callback_interval_ms": 33.628,
+      "tick": 151
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.779,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034364860.0,
+      "physics_callback_interval_ms": 8.209,
+      "tick": 152
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.359,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034364816.0,
+      "physics_callback_interval_ms": 12.975,
+      "tick": 153
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.473,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034367568.0,
+      "physics_callback_interval_ms": 24.774,
+      "tick": 154
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.844,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034368008.0,
+      "physics_callback_interval_ms": 11.196,
+      "tick": 155
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.096,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034367284.0,
+      "physics_callback_interval_ms": 11.997,
+      "tick": 156
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 19.129,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034380288.0,
+      "physics_callback_interval_ms": 33.745,
+      "tick": 157
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.846,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034367592.0,
+      "physics_callback_interval_ms": 7.884,
+      "tick": 158
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.041,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034369952.0,
+      "physics_callback_interval_ms": 7.625,
+      "tick": 159
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.835,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034370844.0,
+      "physics_callback_interval_ms": 13.034,
+      "tick": 160
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.682,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034373564.0,
+      "physics_callback_interval_ms": 18.719,
+      "tick": 161
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.681,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034371912.0,
+      "physics_callback_interval_ms": 10.737,
+      "tick": 162
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.539,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034373032.0,
+      "physics_callback_interval_ms": 19.663,
+      "tick": 163
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 18.838,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034389916.0,
+      "physics_callback_interval_ms": 26.06,
+      "tick": 164
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.105,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034381532.0,
+      "physics_callback_interval_ms": 8.934,
+      "tick": 165
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.013,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034381680.0,
+      "physics_callback_interval_ms": 12.304,
+      "tick": 166
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.582,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034388484.0,
+      "physics_callback_interval_ms": 25.191,
+      "tick": 167
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.734,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034386904.0,
+      "physics_callback_interval_ms": 10.981,
+      "tick": 168
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.972,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034388984.0,
+      "physics_callback_interval_ms": 11.997,
+      "tick": 169
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 18.745,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034399696.0,
+      "physics_callback_interval_ms": 33.529,
+      "tick": 170
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.939,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034403120.0,
+      "physics_callback_interval_ms": 8.449,
+      "tick": 171
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.913,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034403268.0,
+      "physics_callback_interval_ms": 12.342,
+      "tick": 172
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.152,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034401204.0,
+      "physics_callback_interval_ms": 24.954,
+      "tick": 173
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.872,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034402108.0,
+      "physics_callback_interval_ms": 11.605,
+      "tick": 174
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.972,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034399220.0,
+      "physics_callback_interval_ms": 11.818,
+      "tick": 175
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 18.322,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034411520.0,
+      "physics_callback_interval_ms": 33.054,
+      "tick": 176
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.073,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034403736.0,
+      "physics_callback_interval_ms": 8.551,
+      "tick": 177
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.088,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034405536.0,
+      "physics_callback_interval_ms": 12.384,
+      "tick": 178
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.073,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034409836.0,
+      "physics_callback_interval_ms": 24.662,
+      "tick": 179
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.797,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034413152.0,
+      "physics_callback_interval_ms": 11.665,
+      "tick": 180
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.339,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034406432.0,
+      "physics_callback_interval_ms": 12.298,
+      "tick": 181
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 17.561,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034420032.0,
+      "physics_callback_interval_ms": 31.904,
+      "tick": 182
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.967,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034413016.0,
+      "physics_callback_interval_ms": 8.74,
+      "tick": 183
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.503,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034413548.0,
+      "physics_callback_interval_ms": 12.845,
+      "tick": 184
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.398,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034415884.0,
+      "physics_callback_interval_ms": 24.606,
+      "tick": 185
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.033,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034414592.0,
+      "physics_callback_interval_ms": 11.398,
+      "tick": 186
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.124,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034415392.0,
+      "physics_callback_interval_ms": 11.867,
+      "tick": 187
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 17.239,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034430388.0,
+      "physics_callback_interval_ms": 31.892,
+      "tick": 188
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.909,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034423788.0,
+      "physics_callback_interval_ms": 8.505,
+      "tick": 189
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.325,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034423936.0,
+      "physics_callback_interval_ms": 12.753,
+      "tick": 190
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.832,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034428396.0,
+      "physics_callback_interval_ms": 24.21,
+      "tick": 191
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.025,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034428000.0,
+      "physics_callback_interval_ms": 12.048,
+      "tick": 192
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.392,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034429568.0,
+      "physics_callback_interval_ms": 12.13,
+      "tick": 193
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.98,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034440516.0,
+      "physics_callback_interval_ms": 31.289,
+      "tick": 194
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.118,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034438116.0,
+      "physics_callback_interval_ms": 8.638,
+      "tick": 195
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.998,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034439788.0,
+      "physics_callback_interval_ms": 12.227,
+      "tick": 196
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.482,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034441092.0,
+      "physics_callback_interval_ms": 25.16,
+      "tick": 197
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.901,
+      "engine_physics_monitor_ms": 16.463,
+      "engine_process_monitor_ms": 1.299,
+      "live_count": 30,
+      "memory_bytes": 1034442132.0,
+      "physics_callback_interval_ms": 11.205,
+      "tick": 198
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.053,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034441408.0,
+      "physics_callback_interval_ms": 12.082,
+      "tick": 199
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 15.9,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034450304.0,
+      "physics_callback_interval_ms": 30.443,
+      "tick": 200
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.191,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034442708.0,
+      "physics_callback_interval_ms": 8.871,
+      "tick": 201
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.236,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034445020.0,
+      "physics_callback_interval_ms": 12.374,
+      "tick": 202
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.303,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034446360.0,
+      "physics_callback_interval_ms": 21.794,
+      "tick": 203
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.697,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034452048.0,
+      "physics_callback_interval_ms": 17.183,
+      "tick": 204
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.131,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034448812.0,
+      "physics_callback_interval_ms": 9.2,
+      "tick": 205
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.36,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034451224.0,
+      "physics_callback_interval_ms": 22.02,
+      "tick": 206
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 15.211,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034459052.0,
+      "physics_callback_interval_ms": 21.566,
+      "tick": 207
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.397,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034453172.0,
+      "physics_callback_interval_ms": 8.067,
+      "tick": 208
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.664,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034454632.0,
+      "physics_callback_interval_ms": 20.449,
+      "tick": 209
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.351,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034455868.0,
+      "physics_callback_interval_ms": 14.505,
+      "tick": 210
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.647,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034461684.0,
+      "physics_callback_interval_ms": 17.118,
+      "tick": 211
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.905,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034459980.0,
+      "physics_callback_interval_ms": 16.952,
+      "tick": 212
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.227,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034469376.0,
+      "physics_callback_interval_ms": 23.16,
+      "tick": 213
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.793,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034464924.0,
+      "physics_callback_interval_ms": 8.568,
+      "tick": 214
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.439,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034465808.0,
+      "physics_callback_interval_ms": 19.753,
+      "tick": 215
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.57,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034467444.0,
+      "physics_callback_interval_ms": 14.972,
+      "tick": 216
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.4,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034469732.0,
+      "physics_callback_interval_ms": 13.661,
+      "tick": 217
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.521,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034471944.0,
+      "physics_callback_interval_ms": 22.779,
+      "tick": 218
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.322,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034481488.0,
+      "physics_callback_interval_ms": 20.592,
+      "tick": 219
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.301,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034472864.0,
+      "physics_callback_interval_ms": 7.821,
+      "tick": 220
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.645,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034473716.0,
+      "physics_callback_interval_ms": 20.612,
+      "tick": 221
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.758,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034475976.0,
+      "physics_callback_interval_ms": 14.957,
+      "tick": 222
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.413,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034477048.0,
+      "physics_callback_interval_ms": 12.455,
+      "tick": 223
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.805,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034479384.0,
+      "physics_callback_interval_ms": 24.077,
+      "tick": 224
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.631,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034483440.0,
+      "physics_callback_interval_ms": 15.589,
+      "tick": 225
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.566,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034482612.0,
+      "physics_callback_interval_ms": 12.788,
+      "tick": 226
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.513,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034478692.0,
+      "physics_callback_interval_ms": 16.613,
+      "tick": 227
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.475,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034480780.0,
+      "physics_callback_interval_ms": 13.869,
+      "tick": 228
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.598,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034482136.0,
+      "physics_callback_interval_ms": 14.797,
+      "tick": 229
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.802,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034482180.0,
+      "physics_callback_interval_ms": 19.937,
+      "tick": 230
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.643,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034486980.0,
+      "physics_callback_interval_ms": 16.616,
+      "tick": 231
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.762,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034488784.0,
+      "physics_callback_interval_ms": 14.991,
+      "tick": 232
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.946,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034491904.0,
+      "physics_callback_interval_ms": 19.843,
+      "tick": 233
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.692,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034489164.0,
+      "physics_callback_interval_ms": 10.518,
+      "tick": 234
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.959,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034489992.0,
+      "physics_callback_interval_ms": 14.048,
+      "tick": 235
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.735,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034492344.0,
+      "physics_callback_interval_ms": 21.468,
+      "tick": 236
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.745,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034491596.0,
+      "physics_callback_interval_ms": 12.809,
+      "tick": 237
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.641,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034499812.0,
+      "physics_callback_interval_ms": 26.607,
+      "tick": 238
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.809,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034495120.0,
+      "physics_callback_interval_ms": 8.279,
+      "tick": 239
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.456,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034500024.0,
+      "physics_callback_interval_ms": 16.15,
+      "tick": 240
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.573,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034503304.0,
+      "physics_callback_interval_ms": 17.962,
+      "tick": 241
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.062,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034503480.0,
+      "physics_callback_interval_ms": 14.139,
+      "tick": 242
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.785,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034505288.0,
+      "physics_callback_interval_ms": 20.443,
+      "tick": 243
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.944,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034505184.0,
+      "physics_callback_interval_ms": 13.943,
+      "tick": 244
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.809,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034510644.0,
+      "physics_callback_interval_ms": 18.701,
+      "tick": 245
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.322,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034511220.0,
+      "physics_callback_interval_ms": 18.199,
+      "tick": 246
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.122,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034512620.0,
+      "physics_callback_interval_ms": 11.579,
+      "tick": 247
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.642,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034512492.0,
+      "physics_callback_interval_ms": 21.256,
+      "tick": 248
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.521,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034513344.0,
+      "physics_callback_interval_ms": 13.648,
+      "tick": 249
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.301,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034514196.0,
+      "physics_callback_interval_ms": 14.634,
+      "tick": 250
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.741,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034519480.0,
+      "physics_callback_interval_ms": 26.224,
+      "tick": 251
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.186,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034516992.0,
+      "physics_callback_interval_ms": 9.345,
+      "tick": 252
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.752,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034517356.0,
+      "physics_callback_interval_ms": 23.7,
+      "tick": 253
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.732,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034517460.0,
+      "physics_callback_interval_ms": 11.746,
+      "tick": 254
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.605,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034519464.0,
+      "physics_callback_interval_ms": 13.589,
+      "tick": 255
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.727,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034522308.0,
+      "physics_callback_interval_ms": 21.885,
+      "tick": 256
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.258,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034521240.0,
+      "physics_callback_interval_ms": 11.167,
+      "tick": 257
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.469,
+      "engine_physics_monitor_ms": 19.682,
+      "engine_process_monitor_ms": 1.406,
+      "live_count": 30,
+      "memory_bytes": 1034526268.0,
+      "physics_callback_interval_ms": 25.978,
+      "tick": 258
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.053,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034526320.0,
+      "physics_callback_interval_ms": 8.716,
+      "tick": 259
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.76,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034528920.0,
+      "physics_callback_interval_ms": 14.065,
+      "tick": 260
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.211,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034527452.0,
+      "physics_callback_interval_ms": 20.166,
+      "tick": 261
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.895,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034528304.0,
+      "physics_callback_interval_ms": 13.479,
+      "tick": 262
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.051,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034530072.0,
+      "physics_callback_interval_ms": 20.868,
+      "tick": 263
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.813,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034530924.0,
+      "physics_callback_interval_ms": 13.544,
+      "tick": 264
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.843,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034536548.0,
+      "physics_callback_interval_ms": 25.71,
+      "tick": 265
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.724,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034537792.0,
+      "physics_callback_interval_ms": 10.766,
+      "tick": 266
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.809,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034538600.0,
+      "physics_callback_interval_ms": 18.748,
+      "tick": 267
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.146,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034538240.0,
+      "physics_callback_interval_ms": 14.149,
+      "tick": 268
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.799,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034540072.0,
+      "physics_callback_interval_ms": 20.31,
+      "tick": 269
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.934,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034540948.0,
+      "physics_callback_interval_ms": 13.947,
+      "tick": 270
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.844,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034549856.0,
+      "physics_callback_interval_ms": 25.586,
+      "tick": 271
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.794,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034547908.0,
+      "physics_callback_interval_ms": 9.764,
+      "tick": 272
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.851,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034548184.0,
+      "physics_callback_interval_ms": 19.753,
+      "tick": 273
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.924,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034549884.0,
+      "physics_callback_interval_ms": 14.884,
+      "tick": 274
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.019,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034550032.0,
+      "physics_callback_interval_ms": 19.778,
+      "tick": 275
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.039,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034551012.0,
+      "physics_callback_interval_ms": 13.833,
+      "tick": 276
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.646,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034900908.0,
+      "physics_callback_interval_ms": 28.834,
+      "tick": 277
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.124,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034899112.0,
+      "physics_callback_interval_ms": 9.633,
+      "tick": 278
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.722,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034899472.0,
+      "physics_callback_interval_ms": 11.941,
+      "tick": 279
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.152,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034904564.0,
+      "physics_callback_interval_ms": 23.155,
+      "tick": 280
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.756,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034903624.0,
+      "physics_callback_interval_ms": 11.376,
+      "tick": 281
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.239,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034940180.0,
+      "physics_callback_interval_ms": 22.719,
+      "tick": 282
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.544,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034977236.0,
+      "physics_callback_interval_ms": 12.995,
+      "tick": 283
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.196,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034983160.0,
+      "physics_callback_interval_ms": 18.077,
+      "tick": 284
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.234,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034977744.0,
+      "physics_callback_interval_ms": 14.701,
+      "tick": 285
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.123,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1034979576.0,
+      "physics_callback_interval_ms": 13.681,
+      "tick": 286
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.876,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035014784.0,
+      "physics_callback_interval_ms": 23.826,
+      "tick": 287
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.22,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035015080.0,
+      "physics_callback_interval_ms": 10.807,
+      "tick": 288
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.418,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035015996.0,
+      "physics_callback_interval_ms": 13.977,
+      "tick": 289
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.524,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035022104.0,
+      "physics_callback_interval_ms": 26.889,
+      "tick": 290
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.345,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035031808.0,
+      "physics_callback_interval_ms": 8.077,
+      "tick": 291
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.329,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035032724.0,
+      "physics_callback_interval_ms": 20.097,
+      "tick": 292
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.998,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035033640.0,
+      "physics_callback_interval_ms": 13.508,
+      "tick": 293
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.591,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035035828.0,
+      "physics_callback_interval_ms": 15.407,
+      "tick": 294
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.772,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035035720.0,
+      "physics_callback_interval_ms": 19.887,
+      "tick": 295
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.897,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035052408.0,
+      "physics_callback_interval_ms": 14.046,
+      "tick": 296
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.976,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035055940.0,
+      "physics_callback_interval_ms": 25.697,
+      "tick": 297
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.078,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035051624.0,
+      "physics_callback_interval_ms": 7.843,
+      "tick": 298
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.073,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035053200.0,
+      "physics_callback_interval_ms": 13.798,
+      "tick": 299
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.74,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035055460.0,
+      "physics_callback_interval_ms": 23.357,
+      "tick": 300
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.223,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035054988.0,
+      "physics_callback_interval_ms": 11.33,
+      "tick": 301
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.559,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035058164.0,
+      "physics_callback_interval_ms": 21.981,
+      "tick": 302
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.934,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035059036.0,
+      "physics_callback_interval_ms": 12.2,
+      "tick": 303
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.889,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035063528.0,
+      "physics_callback_interval_ms": 26.617,
+      "tick": 304
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.128,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035058888.0,
+      "physics_callback_interval_ms": 8.067,
+      "tick": 305
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.927,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035060592.0,
+      "physics_callback_interval_ms": 13.586,
+      "tick": 306
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.233,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035069096.0,
+      "physics_callback_interval_ms": 23.047,
+      "tick": 307
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.981,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035068980.0,
+      "physics_callback_interval_ms": 12.519,
+      "tick": 308
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.239,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035072772.0,
+      "physics_callback_interval_ms": 22.024,
+      "tick": 309
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.226,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035059200.0,
+      "physics_callback_interval_ms": 13.741,
+      "tick": 310
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.939,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035062604.0,
+      "physics_callback_interval_ms": 15.527,
+      "tick": 311
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.939,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035061208.0,
+      "physics_callback_interval_ms": 17.699,
+      "tick": 312
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.079,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035061924.0,
+      "physics_callback_interval_ms": 13.91,
+      "tick": 313
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.457,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035066188.0,
+      "physics_callback_interval_ms": 23.082,
+      "tick": 314
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.903,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035063648.0,
+      "physics_callback_interval_ms": 10.248,
+      "tick": 315
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.496,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035054196.0,
+      "physics_callback_interval_ms": 22.279,
+      "tick": 316
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.197,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035094008.0,
+      "physics_callback_interval_ms": 16.958,
+      "tick": 317
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.827,
+      "engine_physics_monitor_ms": 16.527,
+      "engine_process_monitor_ms": 1.445,
+      "live_count": 30,
+      "memory_bytes": 1035092860.0,
+      "physics_callback_interval_ms": 10.009,
+      "tick": 318
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.711,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035094668.0,
+      "physics_callback_interval_ms": 22.551,
+      "tick": 319
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.264,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035095700.0,
+      "physics_callback_interval_ms": 12.421,
+      "tick": 320
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.07,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035098756.0,
+      "physics_callback_interval_ms": 23.553,
+      "tick": 321
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.035,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035098812.0,
+      "physics_callback_interval_ms": 10.686,
+      "tick": 322
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.003,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035099108.0,
+      "physics_callback_interval_ms": 14.807,
+      "tick": 323
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.585,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035100660.0,
+      "physics_callback_interval_ms": 22.312,
+      "tick": 324
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.188,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035100452.0,
+      "physics_callback_interval_ms": 10.303,
+      "tick": 325
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.221,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035101808.0,
+      "physics_callback_interval_ms": 23.774,
+      "tick": 326
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.098,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035102128.0,
+      "physics_callback_interval_ms": 10.678,
+      "tick": 327
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.798,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035105060.0,
+      "physics_callback_interval_ms": 25.394,
+      "tick": 328
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.682,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035103696.0,
+      "physics_callback_interval_ms": 10.614,
+      "tick": 329
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.199,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035104632.0,
+      "physics_callback_interval_ms": 12.351,
+      "tick": 330
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.02,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035123280.0,
+      "physics_callback_interval_ms": 23.642,
+      "tick": 331
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.185,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035123024.0,
+      "physics_callback_interval_ms": 10.86,
+      "tick": 332
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.046,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035126612.0,
+      "physics_callback_interval_ms": 23.572,
+      "tick": 333
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.264,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035124208.0,
+      "physics_callback_interval_ms": 11.005,
+      "tick": 334
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.464,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035128132.0,
+      "physics_callback_interval_ms": 17.029,
+      "tick": 335
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.924,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035129416.0,
+      "physics_callback_interval_ms": 20.151,
+      "tick": 336
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.126,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035127636.0,
+      "physics_callback_interval_ms": 10.955,
+      "tick": 337
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.285,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035130312.0,
+      "physics_callback_interval_ms": 22.876,
+      "tick": 338
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.442,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035130952.0,
+      "physics_callback_interval_ms": 11.94,
+      "tick": 339
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.101,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035134916.0,
+      "physics_callback_interval_ms": 23.373,
+      "tick": 340
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.948,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035136468.0,
+      "physics_callback_interval_ms": 14.66,
+      "tick": 341
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.018,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035134640.0,
+      "physics_callback_interval_ms": 10.826,
+      "tick": 342
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.258,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035124200.0,
+      "physics_callback_interval_ms": 21.949,
+      "tick": 343
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.882,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035124348.0,
+      "physics_callback_interval_ms": 12.475,
+      "tick": 344
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.954,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035123972.0,
+      "physics_callback_interval_ms": 20.73,
+      "tick": 345
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.136,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035125860.0,
+      "physics_callback_interval_ms": 13.008,
+      "tick": 346
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.851,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035129368.0,
+      "physics_callback_interval_ms": 16.5,
+      "tick": 347
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.928,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035129244.0,
+      "physics_callback_interval_ms": 22.792,
+      "tick": 348
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.865,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035088112.0,
+      "physics_callback_interval_ms": 8.71,
+      "tick": 349
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.48,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035088948.0,
+      "physics_callback_interval_ms": 24.288,
+      "tick": 350
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.883,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035088644.0,
+      "physics_callback_interval_ms": 10.231,
+      "tick": 351
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.046,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035089068.0,
+      "physics_callback_interval_ms": 21.876,
+      "tick": 352
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.107,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035093540.0,
+      "physics_callback_interval_ms": 15.842,
+      "tick": 353
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.984,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035092000.0,
+      "physics_callback_interval_ms": 10.681,
+      "tick": 354
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.704,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035084304.0,
+      "physics_callback_interval_ms": 25.426,
+      "tick": 355
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.098,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035082116.0,
+      "physics_callback_interval_ms": 9.188,
+      "tick": 356
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.72,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035083280.0,
+      "physics_callback_interval_ms": 25.29,
+      "tick": 357
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.015,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035081936.0,
+      "physics_callback_interval_ms": 9.12,
+      "tick": 358
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.014,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035083724.0,
+      "physics_callback_interval_ms": 14.798,
+      "tick": 359
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.319,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035084380.0,
+      "physics_callback_interval_ms": 23.03,
+      "tick": 360
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.049,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035085196.0,
+      "physics_callback_interval_ms": 10.503,
+      "tick": 361
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.847,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035093284.0,
+      "physics_callback_interval_ms": 25.492,
+      "tick": 362
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.937,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035090040.0,
+      "physics_callback_interval_ms": 8.91,
+      "tick": 363
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.258,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035095484.0,
+      "physics_callback_interval_ms": 18.09,
+      "tick": 364
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.986,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035093824.0,
+      "physics_callback_interval_ms": 17.451,
+      "tick": 365
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.959,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035095840.0,
+      "physics_callback_interval_ms": 12.776,
+      "tick": 366
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.126,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035097416.0,
+      "physics_callback_interval_ms": 23.877,
+      "tick": 367
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.901,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035097784.0,
+      "physics_callback_interval_ms": 10.579,
+      "tick": 368
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.908,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035101448.0,
+      "physics_callback_interval_ms": 25.663,
+      "tick": 369
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.247,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035103992.0,
+      "physics_callback_interval_ms": 13.171,
+      "tick": 370
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.983,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035101780.0,
+      "physics_callback_interval_ms": 10.545,
+      "tick": 371
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.028,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035100772.0,
+      "physics_callback_interval_ms": 20.777,
+      "tick": 372
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.147,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035102900.0,
+      "physics_callback_interval_ms": 12.874,
+      "tick": 373
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.327,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035102392.0,
+      "physics_callback_interval_ms": 23.903,
+      "tick": 374
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.017,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035102864.0,
+      "physics_callback_interval_ms": 10.47,
+      "tick": 375
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.787,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035104252.0,
+      "physics_callback_interval_ms": 18.607,
+      "tick": 376
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.24,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035105856.0,
+      "physics_callback_interval_ms": 22.152,
+      "tick": 377
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.9,
+      "engine_physics_monitor_ms": 15.343,
+      "engine_process_monitor_ms": 1.02,
+      "live_count": 30,
+      "memory_bytes": 1035101964.0,
+      "physics_callback_interval_ms": 8.415,
+      "tick": 378
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.87,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035101260.0,
+      "physics_callback_interval_ms": 21.632,
+      "tick": 379
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.016,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035102684.0,
+      "physics_callback_interval_ms": 11.987,
+      "tick": 380
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.03,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035103212.0,
+      "physics_callback_interval_ms": 22.69,
+      "tick": 381
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.75,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035096208.0,
+      "physics_callback_interval_ms": 16.55,
+      "tick": 382
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.933,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035092092.0,
+      "physics_callback_interval_ms": 8.99,
+      "tick": 383
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.917,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035098692.0,
+      "physics_callback_interval_ms": 28.884,
+      "tick": 384
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.943,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035094596.0,
+      "physics_callback_interval_ms": 7.523,
+      "tick": 385
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.879,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035098500.0,
+      "physics_callback_interval_ms": 21.088,
+      "tick": 386
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.954,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035096428.0,
+      "physics_callback_interval_ms": 12.944,
+      "tick": 387
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.313,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035101156.0,
+      "physics_callback_interval_ms": 16.227,
+      "tick": 388
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.052,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035103156.0,
+      "physics_callback_interval_ms": 23.471,
+      "tick": 389
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.302,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035101564.0,
+      "physics_callback_interval_ms": 8.984,
+      "tick": 390
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.629,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035107548.0,
+      "physics_callback_interval_ms": 29.087,
+      "tick": 391
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.94,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035101176.0,
+      "physics_callback_interval_ms": 7.668,
+      "tick": 392
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.281,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035104696.0,
+      "physics_callback_interval_ms": 14.634,
+      "tick": 393
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.148,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035138992.0,
+      "physics_callback_interval_ms": 22.989,
+      "tick": 394
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.15,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035141100.0,
+      "physics_callback_interval_ms": 10.438,
+      "tick": 395
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.669,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035141960.0,
+      "physics_callback_interval_ms": 26.209,
+      "tick": 396
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.686,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035141484.0,
+      "physics_callback_interval_ms": 9.869,
+      "tick": 397
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.151,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035149908.0,
+      "physics_callback_interval_ms": 20.146,
+      "tick": 398
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.727,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035142228.0,
+      "physics_callback_interval_ms": 14.897,
+      "tick": 399
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.74,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035144500.0,
+      "physics_callback_interval_ms": 12.831,
+      "tick": 400
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.373,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035164712.0,
+      "physics_callback_interval_ms": 24.953,
+      "tick": 401
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.659,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035166032.0,
+      "physics_callback_interval_ms": 9.362,
+      "tick": 402
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.097,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035168028.0,
+      "physics_callback_interval_ms": 20.234,
+      "tick": 403
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.845,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035173124.0,
+      "physics_callback_interval_ms": 22.457,
+      "tick": 404
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.926,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035175256.0,
+      "physics_callback_interval_ms": 7.828,
+      "tick": 405
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.817,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035177348.0,
+      "physics_callback_interval_ms": 22.035,
+      "tick": 406
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.383,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035176520.0,
+      "physics_callback_interval_ms": 11.408,
+      "tick": 407
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.713,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035190736.0,
+      "physics_callback_interval_ms": 16.282,
+      "tick": 408
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.659,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035197720.0,
+      "physics_callback_interval_ms": 25.437,
+      "tick": 409
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.865,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035193164.0,
+      "physics_callback_interval_ms": 7.678,
+      "tick": 410
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.092,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035201544.0,
+      "physics_callback_interval_ms": 28.366,
+      "tick": 411
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.604,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035197376.0,
+      "physics_callback_interval_ms": 6.886,
+      "tick": 412
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.466,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035200036.0,
+      "physics_callback_interval_ms": 9.311,
+      "tick": 413
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.577,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035196916.0,
+      "physics_callback_interval_ms": 11.381,
+      "tick": 414
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.567,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035213344.0,
+      "physics_callback_interval_ms": 16.039,
+      "tick": 415
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.673,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035220464.0,
+      "physics_callback_interval_ms": 24.536,
+      "tick": 416
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.612,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035215908.0,
+      "physics_callback_interval_ms": 7.759,
+      "tick": 417
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.768,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035224224.0,
+      "physics_callback_interval_ms": 28.829,
+      "tick": 418
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.679,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035217764.0,
+      "physics_callback_interval_ms": 7.222,
+      "tick": 419
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.702,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035218132.0,
+      "physics_callback_interval_ms": 15.337,
+      "tick": 420
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.687,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035220332.0,
+      "physics_callback_interval_ms": 19.82,
+      "tick": 421
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.441,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035224216.0,
+      "physics_callback_interval_ms": 12.451,
+      "tick": 422
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.265,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035230604.0,
+      "physics_callback_interval_ms": 26.501,
+      "tick": 423
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.414,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035225580.0,
+      "physics_callback_interval_ms": 8.031,
+      "tick": 424
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.002,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035232060.0,
+      "physics_callback_interval_ms": 22.339,
+      "tick": 425
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.653,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035227112.0,
+      "physics_callback_interval_ms": 15.739,
+      "tick": 426
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.762,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035216064.0,
+      "physics_callback_interval_ms": 14.917,
+      "tick": 427
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.49,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035225476.0,
+      "physics_callback_interval_ms": 18.997,
+      "tick": 428
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.485,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035228748.0,
+      "physics_callback_interval_ms": 12.251,
+      "tick": 429
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.665,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035237428.0,
+      "physics_callback_interval_ms": 19.969,
+      "tick": 430
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.765,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035240224.0,
+      "physics_callback_interval_ms": 22.756,
+      "tick": 431
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.304,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035233828.0,
+      "physics_callback_interval_ms": 6.969,
+      "tick": 432
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.734,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035240240.0,
+      "physics_callback_interval_ms": 27.282,
+      "tick": 433
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.214,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035252944.0,
+      "physics_callback_interval_ms": 8.28,
+      "tick": 434
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.43,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035256088.0,
+      "physics_callback_interval_ms": 12.336,
+      "tick": 435
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.302,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035262788.0,
+      "physics_callback_interval_ms": 26.634,
+      "tick": 436
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.16,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035258232.0,
+      "physics_callback_interval_ms": 7.572,
+      "tick": 437
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.574,
+      "engine_physics_monitor_ms": 12.44,
+      "engine_process_monitor_ms": 1.008,
+      "live_count": 30,
+      "memory_bytes": 1035273656.0,
+      "physics_callback_interval_ms": 30.698,
+      "tick": 438
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.156,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035270296.0,
+      "physics_callback_interval_ms": 7.755,
+      "tick": 439
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.354,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035269252.0,
+      "physics_callback_interval_ms": 16.486,
+      "tick": 440
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.335,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035266240.0,
+      "physics_callback_interval_ms": 16.712,
+      "tick": 441
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.115,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035268260.0,
+      "physics_callback_interval_ms": 13.626,
+      "tick": 442
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.273,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035274648.0,
+      "physics_callback_interval_ms": 26.741,
+      "tick": 443
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.096,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035270092.0,
+      "physics_callback_interval_ms": 7.596,
+      "tick": 444
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.932,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035278384.0,
+      "physics_callback_interval_ms": 22.717,
+      "tick": 445
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.139,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035275828.0,
+      "physics_callback_interval_ms": 18.146,
+      "tick": 446
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.131,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035272456.0,
+      "physics_callback_interval_ms": 8.855,
+      "tick": 447
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.516,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035273372.0,
+      "physics_callback_interval_ms": 21.137,
+      "tick": 448
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.094,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035274288.0,
+      "physics_callback_interval_ms": 13.26,
+      "tick": 449
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.467,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035280668.0,
+      "physics_callback_interval_ms": 20.232,
+      "tick": 450
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.393,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035283248.0,
+      "physics_callback_interval_ms": 22.626,
+      "tick": 451
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.213,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035276724.0,
+      "physics_callback_interval_ms": 6.838,
+      "tick": 452
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.341,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035284156.0,
+      "physics_callback_interval_ms": 25.315,
+      "tick": 453
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.312,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035278556.0,
+      "physics_callback_interval_ms": 8.762,
+      "tick": 454
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.525,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035281700.0,
+      "physics_callback_interval_ms": 13.993,
+      "tick": 455
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.118,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035287944.0,
+      "physics_callback_interval_ms": 26.302,
+      "tick": 456
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.193,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035283388.0,
+      "physics_callback_interval_ms": 7.872,
+      "tick": 457
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.672,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035291712.0,
+      "physics_callback_interval_ms": 29.219,
+      "tick": 458
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.403,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035284740.0,
+      "physics_callback_interval_ms": 6.976,
+      "tick": 459
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.127,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035289944.0,
+      "physics_callback_interval_ms": 18.058,
+      "tick": 460
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.297,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035271228.0,
+      "physics_callback_interval_ms": 15.883,
+      "tick": 461
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.14,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035272968.0,
+      "physics_callback_interval_ms": 14.634,
+      "tick": 462
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.257,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035280888.0,
+      "physics_callback_interval_ms": 25.798,
+      "tick": 463
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.161,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035274040.0,
+      "physics_callback_interval_ms": 7.698,
+      "tick": 464
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.446,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035285064.0,
+      "physics_callback_interval_ms": 22.184,
+      "tick": 465
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.384,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035266972.0,
+      "physics_callback_interval_ms": 18.448,
+      "tick": 466
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.251,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035263600.0,
+      "physics_callback_interval_ms": 8.537,
+      "tick": 467
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.126,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035280464.0,
+      "physics_callback_interval_ms": 23.192,
+      "tick": 468
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.167,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035282848.0,
+      "physics_callback_interval_ms": 11.271,
+      "tick": 469
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.237,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035289236.0,
+      "physics_callback_interval_ms": 19.907,
+      "tick": 470
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.658,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035289956.0,
+      "physics_callback_interval_ms": 23.121,
+      "tick": 471
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.343,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035281204.0,
+      "physics_callback_interval_ms": 7.018,
+      "tick": 472
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.565,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035288828.0,
+      "physics_callback_interval_ms": 25.413,
+      "tick": 473
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.26,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035285456.0,
+      "physics_callback_interval_ms": 8.493,
+      "tick": 474
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.368,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035287196.0,
+      "physics_callback_interval_ms": 14.942,
+      "tick": 475
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.581,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035290260.0,
+      "physics_callback_interval_ms": 25.93,
+      "tick": 476
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.281,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035286088.0,
+      "physics_callback_interval_ms": 8.475,
+      "tick": 477
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.036,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035291048.0,
+      "physics_callback_interval_ms": 28.487,
+      "tick": 478
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.599,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035286944.0,
+      "physics_callback_interval_ms": 7.088,
+      "tick": 479
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.293,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035292076.0,
+      "physics_callback_interval_ms": 18.071,
+      "tick": 480
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.352,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035289528.0,
+      "physics_callback_interval_ms": 16.784,
+      "tick": 481
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.282,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035303692.0,
+      "physics_callback_interval_ms": 12.835,
+      "tick": 482
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.175,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035307820.0,
+      "physics_callback_interval_ms": 26.451,
+      "tick": 483
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.513,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035305748.0,
+      "physics_callback_interval_ms": 8.171,
+      "tick": 484
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.661,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035314168.0,
+      "physics_callback_interval_ms": 21.947,
+      "tick": 485
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.264,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035311868.0,
+      "physics_callback_interval_ms": 18.156,
+      "tick": 486
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.413,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035308496.0,
+      "physics_callback_interval_ms": 8.92,
+      "tick": 487
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.5,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035310236.0,
+      "physics_callback_interval_ms": 21.828,
+      "tick": 488
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.362,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035310328.0,
+      "physics_callback_interval_ms": 12.623,
+      "tick": 489
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.722,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035314136.0,
+      "physics_callback_interval_ms": 20.241,
+      "tick": 490
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.811,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035319544.0,
+      "physics_callback_interval_ms": 22.785,
+      "tick": 491
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.61,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035312956.0,
+      "physics_callback_interval_ms": 7.605,
+      "tick": 492
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.623,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035318136.0,
+      "physics_callback_interval_ms": 26.102,
+      "tick": 493
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.505,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035301648.0,
+      "physics_callback_interval_ms": 7.567,
+      "tick": 494
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.311,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035300904.0,
+      "physics_callback_interval_ms": 17.815,
+      "tick": 495
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.784,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035308616.0,
+      "physics_callback_interval_ms": 24.085,
+      "tick": 496
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.592,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035304060.0,
+      "physics_callback_interval_ms": 8.458,
+      "tick": 497
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 19.386,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035312376.0,
+      "physics_callback_interval_ms": 33.013,
+      "tick": 498
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.495,
+      "engine_physics_monitor_ms": 15.365,
+      "engine_process_monitor_ms": 1.434,
+      "live_count": 30,
+      "memory_bytes": 1035283972.0,
+      "physics_callback_interval_ms": 14.112,
+      "tick": 499
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.153,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035280600.0,
+      "physics_callback_interval_ms": 8.516,
+      "tick": 500
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.14,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035279856.0,
+      "physics_callback_interval_ms": 14.035,
+      "tick": 501
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.473,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035282432.0,
+      "physics_callback_interval_ms": 14.328,
+      "tick": 502
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.979,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035288820.0,
+      "physics_callback_interval_ms": 20.179,
+      "tick": 503
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.355,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035284264.0,
+      "physics_callback_interval_ms": 8.47,
+      "tick": 504
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.461,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035266476.0,
+      "physics_callback_interval_ms": 19.998,
+      "tick": 505
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.378,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035257508.0,
+      "physics_callback_interval_ms": 6.753,
+      "tick": 506
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.554,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035262244.0,
+      "physics_callback_interval_ms": 25.519,
+      "tick": 507
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.333,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035259696.0,
+      "physics_callback_interval_ms": 9.545,
+      "tick": 508
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.422,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035259788.0,
+      "physics_callback_interval_ms": 19.774,
+      "tick": 509
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.379,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035266176.0,
+      "physics_callback_interval_ms": 19.756,
+      "tick": 510
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.481,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035269020.0,
+      "physics_callback_interval_ms": 22.813,
+      "tick": 511
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.521,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035262536.0,
+      "physics_callback_interval_ms": 7.065,
+      "tick": 512
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.527,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035265592.0,
+      "physics_callback_interval_ms": 25.209,
+      "tick": 513
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.482,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035265632.0,
+      "physics_callback_interval_ms": 9.726,
+      "tick": 514
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.643,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035265724.0,
+      "physics_callback_interval_ms": 19.888,
+      "tick": 515
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.39,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035272064.0,
+      "physics_callback_interval_ms": 19.508,
+      "tick": 516
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.705,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035274908.0,
+      "physics_callback_interval_ms": 22.99,
+      "tick": 517
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.627,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035268488.0,
+      "physics_callback_interval_ms": 7.261,
+      "tick": 518
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.595,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035275304.0,
+      "physics_callback_interval_ms": 24.048,
+      "tick": 519
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.46,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035274012.0,
+      "physics_callback_interval_ms": 10.728,
+      "tick": 520
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.604,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035274104.0,
+      "physics_callback_interval_ms": 19.822,
+      "tick": 521
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.414,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035280612.0,
+      "physics_callback_interval_ms": 19.617,
+      "tick": 522
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.651,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035283672.0,
+      "physics_callback_interval_ms": 22.94,
+      "tick": 523
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.747,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035274640.0,
+      "physics_callback_interval_ms": 7.267,
+      "tick": 524
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.584,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035278040.0,
+      "physics_callback_interval_ms": 13.215,
+      "tick": 525
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.553,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035283196.0,
+      "physics_callback_interval_ms": 25.69,
+      "tick": 526
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.428,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035279872.0,
+      "physics_callback_interval_ms": 8.656,
+      "tick": 527
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.289,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035286260.0,
+      "physics_callback_interval_ms": 26.561,
+      "tick": 528
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.568,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035281704.0,
+      "physics_callback_interval_ms": 8.081,
+      "tick": 529
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.724,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035287536.0,
+      "physics_callback_interval_ms": 21.975,
+      "tick": 530
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.564,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035283536.0,
+      "physics_callback_interval_ms": 13.648,
+      "tick": 531
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.479,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035284452.0,
+      "physics_callback_interval_ms": 13.716,
+      "tick": 532
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.753,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035276492.0,
+      "physics_callback_interval_ms": 25.969,
+      "tick": 533
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.387,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035273168.0,
+      "physics_callback_interval_ms": 8.421,
+      "tick": 534
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.36,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035277192.0,
+      "physics_callback_interval_ms": 19.788,
+      "tick": 535
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.774,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035282880.0,
+      "physics_callback_interval_ms": 23.128,
+      "tick": 536
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.46,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035276396.0,
+      "physics_callback_interval_ms": 6.972,
+      "tick": 537
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.518,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035277312.0,
+      "physics_callback_interval_ms": 20.301,
+      "tick": 538
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.491,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035278228.0,
+      "physics_callback_interval_ms": 13.753,
+      "tick": 539
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.468,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035281668.0,
+      "physics_callback_interval_ms": 19.791,
+      "tick": 540
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.534,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035285148.0,
+      "physics_callback_interval_ms": 20.759,
+      "tick": 541
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.502,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035280592.0,
+      "physics_callback_interval_ms": 7.758,
+      "tick": 542
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.556,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035286040.0,
+      "physics_callback_interval_ms": 28.798,
+      "tick": 543
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.503,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035282040.0,
+      "physics_callback_interval_ms": 7.106,
+      "tick": 544
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.156,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035296612.0,
+      "physics_callback_interval_ms": 14.446,
+      "tick": 545
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.265,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035302172.0,
+      "physics_callback_interval_ms": 24.314,
+      "tick": 546
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.518,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035298840.0,
+      "physics_callback_interval_ms": 9.049,
+      "tick": 547
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.455,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035307608.0,
+      "physics_callback_interval_ms": 26.667,
+      "tick": 548
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.679,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035303052.0,
+      "physics_callback_interval_ms": 7.961,
+      "tick": 549
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.7,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035311248.0,
+      "physics_callback_interval_ms": 21.886,
+      "tick": 550
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.531,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035304764.0,
+      "physics_callback_interval_ms": 13.506,
+      "tick": 551
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.279,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035319464.0,
+      "physics_callback_interval_ms": 15.112,
+      "tick": 552
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.295,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035326088.0,
+      "physics_callback_interval_ms": 23.13,
+      "tick": 553
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.336,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035335912.0,
+      "physics_callback_interval_ms": 9.874,
+      "tick": 554
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.388,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035342244.0,
+      "physics_callback_interval_ms": 19.854,
+      "tick": 555
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.643,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035344800.0,
+      "physics_callback_interval_ms": 22.981,
+      "tick": 556
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.665,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035340600.0,
+      "physics_callback_interval_ms": 7.182,
+      "tick": 557
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.569,
+      "engine_physics_monitor_ms": 19.666,
+      "engine_process_monitor_ms": 1.527,
+      "live_count": 30,
+      "memory_bytes": 1035339160.0,
+      "physics_callback_interval_ms": 20.155,
+      "tick": 558
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.448,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035354636.0,
+      "physics_callback_interval_ms": 14.804,
+      "tick": 559
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.365,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035360724.0,
+      "physics_callback_interval_ms": 16.615,
+      "tick": 560
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.986,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035361804.0,
+      "physics_callback_interval_ms": 23.333,
+      "tick": 561
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.629,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035356528.0,
+      "physics_callback_interval_ms": 7.402,
+      "tick": 562
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.798,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035361776.0,
+      "physics_callback_interval_ms": 27.931,
+      "tick": 563
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.419,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035357068.0,
+      "physics_callback_interval_ms": 7.861,
+      "tick": 564
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.241,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035357112.0,
+      "physics_callback_interval_ms": 12.182,
+      "tick": 565
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.349,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035373688.0,
+      "physics_callback_interval_ms": 25.963,
+      "tick": 566
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.452,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035372784.0,
+      "physics_callback_interval_ms": 8.738,
+      "tick": 567
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.039,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035379996.0,
+      "physics_callback_interval_ms": 28.436,
+      "tick": 568
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.508,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035374616.0,
+      "physics_callback_interval_ms": 7.223,
+      "tick": 569
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.159,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035382980.0,
+      "physics_callback_interval_ms": 22.021,
+      "tick": 570
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.595,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035374204.0,
+      "physics_callback_interval_ms": 13.889,
+      "tick": 571
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.065,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035382164.0,
+      "physics_callback_interval_ms": 21.297,
+      "tick": 572
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.42,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035378840.0,
+      "physics_callback_interval_ms": 13.528,
+      "tick": 573
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.35,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035379756.0,
+      "physics_callback_interval_ms": 13.684,
+      "tick": 574
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.162,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035386968.0,
+      "physics_callback_interval_ms": 20.593,
+      "tick": 575
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.637,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035386704.0,
+      "physics_callback_interval_ms": 22.226,
+      "tick": 576
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.574,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035367168.0,
+      "physics_callback_interval_ms": 7.044,
+      "tick": 577
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.385,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035374584.0,
+      "physics_callback_interval_ms": 25.081,
+      "tick": 578
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.963,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035385188.0,
+      "physics_callback_interval_ms": 9.92,
+      "tick": 579
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.212,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035394084.0,
+      "physics_callback_interval_ms": 12.51,
+      "tick": 580
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.184,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035401224.0,
+      "physics_callback_interval_ms": 27.705,
+      "tick": 581
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.37,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035395844.0,
+      "physics_callback_interval_ms": 6.928,
+      "tick": 582
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.528,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035400604.0,
+      "physics_callback_interval_ms": 28.087,
+      "tick": 583
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.379,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035408904.0,
+      "physics_callback_interval_ms": 8.257,
+      "tick": 584
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.142,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035429816.0,
+      "physics_callback_interval_ms": 18.11,
+      "tick": 585
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.214,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035428656.0,
+      "physics_callback_interval_ms": 14.431,
+      "tick": 586
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.112,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035429572.0,
+      "physics_callback_interval_ms": 13.657,
+      "tick": 587
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.522,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035418956.0,
+      "physics_callback_interval_ms": 28.177,
+      "tick": 588
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.851,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035429388.0,
+      "physics_callback_interval_ms": 7.796,
+      "tick": 589
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.244,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035438052.0,
+      "physics_callback_interval_ms": 18.491,
+      "tick": 590
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.065,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035437960.0,
+      "physics_callback_interval_ms": 19.498,
+      "tick": 591
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.196,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035434636.0,
+      "physics_callback_interval_ms": 8.951,
+      "tick": 592
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.156,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035434428.0,
+      "physics_callback_interval_ms": 20.704,
+      "tick": 593
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.305,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035433052.0,
+      "physics_callback_interval_ms": 13.898,
+      "tick": 594
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.108,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035442524.0,
+      "physics_callback_interval_ms": 20.633,
+      "tick": 595
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.388,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035440772.0,
+      "physics_callback_interval_ms": 19.978,
+      "tick": 596
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.27,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035435992.0,
+      "physics_callback_interval_ms": 7.646,
+      "tick": 597
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.296,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035443312.0,
+      "physics_callback_interval_ms": 25.818,
+      "tick": 598
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.214,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035439988.0,
+      "physics_callback_interval_ms": 8.66,
+      "tick": 599
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.235,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035440968.0,
+      "physics_callback_interval_ms": 13.754,
+      "tick": 600
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.181,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035444260.0,
+      "physics_callback_interval_ms": 28.662,
+      "tick": 601
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.143,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035440236.0,
+      "physics_callback_interval_ms": 6.494,
+      "tick": 602
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.302,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035446784.0,
+      "physics_callback_interval_ms": 26.542,
+      "tick": 603
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.174,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035442068.0,
+      "physics_callback_interval_ms": 7.55,
+      "tick": 604
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.014,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035447248.0,
+      "physics_callback_interval_ms": 18.595,
+      "tick": 605
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.454,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035441736.0,
+      "physics_callback_interval_ms": 16.189,
+      "tick": 606
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.227,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035442716.0,
+      "physics_callback_interval_ms": 13.566,
+      "tick": 607
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.824,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035452948.0,
+      "physics_callback_interval_ms": 28.305,
+      "tick": 608
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.143,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035444636.0,
+      "physics_callback_interval_ms": 6.573,
+      "tick": 609
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.382,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035453412.0,
+      "physics_callback_interval_ms": 19.605,
+      "tick": 610
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.128,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035439820.0,
+      "physics_callback_interval_ms": 19.446,
+      "tick": 611
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.399,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035438764.0,
+      "physics_callback_interval_ms": 9.11,
+      "tick": 612
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.334,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035439680.0,
+      "physics_callback_interval_ms": 20.576,
+      "tick": 613
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.422,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035438368.0,
+      "physics_callback_interval_ms": 13.903,
+      "tick": 614
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.055,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035448832.0,
+      "physics_callback_interval_ms": 21.418,
+      "tick": 615
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.42,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035435072.0,
+      "physics_callback_interval_ms": 19.622,
+      "tick": 616
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.209,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035428128.0,
+      "physics_callback_interval_ms": 7.26,
+      "tick": 617
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.518,
+      "engine_physics_monitor_ms": 14.19,
+      "engine_process_monitor_ms": 1.462,
+      "live_count": 30,
+      "memory_bytes": 1035428020.0,
+      "physics_callback_interval_ms": 25.073,
+      "tick": 618
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.148,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035442456.0,
+      "physics_callback_interval_ms": 10.899,
+      "tick": 619
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.316,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035445536.0,
+      "physics_callback_interval_ms": 12.466,
+      "tick": 620
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.271,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035450792.0,
+      "physics_callback_interval_ms": 28.7,
+      "tick": 621
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.53,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035444132.0,
+      "physics_callback_interval_ms": 7.098,
+      "tick": 622
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.75,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035451044.0,
+      "physics_callback_interval_ms": 26.338,
+      "tick": 623
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.328,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035446328.0,
+      "physics_callback_interval_ms": 7.373,
+      "tick": 624
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.526,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035450612.0,
+      "physics_callback_interval_ms": 18.08,
+      "tick": 625
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.66,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035446060.0,
+      "physics_callback_interval_ms": 16.809,
+      "tick": 626
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.582,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035447040.0,
+      "physics_callback_interval_ms": 13.664,
+      "tick": 627
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.344,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035457456.0,
+      "physics_callback_interval_ms": 28.459,
+      "tick": 628
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.457,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035451180.0,
+      "physics_callback_interval_ms": 6.81,
+      "tick": 629
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.746,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035455356.0,
+      "physics_callback_interval_ms": 19.66,
+      "tick": 630
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.001,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035456316.0,
+      "physics_callback_interval_ms": 18.924,
+      "tick": 631
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.45,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035453864.0,
+      "physics_callback_interval_ms": 9.283,
+      "tick": 632
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.973,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035468316.0,
+      "physics_callback_interval_ms": 21.612,
+      "tick": 633
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.958,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035469232.0,
+      "physics_callback_interval_ms": 13.476,
+      "tick": 634
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.603,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035477788.0,
+      "physics_callback_interval_ms": 22.452,
+      "tick": 635
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.156,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035476272.0,
+      "physics_callback_interval_ms": 20.367,
+      "tick": 636
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.811,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035471556.0,
+      "physics_callback_interval_ms": 7.509,
+      "tick": 637
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.827,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035473340.0,
+      "physics_callback_interval_ms": 24.665,
+      "tick": 638
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.428,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035473308.0,
+      "physics_callback_interval_ms": 9.356,
+      "tick": 639
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.673,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035471868.0,
+      "physics_callback_interval_ms": 14.04,
+      "tick": 640
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.501,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035480968.0,
+      "physics_callback_interval_ms": 29.523,
+      "tick": 641
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.295,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035476264.0,
+      "physics_callback_interval_ms": 6.729,
+      "tick": 642
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.918,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035482844.0,
+      "physics_callback_interval_ms": 26.868,
+      "tick": 643
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.394,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035464956.0,
+      "physics_callback_interval_ms": 7.266,
+      "tick": 644
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.568,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035469240.0,
+      "physics_callback_interval_ms": 18.036,
+      "tick": 645
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.441,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035469272.0,
+      "physics_callback_interval_ms": 16.534,
+      "tick": 646
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.6,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035470188.0,
+      "physics_callback_interval_ms": 13.983,
+      "tick": 647
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.579,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035478864.0,
+      "physics_callback_interval_ms": 29.772,
+      "tick": 648
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.976,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035450636.0,
+      "physics_callback_interval_ms": 17.283,
+      "tick": 649
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.683,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035448156.0,
+      "physics_callback_interval_ms": 7.395,
+      "tick": 650
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.7,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035451544.0,
+      "physics_callback_interval_ms": 23.249,
+      "tick": 651
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.449,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035449988.0,
+      "physics_callback_interval_ms": 10.537,
+      "tick": 652
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.775,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035446064.0,
+      "physics_callback_interval_ms": 20.986,
+      "tick": 653
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 13.499,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035456448.0,
+      "physics_callback_interval_ms": 21.557,
+      "tick": 654
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.609,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035424740.0,
+      "physics_callback_interval_ms": 8.077,
+      "tick": 655
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 11.397,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035424856.0,
+      "physics_callback_interval_ms": 25.077,
+      "tick": 656
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.568,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035420908.0,
+      "physics_callback_interval_ms": 7.933,
+      "tick": 657
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.806,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035423828.0,
+      "physics_callback_interval_ms": 23.937,
+      "tick": 658
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.737,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035422272.0,
+      "physics_callback_interval_ms": 10.704,
+      "tick": 659
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.554,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035423188.0,
+      "physics_callback_interval_ms": 13.617,
+      "tick": 660
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 14.351,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035432072.0,
+      "physics_callback_interval_ms": 29.528,
+      "tick": 661
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.75,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035424876.0,
+      "physics_callback_interval_ms": 6.806,
+      "tick": 662
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.69,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035430528.0,
+      "physics_callback_interval_ms": 12.127,
+      "tick": 663
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.491,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035426636.0,
+      "physics_callback_interval_ms": 8.317,
+      "tick": 664
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.696,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035427552.0,
+      "physics_callback_interval_ms": 14.002,
+      "tick": 665
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.612,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035431004.0,
+      "physics_callback_interval_ms": 16.696,
+      "tick": 666
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.557,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035429448.0,
+      "physics_callback_interval_ms": 17.683,
+      "tick": 667
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.74,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035432720.0,
+      "physics_callback_interval_ms": 13.98,
+      "tick": 668
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.174,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035441192.0,
+      "physics_callback_interval_ms": 31.161,
+      "tick": 669
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.362,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035438264.0,
+      "physics_callback_interval_ms": 10.876,
+      "tick": 670
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.614,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035436060.0,
+      "physics_callback_interval_ms": 9.533,
+      "tick": 671
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 10.53,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035435912.0,
+      "physics_callback_interval_ms": 25.705,
+      "tick": 672
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.538,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035435176.0,
+      "physics_callback_interval_ms": 8.767,
+      "tick": 673
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.717,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035435708.0,
+      "physics_callback_interval_ms": 20.867,
+      "tick": 674
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.193,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035446976.0,
+      "physics_callback_interval_ms": 24.495,
+      "tick": 675
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 9.02,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035441500.0,
+      "physics_callback_interval_ms": 10.53,
+      "tick": 676
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.852,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035441708.0,
+      "physics_callback_interval_ms": 17.05,
+      "tick": 677
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.709,
+      "engine_physics_monitor_ms": 14.394,
+      "engine_process_monitor_ms": 1.168,
+      "live_count": 30,
+      "memory_bytes": 1035445740.0,
+      "physics_callback_interval_ms": 14.647,
+      "tick": 678
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.854,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035445060.0,
+      "physics_callback_interval_ms": 21.855,
+      "tick": 679
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.668,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035446620.0,
+      "physics_callback_interval_ms": 11.595,
+      "tick": 680
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.177,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035457328.0,
+      "physics_callback_interval_ms": 24.342,
+      "tick": 681
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.49,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035450780.0,
+      "physics_callback_interval_ms": 16.481,
+      "tick": 682
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.653,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035438528.0,
+      "physics_callback_interval_ms": 10.948,
+      "tick": 683
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.692,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035440364.0,
+      "physics_callback_interval_ms": 21.732,
+      "tick": 684
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.677,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035440316.0,
+      "physics_callback_interval_ms": 14.765,
+      "tick": 685
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.767,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035441876.0,
+      "physics_callback_interval_ms": 11.925,
+      "tick": 686
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 16.166,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035452848.0,
+      "physics_callback_interval_ms": 31.091,
+      "tick": 687
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.268,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035444272.0,
+      "physics_callback_interval_ms": 9.763,
+      "tick": 688
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.91,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035445072.0,
+      "physics_callback_interval_ms": 11.044,
+      "tick": 689
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.731,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035446812.0,
+      "physics_callback_interval_ms": 21.543,
+      "tick": 690
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.682,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035448552.0,
+      "physics_callback_interval_ms": 14.767,
+      "tick": 691
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.785,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035445528.0,
+      "physics_callback_interval_ms": 11.857,
+      "tick": 692
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 12.788,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035452620.0,
+      "physics_callback_interval_ms": 27.779,
+      "tick": 693
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.712,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035452108.0,
+      "physics_callback_interval_ms": 10.212,
+      "tick": 694
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.351,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035450156.0,
+      "physics_callback_interval_ms": 19.878,
+      "tick": 695
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.631,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035462144.0,
+      "physics_callback_interval_ms": 12.596,
+      "tick": 696
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 6.729,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035466516.0,
+      "physics_callback_interval_ms": 13.379,
+      "tick": 697
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.58,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035467848.0,
+      "physics_callback_interval_ms": 21.55,
+      "tick": 698
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.572,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035467116.0,
+      "physics_callback_interval_ms": 11.753,
+      "tick": 699
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 15.5,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035474908.0,
+      "physics_callback_interval_ms": 30.688,
+      "tick": 700
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 8.149,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035471460.0,
+      "physics_callback_interval_ms": 9.625,
+      "tick": 701
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.741,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035470032.0,
+      "physics_callback_interval_ms": 10.988,
+      "tick": 702
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.669,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035485436.0,
+      "physics_callback_interval_ms": 23.075,
+      "tick": 703
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 5.64,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035487564.0,
+      "physics_callback_interval_ms": 11.302,
+      "tick": 704
+    },
+    {
+      "corpse_count": 0,
+      "enemy_inclusive_cpu_ms": 7.752,
+      "engine_physics_monitor_ms": 16.577,
+      "engine_process_monitor_ms": 1.401,
+      "live_count": 30,
+      "memory_bytes": 1035488284.0,
+      "physics_callback_interval_ms": 15.925,
+      "tick": 705
+    }
+  ],
+  "gpu": "NOT_RUN",
+  "label": "small-30-AB-2-BASE",
+  "measurement": "real physics callback spacing and engine monitors; inclusive CPU segments are not additive and monitors are not GPU time",
+  "mode": "small",
+  "moving_surviving_actors": 30,
+  "pet_actual_damage": 0,
+  "pet_attack_starts": 0,
+  "pet_count": 0,
+  "player_hp_delta": 58,
+  "random_input_version": "all_gameplay_actors_and_spawn_hooks.v2",
+  "random_inputs": {
+    "actors": [
+      {
+        "initial_state": "3005413936777014482",
+        "kind": "enemy",
+        "ordinal": 1,
+        "seed": "20260928"
+      },
+      {
+        "initial_state": "-9077193913085744129",
+        "kind": "enemy",
+        "ordinal": 2,
+        "seed": "20260929"
+      },
+      {
+        "initial_state": "-2713057689238951124",
+        "kind": "enemy",
+        "ordinal": 3,
+        "seed": "20260930"
+      },
+      {
+        "initial_state": "3651078534607841881",
+        "kind": "enemy",
+        "ordinal": 4,
+        "seed": "20260931"
+      },
+      {
+        "initial_state": "-8431529315254916730",
+        "kind": "enemy",
+        "ordinal": 5,
+        "seed": "20260932"
+      },
+      {
+        "initial_state": "-2067393091408123725",
+        "kind": "enemy",
+        "ordinal": 6,
+        "seed": "20260933"
+      },
+      {
+        "initial_state": "4296743132438669280",
+        "kind": "enemy",
+        "ordinal": 7,
+        "seed": "20260934"
+      },
+      {
+        "initial_state": "-7785864717424089331",
+        "kind": "enemy",
+        "ordinal": 8,
+        "seed": "20260935"
+      },
+      {
+        "initial_state": "-1421728493577296326",
+        "kind": "enemy",
+        "ordinal": 9,
+        "seed": "20260936"
+      },
+      {
+        "initial_state": "4942407730269496679",
+        "kind": "enemy",
+        "ordinal": 10,
+        "seed": "20260937"
+      },
+      {
+        "initial_state": "-7140200119593261932",
+        "kind": "enemy",
+        "ordinal": 11,
+        "seed": "20260938"
+      },
+      {
+        "initial_state": "-776063895746468927",
+        "kind": "enemy",
+        "ordinal": 12,
+        "seed": "20260939"
+      },
+      {
+        "initial_state": "5588072328100324078",
+        "kind": "enemy",
+        "ordinal": 13,
+        "seed": "20260940"
+      },
+      {
+        "initial_state": "-6494535521762434533",
+        "kind": "enemy",
+        "ordinal": 14,
+        "seed": "20260941"
+      },
+      {
+        "initial_state": "-130399297915641528",
+        "kind": "enemy",
+        "ordinal": 15,
+        "seed": "20260942"
+      },
+      {
+        "initial_state": "6233736925931151477",
+        "kind": "enemy",
+        "ordinal": 16,
+        "seed": "20260943"
+      },
+      {
+        "initial_state": "-5848870923931607134",
+        "kind": "enemy",
+        "ordinal": 17,
+        "seed": "20260944"
+      },
+      {
+        "initial_state": "515265299915185871",
+        "kind": "enemy",
+        "ordinal": 18,
+        "seed": "20260945"
+      },
+      {
+        "initial_state": "6879401523761978876",
+        "kind": "enemy",
+        "ordinal": 19,
+        "seed": "20260946"
+      },
+      {
+        "initial_state": "-5203206326100779735",
+        "kind": "enemy",
+        "ordinal": 20,
+        "seed": "20260947"
+      },
+      {
+        "initial_state": "1160929897746013270",
+        "kind": "enemy",
+        "ordinal": 21,
+        "seed": "20260948"
+      },
+      {
+        "initial_state": "7525066121592806275",
+        "kind": "enemy",
+        "ordinal": 22,
+        "seed": "20260949"
+      },
+      {
+        "initial_state": "-4557541728269952336",
+        "kind": "enemy",
+        "ordinal": 23,
+        "seed": "20260950"
+      },
+      {
+        "initial_state": "1806594495576840669",
+        "kind": "enemy",
+        "ordinal": 24,
+        "seed": "20260951"
+      },
+      {
+        "initial_state": "8170730719423633674",
+        "kind": "enemy",
+        "ordinal": 25,
+        "seed": "20260952"
+      },
+      {
+        "initial_state": "-3911877130439124937",
+        "kind": "enemy",
+        "ordinal": 26,
+        "seed": "20260953"
+      },
+      {
+        "initial_state": "2452259093407668068",
+        "kind": "enemy",
+        "ordinal": 27,
+        "seed": "20260954"
+      },
+      {
+        "initial_state": "8816395317254461073",
+        "kind": "enemy",
+        "ordinal": 28,
+        "seed": "20260955"
+      },
+      {
+        "initial_state": "-3266212532608297538",
+        "kind": "enemy",
+        "ordinal": 29,
+        "seed": "20260956"
+      },
+      {
+        "initial_state": "3097923691238495467",
+        "kind": "enemy",
+        "ordinal": 30,
+        "seed": "20260957"
+      }
+    ],
+    "durability_seed": 20260929,
+    "game_root_seed": 20260927,
+    "global_seed": 20260927,
+    "player_seed": 20260928,
+    "spawn_hooks": [
+      {
+        "audio_seed": 20290928,
+        "facing_seed": 20280928,
+        "ordinal": 1
+      },
+      {
+        "audio_seed": 20290929,
+        "facing_seed": 20280929,
+        "ordinal": 2
+      },
+      {
+        "audio_seed": 20290930,
+        "facing_seed": 20280930,
+        "ordinal": 3
+      },
+      {
+        "audio_seed": 20290931,
+        "facing_seed": 20280931,
+        "ordinal": 4
+      },
+      {
+        "audio_seed": 20290932,
+        "facing_seed": 20280932,
+        "ordinal": 5
+      },
+      {
+        "audio_seed": 20290933,
+        "facing_seed": 20280933,
+        "ordinal": 6
+      },
+      {
+        "audio_seed": 20290934,
+        "facing_seed": 20280934,
+        "ordinal": 7
+      },
+      {
+        "audio_seed": 20290935,
+        "facing_seed": 20280935,
+        "ordinal": 8
+      },
+      {
+        "audio_seed": 20290936,
+        "facing_seed": 20280936,
+        "ordinal": 9
+      },
+      {
+        "audio_seed": 20290937,
+        "facing_seed": 20280937,
+        "ordinal": 10
+      },
+      {
+        "audio_seed": 20290938,
+        "facing_seed": 20280938,
+        "ordinal": 11
+      },
+      {
+        "audio_seed": 20290939,
+        "facing_seed": 20280939,
+        "ordinal": 12
+      },
+      {
+        "audio_seed": 20290940,
+        "facing_seed": 20280940,
+        "ordinal": 13
+      },
+      {
+        "audio_seed": 20290941,
+        "facing_seed": 20280941,
+        "ordinal": 14
+      },
+      {
+        "audio_seed": 20290942,
+        "facing_seed": 20280942,
+        "ordinal": 15
+      },
+      {
+        "audio_seed": 20290943,
+        "facing_seed": 20280943,
+        "ordinal": 16
+      },
+      {
+        "audio_seed": 20290944,
+        "facing_seed": 20280944,
+        "ordinal": 17
+      },
+      {
+        "audio_seed": 20290945,
+        "facing_seed": 20280945,
+        "ordinal": 18
+      },
+      {
+        "audio_seed": 20290946,
+        "facing_seed": 20280946,
+        "ordinal": 19
+      },
+      {
+        "audio_seed": 20290947,
+        "facing_seed": 20280947,
+        "ordinal": 20
+      },
+      {
+        "audio_seed": 20290948,
+        "facing_seed": 20280948,
+        "ordinal": 21
+      },
+      {
+        "audio_seed": 20290949,
+        "facing_seed": 20280949,
+        "ordinal": 22
+      },
+      {
+        "audio_seed": 20290950,
+        "facing_seed": 20280950,
+        "ordinal": 23
+      },
+      {
+        "audio_seed": 20290951,
+        "facing_seed": 20280951,
+        "ordinal": 24
+      },
+      {
+        "audio_seed": 20290952,
+        "facing_seed": 20280952,
+        "ordinal": 25
+      },
+      {
+        "audio_seed": 20290953,
+        "facing_seed": 20280953,
+        "ordinal": 26
+      },
+      {
+        "audio_seed": 20290954,
+        "facing_seed": 20280954,
+        "ordinal": 27
+      },
+      {
+        "audio_seed": 20290955,
+        "facing_seed": 20280955,
+        "ordinal": 28
+      },
+      {
+        "audio_seed": 20290956,
+        "facing_seed": 20280956,
+        "ordinal": 29
+      },
+      {
+        "audio_seed": 20290957,
+        "facing_seed": 20280957,
+        "ordinal": 30
+      }
+    ]
+  },
+  "replacements": 0,
+  "scale": 30,
+  "seed": 20260927,
+  "source_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+  "starts_surviving_actors": 21
+}

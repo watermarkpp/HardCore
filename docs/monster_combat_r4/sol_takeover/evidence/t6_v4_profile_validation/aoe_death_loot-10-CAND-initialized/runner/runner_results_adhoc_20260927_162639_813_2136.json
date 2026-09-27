@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "test_name": "t6_real_load_probe",
+      "test_path": "tests/hc_monster_combat_r4/t6_real_load_probe.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "failed": 0,
+  "passed": 1,
+  "generated_at": "2026-09-27T16:26:39.8138353+08:00",
+  "total": 1,
+  "engine_log_errors": 0,
+  "git_head": "27009bcfa0f8566faedf210dc25e2ddb0238091b"
+}

@@ -1,0 +1,17 @@
+{
+  "base_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+  "candidate_head": "6cd4ed215ba689b9cf1f920693df87604bde2f41",
+  "probe_sha256": "F7A8E4941BC96A9D51A783BCE431DD34222BEB5DDB467F1205DFA0C98D0C4D74",
+  "scene_sha256": "5576C953F25395412EE67A0DA4189DBC7AAADD56894221E99269BD19BD3028BC",
+  "runner_sha256": "19CE6E6332C81FB4E7B1B8985C35118F8509404628D3298E91BA7EA14E7AC4B4",
+  "base_overlay": "Identical test wrapper only. No BASE production changes.",
+  "scope": "20 actual synchronous record-consuming super calls, actual natural engine clock. Full terminal attribution on R3 NOT_RUN; zero HP not inferred as miss.",
+  "ids": [
+    24,
+    76,
+    238,
+    239
+  ],
+  "timeout_seconds": 60,
+  "order": "BASE/CAND/CAND_ON for each ID, serial; same-seed actual CAND observer OFF/ON equivalence"
+}

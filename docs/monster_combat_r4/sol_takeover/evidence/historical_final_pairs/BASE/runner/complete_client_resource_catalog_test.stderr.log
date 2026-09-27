@@ -1,0 +1,9 @@
+SCRIPT ERROR: Assertion failed: file is missing: res://outputs/resource_catalog/complete_client_frame_catalog/manifest.json
+   at: _read_json (res://tests/complete_client_resource_catalog_test.gd:51)
+   GDScript backtrace (most recent call first):
+       [0] _read_json (res://tests/complete_client_resource_catalog_test.gd:51)
+       [1] _ready (res://tests/complete_client_resource_catalog_test.gd:8)
+SCRIPT ERROR: Assertion failed: complete client library count changed
+   at: _ready (res://tests/complete_client_resource_catalog_test.gd:9)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/complete_client_resource_catalog_test.gd:9)

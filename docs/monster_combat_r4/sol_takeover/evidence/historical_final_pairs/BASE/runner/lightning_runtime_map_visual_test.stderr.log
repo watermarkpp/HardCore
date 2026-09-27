@@ -1,0 +1,36 @@
+ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+   at: add_child (scene/main/node.cpp:1721)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:75)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _ready (res://tests/lightning_runtime_map_visual_test.gd:65)
+ERROR: Child is not a child of this node.
+   at: move_child (scene/main/node.cpp:506)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:76)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _ready (res://tests/lightning_runtime_map_visual_test.gd:65)
+ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+   at: add_child (scene/main/node.cpp:1721)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:75)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _ready (res://tests/lightning_runtime_map_visual_test.gd:91)
+ERROR: Child is not a child of this node.
+   at: move_child (scene/main/node.cpp:506)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:76)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _ready (res://tests/lightning_runtime_map_visual_test.gd:91)
+ERROR: Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.
+   at: add_child (scene/main/node.cpp:1721)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:75)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _ready (res://tests/lightning_runtime_map_visual_test.gd:109)
+ERROR: Child is not a child of this node.
+   at: move_child (scene/main/node.cpp:506)
+   GDScript backtrace (most recent call first):
+       [0] _ensure_trial_screen_copy (res://scripts/caster_skill_animation_player.gd:76)
+       [1] _ready (res://scripts/caster_skill_animation_player.gd:60)
+       [2] _ready (res://tests/lightning_runtime_map_visual_test.gd:109)

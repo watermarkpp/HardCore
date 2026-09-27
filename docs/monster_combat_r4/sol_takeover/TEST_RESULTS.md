@@ -14,6 +14,8 @@
 
 ### 旧 18/20 与退出失败裁定
 
+逐release复核补充：`evidence/release_by_release_reconstruction.json`保留每个旧root、实际parent_action、显式source/life/map/target字段匹配的原始行索引，及修复后每个root的declared child、写入/终态和统一验收结果。76原记录20起手/18扣血，父动作2、18没有实际HP行；239这份原记录20起手/17扣血，父动作7、13、19缺HP行。全部旧child使用另一个release_id，缺admission_release_id和victim_generation；即使已有HP行，也不能声称旧归属验收通过。无HP行保持MISSING，不能用新轮次的真实miss倒推旧轮次。这里没有使用帧窗口、金额匹配或奇偶算术。
+
 初次原候选76/239的18/20附近记录缺少正确parent归属与真实miss终态，保留为FAIL。修复后的76/239，未改公式/RNG/冷却：每个根释放归属到明确child，真实 `mixed_magic_evaded` 分支给出miss终态。不能据此逆推无完整身份的旧记录全为合法miss，也没有按奇偶补记录。
 
 上一轮24打印PASS但process超时，保留在 `evidence/natural_24_timeout`。当前明确关闭记录、释放GameRoot、等待两次真实process_frame再退出。24最终实际启动约5秒、world boot约5秒、自然采样约48秒、写证据3ms、清理29ms；完整进程自然退出在60秒内。未清冷却、未缩pending、未手调游戏钟。
@@ -93,3 +95,29 @@ ID79的正式line_magic走真实物理选敌/起手，冻结child后等待原600
 最窄生产planner查询参数反例：骷髅0.331456GU/神兽0.464039GU，与既定实际0.353553/0.5GU不符（summon_planner_red）。修planner后，正式技能释放snapshot仍用旧半径，再得到独立FAIL（summon_snapshot_radius_red）。最终planner、plan snapshot及main-pet创建校验均使用同一ActorBodyPolicy，不改变身体档位、范围、攻击公式或候选落点排序；来源未知模板fail closed，消费端拒绝半径不符的snapshot。
 
 runner_results_adhoc_20260927_143209_147_20248.json：PASS 8/8，engine0，完整退出。含最窄反例、召唤形状、释放、主人传送、正式职业矩阵、golden plan parity、V2召唤生产与实际对外伤害。原始证据和源码身份在evidence/summon_radius_chain。
+
+## R3/CAND共用自然观察与实际OFF/ON等价
+
+common_natural_final实际14/14 PASS，全部正常退出、无timeout及引擎错误门禁失败。固定BASE 1381d283与生产CAND6cd4ed21，字节相同的测试-only BoundaryEnemy包装实际super._hc_settle消费点；真实Enemy.setup/地形/投影/索引/physics。它证明同步消费结果，R3缺完整归属账的零HP仍UNCLASSIFIED，不冒充MISS；完整归属由已注册CAND20次自然场景独立验收。
+
+24/76/238/239各BASE、CAND OFF、CAND ON三次20自然结算。三个来源组的实际HP损耗分别57、704、1759、1500；每ID的敌我最终RNG、序号、间隔及逐次HP均一致。实际最短游戏间隔分别2.516666/2.516666/1.516666/1.516666秒，源间隔2.5/2.5/1.5/1.5秒，没有清冷却或变速。24两树另做真实4GU外追击，均225次位置变化后1次自然起手。原始runner及流水、probe/scene/runner哈希绑定见common_natural_final/identity.json与summary.json。
+
+最初common_natural_pairs/24-CAND出现PASS marker后60秒timeout，保留FAIL；其Enemy种子也在add_child前被_ready.randomize覆写，不能作为同种子对照。修测试设置顺序，并把长追击与20次静止节拍拆为独立条件；20次和真实追击均保留，不缩攻击间隔/游戏钟。旧probe字节另存probe_source。
+
+## R3召唤半径实际反例
+
+r3_radius_pairs在原R3生产树叠加相同的最窄查询/snapshot探针：BASE真实FAIL（骷髅0.331456、神兽0.464039GU及两释放快照不符）；CAND真实PASS（16px对应0.353553、神兽0.5GU）。没有回填BASE生产文件，BODY定义和既定档位不变。
+
+## 性能数据有效性
+
+初轮t6_pairs72/72及t6_quiet10八轮的实际runner均通过真实负载门，但同种子合同FAIL：Player/Summon及出生朝向/audio RNG漏固定。原始记录保留，初轮CPU均值不能作为正式T6验收。测试probe v2固定所有相关输入，保存每个实际Actor的初始seed/state，通过既有前_ready出生测试接口设置facing/audio；新72轮独立输出t6_pairs_seeded_v2，当前NOT_RUN（完整矩阵与最终裁决）。生产源码保持同一CAND。
+
+## 实际销毁待投递来源
+
+最窄source_destroyed_red以真实ID79自然600ms pending，分别free/queue_free，实际没有HP应用、没有引擎错误，但同一验收器报告两个release_missing_terminal，两个取消唯一性断言FAIL。实际remove_child/add_child并恢复正式索引的对照已正常结算，不是销毁。
+
+仅在Enemy实际NOTIFICATION_PREDELETE调用既有只读取消观察，记录来源拥有的pending因对象销毁而终止。没有HP写入、没有修改pending/钟/RNG，不在_exit_tree误判暂时移出。default OFF依然先返回，但新增脚本通知分支的热态成本需要最终性能复核。
+
+source_destroyed_final实际5/5 PASS，engine_log_errors=0，正常退出：free/queue_free独立唯一SOURCE_DESTROYED终态、短暂移出再入对照、既有禁战/控制/死亡取消、异步line、观察完整性、实际多目标/代际。正式critical已注册新增场景，预期集合524。该结果不替代最终full critical。
+
+historical_final_pairs完成原25同集合：固定R3 BASE实际0/25 PASS、CAND6cd4ed21实际25/25 PASS；CAND无timeout、engine_log_errors=0。两项snapshot及其他23项原始assert/错误均保留，逐断言裁定另列。T6 v2虽然72实际runner通过，但canonical请求用wall-time独立种子，技能/宠物的完整同种子合同FAIL；原始数据保留并标DATASET_REVIEW，不作最终性能判定。测试v3固定native请求seed边界，生产随机语义不改，最终同源码性能待执行。

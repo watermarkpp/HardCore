@@ -1,0 +1,28 @@
+{
+  "base_head": "1381d2838a3736f4a06699dd24a8cf4a10714950",
+  "candidate_head": "6cd4ed215ba689b9cf1f920693df87604bde2f41",
+  "probe_sha256": "6B3BE5018B0D8771C46D4CF145C3517C440E81091C0953556A08353722A183D2",
+  "runner_sha256": "19CE6E6332C81FB4E7B1B8985C35118F8509404628D3298E91BA7EA14E7AC4B4",
+  "engine_sha256": "D8055FB8C7E7F5010D7439EC69BE051554055DAE55A265F8647BD7301C34161C",
+  "modes": [
+    "small",
+    "large_pets",
+    "aoe_death_loot"
+  ],
+  "scales": [
+    10,
+    20,
+    30
+  ],
+  "frames": 600,
+  "seed": 20260927,
+  "aa_per_condition": 2,
+  "ab_pairs_per_condition": 3,
+  "order": "AA then AB/BA/AB, one process at a time",
+  "cache": "Independent already-imported trees; fresh engine process per sample; same shared read-only source art and engine; OS file cache not forcibly purged",
+  "measurement": "Desktop headless callback intervals and script CPU only; engine monitor averages not per-frame P95; GPU and device NOT_RUN",
+  "baseline_overlay": "Identical test script/scene and runner only; no BASE production modification",
+  "base_status": "A  tests/hc_monster_combat_r4/t6_real_load_probe.gd\nA  tests/hc_monster_combat_r4/t6_real_load_probe.tscn\n M tools/run_godot_tests.ps1\n?? tests/hc_monster_combat_r1/monster_crowd_scale_performance_probe_test.gd.uid\n?? tests/hc_monster_combat_r2/attack_clock_red_test.gd.uid\n?? tests/hc_monster_combat_r2/attack_presentation_identity_test.gd.uid\n?? tests/hc_monster_combat_r2/body_pair_eight_direction_test.gd.uid\n?? tests/hc_monster_combat_r2/direct_magic_step_chain_test.gd.uid\n?? tests/hc_monster_combat_r2/large_body_swing_cadence_test.gd.uid\n?? tests/hc_monster_combat_r2/monster_body_rejection_test.gd.uid\n?? tests/hc_monster_combat_r2/monster_runtime_census_test.gd.uid\n?? tests/hc_monster_combat_r2/paired_perf_probe_test.gd.uid\n?? tests/hc_monster_combat_r2/player_struck_poison_chain_test.gd.uid\n?? tests/hc_monster_combat_r2/revival_durability_test.gd.uid\n?? tests/hc_monster_combat_r2/runtime_census_deep_test.gd.uid\n?? tests/hc_monster_combat_r3/attack_facing_freeze_test.gd.uid\n?? tests/hc_monster_combat_r3/attack_game_clock_test.gd.uid\n?? tests/hc_monster_combat_r3/attack_parent_release_identity_test.gd.uid\n?? tests/hc_monster_combat_r3/audio_stale_frame_test.gd.uid\n?? tests/hc_monster_combat_r3/body_rejection_world_isolation_test.gd.uid\n?? tests/hc_monster_combat_r3/body_rule_tier_cross_test.gd.uid\n?? tests/hc_monster_combat_r3/paired_load_realism_test.gd.uid\n?? tests/hc_monster_combat_r3/real_admission_census_test.gd.uid\n?? tests/hc_monster_combat_r3/stale_death_notification_test.gd.uid",
+  "candidate_status": " M AGENTS.md\n?? .tmp_chatgpt_read/\n?? assets/art/characters/caster_skill_sources/\n?? chatgpt_share_6ab690f6/\n?? chatgpt_share_6ab693ae/\n?? docs/performance_20260926/CHECKPOINT.sha256\n?? docs/performance_20260926/all_fixes_checkpoint.patch\n?? docs/performance_20260926/save_safety_changes.patch\n?? docs/vfx/\n?? tools/half_moon_generator/\n?? tools/wall_render_manifest_probe.gd.uid",
+  "started_at": "2026-09-27T14:49:29.3407860+08:00"
+}

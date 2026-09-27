@@ -1,0 +1,204 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "id": 24,
+      "source_behavior_fields_equal_r3_cand": true,
+      "observer_off_on_equal": true,
+      "results": {
+        "BASE": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 57,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "-6227186334913327263",
+          "min_game_interval_s": 2.516666666666495,
+          "effective_interval_s": 2.5,
+          "boot_ms": 727.063,
+          "sample_ms": 47929.268,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 57,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "-6227186334913327263",
+          "min_game_interval_s": 2.516666666666495,
+          "effective_interval_s": 2.5,
+          "boot_ms": 728.977,
+          "sample_ms": 47832.522,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND_ON": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 57,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "-6227186334913327263",
+          "min_game_interval_s": 2.516666666666495,
+          "effective_interval_s": 2.5,
+          "boot_ms": 734.704,
+          "sample_ms": 48074.215,
+          "observer_enabled": true,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": 76,
+      "source_behavior_fields_equal_r3_cand": true,
+      "observer_off_on_equal": true,
+      "results": {
+        "BASE": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 704,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "3801427463503270793",
+          "min_game_interval_s": 2.516666666666495,
+          "effective_interval_s": 2.5,
+          "boot_ms": 762.464,
+          "sample_ms": 47614.129,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 704,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "3801427463503270793",
+          "min_game_interval_s": 2.516666666666495,
+          "effective_interval_s": 2.5,
+          "boot_ms": 809.798,
+          "sample_ms": 47614.779,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND_ON": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 704,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "3801427463503270793",
+          "min_game_interval_s": 2.516666666666495,
+          "effective_interval_s": 2.5,
+          "boot_ms": 765.028,
+          "sample_ms": 47614.155,
+          "observer_enabled": true,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": 238,
+      "source_behavior_fields_equal_r3_cand": true,
+      "observer_off_on_equal": true,
+      "results": {
+        "BASE": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 1759,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "-6227186334913327263",
+          "min_game_interval_s": 1.5166666666664987,
+          "effective_interval_s": 1.5,
+          "boot_ms": 754.212,
+          "sample_ms": 28754.235,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 1759,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "-6227186334913327263",
+          "min_game_interval_s": 1.5166666666664987,
+          "effective_interval_s": 1.5,
+          "boot_ms": 773.701,
+          "sample_ms": 28653.676,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND_ON": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 1759,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "-6227186334913327263",
+          "min_game_interval_s": 1.5166666666664987,
+          "effective_interval_s": 1.5,
+          "boot_ms": 762.464,
+          "sample_ms": 28733.771,
+          "observer_enabled": true,
+          "failures": []
+        }
+      }
+    },
+    {
+      "id": 239,
+      "source_behavior_fields_equal_r3_cand": true,
+      "observer_off_on_equal": true,
+      "results": {
+        "BASE": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 1500,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "3801427463503270793",
+          "min_game_interval_s": 1.5166666666664987,
+          "effective_interval_s": 1.5,
+          "boot_ms": 762.097,
+          "sample_ms": 28754.303,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 1500,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "3801427463503270793",
+          "min_game_interval_s": 1.5166666666664987,
+          "effective_interval_s": 1.5,
+          "boot_ms": 800.089,
+          "sample_ms": 28645.841,
+          "observer_enabled": false,
+          "failures": []
+        },
+        "CAND_ON": {
+          "starts": 20,
+          "settlements": 20,
+          "hp_delta": 1500,
+          "enemy_rng": "6973420293454602489",
+          "player_rng": "3801427463503270793",
+          "min_game_interval_s": 1.5166666666664987,
+          "effective_interval_s": 1.5,
+          "boot_ms": 758.931,
+          "sample_ms": 28727.37,
+          "observer_enabled": true,
+          "failures": []
+        }
+      }
+    }
+  ],
+  "chase": {
+    "BASE": {
+      "starts": 1,
+      "position_changes": 225,
+      "failures": [],
+      "sample_ms": 4880.116
+    },
+    "CAND": {
+      "starts": 1,
+      "position_changes": 225,
+      "failures": [],
+      "sample_ms": 4866.934
+    }
+  },
+  "scope": "actual shared synchronous settlement boundary; R3 full terminal attribution NOT_RUN; zero delta remains unclassified"
+}

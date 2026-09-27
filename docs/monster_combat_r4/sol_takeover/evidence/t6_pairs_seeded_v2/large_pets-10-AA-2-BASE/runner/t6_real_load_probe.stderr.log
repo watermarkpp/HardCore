@@ -1,0 +1,5 @@
+ERROR: Parameter "t" is null.
+   at: texture_2d_initialize (./servers/rendering/dummy/storage/texture_storage.h:85)
+   GDScript backtrace (most recent call first):
+       [0] _update_world_camera_constraint (res://scripts/game_root.gd:1958)
+       [1] _process (res://scripts/game_root.gd:1833)

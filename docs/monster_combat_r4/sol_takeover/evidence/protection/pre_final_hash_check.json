@@ -1,0 +1,44 @@
+{
+  "head": "6cd4ed215ba689b9cf1f920693df87604bde2f41",
+  "protected_count": 13611,
+  "protected_changes": [
+    {
+      "path": "assets/data/canonical_monster_classification_v1.json",
+      "before": "f2c2b96a84500460e53483daaf10cc1063f4c75becf20b1dc75af493ad7b885f",
+      "after": "b692de3bdda7ce89fde1dbcad377cfc0925c9aaade52ed1e011188e1b7af8c48"
+    },
+    {
+      "path": "assets/data/monster_runtime_authority_v1.json",
+      "before": "fa536723dc76afcf5ec07318bd42d509ab9390c4a4c2430d9a2581e33ac82a42",
+      "after": "61bbff6be99fa3a0cc94f8689086cc97327b4004ef90e8ed47bfe150c1536702"
+    },
+    {
+      "path": "assets/data/runtime/canonical_monster_catalog.json",
+      "before": "8cd8254758e7f573b7d6cbbd31eb0fc7aad8cff699d73b01a1ffc21fd6521a5b",
+      "after": "628a544ab76948169f7e2bbf0fbf725b9b835ca477ed5f8b9c479e818574dae5"
+    },
+    {
+      "path": "assets/data/special_normal_monster_spawn_authority_v1.json",
+      "before": "336a290e1a3a5a65197e5696680bbd5708b41056cda0179659f6afabbda05c3e",
+      "after": "260545b5dbeb4c221b13eec3ca4f852a38eaab38841654cee39b48512d48ef66"
+    },
+    {
+      "path": "scripts/monster_visual.gd",
+      "before": "68a146a48c8e52479dac0dfdf74ab01c6d0279d3cadf1919390d7e29360b8ecf",
+      "after": "0204b3a6f78c19397767f50ddd47964e3d80678f53e2fccd07f4de7465e0c5a3"
+    },
+    {
+      "path": "scripts/player_visual.gd",
+      "before": "77ed7cbce2c0def0850024c323051c1358ae106b5699815522ce040f5092d8bd",
+      "after": "7d425b86b3e8cda6ef2c2141a74cfb81ea9735709be9ab159e255d57d33221ec"
+    }
+  ],
+  "protected_missing": [],
+  "original_save_count": 4152,
+  "save_backups_verified": 4152,
+  "save_backup_failures": [],
+  "runtime_fixture_save_changes": [
+    ".godot/runtime_appdata/Godot/app_userdata/HardCore/takeover_async_loot/characters/async_probe.json"
+  ],
+  "user_dirty_changes": []
+}
