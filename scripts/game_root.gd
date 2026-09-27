@@ -12868,22 +12868,26 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 		return progressed
 	var jobs_processed := 0
 	var nodes_processed := 0
-	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_RETRY:
-		var retry_item: Dictionary = _pending_enemy_deaths[0]
+	var unsettled_index := _first_unsettled_death_index()
+	if unsettled_index >= 0 and str(_pending_enemy_deaths[unsettled_index].get("state", "")) == DEATH_STATE_RETRY:
+		var retry_item: Dictionary = _pending_enemy_deaths[unsettled_index]
 		if force_synchronous or _death_retry_ready(retry_item):
 			retry_item["retry_at_msec"] = 0
 			_set_enemy_death_state(retry_item, DEATH_STATE_QUEUED)
 			progressed = true
-	if str(_pending_enemy_deaths[0].get("state", "")) == DEATH_STATE_QUEUED:
+	if unsettled_index >= 0 and str(_pending_enemy_deaths[unsettled_index].get("state", "")) == DEATH_STATE_QUEUED:
 		if (
-			(force_synchronous or _death_retry_ready(_pending_enemy_deaths[0]))
+			(force_synchronous or _death_retry_ready(_pending_enemy_deaths[unsettled_index]))
 			and (
 				force_synchronous
 				or jobs_processed == 0
 				or Time.get_ticks_usec() - slice_started_usec < budget_usec
 			)
 		):
-			if _settle_pending_enemy_death_batch(jobs_limit - jobs_processed):
+			# Settlement and display consume one canonical queue independently.
+			# Reserve one work slot for an older display so new deaths cannot starve it.
+			var display_reserved := 1 if unsettled_index > 0 and not force_synchronous else 0
+			if _settle_pending_enemy_death_batch(maxi(1, jobs_limit - jobs_processed - display_reserved)):
 				jobs_processed += _death_settled_jobs_last_batch
 				progressed = true
 				_compact_enemy_death_queue()
@@ -13124,6 +13128,13 @@ func _cancel_pending_enemy_deaths_for_generation_change() -> void:
 
 
 
+func _first_unsettled_death_index() -> int:
+	for index: int in range(_pending_enemy_deaths.size()):
+		if str(_pending_enemy_deaths[index].get("state", "")) in [DEATH_STATE_QUEUED, DEATH_STATE_RETRY]:
+			return index
+	return -1
+
+
 func _settle_pending_enemy_death_batch(
 	max_deaths := DEATH_JOBS_MAX_PER_FRAME,
 ) -> bool:
@@ -13132,7 +13143,10 @@ func _settle_pending_enemy_death_batch(
 		return false
 	if max_deaths <= 0:
 		return false
-	var first: Dictionary = _pending_enemy_deaths[0]
+	var unsettled_index := _first_unsettled_death_index()
+	if unsettled_index < 0:
+		return false
+	var first: Dictionary = _pending_enemy_deaths[unsettled_index]
 	if str(first.get("state", "")) != DEATH_STATE_QUEUED:
 		return false
 	if not _death_retry_ready(first):
@@ -13153,7 +13167,8 @@ func _settle_pending_enemy_death_batch(
 		)
 		return true
 	var batch: Array[Dictionary] = []
-	for death: Dictionary in _pending_enemy_deaths:
+	for death_index: int in range(unsettled_index, _pending_enemy_deaths.size()):
+		var death: Dictionary = _pending_enemy_deaths[death_index]
 		if batch.size() >= max_deaths:
 			break
 		if str(death.get("state", "")) != DEATH_STATE_QUEUED:

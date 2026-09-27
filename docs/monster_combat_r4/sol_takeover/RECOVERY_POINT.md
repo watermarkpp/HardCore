@@ -214,3 +214,6 @@ F03 actualRED f03_hot_persistence at old00c: 501slots event76844B vs1slot560B, s
 
 ## 23:14 周期后台保存/有序清理闭环
 HEAD前项a899c0ac..；本项准备本地提交，源为Json job/service/handle +PlayerState周期保存/索引/CAS/修订号/清理接入。固定最终10/10实际PASS (runner_results_adhoc_20260927_231238_229_16996.json)，所有测试进程已正常结束。新两专项正式注册。下一步直接做真实异步死亡结算和F05，先真实窄RED；不得把前两步当F03全部完成。R4固定性能FAIL仍开；无portal生产修改/forge实际merge/push/archive/APK。用户AGENTS仍原dirty不stage。
+
+## 23:18 F05显示头阻塞窄闭环
+本地准备提交 F05 最早未结算/最早显示消费者，不重排任务或显示、保留原native roll批次顺序，原生真实IO RED→GREEN4/4。已结束所有测试会话。下一步独立实现PlayerState异步死亡请求与GameRoot待持久化状态/退出/代际真实反例；仍同步helper兼容，不对现有RNG/伤害/时钟进行重构。R4性能/门户/forge/最终gate/push/cleanup/APK仍未完。
