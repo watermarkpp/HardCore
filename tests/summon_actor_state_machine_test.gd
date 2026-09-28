@@ -81,7 +81,12 @@ func _run() -> void:
 		"taoist.summon_skeleton",
 		35
 	)
-	dead_heal_fixture.take_damage(dead_heal_fixture.current_hp)
+	dead_heal_fixture.take_damage(
+		dead_heal_fixture.current_hp
+		+ dead_heal_fixture.ac_max
+		+ dead_heal_fixture.physical_defence_bonus(),
+		0
+	)
 	dead_heal_fixture.reset_performance_diagnostics_for_tests()
 	assert(dead_heal_fixture.state == SummonActor.SummonState.DEAD)
 	assert(dead_heal_fixture.restore_health(50) == 0)
@@ -204,6 +209,51 @@ func _run() -> void:
 	formation_beast.global_position = player.global_position
 	game.add_child(formation_beast)
 	formation_beast.set_physics_process(false)
+	# The initial player tile has a blocked divine-beast formation slot. Put
+	# this two-pet movement fixture on a nearby legal patch of the same map.
+	var owner_ground: Vector2 = game._canonical_screen_px_to_ground_gu(player.global_position)
+	var skeleton_offset_px: Vector2 = (
+		skeleton.rest_formation_contract_snapshot().desired_screen_position_px
+		- player.global_position
+	)
+	var beast_offset_px: Vector2 = (
+		formation_beast.rest_formation_contract_snapshot().desired_screen_position_px
+		- player.global_position
+	)
+	var open_formation_found := false
+	var nearby_offsets: Array[Vector2i] = []
+	for offset_y: int in range(-8, 9):
+		for offset_x: int in range(-8, 9):
+			nearby_offsets.append(Vector2i(offset_x, offset_y))
+	nearby_offsets.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
+		if a.length_squared() != b.length_squared():
+			return a.length_squared() < b.length_squared()
+		if a.y != b.y:
+			return a.y < b.y
+		return a.x < b.x
+	)
+	for offset: Vector2i in nearby_offsets:
+		var candidate_px: Vector2 = game._canonical_ground_gu_to_screen_px(
+			owner_ground + Vector2(offset)
+		)
+		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+			game.background, candidate_px, ArtSpec.PLAYER_COLLISION_RADIUS_PX
+		):
+			continue
+		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+			game.background, candidate_px + skeleton_offset_px, skeleton.collision_radius_px
+		):
+			continue
+		if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+			game.background, candidate_px + beast_offset_px, formation_beast.collision_radius_px
+		):
+			continue
+		player.global_position = candidate_px
+		skeleton.global_position = candidate_px
+		formation_beast.global_position = candidate_px
+		open_formation_found = true
+		break
+	assert(open_formation_found, "two-pet formation fixture needs three legal body positions")
 	var skeleton_formation := skeleton.rest_formation_contract_snapshot()
 	var beast_formation := formation_beast.rest_formation_contract_snapshot()
 	assert(
@@ -353,7 +403,7 @@ func _run() -> void:
 		))
 
 	var enemy := EnemyActor.new()
-	enemy.setup({"name": "summon-test-target", "hp": 9999, "attackMin": 1, "attackMax": 1, "level": 1}, player, false)
+	enemy.setup(GameData.get_monster_by_id(38), player, false)
 	enemy.control_time = 60.0
 	enemy.global_position = (
 		skeleton.global_position
@@ -580,13 +630,7 @@ func _make_indexed_enemy(
 	ground_position_gu: Vector2
 ) -> EnemyActor:
 	var enemy := EnemyActor.new()
-	enemy.setup({
-		"name": "summon-index-target-%d" % actor_runtime_id,
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-	}, player, false)
+	enemy.setup(GameData.get_monster_by_id(38), player, false)
 	enemy.control_time = 60.0
 	enemy.global_position = GroundUnit.ground_delta_gu_to_screen_delta_px(
 		ground_position_gu
@@ -623,13 +667,7 @@ func _make_policy_enemy(
 ) -> ExternalAttackPolicyEnemy:
 	var enemy := ExternalAttackPolicyEnemy.new()
 	enemy.allow_external_attack = allow_external_attack
-	enemy.setup({
-		"name": "summon-policy-target-%d" % actor_runtime_id,
-		"hp": 9999,
-		"attackMin": 1,
-		"attackMax": 1,
-		"level": 1,
-	}, player, false)
+	enemy.setup(GameData.get_monster_by_id(38), player, false)
 	enemy.control_time = 60.0
 	enemy.global_position = GroundUnit.ground_delta_gu_to_screen_delta_px(
 		ground_position_gu

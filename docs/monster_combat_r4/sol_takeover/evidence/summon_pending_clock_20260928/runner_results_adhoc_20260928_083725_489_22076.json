@@ -1,0 +1,45 @@
+{
+  "failed": 0,
+  "generated_at": "2026-09-28T08:37:25.4899360+08:00",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "passed": 2,
+  "results": [
+    {
+      "test_name": "summon_owner_teleport_runtime_test",
+      "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:37:31.1958323Z",
+      "native_exit_observed_utc": "2026-09-28T00:37:11.9868600Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "summon_actor_state_machine_test",
+      "test_path": "tests/summon_actor_state_machine_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:37:43.5053906Z",
+      "native_exit_observed_utc": "2026-09-28T00:37:23.9834574Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "c50487c142f117c6f6bbf8b4cf5a02d39e7a6d2e",
+  "total": 2
+}

@@ -2,6 +2,7 @@ extends Node
 
 const SummonActorScript := preload("res://scripts/summon_actor.gd")
 const GroundUnitSpace := preload("res://scripts/ground_unit_space.gd")
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 ## The production relocation boundary is exercised after an actual same-map
 ## random-teleport endpoint and again as the final map-arrival boundary.  The
@@ -76,22 +77,58 @@ func _run() -> void:
 	)
 	_assert_relocated_pet(game, skeleton, skeleton_hp)
 	_assert_relocated_pet(game, divine_beast, divine_hp)
+	_assert_pet_pair_legal(game, skeleton, divine_beast)
 
 	# Re-seed the stale state and invoke the shared map-arrival finalizer directly.
 	# This models the cross-map caller after _load_zone/portal has installed the
 	# player's final position; placement remains the canonical legal-plan search.
-	var arrival: Vector2 = Vector2(game.player.global_position) + Vector2(96.0, -48.0)
+	# This published-map tile is a legal player landing, but its narrow nearby
+	# footprint has exposed a second-pet relocation failure in actual runs.
+	var arrival: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(13.5, 78.5))
+	assert(
+		not WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+			game.background, arrival, ArtSpec.PLAYER_COLLISION_RADIUS_PX
+		),
+		"map-arrival fixture must be a legal player landing"
+	)
 	game.player.global_position = arrival
+	skeleton.global_position = arrival + Vector2(800.0, 300.0)
+	divine_beast.global_position = arrival + Vector2(-700.0, 450.0)
 	_seed_stale_state(skeleton, stale_enemy)
 	_seed_stale_state(divine_beast, stale_enemy)
 	game._relocate_main_pets_after_map_arrival()
 	_assert_relocated_pet(game, skeleton, skeleton_hp)
 	_assert_relocated_pet(game, divine_beast, divine_hp)
+	_assert_pet_pair_legal(game, skeleton, divine_beast)
 	assert(
 		game.current_map_id == skeleton.runtime_map_id
 		and game.current_map_id == divine_beast.runtime_map_id,
 		"map-arrival relocation did not install the current map projection"
 	)
+
+	# If every nearby landing is temporarily occupied, the pet must stop its
+	# stale attack and leave collision until the owner reaches another tile.
+	_seed_stale_state(divine_beast, stale_enemy)
+	divine_beast.defer_owner_teleport_relocation()
+	assert(divine_beast.owner_teleport_pending)
+	assert(not divine_beast.visible and divine_beast.collision_layer == 0)
+	assert(divine_beast.state == SummonActor.SummonState.FOLLOW_OWNER)
+	assert(divine_beast._current_target == null)
+	assert(divine_beast._pending_attack_target == null)
+	var lifetime_before_retry := divine_beast.remaining_lifetime
+	divine_beast._physics_process(1.0 / 60.0)
+	assert(divine_beast.remaining_lifetime < lifetime_before_retry)
+	assert(divine_beast.owner_teleport_pending and divine_beast.current_hp == divine_hp)
+	game._pending_main_pet_arrivals.clear()
+	game._pending_main_pet_arrivals.append(divine_beast)
+	game._pending_main_pet_retry_tile = game._main_pet_owner_tile()
+	game._pending_main_pet_retry_tile_valid = true
+	game.player.global_position = random_destination
+	game._retry_pending_main_pet_arrivals()
+	_assert_relocated_pet(game, divine_beast, divine_hp)
+	assert(not divine_beast.owner_teleport_pending)
+	assert(divine_beast.visible and divine_beast.collision_layer != 0)
+	assert(game._pending_main_pet_arrivals.is_empty())
 
 	game.queue_free()
 	await get_tree().process_frame
@@ -156,3 +193,20 @@ func _assert_relocated_pet(game: Node, summon: SummonActor, expected_hp: int) ->
 		GroundUnitSpace.distance_gu(player_ground, summon_ground) <= 4.0,
 		"relocated %s is not adjacent to final owner position" % summon.summon_id
 	)
+
+
+func _assert_pet_pair_legal(game: Node, a: SummonActor, b: SummonActor) -> void:
+	var a_ground: Vector2 = game._canonical_screen_px_to_ground_gu(a.global_position)
+	var b_ground: Vector2 = game._canonical_screen_px_to_ground_gu(b.global_position)
+	assert(
+		GroundUnitSpace.distance_gu(a_ground, b_ground)
+		>= a.combat_radius_gu + b.combat_radius_gu,
+		"teleported pets overlap each other's body"
+	)
+	for pet: SummonActor in [a, b]:
+		assert(
+			not WorldSpatialRulesScript.environment_blocks_actor_screen_px(
+				game.background, pet.global_position, pet.collision_radius_px
+			),
+			"teleported pet landed inside world collision"
+		)

@@ -1,0 +1,28 @@
+{
+  "git_head": "c50487c142f117c6f6bbf8b4cf5a02d39e7a6d2e",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "summon_owner_teleport_runtime_test",
+      "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:38:50.0698460Z",
+      "native_exit_observed_utc": "2026-09-28T00:38:30.8029039Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-28T08:38:32.2798070+08:00",
+  "failed": 0,
+  "engine_log_errors": 0,
+  "total": 1,
+  "passed": 1
+}

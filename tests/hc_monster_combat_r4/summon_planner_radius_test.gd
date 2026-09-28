@@ -10,7 +10,10 @@ class PlannerProbe extends Root:
 		return GU.screen_delta_px_to_ground_delta_gu(p)
 	func _canonical_ground_gu_to_screen_px(p: Vector2) -> Vector2:
 		return GU.ground_delta_gu_to_screen_delta_px(p)
-	func _canonical_summon_position_is_valid(_p: Vector2, radius: float, _ignored: SummonActor) -> bool:
+	func _canonical_summon_position_is_valid(
+		_p: Vector2, radius: float, _ignored: SummonActor,
+		_ignored_summons: Array[SummonActor] = []
+	) -> bool:
 		# Narrowly observe the planner's actual WORLD/body query parameter.
 		requested_radii.append(radius)
 		return true

@@ -167,6 +167,7 @@ const SKILL_TELEPORT_MIN_DISTANCE_GU := 3.0
 const SKILL_TELEPORT_MAX_DISTANCE_GU := 16.25
 const RANDOM_TELEPORT_ACTOR_CLEARANCE_GU := 0.25
 const CANONICAL_SUMMON_SPAWN_SEARCH_RADIUS_GU := 2.0
+const CANONICAL_SUMMON_TELEPORT_SEARCH_RADIUS_GU := 8
 const CANONICAL_SUMMON_ACTOR_CLEARANCE_GU := 0.05
 const DEATH_DROP_WORK_BUDGET_USEC := 1200
 const DEATH_JOBS_MAX_PER_FRAME := 4
@@ -356,6 +357,9 @@ var _ground_effect_runtime_serial := 0
 var _portal_guard_state := MapPortalTravelGuardScript.new_state()
 var _map_transition_in_progress := false
 var _map_transition_serial := 0
+var _pending_main_pet_arrivals: Array[SummonActor] = []
+var _pending_main_pet_retry_tile := Vector2i.ZERO
+var _pending_main_pet_retry_tile_valid := false
 # Q0-B test hook (inert outside test_mode): forces _resolve_bich_home() to
 # return invalid so safe-logout failure control flow can be reproduced.
 var _test_force_home_failure := false
@@ -1779,6 +1783,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	var physics_started_usec := RuntimeDiagnostics.timing_start()
+	if not _pending_main_pet_arrivals.is_empty() and not _map_transition_in_progress:
+		_retry_pending_main_pet_arrivals()
 	# Q2-B: generic persistent ground effects are scheduled once per physics
 	# frame by the shared manager (old per-effect _physics_process cadence).
 	if _ground_effect_manager != null:
@@ -11293,7 +11299,14 @@ func _apply_canonical_main_pet(
 
 func _relocate_main_pets_after_map_arrival() -> void:
 	# _load_zone restores pets before the caller installs its final arrival.
-	# Reuse the canonical legal-position search, excluding only the moving pet.
+	# Stale positions of the other moving pets cannot reserve arrival tiles.
+	_pending_main_pet_arrivals.clear()
+	_pending_main_pet_retry_tile_valid = false
+	var pending: Array[SummonActor] = []
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var active := _canonical_main_pet(summon_id)
+		if active != null:
+			pending.append(active)
 	for summon_id: String in ["skeleton", "divine_beast"]:
 		var summon := _canonical_main_pet(summon_id)
 		if summon == null:
@@ -11308,14 +11321,107 @@ func _relocate_main_pets_after_map_arrival() -> void:
 			"taoist.summon_skeleton" if summon_id == "skeleton"
 			else "taoist.summon_divine_beast"
 		)
-		var plan := _canonical_summon_spawn_plan(stable_skill_id, summon)
+		var plan := _canonical_summon_spawn_plan(stable_skill_id, summon, pending)
+		if not bool(plan.get("valid", false)):
+			plan = _canonical_summon_teleport_fallback_plan(summon, pending)
 		if bool(plan.get("valid", false)):
 			summon.relocate_after_owner_teleport(plan.get("position_screen_px") as Vector2)
+			pending.erase(summon)
+		else:
+			summon.defer_owner_teleport_relocation()
+			_pending_main_pet_arrivals.append(summon)
+	if not _pending_main_pet_arrivals.is_empty():
+		_pending_main_pet_retry_tile = _main_pet_owner_tile()
+		_pending_main_pet_retry_tile_valid = true
+
+
+func _main_pet_owner_tile() -> Vector2i:
+	var owner_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	return Vector2i(floori(owner_ground_gu.x), floori(owner_ground_gu.y))
+
+
+func _retry_pending_main_pet_arrivals() -> void:
+	if not is_instance_valid(player):
+		return
+	var owner_tile := _main_pet_owner_tile()
+	if _pending_main_pet_retry_tile_valid and owner_tile == _pending_main_pet_retry_tile:
+		return
+	_pending_main_pet_retry_tile = owner_tile
+	_pending_main_pet_retry_tile_valid = true
+	var pending := _pending_main_pet_arrivals.duplicate()
+	for summon: SummonActor in pending:
+		if not is_instance_valid(summon) or summon.is_queued_for_deletion():
+			_pending_main_pet_arrivals.erase(summon)
+			continue
+		if not summon.owner_teleport_pending:
+			_pending_main_pet_arrivals.erase(summon)
+			continue
+		var stable_skill_id := (
+			"taoist.summon_skeleton" if summon.summon_id == "skeleton"
+			else "taoist.summon_divine_beast"
+		)
+		var plan := _canonical_summon_spawn_plan(stable_skill_id, summon, pending)
+		if not bool(plan.get("valid", false)):
+			plan = _canonical_summon_teleport_fallback_plan(summon, pending)
+		if bool(plan.get("valid", false)):
+			summon.relocate_after_owner_teleport(plan.get("position_screen_px") as Vector2)
+			_pending_main_pet_arrivals.erase(summon)
+			pending.erase(summon)
+
+
+func _canonical_summon_teleport_fallback_plan(
+	summon: SummonActor,
+	pending: Array[SummonActor],
+) -> Dictionary:
+	# Casting retains its two-GU search. An existing pet may need a wider legal
+	# landing after its owner arrives in a narrow passage. Search in stable
+	# nearest-first order without drawing RNG or moving through map collision.
+	var owner_ground_gu := _canonical_screen_px_to_ground_gu(player.global_position)
+	var center := Vector2i(roundi(owner_ground_gu.x), roundi(owner_ground_gu.y))
+	var radius_gu := _actor_combat_radius_gu(summon)
+	var candidates: Array[Vector2i] = []
+	for offset_y: int in range(
+		-CANONICAL_SUMMON_TELEPORT_SEARCH_RADIUS_GU,
+		CANONICAL_SUMMON_TELEPORT_SEARCH_RADIUS_GU + 1,
+	):
+		for offset_x: int in range(
+			-CANONICAL_SUMMON_TELEPORT_SEARCH_RADIUS_GU,
+			CANONICAL_SUMMON_TELEPORT_SEARCH_RADIUS_GU + 1,
+		):
+			var candidate := center + Vector2i(offset_x, offset_y)
+			if Vector2(candidate).distance_to(owner_ground_gu) <= (
+				float(CANONICAL_SUMMON_TELEPORT_SEARCH_RADIUS_GU)
+				+ GroundUnitSpaceScript.EPSILON_GU
+			):
+				candidates.append(candidate)
+	candidates.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
+		var a_distance := Vector2(a).distance_squared_to(owner_ground_gu)
+		var b_distance := Vector2(b).distance_squared_to(owner_ground_gu)
+		if not is_equal_approx(a_distance, b_distance):
+			return a_distance < b_distance
+		if a.y != b.y:
+			return a.y < b.y
+		return a.x < b.x
+	)
+	for candidate: Vector2i in candidates:
+		var candidate_gu := Vector2(candidate)
+		if not _canonical_summon_position_is_valid(
+			candidate_gu, radius_gu, summon, pending
+		):
+			continue
+		return {
+			"valid": true,
+			"reason": "",
+			"position_ground_gu": candidate_gu,
+			"position_screen_px": _canonical_ground_gu_to_screen_px(candidate_gu),
+		}
+	return {"valid": false, "reason": "no_legal_teleport_landing"}
 
 
 func _canonical_summon_spawn_plan(
 	stable_skill_id: String,
 	ignored_summon: SummonActor = null,
+	ignored_summons: Array[SummonActor] = [],
 ) -> Dictionary:
 	if not is_instance_valid(player):
 		return {"valid": false, "reason": "player_unavailable"}
@@ -11376,7 +11482,8 @@ func _canonical_summon_spawn_plan(
 		if not _canonical_summon_position_is_valid(
 			candidate_ground_gu,
 			summon_radius_gu,
-			ignored_summon
+			ignored_summon,
+			ignored_summons
 		):
 			continue
 		return {
@@ -11402,7 +11509,8 @@ func _canonical_summon_spawn_plan(
 func _canonical_summon_position_is_valid(
 	candidate_ground_gu: Vector2,
 	summon_radius_gu: float,
-	ignored_summon: SummonActor
+	ignored_summon: SummonActor,
+	ignored_summons: Array[SummonActor] = [],
 ) -> bool:
 	if not candidate_ground_gu.is_finite():
 		return false
@@ -11456,6 +11564,8 @@ func _canonical_summon_position_is_valid(
 			not raw_summon is Node2D
 			or not is_instance_valid(raw_summon)
 			or raw_summon == ignored_summon
+			or (raw_summon is SummonActor and ignored_summons.has(raw_summon as SummonActor))
+			or (raw_summon is SummonActor and (raw_summon as SummonActor).owner_teleport_pending)
 			or raw_summon.is_queued_for_deletion()
 		):
 			continue

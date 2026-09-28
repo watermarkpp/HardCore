@@ -168,6 +168,9 @@ var owner_death_rule := "expire"
 var reject_when_owner_has_slave := true
 var recall_existing_on_create_failure := false
 var state := SummonState.FOLLOW_OWNER
+var owner_teleport_pending := false
+var _owner_teleport_saved_collision_layer := 0
+var _owner_teleport_saved_collision_mask := 0
 var last_attack_type := ""
 var summon_release_id := ""
 var summon_spawn_footprint_snapshot: Dictionary = {}
@@ -542,20 +545,13 @@ func relocate_after_owner_teleport(final_position_px: Vector2) -> Dictionary:
 		}
 	var had_target := is_instance_valid(_current_target)
 	var had_pending_attack := _pending_attack_target != null
-	_current_target = null
-	_clear_pending_attack()
-	_target_acquire_remaining = TARGET_ACQUIRE_INTERVAL_SECONDS
-	_rest_formation_moving = false
-	_attack_timer = 0.0
-	_attack_visual_remaining = 0.0
-	_fire_visual_remaining = 0.0
-	velocity = Vector2.ZERO
-	actual_ground_motion_gu = Vector2.ZERO
+	_reset_combat_after_owner_teleport()
 	global_position = final_position_px
-	_set_state(SummonState.FOLLOW_OWNER)
-	_visual_state = "idle"
-	_visual_elapsed = 0.0
-	_request_visual_redraw()
+	if owner_teleport_pending:
+		collision_layer = _owner_teleport_saved_collision_layer
+		collision_mask = _owner_teleport_saved_collision_mask
+		owner_teleport_pending = false
+		visible = true
 	return {
 		"contract_id": OWNER_TELEPORT_RELOCATION_CONTRACT_ID,
 		"relocated": true,
@@ -565,6 +561,37 @@ func relocate_after_owner_teleport(final_position_px: Vector2) -> Dictionary:
 		"motion_cleared": true,
 		"state": state_name(),
 	}
+
+
+func defer_owner_teleport_relocation() -> void:
+	# A full landing has no legal body slot nearby. Keep HP and lifetime, but
+	# remove the old-map body and stale attack until the owner reaches new ground.
+	if state in [SummonState.DEAD, SummonState.EXPIRED]:
+		return
+	if not owner_teleport_pending:
+		_owner_teleport_saved_collision_layer = collision_layer
+		_owner_teleport_saved_collision_mask = collision_mask
+	owner_teleport_pending = true
+	_reset_combat_after_owner_teleport()
+	collision_layer = 0
+	collision_mask = 0
+	visible = false
+
+
+func _reset_combat_after_owner_teleport() -> void:
+	_current_target = null
+	_clear_pending_attack()
+	_target_acquire_remaining = TARGET_ACQUIRE_INTERVAL_SECONDS
+	_rest_formation_moving = false
+	_attack_timer = 0.0
+	_attack_visual_remaining = 0.0
+	_fire_visual_remaining = 0.0
+	velocity = Vector2.ZERO
+	actual_ground_motion_gu = Vector2.ZERO
+	_set_state(SummonState.FOLLOW_OWNER)
+	_visual_state = "idle"
+	_visual_elapsed = 0.0
+	_request_visual_redraw()
 
 
 func projection_ready() -> bool:
@@ -703,6 +730,10 @@ func _physics_process(delta: float) -> void:
 		return
 	if not is_instance_valid(owner_player) or owner_player.current_hp <= 0:
 		_expire()
+		return
+	if owner_teleport_pending:
+		velocity = Vector2.ZERO
+		actual_ground_motion_gu = Vector2.ZERO
 		return
 	if _monster_control_remaining > 0.0:
 		_monster_control_remaining = maxf(0.0, _monster_control_remaining - delta)
