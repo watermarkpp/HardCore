@@ -1,0 +1,62 @@
+{
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "workbench_any_slot_test",
+      "test_path": "tests/workbench_any_slot_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T17:10:22.2958443Z",
+      "native_exit_observed_utc": "2026-09-28T17:09:58.4911302Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "player_bich_roadblock_escape_test",
+      "test_path": "tests/player_bich_roadblock_escape_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T17:10:29.9838424Z",
+      "native_exit_observed_utc": "2026-09-28T17:10:08.1973874Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "skill_mechanics_description_test",
+      "test_path": "tests/skill_mechanics_description_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T17:10:39.6562322Z",
+      "native_exit_observed_utc": "2026-09-28T17:10:15.8052257Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "b0119a18a346e7919d5b2d6657329b910b1746af",
+  "total": 3,
+  "passed": 3,
+  "generated_at": "2026-09-29T01:10:17.3540195+08:00",
+  "engine_log_errors": 0,
+  "failed": 0
+}
