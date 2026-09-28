@@ -71,6 +71,10 @@ func _run() -> void:
 	assert(state.use_inventory_index_result(0).success)
 	print("CONSUMABLE_DURING_BACKGROUND_SAVE_MS ",
 		float(Time.get_ticks_usec() - background_overlap_started_usec) / 1000.0)
+	assert(state._world_clock_snapshot_sequence == 0 and state._world_clock_dirty,
+		"using a potion waited for an unrelated world-clock checkpoint")
+	assert(int((JSON.parse_string(FileAccess.get_file_as_string(state._profile_path("recovery"))) as Dictionary).inventory[0].count) == 1,
+		"the potion must still commit its character transaction before returning")
 	state.load_save()
 	assert(state.last_load_result.success, str(state.last_load_result))
 	assert(state._death_event_sequence == 1 and state.experience == 1,

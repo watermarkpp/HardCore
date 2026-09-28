@@ -76,7 +76,9 @@ func _assert_safe_content(overlay: Control, label: String) -> void:
 	assert(safe_bounds.encloses(Rect2(overlay.game_icon_watermark.position, overlay.game_icon_watermark.size)), "%s icon exceeds safe area" % label)
 	assert(safe_bounds.encloses(Rect2(overlay.red_glow.position, overlay.red_glow.size)), "%s glow exceeds safe area" % label)
 	assert(safe_bounds.encloses(Rect2(overlay.loading_label.position, overlay.loading_label.size)), "%s text exceeds safe area" % label)
-	assert(absf(overlay.game_icon_watermark.position.x + overlay.game_icon_watermark.size.x * 0.5 - safe_bounds.size.x * 0.5) <= EPSILON, "%s icon is not horizontally centered" % label)
+	var world_center_x: float = overlay.size.x * 0.5
+	assert(absf(overlay.content_safe_root.position.x + overlay.game_icon_watermark.position.x + overlay.game_icon_watermark.size.x * 0.5 - world_center_x) <= EPSILON, "%s icon is not on the gameplay centerline" % label)
+	assert(absf(overlay.content_safe_root.position.x + overlay.progress_root.position.x + overlay.progress_root.size.x * 0.5 - world_center_x) <= EPSILON, "%s progress is not on the gameplay centerline" % label)
 	assert(absf(overlay.loading_label.position.x + overlay.loading_label.size.x * 0.5 - safe_bounds.size.x * 0.5) <= EPSILON, "%s text is not horizontally centered" % label)
 
 

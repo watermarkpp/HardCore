@@ -3577,11 +3577,28 @@ func _run_map_transition(
 			hud.update_loading_progress(transition_id, 0.81, "准备界面")
 			r13_stage_started_usec = Time.get_ticks_usec()
 			await hud.prewarm_all_panels(_system_menu_panel)
+			# Initial Loading has a bounded window for inventory icons as well.
+			# The HUD advances one batch per frame and survives map teardown
+			# without a suspended icon-prewarm coroutine.
+			if not hud._catalog_icon_prewarm_complete:
+				hud._start_catalog_icon_prewarm(false)
+			var catalog_deadline_msec := int(
+				float(r13_loading_profile.get("covered_usec", 0)) / 1000.0
+			) + 9000
+			while (
+				_map_transition_in_progress
+				and _active_map_transition_id == transition_id
+				and not hud._catalog_icon_prewarm_complete
+				and Time.get_ticks_msec() < catalog_deadline_msec
+			):
+				await get_tree().process_frame
 			r13_loading_profile["ui_panels_ms"] = (
 				float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 			)
 			if not hud.all_panels_are_prewarmed():
 				push_warning("Loading ended with incomplete UI panel prewarm; the background retry remains available")
+			if not hud._catalog_icon_prewarm_complete:
+				push_warning("Loading ended with item icons still prewarming in background")
 			if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 				return
 		# perf(R13-D2): Finalize restarts its own timer HERE - it must never
@@ -3627,6 +3644,7 @@ func _run_map_transition(
 				"skill_workset_ms": float(r13_loading_profile.get("skill_workset_ms", 0.0)),
 				"render_warm_ms": float(r13_loading_profile.get("render_warm_ms", 0.0)),
 				"ui_panels_ms": float(r13_loading_profile.get("ui_panels_ms", 0.0)),
+				"catalog_icon_prewarm_complete": hud._catalog_icon_prewarm_complete,
 				"render_warm": {
 					"skills_considered": int(
 						r13_render_warm_diag.get("skills_considered", 0)

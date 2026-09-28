@@ -206,6 +206,7 @@ var _clock_cleanup_active: Dictionary = {}
 var _clock_cleanup_completed: Dictionary = {}
 const JsonPersistenceService := preload("res://scripts/json_persistence_service.gd")
 var _json_persistence := JsonPersistenceService.new()
+var _world_json_persistence := JsonPersistenceService.new()
 const JsonPreparedRequest := preload("res://scripts/json_prepared_request.gd")
 var saved_map_id := 910001
 var saved_position := Vector2.ZERO
@@ -303,7 +304,7 @@ var temporary_item_buff_revision := 0
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		_before_state_transaction()
+		_before_state_transaction(true)
 		return
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_CLOSE_REQUEST]:
 		if _warehouse_active_preparation != null: _warehouse_active_preparation.cancel()
@@ -312,6 +313,7 @@ func _notification(what: int) -> void:
 
 func _process(delta: float) -> void:
 	_json_persistence.pump()
+	_world_json_persistence.pump()
 	_advance_world_clock_cleanup()
 	advance_temporary_item_buffs(delta)
 	_advance_durability_runtime(delta)
@@ -366,7 +368,7 @@ func _ready() -> void:
 
 
 func reset_progress(emit_updates := true) -> void:
-	_before_state_transaction()
+	_before_state_transaction(true)
 	_clear_pending_durability_runtime()
 	level = 1
 	profession = "战士"
@@ -4966,6 +4968,8 @@ func _complete_world_clock_import_backup(document: Dictionary) -> bool:
 func _checkpoint_world_clock() -> bool:
 	if test_mode:
 		return true
+	if _world_json_persistence.pending_count() > 0:
+		_world_json_persistence.drain()
 	if not _valid_profile_storage_id(active_profile_id):
 		return false
 	if (
@@ -5237,7 +5241,11 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	_last_json_promotion = {}
 	if test_mode and _test_force_atomic_write_failure:
 		return false
-	var request := _json_persistence.submit(
+	var coordinator: RefCounted = (
+		_world_json_persistence if path.begins_with(_world_clock_directory() + "/")
+		else _json_persistence
+	)
+	var request: RefCounted = coordinator.submit(
 		path, {"path": path, "profile_id": active_profile_id, "generation": _world_clock_generation},
 		data, _json_validator_for_path(path), Callable(), false,
 		_validated_profile_bytes if path == _validated_profile_path else null,
@@ -5245,7 +5253,7 @@ func _write_json_atomic(path: String, data: Dictionary) -> bool:
 	)
 	if request == null:
 		return false
-	return bool(_json_persistence.finish(request, true).get("success", false))
+	return bool(coordinator.finish(request, true).get("success", false))
 
 
 func _promote_verified_json(path: String, temporary: String, expected_bytes: PackedByteArray, validated_previous_bytes: Variant = null) -> bool:
@@ -5284,7 +5292,8 @@ func _record_background_json_receipt(receipt: Dictionary) -> void:
 		"worker_previous_read_ms": float(phases.get("READ_PREVIOUS", 0)) / 1000.0,
 		"worker_promote_ms": float(phases.get("PROMOTE", 0)) / 1000.0,
 	}
-	_atomic_write_generation += 1
+	if not path.begins_with(_world_clock_directory() + "/"):
+		_atomic_write_generation += 1
 	if path.get_base_dir() == profile_directory and path.ends_with(".json"):
 		_validated_profile_path = path
 		_validated_profile_bytes = receipt.bytes
@@ -5946,7 +5955,7 @@ func _prepare_character_save_payload(checkpoint_world := true) -> Dictionary:
 
 
 func save_game(update_profile_index := true, finalize_pending_durability := true, checkpoint_world := true) -> bool:
-	_before_state_transaction()
+	_before_state_transaction(checkpoint_world)
 	var save_started_usec := Time.get_ticks_usec()
 	_last_save_phase_profile = {}
 	var payload := _prepare_character_save_payload(checkpoint_world)
@@ -6006,7 +6015,7 @@ func device_lab_active_save_document() -> Dictionary:
 ## reloads every normalized runtime field.  A failed write/load restores the
 ## complete previous document before returning.
 func device_lab_apply_save_document(document: Dictionary) -> Dictionary:
-	_before_state_transaction()
+	_before_state_transaction(true)
 	var result := {
 		"ok": false,
 		"contractId": DEVICE_LAB_SAVE_CONTRACT_ID,
@@ -6297,7 +6306,7 @@ func _emit_device_lab_state_changed() -> void:
 
 
 func load_save() -> void:
-	_before_state_transaction()
+	_before_state_transaction(true)
 	if active_profile_id.is_empty():
 		last_load_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -8196,13 +8205,18 @@ func _complete_background_loot(receipt: Dictionary, plan: Dictionary) -> void:
 		profile_changed.emit()
 
 
-func _before_state_transaction() -> void:
+func _before_state_transaction(include_world := false) -> void:
 	# Explicit transaction/lifecycle boundaries consume already-committing
 	# receipts and cancel unapproved preparations BEFORE taking a rollback copy.
 	# Normal hot-path polling does not invoke this synchronous compatibility gate.
-	if _json_persistence.pending_count() > 0:
+	if _json_persistence.pending_count() > 0 or (include_world and _world_json_persistence.pending_count() > 0):
 		var started_usec := Time.get_ticks_usec() if RuntimeDiagnostics.performance_detail_enabled() else 0
 		_json_persistence.drain()
+		if include_world:
+			_world_json_persistence.drain()
+			# The final world receipt can schedule a cleanup after the first
+			# character drain. Complete that dependency at lifecycle barriers.
+			_json_persistence.drain()
 		if started_usec > 0:
 			RuntimeDiagnostics.record_performance_max(
 				&"state_transaction_wait_max_ms",
@@ -8507,7 +8521,7 @@ func _default_world_position_fields() -> Dictionary:
 
 
 func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:
-	_before_state_transaction()
+	_before_state_transaction(true)
 	if _warehouse_transaction_locked:
 		return "仓库事务恢复中，暂不能创建角色"
 	if not _ensure_shared_warehouse_ready():
@@ -8562,7 +8576,7 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 
 
 func delete_character_profile(profile_id: String) -> Dictionary:
-	_before_state_transaction()
+	_before_state_transaction(true)
 	if _warehouse_transaction_locked:
 		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked", "profile_id": profile_id}
 	if not _ensure_shared_warehouse_ready():
@@ -8913,7 +8927,7 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 
 
 func select_character(profile_id: String) -> bool:
-	_before_state_transaction()
+	_before_state_transaction(true)
 	if _warehouse_transaction_locked:
 		return false
 	if _durability_save_pending and not _commit_save(true, true):
@@ -9062,28 +9076,38 @@ func _start_background_save(update_profile_index := true) -> bool:
 			"gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())},
 		"durability_revision": _durability_mutation_revision, "world_revision": _world_mutation_revision,
 		"inventory_before": inventory.duplicate(true), "started_usec": started_usec,
-		"profile_written": false, "completed": false}
+		"profile_written": false, "completed": false,
+		"profile_finished": false, "profile_success": false, "index_updated": false,
+		"world_finished": false, "world_success": false}
 	plan.payload.inventory = SpecialConsumableStacks.split_available(plan.payload.inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
 	_background_save = plan
+	# Submit the captured character state immediately to its sole ordered writer.
+	# A later item transaction drains that writer, never a pending world snapshot.
+	if not _submit_background_profile(plan):
+		_finish_background_save(plan, false, false)
+		return false
 	if _world_clock_dirty or _world_clock_snapshot_sequence != _death_event_sequence or _world_clock_backup_sequence < _world_clock_snapshot_sequence:
 		var clock_path := _world_clock_path(active_profile_id, _world_clock_generation)
 		var clock_identity := identity.duplicate(true)
 		clock_identity.path = clock_path
 		clock_identity["compact_world_at_unix"] = Time.get_unix_time_from_system()
 		var document := WorldMonsterClockLedgerScript.snapshot_document(active_profile_id, _death_event_sequence, world_monster_respawn_state, _world_clock_generation)
-		var job := _json_persistence.submit(clock_path, clock_identity, document, _json_validator_for_path(clock_path), _background_save_context_matches,
+		var job := _world_json_persistence.submit(clock_path, clock_identity, document, _json_validator_for_path(clock_path), _background_save_context_matches,
 			false, null, _complete_background_checkpoint.bind(plan))
 		if job == null:
-			_finish_background_save(plan, false, false)
-			return false
+			plan.world_finished = true
+			_finish_background_save_if_ready(plan)
 	else:
-		_submit_background_profile(plan)
+		plan.world_finished = true
+		plan.world_success = true
+		_finish_background_save_if_ready(plan)
 	return true
 
 
 func _complete_background_checkpoint(receipt: Dictionary, plan: Dictionary) -> void:
 	if not bool(receipt.get("success", false)) or not _background_save_context_matches(plan.identity):
-		_finish_background_save(plan, false, false)
+		plan.world_finished = true
+		_finish_background_save_if_ready(plan)
 		return
 	_record_background_json_receipt(receipt)
 	var sequence := int(plan.identity.sequence)
@@ -9091,20 +9115,22 @@ func _complete_background_checkpoint(receipt: Dictionary, plan: Dictionary) -> v
 	_world_clock_snapshot_sequence = sequence
 	if sequence == _death_event_sequence and int(plan.world_revision) == _world_mutation_revision:
 		_world_clock_dirty = false
-	_submit_background_profile(plan)
+	plan.world_finished = true
+	plan.world_success = true
+	_finish_background_save_if_ready(plan)
 
 
-func _submit_background_profile(plan: Dictionary) -> void:
+func _submit_background_profile(plan: Dictionary) -> bool:
 	var path := str(plan.identity.path)
 	var job := _json_persistence.submit(path, plan.identity, plan.payload, _json_validator_for_path(path), _background_save_context_matches,
 		false, _validated_profile_bytes if path == _validated_profile_path else null, _complete_background_profile.bind(plan))
-	if job == null:
-		_finish_background_save(plan, false, false)
+	return job != null
 
 
 func _complete_background_profile(receipt: Dictionary, plan: Dictionary) -> void:
 	if not bool(receipt.get("success", false)) or not _background_save_context_matches(plan.identity):
-		_finish_background_save(plan, false, false)
+		plan.profile_finished = true
+		_finish_background_save_if_ready(plan)
 		return
 	_record_background_json_receipt(receipt)
 	var sequence := int(plan.identity.sequence)
@@ -9116,8 +9142,11 @@ func _complete_background_profile(receipt: Dictionary, plan: Dictionary) -> void
 		inventory = plan.payload.inventory
 	if int(plan.durability_revision) == _durability_mutation_revision:
 		_finish_pending_durability_save(int(plan.started_usec))
+	plan.profile_success = true
 	if not bool(plan.update_index):
-		_finish_background_save(plan, true, true)
+		plan.profile_finished = true
+		plan.index_updated = true
+		_finish_background_save_if_ready(plan)
 		return
 	var identity: Dictionary = plan.identity.duplicate(true)
 	identity.path = plan.index_path
@@ -9126,7 +9155,8 @@ func _complete_background_profile(receipt: Dictionary, plan: Dictionary) -> void
 		_background_save_context_matches, false, null, _complete_background_index.bind(plan), false, null, "", false, _merge_background_profile_index)
 	if job == null:
 		plan.index_failure = "index_request_rejected"
-		_finish_background_save(plan, true, false)
+		plan.profile_finished = true
+		_finish_background_save_if_ready(plan)
 
 
 func _merge_background_profile_index(document: Dictionary, identity: Dictionary) -> Dictionary:
@@ -9145,7 +9175,15 @@ func _complete_background_index(receipt: Dictionary, plan: Dictionary) -> void:
 	plan.index_failure = str(receipt.get("reason", ""))
 	if bool(receipt.get("success", false)) and _background_save_context_matches(plan.identity):
 		_record_background_json_receipt(receipt)
-	_finish_background_save(plan, true, bool(receipt.get("success", false)))
+		plan.index_updated = true
+	plan.profile_finished = true
+	_finish_background_save_if_ready(plan)
+
+
+func _finish_background_save_if_ready(plan: Dictionary) -> void:
+	if not bool(plan.profile_finished) or not bool(plan.world_finished):
+		return
+	_finish_background_save(plan, bool(plan.profile_success) and bool(plan.world_success), bool(plan.index_updated))
 
 
 func _finish_background_save(plan: Dictionary, success: bool, index_updated: bool) -> void:

@@ -222,6 +222,10 @@ var _panel_prewarm_diagnostic: Dictionary = {}
 var _background_prewarm_requested := false
 var _catalog_icon_prewarm_in_progress := false
 var _catalog_icon_prewarm_complete := false
+var _catalog_icon_prewarm_background_mode := true
+var _catalog_icon_prewarm_paths: Array[String] = []
+var _catalog_icon_prewarm_next_index := 0
+var _catalog_icon_prewarm_poll_frames := 0
 var _panel_prewarm_user_interaction := false
 # Safe-area viewport binding owned by this HUD instance. The connection target
 # is a static-script Callable, so Godot's duplicate-connect check cannot tell
@@ -239,7 +243,14 @@ func _ready() -> void:
 	_build_approved_hud()
 
 
+func _process(_delta: float) -> void:
+	if _catalog_icon_prewarm_in_progress:
+		_advance_catalog_icon_prewarm()
+
+
 func _exit_tree() -> void:
+	_catalog_icon_prewarm_in_progress = false
+	_catalog_icon_prewarm_paths.clear()
 	# Script loaders can still be compiling preloaded textures when the world
 	# exits. Join this HUD's requests before engine/resource teardown; ordinary
 	# prewarming remains asynchronous and never blocks the gameplay frame.
@@ -2069,7 +2080,10 @@ func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
 	if _catalog_icon_prewarm_complete or _catalog_icon_prewarm_in_progress:
 		return
 	_catalog_icon_prewarm_in_progress = true
-	var paths: Array[String] = []
+	_catalog_icon_prewarm_background_mode = background_mode
+	_catalog_icon_prewarm_paths.clear()
+	_catalog_icon_prewarm_next_index = 0
+	_catalog_icon_prewarm_poll_frames = 0
 	var seen: Dictionary = {}
 	for raw_record: Variant in GameData.item_catalog:
 		if not raw_record is Dictionary:
@@ -2082,28 +2096,38 @@ func _start_catalog_icon_prewarm(background_mode: bool = true) -> void:
 		if path.is_empty() or seen.has(path):
 			continue
 		seen[path] = true
-		paths.append(path)
+		_catalog_icon_prewarm_paths.append(path)
+
+
+func _advance_catalog_icon_prewarm() -> void:
+	# Run one batch per HUD frame. A suspended member coroutine would resume on
+	# a freed HUD when a map transition destroys this scene mid-prewarm.
+	if not is_inside_tree() or (
+		_catalog_icon_prewarm_background_mode
+		and not _ui_l1_finish_explicit_prewarm
+		and _ui_l1_background_blocked()
+	):
+		return
 	const REQUEST_BATCH := 12
-	for start_index in range(0, paths.size(), REQUEST_BATCH):
-		if not await _ui_l1_wait_for_background_slot(background_mode):
-			_catalog_icon_prewarm_in_progress = false
-			return
+	if _catalog_icon_prewarm_next_index < _catalog_icon_prewarm_paths.size():
 		var batch: Array[String] = []
-		for path_index in range(start_index, mini(start_index + REQUEST_BATCH, paths.size())):
-			batch.append(paths[path_index])
+		for path_index in range(
+			_catalog_icon_prewarm_next_index,
+			mini(_catalog_icon_prewarm_next_index + REQUEST_BATCH, _catalog_icon_prewarm_paths.size())
+		):
+			batch.append(_catalog_icon_prewarm_paths[path_index])
 		UIItemTextureCacheScript.request_threaded_paths(batch)
 		UIItemTextureCacheScript.poll_threaded_paths()
-		await get_tree().process_frame
-	for _frame in 120:
-		if not await _ui_l1_wait_for_background_slot(background_mode):
-			_catalog_icon_prewarm_in_progress = false
-			return
+		_catalog_icon_prewarm_next_index += REQUEST_BATCH
+		return
+	if _catalog_icon_prewarm_poll_frames < 120:
 		UIItemTextureCacheScript.poll_threaded_paths()
-		if UIItemTextureCacheScript.threaded_pending_count() == 0:
-			break
-		await get_tree().process_frame
+		_catalog_icon_prewarm_poll_frames += 1
+		if UIItemTextureCacheScript.threaded_pending_count() > 0:
+			return
 	_catalog_icon_prewarm_complete = UIItemTextureCacheScript.threaded_pending_count() == 0
 	_catalog_icon_prewarm_in_progress = false
+	_catalog_icon_prewarm_paths.clear()
 	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
 	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
 

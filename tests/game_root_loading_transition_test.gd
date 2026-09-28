@@ -20,6 +20,8 @@ func _run() -> void:
 	while game._world_bootstrap_in_progress:
 		await get_tree().process_frame
 	assert(game.gameplay_input_is_enabled(), "initial READY must release gameplay input")
+	assert(game.hud._catalog_icon_prewarm_complete,
+		"initial Loading ended while item icons were still cold")
 	# This test isolates the UI handshake. Threaded monster streaming has its own
 	# budget/cache suite and must not make these transition timing assertions wait.
 	game._monster_prefetch_enabled = false

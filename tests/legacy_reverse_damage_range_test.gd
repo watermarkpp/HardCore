@@ -1,5 +1,7 @@
 extends Node
 
+const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
+const SkillRuntimeRouterScript := preload("res://scripts/skills/skill_runtime_router.gd")
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -80,7 +82,21 @@ func _run() -> void:
 	)
 	assert(wizard.request_skill("火球术"), "反向 MC 区间技能未能发起")
 	await get_tree().create_timer(1.0).timeout
-	assert(skill_damage[0] == 4, "技能主属性掷骰未采用 legacy_clamp_negative_span")
+	# The player signal is now a damage-free release. The canonical skill plan
+	# owns the stat roll and formula, so a second roll here would diverge from it.
+	assert(skill_damage[0] == 0, "人物释放信号不应在正式技能计划外重复掷骰")
+	var fireball_power: Array[int] = []
+	for mc_roll in [4, 5]:
+		var request := SkillCastRequestScript.create(
+			"wizard.fireball", 0, 40, Vector2i.ZERO, Vector2i.RIGHT,
+			{"has_target": true, "line_of_sight": true, "primary_stat_roll": mc_roll},
+			{"mana": 999, "materials": {}}, 17
+		)
+		var plan: Dictionary = SkillRuntimeRouterScript._plan(request)
+		assert(plan.accepted and plan.effects.size() == 1)
+		fireball_power.append(int(plan.effects[0].raw_power))
+	assert(fireball_power[1] == fireball_power[0] + 1,
+		"正式技能计划未按反向 MC 区间夹定后的主属性计算伤害")
 
-	print("LEGACY_REVERSE_DAMAGE_RANGE_PASS：DC/MC/SC反向端点、玩家普通攻击、技能主属性及幸运诅咒规则一致")
+	print("LEGACY_REVERSE_DAMAGE_RANGE_PASS：DC/MC/SC反向端点、玩家普通攻击、正式技能单一掷骰入口及幸运诅咒规则一致")
 	get_tree().quit(0)
