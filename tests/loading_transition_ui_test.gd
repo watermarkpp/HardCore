@@ -22,7 +22,8 @@ func _run() -> void:
 	assert(overlay.get_meta("stable_id", "") == "ui.loading.overlay", "Loading过渡层稳定ID错误")
 	assert(not overlay.visible, "Loading过渡层默认没有隐藏")
 	assert(overlay.loading_label.text == "Loading......", "Loading文字不是指定内容")
-	assert(_all_visible_text(overlay) == ["Loading......"], "Loading界面出现了额外文字")
+	assert(_all_visible_text(overlay) == ["Loading......", "准备进入世界", "0%"], "Loading进度说明不完整")
+	assert(overlay.progress_track != null and overlay.progress_fill != null, "Loading缺少进度条")
 	assert(is_equal_approx(overlay.shade.color.a, 1.0), "Loading底层遮罩没有保持完全不透明")
 	assert(overlay.shade.color.b > overlay.shade.color.g and overlay.shade.color.g > overlay.shade.color.r, "Loading背景不是冷调炭黑蓝")
 	assert(overlay.battlefield_background.texture.resource_path == BATTLEFIELD_BACKGROUND_PATH, "Loading没有使用正式黑白战场底图")
@@ -34,12 +35,21 @@ func _run() -> void:
 	assert(overlay.red_glow.get_meta("stable_id", "") == "ui.loading.red_breathing_glow", "暗红呼吸光稳定ID错误")
 	assert(overlay.vignette.get_meta("stable_id", "") == "ui.loading.edge_vignette", "边缘暗角稳定ID错误")
 	assert(overlay.embers.size() == 14 and overlay.embers.size() <= 16, "Loading余烬数量不符合低开销限制")
+	overlay.apply_layout(Vector2(1598, 720), Vector4(72, 0, 0, 0))
+	var logo_center_x: float = overlay.content_safe_root.position.x + overlay.game_icon_watermark.position.x + overlay.game_icon_watermark.size.x * 0.5
+	assert(is_equal_approx(logo_center_x, 799.0), "单侧安全区把Loading图标推向东侧")
 
 	var covered_requests: Array[Dictionary] = []
 	var finished_requests: Array[Dictionary] = []
 	overlay.transition_covered.connect(func(request: Dictionary) -> void: covered_requests.append(request.duplicate(true)))
 	overlay.transition_finished.connect(func(request: Dictionary) -> void: finished_requests.append(request.duplicate(true)))
 	overlay.begin_loading("map:test:001")
+	overlay.set_loading_progress("map:test:001", 0.35, "准备地图")
+	assert(overlay.progress_percent.text == "35%" and overlay.progress_stage.text == "准备地图", "Loading进度未更新")
+	overlay.set_loading_progress("map:stale", 0.95, "错误任务")
+	assert(overlay.progress_percent.text == "35%", "旧Loading任务污染当前进度")
+	overlay.set_loading_progress("map:test:001", 0.12, "倒退")
+	assert(overlay.progress_percent.text == "35%", "Loading进度倒退")
 	assert(overlay.visible and is_equal_approx(overlay.modulate.a, 1.0), "Loading显示首帧没有完全遮住旧地图")
 	assert(covered_requests.is_empty(), "Loading覆盖许可不能在调用方开始等待前同步发出")
 	await get_tree().process_frame

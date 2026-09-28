@@ -36,6 +36,8 @@ func _run() -> void:
 			break
 		await get_tree().process_frame
 	assert(hud.all_panels_are_prewarmed(), "background panel prewarm did not resume after close")
+	assert(is_instance_valid(hud.enhancement_panel), "forge panel remained cold until the first vendor tap")
+	assert(not hud.enhancement_panel.visible, "prewarm exposed forge panel")
 	assert(not hud.inventory_panel.visible, "background prewarm reopened a page explicitly closed by the player")
 	assert(hud.inventory_panel.item_grid.get_child_count() == 100, "visible inventory exposed a partial grid")
 	assert(hud.warehouse_panel.bag_grid.get_child_count() == 100, "warehouse bag grid did not finish in background")
@@ -49,6 +51,19 @@ func _run() -> void:
 	var script_prefetch: Dictionary = diagnostic.get("script_prefetch", {})
 	assert((script_prefetch.get("failures", []) as Array).is_empty(), "panel script threaded prefetch failed")
 	assert((script_prefetch.get("pending", []) as Array).is_empty(), "panel scripts remained pending")
-	assert(not bool(diagnostic.get("shop_alternate_profile_warmed", true)), "user interaction did not protect shop profile state")
-	print("HUD_BACKGROUND_PREWARM_PASS visible_phase_preserved=true resumed_after_close=true grids=100 script_failures=0")
+	assert(bool(diagnostic.get("shop_alternate_profile_warmed", false)), "initial Loading did not prepare both shop layouts")
+	PlayerState.inventory = [{"name": "金创药(小量)", "count": 8}]
+	PlayerState.inventory_changed.emit()
+	var consumable_samples: Array[float] = []
+	for _sample in 5:
+		var item_started_usec := Time.get_ticks_usec()
+		var use_result := PlayerState.use_inventory_index_result(0)
+		assert(bool(use_result.get("success", false)), str(use_result))
+		consumable_samples.append(float(Time.get_ticks_usec() - item_started_usec) / 1000.0)
+	print("HUD_CONSUMABLE_SIGNAL_LATENCY ", JSON.stringify(consumable_samples))
+	var forge_open_started_usec := Time.get_ticks_usec()
+	hud.open_enhancement_vendor("")
+	var forge_open_ms := float(Time.get_ticks_usec() - forge_open_started_usec) / 1000.0
+	assert(hud.enhancement_panel.visible and is_instance_valid(hud.enhancement_panel), "first forge open failed after prewarm")
+	print("HUD_BACKGROUND_PREWARM_PASS visible_phase_preserved=true resumed_after_close=true grids=100 script_failures=0 forge_first_open_ms=%.3f" % forge_open_ms)
 	get_tree().quit(0)

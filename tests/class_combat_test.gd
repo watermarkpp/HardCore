@@ -12,16 +12,16 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await _wait_for_playable_world(game)
 	# 正式启动点已是服务端HomeMap=0；职业技能综合测试显式进入带Boss的旧演示场。
 	game.change_zone("比奇郊外")
 	await get_tree().process_frame
 	await get_tree().process_frame
+	await _wait_for_playable_world(game)
 	var enemy: EnemyActor
 	var elite_fixture: EnemyActor
 	for node: Node in get_tree().get_nodes_in_group("enemies"):
-		if node is EnemyActor:
+		if node is EnemyActor and not node.is_queued_for_deletion():
 			if enemy == null:
 				enemy = node
 			if node.monster_id == 56:
@@ -123,3 +123,15 @@ func _run() -> void:
 
 	print("CLASS_COMBAT_PASS：法师投射物/火墙/魔法盾与道士治疗/毒/控制/隐身/召唤正常")
 	get_tree().quit(0)
+
+
+func _wait_for_playable_world(game: Node) -> void:
+	for _frame in range(600):
+		if (
+			not game._world_bootstrap_in_progress
+			and not game._map_transition_in_progress
+			and game.gameplay_input_is_enabled()
+		):
+			return
+		await get_tree().process_frame
+	assert(false, "职业战斗测试等待地图进入可操作状态超时")

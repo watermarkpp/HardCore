@@ -27,8 +27,11 @@ func _run() -> void:
 	var quadrants := {}
 	var successes := 0
 	var far_count := 0
+	var timings_ms: Array[float] = []
 	for attempt in range(128):
+		var query_started_usec := Time.get_ticks_usec()
 		var point: Vector2 = game._find_valid_random_teleport_position(origin)
+		timings_ms.append(float(Time.get_ticks_usec() - query_started_usec) / 1000.0)
 		if point == origin:
 			continue
 		var ground: Vector2 = game._canonical_screen_px_to_ground_gu(point)
@@ -42,6 +45,9 @@ func _run() -> void:
 	assert(successes >= 120, "Unexpected rejection rate on the formal Bich map")
 	assert(far_count >= 32, "Random teleport remains constrained to the old local radius")
 	assert(quadrants.size() == 4, "Full-map sampling must reach all four quarters")
+	timings_ms.sort()
+	print("RANDOM_TELEPORT_QUERY_LATENCY_MS p50=%.3f p95=%.3f max=%.3f" % [
+		timings_ms[64], timings_ms[121], timings_ms[127]])
 	var map_before: int = game.current_map_id
 	game.current_map_id = -12345
 	assert(game._find_valid_random_teleport_position(origin) == origin, "Invalid map must fail closed")

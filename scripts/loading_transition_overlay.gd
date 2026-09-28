@@ -20,8 +20,14 @@ var content_safe_root: Control
 var red_glow: ColorRect
 var vignette: ColorRect
 var loading_label: Label
+var progress_root: Control
+var progress_track: ColorRect
+var progress_fill: ColorRect
+var progress_stage: Label
+var progress_percent: Label
 var embers: Array[ColorRect] = []
 var transition_id := ""
+var _progress_value := 0.0
 var _coverage_request_serial := 0
 var _pulse_time := 0.0
 var _holding_final := false
@@ -64,6 +70,7 @@ func _ready() -> void:
 	loading_label.add_theme_constant_override("outline_size", 1)
 	loading_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content_safe_root.add_child(loading_label)
+	_build_progress()
 	_apply_runtime_layout()
 	if not get_viewport().size_changed.is_connected(_apply_runtime_layout):
 		get_viewport().size_changed.connect(_apply_runtime_layout)
@@ -104,11 +111,19 @@ func apply_layout(viewport_size: Vector2, safe_margins := Vector4.ZERO) -> void:
 	)
 	_set_top_left_rect(content_safe_root, safe_position, safe_size)
 	_set_top_left_rect(loading_label, Vector2.ZERO, safe_size)
-	var content_center := safe_size * 0.5
+	# The gameplay center is the full viewport center. On landscape phones a
+	# one-sided cutout makes the safe rectangle's midpoint drift to the east.
+	var content_center := Vector2(full_size.x * 0.5 - safe_position.x, safe_size.y * 0.5)
 	var icon_size := Vector2.ONE * minf(300.0, safe_size.y * 0.416667)
 	_set_top_left_rect(game_icon_watermark, content_center - icon_size * 0.5 - Vector2(0.0, 26.0), icon_size)
 	var glow_size := Vector2(minf(280.0, safe_size.x * 0.24), minf(150.0, safe_size.y * 0.208333))
 	_set_top_left_rect(red_glow, content_center - glow_size * 0.5 + Vector2(0.0, 19.0), glow_size)
+	var progress_width := minf(490.0, safe_size.x * 0.62)
+	_set_top_left_rect(progress_root, Vector2(content_center.x - progress_width * 0.5, safe_size.y * 0.78), Vector2(progress_width, 63.0))
+	_set_top_left_rect(progress_track, Vector2(0.0, 28.0), Vector2(progress_width, 12.0))
+	_update_progress_fill()
+	_set_top_left_rect(progress_stage, Vector2.ZERO, Vector2(progress_width - 68.0, 25.0))
+	_set_top_left_rect(progress_percent, Vector2(progress_width - 66.0, 0.0), Vector2(66.0, 25.0))
 	for ember: ColorRect in embers:
 		var normalized_position: Vector2 = ember.get_meta("normalized_position", Vector2.ZERO)
 		ember.position = Vector2(normalized_position.x * safe_size.x, normalized_position.y * safe_size.y)
@@ -216,6 +231,71 @@ void fragment() {
 	add_child(vignette)
 
 
+func _build_progress() -> void:
+	progress_root = Control.new()
+	progress_root.name = "LoadingProgress"
+	progress_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress_root.set_meta("stable_id", "ui.loading.progress")
+	content_safe_root.add_child(progress_root)
+	progress_track = ColorRect.new()
+	progress_track.name = "ProgressTrack"
+	progress_track.color = Color("8e6c4d")
+	progress_track.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress_root.add_child(progress_track)
+	var unfilled := ColorRect.new()
+	unfilled.name = "Unfilled"
+	unfilled.color = Color("211a19")
+	unfilled.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	unfilled.position = Vector2(2.0, 2.0)
+	unfilled.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	unfilled.offset_left = 2.0
+	unfilled.offset_top = 2.0
+	unfilled.offset_right = -2.0
+	unfilled.offset_bottom = -2.0
+	progress_track.add_child(unfilled)
+	progress_fill = ColorRect.new()
+	progress_fill.name = "ProgressFill"
+	progress_fill.color = Color("b44228")
+	progress_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress_track.add_child(progress_fill)
+	progress_stage = Label.new()
+	progress_stage.name = "ProgressStage"
+	progress_stage.text = "准备进入世界"
+	progress_stage.add_theme_color_override("font_color", Color("dcc7a5"))
+	progress_stage.add_theme_font_size_override("font_size", 17)
+	progress_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress_root.add_child(progress_stage)
+	progress_percent = Label.new()
+	progress_percent.name = "ProgressPercent"
+	progress_percent.text = "0%"
+	progress_percent.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	progress_percent.add_theme_color_override("font_color", Color("f1c584"))
+	progress_percent.add_theme_font_size_override("font_size", 17)
+	progress_percent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	progress_root.add_child(progress_percent)
+
+
+func _update_progress_fill() -> void:
+	progress_fill.position = Vector2(2.0, 2.0)
+	progress_fill.size = Vector2(maxf(0.0, (progress_track.size.x - 4.0) * _progress_value), 8.0)
+
+
+func set_loading_progress(request_transition_id: String, completed: float, stage: String) -> void:
+	if request_transition_id != transition_id:
+		return
+	_progress_value = maxf(_progress_value, clampf(completed, 0.0, 1.0))
+	progress_stage.text = stage
+	progress_percent.text = "%d%%" % roundi(_progress_value * 100.0)
+	_update_progress_fill()
+
+
+func _reset_progress() -> void:
+	_progress_value = 0.0
+	progress_stage.text = "准备进入世界"
+	progress_percent.text = "0%"
+	_update_progress_fill()
+
+
 func begin_loading(next_transition_id := "") -> void:
 	_coverage_request_serial += 1
 	var request_serial := _coverage_request_serial
@@ -224,6 +304,7 @@ func begin_loading(next_transition_id := "") -> void:
 	var request_transition_id := transition_id
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT
+	_reset_progress()
 	# The complete overlay remains opaque for every frame in which it is visible.
 	# Only the internal text/glow atmosphere animates; gameplay and HUD pixels
 	# must never become part of the Loading presentation.
@@ -238,6 +319,7 @@ func show_loading_immediately(next_transition_id := "") -> void:
 	transition_id = str(next_transition_id)
 	_pulse_time = 0.0
 	loading_label.text = LOADING_TEXT
+	_reset_progress()
 	modulate.a = 1.0
 	show()
 

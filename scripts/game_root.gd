@@ -3411,6 +3411,7 @@ func _run_map_transition(
 		"actor_spawn_ms": 0.0,
 		"skill_workset_ms": 0.0,
 		"render_warm_ms": 0.0,
+		"ui_panels_ms": 0.0,
 		"finalize_ms": 0.0,
 	}
 	var r13_stage_started_usec := Time.get_ticks_usec()
@@ -3429,10 +3430,9 @@ func _run_map_transition(
 		r13_loading_profile["covered_usec"] = r13_stage_started_usec
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
-	# Initial entry deliberately does not prewarm every reusable panel. That
-	# work is not part of the world-ready contract and made the first Loading
-	# screen wait for unrelated UI layout/action preparation. Panels remain
-	# on-demand and are created only when the player opens them.
+	hud.update_loading_progress(transition_id, 0.05, "准备场景")
+	# The player-visible bar reports completed loading stages; UI construction
+	# is included in the initial covered window after the world becomes ready.
 	_last_monster_prefetch_status.clear()
 	r13_stage_started_usec = Time.get_ticks_usec()
 	_preload_map_loot_icons(target_map_id)
@@ -3460,6 +3460,7 @@ func _run_map_transition(
 	r13_loading_profile["monster_prefetch_ms"] = (
 		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 	)
+	hud.update_loading_progress(transition_id, 0.22, "资源已准备")
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	# HC-P1-004: stage the world build through the coordinator budget queues
@@ -3472,6 +3473,8 @@ func _run_map_transition(
 	r13_loading_profile["world_pipeline_ms"] = (
 		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 	)
+	if built_ok:
+		hud.update_loading_progress(transition_id, 0.58, "地图已建立")
 	if not built_ok:
 		# P0-3: pre-arrival failure - the coordinator is already FAILED and
 		# the old world is untouched. Own the whole FAILED transition through
@@ -3504,6 +3507,7 @@ func _run_map_transition(
 	r13_loading_profile["actor_spawn_ms"] = (
 		float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 	)
+	hud.update_loading_progress(transition_id, 0.75, "人物和怪物已就位")
 	if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 		return
 	var actor_summary := _world_bootstrap_coordinator.ready_contract_summary()
@@ -3551,6 +3555,7 @@ func _run_map_transition(
 		r13_loading_profile["skill_workset_ms"] = (
 			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 		)
+		hud.update_loading_progress(transition_id, 0.76, "技能资源已准备")
 		# FW-COLD2 Phase B + PERF-R2 R7/C8: the GPU render warm is bound to
 		# the workset - a warrior/taoist without fire wall bound never pays
 		# for fire-wall warm-up here. R14-C7 + R14-C-R1 P0-11..16: the warm
@@ -3564,9 +3569,21 @@ func _run_map_transition(
 		r13_loading_profile["render_warm_ms"] = (
 			float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
 		)
+		hud.update_loading_progress(transition_id, 0.80, "画面已准备")
 		r13_loading_profile["render_warm_diag"] = r13_render_warm_diag
 		if not _map_transition_in_progress or _active_map_transition_id != transition_id:
 			return
+		if _world_bootstrap_in_progress and hud.has_method("prewarm_all_panels"):
+			hud.update_loading_progress(transition_id, 0.81, "准备界面")
+			r13_stage_started_usec = Time.get_ticks_usec()
+			await hud.prewarm_all_panels(_system_menu_panel)
+			r13_loading_profile["ui_panels_ms"] = (
+				float(Time.get_ticks_usec() - r13_stage_started_usec) / 1000.0
+			)
+			if not hud.all_panels_are_prewarmed():
+				push_warning("Loading ended with incomplete UI panel prewarm; the background retry remains available")
+			if not _map_transition_in_progress or _active_map_transition_id != transition_id:
+				return
 		# perf(R13-D2): Finalize restarts its own timer HERE - it must never
 		# include the render-warm span (stages do not overlap).
 		r13_stage_started_usec = Time.get_ticks_usec()
@@ -3609,6 +3626,7 @@ func _run_map_transition(
 				"actor_spawn_ms": float(r13_loading_profile.get("actor_spawn_ms", 0.0)),
 				"skill_workset_ms": float(r13_loading_profile.get("skill_workset_ms", 0.0)),
 				"render_warm_ms": float(r13_loading_profile.get("render_warm_ms", 0.0)),
+				"ui_panels_ms": float(r13_loading_profile.get("ui_panels_ms", 0.0)),
 				"render_warm": {
 					"skills_considered": int(
 						r13_render_warm_diag.get("skills_considered", 0)
@@ -3649,6 +3667,7 @@ func _run_map_transition(
 				"actor_max_slice_ms": float(r13_bootstrap_diag.get("actor_max_slice_ms", 0.0)),
 				"actor_max_item_ms": float(r13_bootstrap_diag.get("actor_max_item_ms", 0.0)),
 			}))
+		hud.update_loading_progress(transition_id, 1.0, "进入游戏")
 		hud.finish_loading_transition()
 		# FRAME-STALL discipline (remote review 2026-09-16): arm the generic
 		# long-frame probe only now - loading has ended and the prewarm

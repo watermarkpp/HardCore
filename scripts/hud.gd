@@ -1808,6 +1808,11 @@ func prewarm_all_panels(system_menu_panel: Control = null) -> void:
 	await _run_panel_prewarm(system_menu_panel, false)
 
 
+func _report_panel_prewarm_progress(background_mode: bool, completed: float, stage: String) -> void:
+	if not background_mode and is_instance_valid(loading_transition_overlay):
+		update_loading_progress(loading_transition_overlay.transition_id, completed, stage)
+
+
 func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool = false) -> void:
 	if _all_panels_prewarmed:
 		return
@@ -1829,6 +1834,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		"background_mode": background_mode,
 	}
 	_panel_prewarm_diagnostic["script_prefetch"] = await _prefetch_panel_scripts()
+	_report_panel_prewarm_progress(background_mode, 0.84, "界面资源已准备")
 	_start_catalog_icon_prewarm.call_deferred(background_mode)
 	var panel_started_usec := 0
 	if not await _ui_l1_wait_for_background_slot(background_mode):
@@ -1839,6 +1845,17 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["inventory"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.86, "背包已准备")
+	await get_tree().process_frame
+	if not await _ui_l1_wait_for_background_slot(background_mode):
+		_panel_prewarm_in_progress = false
+		return
+	panel_started_usec = Time.get_ticks_usec()
+	_ensure_enhancement_panel()
+	_panel_prewarm_diagnostic["construction_ms_by_panel"]["enhancement"] = (
+		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
+	)
+	_report_panel_prewarm_progress(background_mode, 0.88, "强化界面已准备")
 	await get_tree().process_frame
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
@@ -1848,6 +1865,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["shop"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.90, "商店已准备")
 	await get_tree().process_frame
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
@@ -1857,6 +1875,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["warehouse"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.92, "仓库已准备")
 	await get_tree().process_frame
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
@@ -1866,6 +1885,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["map"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.93, "地图界面已准备")
 	await get_tree().process_frame
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
@@ -1875,6 +1895,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["skill"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.94, "技能界面已准备")
 	await get_tree().process_frame
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
@@ -1884,6 +1905,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["quest"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.95, "任务界面已准备")
 	await get_tree().process_frame
 	if not await _ui_l1_wait_for_background_slot(background_mode):
 		_panel_prewarm_in_progress = false
@@ -1893,6 +1915,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	_panel_prewarm_diagnostic["construction_ms_by_panel"]["death_revival"] = (
 		(Time.get_ticks_usec() - panel_started_usec) / 1000.0
 	)
+	_report_panel_prewarm_progress(background_mode, 0.96, "交互界面已准备")
 	# SkillPanel intentionally refreshes only when opened. Run the same public
 	# refresh once while hidden so its dynamic cards, icons and saved profile are
 	# ready before the first interaction as well.
@@ -1902,6 +1925,8 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	skill_panel.refresh()
 	if inventory_panel.has_method("wait_until_runtime_ready"):
 		await inventory_panel.wait_until_runtime_ready()
+	if enhancement_panel.has_method("wait_until_runtime_ready"):
+		await enhancement_panel.wait_until_runtime_ready()
 	if warehouse_panel.has_method("wait_until_runtime_ready"):
 		await warehouse_panel.wait_until_runtime_ready()
 	_panel_prewarm_diagnostic["construction_ms"] = (
@@ -1909,6 +1934,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	)
 	var panels: Array[Control] = [
 		inventory_panel,
+		enhancement_panel,
 		shop_panel,
 		skill_panel,
 		quest_panel,
@@ -1926,6 +1952,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 	# geometry pass, so first-open can only expose the finished frame.
 	var initial_profiles: Array = [
 		[inventory_panel, "inventory"],
+		[enhancement_panel, "forge"],
 		[shop_panel, "shop_buy"],
 		[skill_panel, "skill"],
 		[quest_panel, "quest"],
@@ -1937,6 +1964,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		initial_profiles.append([system_menu_panel, "system_menu"])
 	var initial_wait_frames := await _wait_for_layout_profiles(initial_profiles)
 	_panel_prewarm_diagnostic["initial_profiles_wait_frames"] = initial_wait_frames
+	_report_panel_prewarm_progress(background_mode, 0.98, "界面布局已就位")
 	_panel_prewarm_diagnostic["initial_profiles_elapsed_ms"] = (
 		(Time.get_ticks_usec() - prewarm_started_usec) / 1000.0
 	)
@@ -1977,6 +2005,8 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 		readiness_profiles += [[shop_panel, "shop_sell"], [shop_panel, "shop_buy"]]
 	_all_panels_prewarmed = _profiles_are_ready(readiness_profiles)
 	_panel_prewarm_diagnostic["completed"] = _all_panels_prewarmed
+	if _all_panels_prewarmed:
+		_report_panel_prewarm_progress(background_mode, 0.99, "进入游戏")
 	_panel_prewarm_diagnostic["catalog_icon_prewarm_complete"] = _catalog_icon_prewarm_complete
 	_panel_prewarm_diagnostic["catalog_icon_pending"] = UIItemTextureCacheScript.threaded_pending_count()
 	_panel_prewarm_diagnostic["total_ms"] = (
@@ -1990,6 +2020,7 @@ func _run_panel_prewarm(system_menu_panel: Control = null, background_mode: bool
 func _prefetch_panel_scripts() -> Dictionary:
 	var paths: Array[String] = [
 		INVENTORY_PANEL_SCRIPT_PATH,
+		ENHANCEMENT_PANEL_SCRIPT_PATH,
 		MAP_PANEL_SCRIPT_PATH,
 		SKILL_PANEL_SCRIPT_PATH,
 		QUEST_PANEL_SCRIPT_PATH,
@@ -2007,7 +2038,9 @@ func _prefetch_panel_scripts() -> Dictionary:
 		else:
 			request_failures.append("%s:%d" % [path, error])
 	var waited_frames := 0
-	while not pending.is_empty() and waited_frames < 120 and is_inside_tree():
+	# Seven panels include the forge's large inherited inventory script. Keep
+	# polling while Loading covers construction, with a finite failure bound.
+	while not pending.is_empty() and waited_frames < 300 and is_inside_tree():
 		for path: String in pending.keys().duplicate():
 			var status := ResourceLoader.load_threaded_get_status(path)
 			if status == ResourceLoader.THREAD_LOAD_LOADED:
@@ -2438,6 +2471,11 @@ func show_loot_feedback(event: Dictionary) -> void:
 func begin_loading_transition(transition_id := "") -> void:
 	if loading_transition_overlay != null:
 		loading_transition_overlay.begin_loading(transition_id)
+
+
+func update_loading_progress(transition_id: String, completed: float, stage: String) -> void:
+	if loading_transition_overlay != null:
+		loading_transition_overlay.set_loading_progress(transition_id, completed, stage)
 
 
 func cancel_movement_input() -> void:

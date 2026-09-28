@@ -39,6 +39,16 @@ func _run() -> void:
 	state._json_persistence.drain()
 	var outcome: Dictionary = state._clock_cleanup_worker.result()
 	assert(outcome.finished and outcome.success and outcome.removed == 2)
+	state._profile_saved_death_event_sequence = 2
+	state._profile_backup_death_event_sequence = 2
+	state._world_clock_snapshot_sequence = 2
+	state._world_clock_backup_sequence = 2
+	state._queue_world_clock_cleanup()
+	assert(state._json_persistence.pending_count() == 0,
+		"completed same-frame cleanup receipt scheduled another filesystem job")
+	state._queue_world_clock_cleanup()
+	assert(state._json_persistence.pending_count() == 0,
+		"unchanged cleanup watermark scheduled another filesystem job")
 	assert(not FileAccess.file_exists(directory.path_join("000000000001.json")))
 	for name: String in ["000000000003.json", "000000000001.json.bak", "1.json", "000000000000.json", "000000000001.tmp"]:
 		assert(FileAccess.get_file_as_string(directory.path_join(name)) == "preserved fixture")

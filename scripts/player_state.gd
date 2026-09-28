@@ -202,6 +202,8 @@ var _world_clock_backup_sequence := -1
 var _world_clock_dirty := true
 var _clock_cleanup_worker: RefCounted
 var _clock_cleanup_pending: Dictionary = {}
+var _clock_cleanup_active: Dictionary = {}
+var _clock_cleanup_completed: Dictionary = {}
 const JsonPersistenceService := preload("res://scripts/json_persistence_service.gd")
 var _json_persistence := JsonPersistenceService.new()
 const JsonPreparedRequest := preload("res://scripts/json_prepared_request.gd")
@@ -305,7 +307,7 @@ func _notification(what: int) -> void:
 		return
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_CLOSE_REQUEST]:
 		if _warehouse_active_preparation != null: _warehouse_active_preparation.cancel()
-		_commit_save()
+		_commit_save(true, true)
 
 
 func _process(delta: float) -> void:
@@ -1161,7 +1163,9 @@ func _consume_inventory_index(index: int, amount := 1) -> bool:
 	var inventory_before := inventory.duplicate(true)
 	if not _consume_inventory_index_without_commit(index, amount):
 		return false
-	if not _commit_save():
+	# Consuming a stack changes only the character document; the hall index's
+	# name, profession and level are unchanged. Save once instead of twice.
+	if not _commit_save(false, false):
 		inventory = inventory_before
 		return false
 	inventory_changed.emit()
@@ -2062,7 +2066,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 				buff_reason,
 				UIErrorFeedbackScript.from_reason(buff_reason, "增益效果应用失败")
 			)
-		if not _consume_inventory_index_without_commit(index) or not _commit_save():
+		if not _consume_inventory_index_without_commit(index) or not _commit_save(false, false):
 			inventory = inventory_before
 			temporary_item_buffs = buffs_before
 			temporary_item_buff_revision = revision_before
@@ -2102,7 +2106,7 @@ func _use_weapon_repair_oil_item_result(index: int, full_repair: bool) -> Dictio
 	else:
 		record["count"] = count - 1
 	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
-	if not _commit_save():
+	if not _commit_save(false, false):
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats(false)
@@ -2132,7 +2136,7 @@ func apply_weapon_repair_oil_result(full_repair: bool) -> Dictionary:
 		return _use_item_failure("weapon_not_damaged", "武器无需修复")
 	var equipment_before := equipment.duplicate(true)
 	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
-	if not _commit_save():
+	if not _commit_save(false, false):
 		equipment = equipment_before
 		recalculate_stats(false)
 		return _use_item_failure("save_failed", "武器修复存档失败")
@@ -2268,7 +2272,7 @@ func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int, upper_s
 	if not bool(effect_result.get("ok", false)):
 		return str(effect_result.get("message", "祝福油使用失败"))
 	recalculate_stats(false)
-	if not _commit_save():
+	if not _commit_save(false, false):
 		equipment = equipment_before
 		recalculate_stats(false)
 		return "祝福油效果未能保存"
@@ -4996,6 +5000,10 @@ func _checkpoint_world_clock() -> bool:
 
 
 func _queue_world_clock_cleanup() -> void:
+	# A completed worker can be waiting for the next _process tick. Reconcile
+	# its receipt before another same-frame transaction compares watermarks.
+	if _clock_cleanup_worker != null and bool(_clock_cleanup_worker.result().finished):
+		_advance_world_clock_cleanup()
 	var through_sequence := mini(
 		mini(
 			_profile_saved_death_event_sequence,
@@ -5010,10 +5018,25 @@ func _queue_world_clock_cleanup() -> void:
 		"generation": _world_clock_generation,
 		"through_sequence": through_sequence,
 	}
+	if _clock_cleanup_covers(_clock_cleanup_completed, request):
+		return
 	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
+		if _clock_cleanup_covers(_clock_cleanup_active, request):
+			return
+		if _clock_cleanup_covers(_clock_cleanup_pending, request):
+			return
 		_clock_cleanup_pending = request
 		return
 	_start_world_clock_cleanup(request)
+
+
+func _clock_cleanup_covers(existing: Dictionary, request: Dictionary) -> bool:
+	return (
+		not existing.is_empty()
+		and str(existing.get("profile_id", "")) == str(request.get("profile_id", ""))
+		and str(existing.get("generation", "")) == str(request.get("generation", ""))
+		and int(existing.get("through_sequence", 0)) >= int(request.get("through_sequence", 0))
+	)
 
 
 func _start_world_clock_cleanup(request: Dictionary) -> void:
@@ -5032,16 +5055,21 @@ func _start_world_clock_cleanup(request: Dictionary) -> void:
 	_clock_cleanup_worker = JsonPreparedRequest.new()
 	_clock_cleanup_worker.configure(_json_persistence, job)
 	_clock_cleanup_worker.terminal_result = true
+	_clock_cleanup_active = request.duplicate(true)
 
 
 func _advance_world_clock_cleanup() -> void:
 	if _clock_cleanup_worker != null and not bool(_clock_cleanup_worker.result().finished):
 		return
+	if _clock_cleanup_worker != null and bool(_clock_cleanup_worker.result().get("success", false)):
+		_clock_cleanup_completed = _clock_cleanup_active.duplicate(true)
 	_clock_cleanup_worker = null
+	_clock_cleanup_active.clear()
 	if not _clock_cleanup_pending.is_empty():
 		var request := _clock_cleanup_pending
 		_clock_cleanup_pending = {}
-		_start_world_clock_cleanup(request)
+		if not _clock_cleanup_covers(_clock_cleanup_completed, request):
+			_start_world_clock_cleanup(request)
 
 
 func _commit_death_event() -> bool:
@@ -5917,11 +5945,11 @@ func _prepare_character_save_payload(checkpoint_world := true) -> Dictionary:
 	return payload
 
 
-func save_game(update_profile_index := true, finalize_pending_durability := true) -> bool:
+func save_game(update_profile_index := true, finalize_pending_durability := true, checkpoint_world := true) -> bool:
 	_before_state_transaction()
 	var save_started_usec := Time.get_ticks_usec()
 	_last_save_phase_profile = {}
-	var payload := _prepare_character_save_payload()
+	var payload := _prepare_character_save_payload(checkpoint_world)
 	if payload.is_empty(): return false
 	_last_save_phase_profile["runtime_snapshot_ms"] = float(Time.get_ticks_usec() - save_started_usec) / 1000.0
 	var profile_path := _profile_path(active_profile_id)
@@ -6500,7 +6528,7 @@ func load_save() -> void:
 		) != SKILL_BUTTON_ASSIGNMENTS_CONTRACT_ID
 		or int(parsed.get("content_schema_version", 0)) < CURRENT_CONTENT_SCHEMA_VERSION
 	):
-		_commit_save()
+		_commit_save(true, true)
 	# Buffs are session-local and never persisted. Loading another character
 	# must not inherit the previous character's unexpired divine-water effect.
 	if not temporary_item_buffs.is_empty():
@@ -8173,7 +8201,13 @@ func _before_state_transaction() -> void:
 	# receipts and cancel unapproved preparations BEFORE taking a rollback copy.
 	# Normal hot-path polling does not invoke this synchronous compatibility gate.
 	if _json_persistence.pending_count() > 0:
+		var started_usec := Time.get_ticks_usec() if RuntimeDiagnostics.performance_detail_enabled() else 0
 		_json_persistence.drain()
+		if started_usec > 0:
+			RuntimeDiagnostics.record_performance_max(
+				&"state_transaction_wait_max_ms",
+				float(Time.get_ticks_usec() - started_usec) / 1000.0
+			)
 
 
 func _loot_save_failure(outcomes: Array) -> Dictionary:
@@ -8494,7 +8528,7 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	var new_profile_id := _new_profile_id()
 	if new_profile_id.is_empty():
 		return "角色存档ID生成失败"
-	if _durability_save_pending and not _commit_save():
+	if _durability_save_pending and not _commit_save(true, true):
 		return "当前角色耐久存档失败，暂不能创建角色"
 	var previous_runtime := _creation_runtime_snapshot()
 	active_profile_id = new_profile_id
@@ -8882,7 +8916,7 @@ func select_character(profile_id: String) -> bool:
 	_before_state_transaction()
 	if _warehouse_transaction_locked:
 		return false
-	if _durability_save_pending and not _commit_save():
+	if _durability_save_pending and not _commit_save(true, true):
 		return false
 	if not _valid_profile_storage_id(profile_id):
 		return false
@@ -9131,13 +9165,15 @@ func _finish_background_save(plan: Dictionary, success: bool, index_updated: boo
 		"success": success, "profile_index_skipped": not bool(plan.update_index), "background": true}
 
 
-func _commit_save(update_profile_index := true) -> bool:
+# Character transactions use the already-durable death-event journal. World
+# snapshots belong to background checkpoints and explicit lifecycle saves.
+func _commit_save(update_profile_index := true, checkpoint_world := false) -> bool:
 	var started_usec := Time.get_ticks_usec()
 	var before_split := inventory
 	inventory = SpecialConsumableStacks.split_available(inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
 	if test_mode:
 		_test_transaction_counters["commit_attempts"] = int(_test_transaction_counters.get("commit_attempts", 0)) + 1
-	var success := save_game(update_profile_index, false) if not test_mode else not _test_force_atomic_write_failure
+	var success := save_game(update_profile_index, false, checkpoint_world) if not test_mode else not _test_force_atomic_write_failure
 	if not success:
 		inventory = before_split
 	else:

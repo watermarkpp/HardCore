@@ -22,7 +22,7 @@ func _run() -> void:
 			var icon := load(GameData.get_item_art_path({"item_id": item_id}, field)) as Texture2D
 			assert(icon != null and icon.get_size().x > 0.0 and icon.get_size().y > 0.0)
 			var maximum := GameData.get_item_art_display_size({"item_id": item_id}, field)
-			assert(maximum == (Vector2(56, 56) if field == "inventoryIcon" else Vector2(36, 36)))
+			assert(maximum == (Vector2(44, 44) if field == "inventoryIcon" else Vector2(36, 36)))
 			var fitted := icon.get_size() * minf(maximum.x / icon.get_size().x, maximum.y / icon.get_size().y)
 			assert(fitted.x <= maximum.x and fitted.y <= maximum.y and fitted.x > 0.0 and fitted.y > 0.0)
 			if Rules.is_badge(item_id):

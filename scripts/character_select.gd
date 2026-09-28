@@ -883,6 +883,7 @@ func _enter_selected_character() -> void:
 	await get_tree().process_frame
 	if not is_inside_tree():
 		return
+	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 0.25, "读取角色")
 	enter_button.disabled = true
 	GothicUIThemeScript.set_button_feedback(
 		enter_button,
@@ -906,6 +907,7 @@ func _enter_selected_character() -> void:
 	profile_hydration_msec = (
 		Time.get_ticks_msec() - profile_hydration_started_msec
 	)
+	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 0.60, "准备游戏场景")
 	last_launch_request = build_launch_request()
 	get_tree().root.set_meta(LAUNCH_CONTEXT_META, last_launch_request.duplicate(true))
 	character_launch_requested.emit(last_launch_request.duplicate(true))
@@ -924,6 +926,7 @@ func _enter_selected_character() -> void:
 	if launch_scene == null:
 		_restore_after_launch_failure("暂时无法进入游戏，请重试")
 		return
+	launch_loading_overlay.set_loading_progress("character:%s" % selected_main_profile_id, 1.0, "进入游戏")
 	if suppress_scene_change_for_test:
 		return
 	var scene_error := get_tree().change_scene_to_packed(launch_scene)
