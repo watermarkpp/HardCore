@@ -323,7 +323,21 @@ try {
         & $GodotConsole --headless --path $StageProjectPath --log-file $ImportLog --import
         $ImportExitCode = $LASTEXITCODE
         if ($ImportExitCode -ne 0) {
-            throw "Godot isolated import failed. Log: $ImportLog"
+            # On a fresh checkout, Godot can finish the full import and then
+            # return a nonzero exit status while closing its first editor run.
+            # Retry only when the recorded import completed without errors;
+            # the second run must exit successfully before export can proceed.
+            $ImportText = Get-Content -LiteralPath $ImportLog -Raw
+            if ($ImportText -notmatch '\[ DONE \] reimport' -or $ImportText -match '(?m)^ERROR:') {
+                throw "Godot isolated import failed. Log: $ImportLog"
+            }
+            $ImportRetryLog = Join-Path $StageProjectPath "outputs\android_isolated_import_retry.log"
+            Write-Warning "Fresh isolated import completed but exited $ImportExitCode; retrying once with the same imported cache."
+            & $GodotConsole --headless --path $StageProjectPath --log-file $ImportRetryLog --import
+            $ImportExitCode = $LASTEXITCODE
+            if ($ImportExitCode -ne 0) {
+                throw "Godot isolated import retry failed. Logs: $ImportLog, $ImportRetryLog"
+            }
         }
         $ExportStdout = Join-Path $StageProjectPath "outputs\android_isolated_export_stdout.log"
         $ExportStderr = Join-Path $StageProjectPath "outputs\android_isolated_export_stderr.log"
