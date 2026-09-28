@@ -1,0 +1,11 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+WARNING: 未实现的技能几何形状：single
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] cells (res://scripts/skills/skill_geometry_service.gd:80)
+       [1] _canonical_target_context (res://scripts/game_root.gd:8565)
+       [2] _test_canonical_context_and_summon_occupancy (res://tests/game_root_r3x6_targeting_broadphase_test.gd:430)
+       [3] _run (res://tests/game_root_r3x6_targeting_broadphase_test.gd:70)
+GAME_ROOT_R3X6_TARGETING_BROADPHASE_PASS actors=96 stable_order=spawn_serial 

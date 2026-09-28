@@ -1,0 +1,12 @@
+WARNING: attempted to release missing gameplay lock: map_transition
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _release_gameplay_input_lock (res://scripts/game_root.gd:1402)
+       [1] _fail_map_transition (res://scripts/game_root.gd:3816)
+       [2] _ready (res://tests/game_root_fail_map_transition_test.gd:35)
+WARNING: attempted to release missing gameplay lock: map_transition
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] _release_gameplay_input_lock (res://scripts/game_root.gd:1402)
+       [1] _fail_map_transition (res://scripts/game_root.gd:3795)
+       [2] _ready (res://tests/game_root_fail_map_transition_test.gd:91)

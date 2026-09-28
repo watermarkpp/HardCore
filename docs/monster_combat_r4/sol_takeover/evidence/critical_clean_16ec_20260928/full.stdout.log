@@ -1,0 +1,620 @@
+[PASS] combat_unit_runtime_static_audit_test
+[PASS] android_attack_action_lifecycle_test
+[PASS] virtual_joystick_lifecycle_test
+[PASS] circular_touch_button_lifecycle_test
+[PASS] caster_skill_visual_factory_entry_test
+[PASS] laser_direction_visual_extent_test
+[PASS] laser_chest_translation_test
+[PASS] caster_skill_animation_routing_test
+[PASS] wizard_geometry_visual_alignment_test
+[PASS] sky_strike_visual_contract_test
+[PASS] lightning_runtime_map_visual_test
+[PASS] hell_lightning_self_area_visual_test
+[PASS] beam_visual_contract_test
+[PASS] beam_runtime_empty_space_test
+[PASS] beam_runtime_terrain_cutoff_test
+[PASS] beam_single_active_test
+[PASS] visual_profile_merge_contract_test
+[PASS] fire_wall_runtime_absolute_ground_test
+[PASS] fire_wall_single_controller_test
+[PASS] player_initial_resource_sync_test
+[PASS] gameplay_input_gate_test
+[PASS] input_release_cleanup_test
+[PASS] initial_world_input_lock_test
+[PASS] map_transition_input_lock_test
+[PASS] caster_skill_workset_lease_test
+[PASS] r14_caster_sequence_lease_test
+[PASS] r14_caster_production_caller_lease_test
+[PASS] canonical_summon_integration_test
+[PASS] taoist_summon_projectile_async_visual_test
+[PASS] taoist_soul_fire_launch_timing_test
+[PASS] taoist_summon_projectile_origin_anchor_test
+[PASS] taoist_summon_projectile_stealth_buff_visual_test
+[PASS] taoist_support_policy_test
+[PASS] taoist_support_runtime_test
+[PASS] taoist_canonical_runtime_test
+[PASS] taoist_entrapment_boundary_production_test
+[PASS] taoist_dual_defense_contract_test
+[PASS] spell_target_lock_and_footprint_test
+[PASS] skill_semantic_contracts_test
+[PASS] taoist_support_production_integration_test
+[PASS] canonical_skill_production_entry_test
+[PASS] skill_button_assignments_v2_test
+[PASS] class_combat_test
+[PASS] game_root_spell_lock_input_integration_test
+[PASS] skill_footprint_snapshot_coordinate_contract_test
+[PASS] skill_footprint_snapshot_map_identity_test
+[PASS] skill_footprint_snapshot_projection_origin_test
+[PASS] skill_footprint_snapshot_legacy_upgrade_test
+[PASS] canonical_snapshot_propagation_test
+[PASS] snapshot_strict_consumer_rejection_test
+[PASS] snapshot_v2_no_legacy_fallback_test
+[PASS] snapshot_absolute_converter_failure_test
+[PASS] snapshot_non_finite_coordinate_test
+[PASS] snapshot_legacy_explicit_policy_test
+[PASS] snapshot_consumer_runtime_map_guard_test
+[PASS] warrior_snapshot_v2_production_test
+[PASS] enemy_snapshot_v2_production_test
+[PASS] summon_snapshot_v2_production_test
+[PASS] projectile_snapshot_v2_production_test
+[PASS] ground_effect_snapshot_v2_production_test
+[PASS] fire_wall_snapshot_v2_production_test
+[PASS] production_snapshot_no_legacy_test
+[PASS] canonical_snapshot_identity_production_test
+[PASS] taoist_profession_package_test
+[PASS] projectile_broadphase_hit_parity_test
+[PASS] projectile_broadphase_no_false_negative_test
+[PASS] projectile_broadphase_candidate_reduction_test
+[PASS] projectile_broadphase_stable_order_test
+[PASS] projectile_broadphase_terrain_cutoff_test
+[PASS] projectile_broadphase_runtime_map_isolation_test
+[PASS] projectile_spatial_index_lifecycle_test
+[PASS] projectile_snapshot_single_build_per_step_test
+[PASS] projectile_spatial_index_same_frame_teleport_test
+[PASS] projectile_spatial_index_same_frame_knockback_test
+[PASS] projectile_spatial_index_query_before_enemy_tick_test
+[PASS] projectile_spatial_index_ready_contract_test
+[PASS] safe_logout_atomic_recovery_test
+[PASS] safe_logout_home_resolution_failure_test
+[PASS] safe_logout_character_select_guard_test
+[PASS] safe_logout_exit_guard_test
+[PASS] safe_logout_save_failure_test
+[PASS] safe_logout_existing_state_preservation_test
+[PASS] home_resolution_side_effect_guard_test
+[PASS] service_home_no_current_position_fallback_test
+[PASS] death_revival_home_failure_test
+[PASS] death_revival_touch_input_test
+[PASS] character_select_launch_loading_test
+[PASS] map_transition_missing_arrival_test
+[PASS] portal_home_lookup_failure_test
+[PASS] persistent_ground_effect_hit_parity_test
+[PASS] persistent_ground_effect_no_false_negative_test
+[PASS] persistent_ground_effect_tick_cadence_test
+[PASS] persistent_ground_effect_stacking_claim_test
+[PASS] persistent_ground_effect_stable_order_test
+[PASS] persistent_ground_effect_runtime_map_isolation_test
+[PASS] persistent_ground_effect_lifecycle_test
+[PASS] persistent_ground_effect_candidate_reduction_test
+[PASS] persistent_ground_effect_no_group_scan_test
+[PASS] persistent_ground_effect_spatial_service_reuse_test
+[PASS] fire_wall_single_query_per_tick_test
+[PASS] fire_wall_single_exact_test_per_candidate_test
+[PASS] fire_wall_visual_cells_pure_test
+[PASS] fire_wall_hit_parity_test
+[PASS] fire_wall_tick_claim_parity_test
+[PASS] fire_wall_boundary_target_test
+[PASS] fire_wall_stacking_parity_test
+[PASS] fire_wall_runtime_map_isolation_test
+[PASS] fire_wall_visual_cell_lifecycle_test
+[PASS] fire_wall_candidate_reduction_test
+[PASS] fire_wall_no_group_scan_test
+[PASS] fire_wall_canonical_snapshot_identity_test
+[PASS] monster_streaming_single_poll_per_frame_test
+[PASS] monster_streaming_request_dedup_test
+[PASS] monster_streaming_visual_parity_test
+[PASS] monster_streaming_animation_continuity_test
+[PASS] monster_streaming_registration_lifecycle_test
+[PASS] monster_streaming_generation_guard_test
+[PASS] monster_streaming_failure_contract_test
+[PASS] monster_streaming_no_visual_queue_test
+[PASS] monster_streaming_no_sync_load_test
+[PASS] monster_streaming_spatial_index_non_regression_test
+[FAIL] monster_streaming_scaling_test - process_did_not_exit;timeout_30s
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+MONSTER_STREAMING_SCALING_SIZE monsters=1 coordinator_polls=600 heavy=600
+MONSTER_STREAMING_SCALING_SIZE monsters=100 coordinator_polls=600 heavy=600
+MONSTER_STREAMING_SCALING_SIZE monsters=300 coordinator_polls=600 heavy=600
+MONSTER_STREAMING_SCALING_PASS 1/100/300 monsters x 600 frames: per_instance=0 coordinator_polls=600 each
+[PASS] monster_streaming_lifecycle_test
+[PASS] monster_streaming_active_lease_test
+[PASS] skill_plan_contract_test
+[PASS] skill_plan_golden_parity_test
+[PASS] skill_plan_no_side_effect_shadow_test
+[PASS] skill_plan_single_resource_commit_test
+[PASS] skill_plan_single_cooldown_commit_test
+[PASS] skill_plan_single_snapshot_build_test
+[PASS] skill_plan_immutable_consumer_test
+[PASS] skill_plan_rejection_reason_parity_test
+[PASS] caster_runtime_canonical_plan_adapter_test
+[PASS] skill_plan_profession_matrix_test
+[PASS] skill_production_canonical_entry_test
+[PASS] skill_production_no_visual_plan_test
+[PASS] skill_production_no_legacy_planner_test
+[PASS] skill_production_single_release_id_test
+[PASS] skill_production_single_snapshot_test
+[PASS] skill_production_single_commit_test
+[PASS] skill_execution_result_contract_test
+[PASS] skill_production_plan_immutable_test
+[PASS] skill_production_profession_matrix_test
+[PASS] skill_production_rejection_flow_test
+[PASS] skill_production_descriptor_failure_parity_test
+[PASS] skill_runtime_no_legacy_api_test
+[PASS] skill_runtime_single_public_entry_test
+[PASS] skill_plan_golden_contract_test
+[PASS] skill_runtime_no_visual_plan_test
+[PASS] skill_runtime_single_result_contract_test
+[PASS] skill_runtime_mapped_world_strict_snapshot_test
+[PASS] wizard_line_footprint_core_test
+[PASS] wizard_line_visual_stability_test
+[PASS] wizard_line_presentation_alignment_test
+[PASS] combat_absolute_ground_roundtrip_test
+[PASS] enemy_spatial_index_absolute_coordinate_test
+[PASS] projectile_absolute_release_snapshot_test
+[PASS] summon_absolute_snapshot_test
+[PASS] persistent_ground_effect_absolute_broadphase_test
+[PASS] fire_wall_absolute_broadphase_test
+[PASS] shared_spatial_index_absolute_contract_test
+[PASS] combat_absolute_ground_integration_test
+[PASS] combat_absolute_ground_parity_test
+[PASS] mapped_enemy_missing_projection_rejected_test
+[PASS] mapped_projectile_missing_projection_rejected_test
+[PASS] mapped_summon_missing_projection_rejected_test
+[PASS] mapped_fire_wall_missing_projection_rejected_test
+[PASS] mapped_skill_plan_missing_projection_rejected_test
+[PASS] mapped_game_root_projection_failure_test
+[PASS] implemented_map_runtime_projection_test
+[PASS] phase1_network_runtime_coverage_test
+[PASS] unbuilt_planned_map_not_playable_test
+[PASS] reference_map_not_playable_test
+[PASS] legacy_reference_projection_isolation_test
+[PASS] formal_map_projection_coverage_test
+[PASS] world_ready_gating_test
+[PASS] safe_logout_world_location_inf_guard_test
+[PASS] hc_polygon_geometry_test
+[PASS] hc_polygon_navigation_test
+[PASS] hc_polygon_physics_test
+[PASS] hc_polygon_precision_test
+[PASS] hc_polygon_editor_input_test
+[PASS] hc_polygon_release_alignment_test
+[PASS] hc_polygon_numerics_test
+[PASS] hc_polygon_reset_test
+[PASS] hc_polygon_reset_release_test
+[PASS] map_runtime_release_registry_contract_test
+[PASS] map_ui_presentation_projection_test
+[PASS] map_persistent_boss_spawn_identity_test
+[PASS] release_registry_current_maps_test
+[PASS] map_runtime_release_gate_test
+[PASS] map_editor_save_path_isolation_test
+[PASS] map_release_identity_matrix_test
+[PASS] hc_polygon_counterexample_matrix_test
+[PASS] aoe_shape_edge_counterexample_test
+[PASS] build_candidate_does_not_mutate_release_test
+[PASS] publish_promotes_candidate_test
+[PASS] publish_failure_rollback_test
+[PASS] map_publish_restart_recovery_test
+[PASS] release_registry_consumer_validation_test
+[PASS] future_map_build_publish_no_code_edit_test
+[PASS] mse_publish_entry_wired_test
+[PASS] rv14_registry_review_counterexamples
+[PASS] rv14_restore_rollback_injection_test
+[PASS] rv14_multi_map_publish_sibling_invariance_test
+[PASS] rv14_restore_injected_failures_test
+[PASS] rv15_provider_validation_counterexamples_test
+[PASS] rv15_spb_ledger_decoupling_test
+[PASS] passive_proc_actor_plane_contract_test
+[PASS] skill_panel_assignment_hint_layout_contract_test
+[PASS] device_lab_local_capture_test
+[PASS] device_lab_runtime_test
+[PASS] device_lab_patch_bootstrap_test
+[PASS] perf_frame_diagnostics_test
+[PASS] r14_diagnostic_mode_test
+[PASS] profile_business_validation_recovery_test
+[PASS] persistence_business_transactions_test
+[PASS] shared_warehouse_transaction_test
+[PASS] shared_warehouse_migration_test
+[PASS] map_editor_workspace_delete_safety_test
+[PASS] startup_loading_failure_recovery_test
+[PASS] brand_intro_test
+[PASS] loot_retry_clock_test
+[PASS] loot_visual_clock_test
+[PASS] runtime_loot_spatial_index_order_test
+[PASS] audit_39fe_regressions
+[PASS] player_cast_release_overwrite_test
+[PASS] player_status_effect_lifecycle_test
+[PASS] rv14_release_reentry_test
+[PASS] complete_client_resource_catalog_test
+[PASS] player_movement_respawn_test
+[PASS] warrior_wear_mapping_test
+[PASS] warrior_service_formula_test
+[PASS] warrior_skill_state_machine_test
+[PASS] caster_spell_action_timing_test
+[PASS] game_root_wizard_geometry_integration_test
+[PASS] fire_wall_runtime_overlap_test
+[PASS] skill_runtime_integration_test
+[PASS] skill_progression_save_integration_test
+[PASS] warrior_client_art_test
+[PASS] skill_combat_profile_test
+[PASS] warrior_attack_timing_test
+[PASS] combat_release_geometry_test
+[PASS] live_attack_resolution_test
+[PASS] melee_lock_fallback_test
+[PASS] warrior_target_aligned_release_geometry_test
+[PASS] warrior_target_aligned_visual_effect_test
+[PASS] game_root_warrior_target_aligned_integration_test
+[PASS] warrior_visual_test
+[PASS] mobile_targeting_test
+[FAIL] item_catalog_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Assertion failed: 175件装备未全部进入目录
+   at: _run (res://tests/item_catalog_test.gd:14)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/item_catalog_test.gd:14)
+[PASS] skeleton_spirit_boss_test
+[PASS] smoke_test
+[PASS] npc_facing_interaction_test
+[PASS] world_spatial_contract_test
+[PASS] zone_portal_visual_test
+[PASS] bich_hard_boundary_test
+[PASS] bich_content_1_test
+[PASS] bich_map_3_runtime_bridge_test
+[PASS] wooma_game_runtime_integration_test
+[PASS] phase1_game_runtime_integration_test
+[PASS] game_root_monster_prefetch_test
+[PASS] orc_tomb_runtime_visual_geometry_test
+[PASS] orc_tomb_game_visual_geometry_test
+[PASS] architecture_final_test
+[PASS] five_layer_architecture_test
+[PASS] bich_community_baseline_test
+[PASS] map_coordinate_mapping_test
+[PASS] map_combat_unit_contract_test
+[PASS] game_root_map_unit_integration_test
+[PASS] source_collision_chunk_test
+[PASS] bich_content_closure_test
+[PASS] corpse_king_boss_test
+[PASS] orc_tomb_source_integration_test
+[PASS] natural_cave_source_integration_test
+[PASS] bich_common_client_art_test
+[PASS] bich_undead_client_art_test
+[PASS] bich_quest_chain_test
+[PASS] bich_source_map_integration_test
+[PASS] service_runtime_integration_test
+[PASS] bich_environment_test
+[PASS] bich_area_test
+[PASS] progression_test
+[PASS] vertical_slice_loop_test
+[PASS] pricing_authority_test
+[PASS] inventory_weight_authority_test
+[PASS] loot_pickup_ground_unit_test
+[PASS] loot_pickup_runtime_manager_test
+[PASS] loot_expiry_pending_guard_test
+[PASS] hud_authority_integration_test
+[PASS] hud_background_prewarm_test
+[FAIL] complete_item_system_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Assertion failed: 运行物品仍有图标或地面外观缺失：黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon,黑铁矿:groundIcon
+   at: _run (res://tests/complete_item_system_test.gd:28)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/complete_item_system_test.gd:28)
+[PASS] inventory_equipment_ui_test
+[FAIL] multi_character_save_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Invalid access to property or key 'slots' on a base object of type 'Dictionary'.
+   at: _run (res://tests/multi_character_save_test.gd:82)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/multi_character_save_test.gd:82)
+[PASS] new_character_starter_loadout_test
+[PASS] system_menu_test
+[PASS] equipment_client_art_test
+[PASS] equipment_future_modifiers_test
+[PASS] equipment_customization_test
+[PASS] equipment_special_phase2_test
+[PASS] equipment_special_effects_test
+[PASS] equipment_luck_test
+[PASS] equipment_durability_policy_test
+[PASS] equipment_precise_durability_test
+[PASS] equipment_service_rules_test
+[PASS] equipment_attribute_master_test
+[PASS] equipment_slot_migration_test
+[PASS] android_layout_test
+[PASS] canonical_monster_catalog_test
+[PASS] monster_drop_authoring_overlay_contract_test
+[PASS] monster_id_contract_test
+[PASS] all_monster_loading_test
+[PASS] monster_world_integration_test
+[PASS] complete_monster_client_art_test
+[PASS] fixed_area_monster_test
+[PASS] classic_boss_order_test
+[PASS] monster_threat_animation_test
+[PASS] bich_monster_visual_test
+[PASS] bich_route_monster_test
+[PASS] crowd_grounding_test
+[PASS] monster_unit_adapter_test
+[PASS] monster_ground_unit_runtime_test
+[PASS] monster_melee_contact_geometry_test
+[PASS] monster_accuracy_runtime_test
+[PASS] monster_anti_stealth_runtime_test
+[PASS] monster_mfc1_attribute_timing_audit_test
+[PASS] monster_movement_cadence_test
+[PASS] monster_struck_policy_test
+[PASS] monster_struck_visual_queue_test
+[PASS] monster_struck_runtime_test
+[PASS] monster_dormant_damage_wake_test
+[PASS] monster_neighbor_step_policy_test
+[PASS] monster_cadence_runtime_integration_test
+[PASS] monster_cadence_blocked_step_test
+[PASS] monster_forced_relocation_during_step_test
+[PASS] monster_density_diagnostics_window_test
+[PASS] safe_zone_spatial_runtime_test
+[PASS] monster_parent_redraw_gate_test
+[PASS] monster_physical_projectile_visual_source_test
+[PASS] monster_target_magic_primary_visual_test
+[PASS] monster_special_delivery_contract_test
+[PASS] monster_special_delivery_runtime_test
+[PASS] direct_spell_compiled_stats_parity_test
+[PASS] multi_target_damage_transaction_test
+[PASS] game_root_combat_resolution_integration_test
+[PASS] game_root_r3x6_targeting_broadphase_test
+[PASS] enemy_mass_death_batch_pipeline_test
+[PASS] death_drop_budget_queue_test
+[PASS] death_queue_lifecycle_rework_test
+[PASS] placeholder_attack_animation_test
+[PASS] random_teleport_map_extent_test
+[PASS] loot_stable_identity_save_test
+[PASS] loot_inventory_transaction_batch_test
+[PASS] loot_runtime_item_policy_test
+[PASS] combat_unit_source_priority_test
+[PASS] skill_book_rank_upgrade_integration_test
+[PASS] player_level_up_effect_runtime_test
+[PASS] town_music_controller_test
+[PASS] audio_runtime_service_test
+[PASS] player_core_audio_hook_test
+[PASS] warrior_thrust_defense_runtime_test
+[PASS] warrior_melee_entry_runtime_test
+[PASS] summon_owner_teleport_runtime_test
+[PASS] summon_incoming_damage_runtime_test
+[PASS] summon_audio_hook_test
+[PASS] monster_audio_hook_test
+[PASS] projectile_audio_lifecycle_test
+[PASS] player_item_audio_event_test
+[PASS] skill_contract_manifest_test
+[PASS] skill_source_of_truth_test
+[PASS] attack_facing_freeze_test
+[PASS] attack_game_clock_test
+[PASS] attack_parent_release_identity_test
+[PASS] audio_stale_frame_test
+[PASS] body_rejection_world_isolation_test
+[PASS] body_rule_tier_cross_test
+[PASS] real_admission_census_test
+[PASS] stale_death_notification_test
+[PASS] attack_expiry_without_render_test
+[PASS] attack_owner_idempotence_test
+[PASS] body_rejected_factory_isolation_test
+[PASS] body_rejected_query_contract_test
+[PASS] overhead_property_scan_test
+[PASS] monster_overhead_return_regression_test
+[PASS] monster_overhead_cold_activation_test
+[PASS] double_generation_death_test
+[PASS] perf_unit_determinism_test
+[PASS] native_physics_sampling_test
+[PASS] synchronous_revive_death_token_test
+[PASS] observer_integrity_test
+[PASS] mp_payment_observation_test
+[PASS] d3_boundary_runtime_test
+[PASS] d3_motion_pressure_runtime_test
+[PASS] body_multitarget_lifecycle_test
+[PASS] async_line_lifecycle_test
+[PASS] cancelled_release_observation_test
+[PASS] source_destroyed_pending_test
+[PASS] explicit_zero_attack_timing_test
+[PASS] runtime_capability_inventory_test
+[PASS] summon_planner_radius_test
+[PASS] damage_attribution_counterexamples_test
+[PASS] all_damage_lost_test
+[PASS] natural_cadence_24_test
+[PASS] natural_cadence_76_test
+[PASS] natural_cadence_238_test
+[PASS] natural_cadence_239_test
+[PASS] natural_cadence_24_chase_test
+[PASS] audio_w4_actor_service_test
+[PASS] game_root_loading_transition_test
+[PASS] r3_gold_cap_entrypoints_test
+[PASS] w1_exact_ranged_delivery_test
+[PASS] monster_mixed_damage_atomic_test
+[PASS] monster_source_status_test
+[PASS] headless_prefetch_compatibility_test
+[PASS] geometry_test
+[PASS] w1_delivery_geometry_test
+[PASS] w1_special_delivery_runtime_test
+[PASS] inventory_test
+[PASS] lightning_test
+[PASS] path_test
+[PASS] scheduler_storm_test
+[PASS] runtime_test
+[PASS] world_obstacle_runtime_test
+[PASS] combat_epoch_delivery_test
+[PASS] w6_visual_contract_test
+[PASS] equipment_inventory_slot_swap_test
+[PASS] combat_environment_request_integration_test
+[PASS] loot_world_placement_integration_test
+[PASS] item_drop_instance_rules_test
+[PASS] item_drop_instance_persistence_test
+[PASS] warrior_slaying_release_integration_test
+[PASS] audio_w4_contract_test
+[PASS] warehouse_gothic_ui_test
+[PASS] shop_gothic_ui_test
+[PASS] ui_error_feedback_scope_guard_test
+[PASS] ui_error_machine_reason_leak_test
+[PASS] ui_error_feedback_overlay_test
+[PASS] inventory_error_feedback_real_input_test
+[PASS] player_poison_presentation_test
+[PASS] player_health_bar_status_marker_test
+[PASS] player_notice_overlay_test
+[PASS] player_notice_item_style_test
+[PASS] player_notice_dedupe_priority_test
+[PASS] player_notice_action_result_contract_test
+[PASS] equipment_success_notice_real_input_test
+[PASS] skill_learning_notice_real_input_test
+[FAIL] user_loot_sheet_authority_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Assertion failed.
+   at: _test_boss_material_slots (res://tests/user_loot_sheet_authority_test.gd:168)
+   GDScript backtrace (most recent call first):
+       [0] _test_boss_material_slots (res://tests/user_loot_sheet_authority_test.gd:168)
+       [1] _run (res://tests/user_loot_sheet_authority_test.gd:33)
+[PASS] dpv2_drop_runtime_policy_test
+[PASS] formal_map_destination_regression_test
+[PASS] game_root_fail_map_transition_test
+[PASS] formal_map_spawn_policy_test
+[PASS] wall_render_binding_test
+[PASS] monster_continuous_step_facing_test
+[PASS] monster_empty_safe_zone_fast_path_test
+[PASS] monster_idle_acquisition_budget_test
+[PASS] monster_idle_scan_cadence_test
+[PASS] boss_respawn_map_reentry_test
+[PASS] skill_visual_cold_lifecycle_test
+[PASS] magic_shield_map_lifecycle_test
+[PASS] wall_render_publisher_snapshot_test
+[PASS] hud_script_prefetch_exit_test
+[PASS] random_teleport_destination_contract_test
+[PASS] player_struck_release_order_test
+[PASS] player_skill_struck_chain_test
+[PASS] player_hit_reaction_policy_test
+[PASS] player_enemy_struck_chain_e2e_test
+[PASS] player_struck_scene_sweep_test
+[PASS] player_struck_lock_test
+[PASS] camera_black_budget_region_test
+[PASS] map_diamond_camera_constraint_test
+[PASS] map_diamond_camera_strict_edge_test
+[PASS] game_root_diamond_camera_constraint_test
+[FAIL] live_map_loot_authority_export_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+LIVE_MAP_LOOT_AUTHORITY maps=67 monsters=120 spawns=2638 slots=5844 failures=["unresolved_output:dpv2.user.boss_material.m195.black_iron.01", "unresolved_output:dpv2.user.boss_material.m143.black_iron.01", "unresolved_output:dpv2.user.boss_material.m160.black_iron.01", "unresolved_output:dpv2.user.boss_material.m124.black_iron.01", "unresolved_output:dpv2.user.boss_material.m193.black_iron.01", "unresolved_output:dpv2.user.boss_material.m76.black_iron.01", "unresolved_output:dpv2.user.boss_material.m163.black_iron.01", "unresolved_output:dpv2.user.boss_material.m163.black_iron.02", "unresolved_output:dpv2.user.boss_material.m162.black_iron.01", "unresolved_output:dpv2.user.boss_material.m162.black_iron.02", "unresolved_output:dpv2.user.boss_material.m180.black_iron.01", "unresolved_output:dpv2.user.boss_material.m180.black_iron.02", "unresolved_output:dpv2.user.boss_material.m208.black_iron.01", "unresolved_output:dpv2.user.boss_material.m224.black_iron.01", "unresolved_output:dpv2.user.boss_material.m224.black_iron.02", "unresolved_output:dpv2.user.boss_material.m235.black_iron.01", "unresolved_output:dpv2.user.boss_material.m238.black_iron.01", "unresolved_output:dpv2.user.boss_material.m237.black_iron.01", "unresolved_output:dpv2.user.boss_material.m240.black_iron.01", "unresolved_output:dpv2.user.boss_material.m236.black_iron.01", "unresolved_output:dpv2.user.boss_material.m239.black_iron.01"]
+SCRIPT ERROR: Assertion failed.
+   at: _ready (res://tests/live_map_loot_authority_export_test.gd:82)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://tests/live_map_loot_authority_export_test.gd:82)
+[FAIL] armor_single_slot_authority_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+SCRIPT ERROR: Assertion failed.
+   at: _run (res://tests/armor_single_slot_authority_test.gd:23)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/armor_single_slot_authority_test.gd:23)
+[PASS] loot_async_durability_test
+[PASS] player_growth_live_runtime_test
+[PASS] skill_runtime_classification_test
+[PASS] skill_target_context_partition_test
+[PASS] fire_wall_animation_batch_test
+[PASS] fire_wall_release_owner_result_test
+[PASS] hellfire_catchup_batch_test
+[PASS] player_physical_defense_production_test
+[PASS] taoist_passive_accuracy_production_test
+[PASS] summon_outgoing_defense_production_test
+[PASS] summon_growth_rank_upgrade_test
+[PASS] taoist_summon_growth_contract_test
+[PASS] ui_result_feedback_timing_test
+[PASS] hidden_inventory_stats_refresh_test
+[PASS] drop_balance_test
+[PASS] runtime_followup_test
+[PASS] warehouse_prepared_transaction_test
+[PASS] bank_prepared_transaction_test
+[PASS] character_delete_transaction_test
+[PASS] player_world_position_unit_migration_test
+[PASS] settings_function_test
+[PASS] ui_r5_audio_config_strict_test
+[PASS] ui_r5_audio_test
+[PASS] touch_scroll_support_test
+[PASS] character_select_touch_scroll_test
+[PASS] shop_selection_identity_test
+[PASS] quest_gothic_ui_test
+[PASS] death_revival_gothic_ui_test
+[PASS] system_menu_gothic_ui_test
+[PASS] town_music_runtime_test
+[PASS] equipment_skill_level_affix_test
+[PASS] world_background_staged_map_build_test
+[PASS] mse_collision_grid_alignment_test
+[PASS] boss_interval_test
+[PASS] player_visual_duration_test
+[PASS] player_poison_reapply_test
+[PASS] attack_presentation_backlog_test
+[PASS] continuous_magic_walk_delay_test
+[PASS] damage_boundary_test
+[PASS] death_reentry_test
+[PASS] actor_body_policy_contract_test
+[PASS] actor_body_projection_test
+[PASS] monster_melee_body_pair_test
+[PASS] summon_body_spawn_consistency_test
+[PASS] monster_crowd_scale_performance_probe_test
+[PASS] monster_body_rejection_test
+[PASS] revival_durability_test
+[PASS] attack_presentation_identity_test
+[PASS] attack_clock_red_test
+[PASS] direct_magic_step_chain_test
+[PASS] player_struck_poison_chain_test
+[PASS] monster_runtime_census_test
+[PASS] large_body_swing_cadence_test
+[PASS] melee_blocked_query_order_test
+[PASS] polygon_query_streaming_test
+[PASS] world_monster_clock_ledger_test
+[PASS] world_monster_clock_persistence_test
+[PASS] world_monster_clock_legacy_migration_test
+[PASS] f03_hot_persistence_test
+[PASS] f03_world_delta_compatibility_test
+[PASS] f03_background_writer_test
+[PASS] f03_pickup_receipt_lifecycle_test
+[PASS] f03_warehouse_receipt_boundary_test
+[PASS] f03_native_pickup_lifecycle_test
+[PASS] f03_ordered_cleanup_test
+[PASS] f03_periodic_background_save_test
+[PASS] f05_settlement_display_separation_test
+[PASS] f03_async_death_receipt_test
+[PASS] f03_native_death_lifecycle_test
+[PASS] portal_actual_arrival_guard_test
+[PASS] portal_all_map_authoring_footprint_test
+[PASS] body_radius_bucket_boundary_test
+[PASS] body_radius_index_consistency_test
+[PASS] classic_boss_area_magic_outcomes_test
+[PASS] ancient_relic_fragment_test
+[PASS] equipment_enhancement_black_iron_test
+[PASS] equipment_enhancement_display_test
+[PASS] equipment_enhancement_grade_test
+[PASS] equipment_enhancement_material_notice_test
+[PASS] equipment_enhancement_panel_flow_test
+[PASS] equipment_enhancement_rules_test
+[PASS] equipment_enhancement_transaction_test
+[PASS] equipment_skill_level_affix_rollout_test
+[PASS] forge_calibrator_save_test
+[PASS] forge_hud_target_occlusion_test
+[PASS] forge_panel_layout_test
+[PASS] relic_synthesis_runtime_test
+[PASS] skeleton_multi_performance_test
+[PASS] skeleton_multi_summon_contract_test
+[PASS] skill_rank_zero_three_matrix_test
+[PASS] synthesis_panel_preview_test
+[PASS] f03_workbench_receipt_boundary_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\Documents\HardCore\docs\monster_combat_r4\sol_takeover\evidence\critical_clean_16ec_20260928\runner\runner_results_critical_20260928_113152_631_10896.json
+TEST_SUMMARY suite=critical passed=559 failed=7 engine_log_errors=6
+FAILED_TESTS=monster_streaming_scaling_test (process_did_not_exit;timeout_30s); item_catalog_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1); complete_item_system_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1); multi_character_save_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1); user_loot_sheet_authority_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1); live_map_loot_authority_export_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1); armor_single_slot_authority_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1)
