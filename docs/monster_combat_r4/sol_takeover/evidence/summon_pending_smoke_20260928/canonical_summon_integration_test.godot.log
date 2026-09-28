@@ -1,0 +1,694 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+[InitialHUDProfile] {"origin":"GameHUD._ready","pre_ready_boundary":"GameHUD_static_script_preloads_before_ready_not_instrumented","stages_ms":{"attach_touch_scroll_support":{"duration_ms":0.423,"start_ms":63.826},"build_bottom_chassis":{"duration_ms":18.278,"start_ms":36.666},"build_combat_controls":{"duration_ms":8.32,"start_ms":54.944},"build_hidden_compatibility_info":{"duration_ms":6.842,"start_ms":25.464},"build_item_quick_slot_menu":{"duration_ms":0.562,"start_ms":63.264},"build_loading_transition":{"duration_ms":1.266,"start_ms":64.249},"build_loot_feedback":{"duration_ms":0.75,"start_ms":32.883},"build_right_utility_stack":{"duration_ms":3.033,"start_ms":33.633},"build_target_bar":{"duration_ms":0.577,"start_ms":32.306},"initial_state_sync":{"duration_ms":0.511,"start_ms":65.527},"root_and_theme":{"duration_ms":25.443,"start_ms":0.0},"safe_area_setup":{"duration_ms":0.021,"start_ms":25.443},"wire_player_state_signals":{"duration_ms":0.012,"start_ms":65.515}},"total_ms":66.041}
+[InitialGameRootProfile] {"lifecycle_ms":{"enter_tree_to_ready":0.01,"init_to_enter_tree":0.056},"origin":"GameRoot._init","pre_ready_boundary":"scene_resource_loading_and_instantiation_before_GameRoot._init_not_instrumented","stages_ms":{"background_construct_and_attach":{"duration_ms":0.125,"start_ms":0.717},"bootstrap_dispatch":{"duration_ms":0.067,"start_ms":588.467},"camera_construct_and_attach":{"duration_ms":0.038,"start_ms":58.863},"hud_attach_and_ready":{"duration_ms":468.96,"start_ms":58.962},"hud_construct":{"duration_ms":0.032,"start_ms":58.901},"hud_post_ready_setup":{"duration_ms":11.449,"start_ms":527.922},"hud_signal_wiring":{"duration_ms":0.029,"start_ms":58.933},"player_construct_wire_attach_restore":{"duration_ms":58.021,"start_ms":0.842},"pre_background_setup":{"duration_ms":0.651,"start_ms":0.066},"system_menu_build":{"duration_ms":49.096,"start_ms":539.371}},"total_ms":588.536}
+[LOADING-TOTAL] {"actor_max_item_ms":285.842,"actor_max_slice_ms":285.848,"actor_slice_count":51,"actor_spawn_ms":1069.172,"collision_max_slice_ms":0.308,"collision_slice_count":4,"finalize_ms":0.043,"map_max_slice_ms":0.997,"map_slice_count":6,"mode":"initial_world","monster_prefetch_ms":345.482,"prewarm_deadline_exceeded":false,"prewarm_tail_after_deadline_ms":0.0,"render_warm":{"budget_exhausted":false,"elapsed_ms":0.0,"frames_drawn":0,"lease_refcount_after":0,"lease_refcount_before":0,"skills_considered":0,"skills_warmed":0},"render_warm_ms":0.006,"skill_workset_ms":0.041,"stage_elapsed_ms":{"BUILD_COLLISION":528.025,"BUILD_MAP":525.049,"COLLECT_REQUIREMENTS":345.772,"FINALIZE":1598.387,"REQUEST_RESOURCES":371.729,"SHOW_LOADING":0.043,"SPAWN_ACTORS":529.11,"WAIT_RESOURCES":524.912},"target_map_id":910001,"total_ms":1606.926,"transition_id":"map:8205:1","world_pipeline_ms":183.459}
+[SESSION-ID] godot=4.7-stable (official) renderer=gl_compatibility adapter= api= refresh=-1.0Hz physics_tps=60 max_physics_steps=8 app_version=hardcore 1.0 正式版 os=Windows
+[WorldBootstrapProfile] {"actor_max_item_ms":285.842,"actor_max_slice_ms":285.848,"actor_slices":51,"actor_total_ms":738.438,"collision_slices":4,"deferred_actors":0,"duplicate_actors":0,"failed_actors":0,"hud":{},"map_slices":6,"max_slice_ms":285.848,"planned_actors":94,"spawned_actors":94,"stages_ms":{"BUILD_COLLISION":528.025,"BUILD_MAP":525.049,"COLLECT_REQUIREMENTS":345.772,"FINALIZE":1598.387,"REQUEST_RESOURCES":371.729,"SHOW_LOADING":0.043,"SPAWN_ACTORS":529.11,"WAIT_RESOURCES":524.912},"total_ms":1609.365}
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:54)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:54)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:54)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:54)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:67)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:67)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:67)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:67)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11258)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:67)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11258)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:67)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _on_player_skill (res://scripts/game_root.gd:7777)
+       [5] _emit_skill_after_windup (res://scripts/player.gd:1242)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _on_player_skill (res://scripts/game_root.gd:7777)
+       [5] _emit_skill_after_windup (res://scripts/player.gd:1242)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _on_player_skill (res://scripts/game_root.gd:7777)
+       [5] _emit_skill_after_windup (res://scripts/player.gd:1242)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _on_player_skill (res://scripts/game_root.gd:7777)
+       [5] _emit_skill_after_windup (res://scripts/player.gd:1242)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11242)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _on_player_skill (res://scripts/game_root.gd:7777)
+       [8] _emit_skill_after_windup (res://scripts/player.gd:1242)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11242)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _on_player_skill (res://scripts/game_root.gd:7777)
+       [8] _emit_skill_after_windup (res://scripts/player.gd:1242)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11242)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11242)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:129)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:153)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:153)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:153)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:153)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:164)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:164)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:164)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:164)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11258)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:164)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11258)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:164)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11242)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11242)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:189)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:207)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:207)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:207)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:207)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11258)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:207)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _apply_canonical_main_pet (res://scripts/game_root.gd:11258)
+       [2] _apply_canonical_main_pet_from_descriptor (res://scripts/game_root.gd:9288)
+       [3] create_cast_nodes_from_canonical_plan (res://scripts/caster_skill_runtime.gd:387)
+       [4] _spawn_canonical_cast_nodes_from_plan (res://scripts/game_root.gd:9240)
+       [5] _apply_canonical_effects_from_plan (res://scripts/game_root.gd:8825)
+       [6] _execute_canonical_skill (res://scripts/game_root.gd:8001)
+       [7] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [8] _run (res://tests/canonical_summon_integration_test.gd:207)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _restore_persisted_taoist_main_pet_if_needed (res://scripts/game_root.gd:10834)
+       [3] _load_zone (res://scripts/game_root.gd:4316)
+       [4] _run (res://tests/canonical_summon_integration_test.gd:243)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _restore_persisted_taoist_main_pet_if_needed (res://scripts/game_root.gd:10834)
+       [3] _load_zone (res://scripts/game_root.gd:4316)
+       [4] _run (res://tests/canonical_summon_integration_test.gd:243)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _restore_persisted_taoist_main_pet_if_needed (res://scripts/game_root.gd:10834)
+       [3] _load_zone (res://scripts/game_root.gd:4316)
+       [4] _run (res://tests/canonical_summon_integration_test.gd:243)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _restore_persisted_taoist_main_pet_if_needed (res://scripts/game_root.gd:10834)
+       [3] _load_zone (res://scripts/game_root.gd:4316)
+       [4] _run (res://tests/canonical_summon_integration_test.gd:243)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _restore_persisted_taoist_main_pet_if_needed (res://scripts/game_root.gd:10834)
+       [3] _load_zone (res://scripts/game_root.gd:4316)
+       [4] _run (res://tests/canonical_summon_integration_test.gd:243)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _restore_persisted_taoist_main_pet_if_needed (res://scripts/game_root.gd:10834)
+       [3] _load_zone (res://scripts/game_root.gd:4316)
+       [4] _run (res://tests/canonical_summon_integration_test.gd:243)
+[FRAME-STALL] long frame 0.475s at process frame 63: caster={ "entries": 0, "resident_bytes": 0, "loads": 0, "hits": 0, "evictions": 0, "sync_decode_calls": 0, "sync_decode_usec": 0, "pinned_count": 0, "pinned_bytes": 0, "leased_sequence_paths": 0, "leased_sequence_refcount_total": 0, "loading_window_active": false, "pending_warm_count": 0, "combat_frame_miss_count": 0 } presentation=1 monster_overlay={ "entries": 0, "resident_bytes": 0, "requested": 0, "queued": 0, "loads": 0, "evictions": 0 }
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:267)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:267)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _run (res://tests/canonical_summon_integration_test.gd:280)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Attempted to use 'has' an object of type 'Node2D' into a TypedArray, which does not inherit from 'CharacterBody2D'.
+   at: _internal_validate_object (./core/variant/container_type_validate.h:115)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+ERROR: Condition "!_p->typed.validate(value, "use 'has'")" is true. Returning: false
+   at: has (core/variant/array.cpp:499)
+   GDScript backtrace (most recent call first):
+       [0] _canonical_summon_position_is_valid (res://scripts/game_root.gd:11563)
+       [1] _canonical_summon_spawn_plan (res://scripts/game_root.gd:11482)
+       [2] _canonical_target_context (res://scripts/game_root.gd:8523)
+       [3] _execute_canonical_skill (res://scripts/game_root.gd:7898)
+       [4] _cast (res://tests/canonical_summon_integration_test.gd:304)
+       [5] _run (res://tests/canonical_summon_integration_test.gd:285)
+CANONICAL_SUMMON_INTEGRATION_PASS: typed coexistence, same-type recall, isolated death replacement, dual persistence, idempotence, blocked no-op

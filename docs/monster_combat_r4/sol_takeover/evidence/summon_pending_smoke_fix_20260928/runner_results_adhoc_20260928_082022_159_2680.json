@@ -1,0 +1,62 @@
+{
+  "engine_log_errors": 0,
+  "passed": 3,
+  "failed": 0,
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "summon_owner_teleport_runtime_test",
+      "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:20:17.2514000Z",
+      "native_exit_observed_utc": "2026-09-28T00:19:58.0455369Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "canonical_summon_integration_test",
+      "test_path": "tests/canonical_summon_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:20:29.5668853Z",
+      "native_exit_observed_utc": "2026-09-28T00:20:11.1927840Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "summon_planner_radius_test",
+      "test_path": "tests/hc_monster_combat_r4/summon_planner_radius_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:20:42.6689481Z",
+      "native_exit_observed_utc": "2026-09-28T00:20:20.6690933Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 3,
+  "generated_at": "2026-09-28T08:20:22.1596937+08:00",
+  "git_head": "c50487c142f117c6f6bbf8b4cf5a02d39e7a6d2e"
+}

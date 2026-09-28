@@ -1,0 +1,4 @@
+SCRIPT ERROR: Parse Error: The function signature doesn't match the parent. Parent signature is "_canonical_summon_position_is_valid(Vector2, float, SummonActor, Array[SummonActor] = <default>) -> bool".
+   at: GDScript::reload (res://tests/hc_monster_combat_r4/summon_planner_radius_test.gd:13)
+ERROR: Failed to load script "res://tests/hc_monster_combat_r4/summon_planner_radius_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

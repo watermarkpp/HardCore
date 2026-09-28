@@ -1,0 +1,41 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+数据库载入完成：地图209 怪物156 Boss20 装备175 技能等级132 掉落槽3424 任务9
+HC_POLYGON_RESET_TEST_PASS checks=110
+
+================================================================
+CrashHandlerException: Program crashed with signal 11
+Engine version: Godot Engine v4.7.stable.official (5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 7ff645650000
+
+[1] 7ff7897160e1 (main+40c60e1) - no debug info in PE/COFF executable
+[2] 7ff9b9c84702 (ntdll.dll+124702) - no debug info in PE/COFF executable
+[3] 7ff9b9cc54fe (ntdll.dll+1654fe) - no debug info in PE/COFF executable
+[4] 7ff9b9c2bd24 (ntdll.dll+cbd24) - no debug info in PE/COFF executable
+[5] 7ff9b9cc4e3d (ntdll.dll+164e3d) - no debug info in PE/COFF executable
+[6] 7ff78946e665 (main+3e1e665) - no debug info in PE/COFF executable
+[7] 7ff789175686 (main+3b25686) - no debug info in PE/COFF executable
+[8] 7ff78a93e95b (main+52ee95b) - no debug info in PE/COFF executable
+[9] 7ff789165fc1 (main+3b15fc1) - no debug info in PE/COFF executable
+[10] 7ff789175770 (main+3b25770) - no debug info in PE/COFF executable
+[11] 7ff789175770 (main+3b25770) - no debug info in PE/COFF executable
+[12] 7ff78a93e95b (main+52ee95b) - no debug info in PE/COFF executable
+[13] 7ff785b88f23 (main+538f23) - no debug info in PE/COFF executable
+[14] 7ff789457c17 (main+3e07c17) - no debug info in PE/COFF executable
+[15] 7ff78918877c (main+3b3877c) - no debug info in PE/COFF executable
+[16] 7ff78a93e95b (main+52ee95b) - no debug info in PE/COFF executable
+[17] 7ff785b88f23 (main+538f23) - no debug info in PE/COFF executable
+[18] 7ff789457c17 (main+3e07c17) - no debug info in PE/COFF executable
+[19] 7ff787aaaff0 (main+245aff0) - no debug info in PE/COFF executable
+[20] 7ff789458fb5 (main+3e08fb5) - no debug info in PE/COFF executable
+[21] 7ff787ad8434 (main+2488434) - no debug info in PE/COFF executable
+[22] 7ff7856a2501 (main+52501) - no debug info in PE/COFF executable
+[23] 7ff7856a253d (main+5253d) - no debug info in PE/COFF executable
+[24] 7ff7856510c8 (main+10c8) - no debug info in PE/COFF executable
+[25] 7ff7856513f5 (main+13f5) - no debug info in PE/COFF executable
+[26] 7ff9b8d2cd86 (kernel32.dll+2cd86) - no debug info in PE/COFF executable
+[27] 7ff9b9c0caeb (ntdll.dll+acaeb) - no debug info in PE/COFF executable
+[28] -1 (main+-7ff785650001) - no debug info in PE/COFF executable
+-- END OF C++ BACKTRACE --
+================================================================

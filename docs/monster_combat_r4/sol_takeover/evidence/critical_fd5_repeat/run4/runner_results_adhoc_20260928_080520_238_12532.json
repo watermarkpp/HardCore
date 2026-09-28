@@ -1,0 +1,62 @@
+{
+  "total": 3,
+  "failed": 1,
+  "git_head": "fd5e2a32ee50cc8ed9cede05c39397fb2d43ef56",
+  "results": [
+    {
+      "test_name": "hc_polygon_reset_test",
+      "test_path": "tests/hc_polygon_reset_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:05:26.0823789Z",
+      "native_exit_observed_utc": "2026-09-28T00:05:01.5800738Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "map_publish_restart_recovery_test",
+      "test_path": "tests/map_publish_restart_recovery_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:05:32.9486741Z",
+      "native_exit_observed_utc": "2026-09-28T00:05:08.0130312Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "summon_owner_teleport_runtime_test",
+      "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-28T00:05:39.3883953Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "generated_at": "2026-09-28T08:05:20.2381920+08:00",
+  "passed": 2,
+  "suite": "adhoc",
+  "engine_log_errors": 1
+}

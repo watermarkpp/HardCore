@@ -1,0 +1,62 @@
+{
+  "total": 3,
+  "failed": 0,
+  "git_head": "fd5e2a32ee50cc8ed9cede05c39397fb2d43ef56",
+  "results": [
+    {
+      "test_name": "hc_polygon_reset_test",
+      "test_path": "tests/hc_polygon_reset_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:04:34.8595796Z",
+      "native_exit_observed_utc": "2026-09-28T00:04:09.7242005Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "map_publish_restart_recovery_test",
+      "test_path": "tests/map_publish_restart_recovery_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:04:41.2202650Z",
+      "native_exit_observed_utc": "2026-09-28T00:04:16.5815222Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "summon_owner_teleport_runtime_test",
+      "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:04:47.9321841Z",
+      "native_exit_observed_utc": "2026-09-28T00:04:28.5962758Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-28T08:04:30.0625733+08:00",
+  "passed": 3,
+  "suite": "adhoc",
+  "engine_log_errors": 0
+}

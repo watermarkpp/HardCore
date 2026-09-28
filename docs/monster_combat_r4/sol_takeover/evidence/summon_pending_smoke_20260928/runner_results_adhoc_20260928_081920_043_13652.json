@@ -1,0 +1,62 @@
+{
+  "passed": 1,
+  "total": 3,
+  "engine_log_errors": 80,
+  "git_head": "c50487c142f117c6f6bbf8b4cf5a02d39e7a6d2e",
+  "generated_at": "2026-09-28T08:19:20.0434249+08:00",
+  "failed": 2,
+  "results": [
+    {
+      "test_name": "summon_owner_teleport_runtime_test",
+      "test_path": "tests/skills/summon_owner_teleport_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:19:21.5549126Z",
+      "native_exit_observed_utc": "2026-09-28T00:19:02.5063408Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "canonical_summon_integration_test",
+      "test_path": "tests/canonical_summon_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T00:19:33.8824199Z",
+      "native_exit_observed_utc": "2026-09-28T00:19:15.4626258Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 78,
+      "engine_log_failure_count": 78,
+      "result": "FAIL",
+      "reason": "stderr_failures_78;engine_log_failures_78"
+    },
+    {
+      "test_name": "summon_planner_radius_test",
+      "test_path": "tests/hc_monster_combat_r4/summon_planner_radius_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-28T00:19:46.9616664Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 2,
+      "engine_log_failure_count": 2,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+    }
+  ],
+  "suite": "adhoc"
+}

@@ -1,0 +1,9 @@
+WARNING: SPB ledger unavailable (history audit only): spb_effective_probability_authority_missing:user://rv15_j3_spb_missing_drop_boost.json
+   at: push_warning (core/variant/variant_utility.cpp:1033)
+   GDScript backtrace (most recent call first):
+       [0] load_database (res://scripts/game_data.gd:289)
+       [1] _run (res://tests/rv15_spb_ledger_decoupling_test.gd:33)
+WARNING: 11 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 3 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
