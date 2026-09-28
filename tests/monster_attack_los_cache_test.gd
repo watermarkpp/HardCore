@@ -73,7 +73,7 @@ func _run() -> void:
         + "static_10s=1 cache_hit_rate>95% "
         + "key_changes=target,source,target_endpoint,map,revision,provider "
         + "legacy_provider_bypass=1 immediate_reuse=melee,70,projectile,magic "
-        + "release_recheck=melee,projectile,magic"
+        + "release_recheck=melee,magic projectile_contact=physics"
     )
     get_tree().quit(0)
 
@@ -317,7 +317,10 @@ func _assert_release_rechecks() -> void:
     var projectile_hp := projectile_player.current_hp
     projectile._update_pending_attack(2.0)
     assert(projectile_player.current_hp == projectile_hp)
-    assert(_counter("attack_los_evaluations") == projectile_eval + 1)
+    # Physical flight owns live wall/player contact. The old delayed damage
+    # timer must neither settle damage nor perform a synthetic LOS recheck.
+    assert(projectile._pending_attack_time < 0.0)
+    assert(_counter("attack_los_evaluations") == projectile_eval)
     projectile.queue_free()
     projectile_player.queue_free()
 
