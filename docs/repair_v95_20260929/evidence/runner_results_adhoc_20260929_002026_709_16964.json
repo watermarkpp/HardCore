@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-09-29T00:20:26.7098928+08:00",
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "player_character_ground_movement_test",
+      "test_path": "tests/skills/player_character_ground_movement_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-28T16:20:47.0960364Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "git_head": "388d81efe10fbb83aa334235f89931e01fcef94b",
+  "suite": "adhoc",
+  "passed": 0,
+  "engine_log_errors": 1,
+  "total": 1
+}

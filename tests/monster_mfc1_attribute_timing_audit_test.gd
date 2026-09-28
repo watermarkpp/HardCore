@@ -135,8 +135,9 @@ func _audit_all_monsters(
 		# --- Attribute runtime projection (Enemy.setup safe clamps) ---
 		_check_int_attr(mid, "level", enemy.level, maxi(1, int(stats.get("level", 0))))
 		_check_int_attr(mid, "max_hp", enemy.max_hp, maxi(1, int(stats.get("hp", 0))))
-		_check_int_attr(mid, "attack_min", enemy.attack_min, maxi(1, int(stats.get("attack_min", 0))))
-		var expected_amax := maxi(maxi(1, int(stats.get("attack_min", 0))), int(stats.get("attack_max", 0)))
+		# Explicit source zero is valid (R4 explicit_zero_attack_timing contract).
+		_check_int_attr(mid, "attack_min", enemy.attack_min, maxi(0, int(stats.get("attack_min", 0))))
+		var expected_amax := maxi(maxi(0, int(stats.get("attack_min", 0))), int(stats.get("attack_max", 0)))
 		_check_int_attr(mid, "attack_max", enemy.attack_max, expected_amax)
 		_check_int_attr(mid, "defense", enemy.defense, maxi(0, int(stats.get("defense", 0))))
 		_check_int_attr(mid, "magic_defense", enemy.magic_defense, maxi(0, int(stats.get("magic_defense", 0))))

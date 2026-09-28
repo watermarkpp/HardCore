@@ -83,19 +83,75 @@ func _run() -> void:
 	priest._attack_timer = 0.0
 	priest._physics_process(0.01)
 	priest._physics_process(0.21)
-	assert(priest.current_hp > priest_hp_before)
+	assert(priest.current_hp > priest_hp_before, "priest hp=%d before=%d ratio=%s pending=%s resolution=%s descriptors=%d" % [priest.current_hp, priest_hp_before, priest.life_steal_ratio, str(priest._pending_attack_release_record), str(priest.last_magic_attack_resolution), _descriptors.size()])
 	assert(priest.current_hp <= priest.max_hp)
 
 	mage.queue_free()
 	priest.queue_free()
+	await get_tree().process_frame
+	await _assert_cow_king(player)
 	player.queue_free()
 	await get_tree().process_frame
 	print(
-		"MONSTER_TARGET_MAGIC_ATTACK_PASS race200=220,222 visual=1 "
+		"MONSTER_TARGET_MAGIC_ATTACK_PASS race200=220,222,224 visual=1 cow_king_frames=20 "
 		+ "delay=0.2 magic_defense=1 physical_defense_bypass=1 "
 		+ "hp_phase=1 boundary=2 cross_map_cancel=1 life_steal=1"
 	)
 	get_tree().quit(0)
+
+
+func _assert_cow_king(player: PlayerCharacter) -> void:
+	_descriptors.clear()
+	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
+	player.current_hp = player.max_hp
+	var king := _make_caster(224, player)
+	assert(king.max_hp == 3600 and king.attack_min == 45 and king.attack_max == 80)
+	assert(str(king.attack_delivery_rule.get("kind", "")) == "target_magic")
+	assert(not king._target_magic_condition_met(Vector2(1, 0)))
+	assert(king._target_magic_condition_met(Vector2(2, 0)))
+	king.current_hp = king.max_hp / 2 - 1
+	assert(king._target_magic_condition_met(Vector2(1, 0)))
+	king.current_hp = king.max_hp
+	var hp_before := player.current_hp
+	king._physics_process(0.01)
+	assert(_descriptors.size() == 1)
+	assert(player.current_hp == hp_before)
+	king._physics_process(0.21)
+	assert(player.current_hp < hp_before - 1, "cow king magic must bypass 999 physical AC")
+	var hp_after := player.current_hp
+	king._physics_process(0.21)
+	assert(player.current_hp == hp_after, "cow king release settled twice")
+	var visual: Node2D
+	for child: Node in get_children():
+		if child.get_script() == MagicEffectScript and int(child.source_monster_id) == 224:
+			visual = child
+	assert(visual != null)
+	visual.set_process(false)
+	assert(visual.presentation_effect_id == MagicEffectScript.COW_KING_PRESENTATION_EFFECT_ID)
+	var profile := MagicEffectScript.source_profile_for_monster_id(224)
+	var frames: Array = profile.frames
+	assert(frames.size() == 20 and int(profile.frame_ms) == 20)
+	# Wait only for the real asynchronous presentation cache; no substituted texture.
+	var ready := false
+	for attempt in range(300):
+		MagicEffectScript.Frames.poll()
+		ready = true
+		for record: Dictionary in frames:
+			if MagicEffectScript.Frames.texture(str(record.path)) == null:
+				ready = false
+		if ready: break
+		await get_tree().process_frame
+	assert(ready, "cow king source frames did not load")
+	for index in range(20):
+		visual._elapsed_seconds = MagicEffectScript.CLIENT_MAGIC_RELEASE_SECONDS + float(index) * 0.02 + 0.001
+		visual._update_presentation()
+		assert(visual._target_sprite.visible)
+		assert(visual._target_sprite.texture == MagicEffectScript.Frames.texture(str(frames[index].path)))
+	assert(is_equal_approx(visual._duration_seconds, 0.88))
+	assert(visual._target_sprite.material.blend_mode == CanvasItemMaterial.BLEND_MODE_ADD)
+	visual.queue_free()
+	king.queue_free()
+	await get_tree().process_frame
 
 
 func _assert_race_200_profiles() -> void:
@@ -130,10 +186,19 @@ func _make_player(ground_gu: Vector2) -> PlayerCharacter:
 	player.current_hp = 1000
 	player.defense_min = 999
 	player.defense_max = 999
+	var reference := RandomNumberGenerator.new()
+	var hit_seed := 1
+	while true:
+		reference.seed = hit_seed
+		if reference.randi_range(0, 9) == 9: break
+		hit_seed += 1
+	player._rng.seed = hit_seed
+	player.set_meta("delivery_hit_seed", hit_seed)
 	return player
 
 
 func _make_caster(monster_id: int, player: PlayerCharacter) -> EnemyActor:
+	player._rng.seed = int(player.get_meta("delivery_hit_seed"))
 	var caster := EnemyActor.new()
 	caster.global_position = Vector2.ZERO
 	caster.setup(GameData.get_monster_by_id(monster_id), player, false)

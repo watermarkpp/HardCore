@@ -1,0 +1,62 @@
+{
+  "total": 3,
+  "suite": "adhoc",
+  "git_head": "388d81efe10fbb83aa334235f89931e01fcef94b",
+  "engine_log_errors": 1,
+  "generated_at": "2026-09-29T00:22:42.4729295+08:00",
+  "passed": 2,
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "player_bich_roadblock_escape_test",
+      "test_path": "tests/player_bich_roadblock_escape_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:22:43.9443115Z",
+      "native_exit_observed_utc": "2026-09-28T16:22:22.6771781Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "player_character_ground_movement_test",
+      "test_path": "tests/skills/player_character_ground_movement_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:22:54.1843660Z",
+      "native_exit_observed_utc": "2026-09-28T16:22:31.9302392Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "workbench_any_slot_test",
+      "test_path": "tests/workbench_any_slot_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:23:03.3713711Z",
+      "native_exit_observed_utc": "2026-09-28T16:22:41.0230902Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "stderr_failures_1;engine_log_failures_1"
+    }
+  ]
+}

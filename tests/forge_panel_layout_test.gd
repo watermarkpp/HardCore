@@ -27,7 +27,7 @@ func _run() -> void:
 	assert(not (forge.get_node("AttributePanel") as Control).visible)
 	assert(not (forge.get_node("EquipmentPanel") as Control).visible)
 	var forge_grid := forge.get_node("ForgeMaterialPanel/ForgeMaterialGrid") as Control
-	assert((forge.get_node("ForgeMaterialPanel/ForgeMaterialHint") as Label).text == "装备与材料可按任意顺序放入对应格")
+	assert((forge.get_node("ForgeMaterialPanel/ForgeMaterialHint") as Label).text == "装备与材料可放任意格，顺序不限")
 	assert(forge_grid.size.distance_to(Vector2(170, 200)) < 0.1, "forge grid must use bag cell dimensions and spacing")
 	for index in 9:
 		var forge_slot := forge.get_node("ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_%d" % index) as Button

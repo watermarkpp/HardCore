@@ -21,11 +21,11 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	_assert_authoritative_archer_profiles()
 	_assert_id50_identity_bridge()
-	for monster_id: int in [50, 150, 152, 206]:
+	for monster_id: int in [42, 50, 62, 145, 150, 152, 174, 186, 206]:
 		await _assert_actual_actor_delivery(monster_id)
 	print(
 		"MONSTER_PHYSICAL_PROJECTILE_ATTACK_PASS "
-		+ "exact_actors=50,150,152,206 release_after_frame=1 "
+		+ "exact_actors=42,50,62,145,150,152,174,186,206 release_after_frame=1 "
 		+ "dodge=1 contact_once=1 cross_map_cancel=1 "
 		+ "combat_epoch_cancel=1 can_fly_block=1"
 	)
@@ -44,6 +44,14 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	player.current_hp = 1000
 	player.defense_min = 0
 	player.defense_max = 0
+	# This delivery fixture needs a hit; exercise the real evasion roll with a
+	# deterministic non-evading seed, not the actor's randomize() startup seed.
+	var reference := RandomNumberGenerator.new()
+	var hit_seed := 1
+	while true:
+		reference.seed = hit_seed
+		if reference.randi_range(0, 9) == 9: break
+		hit_seed += 1
 
 	var attacker := EnemyActor.new()
 	attacker.global_position = Vector2.ZERO
@@ -70,7 +78,7 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	attacker._physics_process(0.01)
 	assert(_descriptors.is_empty(), "projectile must wait for the source attack frame")
 	assert(attacker._pending_attack_release_record.get("kind", "") == "physical_projectile_windup")
-	attacker._physics_process(0.5)
+	_advance_release(attacker)
 	assert(_descriptors.size() == 1, "monsterId=%d release must emit exactly one projectile" % monster_id)
 	assert(player.current_hp == hp_before, "monsterId=%d projectile must not deal instant melee damage" % monster_id)
 	assert(attacker._pending_attack_release_record.is_empty())
@@ -84,11 +92,13 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	assert(is_equal_approx(float(descriptor.get("duration_seconds", 0.0)), 0.2688), str(descriptor.get("duration_seconds")))
 	var effect: Node2D = _find_projectile_effect()
 	assert(effect != null, "accepted projectile release did not create its visual")
+	effect.set_physics_process(false)
 	effect.call("_physics_process", 0.1344)
 	assert(is_equal_approx(float(effect.call("progress_ratio")), 0.5))
 	# A lateral dodge after launch breaks actual contact; the old locked-ID
 	# timer would still have damaged this player.
 	player.global_position = _ground_to_screen(Vector2(4.0, 3.0))
+	await get_tree().physics_frame
 	await get_tree().physics_frame
 	await get_tree().process_frame
 	effect.call("_physics_process", 0.2)
@@ -96,25 +106,28 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	assert(player.current_hp == hp_before, "monsterId=%d dodge still damaged player" % monster_id)
 	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
 	await get_tree().physics_frame
+	await get_tree().physics_frame
 	await get_tree().process_frame
 
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	attacker._physics_process(0.5)
+	_advance_release(attacker)
 	assert(_descriptors.size() == 2)
 	effect = _latest_projectile_effect()
 	assert(effect != null)
+	effect.set_physics_process(false)
+	player._rng.seed = hit_seed
 	effect.call("_physics_process", 0.3)
-	assert(player.current_hp == hp_before - 7, "monsterId=%d contact did not settle" % monster_id)
+	assert(player.current_hp == hp_before - 7, "monsterId=%d contact did not settle hp=%d expected=%d descriptor=%s hit=%s" % [monster_id, player.current_hp, hp_before - 7, str(effect._first_flight_collision(effect.origin_world_px, effect.target_world_px)), str(attacker.last_physical_hit_resolution)])
 	effect.call("_physics_process", 0.3)
-	attacker._physics_process(0.5)
+	attacker._physics_process(0.001)
 	assert(player.current_hp == hp_before - 7, "one arrow applied damage twice")
 
 	# A target changing maps during flight keeps the visual but cancels damage.
 	player.current_hp = hp_before
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	attacker._physics_process(0.5)
+	_advance_release(attacker)
 	assert(_descriptors.size() == 3)
 	player.set_meta("runtime_map_id", 2)
 	effect = _latest_projectile_effect()
@@ -127,7 +140,7 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	attacker.target = player
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	attacker._physics_process(0.5)
+	_advance_release(attacker)
 	assert(_descriptors.size() == 4)
 	var transition_token := "projectile-transition-%d" % monster_id
 	assert(player.begin_combat_transition(transition_token))
@@ -139,7 +152,7 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	# A wall entering the frozen lane after launch must stop the live flight.
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	attacker._physics_process(0.5)
+	_advance_release(attacker)
 	assert(_descriptors.size() == 5)
 	effect = _latest_projectile_effect()
 	var wall := StaticBody2D.new()
@@ -153,6 +166,7 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	wall.add_child(wall_shape)
 	add_child(wall)
 	await get_tree().physics_frame
+	await get_tree().physics_frame
 	await get_tree().process_frame
 	effect.call("_physics_process", 0.3)
 	assert(bool(effect.call("collision_interrupted")), "flight crossed a world collider")
@@ -165,7 +179,7 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	_blocked_world_px = _ground_to_screen(Vector2(2.0, 0.0))
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	attacker._physics_process(0.5)
+	_advance_release(attacker)
 	assert(_descriptors.size() == 5)
 	assert(attacker._pending_attack_release_record.is_empty())
 	attacker._physics_process(1.0)
@@ -177,6 +191,15 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 		if child is Node2D and child.get_script() == ProjectileEffectScript:
 			child.queue_free()
 	await get_tree().process_frame
+
+
+func _advance_release(attacker: EnemyActor) -> void:
+	# Advance to this actor's release, without jumping past a faster actor's
+	# next attack interval and accidentally starting a second test action.
+	for step in range(400):
+		attacker._physics_process(0.005)
+		if attacker._pending_attack_release_record.is_empty(): return
+	assert(false, "projectile windup did not release")
 
 
 func _assert_authoritative_archer_profiles() -> void:

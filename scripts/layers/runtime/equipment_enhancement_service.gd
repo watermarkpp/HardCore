@@ -36,7 +36,29 @@ func quote_forge(target_index: int, iron_index: int, accessory_a_index: int, acc
 
 
 func quote_forge_tray() -> Dictionary:
-	return _issue_quote(_build_quote(4, 1, 3, 5, "tray"))
+	var target := -1
+	var iron := -1
+	var accessories: Array[int] = []
+	for index in _player.forge_tray.size():
+		var stack: Dictionary = _player.forge_tray[index]
+		if stack.is_empty():
+			continue
+		var item := GameData.get_item_record(stack)
+		if str(item.get("kind", "")) == "equipment" and str(item.get("category", "")) in ["武器", "盔甲", "头盔"]:
+			if target >= 0:
+				return _failure("只能放入一件待锻造装备。")
+			target = index
+		elif BlackIron.purity_for(stack) >= 0:
+			if iron >= 0:
+				return _failure("只需放入一块黑铁矿。")
+			iron = index
+		elif Grade.can_use_as_accessory_material(int(item.get("itemId", -1))):
+			accessories.append(index)
+		else:
+			return _failure("%s不可以作为锻造材料" % str(item.get("name", stack.get("name", "该物品"))))
+	if target < 0 or iron < 0 or accessories.size() != 2:
+		return _failure("请放入一件装备、一块黑铁矿和两件首饰；格子不限。")
+	return _issue_quote(_build_quote(target, iron, accessories[0], accessories[1], "tray"))
 
 
 func _issue_quote(quote: Dictionary) -> Dictionary:

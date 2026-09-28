@@ -1,5 +1,6 @@
 extends Node
 const Space := preload("res://scripts/ground_unit_space.gd")
+const Projectile := preload("res://scripts/monster_ranged_projectile_effect.gd")
 class Probe extends PlayerCharacter:
 	var commits := 0
 	var poisons := 0
@@ -24,6 +25,7 @@ func _run() -> void:
 	PlayerState.recalculate_stats(false)
 	var player := Probe.new()
 	player.set_meta("runtime_map_id",1)
+	player.position = _ground_to_screen(Vector2(1, 0))
 	add_child(player)
 	player.set_physics_process(false)
 	player.max_hp = 100000
@@ -60,8 +62,7 @@ func _run() -> void:
 	attacker.max_hp = 100
 	attacker.current_hp = 50
 	# Real frozen projectile release path, including adjacent ranged shots.
-	assert(attacker._launch_physical_projectile(player,100))
-	attacker._settle_physical_projectile_release(attacker._pending_attack_release_record)
+	await _deliver_projectile(attacker, player)
 	assert(player.commits==0 and player.controls==0 and player.poisons==0 and attacker.current_hp==50)
 	var physical_delivery := attacker.attack_delivery_rule.duplicate(true)
 	attacker.attack_delivery_rule = {"status":{"statusChance":1.0,"poisonWeight":1,"controlWeight":0,"poisonDamage":4,"poisonSeconds":8}}
@@ -73,8 +74,7 @@ func _run() -> void:
 	assert(player.commits==1 and player.current_hp==99900 and player.poisons==1 and player.controls==1, "melee: %s" % [ [player.commits,player.current_hp,player.poisons,player.controls] ])
 	PlayerState.computed_stats.anti_magic_points = 0
 	attacker.attack_delivery_rule = physical_delivery
-	assert(attacker._launch_physical_projectile(player,100))
-	attacker._settle_physical_projectile_release(attacker._pending_attack_release_record)
+	await _deliver_projectile(attacker, player)
 	assert(player.commits==2 and player.current_hp==99800 and player.poisons==2)
 	# All ten deterministic thresholds; real incoming HP changes, not just JSON.
 	PlayerState.computed_stats.anti_magic_points = 3
@@ -89,3 +89,19 @@ func _run() -> void:
 	attacker.free()
 	print("RANGED_MAGIC_EVASION_PASS projectile adjacent melee AoE mixed single-roll side-effects ten-thresholds")
 	get_tree().quit()
+
+
+func _deliver_projectile(attacker: EnemyActor, player: PlayerCharacter) -> void:
+	# Contact, not a removed locked-target timer, owns today's ranged delivery.
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	assert(attacker._launch_physical_projectile(player, 100))
+	var projectile: Node2D = null
+	for child in get_children():
+		if child.get_script() == Projectile and not child.is_queued_for_deletion():
+			projectile = child
+	assert(projectile != null)
+	projectile.set_physics_process(false)
+	projectile.call("_physics_process", 1.0)
+	assert(projectile._finished and not projectile.collision_interrupted(), "projectile must actually contact player")

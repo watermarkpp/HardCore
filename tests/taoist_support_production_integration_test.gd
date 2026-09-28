@@ -33,8 +33,12 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	game = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# Loading now prewarms the map and UI asynchronously. Two render frames
+	# are not a readiness contract; no cast may be submitted before READY.
+	var ready_deadline := Time.get_ticks_msec() + 15000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec() < ready_deadline:
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "world loading did not finish")
 	player = game.player
 	game.current_map_id = -1
 	player.set_physics_process(false)

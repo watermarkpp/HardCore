@@ -1,0 +1,62 @@
+{
+  "suite": "adhoc",
+  "git_head": "388d81efe10fbb83aa334235f89931e01fcef94b",
+  "generated_at": "2026-09-29T00:55:46.8222643+08:00",
+  "engine_log_errors": 0,
+  "passed": 3,
+  "failed": 0,
+  "total": 3,
+  "results": [
+    {
+      "test_name": "skill_mechanics_description_test",
+      "test_path": "tests/skill_mechanics_description_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:55:50.8623347Z",
+      "native_exit_observed_utc": "2026-09-28T16:55:26.5786582Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_physical_projectile_attack_test",
+      "test_path": "tests/monster_physical_projectile_attack_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:55:57.9584605Z",
+      "native_exit_observed_utc": "2026-09-28T16:55:36.3090177Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_target_magic_attack_test",
+      "test_path": "tests/monster_target_magic_attack_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:56:07.7813756Z",
+      "native_exit_observed_utc": "2026-09-28T16:55:45.3313795Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ]
+}

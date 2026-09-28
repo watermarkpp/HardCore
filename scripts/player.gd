@@ -346,11 +346,17 @@ func _physics_process(delta: float) -> void:
 		)
 	else:
 		velocity = Vector2.ZERO
+	# Contact recovery belongs to collision separation, not directional input.
+	# Comparing its normal offset with the selected movement axis rolls recovery
+	# back forever when an actor rests inside another body's safe margin.
+	move_and_collide(Vector2.ZERO, false, safe_margin, true)
+	position_before_move = global_position
 	var intended_motion_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(velocity)
-	move_and_slide()
+	# A single swept segment stops at contact; it never slides along a ninth axis.
+	move_and_collide(velocity * delta, false, safe_margin)
 	var accepted_motion_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position - position_before_move)
 	if not LocomotionDirections.motion_follows_direction(accepted_motion_ground, intended_motion_ground):
-		# Collision sliding/recovery cannot introduce a ninth locomotion axis.
+		# Keep separation already applied above even if contact clips the step.
 		global_position = position_before_move
 		velocity = Vector2.ZERO
 	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
@@ -375,7 +381,7 @@ func _physics_process(delta: float) -> void:
 		facing = actual_motion_facing
 		movement_performed.emit(global_position, facing)
 	if has_direction_input and not movement_locked and control_time <= 0.0 and not _dead:
-		# Accumulate only the displacement accepted by move_and_slide. A blocked
+		# Accumulate only accepted directional displacement. A blocked
 		# frame therefore contributes zero and cannot manufacture a run transition.
 		locomotion_distance_gu += actual_ground_motion_gu.length()
 		if locomotion_state == LOCOMOTION_WALK and locomotion_distance_gu >= WALK_TO_RUN_DISTANCE_GU:

@@ -1,0 +1,45 @@
+{
+  "engine_log_errors": 0,
+  "passed": 2,
+  "git_head": "388d81efe10fbb83aa334235f89931e01fcef94b",
+  "failed": 0,
+  "total": 2,
+  "generated_at": "2026-09-29T00:36:12.1729779+08:00",
+  "results": [
+    {
+      "test_name": "relic_equipped_actor_test",
+      "test_path": "tests/relic_equipped_actor_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:36:14.0036839Z",
+      "native_exit_observed_utc": "2026-09-28T16:35:53.3577486Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "relic_combat_entry_test",
+      "test_path": "tests/relic_combat_entry_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T16:36:24.7414602Z",
+      "native_exit_observed_utc": "2026-09-28T16:36:10.7086107Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc"
+}

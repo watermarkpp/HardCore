@@ -7,6 +7,7 @@ param(
     [int]$ExpectedVersionCode = 0,
     [string]$ExpectedVersionName = "",
     [int]$VersionCode = 0,
+    [string]$PreparedStagePath = "",
     [switch]$PreflightOnly,
     [switch]$KeepStage
 )
@@ -176,6 +177,24 @@ $ShortCommit = $ResolvedCommit.Substring(0, 12)
 $StageParent = Join-Path (Split-Path $ProjectRoot -Parent) "HardCore-android-staging"
 $StageName = "{0}-{1}-{2}" -f $ShortCommit, (Get-Date -Format "yyyyMMdd-HHmmss"), ([guid]::NewGuid().ToString("N").Substring(0, 8))
 $StagePath = Join-Path $StageParent $StageName
+if (-not [string]::IsNullOrWhiteSpace($PreparedStagePath)) {
+    # A Codex-managed, clean checkout may be supplied instead of creating a
+    # second worktree. Its lifecycle stays with the caller; never remove it.
+    $StagePath = (Resolve-Path -LiteralPath $PreparedStagePath).Path
+    $StageTop = ((& git -C $StagePath rev-parse --show-toplevel) -join '').Trim()
+    $StageHead = ((& git -C $StagePath rev-parse HEAD) -join '').Trim()
+    $StageCommon = ((& git -C $StagePath rev-parse --path-format=absolute --git-common-dir) -join '').Trim()
+    $SourceCommon = ((& git -C $ProjectRoot rev-parse --path-format=absolute --git-common-dir) -join '').Trim()
+    if ($LASTEXITCODE -ne 0 -or $StageHead -ne $ResolvedCommit -or $StageCommon -ne $SourceCommon -or
+        [IO.Path]::GetFullPath($StageTop) -ne [IO.Path]::GetFullPath($StagePath) -or $StagePath -eq $ProjectRoot) {
+        throw "Prepared stage must be a separate worktree of this repository at the exact build commit."
+    }
+    $StageStatus = @(& git -C $StagePath status --porcelain --untracked-files=normal)
+    if ($LASTEXITCODE -ne 0 -or $StageStatus.Count -gt 0 -or (Test-Path -LiteralPath (Join-Path $StagePath '.godot'))) {
+        throw "Prepared stage must be clean and have no Godot import cache."
+    }
+    $StageParent = Split-Path $StagePath -Parent
+}
 $ResolvedOutputDirectory = [System.IO.Path]::GetFullPath((Split-Path $OutputApk -Parent))
 $ResolvedOutputApk = Join-Path $ResolvedOutputDirectory (Split-Path $OutputApk -Leaf)
 
@@ -200,11 +219,13 @@ New-Item -ItemType Directory -Path $ResolvedOutputDirectory -Force | Out-Null
 $StageCreated = $false
 $BuildSucceeded = $false
 try {
-    & git -C $ProjectRoot worktree add --detach $StagePath $ResolvedCommit
-    if ($LASTEXITCODE -ne 0) {
-        throw "Unable to create isolated build worktree."
+    if ([string]::IsNullOrWhiteSpace($PreparedStagePath)) {
+        & git -C $ProjectRoot worktree add --detach $StagePath $ResolvedCommit
+        if ($LASTEXITCODE -ne 0) {
+            throw "Unable to create isolated build worktree."
+        }
+        $StageCreated = $true
     }
-    $StageCreated = $true
 
     $StageProjectPath = [System.IO.Path]::GetFullPath($StagePath)
     $SafeStageParent = [System.IO.Path]::GetFullPath($StageParent) + [System.IO.Path]::DirectorySeparatorChar

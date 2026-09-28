@@ -34,18 +34,45 @@ func _run() -> void:
 	assert(not decoration.visible and detail.visible, "delete must affect the selected semantic layer only")
 	overlay.undo_last_change()
 	assert(decoration.visible)
-	var cases := {
-		"warrior.fire_sword": ["倍"], "warrior.slaying_swordsmanship": ["基础物理伤害+", "触发概率"], "warrior.thrusting": ["刺杀", "基础伤害"],
-		"warrior.half_moon": ["半月", "基础伤害"], "warrior.wild_rush": ["成功率", "等级"], "warrior.basic_swordsmanship": ["每级准确+3", "当前准确+0"],
-		"wizard.magic_shield": ["承受", "减伤"], "wizard.fire_wall": ["持续", "3000"], "wizard.temptation_light": ["成功概率"],
-		"taoist.poison": ["毒伤", "抗毒"], "taoist.defense": ["防御"], "taoist.summon_skeleton": ["召唤物等级", "存在时间"]
-	}
-	for skill_id in cases:
-		var name := ProfessionRules.skill_display_name(skill_id)
-		var row := GameData.get_skill(name, 0)
-		var combat := ProfessionRules.skill_combat_profile(name, 0)
-		var text := panel._player_mechanics_description(row, combat)
-		for token in cases[skill_id]: assert(str(text).contains(token), "%s missing %s: %s" % [skill_id, token, text])
-		for forbidden in ["技能ID", "来源", "可信度", "formula_id", "source_anchor", "source_", "confidence", "random_range", "random", "round", "get_power", "_formula"]: assert(not str(text).contains(forbidden), "%s leaked %s" % [skill_id, forbidden])
+	var descriptions := preload("res://scripts/skills/skill_player_description.gd")
+	var source := preload("res://scripts/skills/skill_data_loader.gd")
+	var before := JSON.stringify(PlayerState.computed_stats)
+	var count := 0
+	var evidence := {}
+	for skill_id: String in source.skill_ids():
+		for rank: int in [0, 1, 2, 3, 5, 7]:
+			var text := descriptions.describe(skill_id, rank, PlayerState.computed_stats, 40)
+			assert(text.length() > 20, "%s missing readable explanation" % skill_id)
+			for forbidden: String in ["训练等级", "基础威力", "魔法威力基础值", "技能ID", "来源", "可信度", "formula_id", "source_anchor", "source_", "confidence", "random", "round", "get_power", "_formula", "GU"]:
+				assert(not text.contains(forbidden), "%s leaked %s: %s" % [skill_id, forbidden, text])
+			evidence["%s:%d" % [skill_id, rank]] = text
+			count += 1
+	assert(count == 198)
+	var stats := {"magic_min": 20, "magic_max": 20, "tao_min": 20, "tao_max": 20}
+	var lightning := descriptions.describe("wizard.lightning", 3, stats, 40)
+	assert(lightning.contains("40～43") and lightning.contains("1.5 倍"), lightning)
+	var enhanced := descriptions.describe("wizard.lightning", 5, stats, 40)
+	assert(enhanced.contains("48～52"), enhanced)
+	var shield := descriptions.describe("wizard.magic_shield", 3, stats, 40)
+	assert(shield.contains("减少 60%") and shield.contains("35 秒"), shield)
+	assert(shield.contains("吸收容量") and shield.contains("提前破盾"))
+	var group_heal := descriptions.describe("taoist.mass_healing", 3, stats, 40)
+	var heal_plan := descriptions.preview_effects("taoist.mass_healing", 3, stats, 40)
+	assert(int(heal_plan[0].raw_heal_per_target) > 40 and int(heal_plan[0].affected_count) == 1)
+	assert(group_heal.contains(str(heal_plan[0].raw_heal_per_target)) and group_heal.contains("全部满血"), group_heal)
+	assert(descriptions.describe("taoist.spiritual_warfare", 2, stats, 40).contains("准确 5 点"))
+	var skeleton := descriptions.describe("taoist.summon_skeleton", 7, stats, 40)
+	assert(skeleton.contains("3 只") and skeleton.contains("初始宠物等级 3") and skeleton.contains("成长上限 7"), skeleton)
+	assert(descriptions.describe("taoist.revelation", 0, stats, 40).contains("66.7%"))
+	assert(descriptions.describe("wizard.teleport", 0, stats, 40).contains("36.4%"))
+	assert(descriptions.describe("warrior.slaying_swordsmanship", 5, stats, 40).contains("35.0%"))
+	assert(descriptions.mana_cost("wizard.lightning", 3) == 15)
+	var poison_cost := int(source.rank_record("taoist.poison", 3).mp_cost)
+	assert(descriptions.mana_cost("taoist.poison", 3) == poison_cost * 2)
+	assert(descriptions.mana_cost("taoist.defense", 3, 3) == descriptions.mana_cost("taoist.defense", 3) + descriptions.mana_cost("taoist.magic_defense", 3))
+	assert(JSON.stringify(PlayerState.computed_stats) == before, "description mutated player stats")
+	var output := FileAccess.open("res://outputs/test_logs/skill_descriptions_verified.json", FileAccess.WRITE)
+	output.store_string(JSON.stringify(evidence, "\t"))
+	output.close()
 	print("SKILL_MECHANICS_DESCRIPTION_PASS")
 	get_tree().quit(0)

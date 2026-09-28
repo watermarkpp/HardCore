@@ -93,14 +93,14 @@ func _build_quote(item_id: int, material_indices: Array[int], profession := "") 
 		profession = str(_player.profession) if Rules.is_relic(item_id) else str(catalog.get("skillProfession", ""))
 	if profession not in Rules.recipe_professions(item_id):
 		return _failure("该配方的技能职业无效。")
-	if not _player.synthesis_tray[0].is_empty():
-		return _failure("请先取走合成格里的圣物。")
-	for slot in range(1, _player.synthesis_tray.size()):
+	# All nine cells accept input. After consuming exactly four fragments,
+	# cell zero is free for the output, even when it held an input fragment.
+	for slot in range(_player.synthesis_tray.size()):
 		if slot not in material_indices and not _player.synthesis_tray[slot].is_empty():
 			return _failure("请取出多余物品，只放入4个远古圣物碎片。")
 	var seen := {}
 	for index: int in material_indices:
-		if index < 1 or index >= _player.synthesis_tray.size() or seen.has(index):
+		if index < 0 or index >= _player.synthesis_tray.size() or seen.has(index):
 			return _failure("每个材料格必须放入不同的远古圣物碎片。")
 		seen[index] = true
 		var raw: Variant = _player.synthesis_tray[index]

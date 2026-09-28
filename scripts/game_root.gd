@@ -1703,7 +1703,6 @@ func _ready() -> void:
 		_device_lab_runtime.configure(self)
 		_device_lab_runtime.name = "DeviceLabRuntime"
 		add_child(_device_lab_runtime)
-		_device_lab_runtime.local_performance_capture_finished.connect(_on_local_performance_capture_finished)
 	_wire_item_quick_slots_hud()
 	player.resources_changed.connect(
 		func(_current_hp: int, _max_hp: int, _current_mp: int, _max_mp: int) -> void:
@@ -2490,7 +2489,6 @@ func _build_system_menu() -> void:
 	_system_menu_panel.return_to_character_select_requested.connect(_return_to_character_select)
 	_system_menu_panel.save_and_exit_requested.connect(_exit_game)
 	_system_menu_panel.audio_setting_changed.connect(_on_system_menu_audio_setting_changed)
-	_system_menu_panel.performance_capture_requested.connect(_on_local_performance_capture_requested)
 	_system_menu_layer.add_child(_system_menu_panel)
 	_system_menu_panel.set_audio_levels(
 		AudioPreferences.music_volume,
@@ -2507,20 +2505,6 @@ func _show_system_menu() -> void:
 	_system_menu_pause_owned = _system_menu_pause_owned or not get_tree().paused
 	_system_menu_panel.open_menu()
 	get_tree().paused = true
-
-
-func _on_local_performance_capture_requested(detail_mode: String) -> void:
-	if not is_instance_valid(_device_lab_runtime):
-		return
-	var result := _device_lab_runtime.begin_local_performance_capture(detail_mode)
-	_hide_system_menu()
-	if is_instance_valid(hud):
-		hud.show_message("开始记录30秒，请复现卡顿" if bool(result.get("ok", false)) else "已有性能记录正在进行")
-
-
-func _on_local_performance_capture_finished(result: Dictionary) -> void:
-	if is_instance_valid(hud) and not is_queued_for_deletion():
-		hud.show_message("性能记录已保存在本机" if bool(result.get("ok", false)) else "性能记录保存失败")
 
 
 func _hide_system_menu() -> void:

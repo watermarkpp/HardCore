@@ -767,7 +767,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	var cell := _bag_cells[index]
 	var button := cell.get_child(0) as Button
 	var occupied := not stack.is_empty()
-	var can_receive_unequip := not occupied and _can_receive_unequip_to_index(index)
+	var can_receive_unequip := not occupied and _can_receive_selected_item_to_index(index)
 	# Selection/theme changes are independent of item data. Keep their live
 	# idempotent update, but avoid rebuilding textures and labels for every slot.
 	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
@@ -781,7 +781,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	button.name = "ItemButton" if occupied else "EmptySlotBackground"
 	button.disabled = not occupied and not can_receive_unequip
 	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
-	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
+	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("放入此格" if can_receive_unequip else "空物品格")
 	_set_button_texture(button, UIItemTextureCacheScript.texture_for_item(stack) if occupied else null, _item_icon_display_size(stack, "inventoryIcon") if occupied else Vector2.ZERO)
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
@@ -898,8 +898,8 @@ func _select_inventory_item(index: int) -> void:
 	if _press_cancelled or TouchScrollSupportScript.is_drag_active(get_tree()):
 		return
 	if _inventory_record(index).is_empty():
-		if _can_receive_unequip_to_index(index):
-			_unequip_to_inventory_slot(index)
+		if _can_receive_selected_item_to_index(index):
+			_receive_selected_item_to_index(index)
 		else:
 			_ui_dismiss_selection()
 		return
@@ -1098,6 +1098,16 @@ func _show_equipment_detail(slot: String) -> void:
 		)
 		return
 	_show_presented_item(item, record, equipment_buttons.get(slot), {"slot": slot, "presentation_zone": "equipment"})
+
+
+## Derived inventory panels can supply another selected-item owner (workbench).
+## The same native bag activation still dispatches exactly once on release.
+func _can_receive_selected_item_to_index(index: int) -> bool:
+	return _can_receive_unequip_to_index(index)
+
+
+func _receive_selected_item_to_index(index: int) -> void:
+	_unequip_to_inventory_slot(index)
 
 
 func _can_receive_unequip_to_index(index: int) -> bool:
@@ -1811,8 +1821,8 @@ func _ui_sync_empty_destinations() -> void:
 		if not _inventory_record(index).is_empty():
 			continue
 		var button := _bag_cells[index].get_child(0) as Button
-		var functional := _can_receive_unequip_to_index(index)
+		var functional := _can_receive_selected_item_to_index(index)
 		button.disabled = not functional
 		button.mouse_filter = Control.MOUSE_FILTER_STOP if functional else Control.MOUSE_FILTER_IGNORE
-		button.tooltip_text = "卸下到此格" if functional else ""
+		button.tooltip_text = "放入此格" if functional else ""
 		UIItemSelectionVisualScript.apply(button, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")

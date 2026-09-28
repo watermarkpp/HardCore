@@ -1511,7 +1511,7 @@ func place_workbench_item(mode: String, slot: int, inventory_index: int, save_in
 	return {"success": true, "message": "已放入%s" % str(item.get("name", "物品"))}
 
 
-func take_workbench_item(mode: String, slot: int, save_in_background := false) -> Dictionary:
+func take_workbench_item(mode: String, slot: int, save_in_background := false, destination_slot := -1) -> Dictionary:
 	if not save_in_background:
 		_before_state_transaction()
 	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
@@ -1519,6 +1519,10 @@ func take_workbench_item(mode: String, slot: int, save_in_background := false) -
 	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
 	if tray[slot].is_empty():
 		return {"success": false, "message": "这个格子里没有物品。"}
+	if destination_slot < -1 or destination_slot >= INVENTORY_CAPACITY:
+		return {"success": false, "message": "无效背包格。"}
+	if destination_slot >= 0 and destination_slot < inventory.size() and _inventory_slot_is_occupied(inventory[destination_slot]):
+		return {"success": false, "message": "目标背包格已有物品。"}
 	var output := tray[slot].duplicate(true)
 	# This is a move from our own tray; the source still owns its instance ID
 	# until the same save transaction clears the cell.
@@ -1527,7 +1531,13 @@ func take_workbench_item(mode: String, slot: int, save_in_background := false) -
 		return {"success": false, "message": str(preview.get("message", "背包空间不足。"))}
 	var inventory_before := inventory.duplicate(true)
 	var tray_before := tray.duplicate(true)
-	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
+	if destination_slot >= 0:
+		inventory = inventory.duplicate(true)
+		while inventory.size() <= destination_slot:
+			inventory.append({})
+		inventory[destination_slot] = output
+	else:
+		inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
 	tray[slot] = {}
 	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
@@ -1539,16 +1549,16 @@ func take_workbench_item(mode: String, slot: int, save_in_background := false) -
 	return {"success": true, "message": "已放入背包：%s" % str(output.get("name", "物品"))}
 
 
-func transfer_workbench_immediate(mode: String, slot: int, inventory_index := -1) -> Dictionary:
+func transfer_workbench_immediate(mode: String, slot: int, inventory_index := -1, destination_slot := -1) -> Dictionary:
 	if test_mode:
-		return take_workbench_item(mode, slot) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index)
+		return take_workbench_item(mode, slot, false, destination_slot) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index)
 	var selected: Dictionary = inventory[inventory_index].duplicate(true) if inventory_index >= 0 and inventory_index < inventory.size() else {}
 	if not await _begin_live_workbench_transaction():
 		return {"success": false, "message": "物品正在处理中，请重新选择。"}
 	if inventory_index >= 0 and (inventory_index >= inventory.size() or inventory[inventory_index] != selected):
 		_workbench_transfer_pending = false
 		return {"success": false, "message": "所选物品已变化，请重新选择。"}
-	var result := take_workbench_item(mode, slot, true) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index, true)
+	var result := take_workbench_item(mode, slot, true, destination_slot) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index, true)
 	_workbench_transfer_pending = false
 	return result
 

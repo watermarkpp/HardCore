@@ -45,11 +45,32 @@ func _ready() -> void:
 			expected_distance_gu,
 			str(player.global_position),
 		])
+	await _test_monster_contact_escape(player)
 	await _test_oblique_wall(player)
 	await _test_far_map_positions(player)
 	player.free()
 	print("PLAYER_CHARACTER_GROUND_MOVEMENT_PASS: 32 inputs snap actual displacement to eight Ground directions at equal GU speed")
 	get_tree().quit(0)
+
+
+func _test_monster_contact_escape(player: PlayerCharacter) -> void:
+	var body := StaticBody2D.new()
+	body.collision_layer = WorldSpatialRules.ENEMY_LAYER
+	body.collision_mask = 0
+	var shape := CollisionShape2D.new()
+	shape.shape = WorldSpatialRules.actor_footprint_shape_px(16.0)
+	body.add_child(shape)
+	add_child(body)
+	player.set_touch_vector(Vector2.ZERO)
+	player.global_position = Vector2(-33.9, 0.0)
+	await get_tree().physics_frame
+	player.set_touch_vector(Vector2.LEFT)
+	for frame in 4:
+		await get_tree().physics_frame
+		await get_tree().process_frame
+	assert(player.global_position.x < -35.0, "contact recovery against a monster must not glue the player")
+	player.set_touch_vector(Vector2.ZERO)
+	body.free()
 
 
 func _test_oblique_wall(player: PlayerCharacter) -> void:

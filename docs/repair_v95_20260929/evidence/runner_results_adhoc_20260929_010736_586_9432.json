@@ -1,0 +1,28 @@
+{
+  "passed": 1,
+  "total": 1,
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "git_head": "388d81efe10fbb83aa334235f89931e01fcef94b",
+  "results": [
+    {
+      "test_name": "taoist_support_production_integration_test",
+      "test_path": "tests/taoist_support_production_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T17:08:09.9578079Z",
+      "native_exit_observed_utc": "2026-09-28T17:07:35.0901475Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-29T01:07:36.5866929+08:00",
+  "failed": 0
+}

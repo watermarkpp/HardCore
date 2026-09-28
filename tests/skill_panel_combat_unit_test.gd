@@ -37,12 +37,9 @@ func _run() -> void:
 	var combat := ProfessionRules.skill_combat_profile(skill_name)
 	var maximum_range_gu := float(combat.get("maximum_range_gu", -1.0))
 	assert(maximum_range_gu > 0.0, "正式技能接口缺少 maximum_range_gu")
-	assert(
-		"范围：%.1f GU" % maximum_range_gu in panel.detail_label.text,
-		"技能详情没有按正式 GU 射程显示：%s" % panel.detail_label.text
-	)
-	# Equipment ranks change the two visible level numbers only. The existing
-	# description still receives the learned base rank and original skill row.
+	assert("3 格直线" in panel.description_label.text, "readable description lost formal thrust range")
+	assert(not "GU" in panel.detail_label.text and not "熟练度" in panel.detail_label.text)
+	# User now requires effects to reflect equipment's effective cast rank.
 	PlayerState.learned_skills[skill_name] = 3
 	panel._rebuild_skill_cards()
 	panel._show_skill_detail(selected_index)
@@ -53,13 +50,14 @@ func _run() -> void:
 	assert(PlayerState.effective_skill_level(skill_name) == 5)
 	panel._rebuild_skill_cards()
 	panel._show_skill_detail(selected_index)
-	assert("Lv.5" in panel.detail_label.text)
+	assert("5 级（基础 3 级）" in panel.detail_label.text)
 	assert("Lv.5" in (panel.skill_buttons[selected_index].get_node("CenteredText") as Label).text)
-	assert(panel.description_label.text == base_description)
+	assert(panel.description_label.text != base_description)
+	assert("121.0%" in panel.description_label.text)
 
 	var source := FileAccess.get_file_as_string("res://scripts/skill_panel.gd")
-	assert(source.contains('combat.get("maximum_range_gu"'), "技能面板没有读取正式 maximum_range_gu")
+	assert(source.contains('SkillDescription.describe('), "技能面板没有使用正式运行时说明")
 	assert(not source.contains('combat.get("range"'), "技能面板仍保留无单位射程 fallback")
 
-	print("SKILL_PANEL_COMBAT_UNIT_PASS: 技能详情直接读取 maximum_range_gu，并明确以 GU 显示一位小数")
+	print("SKILL_PANEL_COMBAT_UNIT_PASS: canonical readable range and effective rank; refresh coalescing preserved")
 	get_tree().quit(0)

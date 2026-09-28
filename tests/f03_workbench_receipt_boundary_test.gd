@@ -137,8 +137,11 @@ func _live_case() -> void:
 	assert(plan.writer.job.stage_result(true).result.success)
 	assert((await state.transfer_workbench_immediate("forge", 4, 0)).success)
 	assert(plan.completed and plan.completion.success and state.gold == 17)
+	assert((await state.transfer_workbench_immediate("forge", 4, -1, 70)).success)
+	assert(str(state.inventory[70].instance_id) == str(item.instance_id))
 	state.free()
-	assert(_ids(_read(path).forge_tray) == [str(item.instance_id)] and _ids(_read(path).inventory).is_empty())
+	assert(_ids(_read(path).inventory) == [str(item.instance_id)] and _ids(_read(path).forge_tray).is_empty())
+	assert(str(_read(path).inventory[70].instance_id) == str(item.instance_id))
 	assert(int(_read(path).gold) == 17)
 
 
