@@ -577,6 +577,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	_special_delivery_settlement_order.clear()
 	_special_delivery_settlement_floor_serial = _spatial_release_serial
 	_hc_pursuit_session = false
+	_hc_blocked_wait_target_id = 0
 	_hc_cancel_path()
 	_reset_monster_audio_observer()
 	_reset_direct_spell_runtime_stats()
@@ -8191,7 +8192,11 @@ var _hc_failed_edges: Dictionary = {}
 var _hc_scheduler: HCScheduler
 var _hc_motion_window := 0.0
 var _hc_window_remaining := INF
+const HC_BLOCKED_SIDE_RETRY_MS := 200
 var _hc_next_side_retry_ms := 0
+var _hc_blocked_wait_target_id := 0
+var _hc_blocked_wait_self := Vector2.INF
+var _hc_blocked_wait_target := Vector2.INF
 var _hc_owned_movement_call := false
 var _hc_world_collision_count := 0
 static var _hc_shared_static_query_tick := -1
@@ -9068,6 +9073,19 @@ func _hc_path_completed(token: int, status: String, route: PackedVector2Array) -
 
 func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vector2i:
 	_hc_step_override = Vector2.INF
+	# A stationary rear actor with no legal adjacent step has no new path to
+	# evaluate until its existing bounded flank retry. Target/self movement
+	# invalidates the wait immediately; a moving blocker is retried within the
+	# same bounded 200 ms window rather than queried every physics tick.
+	if _hc_blocked_wait_target_id == hit_target.get_instance_id():
+		var target_ground := _screen_position_px_to_ground_position_gu(hit_target.global_position)
+		if (
+			Time.get_ticks_msec() < _hc_next_side_retry_ms
+			and current.is_equal_approx(_hc_blocked_wait_self)
+			and target_ground.is_equal_approx(_hc_blocked_wait_target)
+		):
+			return Vector2i.ZERO
+	_hc_blocked_wait_target_id = 0
 	_hc_sync_navigation()
 	_hc_refresh_observation()
 	if not _hc_known_ground.is_finite() or not MonsterTerrainNavigationPolicyScript.context_valid(_terrain_navigation_context, runtime_map_id):
@@ -9102,7 +9120,7 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		if not r6_motion_clear or _hc_frontline_at(current, anchor, hit_target) > 0:
 			if Time.get_ticks_msec() < _hc_next_side_retry_ms:
 				return Vector2i.ZERO
-			_hc_next_side_retry_ms = Time.get_ticks_msec() + 100
+			_hc_next_side_retry_ms = Time.get_ticks_msec() + HC_BLOCKED_SIDE_RETRY_MS
 			var best := Vector2i.ZERO
 			var best_cost := INF
 			var preferred_sign := 1.0 if posmod(get_instance_id(), 2) == 0 else -1.0
@@ -9137,6 +9155,10 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 			_hc_last_reason = "FRONTLINE_BLOCKED"
 			if best != Vector2i.ZERO:
 				_hc_step_override = Vector2(cell + best) + Vector2(0.5, 0.5)
+			else:
+				_hc_blocked_wait_target_id = hit_target.get_instance_id()
+				_hc_blocked_wait_self = current
+				_hc_blocked_wait_target = _screen_position_px_to_ground_position_gu(hit_target.global_position)
 			return best
 	while _hc_route_index < _hc_route.size() and current.distance_to(_hc_route[_hc_route_index]) <= (0.005 if _terrain_navigation_context.has("poly_index") else 0.08):
 		_hc_route_index += 1

@@ -663,6 +663,7 @@ $Suites.critical = @($Suites.critical + @(
     'tests/monster_source_status_test.tscn',
     'tests/headless_prefetch_compatibility_test.tscn',
     'tests/hc_monster_ai/geometry_test.tscn',
+    'tests/hc_monster_ai/crowd_surround_runtime_test.tscn',
     'tests/hc_monster_ai/w1_delivery_geometry_test.tscn',
     'tests/hc_monster_ai/w1_special_delivery_runtime_test.tscn',
     'tests/hc_monster_ai/inventory_test.tscn',
