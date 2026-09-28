@@ -48,8 +48,8 @@ func _run_map_query_gate() -> void:
 	_blocked_ground_gu = Vector2.INF
 	melee._deal_melee_hit(melee_player, 7)
 	assert(melee_player.current_hp < melee_hp_before, "clear map path did not allow melee damage")
-
 	var projectile_player := _make_player(Vector2(4.0, 0.0))
+	_enable_projectile_contact_body(projectile_player)
 	var projectile := await _make_attacker(150, projectile_player)
 	projectile.ranged_projectile_requested.connect(_capture_projectile_descriptor)
 	_blocked_ground_gu = Vector2(2.0, 0.0)
@@ -70,7 +70,7 @@ func _run_map_query_gate() -> void:
 	_blocked_ground_gu = Vector2.INF
 	assert(projectile._launch_physical_projectile(projectile_player, 7))
 	assert(_projectile_descriptors.size() == 1, "clear physical path did not emit descriptor")
-	projectile._update_pending_attack(2.0)
+	_advance_projectile_to_contact()
 	assert(projectile_player.current_hp < projectile_hp_before, "clear physical path did not settle damage")
 
 	var magic_player := _make_player(Vector2(2.0, 0.0))
@@ -128,6 +128,7 @@ func _run_physics_gate_without_environment_provider() -> void:
 	assert(melee_player.current_hp == melee_hp_before, "WORLD ray leaked melee damage")
 
 	var projectile_player := _make_player(Vector2(4.0, 0.0))
+	_enable_projectile_contact_body(projectile_player)
 	var projectile := await _make_attacker(150, projectile_player)
 	projectile.environment_blocker = null
 	wall.position = _ground_to_screen(Vector2(2.0, 0.0))
@@ -148,10 +149,9 @@ func _run_physics_gate_without_environment_provider() -> void:
 	melee_player.current_hp = melee_player.max_hp
 	melee._deal_melee_hit(melee_player, 7)
 	assert(melee_player.current_hp < melee_player.max_hp, "clear WORLD ray did not allow melee")
-
 	var projectile_hp_before := projectile_player.current_hp
 	assert(projectile._launch_physical_projectile(projectile_player, 7))
-	projectile._update_pending_attack(2.0)
+	_advance_projectile_to_contact()
 	assert(projectile_player.current_hp < projectile_hp_before, "clear WORLD ray did not settle projectile")
 
 	var magic_hp_before := magic_player.current_hp
@@ -240,6 +240,25 @@ func _capture_projectile_descriptor(descriptor: Dictionary) -> void:
 
 func _capture_magic_descriptor(descriptor: Dictionary) -> void:
 	_magic_descriptors.append(descriptor)
+
+
+func _enable_projectile_contact_body(player: PlayerCharacter) -> void:
+	# Process mode DISABLED also removes the player's physics collider. Keep its
+	# real contact body while leaving input and character movement turned off.
+	player.process_mode = Node.PROCESS_MODE_INHERIT
+	player.set_process(false)
+	player.set_physics_process(false)
+
+
+func _advance_projectile_to_contact() -> void:
+	# The physical effect owns real flight and contact; pending-attack time no
+	# longer settles this delivery. Keep the world/player physics query in test.
+	var effect: MonsterRangedProjectileEffect = null
+	for child: Node in get_children():
+		if child is MonsterRangedProjectileEffect and not child.is_queued_for_deletion():
+			effect = child as MonsterRangedProjectileEffect
+	assert(effect != null, "accepted projectile did not create a flight actor")
+	effect._physics_process(2.0)
 
 
 func _ground_to_screen(value: Vector2) -> Vector2:
