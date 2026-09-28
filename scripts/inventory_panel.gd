@@ -764,16 +764,24 @@ func _create_bag_cell(index: int, stack: Dictionary) -> Control:
 func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	if index < 0 or index >= _bag_cells.size():
 		return
-	_bag_cell_update_count += 1
 	var cell := _bag_cells[index]
 	var button := cell.get_child(0) as Button
 	var occupied := not stack.is_empty()
 	var can_receive_unequip := not occupied and _can_receive_unequip_to_index(index)
+	# Selection/theme changes are independent of item data. Keep their live
+	# idempotent update, but avoid rebuilding textures and labels for every slot.
+	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
+	var presentation := [stack, can_receive_unequip, button.size]
+	if cell.get_meta("item_presentation", []) == presentation:
+		return
+	# Inventory records may be mutated in place (for example a consumed stack).
+	# Store a value snapshot, never an alias to the authoritative record.
+	cell.set_meta("item_presentation", presentation.duplicate(true))
+	_bag_cell_update_count += 1
 	button.name = "ItemButton" if occupied else "EmptySlotBackground"
 	button.disabled = not occupied and not can_receive_unequip
 	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
-	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	_set_button_texture(button, UIItemTextureCacheScript.texture_for_item(stack) if occupied else null, _item_icon_display_size(stack, "inventoryIcon") if occupied else Vector2.ZERO)
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
@@ -1339,7 +1347,7 @@ func _on_context_action(id: int) -> void:
 		"use":
 			var use_index := int(action.get("index", -1))
 			use_item_record = GameData.get_item_record(_inventory_record(use_index))
-			use_result = PlayerState.use_inventory_index_result(use_index)
+			use_result = PlayerState.use_inventory_index_result(use_index, not PlayerState.test_mode)
 		_:
 			return
 	if not use_result.is_empty():
@@ -1472,7 +1480,7 @@ func _activate_inventory_index(index: int, preferred_slot := "") -> void:
 				2.0
 			)
 		return
-	var use_result := PlayerState.use_inventory_index_result(index)
+	var use_result := PlayerState.use_inventory_index_result(index, not PlayerState.test_mode)
 	_clear_inventory_selection_styles()
 	refresh()
 	if bool(use_result.get("success", false)):

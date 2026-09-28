@@ -57,11 +57,14 @@ func _run() -> void:
 	await get_tree().physics_frame
 	assert(player.locomotion_state == "walk", "movement after an action lock must restart with walk")
 	PlayerState.select_profession("法师")
-	PlayerState.learned_skills = {"火球术": 1}
+	# This fixture enters the town safe area. Use a real self-targeted active
+	# skill; hostile fireball is correctly rejected by world preflight here.
+	PlayerState.learned_skills = {"魔法盾": 1}
+	player.current_mp = 100
 	player.locomotion_state = "run"
 	player.locomotion_distance_gu = 1.2
 	player._attack_timer = 0.0
-	assert(player.request_skill("火球术"), "active skill fixture could not submit")
+	assert(player.request_skill("魔法盾"), "active skill fixture could not submit")
 	assert(player.locomotion_state == "walk" and is_zero_approx(player.locomotion_distance_gu), "active skill must reset locomotion")
 	PlayerState.select_profession("战士")
 	PlayerState.learned_skills = {"刺杀剑术": 1}

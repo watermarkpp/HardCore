@@ -38,6 +38,8 @@ func _run() -> void:
 	overlay.apply_layout(Vector2(1598, 720), Vector4(72, 0, 0, 0))
 	var logo_center_x: float = overlay.content_safe_root.position.x + overlay.game_icon_watermark.position.x + overlay.game_icon_watermark.size.x * 0.5
 	assert(is_equal_approx(logo_center_x, 799.0), "单侧安全区把Loading图标推向东侧")
+	var text_center_x: float = overlay.content_safe_root.position.x + overlay.loading_label.position.x + overlay.loading_label.size.x * 0.5
+	assert(is_equal_approx(text_center_x, 799.0), "单侧安全区把Loading文字推向东侧")
 
 	var covered_requests: Array[Dictionary] = []
 	var finished_requests: Array[Dictionary] = []

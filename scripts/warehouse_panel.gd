@@ -596,15 +596,19 @@ func _update_item_cell(
 	record: Dictionary,
 	selected: bool
 ) -> void:
-	cell.name = "%sCell_%d" % [side.capitalize(), display_index]
 	var button := cell.get_node("ItemButton") as Button
+	UIItemSelectionVisualScript.apply(button, selected, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
+	var presentation := [side, data_index, display_index, record, button.size]
+	if cell.get_meta("item_presentation", []) == presentation:
+		return
+	cell.set_meta("item_presentation", presentation.duplicate(true))
+	cell.name = "%sCell_%d" % [side.capitalize(), display_index]
 	button.set_meta("side", side)
 	button.set_meta("data_index", data_index)
-	UIItemSelectionVisualScript.apply(button, selected, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	button.disabled = record.is_empty()
 	button.mouse_filter = Control.MOUSE_FILTER_IGNORE if record.is_empty() else Control.MOUSE_FILTER_STOP
 	button.tooltip_text = str(record.get("name", "空物品格"))
-	_set_button_texture(button, _item_texture(record))
+	_set_button_texture(button, _item_texture(record), GameData.get_item_art_display_size(record, "inventoryIcon"))
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(record.get("count", 1))
 	count_label.text = str(count)
@@ -1331,7 +1335,7 @@ func _item_texture(record: Dictionary) -> Texture2D:
 	return UIItemTextureCacheScript.texture_for_item(record)
 
 
-func _set_button_texture(button: Button, texture: Texture2D) -> void:
+func _set_button_texture(button: Button, texture: Texture2D, maximum_size := Vector2.ZERO) -> void:
 	var icon_rect := button.get_node_or_null("CenteredPixelIcon") as TextureRect
 	if texture == null:
 		if icon_rect != null:
@@ -1349,9 +1353,13 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 		icon_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.add_child(icon_rect)
+	var display_size := source_size
+	if maximum_size.x > 0.0 and maximum_size.y > 0.0:
+		var scale := minf(maximum_size.x / source_size.x, maximum_size.y / source_size.y)
+		display_size = source_size * scale
 	icon_rect.texture = texture
-	icon_rect.position = (button.size - source_size) * 0.5
-	icon_rect.size = source_size
+	icon_rect.position = (button.size - display_size) * 0.5
+	icon_rect.size = display_size
 	icon_rect.show()
 
 

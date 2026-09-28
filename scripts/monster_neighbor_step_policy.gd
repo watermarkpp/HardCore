@@ -100,6 +100,63 @@ static func neighbor_from_desired_ground_direction(direction_ground_gu: Variant)
 	return neighbor_for_desired_ground_direction(direction_ground_gu)
 
 
+## Convert an already selected waypoint into axis/diagonal locomotion legs.
+## Keep its exact position (including fractional coordinates); never snap an
+## actor onto a tile centre. Each returned leg is checked with the caller's
+## existing full-footprint terrain authority before the step is committed.
+static func eight_way_path(origin: Vector2, destination: Vector2, clear := Callable()) -> PackedVector2Array:
+	var result := PackedVector2Array()
+	if not origin.is_finite() or not destination.is_finite():
+		return result
+	var whole := destination - origin
+	if whole.length_squared() <= 0.0000000001:
+		return result
+	if absf(whole.x) <= 0.000001 or absf(whole.y) <= 0.000001 or absf(absf(whole.x) - absf(whole.y)) <= 0.000001:
+		if not clear.is_valid() or clear.call(origin, destination):
+			result.append(destination)
+		return result
+	var pending: Array = [[origin, destination, 0]]
+	while not pending.is_empty():
+		var part: Array = pending.pop_back()
+		var a: Vector2 = part[0]
+		var b: Vector2 = part[1]
+		var offset := b - a
+		if offset.length_squared() <= 0.0000000001:
+			continue
+		var absolute := offset.abs()
+		var diagonal := offset.sign() * minf(absolute.x, absolute.y)
+		var neighbor := neighbor_for_desired_ground_direction(offset)
+		var first := diagonal if neighbor.x != 0 and neighbor.y != 0 else offset - diagonal
+		var accepted := false
+		for corner: Vector2 in [a + first, b - first]:
+			if not clear.is_valid() or (clear.call(a, corner) and clear.call(corner, b)):
+				if a.distance_squared_to(corner) > 0.0000000001:
+					result.append(corner)
+				if corner.distance_squared_to(b) > 0.0000000001:
+					result.append(b)
+				accepted = true
+				break
+		if accepted:
+			continue
+		# A clear oblique corridor can require a shorter staircase. Bisection
+		# stays within the original leg, is bounded, and never bypasses clearance.
+		if int(part[2]) >= 5 or result.size() + pending.size() >= 64 or not clear.call(a, b):
+			return PackedVector2Array()
+		var middle := (a + b) * 0.5
+		pending.append([middle, b, int(part[2]) + 1])
+		pending.append([a, middle, int(part[2]) + 1])
+	return result
+
+
+static func motion_follows_direction(actual: Vector2, intended: Vector2) -> bool:
+	if actual.length_squared() <= 0.00000001:
+		return true
+	if intended.length_squared() <= 0.00000001:
+		return false
+	var axis := intended.normalized()
+	return actual.dot(axis) >= -0.00001 and absf(actual.cross(axis)) <= 0.00002
+
+
 static func neighbor_distance_gu(neighbor: Variant) -> float:
 	if not is_valid_neighbor(neighbor):
 		return -1.0

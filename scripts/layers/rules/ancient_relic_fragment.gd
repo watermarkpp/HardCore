@@ -52,7 +52,7 @@ static func _ensure_loaded() -> void:
 		"useEffect": "none",
 		"usable": false,
 		"art": {
-			"inventoryIcon": {"path": inventory_icon, "displaySize": [56, 56]},
+			"inventoryIcon": {"path": inventory_icon, "displaySize": [32, 32]},
 			"groundIcon": {"path": ground_icon, "displaySize": [36, 36]},
 		},
 		"source": {

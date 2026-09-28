@@ -1,0 +1,45 @@
+{
+  "passed": 2,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a",
+  "total": 2,
+  "results": [
+    {
+      "test_name": "monster_neighbor_step_policy_test",
+      "test_path": "tests/monster_neighbor_step_policy_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:18:02.0835196Z",
+      "native_exit_observed_utc": "2026-09-28T14:17:45.4002897Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "player_character_ground_movement_test",
+      "test_path": "tests/skills/player_character_ground_movement_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:18:16.8966513Z",
+      "native_exit_observed_utc": "2026-09-28T14:17:53.2638884Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0,
+  "failed": 0,
+  "generated_at": "2026-09-28T22:17:54.6333878+08:00",
+  "suite": "adhoc"
+}

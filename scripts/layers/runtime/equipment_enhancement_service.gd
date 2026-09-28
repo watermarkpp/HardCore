@@ -50,7 +50,7 @@ func _issue_quote(quote: Dictionary) -> Dictionary:
 	return quote
 
 
-func commit_forge(quote: Dictionary) -> Dictionary:
+func commit_forge(quote: Dictionary, save_in_background := false) -> Dictionary:
 	var quote_id := str(quote.get("quote_id", ""))
 	if _enhancement_transaction_in_progress:
 		return _failure("锻造正在进行，请稍候。")
@@ -116,7 +116,7 @@ func commit_forge(quote: Dictionary) -> Dictionary:
 	else:
 		_player.inventory = next_inventory
 	_player.gold = gold_before - int(quote.gold_cost)
-	if not bool(_player.call("_commit_save")):
+	if not bool(_player.call("_commit_item_use", true) if save_in_background else _player.call("_commit_save")):
 		if source == "tray":
 			_player.forge_tray = collection_before
 		else:
@@ -139,18 +139,24 @@ func commit_forge(quote: Dictionary) -> Dictionary:
 func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int, source := "inventory") -> Dictionary:
 	var indices := [target_index, iron_index, accessory_a_index, accessory_b_index]
 	var inventory: Array = _player.forge_tray if source == "tray" else _player.inventory
+	if source == "tray":
+		for slot in inventory.size():
+			if slot not in indices and not inventory[slot].is_empty():
+				return _failure("请取出多余物品，只保留装备、黑铁矿和两件首饰。")
 	var seen_indices := {}
 	for index: int in indices:
 		if index < 0 or index >= inventory.size() or seen_indices.has(index):
-			return _failure("请依次放入需锻造装备与所需材料。")
+			return _failure("请放入需锻造装备与所需材料，顺序不限。")
 		seen_indices[index] = true
 	if seen_indices.size() != 4:
-		return _failure("请依次放入需锻造装备与所需材料。")
+		return _failure("请放入需锻造装备与所需材料，顺序不限。")
 	var records: Array[Dictionary] = []
 	for index: int in indices:
 		var value: Variant = inventory[index]
 		if not value is Dictionary or (value as Dictionary).is_empty():
 			return _failure("装备或材料已变化，请重新选择。")
+		if int(value.get("count", 1)) != 1:
+			return _failure("每个工作格只需放入一件物品。")
 		records.append(value)
 	var target_item := GameData.get_item_record(records[0])
 	var target_id := int(target_item.get("itemId", -1))

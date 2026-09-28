@@ -37,6 +37,7 @@ const MapTeleportRuntimePolicyScript := preload(
 const MapPortalRuntimeServiceScript := preload("res://scripts/map_editor/map_portal_runtime_service.gd")
 const MapPortalTravelGuardScript := preload("res://scripts/map_editor/map_portal_travel_guard.gd")
 const MapDiamondCameraConstraintScript := preload("res://scripts/map_editor/map_diamond_camera_constraint_service.gd")
+const WorldCameraFollowScript := preload("res://scripts/world_camera_follow.gd")
 const MapRuntimeCollisionGeometryScript := preload(
 	"res://scripts/map_editor/map_editor_runtime_collision_geometry_service.gd"
 )
@@ -230,6 +231,8 @@ const SKILL_VISUAL_GEOMETRY_DEBUG_SETTING := (
 
 var player: PlayerCharacter
 var _world_camera: Camera2D
+var _world_camera_presented_center := Vector2.INF
+var _world_camera_follow_map_id := -1
 var hud: GameHUD
 var background: WorldBackground
 var current_zone := ""
@@ -554,10 +557,12 @@ func _player_inside_active_safe_zone() -> bool:
 	return _refresh_player_safe_zone_cache()
 
 
-func _set_player_world_position(position_px: Vector2) -> void:
+func _set_player_world_position(position_px: Vector2, reset_camera_follow := true) -> void:
 	if not is_instance_valid(player):
 		return
 	player.global_position = position_px
+	if reset_camera_follow:
+		_world_camera_presented_center = Vector2.INF
 	_refresh_player_safe_zone_cache(true)
 	if _loot_pickup_runtime_manager != null:
 		_loot_pickup_runtime_manager.player_position_changed(position_px)
@@ -1576,6 +1581,7 @@ func _ready() -> void:
 	player.movement_performed.connect(_on_player_moved)
 	player.death_requested.connect(_on_player_death_requested)
 	PlayerState.consumable_requested.connect(_on_consumable_used)
+	PlayerState.background_item_save_failed.connect(_on_background_item_save_failed)
 	PlayerState.scroll_requested.connect(_on_scroll_used)
 	PlayerState.item_audio_committed.connect(_on_item_audio_committed)
 	# R2: timed 神水 effects report their end through the central notice layer.
@@ -1616,8 +1622,9 @@ func _ready() -> void:
 
 	_world_camera = Camera2D.new()
 	_world_camera.name = "WorldCamera"
-	_world_camera.position_smoothing_enabled = true
-	_world_camera.position_smoothing_speed = 7.0
+	# Integrate follow once in _process. Engine smoothing also runs from
+	# transform/zoom publication, which can advance it repeatedly in one frame.
+	_world_camera.position_smoothing_enabled = false
 	_world_camera.zoom = Vector2.ONE * ArtSpec.CAMERA_ZOOM
 	# The camera target is resolved explicitly in _process.  Keep it in the
 	# stable GameRoot coordinate domain so Player physics cannot implicitly move
@@ -1924,7 +1931,7 @@ func _constrain_player_foot_to_runtime_ground() -> bool:
 	)
 	if corrected.is_equal_approx(player.global_position):
 		return false
-	_set_player_world_position(corrected)
+	_set_player_world_position(corrected, false)
 	player.velocity = Vector2.ZERO
 	PlayerState.update_world_location(
 		current_map_id,
@@ -1941,12 +1948,16 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 	if not MapEditorRuntimeBridgeScript.has_runtime_map(current_map_id):
 		_world_camera.zoom = base_zoom
 		_world_camera.position = Vector2.ZERO
+		_world_camera.offset = Vector2.ZERO
+		_world_camera_presented_center = Vector2.INF
 		return
 	var runtime := MapEditorRuntimeBridgeScript.load_map(current_map_id)
 	var raw_size: Array = runtime.get("design", {}).get("design_size", [])
 	if raw_size.size() != 2:
 		_world_camera.zoom = base_zoom
 		_world_camera.position = Vector2.ZERO
+		_world_camera.offset = Vector2.ZERO
+		_world_camera_presented_center = Vector2.INF
 		return
 	var design_size := Vector2i(int(raw_size[0]), int(raw_size[1]))
 	var viewport_half := get_viewport().get_visible_rect().size * 0.5
@@ -1963,8 +1974,8 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 	#         triggers or delays the unlock). The early glide unlock of
 	#         C1.5 stays rejected by device ruling.
 	#   The view height is exactly ArtSpec.CAMERA_ZOOM (1.06); no dynamic
-	#         zoom exists here. Rendering stability (smoothing/pixel snap)
-	#         is G2 and is deliberately NOT touched here.
+	#         zoom exists here. Follow integration below changes presentation only;
+	#         the authored map geometry and budget constraint stay unchanged.
 	var fixed_zoom := Vector2.ONE * ArtSpec.CAMERA_ZOOM
 	var camera_center := (
 		MapDiamondCameraConstraintScript.apply_player_visibility_guard(
@@ -1975,8 +1986,15 @@ func _update_world_camera_constraint(delta := 1.0 / 60.0) -> void:
 			_player_display_extent_world_px()
 		)
 	)
-	_world_camera.zoom = fixed_zoom
+	if _world_camera_follow_map_id != current_map_id:
+		_world_camera_presented_center = Vector2.INF
+		_world_camera_follow_map_id = current_map_id
+	_world_camera_presented_center = WorldCameraFollowScript.advance(_world_camera_presented_center, camera_center, delta)
+	if _world_camera.zoom != fixed_zoom:
+		_world_camera.zoom = fixed_zoom
 	_world_camera.global_position = camera_center
+	_world_camera.offset = _world_camera_presented_center - camera_center
+	_world_camera.force_update_scroll()
 
 
 ## R14-CAM-R2: the real display geometry of the player composite, derived
@@ -6775,7 +6793,7 @@ func _apply_wild_rush_displacement(
 	# Both destinations were preflighted before either actor is mutated. This is
 	# one coupled transaction: partial single-actor movement is forbidden.
 	target.set_combat_position(target_destination, &"wild_rush_displacement")
-	_set_player_world_position(player_destination)
+	_set_player_world_position(player_destination, false)
 	player.velocity = Vector2.ZERO
 	player.movement_performed.emit(player.global_position, player.facing)
 	return true
@@ -14385,6 +14403,11 @@ func _sync_player_runtime_snapshot_to_hud() -> void:
 		return
 	hud.update_resources(player.current_hp, player.max_hp, player.current_mp, player.max_mp)
 	hud.update_warrior_states(player.warrior_state_snapshot())
+
+
+func _on_background_item_save_failed() -> void:
+	if is_instance_valid(hud):
+		hud.show_error_message("最近的进度尚未保存，请检查存储空间")
 
 
 func _on_consumable_used(item_name: String) -> void:

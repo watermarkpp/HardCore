@@ -19,6 +19,7 @@ const CombatReleaseGeometryScript := preload(
 	"res://scripts/skills/combat_release_geometry.gd"
 )
 const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
+const LocomotionDirections := preload("res://scripts/monster_neighbor_step_policy.gd")
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -324,7 +325,9 @@ func _physics_process(delta: float) -> void:
 		)
 		if direction_ground_gu.length_squared() <= 0.000001:
 			direction_ground_gu = Vector2(1.0, 1.0)
-		direction_ground_gu = direction_ground_gu.normalized()
+		direction_ground_gu = LocomotionDirections.desired_ground_direction(
+			LocomotionDirections.neighbor_for_desired_ground_direction(direction_ground_gu)
+		)
 		var direction_screen_px := (
 			GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
 				direction_ground_gu
@@ -343,7 +346,13 @@ func _physics_process(delta: float) -> void:
 		)
 	else:
 		velocity = Vector2.ZERO
+	var intended_motion_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(velocity)
 	move_and_slide()
+	var accepted_motion_ground := GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(global_position - position_before_move)
+	if not LocomotionDirections.motion_follows_direction(accepted_motion_ground, intended_motion_ground):
+		# Collision sliding/recovery cannot introduce a ninth locomotion axis.
+		global_position = position_before_move
+		velocity = Vector2.ZERO
 	if WorldSpatialRulesScript.environment_blocks_actor_screen_px(
 		environment_blocker,
 		global_position,

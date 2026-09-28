@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-09-28T22:22:02.9893163+08:00",
+  "results": [
+    {
+      "test_name": "monster_neighbor_step_policy_test",
+      "test_path": "tests/monster_neighbor_step_policy_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:22:08.1475525Z",
+      "native_exit_observed_utc": "2026-09-28T14:21:52.1525491Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "monster_cadence_blocked_step_test",
+      "test_path": "tests/monster_cadence_blocked_step_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:22:23.7140264Z",
+      "native_exit_observed_utc": "2026-09-28T14:22:01.5016450Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "passed": 2,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a",
+  "total": 2
+}

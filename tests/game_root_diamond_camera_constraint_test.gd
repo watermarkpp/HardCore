@@ -50,7 +50,7 @@ func _camera_black_px(
 
 
 func _settle_camera(camera: Camera2D) -> void:
-	## Waits until the G2 position smoothing has converged onto the
+	## Waits until the presentation follow has converged onto the
 	## constrained camera node position (or ~2.5s fail-safe). The project
 	## snaps 2D transforms to device pixels (G2 rendering stability), so
 	## the rendered center carries a <=1px quantization residue that never
@@ -81,6 +81,16 @@ func _run() -> void:
 	var camera: Camera2D = game.get("_world_camera") as Camera2D
 	assert(camera != null and camera.name == "WorldCamera")
 	assert(camera.get_parent() == game, "WorldCamera must not be parented to Player")
+	# Repeated canvas publication in one display frame must not advance time.
+	# Zoom setters, transform notifications and explicit queries can all reach
+	# Camera2D's update path; only the game frame owns follow integration.
+	camera.global_position += Vector2(100.0, 0.0)
+	camera.force_update_scroll()
+	var published_center := camera.get_screen_center_position()
+	for repeat_index in 5:
+		camera.force_update_scroll()
+	assert(camera.get_screen_center_position().distance_to(published_center) < 0.001,
+		"repeated canvas updates integrated camera smoothing multiple times in one frame")
 	var player_position_before_parent_probe: Vector2 = game.player.global_position
 	var camera_global_before_parent_probe: Vector2 = camera.global_position
 	game.player.global_position += Vector2(17.0, 11.0)
@@ -252,7 +262,7 @@ func _run() -> void:
 		"map-center follow must keep the camera on the player"
 	)
 	# REAL canvas verification at converged representative positions: the
-	# production camera uses G2 position smoothing (speed 7), so the canvas
+	# production camera uses one exponential follow update per frame, so the canvas
 	# state is asserted AFTER it settles onto the constrained center. All
 	# three positions stay inside the walkable map so the fixture player is
 	# collision-anchored and does not drift while settling: the centered

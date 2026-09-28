@@ -175,7 +175,7 @@ func _build_forge_slots() -> void:
 		forge_slots.append(slot)
 	var hint := Label.new()
 	hint.name = "ForgeMaterialHint"
-	hint.text = "请依次放入需锻造装备与所需材料"
+	hint.text = "装备与材料可按任意顺序放入对应格"
 	hint.position = Vector2(20, 244)
 	hint.size = Vector2(260, 25)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -259,7 +259,7 @@ func set_synthesis_recipe_previews(entries: Array[Dictionary]) -> void:
 		var slot := synthesis_recipe_slots[index]
 		var entry: Dictionary = _synthesis_recipe_previews[index] if index < _synthesis_recipe_previews.size() else {}
 		var icon := entry.get("icon") as Texture2D
-		_set_button_texture(slot, icon, Vector2(56, 56) if not entry.is_empty() else Vector2.ZERO)
+		_set_button_texture(slot, icon, Vector2(32, 32) if not entry.is_empty() else Vector2.ZERO)
 		slot.disabled = entry.is_empty()
 		slot.tooltip_text = str(entry.get("title", "暂无合成配方"))
 		(slot.get_node("RecipeProfession") as Label).text = str(entry.get("profession", "")).left(1)
@@ -406,7 +406,7 @@ func _set_mode(mode: String) -> void:
 		fee_title.text = "锻造费" if mode == "forge" else "合成费"
 	var hint := get_node_or_null("ForgeMaterialPanel/ForgeMaterialHint") as Label
 	if hint != null:
-		hint.text = "请依次放入需锻造装备与所需材料" if mode == "forge" else "请选择配方并放入所需材料"
+		hint.text = "装备与材料可按任意顺序放入对应格" if mode == "forge" else "请选择配方并放入所需材料"
 	_refresh_forge_information()
 
 
@@ -465,20 +465,24 @@ func _refresh_forge_information() -> void:
 		fee_label.text = "[center]—[/center]" if _selected_synthesis_recipe < 0 else "[center]400000[/center]"
 		forge_button.text = "开始合成"
 		forge_button.disabled = true
-		if _selected_synthesis_recipe < 0 or not tray[0].is_empty():
+		if _selected_synthesis_recipe < 0:
+			_synthesis_quote = {"valid": false, "message": "请选择需要合成的圣物或徽章。"}
+			return
+		if not tray[0].is_empty():
+			_synthesis_quote = {"valid": false, "message": "请先取出合成结果格里的物品。"}
 			return
 		var material_slots: Array[int] = []
 		for slot_index: int in SYNTHESIS_INPUT_SLOTS:
 			var stack: Dictionary = tray[slot_index]
 			if not stack.is_empty() and int(GameData.get_item_record(stack).get("itemId", -1)) == RelicRules.FRAGMENT_ID and int(stack.get("count", 1)) == 1:
 				material_slots.append(slot_index)
-				if material_slots.size() == RelicRules.FRAGMENT_COUNT:
-					break
+
 		if material_slots.size() != RelicRules.FRAGMENT_COUNT:
+			_synthesis_quote = {"valid": false, "message": "需要4个远古圣物碎片，当前已放入%d个。" % material_slots.size()}
 			return
 		var recipe: Dictionary = _synthesis_recipe_previews[_selected_synthesis_recipe]
 		_synthesis_quote = PlayerState.quote_relic_synthesis(int(recipe.get("item_id", -1)), material_slots, str(recipe.get("profession", "")))
-		forge_button.disabled = not bool(_synthesis_quote.get("valid", false))
+		forge_button.disabled = _forging or not bool(_synthesis_quote.get("valid", false))
 		return
 	rules_label.text = "材料需求：黑铁矿 ×1\n首饰 ×2" if not tray[4].is_empty() else "请在上方放入需要锻造的装备"
 	chance_label.text = "[center]—[/center]"
@@ -490,17 +494,18 @@ func _refresh_forge_information() -> void:
 			continue
 		var accessory := GameData.get_item_record(tray[slot_index])
 		if not ForgeGradeScript.can_use_as_accessory_material(int(accessory.get("itemId", -1))):
-			forge_button.disabled = false
+			_forge_quote = {"valid": false, "message": "%s不可以作为锻造材料" % str(accessory.get("name", "该物品"))}
 			return
 	for slot_index: int in [4, 1, 3, 5]:
 		if tray[slot_index].is_empty():
+			_forge_quote = {"valid": false, "message": "请补齐装备、黑铁矿和两件首饰；放入顺序不限。"}
 			return
 	_forge_quote = PlayerState.quote_forge_tray()
 	if not bool(_forge_quote.get("valid", false)):
 		return
 	chance_label.text = "[center]%.2f%%[/center]" % [float(_forge_quote.final_success_bps) / 100.0]
 	fee_label.text = "[center]%d[/center]" % int(_forge_quote.gold_cost)
-	forge_button.disabled = false
+	forge_button.disabled = _forging or PlayerState.gold < int(_forge_quote.gold_cost)
 
 func _sync_forge_slot_visual(slot: Button, occupied: bool) -> void:
 	UIItemSelectionVisualScript.apply(slot, occupied, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
@@ -523,7 +528,7 @@ func _on_forge_slot_pressed(index: int) -> void:
 	var selected_stack := _inventory_record(selected_inventory_index)
 	if not occupied.is_empty():
 		if _selected_workbench_slot == index and selected_stack.is_empty():
-			var take_result := PlayerState.take_workbench_item(_mode, index)
+			var take_result: Dictionary = await PlayerState.transfer_workbench_immediate(_mode, index)
 			if bool(take_result.get("success", false)):
 				_show_success_message(str(take_result.get("message", "已取回物品")))
 				_selected_workbench_slot = -1
@@ -538,7 +543,7 @@ func _on_forge_slot_pressed(index: int) -> void:
 	_selected_workbench_slot = -1
 	if selected_stack.is_empty():
 		return
-	var place_result := PlayerState.place_workbench_item(_mode, index, selected_inventory_index)
+	var place_result: Dictionary = await PlayerState.transfer_workbench_immediate(_mode, index, selected_inventory_index)
 	if not bool(place_result.get("success", false)):
 		_show_error_message(str(place_result.get("message", "无法放入物品。")))
 		return
@@ -574,13 +579,14 @@ func _ui_detail_region(context: Dictionary) -> Dictionary:
 func _on_forge_pressed() -> void:
 	if _forging:
 		return
+	_refresh_forge_information()
 	if _mode == "synthesis":
 		if not bool(_synthesis_quote.get("valid", false)):
 			_show_error_message(str(_synthesis_quote.get("message", "请先选择配方并放入4个远古圣物碎片。")))
 			return
 		_forging = true
 		forge_button.disabled = true
-		var result := PlayerState.commit_relic_synthesis(_synthesis_quote)
+		var result: Dictionary = await PlayerState.commit_workbench_immediate("synthesis", _synthesis_quote)
 		if not bool(result.get("committed", false)):
 			_forging = false
 			_show_error_message(str(result.get("message", "合成失败，材料未消耗。")))
@@ -599,11 +605,11 @@ func _on_forge_pressed() -> void:
 			_show_error_message("%s不可以作为锻造材料" % str(item.get("name", "该物品")))
 			return
 	if not bool(_forge_quote.get("valid", false)):
-		_show_error_message("请依次放入需锻造装备与所需材料。")
+		_show_error_message(str(_forge_quote.get("message", "请补齐装备和所需材料；放入顺序不限。")))
 		return
 	_forging = true
 	forge_button.disabled = true
-	var result := PlayerState.commit_forge(_forge_quote)
+	var result: Dictionary = await PlayerState.commit_workbench_immediate("forge", _forge_quote)
 	if not bool(result.get("committed", false)):
 		_forging = false
 		_show_error_message(str(result.get("message", "锻造失败，请重新选择材料。")))

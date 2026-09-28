@@ -1,0 +1,46 @@
+{
+	"rows": [
+		{
+			"expected_success": true,
+			"frames": 23,
+			"max_gap_ms": 86.317,
+			"operation": "deposit",
+			"wall_ms": 250.209
+		},
+		{
+			"expected_success": true,
+			"frames": 24,
+			"max_gap_ms": 95.95,
+			"operation": "withdraw",
+			"wall_ms": 266.803
+		},
+		{
+			"expected_success": false,
+			"frames": 25,
+			"max_gap_ms": 246.015,
+			"operation": "deposit",
+			"wall_ms": 415.729
+		},
+		{
+			"expected_success": false,
+			"frames": 24,
+			"max_gap_ms": 89.604,
+			"operation": "deposit",
+			"wall_ms": 250.201
+		},
+		{
+			"expected_success": true,
+			"frames": 24,
+			"max_gap_ms": 109.178,
+			"operation": "deposit",
+			"wall_ms": 281.572
+		},
+		{
+			"expected_success": true,
+			"frames": 25,
+			"max_gap_ms": 115.049,
+			"operation": "withdraw",
+			"wall_ms": 292.67
+		}
+	]
+}

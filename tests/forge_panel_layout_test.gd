@@ -27,7 +27,7 @@ func _run() -> void:
 	assert(not (forge.get_node("AttributePanel") as Control).visible)
 	assert(not (forge.get_node("EquipmentPanel") as Control).visible)
 	var forge_grid := forge.get_node("ForgeMaterialPanel/ForgeMaterialGrid") as Control
-	assert((forge.get_node("ForgeMaterialPanel/ForgeMaterialHint") as Label).text == "请依次放入需锻造装备与所需材料")
+	assert((forge.get_node("ForgeMaterialPanel/ForgeMaterialHint") as Label).text == "装备与材料可按任意顺序放入对应格")
 	assert(forge_grid.size.distance_to(Vector2(170, 200)) < 0.1, "forge grid must use bag cell dimensions and spacing")
 	for index in 9:
 		var forge_slot := forge.get_node("ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_%d" % index) as Button
@@ -49,7 +49,7 @@ func _run() -> void:
 	for result_name in ["ForgeImageSuccess", "ForgeImageFailure"]:
 		var result_art := forge.get_node("ForgeArtworkPanel/" + result_name) as TextureRect
 		assert(result_art.get_rect().is_equal_approx(initial_art.get_rect()), "%s must match the calibrated initial artwork" % result_name)
-	assert((forge.get_node("ForgeButton") as Button).disabled, "forge button must stay disabled until materials are selected")
+	assert((forge.get_node("ForgeButton") as Button).disabled, "incomplete materials must keep the action disabled")
 	var requirements := forge.get_node("ForgeRulesPanel/ForgeRulesText") as Label
 	assert(requirements.text == "请在上方放入需要锻造的装备")
 	assert(requirements.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and requirements.vertical_alignment == VERTICAL_ALIGNMENT_CENTER)

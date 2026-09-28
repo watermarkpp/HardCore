@@ -111,8 +111,9 @@ func _run() -> void:
 
 	PlayerState.level = 50
 	PlayerState.recalculate_stats()
-	PlayerState.add_item("基本剑术", 4)
-	for used_count in range(4):
+	# Skill progression v2: the first book learns rank1, the third reaches rank3.
+	PlayerState.add_item("基本剑术", 3)
+	for used_count in range(3):
 		var rank_use := PlayerState.use_quick_item_slot(0, "基本剑术")
 		assert(
 			bool(rank_use.get("ok", false)),

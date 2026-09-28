@@ -38,7 +38,7 @@ func quote_synthesis(item_id: int, material_indices: Array[int], profession := "
 	return quote
 
 
-func commit_synthesis(quote: Dictionary) -> Dictionary:
+func commit_synthesis(quote: Dictionary, save_in_background := false) -> Dictionary:
 	var quote_id := str(quote.get("quote_id", ""))
 	if _busy:
 		return _failure("合成正在进行，请稍候。")
@@ -74,7 +74,7 @@ func commit_synthesis(quote: Dictionary) -> Dictionary:
 	next_tray[0] = output
 	_player.synthesis_tray = next_tray
 	_player.gold = gold_before - Rules.GOLD_COST
-	if not bool(_player.call("_commit_save")):
+	if not bool(_player.call("_commit_item_use", true) if save_in_background else _player.call("_commit_save")):
 		_player.synthesis_tray = tray_before
 		_player.gold = gold_before
 		_busy = false
@@ -95,6 +95,9 @@ func _build_quote(item_id: int, material_indices: Array[int], profession := "") 
 		return _failure("该配方的技能职业无效。")
 	if not _player.synthesis_tray[0].is_empty():
 		return _failure("请先取走合成格里的圣物。")
+	for slot in range(1, _player.synthesis_tray.size()):
+		if slot not in material_indices and not _player.synthesis_tray[slot].is_empty():
+			return _failure("请取出多余物品，只放入4个远古圣物碎片。")
 	var seen := {}
 	for index: int in material_indices:
 		if index < 1 or index >= _player.synthesis_tray.size() or seen.has(index):

@@ -1,0 +1,62 @@
+{
+  "failed": 0,
+  "results": [
+    {
+      "test_name": "f03_workbench_receipt_boundary_test",
+      "test_path": "tests/f03_workbench_receipt_boundary_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:13:48.8746453Z",
+      "native_exit_observed_utc": "2026-09-28T15:13:23.9444012Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "equipment_enhancement_panel_flow_test",
+      "test_path": "tests/equipment_enhancement_panel_flow_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:13:55.4982971Z",
+      "native_exit_observed_utc": "2026-09-28T15:13:37.7913875Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "synthesis_panel_preview_test",
+      "test_path": "tests/synthesis_panel_preview_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:14:09.3310776Z",
+      "native_exit_observed_utc": "2026-09-28T15:13:51.8839172Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-28T23:13:53.3865864+08:00",
+  "passed": 3,
+  "total": 3,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a"
+}

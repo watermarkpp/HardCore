@@ -39,6 +39,21 @@ func pending_count() -> int:
 	return _queue.size()
 
 
+func has_pending_domain(domain: String) -> bool:
+	for entry: Dictionary in _queue:
+		if str(entry.identity.get("domain", "")) == domain:
+			return true
+	return false
+
+
+func cancel_uncommitted_domain(domain: String) -> void:
+	for entry: Dictionary in _queue:
+		if str(entry.identity.get("domain", "")) == domain:
+			# Once promotion started the job refuses cancellation. Its receipt
+			# still has to be consumed; the UI can await frames instead of blocking.
+			entry.job.request_cancel()
+
+
 func submit_cleanup(directory: String, identity: Dictionary, through_sequence: int) -> RefCounted:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id())
 	if _queue.size() >= MAX_PENDING_REQUESTS or through_sequence <= 0 or not _plain_json_value(identity):

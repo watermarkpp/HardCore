@@ -11,8 +11,43 @@ func _ready() -> void:
 	_test_direction_and_distance_mapping()
 	_test_one_event_and_pure_position_boundary()
 	_test_invalid_neighbors_fail_closed()
+	await _test_fractional_actor_displacement()
 	print("MONSTER_NEIGHBOR_STEP_POLICY_PASS checks=%d" % _checks)
 	get_tree().quit(0)
+
+
+func _test_fractional_actor_displacement() -> void:
+	PlayerState.test_mode = true
+	PlayerState.reset_progress()
+	for mid: int in [18, 24]:
+		for neighbor: Vector2i in NeighborPolicy.allowed_neighbors():
+			var actor := EnemyActor.new()
+			actor.setup(GameData.get_monster_by_id(mid), null, false)
+			actor.move_speed_gu_per_sec = 3.0
+			actor.set_meta("safe_zones", [])
+			add_child(actor)
+			actor.set_physics_process(false)
+			var origin := Vector2(10.23, 10.37)
+			actor.global_position = GroundUnitSpace.ground_delta_gu_to_screen_delta_px(origin)
+			assert(actor._begin_autonomous_step_without_cadence(Vector2(neighbor), 1.0, false, &"direction_probe"))
+			var destination := actor._movement_step_target_ground_gu
+			var frames := 0
+			while actor._movement_step_active and frames < 180:
+				await get_tree().physics_frame
+				var before := actor.global_position
+				actor._advance_autonomous_step(1.0 / 60.0)
+				var motion := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(actor.global_position - before)
+				assert(motion.length() <= actor.move_speed_gu_per_sec / 60.0 + 0.0001, "corner transition must not teleport or increase speed")
+				if motion.length() > 0.00002:
+					var unit := motion.normalized().abs()
+					assert(unit.x < 0.002 or unit.y < 0.002 or absf(unit.x - unit.y) < 0.002,
+						"monster %d has non-eight-way displacement from fractional origin: %s" % [mid, motion])
+				frames += 1
+			assert(not actor._movement_step_active, "eight-way route must finish without oscillation")
+			assert(GroundUnitSpace.screen_delta_px_to_ground_delta_gu(actor.global_position).distance_to(destination) < 0.001,
+				"eight-way movement must preserve the selected exact endpoint")
+			actor.free()
+			_checks += 1
 
 
 func _test_quantization_and_centers() -> void:

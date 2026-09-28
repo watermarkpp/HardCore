@@ -110,7 +110,8 @@ func apply_layout(viewport_size: Vector2, safe_margins := Vector4.ZERO) -> void:
 		maxf(1.0, full_size.y - safe_position.y - maxf(0.0, safe_margins.w))
 	)
 	_set_top_left_rect(content_safe_root, safe_position, safe_size)
-	_set_top_left_rect(loading_label, Vector2.ZERO, safe_size)
+	# Center the caption on the viewport, like the logo and progress track.
+	_set_top_left_rect(loading_label, Vector2(-safe_position.x, 0.0), Vector2(full_size.x, safe_size.y))
 	# The gameplay center is the full viewport center. On landscape phones a
 	# one-sided cutout makes the safe rectangle's midpoint drift to the east.
 	var content_center := Vector2(full_size.x * 0.5 - safe_position.x, safe_size.y * 0.5)

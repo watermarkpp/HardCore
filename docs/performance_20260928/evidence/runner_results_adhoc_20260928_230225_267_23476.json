@@ -1,0 +1,45 @@
+{
+  "passed": 2,
+  "suite": "adhoc",
+  "generated_at": "2026-09-28T23:02:25.2678613+08:00",
+  "failed": 0,
+  "engine_log_errors": 0,
+  "total": 2,
+  "results": [
+    {
+      "test_name": "warehouse_prepared_transaction_test",
+      "test_path": "tests/repair_20260913/warehouse_prepared_transaction_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:02:38.0750476Z",
+      "native_exit_observed_utc": "2026-09-28T15:02:17.3048931Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "f03_workbench_receipt_boundary_test",
+      "test_path": "tests/f03_workbench_receipt_boundary_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:02:48.8367192Z",
+      "native_exit_observed_utc": "2026-09-28T15:02:23.9041989Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a"
+}

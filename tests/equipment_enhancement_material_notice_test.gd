@@ -33,8 +33,8 @@ func _run() -> void:
 		forge.selected_inventory_index = inventory_index
 		forge._on_forge_slot_pressed(int(placement[1]))
 	var special_slot := forge.get_node("ForgeMaterialPanel/ForgeMaterialGrid/ForgeSlot_3") as Button
-	assert(special_slot.theme_type_variation == "GothicComponentSelectedSlotButton", "forbidden jewelry should still be placeable for explicit submit feedback")
-	assert(not forge.forge_button.disabled, "forbidden material must allow a real button press")
+	assert(special_slot.theme_type_variation == "GothicComponentSelectedSlotButton", "forbidden jewelry remains placeable but cannot enable forging")
+	assert(forge.forge_button.disabled, "forbidden material must allow a real button press")
 	var inventory_before := PlayerState.inventory.duplicate(true)
 	var gold_before := PlayerState.gold
 	forge.forge_button.pressed.emit()

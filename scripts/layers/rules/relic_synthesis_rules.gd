@@ -209,7 +209,7 @@ static func _ensure_loaded() -> void:
 			"relicEffect": str(raw.effect), "relicNoWear": true,
 			"skillProfession": str(badge_professions.get(item_id, "")),
 			"art": {
-				"inventoryIcon": {"path": inventory_icon, "displaySize": [44, 44]},
+				"inventoryIcon": {"path": inventory_icon, "displaySize": [32, 32]},
 				"groundIcon": {"path": ground_icon, "displaySize": [36, 36]},
 			},
 			"source": {"contract_id": CONTRACT_ID, "distribution": "user.provided"},

@@ -1,0 +1,28 @@
+{
+  "suite": "adhoc",
+  "passed": 1,
+  "total": 1,
+  "failed": 0,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a",
+  "generated_at": "2026-09-28T23:37:30.9375027+08:00",
+  "results": [
+    {
+      "test_name": "device_lab_patch_bootstrap_test",
+      "test_path": "tests/device_lab_patch_bootstrap_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:37:33.4983552Z",
+      "native_exit_observed_utc": "2026-09-28T15:37:29.4301215Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "engine_log_errors": 0
+}

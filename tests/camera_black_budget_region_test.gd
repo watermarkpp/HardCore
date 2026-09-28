@@ -245,6 +245,16 @@ func _display_rect_in_viewport(
 
 
 func _run() -> void:
+	var follow := preload("res://scripts/world_camera_follow.gd")
+	for direction_index in 8:
+		var target := Vector2.from_angle(TAU * direction_index / 8.0) * 100.0
+		for frame_gap: float in [1.0 / 120.0, 1.0 / 60.0, 0.1, 0.25, 0.5, 2.0]:
+			var next := follow.advance(Vector2.ZERO, target, frame_gap)
+			assert(next.length() <= target.length() + 0.0001 and next.dot(target) >= 0.0, "long frame must not overshoot camera target")
+		var split := Vector2.ZERO
+		for step in 60:
+			split = follow.advance(split, target, 1.0 / 60.0)
+		assert(split.distance_to(follow.advance(Vector2.ZERO, target, 1.0)) < 0.0001, "camera follow depends on elapsed time, not refresh rate")
 	CameraConstraint.clear_visibility_conflict()
 	# 1) The eight review-package corner counterexamples: the production
 	# guard must reproduce the independent reference camera, keep the

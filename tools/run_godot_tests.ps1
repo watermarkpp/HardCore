@@ -880,7 +880,8 @@ $Suites.critical = @($Suites.critical + @(
     'tests/skeleton_multi_summon_contract_test.tscn',
     'tests/skills/skill_rank_zero_three_matrix_test.tscn',
     'tests/synthesis_panel_preview_test.tscn',
-    'tests/f03_workbench_receipt_boundary_test.tscn'
+    'tests/f03_workbench_receipt_boundary_test.tscn',
+    'tests/immediate_item_save_test.tscn'
 ) | Select-Object -Unique)
 
 # PASS is granted only when every gate below is satisfied. A PASS marker never

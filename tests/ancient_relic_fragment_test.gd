@@ -22,6 +22,7 @@ func _ready() -> void:
 	var inventory_icon := ItemTextures.texture_for(item, "inventoryIcon")
 	var ground_icon := ItemTextures.texture_for(item, "groundIcon")
 	assert(inventory_icon != null and ground_icon != null)
+	assert(GameData.get_item_art_display_size({"item_id": ITEM_ID}, "inventoryIcon") == Vector2(32, 32), "fragment art must match ordinary material pixel footprint")
 	assert(inventory_icon.get_size() != ground_icon.get_size(), "inventory and ground art must be distinct")
 	assert(GameData.get_item_art_path({"item_id": ITEM_ID}, "inventoryIcon") != GameData.get_item_art_path({"item_id": ITEM_ID}, "groundIcon"))
 	var ground_descriptor := LootPickupScript.ground_visual_descriptor(ITEM_NAME)
@@ -34,5 +35,12 @@ func _ready() -> void:
 	for slot: int in range(2):
 		assert(int(PlayerState.inventory[slot].get("count", -1)) == 1)
 		assert(int(PlayerState.inventory[slot].get("item_id", -1)) == ITEM_ID)
+	PlayerState.warehouse_inventory = [{"item_id": ITEM_ID, "name": ITEM_NAME, "count": 1}]
+	var warehouse := WarehousePanel.new()
+	add_child(warehouse)
+	await warehouse.wait_until_runtime_ready()
+	var icon := warehouse.stash_grid.get_child(0).get_node("ItemButton/CenteredPixelIcon") as TextureRect
+	assert(icon.size.x <= 32.0 and icon.size.y <= 32.0, "warehouse fragment icon overflows ordinary material footprint")
+	assert(icon.position.x >= 0.0 and icon.position.y >= 0.0 and icon.position.x + icon.size.x <= 56.0 and icon.position.y + icon.size.y <= 64.0)
 	print("ANCIENT_RELIC_FRAGMENT_PASS")
 	get_tree().quit(0)

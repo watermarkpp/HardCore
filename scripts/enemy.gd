@@ -536,6 +536,8 @@ var _movement_step_epoch := 0
 var _movement_step_start_ground_gu := Vector2.INF
 var _movement_step_start_screen_px := Vector2.INF
 var _movement_step_target_ground_gu := Vector2.INF
+var _movement_step_legs := PackedVector2Array()
+var _movement_step_leg_index := 0
 var _movement_step_distance_gu := 0.0
 var _movement_step_neighbor := Vector2i.ZERO
 var _movement_step_engagement_target_instance_id := 0
@@ -1792,18 +1794,21 @@ func _begin_autonomous_step_without_cadence(
 	if not bool(step.get("valid", false)):
 		return false
 	var target_ground_gu: Vector2 = step.get("target_ground_gu", Vector2.INF)
-	var continuous_endpoint := false
 	if _hc_polygon_step_override.is_finite():
 		target_ground_gu = _hc_polygon_step_override
-		continuous_endpoint = true
 	if _hc_owned_movement_call and _hc_standard_melee() and reason == &"pursuit" and _hc_step_override.is_finite():
 		target_ground_gu = _hc_step_override
-		continuous_endpoint = true
 	if _hc_owned_movement_call and _hc_standard_melee():
 		_hc_motion_window = 0.0
 		_hc_window_remaining = INF
 	if not target_ground_gu.is_finite():
 		return false
+	var terrain_clear := Callable(self, "_locomotion_segment_clear") if _terrain_navigation_context.has("poly_index") else Callable()
+	var legs := MonsterNeighborStepPolicyScript.eight_way_path(current_ground_gu, target_ground_gu, terrain_clear)
+	if legs.is_empty():
+		return false
+	_movement_step_legs = legs
+	_movement_step_leg_index = 0
 	_movement_step_start_ground_gu = current_ground_gu
 	_movement_step_start_screen_px = global_position
 	_movement_step_target_ground_gu = target_ground_gu
@@ -1820,16 +1825,15 @@ func _begin_autonomous_step_without_cadence(
 	# assignment point of _movement_step_active). Pure observation order.
 	_movement_step_epoch += 1
 	_movement_step_active = true
-	var step_direction_ground := (
-		target_ground_gu - current_ground_gu if continuous_endpoint
-		else MonsterNeighborStepPolicyScript.desired_ground_direction(neighbor)
-	)
-	# Continuous polygon pursuit can cross a cell boundary in a different
-	# direction from its displacement. Pose follows the committed displacement;
-	# cell-based movement retains its eight-neighbour facing contract.
+	var step_direction_ground := legs[0] - current_ground_gu
+	# Navigation owns the final waypoint; locomotion owns the legal eight-way legs.
 	movement_facing = _screen_facing_for_ground_direction(step_direction_ground)
 	facing = movement_facing
 	return true
+
+
+func _locomotion_segment_clear(a: Vector2, b: Vector2) -> bool:
+	return HCPPolyRuntime.segment_walkable(_terrain_navigation_context, a, b, combat_radius_gu)
 
 
 func _terrain_neighbor_for_pursuit(
@@ -2060,6 +2064,8 @@ func _clear_autonomous_step_state() -> void:
 	_movement_step_start_ground_gu = Vector2.INF
 	_movement_step_start_screen_px = Vector2.INF
 	_movement_step_target_ground_gu = Vector2.INF
+	_movement_step_legs.clear()
+	_movement_step_leg_index = 0
 	_movement_step_distance_gu = 0.0
 	_movement_step_neighbor = Vector2i.ZERO
 	_movement_step_engagement_target_instance_id = 0
@@ -2213,7 +2219,12 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 		_clear_autonomous_step_state()
 		_clear_continuous_pursuit_intent()
 		return
-	var remaining := _movement_step_target_ground_gu - current_ground_gu
+	while _movement_step_leg_index < _movement_step_legs.size() - 1 and current_ground_gu.distance_squared_to(_movement_step_legs[_movement_step_leg_index]) <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
+		current_ground_gu = _movement_step_legs[_movement_step_leg_index]
+		set_combat_position(_ground_gu_to_screen_position_px(current_ground_gu), &"eight_way_leg_arrival")
+		_movement_step_leg_index += 1
+	var leg_target := _movement_step_legs[_movement_step_leg_index] if not _movement_step_legs.is_empty() else _movement_step_target_ground_gu
+	var remaining := leg_target - current_ground_gu
 	if remaining.length_squared() <= GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU:
 		var target_screen := _ground_gu_to_screen_position_px(_movement_step_target_ground_gu)
 		if target_screen.is_finite():
@@ -2240,6 +2251,8 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 	var max_frame_distance := presentation_speed * maxf(delta, 0.0)
 	var frame_speed := minf(presentation_speed, remaining_distance / maxf(delta, very_small))
 	var frame_direction := remaining.normalized()
+	movement_facing = _screen_facing_for_ground_direction(frame_direction)
+	facing = movement_facing
 	var frame_start_ground := current_ground_gu
 	var frame_start_screen := global_position
 	velocity = GroundUnitSpace.desired_screen_velocity_px_per_sec(
@@ -2270,7 +2283,7 @@ func _advance_autonomous_step_internal(delta: float) -> void:
 			var actual_step := after_ground_gu.distance_to(frame_start_ground)
 			blocked = actual_step <= GroundUnitSpace.EPSILON_GU
 			if not blocked:
-				blocked = _hc_track_motion(delta, remaining_distance, after_ground_gu.distance_to(_movement_step_target_ground_gu))
+				blocked = _hc_track_motion(delta, frame_start_ground.distance_to(_movement_step_target_ground_gu), after_ground_gu.distance_to(_movement_step_target_ground_gu))
 	else:
 		if get_slide_collision_count() > 0:
 			blocked = true
@@ -3112,6 +3125,8 @@ func set_combat_position(
 		var internal_reasons: Array[StringName] = [
 			&"autonomous_step_arrival",
 			&"autonomous_step_rollback",
+			&"eight_way_leg_arrival",
+			&"eight_way_collision_stop",
 			&"entrapment_boundary_revert",
 			&"safe_zone_revert",
 			&"environment_revert",
@@ -3457,7 +3472,13 @@ func _point_inside_safe_zone_uncached(point_screen_px: Vector2) -> bool:
 func _move_with_spatial_rules(delta := 1.0 / 60.0) -> void:
 	var position_before_move := global_position
 	var move_started_usec := RuntimeDiagnostics.timing_start()
+	var intended_ground := GroundUnitSpace.screen_delta_px_to_ground_delta_gu(velocity)
 	move_and_slide()
+	if _movement_step_active and not MonsterNeighborStepPolicyScript.motion_follows_direction(
+		GroundUnitSpace.screen_delta_px_to_ground_delta_gu(global_position - position_before_move), intended_ground
+	):
+		set_combat_position(position_before_move, &"eight_way_collision_stop")
+		velocity = Vector2.ZERO
 	# Keep the shared bucket authoritative before any same-frame projectile or
 	# crowd query can run after normal physics movement.
 	_spatial_index_update()

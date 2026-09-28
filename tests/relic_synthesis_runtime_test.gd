@@ -22,7 +22,7 @@ func _run() -> void:
 			var icon := load(GameData.get_item_art_path({"item_id": item_id}, field)) as Texture2D
 			assert(icon != null and icon.get_size().x > 0.0 and icon.get_size().y > 0.0)
 			var maximum := GameData.get_item_art_display_size({"item_id": item_id}, field)
-			assert(maximum == (Vector2(44, 44) if field == "inventoryIcon" else Vector2(36, 36)))
+			assert(maximum == (Vector2(32, 32) if field == "inventoryIcon" else Vector2(36, 36)))
 			var fitted := icon.get_size() * minf(maximum.x / icon.get_size().x, maximum.y / icon.get_size().y)
 			assert(fitted.x <= maximum.x and fitted.y <= maximum.y and fitted.x > 0.0 and fitted.y > 0.0)
 			if Rules.is_badge(item_id):
@@ -121,6 +121,11 @@ func _test_synthesis_and_claim() -> void:
 	var service := Service.new(PlayerState)
 	var material_slots: Array[int] = [2, 4, 6, 8]
 	var quote := service.quote_synthesis(950101, material_slots)
+	assert(not bool(quote.get("valid", false)), "extra equipment and fragments must disable synthesis")
+	assert(PlayerState.take_workbench_item("synthesis", 1).success)
+	assert(not service.quote_synthesis(950101, material_slots).valid, "fifth fragment must disable synthesis")
+	assert(PlayerState.take_workbench_item("synthesis", 3).success)
+	quote = service.quote_synthesis(950101, material_slots)
 	assert(bool(quote.get("valid", false)))
 	var tray_before := PlayerState.synthesis_tray.duplicate(true)
 	var gold_before := PlayerState.gold
@@ -136,8 +141,8 @@ func _test_synthesis_and_claim() -> void:
 	assert(Rules.valid_instance(PlayerState.synthesis_tray[0], 950101))
 	for slot: int in material_slots:
 		assert(PlayerState.synthesis_tray[slot].is_empty())
-	assert(int(GameData.get_item_record(PlayerState.synthesis_tray[1]).get("itemId", -1)) == 81, "temporary item was consumed")
-	assert(int(GameData.get_item_record(PlayerState.synthesis_tray[3]).get("itemId", -1)) == Rules.FRAGMENT_ID, "extra fragment was consumed")
+	assert(_item_index(81) >= 0, "removed extra equipment was consumed")
+	assert(_fragment_index() >= 0, "removed extra fragment was consumed")
 	_assert_tray_survives_save_reload()
 	assert(not bool(service.quote_synthesis(950102, material_slots).get("valid", false)), "unclaimed output overwritten")
 	var output_before := PlayerState.synthesis_tray[0].duplicate(true)

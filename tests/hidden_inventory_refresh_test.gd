@@ -56,5 +56,16 @@ func _run() -> void:
 	assert(skills._refresh_execution_count == visible_skills_before + 1, "技能面板信号 burst 未合并为一次刷新")
 	assert(warehouse._refresh_execution_count == visible_warehouse_before + 1, "仓库信号 burst 未合并为一次刷新")
 	assert(shop._inventory_refresh_execution_count == visible_shop_before + 1, "商店信号 burst 未合并为一次刷新")
+	inventory._refresh_bag_grid()
+	var cell_updates := inventory._bag_cell_update_count
+	inventory._refresh_bag_grid()
+	assert(inventory._bag_cell_update_count == cell_updates, "unchanged cells rebuilt on a no-op refresh")
+	PlayerState.inventory = [{"name": "太阳水", "count": 3}]
+	inventory._refresh_bag_grid()
+	assert(inventory._bag_cell_update_count == cell_updates + 1, "one changed stack rebuilt unrelated cells")
+	PlayerState.inventory[0].count = 2
+	inventory._refresh_bag_grid()
+	assert(inventory._bag_cell_update_count == cell_updates + 2, "in-place stack mutation was not refreshed")
+	assert((inventory._bag_cells[0].get_node("StackCount") as Label).text == "2")
 	print("HIDDEN_INVENTORY_REFRESH_PASS: hidden pickup rebuilds=0, visible refreshes=1")
 	get_tree().quit(0)

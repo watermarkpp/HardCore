@@ -106,6 +106,20 @@ func _run() -> void:
 	while PlayerState._warehouse_preparation_pending: await get_tree().process_frame
 	assert(PlayerState.inventory_occupied_count() == 99)
 	assert(PlayerState._read_json(PlayerState.shared_warehouse_path).warehouse_inventory.size() == 401)
+	# App pause/normal close may arrive after promotion has started. The same
+	# receipt owner must settle or roll back before the lifecycle save reads live
+	# ownership; it must not wait for the initiating UI coroutine to resume.
+	_completion = false
+	_run_transfer("deposit", [1], [401])
+	while not PlayerState._warehouse_transaction_locked:
+		assert(not _completion, "fixture must enter actual promotion")
+		await get_tree().process_frame
+	PlayerState._notification(NOTIFICATION_APPLICATION_PAUSED)
+	while not _completion: await get_tree().process_frame
+	assert(not PlayerState._warehouse_transaction_locked)
+	assert(PlayerState._shared_digest(PlayerState._read_json(_profile).inventory) == PlayerState._shared_digest(PlayerState.inventory))
+	assert(PlayerState._shared_digest(PlayerState._read_json(PlayerState.shared_warehouse_path).warehouse_inventory) == PlayerState._shared_digest(PlayerState.warehouse_inventory))
+	assert(PlayerState.inventory_occupied_count() + PlayerState.warehouse_occupied_count() == 500)
 	var output := FileAccess.open("res://outputs/test_logs/warehouse_prepared_latency.json", FileAccess.WRITE)
 	output.store_string(JSON.stringify({"rows": _measurements}, "\t"))
 	output.close()

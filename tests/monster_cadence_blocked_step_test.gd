@@ -67,8 +67,10 @@ func _make_enemy(monster_id: int) -> EnemyActor:
 	enemy.global_position = Vector2.ZERO
 	enemy.set_meta("spawn_position", Vector2.ZERO)
 	enemy.set_meta("safe_zones", [])
-	enemy.set_physics_process(false)
 	add_child(enemy)
+	# Enemy._ready enables physics. Disable it after attachment so this manual
+	# cadence fixture cannot also receive an autonomous engine tick.
+	enemy.set_physics_process(false)
 	await get_tree().physics_frame
 	_checks += 1
 	return enemy

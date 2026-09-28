@@ -1,0 +1,62 @@
+{
+  "suite": "adhoc",
+  "passed": 0,
+  "generated_at": "2026-09-28T23:09:27.8531703+08:00",
+  "engine_log_errors": 420,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a",
+  "failed": 3,
+  "total": 3,
+  "results": [
+    {
+      "test_name": "hidden_inventory_refresh_test",
+      "test_path": "tests/hidden_inventory_refresh_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:09:27.1510988Z",
+      "native_exit_observed_utc": "2026-09-28T15:09:04.2445071Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 220,
+      "engine_log_failure_count": 220,
+      "result": "FAIL",
+      "reason": "stderr_failures_220;engine_log_failures_220"
+    },
+    {
+      "test_name": "inventory_equipment_ui_test",
+      "test_path": "tests/inventory_equipment_ui_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:09:35.7769397Z",
+      "native_exit_observed_utc": "2026-09-28T15:09:12.6553443Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 100,
+      "engine_log_failure_count": 100,
+      "result": "FAIL",
+      "reason": "stderr_failures_100;engine_log_failures_100"
+    },
+    {
+      "test_name": "equipment_enhancement_panel_flow_test",
+      "test_path": "tests/equipment_enhancement_panel_flow_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:09:44.0384731Z",
+      "native_exit_observed_utc": "2026-09-28T15:09:26.4740033Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 100,
+      "engine_log_failure_count": 100,
+      "result": "FAIL",
+      "reason": "stderr_failures_100;engine_log_failures_100"
+    }
+  ]
+}

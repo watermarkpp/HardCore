@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "patchId": "v94-loading-save-forge-21b40dda-slim",
+  "file": "v94-loading-save-forge-21b40dda-slim.pck",
+  "size": 1660356,
+  "sha256": "99CA8B6FBA7DE25E5937F9953B35605E84057DBBC5B9AF6356607A0D2A618E88",
+  "baseCommit": "4123abdc99388ec3fe83776f9b3e7029b14428d1",
+  "patchCommit": "21b40ddae663997f8e9f267585988e6a7c63db6a",
+  "basePacks": [
+    "base_v94.pck"
+  ],
+  "resources": [
+    "res://scripts/character_select.gd",
+    "res://scripts/game_root.gd",
+    "res://scripts/hud.gd",
+    "res://scripts/layers/rules/relic_synthesis_rules.gd",
+    "res://scripts/loading_transition_overlay.gd",
+    "res://scripts/player_state.gd"
+  ]
+}

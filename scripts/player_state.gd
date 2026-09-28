@@ -228,6 +228,14 @@ var _durability_mutation_revision := 0
 var _world_mutation_revision := 0
 var _background_save: Dictionary = {}
 var _background_death: Dictionary = {}
+# Live item effects never wait for disk. Only the ordered character writer
+# consumes these revisions; world-clock IO has a separate owner.
+var _item_save_revision := 0
+var _item_saved_revision := 0
+var _item_save_plan: Dictionary = {}
+var _item_save_failed := false
+var _workbench_transfer_pending := false
+signal background_item_save_failed
 var _durability_visual_pending := false
 var _durability_visual_elapsed := 0.0
 var profile_index_path := PROFILE_INDEX_PATH
@@ -314,6 +322,7 @@ func _notification(what: int) -> void:
 func _process(delta: float) -> void:
 	_json_persistence.pump()
 	_world_json_persistence.pump()
+	_start_item_save()
 	_advance_world_clock_cleanup()
 	advance_temporary_item_buffs(delta)
 	_advance_durability_runtime(delta)
@@ -1160,14 +1169,15 @@ func remove_item(item_name: String, amount := 1) -> bool:
 
 
 
-func _consume_inventory_index(index: int, amount := 1) -> bool:
-	_before_state_transaction()
+func _consume_inventory_index(index: int, amount := 1, save_in_background := false) -> bool:
+	if not save_in_background:
+		_before_state_transaction()
 	var inventory_before := inventory.duplicate(true)
 	if not _consume_inventory_index_without_commit(index, amount):
 		return false
 	# Consuming a stack changes only the character document; the hall index's
 	# name, profession and level are unchanged. Save once instead of twice.
-	if not _commit_save(false, false):
+	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
 		return false
 	inventory_changed.emit()
@@ -1429,6 +1439,20 @@ func commit_relic_synthesis(quote: Dictionary) -> Dictionary:
 	return _relic_service().commit_synthesis(quote)
 
 
+func commit_workbench_immediate(mode: String, quote: Dictionary) -> Dictionary:
+	if mode not in ["forge", "synthesis"]:
+		return {"committed": false, "message": "无效工作台。"}
+	if test_mode:
+		return commit_forge(quote) if mode == "forge" else commit_relic_synthesis(quote)
+	if not await _begin_live_workbench_transaction():
+		return {"committed": false, "message": "物品正在处理中，请重新选择。"}
+	# The service revalidates the exact quote before rolling/consuming anything.
+	var result: Dictionary = (_forge_service().commit_forge(quote, true) if mode == "forge"
+		else _relic_service().commit_synthesis(quote, true))
+	_workbench_transfer_pending = false
+	return result
+
+
 func _empty_workbench_tray() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for _slot in 9:
@@ -1449,8 +1473,9 @@ func workbench_tray(mode: String) -> Array[Dictionary]:
 	return (forge_tray if mode == "forge" else synthesis_tray).duplicate(true) if mode in ["forge", "synthesis"] else []
 
 
-func place_workbench_item(mode: String, slot: int, inventory_index: int) -> Dictionary:
-	_before_state_transaction()
+func place_workbench_item(mode: String, slot: int, inventory_index: int, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
 	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
 		return {"success": false, "message": "无效工作格。"}
 	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
@@ -1462,16 +1487,8 @@ func place_workbench_item(mode: String, slot: int, inventory_index: int) -> Dict
 	if int(source.get("count", 1)) > 1 and not str(source.get("instance_id", "")).is_empty():
 		return {"success": false, "message": "带唯一标识的整组物品不能拆分，请先整理背包。"}
 	var item := GameData.get_item_record(source)
-	if mode == "forge":
-		if slot == 4:
-			if str(item.get("kind", "")) != "equipment" or str(item.get("category", "")) not in ["武器", "盔甲", "头盔"]:
-				return {"success": false, "message": "只能放入武器、衣服或头盔。"}
-		elif slot == 1:
-			if preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd").purity_for(source) < 0:
-				return {"success": false, "message": "请放入黑铁矿。"}
-		elif slot in [3, 5]:
-			if str(item.get("category", "")) not in ["戒指", "手镯", "项链"]:
-				return {"success": false, "message": "请放入首饰。"}
+	# Placement only moves ownership. The quote decides whether the complete
+	# arrangement is valid; an incorrect item remains available for removal.
 	var inventory_before := inventory.duplicate(true)
 	var tray_before := tray.duplicate(true)
 	var moved := source.duplicate(true)
@@ -1482,7 +1499,9 @@ func place_workbench_item(mode: String, slot: int, inventory_index: int) -> Dict
 		inventory[inventory_index] = source.duplicate(true)
 		inventory[inventory_index]["count"] = int(source.get("count", 1)) - 1
 	tray[slot] = moved
-	if not _commit_save():
+	# A tray transfer changes neither the character-list summary nor the
+	# world clock. Persist the inventory and tray together in one document.
+	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
 		if mode == "forge": forge_tray = tray_before
 		else: synthesis_tray = tray_before
@@ -1492,8 +1511,9 @@ func place_workbench_item(mode: String, slot: int, inventory_index: int) -> Dict
 	return {"success": true, "message": "已放入%s" % str(item.get("name", "物品"))}
 
 
-func take_workbench_item(mode: String, slot: int) -> Dictionary:
-	_before_state_transaction()
+func take_workbench_item(mode: String, slot: int, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
 	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
 		return {"success": false, "message": "无效工作格。"}
 	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
@@ -1509,7 +1529,7 @@ func take_workbench_item(mode: String, slot: int) -> Dictionary:
 	var tray_before := tray.duplicate(true)
 	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
 	tray[slot] = {}
-	if not _commit_save():
+	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
 		if mode == "forge": forge_tray = tray_before
 		else: synthesis_tray = tray_before
@@ -1517,6 +1537,39 @@ func take_workbench_item(mode: String, slot: int) -> Dictionary:
 	inventory_changed.emit()
 	profile_changed.emit()
 	return {"success": true, "message": "已放入背包：%s" % str(output.get("name", "物品"))}
+
+
+func transfer_workbench_immediate(mode: String, slot: int, inventory_index := -1) -> Dictionary:
+	if test_mode:
+		return take_workbench_item(mode, slot) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index)
+	var selected: Dictionary = inventory[inventory_index].duplicate(true) if inventory_index >= 0 and inventory_index < inventory.size() else {}
+	if not await _begin_live_workbench_transaction():
+		return {"success": false, "message": "物品正在处理中，请重新选择。"}
+	if inventory_index >= 0 and (inventory_index >= inventory.size() or inventory[inventory_index] != selected):
+		_workbench_transfer_pending = false
+		return {"success": false, "message": "所选物品已变化，请重新选择。"}
+	var result := take_workbench_item(mode, slot, true) if inventory_index < 0 else place_workbench_item(mode, slot, inventory_index, true)
+	_workbench_transfer_pending = false
+	return result
+
+
+func _begin_live_workbench_transaction() -> bool:
+	if _workbench_transfer_pending or not _can_accept_immediate_item_use():
+		return false
+	_workbench_transfer_pending = true
+	var owner := active_profile_id
+	var generation := _world_clock_generation
+	# Only pickup receipts can replace the live inventory. Normal profile save
+	# receipts acknowledge bytes and never restore an older live state.
+	_json_persistence.cancel_uncommitted_domain("loot")
+	while _json_persistence.has_pending_domain("loot"):
+		_json_persistence.pump()
+		if _json_persistence.has_pending_domain("loot"):
+			await get_tree().process_frame
+	if owner != active_profile_id or generation != _world_clock_generation or not _can_accept_immediate_item_use():
+		_workbench_transfer_pending = false
+		return false
+	return true
 
 
 func configure_relic_roll_rng(rng: RandomNumberGenerator) -> void:
@@ -1995,8 +2048,11 @@ func use_inventory_index(index: int) -> String:
 ## Structured use contract (R1.1 closure): {"success", "reason", "message"}.
 ## "message" is always player-readable Chinese; "reason" is a machine token
 ## for diagnostics only and never reaches the player UI.
-func use_inventory_index_result(index: int) -> Dictionary:
-	_before_state_transaction()
+func use_inventory_index_result(index: int, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
+	elif not _can_accept_immediate_item_use():
+		return _use_item_failure("save_unavailable", "角色存档尚未就绪，暂不能使用物品")
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return _use_item_failure("no_item_selected", "请先选择物品")
 	var item_name := str(inventory[index].get("name", ""))
@@ -2004,7 +2060,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 	var kind := str(item.get("kind", ""))
 	var effect := str(item.get("useEffect", ""))
 	if kind == "skill_book":
-		return _learn_skill_result(item_name, index)
+		return _learn_skill_result(item_name, index, save_in_background)
 	if item.get("usable", true) == false:
 		return _use_item_failure("no_local_rule", "%s当前没有可执行的本地规则" % item_name)
 	if kind == "scroll":
@@ -2019,7 +2075,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 					return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
 				var blessing_result := use_blessing_oil_inventory_index(
 					index,
-					_blessing_oil_rng
+					_blessing_oil_rng, save_in_background
 				)
 				if bool(blessing_result.get("ok", false)):
 					scroll_requested.emit(item_name)
@@ -2029,8 +2085,8 @@ func use_inventory_index_result(index: int) -> Dictionary:
 					str(blessing_result.get("message", "祝福油使用失败"))
 				)
 			if effect in ["repair_oil", "war_god_oil"]:
-				return _use_weapon_repair_oil_item_result(index, effect == "war_god_oil")
-		if _consume_inventory_index(index):
+				return _use_weapon_repair_oil_item_result(index, effect == "war_god_oil", save_in_background)
+		if _consume_inventory_index(index, 1, save_in_background):
 			scroll_requested.emit(item_name)
 			if _last_item_commit_succeeded():
 				_emit_item_audio_committed(item, "use_success")
@@ -2046,7 +2102,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 			return _use_item_failure("weapon_required", "需要先装备武器")
 		if _blessing_oil_rng == null:
 			return _use_item_failure("blessing_rng_not_ready", "祝福油随机源尚未就绪")
-		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng)
+		var blessing_result := use_blessing_oil_inventory_index(index, _blessing_oil_rng, save_in_background)
 		if bool(blessing_result.get("ok", false)):
 			consumable_requested.emit(item_name)
 			return _use_item_success(str(blessing_result.get("message", "祝福油使用成功")))
@@ -2068,7 +2124,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 				buff_reason,
 				UIErrorFeedbackScript.from_reason(buff_reason, "增益效果应用失败")
 			)
-		if not _consume_inventory_index_without_commit(index) or not _commit_save(false, false):
+		if not _consume_inventory_index_without_commit(index) or not _commit_item_use(save_in_background):
 			inventory = inventory_before
 			temporary_item_buffs = buffs_before
 			temporary_item_buff_revision = revision_before
@@ -2078,7 +2134,7 @@ func use_inventory_index_result(index: int) -> Dictionary:
 		inventory_changed.emit()
 		_emit_item_audio_committed(item, "use_success")
 		return _use_item_success("使用：%s" % item_name)
-	if _consume_inventory_index(index):
+	if _consume_inventory_index(index, 1, save_in_background):
 		consumable_requested.emit(item_name)
 		if _last_item_commit_succeeded():
 			_emit_item_audio_committed(item, "use_success")
@@ -2086,8 +2142,9 @@ func use_inventory_index_result(index: int) -> Dictionary:
 	return _use_item_failure("insufficient_items", "物品数量不足")
 
 
-func _use_weapon_repair_oil_item_result(index: int, full_repair: bool) -> Dictionary:
-	_before_state_transaction()
+func _use_weapon_repair_oil_item_result(index: int, full_repair: bool, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
 	if index < 0 or index >= inventory.size() or not inventory[index] is Dictionary or (inventory[index] as Dictionary).is_empty():
 		return _use_item_failure("insufficient_items", "物品数量不足")
 	var weapon_value: Variant = equipment.get("武器", {})
@@ -2108,7 +2165,7 @@ func _use_weapon_repair_oil_item_result(index: int, full_repair: bool) -> Dictio
 	else:
 		record["count"] = count - 1
 	_apply_weapon_repair_oil_without_commit(weapon_value, full_repair)
-	if not _commit_save(false, false):
+	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats(false)
@@ -2285,9 +2342,11 @@ func apply_blessing_oil_with_rolls(unlucky_roll: int, success_roll: int, upper_s
 
 func use_blessing_oil_inventory_index(
 	index: int,
-	rng: RandomNumberGenerator
+	rng: RandomNumberGenerator,
+	save_in_background := false
 ) -> Dictionary:
-	_before_state_transaction()
+	if not save_in_background:
+		_before_state_transaction()
 	if rng == null:
 		return {"ok": false, "reason": "rng_unavailable", "message": "祝福油随机源尚未就绪"}
 	if (
@@ -2307,7 +2366,7 @@ func use_blessing_oil_inventory_index(
 		index,
 		int(rolls.get("unlucky_roll", 0)),
 		int(rolls.get("success_roll", 0)),
-		int(rolls.get("upper_stage_roll", -1))
+		int(rolls.get("upper_stage_roll", -1)), save_in_background
 	)
 
 
@@ -2315,9 +2374,11 @@ func use_blessing_oil_inventory_index_with_rolls(
 	index: int,
 	unlucky_roll: int,
 	success_roll: int,
-	upper_stage_roll := -1
+	upper_stage_roll := -1,
+	save_in_background := false
 ) -> Dictionary:
-	_before_state_transaction()
+	if not save_in_background:
+		_before_state_transaction()
 	var oil_catalog := GameData.get_item_record("祝福油")
 	if (
 		str(oil_catalog.get("useEffect", "")) != "blessing_oil"
@@ -2344,7 +2405,7 @@ func use_blessing_oil_inventory_index_with_rolls(
 		equipment = equipment_before
 		return effect_result
 	recalculate_stats(false)
-	if not _commit_save():
+	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
 		equipment = equipment_before
 		recalculate_stats(false)
@@ -2857,8 +2918,9 @@ func learn_skill(skill_name: String, inventory_index := -1) -> String:
 ## Structured learn contract (R1.1 closure): {"success", "reason", "message"}.
 ## "message" is always player-readable Chinese; "reason" is a machine token
 ## for diagnostics only and never reaches the player UI.
-func _learn_skill_result(skill_name: String, inventory_index := -1) -> Dictionary:
-	_before_state_transaction()
+func _learn_skill_result(skill_name: String, inventory_index := -1, save_in_background := false) -> Dictionary:
+	if not save_in_background:
+		_before_state_transaction()
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if stable_skill_id.is_empty():
 		return _use_item_failure("skill_data_missing", "技能数据不存在")
@@ -2925,7 +2987,7 @@ func _learn_skill_result(skill_name: String, inventory_index := -1) -> Dictionar
 				break
 		_sync_legacy_quick_slots_from_ring()
 	recalculate_stats(false)
-	if not _commit_save():
+	if not _commit_item_use(save_in_background):
 		inventory = inventory_before
 		learned_skills = learned_before
 		attack_ring_slots.assign(ring_before)
@@ -5979,6 +6041,8 @@ func save_game(update_profile_index := true, finalize_pending_durability := true
 	)
 	_profile_saved_death_event_sequence = _death_event_sequence
 	_active_profile_legacy_warehouse_pending = false
+	_item_saved_revision = _item_save_revision
+	_item_save_failed = false
 	_queue_world_clock_cleanup()
 	var index_updated := _update_profile_index() if update_profile_index else true
 	last_save_result = {
@@ -6307,6 +6371,9 @@ func _emit_device_lab_state_changed() -> void:
 
 func load_save() -> void:
 	_before_state_transaction(true)
+	if _item_save_revision > _item_saved_revision:
+		last_load_result = {"success": false, "reason": "pending_item_save_failed"}
+		return
 	if active_profile_id.is_empty():
 		last_load_result = {
 			"contract_id": SAVE_RESULT_CONTRACT_ID,
@@ -6884,7 +6951,7 @@ func use_quick_item_slot(index: int, expected_item_name := "") -> Dictionary:
 			"reason": "no_inventory",
 			"message": "背包中没有%s" % bound_name,
 		}
-	var use_result := use_inventory_index_result(inventory_index)
+	var use_result := use_inventory_index_result(inventory_index, not test_mode)
 	# The structured use contract is authoritative: a declared success consumed
 	# the item, every failure keeps it. The former count-delta heuristic cannot
 	# distinguish "rejected" from "no-op" and is no longer needed.
@@ -7603,6 +7670,8 @@ func transfer_shared_gold_prepared(deposit: bool, transaction_id: String, transa
 
 
 func _prepare_shared_gold_request(deposit: bool, transaction_id: String, transaction_sequence: int) -> Dictionary:
+	if not await _await_character_writes_for_ui():
+		return {"success": false, "contract_id": BANK_CONTRACT_ID, "reason": "save_failed"}
 	var ready := _bank_request_preflight(transaction_id, transaction_sequence)
 	if not bool(ready.success): return ready
 	var profile_id := active_profile_id
@@ -7651,9 +7720,22 @@ func _captured_json_matches_document(path: String, bytes: PackedByteArray, docum
 	return parsed is Dictionary and parsed == document
 
 
+# Leave most of the 16.7ms frame to world simulation/render preparation. A
+# completed small check need not impose another whole frame of input latency.
+const UI_WORK_SLICE_BUDGET_USEC := 2000
+
+func _continue_ui_work_slice(started_usec: int) -> int:
+	if Time.get_ticks_usec() - started_usec >= UI_WORK_SLICE_BUDGET_USEC:
+		await get_tree().process_frame
+		return Time.get_ticks_usec()
+	return started_usec
+
+
 func _prepare_warehouse_transfer(operation: String, source_indices: Array, target_slots: Array, bank_plan: Dictionary = {}) -> Dictionary:
 	if operation not in ["deposit", "withdraw", "bank"]:
 		return _warehouse_preparation_failure("仓库存取操作无效。")
+	if not await _await_character_writes_for_ui():
+		return _warehouse_preparation_failure("人物存档尚未保存成功，请稍后重试。")
 	var is_bank := operation == "bank"
 	var plan := bank_plan if is_bank else (deposit_to_warehouse_batch(source_indices, target_slots, true) if operation == "deposit" else withdraw_from_warehouse_batch(source_indices, true))
 	if not bool(plan.get("success", false)):
@@ -7665,10 +7747,11 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 	var generation := _atomic_write_generation
 	var paths := {"profile": _profile_path(profile_id), "shared": shared_warehouse_path, "journal": shared_warehouse_transaction_log_path}
 	await get_tree().process_frame
+	var ui_slice_started := Time.get_ticks_usec()
 	var before_profile := _read_json(str(paths.profile))
-	await get_tree().process_frame
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 	var before_shared := _read_json(str(paths.shared))
-	await get_tree().process_frame
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 	var previous_profile_bytes := FileAccess.get_file_as_bytes(paths.profile)
 	var previous_shared_bytes := FileAccess.get_file_as_bytes(paths.shared)
 	# Bind the validated snapshots to the exact disk bytes, including file edits
@@ -7677,7 +7760,7 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 		or not _captured_json_matches_document(paths.profile, previous_profile_bytes, before_profile)
 		or not _captured_json_matches_document(paths.shared, previous_shared_bytes, before_shared)):
 		return _warehouse_preparation_failure("仓库存档已变化，物品未改变。")
-	await get_tree().process_frame
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 	var after_profile := before_profile.duplicate()
 	if is_bank:
 		if before_profile != plan._bank_before_profile or before_shared != plan._bank_before_shared:
@@ -7700,24 +7783,25 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 	if not bool(job.result().success):
 		job.cancel()
 		return _warehouse_preparation_failure("仓库存档准备失败，物品未改变。")
+	ui_slice_started = Time.get_ticks_usec()
 	# Validate the actual normalized JSON which the worker wrote, on the main
 	# thread. Separate document checks keep a 500-item transaction responsive.
 	for key: String in ["before_profile", "after_profile"]:
-		await get_tree().process_frame
+		ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 		if not bool(_validate_profile_document_status(job.documents[key], profile_id, false).valid):
 			job.cancel()
 			return _warehouse_preparation_failure("角色存档校验失败，物品未改变。")
 	for key: String in ["before_shared", "after_shared"]:
-		await get_tree().process_frame
+		ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 		if not _validate_shared_warehouse_document(job.documents[key]):
 			job.cancel()
 			return _warehouse_preparation_failure("仓库存档校验失败，物品未改变。")
 	for prefix: String in ["before_", "after_"]:
-		await get_tree().process_frame
+		ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 		if not _profile_and_shared_drop_instances_are_disjoint(job.documents[prefix + "profile"], job.documents[prefix + "shared"]):
 			job.cancel()
 			return _warehouse_preparation_failure("物品实例校验失败，物品未改变。")
-	await get_tree().process_frame
+	ui_slice_started = await _continue_ui_work_slice(ui_slice_started)
 	var current: bool = (active_profile_id == profile_id and _profile_path(profile_id) == paths.profile
 		and shared_warehouse_path == paths.shared and shared_warehouse_transaction_log_path == paths.journal
 		and _atomic_write_generation == generation and not _warehouse_transaction_locked
@@ -7740,50 +7824,82 @@ func _prepare_warehouse_transfer(operation: String, source_indices: Array, targe
 		or int(job.documents.after_shared.get("revision", -1)) != int(job.documents.before_shared.get("revision", -1)) + 1):
 		job.cancel()
 		return _warehouse_preparation_failure("仓库交易校验失败，物品未改变。")
-	var committed := _promote_prepared_warehouse(job, previous_profile_bytes, previous_shared_bytes)
-	job.cancel() # removes remaining private files only; promoted paths are absent.
-	if not committed:
+	# From this point the receipt owner, not the coroutine/UI, owns promotion
+	# and live-state handoff. A normal lifecycle drain consumes the same owner.
+	var commit := {"finished": false, "success": false, "owner": profile_id,
+		"generation": _world_clock_generation, "plan": plan, "bank": is_bank, "job": job}
+	_warehouse_transaction_locked = true
+	var operation_owner := preload("res://scripts/warehouse_commit_operation.gd").new()
+	operation_owner.start(_json_persistence, job,
+		{"profile": previous_profile_bytes, "shared": previous_shared_bytes},
+		{"profile": _json_validator_for_path(paths.profile), "shared": _json_validator_for_path(paths.shared)},
+		_record_background_json_receipt, _complete_prepared_warehouse.bind(commit),
+		{"journal": test_mode and _test_force_atomic_write_failure,
+			"shared": test_mode and _test_fail_shared_write,
+			"profile": test_mode and _test_fail_profile_write,
+			"rollback": test_mode and _test_fail_warehouse_rollback_write})
+	while not bool(commit.finished):
+		_json_persistence.pump()
+		if not bool(commit.finished):
+			await get_tree().process_frame
+	if not bool(commit.success):
 		return _warehouse_preparation_failure("仓库存档失败，物品未改变。")
-	if is_bank:
+	return commit.result
+
+
+func _await_character_writes_for_ui() -> bool:
+	var owner := active_profile_id
+	var generation := _world_clock_generation
+	# Use the same ordering as the synchronous boundary, without waiting for a
+	# worker on the render thread. Unapproved pickup preparations can be retried
+	# by their owner; already-promoting receipts must finish and apply first.
+	_json_persistence.cancel_uncommitted_domain("loot")
+	var retried_failed_save := false
+	while true:
+		if owner != active_profile_id or generation != _world_clock_generation:
+			return false
+		_json_persistence.pump()
+		if _json_persistence.pending_count() == 0:
+			if _item_save_revision <= _item_saved_revision:
+				return true
+			if _item_save_failed and retried_failed_save:
+				return false
+			retried_failed_save = true
+			if not _start_item_save(true):
+				return false
+		await get_tree().process_frame
+	return false
+
+
+func _complete_prepared_warehouse(success: bool, can_remove_journal: bool, journal_written: bool, commit: Dictionary) -> void:
+	var job: RefCounted = commit.job
+	if can_remove_journal:
+		_warehouse_transaction_locked = not _remove_persistence_file(job.paths.journal)
+	elif not journal_written:
+		_warehouse_transaction_locked = false
+	# If rollback failed, retain the existing recovery journal and lock.
+	job.cancel()
+	commit.finished = true
+	commit.success = success
+	if not success:
+		return
+	var plan: Dictionary = commit.plan
+	if active_profile_id != str(commit.owner) or _world_clock_generation != str(commit.generation):
+		commit.success = false
+		return # Never apply an old role's receipt to another active role.
+	if bool(commit.bank):
 		gold = int(plan._next_gold)
-		profile_changed.emit()
-		return {"success": true, "contract_id": BANK_CONTRACT_ID, "reason": "", "player_gold": gold,
+		commit.result = {"success": true, "contract_id": BANK_CONTRACT_ID, "reason": "", "player_gold": gold,
 			"shared_gold": int(plan._bank_update.bank_gold), "transaction_id": plan.transaction_id,
 			"transaction_sequence": plan.transaction_sequence}
+		profile_changed.emit()
+		return
 	inventory = plan._prepared_inventory
 	warehouse_inventory = plan._prepared_warehouse
 	for key: String in ["_inventory_before", "_warehouse_before", "_prepared_inventory", "_prepared_warehouse"]:
 		plan.erase(key)
+	commit.result = plan
 	inventory_changed.emit()
-	return plan
-
-
-func _promote_prepared_warehouse(job: RefCounted, previous_profile_bytes: PackedByteArray, previous_shared_bytes: PackedByteArray) -> bool:
-	if test_mode and _test_force_atomic_write_failure:
-		return false
-	# This final phase contains no await. Gameplay mutations cannot interleave
-	# between the optimistic checks, file promotion and the inventory handoff.
-	for key: String in ["journal", "shared", "profile"]:
-		if not _file_matches_validated_bytes(job.temporary_paths[key], job.bytes[key]): return false
-	if not _promote_verified_json(job.paths.journal, job.temporary_paths.journal, job.bytes.journal):
-		return false
-	_warehouse_transaction_locked = true
-	_persistence_transaction_in_progress = true
-	var shared_ok := not (test_mode and _test_fail_shared_write)
-	if shared_ok: shared_ok = _promote_verified_json(job.paths.shared, job.temporary_paths.shared, job.bytes.shared, previous_shared_bytes)
-	var profile_ok := shared_ok and not (test_mode and _test_fail_profile_write)
-	if profile_ok: profile_ok = _promote_verified_json(job.paths.profile, job.temporary_paths.profile, job.bytes.profile, previous_profile_bytes)
-	_persistence_transaction_in_progress = false
-	if shared_ok and profile_ok and _file_matches_validated_bytes(job.paths.profile, job.bytes.profile) and _file_matches_validated_bytes(job.paths.shared, job.bytes.shared):
-		_warehouse_transaction_locked = not _remove_persistence_file(job.paths.journal)
-		return true
-	var restored := false
-	if not (test_mode and _test_fail_warehouse_rollback_write):
-		var shared_restored := _write_json_atomic(job.paths.shared, job.documents.before_shared)
-		var profile_restored := _write_json_atomic(job.paths.profile, job.documents.before_profile)
-		restored = shared_restored and profile_restored and _shared_digest(_read_json(job.paths.profile)) == _shared_digest(job.documents.before_profile) and _shared_digest(_read_json(job.paths.shared)) == _shared_digest(job.documents.before_shared)
-	if restored: _warehouse_transaction_locked = not _remove_persistence_file(job.paths.journal)
-	return false
 
 
 func _bank_transfer_commit(
@@ -8104,6 +8220,7 @@ func prepare_loot_save(candidates: Array) -> Dictionary:
 	var payload := _prepare_character_save_payload(false)
 	if payload.is_empty():
 		return {"immediate": _loot_save_failure(plan.outcomes)}
+	plan.inventory_after = plan.inventory_after.duplicate(true)
 	payload["inventory"] = plan.inventory_after
 	payload["gold"] = plan.gold_after
 	var path := _profile_path(active_profile_id)
@@ -8116,6 +8233,7 @@ func prepare_loot_save(candidates: Array) -> Dictionary:
 	plan["completion"] = {}
 	var identity := {
 		"profile_id": active_profile_id, "path": path,
+		"domain": "loot",
 		"world_clock_generation": _world_clock_generation,
 		"sequence": _death_event_sequence, "write_generation": _atomic_write_generation,
 		"inventory_before": plan.inventory_before.duplicate(true), "gold_before": plan.gold_before,
@@ -8184,9 +8302,10 @@ func _complete_background_loot(receipt: Dictionary, plan: Dictionary) -> void:
 		str(plan.path), _profile_saved_death_event_sequence, int(receipt.identity.sequence), "death_event_sequence"
 	)
 	_profile_saved_death_event_sequence = int(receipt.identity.sequence)
-	var inventory_changed_value: bool = inventory != plan.inventory_after
+	var received_inventory := _loot_inventory_after_immediate_uses(plan.inventory_before, plan.inventory_after)
+	var inventory_changed_value: bool = inventory != received_inventory
 	var gold_changed: bool = gold != int(plan.gold_after)
-	inventory = plan.inventory_after
+	inventory = received_inventory
 	gold = int(plan.gold_after)
 	_active_profile_legacy_warehouse_pending = false
 	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": true, "reason": "", "path": plan.path, "profile_index_updated": true, "profile_index_skipped": true}
@@ -8203,6 +8322,77 @@ func _complete_background_loot(receipt: Dictionary, plan: Dictionary) -> void:
 		inventory_changed.emit()
 	if gold_changed:
 		profile_changed.emit()
+
+
+func _loot_inventory_after_immediate_uses(before: Array, after: Array) -> Array:
+	if inventory == before:
+		return after
+	# Other inventory mutations still cross the transaction barrier. The only
+	# changes allowed during an irreversible loot promotion are item consumption:
+	# same slots/identities, lower counts. Apply that exact delta to the receipt,
+	# including a newly collected stack whose last OLD unit was just consumed.
+	var result := after.duplicate(true)
+	for index in maxi(before.size(), inventory.size()):
+		var original: Dictionary = before[index] if index < before.size() else {}
+		var live: Dictionary = inventory[index] if index < inventory.size() else {}
+		if original == live:
+			continue
+		assert(not original.is_empty(), "only consumption may overlap a loot receipt")
+		var original_identity := original.duplicate(true)
+		original_identity.erase("count")
+		var live_identity := live.duplicate(true)
+		live_identity.erase("count")
+		assert(live.is_empty() or original_identity == live_identity,
+			"an inventory identity changed without its transaction barrier")
+		var consumed := int(original.get("count", 1)) - (0 if live.is_empty() else int(live.get("count", 1)))
+		assert(consumed >= 0 and index < result.size())
+		var remaining := int(result[index].get("count", 1)) - consumed
+		assert(remaining >= 0)
+		if remaining == 0:
+			result[index] = {}
+		else:
+			result[index]["count"] = remaining
+	_trim_inventory_empty_tail(result)
+	return result
+
+
+func _can_accept_immediate_item_use() -> bool:
+	if test_mode:
+		return not _test_force_atomic_write_failure
+	return (_valid_profile_storage_id(active_profile_id)
+		and active_profile_id != _save_blocked_profile_id
+		and not _warehouse_transaction_locked and _world_clock_snapshot_sequence >= 0)
+
+
+func _commit_item_use(save_in_background: bool) -> bool:
+	if not save_in_background or test_mode:
+		return _commit_save(false, false)
+	if not _can_accept_immediate_item_use():
+		return false
+	_item_save_revision += 1
+	_item_save_failed = false
+	_last_runtime_commit_profile = {"success": true, "background": true, "pending": true}
+	# Capture on the normal process pump, after the immediate effect callback.
+	# Multiple uses in one frame coalesce; no serialization/IO in this call.
+	return true
+
+
+func _start_item_save(retry_failed := false) -> bool:
+	if (_item_save_revision <= _item_saved_revision or not _item_save_plan.is_empty()
+		or _json_persistence.pending_count() > 0 or (_item_save_failed and not retry_failed)):
+		return false
+	var plan := _capture_background_character_plan(false)
+	if plan.is_empty():
+		_item_save_failed = true
+		background_item_save_failed.emit()
+		return false
+	plan.world_finished = true
+	plan.world_success = true
+	_item_save_plan = plan
+	if not _submit_background_profile(plan):
+		_finish_background_save(plan, false, false)
+		return false
+	return true
 
 
 func _before_state_transaction(include_world := false) -> void:
@@ -8222,6 +8412,10 @@ func _before_state_transaction(include_world := false) -> void:
 				&"state_transaction_wait_max_ms",
 				float(Time.get_ticks_usec() - started_usec) / 1000.0
 			)
+
+	if _item_save_revision > _item_saved_revision:
+		_start_item_save(true)
+		_json_persistence.drain()
 
 
 func _loot_save_failure(outcomes: Array) -> Dictionary:
@@ -8522,6 +8716,8 @@ func _default_world_position_fields() -> Dictionary:
 
 func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:
 	_before_state_transaction(true)
+	if _item_save_revision > _item_saved_revision:
+		return "当前角色尚未保存，请稍后重试"
 	if _warehouse_transaction_locked:
 		return "仓库事务恢复中，暂不能创建角色"
 	if not _ensure_shared_warehouse_ready():
@@ -8928,6 +9124,8 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 
 func select_character(profile_id: String) -> bool:
 	_before_state_transaction(true)
+	if _item_save_revision > _item_saved_revision:
+		return false
 	if _warehouse_transaction_locked:
 		return false
 	if _durability_save_pending and not _commit_save(true, true):
@@ -9063,23 +9261,10 @@ func _start_background_save(update_profile_index := true) -> bool:
 		return true # One immutable save in flight; later wear remains pending.
 	if _json_persistence.pending_count() > 0:
 		return false # Do not snapshot ahead of another owner's accepted receipt.
-	var started_usec := Time.get_ticks_usec()
-	var payload := _prepare_character_save_payload(false)
-	if payload.is_empty():
+	var plan := _capture_background_character_plan(update_profile_index)
+	if plan.is_empty():
 		return false
-	var path := _profile_path(active_profile_id)
-	var identity := {"path": path, "profile_id": active_profile_id,
-		"world_clock_generation": _world_clock_generation, "sequence": _death_event_sequence}
-	var plan := {"identity": identity, "payload": payload.duplicate(true),
-		"index_path": profile_index_path, "update_index": update_profile_index,
-		"index_entry": {"id": active_profile_id, "name": character_name, "profession": profession,
-			"gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())},
-		"durability_revision": _durability_mutation_revision, "world_revision": _world_mutation_revision,
-		"inventory_before": inventory.duplicate(true), "started_usec": started_usec,
-		"profile_written": false, "completed": false,
-		"profile_finished": false, "profile_success": false, "index_updated": false,
-		"world_finished": false, "world_success": false}
-	plan.payload.inventory = SpecialConsumableStacks.split_available(plan.payload.inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	var identity: Dictionary = plan.identity
 	_background_save = plan
 	# Submit the captured character state immediately to its sole ordered writer.
 	# A later item transaction drains that writer, never a pending world snapshot.
@@ -9102,6 +9287,27 @@ func _start_background_save(update_profile_index := true) -> bool:
 		plan.world_success = true
 		_finish_background_save_if_ready(plan)
 	return true
+
+
+func _capture_background_character_plan(update_profile_index: bool) -> Dictionary:
+	var started_usec := Time.get_ticks_usec()
+	var payload := _prepare_character_save_payload(false)
+	if payload.is_empty():
+		return {}
+	var path := _profile_path(active_profile_id)
+	var identity := {"path": path, "profile_id": active_profile_id,
+		"world_clock_generation": _world_clock_generation, "sequence": _death_event_sequence}
+	var plan := {"identity": identity, "payload": payload.duplicate(true),
+		"index_path": profile_index_path, "update_index": update_profile_index,
+		"index_entry": {"id": active_profile_id, "name": character_name, "profession": profession,
+			"gender": gender, "level": level, "updated_at": int(Time.get_unix_time_from_system())},
+		"durability_revision": _durability_mutation_revision, "world_revision": _world_mutation_revision,
+		"inventory_before": inventory.duplicate(true), "started_usec": started_usec,
+		"profile_written": false, "completed": false, "item_revision": _item_save_revision,
+		"profile_finished": false, "profile_success": false, "index_updated": false,
+		"world_finished": false, "world_success": false}
+	plan.payload.inventory = SpecialConsumableStacks.split_available(plan.payload.inventory, INVENTORY_CAPACITY, INVENTORY_CAPACITY)
+	return plan
 
 
 func _complete_background_checkpoint(receipt: Dictionary, plan: Dictionary) -> void:
@@ -9138,6 +9344,8 @@ func _complete_background_profile(receipt: Dictionary, plan: Dictionary) -> void
 	_profile_saved_death_event_sequence = sequence
 	_active_profile_legacy_warehouse_pending = false
 	plan.profile_written = true
+	_item_saved_revision = maxi(_item_saved_revision, int(plan.item_revision))
+	_item_save_failed = false
 	if inventory == plan.inventory_before:
 		inventory = plan.payload.inventory
 	if int(plan.durability_revision) == _durability_mutation_revision:
@@ -9191,6 +9399,9 @@ func _finish_background_save(plan: Dictionary, success: bool, index_updated: boo
 	plan.success = success
 	if _background_save == plan:
 		_background_save = {}
+	var is_item_save := _item_save_plan == plan
+	if is_item_save:
+		_item_save_plan = {}
 	if not _background_save_context_matches(plan.identity):
 		return
 	last_save_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": success,
@@ -9201,6 +9412,9 @@ func _finish_background_save(plan: Dictionary, success: bool, index_updated: boo
 		_queue_world_clock_cleanup()
 	_last_runtime_commit_profile = {"duration_ms": float(Time.get_ticks_usec() - int(plan.started_usec)) / 1000.0,
 		"success": success, "profile_index_skipped": not bool(plan.update_index), "background": true}
+	if is_item_save and not success:
+		_item_save_failed = true
+		background_item_save_failed.emit()
 
 
 # Character transactions use the already-durable death-event journal. World

@@ -1,0 +1,28 @@
+{
+  "failed": 1,
+  "suite": "adhoc",
+  "passed": 0,
+  "total": 1,
+  "results": [
+    {
+      "test_name": "hidden_inventory_refresh_test",
+      "test_path": "tests/hidden_inventory_refresh_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-28T15:04:55.2576754Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 1,
+      "engine_log_failure_count": 1,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1"
+    }
+  ],
+  "engine_log_errors": 1,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a",
+  "generated_at": "2026-09-28T23:04:32.2913559+08:00"
+}

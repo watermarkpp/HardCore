@@ -30,9 +30,31 @@ func _run() -> void:
 	host.add_child(panel)
 	for frame in 4:
 		await get_tree().process_frame
-	for placement: Array in [[81, 4], [940010, 1], [191, 3], [192, 5]]:
+	assert(panel.forge_button.disabled, "incomplete inputs must keep action disabled")
+	# Invalid contents are removable; validity belongs to the action button.
+	assert(PlayerState.place_workbench_item("forge", 1, _index_for_id(191)).success)
+	panel._refresh_forge_information()
+	assert(panel.forge_button.disabled)
+	assert(PlayerState.take_workbench_item("forge", 1).success)
+	# Materials before equipment is a supported order, with the same quote.
+	for placement: Array in [[940010, 1], [191, 3], [192, 5], [81, 4]]:
 		panel.selected_inventory_index = _index_for_id(int(placement[0]))
 		panel._on_forge_slot_pressed(int(placement[1]))
+	assert(not panel.forge_button.disabled)
+	# Extra equipment must be accepted into an empty cell, then invalidate
+	# both the real quote and the UI until the user removes it.
+	var extra := GameData.get_item_record({"item_id": 81})
+	assert(PlayerState.receive_record({"item_id": 81, "name": str(extra.name)}, false).success)
+	assert(PlayerState.place_workbench_item("forge", 8, _index_for_id(81)).success)
+	panel._refresh_forge_information()
+	assert(panel.forge_button.disabled and not PlayerState.quote_forge_tray().valid)
+	assert(PlayerState.take_workbench_item("forge", 8).success)
+	var available_gold := PlayerState.gold
+	PlayerState.gold = 0
+	panel._refresh_forge_information()
+	assert(panel.forge_button.disabled, "unaffordable forge must not light up")
+	PlayerState.gold = available_gold
+	panel._refresh_forge_information()
 	assert(not panel.forge_button.disabled)
 	assert("%" in panel.chance_label.text)
 	assert("100000" in panel.fee_label.text)
@@ -51,7 +73,7 @@ func _run() -> void:
 	assert(panel._forge_audio_plays_in_cycle == 3, "forge audio should start once per second for three seconds")
 	assert((panel._forge_glow_overlays[0] as Panel).modulate.a == 0.0, "glow must stop after forge result")
 	assert(host.messages.size() == 1)
-	assert(panel.forge_button.disabled)
+	assert(panel.forge_button.disabled, "consumed materials must disable the next action")
 	assert((panel.forge_artwork["ForgeImageSuccess"] as TextureRect).visible != (panel.forge_artwork["ForgeImageFailure"] as TextureRect).visible)
 	var inventory_after := PlayerState.inventory.duplicate(true)
 	var gold_after := PlayerState.gold

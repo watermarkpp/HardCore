@@ -1,0 +1,62 @@
+{
+  "passed": 3,
+  "generated_at": "2026-09-28T22:26:30.8880415+08:00",
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "camera_black_budget_region_test",
+      "test_path": "tests/camera_black_budget_region_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:26:25.3866382Z",
+      "native_exit_observed_utc": "2026-09-28T14:26:00.3646090Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "game_root_diamond_camera_constraint_test",
+      "test_path": "tests/game_root_diamond_camera_constraint_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:26:31.8846313Z",
+      "native_exit_observed_utc": "2026-09-28T14:26:13.9373204Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "player_walk_run_locomotion_test",
+      "test_path": "tests/player_walk_run_locomotion_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T14:26:45.4090843Z",
+      "native_exit_observed_utc": "2026-09-28T14:26:29.3945951Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "total": 3,
+  "engine_log_errors": 0,
+  "git_head": "21b40ddae663997f8e9f267585988e6a7c63db6a"
+}

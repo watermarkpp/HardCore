@@ -8,6 +8,7 @@ const Runtime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
 const Search := preload("res://scripts/map_editor/polygon/poly_path_search.gd")
 const ExistingSearch := preload("res://scripts/monster_ai_package/path_search.gd")
 const Terrain := preload("res://scripts/monster_terrain_navigation_policy.gd")
+const Locomotion := preload("res://scripts/monster_neighbor_step_policy.gd")
 const Codec := preload("res://scripts/map_editor/map_editor_json_codec.gd")
 var errors: Array[String] = []
 var checks := 0
@@ -65,6 +66,17 @@ func search_path(context: Dictionary, start: Vector2, goal: Vector2, radius: flo
 		var previous := start
 		for point: Vector2 in task.path:
 			check(Runtime.segment_walkable(context, previous, point, radius), "every returned segment clears full footprint")
+			if previous.distance_to(point) > 0.0001:
+				var clear := func(a: Vector2, b: Vector2) -> bool: return Runtime.segment_walkable(context, a, b, radius)
+				var legs := Locomotion.eight_way_path(previous, point, clear)
+				check(not legs.is_empty(), "waypoint supports collision-safe eight-way locomotion")
+				var leg_start := previous
+				for endpoint: Vector2 in legs:
+					var unit := (endpoint - leg_start).normalized().abs()
+					check(unit.x < 0.0001 or unit.y < 0.0001 or absf(unit.x - unit.y) < 0.0001, "actual locomotion leg is eight-way")
+					check(Runtime.segment_walkable(context, leg_start, endpoint, radius), "eight-way corner preserves full body clearance")
+					leg_start = endpoint
+				check(leg_start.distance_to(point) < 0.0001, "locomotion preserves exact nav waypoint")
 			previous = point
 		check(previous.distance_to(goal) <= 0.001, "continuous endpoint reaches requested goal")
 	return task

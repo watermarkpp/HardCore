@@ -1,6 +1,12 @@
 extends Node
 
 class FixtureState extends "res://scripts/player_state.gd":
+	var blocking_boundaries := 0
+	func _before_state_transaction(include_world := false) -> void:
+		if _json_persistence.pending_count() > 0 or _item_save_revision > _item_saved_revision:
+			blocking_boundaries += 1
+		super._before_state_transaction(include_world)
+
 	func _ready() -> void:
 		# Isolated paths are supplied by the fixture. Keep the older completion
 		# pending until the public transaction consumes it; prepared transfers
@@ -63,8 +69,10 @@ func _case(operation: String, prepared: bool) -> void:
 	assert(not plan.writer.job.response.finished and state.gold == 0)
 	assert(int(_read(profile_path).gold) == 17)
 	var result: Dictionary
+	state.blocking_boundaries = 0
 	if prepared:
 		result = await state.transfer_warehouse_prepared(operation, [0], [0] if operation == "deposit" else [])
+		_expect(state.blocking_boundaries == 0, label + ": prepared UI blocked on an older writer")
 	elif operation == "deposit":
 		result = state.deposit_to_warehouse(0, 0)
 	else:

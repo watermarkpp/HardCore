@@ -47,7 +47,7 @@ func _run() -> void:
 	assert(preload("res://scripts/item_detail_presenter.gd").format_item(heart, {}, {"recipe_profession": "法师"}).contains("随机法师技能等级 +1"))
 	for art: TextureRect in panel.forge_artwork.values():
 		assert(not art.visible, "forge result art must be absent in synthesis mode")
-	assert(panel.forge_button.text == "开始合成" and panel.forge_button.disabled)
+	assert(panel.forge_button.text == "开始合成" and panel.forge_button.disabled, "missing recipe must keep action disabled")
 	assert((panel.get_node("ForgeRulesPanel/ForgeRulesText") as Label).text == "请选择合成配方")
 	panel.call("_on_synthesis_recipe_pressed", 0)
 	assert((panel.get_node("ForgeRulesPanel/ForgeRulesText") as Label).text == "材料需求：远古圣物碎片 ×4")
@@ -64,12 +64,22 @@ func _run() -> void:
 	assert((panel._forge_glow_overlays[0] as Panel).modulate.a == 0.0)
 	assert(PlayerState.gold == gold_before and PlayerState.inventory == inventory_before and PlayerState.synthesis_tray == PlayerState._empty_workbench_tray(), "UI preview must not commit a recipe")
 	PlayerState.gold = 500000
+	panel._selected_synthesis_recipe = -1
 	for _fragment in 4:
 		assert(bool(PlayerState.receive("远古圣物碎片", 1, false).get("success", false)))
 	for material_slot: int in [2, 4, 6, 8]:
 		panel.selected_inventory_index = _fragment_index()
 		panel.call("_on_forge_slot_pressed", material_slot)
 		assert(not PlayerState.synthesis_tray[material_slot].is_empty())
+	assert(panel.forge_button.disabled, "materials before recipe must be accepted without enabling an invalid action")
+	panel.call("_on_synthesis_recipe_pressed", 0)
+	assert(not panel.forge_button.disabled)
+	assert(PlayerState.receive("远古圣物碎片", 1, false).success)
+	assert(PlayerState.place_workbench_item("synthesis", 1, _fragment_index()).success)
+	panel._refresh_forge_information()
+	assert(panel.forge_button.disabled, "extra materials must disable synthesis")
+	assert(PlayerState.take_workbench_item("synthesis", 1).success)
+	panel._refresh_forge_information()
 	assert(not panel.forge_button.disabled)
 	panel.forge_button.pressed.emit()
 	assert(panel._forging)
