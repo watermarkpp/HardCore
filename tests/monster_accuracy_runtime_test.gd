@@ -95,18 +95,18 @@ func _run() -> void:
 	assert(_target.current_hp == 90, "ordinary monster melee did not use accuracy")
 	assert(bool(_melee_attacker.last_physical_hit_resolution.get("success", false)), "ordinary melee hit was not recorded")
 
-	# Physical projectile release also settles through the same gate.  The
-	# release/visual timing is unchanged; only damage submission is gated.
+	# Physical projectile contact settles through the same accuracy gate. Its
+	# actual wall/player collision is covered by the separate flight test.
 	_target.current_hp = 100
 	_projectile_attacker.accuracy = 0
 	assert(_projectile_attacker._launch_physical_projectile(_target, 10), "physical projectile release fixture did not launch")
-	_projectile_attacker._settle_physical_projectile_release(_projectile_attacker._pending_attack_release_record)
+	_projectile_attacker._on_physical_projectile_contact(_latest_projectile_descriptor(), _target)
 	assert(_target.current_hp == 100, "physical projectile ignored accuracy=0")
 	assert(not bool(_projectile_attacker.last_physical_hit_resolution.get("success", true)), "projectile miss was not recorded")
 	_target.current_hp = 100
 	_projectile_attacker.accuracy = 16
 	assert(_projectile_attacker._launch_physical_projectile(_target, 10), "physical projectile hit fixture did not launch")
-	_projectile_attacker._settle_physical_projectile_release(_projectile_attacker._pending_attack_release_record)
+	_projectile_attacker._on_physical_projectile_contact(_latest_projectile_descriptor(), _target)
 	assert(_target.current_hp == 90, "physical projectile did not use accuracy")
 	assert(bool(_projectile_attacker.last_physical_hit_resolution.get("success", false)), "projectile hit was not recorded")
 
@@ -151,6 +151,16 @@ func _assert_fixed_roll(
 	assert(int(resolution.get("target_agility", -1)) == target_agility, "%s agility evidence mismatch" % case_name)
 	assert(int(resolution.get("random_roll", -1)) == random_roll, "%s roll evidence mismatch" % case_name)
 	assert(bool(resolution.get("success", not expected_hit)) == expected_hit, "%s success evidence mismatch" % case_name)
+
+
+func _latest_projectile_descriptor() -> Dictionary:
+	var children := get_children()
+	for index: int in range(children.size() - 1, -1, -1):
+		var child: Node = children[index]
+		if child is MonsterRangedProjectileEffect and not child.is_queued_for_deletion():
+			return (child as MonsterRangedProjectileEffect).release_descriptor
+	assert(false, "accepted physical release did not create a flight actor")
+	return {}
 
 
 func is_environment_point_blocked(_world_px: Vector2) -> bool:
