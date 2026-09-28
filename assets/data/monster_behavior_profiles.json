@@ -145,6 +145,10 @@
       "runtimeProjection": {"moveSpeed": 0.0, "attackRange": 0.0, "aggroRadius": 288.0},
       "summonRule": {"enabled": true, "monsterIds": [183], "count": 1, "maxActive": 5, "delaySeconds": 0.5, "confidence": "B"}
     },
+    "explosion_spider": {
+      "serviceClass": {"race": 117, "name": "TExplosionSpider", "confidence": "A", "source": "original_gameofmir/M2Server/UsrEngn.pas:1919 and ObjMon2.pas:729-804"},
+      "attackDelivery": {"kind": "self_detonation", "rangeShape": "adjacent_map_cells", "range_gu": 1.0, "physicalRatio": 0.5, "magicRatio": 0.5, "confidence": "A", "source": "original_gameofmir/M2Server/ObjMon2.pas:745-804"}
+    },
     "rainbow_demon": {"lifeStealRatio": 0.33},
     "millennium_tree": {
       "specialClassification": "fixed_body_full_area_attacker",
@@ -1347,6 +1351,7 @@
     "153": "zuma_dormant", "154": "zuma_dormant", "155": "zuma_dormant",
     "156": "zuma_guard_holy_word", "157": "zuma_guard_holy_word", "158": "zuma_guard_holy_word", "159": "zuma_guard_holy_word",
     "180": "stationary_demon", "182": "stationary_spider",
+    "183": "explosion_spider",
     "186": "w1_archer_projectile",
     "193": "rainbow_demon", "195": "millennium_tree",
     "206": "skeleton_archer", "207": "skeleton_archer",

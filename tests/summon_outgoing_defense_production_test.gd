@@ -1,6 +1,7 @@
 extends Node
 
 const GroundUnit := preload("res://scripts/ground_unit_space.gd")
+const WorldSpatialRules := preload("res://scripts/world_spatial_rules.gd")
 const RAW_DAMAGE := 20
 const MAP_ID := 910001
 const ORIGIN_GU := Vector2(38.5, 13.5)
@@ -81,6 +82,8 @@ func _run() -> void:
 	for summon: SummonActor in [skeleton, divine]:
 		_verify_miss_boundary(summon, _targets[135])
 		_verify_moved_target_rejects_release(summon, _targets[38])
+	for summon: SummonActor in _summons:
+		await _verify_world_wall_blocks_attack(summon, _targets[38])
 	for summon: SummonActor in _summons:
 		summon.queue_free()
 	for target: EnemyActor in _targets.values():
@@ -176,6 +179,29 @@ func _verify_moved_target_rejects_release(summon: SummonActor, target: EnemyActo
 	summon._release_pending_attack()
 	assert(target.current_hp == hp_before, "release ignored its frozen geometry rejection")
 	assert(summon._pending_attack_target == null)
+
+
+func _verify_world_wall_blocks_attack(summon: SummonActor, target: EnemyActor) -> void:
+	_prepare_attack(summon, target)
+	var hp_before := target.current_hp
+	var wall := StaticBody2D.new()
+	wall.collision_layer = WorldSpatialRules.WORLD_LAYER
+	wall.collision_mask = 0
+	wall.global_position = _ground_to_screen(ORIGIN_GU + Vector2(0.5, 0.0))
+	var collision := CollisionShape2D.new()
+	var shape := CircleShape2D.new()
+	shape.radius = 8.0
+	collision.shape = shape
+	wall.add_child(collision)
+	add_child(wall)
+	await get_tree().physics_frame
+	assert(not summon._target_within_attack_geometry(target), "wall did not veto summon attack admission")
+	summon._release_pending_attack()
+	assert(target.current_hp == hp_before, "summon hit through wall during windup")
+	assert(summon._pending_attack_target == null)
+	wall.queue_free()
+	await get_tree().physics_frame
+	assert(summon._target_within_attack_geometry(target), "open corridor stayed blocked after wall removal")
 
 
 func _seed_for_exact_roll(agility: int, exact_roll: int) -> int:

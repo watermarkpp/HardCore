@@ -2657,6 +2657,28 @@ def build_spawn_and_summons(catalog: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def build_one_behavior(catalog: dict[str, Any], monster_id: int) -> dict[str, Any]:
+    """Refresh one exact-ID behavior without rebuilding frozen catalog lanes."""
+    candidate = build_catalog()
+    key = str(monster_id)
+    if key not in catalog["entries_by_id"] or key not in candidate["entries_by_id"]:
+        raise RuntimeError(f"behavior target is not a catalog identity: {monster_id}")
+    result = copy.deepcopy(catalog)
+    source = candidate["entries_by_id"][key]
+    target = result["entries_by_id"][key]
+    target["combat"]["behavior_profile"] = copy.deepcopy(source["combat"]["behavior_profile"])
+    target["source_evidence"]["combat_ai_timing"]["behavior"] = copy.deepcopy(
+        source["source_evidence"]["combat_ai_timing"]["behavior"]
+    )
+    for index, entry in enumerate(result["entries"]):
+        if entry["monster_id"] == monster_id:
+            result["entries"][index] = copy.deepcopy(target)
+            break
+    else:
+        raise RuntimeError(f"behavior target has no matching entry: {monster_id}")
+    return result
+
+
 def assert_identity_and_body_views(catalog: dict[str, Any]) -> None:
     """HC-MONSTER-COMBAT-R2 T2: fail closed unless both catalog identity views
     agree and every baked body_profile is exactly the policy assignment for
@@ -2746,9 +2768,18 @@ def main() -> int:
                         help="refresh enemy summons and spawn/drop separation; preserve all other catalog domains")
     parser.add_argument("--base-catalog", type=Path, default=DEFAULT_OUTPUT,
                         help="published input for --spawn-and-summons-only")
+    parser.add_argument("--target-behavior-monster-id", type=int,
+                        help="refresh only this exact-ID behavior from authoring, preserving other catalog entries")
     args = parser.parse_args()
     try:
-        catalog = build_spawn_and_summons(load_json(args.base_catalog)) if args.spawn_and_summons_only else build_catalog()
+        if args.spawn_and_summons_only and args.target_behavior_monster_id is not None:
+            raise RuntimeError("select exactly one selective catalog mode")
+        if args.target_behavior_monster_id is not None:
+            catalog = build_one_behavior(load_json(args.base_catalog), args.target_behavior_monster_id)
+        elif args.spawn_and_summons_only:
+            catalog = build_spawn_and_summons(load_json(args.base_catalog))
+        else:
+            catalog = build_catalog()
         if not args.spawn_and_summons_only:
             assert_identity_and_body_views(catalog)
         errors = [] if args.spawn_and_summons_only else validate_catalog(catalog) + validate_generator_contract()

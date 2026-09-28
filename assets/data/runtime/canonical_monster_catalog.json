@@ -273535,6 +273535,21 @@
           }
         },
         "behavior_profile": {
+          "serviceClass": {
+            "race": 117,
+            "name": "TExplosionSpider",
+            "confidence": "A",
+            "source": "original_gameofmir/M2Server/UsrEngn.pas:1919 and ObjMon2.pas:729-804"
+          },
+          "attackDelivery": {
+            "kind": "self_detonation",
+            "rangeShape": "adjacent_map_cells",
+            "range_gu": 1.0,
+            "physicalRatio": 0.5,
+            "magicRatio": 0.5,
+            "confidence": "A",
+            "source": "original_gameofmir/M2Server/ObjMon2.pas:745-804"
+          },
           "timing": {
             "attackIntervalMs": 0,
             "moveIntervalMs": 500,
@@ -273680,10 +273695,10 @@
             "distribution": "project.monster_behavior_profiles",
             "tier": "primary",
             "original_path": "assets/data/monster_behavior_profiles.json",
-            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "sha256": "DDCC3F2796172CB518DB2EF081EA0D82894512CB70FE05FAD84BE234047AD27E",
             "hash_normalization": "lf_text",
             "role": "behavior_profile",
-            "evidence": "profileByMonsterId[183]=none"
+            "evidence": "profileByMonsterId[183]=explosion_spider"
           },
           "detail": {
             "source": "assets/data/monster_21cq_detail_source_v1.json",
@@ -332033,6 +332048,21 @@
           }
         },
         "behavior_profile": {
+          "serviceClass": {
+            "race": 117,
+            "name": "TExplosionSpider",
+            "confidence": "A",
+            "source": "original_gameofmir/M2Server/UsrEngn.pas:1919 and ObjMon2.pas:729-804"
+          },
+          "attackDelivery": {
+            "kind": "self_detonation",
+            "rangeShape": "adjacent_map_cells",
+            "range_gu": 1.0,
+            "physicalRatio": 0.5,
+            "magicRatio": 0.5,
+            "confidence": "A",
+            "source": "original_gameofmir/M2Server/ObjMon2.pas:745-804"
+          },
           "timing": {
             "attackIntervalMs": 0,
             "moveIntervalMs": 500,
@@ -332178,10 +332208,10 @@
             "distribution": "project.monster_behavior_profiles",
             "tier": "primary",
             "original_path": "assets/data/monster_behavior_profiles.json",
-            "sha256": "06DF0BD39E7457FB6B41681C67D6D1737C333ABE8CA00237C9622BC4DE5A384D",
+            "sha256": "DDCC3F2796172CB518DB2EF081EA0D82894512CB70FE05FAD84BE234047AD27E",
             "hash_normalization": "lf_text",
             "role": "behavior_profile",
-            "evidence": "profileByMonsterId[183]=none"
+            "evidence": "profileByMonsterId[183]=explosion_spider"
           },
           "detail": {
             "source": "assets/data/monster_21cq_detail_source_v1.json",

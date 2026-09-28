@@ -425,15 +425,15 @@ func _test_guard_immediate_visual() -> void:
 		"guard direct projectile releases inside Manhattan view range",
 	)
 	check(
-		player.current_hp == hp_before - 20 and actor._pending_attack_time < 0.0,
-		"W1-guard-immediate",
-		"guard HP is immediate and never owned by the presentation flight",
+		player.current_hp == hp_before and actor._pending_attack_time < 0.0,
+		"W1-guard-contact-pending",
+		"guard release does not damage before projectile contact",
 	)
 	check(
 		descriptors.size() == 1
-		and is_equal_approx(float(descriptors[0].get("presentation_delay_seconds", 0.0)), 0.85),
+		and is_equal_approx(float(descriptors[0].get("presentation_delay_seconds", 0.0)), 0.336),
 		"W1-guard-delay",
-		"guard presentation retains 0.6 + ChebyshevGU*0.05",
+		"guard flight uses the converted original 500px/700ms speed",
 	)
 	var visual_count := 0
 	for child: Node in get_children():
@@ -442,8 +442,12 @@ func _test_guard_immediate_visual() -> void:
 	check(
 		visual_count == 1,
 		"W1-guard-visual",
-		"guard reuses exactly one existing presentation-only projectile visual",
+		"guard owns one projectile flight",
 	)
+	var effect := _latest_guard_effect()
+	if effect != null:
+		effect.call("_physics_process", 0.4)
+	check(player.current_hp == hp_before - 20, "W1-guard-contact", "guard damage follows actual contact")
 	actor.queue_free()
 	for child: Node in get_children():
 		if child.get_script() == ProjectileVisual:
@@ -536,6 +540,10 @@ func _test_exact_special_family_actors() -> void:
 			var launched := actor._launch_monster_special_cell_delivery(player, 20)
 			if expected_kind == "line_magic":
 				actor._update_pending_attack(0.61)
+			elif expected_kind == "guard_direct_projectile":
+				var projectile := _latest_guard_effect()
+				if projectile != null:
+					projectile.call("_physics_process", 1.0)
 			var positive_ok := (
 				launched and player.current_hp < hp_before
 				and descriptors.size() == 1
@@ -561,6 +569,10 @@ func _test_exact_special_family_actors() -> void:
 			launched = actor._launch_monster_special_cell_delivery(player, 20)
 			if expected_kind == "line_magic":
 				actor._update_pending_attack(0.61)
+			elif expected_kind == "guard_direct_projectile":
+				var blocked_projectile := _latest_guard_effect()
+				if blocked_projectile != null:
+					blocked_projectile.call("_physics_process", 1.0)
 			check(
 				launched and player.current_hp == hp_before,
 				"W1-exact-%d-world-negative" % monster_id_value,
@@ -595,6 +607,19 @@ func _exact_launch_diagnostic(actor: EnemyActor, kind: String) -> Dictionary:
 		"victim_count": actor._monster_special_delivery_targets(snapshot, player).size(),
 		"resolution": actor.last_magic_attack_resolution,
 	}
+
+
+func _latest_guard_effect() -> Node2D:
+	var children := get_children()
+	for index: int in range(children.size() - 1, -1, -1):
+		var child: Node = children[index]
+		if (
+			child is Node2D
+			and child.get_script() == ProjectileVisual
+			and not child.is_queued_for_deletion()
+		):
+			return child as Node2D
+	return null
 
 
 func add_world_wall(ground_position_gu: Vector2) -> StaticBody2D:

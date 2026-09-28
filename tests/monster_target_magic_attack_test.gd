@@ -51,9 +51,12 @@ func _run() -> void:
 	mage.current_hp = mage.max_hp
 	assert(not mage._target_magic_condition_met(Vector2(1.0, 0.0)))
 	assert(mage._target_magic_condition_met(Vector2(2.0, 0.0)))
+	assert(not mage._target_magic_condition_met(Vector2(1.99, 0.0)))
+	assert(mage._target_magic_condition_met(Vector2(2.01, 0.0)))
 	mage.current_hp = maxi(1, mage.max_hp / 2 - 1)
 	assert(mage._target_magic_condition_met(Vector2(1.0, 0.0)))
-	assert(not mage._target_magic_condition_met(Vector2(2.01, 2.01)))
+	assert(mage._target_magic_condition_met(Vector2(2.01, 2.01)))
+	assert(not mage._target_magic_condition_met(Vector2(3.0, 3.0)))
 
 	# Target identity is bound at release, but a map transition cancels impact.
 	player.current_hp = hp_before

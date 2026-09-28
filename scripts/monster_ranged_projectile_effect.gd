@@ -1,9 +1,9 @@
 class_name MonsterRangedProjectileEffect
 extends Node2D
 
-## Presentation-only projectile for monster physical ranged attacks. EnemyActor
-## owns target binding and delayed damage; this node only traverses the frozen
-## release path and cannot submit damage.
+## A physical projectile owns its frozen flight and first world/player contact.
+## EnemyActor remains the sole damage formula owner and is called only after
+## that contact. Preview-only instances have no gameplay callback.
 ##
 ## The live 1.76 client uses TFlyingArrow (not TFlyingAxe) with
 ## WEffectImg[ARCHERBASE2 + Dir16 + curframe]. The mtFlyArrow constructor has
@@ -66,6 +66,7 @@ var _previous_world_px := Vector2.ZERO
 var _sprite: Sprite2D
 var _exact_profile: Dictionary = {}
 var _animation_frame := -1
+var _body_only := false
 
 
 static func _profile_has_id(profile: Dictionary, monster_id: int) -> bool:
@@ -101,8 +102,8 @@ func setup(descriptor: Dictionary) -> void:
 		if parsed is Dictionary: _exact_sources = parsed
 	var source_monster_id := int(release_descriptor.get("source_monster_id", -1))
 	if _profile_has_id({"monster_ids": _exact_sources.get("body_only_monster_ids", [])}, source_monster_id):
-		_reject_visual()
-		return
+		_body_only = true
+		visible = false
 	for profile: Dictionary in _exact_sources.get("profiles", {}).values():
 		if _profile_has_id(profile, source_monster_id):
 			_exact_profile = profile
@@ -133,13 +134,16 @@ func _ready() -> void:
 	z_as_relative = true
 	z_index = 0
 	add_to_group("zone_content")
-	_install_source_frame()
-	set_process(visible and _sprite != null)
+	if not _body_only:
+		_install_source_frame()
+	var authoritative := not bool(release_descriptor.get("presentation_only", true))
+	set_process(not authoritative and visible and _sprite != null)
+	set_physics_process(authoritative)
 	if _finished: queue_free()
 
 
 func _install_source_frame() -> void:
-	if not visible or _sprite != null:
+	if _body_only or not visible or _sprite != null:
 		return
 	if not _exact_profile.is_empty():
 		SourceFrames.request_profile(_exact_profile, _direction16)
@@ -167,19 +171,68 @@ func _install_source_frame() -> void:
 
 
 func _process(delta: float) -> void:
+	if bool(release_descriptor.get("presentation_only", true)):
+		_advance_flight(delta)
+
+
+func _physics_process(delta: float) -> void:
+	if not bool(release_descriptor.get("presentation_only", true)):
+		_advance_flight(delta)
+
+
+func _advance_flight(delta: float) -> void:
 	if _finished:
 		return
+	if not bool(release_descriptor.get("presentation_only", true)):
+		var source: Object = instance_from_id(int(release_descriptor.get("source_instance_id", 0)))
+		if not is_instance_valid(source) or not bool(source.get("combat_enabled")):
+			_finish(false)
+			return
 	_elapsed_seconds = minf(duration_seconds, _elapsed_seconds + maxf(0.0, delta))
 	var progress := clampf(_elapsed_seconds / duration_seconds, 0.0, 1.0)
 	var next_world_px := origin_world_px.lerp(target_world_px, progress)
-	if not _world_segment_is_clear(_previous_world_px, next_world_px):
-		_finish(true)
-		return
+	if bool(release_descriptor.get("presentation_only", true)):
+		if not _world_segment_is_clear(_previous_world_px, next_world_px):
+			_finish(true)
+			return
+	else:
+		var collision := _first_flight_collision(_previous_world_px, next_world_px)
+		if not collision.is_empty():
+			global_position = collision.get("position", next_world_px)
+			var collider: Object = collision.get("collider", null)
+			var target_contact := (
+				(collider is PlayerCharacter or collider is SummonActor)
+				and collider.get_instance_id()
+				== int(release_descriptor.get("target_instance_id", 0))
+			)
+			_finish(not target_contact, target_contact)
+			if target_contact:
+				var owner: Object = instance_from_id(int(release_descriptor.get("source_instance_id", 0)))
+				if is_instance_valid(owner):
+					if str(release_descriptor.get("delivery_kind", "")) == "guard_direct_projectile":
+						owner.call("_on_guard_projectile_contact", release_descriptor.get("release_record", {}), collider)
+					else:
+						owner.call("_on_physical_projectile_contact", release_descriptor, collider)
+			return
 	global_position = next_world_px
 	_previous_world_px = next_world_px
 	if not _exact_profile.is_empty(): _update_exact_frame()
 	if progress >= 1.0:
 		_finish(false)
+
+
+func _first_flight_collision(from_world_px: Vector2, to_world_px: Vector2) -> Dictionary:
+	var world := get_world_2d()
+	if world == null or world.direct_space_state == null:
+		return {}
+	var query := PhysicsRayQueryParameters2D.create(
+		from_world_px,
+		to_world_px,
+		WorldSpatialRulesScript.WORLD_LAYER | WorldSpatialRulesScript.PLAYER_LAYER,
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	return world.direct_space_state.intersect_ray(query)
 
 
 func _update_exact_frame() -> void:
@@ -211,21 +264,30 @@ func _world_segment_is_clear(from_world_px: Vector2, to_world_px: Vector2) -> bo
 	return physics_space.intersect_ray(query).is_empty()
 
 
-func _finish(blocked_by_world: bool) -> void:
+func _finish(blocked_by_world: bool, target_contact := false) -> void:
 	if _finished:
 		return
 	_finished = true
 	_blocked_by_world = blocked_by_world
 	set_process(false)
+	set_physics_process(false)
 	if blocked_by_world:
 		visible = false
 	playback_finished.emit(self)
+	if (
+		not target_contact
+		and str(release_descriptor.get("delivery_kind", "")) == "guard_direct_projectile"
+	):
+		var owner: Object = instance_from_id(int(release_descriptor.get("source_instance_id", 0)))
+		if is_instance_valid(owner):
+			owner.call("_on_guard_projectile_miss", release_descriptor.get("release_record", {}))
 	queue_free()
 
 
 func _reject_visual() -> void:
 	visible = false
 	set_process(false)
+	set_physics_process(false)
 	_finished = true
 
 
@@ -314,7 +376,11 @@ func visual_descriptor() -> Dictionary:
 		"source_direction16": _direction16,
 		"source_frame_time_ms": 50 if not _exact_profile.is_empty() else SOURCE_FRAME_TIME_MS,
 		"background_policy": "transparent_source_wil_frame",
-		"collision_policy": "continuous_world_mask_visual_cutoff",
+		"collision_policy": (
+			"first_world_or_player_contact_once"
+			if not bool(release_descriptor.get("presentation_only", true))
+			else "continuous_world_mask_visual_cutoff"
+		),
 	}
 	descriptor.make_read_only()
 	return descriptor

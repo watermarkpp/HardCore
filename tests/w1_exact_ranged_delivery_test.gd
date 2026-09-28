@@ -264,6 +264,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	var player := _make_player(Vector2(4.0, 0.0))
 	var attacker := _make_attacker(monster_id, player)
 	await get_tree().process_frame
+	await get_tree().physics_frame
 
 	_assert_actor_identity_and_delivery(
 		attacker,
@@ -284,6 +285,9 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	attacker.target = player
 	var hp_before := player.current_hp
 	attacker._physics_process(0.01)
+	assert(_projectile_descriptors.is_empty(), "ID%d projectile must wait for attack release frame" % monster_id)
+	assert(attacker._pending_attack_release_record.get("kind", "") == "physical_projectile_windup")
+	attacker._update_pending_attack(0.5)
 	assert(
 		_projectile_descriptors.size() == 1,
 		"ID%d must emit one exact physical projectile" % monster_id,
@@ -292,47 +296,44 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 		player.current_hp == hp_before,
 		"ID%d projectile must not deal instant damage" % monster_id,
 	)
-	assert(
-		attacker._pending_attack_release_record.get("kind", "") == "physical_projectile",
-		"ID%d must freeze a physical_projectile release" % monster_id,
-	)
+	assert(attacker._pending_attack_release_record.is_empty())
 	var descriptor: Dictionary = _projectile_descriptors[0]
 	_assert_projectile_descriptor(descriptor, monster_id, player)
-	var expected_duration := 0.6 + 4.0 * 0.05
+	var expected_duration := 0.2688
 	assert(
 		is_equal_approx(float(descriptor.get("duration_seconds", 0.0)), expected_duration),
 		"ID%d projectile delay must be %s seconds, got %s"
 		% [monster_id, str(expected_duration), str(descriptor.get("duration_seconds", 0.0))],
 	)
-	attacker._physics_process(0.79)
+	var effect := _latest_projectile_effect()
+	assert(effect != null)
+	effect.call("_physics_process", 0.3)
 	assert(
-		player.current_hp == hp_before,
-		"ID%d projectile settled before frozen delay" % monster_id,
-	)
-	attacker._physics_process(0.02)
-	assert(
-		player.current_hp == hp_before - 7,
+		player.current_hp == hp_before - int(descriptor.get("damage", 0)),
 		"ID%d physical projectile did not resolve" % monster_id,
 	)
 
-	# A live target may move within the same WORLD while the projectile is in
-	# flight.  The frozen target instance remains a valid hit; this is separate
-	# from the WORLD/epoch cancellation cases below.
+	# The original target can dodge the actual projectile path in the same WORLD.
 	player.current_hp = hp_before
 	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
 	_projectile_descriptors.clear()
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
+	attacker._update_pending_attack(0.5)
 	assert(_projectile_descriptors.size() == 1)
-	player.global_position = _ground_to_screen(Vector2(3.0, 1.0))
-	attacker._physics_process(0.79)
-	assert(player.current_hp == hp_before)
-	attacker._physics_process(0.02)
+	player.global_position = _ground_to_screen(Vector2(4.0, 3.0))
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	effect = _latest_projectile_effect()
+	effect.call("_physics_process", 0.3)
 	assert(
-		player.current_hp == hp_before - 7,
-		"ID%d moving same-WORLD target did not resolve" % monster_id,
+		player.current_hp == hp_before,
+		"ID%d dodged same-WORLD target was hit by locked ID" % monster_id,
 	)
+	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
+	await get_tree().physics_frame
+	await get_tree().process_frame
 
 	player.current_hp = hp_before
 	player.set_meta("runtime_map_id", 1)
@@ -340,12 +341,14 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
+	attacker._update_pending_attack(0.5)
 	assert(
 		_projectile_descriptors.size() == 1,
 		"ID%d WORLD probe must launch before map change" % monster_id,
 	)
 	player.set_meta("runtime_map_id", 2)
-	attacker._physics_process(0.81)
+	effect = _latest_projectile_effect()
+	effect.call("_physics_process", 0.3)
 	assert(
 		player.current_hp == hp_before,
 		"ID%d projectile crossed runtime WORLD boundary" % monster_id,
@@ -359,6 +362,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	# Reacquire it before testing the independent epoch boundary.
 	attacker.target = player
 	attacker._physics_process(0.01)
+	attacker._update_pending_attack(0.5)
 	assert(
 		_projectile_descriptors.size() == 1,
 		"ID%d epoch probe must launch before transition" % monster_id,
@@ -366,7 +370,8 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	var token := "w1-id%d-epoch" % monster_id
 	assert(player.begin_combat_transition(token))
 	assert(player.finish_combat_transition(token))
-	attacker._physics_process(0.81)
+	effect = _latest_projectile_effect()
+	effect.call("_physics_process", 0.3)
 	assert(
 		player.current_hp == hp_before,
 		"ID%d physical release crossed combat_epoch" % monster_id,
@@ -378,6 +383,7 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	attacker.queue_free()
 	player.queue_free()
 	await get_tree().process_frame
+	await get_tree().physics_frame
 
 
 func _assert_physical_world_wall(
@@ -398,6 +404,7 @@ func _assert_physical_world_wall(
 	var launch_wall := _make_world_wall(Vector2.ZERO, Vector2(4.0, 0.0))
 	await get_tree().physics_frame
 	attacker._physics_process(0.01)
+	attacker._update_pending_attack(0.5)
 	assert(
 		_projectile_descriptors.is_empty(),
 		"ID50 WORLD wall must block physical launch",
@@ -406,7 +413,7 @@ func _assert_physical_world_wall(
 		attacker._pending_attack_release_record.is_empty(),
 		"ID50 launch-blocked path must not retain pending damage",
 	)
-	attacker._physics_process(0.81)
+	attacker._physics_process(0.3)
 	assert(
 		player.current_hp == hp_before,
 		"ID50 launch-blocked WORLD path must deal no damage",
@@ -420,18 +427,17 @@ func _assert_physical_world_wall(
 	_projectile_descriptors.clear()
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
+	attacker._update_pending_attack(0.5)
 	assert(
 		_projectile_descriptors.size() == 1,
 		"ID50 open WORLD corridor must launch the projectile",
 	)
-	assert(
-		attacker._pending_attack_release_record.get("kind", "")
-		== "physical_projectile",
-		"ID50 open corridor must retain physical release state",
-	)
+	assert(attacker._pending_attack_release_record.is_empty())
+	var effect := _latest_projectile_effect()
+	assert(effect != null)
 	var release_wall := _make_world_wall(Vector2.ZERO, Vector2(4.0, 0.0))
 	await get_tree().physics_frame
-	attacker._physics_process(0.81)
+	effect.call("_physics_process", 0.3)
 	assert(
 		player.current_hp == hp_before,
 		"ID50 WORLD wall inserted before release must deal no damage",
@@ -584,9 +590,12 @@ func _run_target_magic_case() -> void:
 	attacker.current_hp = attacker.max_hp
 	assert(not attacker._target_magic_condition_met(Vector2(1.0, 0.0)))
 	assert(attacker._target_magic_condition_met(Vector2(2.0, 0.0)))
+	assert(not attacker._target_magic_condition_met(Vector2(1.99, 0.0)))
+	assert(attacker._target_magic_condition_met(Vector2(2.01, 0.0)))
 	attacker.current_hp = maxi(1, int(attacker.max_hp / 2.0) - 1)
 	assert(attacker._target_magic_condition_met(Vector2(1.0, 0.0)))
-	assert(not attacker._target_magic_condition_met(Vector2(2.01, 2.01)))
+	assert(attacker._target_magic_condition_met(Vector2(2.01, 2.01)))
+	assert(not attacker._target_magic_condition_met(Vector2(3.0, 3.0)))
 	attacker.current_hp = attacker.max_hp
 	await _assert_target_magic_world_wall(attacker, player, hp_before)
 
@@ -698,6 +707,15 @@ func _assert_projectile_descriptor(
 	assert(str(snapshot.get("projection_relationship_id", "")) == "projectile_sweep")
 
 
+func _latest_projectile_effect() -> Node2D:
+	var children := get_children()
+	for index: int in range(children.size() - 1, -1, -1):
+		var child: Node = children[index]
+		if child is Node2D and child.get_script() == ProjectileEffectScript and not child.is_queued_for_deletion():
+			return child as Node2D
+	return null
+
+
 func _make_world_wall(
 	from_ground_gu: Vector2,
 	to_ground_gu: Vector2,
@@ -727,11 +745,12 @@ func _make_player(ground_gu: Vector2) -> PlayerCharacter:
 	player.set_meta("runtime_map_id", 1)
 	player.set_meta("safe_zones", [])
 	player.set_physics_process(false)
-	player.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(player)
+	player.set_physics_process(false)
 	player.max_hp = 1000
 	player.current_hp = 1000
 	player.defense_min = 0
+	player.defense_max = 0
 	player.defense_max = 0
 	return player
 
@@ -749,8 +768,8 @@ func _make_attacker(monster_id: int, player: PlayerCharacter) -> EnemyActor:
 	attacker.environment_blocker = self
 	attacker.set_meta("safe_zones", [])
 	attacker.set_physics_process(false)
-	attacker.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(attacker)
+	attacker.set_physics_process(false)
 	attacker.ranged_projectile_requested.connect(_capture_projectile_descriptor)
 	attacker.target_magic_requested.connect(_capture_target_magic_descriptor)
 	attacker.target = player

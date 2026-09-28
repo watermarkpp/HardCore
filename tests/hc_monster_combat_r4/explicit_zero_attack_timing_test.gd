@@ -18,5 +18,12 @@ func _ready() -> void:
 		if not is_equal_approx(actor._attack_interval, 0.2):
 			failures.append("%d:explicit_zero_became_default_%f" % [mid, actor._attack_interval])
 		actor.free()
+	# The primary combat row for ID19 has 0..5 DC. Setup must retain the
+	# legitimate zero outcome rather than silently raising the lower bound.
+	var zero_floor := EnemyActor.new()
+	zero_floor.setup(GameData.get_monster_by_id(19), null, false)
+	if zero_floor.attack_min != 0 or zero_floor.attack_max < 1:
+		failures.append("19:zero_dc_floor_changed:%d..%d" % [zero_floor.attack_min, zero_floor.attack_max])
+	zero_floor.free()
 	print("R4_ZERO_ATTACK_TIMING_PASS" if failures.is_empty() else "R4_ZERO_ATTACK_TIMING_FAIL " + str(failures))
 	get_tree().quit(0 if failures.is_empty() else 1)

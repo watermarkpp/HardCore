@@ -624,7 +624,10 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	defense = maxi(0, int(stats.get("defense", 0)))
 	magic_defense = maxi(0, int(stats.get("magic_defense", 0)))
 	_compile_direct_spell_runtime_stats(canonical_entry)
-	attack_min = maxi(1, int(stats.get("attack_min", 0)))
+	# An authored zero lower bound is a real roll outcome (for example ID19).
+	# Only negative/corrupt values are clamped; downstream positive-damage gates
+	# already reject a zero roll without manufacturing a minimum hit.
+	attack_min = maxi(0, int(stats.get("attack_min", 0)))
 	attack_max = maxi(attack_min, int(stats.get("attack_max", attack_min)))
 	agility = maxi(1, int(runtime_projection.get("agility", WarriorCombatMath.BASE_AGILITY)))
 	accuracy = maxi(0, int(runtime_projection.get("accuracy", WarriorCombatMath.BASE_HIT)))
@@ -2831,14 +2834,18 @@ func _physics_process_internal(delta: float) -> void:
 			var legacy_parent_action := _allocate_attack_action(legacy_melee_duration)
 			_play_attack_animation(legacy_melee_duration, legacy_parent_action)
 			var dealt_damage := _rng.randi_range(attack_min, attack_max)
-			if _uses_special_magic_melee_delivery():
+			if str(attack_delivery_rule.get("kind", "")) == "self_detonation":
+				_detonate_explosion_spider(target, dealt_damage)
+			elif _uses_special_magic_melee_delivery():
 				_deal_special_magic_melee_hit(target, dealt_damage)
 			elif _uses_monster_special_cell_delivery():
 				var contact_observation: Variant = _observe_special_contact_admission(target, dealt_damage, legacy_parent_action)
-				if not _launch_monster_special_cell_delivery(target, dealt_damage, contact_observation):
+				if str(attack_delivery_rule.get("kind", "")) == "guard_direct_projectile":
+					_queue_guard_projectile(target, dealt_damage, contact_observation)
+				elif not _launch_monster_special_cell_delivery(target, dealt_damage, contact_observation):
 					DamageLedgerObserverScript.record_terminal(_delivery_observation_identity(contact_observation, target, "admission"), "rejected", "SPECIAL_DELIVERY_NOT_DISPATCHED")
 			elif _uses_physical_projectile_delivery():
-				_launch_physical_projectile(target, dealt_damage)
+				_queue_physical_projectile(target, dealt_damage)
 			elif (
 				_uses_target_magic_delivery()
 				and _target_magic_condition_met(offset_ground_gu)
@@ -3910,11 +3917,18 @@ func _target_magic_condition_met(offset_ground_gu: Vector2) -> bool:
 		"rangePixels",
 		0.0,
 	)
-	var abs_x := absf(offset_ground_gu.x)
-	var abs_y := absf(offset_ground_gu.y)
+	# The source condition uses integer map cells, not an infinitesimally thin
+	# boundary in the continuous GU plane. Quantize both absolute positions so
+	# fractional actor footpoints map to the same cells used by the source AI.
+	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not source_ground_gu.is_finite():
+		return false
+	var target_ground_gu := source_ground_gu + offset_ground_gu
+	var abs_x := absi(floori(target_ground_gu.x) - floori(source_ground_gu.x))
+	var abs_y := absi(floori(target_ground_gu.y) - floori(source_ground_gu.y))
 	if (
-		abs_x > range_gu + GroundUnitSpace.EPSILON_GU
-		or abs_y > range_gu + GroundUnitSpace.EPSILON_GU
+		abs_x > floori(range_gu)
+		or abs_y > floori(range_gu)
 	):
 		return false
 	var activation: Dictionary = attack_delivery_rule.get("activation", {})
@@ -3923,13 +3937,10 @@ func _target_magic_condition_met(offset_ground_gu: Vector2) -> bool:
 		and float(current_hp) / float(max_hp)
 		< float(activation.get("hpBelowRatio", 0.5))
 	)
-	var boundary_gu := maxf(
-		0.0,
-		float(activation.get("orAxisBoundaryTiles", range_gu)),
-	)
+	var boundary_tiles := maxi(0, int(activation.get("orAxisBoundaryTiles", range_gu)))
 	var on_axis_boundary := (
-		abs_x >= boundary_gu - GroundUnitSpace.EPSILON_GU
-		or abs_y >= boundary_gu - GroundUnitSpace.EPSILON_GU
+		abs_x == boundary_tiles
+		or abs_y == boundary_tiles
 	)
 	return low_health or on_axis_boundary
 
@@ -3967,8 +3978,23 @@ func _update_pending_attack(delta: float) -> void:
 	if str(release_record.get("kind", "")) == "hc_standard_melee":
 		_hc_settle(release_record)
 		return
-	if str(release_record.get("kind", "")) == "physical_projectile":
-		_settle_physical_projectile_release(release_record)
+	if str(release_record.get("kind", "")) == "physical_projectile_windup":
+		if (
+			is_instance_valid(hit_target)
+			and _release_player_combat_epoch_is_current(hit_target, release_record)
+			and int(release_record.get("runtime_map_id", -1)) == runtime_map_id
+		):
+			_launch_physical_projectile(hit_target, damage)
+		return
+	if str(release_record.get("kind", "")) == "guard_direct_projectile_windup":
+		if (
+			is_instance_valid(hit_target)
+			and _release_player_combat_epoch_is_current(hit_target, release_record)
+			and int(release_record.get("runtime_map_id", -1)) == runtime_map_id
+		):
+			_launch_monster_special_cell_delivery(
+				hit_target, damage, release_record.get("parent_release"),
+			)
 		return
 	if str(release_record.get("kind", "")) == "target_magic":
 		_settle_target_magic_release(release_record)
@@ -4260,7 +4286,11 @@ func _launch_monster_special_cell_delivery(
 	release_record.make_read_only()
 	_last_attack_footprint_snapshot = snapshot
 	_emit_monster_special_delivery_descriptor(release_record)
-	if kind == "line_magic":
+	if kind == "guard_direct_projectile":
+		# The projectile node owns the first contact; the special settlement path
+		# must not deal a second, immediate target-locked hit.
+		pass
+	elif kind == "line_magic":
 		_pending_attack_time = float(attack_delivery_rule.get("hitDelaySeconds", 0.0))
 		_pending_attack_target = hit_target
 		_pending_attack_damage = maxi(0, rolled_damage)
@@ -4341,14 +4371,57 @@ func _monster_special_presentation_delay_seconds(
 			0.0,
 			float(attack_delivery_rule.get("presentationDelaySeconds", 0.0)),
 		)
-	var delay: Dictionary = attack_delivery_rule.get("presentationDelay", {})
-	var delta := (target_ground_gu - source_ground_gu).abs()
-	return maxf(
-		0.001,
-		float(delay.get("baseSeconds", 0.0))
-		+ maxf(delta.x, delta.y)
-		* float(delay.get("perChebyshevGuSeconds", 0.0)),
+	return _physical_projectile_flight_duration_seconds(
+		source_ground_gu, target_ground_gu,
 	)
+
+
+func _detonate_explosion_spider(selected_target: Node2D, rolled_damage: int) -> void:
+	# TExplosionSpider.sub_4A65C4 (ObjMon2.pas) spends the spider's HP and
+	# applies half DC through AC and half through MAC to each proper target in
+	# the surrounding integer map cells. Its parent (race 116) spawns ID183.
+	if monster_id != 183 or int(behavior_profile.get("serviceClass", {}).get("race", -1)) != 117:
+		return
+	var source_gu := _screen_position_px_to_ground_position_gu(global_position)
+	if not source_gu.is_finite():
+		return
+	var origin_cell := Vector2i(floori(source_gu.x), floori(source_gu.y))
+	var candidates: Array[Node2D] = []
+	_append_special_delivery_candidate(candidates, selected_target)
+	_append_special_delivery_candidate(candidates, primary_target)
+	_ensure_target_grid(false)
+	for candidate: Node2D in _target_grid_candidates(2.0):
+		_append_special_delivery_candidate(candidates, candidate)
+	# Freeze the eligible actors before making this monster a corpse. Damage
+	# callbacks may change targeting or create new actors in the same frame.
+	var victims: Array[Node2D] = []
+	for candidate: Node2D in candidates:
+		if not (candidate is PlayerCharacter or candidate is SummonActor):
+			continue
+		if not _special_delivery_target_is_live(candidate):
+			continue
+		var target_gu := _screen_position_px_to_ground_position_gu(candidate.global_position)
+		if not target_gu.is_finite():
+			continue
+		var target_cell := Vector2i(floori(target_gu.x), floori(target_gu.y))
+		if absi(target_cell.x - origin_cell.x) <= 1 and absi(target_cell.y - origin_cell.y) <= 1:
+			victims.append(candidate)
+	victims.sort_custom(func(left: Node2D, right: Node2D) -> bool:
+		return left.get_instance_id() < right.get_instance_id()
+	)
+	var half_damage := maxi(0, floori(float(rolled_damage) * 0.5))
+	var context := {
+		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"damage_owner": "enemy.explosion_spider",
+	}
+	context.make_read_only()
+	current_hp = 0
+	for victim: Node2D in victims:
+		if not _special_delivery_target_is_live(victim):
+			continue
+		victim.take_monster_mixed_damage(half_damage, half_damage, context)
+	_mark_death_pending()
 
 
 func _create_monster_special_cell_snapshot(
@@ -4823,6 +4896,10 @@ func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> vo
 	var projectile_descriptor := {
 		"effect_id": MonsterRangedProjectileEffectScript.EFFECT_ID,
 		"source_monster_id": monster_id,
+		"source_instance_id": get_instance_id(),
+		"delivery_kind": "guard_direct_projectile",
+		"release_record": release_record,
+		"target_instance_id": int(first_record.get("target_instance_id", 0)),
 		"release_id": str(release_record.get("release_id", "")),
 		"origin_world_px": release_record.get("origin_world_px", Vector2.INF),
 		"target_world_px": first_record.get("target_world_px", Vector2.INF),
@@ -4832,7 +4909,7 @@ func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> vo
 		),
 		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
 		"damage_owner": "enemy.monster_special_cell_release",
-		"presentation_only": true,
+		"presentation_only": false,
 	}
 	projectile_descriptor.make_read_only()
 	var host := get_parent()
@@ -4842,6 +4919,69 @@ func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> vo
 		projectile_descriptor
 	)
 	host.add_child(effect)
+
+
+func _queue_physical_projectile(hit_target: Node2D, dealt_damage: int) -> void:
+	# The source client releases the dual axe on relative frame 2 and arrows
+	# on relative frame 4. The action clock owns the windup; flight begins only
+	# when the release frame is reached, with aim sampled at that moment.
+	var release_frame := 2 if monster_id == 50 else 4
+	var attack_frame_count := 6
+	if is_instance_valid(visual):
+		attack_frame_count = maxi(
+			release_frame + 1,
+			MonsterAnimationPolicy.frame_count(visual.active_resources, &"attack"),
+		)
+	_pending_attack_time = maxf(
+		0.001,
+		_attack_animation_duration * float(release_frame) / float(attack_frame_count),
+	)
+	_pending_attack_target = hit_target
+	_pending_attack_damage = dealt_damage
+	_pending_attack_release_record = {
+		"kind": "physical_projectile_windup",
+		"target_instance_id": hit_target.get_instance_id(),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
+		"runtime_map_id": runtime_map_id,
+	}
+
+
+func _queue_guard_projectile(
+	hit_target: Node2D,
+	dealt_damage: int,
+	parent_release: Variant,
+) -> void:
+	var release_frame := 4
+	var attack_frame_count := 6
+	if is_instance_valid(visual):
+		attack_frame_count = maxi(
+			release_frame + 1,
+			MonsterAnimationPolicy.frame_count(visual.active_resources, &"attack"),
+		)
+	_pending_attack_time = maxf(
+		0.001,
+		_attack_animation_duration * float(release_frame) / float(attack_frame_count),
+	)
+	_pending_attack_target = hit_target
+	_pending_attack_damage = dealt_damage
+	_pending_attack_release_record = {
+		"kind": "guard_direct_projectile_windup",
+		"target_instance_id": hit_target.get_instance_id(),
+		"target_combat_epoch": _typed_player_combat_epoch(hit_target),
+		"runtime_map_id": runtime_map_id,
+		"parent_release": parent_release,
+	}
+
+
+func _physical_projectile_flight_duration_seconds(
+	source_ground_gu: Vector2,
+	target_ground_gu: Vector2,
+) -> float:
+	var original_axis_px := Vector2(
+		absf(target_ground_gu.x - source_ground_gu.x) * 48.0,
+		absf(target_ground_gu.y - source_ground_gu.y) * 32.0,
+	)
+	return maxf(0.001, maxf(original_axis_px.x, original_axis_px.y) * 0.7 / 500.0)
 
 
 func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
@@ -4891,16 +5031,11 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 	)
 	if not _snapshot_strict_ok(snapshot):
 		return false
-	var delay_rule: Dictionary = attack_delivery_rule.get("impactDelay", {})
-	var chebyshev_distance_gu := maxf(
-		absf(target_ground_gu.x - source_ground_gu.x),
-		absf(target_ground_gu.y - source_ground_gu.y),
-	)
-	var duration_seconds := maxf(
-		0.001,
-		float(delay_rule.get("baseSeconds", 0.6))
-		+ chebyshev_distance_gu
-		* float(delay_rule.get("perChebyshevGuSeconds", 0.05)),
+	# MirClient/magiceff.pas advances a flight vector whose largest original
+	# screen axis is 500 px per 700 ms. Original map axes are 48x32 px per
+	# tile; convert the frozen ground displacement before computing duration.
+	var duration_seconds := _physical_projectile_flight_duration_seconds(
+		source_ground_gu, target_ground_gu,
 	)
 	var target_world_px := _target_approved_ground_footpoint_world_px(hit_target)
 	var release_record := {
@@ -4920,10 +5055,6 @@ func _launch_physical_projectile(hit_target: Node2D, dealt_damage: int) -> bool:
 		"footprint_snapshot": snapshot,
 	}
 	release_record.make_read_only()
-	_pending_attack_time = duration_seconds
-	_pending_attack_target = hit_target
-	_pending_attack_damage = maxi(0, dealt_damage)
-	_pending_attack_release_record = release_record
 	_last_attack_footprint_snapshot = snapshot
 	_emit_physical_projectile_descriptor(release_record)
 	return true
@@ -4947,21 +5078,48 @@ func _physical_projectile_path_is_clear(
 	)
 
 
-func _settle_physical_projectile_release(release_record: Dictionary) -> void:
+func _on_physical_projectile_contact(
+	release_record: Dictionary,
+	hit_target: Node2D,
+) -> void:
 	if not combat_enabled:
 		return
 	var target_instance_id := int(release_record.get("target_instance_id", 0))
-	if target_instance_id <= 0:
+	if target_instance_id <= 0 or hit_target.get_instance_id() != target_instance_id:
 		return
-	var candidate: Object = instance_from_id(target_instance_id)
-	if not (candidate is Node2D):
-		return
-	var hit_target := candidate as Node2D
 	if not _physical_projectile_release_target_is_valid(hit_target, release_record):
 		return
-	if not _world_attack_path_is_clear_for_release(release_record):
-		return
 	_apply_attack_damage(hit_target, int(release_record.get("damage", 0)), true, -1, false, -1, true)
+
+
+func _on_guard_projectile_contact(
+	release_record: Dictionary,
+	hit_target: Node2D,
+) -> void:
+	if not combat_enabled or _dying or current_hp <= 0:
+		return
+	for victim_record: Dictionary in release_record.get("victims", []):
+		if int(victim_record.get("target_instance_id", 0)) != hit_target.get_instance_id():
+			continue
+		if not _monster_special_release_target_is_valid(hit_target, victim_record):
+			DamageLedgerObserverScript.record_terminal(victim_record.get("observation_identity"), "rejected", "GUARD_CONTACT_INVALID")
+			return
+		if not _claim_special_delivery_settlement(
+			hit_target.get_instance_id(),
+			int(victim_record.get("release_serial", 0)),
+		):
+			return
+		_settle_monster_special_victim(hit_target, victim_record)
+		return
+
+
+func _on_guard_projectile_miss(release_record: Dictionary) -> void:
+	if not DamageLedgerObserverScript.recording_enabled:
+		return
+	for victim_record: Dictionary in release_record.get("victims", []):
+		DamageLedgerObserverScript.record_terminal(
+			victim_record.get("observation_identity"), "miss", "GUARD_FLIGHT_NO_CONTACT",
+		)
 
 
 func _physical_projectile_release_target_is_valid(
@@ -5003,6 +5161,7 @@ func _emit_physical_projectile_descriptor(release_record: Dictionary) -> void:
 		"footprint_snapshot": release_record.get("footprint_snapshot", {}),
 		"damage": maxi(0, int(release_record.get("damage", 0))),
 		"damage_owner": "enemy.physical_projectile_release",
+		"presentation_only": false,
 	}
 	descriptor.make_read_only()
 	ranged_projectile_requested.emit(descriptor)
@@ -5123,7 +5282,13 @@ func _settle_target_magic_release(release_record: Dictionary) -> void:
 	)
 	last_magic_attack_resolution["damage_channel"] = "magic_defense"
 	last_magic_attack_resolution["success"] = true
-	apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
+	# TElectronicScolpionMon.LightingAttack heals from nDamage after MAC,
+	# before the victim's shield/HP write. The source uses integer division,
+	# so a sub-threshold hit must not manufacture the physical path's +1 heal.
+	if monster_id == 222 and int(behavior_profile.get("serviceClass", {}).get("race", -1)) == 200:
+		apply_source_magic_life_steal(int(last_magic_attack_resolution.get("final_damage", 0)))
+	else:
+		apply_life_steal(int(last_magic_attack_resolution.get("applied_damage", 0)))
 
 
 func _emit_target_magic_descriptor(release_record: Dictionary) -> void:
@@ -6574,6 +6739,16 @@ func apply_life_steal(dealt_damage: int) -> void:
 	if life_steal_ratio <= 0.0 or dealt_damage <= 0:
 		return
 	current_hp = mini(max_hp, current_hp + maxi(1, int(dealt_damage * life_steal_ratio)))
+	_refresh_overhead_health()
+
+
+func apply_source_magic_life_steal(post_magic_defense_damage: int) -> void:
+	if life_steal_ratio <= 0.0 or post_magic_defense_damage <= 0:
+		return
+	var healed := floori(float(post_magic_defense_damage) * life_steal_ratio + 0.000001)
+	if healed <= 0:
+		return
+	current_hp = mini(max_hp, current_hp + healed)
 	_refresh_overhead_health()
 
 

@@ -862,6 +862,7 @@ func _release_pending_attack() -> void:
 		and target.current_hp > 0
 		and _enemy_accepts_external_attack(target)
 		and attack_release_snapshot_intersects_target(snapshot, target)
+		and _attack_world_path_clear(target)
 		and _attack_hit_succeeds(target)
 	):
 		var hp_before := target.current_hp
@@ -1250,7 +1251,24 @@ func _target_within_attack_geometry(target: Node2D) -> bool:
 		<= _attack_effect_length_gu()
 			+ _target_combat_radius_gu(target)
 			+ GroundUnitSpaceScript.EPSILON_GU
+		and _attack_world_path_clear(target)
 	)
+
+
+func _attack_world_path_clear(target: Node2D) -> bool:
+	if not is_inside_tree() or not is_instance_valid(target):
+		return false
+	var world := get_world_2d()
+	if world == null or world.direct_space_state == null:
+		return false
+	var query := PhysicsRayQueryParameters2D.create(
+		global_position,
+		target.global_position,
+		WorldSpatialRulesScript.WORLD_MASK,
+	)
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	return world.direct_space_state.intersect_ray(query).is_empty()
 
 
 func attack_release_snapshot_intersects_target(

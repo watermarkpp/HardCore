@@ -6,6 +6,7 @@ const SnapshotScript := preload("res://scripts/skills/skill_footprint_snapshot.g
 const ProjectileEffectScript := preload(
 	"res://scripts/monster_ranged_projectile_effect.gd"
 )
+const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 
 var _descriptors: Array[Dictionary] = []
 var _blocked_world_px := Vector2.INF
@@ -24,8 +25,8 @@ func _run() -> void:
 		await _assert_actual_actor_delivery(monster_id)
 	print(
 		"MONSTER_PHYSICAL_PROJECTILE_ATTACK_PASS "
-		+ "exact_actors=50,150,152,206 immediate_damage=0 "
-		+ "chebyshev_delay=0.8 visual=1 cross_map_cancel=1 "
+		+ "exact_actors=50,150,152,206 release_after_frame=1 "
+		+ "dodge=1 contact_once=1 cross_map_cancel=1 "
 		+ "combat_epoch_cancel=1 can_fly_block=1"
 	)
 	get_tree().quit(0)
@@ -67,38 +68,57 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 
 	var hp_before := player.current_hp
 	attacker._physics_process(0.01)
+	assert(_descriptors.is_empty(), "projectile must wait for the source attack frame")
+	assert(attacker._pending_attack_release_record.get("kind", "") == "physical_projectile_windup")
+	attacker._physics_process(0.5)
 	assert(_descriptors.size() == 1, "monsterId=%d release must emit exactly one projectile" % monster_id)
 	assert(player.current_hp == hp_before, "monsterId=%d projectile must not deal instant melee damage" % monster_id)
-	assert(attacker._pending_attack_release_record.get("kind", "") == "physical_projectile")
+	assert(attacker._pending_attack_release_record.is_empty())
 	var descriptor := _descriptors[0]
 	assert(str(descriptor.get("effect_id", "")) == ProjectileEffectScript.EFFECT_ID)
 	assert(str(descriptor.get("damage_owner", "")) == "enemy.physical_projectile_release")
+	assert(not bool(descriptor.get("presentation_only", true)))
 	var snapshot: Dictionary = descriptor.get("footprint_snapshot", {})
 	assert(str(snapshot.get("shape_type", "")) == SnapshotScript.SHAPE_SWEPT_CAPSULE_PATH)
 	assert(str(snapshot.get("projection_relationship_id", "")) == "projectile_sweep")
-	assert(is_equal_approx(float(descriptor.get("duration_seconds", 0.0)), 0.8))
+	assert(is_equal_approx(float(descriptor.get("duration_seconds", 0.0)), 0.2688), str(descriptor.get("duration_seconds")))
 	var effect: Node2D = _find_projectile_effect()
 	assert(effect != null, "accepted projectile release did not create its visual")
-	effect.call("_process", 0.4)
+	effect.call("_physics_process", 0.1344)
 	assert(is_equal_approx(float(effect.call("progress_ratio")), 0.5))
+	# A lateral dodge after launch breaks actual contact; the old locked-ID
+	# timer would still have damaged this player.
+	player.global_position = _ground_to_screen(Vector2(4.0, 3.0))
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	effect.call("_physics_process", 0.2)
+	attacker._physics_process(0.3)
+	assert(player.current_hp == hp_before, "monsterId=%d dodge still damaged player" % monster_id)
+	player.global_position = _ground_to_screen(Vector2(4.0, 0.0))
+	await get_tree().physics_frame
+	await get_tree().process_frame
 
-	var pending_before := attacker._pending_attack_time
-	attacker._physics_process(0.75)
-	assert(
-		player.current_hp == hp_before,
-		"projectile settled early: pending_before=%s pending_after=%s hp=%d"
-		% [str(pending_before), str(attacker._pending_attack_time), player.current_hp],
-	)
-	attacker._physics_process(0.06)
-	assert(player.current_hp == hp_before - 7, "monsterId=%d bound projectile impact did not settle" % monster_id)
+	attacker._attack_timer = 0.0
+	attacker._physics_process(0.01)
+	attacker._physics_process(0.5)
+	assert(_descriptors.size() == 2)
+	effect = _latest_projectile_effect()
+	assert(effect != null)
+	effect.call("_physics_process", 0.3)
+	assert(player.current_hp == hp_before - 7, "monsterId=%d contact did not settle" % monster_id)
+	effect.call("_physics_process", 0.3)
+	attacker._physics_process(0.5)
+	assert(player.current_hp == hp_before - 7, "one arrow applied damage twice")
 
 	# A target changing maps during flight keeps the visual but cancels damage.
 	player.current_hp = hp_before
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	assert(_descriptors.size() == 2)
+	attacker._physics_process(0.5)
+	assert(_descriptors.size() == 3)
 	player.set_meta("runtime_map_id", 2)
-	attacker._physics_process(0.81)
+	effect = _latest_projectile_effect()
+	effect.call("_physics_process", 0.3)
 	assert(player.current_hp == hp_before)
 	player.set_meta("runtime_map_id", 1)
 
@@ -107,19 +127,46 @@ func _assert_actual_actor_delivery(monster_id: int) -> void:
 	attacker.target = player
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	assert(_descriptors.size() == 3)
+	attacker._physics_process(0.5)
+	assert(_descriptors.size() == 4)
 	var transition_token := "projectile-transition-%d" % monster_id
 	assert(player.begin_combat_transition(transition_token))
 	assert(player.finish_combat_transition(transition_token))
-	attacker._physics_process(0.81)
+	effect = _latest_projectile_effect()
+	effect.call("_physics_process", 0.3)
 	assert(player.current_hp == hp_before, "monsterId=%d projectile crossed combat_epoch" % monster_id)
+
+	# A wall entering the frozen lane after launch must stop the live flight.
+	attacker._attack_timer = 0.0
+	attacker._physics_process(0.01)
+	attacker._physics_process(0.5)
+	assert(_descriptors.size() == 5)
+	effect = _latest_projectile_effect()
+	var wall := StaticBody2D.new()
+	wall.collision_layer = WorldSpatialRulesScript.WORLD_LAYER
+	wall.collision_mask = 0
+	wall.global_position = _ground_to_screen(Vector2(2.0, 0.0))
+	var wall_shape := CollisionShape2D.new()
+	var wall_circle := CircleShape2D.new()
+	wall_circle.radius = 8.0
+	wall_shape.shape = wall_circle
+	wall.add_child(wall_shape)
+	add_child(wall)
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	effect.call("_physics_process", 0.3)
+	assert(bool(effect.call("collision_interrupted")), "flight crossed a world collider")
+	assert(player.current_hp == hp_before, "wall-blocked projectile damaged player")
+	wall.queue_free()
+	await get_tree().process_frame
 
 	# CanFly parity: one blocked intermediate sample rejects the whole release,
 	# so there is no visual and no delayed damage transaction.
 	_blocked_world_px = _ground_to_screen(Vector2(2.0, 0.0))
 	attacker._attack_timer = 0.0
 	attacker._physics_process(0.01)
-	assert(_descriptors.size() == 3)
+	attacker._physics_process(0.5)
+	assert(_descriptors.size() == 5)
 	assert(attacker._pending_attack_release_record.is_empty())
 	attacker._physics_process(1.0)
 	assert(player.current_hp == hp_before)
@@ -202,6 +249,15 @@ func _capture_descriptor(descriptor: Dictionary) -> void:
 func _find_projectile_effect() -> Node2D:
 	for child: Node in get_children():
 		if child is Node2D and child.get_script() == ProjectileEffectScript:
+			return child as Node2D
+	return null
+
+
+func _latest_projectile_effect() -> Node2D:
+	var children := get_children()
+	for index: int in range(children.size() - 1, -1, -1):
+		var child: Node = children[index]
+		if child is Node2D and child.get_script() == ProjectileEffectScript and not child.is_queued_for_deletion():
 			return child as Node2D
 	return null
 
