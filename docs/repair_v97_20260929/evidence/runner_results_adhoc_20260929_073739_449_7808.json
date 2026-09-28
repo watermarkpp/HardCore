@@ -1,0 +1,28 @@
+{
+  "suite": "adhoc",
+  "engine_log_errors": 5,
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "forge_persistence_roundtrip_test",
+      "test_path": "tests/forge_persistence_roundtrip_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-28T23:38:03.9150119Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 5,
+      "engine_log_failure_count": 5,
+      "result": "FAIL",
+      "reason": "process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5"
+    }
+  ],
+  "git_head": "353347ffc5891f1000d86b4ab804ee1e7bd72fd9",
+  "generated_at": "2026-09-29T07:37:39.4498721+08:00",
+  "passed": 0,
+  "total": 1
+}

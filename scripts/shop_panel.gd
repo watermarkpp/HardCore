@@ -673,6 +673,9 @@ func _build_card_contents(
 			card.add_child(icon)
 		icon.texture = texture
 		icon.size = texture.get_size()
+		var maximum := GameData.get_item_art_display_size(item, "inventoryIcon")
+		if maximum.x > 0.0 and maximum.y > 0.0:
+			icon.size *= minf(maximum.x / icon.size.x, maximum.y / icon.size.y)
 		icon.position = Vector2(37, CARD_SIZE.y * 0.5) - icon.size * 0.5
 		icon.show()
 	elif icon != null:

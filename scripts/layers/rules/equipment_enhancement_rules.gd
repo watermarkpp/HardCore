@@ -115,10 +115,12 @@ static func validate_enhancement(enhancement: Variant, category: String) -> bool
 	var raw_stage: Variant = forge.get("stage", null)
 	var history: Variant = forge.get("history", null)
 	var modifiers: Variant = forge.get("modifiers", null)
-	if not raw_stage is int or not history is Array or not modifiers is Array:
+	if not _is_integral_number(raw_stage) or not history is Array or not modifiers is Array:
 		return false
-	var stage: int = raw_stage
-	if stage < 0 or stage > max_stage(category) or history.size() != stage:
+	if raw_stage < 0 or raw_stage > max_stage(category):
+		return false
+	var stage := int(raw_stage)
+	if history.size() != stage:
 		return false
 	var totals := {}
 	for stat: Variant in history:
@@ -138,7 +140,13 @@ static func validate_enhancement(enhancement: Variant, category: String) -> bool
 		if not value is Dictionary or value.size() != 3 or str(value.get("op", "")) != "add":
 			return false
 		var stat := str(value.get("stat", ""))
-		if seen.has(stat) or not value.get("value") is int or int(value.value) != int(totals.get(stat, -1)):
+		if seen.has(stat) or not _is_integral_number(value.get("value")) or value.value != totals.get(stat, -1):
 			return false
 		seen[stat] = true
 	return true
+
+
+static func _is_integral_number(value: Variant) -> bool:
+	# JSON has one number type: Godot reads saved integers back as floats.
+	# Accept the identical integral value, never coerce strings or fractions.
+	return value is int or (value is float and is_finite(value) and value == floorf(value))

@@ -871,6 +871,8 @@ $Suites.critical = @($Suites.critical + @(
     'tests/equipment_enhancement_panel_flow_test.tscn',
     'tests/equipment_enhancement_rules_test.tscn',
     'tests/equipment_enhancement_transaction_test.tscn',
+    'tests/forge_persistence_roundtrip_test.tscn',
+    'tests/new_item_icon_surfaces_test.tscn',
     'tests/equipment_skill_level_affix_rollout_test.tscn',
     'tests/forge_calibrator_save_test.tscn',
     'tests/forge_hud_target_occlusion_test.tscn',

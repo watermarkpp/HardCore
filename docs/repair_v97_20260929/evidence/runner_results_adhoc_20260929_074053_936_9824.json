@@ -1,0 +1,28 @@
+{
+  "git_head": "353347ffc5891f1000d86b4ab804ee1e7bd72fd9",
+  "passed": 1,
+  "generated_at": "2026-09-29T07:40:53.9361762+08:00",
+  "results": [
+    {
+      "test_name": "new_item_icon_surfaces_test",
+      "test_path": "tests/new_item_icon_surfaces_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T23:41:14.0101497Z",
+      "native_exit_observed_utc": "2026-09-28T23:40:52.4182262Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "failed": 0,
+  "engine_log_errors": 0,
+  "suite": "adhoc",
+  "total": 1
+}
