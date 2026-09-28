@@ -59,8 +59,8 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				"stat": "accuracy",
 				"value": SkillRankResolverScript.linear_int(
 					mechanics.get("flat_bonus_by_rank", [0, 0, 0, 0]),
-					rank
-				),
+					SkillRankResolverScript.formula_rank(rank)
+				) + 3 * maxi(0, rank - 3),
 				"affects": mechanics.get("affects", []).duplicate(),
 			}]
 		"taoist.poison":
@@ -174,12 +174,14 @@ static func _resolve_single_heal(
 static func _raw_heal(definition: Dictionary, request: Dictionary, rng: RefCounted) -> int:
 	var context: Dictionary = request.get("target_context", {})
 	var raw_fields: Dictionary = definition.get("magic_db_reference", {}).get("raw_fields", {})
-	return Formula.raw_magic_power(
+	var rank := int(request.get("rank", 0))
+	var raw := Formula.raw_magic_power(
 		rng,
-		int(request.get("rank", 0)),
+		SkillRankResolverScript.formula_rank(rank),
 		raw_fields,
 		2 * int(context.get("primary_stat_roll", 0))
 	)
+	return raw if rank <= 3 else roundi(float(raw) * SkillRankResolverScript.more_multiplier(rank))
 
 
 static func _resolve_poison(
@@ -200,10 +202,7 @@ static func _resolve_poison(
 			)) <= 6
 		)
 	)
-	var duration_seconds: int = SkillRankResolverScript.linear_int(
-		[8, 12, 16, 20],
-		rank
-	) + int(floor(float(sc_roll) / 5.0))
+	var duration_seconds: int = 8 + rank * 4 + int(floor(float(sc_roll) / 5.0))
 	var resist_bound := maxi(1, int(context.get("target_poison_resist", 0)) + 7)
 	var apply_probability := float(mini(7, resist_bound)) / float(resist_bound)
 	var green_power := Formula.get_power13(rng, rank, 40) + 2 * sc_roll
@@ -242,14 +241,16 @@ static func _spirit_damage_effect(
 ) -> Dictionary:
 	var context: Dictionary = request.get("target_context", {})
 	var raw_fields: Dictionary = definition.get("magic_db_reference", {}).get("raw_fields", {})
+	var rank := int(request.get("rank", 0))
+	var raw := Formula.raw_magic_power(
+		rng,
+		SkillRankResolverScript.formula_rank(rank),
+		raw_fields,
+		int(context.get("primary_stat_roll", 0))
+	)
 	return {
 		"type": "talisman_projectile_damage",
-		"raw_power": Formula.raw_magic_power(
-			rng,
-			int(request.get("rank", 0)),
-			raw_fields,
-			int(context.get("primary_stat_roll", 0))
-		),
+		"raw_power": raw if rank <= 3 else roundi(float(raw) * SkillRankResolverScript.more_multiplier(rank)),
 		"damage_type": "spirit_magic",
 		"defence_type": "MAC",
 		"server_authoritative": true,
@@ -273,7 +274,9 @@ static func _resolve_main_pet(
 		# Compatibility for older isolated planner fixtures. Production always
 		# supplies the typed active-id list.
 		has_requested_main_pet = bool(context.get("has_main_pet", false))
-	if has_requested_main_pet:
+	var group_limit := SkillRankResolverScript.skeleton_count(rank) if template_id == "skeleton" else 1
+	var active_count := int(context.get("active_skeleton_count", 1 if has_requested_main_pet else 0)) if template_id == "skeleton" else (1 if has_requested_main_pet else 0)
+	if active_count >= group_limit:
 		plan.effects = [{
 			"type": "recall_existing_main_pet",
 			"pet_group": "taoist_main_pet",
@@ -296,9 +299,10 @@ static func _resolve_main_pet(
 		"type": "main_pet_spawn",
 		"spawned": true,
 		"pet_group": "taoist_main_pet",
-		"group_limit": 1,
+		"group_limit": group_limit,
 		"group_limit_scope": "summon_id",
 		"template_id": template_id,
+		"pet_slot_index": int(context.get("next_skeleton_slot_index", 0)) if template_id == "skeleton" else 0,
 		"initial_pet_level": SkillRankResolverScript.summon_pet_level(rank),
 		"max_pet_level": max_pet_level,
 		"skill_rank_is_pet_level": false,
@@ -518,7 +522,7 @@ static func _resolve_dual_defence_effects(
 	rng: RefCounted
 ) -> void:
 	var partner_skill_id := str(dual_context.get("partner_skill_id", ""))
-	var partner_rank := SkillRankResolverScript.safe_effective_rank(
+	var partner_rank := SkillRankResolverScript.formula_rank(
 		int(dual_context.get("partner_rank", clicked_rank))
 	)
 	var mac_skill_id := "taoist.magic_defense"

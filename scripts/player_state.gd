@@ -11,6 +11,10 @@ const SkillProgressionServiceScript := preload("res://scripts/skills/skill_progr
 const SkillRngScript := preload("res://scripts/skills/skill_rng.gd")
 const PricingServiceScript := preload("res://scripts/pricing_service.gd")
 const ItemDropInstanceRulesScript := preload("res://scripts/item_drop_instance_rules.gd")
+const EquipmentEnhancementRulesScript := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
+const EquipmentEnhancementServiceScript := preload("res://scripts/layers/runtime/equipment_enhancement_service.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
+const RelicSynthesisServiceScript := preload("res://scripts/layers/runtime/relic_synthesis_service.gd")
 const WorldMonsterRespawnStateScript := preload(
 	"res://scripts/world_monster_respawn_state.gd"
 )
@@ -36,6 +40,7 @@ signal scroll_requested(item_name: String)
 signal quests_changed
 signal profession_changed(profession: String)
 signal levels_gained(previous_level: int, new_level: int)
+signal relic_proc_started(item_id: int)
 
 const SAVE_VERSION := 10
 const SAVE_PATH := "user://player_save_v03.json"
@@ -51,7 +56,7 @@ const TAOIST_MAIN_PET_PERSISTENCE_CONTRACT_ID := (
 	"skills.summon.persistence.runtime_state.v1"
 )
 const TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID := (
-	"skills.summon.persistence.runtime_states.v1"
+	"skills.taoist_main_pets.v3"
 )
 const TEST_CHARACTER_ROSTER_CONTRACT_ID := "test.character.roster.full_equipment_skills.v2"
 const TEST_ROSTER_RESET_CONTRACT_ID := "test.character.roster.reset.v2"
@@ -150,6 +155,8 @@ var experience := 0
 var gold := 0
 var gold_overflow_records: Array = []
 var inventory: Array = []
+var forge_tray: Array[Dictionary] = []
+var synthesis_tray: Array[Dictionary] = []
 var warehouse_inventory: Array = []
 ## The public warehouse is account-scoped, never character-scoped.  The path
 ## is overridable only by isolated tests; production always uses the default.
@@ -178,7 +185,7 @@ var attack_ring_slots: Array[String] = ["", "", "", "", "", ""]
 var warrior_runtime_state: Dictionary = {}
 var taoist_main_pet_runtime_states: Dictionary = {
 	"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-	"slots": {},
+	"groups": {"skeleton": [], "divine_beast": []},
 }
 var quest_states: Dictionary = {}
 var world_monster_respawn_state: Dictionary = (
@@ -239,6 +246,12 @@ var last_load_result: Dictionary = {
 var _save_blocked_profile_id := ""
 var _save_blocked_reason := ""
 var _consumed_shop_sell_quote_ids: Dictionary = {}
+var _enhancement_service
+var _relic_synthesis_service
+var _relic_instance_rng := RandomNumberGenerator.new()
+var _relic_proc_rng := RandomNumberGenerator.new()
+var _relic_proc_state: Dictionary = {}
+var _relic_proc_equipment_snapshot: Dictionary = {}
 var _loot_batch_debug: Dictionary = {
 	"plan_scans": 0,
 	"initial_weight_scans": 0,
@@ -300,6 +313,7 @@ func _process(delta: float) -> void:
 	_advance_world_clock_cleanup()
 	advance_temporary_item_buffs(delta)
 	_advance_durability_runtime(delta)
+	advance_relic_proc(delta)
 	if test_mode or active_profile_id.is_empty():
 		return
 	_autosave_elapsed += delta
@@ -335,6 +349,8 @@ func _clear_pending_durability_runtime() -> void:
 
 
 func _ready() -> void:
+	_relic_instance_rng.randomize()
+	_relic_proc_rng.randomize()
 	_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
 	_migrate_single_save_to_profile()
@@ -359,6 +375,8 @@ func reset_progress(emit_updates := true) -> void:
 	gold = 0
 	gold_overflow_records = []
 	inventory = []
+	forge_tray = _empty_workbench_tray()
+	synthesis_tray = _empty_workbench_tray()
 	# reset_progress is character-local.  Never clear the account warehouse.
 	if test_mode and not _shared_warehouse_test_isolation_enabled():
 		warehouse_inventory = []
@@ -388,6 +406,12 @@ func reset_progress(emit_updates := true) -> void:
 	_world_clock_dirty = true
 	_consumed_shop_sell_quote_ids.clear()
 	_consumed_shop_buy_quote_ids.clear()
+	if _enhancement_service != null:
+		_enhancement_service.reset()
+	if _relic_synthesis_service != null:
+		_relic_synthesis_service.reset()
+	_relic_proc_state.clear()
+	_relic_proc_equipment_snapshot.clear()
 	_shop_buy_quote_serial = 0
 	durability_event_commit_count = 0
 	temporary_item_buffs = {}
@@ -633,6 +657,12 @@ func _build_receive_result_for_record(
 		return _receive_failure("duplicate_item_instance", "掉落实例已入账。")
 	var canonical_record := record.duplicate(true)
 	canonical_record["name"] = item_name
+	var relic_id := int(catalog_item.get("itemId", -1))
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
+		if record.has("relic_roll") and not RelicSynthesisRulesScript.valid_instance(record, relic_id):
+			return _receive_failure("invalid_item_instance", "圣物属性无效。")
+		if not record.has("relic_roll"):
+			canonical_record = {}
 	return _build_receive_result_for_template(item_name, amount, catalog_item, base_inventory, canonical_record, owned_batch_weight)
 
 
@@ -646,6 +676,12 @@ func _build_receive_result_for_template(
 ) -> Dictionary:
 	if amount <= 0:
 		return _receive_failure("invalid_amount", "数量无效。")
+	var relic_id := int(catalog_item.get("itemId", -1))
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
+		if template.has("relic_roll") and not RelicSynthesisRulesScript.valid_instance(template, relic_id):
+			return _receive_failure("invalid_item_instance", "圣物属性无效。")
+		if not template.has("relic_roll"):
+			template = {}
 	# An owned warehouse plan may share unchanged records between successive
 	# previews. Changed stacks are copied below; public previews remain defensive.
 	var next_inventory: Array = base_inventory.duplicate(owned_batch_weight < 0)
@@ -705,7 +741,9 @@ func _build_receive_result_for_template(
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		var moved := mini(remaining, max_stack) if is_stackable else 1
 		var new_record: Dictionary
-		if not template.is_empty():
+		if RelicSynthesisRulesScript.is_synthesis_item(int(catalog_item.get("itemId", -1))) and template.is_empty():
+			new_record = _make_item_instance(item_name, catalog_item)
+		elif not template.is_empty():
 			new_record = template.duplicate(true)
 			new_record["count"] = moved
 		elif str(catalog_item.get("kind", "")) == "equipment":
@@ -716,7 +754,7 @@ func _build_receive_result_for_template(
 			return _receive_failure("inventory_full", INVENTORY_SLOT_REJECTION)
 		remaining -= moved
 	var weight_before := inventory_weight(base_inventory) if owned_batch_weight < 0 else owned_batch_weight
-	var weight_after := inventory_weight(next_inventory) if owned_batch_weight < 0 else mini(MAX_SAFE_WEIGHT, weight_before + inventory_weight([{"name": item_name, "count": amount}]))
+	var weight_after := inventory_weight(next_inventory) if owned_batch_weight < 0 else mini(MAX_SAFE_WEIGHT, weight_before + inventory_weight([{"name": item_name, "item_id": int(catalog_item.get("itemId", -1)), "count": amount}]))
 	var max_weight := max_inventory_weight()
 	# Compatibility rule: an old save may already exceed the new cap, but no
 	# operation may increase that burden. This also lets a swap/unequip preserve
@@ -985,6 +1023,20 @@ func create_drop_item_instance(item_record: Dictionary, stable_drop_key: String)
 	var catalog := GameData.get_item_rules_record({"item_id": item_id})
 	if catalog.is_empty() or int(catalog.get("itemId", -1)) != item_id:
 		return _invalid_drop_instance_record(result, "catalog_identity_missing")
+	if RelicSynthesisRulesScript.is_synthesis_item(item_id):
+		if stable_drop_key.is_empty():
+			return _invalid_drop_instance_record(result, "instance_generation_failed")
+		var digest := ("relic:%d:%s" % [item_id, stable_drop_key]).sha256_text()
+		var relic_rng := RandomNumberGenerator.new()
+		relic_rng.seed = ("0x" + digest.substr(0, 15)).hex_to_int()
+		var instance := _make_item_instance(str(catalog.get("name", "")), catalog, 0, false)
+		instance.merge(RelicSynthesisRulesScript.roll_instance(item_id, "", relic_rng), true)
+		instance["instance_id"] = "relic:%d:%s" % [item_id, digest.substr(0, 24)]
+		if not RelicSynthesisRulesScript.valid_instance(instance, item_id):
+			return _invalid_drop_instance_record(result, "relic_roll_failed")
+		result["item_instance_contract_id"] = RelicSynthesisRulesScript.CONTRACT_ID
+		result["item_instance"] = instance
+		return result
 	if str(catalog.get("kind", "")) != "equipment":
 		return result
 	var instance := ItemDropInstanceRulesScript.create_instance(catalog, stable_drop_key)
@@ -1335,6 +1387,138 @@ func _shop_buy_result(success: bool, message: String, stock: Array, context: Dic
 		"message": message,
 		"quotes": shop_buy_quotes(stock, context),
 	}
+
+
+func _forge_service():
+	if _enhancement_service == null:
+		_enhancement_service = EquipmentEnhancementServiceScript.new(self)
+	return _enhancement_service
+
+
+func quote_forge(target_index: int, iron_index: int, accessory_a_index: int, accessory_b_index: int) -> Dictionary:
+	return _forge_service().quote_forge(target_index, iron_index, accessory_a_index, accessory_b_index)
+
+
+func quote_forge_tray() -> Dictionary:
+	return _forge_service().quote_forge_tray()
+
+
+func commit_forge(quote: Dictionary) -> Dictionary:
+	_before_state_transaction()
+	return _forge_service().commit_forge(quote)
+
+
+func _relic_service():
+	if _relic_synthesis_service == null:
+		_relic_synthesis_service = RelicSynthesisServiceScript.new(self)
+	return _relic_synthesis_service
+
+
+func quote_relic_synthesis(item_id: int, material_indices: Array[int], profession := "") -> Dictionary:
+	return _relic_service().quote_synthesis(item_id, material_indices, profession)
+
+
+func commit_relic_synthesis(quote: Dictionary) -> Dictionary:
+	_before_state_transaction()
+	return _relic_service().commit_synthesis(quote)
+
+
+func _empty_workbench_tray() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for _slot in 9:
+		result.append({})
+	return result
+
+
+func _load_workbench_tray(value: Variant) -> Array[Dictionary]:
+	if not value is Array or (value as Array).size() != 9:
+		return _empty_workbench_tray()
+	var result: Array[Dictionary] = []
+	for raw: Variant in value:
+		result.append((raw as Dictionary).duplicate(true) if raw is Dictionary else {})
+	return result
+
+
+func workbench_tray(mode: String) -> Array[Dictionary]:
+	return (forge_tray if mode == "forge" else synthesis_tray).duplicate(true) if mode in ["forge", "synthesis"] else []
+
+
+func place_workbench_item(mode: String, slot: int, inventory_index: int) -> Dictionary:
+	_before_state_transaction()
+	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
+		return {"success": false, "message": "无效工作格。"}
+	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
+	if not tray[slot].is_empty():
+		return {"success": false, "message": "请先取出这个格子里的物品。"}
+	if inventory_index < 0 or inventory_index >= inventory.size() or not inventory[inventory_index] is Dictionary or (inventory[inventory_index] as Dictionary).is_empty():
+		return {"success": false, "message": "请先在背包中选择物品。"}
+	var source: Dictionary = inventory[inventory_index]
+	if int(source.get("count", 1)) > 1 and not str(source.get("instance_id", "")).is_empty():
+		return {"success": false, "message": "带唯一标识的整组物品不能拆分，请先整理背包。"}
+	var item := GameData.get_item_record(source)
+	if mode == "forge":
+		if slot == 4:
+			if str(item.get("kind", "")) != "equipment" or str(item.get("category", "")) not in ["武器", "盔甲", "头盔"]:
+				return {"success": false, "message": "只能放入武器、衣服或头盔。"}
+		elif slot == 1:
+			if preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd").purity_for(source) < 0:
+				return {"success": false, "message": "请放入黑铁矿。"}
+		elif slot in [3, 5]:
+			if str(item.get("category", "")) not in ["戒指", "手镯", "项链"]:
+				return {"success": false, "message": "请放入首饰。"}
+	var inventory_before := inventory.duplicate(true)
+	var tray_before := tray.duplicate(true)
+	var moved := source.duplicate(true)
+	moved["count"] = 1
+	if int(source.get("count", 1)) <= 1:
+		inventory[inventory_index] = {}
+	else:
+		inventory[inventory_index] = source.duplicate(true)
+		inventory[inventory_index]["count"] = int(source.get("count", 1)) - 1
+	tray[slot] = moved
+	if not _commit_save():
+		inventory = inventory_before
+		if mode == "forge": forge_tray = tray_before
+		else: synthesis_tray = tray_before
+		return {"success": false, "message": "保存失败，物品仍在背包。"}
+	inventory_changed.emit()
+	profile_changed.emit()
+	return {"success": true, "message": "已放入%s" % str(item.get("name", "物品"))}
+
+
+func take_workbench_item(mode: String, slot: int) -> Dictionary:
+	_before_state_transaction()
+	if mode not in ["forge", "synthesis"] or slot < 0 or slot >= 9:
+		return {"success": false, "message": "无效工作格。"}
+	var tray: Array[Dictionary] = forge_tray if mode == "forge" else synthesis_tray
+	if tray[slot].is_empty():
+		return {"success": false, "message": "这个格子里没有物品。"}
+	var output := tray[slot].duplicate(true)
+	# This is a move from our own tray; the source still owns its instance ID
+	# until the same save transaction clears the cell.
+	var preview := _build_receive_result_for_record(output, inventory, false)
+	if not bool(preview.get("success", false)):
+		return {"success": false, "message": str(preview.get("message", "背包空间不足。"))}
+	var inventory_before := inventory.duplicate(true)
+	var tray_before := tray.duplicate(true)
+	inventory = (preview.get("inventory", inventory) as Array).duplicate(true)
+	tray[slot] = {}
+	if not _commit_save():
+		inventory = inventory_before
+		if mode == "forge": forge_tray = tray_before
+		else: synthesis_tray = tray_before
+		return {"success": false, "message": "保存失败，物品仍在工作格。"}
+	inventory_changed.emit()
+	profile_changed.emit()
+	return {"success": true, "message": "已放入背包：%s" % str(output.get("name", "物品"))}
+
+
+func configure_relic_roll_rng(rng: RandomNumberGenerator) -> void:
+	_relic_instance_rng = rng
+
+
+func configure_relic_proc_rng(rng: RandomNumberGenerator) -> void:
+	_relic_proc_rng = rng
 
 
 func sell_inventory_item(request: Dictionary) -> Dictionary:
@@ -1697,6 +1881,7 @@ func _shop_sell_risk_flags(
 	if (
 		int(record.get("enhancement_level", record.get("upgrade_level", 0))) > 0
 		or int(record.get("refine_level", 0)) > 0
+		or EquipmentEnhancementRulesScript.forge_stage(record) > 0
 	):
 		flags.append("enhanced")
 	if int(record.get("weapon_luck", 0)) != 0 or int(record.get("weapon_curse", 0)) != 0:
@@ -1974,7 +2159,7 @@ func _apply_weapon_repair_oil_without_commit(
 	recalculate_stats(false)
 
 
-func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_serial := -1) -> Dictionary:
+func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_serial := -1, roll_relic := true) -> Dictionary:
 	var instance := {"name": item_name, "count": 1}
 	if str(catalog_item.get("kind", "")) == "equipment":
 		var maximum := maxi(1, int(catalog_item.get("maxDurability", 1)))
@@ -1990,6 +2175,10 @@ func _make_item_instance(item_name: String, catalog_item: Dictionary, instance_s
 		if str(catalog_item.get("category", "")) == "武器":
 			instance["weapon_luck"] = 0
 			instance["weapon_curse"] = 0
+		var item_id := int(catalog_item.get("itemId", -1))
+		if roll_relic and RelicSynthesisRulesScript.is_synthesis_item(item_id):
+			var rolled := RelicSynthesisRulesScript.roll_instance(item_id, profession, _relic_instance_rng)
+			instance.merge(rolled, true)
 	return instance
 
 
@@ -3012,6 +3201,7 @@ func _migrate_quest_states() -> void:
 
 
 func recalculate_stats(emit_profile_change := true) -> void:
+	_sync_relic_proc_equipment()
 	var base := ProfessionRules.stats_for_level(profession, level)
 	base_stats = base.duplicate(true)
 	computed_special_effects = {}
@@ -3093,6 +3283,15 @@ func recalculate_stats(emit_profile_change := true) -> void:
 				affix_input["modifiers"] = instance_modifiers.duplicate(true)
 			else:
 				affix_input["modifiers"] = instance_modifiers
+		if equipped_value is Dictionary and RelicSynthesisRulesScript.is_synthesis_item(int(item.get("itemId", -1))):
+			var roll: Dictionary = (equipped_value as Dictionary).get("relic_roll", {})
+			if not RelicSynthesisRulesScript.skill_ids_for(profession).has(str(roll.get("skill_id", ""))):
+				var active_modifiers: Array = []
+				for modifier: Variant in affix_input.get("modifiers", []):
+					if modifier is Dictionary and str(modifier.get("stat", "")) == "skill_level":
+						continue
+					active_modifiers.append(modifier)
+				affix_input["modifiers"] = active_modifiers
 		skill_level_affix_records.append(affix_input)
 		_add_nullable_stat(result, "attack_min", item.get("attackMin", null))
 		_add_nullable_stat(result, "attack_max", item.get("attackMax", null))
@@ -3140,6 +3339,12 @@ func recalculate_stats(emit_profile_change := true) -> void:
 			result = ModifierEffectRuntime.apply_modifiers(result, drop_instance_modifiers, {
 				"profession": profession, "level": level, "slot": slot,
 			})
+		if equipped_value is Dictionary and equipped_value.has("enhancement"):
+			var enhancement: Variant = equipped_value.enhancement
+			if EquipmentEnhancementRulesScript.validate_enhancement(enhancement, str(item.get("category", ""))):
+				result = ModifierEffectRuntime.apply_modifiers(result, enhancement.forge.modifiers, {
+					"profession": profession, "level": level, "slot": slot,
+				})
 		var special := EquipmentRulesScript.special_effect_for(item)
 		if not special.is_empty() and bool(special.get("runtime", false)):
 			var effect_id := str(special.get("id", ""))
@@ -3174,9 +3379,87 @@ func recalculate_stats(emit_profile_change := true) -> void:
 	result["magic_evasion_percent"] = CombatResolutionRules.anti_magic_display_percent(int(result.anti_magic_points))
 	result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0))
 	_apply_temporary_item_stat_modifiers(result)
+	_apply_relic_proc_stats(result)
 	computed_stats = result
 	if emit_profile_change:
 		profile_changed.emit()
+
+
+func _sync_relic_proc_equipment() -> bool:
+	var equipped: Variant = equipment.get("圣物", {})
+	var equipped_record: Dictionary = equipped if equipped is Dictionary else {}
+	if _relic_proc_state.has("item_id") and equipped_record == _relic_proc_equipment_snapshot:
+		return false
+	_relic_proc_equipment_snapshot = equipped_record.duplicate(true)
+	var was_active := float(_relic_proc_state.get("remaining", 0.0)) > 0.0
+	var identity := ""
+	var item_id := -1
+	if not equipped_record.is_empty():
+		var raw_id: Variant = equipped_record.get("item_id", null)
+		if raw_id is int or raw_id is float:
+			item_id = int(raw_id)
+		if RelicSynthesisRulesScript.is_relic(item_id) and RelicSynthesisRulesScript.valid_instance(equipped_record, item_id):
+			identity = str(equipped_record.get("instance_id", ""))
+	if identity.is_empty():
+		item_id = -1
+	if identity == str(_relic_proc_state.get("instance_id", "")) and item_id == int(_relic_proc_state.get("item_id", -1)):
+		return false
+	_relic_proc_state = {
+		"instance_id": identity, "item_id": item_id,
+		"remaining": 0.0, "cooldown": 0.0, "started_at_usec": 0,
+	}
+	return was_active
+
+
+func try_trigger_relic_proc() -> bool:
+	if _sync_relic_proc_equipment():
+		recalculate_stats()
+	var item_id := int(_relic_proc_state.get("item_id", -1))
+	if item_id < 0 or float(_relic_proc_state.get("remaining", 0.0)) > 0.0 or float(_relic_proc_state.get("cooldown", 0.0)) > 0.0:
+		return false
+	if _relic_proc_rng.randi_range(0, 99) >= RelicSynthesisRulesScript.PROC_CHANCE_PERCENT:
+		return false
+	_relic_proc_state["remaining"] = RelicSynthesisRulesScript.PROC_DURATION_SECONDS
+	_relic_proc_state["started_at_usec"] = Time.get_ticks_usec()
+	recalculate_stats()
+	relic_proc_started.emit(item_id)
+	return true
+
+
+func advance_relic_proc(delta: float) -> void:
+	if delta <= 0.0:
+		return
+	if _sync_relic_proc_equipment():
+		recalculate_stats()
+	var remaining := float(_relic_proc_state.get("remaining", 0.0))
+	if remaining > 0.0:
+		var after := remaining - delta
+		_relic_proc_state["remaining"] = maxf(0.0, after)
+		if after <= 0.0:
+			_relic_proc_state["cooldown"] = maxf(0.0, RelicSynthesisRulesScript.PROC_COOLDOWN_SECONDS + after)
+			recalculate_stats()
+		return
+	if float(_relic_proc_state.get("cooldown", 0.0)) > 0.0:
+		_relic_proc_state["cooldown"] = maxf(0.0, float(_relic_proc_state.cooldown) - delta)
+
+
+func relic_proc_status() -> Dictionary:
+	if _sync_relic_proc_equipment():
+		recalculate_stats()
+	return _relic_proc_state.duplicate(true)
+
+
+func _apply_relic_proc_stats(result: Dictionary) -> void:
+	if float(_relic_proc_state.get("remaining", 0.0)) <= 0.0:
+		return
+	match RelicSynthesisRulesScript.effect_for(int(_relic_proc_state.get("item_id", -1))):
+		"speed":
+			result["attack_speed_tier"] = int(result.get("attack_speed_tier", 0)) + 2
+		"luck":
+			result["luck"] = int(result.get("luck", 0)) + 2
+		"damage":
+			for stat: String in ["attack_min", "attack_max", "magic_min", "magic_max", "tao_min", "tao_max"]:
+				result[stat] = roundi(float(result.get(stat, 0)) * 1.15)
 
 
 func has_special_effect(effect_id: String) -> bool:
@@ -3192,6 +3475,8 @@ func effective_skill_level(skill_name: String) -> int:
 	return _skill_progression.effective_rank(
 		stable_skill_id,
 		_equipment_skill_level_bonus(stable_skill_id)
+		if SkillRankExtensionPolicy.can_extend(stable_skill_id)
+		else 0
 	)
 
 
@@ -3256,6 +3541,10 @@ func canonical_skill_resource_context(stable_skill_id: String, current_mana: int
 		result["active_main_pet_summon_ids"] = (
 			_taoist_main_pet_runtime_state_slots().keys()
 		)
+		if requested_main_pet_summon_id == "skeleton":
+			var pet_groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+			result["active_skeleton_count"] = (pet_groups.get("skeleton", []) as Array).size()
+			result["effective_skill_rank"] = effective_skill_level(stable_skill_id)
 	## Dual defence: when both taoist.defense and taoist.magic_defense are
 	## learned (base rank 0 counts as learned in HardCore v2), any
 	## preflight/release quote must price the combination in one transaction
@@ -3368,7 +3657,8 @@ func _prewarm_loot_inventory_catalog(records: Array) -> void:
 	for raw_record: Variant in records:
 		if not raw_record is Dictionary or (raw_record as Dictionary).is_empty():
 			continue
-		_loot_inventory_catalog_record(str((raw_record as Dictionary).get("name", "")))
+		var record: Dictionary = raw_record
+		_loot_inventory_catalog_record(int(record.get("item_id", -1)) if record.has("item_id") else str(record.get("name", "")))
 
 
 func inventory_weight(records: Array = inventory) -> int:
@@ -3382,7 +3672,7 @@ func inventory_weight(records: Array = inventory) -> int:
 		var item_name := str(record.get("name", ""))
 		if item_name.is_empty():
 			continue
-		var item: Dictionary = _loot_inventory_catalog_record(item_name)
+		var item: Dictionary = _loot_inventory_catalog_record(int(record.get("item_id", -1)) if record.has("item_id") else item_name)
 		if item.is_empty() or str(item.get("kind", "")) == "currency":
 			continue
 		var unit_weight := maxi(0, int(item.get("weight", 0)))
@@ -3602,6 +3892,8 @@ func _damage_equipment_durability_raw(
 ) -> bool:
 	var equipped: Variant = equipment.get(slot, {})
 	if not equipped is Dictionary or equipped.is_empty():
+		return false
+	if RelicSynthesisRulesScript.is_synthesis_item(int((equipped as Dictionary).get("item_id", -1))):
 		return false
 	_ensure_raw_durability_fields(equipped)
 	var old_value := int(equipped.get("durability_raw", 0))
@@ -4135,18 +4427,18 @@ func _validate_saved_item_records(value: Variant, capacity: int) -> bool:
 func _validate_saved_item_records_uncached(value: Variant, capacity: int) -> bool:
 	if not value is Array or (value as Array).size() > capacity:
 		return false
-	var seen_drop_instance_ids: Dictionary = {}
+	var seen_item_instance_ids: Dictionary = {}
 	for raw_record: Variant in value:
 		if not raw_record is Dictionary:
 			return false
 		var record: Dictionary = raw_record
 		if record.is_empty():
 			continue
-		if record.has("drop_instance_contract_id"):
-			var drop_instance_id := _validated_drop_instance_id(record)
-			if drop_instance_id == "#invalid" or seen_drop_instance_ids.has(drop_instance_id):
+		if record.has("drop_instance_contract_id") or RelicSynthesisRulesScript.is_synthesis_item(int(record.get("item_id", -1))):
+			var instance_id := _validated_persisted_instance_id(record)
+			if instance_id == "#invalid" or seen_item_instance_ids.has(instance_id):
 				return false
-			seen_drop_instance_ids[drop_instance_id] = true
+			seen_item_instance_ids[instance_id] = true
 		if not record.has("count"):
 			continue
 		var count_value: Variant = record.get("count")
@@ -4174,7 +4466,7 @@ func _validate_saved_equipment(value: Variant) -> bool:
 			var count_value: Variant = (equipped as Dictionary).get("count")
 			if not _is_integral_json_number(count_value) or int(count_value) <= 0:
 				return false
-		if _validated_drop_instance_id(equipped as Dictionary) == "#invalid":
+		if _validated_persisted_instance_id(equipped as Dictionary) == "#invalid":
 			return false
 	return true
 
@@ -4190,16 +4482,28 @@ func _validated_drop_instance_id(record: Dictionary) -> String:
 	return str(record.get("instance_id", ""))
 
 
+func _validated_persisted_instance_id(record: Dictionary) -> String:
+	if record.has("drop_instance_contract_id"):
+		return _validated_drop_instance_id(record)
+	var item_id := int(record.get("item_id", -1))
+	if not RelicSynthesisRulesScript.is_synthesis_item(item_id):
+		return ""
+	if not RelicSynthesisRulesScript.valid_instance(record, item_id):
+		return "#invalid"
+	var instance_id := str(record.get("instance_id", ""))
+	return "#invalid" if instance_id.is_empty() else instance_id
+
+
 func _validate_profile_drop_instance_uniqueness(document: Dictionary) -> bool:
 	var seen: Dictionary = {}
-	for array_field: String in ["inventory", "warehouse_inventory"]:
+	for array_field: String in ["inventory", "warehouse_inventory", "forge_tray", "synthesis_tray"]:
 		var records: Variant = document.get(array_field, [])
 		if not records is Array:
 			continue
 		for raw_record: Variant in records:
 			if not raw_record is Dictionary:
 				continue
-			var instance_id := _validated_drop_instance_id(raw_record as Dictionary)
+			var instance_id := _validated_persisted_instance_id(raw_record as Dictionary)
 			if instance_id in ["", "#invalid"]:
 				continue
 			if seen.has(instance_id):
@@ -4210,7 +4514,7 @@ func _validate_profile_drop_instance_uniqueness(document: Dictionary) -> bool:
 		for raw_equipped: Variant in (saved_equipment as Dictionary).values():
 			if not raw_equipped is Dictionary:
 				continue
-			var instance_id := _validated_drop_instance_id(raw_equipped as Dictionary)
+			var instance_id := _validated_persisted_instance_id(raw_equipped as Dictionary)
 			if instance_id in ["", "#invalid"]:
 				continue
 			if seen.has(instance_id):
@@ -4224,20 +4528,22 @@ func _profile_and_shared_drop_instances_are_disjoint(
 	shared_document: Dictionary,
 ) -> bool:
 	var profile_ids: Dictionary = {}
-	var inventory_value: Variant = profile_document.get("inventory", [])
-	if inventory_value is Array:
-		for raw_record: Variant in inventory_value:
+	for field: String in ["inventory", "forge_tray", "synthesis_tray"]:
+		var records: Variant = profile_document.get(field, [])
+		if not records is Array:
+			continue
+		for raw_record: Variant in records:
 			if not raw_record is Dictionary:
 				continue
-			var inventory_instance_id := _validated_drop_instance_id(raw_record as Dictionary)
-			if inventory_instance_id not in ["", "#invalid"]:
-				profile_ids[inventory_instance_id] = true
+			var instance_id := _validated_persisted_instance_id(raw_record as Dictionary)
+			if instance_id not in ["", "#invalid"]:
+				profile_ids[instance_id] = true
 	var equipment_value: Variant = profile_document.get("equipment", {})
 	if equipment_value is Dictionary:
 		for raw_equipped: Variant in (equipment_value as Dictionary).values():
 			if not raw_equipped is Dictionary:
 				continue
-			var equipment_instance_id := _validated_drop_instance_id(raw_equipped as Dictionary)
+			var equipment_instance_id := _validated_persisted_instance_id(raw_equipped as Dictionary)
 			if equipment_instance_id not in ["", "#invalid"]:
 				profile_ids[equipment_instance_id] = true
 	var shared_records: Variant = shared_document.get("warehouse_inventory", [])
@@ -4245,7 +4551,7 @@ func _profile_and_shared_drop_instances_are_disjoint(
 		for raw_record: Variant in shared_records:
 			if not raw_record is Dictionary:
 				continue
-			var shared_instance_id := _validated_drop_instance_id(raw_record as Dictionary)
+			var shared_instance_id := _validated_persisted_instance_id(raw_record as Dictionary)
 			if shared_instance_id not in ["", "#invalid"] and profile_ids.has(shared_instance_id):
 				return false
 	return true
@@ -4321,6 +4627,11 @@ func _validate_profile_document_status(
 		return _validation_result(false, "invalid_warehouse_inventory")
 	if document.has("equipment") and not _validate_saved_equipment(document.get("equipment")):
 		return _validation_result(false, "invalid_equipment")
+	for tray_field: String in ["forge_tray", "synthesis_tray"]:
+		if document.has(tray_field):
+			var tray_value: Variant = document.get(tray_field)
+			if not _validate_saved_item_records(tray_value, 9) or (tray_value as Array).size() != 9:
+				return _validation_result(false, "invalid_" + tray_field)
 	if not _validate_profile_drop_instance_uniqueness(document):
 		return _validation_result(false, "duplicate_drop_instance")
 	for object_field: String in [
@@ -5565,6 +5876,8 @@ func _prepare_character_save_payload(checkpoint_world := true) -> Dictionary:
 		"gold": gold,
 		"gold_overflow_records": gold_overflow_records.duplicate(true),
 		"inventory": inventory,
+		"forge_tray": forge_tray.duplicate(true),
+		"synthesis_tray": synthesis_tray.duplicate(true),
 		"warehouse_storage_contract_id": SHARED_WAREHOUSE_CONTRACT_ID,
 		"equipment": equipment,
 		"learned_skills": learned_skills,
@@ -6074,6 +6387,8 @@ func load_save() -> void:
 	gold_overflow_records = projected_gold.gold_overflow_records
 	var loaded_inventory: Variant = parsed.get("inventory", [])
 	inventory = (loaded_inventory as Array).duplicate(true) if loaded_inventory is Array else []
+	forge_tray = _load_workbench_tray(parsed.get("forge_tray", []))
+	synthesis_tray = _load_workbench_tray(parsed.get("synthesis_tray", []))
 	if not legacy_isolated_profile_fixture:
 		warehouse_inventory = _shared_warehouse_read_inventory()
 	_trim_inventory_empty_tail()
@@ -6117,13 +6432,9 @@ func load_save() -> void:
 		)
 		taoist_main_pet_runtime_states = _empty_taoist_main_pet_runtime_states()
 		if not legacy_main_pet.is_empty():
-			var migrated_slots := (
-				taoist_main_pet_runtime_states["slots"] as Dictionary
-			)
-			migrated_slots[str(legacy_main_pet.get("summon_id", ""))] = (
-				legacy_main_pet
-			)
-	quest_states = world_replay.get("quest_states", parsed.get("quest_states", {}))
+			var migrated_groups := taoist_main_pet_runtime_states["groups"] as Dictionary
+			migrated_groups[str(legacy_main_pet.get("summon_id", ""))] = [legacy_main_pet]
+		quest_states = world_replay.get("quest_states", parsed.get("quest_states", {}))
 	world_monster_respawn_state = (
 		WorldMonsterRespawnStateScript.compact_elapsed(
 			world_replay.get("world_state", WorldMonsterRespawnStateScript.empty_snapshot()),
@@ -6607,15 +6918,17 @@ func apply_taoist_main_pet_runtime_states(states: Dictionary) -> bool:
 	return true
 
 
-func clear_taoist_main_pet_runtime_state(summon_id: String) -> void:
+func clear_taoist_main_pet_runtime_state(summon_id: String, pet_slot_index: int = -1) -> void:
 	if summon_id not in ["skeleton", "divine_beast"]:
 		return
-	var slots := _taoist_main_pet_runtime_state_slots()
-	slots.erase(summon_id)
-	taoist_main_pet_runtime_states = {
-		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-		"slots": slots,
-	}
+	var groups := taoist_main_pet_runtime_states.get("groups", {}).duplicate(true) as Dictionary
+	var retained: Array = []
+	if pet_slot_index >= 0:
+		for snapshot: Variant in groups.get(summon_id, []):
+			if int((snapshot as Dictionary).get("pet_slot_index", 0)) != pet_slot_index:
+				retained.append(snapshot)
+	groups[summon_id] = retained
+	taoist_main_pet_runtime_states = {"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "groups": groups}
 
 
 func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
@@ -6623,8 +6936,9 @@ func taoist_main_pet_runtime_states_for_restore() -> Dictionary:
 
 
 func taoist_main_pet_runtime_state_for_restore(summon_id: String) -> Dictionary:
-	var slots := _taoist_main_pet_runtime_state_slots()
-	var snapshot: Variant = slots.get(summon_id, {})
+	var groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+	var snapshots: Array = groups.get(summon_id, [])
+	var snapshot: Variant = snapshots[0] if not snapshots.is_empty() else {}
 	return (snapshot as Dictionary).duplicate(true) if snapshot is Dictionary else {}
 
 
@@ -6634,8 +6948,9 @@ func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
 	var captured: Variant = _taoist_main_pets_persistence_provider.call()
 	if not captured is Dictionary:
 		return
-	# The live provider is authoritative. Invalid/corrupt captured state fails
-	# closed to an empty two-slot document rather than retaining stale pets.
+	# The provider merges live actors with valid saved slots still waiting for a
+	# legal map birth tile. Invalid captured state fails closed to an empty
+	# document rather than retaining corrupt pets.
 	var normalized := _normalized_taoist_main_pet_runtime_states(
 		captured
 	)
@@ -6649,38 +6964,51 @@ func _refresh_taoist_main_pet_runtime_states_for_save() -> void:
 func _empty_taoist_main_pet_runtime_states() -> Dictionary:
 	return {
 		"contract_id": TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID,
-		"slots": {},
+		"groups": {"skeleton": [], "divine_beast": []},
 	}
 
 
 func _taoist_main_pet_runtime_state_slots() -> Dictionary:
-	var slots: Variant = taoist_main_pet_runtime_states.get("slots", {})
-	return (slots as Dictionary).duplicate(true) if slots is Dictionary else {}
+	var groups: Dictionary = taoist_main_pet_runtime_states.get("groups", {})
+	var slots := {}
+	for summon_id: String in ["skeleton", "divine_beast"]:
+		var snapshots: Array = groups.get(summon_id, [])
+		if not snapshots.is_empty():
+			slots[summon_id] = snapshots[0]
+	return slots
 
 
 func _normalized_taoist_main_pet_runtime_states(states: Variant) -> Dictionary:
 	if not states is Dictionary:
 		return {}
 	var source := states as Dictionary
-	if (
-		str(source.get("contract_id", ""))
-		!= TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID
-	):
-		return {}
-	var raw_slots: Variant = source.get("slots", {})
-	if not raw_slots is Dictionary:
+	var contract_id := str(source.get("contract_id", ""))
+	if contract_id not in [TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID, "skills.summon.persistence.runtime_states.v1", "skills.taoist_main_pet.v2"]:
 		return {}
 	var result := _empty_taoist_main_pet_runtime_states()
-	var slots := result["slots"] as Dictionary
+	var groups := result["groups"] as Dictionary
+	var raw_groups: Variant = source.get("groups", {})
+	var raw_slots: Variant = source.get("slots", {})
 	for summon_id: String in ["skeleton", "divine_beast"]:
-		var normalized := _normalized_taoist_main_pet_runtime_state(
-			(raw_slots as Dictionary).get(summon_id, {})
+		var candidates: Array = []
+		if contract_id == TAOIST_MAIN_PETS_PERSISTENCE_CONTRACT_ID and raw_groups is Dictionary:
+			var entries: Variant = (raw_groups as Dictionary).get(summon_id, [])
+			if entries is Array:
+				candidates = entries
+		elif raw_slots is Dictionary:
+			candidates = [(raw_slots as Dictionary).get(summon_id, {})]
+		var seen := {}
+		for candidate: Variant in candidates:
+			var normalized := _normalized_taoist_main_pet_runtime_state(candidate)
+			var slot := int(normalized.get("pet_slot_index", 0))
+			if normalized.is_empty() or str(normalized.get("summon_id", "")) != summon_id or seen.has(slot) or slot < 0 or slot >= (8 if summon_id == "skeleton" else 1):
+				continue
+			normalized["pet_slot_index"] = slot
+			seen[slot] = true
+			(groups[summon_id] as Array).append(normalized)
+		(groups[summon_id] as Array).sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+			return int(a.get("pet_slot_index", 0)) < int(b.get("pet_slot_index", 0))
 		)
-		if (
-			not normalized.is_empty()
-			and str(normalized.get("summon_id", "")) == summon_id
-		):
-			slots[summon_id] = normalized
 	return result
 
 
@@ -6715,6 +7043,8 @@ func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
 	]:
 		return {}
 	var skill_rank := int(source.get("skill_rank", -1))
+	var pet_slot_index := int(source.get("pet_slot_index", 0))
+	var effective_rank := int(source.get("effective_skill_rank", skill_rank))
 	var owner_level := int(source.get("owner_level", 0))
 	var current_hp := int(source.get("current_hp", 0))
 	var max_hp := int(source.get("max_hp", 0))
@@ -6725,6 +7055,9 @@ func _normalized_taoist_main_pet_runtime_state(snapshot: Variant) -> Dictionary:
 	if (
 		skill_rank < 0
 		or skill_rank > 7
+		or pet_slot_index < 0
+		or effective_rank < 0
+		or effective_rank > 1000000
 		or owner_level <= 0
 		or current_hp <= 0
 		or max_hp <= 0
@@ -7578,9 +7911,13 @@ func receive_loot_batch_partial(candidates: Array, prepare_only := false) -> Dic
 			if (
 				kind != "equipment"
 				or not instance_value is Dictionary
-				or not ItemDropInstanceRulesScript.validate_instance(
-					instance_value as Dictionary,
-					catalog,
+				or (
+					RelicSynthesisRulesScript.is_synthesis_item(canonical_item_id)
+					and not RelicSynthesisRulesScript.valid_instance(instance_value as Dictionary, canonical_item_id)
+				)
+				or (
+					not RelicSynthesisRulesScript.is_synthesis_item(canonical_item_id)
+					and not ItemDropInstanceRulesScript.validate_instance(instance_value as Dictionary, catalog)
 				)
 			):
 				outcomes.append({
@@ -7852,7 +8189,7 @@ func _loot_save_failure(outcomes: Array) -> Dictionary:
 func _drop_instance_id_already_present(instance_id: String, working_inventory: Array) -> bool:
 	if instance_id.is_empty():
 		return true
-	for raw_records: Variant in [working_inventory, warehouse_inventory]:
+	for raw_records: Variant in [working_inventory, warehouse_inventory, forge_tray, synthesis_tray]:
 		var records: Array = raw_records
 		for raw_record: Variant in records:
 			if (
@@ -8445,6 +8782,8 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"experience": experience,
 		"gold": gold,
 		"inventory": inventory.duplicate(true),
+		"forge_tray": forge_tray.duplicate(true),
+		"synthesis_tray": synthesis_tray.duplicate(true),
 		"gold_overflow_records": gold_overflow_records.duplicate(true),
 		"warehouse_inventory": warehouse_inventory.duplicate(true),
 		"equipment": equipment.duplicate(true),
@@ -8497,6 +8836,8 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	gold = int(snapshot.get("gold", 0))
 	gold_overflow_records = snapshot.get("gold_overflow_records", []).duplicate(true)
 	inventory = (snapshot.get("inventory", []) as Array).duplicate(true)
+	forge_tray = _load_workbench_tray(snapshot.get("forge_tray", []))
+	synthesis_tray = _load_workbench_tray(snapshot.get("synthesis_tray", []))
 	warehouse_inventory = (snapshot.get("warehouse_inventory", []) as Array).duplicate(true)
 	equipment = (snapshot.get("equipment", {}) as Dictionary).duplicate(true)
 	learned_skills = (snapshot.get("learned_skills", {}) as Dictionary).duplicate(true)
@@ -8558,6 +8899,8 @@ func select_character(profile_id: String) -> bool:
 	if not bool(last_load_result.get("success", false)):
 		active_profile_id = ""
 		return false
+	if _enhancement_service != null:
+		_enhancement_service.reset()
 	_autosave_elapsed = 0.0
 	_clear_pending_durability_runtime()
 	return true

@@ -4,7 +4,7 @@ extends RefCounted
 ## Single rank-resolution entry point for the canonical skill plan chain.
 ## Base ranks 0..3 come verbatim from skills_source_of_truth_v1.json (zero
 ## change); effective ranks above 3 are extended per
-## skills.rank_extension.v1 semantics. There is no gameplay level cap: the
+## skills.rank_extension.v2 semantics. There is no gameplay level cap: the
 ## only upper bound is the policy's technical anti-abuse sanity cap.
 
 const Policy := preload("res://scripts/skills/skill_rank_extension_policy.gd")
@@ -45,22 +45,30 @@ static func value(values: Variant, rank_value: Variant, semantic: String) -> Var
 	if rank < array.size():
 		return array[rank]
 	var base_max := array.size() - 1
-	var last: Variant = array[base_max]
-	var previous: Variant = array[maxi(0, base_max - 1)]
-	if semantic == SEMANTIC_TIMING_CONSTANT:
-		return last
-	var extended: Variant = _linear_extend(last, previous, rank - base_max)
-	match semantic:
-		SEMANTIC_PROBABILITY:
-			return clampf(float(extended), 0.0, Policy.max_probability())
-		SEMANTIC_DAMAGE_REDUCTION:
-			return clampf(float(extended), 0.0, Policy.max_damage_reduction())
-		SEMANTIC_DENOMINATOR:
-			return maxi(Policy.denominator_floor(), int(extended))
-		SEMANTIC_SUMMON_PET_LEVEL:
-			return clampi(int(extended), 0, Policy.summon_pet_level_cap())
-		_:
-			return extended
+	# No generic last-delta extrapolation is allowed in V2. Individual
+	# extension modes own their formulas; all other fields freeze at rank 3.
+	return array[base_max]
+
+
+static func mode_for(skill_id: String) -> String:
+	return Policy.mode_for(skill_id)
+
+
+static func can_extend(skill_id: String) -> bool:
+	return Policy.can_extend(skill_id)
+
+
+static func formula_rank(rank_value: Variant) -> int:
+	return mini(safe_effective_rank(rank_value), base_rank_max())
+
+
+static func more_multiplier(rank_value: Variant) -> float:
+	return pow(1.1, maxi(0, safe_effective_rank(rank_value) - base_rank_max()))
+
+
+static func skeleton_count(rank_value: Variant) -> int:
+	var extra := maxi(0, safe_effective_rank(rank_value) - base_rank_max())
+	return mini(1 + floori(float(extra) / 2.0), Policy.skeleton_count_cap())
 
 
 static func linear_int(values: Variant, rank_value: Variant) -> int:
@@ -92,7 +100,7 @@ static func probability(values: Variant, rank_value: Variant) -> float:
 
 
 static func summon_pet_level(rank_value: Variant) -> int:
-	return clampi(safe_effective_rank(rank_value), 0, Policy.summon_pet_level_cap())
+	return formula_rank(rank_value)
 
 
 static func capped_probability(raw_probability: float) -> float:
@@ -110,12 +118,3 @@ static func capped_roll_bound(raw_bound: int, roll_space: int) -> int:
 
 static func denominator_min(raw_value: int) -> int:
 	return maxi(Policy.denominator_floor(), raw_value)
-
-
-static func _linear_extend(last: Variant, previous: Variant, steps: int) -> Variant:
-	var last_f := float(last)
-	var previous_f := float(previous)
-	var extended_f := last_f + (last_f - previous_f) * float(steps)
-	if typeof(last) == TYPE_INT and typeof(previous) == TYPE_INT:
-		return roundi(extended_f)
-	return extended_f

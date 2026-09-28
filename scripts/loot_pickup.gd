@@ -91,7 +91,8 @@ static func _ground_visual_descriptor_from_catalog_record(
 		path = str(GameData.service_item_catalog.get("runtimeFallbackArt", {}).get(fallback_key, {}).get("ground", ""))
 	var draw_color: Color = {"equipment": Color(0.35, 0.65, 0.95), "skill_book": Color(0.60, 0.38, 0.90), "consumable": Color(0.25, 0.75, 0.35), "quest_item": Color(0.90, 0.28, 0.12)}.get(kind, Color(0.95, 0.67, 0.12))
 	var label_color: Color = {"equipment": Color(0.55, 0.82, 1.0), "skill_book": Color(0.72, 0.55, 1.0), "currency": Color(1.0, 0.82, 0.28), "consumable": Color(0.45, 0.92, 0.52), "quest_item": Color(1.0, 0.48, 0.25)}.get(kind, Color(0.90, 0.82, 0.66))
-	var descriptor := {"path": path, "kind": kind, "label_color": label_color, "fallback_draw_color": draw_color}
+	var display_size := GameData.get_item_art_display_size(record, "groundIcon")
+	var descriptor := {"path": path, "kind": kind, "label_color": label_color, "fallback_draw_color": draw_color, "display_size": display_size}
 	_descriptor_cache[cache_key] = descriptor
 	_descriptor_build_count += 1
 	return descriptor.duplicate(true)
@@ -196,6 +197,10 @@ func _ready() -> void:
 		icon_sprite = Sprite2D.new()
 		icon_sprite.name = "ClientGroundIcon"
 		icon_sprite.texture = icon_texture
+		var target_size: Vector2 = descriptor.get("display_size", Vector2.ZERO)
+		if icon_sprite.texture != null and target_size.x > 0.0 and target_size.y > 0.0:
+			var native_size := icon_sprite.texture.get_size()
+			icon_sprite.scale = Vector2.ONE * minf(target_size.x / native_size.x, target_size.y / native_size.y)
 		icon_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		icon_sprite.position = Vector2(0, -5)
 		add_child(icon_sprite)

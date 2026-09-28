@@ -1,64 +1,64 @@
 {
   "maps": [
     {
-      "approval_revision": 5,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "e5488e5ba9a3a13751fe77cfbb9baaf97db180179ae9006654a6b0859af9240a",
-      "display_name": "比奇省（单机重制）",
-      "map_key": "world_bich_province",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 910001.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/world_bich_province.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": true,
-        "monster_names": [
-          "毒蜘蛛",
-          "蛤蟆",
-          "稻草人",
-          "多钩猫",
-          "钉耙猫",
-          "森林雪人",
-          "半兽人",
-          "食人花"
-        ],
-        "npc_kinds": [
-          "shop",
-          "trainer",
-          "quest",
-          "warehouse"
-        ],
-        "portals": [
-          {
-            "label": "前往沃玛森林",
-            "target_map_id": 910004.0,
-            "target_map_key": "world_wooma_forest"
-          },
-          {
-            "label": "兽人古墓",
-            "target_map_id": 911001.0,
-            "target_map_key": "bich_orc_tomb_f1"
-          },
-          {
-            "label": "比奇矿区",
-            "target_map_id": 911101.0,
-            "target_map_key": "bich_mine_f1"
-          },
-          {
-            "label": "地狱烈焰",
-            "target_map_id": 918002.0,
-            "target_map_key": "hidden_hellfire"
-          },
-          {
-            "label": "进入毒蛇山谷",
-            "target_map_id": 910002.0,
-            "target_map_key": "world_snake_valley"
-          }
-        ],
-        "runtime_build_sha256": "e5488e5ba9a3a13751fe77cfbb9baaf97db180179ae9006654a6b0859af9240a"
+  "approval_revision": 6,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "b931fc7bc531a652fa6f59755fd5e7b285d572955c5a67162ce4e34ccf4397ed",
+  "display_name": "比奇省（单机重制）",
+  "map_key": "world_bich_province",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 910001,
+  "runtime_path": "res://assets/data/runtime/map_editor/world_bich_province.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": true,
+    "monster_names": [
+      "毒蜘蛛",
+      "蛤蟆",
+      "稻草人",
+      "多钩猫",
+      "钉耙猫",
+      "森林雪人",
+      "半兽人",
+      "食人花"
+    ],
+    "npc_kinds": [
+      "shop",
+      "trainer",
+      "quest",
+      "warehouse"
+    ],
+    "portals": [
+      {
+        "label": "前往沃玛森林",
+        "target_map_id": 910004,
+        "target_map_key": "world_wooma_forest"
+      },
+      {
+        "label": "兽人古墓",
+        "target_map_id": 911001,
+        "target_map_key": "bich_orc_tomb_f1"
+      },
+      {
+        "label": "比奇矿区",
+        "target_map_id": 911101,
+        "target_map_key": "bich_mine_f1"
+      },
+      {
+        "label": "地狱烈焰",
+        "target_map_id": 918002,
+        "target_map_key": "hidden_hellfire"
+      },
+      {
+        "label": "进入毒蛇山谷",
+        "target_map_id": 910002,
+        "target_map_key": "world_snake_valley"
       }
-    },
+    ],
+    "runtime_build_sha256": "b931fc7bc531a652fa6f59755fd5e7b285d572955c5a67162ce4e34ccf4397ed"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",
@@ -103,64 +103,64 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "177e0cfa37eae3ca5b50ac644c6de3ad482c9460b9b6d24dcfcc96231c768c8c",
-      "display_name": "盟重省",
-      "map_key": "world_mengzhong_province",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 910003.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/world_mengzhong_province.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": true,
-        "monster_names": [
-          "羊",
-          "猎鹰",
-          "狼",
-          "盔甲虫",
-          "威思而小虫",
-          "沙虫",
-          "多角虫",
-          "巨型多角虫"
-        ],
-        "npc_kinds": [
-          "shop",
-          "warehouse",
-          "quest",
-          "trainer"
-        ],
-        "portals": [
-          {
-            "label": "毒蛇山谷",
-            "target_map_id": 910002.0,
-            "target_map_key": "world_snake_valley"
-          },
-          {
-            "label": "石墓",
-            "target_map_id": 913001.0,
-            "target_map_key": "mengzhong_stone_tomb_f1"
-          },
-          {
-            "label": "祖玛寺庙",
-            "target_map_id": 913101.0,
-            "target_map_key": "mengzhong_zuma_temple_f1"
-          },
-          {
-            "label": "苍月岛",
-            "target_map_id": 910007.0,
-            "target_map_key": "world_cangyue_island"
-          },
-          {
-            "label": "死亡山谷",
-            "target_map_id": 913201.0,
-            "target_map_key": "mengzhong_death_valley_dungeon"
-          }
-        ],
-        "runtime_build_sha256": "177e0cfa37eae3ca5b50ac644c6de3ad482c9460b9b6d24dcfcc96231c768c8c"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "80750cc0e3ae45343c85b65e3e1412c48942e98302906a60456b9949d08372a8",
+  "display_name": "盟重省",
+  "map_key": "world_mengzhong_province",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 910003,
+  "runtime_path": "res://assets/data/runtime/map_editor/world_mengzhong_province.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": true,
+    "monster_names": [
+      "羊",
+      "猎鹰",
+      "狼",
+      "盔甲虫",
+      "威思而小虫",
+      "沙虫",
+      "多角虫",
+      "巨型多角虫"
+    ],
+    "npc_kinds": [
+      "shop",
+      "warehouse",
+      "quest",
+      "trainer"
+    ],
+    "portals": [
+      {
+        "label": "毒蛇山谷",
+        "target_map_id": 910002,
+        "target_map_key": "world_snake_valley"
+      },
+      {
+        "label": "石墓",
+        "target_map_id": 913001,
+        "target_map_key": "mengzhong_stone_tomb_f1"
+      },
+      {
+        "label": "祖玛寺庙",
+        "target_map_id": 913101,
+        "target_map_key": "mengzhong_zuma_temple_f1"
+      },
+      {
+        "label": "苍月岛",
+        "target_map_id": 910007,
+        "target_map_key": "world_cangyue_island"
+      },
+      {
+        "label": "死亡山谷",
+        "target_map_id": 913201,
+        "target_map_key": "mengzhong_death_valley_dungeon"
       }
-    },
+    ],
+    "runtime_build_sha256": "80750cc0e3ae45343c85b65e3e1412c48942e98302906a60456b9949d08372a8"
+  }
+},
     {
       "approval_revision": 3,
       "approval_source": "published_via_publish_runtime_release",
@@ -273,98 +273,98 @@
       }
     },
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "59afc8ee024278fb9c1b6d08c773c53d130bff0606c53f4c20d2604354b87ca7",
-      "display_name": "白日门",
-      "map_key": "world_white_day_gate",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 910006.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
-      "ui_presentation": {
-        "boss_names": [
-          "多钩猫王",
-          "钉耙猫王",
-          "半兽统领",
-          "半兽勇士"
-        ],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": true,
-        "monster_names": [
-          "森林雪人",
-          "半兽战士",
-          "天狼蜘蛛",
-          "剧毒蜘蛛"
-        ],
-        "npc_kinds": [
-          "shop",
-          "warehouse",
-          "trainer"
-        ],
-        "portals": [
-          {
-            "label": "沃玛森林",
-            "target_map_id": 910004.0,
-            "target_map_key": "world_wooma_forest"
-          },
-          {
-            "label": "赤月峡谷",
-            "target_map_id": 916001.0,
-            "target_map_key": "chiyue_valley"
-          },
-          {
-            "label": "钳虫巢穴",
-            "target_map_id": 918006.0,
-            "target_map_key": "hidden_pincer_nest"
-          }
-        ],
-        "runtime_build_sha256": "59afc8ee024278fb9c1b6d08c773c53d130bff0606c53f4c20d2604354b87ca7"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "d3946d1a38dd9c5ca83529883aba6a9ba9d7aaaebe08cd2a4a29434d6042bb2b",
+  "display_name": "白日门",
+  "map_key": "world_white_day_gate",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 910006,
+  "runtime_path": "res://assets/data/runtime/map_editor/world_white_day_gate.runtime.json",
+  "ui_presentation": {
+    "boss_names": [
+      "多钩猫王",
+      "钉耙猫王",
+      "半兽统领",
+      "半兽勇士"
+    ],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": true,
+    "monster_names": [
+      "森林雪人",
+      "半兽战士",
+      "天狼蜘蛛",
+      "剧毒蜘蛛"
+    ],
+    "npc_kinds": [
+      "shop",
+      "warehouse",
+      "trainer"
+    ],
+    "portals": [
+      {
+        "label": "沃玛森林",
+        "target_map_id": 910004,
+        "target_map_key": "world_wooma_forest"
+      },
+      {
+        "label": "赤月峡谷",
+        "target_map_id": 916001,
+        "target_map_key": "chiyue_valley"
+      },
+      {
+        "label": "钳虫巢穴",
+        "target_map_id": 918006,
+        "target_map_key": "hidden_pincer_nest"
       }
-    },
+    ],
+    "runtime_build_sha256": "d3946d1a38dd9c5ca83529883aba6a9ba9d7aaaebe08cd2a4a29434d6042bb2b"
+  }
+},
     {
-      "approval_revision": 3.0,
-      "approval_source": "published_via_publish_runtime_release",
-      "approved_build_sha256": "673d82b4474a49255400fc1a58f3021e55de6831b093b3c30ef8483a369810c1",
-      "display_name": "苍月岛",
-      "map_key": "world_cangyue_island",
-      "release_state": "implemented_playable",
-      "runtime_map_id": 910007.0,
-      "runtime_path": "res://assets/data/runtime/map_editor/world_cangyue_island.runtime.json",
-      "ui_presentation": {
-        "boss_names": [],
-        "contract_id": "ui.map.presentation_projection.v1",
-        "has_safe_area": true,
-        "monster_names": [
-          "毒蜘蛛",
-          "钉耙猫",
-          "森林雪人",
-          "半兽人"
-        ],
-        "npc_kinds": [
-          "shop",
-          "warehouse",
-          "trainer"
-        ],
-        "portals": [
-          {
-            "label": "牛魔寺庙",
-            "target_map_id": 917101.0,
-            "target_map_key": "cangyue_bull_temple_f1"
-          },
-          {
-            "label": "骨魔洞",
-            "target_map_id": 917001.0,
-            "target_map_key": "cangyue_bone_cave_f1"
-          },
-          {
-            "label": "盟重",
-            "target_map_id": 910003.0,
-            "target_map_key": "world_mengzhong_province"
-          }
-        ],
-        "runtime_build_sha256": "673d82b4474a49255400fc1a58f3021e55de6831b093b3c30ef8483a369810c1"
+  "approval_revision": 4,
+  "approval_source": "published_via_publish_runtime_release",
+  "approved_build_sha256": "2fa236e9b5915bdf2ea8a8a692de3ede7198881e87ed05d0a4b978a2c041ba27",
+  "display_name": "苍月岛",
+  "map_key": "world_cangyue_island",
+  "release_state": "implemented_playable",
+  "runtime_map_id": 910007,
+  "runtime_path": "res://assets/data/runtime/map_editor/world_cangyue_island.runtime.json",
+  "ui_presentation": {
+    "boss_names": [],
+    "contract_id": "ui.map.presentation_projection.v1",
+    "has_safe_area": true,
+    "monster_names": [
+      "毒蜘蛛",
+      "钉耙猫",
+      "森林雪人",
+      "半兽人"
+    ],
+    "npc_kinds": [
+      "shop",
+      "warehouse",
+      "trainer"
+    ],
+    "portals": [
+      {
+        "label": "牛魔寺庙",
+        "target_map_id": 917101,
+        "target_map_key": "cangyue_bull_temple_f1"
+      },
+      {
+        "label": "骨魔洞",
+        "target_map_id": 917001,
+        "target_map_key": "cangyue_bone_cave_f1"
+      },
+      {
+        "label": "盟重",
+        "target_map_id": 910003,
+        "target_map_key": "world_mengzhong_province"
       }
-    },
+    ],
+    "runtime_build_sha256": "2fa236e9b5915bdf2ea8a8a692de3ede7198881e87ed05d0a4b978a2c041ba27"
+  }
+},
     {
       "approval_revision": 3.0,
       "approval_source": "published_via_publish_runtime_release",

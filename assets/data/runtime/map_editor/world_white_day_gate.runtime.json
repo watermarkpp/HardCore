@@ -1,5 +1,5 @@
 {
-  "build_sha256": "59afc8ee024278fb9c1b6d08c773c53d130bff0606c53f4c20d2604354b87ca7",
+  "build_sha256": "d3946d1a38dd9c5ca83529883aba6a9ba9d7aaaebe08cd2a4a29434d6042bb2b",
   "collision": {
     "authored_polygons_ground_gu": [
       {
@@ -1026,7 +1026,7 @@
     "coordinate_contract_id": "hc.map.polygon_ground_gu.v1",
     "ground_coordinate_contract_id": "isometric_cell_center_64x32_v2",
     "navigation": {
-      "canonical_catalog_sha256": "e801fc9dfe9bfa920376872f6ac4ff735073a27a8b5eb05cc922e4ecb19d3099",
+      "canonical_catalog_sha256": "628a544ab76948169f7e2bbf0fbf725b9b835ca477ed5f8b9c479e818574dae5",
       "clearance_gu": 0.025,
       "contract_id": "hc.polygon_nav_faces.v1",
       "profiles": [
@@ -9762,6 +9762,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000001",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000001",
@@ -9805,6 +9808,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000002",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000002",
@@ -9848,6 +9854,9 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000003",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000003",
@@ -9891,6 +9900,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000004",
@@ -9935,6 +9946,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000005",
@@ -9979,6 +9992,8 @@
           ]
         },
         "radius_gu": 0.0,
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
         "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000006",
@@ -10023,7 +10038,9 @@
           ]
         },
         "radius_gu": 0.0,
-        "respawn_policy_id": "beginner_outdoor",
+        "respawn_policy_id": "elite",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 1800.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.boss_spawn.000007",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.boss_spawn.000007",
@@ -10228,6 +10245,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000001",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000001",
@@ -10272,6 +10291,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000002",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000002",
@@ -10316,6 +10337,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000004",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000004",
@@ -10360,6 +10383,8 @@
         },
         "radius_gu": 0.0,
         "respawn_policy_id": "beginner_outdoor",
+        "respawn_random_seconds": 0.0,
+        "respawn_seconds": 300.0,
         "runtime_export": true,
         "semantic_id": "mse.placement.v1.world_white_day_gate.monster_spawn.000005",
         "spawn_group_id": "mse.group.v1.world_white_day_gate.monster_spawn.000005",
@@ -10524,7 +10549,7 @@
         "collision_profile_id": "small_prop_1x1",
         "content_id": "npc.4.004",
         "content_layer": "personal_expansion",
-        "display_name": "强化商人",
+        "display_name": "强化大师",
         "facing": "south",
         "kind": "npc",
         "npc_id": "npc.4.004",
@@ -10627,12 +10652,12 @@
   },
   "source": {
     "candidate_binding": {
-      "authoring_sha256": "5a2267e5cff1b4a3801a8be7fb1066d953905977deca581df771130571909269",
+      "authoring_sha256": "f6c15723062a00fb630ac0869393a95898401af80173b5778d515ac2f6a3437d",
       "contract_id": "mse.map.runtime.candidate_binding.v1",
       "document_revision": 46.0,
-      "document_sha256": "873a0041b41e2aaf079aaf07e68382c8b7519699ec9cc19f7f9b5ff5248e8729",
+      "document_sha256": "b7d62b059522e243fa7461265ebfbca395088ebe43af443dd715f4bc92840e00",
       "ground_manifest_sha256": "83cd2fcbcb56986390a894caac3caf57b31cf121b8bc9bbaf823679b1d1207b2",
-      "ground_state_sha256": "bf353a8225d1f7d915512b1f649004f23222b7dbed6e582a8a3299c05ad46d63",
+      "ground_state_sha256": "050164567b7a354eaf62b4bde3f4164bb71869f803d8b4e66abccd2cf2c16d57",
       "map_key": "world_white_day_gate",
       "runtime_map_id": 910006.0
     },

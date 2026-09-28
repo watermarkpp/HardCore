@@ -41,6 +41,17 @@ func _ready() -> void:
 	assert(lab._speed_option.item_count == 4)
 	assert(lab._background_option.item_count == 3)
 	assert(lab._foot_pick_button != null)
+	assert(lab._relic_proc_preview != null and not lab._relic_proc_preview.visible)
+	lab._relic_proc_toggle.button_pressed = true
+	assert(lab._relic_proc_preview.visible)
+	assert(lab._relic_proc_preview.position == lab._player.approved_ground_footpoint_local_px())
+	assert(lab._relic_proc_preview._decal.position == Vector2(0, 5))
+	lab._relic_proc_loop.button_pressed = true
+	assert(not lab._relic_proc_loop_timer.is_stopped())
+	assert(lab._relic_proc_preview.is_processing())
+	lab._relic_proc_loop.button_pressed = false
+	assert(lab._relic_proc_loop_timer.is_stopped())
+	lab._relic_proc_toggle.button_pressed = false
 	assert(lab._alignment_button != null)
 	assert(lab._alignment_offset_label != null)
 	assert(

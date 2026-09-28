@@ -17,8 +17,8 @@ static func get_power(
 	def_power := 0,
 	def_max_power := 0
 ) -> int:
-	## Base ranks 0..3 are exact; above 3 the formula's per-rank slope IS the
-	## last-delta linear extension (skills.rank_extension.v1).
+	## Callers choose the rank before entering this base formula. V2 passes
+	## rank 3 for frozen fields and lets only poison use native growth above 3.
 	var safe_rank := SkillRankResolverScript.safe_effective_rank(rank)
 	var scaled := roundi(float(base_input) / 4.0 * float(safe_rank + 1))
 	return scaled + def_power + int(rng.call("pascal_random_exclusive", def_max_power - def_power))

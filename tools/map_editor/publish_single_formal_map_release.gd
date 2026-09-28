@@ -8,7 +8,9 @@ extends Node
 
 const FORMAL_TARGET_COUNTS := {
 	"world_bich_province": Vector2i(82, 0),
-	"world_cangyue_island": Vector2i(37, 0),
+	"world_cangyue_island": Vector2i(35, 0),
+	"world_mengzhong_province": Vector2i(37, 0),
+	"world_white_day_gate": Vector2i(4, 7),
 	"world_wooma_forest": Vector2i(50, 4),
 	"bich_orc_tomb_f1": Vector2i(40, 0),
 	"mengzhong_zuma_leader_home": Vector2i(4, 6),

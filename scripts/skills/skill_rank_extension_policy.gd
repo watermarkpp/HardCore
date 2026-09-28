@@ -7,7 +7,8 @@ extends RefCounted
 ## array-index clamps to mask field meaning.
 
 const POLICY_PATH := "res://assets/data/vanilla_176/skill_rank_extension_policy.json"
-const CONTRACT_ID := "skills.rank_extension.v1"
+const CONTRACT_ID := "skills.rank_extension.v2"
+const MODES := ["DAMAGE_MORE", "HEAL_MORE", "PASSIVE_BASIC_ACCURACY", "PASSIVE_SLAYING", "PASSIVE_SPIRITUAL_WARFARE", "POISON_NATIVE_FORMULA", "SUMMON_SKELETON_COUNT", "SUMMON_DIVINE_DAMAGE_MORE", "EXCLUDED"]
 
 static var _policy: Dictionary = {}
 static var _validation: Dictionary = {}
@@ -47,23 +48,31 @@ static func validate_policy(value: Variant) -> Dictionary:
 		errors.append("base_rank_bounds")
 	if int(parsed.get("technical_effective_rank_cap", -1)) != 1000000:
 		errors.append("technical_effective_rank_cap")
-	var semantics: Dictionary = parsed.get("semantics", {})
-	var probability_cap: Dictionary = semantics.get("probability_cap", {})
-	if not is_equal_approx(float(probability_cap.get("max", -1.0)), 1.0):
-		errors.append("probability_cap")
-	var reduction_cap: Dictionary = semantics.get("damage_reduction_cap", {})
-	if not is_equal_approx(float(reduction_cap.get("max", -1.0)), 0.75):
-		errors.append("damage_reduction_cap")
-	var denominator_floor: Dictionary = semantics.get("denominator_floor", {})
-	if int(denominator_floor.get("min", -1)) != 2:
-		errors.append("denominator_floor")
-	var summon_cap: Dictionary = semantics.get("summon_pet_level_cap", {})
-	if int(summon_cap.get("max", -1)) != 7:
-		errors.append("summon_pet_level_cap")
-	if not semantics.has("linear_extrapolation_last_delta"):
-		errors.append("linear_extrapolation_last_delta")
-	if not semantics.has("timing_constant"):
-		errors.append("timing_constant")
+	if not is_equal_approx(float(parsed.get("more_per_extra_rank", 0.0)), 1.1):
+		errors.append("more_per_extra_rank")
+	if int(parsed.get("skeleton_count_technical_cap", 0)) != 8:
+		errors.append("skeleton_count_technical_cap")
+	var modes: Variant = parsed.get("modes", {})
+	if not modes is Dictionary:
+		errors.append("modes")
+	else:
+		var seen := {}
+		for mode: String in (modes as Dictionary):
+			if mode not in MODES:
+				errors.append("unknown_mode:" + mode)
+		for mode: String in MODES:
+			var ids: Variant = (modes as Dictionary).get(mode, null)
+			if not ids is Array:
+				errors.append("missing_mode:" + mode)
+				continue
+			for id: Variant in ids:
+				if str(id).is_empty():
+					errors.append("empty_skill_id")
+				if seen.has(str(id)):
+					errors.append("duplicate_skill:" + str(id))
+				seen[str(id)] = true
+		if seen.size() != 33:
+			errors.append("skill_count")
 	return {
 		"valid": errors.is_empty(),
 		"errors": errors,
@@ -80,33 +89,36 @@ static func technical_effective_rank_cap() -> int:
 
 
 static func max_probability() -> float:
-	return float(
-		policy().get("semantics", {}).get("probability_cap", {}).get("max", 1.0)
-	)
+	return 1.0
 
 
 static func max_damage_reduction() -> float:
-	return float(
-		policy()
-		.get("semantics", {})
-		.get("damage_reduction_cap", {})
-		.get("max", 0.75)
-	)
+	return 0.75
 
 
 static func denominator_floor() -> int:
-	return int(
-		policy().get("semantics", {}).get("denominator_floor", {}).get("min", 2)
-	)
+	return 2
 
 
 static func summon_pet_level_cap() -> int:
-	return int(
-		policy()
-		.get("semantics", {})
-		.get("summon_pet_level_cap", {})
-		.get("max", 7)
-	)
+	return 7
+
+
+static func mode_for(skill_id: String) -> String:
+	var modes: Dictionary = policy().get("modes", {})
+	for mode: String in modes:
+		if modes[mode] is Array and (modes[mode] as Array).has(skill_id):
+			return mode
+	return ""
+
+
+static func can_extend(skill_id: String) -> bool:
+	var mode := mode_for(skill_id)
+	return not mode.is_empty() and mode != "EXCLUDED"
+
+
+static func skeleton_count_cap() -> int:
+	return int(policy().get("skeleton_count_technical_cap", 8))
 
 
 static func clear_cache_for_tests() -> void:

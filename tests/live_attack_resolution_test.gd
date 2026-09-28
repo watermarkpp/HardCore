@@ -21,6 +21,7 @@ func _run() -> void:
 	add_child(game)
 	await FormalWorldFixture.wait_for_formal_world(self, game, "live_attack_resolution_test")
 	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5)))
+	assert(not game._player_inside_active_safe_zone())
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			_move_enemy(

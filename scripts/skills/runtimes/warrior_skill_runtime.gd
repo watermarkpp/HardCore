@@ -16,6 +16,8 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 	)
 	var context: Dictionary = request.get("target_context", {})
 	var mechanics: Dictionary = definition.get("mechanics", {})
+	var formula_rank := SkillRankResolverScript.formula_rank(rank)
+	var damage_more := SkillRankResolverScript.more_multiplier(rank)
 	var plan := _base_plan(definition)
 	match skill_id:
 		"warrior.basic_swordsmanship":
@@ -24,16 +26,17 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				"stat": "accuracy",
 				"value": SkillRankResolverScript.linear_int(
 					mechanics.get("flat_bonus_by_rank", [0, 0, 0, 0]),
-					rank
-				),
+					formula_rank
+				) + 3 * maxi(0, rank - 3),
 				"affects": mechanics.get("affects", []).duplicate(),
 			}]
 		"warrior.slaying_swordsmanship":
 			var denominators: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
 			var denominator := SkillRankResolverScript.denominator(
 				denominators,
-				rank
+				formula_rank
 			)
+			var proc_probability := 1.0 / float(denominator) if rank <= 3 else minf(1.0, 0.25 + float(rank - 3) * 0.05)
 			var valid_melee_action := bool(context.get("valid_melee_swing", false))
 			var force_proc := bool(context.get("force_proc", false))
 			var force_no_proc := bool(context.get("force_no_proc", false))
@@ -42,8 +45,10 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				proc_roll = clampi(int(context.get("proc_roll", 0)), 0, denominator - 1)
 			elif force_proc:
 				proc_roll = 0
-			elif valid_melee_action and not force_no_proc:
+			elif valid_melee_action and not force_no_proc and rank <= 3:
 				proc_roll = int(rng.call("pascal_random_exclusive", denominator))
+			elif valid_melee_action and not force_no_proc:
+				proc_roll = 0 if bool(rng.call("chance", proc_probability)) else 1
 			var proc: bool = (
 				valid_melee_action
 				and not force_no_proc
@@ -53,17 +58,17 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			plan.effects = [{
 				"type": "melee_proc_modifier",
 				"proc": proc,
-				"success_probability": 1.0 / float(denominator),
-				"proc_denominator": denominator,
+				"success_probability": proc_probability,
+				"proc_denominator": denominator if rank <= 3 else 0,
 				"proc_roll": proc_roll,
 				"flat_damage_bonus": SkillRankResolverScript.linear_int(
 					mechanics.get("flat_damage_bonus_by_rank", [2, 4, 6, 8]),
-					rank
-				),
+					formula_rank
+				) + 2 * maxi(0, rank - 3),
 				"flat_accuracy_bonus": SkillRankResolverScript.linear_int(
 					mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3]),
-					rank
-				),
+					formula_rank
+				) + maxi(0, rank - 3),
 				"accuracy_always_applies": true,
 				"damage_bonus_applies_after_body_formula": true,
 				"valid_melee_action": valid_melee_action,
@@ -80,7 +85,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 				{
 					"type": "melee_hit",
 					"cell": 1,
-					"multiplier": float(first.get("damage_multiplier", 1.0)),
+					"multiplier": float(first.get("damage_multiplier", 1.0)) * damage_more,
 					"ignore_ac": false,
 					"maximum_targets": thrust_limit,
 					"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
@@ -92,8 +97,8 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 						second.get(
 							"damage_multiplier_by_rank", [0.4, 0.6, 0.8, 1.0]
 						),
-						rank
-					),
+						formula_rank
+					) * damage_more,
 					"ignore_ac": bool(second.get("ignore_ac", true)),
 					"maximum_targets": thrust_limit,
 					"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
@@ -107,14 +112,14 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 					WarriorMeleeGeometryScript.SKILL_HALF_MOON
 				),
 				"target_count_policy_id": WarriorMeleeGeometryScript.TARGET_COUNT_POLICY_ID,
-				"primary_multiplier": float(mechanics.get("primary_damage_multiplier", 1.0)),
+				"primary_multiplier": float(mechanics.get("primary_damage_multiplier", 1.0)) * damage_more,
 				"side_multiplier": SkillRankResolverScript.linear_float(
 					mechanics.get(
 						"side_damage_multiplier_by_rank",
 						[0.15, 0.23, 0.31, 5.0 / 13.0]
 					),
-					rank
-				),
+					formula_rank
+				) * damage_more,
 				"max_resource_commits": 1,
 				"max_training_events": 1,
 			}]
@@ -165,8 +170,8 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 						"damage_multiplier_by_rank",
 						[1.4, 1.8, 2.2, 2.6]
 					),
-					rank
-				),
+					formula_rank
+				) * damage_more,
 				"stack_count_max": 1,
 				"auto_cast": false,
 				"consume_on": "next_valid_melee_damage_attempt",

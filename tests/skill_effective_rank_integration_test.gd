@@ -69,16 +69,16 @@ func _run() -> void:
 		5,
 		rank5_context
 	)
-	assert(rank5_quote.valid and rank5_quote.mp_cost == 13, "rank5 MP 报价错误")
+	assert(rank5_quote.valid and rank5_quote.mp_cost == 9, "rank5 MP 应维持3级耗蓝")
 	var rank5_plan := _canonical_plan(5)
-	assert(int(rank5_plan.get("resource_quote", {}).get("mp_cost", -1)) == 13, "rank5 canonical plan 报价与 quote 不一致")
+	assert(int(rank5_plan.get("resource_quote", {}).get("mp_cost", -1)) == 9, "rank5 canonical plan 报价与 quote 不一致")
 
 	var player := PlayerCharacter.new()
 	add_child(player)
 	await get_tree().process_frame
-	player.current_mp = 13
+	player.current_mp = 9
 	assert(player.can_request_skill("火球术"), "MP 恰好等于 rank5 报价时应可施法")
-	player.current_mp = 12
+	player.current_mp = 8
 	assert(not player.can_request_skill("火球术"), "MP 低于 rank5 报价时应拒绝预检")
 
 	# rank4 after removing one affix item.
@@ -89,12 +89,12 @@ func _run() -> void:
 		4,
 		PlayerState.canonical_skill_resource_context("wizard.fireball", 9999)
 	)
-	assert(rank4_quote.valid and rank4_quote.mp_cost == 11, "rank4 MP 报价错误")
+	assert(rank4_quote.valid and rank4_quote.mp_cost == 9, "rank4 MP 应维持3级耗蓝")
 	var rank4_plan := _canonical_plan(4)
-	assert(int(rank4_plan.get("resource_quote", {}).get("mp_cost", -1)) == 11, "rank4 canonical plan 报价与 quote 不一致")
-	player.current_mp = 11
+	assert(int(rank4_plan.get("resource_quote", {}).get("mp_cost", -1)) == 9, "rank4 canonical plan 报价与 quote 不一致")
+	player.current_mp = 9
 	assert(player.can_request_skill("火球术"), "rank4 MP 恰好等于报价时应可施法")
-	player.current_mp = 10
+	player.current_mp = 8
 	assert(not player.can_request_skill("火球术"), "rank4 MP 低于报价时应拒绝预检")
 
 	# Unequip and durability-zero both invalidate affixes.

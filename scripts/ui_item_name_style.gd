@@ -5,6 +5,7 @@ extends RefCounted
 ## The installer compiles frozen membership into an exact canonical-ID UI table.
 const DATA_PATH := "res://assets/data/ui/item_name_rarity_v1.json"
 const CONTRACT := "ui.item_name.rarity.v1"
+const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const DEFAULT_COLOR := Color("E6DDCB")
 const MESSAGE_COLOR := Color("F2C783")
 static var _loaded := false
@@ -66,6 +67,14 @@ static func display_name(item: Dictionary, instance: Dictionary = {}) -> String:
 		if preload("res://scripts/item_drop_instance_rules.gd").is_affixed_instance(actual, catalog):
 			return "★" + plain.trim_prefix("★")
 	return plain
+
+
+static func forge_suffix(item: Dictionary, instance: Dictionary = {}) -> String:
+	var enhancement: Variant = instance.get("enhancement", null)
+	if not EnhancementRules.validate_enhancement(enhancement, str(item.get("category", ""))):
+		return ""
+	var stage := int((enhancement as Dictionary).get("forge", {}).get("stage", 0))
+	return "+%d" % stage if stage > 0 else ""
 
 static func _plain_display_name(item: Dictionary, instance: Dictionary = {}) -> String:
 	for record: Dictionary in [instance, item]:

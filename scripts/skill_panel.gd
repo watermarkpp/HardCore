@@ -547,7 +547,7 @@ func _rebuild_skill_cards() -> void:
 		var skill_name := str(entry.get("skillName", "技能"))
 		var learned := PlayerState.is_skill_learned(skill_name)
 		var has_book := PlayerState.has_item(skill_name)
-		var level := int(PlayerState.learned_skills.get(skill_name, 0))
+		var level := PlayerState.effective_skill_level(skill_name)
 		var interaction_label := _skill_presentation_label(skill_name)
 		var status := "已学会" if learned else "未学会"
 		var detail_status := "Lv.%d · %s" % [level, interaction_label] if learned else ("可学习" if has_book else "缺少技能书")
@@ -615,11 +615,12 @@ func _show_skill_detail(index: int) -> void:
 	var entry: Dictionary = skill_entries[index]
 	var skill_name := str(entry.get("skillName", ""))
 	var learned := PlayerState.is_skill_learned(skill_name)
-	var learned_level := int(PlayerState.learned_skills.get(skill_name, 0)) if learned else -1
-	var row := GameData.get_skill(skill_name, maxi(0, learned_level))
+	var learned_level := PlayerState.effective_skill_level(skill_name) if learned else -1
+	var base_level := int(PlayerState.learned_skills.get(skill_name, 0)) if learned else -1
+	var row := GameData.get_skill(skill_name, maxi(0, base_level))
 	if row.is_empty():
 		row = entry
-	var combat := ProfessionRules.skill_combat_profile(skill_name, learned_level)
+	var combat := ProfessionRules.skill_combat_profile(skill_name, base_level)
 	var cast_type := str(combat.get("cast_type", "unknown"))
 	var target_mode := str(combat.get("target_mode", "unknown"))
 	var cooldown := float(combat.get("cooldown", 0.0))

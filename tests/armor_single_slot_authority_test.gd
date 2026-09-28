@@ -4,7 +4,7 @@ const Provider := preload("res://scripts/drop/user_loot_sheet_provider.gd")
 const LootRuntime := preload("res://scripts/layers/runtime/loot_runtime_service.gd")
 const DIRECTIVE_PATH := "res://tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json"
 const MASTER_PATH := "res://assets/data/equipment_attribute_master.json"
-const EXPECTED_SLOTS := 6042
+const EXPECTED_SLOTS := 6084
 const EXPECTED_GROUPS := 102
 const EXPECTED_AFFECTED_MONSTERS := 37
 const EXPECTED_EXCEPTION_IDS := {235: 140, 236: 144, 237: 142, 238: 141, 239: 145, 240: 143}
@@ -26,6 +26,7 @@ func _run() -> void:
 	assert(provider.valid, provider.load_error)
 	assert(provider.monster_count == 126 and provider.slot_count == EXPECTED_SLOTS)
 	assert(provider.overlay_slot_count == 168 and provider.new_slot_count == 41)
+	assert(provider.boss_material_slot_count == 42)
 	var loot := LootRuntime.new()
 	var master_armor := {}
 	for record: Dictionary in master.records:
@@ -109,5 +110,5 @@ func _run() -> void:
 			armor_attempts[output_id] = true
 	assert(GameData.dpv2_ground_slot_limit() == 15)
 	loot.free()
-	print("ARMOR_SINGLE_SLOT_AUTHORITY_PASS monsters=126 slots=6042 affected=37 groups=102 removed=102 frozen_dark_boss=6 production_rng_single_trial=true ground_limit=15")
+	print("ARMOR_SINGLE_SLOT_AUTHORITY_PASS monsters=126 slots=6084 affected=37 groups=102 removed=102 frozen_dark_boss=6 production_rng_single_trial=true ground_limit=15")
 	get_tree().quit(0)

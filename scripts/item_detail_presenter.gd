@@ -7,6 +7,10 @@ extends PanelContainer
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PlayerCopy := preload("res://scripts/ui_item_player_copy.gd")
+const EnhancementBlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
+const AncientRelicFragmentScript := preload("res://scripts/layers/rules/ancient_relic_fragment.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
+const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
 var attribute_help: Node
 
@@ -392,6 +396,14 @@ func _strip_bbcode(value: String) -> String:
 
 
 static func format_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> String:
+	var black_iron_purity := EnhancementBlackIron.purity_for(item)
+	if black_iron_purity >= 0:
+		return "类别：矿石\n纯度：%d\n[color=#b58a45]乌黑色的矿石，天外陨石的碎片[/color]" % black_iron_purity
+	if AncientRelicFragmentScript.is_item(item):
+		return "类别：材料\n重量：1\n[color=#b58a45]%s[/color]" % str(item.get("description", ""))
+	var relic_id := int(item.get("itemId", -1))
+	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
+		return _format_relic_item(relic_id, instance, context)
 	var kind := str(item.get("kind", ""))
 	var lines: Array[String] = []
 	var category := str(item.get("category", item.get("type", "")))
@@ -435,6 +447,41 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 	return "\n".join(lines)
 
 
+static func _format_relic_item(item_id: int, instance: Dictionary, context: Dictionary = {}) -> String:
+	var badge := RelicSynthesisRulesScript.is_badge(item_id)
+	var lines: Array[String] = []
+	if badge:
+		lines.assign(["类别：徽章", "部位：徽章槽"])
+	else:
+		lines.assign(["类别：圣物", "部位：圣物槽"])
+	var roll: Dictionary = instance.get("relic_roll", {}) if instance.get("relic_roll", {}) is Dictionary else {}
+	if RelicSynthesisRulesScript.valid_instance(instance, item_id):
+		var skill_name := SkillDataLoader.display_name(str(roll.get("skill_id", "")))
+		lines.append("%s等级 +1" % skill_name)
+	else:
+		var skill_pool := str(context.get("recipe_profession", RelicSynthesisRulesScript.record_for_id(item_id).get("skillProfession", "")))
+		lines.append("随机%s技能等级 +1" % skill_pool)
+	match item_id:
+		950101:
+			lines.append("速度 +1")
+			lines.append("攻击或使用技能时，20%几率速度 +2，持续10秒；结束后冷却15秒")
+		950102:
+			if RelicSynthesisRulesScript.valid_instance(instance, item_id):
+				var maxima: Dictionary = roll.get("heart_maxima", {})
+				lines.append("攻击 0-%d　魔法 0-%d　道术 0-%d" % [int(maxima.attack), int(maxima.magic), int(maxima.tao)])
+			else:
+				lines.append("攻击 0-5　魔法 0-5　道术 0-5")
+			lines.append("攻击或使用技能时，20%几率三系面板伤害 +15%，持续10秒；结束后冷却15秒")
+		950103:
+			lines.append("幸运 +1")
+			lines.append("攻击或使用技能时，20%几率幸运 +2，持续10秒；结束后冷却15秒")
+		950201, 950202, 950203:
+			lines.append("防御 0-5　魔法防御 0-5")
+			lines.append("每秒恢复最大生命值的1%" if item_id == 950201 else "每秒恢复最大魔力值的1%")
+	lines.append("穿戴要求：35级")
+	return "\n".join(lines)
+
+
 const RANGE_STATS := {"attack_min":"attackMin", "attack_max":"attackMax", "magic_min":"magicMin", "magic_max":"magicMax", "tao_min":"taoMin", "tao_max":"taoMax", "defense_min":"defenseMin", "defense_max":"defenseMax", "magic_defense_min":"mdefMin", "magic_defense_max":"mdefMax"}
 
 static func _stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
@@ -444,6 +491,9 @@ static func _stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
 	var containers: Array = [instance.get("modifiers", item.get("modifiers", []))]
 	if instance.has("drop_instance_contract_id"):
 		containers = [item.get("modifiers", []), instance.get("modifiers", [])]
+	var enhancement: Variant = instance.get("enhancement", null)
+	if EnhancementRules.validate_enhancement(enhancement, str(item.get("category", ""))):
+		containers.append((enhancement as Dictionary).get("forge", {}).get("modifiers", []))
 	for container: Variant in containers:
 		if not container is Array:
 			continue
@@ -572,10 +622,35 @@ static func _modifier_lines_from_container(container: Variant, omit_ranges := fa
 		if not MODIFIER_LABELS.has(stat):
 			continue
 		var label := str(MODIFIER_LABELS[stat])
+		if stat == "skill_level":
+			var parsed := EquipmentRulesScript.parse_skill_level_affix_entry(entry)
+			if str(parsed.get("status", "")) not in ["accepted", "legacy"]:
+				continue
+			var scope := str(parsed.get("canonical_scope", ""))
+			if str(parsed.get("status", "")) == "legacy":
+				var stable_id := SkillDataLoader.stable_skill_id(str(parsed.get("legacy_name", "")))
+				scope = "skill:" + stable_id if not stable_id.is_empty() else ""
+			label = _skill_level_scope_label(scope)
+			if label.is_empty():
+				continue
 		var operation := str(entry.get("op", "add"))
 		var value_text := _modifier_value_text(stat, operation, value)
 		result.append("%s %s" % [label, value_text])
 	return result
+
+
+static func _skill_level_scope_label(scope: String) -> String:
+	match scope:
+		"all": return "所有可突破技能等级"
+		"profession:warrior": return "战士可突破技能等级"
+		"profession:wizard": return "法师可突破技能等级"
+		"profession:taoist": return "道士可突破技能等级"
+	if scope.begins_with("skill:"):
+		var skill_id := scope.trim_prefix("skill:")
+		if SkillRankExtensionPolicy.can_extend(skill_id):
+			var display := SkillDataLoader.display_name(skill_id)
+			return "%s等级" % display if not display.is_empty() else ""
+	return ""
 
 
 static func _modifier_value_text(stat: String, operation: String, value: float) -> String:

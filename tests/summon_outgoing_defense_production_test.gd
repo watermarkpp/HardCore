@@ -71,6 +71,13 @@ func _run() -> void:
 		int(fire[57]) == 0,
 		"divine release bypassed MAC100 or used the physical floor1: %s" % str(fire),
 	)
+	assert(divine.synchronize_skill_rank(4))
+	assert(_release(divine, _targets[38], 0) == 22, "rank4 divine More must apply before MAC")
+	assert(_release(divine, _targets[57], 0) == 0, "rank4 divine must still honor MAC100")
+	assert(divine.synchronize_skill_rank(5))
+	assert(_release(divine, _targets[38], 0) == 24, "rank5 divine More must apply once")
+	assert(skeleton.synchronize_skill_rank(5))
+	assert(_release(skeleton, _targets[38], 0) == RAW_DAMAGE, "extra summon rank must not boost a skeleton's individual damage")
 	for summon: SummonActor in [skeleton, divine]:
 		_verify_miss_boundary(summon, _targets[135])
 		_verify_moved_target_rejects_release(summon, _targets[38])

@@ -1,6 +1,7 @@
 extends Node
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
+const ItemDetailPresenterScript = preload("res://scripts/item_detail_presenter.gd")
 const CONTRACT_ID := "equipment.skill_level_affix.v1"
 
 
@@ -20,8 +21,22 @@ func _run() -> void:
 	_test_immutability_and_determinism()
 	_test_aggregate_records()
 	_test_empty_records()
+	_test_scope_display()
 	print("EQUIPMENT_SKILL_LEVEL_AFFIX_PASS：稳定合同、legacy兼容、畸形拒绝、不可变性与确定性均通过")
 	get_tree().quit(0)
+
+
+func _test_scope_display() -> void:
+	var lines := ItemDetailPresenterScript._modifier_lines_from_container([
+		{"stat": "skill_level", "scope": "all", "value": 1},
+		{"stat": "skill_level", "scope": "profession:warrior", "value": 1},
+		{"stat": "skill_level", "scope": "skill:warrior.fire_sword", "value": 2},
+		{"stat": "skill_level", "scope": "skill:wizard.magic_shield", "value": 1},
+	])
+	assert(lines.size() == 3)
+	assert(lines[0] == "所有可突破技能等级 +1")
+	assert(lines[1] == "战士可突破技能等级 +1")
+	assert(lines[2] == "烈火剑法等级 +2")
 
 
 func _test_canonical_stacking() -> void:

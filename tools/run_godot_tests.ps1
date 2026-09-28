@@ -860,6 +860,28 @@ $Suites.critical = @($Suites.critical + @(
     'tests/classic_boss_area_magic_outcomes_test.tscn'
 ) | Select-Object -Unique)
 
+# Integrated forge, relic and expanded Taoist summon production contracts.
+$Suites.critical = @($Suites.critical + @(
+    'tests/ancient_relic_fragment_test.tscn',
+    'tests/equipment_enhancement_black_iron_test.tscn',
+    'tests/equipment_enhancement_display_test.tscn',
+    'tests/equipment_enhancement_grade_test.tscn',
+    'tests/equipment_enhancement_material_notice_test.tscn',
+    'tests/equipment_enhancement_panel_flow_test.tscn',
+    'tests/equipment_enhancement_rules_test.tscn',
+    'tests/equipment_enhancement_transaction_test.tscn',
+    'tests/equipment_skill_level_affix_rollout_test.tscn',
+    'tests/forge_calibrator_save_test.tscn',
+    'tests/forge_hud_target_occlusion_test.tscn',
+    'tests/forge_panel_layout_test.tscn',
+    'tests/relic_synthesis_runtime_test.tscn',
+    'tests/skeleton_multi_performance_test.tscn',
+    'tests/skeleton_multi_summon_contract_test.tscn',
+    'tests/skills/skill_rank_zero_three_matrix_test.tscn',
+    'tests/synthesis_panel_preview_test.tscn',
+    'tests/f03_workbench_receipt_boundary_test.tscn'
+) | Select-Object -Unique)
+
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
 $FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'

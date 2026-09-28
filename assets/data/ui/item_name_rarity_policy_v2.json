@@ -4,6 +4,15 @@
   "scope": "presentation_only_no_drop_or_equipment_attribute_changes",
   "membership_source": "assets/data/drop/dpv2_item_tier_authority_v1.json",
   "equipment_membership_source": "assets/data/equipment_attribute_master.json",
+  "custom_exact_items": [
+    {"item_id": 950001, "canonical_name": "远古圣物碎片", "name_style": "redmoon", "source_path": "assets/data/ancient_relic_fragment_v1.json"},
+    {"item_id": 950101, "canonical_name": "魔龙之眼", "name_style": "ultra_rare", "source_path": "assets/data/relic_synthesis_v1.json"},
+    {"item_id": 950102, "canonical_name": "魔龙之心", "name_style": "ultra_rare", "source_path": "assets/data/relic_synthesis_v1.json"},
+    {"item_id": 950103, "canonical_name": "幸运守护", "name_style": "ultra_rare", "source_path": "assets/data/relic_synthesis_v1.json"},
+    {"item_id": 950201, "canonical_name": "勇气徽章", "name_style": "ultra_rare", "source_path": "assets/data/relic_synthesis_v1.json"},
+    {"item_id": 950202, "canonical_name": "智慧徽章", "name_style": "ultra_rare", "source_path": "assets/data/relic_synthesis_v1.json"},
+    {"item_id": 950203, "canonical_name": "信仰徽章", "name_style": "ultra_rare", "source_path": "assets/data/relic_synthesis_v1.json"}
+  ],
   "palette": {
     "default": "#E6DDCB",
     "wooma": "#FFD86B",
@@ -207,8 +216,11 @@
     "258": "ultra_rare",
     "259": "ultra_rare",
     "260": "default",
+    "920002": "default",
+    "920005": "default",
     "920007": "default",
     "920023": "wooma",
+    "920028": "default",
     "920032": "zuma",
     "910001": "divine_water",
     "910002": "divine_water",

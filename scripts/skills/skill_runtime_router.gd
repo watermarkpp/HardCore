@@ -37,6 +37,10 @@ static func _plan(request: Variant) -> Dictionary:
 			),
 		}
 	var skill_id := SkillDataLoaderScript.stable_skill_id(str(request.get("skill_id", "")))
+	var resolved_request: Dictionary = request
+	if SkillRankResolverScript.mode_for(skill_id) == "EXCLUDED" and int(request.get("rank", 0)) > 3:
+		resolved_request = request.duplicate(false)
+		resolved_request["rank"] = SkillRankResolverScript.formula_rank(request.get("rank", 0))
 	var definition := SkillDataLoaderScript.skill(skill_id)
 	if definition.is_empty():
 		return {
@@ -62,9 +66,9 @@ static func _plan(request: Variant) -> Dictionary:
 		}
 	var resource_quote := SkillResourceServiceScript.quote(
 		definition,
-		int(request.get("rank", 0)),
-		request.get("resource_context", {}),
-		request.get("target_context", {})
+		int(resolved_request.get("rank", 0)),
+		resolved_request.get("resource_context", {}),
+		resolved_request.get("target_context", {})
 	)
 	if not bool(resource_quote.get("valid", false)):
 		return {
@@ -76,15 +80,15 @@ static func _plan(request: Variant) -> Dictionary:
 				resource_quote.get("reason", "insufficient_resource")
 			),
 		}
-	var rng := SkillRngScript.new(int(request.get("seed", 0)))
+	var rng := SkillRngScript.new(int(resolved_request.get("seed", 0)))
 	var plan: Dictionary
 	match str(definition.get("class", "")):
 		"warrior":
-			plan = WarriorRuntimeScript.execute(definition, request, rng)
+			plan = WarriorRuntimeScript.execute(definition, resolved_request, rng)
 		"wizard":
-			plan = WizardRuntimeScript.execute(definition, request, rng)
+			plan = WizardRuntimeScript.execute(definition, resolved_request, rng)
 		"taoist":
-			plan = TaoistRuntimeScript.execute(definition, request, rng)
+			plan = TaoistRuntimeScript.execute(definition, resolved_request, rng)
 		_:
 			return {
 				"accepted": false,
@@ -113,7 +117,7 @@ static func _plan(request: Variant) -> Dictionary:
 	plan["resource_quote"] = resource_quote
 	## The release freezes the effective rank used to build every effect.
 	plan["effective_rank"] = SkillRankResolverScript.safe_effective_rank(
-		int(request.get("rank", 0))
+		int(resolved_request.get("rank", 0))
 	)
 	return plan
 
@@ -144,10 +148,14 @@ static func build_canonical_plan(
 			request,
 			context
 		)
-	var legacy_result := _plan(request)
+	var resolved_request: Dictionary = request
+	if SkillRankResolverScript.mode_for(skill_id) == "EXCLUDED" and int(request.get("rank", 0)) > 3:
+		resolved_request = request.duplicate(false)
+		resolved_request["rank"] = SkillRankResolverScript.formula_rank(request.get("rank", 0))
+	var legacy_result := _plan(resolved_request)
 	return SkillExecutionPlanContractScript.build_canonical_plan(
 		legacy_result,
-		request,
+		resolved_request,
 		context
 	)
 
@@ -277,8 +285,8 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 		var denominator_values: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])
 		flat_accuracy_bonus += SkillRankResolverScript.linear_int(
 			accuracy_values,
-			slaying_rank
-		)
+			SkillRankResolverScript.formula_rank(slaying_rank)
+		) + maxi(0, slaying_rank - 3)
 		slaying_proc_denominator = SkillRankResolverScript.denominator(
 			denominator_values,
 			slaying_rank

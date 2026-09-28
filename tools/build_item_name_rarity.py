@@ -28,6 +28,17 @@ def build():
     tier_ids = {row["canonical_item_id"] for row in records}
     records += [{"canonical_item_id": row["itemId"], "canonical_name": row["name"], "tier": "UNCLASSIFIED"}
                 for row in equipment if row["itemId"] not in tier_ids]
+    for custom in policy.get("custom_exact_items", []):
+        source_path = ROOT / custom["source_path"]
+        source_data = json.loads(source_path.read_text(encoding="utf-8"))
+        source_records = source_data.get("items", [source_data])
+        matches = [row for row in source_records if row.get("item_id") == custom["item_id"]]
+        if (len(matches) != 1 or matches[0].get("name") != custom["canonical_name"]
+                or custom["name_style"] not in policy["palette"]):
+            raise ValueError(f"Custom item identity or style mismatch: {custom['item_id']}")
+        records.append({"canonical_item_id": custom["item_id"],
+                        "canonical_name": custom["canonical_name"],
+                        "tier": "CUSTOM_EQUIPMENT" if custom["item_id"] != 950001 else "CUSTOM_MATERIAL"})
     records.sort(key=lambda row: row["canonical_item_id"])
     result = {}
     for row in records:
@@ -35,7 +46,9 @@ def build():
         if key in result:
             raise ValueError(f"Duplicate item ID {key}")
         tier = row["tier"]
-        style = policy["exact_id_overrides"].get(key, policy["tier_styles"].get(tier, "default"))
+        custom_style = next((entry["name_style"] for entry in policy.get("custom_exact_items", [])
+                             if entry["item_id"] == row["canonical_item_id"]), None)
+        style = custom_style or policy["exact_id_overrides"].get(key, policy["tier_styles"].get(tier, "default"))
         if style not in policy["palette"]:
             raise ValueError(f"Unknown palette entry {style}")
         result[key] = {"canonical_name": row["canonical_name"], "source_tier": tier, "name_style": style}

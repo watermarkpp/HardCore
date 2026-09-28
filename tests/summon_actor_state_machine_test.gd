@@ -179,7 +179,7 @@ func _run() -> void:
 		single_skeleton_formation.contract_id
 			== "skills.summon.owner_formation_slots.v1"
 	)
-	assert(single_skeleton_formation.typed_slot_id == "skeleton")
+	assert(single_skeleton_formation.typed_slot_id == "skeleton:0")
 	assert(
 		single_skeleton_formation.direction_source
 			== "owner_movement_facing"
@@ -260,8 +260,8 @@ func _run() -> void:
 		skeleton_formation.collision_contract_id
 			== "skills.summon.collision.player_pet_passthrough.v1"
 	)
-	assert(skeleton_formation.typed_slot_id == "skeleton")
-	assert(beast_formation.typed_slot_id == "divine_beast")
+	assert(skeleton_formation.typed_slot_id == "skeleton:0")
+	assert(beast_formation.typed_slot_id == "divine_beast:0")
 	assert(
 		skeleton_formation.desired_screen_position_px
 			!= beast_formation.desired_screen_position_px

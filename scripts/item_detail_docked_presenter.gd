@@ -21,6 +21,7 @@ var attribute_help: Node
 
 var title_label: Label
 var affix_marker: Label
+var forge_marker: Label
 var detail_label: RichTextLabel
 var _context: Dictionary = {}
 var _layout_key: Array = []
@@ -33,6 +34,7 @@ var _laying_out := false
 var _layout_count := 0
 var _layout_error := ""
 var _title_source := ""
+var _forge_suffix := ""
 var _body_source := ""
 var _connections: Array = []
 var _name_style: Dictionary = {}
@@ -74,6 +76,14 @@ func _init() -> void:
 	_mark_runtime(affix_marker)
 	add_child(affix_marker)
 	affix_marker.hide()
+	forge_marker = Label.new()
+	forge_marker.name = "ForgeMarker"
+	forge_marker.add_theme_font_size_override("font_size", TITLE_SIZE)
+	forge_marker.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	forge_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mark_runtime(forge_marker)
+	add_child(forge_marker)
+	forge_marker.hide()
 	detail_label = RichTextLabel.new()
 	detail_label.name = "Body"
 	detail_label.bbcode_enabled = true
@@ -199,12 +209,15 @@ func _set_name_style(item: Dictionary, instance: Dictionary = {}) -> void:
 	_title_color = _name_style["color"]
 	NameStyle.apply_label_style(title_label, _name_style)
 	NameStyle.apply_label_style(affix_marker, _name_style)
+	NameStyle.apply_label_style(forge_marker, _name_style)
 
 func _reset_name_style(message: bool = false) -> void:
 	_name_style.clear()
+	_forge_suffix = ""
 	_title_color = NameStyle.MESSAGE_COLOR if message else NameStyle.DEFAULT_COLOR
 	NameStyle.apply_label_style(title_label, {}, _title_color)
 	NameStyle.apply_label_style(affix_marker, {}, _title_color)
+	NameStyle.apply_label_style(forge_marker, {}, _title_color)
 
 
 func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> void:
@@ -212,6 +225,7 @@ func show_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary 
 		hide_detail()
 		return
 	_set_name_style(item, instance)
+	_forge_suffix = NameStyle.forge_suffix(item, instance)
 	_set_content(_item_title(item, instance), Formatter.format_item(item, instance, context), context, false)
 
 func show_multi(count: int, context: Dictionary = {}) -> void:
@@ -226,6 +240,7 @@ func show_text(title: String, body: String, context: Dictionary = {}) -> void:
 	var instance: Variant = context.get("rarity_instance", {})
 	if item is Dictionary and not (item as Dictionary).is_empty():
 		_set_name_style(item, instance if instance is Dictionary else {})
+		_forge_suffix = NameStyle.forge_suffix(item, instance if instance is Dictionary else {})
 	else:
 		_reset_name_style()
 	_set_content(title, body, context, false)
@@ -281,6 +296,7 @@ func hide_detail() -> void:
 	_body_source = ""
 	title_label.text = ""
 	affix_marker.hide()
+	forge_marker.hide()
 	detail_label.text = ""
 	visible = false
 	_r33_sync_caption()
@@ -300,6 +316,7 @@ func debug_layout_snapshot() -> Dictionary:
 		"margin": MARGIN, "title_gap": TITLE_GAP, "space_spec": _r3_spec.duplicate(),
 		"candidate_trace": _r32_candidates.duplicate(true),
 		"source_title": _title_source, "source_body": _body_source,
+		"forge_suffix": _forge_suffix,
 		"name_style": _name_style.duplicate(), "title_color": title_label.get_theme_color("font_color"),
 		"title": title_label.text, "body": detail_label.get_parsed_text(),
 		"rect": Rect2(position, size), "title_rect": Rect2(title_label.position, title_label.size),
@@ -347,10 +364,13 @@ func _measure_at(width: float, margin: float = MARGIN, pad: float = MEASURE_PAD)
 func _sync_title() -> void:
 	affix_marker.visible = _title_source.begins_with("★")
 	title_label.text = _title_source.trim_prefix("★") if affix_marker.visible else _title_source
+	forge_marker.text = _forge_suffix
+	forge_marker.visible = not _forge_suffix.is_empty()
 
 func _title_required_width() -> float:
 	var marker_width := affix_marker.get_minimum_size().x + 2.0 if affix_marker.visible else 0.0
-	return ceilf(title_label.get_minimum_size().x + 2.0 * (MARGIN + marker_width))
+	var suffix_width := forge_marker.get_minimum_size().x + 2.0 if forge_marker.visible else 0.0
+	return ceilf(title_label.get_minimum_size().x + 2.0 * (MARGIN + maxf(marker_width, suffix_width)))
 
 func _place_affix_marker() -> void:
 	# The plain name stays centered. The marker is separate from its alignment.
@@ -360,6 +380,9 @@ func _place_affix_marker() -> void:
 	title_label.size.x = name_width
 	affix_marker.position = Vector2((size.x - name_width) * 0.5 - marker_width - 2.0, MARGIN)
 	affix_marker.size = Vector2(marker_width, title_label.size.y)
+	var suffix_width := forge_marker.get_minimum_size().x
+	forge_marker.position = Vector2((size.x + name_width) * 0.5 + 2.0, MARGIN)
+	forge_marker.size = Vector2(suffix_width, title_label.size.y)
 
 func _center_body_block() -> void:
 	# A long title can widen the card beyond its body. Keep each paragraph's
@@ -391,7 +414,7 @@ func _relayout() -> void:
 	var expanded: Rect2 = spec.get("expanded_region", region)
 	var shop := str(spec.get("kind", "")) == "shop"
 	var side := str(spec.get("side", "center"))
-	var key: Array = [region, expanded, side, shop, spec.get("screen_scale", Vector2.ONE), _title_source, _body_source]
+	var key: Array = [region, expanded, side, shop, spec.get("screen_scale", Vector2.ONE), _title_source, _forge_suffix, _body_source]
 	if key == _layout_key:
 		_laying_out = false
 		return
@@ -461,6 +484,8 @@ func _relayout() -> void:
 		var scroll_extent := _measure_at(scroll_width)
 		var scroll_height := minf(ceilf(MARGIN * 2.0 + scroll_extent.x + TITLE_GAP + scroll_extent.y), max_height)
 		scroll_height = minf(scroll_height, max_height)
+		if bool(spec.get("fill_height", false)):
+			scroll_height = max_height
 		var fitted := Dock.fit_rect(fallback, Vector2(scroll_width, scroll_height), side)
 		set_anchors_preset(Control.PRESET_TOP_LEFT)
 		position = fitted.position
@@ -497,6 +522,8 @@ func _relayout() -> void:
 	var width: float = chosen.width
 	var height: float = chosen.height
 	region = chosen.region
+	if bool(spec.get("fill_height", false)):
+		height = region.size.y
 	# Candidate measurements mutate the controls. Re-shape the actual winner.
 	var extent := _measure_at(width)
 	var fitted := Dock.fit_rect(region, Vector2(width, height), side)

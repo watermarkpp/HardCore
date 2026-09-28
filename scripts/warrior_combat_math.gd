@@ -100,8 +100,12 @@ static func roll_attack_power(attack_min: int, attack_max: int, total_luck: int,
 
 static func slaying_proc_cycle(level_value: int) -> int:
 	# 用户定稿表：内部0/1/2/3级分别为1/7、1/6、1/5、1/4。
-	# Effective ranks above 3 stop improving the proc at 1/2 (policy floor).
-	return maxi(2, 7 - clamp_skill_level(level_value))
+	# Above rank 3 the runtime uses the exact probability helper, not 1/N.
+	return 7 - SkillRankResolverScript.formula_rank(level_value)
+
+
+static func slaying_proc_probability(level_value: int) -> float:
+	return 1.0 / float(slaying_proc_cycle(level_value)) if level_value <= 3 else minf(1.0, 0.25 + float(level_value - 3) * 0.05)
 
 
 static func slaying_flat_damage_bonus(level_value: int) -> int:
@@ -113,9 +117,9 @@ static func slaying_damage(base_damage: int, level_value: int) -> int:
 
 
 static func thrust_secondary_damage(base_damage: int, level_value: int, sword_long_rate := SWORD_LONG_POWER_RATE) -> int:
-	var level := clamp_skill_level(level_value)
+	var level := SkillRankResolverScript.formula_rank(level_value)
 	var scaled := roundi(float(base_damage) / float(MAGIC_TRAIN_LEVEL + 2) * float(level + 2))
-	return maxi(1, roundi(float(scaled) * float(sword_long_rate) / 100.0))
+	return maxi(1, roundi(float(scaled) * float(sword_long_rate) / 100.0 * SkillRankResolverScript.more_multiplier(level_value)))
 
 
 static func thrust_segment_ignores_ac(segment: int) -> bool:
@@ -149,13 +153,13 @@ static func resolve_enemy_physical_damage(
 
 
 static func half_moon_secondary_damage(base_damage: int, level_value: int) -> int:
-	var level := clamp_skill_level(level_value)
-	return maxi(1, roundi(float(base_damage) / float(MAGIC_TRAIN_LEVEL + 10) * float(level + 2)))
+	var level := SkillRankResolverScript.formula_rank(level_value)
+	return maxi(1, roundi(float(base_damage) / float(MAGIC_TRAIN_LEVEL + 10) * float(level + 2) * SkillRankResolverScript.more_multiplier(level_value)))
 
 
 static func fire_sword_multiplier(level_value: int) -> float:
 	# m_nHitDouble=4+level*4；nPower += nPower/100*(m_nHitDouble*10)。
-	return 1.4 + 0.4 * float(clamp_skill_level(level_value))
+	return (1.4 + 0.4 * float(SkillRankResolverScript.formula_rank(level_value))) * SkillRankResolverScript.more_multiplier(level_value)
 
 
 static func fire_sword_damage(base_damage: int, level_value: int) -> int:

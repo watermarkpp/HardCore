@@ -7,6 +7,10 @@ param(
     [string]$CaptureCharacterStatsPreview = '',
     [switch]$ChassisDesignCompare,
     [string]$CaptureChassisDesignCompare = '',
+    [switch]$ForgePreview,
+    [string]$CaptureForgePreview = '',
+    [switch]$SynthesisPreview,
+    [string]$CaptureSynthesisPreview = '',
     [switch]$Visible
 )
 
@@ -99,6 +103,20 @@ if (-not [string]::IsNullOrWhiteSpace($CaptureCharacterStatsPreview)) {
 if ($ChassisDesignCompare.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureChassisDesignCompare)) {
     $PreviewUserArguments += '--chassis-design-compare'
 }
+if ($ForgePreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureForgePreview)) {
+    $PreviewUserArguments += '--forge-preview'
+}
+if (-not [string]::IsNullOrWhiteSpace($CaptureForgePreview)) {
+    $ForgeCaptureArgument = Resolve-ProjectLocalPngArgument $CaptureForgePreview
+    $PreviewUserArguments += "--capture-forge-preview=$ForgeCaptureArgument"
+}
+if ($SynthesisPreview.IsPresent -or -not [string]::IsNullOrWhiteSpace($CaptureSynthesisPreview)) {
+    $PreviewUserArguments += '--synthesis-preview'
+}
+if (-not [string]::IsNullOrWhiteSpace($CaptureSynthesisPreview)) {
+    $SynthesisCaptureArgument = Resolve-ProjectLocalPngArgument $CaptureSynthesisPreview
+    $PreviewUserArguments += "--capture-synthesis-preview=$SynthesisCaptureArgument"
+}
 if (-not [string]::IsNullOrWhiteSpace($CaptureChassisDesignCompare)) {
     $CaptureDirArgument = Resolve-ProjectLocalDirArgument $CaptureChassisDesignCompare
     $PreviewUserArguments += "--capture-chassis-design-compare=$CaptureDirArgument"
@@ -108,11 +126,13 @@ $Arguments = @(
 	'--path', $ProjectRoot,
 	'--display-driver', 'windows',
 	'--rendering-method', 'gl_compatibility',
-	'--audio-driver', 'Dummy',
 	'--log-file', $LogPath,
 	'--resolution', '2664x1200',
 	'tests/ui_layout_calibration_workbench.tscn'
 )
+if (-not ($Visible.IsPresent -and ($ForgePreview.IsPresent -or $SynthesisPreview.IsPresent))) {
+	$Arguments = @('--audio-driver', 'Dummy') + $Arguments
+}
 
 # The calibrator instantiates the production game scene. A fresh integration
 # worktree may have tracked `.import` descriptors but no local `.godot/imported`

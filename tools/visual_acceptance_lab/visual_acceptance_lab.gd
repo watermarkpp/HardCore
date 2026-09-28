@@ -6,6 +6,7 @@ const MonsterDraftScript := preload(
 const MonsterGroundSpikeEffectScript := preload(
 	"res://scripts/monster_ground_spike_effect.gd"
 )
+const RelicProcEffectScript := preload("res://scripts/ui_relic_proc_effect.gd")
 const ACTIONS := ["idle", "walk", "attack", "cast", "hit", "death"]
 const ACTION_LABELS := ["站立", "行走", "攻击", "施法", "受击", "死亡"]
 const MONSTER_ACTIONS := ["idle", "walk", "attack", "hit", "death"]
@@ -75,6 +76,7 @@ const MONSTER_GROUND_REVIEW_ARG := "--monster-ground-review"
 const WARRIOR_SKILL_REVIEW_ARG := "--warrior-skill-review"
 const MONSTER_ID_ARG_PREFIX := "--monster-id="
 const GROUND_SPIKE_REVIEW_ARG := "--fixed-area-ground-spike-review"
+const RELIC_PROC_REVIEW_ARG := "--relic-proc-review"
 const FIXED_AREA_GROUND_SPIKE_MONSTER_IDS := [180, 195]
 const GROUND_SPIKE_TARGET_OFFSET := Vector2(105.0, 28.0)
 const MONSTER_FOOT_MATCH_EPSILON := 0.01
@@ -86,6 +88,7 @@ var _old_test_mode := false
 var _player: PlayerCharacter
 var _monster: EnemyActor
 var _ground_spike_preview: Node2D
+var _relic_proc_preview: UIRelicProcEffect
 var _monster_rows: Array[Dictionary] = []
 var _active_monster_id := -1
 var _preview_root: Node2D
@@ -105,6 +108,10 @@ var _frame_spin: SpinBox
 var _zoom_slider: HSlider
 var _play_button: Button
 var _overlay_button: CheckButton
+var _relic_proc_controls: HBoxContainer
+var _relic_proc_toggle: CheckButton
+var _relic_proc_loop: CheckButton
+var _relic_proc_loop_timer: Timer
 var _foot_pick_button: CheckButton
 var _alignment_button: CheckButton
 var _alignment_offset_label: Label
@@ -152,7 +159,13 @@ func _ready() -> void:
 	_load_alignment_draft()
 	_on_zoom_changed(_zoom_slider.value)
 	var requested_monster_id := monster_id_from_args(OS.get_cmdline_user_args())
-	if OS.get_cmdline_user_args().has(WARRIOR_SKILL_REVIEW_ARG):
+	if OS.get_cmdline_user_args().has(RELIC_PROC_REVIEW_ARG):
+		if DisplayServer.get_name() != "headless":
+			get_window().title = "HardCore 圣物动画脚点验收"
+		_relic_proc_toggle.button_pressed = true
+		_relic_proc_loop.button_pressed = true
+		_apply_selection()
+	elif OS.get_cmdline_user_args().has(WARRIOR_SKILL_REVIEW_ARG):
 		if DisplayServer.get_name() != "headless":
 			get_window().title = "HardCore 战士技能动画验收"
 		_mode_option.select(2)
@@ -405,6 +418,18 @@ func _build_ui() -> void:
 	_overlay_button.text = "显示锚点 / 碰撞脚印 / 帧边界"
 	_overlay_button.button_pressed = true
 	controls.add_child(_overlay_button)
+	_relic_proc_controls = HBoxContainer.new()
+	_relic_proc_controls.add_theme_constant_override("separation", 8)
+	controls.add_child(_relic_proc_controls)
+	_relic_proc_toggle = CheckButton.new()
+	_relic_proc_toggle.text = "圣物图案定位"
+	_relic_proc_controls.add_child(_relic_proc_toggle)
+	var relic_proc_play := _button("播放动画")
+	relic_proc_play.pressed.connect(_play_relic_proc_preview)
+	_relic_proc_controls.add_child(relic_proc_play)
+	_relic_proc_loop = CheckButton.new()
+	_relic_proc_loop.text = "循环播放圣物动画"
+	controls.add_child(_relic_proc_loop)
 	_foot_pick_button = CheckButton.new()
 	_foot_pick_button.text = "① 点击鞋底中点设置蓝色脚点"
 	controls.add_child(_foot_pick_button)
@@ -494,6 +519,8 @@ func _build_ui() -> void:
 	_frame_spin.value_changed.connect(_on_frame_changed)
 	_zoom_slider.value_changed.connect(_on_zoom_changed)
 	_overlay_button.toggled.connect(_on_overlay_toggled)
+	_relic_proc_toggle.toggled.connect(_on_relic_proc_toggled)
+	_relic_proc_loop.toggled.connect(_on_relic_proc_loop_toggled)
 	_foot_pick_button.toggled.connect(_on_foot_pick_toggled)
 	_alignment_button.toggled.connect(_on_alignment_toggled)
 	_body_layer_button.toggled.connect(_on_warrior_layer_toggled)
@@ -518,6 +545,13 @@ func _build_preview_actor() -> void:
 	_player.visual.set_process(false)
 	_runtime_visual_origin = _player.visual.position
 	_load_formal_alignment_contract()
+	_relic_proc_preview = RelicProcEffectScript.new()
+	_relic_proc_preview.name = "RelicProcFootpointPreview"
+	_player.add_child(_relic_proc_preview)
+	_relic_proc_loop_timer = Timer.new()
+	_relic_proc_loop_timer.wait_time = UIRelicProcEffect.DURATION_SECONDS + 0.65
+	_relic_proc_loop_timer.timeout.connect(_replay_relic_proc_loop)
+	add_child(_relic_proc_loop_timer)
 	_ground_spike_preview = MonsterGroundSpikeEffectScript.create_visual({
 		"effect_id": MonsterGroundSpikeEffectScript.EFFECT_ID,
 		"release_id": "visual-acceptance-ground-spike",
@@ -584,6 +618,8 @@ func _apply_preview_frame() -> void:
 	_player.facing = direction
 	_player.actual_motion_facing = direction
 	_player.velocity = direction * 90.0 if action == "walk" else Vector2.ZERO
+	_player.movement_input_active = action == "walk"
+	_player.locomotion_state = PlayerCharacter.LOCOMOTION_WALK
 	var visual := _player.visual
 	var frame_count := _frame_count()
 	_current_frame = clampi(_current_frame, 0, maxi(0, frame_count - 1))
@@ -2071,6 +2107,16 @@ func _on_mode_changed(_index: int) -> void:
 		action_labels = WARRIOR_SKILL_ACTION_LABELS
 	_replace_action_options(action_labels)
 	_warrior_skill_controls.visible = _is_warrior_skill_mode()
+	_relic_proc_controls.visible = not _is_monster_mode() and not _is_warrior_skill_mode()
+	_relic_proc_loop.visible = _relic_proc_controls.visible
+	if _relic_proc_loop_timer != null:
+		_relic_proc_loop_timer.stop()
+	if _relic_proc_preview != null:
+		_relic_proc_preview.visible = false
+		if _relic_proc_controls.visible and _relic_proc_loop.button_pressed:
+			_on_relic_proc_loop_toggled(true)
+		elif _relic_proc_controls.visible and _relic_proc_toggle.button_pressed:
+			_show_relic_proc_reference()
 	_foot_pick_button.visible = not _is_warrior_skill_mode()
 	_alignment_button.visible = not _is_warrior_skill_mode()
 	_alignment_actions.visible = not _is_warrior_skill_mode()
@@ -2127,6 +2173,55 @@ func _on_zoom_changed(value: float) -> void:
 
 func _on_overlay_toggled(_pressed: bool) -> void:
 	_update_overlay()
+
+
+func _on_relic_proc_toggled(pressed: bool) -> void:
+	if _relic_proc_preview == null:
+		return
+	if _relic_proc_loop.button_pressed:
+		return
+	if pressed:
+		_show_relic_proc_reference()
+	else:
+		_relic_proc_preview.visible = false
+		_relic_proc_preview.set_process(false)
+
+
+func _show_relic_proc_reference() -> void:
+	if _relic_proc_preview == null or _player == null:
+		return
+	_relic_proc_preview.hold_at(_player.approved_ground_footpoint_local_px())
+
+
+func _on_relic_proc_loop_toggled(pressed: bool) -> void:
+	if _relic_proc_loop_timer == null:
+		return
+	_relic_proc_loop_timer.stop()
+	if pressed and _relic_proc_controls.visible:
+		_replay_relic_proc_loop()
+		_relic_proc_loop_timer.start()
+	elif _relic_proc_toggle.button_pressed:
+		_show_relic_proc_reference()
+	elif _relic_proc_preview != null:
+		_relic_proc_preview.visible = false
+
+
+func _replay_relic_proc_loop() -> void:
+	if _relic_proc_preview == null or _player == null:
+		return
+	_relic_proc_preview.replay(_player.approved_ground_footpoint_local_px())
+
+
+func _play_relic_proc_preview() -> void:
+	if _relic_proc_preview == null or _player == null:
+		return
+	_relic_proc_preview.replay(_player.approved_ground_footpoint_local_px())
+	if _relic_proc_loop.button_pressed:
+		_relic_proc_loop_timer.start()
+		return
+	await get_tree().create_timer(UIRelicProcEffect.DURATION_SECONDS).timeout
+	if is_instance_valid(_relic_proc_preview) and _relic_proc_toggle.button_pressed:
+		_show_relic_proc_reference()
 
 
 func _is_monster_mode() -> bool:

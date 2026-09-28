@@ -49,7 +49,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			var lightning := _damage_effect(definition, request, rng, "targeted_sky_strike")
 			var race_multiplier := 1.5 if bool(context.get("target_is_undead", false)) else 1.0
 			lightning["race_multiplier"] = race_multiplier
-			lightning["raw_power_after_race"] = roundi(float(lightning.raw_power) * race_multiplier)
+			lightning["raw_power_after_race"] = roundi(float(lightning.raw_power) * race_multiplier) if rank <= 3 else roundi(float(lightning.raw_power_rank3) * race_multiplier * SkillRankResolverScript.more_multiplier(rank))
 			lightning["horizontal_projectile"] = false
 			plan.effects = [lightning]
 		"wizard.teleport":
@@ -68,7 +68,7 @@ static func execute(definition: Dictionary, request: Dictionary, rng: RefCounted
 			field["max_ticks_per_target_per_caster"] = 1
 			field["duration_seconds"] = maxi(
 				1,
-				Formula.get_power(rng, rank, 10) + int(floor(float(primary_stat_roll) / 2.0))
+				Formula.get_power(rng, SkillRankResolverScript.formula_rank(rank), 10) + int(floor(float(primary_stat_roll) / 2.0))
 			)
 			field["stacking_policy"] = str(mechanics.get("stacking_policy", ""))
 			field["max_active_fields_per_caster"] = str(
@@ -126,17 +126,21 @@ static func _damage_effect(
 	var raw_fields: Dictionary = definition.get("magic_db_reference", {}).get("raw_fields", {})
 	var raw_power := Formula.raw_magic_power(
 		rng,
-		int(request.get("rank", 0)),
+		SkillRankResolverScript.formula_rank(request.get("rank", 0)),
 		raw_fields,
 		int(context.get("primary_stat_roll", 0))
 	)
-	return {
+	var effective_rank := int(request.get("rank", 0))
+	var effect := {
 		"type": effect_type,
-		"raw_power": raw_power,
+		"raw_power": raw_power if effective_rank <= 3 else roundi(float(raw_power) * SkillRankResolverScript.more_multiplier(effective_rank)),
 		"damage_type": str(definition.get("mechanics", {}).get("damage_type", "magic")),
 		"defence_type": str(definition.get("mechanics", {}).get("defence_type", "MAC")),
 		"server_authoritative": true,
 	}
+	if effective_rank > 3:
+		effect["raw_power_rank3"] = raw_power
+	return effect
 
 
 static func _resolve_repulsion(

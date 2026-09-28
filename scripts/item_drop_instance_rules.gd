@@ -2,6 +2,7 @@ class_name ItemDropInstanceRules
 extends RefCounted
 
 const AffixV3 := preload("res://scripts/item_drop_affix_v3_rules.gd")
+const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 
 const RULES_PATH := "res://assets/data/item_drop_instance_rules_v1.json"
 const INSTANCE_RULES_CONTRACT_ID := "item.drop.instance.rules.v1"
@@ -185,6 +186,7 @@ static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dict
 		"drop_affix": true,
 		"weapon_luck": true,
 		"weapon_curse": true,
+		"enhancement": true,
 	}
 	for required_field: String in [
 		"drop_instance_contract_id", "drop_rules_contract_id", "drop_key_digest",
@@ -197,6 +199,8 @@ static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dict
 	for raw_field: Variant in instance.keys():
 		if not allowed_fields.has(str(raw_field)):
 			return false
+	if instance.has("enhancement") and not EnhancementRules.validate_enhancement(instance.enhancement, str(catalog_item.get("category", ""))):
+		return false
 	var digest := str(instance.get("drop_key_digest", ""))
 	var instance_id := str(instance.get("instance_id", ""))
 	if (

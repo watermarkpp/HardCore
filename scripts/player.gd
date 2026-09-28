@@ -28,6 +28,7 @@ const CasterSkillVisualRegistryScript := preload(
 
 const PlayerVisualScript := preload("res://scripts/player_visual.gd")
 const PlayerHealthBarScript := preload("res://scripts/player_health_bar.gd")
+const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 const EquipmentRulesScript := preload("res://scripts/equipment_rules.gd")
 const WorldSpatialRulesScript := preload("res://scripts/world_spatial_rules.gd")
 const CombatResolutionRules := preload("res://scripts/combat_resolution_rules.gd")
@@ -87,6 +88,10 @@ signal death_requested
 var current_hp := 120
 var max_mp := 40
 var current_mp := 40
+var _badge_recovery_elapsed := 0.0
+var _badge_recovery_item_id := -1
+var _badge_recovery_effect := ""
+var _badge_recovery_equipment_snapshot: Dictionary = {}
 var defense_min := 0
 var defense_max := 0
 var damage_reduction := 0.0
@@ -276,6 +281,7 @@ func _physics_process(delta: float) -> void:
 	mac_buff_time = maxf(0.0, mac_buff_time - delta)
 	control_time = maxf(0.0, control_time - delta)
 	_process_potion_restore(delta)
+	_tick_badge_recovery(delta)
 	var previous_poison_second := int(ceil(poison_time))
 	if not combat_transition_is_active():
 		poison_time = maxf(0.0, poison_time - delta)
@@ -1524,6 +1530,40 @@ func restore_health(amount: int) -> void:
 func restore_mana(amount: int) -> void:
 	current_mp = mini(max_mp, current_mp + maxi(0, amount))
 	resources_changed.emit(current_hp, max_hp, current_mp, max_mp)
+
+
+func _tick_badge_recovery(delta: float) -> void:
+	var equipped: Variant = PlayerState.equipment.get("徽章", {})
+	var equipped_record: Dictionary = equipped if equipped is Dictionary else {}
+	var item_id := _badge_recovery_item_id
+	if equipped_record != _badge_recovery_equipment_snapshot:
+		_badge_recovery_equipment_snapshot = equipped_record.duplicate(true)
+		item_id = -1
+		var raw_id: Variant = equipped_record.get("item_id", null)
+		if raw_id is int or raw_id is float:
+			var candidate_id := int(raw_id)
+			if RelicSynthesisRulesScript.is_badge(candidate_id) and RelicSynthesisRulesScript.valid_instance(equipped_record, candidate_id):
+				item_id = candidate_id
+	if item_id != _badge_recovery_item_id:
+		_badge_recovery_item_id = item_id
+		_badge_recovery_elapsed = 0.0
+		_badge_recovery_effect = RelicSynthesisRulesScript.effect_for(item_id) if item_id > 0 else ""
+	if _badge_recovery_effect not in ["hp_regen", "mp_regen"] or _dead or current_hp <= 0:
+		_badge_recovery_elapsed = 0.0
+		return
+	_badge_recovery_elapsed += maxf(0.0, delta)
+	var ticks := floori(_badge_recovery_elapsed)
+	if ticks <= 0:
+		return
+	_badge_recovery_elapsed -= float(ticks)
+	if _badge_recovery_effect == "hp_regen":
+		var amount := roundi(float(max_hp) * 0.01) * ticks
+		if amount > 0 and current_hp < max_hp:
+			restore_health(amount)
+	else:
+		var amount := roundi(float(max_mp) * 0.01) * ticks
+		if amount > 0 and current_mp < max_mp:
+			restore_mana(amount)
 
 
 func queue_potion_restore(health_amount: int, mana_amount: int) -> void:

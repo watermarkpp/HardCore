@@ -162,6 +162,7 @@ func _run() -> void:
 	player.half_moon_enabled = false
 	var fixture_origin: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5))
 	game._set_player_world_position(fixture_origin)
+	assert(not game._player_inside_active_safe_zone())
 	player.facing = Vector2.RIGHT
 	for existing: Node in get_tree().get_nodes_in_group("enemies"):
 		if existing is EnemyActor:

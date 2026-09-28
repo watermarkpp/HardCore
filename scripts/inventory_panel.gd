@@ -571,7 +571,7 @@ func _refresh_equipment_slots() -> void:
 		button.tooltip_text = "%s：空" % slot
 		if not name.is_empty():
 			var item_ref: Variant = record if record is Dictionary else name
-			_set_button_texture(button, _item_texture(GameData.get_item_record(item_ref), "inventoryIcon"))
+			_set_button_texture(button, _item_texture(GameData.get_item_record(item_ref), "inventoryIcon"), _item_icon_display_size(item_ref, "inventoryIcon"))
 			button.tooltip_text = _equipment_tooltip(slot, record)
 		else:
 			_set_button_texture(button, null)
@@ -774,7 +774,7 @@ func _update_bag_cell(index: int, stack: Dictionary) -> void:
 	button.mouse_filter = Control.MOUSE_FILTER_STOP if occupied or can_receive_unequip else Control.MOUSE_FILTER_IGNORE
 	button.tooltip_text = str(stack.get("name", "未知物品")) if occupied else ("卸下到此格" if can_receive_unequip else "空物品格")
 	UIItemSelectionVisualScript.apply(button, occupied and selected_inventory_indices.has(index), &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
-	_set_button_texture(button, UIItemTextureCacheScript.texture_for_item(stack) if occupied else null)
+	_set_button_texture(button, UIItemTextureCacheScript.texture_for_item(stack) if occupied else null, _item_icon_display_size(stack, "inventoryIcon") if occupied else Vector2.ZERO)
 	var count_label := cell.get_node("StackCount") as Label
 	var count := int(stack.get("count", 1))
 	count_label.text = str(count)
@@ -1709,7 +1709,11 @@ func _item_texture(record: Dictionary, field: String) -> Texture2D:
 	return UIItemTextureCacheScript.texture_for(record, field)
 
 
-func _set_button_texture(button: Button, texture: Texture2D) -> void:
+func _item_icon_display_size(item_ref: Variant, field: String) -> Vector2:
+	return GameData.get_item_art_display_size(item_ref, field)
+
+
+func _set_button_texture(button: Button, texture: Texture2D, maximum_size := Vector2.ZERO) -> void:
 	button.icon = null
 	var icon_rect := button.get_node_or_null("CenteredPixelIcon") as TextureRect
 	if texture == null:
@@ -1723,6 +1727,9 @@ func _set_button_texture(button: Button, texture: Texture2D) -> void:
 	# The original client inventory art stays at its native 1:1 pixel size.
 	# Only its position changes; scaling it to fill the slot makes it look soft.
 	var display_size := source_size
+	if maximum_size.x > 0.0 and maximum_size.y > 0.0:
+		var scale := minf(maximum_size.x / source_size.x, maximum_size.y / source_size.y)
+		display_size = source_size * scale
 	if icon_rect == null:
 		icon_rect = TextureRect.new()
 		icon_rect.name = "CenteredPixelIcon"

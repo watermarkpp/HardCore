@@ -1,0 +1,29 @@
+{
+  "schema": "hardcore.drop.boss_material_directive.v1",
+  "directive_id": "boss_materials.user.20260925.v1",
+  "black_iron_drop_token_id": 940000,
+  "ancient_relic_fragment_item_id": 950001,
+  "black_iron_purity_min": 10,
+  "black_iron_purity_max": 20,
+  "overflow_priority": 2000,
+  "protected_drop": true,
+  "bosses": [
+    {"monster_id": 76, "monster_name": "沃玛教主", "numerator": 1, "denominator": 4, "slots_per_item": 1},
+    {"monster_id": 124, "monster_name": "触龙神", "numerator": 1, "denominator": 4, "slots_per_item": 1},
+    {"monster_id": 195, "monster_name": "千年树妖", "numerator": 1, "denominator": 4, "slots_per_item": 1},
+    {"monster_id": 143, "monster_name": "石墓尸王", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 208, "monster_name": "黄泉教主", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 160, "monster_name": "祖玛教主", "numerator": 1, "denominator": 1, "slots_per_item": 1},
+    {"monster_id": 193, "monster_name": "虹魔教主", "numerator": 1, "denominator": 1, "slots_per_item": 1},
+    {"monster_id": 235, "monster_name": "暗之双头血魔", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 236, "monster_name": "暗之双头金刚", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 237, "monster_name": "暗之黄泉教主", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 238, "monster_name": "暗之骷髅精灵", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 239, "monster_name": "暗之沃玛教主", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 240, "monster_name": "暗之虹魔教主", "numerator": 1, "denominator": 2, "slots_per_item": 1},
+    {"monster_id": 162, "monster_name": "双头血魔", "numerator": 1, "denominator": 1, "slots_per_item": 2},
+    {"monster_id": 163, "monster_name": "双头金刚", "numerator": 1, "denominator": 1, "slots_per_item": 2},
+    {"monster_id": 180, "monster_name": "赤月恶魔", "numerator": 1, "denominator": 1, "slots_per_item": 2},
+    {"monster_id": 224, "monster_name": "牛魔王", "numerator": 1, "denominator": 1, "slots_per_item": 2}
+  ]
+}

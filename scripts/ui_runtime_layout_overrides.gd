@@ -2,13 +2,15 @@ class_name UIRuntimeLayoutOverrides
 extends RefCounted
 
 const CONTRACT_PATH := "res://assets/data/ui/manual_layout_overrides.json"
-const CONTRACT_SHA256 := "0EA858C9FE5867B8B7057DFC16FF32FB06DF68A7A6862992A702E45D470CBF10"
+const CONTRACT_SHA256 := "C2896BA7F044C7D228024C2E8D941061DF33C8BEC16778E42256C448551122B2"
 const SCHEMA_VERSION := 3
 const KNOWN_PROFILE_IDS := {
 	"character_hall": true,
 	"confirmation_dialog": true,
 	"death_revival": true,
 	"inventory": true,
+	"forge": true,
+	"synthesis": true,
 	"map": true,
 	"quest": true,
 	"shop_buy": true,
@@ -677,7 +679,13 @@ static func _stale(control: Control, entry: Dictionary) -> bool:
 
 
 static func _retired(target: Control, path: String) -> bool:
-	return target.has_meta("calibration_retired_paths") and path in target.get_meta("calibration_retired_paths", [])
+	if target.has_meta("calibration_retired_paths") and path in target.get_meta("calibration_retired_paths", []):
+		return true
+	for prefix in target.get_meta("calibration_retired_prefixes", []):
+		var section := str(prefix)
+		if path == section or path.begins_with(section + "/"):
+			return true
+	return false
 
 
 static func _dependency_retired(target: Control, entries: Dictionary, control: Control) -> bool:

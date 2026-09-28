@@ -106,8 +106,9 @@ func _run() -> void:
 	expect(
 		bool(real.valid), "real authority must stay valid"
 	)
-	expect(int(real.slot_count) == 6042, "real authority keeps 6042 slots after the explicit armor single-slot directive")
+	expect(int(real.slot_count) == 6084, "real authority adds 42 Boss material slots without restoring removed armor trials")
 	expect(int(real.overlay_slot_count) == 168, "real authority keeps 168 overlay slots")
+	expect(int(real.boss_material_slot_count) == 42, "real authority keeps 42 Boss material slots")
 	real = null
 
 	# 1. Same-monster duplicate UID: refused, not merged, not re-indexed.
