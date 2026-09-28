@@ -1,5 +1,14 @@
 # 精确恢复点 2026-09-28
 
+## 08:45 新恢复点（以下旧“活跃执行”段均为历史）
+
+- 主树 `codex/integration` 最新 `bf92d8ae11838a93f3a3b822ff1f9cfe5590e96b`，前一代码提交 `6d091c1254010adf56ff3b76326839e435ca8770` 修复宠物传送，后者提交保存原始证据。未 push、未合锻造、未打包、未清理树。用户 `AGENTS.md` dirty SHA256 仍为 `D267703E2DC8B72459EA5B01C8D9535516DF7BAE2C03D690CF1D938A225E9AFF`；其他原 untracked 保护。
+- fd5 固定独立完整548项：集合 PASS、545PASS/3FAIL；`hc_polygon_reset_test` 打印PASS后 Godot signal11、`map_publish_restart_recovery_test` 打印PASS后 `0xC0000374` 退出、`summon_owner_teleport_runtime_test` 真实落点无第二宠位置。固定源码上三项合并重跑1轮、后5轮：polygon/map均6次正常PASS，宠物第4轮真实复现FAIL。全部原始日志与精确验证 `critical_clean_fd5_20260928` 等已提交 bf92；不把打印PASS冒作正式通过。
+- 宠物传送根因和 RED→GREEN 见 `evidence/SUMMON_TELEPORT_R4_20260928.md`：固定合法窄口最初真实失败；新确定性至8GU合法身体搜索、移动宠物旧占位忽略、无位时清旧攻击并暂时隐藏退碰撞、新玩家格子重试，寿命/毒时钟继续。5次冻结源码独立传送PASS；相关召唤体型/正式召唤/瞬移测试PASS。旧 `summon_actor_state_machine_test` 原无ID敌人进入树即排队删除、起点神兽编队位置在墙内、致死测试未覆盖防御；夹具改用正式怪物ID38、合法站位/致死输入，不削弱原断言，单项PASS。多宠尚未验收。
+- 用户新要求“人物传送时彻底修好道士第三只及5级以上多骷髅”。锻造 tip `da41da3642123c180723ef03dec193ef1fc4cb1b` 自带 `_canonical_main_pets`/`pet_slot_index`、5级两骷髅/上限8，但其 `_relocate_main_pets_after_map_arrival` 仍逐只只试2GU无失败处理。R4固定门禁后必须完整集成锻造，再将传送修复扩到全部活动槽位并测3~9宠、狭窄落点、跨图、存档恢复、身体与时钟。
+- 新独立干净检出 `C:/Users/Administrator/.codex/worktrees/r4-final-clean/HardCore` 固定 bf92，只有 `dev_art_sources`/`tools/godot-4.7` 到主树只读资源联接。`run_fixed_clean_critical.ps1` 的外层 exec session **81686** 正在跑548项，证据目标 `evidence/critical_clean_bf92_20260928`。运行中不修改该检出、runner或测试，先等 `completion.json` 与进程退出，再用 `verify_full_critical.py` 验证实际集合/每项退出/源码身份；无结束裁定之前不是PASS。不能同时启动另一 Godot。
+- R4正式门禁后串行集成锻造完整7提交，按先前5冲突逐项合并（详见 `forge_intake_c046/REVIEW.md`），补F03写入屏障和严格圣物身份等缺陷、正式锻造测试，完成最终完整回归、保护数据检查和正常push。用户要求随后逐树核验独有内容/ignored资源并安全退休临时树，**在开始打APK前停止**。
+
 ## 06:20 新恢复点（覆盖下方旧“当前活跃执行”）
 
 - 06:33 新干净检出 `C:/Users/Administrator/.codex/worktrees/r4-candidate-clean/HardCore` 固定 `fd5e2a32ee50cc8ed9cede05c39397fb2d43ef56`；正式548项 `critical_clean_fd5_20260928` 已经 headless import 正常完成，run_fixed_clean_critical.ps1 的外层 exec session `84496` 正在跑。identity.json 的expected548、源tree、runner/engine SHA 已落盘；尚未有 completion，不能判PASS。旧 e367 独立检出保留。运行期间不修改此固定检出/runner/测试。
