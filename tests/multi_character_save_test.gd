@@ -80,7 +80,7 @@ func _run() -> void:
 		)
 	)
 	assert(
-		PlayerState.taoist_main_pet_runtime_states_for_restore().slots.is_empty(),
+		_no_main_pets_saved(),
 		"new profile inherited summon slots"
 	)
 	var second_path := TEST_DIRECTORY + "/" + second_id + ".json"
@@ -93,7 +93,7 @@ func _run() -> void:
 	assert(not (missing_field_payload as Dictionary).has("taoist_main_pet_runtime_states"))
 	PlayerState.load_save()
 	assert(
-		PlayerState.taoist_main_pet_runtime_states_for_restore().slots.is_empty(),
+		_no_main_pets_saved(),
 		"current save without summon fields did not load compatibly"
 	)
 
@@ -159,7 +159,7 @@ func _run() -> void:
 		and PlayerState.level == 12
 		and PlayerState.gold == 3456
 	)
-	assert(PlayerState.taoist_main_pet_runtime_states_for_restore().slots.is_empty())
+	assert(_no_main_pets_saved())
 	assert(PlayerState.attack_ring_slots[2] == wild_rush_name)
 	assert(PlayerState.quick_slots[2] == wild_rush_name)
 	var restored_runtime := PlayerState.warrior_runtime_state_for_restore()
@@ -231,6 +231,16 @@ func _run() -> void:
 		+ "typed dual summon save, atomic backup, safe logout"
 	)
 	get_tree().quit(0)
+
+
+func _no_main_pets_saved() -> bool:
+	var state := PlayerState.taoist_main_pet_runtime_states_for_restore()
+	var groups: Dictionary = state.get("groups", {})
+	return (
+		groups.has("skeleton") and groups.has("divine_beast")
+		and groups["skeleton"] is Array and (groups["skeleton"] as Array).is_empty()
+		and groups["divine_beast"] is Array and (groups["divine_beast"] as Array).is_empty()
+	)
 
 
 func _summon_snapshot(

@@ -19,6 +19,7 @@ func _ready() -> void:
 		assert(not item.stackable and item.maxStack == 1 and item.weight == 1)
 		assert(BlackIron.purity_for({"item_id": item_id, "name": "黑铁矿"}) == purity)
 		assert(not GameData.get_item_art_path({"item_id": item_id}).is_empty())
+		assert(str(item.get("art", {}).get("groundIcon", {}).get("path", "")) == "res://assets/art/items/service/ground/client.classic_raw_complete/DnItems_00284.png")
 		assert(Detail.format_item(item).begins_with("类别：矿石\n纯度：%d\n" % purity))
 		assert("[color=#b58a45]乌黑色的矿石，天外陨石的碎片[/color]" in Detail.format_item(item))
 		assert(GameData.get_item_price_record({"item_id": item_id, "name": "黑铁矿"}).is_empty(), "ore must not have a merchant price")

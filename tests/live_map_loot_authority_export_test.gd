@@ -33,6 +33,9 @@ func _ready() -> void:
 	var rows: Array = []
 	var failures: Array = []
 	var total_slots := 0
+	# Projection RNG is independent of production drop rolls.
+	var projection_rng := RandomNumberGenerator.new()
+	projection_rng.seed = 20260928
 	for mid: int in monsters:
 		var row: Dictionary = monsters[mid]
 		row.maps = row.maps.values()
@@ -47,7 +50,14 @@ func _ready() -> void:
 				failures.append("unresolved_slot:%s" % str(slot.slot_uid))
 			var output: Dictionary = {}
 			if str(reward.get("kind", "")) != "gold":
-				output = service._drop_output_item_record(int(slot.get("canonical_item_id", -1)), str(reward.get("item_name", "")))
+				# The ore token chooses its exact purity after a successful roll.
+				# This read-only projection inspects one resolved output without
+				# consuming a production draw.
+				output = service._drop_output_item_record(
+					int(slot.get("canonical_item_id", -1)),
+					str(reward.get("item_name", "")),
+					projection_rng,
+				)
 				if output.get("identity_status", "") != "resolved":
 					failures.append("unresolved_output:%s" % str(slot.slot_uid))
 			row.slots.append({"slot": slot, "probability": probability, "reward": reward, "output": {

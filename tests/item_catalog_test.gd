@@ -11,7 +11,9 @@ func _run() -> void:
 	assert(GameData.item_catalog.size() >= 245, "统一物品目录数量不足")
 	assert(GameData.unresolved_drop_item_names().is_empty(), "仍有掉落物无法解析")
 	var counts := GameData.item_catalog_counts()
-	assert(int(counts.get("equipment", 0)) == 175, "175件装备未全部进入目录")
+	assert(int(counts.get("equipment", 0)) == 181, "175件基础装备与6件圣物/徽章未全部进入目录")
+	for relic_id: int in [950101, 950102, 950103, 950201, 950202, 950203]:
+		assert(GameData.get_item_record({"item_id": relic_id}).get("kind", "") == "equipment")
 	assert(GameData.get_item_kind("基本剑术") == "skill_book", "技能书分类错误")
 	assert(GameData.get_item_kind("金币 1000") == "currency", "金币包分类错误")
 	assert(GameData.get_item_kind("回城卷") == "scroll", "卷轴分类错误")

@@ -1039,9 +1039,12 @@ foreach ($testPath in $SelectedTests) {
     $process = Start-Process -FilePath 'cmd.exe' `
         -ArgumentList @('/c', $launchCommand) `
         -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru
-    # This scene intentionally observes 6 real 4-second attack windows plus
-    # pursuit/detour physics (~36 seconds). Keep ordinary scenes at 30 seconds.
+    # Natural cadence scenes observe six real 4-second attack windows plus
+    # pursuit/detour physics. The 1/100/300-monster streaming scale scene
+    # also runs 1800 real frames and exits normally in roughly 38 seconds.
+    # Keep ordinary scenes at 30 seconds.
     $HeavyR4Scenes = @(
+		'tests/monster_streaming_scaling_test.tscn',
         'tests/hc_monster_ai/runtime_test.tscn',
         'tests/hc_monster_combat_r4/d3_motion_pressure_runtime_test.tscn',
         'tests/hc_monster_combat_r4/natural_cadence_24_test.tscn',

@@ -6,6 +6,7 @@ docs/repair_v93/evidence/** -text -whitespace
 docs/repair_20260923_summons/evidence/** -text -whitespace
 # This directive's raw CRLF bytes are bound by the published loot authority.
 tools/loot_sheet_compiler/evidence/armor_single_slot_directive_v92.json text eol=crlf
+assets/data/drop/boss_material_drop_directive_v1.json text eol=crlf
 
 # DPV2-SPB raw-byte authorities are frozen to their audited Windows CRLF
 # representation.  Keep clean worktrees and isolated Android build worktrees

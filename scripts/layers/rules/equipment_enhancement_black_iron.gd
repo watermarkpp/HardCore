@@ -40,8 +40,10 @@ static func _ensure_loaded() -> void:
 	var maximum := int(parsed.get("max_purity", -1))
 	var base := int(parsed.get("item_id_base", -1))
 	var icon := str(parsed.get("inventory_icon", ""))
+	var ground_icon := str(parsed.get("ground_icon", ""))
 	if (
-		minimum != 10 or maximum != 20 or base <= 0 or not ResourceLoader.exists(icon)
+		minimum != 10 or maximum != 20 or base <= 0
+		or not ResourceLoader.exists(icon) or not ResourceLoader.exists(ground_icon)
 		or str(parsed.get("name", "")) != "黑铁矿"
 		or str(parsed.get("kind", "")) != "material"
 		or str(parsed.get("category", "")) != "矿石"
@@ -62,6 +64,9 @@ static func _ensure_loaded() -> void:
 			"description": str(parsed.note),
 			"useEffect": "none",
 			"usable": false,
-			"art": {"inventoryIcon": {"path": icon}},
+			"art": {
+				"inventoryIcon": {"path": icon},
+				"groundIcon": {"path": ground_icon},
+			},
 			"source": {"contract_id": CONTRACT_ID},
 		}
