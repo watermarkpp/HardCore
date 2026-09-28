@@ -36,6 +36,24 @@
     "runner": "runner_results_adhoc_20260928_232635_063_8476.json"
   },
   {
+    "test_name": "character_select_launch_loading_test",
+    "test_path": "tests/character_select_launch_loading_test.tscn",
+    "pass_marker_found": true,
+    "process_exited": true,
+    "wrapper_exit_code": 0,
+    "child_process_exit_state": "exited",
+    "execution_deadline_utc": "2026-09-28T15:50:54.0943987Z",
+    "native_exit_observed_utc": "2026-09-28T15:50:03.6142082Z",
+    "effective_exit_code": 0,
+    "timeout": false,
+    "stdout_failure_count": 0,
+    "stderr_failure_count": 0,
+    "engine_log_failure_count": 0,
+    "result": "PASS",
+    "reason": "",
+    "runner": "runner_results_adhoc_20260928_235005_100_18148.json"
+  },
+  {
     "test_name": "consumable_save_latency_test",
     "test_path": "tests/consumable_save_latency_test.tscn",
     "pass_marker_found": true,
@@ -252,6 +270,24 @@
     "runner": "runner_results_adhoc_20260928_232635_063_8476.json"
   },
   {
+    "test_name": "game_root_loading_transition_test",
+    "test_path": "tests/game_root_loading_transition_test.tscn",
+    "pass_marker_found": true,
+    "process_exited": true,
+    "wrapper_exit_code": 0,
+    "child_process_exit_state": "exited",
+    "execution_deadline_utc": "2026-09-28T15:50:30.3741078Z",
+    "native_exit_observed_utc": "2026-09-28T15:49:52.5544731Z",
+    "effective_exit_code": 0,
+    "timeout": false,
+    "stdout_failure_count": 0,
+    "stderr_failure_count": 0,
+    "engine_log_failure_count": 0,
+    "result": "PASS",
+    "reason": "",
+    "runner": "runner_results_adhoc_20260928_235005_100_18148.json"
+  },
+  {
     "test_name": "player_struck_poison_chain_test",
     "test_path": "tests/hc_monster_combat_r2/player_struck_poison_chain_test.tscn",
     "pass_marker_found": true,
@@ -340,6 +376,24 @@
     "result": "PASS",
     "reason": "",
     "runner": "runner_results_adhoc_20260928_232348_905_19688.json"
+  },
+  {
+    "test_name": "hud_background_prewarm_test",
+    "test_path": "tests/hud_background_prewarm_test.tscn",
+    "pass_marker_found": true,
+    "process_exited": true,
+    "wrapper_exit_code": 0,
+    "child_process_exit_state": "exited",
+    "execution_deadline_utc": "2026-09-28T15:50:00.1431704Z",
+    "native_exit_observed_utc": "2026-09-28T15:49:28.8533978Z",
+    "effective_exit_code": 0,
+    "timeout": false,
+    "stdout_failure_count": 0,
+    "stderr_failure_count": 0,
+    "engine_log_failure_count": 0,
+    "result": "PASS",
+    "reason": "",
+    "runner": "runner_results_adhoc_20260928_235005_100_18148.json"
   },
   {
     "test_name": "immediate_item_save_test",

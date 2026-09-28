@@ -1,0 +1,62 @@
+{
+  "results": [
+    {
+      "test_name": "hud_background_prewarm_test",
+      "test_path": "tests/hud_background_prewarm_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:50:00.1431704Z",
+      "native_exit_observed_utc": "2026-09-28T15:49:28.8533978Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "game_root_loading_transition_test",
+      "test_path": "tests/game_root_loading_transition_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:50:30.3741078Z",
+      "native_exit_observed_utc": "2026-09-28T15:49:52.5544731Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "character_select_launch_loading_test",
+      "test_path": "tests/character_select_launch_loading_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-28T15:50:54.0943987Z",
+      "native_exit_observed_utc": "2026-09-28T15:50:03.6142082Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "generated_at": "2026-09-28T23:50:05.1013528+08:00",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "failed": 0,
+  "total": 3,
+  "git_head": "7076bc465dbf7dc837381f267fa8eb9e151bf001",
+  "passed": 3
+}

@@ -28,7 +28,7 @@ assert all(r["result"] == "PASS" and not r["timeout"] for r in latest.values())
 for source, dest in [("outputs/async_ui_20260928/warehouse_before.json", "warehouse_before.json"),
                      ("outputs/test_logs/warehouse_prepared_latency.json", "warehouse_after.json")]:
     shutil.copy2(ROOT / source, OUT / dest)
-paths = subprocess.check_output(["git", "diff", "HEAD", "--name-only"], cwd=ROOT, text=True).splitlines()
+paths = subprocess.check_output(["git", "diff", "21b40ddae663997f8e9f267585988e6a7c63db6a", "--name-only"], cwd=ROOT, text=True).splitlines()
 paths += ["scripts/warehouse_commit_operation.gd", "scripts/world_camera_follow.gd"]
 hashes = {}
 for name in sorted(set(paths)):

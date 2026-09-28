@@ -1,5 +1,9 @@
 # HardCore Current Status
 
+## 2026-09-29：v95 完整修复 APK 已交付桌面
+
+固定源码 `7076bc465dbf7dc837381f267fa8eb9e151bf001`，包含v94、Sol随后热补丁21b40ddae及本轮药剂/工作台/仓库、八方向移动/镜头、图标与loading修复。桌面 `HardCore-v95-full-fixes-debug.apk`，488710512字节，SHA256 `6B1222403A0711A07769199B7A3A7CA38A97089D33EC3BCEBAE9F5D862C10826`。versionCode95、同包名同签名，支持覆盖v94；39项相关场景PASS，包身份/资源与冻结9684条数据纹理对照PASS。构建首次JDK环境异常已按进程级参数恢复，证据见 `docs/performance_20260928/APK_DELIVERY.md`。DEVICE TEST: NOT_RUN；未自动安装或push，手机存档未覆盖。后续文档提交不改变APK源码身份。
+
 ## 2026-09-28：Astra 接管药剂、工作台长帧及八方向移动修复
 
 本轮基线 `21b40ddae663997f8e9f267585988e6a7c63db6a`，唯一主控串行施工。药剂及其他可用物品立即生效、人物档顺序后台保存；工作台放入取出与结算接入同一通道；仓库保留双文件交易、将最终写入和前置等待移出主线程阻塞。按用户最新裁决，材料放入顺序不限，只有完整合法组合及足够金币才启用按钮。另修复人物/怪物实际八方向移动、镜头同帧重复平滑、圣物/徽章/碎片图标及 loading 文字居中。详见 `docs/performance_20260928/ASTRA_BUGFIX_CONTINUATION.md` 与 `VERIFICATION.md`。本地专项通过不代表手机体感验收；用户最新要求完整APK放桌面，按versionCode95升级94；候选尚未安装，手机最近一次查询未连接。旧章节为历史快照。

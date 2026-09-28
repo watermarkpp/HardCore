@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-本轮基线21b40ddae663997f8e9f267585988e6a7c63db6a，codex/integration，单主控串行。全部本轮源码/定向修复已完成，36个不同相关场景最后结果PASS。正式说明及原始证据见 `VERIFICATION.md`、`evidence/latest_results.json` 和源码LF哈希。不要再按旧检查点重新做已经关闭的问题。
+本轮基线21b40ddae663997f8e9f267585988e6a7c63db6a，codex/integration，单主控串行。全部本轮源码/定向修复已完成，39个不同相关场景最后结果PASS。正式说明及原始证据见 `VERIFICATION.md`、`evidence/latest_results.json` 和源码LF哈希。不要再按旧检查点重新做已经关闭的问题。
 
 ## 已关闭
 
@@ -15,18 +15,19 @@
 
 ## 最新交付指令
 
-用户改为：完成后构建**完整新APK放桌面，包含主树全部新改动和本轮修复**。不再只交热补丁。使用正式隔离构建脚本、versionCode95升级94，包名/签名保持。完整构建前源码必须本地提交；当前未push。既有主树先前修改已在21b40ddae祖先内，不能从v93重起。
+用户改为：完成后构建**完整新APK放桌面，包含主树全部新改动和本轮修复**。不再只交热补丁。使用正式隔离构建脚本、versionCode95升级94，包名/签名保持。构建源码已提交为7076bc465dbf7dc837381f267fa8eb9e151bf001；当前未push。既有主树先前修改已在21b40ddae祖先内，不能从v93重起。
 
 ## 保护
 
 `AGENTS.md`与`tests/cangyue_area_test.gd`为接管前dirty，及大量无关untracked，禁止覆盖/全量stage。人工地图/assets/project/export_presets未动。测试new immediate_item_save曾为runner门禁stage，最终提交前重新选择性stage。新脚本warehouse_commit_operation、world_camera_follow必须纳入。
 
-## 构建与验收剩余
+## 构建交付完成 — 2026-09-29
 
-1. 完成选择性本地提交，记录SHA，正式 `tools/build_android_isolated.ps1` 固定SHA，-VersionCode95 -KeepStage，baseline桌面v94包。
-2. 包名/签名/版本/build_info验证，以及包内本轮所有编译脚本与stage导出缓存逐项hash比对；新保存/镜头脚本必须存在。
-3. 桌面交付APK与SHA，补APK_DELIVERY记录。手机验收NOT_RUN，不承诺本地PASS代表实机全部丝滑。
-4. 用户现在要求自己拿完整APK，勿自动安装；未授权本轮push时保留本地提交。
+源码7076bc465dbf7dc837381f267fa8eb9e151bf001已完成隔离导入、Android构建和签名/版本/资源检查。完整APK已复制桌面并复核SHA256，详见 `APK_DELIVERY.md`。39项相关场景PASS，包内9684项冻结数据/纹理与v94逐字节相同；六项Sol热补丁资源已核验继承。旧补丁在新APK启动时按源码身份拒绝挂载，避免覆盖新修复。
+
+首次导出因Windows JDK本机通信异常FAIL，同一隔离stage使用进程级临时目录参数后重试PASS；没有把第一次失败写成成功。正式验证和原始日志已保存。
+
+唯一后续验收：用户自行覆盖安装桌面 `HardCore-v95-full-fixes-debug.apk`，实际检查跑动吃药、工作台、仓库、八向移动/镜头和loading。DEVICE TEST: NOT_RUN。不要重新安装旧补丁，不用旧存档覆盖手机新进度。不自动安装或push；当前后续文件仅交付证据，APK源码仍固定7076。
 
 手机最后adb不在线。旧stopdiagnostics nonce bd8de724c2a3429c9956702fada818d7，若以后连接先取outbox避免覆盖旧命令；不录屏/截图/覆盖旧存档。手机已消耗药剂，禁止用旧备份回写。
 

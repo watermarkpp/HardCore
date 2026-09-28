@@ -3,11 +3,12 @@
 ## 结论与身份
 
 - 接管基线：`21b40ddae663997f8e9f267585988e6a7c63db6a`，主树 `codex/integration`。
-- 本地定向/相关回归：**PASS，36 个不同场景**。逐项结果见 `evidence/latest_results.json`，保留中间 FAIL 的 runner 原始结果，不以中途 PASS marker 覆盖超时/退出状态。
+- 本地定向/相关回归：**PASS，39 个不同场景**。逐项结果见 `evidence/latest_results.json`，保留中间 FAIL 的 runner 原始结果，不以中途 PASS marker 覆盖超时/退出状态。
 - 验证代码身份：`evidence/verified_source_sha256_lf.json`（LF 规范化 SHA256）。测试分批按依赖执行；不是最终 HEAD 上重新跑完整 critical。
 - 全量 critical：**NOT_RUN**，遵守用户“不重跑全部548项、修复失败和相关回归”要求。
 - 新候选手机验收：**NOT_RUN**。本地耗时不等同于 Android 端到端流畅度。
 - 用户最新要求改为完整 APK 放桌面。采用正式隔离构建、候选 versionCode 95（升级既有94），包名/签名/角色存档兼容保持。
+- APK已于2026-09-29完成并复制桌面，固定源码7076bc465dbf7dc837381f267fa8eb9e151bf001；包内内容和签名验证PASS，详见 `APK_DELIVERY.md`。设备尚未安装，不将打包完成记为手机性能通过。
 
 ## 修复与覆盖
 
@@ -47,7 +48,7 @@
 - relic_synthesis_runtime旧测试允许额外装备/第5碎片，与用户本轮“多放则按钮不亮”裁决冲突：改为明确拒绝额外物品、取回后才能合成，保留全部未消费物品断言。
 - player_walk fixture在安全城镇用攻击火球与安全区规则冲突：改用真实自身魔法盾触发同一施法/移动约束，不改安全区。
 - monster blocked fixture在ready前关闭物理处理被ready覆盖：移到ready后，生产节拍不变。
-- 当前36项最后结果无FAIL，无timeout，无engine log errors；其余未执行场景不冒充通过。
+- 当前39项最后结果无FAIL，无timeout，无engine log errors；其余未执行场景不冒充通过。
 
 ## 保护与交付边界
 
