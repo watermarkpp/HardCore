@@ -1,13 +1,17 @@
 extends Node2D
 
-## source176 Task 2 (docs/02 D2): the per-tick source decision permission
-## cache on EnemyActor. Contracts under test:
-## - one cadence.evaluate per logical millisecond; a repeated call in the
-##   same millisecond returns the cached result without re-consuming it;
+## source176 R2 (docs/02 R02/R03): the per-tick source decision permission
+## cache on EnemyActor, now keyed by the actor identity plus the physics tick
+## and evaluated on the projected owner game clock. Contracts under test:
+## - one cadence.evaluate per logical decision event (physics tick); a repeated
+##   call inside the same tick returns the cached result without re-consuming;
 ## - a granted permission increments the source decision serial exactly once
-##   and the cadence walk tick moves to the evaluation time;
+##   and the cadence walk tick moves to the projected game-clock time;
 ## - a committed movement step is bound to the originating permission serial;
 ## - the authority violation path fails closed.
+## The fixture drives the deterministic owner game clock `_combat_action_time_s`
+## directly and resets `_source176_decision_tick` to -1 to model entering a new
+## physics tick, so no wall-clock sleep is involved anywhere.
 
 const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
 
@@ -43,7 +47,7 @@ func _run() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	RuntimeDiagnosticsScript.set_device_lab_performance_enabled(true)
-	await _test_cache_dedupes_same_millisecond()
+	await _test_cache_dedupes_same_tick()
 	_completed_cases += 1
 	await _test_grant_consumes_walk_tick_once()
 	_completed_cases += 1
@@ -73,25 +77,29 @@ func _make_enemy() -> EnemyActor:
 	return enemy
 
 
-func _test_cache_dedupes_same_millisecond() -> void:
+func _test_cache_dedupes_same_tick() -> void:
 	var enemy := await _make_enemy()
 	var cadence = enemy._movement_cadence
 	var interval_ms := int(cadence.walk_interval_ms)
-	cadence.walk_tick_ms = Time.get_ticks_msec() - (interval_ms + 7)
+	# A deterministic on-phase fixture: the projected game clock sits at 10 s
+	# and the walk tick is a full interval plus 7 ms in the past.
+	enemy._combat_action_time_s = 10.0
+	var now_ms := int(enemy._combat_action_time_s * 1000.0)
+	cadence.walk_tick_ms = now_ms - (interval_ms + 7)
 	var walk_count_before := int(cadence.walk_count)
 	var granted_first: bool = enemy._source176_take_tick_decision()
 	var serial_after_first := int(enemy._source176_decision_serial)
 	_check(granted_first, "elapsed interval grants the permission")
 	_check(serial_after_first == 1, "first grant bumps the decision serial")
 	_check(
-		enemy._source176_decision_now_ms == Time.get_ticks_msec(),
-		"cache records the decision millisecond"
+		enemy._source176_decision_now_ms == now_ms,
+		"cache records the projected game-clock millisecond"
 	)
 	var granted_second: bool = enemy._source176_take_tick_decision()
-	_check(granted_second == granted_first, "same-millisecond repeat returns the cached result")
+	_check(granted_second == granted_first, "same-tick repeat returns the cached result")
 	_check(
 		int(enemy._source176_decision_serial) == serial_after_first,
-		"same-millisecond repeat does not bump the serial"
+		"same-tick repeat does not bump the serial"
 	)
 	_check(
 		int(cadence.walk_count) == walk_count_before + 1,
@@ -108,10 +116,12 @@ func _test_grant_consumes_walk_tick_once() -> void:
 	var enemy := await _make_enemy()
 	var cadence = enemy._movement_cadence
 	var interval_ms := int(cadence.walk_interval_ms)
-	var evaluation_ms := Time.get_ticks_msec() + 3
+	# A NEW logical event: advance the deterministic clock and enter a fresh
+	# physics tick for the second decision.
+	enemy._combat_action_time_s = 20.0
+	var evaluation_ms := int(enemy._combat_action_time_s * 1000.0)
 	cadence.walk_tick_ms = evaluation_ms - (interval_ms + 11)
-	while Time.get_ticks_msec() < evaluation_ms:
-		await get_tree().process_frame
+	enemy._source176_decision_tick = -1
 	var granted: bool = enemy._source176_take_tick_decision()
 	_check(granted, "grant after forced interval elapse")
 	_check(
@@ -121,15 +131,18 @@ func _test_grant_consumes_walk_tick_once() -> void:
 	var walk_tick_after_grant := int(cadence.walk_tick_ms)
 	var granted_again := enemy._source176_take_tick_decision()
 	_check(granted_again == false or int(cadence.walk_tick_ms) == walk_tick_after_grant,
-		"a same-millisecond repeat never re-anchors the walk tick")
+		"a same-tick repeat never re-anchors the walk tick")
 	enemy.free()
 
 
 func _test_wait_does_not_consume() -> void:
 	var enemy := await _make_enemy()
 	var cadence = enemy._movement_cadence
-	var interval_ms := int(cadence.walk_interval_ms)
-	cadence.walk_tick_ms = Time.get_ticks_msec()
+	# The projected clock equals the walk tick: the interval has not elapsed.
+	enemy._combat_action_time_s = 30.0
+	var now_ms := int(enemy._combat_action_time_s * 1000.0)
+	cadence.walk_tick_ms = now_ms
+	enemy._source176_decision_tick = -1
 	var walk_count_before := int(cadence.walk_count)
 	var granted: bool = enemy._source176_take_tick_decision()
 	_check(not granted, "unelapsed interval waits")
@@ -144,11 +157,14 @@ func _test_wait_does_not_consume() -> void:
 func _test_violation_fails_closed() -> void:
 	var enemy := await _make_enemy()
 	var cadence = enemy._movement_cadence
-	cadence.walk_tick_ms = Time.get_ticks_msec() - int(cadence.walk_interval_ms) - 5
+	enemy._combat_action_time_s = 40.0
+	var now_ms := int(enemy._combat_action_time_s * 1000.0)
+	cadence.walk_tick_ms = now_ms - int(cadence.walk_interval_ms) - 5
 	# Force the M01A authority contract into the violation state: the next
 	# evaluate must report the violation and the accessor must fail closed
 	# exactly like the production step-request path does.
 	cadence._enter_violation("source176_test_forced_violation")
+	enemy._source176_decision_tick = -1
 	var granted: bool = enemy._source176_take_tick_decision()
 	_check(not granted, "authority violation never grants")
 	_check(

@@ -84,26 +84,21 @@ func _admit_rounds(enemy: EnemyActor, player: PlayerCharacter, monster_id: int) 
 		enemy._attack_timer = 0.0
 		enemy._hc_m30_attack_pose_remaining = 0.0
 		enemy._hc_last_start_tick = -1
-		# docs/02 M01A: rewind the wall-ms decision phase so each round's tick
-		# sees a fully elapsed walk interval, like production would after a
-		# real pause between swings.
+		# R2/R03: the source decision projects the owner game clock, so this
+		# fixture advances the deterministic `_combat_action_time_s` by one
+		# full interval per round. The real physics-frame await below already
+		# rotates the per-tick decision identity, and the same-tick cache then
+		# guarantees the settle loop and the admission tick share one evaluate.
 		var cad = enemy._movement_cadence
-		var now_ms := Time.get_ticks_msec()
+		enemy._combat_action_time_s += (float(int(cad.walk_interval_ms)) + 1.0) / 1000.0
+		var now_ms := int(enemy._combat_action_time_s * 1000.0)
 		cad.walk_wait_locked = false
 		cad.walk_tick_ms = now_ms - int(cad.walk_interval_ms) - 1
 		# A freshly stamped wait tick would immediately re-lock the gate
 		# (now - wait_tick <= wait interval), so park it in the past.
 		cad.walk_wait_tick_ms = 0
 		cad.last_evaluated_ms = now_ms - 1
-		enemy._source176_decision_now_ms = -1
 		await get_tree().physics_frame
-		# The settle loop's internal decision may consume and rewrite the walk
-		# phase inside the awaited frame; stamp the final phase immediately
-		# before the admission tick so the gate sees a fully elapsed interval.
-		cad.walk_tick_ms = Time.get_ticks_msec() - int(cad.walk_interval_ms) - 1
-		cad.last_evaluated_ms = Time.get_ticks_msec() - 1
-		cad.walk_wait_locked = false
-		enemy._source176_decision_now_ms = -1
 		enemy._physics_process(1.0 / 60.0)
 		var record: Dictionary = enemy._last_hc_release_record
 		var expected_serial := first_serial + round_index + 1

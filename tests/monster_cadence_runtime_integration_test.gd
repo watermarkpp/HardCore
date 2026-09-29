@@ -121,24 +121,37 @@ func _screen_px_to_ground_gu(screen_px: Vector2) -> Vector2:
 	return GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(screen_px)
 
 
+# R2/R03: every fixture clock lives on the deterministic owner game clock
+# (`_combat_action_time_s`), never the wall clock. `_fixture_clock_ms` is the
+# shared projected millisecond; helpers stamp the cadence phase on it.
+var _fixture_clock_ms := 10000
+
+
+func _advance_fixture_clock(enemy: EnemyActor, ms: int) -> void:
+	_fixture_clock_ms += ms
+	enemy._combat_action_time_s = float(_fixture_clock_ms) / 1000.0
+
+
 func _set_cadence_waiting(enemy: EnemyActor) -> void:
 	var cadence = enemy._movement_cadence
 	assert(cadence != null, "enemy must own a configured cadence")
-	var now_ms := Time.get_ticks_msec()
+	_fixture_clock_ms += 10000
+	enemy._combat_action_time_s = float(_fixture_clock_ms) / 1000.0
 	cadence.walk_wait_locked = false
-	cadence.walk_tick_ms = now_ms
-	cadence.walk_wait_tick_ms = now_ms
-	cadence.last_evaluated_ms = now_ms - 1
+	cadence.walk_tick_ms = _fixture_clock_ms
+	cadence.walk_wait_tick_ms = _fixture_clock_ms
+	cadence.last_evaluated_ms = _fixture_clock_ms - 1
 
 
 func _force_cadence_ready(enemy: EnemyActor) -> void:
 	var cadence = enemy._movement_cadence
 	assert(cadence != null, "enemy must own a configured cadence")
-	var now_ms := Time.get_ticks_msec()
+	_fixture_clock_ms += 10000
+	enemy._combat_action_time_s = float(_fixture_clock_ms) / 1000.0
 	cadence.walk_wait_locked = false
-	cadence.walk_tick_ms = now_ms - cadence.walk_interval_ms - 1
-	cadence.walk_wait_tick_ms = now_ms
-	cadence.last_evaluated_ms = now_ms - 1
+	cadence.walk_tick_ms = _fixture_clock_ms - cadence.walk_interval_ms - 1
+	cadence.walk_wait_tick_ms = _fixture_clock_ms
+	cadence.last_evaluated_ms = _fixture_clock_ms - 1
 
 
 # ---------------------------------------------------------------------------
@@ -148,10 +161,15 @@ func _force_cadence_ready(enemy: EnemyActor) -> void:
 func _test_cadence_interval_not_elapsed() -> void:
 	var enemy := _make_unready_enemy(18)
 	var start_position := enemy.global_position
+	# Stamp the cadence phase on the projected fixture clock: setup configures
+	# the cadence at game-clock zero, so the waiting phase is explicit here.
+	enemy._combat_action_time_s = float(_fixture_clock_ms) / 1000.0
+	enemy._movement_cadence.walk_tick_ms = _fixture_clock_ms
 
-	# Immediately request a step with the same timestamp that was used during
-	# setup.  The cadence should reject because the interval hasn't elapsed.
-	var now_ms := Time.get_ticks_msec()
+	# Immediately request a step on the same projected game-clock millisecond
+	# the cadence phase was stamped with. The cadence should reject because
+	# the interval hasn't elapsed.
+	var now_ms := _fixture_clock_ms
 	var started := enemy._request_autonomous_step(
 		Vector2.RIGHT,
 		1.0,

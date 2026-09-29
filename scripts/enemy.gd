@@ -451,6 +451,8 @@ var _attack_action_active := false
 # authority consumes - no scaled delta is mixed in anywhere.
 var _source176_decision_serial: int = 0
 var _source176_decision_now_ms: int = -1
+var _source176_decision_tick: int = -1
+var _source176_decision_generation: int = -1
 var _source176_decision_granted: bool = false
 var _source_committed_step_serial: int = -1
 # source176 Task 5 (docs/02 G): the shared body-action mutex tick. Every
@@ -1660,7 +1662,10 @@ func _configure_movement_cadence() -> bool:
 		set_meta("movement_authority_rejected", true)
 		return false
 	var new_cadence := MonsterMovementCadenceScript.new()
-	var now_ms := Time.get_ticks_msec()
+	# R03: cadence construction joins the same owner game-clock domain as the
+	# decision gate, so an initial wall offset can never masquerade as elapsed
+	# source phase.
+	var now_ms := int(_combat_action_time_s * 1000.0)
 	var ok: bool = new_cadence.configure(authority_record, now_ms)
 	if not ok:
 		_movement_authority_failed_closed = true
@@ -1735,10 +1740,29 @@ func _request_autonomous_step(
 		return false
 	if desired_direction_ground_gu.length() <= GroundUnitSpace.EPSILON_GU:
 		return false
-	var now_ms := now_ms_override
-	if now_ms < 0:
-		now_ms = Time.get_ticks_msec()
-	var cadence_result: Dictionary = _movement_cadence.evaluate(now_ms)
+	var tick := Engine.get_physics_frames()
+	var generation := int(get_meta("zone_generation", -1))
+	var shared_decision := (
+		_source176_decision_tick == tick
+		and _source176_decision_generation == generation
+		and _source176_decision_now_ms >= 0
+	)
+	var now_ms := _source176_decision_now_ms
+	var cadence_result: Dictionary
+	if shared_decision:
+		# R02: one source permission per physics tick. A pursue leg entered
+		# after this tick's decision gate already consumed the evaluate call,
+		# so it reuses that result instead of evaluating a second time.
+		if not _source176_decision_granted:
+			return false
+		cadence_result = {"granted": true, "authority_contract_violation": false, "shared_from_tick": tick}
+	else:
+		# R03: the standalone path (non-ordinary sources, idle steps) still
+		# evaluates, now on the same projected game-clock domain.
+		now_ms = now_ms_override
+		if now_ms < 0:
+			now_ms = int(_combat_action_time_s * 1000.0)
+		cadence_result = _movement_cadence.evaluate(now_ms)
 	if cadence_result.authority_contract_violation:
 		_movement_authority_failed_closed = true
 		velocity = Vector2.ZERO
@@ -1793,7 +1817,7 @@ func _begin_autonomous_step_without_cadence(
 	# committed current step is never revoked here; only a new segment start is
 	# refused, and an already-expired postponement allows the step immediately.
 	if _movement_cadence != null and _movement_cadence.direct_magic_delay_blocks_next_step(
-		Time.get_ticks_msec() if now_ms_override < 0 else now_ms_override
+		int(_combat_action_time_s * 1000.0) if now_ms_override < 0 else now_ms_override
 	):
 		RuntimeDiagnostics.increment_performance_counter(
 			&"monster_direct_magic_walk_delay_blocked_steps"
@@ -8781,16 +8805,25 @@ func _hc_finalize_boss_facing() -> void:
 ## monster only stands or walks), which keeps later magic postponements on
 ## a fresh source phase instead of a stale one.
 func _source176_take_tick_decision() -> bool:
-	var now_ms := Time.get_ticks_msec()
-	if _source176_decision_now_ms == now_ms:
+	var tick := Engine.get_physics_frames()
+	var generation := int(get_meta("zone_generation", -1))
+	if _source176_decision_tick == tick and _source176_decision_generation == generation:
 		return _source176_decision_granted
+	# R03: the source action domain projects the owner game clock once per
+	# physics tick. The wall clock is no longer a decision identity, so a
+	# pause or time_scale change can never finish a source wait for us.
+	var now_ms := int(_combat_action_time_s * 1000.0)
 	var result: Dictionary = _movement_cadence.evaluate(now_ms)
 	if bool(result.get("authority_contract_violation", false)):
 		_movement_authority_failed_closed = true
 		velocity = Vector2.ZERO
+		_source176_decision_tick = tick
+		_source176_decision_generation = generation
 		_source176_decision_now_ms = now_ms
 		_source176_decision_granted = false
 		return false
+	_source176_decision_tick = tick
+	_source176_decision_generation = generation
 	_source176_decision_now_ms = now_ms
 	_source176_decision_granted = bool(result.get("granted", false))
 	if _source176_decision_granted:
@@ -8871,15 +8904,25 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	if source176_ordinary and source176_in_zone:
 		var source176_decision_granted := _source176_take_tick_decision()
 		if _attack_timer > 0.0:
-			velocity = Vector2.ZERO
-			_hc_last_reason = "COOLDOWN_HOLD"
-			return
-		if not source176_decision_granted:
+			# R02: being blocked is NOT a legal attack position. Only a CLEAR
+			# access holds position on a running cooldown; a blocked in-zone
+			# actor still selects a legal step under this tick's permission.
+			if _hc_access(target) == "CLEAR":
+				velocity = Vector2.ZERO
+				_hc_last_reason = "COOLDOWN_HOLD"
+				return
+			if not source176_decision_granted:
+				velocity = Vector2.ZERO
+				_hc_last_reason = "SOURCE_DECISION_WAIT"
+				return
+		elif not source176_decision_granted:
 			velocity = Vector2.ZERO
 			_hc_last_reason = "SOURCE_DECISION_WAIT"
 			return
-		if _hc_try_start(target):
+		elif _hc_try_start(target):
 			return
+		# Granted but the attack could not start (WORLD/FRONTLINE): fall
+		# through to the pursue leg reusing this tick's shared permission.
 	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and str(attack_delivery_rule.get("kind", "")) != "" and _hc_try_start(target):
 		return
 	_hc_refresh_observation()
