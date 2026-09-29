@@ -1082,6 +1082,9 @@ func _aoe_apply_legacy_damage_candidates(
 				Callable(self, "_resolve_magic_defense"),
 				-1,
 				_direct_spell_target_stats_scratch,
+				# source176 Task 1: generic AoE applier - the registry resolves
+				# the per-skill delivery family; unknown ids fail closed.
+				CombatRuntimeServiceScript.EnemyMagicDeliveryKind.AUTO,
 			)
 			resolved_damage = int(resolution.get("final_damage", 0))
 			if resolved_damage > 0:
@@ -9549,6 +9552,9 @@ func _apply_canonical_spell_damage(
 			Callable(self, "_resolve_magic_defense"),
 			-1,
 			_direct_spell_target_stats_scratch,
+			# source176 Task 1: generic canonical-AoE applier - registry-resolved
+			# delivery family; unknown ids fail closed.
+			CombatRuntimeServiceScript.EnemyMagicDeliveryKind.AUTO,
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
 	RuntimeDiagnostics.record_timing_usec(&"aoe_exact_phase_usec", aoe_exact_started_usec)

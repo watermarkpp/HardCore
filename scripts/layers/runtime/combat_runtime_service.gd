@@ -2,6 +2,10 @@ extends Node
 
 const CombatResolutionRulesScript := preload("res://scripts/combat_resolution_rules.gd")
 const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.gd")
+## source176 Task 1: the authoritative 33-skill reception-family table.
+const SourceReactionRegistryScript := preload(
+	"res://scripts/monster_source176/skill_reaction_registry.gd"
+)
 
 ## R1: vanilla monster magic delivery classes.
 ## DIRECT_MAGSTRUCK is the RM_MAGSTRUCK family (targeted/destined direct
@@ -12,7 +16,13 @@ const MonsterStruckPolicyScript := preload("res://scripts/monster_struck_policy.
 ## burns, e.g. wizard.fire_wall): MAC and damage resolve normally and a
 ## positive tick still produces an ordinary STRUCK, but the walk tick is
 ## NEVER postponed. Every pre-R1 caller keeps DIRECT_MAGSTRUCK semantics.
+## source176 AUTO (-1) is the migration/compatibility value for generic
+## call sites that deliver several skills: the kind is resolved through
+## SourceReactionRegistry by stable id. AUTO never grants DIRECT silently -
+## an unknown id, or an explicit kind that contradicts the registry,
+## fails closed before any RNG consumption or damage.
 enum EnemyMagicDeliveryKind {
+	AUTO = -1,
 	DIRECT_MAGSTRUCK,
 	MAGSTRUCK_MINE,
 }
@@ -89,6 +99,19 @@ func apply_enemy_direct_spell_damage(
 			"failure_reason": "target_missing_damage_pipeline",
 			"final_damage": 0,
 		}
+	var checked_delivery := _checked_player_spell_delivery(
+		stable_skill_id, delivery_kind
+	)
+	if checked_delivery < 0:
+		# source176 Task 1 (docs/02 C1): a rejected id/kind combination is a
+		# configuration/call failure. It must fail BEFORE any RNG consumption
+		# (anti-magic roll), stats snapshot and damage.
+		return {
+			"success": false,
+			"failure_reason": "source176_delivery_kind_rejected",
+			"final_damage": 0,
+			"stable_skill_id": stable_skill_id,
+		}
 	RuntimeDiagnostics.increment_performance_counter(&"direct_spell_resolution_count")
 	var resolution_started_usec := RuntimeDiagnostics.timing_start()
 	var target_stats: Dictionary = (
@@ -130,13 +153,13 @@ func apply_enemy_direct_spell_damage(
 	# even if MAC later compresses the final damage to 0. The ordinary STRUCK
 	# (take_damage below) still requires final_damage > 0.
 	if (
-		delivery_kind == EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
+		checked_delivery == EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
 		and bool(resolution.get("enters_magic_defense_stage", false))
 	):
 		_apply_direct_magic_walk_delay(target)
 	var final_damage := int(resolution.get("final_damage", 0))
 	if final_damage > 0:
-		if delivery_kind == EnemyMagicDeliveryKind.MAGSTRUCK_MINE:
+		if checked_delivery == EnemyMagicDeliveryKind.MAGSTRUCK_MINE:
 			RuntimeDiagnostics.increment_performance_counter(
 				&"monster_magic_mine_struck_count"
 			)
@@ -150,6 +173,28 @@ func apply_enemy_direct_spell_damage(
 	var result: Dictionary = resolution
 	result["success"] = final_damage > 0
 	return result
+
+
+## source176 docs/02 C1: resolve/validate the delivery stage of the current
+## 33-skill player pipeline against the reaction registry. Returns the
+## effective EnemyMagicDeliveryKind, or -1 when the combination must fail:
+## - unknown skill id (family neither DIRECT nor MINE in the registry), or
+## - an explicitly declared kind that contradicts the registry family.
+## AUTO (-1) resolves through the registry and is only accepted for real
+## registry ids; this function serves the player-spell pipeline only and
+## must not be used to reject monster attacks or pet internal damage.
+func _checked_player_spell_delivery(stable_id: String, declared: int) -> int:
+	var family: StringName = SourceReactionRegistryScript.family(stable_id)
+	var expected: int = -1
+	if family == &"DIRECT":
+		expected = EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK
+	elif family == &"MINE":
+		expected = EnemyMagicDeliveryKind.MAGSTRUCK_MINE
+	if expected < 0:
+		return -1
+	if declared != -1 and declared != expected:
+		return -1
+	return expected
 
 
 func _target_rejects_damage(target: Node) -> bool:

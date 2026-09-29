@@ -703,6 +703,9 @@ func _apply_hit(enemy: EnemyActor) -> void:
 			magic_defense_adapter,
 			anti_magic_roll,
 			_direct_spell_target_stats_scratch,
+			# source176 Task 1: generic projectile applier - registry-resolved
+			# delivery family; unknown ids fail closed.
+			CombatRuntimeServiceScript.EnemyMagicDeliveryKind.AUTO,
 		)
 		if int(last_resolution.get("final_damage", 0)) <= 0:
 			return
