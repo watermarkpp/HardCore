@@ -46,6 +46,15 @@ const MonsterMovementCadenceScript := preload(
 const MonsterStruckPolicyScript := preload(
 	"res://scripts/monster_struck_policy.gd"
 )
+const Source176Melee := preload(
+	"res://scripts/monster_source176/source_melee_geometry.gd"
+)
+const SourceStepPlan := preload(
+	"res://scripts/monster_source176/source_step_plan.gd"
+)
+const SourceActionBoundary := preload(
+	"res://scripts/monster_source176/action_boundary.gd"
+)
 ## Shared read-only empty damage context so DOT/poison ticks never allocate a
 ## per-tick Dictionary on the damage core path.
 const EMPTY_DAMAGE_CONTEXT: Dictionary = {}
@@ -444,6 +453,29 @@ var _source176_decision_serial: int = 0
 var _source176_decision_now_ms: int = -1
 var _source176_decision_granted: bool = false
 var _source_committed_step_serial: int = -1
+# source176 Task 5 (docs/02 G): the shared body-action mutex tick. Every
+# independent body attack/skill commit writes it once per physics frame; a
+# parent action's multi-victim releases never come back through here.
+var _last_body_action_commit_tick: int = -1
+
+
+## source176 Task 5 (docs/02 G): the one admission for every independent body
+## action. Call after the target/eligibility checks, before allocating the
+## parent action, rolling damage, resetting the attack timer or starting
+## audio. A failed reserve commits nothing.
+func _try_reserve_source_body_action(incompatible_pending: bool) -> bool:
+	var tick: int = Engine.get_physics_frames()
+	var locked: bool = _dying or _death_pending or not combat_enabled
+	locked = locked or control_time > 0.0 or charm_time > 0.0
+	if not SourceActionBoundary.can_reserve_body_action(
+		tick,
+		_last_body_action_commit_tick,
+		incompatible_pending,
+		locked,
+	):
+		return false
+	_last_body_action_commit_tick = tick
+	return true
 # R4 T3: body admission resolves once; the spawn factory may precheck it
 # before the node ever enters the tree or the world registries.
 var _body_admission_resolved := false
@@ -590,6 +622,10 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	_special_delivery_settlement_floor_serial = _spatial_release_serial
 	_hc_pursuit_session = false
 	_hc_blocked_wait_target_id = 0
+	# source176 Task 5 (docs/02 G): a fresh life starts with a clean body
+	# action mutex; old child releases still go through the original
+	# generation rejection.
+	_last_body_action_commit_tick = -1
 	_hc_cancel_path()
 	_reset_monster_audio_observer()
 	_reset_direct_spell_runtime_stats()
@@ -1814,7 +1850,26 @@ func _begin_autonomous_step_without_cadence(
 	if not target_ground_gu.is_finite():
 		return false
 	var terrain_clear := Callable(self, "_locomotion_segment_clear") if _terrain_navigation_context.has("poly_index") else Callable()
-	var legs := MonsterNeighborStepPolicyScript.eight_way_path(current_ground_gu, target_ground_gu, terrain_clear)
+	var legs := PackedVector2Array()
+	if (
+		_source176_ordinary_melee()
+		and reason == &"pursuit"
+		and target_ground_gu.is_finite()
+	):
+		# source176 Task 4 (docs/02 F): one monotone eight-way leg toward the
+		# stable goal. The leg is verified as a whole real segment; when it is
+		# not terrain-clear, the existing neighbor/candidate fallback below
+		# stays untouched.
+		var planned_leg := SourceStepPlan.next_leg(current_ground_gu, target_ground_gu)
+		if (
+			planned_leg.is_finite()
+			and current_ground_gu.distance_squared_to(planned_leg) > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
+			and (not terrain_clear.is_valid() or bool(terrain_clear.call(current_ground_gu, planned_leg)))
+		):
+			legs = PackedVector2Array([planned_leg])
+			target_ground_gu = planned_leg
+	if legs.is_empty():
+		legs = MonsterNeighborStepPolicyScript.eight_way_path(current_ground_gu, target_ground_gu, terrain_clear)
 	if legs.is_empty():
 		return false
 	_movement_step_legs = legs
@@ -2852,6 +2907,10 @@ func _physics_process_internal(delta: float) -> void:
 	elif engagement_ready:
 		velocity = Vector2.ZERO
 		if _attack_timer <= 0.0:
+			# source176 Task 5 (docs/02 G): reserve before the timer reset,
+			# the parent allocation and the damage roll.
+			if not _try_reserve_source_body_action(_pending_attack_time >= 0.0):
+				return
 			_attack_timer = _current_attack_interval()
 			_refresh_target_focus()
 			# R4 T1: the legacy melee branch owns its admission like every
@@ -3617,6 +3676,13 @@ func _attack_engagement_ready(
 				or distance_gu
 				<= contact_distance_gu + GroundUnitSpace.EPSILON_GU
 			)
+		)
+	if _source176_ordinary_melee():
+		# docs/02 E1: the ordinary branch shares the L-inf commit geometry.
+		return (
+			is_instance_valid(hit_target)
+			and _source176_melee_reach_ok(offset_ground_gu, 0.0)
+			and _attack_world_path_is_clear_for_target(hit_target)
 		)
 	return (
 		is_instance_valid(hit_target)
@@ -5430,23 +5496,35 @@ func _deal_melee_hit(
 	if not combat_enabled or not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
 	var target_radius_gu := _target_combat_radius_gu(hit_target)
-	var center_reach_gu := (
-		HCPolicy.START_GU if _hc_standard_melee()
-		else maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
-	)
 	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	var target_ground_gu := _screen_position_px_to_ground_position_gu(
 		hit_target.global_position
 	)
-	if (
-		source_ground_gu.distance_to(target_ground_gu)
-		> (
-			center_reach_gu
-			+ maxf(0.0, center_tolerance_gu)
-			+ GroundUnitSpace.EPSILON_GU
+	if _source176_ordinary_melee():
+		# docs/02 E1(i)/E2: the ordinary hit phase measures the same L-inf box
+		# as the start geometry, extended only by the separately-named
+		# delayed-hit tolerance (0.25 GU project-compat behaviour, listed in
+		# the diff table). The legacy 1.5-GU circle stays for special
+		# deliveries.
+		if not _source176_melee_reach_ok(
+			target_ground_gu - source_ground_gu,
+			maxf(0.0, center_tolerance_gu),
+		):
+			return
+	else:
+		var center_reach_gu := (
+			HCPolicy.START_GU if _hc_standard_melee()
+			else maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
 		)
-	):
-		return
+		if (
+			source_ground_gu.distance_to(target_ground_gu)
+			> (
+				center_reach_gu
+				+ maxf(0.0, center_tolerance_gu)
+				+ GroundUnitSpace.EPSILON_GU
+			)
+		):
+			return
 	if not _world_attack_path_is_clear(
 		source_ground_gu,
 		target_ground_gu,
@@ -8115,6 +8193,12 @@ func _update_boss_skill(delta: float, distance_gu: float) -> void:
 		)
 		if distance_gu > trigger_range_gu:
 			return
+		# source176 Task 5 (docs/02 G): the boss special windup is an
+		# independent body action. Reserving here blocks the same-frame
+		# ordinary try_start; on failure nothing below is committed and no
+		# cooldown is touched (it is only set when the release lands).
+		if not _try_reserve_source_body_action(_pending_attack_time >= 0.0):
+			return
 		_boss_skill_direction_ground = (
 			_ground_delta_gu_between_screen_positions(global_position, target.global_position).normalized()
 			if is_instance_valid(target)
@@ -8253,6 +8337,37 @@ var _hc_local_walkable_radius_px := NAN
 var _hc_local_walkable_tick := -1
 var _hc_local_walkable_cache: Dictionary = {}
 
+## source176 Task 3 (docs/02 E): the ordinary eight-adjacency classification.
+## Ordinary = the melee AI package's unnamed kind. Named contact deliveries
+## (special_melee, gas_adjacent, mixed_target_tile) keep their own shapes.
+func _source176_ordinary_melee() -> bool:
+	return _hc_standard_melee() and str(attack_delivery_rule.get("kind", "")) == ""
+
+
+## source176 Task 3 (docs/02 E/E2): the single ordinary reach predicate. A
+## zero tolerance is the strict start/commit box; the separately-named
+## delayed-hit tolerance only extends the box outward - it never adds a
+## minimum and never widens the start geometry.
+func _source176_melee_reach_ok(offset_gu: Vector2, tolerance: float) -> bool:
+	if Source176Melee.continuous_adjacent(offset_gu):
+		return true
+	if tolerance <= 0.0 or not offset_gu.is_finite() or not is_finite(tolerance):
+		return false
+	return maxf(absf(offset_gu.x), absf(offset_gu.y)) <= Source176Melee.HALF_EXTENT_GU + tolerance
+
+
+## source176 Task 3 (docs/02 E): geometry-only predicate. It never replaces
+## the live/WORLD/frontline checks and carries no hit tolerance.
+func _source176_basic_melee_geometry_clear(hit_target: Node2D) -> bool:
+	if not is_instance_valid(hit_target):
+		return false
+	var offset: Vector2 = _ground_delta_gu_between_screen_positions(
+		global_position,
+		hit_target.global_position,
+	)
+	return Source176Melee.continuous_adjacent(offset)
+
+
 func _hc_standard_melee() -> bool:
 	# Reach/motion classification is independent of physical or magic damage.
 	# Named contact attacks (including Moon Spider gas) share the same 1.5-GU
@@ -8336,7 +8451,13 @@ func _hc_access(hit_target: Node2D, tolerance := 0.0, fresh_world := false) -> S
 	var b := _screen_position_px_to_ground_position_gu(hit_target.global_position)
 	if not a.is_finite() or not b.is_finite() or runtime_map_id < 0:
 		return "PROJECTION_UNAVAILABLE"
-	if not HCPolicy.within(a, b, HCPolicy.START_GU + tolerance):
+	# source176 Task 3 (docs/02 E1): ordinary melee measures the relative
+	# L-inf box; the legacy 1.5-GU circle stays for special deliveries. The
+	# delayed-hit tolerance extends the box without a minimum (E2).
+	if _source176_ordinary_melee():
+		if not _source176_melee_reach_ok(b - a, tolerance):
+			return "OUT_OF_RANGE"
+	elif not HCPolicy.within(a, b, HCPolicy.START_GU + tolerance):
 		return "OUT_OF_RANGE"
 	if (
 		hit_target.has_method("is_stealthed") and bool(hit_target.call("is_stealthed"))
@@ -8451,6 +8572,12 @@ func _hc_try_start(hit_target: Node2D) -> bool:
 		return false
 	_hc_last_reason = _hc_access(hit_target)
 	if _hc_last_reason != "CLEAR":
+		return false
+	# source176 Task 5 (docs/02 G): the single body-action admission. Target
+	# and eligibility checks above own validity; this reserve precedes the
+	# parent allocation, the damage roll, the timer reset and every audio.
+	if not _try_reserve_source_body_action(false):
+		_hc_last_reason = "BODY_ACTION_BUSY"
 		return false
 	# Reserve before callbacks (animation/audio may emit signals).
 	_hc_last_start_tick = tick
@@ -8712,11 +8839,17 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	# waits for the permission (SOURCE_DECISION_WAIT). Special contact
 	# deliveries (named kinds) keep their previous immediate commit until
 	# their own source identity is verified.
+	# source176 Task 3 (docs/02 E1): the ordinary zone test is the same L-inf
+	# predicate as the commit path; the legacy circle quick filter stays for
+	# special deliveries. The ordinary in-zone decision (attack on a granted
+	# permission, COOLDOWN_HOLD otherwise) comes from the Task 2 gate below.
 	var source176_ordinary := str(attack_delivery_rule.get("kind", "")) == ""
-	if (
-		source176_ordinary
-		and distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
-	):
+	var source176_in_zone := (
+		_source176_melee_reach_ok(offset, 0.0)
+		if source176_ordinary
+		else distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+	)
+	if source176_ordinary and source176_in_zone:
 		var source176_decision_granted := _source176_take_tick_decision()
 		if _attack_timer > 0.0:
 			velocity = Vector2.ZERO
@@ -8739,19 +8872,24 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		return
 	var access := (
 		_hc_access(target)
-		if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+		if source176_in_zone
 		else "OUT_OF_RANGE"
 	)
-	var preferred := _hc_preferred(target)
-	if preferred > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
-		_hc_last_reason = "BODY_REQUIRES_EXPLICIT_EXCEPTION"
-		velocity = Vector2.ZERO
-		return
-	if access == "CLEAR" and not HCPolicy.should_close(distance, preferred):
-		_clear_autonomous_step_state()
-		velocity = Vector2.ZERO
-		_hc_last_reason = "PREFERRED_COOLDOWN_WAIT"
-		return
+	if not source176_ordinary:
+		# Special deliveries keep the legacy preferred-gap approach target.
+		# Ordinary melee owns its zone decision through the L-inf predicate
+		# and the Task 2 decision gate (docs/02 E1): no contact-gap approach
+		# target and no body-size deadlock.
+		var preferred := _hc_preferred(target)
+		if preferred > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
+			_hc_last_reason = "BODY_REQUIRES_EXPLICIT_EXCEPTION"
+			velocity = Vector2.ZERO
+			return
+		if access == "CLEAR" and not HCPolicy.should_close(distance, preferred):
+			_clear_autonomous_step_state()
+			velocity = Vector2.ZERO
+			_hc_last_reason = "PREFERRED_COOLDOWN_WAIT"
+			return
 	if stationary:
 		velocity = Vector2.ZERO
 		return
@@ -8803,14 +8941,20 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 func _hc_step_can_end() -> bool:
 	if not _hc_standard_melee() or not is_instance_valid(target) or target.is_queued_for_deletion():
 		return false
-	# Pure geometry first; distant moves cannot end through the 1.5-GU gate.
+	# Pure geometry first; distant moves cannot end through the reach gate.
 	var offset: Vector2 = _ground_delta_gu_between_screen_positions(global_position, target.global_position)
 	if not offset.is_finite():
 		return false
-	var reach: float = HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
-	var distance_sq: float = offset.length_squared()
-	if distance_sq > reach * reach:
-		return false
+	# source176 Task 3 (docs/02 E1): ordinary pursuit ends through the same
+	# L-inf predicate, not a second circle.
+	if _source176_ordinary_melee():
+		if not _source176_melee_reach_ok(offset, 0.0):
+			return false
+	else:
+		var reach: float = HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+		var distance_sq: float = offset.length_squared()
+		if distance_sq > reach * reach:
+			return false
 	# Full live target, WORLD and frontline checks still own any accepted end.
 	return _hc_access(target) == "CLEAR"
 
@@ -9060,6 +9204,7 @@ func _hc_goal_points(anchor: Vector2) -> Dictionary:
 	if not cache_key.is_empty() and _hc_shared_goal_cache.has(cache_key):
 		return _hc_shared_goal_cache[cache_key]
 	var goals: Dictionary = {}
+	var source176_ordinary := _source176_ordinary_melee()
 	var reach := HCPolicy.START_GU
 	var floor_distance := combat_radius_gu + _target_combat_radius_gu(target)
 	var base := MonsterNeighborStepPolicyScript.temporary_cell(anchor)
@@ -9068,14 +9213,33 @@ func _hc_goal_points(anchor: Vector2) -> Dictionary:
 		for x in range(-n, n + 1):
 			var cell := base + Vector2i(x, y)
 			var p := Vector2(cell) + Vector2(0.5, 0.5)
-			if HCPolicy.within(p, anchor, reach) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+			# source176 Task 3 (docs/02 E1): ordinary samples the L-inf box;
+			# special deliveries keep the 1.5-GU circle.
+			var in_reach := (
+				Source176Melee.continuous_adjacent(p - anchor)
+				if source176_ordinary
+				else HCPolicy.within(p, anchor, reach)
+			)
+			if in_reach and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
 				goals[cell] = p
-	# Bounded continuous end-point samples. They never extend the attack reach.
-	for index in range(16):
-		var p := anchor + Vector2.from_angle(TAU * float(index) / 16.0) * reach
-		var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
-		if not goals.has(cell) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
-			goals[cell] = p
+	if source176_ordinary:
+		# docs/02 E1: the eight source stand points on the unit box, each
+		# through the same footprint/WORLD filters. No angle ring here.
+		for box_offset: Vector2 in [
+			Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+			Vector2(1, 1), Vector2(1, -1), Vector2(-1, 1), Vector2(-1, -1),
+		]:
+			var p := anchor + box_offset
+			var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
+			if not goals.has(cell) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+				goals[cell] = p
+	else:
+		# Bounded continuous end-point samples. They never extend the attack reach.
+		for index in range(16):
+			var p := anchor + Vector2.from_angle(TAU * float(index) / 16.0) * reach
+			var cell := MonsterNeighborStepPolicyScript.temporary_cell(p)
+			if not goals.has(cell) and p.distance_to(anchor) >= floor_distance and _hc_point_walkable(p) and _hc_world_between(p, anchor):
+				goals[cell] = p
 	if not cache_key.is_empty():
 		goals.make_read_only()
 		if _hc_shared_goal_cache_order.size() >= HC_SHARED_GOAL_CACHE_LIMIT:
@@ -9098,6 +9262,9 @@ func _hc_goal_cache_key(anchor: Vector2) -> Array:
 		anchor,
 		combat_radius_gu,
 		_target_combat_radius_gu(target),
+		# docs/02 E1: the geometry contract version rides the cache key, so a
+		# legacy circle entry can never satisfy an L-inf query or vice versa.
+		"source176.linf.v1" if _source176_ordinary_melee() else "hc.circle.v1",
 	]
 
 func _hc_submit_path(anchor: Vector2) -> void:
@@ -9187,11 +9354,19 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 	var preferred := _hc_preferred(hit_target)
 	if _hc_observed and _hc_world_between(current, anchor):
 		var intended := Vector2(cell + direct) + Vector2(0.5, 0.5)
-		if _terrain_navigation_context.has("poly_index"):
-			var hc_direction := anchor - current
-			intended = current + hc_direction.normalized() * minf(1.0, hc_direction.length())
-		if current.distance_to(anchor) <= preferred + 1.0:
-			intended = anchor + (current - anchor).normalized() * preferred
+		if _source176_ordinary_melee():
+			# docs/02 F + E1(h): head along the next monotone eight-way leg of
+			# the stable goal. Never radial-project back onto the legacy
+			# circle, and never cut an arbitrary-angle 1-GU endpoint first.
+			var planned_leg := SourceStepPlan.next_leg(current, anchor)
+			if planned_leg.is_finite():
+				intended = planned_leg
+		else:
+			if _terrain_navigation_context.has("poly_index"):
+				var hc_direction := anchor - current
+				intended = current + hc_direction.normalized() * minf(1.0, hc_direction.length())
+			if current.distance_to(anchor) <= preferred + 1.0:
+				intended = anchor + (current - anchor).normalized() * preferred
 		var next := MonsterNeighborStepPolicyScript.temporary_cell(intended)
 		var neighbor := next - cell
 		if neighbor == Vector2i.ZERO:
@@ -9260,8 +9435,16 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 	if _hc_route_index < _hc_route.size():
 		var point := _hc_route[_hc_route_index]
 		if _terrain_navigation_context.has("poly_index"):
-			var hc_delta := point - current
-			point = current + hc_delta.normalized() * minf(1.0, hc_delta.length())
+			if _source176_ordinary_melee():
+				# docs/02 F: take the next monotone eight-way leg toward the
+				# real route vertex; do not cut an arbitrary-angle 1-GU
+				# endpoint for eight_way_path to re-split.
+				var route_leg := SourceStepPlan.next_leg(current, point)
+				if route_leg.is_finite():
+					point = route_leg
+			else:
+				var hc_delta := point - current
+				point = current + hc_delta.normalized() * minf(1.0, hc_delta.length())
 		var next := MonsterNeighborStepPolicyScript.temporary_cell(point)
 		var neighbor := next - cell
 		if next == cell:
