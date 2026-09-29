@@ -88,7 +88,12 @@ func _spawn_pair(offset_gu: Vector2) -> Array:
 	player.global_position = center_px
 	var enemy: EnemyActor = EnemyActor.new()
 	enemy.global_position = center_px + _g2s(offset_gu)
-	enemy.setup(GameData.get_monster_by_id(18), player, true)
+	# Monster 89 is the verified ordinary-melee identity (corpse-king Task 2
+	# evidence). The delivery rule is pinned empty so the fixture is
+	# deterministic even if catalog data later gains a named kind.
+	enemy.setup(GameData.get_monster_by_id(89), player, true)
+	enemy.attack_delivery_rule = {}
+	enemy.target = player
 	enemy.configure_runtime_map_projection(
 		1,
 		Callable(self, "_g2s"),
@@ -119,7 +124,7 @@ func _teardown_pair(pair: Array) -> void:
 func _test_access_box() -> void:
 	var diagonal := await _spawn_pair(Vector2(1, 1))
 	var enemy: EnemyActor = diagonal[1]
-	_check(enemy._source176_ordinary_melee(), "fixture: monster 18 is ordinary melee")
+	_check(enemy._source176_ordinary_melee(), "fixture: monster 89 with empty rule is ordinary melee")
 	var access := String(enemy._hc_access(diagonal[0]))
 	_check(access != "OUT_OF_RANGE", "L-inf: (1,1) diagonal is in reach (Euclidean sqrt2)")
 	_check(
