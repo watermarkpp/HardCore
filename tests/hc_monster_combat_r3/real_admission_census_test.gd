@@ -38,8 +38,11 @@ func _ready() -> void:
 	_run.call_deferred()
 
 
-func _spawn(player: PlayerCharacter, monster_id: int, offset_gu: float) -> EnemyActor:
-	var ground_position_gu := Vector2(16.5, 16.5) + Vector2(0, offset_gu)
+func _spawn(player: PlayerCharacter, monster_id: int, offset_gu: Vector2) -> EnemyActor:
+	# docs/02 E: the admission gate is the L-inf box. The diagonal offset keeps
+	# the ordinary channel inside the box while staying outside the spawn
+	# grounding contact band (1.344 GU).
+	var ground_position_gu := Vector2(16.5, 16.5) + offset_gu
 	var serial := _serial
 	_serial += 1
 	var enemy := EnemyActor.new()
@@ -68,12 +71,39 @@ func _admit_rounds(enemy: EnemyActor, player: PlayerCharacter, monster_id: int) 
 		# itself is the production _hc_settle path).
 		while enemy._pending_attack_time >= 0.0:
 			enemy._pending_attack_time = minf(enemy._pending_attack_time, 1.0 / 60.0)
-			enemy._physics_process(1.0 / 60.0)
+			# Only advance the pending lifecycle here; a full physics tick could
+			# start the NEXT swing inside the settle loop and shift the serial
+			# census by one round.
+			enemy._update_pending_attack(1.0 / 60.0)
+			# The body-action reserve is one commit per real engine frame
+			# (T06). Manual ticks do not advance the engine frame, so each
+			# round must cross a real physics frame before its admission.
+			await get_tree().physics_frame
 		# A combat-ready identity: clear the previous swing's cooldown and
 		# pose so THIS round's real admission is the thing under test.
 		enemy._attack_timer = 0.0
 		enemy._hc_m30_attack_pose_remaining = 0.0
 		enemy._hc_last_start_tick = -1
+		# docs/02 M01A: rewind the wall-ms decision phase so each round's tick
+		# sees a fully elapsed walk interval, like production would after a
+		# real pause between swings.
+		var cad = enemy._movement_cadence
+		var now_ms := Time.get_ticks_msec()
+		cad.walk_wait_locked = false
+		cad.walk_tick_ms = now_ms - int(cad.walk_interval_ms) - 1
+		# A freshly stamped wait tick would immediately re-lock the gate
+		# (now - wait_tick <= wait interval), so park it in the past.
+		cad.walk_wait_tick_ms = 0
+		cad.last_evaluated_ms = now_ms - 1
+		enemy._source176_decision_now_ms = -1
+		await get_tree().physics_frame
+		# The settle loop's internal decision may consume and rewrite the walk
+		# phase inside the awaited frame; stamp the final phase immediately
+		# before the admission tick so the gate sees a fully elapsed interval.
+		cad.walk_tick_ms = Time.get_ticks_msec() - int(cad.walk_interval_ms) - 1
+		cad.last_evaluated_ms = Time.get_ticks_msec() - 1
+		cad.walk_wait_locked = false
+		enemy._source176_decision_now_ms = -1
 		enemy._physics_process(1.0 / 60.0)
 		var record: Dictionary = enemy._last_hc_release_record
 		var expected_serial := first_serial + round_index + 1
@@ -139,7 +169,7 @@ func _run() -> void:
 	await get_tree().process_frame
 
 	for monster_id: int in [238, 239, 76, 24]:
-		var enemy := _spawn(player, monster_id, 1.2)
+		var enemy := _spawn(player, monster_id, Vector2(0.95, 0.95))
 		await get_tree().process_frame
 		enemy.target = player
 		enemy._refresh_target_focus()
@@ -147,7 +177,7 @@ func _run() -> void:
 			enemy.combat_enabled and not enemy.has_meta("body_policy_rejected"),
 			"fixture: identity %d must be a combat-enabled member" % monster_id,
 		)
-		_admit_rounds(enemy, player, monster_id)
+		await _admit_rounds(enemy, player, monster_id)
 		enemy.queue_free()
 
 	player.queue_free()

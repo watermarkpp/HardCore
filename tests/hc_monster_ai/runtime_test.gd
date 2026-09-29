@@ -70,7 +70,9 @@ func ready_cadence(actor: EnemyActor) -> void:
 	var now:=Time.get_ticks_msec()
 	cadence.walk_wait_locked=false
 	cadence.walk_tick_ms=now-cadence.walk_interval_ms-1
-	cadence.walk_wait_tick_ms=now
+	# A freshly stamped wait tick would immediately re-lock the gate, so park
+	# it in the past (same wall-ms phase discipline as walk_tick_ms).
+	cadence.walk_wait_tick_ms=0
 	cadence.last_evaluated_ms=now-1
 
 func _ready() -> void:
