@@ -58,7 +58,7 @@ func _test_static_predicate() -> void:
 	_check(not Source176Melee.continuous_adjacent(Vector2(1.2, 0.0)), "box: (1.2,0) outside")
 	_check(not Source176Melee.continuous_adjacent(Vector2(1.0, 1.05)), "box: (1,1.05) outside")
 	_check(
-		Source176Melee.broadphase_radius_gu() >= Source176Melee.continuous_adjacent(Vector2(1, 1)) and Source176Melee.broadphase_radius_gu() > sqrt(2.0) - 0.001,
+		Source176Melee.broadphase_radius_gu() > sqrt(2.0) - 0.001,
 		"box: broadphase covers the corner"
 	)
 
