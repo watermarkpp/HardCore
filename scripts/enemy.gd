@@ -434,6 +434,16 @@ var _attack_action_duration_s := 0.0
 var _attack_action_source_life := -1
 var _attack_action_generation := -1
 var _attack_action_active := false
+# source176 Task 2 (docs/02 D2): per-tick source decision permission cache.
+# One cadence.evaluate per logical event (evaluate itself refuses a repeated
+# same-millisecond grant); the tick's melee/pursue choice shares the cached
+# decision. The serial counts source permissions, not animation segments.
+# The cache reads exactly the wall-millisecond domain the M01A cadence
+# authority consumes - no scaled delta is mixed in anywhere.
+var _source176_decision_serial: int = 0
+var _source176_decision_now_ms: int = -1
+var _source176_decision_granted: bool = false
+var _source_committed_step_serial: int = -1
 # R4 T3: body admission resolves once; the spawn factory may precheck it
 # before the node ever enters the tree or the world registries.
 var _body_admission_resolved := false
@@ -1824,6 +1834,10 @@ func _begin_autonomous_step_without_cadence(
 	# R1.3: a genuinely new committed step begins here (single production
 	# assignment point of _movement_step_active). Pure observation order.
 	_movement_step_epoch += 1
+	# source176 Task 2 (docs/02 D2): bind the committed step to the source
+	# decision serial that started it (diagnostic bookkeeping only; pursuit
+	# session continuations keep the serial of their originating permission).
+	_source_committed_step_serial = _source176_decision_serial
 	_movement_step_active = true
 	var step_direction_ground := legs[0] - current_ground_gu
 	# Navigation owns the final waypoint; locomotion owns the legal eight-way legs.
@@ -8613,6 +8627,31 @@ func _hc_finalize_boss_facing() -> void:
 	facing = _screen_facing_for_ground_direction(aim_delta)
 
 
+## source176 Task 2 (docs/02 D2/D3): evaluate the source decision gate once
+## per logical tick and cache the result for this tick's attack/pursue
+## choice. evaluate() dedupes the same timestamp, so a permission can be
+## consumed at most once per millisecond; permitted idle/pursue ticks still
+## refresh the cadence phase (source Run refreshes WalkTick even when the
+## monster only stands or walks), which keeps later magic postponements on
+## a fresh source phase instead of a stale one.
+func _source176_take_tick_decision() -> bool:
+	var now_ms := Time.get_ticks_msec()
+	if _source176_decision_now_ms == now_ms:
+		return _source176_decision_granted
+	var result: Dictionary = _movement_cadence.evaluate(now_ms)
+	if bool(result.get("authority_contract_violation", false)):
+		_movement_authority_failed_closed = true
+		velocity = Vector2.ZERO
+		_source176_decision_now_ms = now_ms
+		_source176_decision_granted = false
+		return false
+	_source176_decision_now_ms = now_ms
+	_source176_decision_granted = bool(result.get("granted", false))
+	if _source176_decision_granted:
+		_source176_decision_serial += 1
+	return _source176_decision_granted
+
+
 func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	if visual != null:
 		visual.hc_m30_begin_melee_tick()
@@ -8666,7 +8705,30 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		velocity = Vector2.ZERO
 		_hc_last_reason = "ATTACK_POSE_COMMIT"
 		return
-	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and _hc_try_start(target):
+	# source176 Task 2 (docs/02 D1/D2): ordinary melee commits only through
+	# the source decision gate. An in-zone target with a running cooldown
+	# holds position (COOLDOWN_HOLD) instead of continuing to walk the player
+	# centre down or re-seeking stations every frame; a ready cooldown still
+	# waits for the permission (SOURCE_DECISION_WAIT). Special contact
+	# deliveries (named kinds) keep their previous immediate commit until
+	# their own source identity is verified.
+	var source176_ordinary := str(attack_delivery_rule.get("kind", "")) == ""
+	if (
+		source176_ordinary
+		and distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU
+	):
+		var source176_decision_granted := _source176_take_tick_decision()
+		if _attack_timer > 0.0:
+			velocity = Vector2.ZERO
+			_hc_last_reason = "COOLDOWN_HOLD"
+			return
+		if not source176_decision_granted:
+			velocity = Vector2.ZERO
+			_hc_last_reason = "SOURCE_DECISION_WAIT"
+			return
+		if _hc_try_start(target):
+			return
+	if distance <= HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU and str(attack_delivery_rule.get("kind", "")) != "" and _hc_try_start(target):
 		return
 	_hc_refresh_observation()
 	var current := spatial_index_position()
@@ -8728,7 +8790,15 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 	if current.is_finite() and after.is_finite() and visual != null:
 		visual.hc_m30_accept_ground_motion(current.distance_to(after))
 	# Actual, post-movement endpoints; no extra movement budget in this tick.
-	_hc_try_start(target)
+	# source176 Task 2: an ordinary melee arrival commits the attack only on
+	# its own source decision permission - the step's starting permission does
+	# not carry over (docs/02 D2). Special contact deliveries keep the
+	# previous immediate endpoint commit.
+	if source176_ordinary:
+		if _source176_take_tick_decision():
+			_hc_try_start(target)
+	else:
+		_hc_try_start(target)
 
 func _hc_step_can_end() -> bool:
 	if not _hc_standard_melee() or not is_instance_valid(target) or target.is_queued_for_deletion():

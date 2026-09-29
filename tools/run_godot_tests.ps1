@@ -110,6 +110,7 @@ $Suites = @{
 		'tests/monster_struck_visual_queue_test.tscn',
 		'tests/monster_struck_runtime_test.tscn',
 		'tests/source176_delivery_gate_test.tscn',
+		'tests/source176_decision_gate_test.tscn',
 		'tests/monster_dormant_damage_wake_test.tscn',
 		'tests/monster_neighbor_step_policy_test.tscn',
 		'tests/monster_cadence_runtime_integration_test.tscn',
