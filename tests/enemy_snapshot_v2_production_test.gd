@@ -25,9 +25,10 @@ func _run() -> void:
 	var enemy_position: Vector2 = game._canonical_ground_gu_to_screen_px(
 		FIXTURE_ENEMY_GROUND_POSITION
 	)
-	# Snapshot consumers must be reached through the frozen 1.5GU admission
-	# geometry. Setting a compatibility source range cannot widen that gate.
-	var target_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(1.499, 0.0)
+	# Snapshot consumers must be reached through the source176 admission
+	# geometry (docs/02 E: the L-inf box), so the victim stands 0.98 GU away
+	# instead of the legacy 1.499 circle point.
+	var target_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(0.98, 0.0)
 	var target_position: Vector2 = game._canonical_ground_gu_to_screen_px(target_ground)
 	assert(enemy_position.is_finite() and target_position.is_finite(), "enemy snapshot fixture needs a finite map projection")
 	assert(
