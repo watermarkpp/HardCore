@@ -11,7 +11,11 @@ extends Node2D
 
 const RuntimeDiagnosticsScript := preload("res://scripts/runtime_diagnostics.gd")
 
+const EXPECTED_CHECKS := 16
+const EXPECTED_CASES := 4
 var _checks := 0
+var _completed_cases := 0
+var _failures: Array[String] = []
 
 
 class DecisionEnemyFixture:
@@ -26,19 +30,34 @@ func _ready() -> void:
 
 
 func _check(condition: bool, label: String) -> void:
-	assert(condition, "SOURCE176_DECISION_GATE: " + label)
 	_checks += 1
+	if not condition:
+		_failures.append(label)
+		push_error("SOURCE176_DECISION_GATE: " + label)
 
 
 func _run() -> void:
+	_checks = 0
+	_completed_cases = 0
+	_failures.clear()
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	RuntimeDiagnosticsScript.set_device_lab_performance_enabled(true)
-	_test_cache_dedupes_same_millisecond()
-	_test_grant_consumes_walk_tick_once()
-	_test_wait_does_not_consume()
-	_test_violation_fails_closed()
-	print("SOURCE176_DECISION_GATE_PASS checks=%d" % _checks)
+	await _test_cache_dedupes_same_millisecond()
+	_completed_cases += 1
+	await _test_grant_consumes_walk_tick_once()
+	_completed_cases += 1
+	await _test_wait_does_not_consume()
+	_completed_cases += 1
+	await _test_violation_fails_closed()
+	_completed_cases += 1
+	var complete := _checks == EXPECTED_CHECKS and _completed_cases == EXPECTED_CASES
+	if not complete or not _failures.is_empty():
+		print("SOURCE176_DECISION_GATE_FAIL checks=%d/%d cases=%d/%d failures=%s" % [
+			_checks, EXPECTED_CHECKS, _completed_cases, EXPECTED_CASES, str(_failures)])
+		get_tree().quit(1)
+		return
+	print("SOURCE176_DECISION_GATE_PASS checks=%d cases=%d failures=0" % [_checks, _completed_cases])
 	get_tree().quit(0)
 
 
