@@ -52,7 +52,7 @@ func _run() -> void:
 		enemy._hc_next_observation_ms = Time.get_ticks_msec() + 1000
 		var started := enemy._begin_autonomous_step_without_cadence(Vector2(6, 1.8), 1.0, false, &"pursuit", player)
 		if not started:
-			print("STEP_NOT_STARTED mid=%d reason=%s origin=%s context=%s observed=%s known=%s" % [mid, enemy._hc_last_reason, origin, Terrain.context_valid(context, MAP_ID), enemy._hc_observed, enemy._hc_known_ground])
+			print("STEP_NOT_STARTED mid=%d reason=%s origin=%s observed=%s known=%s" % [mid, enemy._hc_last_reason, origin, enemy._hc_observed, enemy._hc_known_ground])
 		if started:
 			var delta := _to_screen(enemy._movement_step_target_ground_gu) - _to_screen(enemy._movement_step_start_ground_gu)
 			checks += 1

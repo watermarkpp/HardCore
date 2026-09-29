@@ -9355,11 +9355,35 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		var intended := Vector2(cell + direct) + Vector2(0.5, 0.5)
 		if _source176_ordinary_melee():
 			# docs/02 F + E1(h): head along the next monotone eight-way leg of
-			# the stable goal. Never radial-project back onto the legacy
-			# circle, and never cut an arbitrary-angle 1-GU endpoint first.
+			# the stable goal. The full leg is validated as one real segment by
+			# _begin_autonomous_step_without_cadence via _hc_step_override;
+			# here the neighbor contract still requires an ADJACENT cell step,
+			# so only the leg's first-segment direction picks the cell.
 			var planned_leg := SourceStepPlan.next_leg(current, anchor)
+			var leg_adopted := false
 			if planned_leg.is_finite():
-				intended = planned_leg
+				var leg_neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
+					planned_leg - current
+				)
+				if leg_neighbor != Vector2i.ZERO:
+					var leg_intended := Vector2(cell + leg_neighbor) + Vector2(0.5, 0.5)
+					var leg_next := MonsterNeighborStepPolicyScript.temporary_cell(leg_intended)
+					# Adopt the monotone leg only when its first cell is
+					# statically legal.
+					if (
+						_hc_polygon_neighbor_clear(current, leg_intended, cell, leg_next)
+						and not _hc_edge_blocked(cell, leg_next)
+						and _hc_point_walkable(leg_intended)
+					):
+						_hc_step_override = planned_leg
+						intended = leg_intended
+						leg_adopted = true
+			if not leg_adopted:
+				# docs/02 F sanctioned fallback: when the monotone leg's first
+				# cell is blocked, the pre-existing 1-GU anchor cut keeps the
+				# real step starting on this tick (legacy behaviour kept).
+				var fallback_direction := anchor - current
+				intended = current + fallback_direction.normalized() * minf(1.0, fallback_direction.length())
 		else:
 			if _terrain_navigation_context.has("poly_index"):
 				var hc_direction := anchor - current
@@ -9435,12 +9459,29 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 		var point := _hc_route[_hc_route_index]
 		if _terrain_navigation_context.has("poly_index"):
 			if _source176_ordinary_melee():
-				# docs/02 F: take the next monotone eight-way leg toward the
-				# real route vertex; do not cut an arbitrary-angle 1-GU
-				# endpoint for eight_way_path to re-split.
+				# docs/02 F: head along the next monotone eight-way leg toward
+				# the real route vertex. The leg rides _hc_step_override for
+				# whole-segment validation; the cell step keeps the adjacent
+				# neighbor contract using the leg's first-segment direction.
 				var route_leg := SourceStepPlan.next_leg(current, point)
 				if route_leg.is_finite():
-					point = route_leg
+					var route_neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
+						route_leg - current
+					)
+					var route_intended := Vector2.ZERO
+					if route_neighbor != Vector2i.ZERO:
+						route_intended = Vector2(cell + route_neighbor) + Vector2(0.5, 0.5)
+						var route_next := MonsterNeighborStepPolicyScript.temporary_cell(route_intended)
+						if (
+							_hc_polygon_neighbor_clear(current, route_intended, cell, route_next)
+							and not _hc_edge_blocked(cell, route_next)
+							and _hc_point_walkable(route_intended)
+						):
+							_hc_step_override = route_leg
+							point = route_intended
+					if point == _hc_route[_hc_route_index]:
+						var fallback_delta := point - current
+						point = current + fallback_delta.normalized() * minf(1.0, fallback_delta.length())
 			else:
 				var hc_delta := point - current
 				point = current + hc_delta.normalized() * minf(1.0, hc_delta.length())
