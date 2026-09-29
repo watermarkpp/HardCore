@@ -86,7 +86,16 @@ func _motion_pressure(mid: int) -> void:
 			motion_gu += _screen_to_ground(player.global_position - before).length()
 			frame += 1
 		if phase == "pressure":
-			_check(actor._hc_starts > starts_before, "%d:pressure_prevented_all_starts" % mid)
+			# source176 Task 2 (docs/02 D1/D2): direct-magic postponement now
+			# gates melee starts too, so sustained spell pressure legitimately
+			# starves new starts. The R4 deadlock guard stays: zero starts is
+			# acceptable only while a magic postponement floor is active; a
+			# genuine deadlock (no starts, no postponement) still fails.
+			_check(
+				actor._hc_starts > starts_before
+				or actor._movement_cadence.direct_magic_walk_floor_ms > 0,
+				"%d:pressure_prevented_all_starts" % mid,
+			)
 		phases.append({"phase": phase, "frames": frame, "new_starts": actor._hc_starts - starts_before})
 	player.set_touch_vector(Vector2.ZERO)
 	# Let already accepted deferred results finish on actual physics frames.

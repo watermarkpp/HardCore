@@ -99,6 +99,16 @@ func _run() -> void:
 
 	var hp_before := player.current_hp
 	boss._physics_process(0.01)
+	# source176 Task 2 (docs/02 D1/D2): melee commits only on a source decision
+	# permission and the cadence phase anchors at setup time, so the very first
+	# tick holds position instead of committing the attack. Advance the phase
+	# deterministically, then the committed hit must still wait for its frame.
+	assert(boss._pending_attack_time < 0.0 and player.current_hp == hp_before, "尸王首个来源许可前提交了攻击")
+	# Advance one real frame first: the decision cache dedupes by wall
+	# millisecond, so the next manual tick must happen in a later one.
+	await get_tree().physics_frame
+	boss._movement_cadence.walk_tick_ms = Time.get_ticks_msec() - int(boss._movement_cadence.walk_interval_ms) - 1
+	boss._physics_process(0.01)
 	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "尸王伤害没有等待命中帧")
 	player.global_position = (
 		boss.global_position
