@@ -5067,17 +5067,28 @@ func _emit_monster_special_delivery_descriptor(release_record: Dictionary) -> vo
 	host.add_child(effect)
 
 
+func _canonical_attack_frame_count(minimum: int) -> int:
+	# R2/R06: the projectile windup release must land on the same authored
+	# frame cold and hot. The identity appearance profile is the offline
+	# canonical source; the live visual sheet must never move the release
+	# time (and no blanket duration extension is involved).
+	var appearance := MonsterIdentityScript.appearance_profile(monster_id)
+	var actions: Variant = appearance.get("actions", {})
+	if actions is Dictionary:
+		var attack: Variant = (actions as Dictionary).get("attack", {})
+		if attack is Dictionary:
+			var count := int((attack as Dictionary).get("framesPerDirection", 0))
+			if count > 0:
+				return maxi(minimum, count)
+	return maxi(minimum, 6)
+
+
 func _queue_physical_projectile(hit_target: Node2D, dealt_damage: int) -> void:
 	# The source client releases the dual axe on relative frame 2 and arrows
 	# on relative frame 4. The action clock owns the windup; flight begins only
 	# when the release frame is reached, with aim sampled at that moment.
 	var release_frame := 2 if monster_id == 50 else 4
-	var attack_frame_count := 6
-	if is_instance_valid(visual):
-		attack_frame_count = maxi(
-			release_frame + 1,
-			MonsterAnimationPolicy.frame_count(visual.active_resources, &"attack"),
-		)
+	var attack_frame_count := _canonical_attack_frame_count(release_frame + 1)
 	_pending_attack_time = maxf(
 		0.001,
 		_attack_animation_duration * float(release_frame) / float(attack_frame_count),
@@ -5098,12 +5109,7 @@ func _queue_guard_projectile(
 	parent_release: Variant,
 ) -> void:
 	var release_frame := 4
-	var attack_frame_count := 6
-	if is_instance_valid(visual):
-		attack_frame_count = maxi(
-			release_frame + 1,
-			MonsterAnimationPolicy.frame_count(visual.active_resources, &"attack"),
-		)
+	var attack_frame_count := _canonical_attack_frame_count(release_frame + 1)
 	_pending_attack_time = maxf(
 		0.001,
 		_attack_animation_duration * float(release_frame) / float(attack_frame_count),
