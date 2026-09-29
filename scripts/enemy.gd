@@ -5496,6 +5496,10 @@ func _deal_melee_hit(
 	if not combat_enabled or not is_instance_valid(hit_target) or not hit_target.has_method("take_damage") or _target_is_safe_player(hit_target):
 		return
 	var target_radius_gu := _target_combat_radius_gu(hit_target)
+	var center_reach_gu := (
+		HCPolicy.START_GU if _hc_standard_melee()
+		else maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
+	)
 	var source_ground_gu := _screen_position_px_to_ground_position_gu(global_position)
 	var target_ground_gu := _screen_position_px_to_ground_position_gu(
 		hit_target.global_position
@@ -5505,26 +5509,21 @@ func _deal_melee_hit(
 		# as the start geometry, extended only by the separately-named
 		# delayed-hit tolerance (0.25 GU project-compat behaviour, listed in
 		# the diff table). The legacy 1.5-GU circle stays for special
-		# deliveries.
+		# deliveries; the centre reach below only feeds the snapshot shape.
 		if not _source176_melee_reach_ok(
 			target_ground_gu - source_ground_gu,
 			maxf(0.0, center_tolerance_gu),
 		):
 			return
-	else:
-		var center_reach_gu := (
-			HCPolicy.START_GU if _hc_standard_melee()
-			else maxf(attack_range_gu, _contact_distance_gu_to_target(hit_target))
+	elif (
+		source_ground_gu.distance_to(target_ground_gu)
+		> (
+			center_reach_gu
+			+ maxf(0.0, center_tolerance_gu)
+			+ GroundUnitSpace.EPSILON_GU
 		)
-		if (
-			source_ground_gu.distance_to(target_ground_gu)
-			> (
-				center_reach_gu
-				+ maxf(0.0, center_tolerance_gu)
-				+ GroundUnitSpace.EPSILON_GU
-			)
-		):
-			return
+	):
+		return
 	if not _world_attack_path_is_clear(
 		source_ground_gu,
 		target_ground_gu,
@@ -8875,12 +8874,12 @@ func _hc_tick_melee(delta: float, physics_delta: float) -> void:
 		if source176_in_zone
 		else "OUT_OF_RANGE"
 	)
+	var preferred := _hc_preferred(target)
 	if not source176_ordinary:
 		# Special deliveries keep the legacy preferred-gap approach target.
 		# Ordinary melee owns its zone decision through the L-inf predicate
 		# and the Task 2 decision gate (docs/02 E1): no contact-gap approach
 		# target and no body-size deadlock.
-		var preferred := _hc_preferred(target)
 		if preferred > HCPolicy.START_GU + GroundUnitSpace.EPSILON_GU:
 			_hc_last_reason = "BODY_REQUIRES_EXPLICIT_EXCEPTION"
 			velocity = Vector2.ZERO
