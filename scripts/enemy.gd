@@ -9386,7 +9386,8 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 					planned_leg - current
 				)
 				if leg_neighbor != Vector2i.ZERO:
-					var leg_intended := Vector2(cell + leg_neighbor) + Vector2(0.5, 0.5)
+					# R2: validate and commit the SAME exact source leg, never a cell centre.
+					var leg_intended := planned_leg
 					var leg_next := MonsterNeighborStepPolicyScript.temporary_cell(leg_intended)
 					# Adopt the monotone leg only when its first cell is
 					# statically legal.
@@ -9484,13 +9485,14 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 				# whole-segment validation; the cell step keeps the adjacent
 				# neighbor contract using the leg's first-segment direction.
 				var route_leg := SourceStepPlan.next_leg(current, point)
+				var route_leg_adopted := false
 				if route_leg.is_finite():
 					var route_neighbor := MonsterNeighborStepPolicyScript.neighbor_for_desired_ground_direction(
 						route_leg - current
 					)
 					var route_intended := Vector2.ZERO
 					if route_neighbor != Vector2i.ZERO:
-						route_intended = Vector2(cell + route_neighbor) + Vector2(0.5, 0.5)
+						route_intended = route_leg
 						var route_next := MonsterNeighborStepPolicyScript.temporary_cell(route_intended)
 						if (
 							_hc_polygon_neighbor_clear(current, route_intended, cell, route_next)
@@ -9499,7 +9501,9 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 						):
 							_hc_step_override = route_leg
 							point = route_intended
-					if point == _hc_route[_hc_route_index]:
+							route_leg_adopted = true
+					# Reaching the real route vertex is success, not a fallback trigger.
+					if not route_leg_adopted:
 						var fallback_delta := point - current
 						point = current + fallback_delta.normalized() * minf(1.0, fallback_delta.length())
 			else:
