@@ -8463,7 +8463,15 @@ func hc_package_policy_snapshot() -> Dictionary:
 
 func _hc_preferred(hit_target: Node2D) -> float:
 	# The existing contact gap is retained. It is NOT added to attack reach.
-	return HCPolicy.preferred(_contact_distance_gu_to_target(hit_target))
+	var preferred := HCPolicy.preferred(_contact_distance_gu_to_target(hit_target))
+	# R2/R05: for the ordinary player-melee contact contract the legacy
+	# circular soft-stop (radii + 0.4375) may exceed the 1.0-GU source box,
+	# which would park the actor permanently outside its own reach test.
+	# The stop point is therefore capped at the source box edge; the legacy
+	# gap keeps its separate spawn/physics-separation role.
+	if hit_target is PlayerCharacter and _uses_player_melee_contact_contract(hit_target):
+		preferred = minf(preferred, Source176Melee.HALF_EXTENT_GU)
+	return preferred
 
 func _hc_target_usable(hit_target: Node2D) -> bool:
 	if not _target_candidate_is_live(hit_target):
