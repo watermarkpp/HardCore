@@ -119,7 +119,7 @@ func _real_pause_and_late_draw() -> void:
 	Observer.reset()
 	player.set_touch_vector(Vector2.ZERO)
 	player.global_position = _ground_to_screen(CENTER)
-	var actor := _spawn(24, CENTER + Vector2(1.4, 0.0))
+	var actor := _spawn(24, CENTER + Vector2(0.98, 0.0))
 	actor.process_mode = Node.PROCESS_MODE_PAUSABLE
 	actor.visual.set_process(false)
 	actor.set_physics_process(true)

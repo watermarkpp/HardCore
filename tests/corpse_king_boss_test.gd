@@ -42,7 +42,7 @@ func _run() -> void:
 	)
 	player.global_position = (
 		open_field_center_px
-		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 1.5)
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 0.98)
 	)
 	var boss := EnemyActor.new()
 	boss.global_position = open_field_center_px
@@ -112,7 +112,7 @@ func _run() -> void:
 	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "尸王伤害没有等待命中帧")
 	player.global_position = (
 		boss.global_position
-		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN * 1.5)
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN * 0.98)
 	)
 	boss._physics_process(0.12)
 	var expected_attack_facing_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN).normalized()

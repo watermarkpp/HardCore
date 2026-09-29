@@ -116,6 +116,7 @@ func _run() -> void:
 	ranged_probe.free()
 
 	var final_distances_gu: Array[float] = []
+	var final_extents_gu: Array[float] = []
 	var enemies: Array[EnemyActor] = []
 	var settled_frame_counts: Array[int] = []
 	for direction_index in range(8):
@@ -196,6 +197,13 @@ func _run() -> void:
 			player.global_position - enemy.global_position
 		)
 		final_distances_gu.append(final_delta_ground_gu.length())
+		# source176 Task 3 (docs/02 E): the ordinary stop contract is the L-inf
+		# box, so the source-faithful isotropy measure is the box extent, not
+		# the Euclidean length (the box is direction-dependent in Euclidean
+		# terms by design: doc 01 §4 stop-distance dwell).
+		final_extents_gu.append(
+			maxf(absf(final_delta_ground_gu.x), absf(final_delta_ground_gu.y))
+		)
 		var hp_before := player.current_hp
 		enemy._deal_melee_hit(player, 5)
 		assert(player.current_hp < hp_before, "direction %d footprint contact did not deal damage" % direction_index)
@@ -224,11 +232,11 @@ func _run() -> void:
 		enemy.queue_free()
 	await get_tree().physics_frame
 
-	var minimum: float = float(final_distances_gu.min())
-	var maximum: float = float(final_distances_gu.max())
+	var minimum: float = float(final_extents_gu.min())
+	var maximum: float = float(final_extents_gu.max())
 	assert(
 		maximum - minimum <= 0.025,
-		"GU melee contact remains direction dependent: %s" % [final_distances_gu],
+		"GU melee contact L-inf extent is direction dependent: %s" % [final_extents_gu],
 	)
 
 	player.queue_free()
