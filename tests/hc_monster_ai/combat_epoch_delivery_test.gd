@@ -240,10 +240,21 @@ func _test_start_gate() -> void:
 
 
 func _test_melee_epoch() -> void:
-	var actor := make_enemy(Vector2(21.49, 20.0))
+	# docs/02 E: the ordinary start gate is the L-inf box (0.98 GU here).
+	var actor := make_enemy(Vector2(20.98, 20.0))
 	actor.attack_range_gu = 3.0
 	actor._attack_hit_delay = 0.05
 	actor._attack_timer = 0.0
+	# docs/02 M01A: rewind the wall-ms decision phase so the single fixture
+	# tick sees a fully elapsed walk interval (like the production cadence
+	# after a real pause); a fresh gate would legitimately WAIT this tick.
+	var e01_cad = actor._movement_cadence
+	var e01_now := Time.get_ticks_msec()
+	e01_cad.walk_wait_locked = false
+	e01_cad.walk_tick_ms = e01_now - int(e01_cad.walk_interval_ms) - 1
+	e01_cad.walk_wait_tick_ms = 0
+	e01_cad.last_evaluated_ms = e01_now - 1
+	actor._source176_decision_now_ms = -1
 	actor._physics_process_internal(1.0 / 60.0)
 	check(
 		str(actor._pending_attack_release_record.get("kind", "")) == "hc_standard_melee",

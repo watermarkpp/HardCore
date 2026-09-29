@@ -44,7 +44,10 @@ func _body_pair(mid: int, pet_kind: String, multi: bool) -> void:
 	# Shared target discovery has a production 250ms refresh period. Wait for
 	# real time rather than clearing that cache for the fixture.
 	await get_tree().create_timer(0.3).timeout
-	var actor := _spawn(mid, center + Vector2(-1.5 if multi else 1.46, 0))
+	# docs/02 E: the admission gate is the L-inf box, so the single-pet body
+	# pair stands at 0.98 GU from the pet instead of the legacy 1.46 circle
+	# point.
+	var actor := _spawn(mid, center + Vector2(-1.5 if multi else 0.98, 0))
 	var target: Node2D = player if multi else pet
 	var radius := pet.combat_radius_gu
 	var shape: CollisionShape2D = pet.get_node_or_null("CollisionShape2D")
@@ -82,7 +85,9 @@ func _body_pair(mid: int, pet_kind: String, multi: bool) -> void:
 func _admitted_lifecycle(change: String) -> void:
 	Observer.reset()
 	_make_player(CENTER)
-	var actor := _spawn(238, CENTER + Vector2(1.4, 0))
+	# docs/02 E: the admission gate is the L-inf box; the diagonal offset keeps
+	# 238 inside the box while staying outside the spawn grounding band.
+	var actor := _spawn(238, CENTER + Vector2(0.95, 0.95))
 	var mutation_count := [0]
 	actor.test_attack_admission_hook = func(_record: Dictionary) -> void:
 		mutation_count[0] += 1

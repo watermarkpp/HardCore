@@ -53,7 +53,9 @@ func _run() -> void:
 	)
 	enemy.configure_terrain_navigation_context(OpenTerrainFixture.build(MAP_ID))
 	enemy.configure_spatial_index(_index, serial)
-	var ground_position_gu := Vector2(16.5, 16.5) + Vector2(0, 1.499)
+	# docs/02 E: the admission gate is the L-inf box; the diagonal offset stays
+	# inside the box while remaining outside the spawn grounding band.
+	var ground_position_gu := Vector2(16.5, 16.5) + Vector2(0.95, 0.95)
 	enemy.set_combat_position(_ground_to_screen(ground_position_gu), &"r3_parent_identity_spawn")
 	add_child(enemy)
 	enemy.set_physics_process(false)
