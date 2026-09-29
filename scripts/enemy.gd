@@ -9429,8 +9429,11 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 					planned_leg - current
 				)
 				if leg_neighbor != Vector2i.ZERO:
-					# R2: validate and commit the SAME exact source leg, never a cell centre.
-					var leg_intended := planned_leg
+					# R2: validate on the canonical neighbour cell step (the
+					# cell-centre sampling the polygon contract was built on),
+					# then commit the SAME exact source leg endpoint the source
+					# plan produced — equality with a route vertex means ADOPTED.
+					var leg_intended := Vector2(cell + leg_neighbor) + Vector2(0.5, 0.5)
 					var leg_next := MonsterNeighborStepPolicyScript.temporary_cell(leg_intended)
 					# Adopt the monotone leg only when its first cell is
 					# statically legal.
@@ -9440,7 +9443,7 @@ func _hc_neighbor(current: Vector2, hit_target: Node2D, direct: Vector2i) -> Vec
 						and _hc_point_walkable(leg_intended)
 					):
 						_hc_step_override = planned_leg
-						intended = leg_intended
+						intended = planned_leg
 						leg_adopted = true
 			if not leg_adopted:
 				# docs/02 F sanctioned fallback: when the monotone leg's first
