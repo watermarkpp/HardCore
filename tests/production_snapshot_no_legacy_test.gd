@@ -37,7 +37,9 @@ func _run() -> void:
 	var enemy_position: Vector2 = game._canonical_ground_gu_to_screen_px(
 		FIXTURE_ENEMY_GROUND_POSITION
 	)
-	var player_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(1.499, 0.0)
+	# docs/02 E: the ordinary melee hit gate is the L-inf box, so the victim
+	# stands 0.98 GU from the enemy instead of the legacy 1.499 circle point.
+	var player_ground: Vector2 = FIXTURE_ENEMY_GROUND_POSITION + Vector2(0.98, 0.0)
 	var player_position: Vector2 = game._canonical_ground_gu_to_screen_px(player_ground)
 	assert(enemy_position.is_finite() and player_position.is_finite(), "no-legacy snapshot fixture needs a finite map projection")
 	assert(
