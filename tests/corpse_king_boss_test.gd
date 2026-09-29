@@ -42,7 +42,7 @@ func _run() -> void:
 	)
 	player.global_position = (
 		open_field_center_px
-		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 0.98)
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 0.5)
 	)
 	var boss := EnemyActor.new()
 	boss.global_position = open_field_center_px
@@ -98,6 +98,13 @@ func _run() -> void:
 	assert(is_equal_approx(boss._attack_interval, 2.8) and is_equal_approx(boss._attack_animation_duration, 0.72) and is_equal_approx(boss._attack_hit_delay, 0.36), "尸王速度或命中帧错误")
 
 	var hp_before := player.current_hp
+	# Anchor the player relative to the boss's settled (spawn-grounded)
+	# position: the large body may be pushed by spawn grounding, so a
+	# precomputed screen offset from the fixture centre is not trustworthy.
+	player.global_position = (
+		boss.global_position
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.RIGHT * 0.6)
+	)
 	boss._physics_process(0.01)
 	# source176 Task 2 (docs/02 D1/D2): melee commits only on a source decision
 	# permission and the cadence phase anchors at setup time, so the very first
@@ -107,12 +114,19 @@ func _run() -> void:
 	# Advance one real frame first: the decision cache dedupes by wall
 	# millisecond, so the next manual tick must happen in a later one.
 	await get_tree().physics_frame
+	# evaluate() dedupes on the monotonic last_evaluated_ms; headless frames
+	# run faster than real milliseconds, so wait for a fresh wall millisecond
+	# before the next logical tick.
+	while Time.get_ticks_msec() <= int(boss._movement_cadence.last_evaluated_ms):
+		await get_tree().process_frame
+	# The decision cache dedupes by wall millisecond as well.
+	boss._source176_decision_now_ms = -1
 	boss._movement_cadence.walk_tick_ms = Time.get_ticks_msec() - int(boss._movement_cadence.walk_interval_ms) - 1
 	boss._physics_process(0.01)
 	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "尸王伤害没有等待命中帧")
 	player.global_position = (
 		boss.global_position
-		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN * 0.98)
+		+ GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN * 0.5)
 	)
 	boss._physics_process(0.12)
 	var expected_attack_facing_px := GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(Vector2.DOWN).normalized()

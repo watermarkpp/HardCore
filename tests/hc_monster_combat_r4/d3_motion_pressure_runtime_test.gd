@@ -123,6 +123,19 @@ func _real_pause_and_late_draw() -> void:
 	actor.process_mode = Node.PROCESS_MODE_PAUSABLE
 	actor.visual.set_process(false)
 	actor.set_physics_process(true)
+	# Let spawn grounding settle, then anchor the player relative to the
+	# actor's real position so the first decision grant finds an adjacent
+	# target (docs/02 E L-inf box).
+	await get_tree().physics_frame
+	player.global_position = actor.global_position + (
+		_ground_to_screen(CENTER + Vector2(0.6, 0.0)) - _ground_to_screen(CENTER)
+	)
+	# Task 2 (docs/02 D): the first real admission now waits out the walk
+	# interval, which exceeds this scenario's real-time window. Anchor the
+	# cadence phase at an elapsed interval so the next tick can grant.
+	actor._movement_cadence.walk_tick_ms = (
+		Time.get_ticks_msec() - int(actor._movement_cadence.walk_interval_ms) - 1
+	)
 	var deadline := Time.get_ticks_msec() + 1500
 	while actor._hc_starts == 0 and Time.get_ticks_msec() < deadline:
 		await get_tree().physics_frame
