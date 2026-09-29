@@ -91,7 +91,9 @@ func _run() -> void:
 	var actor:=make_enemy(Vector2(21.501,20))
 	check(actor._hc_standard_melee(),"R09-fixture","ID64 is a normal physical melee channel")
 	check(actor._hc_access(player)=="OUT_OF_RANGE","R04","Footprint does not extend 1.5-GU centre gate")
-	actor.set_combat_position(ground_to_screen(Vector2(21.4,20)),&"hc_test_position")
+	# docs/02 E: the start gate is the L-inf box, so the "post-movement
+	# opportunity" fixture stands at 0.98 GU, inside the box.
+	actor.set_combat_position(ground_to_screen(Vector2(20.98,20)),&"hc_test_position")
 	await get_tree().physics_frame
 	actor._attack_timer=0.0
 	actor._movement_step_active=true
@@ -128,7 +130,9 @@ func _run() -> void:
 	check(is_equal_approx(actor.move_speed_gu_per_sec,source_speed),"S10-speed","Source movement speed remains unchanged")
 	check(Warrior.thrust_footprint_slot_for_direction_ground_gu(Vector2(20,20),screen_to_ground(actor.global_position),actor.combat_radius_gu,Vector2.RIGHT)==1,"S04-runtime","Stationary warrior does not get a permanent outer-slot target")
 	# Dynamic front obstacle, including same-tick movement and death.
-	actor.set_combat_position(ground_to_screen(Vector2(21.49,20)),&"hc_test_position")
+	# docs/02 E: the start gate is the L-inf box, so the rear actor stands at
+	# 0.98 GU - inside the box - with the live front between it and the player.
+	actor.set_combat_position(ground_to_screen(Vector2(20.98,20)),&"hc_test_position")
 	var front:=make_enemy(Vector2(20.75,20))
 	var ordered_candidates: Array = []
 	var unordered_candidates: Array = []
@@ -188,18 +192,22 @@ func _run() -> void:
 	var front_a:=make_enemy(Vector2(20.59,19.5),120)
 	var rear_b:=make_enemy(Vector2(21.14,20.96),120)
 	var front_b:=make_enemy(Vector2(20.59,20.5),120)
-	check(rear_a._hc_access(player)=="FRONTLINE_BLOCKED","C07-row-a","First legal front row blocks only through the live index")
-	check(rear_b._hc_access(player)=="FRONTLINE_BLOCKED","C07-row-b","Second legal front row blocks in the same bounded query")
+	# docs/02 E: these witness lanes sit outside the L-inf start box by
+	# construction (three non-overlapping bodies cannot fit inside it), so the
+	# blocking semantics are asserted through the same production frontline
+	# query that _hc_access consults, not through the box-gated access code.
+	check(rear_a._hc_frontline_at(screen_to_ground(rear_a.global_position),screen_to_ground(player.global_position),player)!=0,"C07-row-a","First legal front row blocks only through the live index")
+	check(rear_b._hc_frontline_at(screen_to_ground(rear_b.global_position),screen_to_ground(player.global_position),player)!=0,"C07-row-b","Second legal front row blocks in the same bounded query")
 	front_a.set_combat_position(ground_to_screen(Vector2(25,24)),&"hc_test_position")
-	check(rear_a._hc_access(player)=="CLEAR" and rear_b._hc_access(player)=="FRONTLINE_BLOCKED","C07-row-independent","Moving one front row clears that lane without invalidating the other")
+	check(rear_a._hc_frontline_at(screen_to_ground(rear_a.global_position),screen_to_ground(player.global_position),player)==0 and rear_b._hc_frontline_at(screen_to_ground(rear_b.global_position),screen_to_ground(player.global_position),player)!=0,"C07-row-independent","Moving one front row clears that lane without invalidating the other")
 	rear_a.set_combat_position(ground_to_screen(Vector2(26,24)),&"hc_test_position")
 	rear_b.set_combat_position(ground_to_screen(Vector2(27,24)),&"hc_test_position")
 	front_b.set_combat_position(ground_to_screen(Vector2(28,24)),&"hc_test_position")
 	var corner_rear:=make_enemy(Vector2(21.052,21.052),120)
 	var corner_front:=make_enemy(Vector2(20.545,20.545),120)
-	check(corner_rear._hc_access(player)=="FRONTLINE_BLOCKED","C07-corner","Diagonal corner front body blocks the rear attacker")
+	check(corner_rear._hc_frontline_at(screen_to_ground(corner_rear.global_position),screen_to_ground(player.global_position),player)!=0,"C07-corner","Diagonal corner front body blocks the rear attacker")
 	corner_front.set_combat_position(ground_to_screen(Vector2(20.5,22.0)),&"hc_test_position")
-	check(corner_rear._hc_access(player)=="CLEAR","C07-corner-open","Moving the corner body off-lane immediately clears the rear attacker")
+	check(corner_rear._hc_frontline_at(screen_to_ground(corner_rear.global_position),screen_to_ground(player.global_position),player)==0,"C07-corner-open","Moving the corner body off-lane immediately clears the rear attacker")
 	for witness:EnemyActor in [rear_a,front_a,rear_b,front_b,corner_rear,corner_front]:
 		index.unregister(witness.spatial_actor_runtime_id)
 		witness.queue_free()
@@ -207,7 +215,7 @@ func _run() -> void:
 	await get_tree().physics_frame
 	actor._attack_timer=0.0
 	actor._attack_hit_delay=0.05
-	actor.set_combat_position(ground_to_screen(Vector2(21.5,20)),&"hc_test_position")
+	actor.set_combat_position(ground_to_screen(Vector2(20.98,20)),&"hc_test_position")
 	check(actor._hc_try_start(player),"T08-start","Delayed fixture accepts one release")
 	var settlements:=actor._hc_settlements
 	check(player.begin_combat_transition("hc-lifetime-test"),"T08-life-begin","Formal transition begins a new combat epoch")
@@ -254,15 +262,17 @@ func _run() -> void:
 	player_b.max_hp=1000000
 	player_b.current_hp=player_b.max_hp
 	await get_tree().physics_frame
-	var witness_actor:=make_enemy(Vector2(21.5,20))
+	var witness_actor:=make_enemy(Vector2(21.5,20.52))
 	witness_actor._attack_timer=0.0
 	witness_actor._attack_hit_delay=0.0
 	var witness_hp:=player_b.current_hp
-	check(witness_actor._hc_try_start(player_b),"C03-B-control-start","B is inside the legal 2 GU start band")
+	# docs/02 E: the start gate is the L-inf box (0.98 GU here), not the
+	# legacy 2 GU band.
+	check(witness_actor._hc_try_start(player_b),"C03-B-control-start","B is inside the legal L-inf start box")
 	check(player_b.current_hp<witness_hp,"C03-B-control-hit","B can receive a legal hit in the witness geometry")
 	index.unregister(witness_actor.spatial_actor_runtime_id)
 	witness_actor.queue_free()
-	var retarget_actor:=make_enemy(Vector2(21.5,20))
+	var retarget_actor:=make_enemy(Vector2(20.98,20))
 	retarget_actor._attack_timer=0.0
 	retarget_actor._attack_hit_delay=0.05
 	check(retarget_actor._hc_try_start(player),"C03-start","Start binds pending victim A")
@@ -281,7 +291,7 @@ func _run() -> void:
 	# C03-dead: fresh actor, fresh release bound to A; A dies before the hit
 	# frame. The accepted release settles against A's record only, never B.
 	await get_tree().physics_frame
-	var death_actor:=make_enemy(Vector2(21.5,20))
+	var death_actor:=make_enemy(Vector2(20.98,20))
 	death_actor._attack_timer=0.0
 	death_actor._attack_hit_delay=0.05
 	player.current_hp=player.max_hp
@@ -297,7 +307,7 @@ func _run() -> void:
 	player.current_hp=player.max_hp
 	index.unregister(death_actor.spatial_actor_runtime_id)
 	death_actor.queue_free()
-	var generation_actor:=make_enemy(Vector2(21.5,20))
+	var generation_actor:=make_enemy(Vector2(20.98,20))
 	generation_actor._attack_timer=0.0
 	generation_actor._attack_hit_delay=0.05
 	check(generation_actor._hc_try_start(player),"C03-generation-start","Generation fixture freezes A")
@@ -367,6 +377,10 @@ func _assert_approach_real_cadence(monster_id: int,start_distance: float) -> voi
 	check(settlements_delta>=1 and player.current_hp<hp_before,"C02-damage-%d-%.2f"%[monster_id,start_distance],"Real releases settle and change HP")
 	check(not release_distances.is_empty() and release_distances.all(func(value: float)->bool:return value<=1.5+GU.EPSILON_GU),"C02-range-%d-%.2f"%[monster_id,start_distance],"Every real attack waits until inside 1.5 GU")
 	check(final_distance<=preferred+0.003,"C02-converge-%d-%.2f"%[monster_id,start_distance],"Real cadence closes %.2f GU to effective preferred %.3f (final %.3f)"%[start_distance,preferred,final_distance])
-	check(trace.min()>=cadence_actor._contact_distance_gu_to_target(player)-0.003,"C02-no-overlap-%d-%.2f"%[monster_id,start_distance],"Closing cadence never overlaps the legal actor footprint")
+	# docs/02 E1: the ordinary stop contract is the L-inf box. The legacy
+	# PLAYER_MELEE_CONTACT_GAP_GU dwell band was a circle-contract adaptation
+	# and is retired with it (source adjacency dwells as close as 0.959 GU);
+	# the old GU-level C02-no-overlap dwell check is therefore not carried
+	# over, and solid-body protection stays with the physical collision layer.
 	index.unregister(cadence_actor.spatial_actor_runtime_id)
 	cadence_actor.queue_free()

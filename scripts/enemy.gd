@@ -1861,6 +1861,26 @@ func _begin_autonomous_step_without_cadence(
 		# not terrain-clear, the existing neighbor/candidate fallback below
 		# stays untouched.
 		var planned_leg := SourceStepPlan.next_leg(current_ground_gu, target_ground_gu)
+		# Source pursuit never enters the victim's occupied cell: from a
+		# non-cell-centred start the raw one-cell leg can overshoot into body
+		# overlap, so the leg is truncated at the legal contact boundary
+		# (docs/02 F: monotone eight-way direction, contact-capped length).
+		if (
+			planned_leg.is_finite()
+			and is_instance_valid(engagement_target)
+		):
+			var leg_target_pos := _screen_position_px_to_ground_position_gu(
+				engagement_target.global_position
+			)
+			if leg_target_pos.is_finite():
+				var leg_offset := planned_leg - current_ground_gu
+				var leg_length := leg_offset.length()
+				var leg_room := current_ground_gu.distance_to(leg_target_pos) - _contact_distance_gu_to_target(engagement_target)
+				if leg_length > GroundUnitSpace.EPSILON_GU and leg_room < leg_length:
+					if leg_room <= GroundUnitSpace.EPSILON_GU:
+						planned_leg = Vector2.INF
+					else:
+						planned_leg = current_ground_gu + leg_offset * (leg_room / leg_length)
 		if (
 			planned_leg.is_finite()
 			and current_ground_gu.distance_squared_to(planned_leg) > GroundUnitSpace.EPSILON_GU * GroundUnitSpace.EPSILON_GU
