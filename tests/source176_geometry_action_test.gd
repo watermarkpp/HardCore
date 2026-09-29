@@ -19,13 +19,6 @@ var index := SpatialIndex.new()
 var _checks := 0
 
 
-class GeometryEnemyFixture:
-	extends EnemyActor
-	func _ready() -> void:
-		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-		_initialize_spawn_facing_once()
-
-
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -93,7 +86,7 @@ func _spawn_pair(offset_gu: Vector2) -> Array:
 	player.defense_max = 0
 	var center_px := _g2s(OpenTerrainFixture.CENTER_GROUND_GU)
 	player.global_position = center_px
-	var enemy := GeometryEnemyFixture.new()
+	var enemy: EnemyActor = EnemyActor.new()
 	enemy.global_position = center_px + _g2s(offset_gu)
 	enemy.setup(GameData.get_monster_by_id(18), player, true)
 	enemy.configure_runtime_map_projection(
