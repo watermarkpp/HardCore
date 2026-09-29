@@ -358,6 +358,9 @@ func _exercise_physical_case(monster_id: int, expected: Dictionary) -> void:
 	player.current_hp = hp_before
 	_projectile_descriptors.clear()
 	attacker._attack_timer = 0.0
+	# The body-action reserve is one commit per real engine frame (T06, now
+	# enforced): cross a real physics frame before the independent epoch probe.
+	await get_tree().physics_frame
 	# The previous map-boundary cancellation legitimately cleared the target.
 	# Reacquire it before testing the independent epoch boundary.
 	attacker.target = player
@@ -574,6 +577,9 @@ func _run_target_magic_case() -> void:
 	player.current_hp = hp_before
 	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
 	_target_magic_descriptors.clear()
+	# One body action per engine frame (T06): cross a physics frame before
+	# this segment's start.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
@@ -614,6 +620,8 @@ func _run_target_magic_case() -> void:
 
 	player.current_hp = hp_before
 	_target_magic_descriptors.clear()
+	# One body action per engine frame (T06): cross a physics frame.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker._physics_process(0.01)
@@ -628,6 +636,8 @@ func _run_target_magic_case() -> void:
 	player.global_position = _ground_to_screen(Vector2(1.0, 0.0))
 	player.set_meta("runtime_map_id", 1)
 	_target_magic_descriptors.clear()
+	# One body action per engine frame (T06): cross a physics frame.
+	await get_tree().physics_frame
 	attacker._attack_timer = 0.0
 	attacker.target = player
 	attacker.current_hp = attacker.max_hp
