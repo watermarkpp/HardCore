@@ -111,17 +111,16 @@ func _run() -> void:
 	# tick holds position instead of committing the attack. Advance the phase
 	# deterministically, then the committed hit must still wait for its frame.
 	assert(boss._pending_attack_time < 0.0 and player.current_hp == hp_before, "尸王首个来源许可前提交了攻击")
-	# Advance one real frame first: the decision cache dedupes by wall
-	# millisecond, so the next manual tick must happen in a later one.
+	# R2/R03: the decision cache dedupes per physics tick and evaluates on the
+	# projected owner game clock. Advance the deterministic clock by one full
+	# interval; the awaited frame below already rotates the per-tick identity.
 	await get_tree().physics_frame
-	# evaluate() dedupes on the monotonic last_evaluated_ms; headless frames
-	# run faster than real milliseconds, so wait for a fresh wall millisecond
-	# before the next logical tick.
-	while Time.get_ticks_msec() <= int(boss._movement_cadence.last_evaluated_ms):
-		await get_tree().process_frame
-	# The decision cache dedupes by wall millisecond as well.
-	boss._source176_decision_now_ms = -1
-	boss._movement_cadence.walk_tick_ms = Time.get_ticks_msec() - int(boss._movement_cadence.walk_interval_ms) - 1
+	boss._combat_action_time_s += (float(int(boss._movement_cadence.walk_interval_ms)) + 1.0) / 1000.0
+	var now_ms := int(boss._combat_action_time_s * 1000.0)
+	boss._movement_cadence.walk_tick_ms = now_ms - int(boss._movement_cadence.walk_interval_ms) - 1
+	boss._movement_cadence.walk_wait_tick_ms = 0
+	boss._movement_cadence.walk_wait_locked = false
+	boss._movement_cadence.last_evaluated_ms = now_ms - 1
 	boss._physics_process(0.01)
 	assert(boss._pending_attack_time > 0.0 and player.current_hp == hp_before, "尸王伤害没有等待命中帧")
 	player.global_position = (

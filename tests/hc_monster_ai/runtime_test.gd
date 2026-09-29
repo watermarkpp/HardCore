@@ -67,11 +67,17 @@ func ready_cadence(actor: EnemyActor) -> void:
 	check(cadence!=null,"fixture-cadence","Production cadence exists")
 	if cadence==null:
 		return
-	var now:=Time.get_ticks_msec()
+	# R2/R03: the decision domain projects the owner game clock, so the ready
+	# phase is stamped on the actor's own projected milliseconds (the live
+	# physics ticks keep advancing it monotonically from here).
+	var now:=int(actor._combat_action_time_s*1000.0)
+	if now<int(cadence.walk_interval_ms)+2:
+		now=int(cadence.walk_interval_ms)+2
+		actor._combat_action_time_s=float(now)/1000.0
 	cadence.walk_wait_locked=false
 	cadence.walk_tick_ms=now-cadence.walk_interval_ms-1
 	# A freshly stamped wait tick would immediately re-lock the gate, so park
-	# it in the past (same wall-ms phase discipline as walk_tick_ms).
+	# it in the past (same projected-clock phase discipline as walk_tick_ms).
 	cadence.walk_wait_tick_ms=0
 	cadence.last_evaluated_ms=now-1
 
