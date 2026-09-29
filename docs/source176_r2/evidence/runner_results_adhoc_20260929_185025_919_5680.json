@@ -1,0 +1,28 @@
+{
+  "suite": "adhoc",
+  "results": [
+    {
+      "test_name": "shared_permission_runtime_test",
+      "test_path": "tests/source176_r2/shared_permission_runtime_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-29T10:50:47.3728409Z",
+      "native_exit_observed_utc": "2026-09-29T10:50:24.7179538Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ],
+  "git_head": "97ca34bdda0a7220973567e371e1f057b7295929",
+  "engine_log_errors": 0,
+  "passed": 0,
+  "total": 1,
+  "failed": 1,
+  "generated_at": "2026-09-29T18:50:25.9196005+08:00"
+}

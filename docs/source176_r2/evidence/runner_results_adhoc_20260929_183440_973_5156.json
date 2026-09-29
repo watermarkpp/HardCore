@@ -1,0 +1,28 @@
+{
+  "total": 1,
+  "suite": "adhoc",
+  "passed": 1,
+  "failed": 0,
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-29T18:34:40.9735062+08:00",
+  "results": [
+    {
+      "test_name": "skeleton_spirit_boss_test",
+      "test_path": "tests/skeleton_spirit_boss_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-29T10:34:59.7671436Z",
+      "native_exit_observed_utc": "2026-09-29T10:34:39.5684513Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "0cbb7654400a22556e4f0b2e6795ef3f712e42fd"
+}

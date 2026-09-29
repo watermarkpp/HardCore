@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-09-29T18:41:59.1408854+08:00",
+  "total": 1,
+  "passed": 0,
+  "suite": "adhoc",
+  "git_head": "802cc1404bb02c5043682cd6b36be1db8c7815bc",
+  "engine_log_errors": 0,
+  "failed": 1,
+  "results": [
+    {
+      "test_name": "runtime_test",
+      "test_path": "tests/hc_monster_ai/runtime_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": true,
+      "wrapper_exit_code": 1,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-29T10:42:17.8536286Z",
+      "native_exit_observed_utc": "2026-09-29T10:41:57.9675617Z",
+      "effective_exit_code": 1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;non_zero_exit_code_1"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "baseline": {
+    "sha": "8181f197b",
+    "tree": "codex/integration",
+    "note": "R1 audit-verified untouched baseline"
+  },
+  "candidate": {
+    "branch": "codex/glm53-r1-20260929",
+    "head": "b9717d1da",
+    "remote_synced": true,
+    "commit_chain": "33 commits (21 R1 + 12 R2), see COMMIT_CHAIN.txt",
+    "diff_numstat": "DIFF_NUMSTAT.txt"
+  },
+  "r2_remediation": {
+    "R01_acceptance_tool": {
+      "status": "PASS",
+      "evidence": "runner_results_adhoc_20260929_181703: SOURCE176_DECISION_GATE_PASS checks=16 cases=4 failures=0; mutation test forced FAIL with exit 1 and explicit failure list",
+      "commits": ["27e548ff7"]
+    },
+    "R02_shared_permission": {
+      "status": "PASS",
+      "evidence": "tests/source176_r2/shared_permission_runtime_test.tscn R2_SHARED_PERMISSION_PASS checks=11 cases=4 failures=0 (scenarios C/A/D/B)",
+      "commits": ["db34b0bde", "392af75c0"]
+    },
+    "R03_game_clock_domain": {
+      "status": "PASS",
+      "evidence": "decision gate, cadence construction, direct-magic next-segment gate and standalone evaluate all project _combat_action_time_s; migrated fixtures: decision_gate 16/16, census 80 rounds, cadence_runtime_integration 238 checks, corpse_king, skeleton_spirit, runtime ready_cadence",
+      "commits": ["db34b0bde", "0cbb76544", "802cc1404"]
+    },
+    "R04_exact_leg": {
+      "status": "PASS",
+      "evidence": "tests/source176_r2/exact_leg_runtime_test.tscn R2_EXACT_LEG_PASS checks=32 cases=2 failures=0; C05 detour regression bisected to the strict fractional endpoint check and fixed by validating on the cell contract while committing the exact leg",
+      "commits": ["19abbb775", "97ca34bdd", "d448b08f6"]
+    },
+    "R05_soft_gap_and_snapshot": {
+      "status": "PASS",
+      "evidence": "HC preferred stop capped at Source176Melee.HALF_EXTENT_GU for the ordinary player-melee contact contract; natural-approach test R2_APPROACH_PASS checks=6 cases=2 (ordinary melee inside the 1.0-GU box, corpse king inside its own START_GU circle, neither overlapping the player body); policy snapshot exports source_box_half_extent_gu",
+      "commits": ["72af594ec", "9238dc4ff", "de3293c24"]
+    },
+    "R06_admission_and_animation": {
+      "status": "PASS",
+      "evidence": "projectile windup releases pinned to identity appearance-profile frame counts (cold == hot, no blanket duration extension); _hc_try_start incompatible_pending=false confirmed correct by construction (pending-attack guard fails closed above it)",
+      "commits": ["b9717d1da"]
+    },
+    "R07_report_and_evidence": {
+      "status": "IN_PROGRESS",
+      "evidence": "this directory; portable raw runner_results JSONs copied from outputs/test_logs"
+    }
+  },
+  "baseline_failed_tests": {
+    "classification": "BASELINE_EXISTING",
+    "tests": [
+      "tests/hc_monster_ai/runtime_test.gd T01 Real EnemyActor movement branch starts in this tick",
+      "tests/hc_monster_ai/runtime_test.gd T06 Second start in same physics tick is refused",
+      "tests/hc_monster_ai/runtime_test.gd T02 A legal opportunity after actual movement starts in same tick",
+      "tests/hc_monster_ai/runtime_test.gd C02-starts-162-1.80/1.99/2.00 Real timer produces repeated starts"
+    ],
+    "note": "same assertion text, same reason and same exit code as the R1 baseline; no R2 regression (verified after every production commit)"
+  }
+}

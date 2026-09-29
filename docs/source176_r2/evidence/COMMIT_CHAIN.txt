@@ -1,0 +1,33 @@
+b9717d1da R06: pin projectile windup releases to the identity frame counts
+de3293c24 R05: export the source box half extent in the HC policy snapshot
+9238dc4ff R05: natural-approach test for ordinary melee and corpse king
+72af594ec R05: cap the ordinary melee preferred stop at the source box edge
+d448b08f6 R04: exact-leg runtime test over eight approach cones
+392af75c0 R02: shared-permission runtime test, scenarios C/A/D/B on the game clock
+97ca34bdd R04: validate the neighbour leg on the cell contract, commit the exact leg
+802cc1404 R03: migrate skeleton spirit boss fixture phase to the game clock
+0cbb76544 R03: migrate corpse king and runtime ready_cadence fixtures to the game clock
+db34b0bde R02/R03: one source permission per physics tick on the owner game clock
+19abbb775 R04: commit the exact source leg instead of a cell centre in neighbor routing
+27e548ff7 R01: await the decision gate cases and gate PASS on 16 checks / 4 cases
+be5d5899e source176: record the confirmation critical totals
+3f07c4ab5 source176: add the 1.76 source rules integration report
+6d7cf8fe3 source176: rebase the snapshot v2 victim on the L-inf hit box
+4cc2f7fdb source176: cross a physics frame between w1 body-action segments
+10430232b source176: rebase the no-legacy snapshot victim on the L-inf hit box
+c2276fb1e source176: rebase body pair, parent identity and epoch fixtures on the L-inf box
+963df7e11 source176: rephase the admission census decision gate per round
+b6f327ca7 source176: rebase d3 boundary scan on the L-inf box edge and rephase skeleton spirit admission
+f8f0b8266 source176: cap pursuit legs at contact and rebase runtime fixtures on the L-inf start box
+9d1fae616 source176: keep the neighbor contract when the monotone leg cell is blocked
+14697c0e4 source176: anchor pause/king fixtures on settled positions and cadence phase
+49aa59200 source176: rebase contact/d3/corpse-king fixtures on the L-inf stop contract
+25561aa11 source176: pin geometry fixture to the ordinary-melee identity
+d7054734d source176: hoist reach and preferred locals back into function scope
+db2690331 source176: drop inner-class fixture from geometry test
+4108ec6ca source176: fix geometry test assertion operand
+9262bfc06 source176: unify ordinary melee geometry, plan monotone legs, gate body actions
+1e95e90f0 source176: rebase corpse-king and motion-pressure expectations on decision-gate contract
+349ace529 source176: gate ordinary melee on per-tick source decision permission
+e118d9446 source176: registry-check player spell delivery kinds (fail closed)
+baa661167 source176: install reaction foundation modules and cadence oracle

@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-09-29T18:54:46.3776560+08:00",
+  "passed": 1,
+  "total": 1,
+  "results": [
+    {
+      "test_name": "exact_leg_runtime_test",
+      "test_path": "tests/source176_r2/exact_leg_runtime_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-29T10:55:06.5728580Z",
+      "native_exit_observed_utc": "2026-09-29T10:54:44.8118969Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "git_head": "392af75c048b2fd2410f37c57f8050814797b618",
+  "suite": "adhoc",
+  "engine_log_errors": 0,
+  "failed": 0
+}

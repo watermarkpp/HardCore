@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-09-29T18:53:36.6186982+08:00",
+  "failed": 1,
+  "engine_log_errors": 3,
+  "results": [
+    {
+      "test_name": "exact_leg_runtime_test",
+      "test_path": "tests/source176_r2/exact_leg_runtime_test.tscn",
+      "pass_marker_found": false,
+      "process_exited": false,
+      "wrapper_exit_code": -1,
+      "child_process_exit_state": "forced_termination",
+      "execution_deadline_utc": "2026-09-29T10:54:03.7432917Z",
+      "native_exit_observed_utc": null,
+      "effective_exit_code": -1,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 3,
+      "engine_log_failure_count": 3,
+      "result": "FAIL",
+      "reason": "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3"
+    }
+  ],
+  "total": 1,
+  "suite": "adhoc",
+  "passed": 0,
+  "git_head": "392af75c048b2fd2410f37c57f8050814797b618"
+}

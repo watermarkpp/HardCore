@@ -1,0 +1,28 @@
+{
+  "engine_log_errors": 0,
+  "generated_at": "2026-09-29T18:23:55.1660218+08:00",
+  "failed": 0,
+  "results": [
+    {
+      "test_name": "real_admission_census_test",
+      "test_path": "tests/hc_monster_combat_r3/real_admission_census_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-09-29T10:24:15.8071559Z",
+      "native_exit_observed_utc": "2026-09-29T10:23:53.6541552Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "total": 1,
+  "git_head": "19abbb775170a9031fcbb90777b4dc35bb5f7e47",
+  "passed": 1,
+  "suite": "adhoc"
+}
