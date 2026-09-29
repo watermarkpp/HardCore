@@ -121,16 +121,17 @@ func _run() -> void:
 	)
 	boss.target = player
 	boss._attack_timer = 0.0
-	# docs/02 M01A: the wall-ms decision gate must see an elapsed walk
-	# interval. A fresh fixture stamps its walk tick with "now", so rewind the
-	# phase exactly like the production cadence would after a real interval.
+	# R2/R03: the decision gate projects the owner game clock, so the fixture
+	# stamps an elapsed walk phase on that deterministic domain. A fresh
+	# fixture cadence anchors at game-clock zero, so lift the clock above one
+	# full interval before stamping the elapsed phase.
 	var ss_cad = boss._movement_cadence
-	var ss_now := Time.get_ticks_msec()
+	boss._combat_action_time_s = (float(int(ss_cad.walk_interval_ms)) + 1.0) / 1000.0
+	var ss_now := int(boss._combat_action_time_s * 1000.0)
 	ss_cad.walk_wait_locked = false
 	ss_cad.walk_tick_ms = ss_now - int(ss_cad.walk_interval_ms) - 1
-	ss_cad.walk_wait_tick_ms = ss_now
+	ss_cad.walk_wait_tick_ms = 0
 	ss_cad.last_evaluated_ms = ss_now - 1
-	boss._source176_decision_now_ms = -1
 	boss._physics_process(0.01)
 	var maximum_runtime_retarget_seconds := (
 		EnemyActor.BOSS_TARGET_REEVALUATION_MAX_SECONDS
