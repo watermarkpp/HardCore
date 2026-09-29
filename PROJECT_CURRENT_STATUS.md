@@ -1,5 +1,9 @@
 # HardCore Current Status
 
+## 2026-09-29：v97 锻造存档与新物品图标修复
+
+固定源码 `a945e921e849b4aa81439183f60cec95e63d725c`，完整继承 v96（`b0119a18a`）及 v94 后热补丁。修复真实掉落装备锻造后 JSON 数字类型导致保存被拒、退出受阻的问题，以及出售卡片遗漏图标尺寸设置的问题。17 项相关回归 PASS，固定源码两项复验 PASS；18 种新物品显示检查 PASS。桌面 `HardCore-v97-forge-icons-debug.apk`，versionCode97，同包名同签名，488711865字节，SHA256 `02E3E86D90F2437C64F211A83E052578A728EEF53D4912C80FAE8867C5C90CDD`。包内2个修复脚本更新，其余296脚本、9684数据/纹理同v96一致。DEVICE TEST: NOT_RUN；未自动安装。详见 `docs/repair_v97_20260929/DELIVERY.md`。下方 v95 条目保留为历史；v96 交付证据在 `docs/repair_v95_20260929/DELIVERY.md`。
+
 ## 2026-09-29：v95 完整修复 APK 已交付桌面
 
 固定源码 `7076bc465dbf7dc837381f267fa8eb9e151bf001`，包含v94、Sol随后热补丁21b40ddae及本轮药剂/工作台/仓库、八方向移动/镜头、图标与loading修复。桌面 `HardCore-v95-full-fixes-debug.apk`，488710512字节，SHA256 `6B1222403A0711A07769199B7A3A7CA38A97089D33EC3BCEBAE9F5D862C10826`。versionCode95、同包名同签名，支持覆盖v94；39项相关场景PASS，包身份/资源与冻结9684条数据纹理对照PASS。构建首次JDK环境异常已按进程级参数恢复，证据见 `docs/performance_20260928/APK_DELIVERY.md`。DEVICE TEST: NOT_RUN；未自动安装或push，手机存档未覆盖。后续文档提交不改变APK源码身份。
