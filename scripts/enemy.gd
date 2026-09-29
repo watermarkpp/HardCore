@@ -8447,6 +8447,10 @@ func hc_package_policy_snapshot() -> Dictionary:
 		"monster_id": monster_id, "delivery_kind": str(attack_delivery_rule.get("kind", "")),
 		"ordinary_override": _hc_standard_melee(), "source_range_gu": attack_range_gu,
 		"start_gu": HCPolicy.START_GU if _hc_standard_melee() else attack_range_gu,
+		# R2/R05: the ordinary melee AI start is the relative L-infinity box,
+		# not the legacy 1.5-GU circle above. The box half extent is exported
+		# so evidence and policy consumers read one geometry.
+		"source_box_half_extent_gu": (Source176Melee.HALF_EXTENT_GU if _hc_standard_melee() else -1.0),
 		"preferred_base_gu": HCPolicy.PREFERRED_GU,
 		"stationary": stationary, "target_id": target.get_instance_id() if is_instance_valid(target) else 0,
 		"reason": _hc_last_reason, "blocker_id": _hc_blocker_id,
