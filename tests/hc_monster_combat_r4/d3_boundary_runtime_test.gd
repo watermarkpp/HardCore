@@ -63,9 +63,21 @@ func _run() -> void:
 	player.current_hp = player.max_hp
 	Observer.recording_enabled = true
 	for mid: int in [24, 76, 238, 239]:
+		# docs/02 E: ordinary channels admit through the L-inf box edge
+		# (1.0 / max component per direction); special mixed deliveries keep
+		# the legacy 1.5 GU circle. Along axial directions the box edge sits
+		# inside the spawn-grounding contact band, so only the deny side is
+		# constructible there; the accept side is covered by the walking
+		# convergence in the C02 runtime cadence cases.
+		var probe := _spawn(mid, CENTER + Vector2(2.5, 0.0))
+		var ordinary: bool = probe._source176_ordinary_melee()
+		index.unregister(probe.spatial_actor_runtime_id)
+		probe.free()
 		for direction_index in range(8):
 			var direction := Vector2.from_angle(TAU * float(direction_index) / 8.0)
-			for distance: float in [1.499, 1.500, 1.501]:
+			var boundary := (1.0 / maxf(absf(direction.x), absf(direction.y))) if ordinary else 1.5
+			var distances: Array = [boundary + 0.05] if boundary <= 1.2 else [boundary - 0.05, boundary + 0.05]
+			for distance: float in distances:
 				await _boundary_case(mid, direction_index, direction, distance)
 	await _physical_wall_case()
 	Observer.recording_enabled = false
@@ -87,7 +99,8 @@ func _boundary_case(mid: int, direction_index: int, direction: Vector2, distance
 	var hp_before := player.current_hp
 	var starts_before := actor._hc_starts
 	var accepted := actor._hc_try_start(player)
-	_check(accepted == (distance <= 1.500), label + ":admission_boundary_wrong reason=" + actor._hc_last_reason)
+	var reach_boundary: float = (1.0 / maxf(absf(direction.x), absf(direction.y))) if actor._source176_ordinary_melee() else 1.5
+	_check(accepted == (distance <= reach_boundary - 0.04), label + ":admission_boundary_wrong reason=" + actor._hc_last_reason)
 	if accepted:
 		_check(actor._hc_starts == starts_before + 1, label + ":start_count_wrong")
 		_check(actor.visual.current_attack_action_id() == actor._attack_logic_serial, label + ":body_parent_identity_wrong")
@@ -117,17 +130,20 @@ func _boundary_case(mid: int, direction_index: int, direction: Vector2, distance
 
 func _physical_wall_case() -> void:
 	Observer.reset()
-	var actor := _spawn(24, CENTER + Vector2(1.4, 0.0))
+	# docs/02 E: the wall case stands inside the L-inf start box on the
+	# diagonal (grounding-stable: 1.386 GU > contact band) with the wall
+	# between the actor and the player.
+	var actor := _spawn(24, CENTER + Vector2(0.98, 0.98))
 	var provider := CollisionRevision.new()
 	add_child(provider)
 	actor.environment_blocker = provider
 	var wall := StaticBody2D.new()
 	wall.collision_layer = WorldSpatialRules.WORLD_MASK
 	wall.collision_mask = 0
-	wall.position = _ground_to_screen(CENTER + Vector2(0.7, 0.0))
+	wall.position = _ground_to_screen(CENTER + Vector2(0.49, 0.49))
 	var collider := CollisionShape2D.new()
-	var shape := RectangleShape2D.new()
-	shape.size = Vector2(8, 100)
+	var shape := CircleShape2D.new()
+	shape.radius = 4.0
 	collider.shape = shape
 	wall.add_child(collider)
 	add_child(wall)

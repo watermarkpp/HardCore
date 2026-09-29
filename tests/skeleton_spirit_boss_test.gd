@@ -107,11 +107,30 @@ func _run() -> void:
 	var move_speed_before_retarget := boss.move_speed_gu_per_sec
 
 	var hp_before := player.current_hp
-	# This fixture validates attack timing, not target-acquisition staggering.
-	# Pin the already-authorized player target so an unrelated acquisition policy
-	# cannot prevent the attack from reaching its hit-frame assertions.
+	# docs/02 E: the admission gate is the L-inf box, so the player is anchored
+	# 0.98 GU from the boss's settled (grounded) position before the attack
+	# tick. This fixture validates attack timing, not target-acquisition
+	# staggering; pin the already-authorized player target so an unrelated
+	# acquisition policy cannot prevent the attack from reaching its hit-frame
+	# assertions.
+	var boss_grounded: Vector2 = GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
+		boss.global_position
+	)
+	player.global_position = GroundUnitSpaceScript.ground_delta_gu_to_screen_delta_px(
+		boss_grounded + Vector2.RIGHT * 0.98
+	)
 	boss.target = player
 	boss._attack_timer = 0.0
+	# docs/02 M01A: the wall-ms decision gate must see an elapsed walk
+	# interval. A fresh fixture stamps its walk tick with "now", so rewind the
+	# phase exactly like the production cadence would after a real interval.
+	var ss_cad = boss._movement_cadence
+	var ss_now := Time.get_ticks_msec()
+	ss_cad.walk_wait_locked = false
+	ss_cad.walk_tick_ms = ss_now - int(ss_cad.walk_interval_ms) - 1
+	ss_cad.walk_wait_tick_ms = ss_now
+	ss_cad.last_evaluated_ms = ss_now - 1
+	boss._source176_decision_now_ms = -1
 	boss._physics_process(0.01)
 	var maximum_runtime_retarget_seconds := (
 		EnemyActor.BOSS_TARGET_REEVALUATION_MAX_SECONDS
