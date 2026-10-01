@@ -40,7 +40,7 @@ func _run() -> void:
 	assert("3 格直线" in panel.description_label.text, "readable description lost formal thrust range")
 	assert(not "GU" in panel.detail_label.text and not "熟练度" in panel.detail_label.text)
 	# User now requires effects to reflect equipment's effective cast rank.
-	PlayerState.learned_skills[skill_name] = 3
+	PlayerState.learned_skills = {"hc.skill.warrior.thrusting": 3}
 	panel._rebuild_skill_cards()
 	panel._show_skill_detail(selected_index)
 	var base_description := panel.description_label.text

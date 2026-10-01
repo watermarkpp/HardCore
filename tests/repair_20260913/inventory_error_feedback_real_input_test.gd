@@ -164,7 +164,7 @@ func _run() -> void:
 	expect(not expected_level.is_empty(), "level fixture yields a requirement rejection")
 	await tap_slot("武器")
 	await assert_error(expected_level, "level short")
-	expect((PlayerState.equipment.get("武器", {}) as Dictionary).is_empty(), "level short leaves weapon empty")
+	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "level short leaves weapon empty")
 	expect(panel.selected_inventory_index == 0, "level short keeps the source selected")
 	expect(panel.item_detail_presenter.visible, "level short keeps the detail visible")
 
@@ -238,7 +238,7 @@ func _run() -> void:
 	]
 	await tap_slot("衣服")
 	await assert_error(profession_expected, "profession mismatch")
-	expect((PlayerState.equipment.get("衣服", {}) as Dictionary).is_empty(), "profession mismatch leaves slot empty")
+	expect((PlayerState.equipment.get("hc.slot.armor", {}) as Dictionary).is_empty(), "profession mismatch leaves slot empty")
 	GameData.items.erase(profession_item)
 	GameData._build_indexes()
 
@@ -274,7 +274,7 @@ func _run() -> void:
 	# --- 8. 背包已满卸装失败 ---------------------------------------------------
 	reset_fixture_state()
 	var old_weapon := GameData.get_item_record({"item_id": 99})
-	PlayerState.equipment["武器"] = PlayerState._make_item_instance(str(old_weapon.name), old_weapon, 99301)
+	PlayerState.equipment["hc.slot.weapon"] = PlayerState._make_item_instance(str(old_weapon.name), old_weapon, 99301)
 	for _index in range(InventoryPanel.BAG_CAPACITY):
 		PlayerState.add_item("木剑", 1)
 	expect(PlayerState.inventory.size() >= InventoryPanel.BAG_CAPACITY, "bag is full for unequip case")
@@ -284,7 +284,7 @@ func _run() -> void:
 	expect(panel.selected_equipment_slot == "武器", "equipped weapon selected for unequip")
 	await tap_bag(0)
 	await assert_error("背包已满，没有空位可以卸下装备。", "bag full unequip")
-	expect(not (PlayerState.equipment.get("武器", {}) as Dictionary).is_empty(), "weapon still equipped")
+	expect(not (PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "weapon still equipped")
 
 	# --- 9. stale instance ------------------------------------------------------
 	reset_fixture_state()
@@ -299,7 +299,7 @@ func _run() -> void:
 	PlayerState.inventory = [PlayerState._make_item_instance(str(new_weapon.name), new_weapon, 102302)]
 	await tap_slot("武器")
 	await assert_error("所选装备已变化", "stale instance")
-	expect((PlayerState.equipment.get("武器", {}) as Dictionary).is_empty(), "stale instance leaves weapon empty")
+	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "stale instance leaves weapon empty")
 
 	# --- 10. 存档失败回滚 -------------------------------------------------------
 	reset_fixture_state()
@@ -311,7 +311,7 @@ func _run() -> void:
 	await tap_bag(0)
 	await tap_slot("武器")
 	await assert_error("装备存档失败，装备和背包均未改变", "save failure")
-	expect((PlayerState.equipment.get("武器", {}) as Dictionary).is_empty(), "save failure rolls back equipment")
+	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "save failure rolls back equipment")
 	expect(PlayerState.inventory.size() == 1 and not (PlayerState.inventory[0] as Dictionary).is_empty(), "save failure keeps the bag item")
 	expect(panel.selected_inventory_index == 0, "save failure keeps the source selected")
 	PlayerState._test_force_atomic_write_failure = previous_flag

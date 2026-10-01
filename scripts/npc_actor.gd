@@ -81,7 +81,7 @@ func interact(game: Node) -> void:
 	if npc_kind == "shop":
 		var active_stock := shop_stock
 		if stock_key == "books":
-			active_stock = game._build_skill_book_stock(PlayerState.profession)
+			active_stock = game._build_skill_book_stock(PlayerState.profession_id)
 		# Keep the merchant identity explicit even when the stock is empty or
 		# filtered. ShopPanel must not infer authority from stock[0].
 		var merchant_context := GameData.merchant_context(stock_key)

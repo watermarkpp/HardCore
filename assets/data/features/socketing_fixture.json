@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.socketing_fixture",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": ["stats.contribute", "items.transact"],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {"commands_per_event": 0, "states_per_target": 0},
+  "default_enabled": false,
+  "scope": "equipment",
+  "activation_boundary": "world_ready",
+  "mechanics": [
+    {"mechanic_id": "hc.socketing.fixture_accuracy", "kind": "stat", "tags": ["hc.numeric"],
+      "operations": [{"stat": "accuracy", "op": "add", "value": 1}]}
+  ],
+  "tests": ["tests/framework/socket_gem_identity_test.tscn", "tests/framework/socket_transaction_test.tscn"]
+}

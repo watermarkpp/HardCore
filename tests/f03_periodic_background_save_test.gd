@@ -42,7 +42,7 @@ func _run() -> void:
 	assert(state.apply_durability_event(state.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT, {"confirmed_hit": true, "damage": 10, "weapon_roll": 0, "weapon_strong": 0}).applied)
 	state._json_persistence.drain()
 	assert(state._durability_save_pending, "older receipt incorrectly cleared newer wear")
-	assert(int(state.equipment["武器"].durability_raw) == 3996)
+	assert(int(state.equipment["hc.slot.weapon"].durability_raw) == 3996)
 	assert(int(JSON.parse_string(FileAccess.get_file_as_string(profile)).equipment["武器"].durability_raw) == 3998)
 	state._advance_durability_runtime(state.DURABILITY_SAVE_INTERVAL)
 	state._json_persistence.drain()

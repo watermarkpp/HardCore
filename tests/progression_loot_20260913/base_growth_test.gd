@@ -51,7 +51,7 @@ func _run() -> void:
 				assert(PlayerState.base_stats.magic_defense_max == (9 if job == "道士" else 0))
 		base = PlayerState.base_stats.duplicate()
 		var profile := {"contractId":"item.temporary_stat_buff.v1","durationSeconds":2.0,"buffGroup":"growth_test","modifiers":{"magic_max":5,"max_hp":50}}
-		assert(PlayerState.apply_temporary_item_buff("测试神水",profile).ok)
+		assert(PlayerState.apply_temporary_item_buff("hc.item.910001",profile).ok)
 		assert(PlayerState.computed_stats.magic_max == base.magic_max + 5)
 		assert(PlayerState.computed_stats.max_hp == base.max_hp + 50)
 		assert(PlayerState.base_stats == base)

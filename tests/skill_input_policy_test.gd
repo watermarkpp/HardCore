@@ -62,8 +62,8 @@ func _ready() -> void:
 		assert(input.has("attack_priority"))
 		assert(input.has("repeatable_offensive_spell") and input.has("press_hold_repeat"))
 
-	var slots: Array[String] = ["野蛮冲撞", "", "", ""]
-	var learned := {"基本剑术": 3, "攻杀剑术": 3, "野蛮冲撞": 3}
+	var slots: Array[String] = ["hc.skill.warrior.wild_rush", "", "", ""]
+	var learned := {"hc.skill.warrior.basic_swordsmanship": 3, "hc.skill.warrior.slaying_swordsmanship": 3, "hc.skill.warrior.wild_rush": 3}
 	for passive_name: String in ["基本剑术", "攻杀剑术"]:
 		var rejected := LoadoutRules.assign_quick_slot(slots, learned, {
 			"contract_id": "ui.skill.button_assignment.v2",
@@ -82,16 +82,16 @@ func _ready() -> void:
 		"attack_ring": ["野蛮冲撞", "雷电术", "火墙"],
 	})
 	assert(migrated_v2.attack == [""])
-	assert(migrated_v2.attack_ring == ["野蛮冲撞", "雷电术", "火墙", "", "", ""])
+	assert(migrated_v2.attack_ring == ["hc.skill.warrior.wild_rush", "hc.skill.wizard.lightning", "hc.skill.wizard.fire_wall", "", "", ""])
 	assert(LoadoutRules.validate_assignments(migrated_v2).valid)
 	var passive_migration := LoadoutRules.normalize_assignments({
 		"contract_id": LoadoutRules.LEGACY_BUTTON_ASSIGNMENTS_CONTRACT_ID,
 		"attack_ring": ["基本剑术", "攻杀剑术", "刺杀剑术"],
 	})
-	assert(passive_migration.attack_ring == ["", "", "刺杀剑术", "", "", ""])
+	assert(passive_migration.attack_ring == ["", "", "hc.skill.warrior.thrusting", "", "", ""])
 	var attack_assignment := LoadoutRules.assign_button_slot(
 		migrated_v2,
-		{"野蛮冲撞": 3},
+		{"hc.skill.warrior.wild_rush": 3},
 		{
 			"contract_id": "ui.skill.button_assignment.v3",
 			"slot_group": "attack",
@@ -100,7 +100,7 @@ func _ready() -> void:
 			"skill_name": "野蛮冲撞",
 		}
 	)
-	assert(attack_assignment.ok and attack_assignment.assignments.attack == ["野蛮冲撞"])
+	assert(attack_assignment.ok and attack_assignment.assignments.attack == ["hc.skill.warrior.wild_rush"])
 	assert(attack_assignment.change.slot_id == "hud.attack.primary")
 	var restored_attack := LoadoutRules.clear_button_slot(
 		attack_assignment.assignments,

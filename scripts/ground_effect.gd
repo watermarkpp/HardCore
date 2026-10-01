@@ -83,7 +83,7 @@ func setup_ground_unit_effect(
 	effect_color = color
 	skill_id = ProfessionRules.skill_id(source_skill_id) if not source_skill_id.is_empty() else ""
 	if skill_id.is_empty() and PlayerState != null:
-		skill_id = "wizard.fire_wall" if PlayerState.profession == "法师" else ""
+		skill_id = "wizard.fire_wall" if PlayerState.profession_id == "hc.profession.wizard" else ""
 	release_id = (
 		source_release_id
 		if not source_release_id.is_empty()

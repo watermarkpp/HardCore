@@ -127,7 +127,7 @@ func _run() -> void:
 	)
 	# Runtime consumes the exact-ID rule snapshot. Exercise the supported legacy
 	# instance-modifier layer instead of mutating the name catalog behind it.
-	PlayerState.equipment["武器"] = {"name": "木剑", "durability": 1, "modifiers": {"antiMagicPoints": 3, "attackSpeedTier": 2}}
+	PlayerState.equipment["hc.slot.weapon"] = {"name": "木剑", "durability": 1, "modifiers": {"antiMagicPoints": 3, "attackSpeedTier": 2}}
 	PlayerState.recalculate_stats()
 	assert(
 		int(PlayerState.computed_stats.anti_magic_points) == 4

@@ -89,6 +89,7 @@ var _launch_scene_preload_state: StringName = LAUNCH_PRELOAD_IDLE
 var _launch_scene_preload_resource: PackedScene
 var _launch_scene_preload_request_count := 0
 var _launch_scene_preload_generation := 0
+var _launch_scene_preload_requests: Dictionary = {}
 @export var force_launch_preload_for_test := false
 
 
@@ -114,6 +115,21 @@ func _ready() -> void:
 		call_deferred("_request_launch_scene_preload")
 
 
+func _exit_tree() -> void:
+	# ResourceLoader requests cannot be cancelled. Close the real ownership
+	# boundary before the scene or engine can release its resource filesystem.
+	# Includes older requested paths and timed-out monitors, not only the current
+	# display state; no normal interaction frame performs this lifecycle join.
+	_launch_scene_preload_generation += 1
+	for requested_path: String in _launch_scene_preload_requests:
+		var status := ResourceLoader.load_threaded_get_status(requested_path)
+		if status in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
+			ResourceLoader.load_threaded_get(requested_path)
+	_launch_scene_preload_requests.clear()
+	_launch_scene_preload_resource = null
+	_launch_scene_preload_state = LAUNCH_PRELOAD_IDLE
+
+
 func _request_launch_scene_preload() -> void:
 	var requested_path := launch_scene_path
 	if (
@@ -136,6 +152,7 @@ func _request_launch_scene_preload() -> void:
 		if existing_status not in [ResourceLoader.THREAD_LOAD_IN_PROGRESS, ResourceLoader.THREAD_LOAD_LOADED]:
 			_mark_launch_scene_preload_failed(request_error, generation, requested_path)
 			return
+	_launch_scene_preload_requests[requested_path] = true
 	_launch_scene_preload_state = LAUNCH_PRELOAD_REQUESTED
 	_monitor_launch_scene_preload.call_deferred(generation, requested_path)
 
@@ -150,6 +167,7 @@ func _monitor_launch_scene_preload(generation: int, requested_path: String) -> v
 		var status := ResourceLoader.load_threaded_get_status(requested_path)
 		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			var resource := ResourceLoader.load_threaded_get(requested_path)
+			_launch_scene_preload_requests.erase(requested_path)
 			if resource is PackedScene:
 				_launch_scene_preload_resource = resource
 				_launch_scene_preload_state = LAUNCH_PRELOAD_READY
@@ -706,7 +724,9 @@ func _profile_equipment_snapshot(profile_id: String) -> Dictionary:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(profile_path))
 	if not parsed is Dictionary:
 		return {}
-	var saved_equipment: Variant = parsed.get("equipment", {})
+	var decoded := preload("res://scripts/items/item_extension_codec.gd").decode_document(parsed)
+	if decoded.status != "KNOWN_VALID": return {}
+	var saved_equipment: Variant = decoded.document.get("equipment", {})
 	if not saved_equipment is Dictionary:
 		return {}
 	return PlayerState.migrate_equipment_slots(saved_equipment).duplicate(true)

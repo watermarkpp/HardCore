@@ -3,6 +3,7 @@ extends Node
 
 const LOADOUT_PATH := "res://assets/data/equipment_test_loadouts.json"
 const ACTIONS := ["idle", "walk", "attack", "cast", "hit", "death"]
+const MALE_BASE_ACTIONS := ["idle", "walk", "run", "attack", "cast", "hit", "death"]
 const PROFESSIONS := ["战士", "法师", "道士"]
 const RESOLVED_WEAPON_PROFESSIONS := {
 	"罗刹": "战士",
@@ -30,7 +31,7 @@ func _equipment_from_profile(profile: Dictionary) -> Dictionary:
 	for slot: String in profile.get("equipment", {}):
 		var source: Variant = profile.get("equipment", {})[slot]
 		if source is Dictionary:
-			result[slot] = {"name": str(source.get("itemName", ""))}
+			result[slot] = {"item_id": int(source.get("itemId", -1)), "name": str(source.get("itemName", ""))}
 	return result
 
 
@@ -47,8 +48,11 @@ func _spawn_visual(profession: String, equipment: Dictionary, gender := "男") -
 func _assert_formal_visual(visual: Node, profession: String) -> void:
 	assert(visual.uses_final_art(), "%s 必须启用正式人物图集" % profession)
 	assert(visual.visible, "%s 正式人物层不得隐藏" % profession)
-	assert(visual._base_action_textures.size() == ACTIONS.size(), "%s 基础人物必须有六动作" % profession)
-	for action: String in ACTIONS:
+	# The accepted source-backed male body now also supplies the running clip.
+	# Female and equipped-layer catalogs retain their existing six-action set.
+	var expected: Array = MALE_BASE_ACTIONS if PlayerState.gender == "男" else ACTIONS
+	assert(visual._base_action_textures.size() == expected.size(), "%s 基础人物动作数量必须符合正式目录" % profession)
+	for action: String in expected:
 		assert(visual._base_action_textures.has(action), "%s 缺少基础动作 %s" % [profession, action])
 		assert(int(visual._body_action_frame_counts.get(action, 0)) > 0, "%s/%s 帧数无效" % [profession, action])
 	visual.current_state = "action"
@@ -87,8 +91,8 @@ func _run() -> void:
 		var player: PlayerCharacter = spawned[0]
 		var visual: Node = spawned[1]
 		_assert_formal_visual(visual, profession)
-		assert(visual._dress_action_textures.size() == ACTIONS.size(), "%s 衣服必须有六动作" % profile.get("loadoutId", ""))
-		assert(visual._weapon_action_textures.size() == ACTIONS.size(), "%s 武器必须有六动作" % profile.get("loadoutId", ""))
+		_assert_item_actions(visual._dress_action_textures,int(profile.equipment["衣服"].itemId),"男")
+		_assert_item_actions(visual._weapon_action_textures,int(profile.equipment["武器"].itemId),"男")
 		player.queue_free()
 		await get_tree().process_frame
 
@@ -104,15 +108,15 @@ func _run() -> void:
 	PlayerState.equipment = _equipment_from_profile(live_wizard_profile)
 	PlayerState.equipment_changed.emit()
 	await get_tree().process_frame
-	assert(live_visual._dress_action_textures.size() == ACTIONS.size(), "存活法师换装后衣服六动作未刷新")
-	assert(live_visual._weapon_action_textures.size() == ACTIONS.size(), "存活法师换装后武器六动作未刷新")
+	_assert_item_actions(live_visual._dress_action_textures,int(live_wizard_profile.equipment["衣服"].itemId),"男")
+	_assert_item_actions(live_visual._weapon_action_textures,int(live_wizard_profile.equipment["武器"].itemId),"男")
 	PlayerState.gender = "女"
 	live_visual.refresh_profession()
 	await get_tree().process_frame
 	assert(live_visual.uses_final_art(), "存活角色切换女性资源后必须保持正式人物")
 	assert(live_visual._base_action_textures.size() == ACTIONS.size(), "女性法师基础人物六动作未刷新")
-	assert(live_visual._dress_action_textures.size() == ACTIONS.size(), "女性法师衣服六动作未刷新")
-	assert(live_visual._weapon_action_textures.size() == ACTIONS.size(), "女性法师武器六动作未刷新")
+	_assert_item_actions(live_visual._dress_action_textures,int(live_wizard_profile.equipment["衣服"].itemId),"女")
+	_assert_item_actions(live_visual._weapon_action_textures,int(live_wizard_profile.equipment["武器"].itemId),"女")
 	live_player.queue_free()
 	await get_tree().process_frame
 
@@ -124,7 +128,8 @@ func _run() -> void:
 		var appearance: Variant = resolved.get("appearance", {})
 		assert(appearance is Dictionary and bool(appearance.get("visible", false)), "%s 必须保持世界外观可见" % resolved_name)
 		var actions: Variant = appearance.get("actions", {})
-		assert(actions is Dictionary and actions.size() == ACTIONS.size(), "%s 必须提供六动作世界外观" % resolved_name)
+		assert(actions is Dictionary and actions.size() in [ACTIONS.size(),MALE_BASE_ACTIONS.size()], "%s 必须提供六动作及已登记跑步世界外观" % resolved_name)
+		if actions.size() > ACTIONS.size(): assert(actions.has("run"))
 		for action: String in ACTIONS:
 			assert(actions.has(action), "%s 缺少正式动作 %s" % [resolved_name, action])
 		var equipment := _equipment_from_profile({})
@@ -133,7 +138,7 @@ func _run() -> void:
 		var player: PlayerCharacter = spawned[0]
 		var visual: Node = spawned[1]
 		assert(visual.uses_final_art(), "%s 必须保留正式人物底层" % resolved_name)
-		assert(visual._weapon_action_textures.size() == ACTIONS.size(), "%s 必须加载六动作武器层" % resolved_name)
+		_assert_item_actions(visual._weapon_action_textures,int(item.itemId),"男")
 		player.queue_free()
 		await get_tree().process_frame
 
@@ -159,9 +164,20 @@ func _run() -> void:
 	assert(GameData.load_database(), "装备视觉目录重载失败")
 	await get_tree().process_frame
 	assert(reload_visual.uses_final_art(), "数据库重载后正式人物视觉必须自动刷新")
-	assert(reload_visual._dress_action_textures.size() == ACTIONS.size())
-	assert(reload_visual._weapon_action_textures.size() == ACTIONS.size())
+	_assert_item_actions(reload_visual._dress_action_textures,int(reload_profile.equipment["衣服"].itemId),"男")
+	_assert_item_actions(reload_visual._weapon_action_textures,int(reload_profile.equipment["武器"].itemId),"男")
 	reload_player.queue_free()
 
 	print("PLAYER_THREE_PROFESSION_VISUAL_CATALOG_PASS：三职业基础人物、九套装备、施法与缺源策略通过")
 	get_tree().quit(0)
+
+
+func _assert_item_actions(actual: Dictionary,item_id: int,gender: String) -> void:
+	var source: Dictionary = GameData.item_world_appearance(item_id,gender).appearance
+	var expected: Array = source.get("actions",{}).keys()
+	for action: String in source.get("actionFallbacks",{}):
+		if action not in expected: expected.append(action)
+	for action: String in ACTIONS: assert(action in expected,"正式装备必须保留六个原动作")
+	for action: String in expected: assert(action in MALE_BASE_ACTIONS,"未知装备动作不能进入正式目录")
+	var actual_keys := actual.keys(); actual_keys.sort(); expected.sort()
+	assert(actual_keys == expected,"%d/%s 实际装备动作必须精确覆盖主源及其声明 fallback" % [item_id,gender])

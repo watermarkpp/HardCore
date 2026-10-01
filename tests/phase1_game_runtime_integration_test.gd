@@ -29,11 +29,11 @@ func _run() -> void:
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
 	await get_tree().process_frame
-	await get_tree().process_frame
+	await _wait_for_initial_ready(game)
 
 	await _travel_mine_route_to_corpse_hall(game)
 	_validate_corpse_hall_arrival_only(game)
-	game._on_scroll_used("回城卷")
+	game._on_scroll_used(GameData.item_entity_id("hc.service_item.000719"))
 	await get_tree().process_frame
 	assert(game.current_map_id == GameData.service_home_runtime_map_id(false))
 	assert(game.player.global_position.is_equal_approx(game._bich_home_screen_position_px()))
@@ -63,6 +63,16 @@ func _run() -> void:
 	)
 	game.queue_free()
 	get_tree().quit(0)
+
+
+func _wait_for_initial_ready(game: Node) -> void:
+	# World nodes may exist before the loading owner releases its input lock.
+	# Observe that actual boundary rather than assuming two frames are READY.
+	var deadline := Time.get_ticks_msec() + 10000
+	while game._world_bootstrap_in_progress or game._map_transition_in_progress or not game.gameplay_input_is_enabled():
+		assert(Time.get_ticks_msec() < deadline, "initial world did not reach its actual READY boundary")
+		await get_tree().process_frame
+	assert(not game._world_bootstrap_in_progress and game.gameplay_input_is_enabled())
 
 
 func _validate_phase1_runtime_bridge() -> void:

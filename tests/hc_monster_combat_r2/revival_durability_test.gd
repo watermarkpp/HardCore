@@ -27,7 +27,7 @@ func _equip_only_revival_ring() -> Dictionary:
 		PlayerState.equip_inventory_index(_inventory_index("复活戒指")).begins_with("已装备"),
 		"复活戒指穿戴失败"
 	)
-	var ring: Dictionary = PlayerState.equipment["左戒指"]
+	var ring: Dictionary = PlayerState.equipment["hc.slot.ring_left"]
 	assert(
 		PlayerState.has_special_effect("revival"),
 		"fixture: the equipped revival ring must register the revival effect"

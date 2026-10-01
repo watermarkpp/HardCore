@@ -69,7 +69,7 @@ func _run() -> void:
 		assert(not item_contract.is_empty(), "missing helmet item %d" % item_id)
 		var final_item := _final_item(finalization, item_id)
 		assert(not final_item.is_empty(), "missing finalization item %d" % item_id)
-		PlayerState.equipment["头盔"] = {
+		PlayerState.equipment["hc.slot.helmet"] = {
 			"item_id": item_id,
 			"name": str(item_contract.get("itemName", "")),
 			"instance_id": "final_helmet_%d" % item_id,

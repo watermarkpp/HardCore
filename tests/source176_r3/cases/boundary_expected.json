@@ -1,0 +1,2457 @@
+{
+  "schema": "source176.r3.boundary_inputs.v1",
+  "ordinary_monster_ids": [
+    64,
+    89
+  ],
+  "rows": [
+    {
+      "case_id": "64:p0:d0:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 0,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d0:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 0,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d0:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 0,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d1:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 1,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d1:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 1,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d1:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 1,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d2:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 2,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d2:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 2,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d2:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 2,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d3:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 3,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d3:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 3,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d3:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 3,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d4:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 4,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d4:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 4,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d4:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 4,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d5:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 5,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d5:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 5,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d5:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 5,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d6:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 6,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d6:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 6,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d6:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 6,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d7:inside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 7,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d7:equal",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 7,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p0:d7:outside",
+      "monster_id": 64,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 7,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d0:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 0,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d0:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 0,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d0:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 0,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d1:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 1,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d1:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 1,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d1:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 1,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d2:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 2,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d2:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 2,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d2:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 2,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d3:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 3,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d3:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 3,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d3:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 3,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d4:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 4,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d4:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 4,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d4:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 4,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d5:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 5,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d5:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 5,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d5:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 5,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d6:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 6,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d6:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 6,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d6:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 6,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d7:inside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 7,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d7:equal",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 7,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p1:d7:outside",
+      "monster_id": 64,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 7,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d0:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 0,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d0:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 0,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d0:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 0,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d1:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 1,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d1:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 1,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d1:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 1,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d2:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 2,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d2:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 2,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d2:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 2,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d3:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 3,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d3:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 3,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d3:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 3,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d4:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 4,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d4:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 4,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d4:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 4,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d5:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 5,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d5:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 5,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d5:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 5,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d6:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 6,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d6:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 6,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d6:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 6,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d7:inside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 7,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d7:equal",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 7,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "64:p2:d7:outside",
+      "monster_id": 64,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 7,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d0:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 0,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d0:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 0,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d0:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 0,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d1:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 1,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d1:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 1,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d1:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 1,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d2:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 2,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d2:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 2,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d2:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 2,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d3:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 3,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d3:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 3,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d3:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 3,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d4:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 4,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d4:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 4,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d4:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 4,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d5:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 5,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d5:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 5,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d5:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 5,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d6:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 6,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d6:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 6,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d6:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 6,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d7:inside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 7,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d7:equal",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 7,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p0:d7:outside",
+      "monster_id": 89,
+      "phase_id": 0,
+      "phase": [
+        0.0,
+        0.0
+      ],
+      "direction": 7,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d0:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 0,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d0:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 0,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d0:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 0,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d1:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 1,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d1:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 1,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d1:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 1,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d2:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 2,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d2:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 2,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d2:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 2,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d3:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 3,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d3:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 3,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d3:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 3,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d4:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 4,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d4:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 4,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d4:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 4,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d5:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 5,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d5:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 5,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d5:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 5,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d6:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 6,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d6:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 6,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d6:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 6,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d7:inside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 7,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d7:equal",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 7,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p1:d7:outside",
+      "monster_id": 89,
+      "phase_id": 1,
+      "phase": [
+        0.125,
+        0.875
+      ],
+      "direction": 7,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d0:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 0,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d0:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 0,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d0:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 0,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d1:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 1,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d1:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 1,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d1:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 1,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d2:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 2,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d2:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 2,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d2:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 2,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d3:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 3,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d3:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 3,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d3:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 3,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d4:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 4,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d4:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 4,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        0.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d4:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 4,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        0.0
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d5:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 5,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        -0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d5:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 5,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        -1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d5:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 5,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        -1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d6:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 6,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.0,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d6:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 6,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        0.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d6:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 6,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        0.0,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d7:inside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 7,
+      "boundary": "inside",
+      "relative_ground_gu": [
+        0.99,
+        -0.99
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d7:equal",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 7,
+      "boundary": "equal",
+      "relative_ground_gu": [
+        1.0,
+        -1.0
+      ],
+      "expected": true,
+      "purpose": "strict admission geometry, not natural pursuit"
+    },
+    {
+      "case_id": "89:p2:d7:outside",
+      "monster_id": 89,
+      "phase_id": 2,
+      "phase": [
+        0.5,
+        0.5
+      ],
+      "direction": 7,
+      "boundary": "outside",
+      "relative_ground_gu": [
+        1.01,
+        -1.01
+      ],
+      "expected": false,
+      "purpose": "strict admission geometry, not natural pursuit"
+    }
+  ]
+}

@@ -245,11 +245,12 @@ func _test_melee_epoch() -> void:
 	actor.attack_range_gu = 3.0
 	actor._attack_hit_delay = 0.05
 	actor._attack_timer = 0.0
-	# docs/02 M01A: rewind the wall-ms decision phase so the single fixture
-	# tick sees a fully elapsed walk interval (like the production cadence
-	# after a real pause); a fresh gate would legitimately WAIT this tick.
+	# docs/02 M01A: anchor the decision phase to the production combat clock
+	# so the single fixture tick sees a fully elapsed walk interval; a fresh
+	# gate would legitimately WAIT this tick.
 	var e01_cad = actor._movement_cadence
-	var e01_now := Time.get_ticks_msec()
+	actor._combat_action_time_s = (float(int(e01_cad.walk_interval_ms)) + 1.0) / 1000.0
+	var e01_now := int(actor._combat_action_time_s * 1000.0)
 	e01_cad.walk_wait_locked = false
 	e01_cad.walk_tick_ms = e01_now - int(e01_cad.walk_interval_ms) - 1
 	e01_cad.walk_wait_tick_ms = 0

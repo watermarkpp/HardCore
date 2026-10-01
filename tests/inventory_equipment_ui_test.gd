@@ -61,8 +61,8 @@ func _run() -> void:
 	assert(panel.get_node("EquipmentPanel").position.x < panel.get_node("BagPanel").position.x, "综合背包必须位于装备栏右侧")
 	assert(panel.bag_summary_label.position.y >= 18.0 and panel.bag_summary_label.vertical_alignment == VERTICAL_ALIGNMENT_CENTER, "背包金币与占用格数仍然贴近装饰框上沿")
 	assert(panel.equipment_buttons.size() == 10, "人物装备栏必须显示十个直接装备槽")
-	assert((panel.equipment_buttons["圣物"] as Button).get_parent().position == Vector2(10, 44), "圣物槽默认位置必须在左上")
-	assert((panel.equipment_buttons["徽章"] as Button).get_parent().position == Vector2(10, 444), "徽章槽默认位置必须在左戒指下方")
+	assert((panel.equipment_buttons["hc.slot.relic"] as Button).get_parent().position == Vector2(10, 44), "圣物槽默认位置必须在左上")
+	assert((panel.equipment_buttons["hc.slot.badge"] as Button).get_parent().position == Vector2(10, 444), "徽章槽默认位置必须在左戒指下方")
 	assert(not (panel.get_node("BagPanel/InventoryActions") is Container), "背包操作栏必须允许校准器独立调整")
 	var sort_rect := Rect2(panel.auto_sort_button.position, panel.auto_sort_button.size)
 	var discard_rect := Rect2(panel.discard_button.position, panel.discard_button.size)
@@ -174,15 +174,15 @@ func _run() -> void:
 			"人物属性与物品详情必须分别服从正式校准合同"
 		)
 	var equipment_panel := panel.get_node("EquipmentPanel") as Control
-	var necklace_button := panel.equipment_buttons["项链"] as Button
-	var armor_button := panel.equipment_buttons["衣服"] as Button
+	var necklace_button := panel.equipment_buttons["hc.slot.necklace"] as Button
+	var armor_button := panel.equipment_buttons["hc.slot.armor"] as Button
 	var necklace_rect := Rect2(necklace_button.get_parent().position + necklace_button.position, necklace_button.size)
 	var armor_rect := Rect2(armor_button.get_parent().position + armor_button.position, armor_button.size)
 	assert(not necklace_rect.intersects(armor_rect), "项链与衣服装备格发生连接或重叠")
 	assert(panel.theme.get_stylebox("normal", "GothicEquipmentSlotButton") is StyleBoxFlat, "装备格没有使用简洁正方形公共样式")
-	assert((panel.equipment_buttons["武器"] as Button).size.x == (panel.equipment_buttons["武器"] as Button).size.y, "装备格不是严格正方形")
-	var weapon_caption := panel.equipment_buttons["武器"].get_parent().get_node("SlotCaptionPlate") as Control
-	var weapon_button := panel.equipment_buttons["武器"] as Button
+	assert((panel.equipment_buttons["hc.slot.weapon"] as Button).size.x == (panel.equipment_buttons["hc.slot.weapon"] as Button).size.y, "装备格不是严格正方形")
+	var weapon_caption := panel.equipment_buttons["hc.slot.weapon"].get_parent().get_node("SlotCaptionPlate") as Control
+	var weapon_button := panel.equipment_buttons["hc.slot.weapon"] as Button
 	for slot_name in panel.equipment_slot_labels:
 		var label := panel.equipment_slot_labels[slot_name] as Label
 		var plate := label.get_parent() as Control
@@ -201,14 +201,14 @@ func _run() -> void:
 	panel._context_actions.clear()
 	panel._add_inventory_context_actions(2)
 	assert(panel.context_menu.item_count == 2, "戒指长按菜单必须提供左右两个槽位")
-	assert(panel._context_actions[1].get("slot", "") == "左戒指" and panel._context_actions[2].get("slot", "") == "右戒指", "戒指左右槽位菜单顺序错误")
+	assert(panel._context_actions[1].get("slot", "") == "hc.slot.ring_left" and panel._context_actions[2].get("slot", "") == "hc.slot.ring_right", "戒指左右槽位菜单顺序错误")
 
 	var attack_before := int(PlayerState.computed_stats.get("attack_max", 0))
 	var potion_index_for_slot_selection := _inventory_index_of("太阳水")
 	panel._clear_inventory_selection_styles()
 	panel._select_inventory_item(potion_index_for_slot_selection)
 	var bag_updates_before_equipment_slot := panel._bag_cell_update_count
-	panel._select_equipment_slot("武器")
+	panel._select_equipment_slot("hc.slot.weapon")
 	assert(panel._bag_cell_update_count == bag_updates_before_equipment_slot, "仅选择装备槽触发了全背包格刷新")
 	assert(panel.selected_inventory_index == -1 and panel.selected_inventory_indices.is_empty(), "装备槽选择没有清除背包选择")
 	var selection_updates_before := panel._selection_cell_update_count
@@ -321,14 +321,14 @@ func _run() -> void:
 	assert(panel._refresh_execution_count == refresh_before_equip + 1, "单次穿戴没有恰好执行一次 UI 刷新")
 	await get_tree().process_frame
 	assert(panel._refresh_execution_count == refresh_before_equip + 1, "穿戴信号的 deferred refresh 重复执行")
-	assert(str(PlayerState.equipment["武器"].get("name", "")) == "匕首", "界面穿戴没有进入武器槽")
+	assert(str(PlayerState.equipment["hc.slot.weapon"].get("name", "")) == "匕首", "界面穿戴没有进入武器槽")
 	assert(int(PlayerState.computed_stats.get("attack_max", 0)) > attack_before, "界面穿戴没有即时刷新装备属性")
 	assert(panel.character_preview._weapon_texture != null, "武器穿戴后人物预览没有外观")
-	var weapon_slot_icon: TextureRect = panel.equipment_buttons["武器"].get_node("CenteredPixelIcon")
+	var weapon_slot_icon: TextureRect = panel.equipment_buttons["hc.slot.weapon"].get_node("CenteredPixelIcon")
 	assert("/inventory/" in weapon_slot_icon.texture.resource_path, "装备格错误使用了穿戴人物缩略图")
 	assert(weapon_slot_icon.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "装备格图标没有使用清晰像素过滤")
-	assert(weapon_slot_icon.position == (panel.equipment_buttons["武器"].size - weapon_slot_icon.size) * 0.5, "装备图标没有处于格子正中")
-	assert(weapon_slot_icon.size.x <= panel.equipment_buttons["武器"].size.x - 4.0 and weapon_slot_icon.size.y <= panel.equipment_buttons["武器"].size.y - 4.0, "装备图标侵入简洁插槽边框")
+	assert(weapon_slot_icon.position == (panel.equipment_buttons["hc.slot.weapon"].size - weapon_slot_icon.size) * 0.5, "装备图标没有处于格子正中")
+	assert(weapon_slot_icon.size.x <= panel.equipment_buttons["hc.slot.weapon"].size.x - 4.0 and weapon_slot_icon.size.y <= panel.equipment_buttons["hc.slot.weapon"].size.y - 4.0, "装备图标侵入简洁插槽边框")
 	assert(weapon_slot_icon.size == weapon_slot_icon.texture.get_size(), "原游戏物品图被缩放，未保持1:1原始清晰度")
 
 	var armor_index := -1
@@ -340,23 +340,23 @@ func _run() -> void:
 	panel.context_menu.clear()
 	panel._context_actions.clear()
 	panel._add_inventory_context_actions(armor_index)
-	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("slot", "") == "衣服", "长按衣服没有生成正确穿戴菜单")
+	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("slot", "") == "hc.slot.armor", "长按衣服没有生成正确穿戴菜单")
 	panel._on_context_action(1)
 	await get_tree().process_frame
-	assert(str(PlayerState.equipment["衣服"].get("name", "")) == "布衣(男)", "界面穿戴没有进入衣服槽")
+	assert(str(PlayerState.equipment["hc.slot.armor"].get("name", "")) == "布衣(男)", "界面穿戴没有进入衣服槽")
 	assert(panel.character_preview._body_texture != null, "衣服穿戴后人物预览没有外观")
 
-	panel._select_equipment_slot("武器")
-	assert(panel.selected_equipment_slot == "武器" and panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "点击已装备物品没有显示物品属性")
-	panel._select_equipment_slot("武器")
+	panel._select_equipment_slot("hc.slot.weapon")
+	assert(panel.selected_equipment_slot == "hc.slot.weapon" and panel.item_detail_presenter.title_label.text == "匕首" and panel.item_detail_presenter.visible, "点击已装备物品没有显示物品属性")
+	panel._select_equipment_slot("hc.slot.weapon")
 	assert(not panel.item_detail_presenter.visible and panel.selected_equipment_slot.is_empty(), "再次点击同一装备槽没有取消选择")
-	panel._select_equipment_slot("武器")
-	panel._press_context = {"source": "equipment", "slot": "武器"}
-	panel._press_button = panel.equipment_buttons["武器"]
+	panel._select_equipment_slot("hc.slot.weapon")
+	panel._press_context = {"source": "equipment", "slot": "hc.slot.weapon"}
+	panel._press_button = panel.equipment_buttons["hc.slot.weapon"]
 	panel._open_long_press_menu()
 	assert(panel.context_menu.item_count == 1 and panel._context_actions[1].get("action", "") == "unequip", "长按已装备物品没有显示卸下")
 	panel._on_context_action(1)
-	assert(PlayerState.equipment["武器"].is_empty(), "界面卸下武器失败")
+	assert(PlayerState.equipment["hc.slot.weapon"].is_empty(), "界面卸下武器失败")
 
 	# --- Direct activation contract: single click selects, double click uses ---
 	PlayerState.reset_progress()
@@ -371,14 +371,14 @@ func _run() -> void:
 	var wrong_equipment := PlayerState.equipment.duplicate(true)
 	var wrong_inventory := PlayerState.inventory.duplicate(true)
 	var wrong_slot_detail := panel.detail_label.text
-	panel._select_equipment_slot("衣服")
+	panel._select_equipment_slot("hc.slot.armor")
 	assert(PlayerState.equipment == wrong_equipment and PlayerState.inventory == wrong_inventory and panel.selected_inventory_index == dagger_direct and panel.detail_label.text == wrong_slot_detail, "wrong equipment slot must reject without mutation or detail jump")
-	panel._select_equipment_slot("武器")
-	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "匕首" and not PlayerState.has_item("匕首"), "correct slot click must equip")
+	panel._select_equipment_slot("hc.slot.weapon")
+	assert(str(PlayerState.equipment.get("hc.slot.weapon", {}).get("name", "")) == "匕首" and not PlayerState.has_item("匕首"), "correct slot click must equip")
 	await get_tree().process_frame
 	_assert_six_column_geometry(panel, "点击匹配装备槽后")
-	PlayerState.unequip_slot("武器")
-	assert(PlayerState.equipment.get("武器", {}).is_empty() and PlayerState.has_item("匕首"), "double-click fixture must restore dagger to inventory")
+	PlayerState.unequip_slot("hc.slot.weapon")
+	assert(PlayerState.equipment.get("hc.slot.weapon", {}).is_empty() and PlayerState.has_item("匕首"), "double-click fixture must restore dagger to inventory")
 	panel.refresh()
 	await get_tree().process_frame
 
@@ -390,7 +390,7 @@ func _run() -> void:
 	assert(panel.selected_inventory_index == sun_index, "单击应只选择并显示详情")
 	assert(panel.item_detail_presenter.title_label.text == "太阳水" and panel.item_detail_presenter.visible, "单击未显示物品详情")
 	panel._select_inventory_item(dagger_index)
-	assert(PlayerState.equipment.get("武器", {}).is_empty(), "单击装备不应直接装备")
+	assert(PlayerState.equipment.get("hc.slot.weapon", {}).is_empty(), "单击装备不应直接装备")
 	await get_tree().process_frame
 
 	var sun_button := panel.item_grid.get_child(sun_index).get_node("ItemButton") as Button
@@ -424,7 +424,7 @@ func _run() -> void:
 	equip_click.position = dagger_button.size * 0.5
 	panel._inventory_input(equip_click, dagger_index, dagger_button)
 	await get_tree().process_frame
-	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) != "匕首", "double-click equipment must not equip")
+	assert(str(PlayerState.equipment.get("hc.slot.weapon", {}).get("name", "")) != "匕首", "double-click equipment must not equip")
 	assert(PlayerState.has_item("匕首"), "double-click equipment remains in inventory")
 	_assert_six_column_geometry(panel, "装备双击后")
 
@@ -565,14 +565,14 @@ func _run() -> void:
 	assert(panel.selected_inventory_indices.is_empty() and not panel.item_detail_presenter.visible, "清空多选后详情没有隐藏")
 	panel._select_inventory_item(contract_dagger_index)
 	panel._select_inventory_item(contract_armor_index)
-	panel._select_equipment_slot("武器")
-	assert(PlayerState.equipment["武器"].is_empty() and PlayerState.has_item("匕首"), "多选物品点击穿戴槽仍触发了单项穿戴")
+	panel._select_equipment_slot("hc.slot.weapon")
+	assert(PlayerState.equipment["hc.slot.weapon"].is_empty() and PlayerState.has_item("匕首"), "多选物品点击穿戴槽仍触发了单项穿戴")
 	panel._clear_inventory_selection_styles()
 	panel._press_cancelled = false
 	panel._select_inventory_item(contract_dagger_index)
-	panel._select_equipment_slot("武器")
-	assert(str(PlayerState.equipment["武器"].get("name", "")) == "匕首", "结构化装备入口未穿戴选定实例")
-	var equipped_instance_id := str(PlayerState.equipment["武器"].get("instance_id", ""))
+	panel._select_equipment_slot("hc.slot.weapon")
+	assert(str(PlayerState.equipment["hc.slot.weapon"].get("name", "")) == "匕首", "结构化装备入口未穿戴选定实例")
+	var equipped_instance_id := str(PlayerState.equipment["hc.slot.weapon"].get("instance_id", ""))
 	var empty_destination := -1
 	for candidate_index in range(InventoryPanel.BAG_VISIBLE_CAPACITY):
 		if panel._can_receive_unequip_to_index(candidate_index):
@@ -580,18 +580,18 @@ func _run() -> void:
 			break
 	assert(empty_destination >= 0, "已选穿戴装备没有任何可用空格作为指定卸装目标")
 	var detail_before_stale_failure: String = panel.item_detail_presenter.title_label.text
-	panel.selected_equipment_ref = {"container": "equipment", "slot": "武器", "instance_id": "stale-instance", "revision": panel._selection_revision}
+	panel.selected_equipment_ref = {"container": "equipment", "slot": "hc.slot.weapon", "instance_id": "stale-instance", "revision": panel._selection_revision}
 	panel._unequip_to_inventory_slot(empty_destination)
 	assert(
-		str(PlayerState.equipment["武器"].get("instance_id", "")) == equipped_instance_id
-		and panel.selected_equipment_slot == "武器"
+		str(PlayerState.equipment["hc.slot.weapon"].get("instance_id", "")) == equipped_instance_id
+		and panel.selected_equipment_slot == "hc.slot.weapon"
 		and panel.item_detail_presenter.title_label.text == detail_before_stale_failure,
 		"过期实例卸装失败没有保持源槽与详情",
 	)
-	panel.selected_equipment_ref = panel._equipment_selection_ref("武器", PlayerState.equipment["武器"])
+	panel.selected_equipment_ref = panel._equipment_selection_ref("hc.slot.weapon", PlayerState.equipment["hc.slot.weapon"])
 	panel._select_inventory_item(empty_destination)
 	assert(
-		PlayerState.equipment["武器"].is_empty()
+		PlayerState.equipment["hc.slot.weapon"].is_empty()
 		and str(PlayerState.inventory[empty_destination].get("instance_id", "")) == equipped_instance_id,
 		"指定空格卸装没有落到点击的格子或保留同一实例",
 	)

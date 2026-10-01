@@ -21,6 +21,105 @@
       "673": {
         "stackable": true,
         "maxStack": 20
+      },
+      "973": {
+        "learnSkillId": "hc.skill.warrior.basic_swordsmanship"
+      },
+      "974": {
+        "learnSkillId": "hc.skill.warrior.slaying_swordsmanship"
+      },
+      "975": {
+        "learnSkillId": "hc.skill.warrior.thrusting"
+      },
+      "976": {
+        "learnSkillId": "hc.skill.warrior.half_moon"
+      },
+      "977": {
+        "learnSkillId": "hc.skill.warrior.wild_rush"
+      },
+      "980": {
+        "learnSkillId": "hc.skill.warrior.fire_sword"
+      },
+      "990": {
+        "learnSkillId": "hc.skill.wizard.fireball"
+      },
+      "991": {
+        "learnSkillId": "hc.skill.wizard.repulsion_ring"
+      },
+      "992": {
+        "learnSkillId": "hc.skill.wizard.temptation_light"
+      },
+      "993": {
+        "learnSkillId": "hc.skill.wizard.great_fireball"
+      },
+      "994": {
+        "learnSkillId": "hc.skill.wizard.hellfire"
+      },
+      "995": {
+        "learnSkillId": "hc.skill.wizard.lightning"
+      },
+      "996": {
+        "learnSkillId": "hc.skill.wizard.teleport"
+      },
+      "997": {
+        "learnSkillId": "hc.skill.wizard.exploding_flame"
+      },
+      "998": {
+        "learnSkillId": "hc.skill.wizard.fire_wall"
+      },
+      "999": {
+        "learnSkillId": "hc.skill.wizard.laser"
+      },
+      "1001": {
+        "learnSkillId": "hc.skill.wizard.hell_lightning"
+      },
+      "1002": {
+        "learnSkillId": "hc.skill.wizard.magic_shield"
+      },
+      "1003": {
+        "learnSkillId": "hc.skill.wizard.holy_word"
+      },
+      "1005": {
+        "learnSkillId": "hc.skill.wizard.ice_storm"
+      },
+      "1016": {
+        "learnSkillId": "hc.skill.taoist.healing"
+      },
+      "1017": {
+        "learnSkillId": "hc.skill.taoist.spiritual_warfare"
+      },
+      "1018": {
+        "learnSkillId": "hc.skill.taoist.poison"
+      },
+      "1019": {
+        "learnSkillId": "hc.skill.taoist.soul_fire_talisman"
+      },
+      "1020": {
+        "learnSkillId": "hc.skill.taoist.summon_skeleton"
+      },
+      "1021": {
+        "learnSkillId": "hc.skill.taoist.invisibility"
+      },
+      "1022": {
+        "learnSkillId": "hc.skill.taoist.mass_invisibility"
+      },
+      "1023": {
+        "learnSkillId": "hc.skill.taoist.magic_defense"
+      },
+      "1024": {
+        "learnSkillId": "hc.skill.taoist.revelation"
+      },
+      "1025": {
+        "learnSkillId": "hc.skill.taoist.defense"
+      },
+      "1027": {
+        "learnSkillId": "hc.skill.taoist.entrapment"
+      },
+      "1029": {
+        "learnSkillId": "hc.skill.taoist.mass_healing"
+      },
+      "1032": {
+        "learnSkillId": "hc.skill.taoist.summon_divine_beast"
       }
     }
   },
@@ -195,9 +294,27 @@
       "restoreHealth": 100,
       "restoreMana": 160,
       "art": {
-        "inventoryIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
-        "stateIcon": { "path": "res://assets/art/items/service/fallback/potion_inventory.png", "exact": false },
-        "groundIcon": { "path": "res://assets/art/items/service/fallback/potion_ground.png", "exact": false }
+        "inventoryIcon": { "path": "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png", "exact": true, "distribution": "client.classic_raw_complete", "sourceLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Items.wil", "sourceIndex": 14, "sourceName": "疗伤药", "selection": "exact_auxiliary_1_item_art_mapping" },
+        "stateIcon": { "path": "res://assets/art/items/service/inventory/client.classic_raw_complete/Items_00014.png", "exact": true, "distribution": "client.classic_raw_complete", "sourceLibrary": "dev_art_sources/reference/mir2_client_raw/Data/Items.wil", "sourceIndex": 14, "sourceName": "疗伤药", "selection": "exact_auxiliary_1_item_art_mapping" },
+        "groundIcon": { "path": "res://assets/art/items/service/ground/client.classic_raw_complete/DnItems_00014.png", "exact": true, "distribution": "client.classic_raw_complete", "sourceLibrary": "dev_art_sources/reference/mir2_client_raw/Data/DnItems.wil", "sourceIndex": 14, "sourceName": "疗伤药", "selection": "exact_auxiliary_1_item_art_mapping" }
+      },
+      "artMappingEvidence": {
+        "lane": "server_data",
+        "distribution": "server.angelk727_exports",
+        "tier": "auxiliary_1",
+        "path": "dev_art_sources/reference/mir2_database_candidates/angelk727_full/Exports/2_物品数据.csv",
+        "sha256": "2f5746feb7276b726b9482e742da30539b9dd7b10e40e90813367d5fba42cd8a",
+        "line": 18,
+        "itemName": "疗伤药",
+        "itemImage": 14,
+        "primaryMissing": {
+          "distribution": "server.crystal.cjlaaa",
+          "path": "dev_art_sources/reference/mir2_database_candidates/suprcode_crystal_database/cjlaaa/Server.MirDB",
+          "sha256": "ace4fa6a70e18db7f8454350326d611ce6c56826b9f9a4f214797a3f8a5f69d0",
+          "databaseVersion": 105,
+          "queryName": "疗伤药",
+          "matchCount": 0
+        }
       },
       "source": { "distribution": "project.hardcore.item_runtime_authority.v1", "authority": "project_integration_authority", "purpose": "canonical_monster_drop_item_closure" }
     },

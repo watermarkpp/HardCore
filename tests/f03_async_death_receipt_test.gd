@@ -1,5 +1,7 @@
 extends Node
 
+const OrderedStageFixture := preload("res://tests/helpers/ordered_json_stage_fixture.gd")
+
 const State := preload("res://scripts/player_state.gd")
 const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
 class ObservedState extends State:
@@ -117,10 +119,8 @@ func _run() -> void:
 	var late := _new_state(root.path_join("late_foreign"))
 	var late_request: Dictionary = late.prepare_death_settlement([{"experience": 1}], {})
 	assert(late_request.writer.result(true).success)
-	assert(late.finish_prepared_death_settlement(late_request).get("pending", false))
-	assert(late_request.writer.job.stage_result(true).result.success)
-	assert(late.finish_prepared_death_settlement(late_request).get("pending", false))
-	assert(late_request.writer.job.stage_result(true).result.success)
+	await OrderedStageFixture.await_durable_promotion(late._json_persistence, late_request.writer.job,
+		late.finish_prepared_death_settlement.bind(late_request), get_tree())
 	late.active_profile_id = "new_role"
 	result = await _finish(late, late_request)
 	assert(result.success and not result.active_state_applied and result.saved_profile_id == "death")

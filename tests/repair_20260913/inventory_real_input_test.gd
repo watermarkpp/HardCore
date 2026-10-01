@@ -88,7 +88,7 @@ func _run() -> void:
 	PlayerState.profession = "战士"
 	var old_weapon := GameData.get_item_record({"item_id": 99})
 	var new_weapon := GameData.get_item_record({"item_id": 102})
-	PlayerState.equipment["武器"] = PlayerState._make_item_instance(str(old_weapon.name), old_weapon, 99130)
+	PlayerState.equipment["hc.slot.weapon"] = PlayerState._make_item_instance(str(old_weapon.name), old_weapon, 99130)
 	PlayerState.inventory = [PlayerState._make_item_instance(str(new_weapon.name), new_weapon, 102130)]
 	PlayerState.recalculate_stats(false)
 	panel.refresh()
@@ -99,12 +99,12 @@ func _run() -> void:
 		send_touch(bag_point, true)
 		send_touch(bag_point, false)
 		await settle()
-		var slot: Control = panel.equipment_buttons["武器"]
+		var slot: Control = panel.equipment_buttons["hc.slot.weapon"]
 		var slot_point := slot.get_global_transform_with_canvas() * (slot.size * 0.5)
 		send_touch(slot_point, true)
 		send_touch(slot_point, false)
 		await settle()
-		expect(int(GameData.get_item_record(PlayerState.equipment["武器"]).get("itemId", -1)) == expected_id, "native weapon replacement without re-entry")
+		expect(int(GameData.get_item_record(PlayerState.equipment["hc.slot.weapon"]).get("itemId", -1)) == expected_id, "native weapon replacement without re-entry")
 		expect(PlayerState.equipment_transaction_revision == revision + 1, "single equip commit")
 		expect(panel.item_detail_presenter.title_label.text == str(GameData.get_item_record({"item_id":expected_id}).name), "equipped detail follows new instance")
 	hud.queue_free()

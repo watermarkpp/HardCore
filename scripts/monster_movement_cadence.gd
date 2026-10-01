@@ -54,6 +54,8 @@ var failed_closed := true
 var authority_violation := true
 var last_error_code := AUTHORITY_VIOLATION_CODE
 var last_error_reason := "not_configured"
+var _last_evaluation_decision := DECISION_IMMOBILE
+var _last_evaluation_reason := "authority_contract_violation"
 
 
 func _init(authority_record: Variant = null, initial_now_ms: Variant = 0) -> void:
@@ -221,29 +223,31 @@ func configure(authority_record: Variant, initial_now_ms: Variant = 0) -> bool:
 ## Evaluate at most one autonomous movement grant.  The caller supplies the
 ## monotonic clock; this method never reads wall time or engine time.
 func evaluate(now_ms: Variant) -> Dictionary:
+	var granted := evaluate_grant(now_ms)
+	return _result(_last_evaluation_decision, _last_evaluation_decision, granted, _last_evaluation_reason)
+
+
+## Same authority transition, without a diagnostic Dictionary allocation.
+## The continuous owner-clock path needs only the grant and violation flag.
+func evaluate_grant(now_ms: Variant) -> bool:
 	if not configured or authority_violation:
-		return _result(
-			DECISION_IMMOBILE,
-			DECISION_IMMOBILE,
-			false,
-			"authority_contract_violation"
-		)
+		return _record_evaluation(DECISION_IMMOBILE, "authority_contract_violation")
 	if not _is_strict_int(now_ms):
 		_enter_violation("now_ms_must_be_integer")
-		return _result(DECISION_IMMOBILE, DECISION_IMMOBILE, false, "time_invalid")
+		return _record_evaluation(DECISION_IMMOBILE, "time_invalid")
 	var now := int(now_ms)
 	if now < 0:
 		_enter_violation("now_ms_must_not_be_negative")
-		return _result(DECISION_IMMOBILE, DECISION_IMMOBILE, false, "time_invalid")
+		return _record_evaluation(DECISION_IMMOBILE, "time_invalid")
 	if now < last_evaluated_ms:
 		_enter_violation("monotonic_clock_regressed")
-		return _result(DECISION_IMMOBILE, DECISION_IMMOBILE, false, "time_regression")
+		return _record_evaluation(DECISION_IMMOBILE, "time_regression")
 	if now == last_evaluated_ms:
-		return _result(DECISION_WAIT, DECISION_WAIT, false, "same_timestamp")
+		return _record_evaluation(DECISION_WAIT, "same_timestamp")
 	last_evaluated_ms = now
 
 	if not runtime_allowed or not movement_enabled or source_status == STATUS_LOCKED:
-		return _result(DECISION_IMMOBILE, DECISION_IMMOBILE, false, "stationary_or_runtime_disabled")
+		return _record_evaluation(DECISION_IMMOBILE, "stationary_or_runtime_disabled")
 
 	# ObjMon.Run order: unlock the wait first, using strict >.  A zero wait
 	# therefore remains locked for the same millisecond as the grant.
@@ -251,12 +255,12 @@ func evaluate(now_ms: Variant) -> Dictionary:
 		if now - walk_wait_tick_ms > walk_wait_ms:
 			walk_wait_locked = false
 		else:
-			return _result(DECISION_WAIT, DECISION_WAIT, false, "walk_wait_locked")
+			return _record_evaluation(DECISION_WAIT, "walk_wait_locked")
 
 	# ObjMon.Run uses strict > here as well.  Do not catch up multiple elapsed
 	# intervals: the accepted event resets walk_tick_ms to this exact now_ms.
 	if now - walk_tick_ms <= walk_interval_ms:
-		return _result(DECISION_WAIT, DECISION_WAIT, false, "cadence_not_elapsed")
+		return _record_evaluation(DECISION_WAIT, "cadence_not_elapsed")
 
 	walk_tick_ms = now
 	walk_count += 1
@@ -266,7 +270,13 @@ func evaluate(now_ms: Variant) -> Dictionary:
 		walk_count = 0
 		walk_wait_locked = true
 		walk_wait_tick_ms = now
-	return _result(DECISION_GRANT, DECISION_GRANT, true, "cadence_grant")
+	return _record_evaluation(DECISION_GRANT, "cadence_grant")
+
+
+func _record_evaluation(action: String, reason: String) -> bool:
+	_last_evaluation_decision = action
+	_last_evaluation_reason = reason
+	return action == DECISION_GRANT
 
 
 ## Public authority-aware decision.  For a HOLD, this returns COMPATIBILITY;
@@ -294,7 +304,7 @@ func decision(now_ms: Variant) -> String:
 
 
 func should_grant(now_ms: Variant) -> bool:
-	return bool(evaluate(now_ms).get("granted", false))
+	return evaluate_grant(now_ms)
 
 
 ## Re-anchor the cadence without changing the bound authority record.  Reset
@@ -417,6 +427,8 @@ func _source_status_set(value: String) -> void:
 
 
 func _reset_state() -> void:
+	_last_evaluation_decision = DECISION_IMMOBILE
+	_last_evaluation_reason = "authority_contract_violation"
 	monster_id = -1
 	source_status = ""
 	movement_enabled = false

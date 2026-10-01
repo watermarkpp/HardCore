@@ -6,10 +6,10 @@ const ResourceService := preload("res://scripts/skills/skill_resource_service.gd
 const Router := preload("res://scripts/skills/skill_runtime_router.gd")
 
 const LEARNED := {
-	"烈火剑法": 3,
-	"半月弯刀": 3,
-	"刺杀剑术": 3,
-	"攻杀剑术": 3,
+	"hc.skill.warrior.fire_sword": 3,
+	"hc.skill.warrior.half_moon": 3,
+	"hc.skill.warrior.thrusting": 3,
+	"hc.skill.warrior.slaying_swordsmanship": 3,
 }
 const ALL_TOGGLES := {
 	"warrior.fire_sword": true,
@@ -134,7 +134,7 @@ func _ready() -> void:
 	var half_only_no_mana_effect := Policy.resolve_warrior_hit_effect(
 		half_only_no_mana,
 		{
-			"learned_skills": {"半月弯刀": 3, "攻杀剑术": 3},
+			"learned_skills": {"hc.skill.warrior.half_moon": 3, "hc.skill.warrior.slaying_swordsmanship": 3},
 			"toggles": {"warrior.half_moon": true},
 			"has_combat_target": true,
 			"current_mp": 0,
@@ -281,7 +281,7 @@ func _ready() -> void:
 			)
 
 	var slaying := Policy.resolve_warrior_attack({
-		"learned_skills": {"攻杀剑术": 3},
+		"learned_skills": {"hc.skill.warrior.slaying_swordsmanship": 3},
 		"toggles": {},
 		"has_combat_target": true,
 		"current_mp": 0,

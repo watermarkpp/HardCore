@@ -36,7 +36,7 @@ func _test_oil_transaction(item_name: String, expected_full_repair: bool) -> voi
 	PlayerState.add_item("木剑")
 	assert(PlayerState.equip_inventory_index(0).begins_with("已装备"))
 	PlayerState.add_item(item_name)
-	var weapon: Dictionary = PlayerState.equipment["武器"]
+	var weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
 	weapon["durability_raw"] = 3998
 	weapon["max_durability_raw"] = 4000
 	PlayerState._sync_durability_compatibility_fields(weapon)
@@ -53,7 +53,7 @@ func _test_oil_transaction(item_name: String, expected_full_repair: bool) -> voi
 	var success := PlayerState.use_inventory_index(_inventory_index(item_name))
 	assert(success.begins_with("武器已"), "%s在3998/4000 raw时被display字段错误阻断" % item_name)
 	assert(PlayerState.item_count(item_name) == oil_count_before - 1, "%s成功后没有且仅有一次消费" % item_name)
-	weapon = PlayerState.equipment["武器"]
+	weapon = PlayerState.equipment["hc.slot.weapon"]
 	assert(int(weapon.durability_raw) == int(weapon.max_durability_raw))
 	if expected_full_repair:
 		assert(int(weapon.max_durability_raw) == 4000, "战神油错误降低最大耐久")
@@ -71,7 +71,7 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 
 	var weapon := _instance("木剑", 5000, 10000)
-	PlayerState.equipment["武器"] = weapon
+	PlayerState.equipment["hc.slot.weapon"] = weapon
 	var unchanged := int(weapon.durability_raw)
 	assert(not PlayerState.apply_durability_event(
 		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
@@ -117,12 +117,12 @@ func _run() -> void:
 	PlayerState._test_force_atomic_write_failure = false
 	assert(bool(failed_save.applied) and PlayerState._durability_save_pending, "延迟写盘失败后应保留待存档耐久")
 	assert(
-		int(PlayerState.equipment["武器"].durability_raw) == raw_before_failed_save - 2,
+		int(PlayerState.equipment["hc.slot.weapon"].durability_raw) == raw_before_failed_save - 2,
 		"延迟写盘失败错误回滚了已生效的耐久"
 	)
 	PlayerState._advance_durability_runtime(PlayerState.DURABILITY_SAVE_INTERVAL)
 	assert(not PlayerState._durability_save_pending and PlayerState.durability_event_commit_count == commits_before + 2, "耐久存档失败后未成功重试")
-	weapon = PlayerState.equipment["武器"]
+	weapon = PlayerState.equipment["hc.slot.weapon"]
 
 	weapon.durability_raw = 5000
 	PlayerState._sync_durability_compatibility_fields(weapon)
@@ -142,30 +142,30 @@ func _run() -> void:
 	)
 	assert(int(weapon.durability_raw) == 999 and int(weapon.durability) == 1, "跨1000 raw边界没有同步display兼容字段")
 	var roundtrip := PlayerState.migrate_equipment_slots(PlayerState.equipment.duplicate(true))
-	assert(int(roundtrip["武器"].durability_raw) == 999 and int(roundtrip["武器"].durability) == 1, "raw存档往返不精确")
+	assert(int(roundtrip["hc.slot.weapon"].durability_raw) == 999 and int(roundtrip["hc.slot.weapon"].durability) == 1, "raw存档往返不精确")
 	var migrated := PlayerState.migrate_equipment_slots({
 		"武器": {"name": "木剑", "durability": 7, "max_durability": 8, "instance_id": "legacy"},
 	})
-	assert(int(migrated["武器"].durability_raw) == 7000)
-	assert(int(migrated["武器"].max_durability_raw) == 8000, "旧display存档没有一次迁移到raw")
+	assert(int(migrated["hc.slot.weapon"].durability_raw) == 7000)
+	assert(int(migrated["hc.slot.weapon"].max_durability_raw) == 8000, "旧display存档没有一次迁移到raw")
 
 	_equip_all()
 	var slot_rolls := {}
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		slot_rolls[slot] = 1
-	slot_rolls["衣服"] = 0
-	slot_rolls["项链"] = 0
-	slot_rolls["圣物"] = 0
-	slot_rolls["徽章"] = 0
+	slot_rolls["hc.slot.armor"] = 0
+	slot_rolls["hc.slot.necklace"] = 0
+	slot_rolls["hc.slot.relic"] = 0
+	slot_rolls["hc.slot.badge"] = 0
 	var incoming := PlayerState.apply_durability_event(
 		PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
 		{"damage": 12, "causes_struck": true, "armor_roll": 0, "slot_rolls": slot_rolls}
 	)
 	assert(incoming.applied and incoming.raw_loss == 5)
-	assert(int(PlayerState.equipment["衣服"].durability_raw) == 9990, "衣服未执行必损+独立1/8二次损耗")
-	assert(int(PlayerState.equipment["项链"].durability_raw) == 9995, "其他装备独立1/8损耗错误")
-	assert(int(PlayerState.equipment["圣物"].durability_raw) == 9995 and int(PlayerState.equipment["徽章"].durability_raw) == 9995, "项目圣物/徽章扩展策略未接入")
-	assert(int(PlayerState.equipment["武器"].durability_raw) == 10000, "未命中1/8的槽位被错误损耗")
+	assert(int(PlayerState.equipment["hc.slot.armor"].durability_raw) == 9990, "衣服未执行必损+独立1/8二次损耗")
+	assert(int(PlayerState.equipment["hc.slot.necklace"].durability_raw) == 9995, "其他装备独立1/8损耗错误")
+	assert(int(PlayerState.equipment["hc.slot.relic"].durability_raw) == 9995 and int(PlayerState.equipment["hc.slot.badge"].durability_raw) == 9995, "项目圣物/徽章扩展策略未接入")
+	assert(int(PlayerState.equipment["hc.slot.weapon"].durability_raw) == 10000, "未命中1/8的槽位被错误损耗")
 
 	_equip_all()
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
@@ -174,12 +174,12 @@ func _run() -> void:
 		PlayerState.DURABILITY_EVENT_INCOMING_PHYSICAL_STRUCK,
 		{"damage": 12, "causes_struck": true, "armor_roll": 0, "slot_rolls": slot_rolls, "red_poison": true}
 	)
-	assert(poisoned.raw_loss == 6 and int(PlayerState.equipment["衣服"].durability_raw) == 9994, "红毒1.2倍raw损耗错误")
+	assert(poisoned.raw_loss == 6 and int(PlayerState.equipment["hc.slot.armor"].durability_raw) == 9994, "红毒1.2倍raw损耗错误")
 
 	PlayerState.reset_progress(false)
 	PlayerState.add_item("木剑")
 	assert(PlayerState.equip_inventory_index(0).begins_with("已装备"))
-	weapon = PlayerState.equipment["武器"]
+	weapon = PlayerState.equipment["hc.slot.weapon"]
 	var instance_id := str(weapon.instance_id)
 	weapon.durability_raw = 2
 	PlayerState._sync_durability_compatibility_fields(weapon)
@@ -189,7 +189,7 @@ func _run() -> void:
 		PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT,
 		{"confirmed_hit": true, "damage": 1, "weapon_roll": 0}
 	)
-	assert(str(PlayerState.equipment["武器"].instance_id) == instance_id and int(weapon.durability_raw) == 0, "零耐久装备实例未保留")
+	assert(str(PlayerState.equipment["hc.slot.weapon"].instance_id) == instance_id and int(weapon.durability_raw) == 0, "零耐久装备实例未保留")
 	assert(equipment_signals[0] == equipment_before + 1 and profile_signals[0] == profile_before + 1, "装备损坏未立即更新属性与界面")
 	commits_before = PlayerState.durability_event_commit_count
 	PlayerState.notification(NOTIFICATION_APPLICATION_PAUSED)

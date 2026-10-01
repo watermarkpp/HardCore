@@ -1,6 +1,11 @@
 extends Node
 
 const DPV2RepairV5 = preload("res://scripts/drop/dpv2_repair_v5_contract.gd")
+const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
+const SocketGemRules := preload("res://scripts/items/socket_gem_rules.gd")
+const CanonicalSkills := preload("res://scripts/skills/skill_data_loader.gd")
 
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PricingServiceScript = preload("res://scripts/pricing_service.gd")
@@ -123,12 +128,6 @@ const ITEM_ALIASES := {
 # 服务端使用经典MAP代码；正式地图运行时使用冻结 canonical IDs。
 # 别名必须显式保留，禁止用名称或数组顺序推导。
 const SERVICE_RUNTIME_MAP_ALIASES := {0: 910001}
-const PROFESSION_VISUAL_IDS := {
-	"战士": "warrior",
-	"法师": "wizard",
-	"道士": "taoist",
-}
-
 var database: Dictionary = {}
 var service_reference: Dictionary = {}
 var equipment_customization: Dictionary = {}
@@ -169,6 +168,7 @@ var drops: Array = []
 var tasks: Array = []
 var item_catalog: Array = []
 var load_error := ""
+var _item_category_error := ""
 var initial_load_deferred := OS.get_name() == "Android"
 var _initial_load_started := false
 var _initial_load_complete := false
@@ -182,6 +182,7 @@ var _maps_by_name: Dictionary = {}
 var _catalog_by_name: Dictionary = {}
 var _catalog_by_item_id: Dictionary = {}
 var _catalog_by_service_index: Dictionary = {}
+var _skill_books_by_skill: Dictionary = {}
 var _price_by_name: Dictionary = {}
 var _price_by_item_id: Dictionary = {}
 var _price_by_service_index: Dictionary = {}
@@ -296,7 +297,8 @@ func load_database() -> bool:
 		spb_ledger_audit_error = ""
 	_load_equipment_price_candidates()
 	_load_merchant_catalog()
-	_build_indexes()
+	if not _build_indexes():
+		return false
 	if not ItemDropInstanceRules.prepare_runtime():
 		load_error = "item_drop_affix_rules_not_ready"
 		return false
@@ -2352,7 +2354,11 @@ func _append_formal_map_identities() -> bool:
 	return true
 
 
-func _build_indexes() -> void:
+func _build_indexes() -> bool:
+	_item_category_error = ""
+	if not ItemCategories.ensure_loaded():
+		load_error = "item_category_authority_not_ready:" + ItemCategories.last_error
+		return false
 	_items_by_name.clear()
 	_items_by_id.clear()
 	_maps_by_id.clear()
@@ -2369,6 +2375,9 @@ func _build_indexes() -> void:
 			_maps_by_name[map_name] = entry
 	for entry: Variant in items:
 		if entry is Dictionary:
+			if not ItemCategories.attach_source_category(entry):
+				_item_category_error = "unknown_primary_equipment_category"
+				continue
 			var item_name := str(entry.get("name", ""))
 			_items_by_name[item_name] = entry
 			var item_id := _stable_item_id(entry)
@@ -2376,6 +2385,9 @@ func _build_indexes() -> void:
 				_items_by_id[item_id] = entry
 	_build_item_catalog()
 	for relic: Dictionary in RelicSynthesisRulesScript.records():
+		if not ItemCategories.attach_source_category(relic):
+			_item_category_error = "unknown_relic_category"
+			continue
 		var relic_id := int(relic.itemId)
 		var relic_name := str(relic.name)
 		if _items_by_id.has(relic_id) or _items_by_name.has(relic_name):
@@ -2383,7 +2395,20 @@ func _build_indexes() -> void:
 			continue
 		_items_by_id[relic_id] = relic
 		_items_by_name[relic_name] = relic
+	if not _item_category_error.is_empty():
+		_items_by_name.clear()
+		_items_by_id.clear()
+		item_catalog.clear()
+		_catalog_by_name.clear()
+		_catalog_by_item_id.clear()
+		_catalog_by_service_index.clear()
+		_price_by_name.clear()
+		_price_by_item_id.clear()
+		_price_by_service_index.clear()
+		load_error = _item_category_error
+		return false
 	_build_canonical_monster_runtime_drop_closure()
+	return true
 
 
 func _build_canonical_monster_runtime_drop_closure() -> void:
@@ -2516,10 +2541,12 @@ func _build_item_catalog() -> void:
 		if str(service_record.get("name", "")) in ["沃玛号角", "祖玛头像"]:
 			service_record["kind"] = "quest_item"
 			service_record["category"] = "任务物品"
-		if str(service_record.get("kind", "")) == "skill_book" and not skill_names.has(str(service_record.get("name", ""))):
-			service_record["usable"] = false
-			service_record["useEffect"] = "skill_not_in_current_class_catalog"
 		var override_record := _apply_item_runtime_authority_overrides(service_record, skill_names)
+		if str(override_record.get("kind", "")) == "skill_book":
+			var target: Variant = override_record.get("learnSkillId", "")
+			if not target is String or EntityRegistry.resolve(target, "skill").is_empty():
+				override_record["usable"] = false
+				override_record["useEffect"] = "skill_not_in_current_class_catalog"
 		_register_catalog_item(override_record)
 	for special_item: Variant in service_item_catalog.get("runtimeSpecials", {}).values():
 		if special_item is Dictionary:
@@ -2535,6 +2562,9 @@ func _build_item_catalog() -> void:
 	# Purity is a stable numeric identity. Keep all eleven entries ID-addressed;
 	# a name-only lookup must never choose an arbitrary purity or the retired ore.
 	for black_iron: Dictionary in EnhancementBlackIron.records():
+		if not ItemCategories.attach_source_category(black_iron):
+			_item_category_error = "unknown_black_iron_category"
+			continue
 		var iron_id := int(black_iron.itemId)
 		if _catalog_by_item_id.has(iron_id):
 			push_error("锻造黑铁矿 ID 与现有物品冲突：%d" % iron_id)
@@ -2580,6 +2610,29 @@ func _build_item_catalog() -> void:
 		if not catalog.is_empty():
 			_price_by_name[item_name]["kind"] = str(catalog.get("kind", _price_by_name[item_name].get("kind", "unknown")))
 			_price_by_name[item_name]["category"] = str(catalog.get("category", _price_by_name[item_name].get("category", "")))
+			_price_by_name[item_name]["category_id"] = str(catalog.get("category_id", ""))
+	_build_skill_book_index()
+
+
+func _build_skill_book_index() -> void:
+	_skill_books_by_skill = {}
+	var candidate := {}
+	for item: Dictionary in item_catalog:
+		if str(item.get("kind", "")) != "skill_book" or not item.get("usable", true): continue
+		var target: Variant = item.get("learnSkillId", "")
+		var numeric := _stable_item_id(item)
+		var book := EntityRegistry.canonical(EntityRegistry.from_legacy("item", numeric) if numeric >= 0
+			else EntityRegistry.from_legacy("service_item", _service_index(item)))
+		if not target is String or EntityRegistry.resolve(target, "skill").is_empty() or book.is_empty() \
+			or (candidate.has(target) and candidate[target] != book):
+			push_error("Invalid registered skill book relation")
+			return
+		candidate[target] = book
+	if candidate.size() != CanonicalSkills.skill_ids().size():
+		push_error("Incomplete registered skill book relations")
+		return
+	candidate.make_read_only()
+	_skill_books_by_skill = candidate
 
 
 func _build_price_index() -> void:
@@ -2644,8 +2697,12 @@ func _register_price_record(raw: Variant) -> void:
 		"base_price": base_price,
 		"kind": str(source_record.get("kind", "unknown")),
 		"category": str(source_record.get("category", "")),
+		"category_id": ItemCategories.category_for_record(source_record),
 		"source": (source_record.get("source", {}) as Dictionary).duplicate(true),
 	}
+	if not ItemCategories.attach_source_category(price_record):
+		_item_category_error = "unknown_price_category"
+		return
 	_price_by_name[canonical_name] = price_record
 	if service_index >= 0:
 		_price_by_service_index[service_index] = price_record
@@ -2654,6 +2711,9 @@ func _register_price_record(raw: Variant) -> void:
 
 
 func _register_catalog_item(record: Dictionary) -> void:
+	if not ItemCategories.attach_source_category(record):
+		_item_category_error = "unknown_catalog_category"
+		return
 	var item_name := str(record.get("name", ""))
 	if item_name.is_empty() or _catalog_by_name.has(item_name):
 		return
@@ -3491,7 +3551,7 @@ func get_item(item_name: String) -> Dictionary:
 
 
 func player_base_appearance(profession: String, gender: String) -> Dictionary:
-	var profession_id := str(PROFESSION_VISUAL_IDS.get(profession, ""))
+	var profession_id := ProfessionRules.profession_id(profession)
 	var manifests: Dictionary = equipment_visual_catalog.get("professionManifests", {})
 	var manifest: Variant = manifests.get(profession_id, {})
 	if not manifest is Dictionary:
@@ -3542,6 +3602,55 @@ func get_item_record(item_ref: Variant) -> Dictionary:
 	return _item_record_for_read(item_ref).duplicate(true)
 
 
+# New typed entry point delegates every attribute to the existing consumer.
+# Display strings never participate in this lookup.
+func get_entity_record(entity_id: String) -> Dictionary:
+	var identity := EntityRegistry.resolve(entity_id)
+	if identity.is_empty():
+		return {}
+	match identity.kind:
+		"item":
+			return get_item_record({"item_id":int(identity.legacy_id)})
+		"service_item":
+			return get_item_record({"service_index":int(identity.legacy_id)})
+		"monster":
+			return get_monster_by_id(int(identity.legacy_id))
+		"map":
+			return get_map_by_id(int(identity.legacy_id))
+	return {}
+
+
+func item_entity_id(item_ref: Variant) -> String:
+	var record := _item_record_for_read(item_ref)
+	if record.is_empty():
+		return ""
+	var item_id := _stable_item_id(record)
+	if item_id >= 0:
+		return EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_id))
+	return EntityRegistry.canonical(EntityRegistry.from_legacy("service_item", _service_index(record)))
+
+
+func item_category_id(item_ref: Variant) -> String:
+	if item_ref is String:
+		if EntityRegistry.resolve(item_ref).get("kind") not in ["item", "service_item"]: return ""
+	elif item_ref is Dictionary:
+		var typed: bool = item_ref.has("format_version")
+		for key: String in ["item_id", "itemId", "service_index", "serviceIndex"]:
+			if not item_ref.has(key): continue
+			typed = true
+			var number: Variant = item_ref[key]
+			if not (number is int or number is float) or not is_finite(float(number)) \
+				or float(number) != floor(float(number)) or number < 0 or number > 2147483647: return ""
+		if not typed: return ""
+	else:
+		return ""
+	var record := _item_record_for_read(item_ref)
+	if record.is_empty(): return ""
+	var category := ItemCategories.category_for_record(record)
+	if item_ref is Dictionary and item_ref.has("category_id") and item_ref.category_id != category: return ""
+	return category
+
+
 func get_item_art_path(item_ref: Variant, field := "inventoryIcon") -> String:
 	# UI icon refreshes need one string, not a deep copy of source provenance,
 	# every animation and all equipment rules. Resolve through the same indexes.
@@ -3575,18 +3684,30 @@ func get_item_rules_record(item_ref: Variant) -> Dictionary:
 
 
 func _item_record_for_read(item_ref: Variant) -> Dictionary:
+	if not _valid_explicit_item_reference(item_ref):
+		return {}
+	if item_ref is Dictionary and (item_ref.has("format_version") or item_ref.has("base") or item_ref.has("extensions")):
+		var base := ItemExtensionCodec.base_record(item_ref)
+		return _item_record_for_read(base) if not base.is_empty() else {}
+	if item_ref is String and item_ref.begins_with("hc."):
+		var registered := EntityRegistry.resolve(item_ref)
+		if registered.get("kind") == "item":
+			return _item_record_for_read({"item_id":int(registered.legacy_id)})
+		if registered.get("kind") == "service_item":
+			return _item_record_for_read({"service_index":int(registered.legacy_id)})
+		return {}
 	var identity := _stable_identity(item_ref)
 	var item_id := int(identity.get("item_id", -1))
+	if item_id == SocketGemRules.ITEM_ID:
+		return SocketGemRules.record_for_id(item_id)
 	if item_id >= 0 and _catalog_by_item_id.has(item_id):
 		return _catalog_by_item_id.get(item_id, {}) as Dictionary
-	# Direct-drop reserved identities (notably 920xxx skill books) are exact
-	# authority IDs even when the legacy presentation catalog has serviceIndex
-	# only. Resolve through that explicit ID map, never through caller text.
+	# The registry declares the exact service source for these reserved direct
+	# item IDs. No display string participates in this runtime bridge.
 	if item_id >= 0:
-		var direct_identity := dpv2_direct_item_identity(item_id)
-		var direct_name := str(direct_identity.get("canonical_item_name", ""))
-		if not direct_name.is_empty() and _catalog_by_name.has(direct_name):
-			var direct_record: Dictionary = (_catalog_by_name[direct_name] as Dictionary).duplicate(true)
+		var service_id := EntityRegistry.service_for_item(EntityRegistry.from_legacy("item", item_id))
+		if service_id >= 0 and _catalog_by_service_index.has(service_id):
+			var direct_record: Dictionary = (_catalog_by_service_index[service_id] as Dictionary).duplicate(true)
 			var existing_id := int(direct_record.get("itemId", -1))
 			if existing_id >= 0 and existing_id != item_id:
 				return {}
@@ -3601,10 +3722,37 @@ func _item_record_for_read(item_ref: Variant) -> Dictionary:
 	return _catalog_by_name.get(canonical_name, {}) as Dictionary
 
 
+func _valid_explicit_item_reference(value: Variant, runtime_membership := true) -> bool:
+	if value is int or value is float:
+		return is_finite(float(value)) and float(value) == floor(float(value)) and float(value) >= 0 and float(value) <= 2147483647
+	if not value is Dictionary:
+		return true
+	# A malformed explicit runtime identity never falls through to presentation
+	# text. Authoring aliases are resolved by their existing primary indexes.
+	for key: String in ["item_id", "service_index"]:
+		if value.has(key):
+			var number: Variant = value[key]
+			if not (number is int or number is float) or not is_finite(float(number)) \
+				or float(number) != floor(float(number)) or float(number) < 0 or float(number) > 2147483647:
+				return false
+	if value.has("item_id") and value.has("service_index"):
+		# Both are permitted only when the existing item authority declares that
+		# precise service link. Neither display name can establish the relation.
+		var item := _item_record_for_read({"item_id": value.item_id})
+		return not item.is_empty() and _service_index(item) == int(value.service_index)
+	if value.has("service_index"):
+		return not runtime_membership or _catalog_by_service_index.has(int(value.service_index))
+	if value.has("item_id"):
+		return not runtime_membership or not EntityRegistry.from_legacy("item", value.item_id).is_empty()
+	return true
+
+
 func validate_item_drop_instance(instance: Dictionary) -> bool:
 	# The validator reads this authoritative record without exposing a mutable
 	# catalog reference to callers or copying unrelated artwork/rule metadata.
-	return ItemDropInstanceRules.validate_instance(instance, _item_record_for_read({"item_id": instance.get("item_id", -1)}))
+	var base := ItemExtensionCodec.base_record(instance)
+	return not base.is_empty() and ItemDropInstanceRules.validate_instance(base,
+		_item_record_for_read({"item_id": base.get("item_id", -1)}))
 
 
 func get_item_shop_price(item_name: String) -> int:
@@ -3639,6 +3787,25 @@ func get_item_price_record(item_ref: Variant) -> Dictionary:
 
 
 func _get_item_price_record(item_ref: Variant, name_id_snapshot: Dictionary = {}) -> Dictionary:
+	# Price-only service SKUs also include the existing equipment source lane;
+	# their numeric source identity need not be an inventory-ownable service item.
+	if not _valid_explicit_item_reference(item_ref, false):
+		return {}
+	if item_ref is String and item_ref.begins_with("hc."):
+		var registered := EntityRegistry.resolve(item_ref)
+		if registered.get("kind") not in ["item", "service_item"]:
+			return {}
+		item_ref = {"item_id" if registered.kind == "item" else "service_index": int(registered.legacy_id)}
+	if item_ref is Dictionary and item_ref.has("item_id") and not item_ref.has("service_index"):
+		var service_id := EntityRegistry.service_for_item(EntityRegistry.from_legacy("item", item_ref.item_id))
+		if service_id >= 0:
+			item_ref = item_ref.duplicate()
+			item_ref["service_index"] = service_id
+	if item_ref is Dictionary and (item_ref.has("item_id") or item_ref.has("service_index")):
+		item_ref = item_ref.duplicate()
+		item_ref.erase("name")
+		item_ref.erase("item_name")
+		item_ref.erase("itemName")
 	# No independent price cache. Read the existing primary-first indexes only.
 	# A missing higher-priority identity MUST run the original maintenance path.
 	# Its newly added candidate can be stronger than a currently available fallback.
@@ -3804,11 +3971,32 @@ func get_calibrated_drops(monster_id: int, _retired_name := "") -> Array:
 	return entries.duplicate(true) if entries is Array else []
 
 
-func get_skill(skill_name: String, skill_level := 0) -> Dictionary:
+func get_skill(skill_ref: String, skill_level := 0) -> Dictionary:
+	# Exact legacy/UI ingress translates once; rank ownership is the existing
+	# primary skill_id, independent of any display projection in these rows.
+	var stable_id := CanonicalSkills.stable_skill_id(skill_ref)
+	if stable_id.is_empty(): return {}
 	for entry: Variant in skills:
-		if entry is Dictionary and entry.get("skillName", "") == skill_name and int(entry.get("skillLevel", -1)) == skill_level:
+		if entry is Dictionary and entry.get("skill_id", "") == stable_id and int(entry.get("skillLevel", -1)) == skill_level:
 			return entry
 	return {}
+
+
+func skill_book_entity_id(skill_id: String) -> String:
+	if EntityRegistry.resolve(skill_id, "skill").is_empty(): return ""
+	return str(_skill_books_by_skill.get(skill_id, ""))
+
+
+func skill_book_skill_id(item_ref: Variant) -> String:
+	# New business queries require a typed owner. Old name-only saves are
+	# imported by the item codec before reaching this runtime entrance.
+	if item_ref is String and not item_ref.begins_with("hc."): return ""
+	if item_ref is Dictionary and not item_ref.has("item_id") and not item_ref.has("service_index"): return ""
+	var item := _item_record_for_read(item_ref)
+	if str(item.get("kind", "")) != "skill_book" or not item.get("usable", true): return ""
+	var target: Variant = item.get("learnSkillId", "")
+	if not target is String or EntityRegistry.resolve(target, "skill").is_empty(): return ""
+	return target if _skill_books_by_skill.get(target, "") == item_entity_id(item_ref) else ""
 
 
 func canonical_item_kind(item_id: int) -> String:
@@ -3865,8 +4053,10 @@ func service_profession_stats(profession_name: String, level_value: int) -> Dict
 
 func get_profession_skills(profession: String) -> Array:
 	var result: Array = []
+	var identity := ProfessionRules.profession_id(profession)
+	if identity.is_empty(): return result
 	for entry: Variant in skills:
-		if entry is Dictionary and entry.get("profession", "") == profession and int(entry.get("skillLevel", -1)) == 0:
+		if entry is Dictionary and entry.get("profession_id", "") == identity and int(entry.get("skillLevel", -1)) == 0:
 			result.append(entry)
 	return result
 

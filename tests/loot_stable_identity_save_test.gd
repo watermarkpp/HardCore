@@ -88,8 +88,10 @@ func _run() -> void:
 	assert(merged.success and int(merged.inventory[0].get("item_id", -1)) == 920045)
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var ready_deadline := Time.get_ticks_msec() + 20000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec() < ready_deadline:
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "actual mapped world must be READY before evaluating the real pickup route")
 	game.process_mode = Node.PROCESS_MODE_DISABLED
 	var wrong: Dictionary = LootRuntime._drop_output_item_record(920045, "魔法药(小量)")
 	assert(not game._spawn_loot("魔法药(小量)", game.player.global_position, wrong), "unresolved formal ID materialized as another item")

@@ -1,6 +1,8 @@
 class_name SkillDataLoader
 extends RefCounted
 
+const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
+
 const CombatUnitLegacyAdapter := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -46,6 +48,7 @@ const RUNTIME_FORBIDDEN_STATUS_FRAGMENTS := [
 static var _document: Dictionary = {}
 static var _skills_by_id: Dictionary = {}
 static var _ids_by_alias: Dictionary = {}
+static var _configuration_revision := ""
 
 
 static func document() -> Dictionary:
@@ -56,6 +59,7 @@ static func document() -> Dictionary:
 			push_error("技能唯一真源无效：%s" % "; ".join(validation.get("errors", [])))
 			return {}
 		_document = parsed
+		_configuration_revision = JSON.stringify(parsed).sha256_text()
 		_build_indexes()
 	return _document
 
@@ -64,8 +68,14 @@ static func reload_data() -> Dictionary:
 	_document.clear()
 	_skills_by_id.clear()
 	_ids_by_alias.clear()
+	_configuration_revision = ""
 	var loaded := document()
 	return validate_document(loaded)
+
+
+static func configuration_revision() -> String:
+	document()
+	return _configuration_revision
 
 
 static func skill_ids() -> PackedStringArray:
@@ -97,6 +107,10 @@ static func skill(skill_name_or_id: String) -> Dictionary:
 		)
 		return {}
 	var definition_gu: Dictionary = adapted.definition_gu
+	definition_gu["entity_id"] = EntityRegistry.from_legacy("skill", stable_id)
+	if str(definition_gu.entity_id).is_empty():
+		push_error("Skill has no registered formal identity: " + stable_id)
+		return {}
 	definition_gu["combat_unit_adapter"] = {
 		"contract_id": adapted.contract_id,
 		"unit_contract_id": adapted.unit_contract_id,
@@ -110,9 +124,22 @@ static func skill(skill_name_or_id: String) -> Dictionary:
 
 static func stable_skill_id(skill_name_or_id: String) -> String:
 	document()
+	if skill_name_or_id.begins_with("hc."):
+		var old: Variant = EntityRegistry.legacy(skill_name_or_id, "skill")
+		return str(old) if old is String and _skills_by_id.has(old) else ""
 	if _skills_by_id.has(skill_name_or_id):
 		return skill_name_or_id
 	return str(_ids_by_alias.get(skill_name_or_id, ""))
+
+
+# Exact UI/legacy-import boundary; runtime tables retain only the returned ID.
+static func entity_skill_id(skill_name_or_id: String) -> String:
+	return EntityRegistry.from_legacy("skill", stable_skill_id(skill_name_or_id))
+
+
+static func is_canonical_skill_id(skill_id: String) -> bool:
+	document()
+	return _skills_by_id.has(skill_id)
 
 
 static func display_name(skill_name_or_id: String) -> String:
@@ -353,6 +380,7 @@ static func validate_document(value: Variant) -> Dictionary:
 	var orders: Dictionary = {}
 	var counts := {"warrior": 0, "wizard": 0, "taoist": 0}
 	var names: Dictionary = {}
+	var aliases: Dictionary = {}
 	for raw_skill: Variant in skills:
 		if not raw_skill is Dictionary:
 			errors.append("skill_not_dictionary")
@@ -372,6 +400,18 @@ static func validate_document(value: Variant) -> Dictionary:
 		else:
 			counts[profession_id] += 1
 		names[str(definition.get("display_name", ""))] = true
+		var identities: Array = [definition.get("display_name", "")]
+		if not definition.get("aliases", []) is Array:
+			errors.append("invalid_skill_aliases:" + skill_id)
+		else:
+			identities.append_array(definition.get("aliases", []))
+		for identity: Variant in identities:
+			if not identity is String or identity.is_empty():
+				errors.append("invalid_skill_alias:" + skill_id)
+			elif aliases.has(identity) and str(aliases[identity]) != skill_id:
+				errors.append("conflicting_skill_alias:" + identity)
+			else:
+				aliases[identity] = skill_id
 		if str(definition.get("content_layer", "")) != "vanilla":
 			errors.append("non_vanilla_skill:%s" % skill_id)
 		if str(definition.get("version_scope", "")) != "CN_MIR2_1_76":

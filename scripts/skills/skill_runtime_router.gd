@@ -2,6 +2,7 @@ class_name SkillRuntimeRouter
 extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const ActionLease := preload("res://scripts/features/contracts/action_config_lease.gd")
 const SkillCastRequestScript := preload("res://scripts/skills/skill_cast_request.gd")
 const SkillTargetServiceScript := preload("res://scripts/skills/skill_target_service.gd")
 const SkillResourceServiceScript := preload("res://scripts/skills/skill_resource_service.gd")
@@ -22,7 +23,7 @@ const CANONICAL_PRODUCTION_DEFAULT := true
 const WARRIOR_MELEE_MODIFIER_CONTRACT_ID := "gameplay.warrior.melee_modifiers.v2"
 
 
-static func _plan(request: Variant) -> Dictionary:
+static func _plan(request: Variant, definition: Dictionary = {}) -> Dictionary:
 	## Q3-C: the SINGLE planner baseline used by the canonical formal entry
 	## build_canonical_plan(). Pure: no resource commits, no cooldown commits,
 	## no node creation, no release snapshot building.
@@ -41,7 +42,8 @@ static func _plan(request: Variant) -> Dictionary:
 	if SkillRankResolverScript.mode_for(skill_id) == "EXCLUDED" and int(request.get("rank", 0)) > 3:
 		resolved_request = request.duplicate(false)
 		resolved_request["rank"] = SkillRankResolverScript.formula_rank(request.get("rank", 0))
-	var definition := SkillDataLoaderScript.skill(skill_id)
+	if definition.is_empty():
+		definition = ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
 	if definition.is_empty():
 		return {
 			"accepted": false,
@@ -140,7 +142,7 @@ static func build_canonical_plan(
 	var skill_id := SkillDataLoaderScript.stable_skill_id(
 		str(request.get("skill_id", ""))
 	)
-	var definition := SkillDataLoaderScript.skill(skill_id)
+	var definition := ActionLease.resolve_definition(skill_id, request.get("action_config_lease"))
 	if definition.is_empty():
 		return _canonical_rejection_plan(
 			skill_id,
@@ -152,7 +154,7 @@ static func build_canonical_plan(
 	if SkillRankResolverScript.mode_for(skill_id) == "EXCLUDED" and int(request.get("rank", 0)) > 3:
 		resolved_request = request.duplicate(false)
 		resolved_request["rank"] = SkillRankResolverScript.formula_rank(request.get("rank", 0))
-	var legacy_result := _plan(resolved_request)
+	var legacy_result := _plan(resolved_request, definition)
 	return SkillExecutionPlanContractScript.build_canonical_plan(
 		legacy_result,
 		resolved_request,
@@ -220,8 +222,8 @@ static func _canonical_rejection_plan(
 	}
 
 
-static func taoist_melee_accuracy_bonus(rank: int) -> int:
-	var definition := SkillDataLoaderScript.skill("taoist.spiritual_warfare")
+static func taoist_melee_accuracy_bonus(rank: int, configuration: RefCounted = null) -> int:
+	var definition := ActionLease.resolve_definition("taoist.spiritual_warfare", configuration)
 	var plan := TaoistRuntimeScript.execute(
 		definition, {"rank": rank}, SkillRngScript.new(0)
 	)
@@ -263,7 +265,7 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 	var slaying_proc_roll := -1
 
 	if basic_learned:
-		var basic_definition := SkillDataLoaderScript.skill("warrior.basic_swordsmanship")
+		var basic_definition := ActionLease.resolve_definition("warrior.basic_swordsmanship", request.get("action_config_lease"))
 		var basic_plan := WarriorRuntimeScript.execute(
 			basic_definition,
 			{
@@ -279,7 +281,7 @@ static func resolve_warrior_melee_modifiers(request: Dictionary) -> Dictionary:
 				if str(effect.get("type", "")) == "passive_stat_modifier":
 					flat_accuracy_bonus += int(effect.get("value", 0))
 	if slaying_learned:
-		var slaying_definition := SkillDataLoaderScript.skill("warrior.slaying_swordsmanship")
+		var slaying_definition := ActionLease.resolve_definition("warrior.slaying_swordsmanship", request.get("action_config_lease"))
 		var mechanics: Dictionary = slaying_definition.get("mechanics", {})
 		var accuracy_values: Array = mechanics.get("flat_accuracy_bonus_by_rank", [0, 1, 2, 3])
 		var denominator_values: Array = mechanics.get("proc_denominator_by_rank", [7, 6, 5, 4])

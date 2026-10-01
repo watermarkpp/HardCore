@@ -51,14 +51,14 @@ func _run() -> void:
 			assert(rolls == {"unlucky_roll":first,"success_roll":lower,"upper_stage_roll":upper})
 			assert(actual.state == reference.state, "conditional RNG consumption matches original")
 	weapon.weapon_luck = 1
-	PlayerState.equipment["武器"] = weapon
+	PlayerState.equipment["hc.slot.weapon"] = weapon
 	PlayerState.inventory = [{"name":"祝福油", "count":2}]
 	var result := PlayerState.use_blessing_oil_inventory_index_with_rolls(0, 0, 0, 1)
-	assert(result.ok and PlayerState.equipment["武器"].weapon_luck == 2 and PlayerState.inventory[0].count == 1)
+	assert(result.ok and PlayerState.equipment["hc.slot.weapon"].weapon_luck == 2 and PlayerState.inventory[0].count == 1)
 	PlayerState._test_force_atomic_write_failure = true
 	result = PlayerState.use_blessing_oil_inventory_index_with_rolls(0, 1, 0)
 	PlayerState._test_force_atomic_write_failure = false
-	assert(not result.ok and PlayerState.equipment["武器"].weapon_luck == 2 and PlayerState.inventory[0].count == 1, "oil and weapon roll back together")
+	assert(not result.ok and PlayerState.equipment["hc.slot.weapon"].weapon_luck == 2 and PlayerState.inventory[0].count == 1, "oil and weapon roll back together")
 	for pair in [Vector2i(1,0),Vector2i(0,2),Vector2i(4,1),Vector2i(0,0)]:
 		var detail := Detail.format_item(catalog, {"weapon_luck":pair.x,"weapon_curse":pair.y})
 		var net := Rules.equipment_luck_contribution(catalog, {"weapon_luck":pair.x,"weapon_curse":pair.y}, true)

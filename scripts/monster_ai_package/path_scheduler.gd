@@ -3,6 +3,7 @@ extends Node
 
 const Terrain := preload("res://scripts/monster_terrain_navigation_policy.gd")
 const Search := preload("res://scripts/monster_ai_package/path_search.gd")
+const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 const SOFT_BUDGET_USEC := 1200
 const NODE_NAME := "HCMonsterPathBudget"
 var jobs: Dictionary = {}
@@ -13,6 +14,11 @@ var expansions_count := 0
 var maximum_wait_frames := 0
 var diagnostic_pump_calls := 0
 var diagnostic_pump_usec := 0
+var maximum_completion_latency_usec := 0
+var _budget_category := "path:%d" % get_instance_id()
+
+func _exit_tree() -> void:
+	FrameBudget.mark_pending(_budget_category, false)
 
 static func for_tree(tree: SceneTree) -> HCMonsterPathScheduler:
 	if tree == null:
@@ -35,9 +41,11 @@ func submit(owner: Node, token: int, search: Search) -> void:
 	if not previous.is_empty():
 		(previous.search as Search).detach_shared_goal_field()
 	var submitted_frame := int(previous.get("submitted_frame", Engine.get_physics_frames()))
-	jobs[id] = {"owner": weakref(owner), "token": token, "search": search, "submitted_frame": submitted_frame}
+	jobs[id] = {"owner": weakref(owner), "token": token, "search": search, "submitted_frame": submitted_frame,
+		"queued_at_usec": int(previous.get("queued_at_usec", Time.get_ticks_usec()))}
 	if not queue.has(id):
 		queue.append(id)
+	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
 
 func cancel(owner_id: int) -> void:
 	var job: Dictionary = jobs.get(owner_id, {})
@@ -46,20 +54,35 @@ func cancel(owner_id: int) -> void:
 	if jobs.erase(owner_id):
 		cancelled_count += 1
 	queue.erase(owner_id)
+	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
 
 func _physics_process(_delta: float) -> void:
 	pump()
 
 func pump(soft_budget_usec: int = SOFT_BUDGET_USEC) -> void:
+	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
+	if queue.is_empty():
+		return
+	var token := FrameBudget.begin(_budget_category)
+	if token == 0:
+		return
+	var admitted_usec := FrameBudget.remaining_usec()
+	if soft_budget_usec > 0:
+		admitted_usec = mini(admitted_usec, soft_budget_usec)
+	_pump_slice(admitted_usec)
+	FrameBudget.end(token)
+	FrameBudget.mark_pending(_budget_category, not queue.is_empty(), true, false, self, true)
+
+func _pump_slice(soft_budget_usec: int) -> void:
 	var pump_started_usec := Time.get_ticks_usec()
 	diagnostic_pump_calls += 1
 	var visits := 0
 	var initial_count := queue.size()
 	var services := 0
 	var started_usec := Time.get_ticks_usec()
-	var pump_deadline_usec := started_usec + soft_budget_usec if soft_budget_usec > 0 else 0
+	var pump_deadline_usec := started_usec + soft_budget_usec
 	while not queue.is_empty() and visits < initial_count and services < 2:
-		if soft_budget_usec > 0 and visits > 0 and Time.get_ticks_usec() - started_usec >= soft_budget_usec:
+		if Time.get_ticks_usec() >= pump_deadline_usec:
 			break
 		var id: int = queue.pop_front()
 		visits += 1
@@ -92,4 +115,13 @@ func pump(soft_budget_usec: int = SOFT_BUDGET_USEC) -> void:
 			search.detach_shared_goal_field()
 			jobs.erase(id)
 			owner.call("_hc_path_completed", int(job.token), result, search.path)
+			maximum_completion_latency_usec = maxi(maximum_completion_latency_usec,
+				Time.get_ticks_usec() - int(job.queued_at_usec))
 	diagnostic_pump_usec += Time.get_ticks_usec() - pump_started_usec
+
+func work_snapshot() -> Dictionary:
+	var oldest_age_usec := 0
+	for job: Dictionary in jobs.values():
+		oldest_age_usec = maxi(oldest_age_usec, Time.get_ticks_usec() - int(job.queued_at_usec))
+	return {"pending": jobs.size(), "services": service_count, "oldest_age_usec": oldest_age_usec,
+		"maximum_completion_latency_usec": maximum_completion_latency_usec}

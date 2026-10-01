@@ -7,6 +7,8 @@ class FakeHud extends GameHUD:
 	var received_assignments: Array = []
 	var received_skill_assignments: Dictionary = {}
 	var messages: Array[String] = []
+	var error_messages: Array[String] = []
+	var success_messages: Array[String] = []
 
 	func set_item_quick_slots(assignments: Array) -> void:
 		received_assignments = assignments.duplicate()
@@ -15,6 +17,14 @@ class FakeHud extends GameHUD:
 		received_skill_assignments = assignments.duplicate(true)
 
 	func show_message(message: String, seconds := 2.0) -> void:
+		messages.append(message)
+
+	func show_error_message(message: String, seconds := 2.0) -> void:
+		error_messages.append(message)
+		messages.append(message)
+
+	func show_success_message(message: String, seconds := 2.0) -> void:
+		success_messages.append(message)
 		messages.append(message)
 
 
@@ -61,21 +71,22 @@ func _run() -> void:
 	)
 
 	# 绑定信号 → PlayerState + HUD 同步 + 可见提示
-	fake_hud.item_quick_slot_assignment_requested.emit(0, "太阳水")
-	assert(PlayerState.quick_item_slots[0] == "太阳水", "assignment 未写入 PlayerState")
-	assert(fake_hud.received_assignments[0] == "太阳水", "绑定后 HUD 未同步")
+	fake_hud.item_quick_slot_assignment_requested.emit(0, GameData.item_entity_id("太阳水"))
+	assert(PlayerState.quick_item_slots[0] == GameData.item_entity_id("太阳水"), "assignment 未写入 PlayerState")
+	assert(fake_hud.received_assignments[0] == GameData.item_entity_id("太阳水"), "绑定后 HUD 未同步")
 	assert(fake_hud.messages.size() == 1, "绑定成功未提示")
 
 	# 非法绑定拒绝并提示
-	fake_hud.item_quick_slot_assignment_requested.emit(1, "木剑")
+	fake_hud.item_quick_slot_assignment_requested.emit(1, GameData.item_entity_id("木剑"))
 	assert(PlayerState.quick_item_slots[1].is_empty(), "非法绑定未被拒绝")
 	assert(fake_hud.messages.size() == 2, "非法绑定未提示")
+	assert(fake_hud.error_messages.size() == 1, "非法绑定必须走专用错误通道")
 
 	# 持久化失败必须回滚 PlayerState，并覆盖 HUD 的乐观本地镜像。
 	var quick_slots_before := PlayerState.quick_item_slots_snapshot()
 	fake_hud.received_assignments = ["本地乐观值", "", "", ""]
 	PlayerState._test_force_atomic_write_failure = true
-	fake_hud.item_quick_slot_assignment_requested.emit(2, "太阳水")
+	fake_hud.item_quick_slot_assignment_requested.emit(2, GameData.item_entity_id("太阳水"))
 	PlayerState._test_force_atomic_write_failure = false
 	assert(PlayerState.quick_item_slots_snapshot() == quick_slots_before)
 	assert(fake_hud.received_assignments == quick_slots_before, "物品绑定保存失败后 HUD 未同步回权威值")
@@ -103,16 +114,16 @@ func _run() -> void:
 		"item_name": "太阳水",
 		"slots": PlayerState.quick_item_slots.duplicate(),
 	})
-	assert(fake_hud.received_assignments == ["太阳水", "", "", ""], "signal 未同步 HUD 快照")
+	assert(fake_hud.received_assignments == [GameData.item_entity_id("太阳水"), "", "", ""], "signal 未同步 HUD 快照")
 
 	# consumable/scroll 成功走既有信号链，不重复成功提示
 	var messages_before := fake_hud.messages.size()
-	fake_hud.item_quick_slot_use_requested.emit(0, "太阳水")
+	fake_hud.item_quick_slot_use_requested.emit(0, GameData.item_entity_id("太阳水"))
 	assert(PlayerState.item_count("太阳水") == 1, "快捷使用未消耗")
 	assert(fake_hud.messages.size() == messages_before, "consumable 成功不应重复提示")
 
 	# expected mismatch / 空槽必须可见失败提示
-	fake_hud.item_quick_slot_use_requested.emit(0, "回城卷")
+	fake_hud.item_quick_slot_use_requested.emit(0, GameData.item_entity_id("回城卷"))
 	assert(PlayerState.item_count("太阳水") == 1, "expected mismatch 不应消耗")
 	assert(fake_hud.messages.size() == messages_before + 1, "expected mismatch 未提示")
 	fake_hud.item_quick_slot_use_requested.emit(3, "")
@@ -120,16 +131,17 @@ func _run() -> void:
 
 	# skill_book 成功必须可见提示
 	PlayerState.add_item("基本剑术", 1)
-	fake_hud.item_quick_slot_assignment_requested.emit(1, "基本剑术")
+	fake_hud.item_quick_slot_assignment_requested.emit(1, GameData.item_entity_id("基本剑术"))
 	messages_before = fake_hud.messages.size()
-	fake_hud.item_quick_slot_use_requested.emit(1, "基本剑术")
+	fake_hud.item_quick_slot_use_requested.emit(1, GameData.item_entity_id("基本剑术"))
 	assert(PlayerState.is_skill_learned("基本剑术"), "快捷技能书未学习")
 	assert(fake_hud.messages.size() == messages_before + 1, "技能书成功未提示")
+	assert(fake_hud.success_messages.size() == 1, "技能书成功必须走正式成功通道")
 
 	# gameplay_input_is_enabled 约束使用动作
 	var messages_gated := fake_hud.messages.size()
 	game._player_input_enabled = false
-	fake_hud.item_quick_slot_use_requested.emit(0, "太阳水")
+	fake_hud.item_quick_slot_use_requested.emit(0, GameData.item_entity_id("太阳水"))
 	assert(PlayerState.item_count("太阳水") == 1, "输入门关闭时未阻止快捷使用")
 	assert(fake_hud.messages.size() == messages_gated, "输入门关闭时不应提示")
 	game._player_input_enabled = true

@@ -405,10 +405,10 @@ func _test_legacy_versions_and_shapes_migrate() -> void:
 	v7["taoist_main_pet_runtime_state"] = _legacy_pet_snapshot()
 	_write_index([v7_id])
 	_load_fixture(v7_id, v7)
-	assert(int(PlayerState.learned_skills.get("治愈术", 0)) == 2)
-	assert(str(PlayerState.equipment.get("武器", {}).get("name", "")) == "木剑")
-	assert(int(PlayerState.equipment.get("左手镯", {}).get("durability_raw", 0)) == 2000)
-	assert(int(PlayerState.equipment.get("左戒指", {}).get("durability_raw", 0)) == 3000)
+	assert(int(PlayerState.learned_skills.get("hc.skill.taoist.healing", 0)) == 2)
+	assert(str(PlayerState.equipment.get("hc.slot.weapon", {}).get("name", "")) == "木剑")
+	assert(int(PlayerState.equipment.get("hc.slot.bracelet_left", {}).get("durability_raw", 0)) == 2000)
+	assert(int(PlayerState.equipment.get("hc.slot.ring_left", {}).get("durability_raw", 0)) == 3000)
 	assert(not PlayerState.taoist_main_pet_runtime_state_for_restore("skeleton").is_empty())
 	assert(PlayerState.warehouse_inventory.size() == 1)
 	assert(not PlayerState._read_json(PlayerState._profile_path(v7_id)).has("warehouse_inventory"))
@@ -419,7 +419,7 @@ func _test_legacy_versions_and_shapes_migrate() -> void:
 	v8["quick_item_slots"] = ["回城卷", 123, null, "不存在物品"]
 	v8.erase("equip_cycle_cursor")
 	_load_fixture(v8_id, v8)
-	assert(PlayerState.quick_item_slots == ["回城卷", "", "", ""])
+	assert(PlayerState.quick_item_slots == [GameData.item_entity_id("回城卷"), "", "", ""])
 	assert(PlayerState.equip_cycle_cursor == {"戒指": "左戒指", "手镯": "左手镯"})
 
 	_configure_case("legacy_v9")

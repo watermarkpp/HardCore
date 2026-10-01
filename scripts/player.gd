@@ -42,12 +42,12 @@ const MAGIC_SHIELD_CAPACITY_CONTRACT_ID := (
 	"skills.wizard.magic_shield.absorption_capacity.v1"
 )
 const MAGIC_SHIELD_AUTO_REFRESH_RATIO := 0.20
-const WARRIOR_STATE_SKILL_NAMES := [
-	"基本剑术",
-	"攻杀剑术",
-	"刺杀剑术",
-	"半月弯刀",
-	"烈火剑法",
+const WARRIOR_STATE_SKILL_IDS := [
+	"hc.skill.warrior.basic_swordsmanship",
+	"hc.skill.warrior.slaying_swordsmanship",
+	"hc.skill.warrior.thrusting",
+	"hc.skill.warrior.half_moon",
+	"hc.skill.warrior.fire_sword",
 ]
 ## Legacy movement speed is the two-ground-unit run cadence (2 GU/600 ms).
 ## A fresh directional input performs one 1 GU walk step before entering run.
@@ -161,6 +161,10 @@ var _dead := false
 var _combat_transition_token := ""
 var combat_epoch := 0
 var hc_world_skill_preflight := Callable()
+var hc_action_configuration_provider := Callable()
+var hc_melee_configuration_provider := Callable()
+var hc_action_configuration_identity := Callable()
+var _preflight_action_configurations: Array = []
 var movement_input_active := false
 var movement_facing := Vector2.DOWN
 var actual_motion_facing := Vector2.DOWN
@@ -429,17 +433,27 @@ func can_start_attack() -> bool:
 	return not _dead and _attack_timer <= 0.0 and _attack_action_timer <= 0.0 and _struck_lock_remaining <= 0.0 and _struck_reaction_lock_remaining <= 0.0 and control_time <= 0.0
 
 
-func request_attack(has_combat_target := false, locked_target_instance_id := 0) -> bool:
+func request_attack(has_combat_target := false, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
 	if _dead or current_hp <= 0 or combat_transition_is_active():
+		return false
+	if configuration == null and hc_melee_configuration_provider.is_valid():
+		configuration = hc_melee_configuration_provider.call()
+		if configuration == null:
+			return false
+	if configuration != null and not _action_configuration_current(configuration):
 		return false
 	## Any attack submission breaks stealth uniformly (user override
 	## 2026-08-09).
 	break_stealth()
 	if not can_start_attack():
 		return false
-	var context := _build_warrior_attack_context(has_combat_target)
+	var context := _build_warrior_attack_context(has_combat_target, configuration)
 	if str(context.get("action", "attack")) != "attack":
 		return false
+	if configuration != null:
+		if not configuration.accept(PlayerState.action_configuration_versions(), hc_action_configuration_identity.call()):
+			return false
+		context["action_config_lease"] = configuration
 	var action_duration := attack_animation_duration
 	_attack_timer = attack_cooldown
 	_attack_action_timer = action_duration
@@ -452,10 +466,14 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 	var accepted_action_epoch := _pending_combat_action_epoch
 	var animation_name := str(context.get("skill_name", "attack"))
 	visual.play_action(animation_name, action_duration)
-	var damage := WarriorCombatMath.roll_attack_power(attack_min, attack_max, int(PlayerState.computed_stats.get("luck", 0)), _rng)
-	var critical_chance := float(PlayerState.computed_stats.get("critical_chance", 0.0))
+	var attack_stats: Dictionary = (configuration.primary_stats() if configuration != null \
+		and configuration.primary_stat_policy() == preload("res://scripts/features/contracts/action_config_lease.gd").ACCEPTED_PRIMARY_STATS else PlayerState.computed_stats)
+	var accepted_numeric: bool = configuration != null and configuration.primary_stat_policy() == preload("res://scripts/features/contracts/action_config_lease.gd").ACCEPTED_PRIMARY_STATS
+	var damage := WarriorCombatMath.roll_attack_power(int(attack_stats.get("attack_min", attack_min)) if accepted_numeric else attack_min,
+		int(attack_stats.get("attack_max", attack_max)) if accepted_numeric else attack_max, int(attack_stats.get("luck", 0)), _rng)
+	var critical_chance := float(attack_stats.get("critical_chance", 0.0))
 	if critical_chance > 0.0 and EquipmentRulesScript.critical_succeeds(critical_chance, _rng.randf()):
-		damage = EquipmentRulesScript.critical_damage(damage, float(PlayerState.computed_stats.get("critical_damage_multiplier", 1.5)))
+		damage = EquipmentRulesScript.critical_damage(damage, float(attack_stats.get("critical_damage_multiplier", 1.5)))
 	_emit_attack_after_windup(
 		damage,
 		attack_hit_windup,
@@ -471,22 +489,27 @@ func request_attack(has_combat_target := false, locked_target_instance_id := 0) 
 func request_attack_toward(
 	direction: Vector2,
 	has_combat_target := false,
-	locked_target_instance_id := 0
+	locked_target_instance_id := 0,
+	configuration: RefCounted = null
 ) -> bool:
 	if not can_start_attack() or direction.length_squared() <= 0.01:
 		return false
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
 	set_combat_facing(direction)
-	return request_attack(has_combat_target, locked_target_instance_id)
+	return request_attack(has_combat_target, locked_target_instance_id, configuration)
 
 
 # Pure preflight for callers that must not select targets or change facing
 # unless the request can commit immediately.
-func can_request_skill(skill_name: String) -> bool:
+func can_request_skill(skill_name: String, configuration: RefCounted = null) -> bool:
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
 	if skill_name.is_empty() or not PlayerState.is_skill_learned(skill_name):
 		return false
 	if _struck_lock_remaining > 0.0 or _struck_reaction_lock_remaining > 0.0 or control_time > 0.0 or _dead or current_hp <= 0 or combat_transition_is_active():
 		return false
-	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
+	if PlayerState.profession_id == "hc.profession.warrior" and SkillDataLoaderScript.entity_skill_id(skill_name) in WARRIOR_STATE_SKILL_IDS:
 		return true
 	if _attack_timer > 0.0:
 		return false
@@ -495,14 +518,16 @@ func can_request_skill(skill_name: String) -> bool:
 		return false
 	if skill_cooldown_remaining_ms(stable_skill_id) > 0:
 		return false
-	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var canonical_definition: Dictionary = (configuration.definition_for(stable_skill_id)
+		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
 	if canonical_definition.is_empty():
 		return false
-	var learned_level := PlayerState.effective_skill_level(skill_name)
+	var learned_level: int = configuration.rank() if configuration != null else PlayerState.effective_skill_level(skill_name)
 	var resource_context := PlayerState.canonical_skill_resource_context(
 		stable_skill_id,
 		current_mp
 	)
+	_freeze_partner_resource_context(resource_context, configuration)
 	var dual_defense_context: Dictionary = resource_context.get(
 		"dual_defense_context",
 		{}
@@ -526,28 +551,44 @@ func can_request_skill(skill_name: String) -> bool:
 	return current_mp >= maxi(0, int(quote.get("mp_cost", 0)))
 
 
-func request_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
+func request_skill(skill_name: String, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
+	# Typed API input is translated once for existing display/event consumers.
+	# Gameplay qualification and state dispatch use the registered identity.
+	if skill_name.begins_with("hc."):
+		skill_name = SkillDataLoaderScript.display_name(skill_name)
+		if skill_name.is_empty():
+			return false
+	if configuration == null and hc_action_configuration_provider.is_valid():
+		configuration = hc_action_configuration_provider.call(SkillDataLoaderScript.stable_skill_id(skill_name))
+		if configuration == null:
+			return false
+	if configuration != null and not _action_configuration_current(configuration):
+		return false
 	## Any skill submission breaks stealth uniformly (user override
 	## 2026-08-09); the break happens at submission so a broken state can
 	## never linger into the next combat action.
 	break_stealth()
-	if not can_request_skill(skill_name):
+	if not can_request_skill(skill_name, configuration):
 		return false
 	var learned_level := PlayerState.effective_skill_level(skill_name)
-	if PlayerState.profession == "战士" and skill_name in WARRIOR_STATE_SKILL_NAMES:
-		return _request_warrior_state_skill(skill_name, learned_level)
-	return _request_active_skill(skill_name, locked_target_instance_id)
+	if PlayerState.profession_id == "hc.profession.warrior" and SkillDataLoaderScript.entity_skill_id(skill_name) in WARRIOR_STATE_SKILL_IDS:
+		return _request_warrior_state_skill(SkillDataLoaderScript.entity_skill_id(skill_name), learned_level)
+	return _request_active_skill(skill_name, locked_target_instance_id, configuration)
 
 
-func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -> bool:
-	var learned_level := PlayerState.effective_skill_level(skill_name)
+func _request_active_skill(skill_name: String, locked_target_instance_id := 0, configuration: RefCounted = null) -> bool:
+	var learned_level: int = configuration.rank() if configuration != null else PlayerState.effective_skill_level(skill_name)
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	if hc_world_skill_preflight.is_valid():
-		if not bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id)):
+		_preflight_action_configurations.append(configuration)
+		var passed := bool(hc_world_skill_preflight.call(stable_skill_id, locked_target_instance_id))
+		_preflight_action_configurations.pop_back()
+		if not passed:
 			return false
 	elif stable_skill_id == "wizard.lightning":
 		return false
-	var canonical_definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var canonical_definition: Dictionary = (configuration.definition_for(stable_skill_id)
+		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
 	var canonical_timing: Dictionary = canonical_definition.get("timing", {})
 	var combat_profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
 	var track_locked_target := CombatReleaseGeometryScript.tracks_locked_target_for_skill(
@@ -570,6 +611,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		stable_skill_id,
 		current_mp
 	)
+	_freeze_partner_resource_context(resource_context, configuration)
 	var dual_defense_context: Dictionary = resource_context.get(
 		"dual_defense_context",
 		{}
@@ -579,7 +621,8 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		""
 	))
 	if not partner_skill_id.is_empty():
-		var partner_definition := SkillDataLoaderScript.skill(partner_skill_id)
+		var partner_definition: Dictionary = (configuration.partner_definition()
+			if configuration != null else PlayerState.effective_skill_definition(partner_skill_id))
 		cooldown_ms = maxi(
 			cooldown_ms,
 			int(partner_definition.get("timing", {}).get(
@@ -613,6 +656,8 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		0.0,
 		float(cooldown_ms) / 1000.0
 	) * _equipment_spell_time_scale / _cast_speed_multiplier
+	if configuration != null and not configuration.accept(PlayerState.action_configuration_versions(), hc_action_configuration_identity.call()):
+		return false
 	_attack_timer = action_lock_seconds
 	if cooldown_seconds > 0.0:
 		_skill_cooldown_remaining[stable_skill_id] = cooldown_seconds
@@ -659,7 +704,7 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 	# a synchronous observer may complete a begin/finish transition and bump
 	# the live epoch before the delayed release reads it (RV14-R2 boundary).
 	var accepted_action_epoch := _pending_combat_action_epoch
-	visual.play_action(skill_name if PlayerState.profession == "战士" else "cast", action_duration)
+	visual.play_action(skill_name if PlayerState.profession_id == "hc.profession.warrior" else "cast", action_duration)
 	skill_cast_started.emit(stable_skill_id)
 	_emit_skill_after_windup(
 		skill_name,
@@ -669,9 +714,29 @@ func _request_active_skill(skill_name: String, locked_target_instance_id := 0) -
 		accepted_action_epoch,
 		facing.normalized(),
 		locked_target_instance_id,
-		track_locked_target
+		track_locked_target,
+		configuration
 	)
 	return true
+
+
+func _action_configuration_current(configuration: RefCounted) -> bool:
+	return hc_action_configuration_identity.is_valid() and configuration.current_before_accept(
+		PlayerState.action_configuration_versions(), hc_action_configuration_identity.call())
+
+
+func current_preflight_action_configuration() -> RefCounted:
+	return null if _preflight_action_configurations.is_empty() else _preflight_action_configurations.back()
+
+
+func _freeze_partner_resource_context(context: Dictionary, configuration: RefCounted) -> void:
+	if configuration == null:
+		return
+	context.erase("dual_defense_context")
+	var partner: Dictionary = configuration.partner_definition()
+	if not partner.is_empty():
+		context["dual_defense_context"] = {"partner_skill_id":partner.skill_id,"partner_rank":configuration.partner_rank()}
+		context["action_partner_definition"] = partner
 
 
 func apply_confirmed_physical_hit_durability(damage: int, context := {}) -> Dictionary:
@@ -1166,6 +1231,10 @@ func _emit_attack_after_windup(
 		and not combat_transition_is_active()
 		and combat_epoch == action_epoch
 	):
+		var configuration: RefCounted = context.get("action_config_lease")
+		if configuration != null and (not hc_action_configuration_identity.is_valid() \
+			or not configuration.valid_for_release(hc_action_configuration_identity.call())):
+			return
 		if action_id == _pending_combat_action_id and _pending_combat_action_active:
 			_pending_combat_action_committed = true
 		var release_geometry := _resolve_combat_release_geometry(
@@ -1199,7 +1268,8 @@ func _emit_skill_after_windup(
 	action_epoch: int,
 	input_direction: Vector2,
 	locked_target_instance_id: int,
-	track_locked_target: bool
+	track_locked_target: bool,
+	configuration: RefCounted = null
 ) -> void:
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
@@ -1256,7 +1326,12 @@ func _emit_skill_after_windup(
 					friendly_target_valid
 				)
 			)
+		if configuration != null:
+			if not hc_action_configuration_identity.is_valid() or not configuration.valid_for_release(hc_action_configuration_identity.call()):
+				return
 		_pending_skill_context = {"release_geometry": release_geometry}
+		if configuration != null:
+			_pending_skill_context["action_config_lease"] = configuration
 		var release_signal_payload := combat_release_signal_payload(
 			release_geometry
 		)
@@ -1426,7 +1501,7 @@ func warrior_state_snapshot() -> Dictionary:
 	)
 	return {
 		"contract_id": "gameplay.warrior.skill_runtime.v2",
-		"slaying_auto": PlayerState.learned_skills.has("攻杀剑术"),
+		"slaying_auto": PlayerState.is_skill_learned("warrior.slaying_swordsmanship"),
 		"thrusting": thrusting_enabled,
 		"half_moon": half_moon_enabled,
 		"fire_enabled": fire_sword_enabled,
@@ -1472,30 +1547,31 @@ func _combat_time_ms() -> int:
 	return _test_combat_time_ms if _test_combat_time_ms >= 0 else Time.get_ticks_msec()
 
 
-func _request_warrior_state_skill(skill_name: String, _level: int) -> bool:
-	match skill_name:
-		"基本剑术":
+func _request_warrior_state_skill(skill_id: String, _level: int) -> bool:
+	var skill_name := SkillDataLoaderScript.display_name(skill_id)
+	match skill_id:
+		"hc.skill.warrior.basic_swordsmanship":
 			warrior_skill_state_changed.emit(skill_name, true, "基本剑术为被动命中技能")
 			return true
-		"攻杀剑术":
+		"hc.skill.warrior.slaying_swordsmanship":
 			warrior_skill_state_changed.emit(skill_name, true, "攻杀剑术按攻击周期自动触发")
 			return true
-		"刺杀剑术":
+		"hc.skill.warrior.thrusting":
 			thrusting_enabled = not thrusting_enabled
 			warrior_skill_state_changed.emit(skill_name, thrusting_enabled, "刺杀剑术：%s" % ("开启" if thrusting_enabled else "关闭"))
 			return true
-		"半月弯刀":
+		"hc.skill.warrior.half_moon":
 			half_moon_enabled = not half_moon_enabled
 			warrior_skill_state_changed.emit(skill_name, half_moon_enabled, "半月弯刀：%s" % ("开启" if half_moon_enabled else "关闭"))
 			return true
-		"烈火剑法":
+		"hc.skill.warrior.fire_sword":
 			fire_sword_enabled = not fire_sword_enabled
 			warrior_skill_state_changed.emit(skill_name, fire_sword_enabled, "烈火剑法：%s" % ("开启" if fire_sword_enabled else "关闭"))
 			return true
 	return false
 
 
-func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
+func _build_warrior_attack_context(has_combat_target := false, configuration: RefCounted = null) -> Dictionary:
 	var context := {
 		"policy_id": SkillInputPolicyScript.WARRIOR_ATTACK_POLICY_ID,
 		"action": "attack",
@@ -1503,12 +1579,13 @@ func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
 		"skill_name": "attack",
 		"skill_level": 0,
 	}
-	if PlayerState.profession != "战士":
+	if PlayerState.profession_id != "hc.profession.warrior":
 		return context
 	var fire_remaining_ms := maxi(0, _fire_sword_charge_expires_at_ms - Time.get_ticks_msec())
+	var accepted: Dictionary = configuration.melee_context() if configuration != null else {}
 	var resolution := SkillInputPolicyScript.resolve_warrior_attack({
-		"learned_skills": PlayerState.learned_skills,
-		"toggles": {
+		"learned_skills": accepted.learned_skills if not accepted.is_empty() else PlayerState.learned_skills,
+		"toggles": accepted.toggles if not accepted.is_empty() else {
 			"warrior.fire_sword": fire_sword_enabled,
 			"warrior.half_moon": half_moon_enabled,
 			"warrior.thrusting": thrusting_enabled,
@@ -1517,13 +1594,14 @@ func _build_warrior_attack_context(has_combat_target := false) -> Dictionary:
 		"current_mp": current_mp,
 		"fire_armed": fire_remaining_ms > 0,
 		"fire_cooldown_remaining_ms": skill_cooldown_remaining_ms("warrior.fire_sword"),
-		"fire_rank": PlayerState.effective_skill_level("烈火剑法"),
-		"half_moon_rank": PlayerState.effective_skill_level("半月弯刀"),
-		"slaying_rank": PlayerState.effective_skill_level("攻杀剑术"),
+		"fire_rank": configuration.rank_for("warrior.fire_sword") if configuration != null else PlayerState.effective_skill_level("warrior.fire_sword"),
+		"half_moon_rank": configuration.rank_for("warrior.half_moon") if configuration != null else PlayerState.effective_skill_level("warrior.half_moon"),
+		"slaying_rank": configuration.rank_for("warrior.slaying_swordsmanship") if configuration != null else PlayerState.effective_skill_level("warrior.slaying_swordsmanship"),
+		"action_config_lease": configuration,
 	})
 	var selected_id := str(resolution.get("skill_id", ""))
 	resolution["skill_level"] = (
-		PlayerState.effective_skill_level(selected_id)
+		(configuration.rank_for(selected_id) if configuration != null else PlayerState.effective_skill_level(selected_id))
 		if not selected_id.is_empty()
 		else 0
 	)
@@ -1548,7 +1626,7 @@ func restore_mana(amount: int) -> void:
 
 
 func _tick_badge_recovery(delta: float) -> void:
-	var equipped: Variant = PlayerState.equipment.get("徽章", {})
+	var equipped: Variant = PlayerState.equipment.get("hc.slot.badge", {})
 	var equipped_record: Dictionary = equipped if equipped is Dictionary else {}
 	var item_id := _badge_recovery_item_id
 	if equipped_record != _badge_recovery_equipment_snapshot:
@@ -1814,7 +1892,7 @@ func _draw() -> void:
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	if visual == null or not visual.uses_final_art():
 		draw_circle(Vector2(0, -8), 17.0, Color(0.76, 0.66, 0.46))
-		var profession_color: Color = {"战士": Color(0.24, 0.34, 0.48), "法师": Color(0.20, 0.28, 0.56), "道士": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession, Color(0.24, 0.34, 0.48))
+		var profession_color: Color = {"hc.profession.warrior": Color(0.24, 0.34, 0.48), "hc.profession.wizard": Color(0.20, 0.28, 0.56), "hc.profession.taoist": Color(0.36, 0.42, 0.24)}.get(PlayerState.profession_id, Color(0.24, 0.34, 0.48))
 		draw_colored_polygon(PackedVector2Array([Vector2(-17, -5), Vector2(17, -5), Vector2(13, 23), Vector2(-13, 23)]), profession_color)
 		draw_line(Vector2(0, 7), facing * 27.0 + Vector2(0, 7), Color(0.92, 0.86, 0.65), 5.0)
 	# Neither paralysis nor poison draws a ground ring under the character any
@@ -1843,7 +1921,7 @@ func _apply_profile_stats() -> void:
 	_cast_speed_multiplier = clampf(1.0 + float(stats.get("cast_speed_percent", 0.0)), 0.2, 6.0)
 	_equipment_spell_time_scale = (
 		CombatResolutionRules.equipment_spell_time_scale(_attack_speed_tier)
-		if PlayerState.profession in ["法师", "道士"] else 1.0
+		if PlayerState.profession_id in ["hc.profession.wizard", "hc.profession.taoist"] else 1.0
 	)
 	defense_min = int(stats.get("defense_min", 0))
 	defense_max = maxi(defense_min, int(stats.get("defense_max", 0)))

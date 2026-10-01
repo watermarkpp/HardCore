@@ -2,12 +2,15 @@ class_name SkillLoadoutRules
 extends RefCounted
 
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+const SkillIds := preload("res://scripts/skills/skill_data_loader.gd")
+const EntityIds := preload("res://scripts/identity/entity_registry.gd")
 const SkillVisibilityPolicyScript := preload(
 	"res://scripts/skills/skill_visibility_policy.gd"
 )
 
 const ASSIGNMENT_CONTRACT_ID := "gameplay.skill.quick_slot_assignment.v1"
-const BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
+const BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v4"
+const PREVIOUS_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v3"
 const LEGACY_BUTTON_ASSIGNMENTS_CONTRACT_ID := "gameplay.skill.button_assignments.v2"
 const UI_ASSIGNMENT_CONTRACT_IDS: Array[String] = [
 	"ui.skill.button_assignment.v3",
@@ -25,8 +28,28 @@ const ATTACK_RING_SLOT_COUNT := 6
 static func normalize_assignments(value: Variant, legacy_center: Array = []) -> Dictionary:
 	var attack := _normalized_slot_array([], ATTACK_SLOT_COUNT)
 	var attack_ring := _normalized_slot_array([], ATTACK_RING_SLOT_COUNT)
-	var migration := "native_v3"
+	var migration := "native_v4"
+	if value is Dictionary and value.get("valid", true) == false:
+		return value.duplicate(true)
+	var legacy_errors: Array[String] = []
+	if value is Dictionary and str(value.get("contract_id", "")) in [PREVIOUS_BUTTON_ASSIGNMENTS_CONTRACT_ID, LEGACY_BUTTON_ASSIGNMENTS_CONTRACT_ID]:
+		for group: String in [SLOT_GROUP_ATTACK, SLOT_GROUP_ATTACK_RING]:
+			_validate_legacy_slot_identities(value.get(group, []), group, legacy_errors)
+	elif not (value is Dictionary and str(value.get("contract_id", "")) == BUTTON_ASSIGNMENTS_CONTRACT_ID):
+		if value is Dictionary and not value.is_empty():
+			legacy_errors.append("unsupported_assignment_contract")
+		_validate_legacy_slot_identities(legacy_center, "legacy_quick_slots", legacy_errors)
+	if not legacy_errors.is_empty():
+		return {"contract_id":BUTTON_ASSIGNMENTS_CONTRACT_ID,"attack":attack,"attack_ring":attack_ring,
+			"migration":"rejected_legacy_identity","valid":false,"errors":legacy_errors}
 	if value is Dictionary and str(value.get("contract_id", "")) == BUTTON_ASSIGNMENTS_CONTRACT_ID:
+		var checked := validate_assignments(value)
+		if not bool(checked.valid):
+			return {"contract_id":BUTTON_ASSIGNMENTS_CONTRACT_ID,"attack":attack,"attack_ring":attack_ring,
+				"migration":"native_v4","valid":false,"errors":checked.errors}
+		attack = _normalized_slot_array(value.get(SLOT_GROUP_ATTACK), ATTACK_SLOT_COUNT)
+		attack_ring = _normalized_slot_array(value.get(SLOT_GROUP_ATTACK_RING), ATTACK_RING_SLOT_COUNT)
+	elif value is Dictionary and str(value.get("contract_id", "")) == PREVIOUS_BUTTON_ASSIGNMENTS_CONTRACT_ID:
 		attack = _normalized_bindable_slot_array(
 			value.get(SLOT_GROUP_ATTACK, []),
 			ATTACK_SLOT_COUNT,
@@ -37,6 +60,7 @@ static func normalize_assignments(value: Variant, legacy_center: Array = []) -> 
 			ATTACK_RING_SLOT_COUNT,
 			"skill_slot"
 		)
+		migration = "v3_names_to_formal_ids"
 	elif value is Dictionary and str(value.get("contract_id", "")) == LEGACY_BUTTON_ASSIGNMENTS_CONTRACT_ID:
 		# v2 had center[4] + attack_ring[3]. The center controls no longer
 		# exist. Preserve the actual ring assignments in the first three new
@@ -56,13 +80,15 @@ static func normalize_assignments(value: Variant, legacy_center: Array = []) -> 
 		migration = (
 			"legacy_quick_slots_to_attack_ring"
 			if not legacy_center.is_empty()
-			else "native_v3"
+			else "native_v4"
 		)
 	return {
 		"contract_id": BUTTON_ASSIGNMENTS_CONTRACT_ID,
 		SLOT_GROUP_ATTACK: attack,
 		SLOT_GROUP_ATTACK_RING: attack_ring,
 		"migration": migration,
+		"valid": true,
+		"errors": [],
 	}
 
 
@@ -72,6 +98,8 @@ static func assign_button_slot(
 	request: Dictionary
 ) -> Dictionary:
 	var assignments := normalize_assignments(current_assignments)
+	if not bool(assignments.valid):
+		return _button_failure("invalid_assignment_identity", assignments, request)
 	var source_contract_id := str(request.get("contract_id", ""))
 	if source_contract_id not in UI_ASSIGNMENT_CONTRACT_IDS:
 		return _button_failure("unsupported_contract", assignments, request)
@@ -98,6 +126,9 @@ static func assign_button_slot(
 		skill_id = ProfessionRules.skill_id(skill_name)
 	if skill_name.is_empty() or skill_id.is_empty():
 		return _button_failure("unknown_skill", assignments, request)
+	if SkillIds.stable_skill_id(skill_name) != SkillIds.stable_skill_id(skill_id):
+		return _button_failure("skill_identity_mismatch", assignments, request)
+	var entity_id := SkillIds.entity_skill_id(skill_id)
 	if not _learned_skills_contains(learned_skills, skill_name, skill_id):
 		return _button_failure("skill_not_learned", assignments, request)
 	if not SkillVisibilityPolicyScript.is_skill_castable(skill_id):
@@ -108,12 +139,12 @@ static func assign_button_slot(
 	var next_assignments := normalize_assignments(assignments)
 	var group_slots: Array = next_assignments[slot_group]
 	var previous_skill_name := str(group_slots[slot_index])
-	group_slots[slot_index] = skill_name
+	group_slots[slot_index] = entity_id
 	next_assignments[slot_group] = group_slots
-	next_assignments["migration"] = "native_v3"
+	next_assignments["migration"] = "native_v4"
 	return {
 		"ok": true,
-		"changed": previous_skill_name != skill_name,
+		"changed": previous_skill_name != entity_id,
 		"reason": "assigned",
 		"assignments": next_assignments,
 		"change": {
@@ -123,7 +154,7 @@ static func assign_button_slot(
 			"slot_index": slot_index,
 			"slot_id": expected_slot_id,
 			"requested_slot_id": requested_slot_id,
-			"skill_id": skill_id,
+			"skill_id": entity_id,
 			"skill_name": skill_name,
 			"previous_skill_name": previous_skill_name,
 		},
@@ -135,6 +166,8 @@ static func clear_button_slot(
 	request: Dictionary
 ) -> Dictionary:
 	var assignments := normalize_assignments(current_assignments)
+	if not bool(assignments.valid):
+		return _button_failure("invalid_assignment_identity", assignments, request)
 	var source_contract_id := str(request.get("contract_id", ""))
 	if source_contract_id not in UI_ASSIGNMENT_CONTRACT_IDS:
 		return _button_failure("unsupported_contract", assignments, request)
@@ -158,7 +191,7 @@ static func clear_button_slot(
 	var previous_skill_name := str(group_slots[slot_index])
 	group_slots[slot_index] = ""
 	next_assignments[slot_group] = group_slots
-	next_assignments["migration"] = "native_v3"
+	next_assignments["migration"] = "native_v4"
 	return {
 		"ok": true,
 		"changed": not previous_skill_name.is_empty(),
@@ -207,6 +240,9 @@ static func assign_quick_slot(
 		skill_id = ProfessionRules.skill_id(skill_name)
 	if skill_name.is_empty() or skill_id.is_empty():
 		return _failure("unknown_skill", current_slots, request)
+	if SkillIds.stable_skill_id(skill_name) != SkillIds.stable_skill_id(skill_id):
+		return _failure("skill_identity_mismatch", current_slots, request)
+	var entity_id := SkillIds.entity_skill_id(skill_id)
 	if not _learned_skills_contains(learned_skills, skill_name, skill_id):
 		return _failure("skill_not_learned", current_slots, request)
 	if not SkillVisibilityPolicyScript.is_skill_castable(skill_id):
@@ -215,10 +251,10 @@ static func assign_quick_slot(
 		return _failure("skill_not_bindable", current_slots, request)
 	var next_slots := current_slots.duplicate()
 	var previous_skill_name: String = str(next_slots[slot_index])
-	next_slots[slot_index] = skill_name
+	next_slots[slot_index] = entity_id
 	return {
 		"ok": true,
-		"changed": previous_skill_name != skill_name,
+		"changed": previous_skill_name != entity_id,
 		"reason": "assigned",
 		"slots": next_slots,
 		"change": {
@@ -228,7 +264,7 @@ static func assign_quick_slot(
 			"slot_index": slot_index,
 			"slot_id": "player.quick_skill.%d" % (slot_index + 1),
 			"requested_slot_id": str(request.get("slot_id", "")),
-			"skill_id": skill_id,
+			"skill_id": entity_id,
 			"skill_name": skill_name,
 			"previous_skill_name": previous_skill_name,
 		},
@@ -256,9 +292,15 @@ static func validate_assignments(value: Variant) -> Dictionary:
 	if not attack_ring is Array or attack_ring.size() != ATTACK_RING_SLOT_COUNT:
 		errors.append("attack_ring_slot_count")
 	for skill_name: Variant in attack if attack is Array else []:
+		if not skill_name is String or (not skill_name.is_empty() and EntityIds.resolve(skill_name, "skill").is_empty()):
+			errors.append("invalid_attack_skill_identity")
+			continue
 		if not str(skill_name).is_empty() and not can_bind_to_attack_slot(str(skill_name)):
 			errors.append("attack_skill_not_bindable:%s" % str(skill_name))
 	for skill_name: Variant in attack_ring if attack_ring is Array else []:
+		if not skill_name is String or (not skill_name.is_empty() and EntityIds.resolve(skill_name, "skill").is_empty()):
+			errors.append("invalid_ring_skill_identity")
+			continue
 		if (
 			not str(skill_name).is_empty()
 			and not SkillInputPolicyScript.can_bind(str(skill_name), "skill_slot")
@@ -305,7 +347,19 @@ static func _normalized_bindable_slot_array(
 			and not SkillInputPolicyScript.can_bind(skill_name, destination)
 		):
 			result[index] = ""
+		elif not skill_name.is_empty():
+			result[index] = SkillIds.entity_skill_id(skill_name)
 	return result
+
+
+static func _validate_legacy_slot_identities(value: Variant, group: String, errors: Array[String]) -> void:
+	if not value is Array:
+		errors.append("legacy_slot_array:" + group)
+		return
+	for index in range(value.size()):
+		var identity: Variant = value[index]
+		if not identity is String or (not identity.is_empty() and SkillIds.entity_skill_id(identity).is_empty()):
+			errors.append("legacy_slot_identity:%s:%d" % [group, index])
 
 
 static func _learned_skills_contains(
@@ -313,7 +367,7 @@ static func _learned_skills_contains(
 	skill_name: String,
 	skill_id: String
 ) -> bool:
-	return learned_skills.has(skill_name) or learned_skills.has(skill_id)
+	return learned_skills.has(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_id))
 
 
 static func _stable_slot_id(slot_group: String, slot_index: int) -> String:
@@ -333,7 +387,7 @@ static func _button_failure(
 		"ok": false,
 		"changed": false,
 		"reason": reason,
-		"assignments": normalize_assignments(assignments),
+		"assignments": assignments.duplicate(true),
 		"change": {
 			"contract_id": BUTTON_ASSIGNMENTS_CONTRACT_ID,
 			"source_contract_id": str(request.get("contract_id", "")),

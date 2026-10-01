@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/user_feedback_20260930/crowd_recovery_test.gd" type="Script" id="1"]
+
+[node name="CrowdRecovery4Test" type="Node"]
+script = ExtResource("1")
+case_monster_id = 64
+case_count = 4

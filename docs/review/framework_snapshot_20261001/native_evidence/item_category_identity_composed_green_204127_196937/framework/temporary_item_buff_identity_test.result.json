@@ -1,0 +1,145 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture uses the existing primary registered water",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal item identity admits the actual primary effect",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "the temporary effect has one formal owner and no name alias",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "display metadata is separate from the formal owner",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "the ID change preserves the real primary max-health bonus",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual duration does not expire early",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "refresh preserves original order and resets the actual duration",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "the other same-group fixture comes from actual primary data",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "same group replaces the actual ID without a second owner",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "same-group replacement retains start order and never stacks the old health bonus",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "invalid or presentation-only identity cannot mutate the actual effect: 体力强效神水",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "invalid or presentation-only identity cannot mutate the actual effect: 测试药水",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "invalid or presentation-only identity cannot mutate the actual effect: hc.item.910001.5",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "invalid or presentation-only identity cannot mutate the actual effect: hc.item.999999",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "invalid or presentation-only identity cannot mutate the actual effect: hc.skill.wizard.fireball",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "invalid or presentation-only identity cannot mutate the actual effect: hc.slot.weapon",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "different formal groups retain independent real effects",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "expiry removes every real modifier",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "expiry publishes each current formal item exactly once",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "repeated expiry cannot repeat the formal completion",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual use consumes and owns the formal water despite changed display",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "real writer failure restores both typed ownership and the original inventory",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "actual status projection carries the formal item owner",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "the real HUD resolves the original art through the formal identity",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "a registered service-only item icon requires no invented numeric item identity",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "the actual end notice projects the existing Chinese display from the ID",
+      "passed": true
+    }
+  ],
+  "count": 26,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 26,
+  "reported_checks": 26,
+  "reported_failures": 0,
+  "run_id": "94d19702-aa04-4b04-ac36-312d3acc6da8",
+  "scene_id": "temporary_item_buff_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "758c10cfdfb094a7a532e15e5fe3735c0d793b86b2c79b9c87ac405434883fee",
+  "status": "PASS"
+}

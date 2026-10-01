@@ -64,6 +64,9 @@ func _run() -> void:
 	player.global_position = _ground_to_screen(Vector2(2.0, 0.0))
 	mage.current_hp = mage.max_hp
 	mage._attack_timer = 0.0
+	# A second parent belongs to a genuinely new physics decision. Pending
+	# child updates above may share the prior frame; new body actions may not.
+	await get_tree().physics_frame
 	mage._physics_process(0.01)
 	assert(_descriptors.size() == 2)
 	player.set_meta("runtime_map_id", 2)

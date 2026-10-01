@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the real solar potion fixture uses its actual primary restoration rule",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual committed consumable requests publish the canonical item ID once",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "the actual signal consumer applies the same primary health and mana amounts",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "a presentation or invalid event cannot execute a gameplay effect: 太阳水",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "a presentation or invalid event cannot execute a gameplay effect: 金创药(小量)",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "a presentation or invalid event cannot execute a gameplay effect: hc.item.920014.5",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "a presentation or invalid event cannot execute a gameplay effect: hc.skill.wizard.fireball",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "a presentation or invalid event cannot execute a gameplay effect: hc.item.999999",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "the delayed fixture has an existing declared canonical identity",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "formal delayed potions preserve queued recovery rather than becoming immediate",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "the existing divine-water compatibility effect retains its exact amounts and duration through its registered service ID",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual scroll consumption publishes the declared canonical ID once",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "the actual writer rejection cannot dispatch a consumable effect or lose the item",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "the luck fixture uses the existing registered weapon source",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "the actual deterministic oil transaction identifies a renamed oil by ID and preserves its outcome",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "a different typed item forged with the oil display is rejected before any real RNG draw or mutation",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "the declared service alias enters the same real blessing transaction",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "real oil writer failure restores the exact typed oil and weapon luck state",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "the actual oil inventory entrance publishes its formal scroll event after commit",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "actual runtime catalog audit bounds the former display fallback to the one preserved registered compatibility item",
+      "passed": true
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 20,
+  "reported_checks": 20,
+  "reported_failures": 0,
+  "run_id": "97aa69c0-d0db-4d36-b0b5-ce716c0d2540",
+  "scene_id": "item_use_action_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "758c10cfdfb094a7a532e15e5fe3735c0d793b86b2c79b9c87ac405434883fee",
+  "status": "PASS"
+}

@@ -30,6 +30,9 @@ func _run() -> void:
 		source.target = caster
 		sources.append(source)
 	for index in range(20):
+		# Each new body action gets a real engine decision boundary; a batch
+		# of manual calls in one frame must not manufacture twenty parents.
+		await get_tree().physics_frame
 		for source in sources:
 			if source.is_boss:
 				source._boss_health_stage = 5

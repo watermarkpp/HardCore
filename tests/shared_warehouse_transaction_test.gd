@@ -187,6 +187,7 @@ func _test_prepared_log_recovery_without_active_profile_coupling() -> void:
 
 func _test_extended_stack_metadata_and_opaque_split_guard() -> void:
 	var extended := {
+		"item_id": 920014,
 		"name": "太阳水",
 		"count": 3,
 		"bind": true,
@@ -462,11 +463,11 @@ func _prepared_log(
 
 
 func _item(instance_id: String) -> Dictionary:
-	return {"name": "太阳水", "count": 1, "instance_id": instance_id}
+	return {"item_id": 920014, "name": "太阳水", "count": 1, "instance_id": instance_id}
 
 
 func _equipment_item(instance_id: String) -> Dictionary:
-	return {"name": "匕首", "count": 1, "instance_id": instance_id}
+	return {"item_id": 81, "name": "匕首", "count": 1, "instance_id": instance_id}
 
 
 func _instance_ids(records: Array) -> Array:

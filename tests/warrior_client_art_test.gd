@@ -74,7 +74,7 @@ func _run() -> void:
 	)
 	assert(visual._action_name == "半月弯刀", "攻杀附加层错误替换主体动作")
 
-	PlayerState.equipment["武器"] = {"name": "裁决之杖", "durability": 30, "max_durability": 30}
+	PlayerState.equipment["hc.slot.weapon"] = {"name": "裁决之杖", "durability": 30, "max_durability": 30}
 	PlayerState.equipment_changed.emit()
 	visual.play_action("烈火剑法", 0.51)
 	visual._process(0.40)

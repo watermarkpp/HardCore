@@ -12,14 +12,14 @@ class ObservedRoot extends RootScript:
 	var hit_records: Array[Dictionary] = []
 
 
-	func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0, ignore_ac := false) -> bool:
+	func _apply_physical_hit(enemy: EnemyActor, damage: int, accuracy_bonus := 0, ignore_ac := false, configuration: RefCounted = null, damage_batch: RefCounted = null) -> bool:
 		# Execute the real hit roll even though the surrounding fixture uses the
 		# save-isolated test mode. Restore it before durability/resource handling.
 		# Keep this observer's signature in step with the production hit entry.
 		var previous_test_mode := PlayerState.test_mode
 		var hp_before := enemy.current_hp
 		PlayerState.test_mode = false
-		var hit := super._apply_physical_hit(enemy, damage, accuracy_bonus, ignore_ac)
+		var hit := super._apply_physical_hit(enemy, damage, accuracy_bonus, ignore_ac, configuration, damage_batch)
 		PlayerState.test_mode = previous_test_mode
 		hit_records.append({
 			"target_id": enemy.get_instance_id(),

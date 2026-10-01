@@ -60,7 +60,7 @@ func _run() -> void:
 		var received: Dictionary = PlayerState.add_item("木剑", 1)
 		check(bool(received.get("success", false)), zone+" fixture receive failed")
 		if zone == "inventory_equipment":
-			var result: Dictionary = PlayerState.equip_inventory_index_result(0, "武器")
+			var result: Dictionary = PlayerState.equip_inventory_index_result(0, "hc.slot.weapon")
 			check(bool(result.get("success", false)), "fixture equip failed")
 		elif zone == "warehouse_stash":
 			PlayerState.warehouse_inventory = PlayerState.inventory.duplicate(true)

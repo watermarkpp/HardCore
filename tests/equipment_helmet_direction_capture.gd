@@ -69,7 +69,7 @@ func _capture() -> void:
 		var source_order: Array = identity.get("sourceSlotDirectionOrder", [])
 		var canonical_source_slots: Array = identity.get("canonicalRowSourceSlots", [])
 		assert(source_order.size() == 8 and canonical_source_slots.size() == 8)
-		PlayerState.equipment["头盔"] = {
+		PlayerState.equipment["hc.slot.helmet"] = {
 			"item_id": int(item_id),
 			"name": item_name,
 			"instance_id": "helmet_capture_%s" % item_id,

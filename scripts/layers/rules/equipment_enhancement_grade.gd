@@ -1,9 +1,11 @@
 class_name EquipmentEnhancementGrade
 extends RefCounted
 
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+
 const CONTRACT_ID := "equipment.enhancement.grade.v1"
 const AUTHORITY_PATH := "res://assets/data/equipment_enhancement_grade_v1.json"
-const ACCESSORY_CATEGORIES := ["戒指", "手镯", "项链"]
+const ACCESSORY_CATEGORIES := ["hc.item_category.ring", "hc.item_category.bracelet", "hc.item_category.necklace"]
 
 static var _loaded := false
 static var _by_id: Dictionary = {}
@@ -51,12 +53,13 @@ static func _ensure_loaded() -> void:
 			return
 		var item_id := int(row.item_id)
 		var grade := int(row.material_grade)
-		var category := str(row.get("category", ""))
+		var category := ItemCategories.import_legacy_category(row.get("category"))
 		if item_id <= 0 or grade < 0 or grade > 3 or str(row.get("name", "")).is_empty() or category.is_empty() or accepted.has(item_id):
 			return
 		if bool(row.accessory_material_eligible) and category not in ACCESSORY_CATEGORIES:
 			return
 		accepted[item_id] = row.duplicate(true)
+		accepted[item_id]["category_id"] = category
 	_by_id = accepted
 
 

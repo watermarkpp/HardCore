@@ -28,16 +28,16 @@ func _run() -> void:
 	PlayerState.reset_progress()
 	PlayerState.add_item("木剑")
 	assert(PlayerState.equip_inventory_index(_inventory_index("木剑")).begins_with("已装备"), "木剑穿戴失败")
-	var weapon: Dictionary = PlayerState.equipment["武器"]
+	var weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
 	var instance_id := str(weapon.get("instance_id", ""))
 	var maximum := int(weapon.get("max_durability", 0))
 	var attack_with_weapon := int(PlayerState.computed_stats.get("attack_max", 0))
 	assert(maximum > 0 and attack_with_weapon > 5, "测试装备没有有效属性或耐久")
 
-	PlayerState.damage_equipment_durability("武器", maximum)
-	assert(not PlayerState.equipment["武器"].is_empty(), "耐久归零后装备被删除")
-	assert(str(PlayerState.equipment["武器"].get("instance_id", "")) == instance_id, "耐久归零后装备实例被替换")
-	assert(int(PlayerState.equipment["武器"].get("durability", -1)) == 0, "装备耐久没有归零")
+	PlayerState.damage_equipment_durability("hc.slot.weapon", maximum)
+	assert(not PlayerState.equipment["hc.slot.weapon"].is_empty(), "耐久归零后装备被删除")
+	assert(str(PlayerState.equipment["hc.slot.weapon"].get("instance_id", "")) == instance_id, "耐久归零后装备实例被替换")
+	assert(int(PlayerState.equipment["hc.slot.weapon"].get("durability", -1)) == 0, "装备耐久没有归零")
 	# Zero-durability authority contract: the attribute stops applying
 	# (recalculate_stats skips equipment without positive raw durability), so
 	# only the base remains: attack_with_weapon minus the wooden sword's 5.
@@ -79,7 +79,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	shop.open_for("比奇铁匠", GameData.merchant_stock("starter_gear"))
 	assert(shop.repair_button.text == "装备无需维修", "商店维修按钮初始预览错误")
-	PlayerState.damage_equipment_durability("武器", 1)
+	PlayerState.damage_equipment_durability("hc.slot.weapon", 1)
 	# UI-L1 contract: equipment_changed refresh is deferred and coalesced, so
 	# the repair preview settles within a few process frames instead of the
 	# same call stack.  Allow up to 3 frames and verify the exact preview.
@@ -107,17 +107,17 @@ func _run() -> void:
 
 
 func _verify_batch_all_equipment_contract(blacksmith_context: Dictionary) -> void:
-	var expected_priority := ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指", "圣物", "徽章"]
+	var expected_priority := ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet", "hc.slot.necklace", "hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right", "hc.slot.relic", "hc.slot.badge"]
 	assert(PricingServiceScript.repair_batch_slot_order() == expected_priority)
 	assert(str(PricingServiceScript.policy().get("repair", {}).get("contractId", "")) == "gameplay.repair.batch_all_equipment.v1")
 
 	# Full repair: every occupied classic equipment slot is quoted in stable slot
 	# order. A full-durability necklace is deliberately skipped.
-	_install_batch_fixture(false, "项链")
-	var necklace_before: Dictionary = PlayerState.equipment["项链"].duplicate(true)
+	_install_batch_fixture(false, "hc.slot.necklace")
+	var necklace_before: Dictionary = PlayerState.equipment["hc.slot.necklace"].duplicate(true)
 	var plan := PlayerState._repair_plan(blacksmith_context)
-	assert(PlayerState.equipment["项链"] == necklace_before, "维修预览不得改写装备实例")
-	var expected_quoted_slots := ["武器", "衣服", "头盔", "左手镯", "右手镯", "左戒指", "右戒指"]
+	assert(PlayerState.equipment["hc.slot.necklace"] == necklace_before, "维修预览不得改写装备实例")
+	var expected_quoted_slots := ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet", "hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right"]
 	assert(bool(plan.get("valid", false)) and plan.get("slots", []) == expected_quoted_slots)
 	var entries: Array = plan.get("entries", [])
 	assert(entries.size() == expected_quoted_slots.size())
@@ -137,13 +137,13 @@ func _verify_batch_all_equipment_contract(blacksmith_context: Dictionary) -> voi
 	for slot: String in expected_quoted_slots:
 		var equipped: Dictionary = PlayerState.equipment[slot]
 		assert(int(equipped.get("durability_raw", -1)) == int(equipped.get("max_durability_raw", 0)), "%s没有修满" % slot)
-	assert(PlayerState.equipment["项链"] == necklace_before, "满耐久装备不应进入报价或被改写")
+	assert(PlayerState.equipment["hc.slot.necklace"] == necklace_before, "满耐久装备不应进入报价或被改写")
 
 	# Insufficient gold: fully repair the weapon first, then spend the exact
 	# remainder on the largest affordable raw delta of the clothing slot.
 	_install_batch_fixture(true)
 	var partial_plan := PlayerState._repair_plan(blacksmith_context)
-	assert(partial_plan.get("slots", []).slice(0, 4) == ["武器", "衣服", "头盔", "项链"])
+	assert(partial_plan.get("slots", []).slice(0, 4) == ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet", "hc.slot.necklace"])
 	var partial_entries: Array = partial_plan.get("entries", [])
 	var weapon_entry: Dictionary = partial_entries[0]
 	var weapon_quote: Dictionary = weapon_entry.get("quote", {})
@@ -153,13 +153,13 @@ func _verify_batch_all_equipment_contract(blacksmith_context: Dictionary) -> voi
 	var gold_before := PlayerState.gold
 	var partial_result := PlayerState.repair_all_equipment(blacksmith_context)
 	assert(partial_result.begins_with("金币不足，已优先维修"))
-	assert(int(PlayerState.equipment["武器"].get("durability_raw", 0)) == int(PlayerState.equipment["武器"].get("max_durability_raw", 0)), "金币不足时没有优先修满武器")
-	assert(int(PlayerState.equipment["衣服"].get("durability_raw", 0)) > int(raw_before.get("衣服", 0)), "武器后没有按稳定顺序部分维修衣服")
-	for untouched_slot: String in ["头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]:
+	assert(int(PlayerState.equipment["hc.slot.weapon"].get("durability_raw", 0)) == int(PlayerState.equipment["hc.slot.weapon"].get("max_durability_raw", 0)), "金币不足时没有优先修满武器")
+	assert(int(PlayerState.equipment["hc.slot.armor"].get("durability_raw", 0)) > int(raw_before.get("hc.slot.armor", 0)), "武器后没有按稳定顺序部分维修衣服")
+	for untouched_slot: String in ["hc.slot.helmet", "hc.slot.necklace", "hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right"]:
 		assert(int(PlayerState.equipment[untouched_slot].get("durability_raw", 0)) == int(raw_before.get(untouched_slot, -1)), "余额耗尽后仍越序维修%s" % untouched_slot)
-	var clothing_delta := int(PlayerState.equipment["衣服"].get("durability_raw", 0)) - int(raw_before.get("衣服", 0))
-	var clothing_before: Dictionary = PlayerState.equipment["衣服"].duplicate(true)
-	clothing_before["durability_raw"] = int(raw_before.get("衣服", 0))
+	var clothing_delta := int(PlayerState.equipment["hc.slot.armor"].get("durability_raw", 0)) - int(raw_before.get("hc.slot.armor", 0))
+	var clothing_before: Dictionary = PlayerState.equipment["hc.slot.armor"].duplicate(true)
+	clothing_before["durability_raw"] = int(raw_before.get("hc.slot.armor", 0))
 	var clothing_quote := PricingServiceScript.quote_repair_raw_delta(
 		GameData.get_item_price_record("布衣(男)"),
 		GameData.get_item_record("布衣(男)"),
@@ -191,7 +191,7 @@ func _verify_batch_all_equipment_contract(blacksmith_context: Dictionary) -> voi
 	var forged_context := {"merchant_id": "merchant.test.forged", "supports_repair": true, "types": [1, 2, 4, 5, 6, 7]}
 	assert(PlayerState.repair_cost(forged_context) == 0 and PlayerState.repair_all_equipment(forged_context).begins_with("该商人不提供维修服务"))
 	assert(PlayerState.equipment == denied_equipment and PlayerState.gold == denied_gold, "非铁匠维修请求改变了状态")
-	for slot: String in ["衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]:
+	for slot: String in ["hc.slot.armor", "hc.slot.helmet", "hc.slot.necklace", "hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right"]:
 		var equipped: Dictionary = PlayerState.equipment[slot]
 		var item_name := str(equipped.get("name", ""))
 		var quote := PricingServiceScript.quote_repair(
@@ -209,14 +209,14 @@ func _verify_live_high_gear_repair_contract(blacksmith_context: Dictionary) -> v
 	PlayerState.level = 50
 	PlayerState.gender = "男"
 	var item_by_slot := {
-		"武器": "乌木剑",
-		"衣服": "天魔神甲",
-		"头盔": "圣战头盔",
-		"项链": "圣战项链",
-		"左手镯": "圣战手镯",
-		"右手镯": "圣战手镯",
-		"左戒指": "圣战戒指",
-		"右戒指": "圣战戒指",
+		"hc.slot.weapon": "乌木剑",
+		"hc.slot.armor": "天魔神甲",
+		"hc.slot.helmet": "圣战头盔",
+		"hc.slot.necklace": "圣战项链",
+		"hc.slot.bracelet_left": "圣战手镯",
+		"hc.slot.bracelet_right": "圣战手镯",
+		"hc.slot.ring_left": "圣战戒指",
+		"hc.slot.ring_right": "圣战戒指",
 	}
 	var stable_item_ids: Array[int] = [82, 140, 232, 233, 234, 234, 235, 235]
 	for slot: String in item_by_slot:
@@ -234,7 +234,7 @@ func _verify_live_high_gear_repair_contract(blacksmith_context: Dictionary) -> v
 		PlayerState._sync_durability_compatibility_fields(instance)
 		PlayerState.equipment[slot] = instance
 	PlayerState.recalculate_stats(false)
-	var expected_slots := ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]
+	var expected_slots := ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet", "hc.slot.necklace", "hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right"]
 	var plan := PlayerState._repair_plan(blacksmith_context)
 	assert(bool(plan.get("valid", false)) and plan.get("slots", []) == expected_slots, "实机高阶装备没有全部进入维修报价清单")
 	var total_cost := int(plan.get("total_price", 0))
@@ -252,14 +252,14 @@ func _install_batch_fixture(damage_every_slot: bool, full_slot := "") -> void:
 	PlayerState.level = 50
 	PlayerState.gender = "男"
 	var item_by_slot := {
-		"武器": "木剑",
-		"衣服": "布衣(男)",
-		"头盔": "青铜头盔",
-		"项链": "金项链",
-		"左手镯": "铁手镯",
-		"右手镯": "铁手镯",
-		"左戒指": "古铜戒指",
-		"右戒指": "古铜戒指",
+		"hc.slot.weapon": "木剑",
+		"hc.slot.armor": "布衣(男)",
+		"hc.slot.helmet": "青铜头盔",
+		"hc.slot.necklace": "金项链",
+		"hc.slot.bracelet_left": "铁手镯",
+		"hc.slot.bracelet_right": "铁手镯",
+		"hc.slot.ring_left": "古铜戒指",
+		"hc.slot.ring_right": "古铜戒指",
 	}
 	for slot: String in item_by_slot:
 		var item_name := str(item_by_slot[slot])

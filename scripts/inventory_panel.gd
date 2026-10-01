@@ -288,11 +288,11 @@ func _build_equipment_panel() -> void:
 	panel.add_child(character_preview)
 
 	var positions := {
-		"头盔": Vector2(153, 44), "项链": Vector2(296, 44),
-		"武器": Vector2(10, 144), "衣服": Vector2(296, 144),
-		"左手镯": Vector2(10, 244), "右手镯": Vector2(296, 244),
-		"左戒指": Vector2(10, 344), "右戒指": Vector2(296, 344),
-		"圣物": Vector2(10, 44), "徽章": Vector2(10, 444),
+		"hc.slot.helmet": Vector2(153, 44), "hc.slot.necklace": Vector2(296, 44),
+		"hc.slot.weapon": Vector2(10, 144), "hc.slot.armor": Vector2(296, 144),
+		"hc.slot.bracelet_left": Vector2(10, 244), "hc.slot.bracelet_right": Vector2(296, 244),
+		"hc.slot.ring_left": Vector2(10, 344), "hc.slot.ring_right": Vector2(296, 344),
+		"hc.slot.relic": Vector2(10, 44), "hc.slot.badge": Vector2(10, 444),
 	}
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
 		_create_equipment_slot(panel, slot, positions.get(slot, Vector2.ZERO))
@@ -311,7 +311,7 @@ func _build_equipment_panel() -> void:
 	equipment_slot_picker = OptionButton.new()
 	equipment_slot_picker.visible = false
 	for slot: String in PlayerState.EQUIPMENT_SLOTS:
-		equipment_slot_picker.add_item(slot)
+		equipment_slot_picker.add_item(_slot_name(slot))
 	panel.add_child(equipment_slot_picker)
 	action_button = Button.new()
 	action_button.visible = false
@@ -406,19 +406,19 @@ func _build_context_menu() -> void:
 
 func _create_equipment_slot(parent: Control, slot: String, position_value: Vector2) -> void:
 	var holder := Control.new()
-	holder.name = "EquipmentHolder_%s" % slot
+	holder.name = "EquipmentHolder_%s" % _slot_name(slot)
 	holder.position = position_value
 	holder.size = Vector2(72, 84)
 	parent.add_child(holder)
 	var button := Button.new()
-	button.name = "EquipmentSlot_%s" % slot
+	button.name = "EquipmentSlot_%s" % _slot_name(slot)
 	button.position = Vector2(2, 0)
 	button.size = Vector2(68, 68)
 	button.set_meta("calibration_layout_revision", EQUIPMENT_SLOT_LAYOUT_REVISION)
 	holder.set_meta("calibration_layout_revision", EQUIPMENT_SLOT_LAYOUT_REVISION)
 	button.expand_icon = true
 	button.toggle_mode = true
-	button.tooltip_text = "%s：空" % slot
+	button.tooltip_text = "%s：空" % _slot_name(slot)
 	button.theme_type_variation = "GothicEquipmentSlotButton"
 	UIActivationOnceScript.attach(button, _select_equipment_slot.bind(slot))
 	button.gui_input.connect(_equipment_input.bind(slot, button))
@@ -432,7 +432,7 @@ func _create_equipment_slot(parent: Control, slot: String, position_value: Vecto
 	holder.add_child(caption_plate)
 	var slot_label := Label.new()
 	slot_label.name = "SlotLabel"
-	slot_label.text = slot
+	slot_label.text = _slot_name(slot)
 	slot_label.set_meta("calibration_layout_revision", EQUIPMENT_SLOT_LAYOUT_REVISION)
 	slot_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	slot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -568,7 +568,7 @@ func _refresh_equipment_slots() -> void:
 		var name := str(record.get("name", "")) if record is Dictionary else str(record)
 		button.icon = null
 		button.text = ""
-		button.tooltip_text = "%s：空" % slot
+		button.tooltip_text = "%s：空" % _slot_name(slot)
 		if not name.is_empty():
 			var item_ref: Variant = record if record is Dictionary else name
 			_set_button_texture(button, _item_texture(GameData.get_item_record(item_ref), "inventoryIcon"), _item_icon_display_size(item_ref, "inventoryIcon"))
@@ -1015,7 +1015,7 @@ func _select_equipment_slot(slot: String) -> void:
 	if selected_inventory_index >= 0 and not _inventory_record(selected_inventory_index).is_empty():
 		var item := GameData.get_item_record(_inventory_record(selected_inventory_index))
 		if str(item.get("kind", "")) == "equipment":
-			var allowed: Array = _slots_for_category(str(item.get("category", "")))
+			var allowed: Array = _slots_for_category(str(item.get("category_id", "")))
 			if not allowed.has(slot):
 				# A rejected slot click must leave both the source selection and its
 				# attribute view intact; the authority was never called.
@@ -1073,7 +1073,7 @@ func _select_equipment_slot(slot: String) -> void:
 		selected_equipment_ref = _equipment_selection_ref(slot, equipped)
 		_show_equipment_detail(slot)
 	else:
-		item_detail_presenter.show_message("[color=#e0bd83][font_size=18]%s[/font_size][/color]\n当前为空。按住背包中的对应装备可选择穿戴位置。" % slot, _selection_control_context(equipment_buttons.get(slot), {"presentation_zone": "equipment", "slot": slot}))
+		item_detail_presenter.show_message("[color=#e0bd83][font_size=18]%s[/font_size][/color]\n当前为空。按住背包中的对应装备可选择穿戴位置。" % _slot_name(slot), _selection_control_context(equipment_buttons.get(slot), {"presentation_zone": "equipment", "slot": slot}))
 	_refresh_equipment_slots()
 
 
@@ -1315,10 +1315,10 @@ func _add_inventory_context_actions(index: int) -> void:
 	var item := GameData.get_item_record(stack)
 	var kind := str(item.get("kind", ""))
 	if kind == "equipment":
-		var slots := _slots_for_category(str(item.get("category", "")))
+		var slots := _slots_for_category(str(item.get("category_id", "")))
 		if slots.size() == 2:
-			_add_context_action("装备到%s" % slots[0], {"action": "equip", "index": index, "slot": slots[0]})
-			_add_context_action("装备到%s" % slots[1], {"action": "equip", "index": index, "slot": slots[1]})
+			_add_context_action("装备到%s" % _slot_name(slots[0]), {"action": "equip", "index": index, "slot": slots[0]})
+			_add_context_action("装备到%s" % _slot_name(slots[1]), {"action": "equip", "index": index, "slot": slots[1]})
 		elif slots.size() == 1:
 			_add_context_action("装备", {"action": "equip", "index": index, "slot": slots[0]})
 	elif kind in ["consumable", "scroll"]:
@@ -1641,14 +1641,14 @@ func _equipment_detail(slot: String, record: Dictionary) -> String:
 	var durability := int(record.get("durability", 0))
 	var maximum := int(record.get("max_durability", 1))
 	var state_parts: Array[String] = []
-	if slot == "武器":
+	if slot == "hc.slot.weapon":
 		state_parts.append(EquipmentRulesScript.weapon_luck_label(record))
 	var special := EquipmentRulesScript.special_effect_for(item)
 	if not special.is_empty():
 		state_parts.append("%s（%s）" % [special.get("label", "特殊效果"), "生效" if durability > 0 and bool(special.get("runtime", false)) else "未生效"])
 	var disabled_text := "\n[color=#ef5f55]耐久为0，外观保留，属性失效[/color]" if durability <= 0 else ""
 	var state_text := "\n" + "　".join(state_parts) if not state_parts.is_empty() else ""
-	return "[color=#f2c783][font_size=18]%s[/font_size][/color]\n槽位：%s　耐久 %d/%d%s%s\n%s\n%s" % [record.get("name", ""), slot, durability, maximum, state_text, disabled_text, _stat_line(item), _advanced_stat_line(item)]
+	return "[color=#f2c783][font_size=18]%s[/font_size][/color]\n槽位：%s　耐久 %d/%d%s%s\n%s\n%s" % [record.get("name", ""), _slot_name(slot), durability, maximum, state_text, disabled_text, _stat_line(item), _advanced_stat_line(item)]
 
 
 func _stat_line(item: Dictionary) -> String:
@@ -1676,17 +1676,11 @@ func _advanced_stat_line(item: Dictionary) -> String:
 
 
 func _slots_for_category(category: String) -> Array[String]:
-	match category:
-		"武器": return ["武器"]
-		"盔甲": return ["衣服"]
-		"衣服": return ["衣服"]
-		"头盔": return ["头盔"]
-		"项链": return ["项链"]
-		"手镯": return ["左手镯", "右手镯"]
-		"戒指": return ["左戒指", "右戒指"]
-		"圣物": return ["圣物"]
-		"徽章": return ["徽章"]
-	return []
+	return preload("res://scripts/identity/equipment_identity_codec.gd").slots_for_category(
+		preload("res://scripts/identity/item_category_identity.gd").import_legacy_category(category))
+
+func _slot_name(slot: String) -> String:
+	return preload("res://scripts/identity/equipment_identity_codec.gd").display_name(slot)
 
 
 func _slot_is_empty(slot: String) -> bool:
@@ -1697,11 +1691,11 @@ func _slot_is_empty(slot: String) -> bool:
 func _compatibility_equipment_text(slot: String, record: Variant) -> String:
 	var name := str(record.get("name", "")) if record is Dictionary else str(record)
 	if name.is_empty():
-		return "%s：—" % slot
-	var text := "%s：%s" % [slot, name]
+		return "%s：—" % _slot_name(slot)
+	var text := "%s：%s" % [_slot_name(slot), name]
 	if record is Dictionary:
 		text += " %d/%d" % [int(record.get("durability", 0)), int(record.get("max_durability", 1))]
-		if slot == "武器":
+		if slot == "hc.slot.weapon":
 			text += " %s" % EquipmentRulesScript.weapon_luck_label(record)
 		var special := EquipmentRulesScript.special_effect_for(GameData.get_item(name))
 		if not special.is_empty():
@@ -1710,7 +1704,7 @@ func _compatibility_equipment_text(slot: String, record: Variant) -> String:
 
 
 func _equipment_tooltip(slot: String, record: Dictionary) -> String:
-	return "%s：%s　耐久%d/%d" % [slot, record.get("name", ""), int(record.get("durability", 0)), int(record.get("max_durability", 1))]
+	return "%s：%s　耐久%d/%d" % [_slot_name(slot), record.get("name", ""), int(record.get("durability", 0)), int(record.get("max_durability", 1))]
 
 
 func _kind_label(kind: String) -> String:

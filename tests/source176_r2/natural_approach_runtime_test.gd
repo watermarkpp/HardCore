@@ -1,6 +1,8 @@
 extends Node2D
 
-## R2 natural-approach contract (docs/02 R05): a real actor walking toward
+## Legacy deterministic MANUAL simulation; not native-frame acceptance.
+## R3's real_frame_case_test and published_map_approach_test own natural proof.
+## R2 approach contract (docs/02 R05): a real actor walking toward
 ## the player must stop inside its own attack geometry without overlapping
 ## the player body. No overlap fixtures: both monsters start 5 GU away and
 ## pursue under the live step pipeline on the deterministic game clock.
@@ -118,6 +120,10 @@ func _dispose(actor: EnemyActor) -> void:
 
 
 func _scenario_natural_approach(monster_id: int, min_centre_gu: float, tag: String) -> void:
+	# TEST CREDIBILITY: this is a manual synthetic harness, not a natural
+	# runtime trajectory. It explicitly calls EnemyActor._physics_process and
+	# advances the combat clock itself. R3 uses tests/source176_r3 real-frame
+	# scenes for the evidence-backed cases.
 	# 5 GU away, 900 manual ticks at 1/60 s (15 s budget): the actor must
 	# close in, never overlap the player body, and finish inside its source
 	# box reach (L-infinity centre distance <= 1.0 GU).

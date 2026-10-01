@@ -44,11 +44,11 @@ func _run() -> void:
 		PlayerState.recalculate_stats(false)
 		var naked := PlayerState.computed_stats.duplicate(true)
 		var item := _equip(id, profession)
-		var slot := "徽章" if Rules.is_badge(id) else "圣物"
+		var slot := "hc.slot.badge" if Rules.is_badge(id) else "hc.slot.relic"
 		assert(PlayerState.equipment[slot] == item)
 		var skill_name := SkillData.display_name(str(item.relic_roll.skill_id))
 		assert(PlayerState.effective_skill_level(skill_name) == 0)
-		PlayerState.learned_skills[skill_name] = 3
+		PlayerState.learned_skills = {SkillData.entity_skill_id(skill_name): 3}
 		assert(PlayerState.effective_skill_level(skill_name) == 4)
 		var before_reload := PlayerState.equipment.duplicate(true)
 		assert(PlayerState.save_game(false))

@@ -3,6 +3,7 @@ extends RefCounted
 
 const CONTRACT_ID := "gameplay.pricing.authority.v1"
 const POLICY_PATH := "res://assets/data/pricing_policy_v1.json"
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
 const BPS_DENOMINATOR := 10000
 
 static var _cached_policy: Dictionary = {}
@@ -33,7 +34,7 @@ static func _adjusted_database_price_resolved(
 		return 0
 	var modifiers: Dictionary = active.get("modifiers", {})
 	var value := _apply_bps(base_price, int(modifiers.get("globalBps", BPS_DENOMINATOR)))
-	var category := str(price_record.get("category", ""))
+	var category := ItemCategories.category_for_record(price_record)
 	value = _apply_bps(value, int((modifiers.get("categoryBps", {}) as Dictionary).get(category, BPS_DENOMINATOR)))
 	var item_bps: Dictionary = modifiers.get("itemBps", {})
 	var item_key := str(price_record.get("item_key", ""))
@@ -107,7 +108,7 @@ static func repair_batch_slot_order(policy_override := {}) -> Array[String]:
 	if not raw_slots is Array:
 		return slots
 	for raw_slot: Variant in raw_slots:
-		var slot := str(raw_slot)
+		var slot: String = preload("res://scripts/identity/equipment_identity_codec.gd").import_slot(raw_slot)
 		if slot.is_empty() or slot in slots:
 			return []
 		slots.append(slot)
@@ -432,7 +433,7 @@ static func _round_half_up_ratio(value: int, numerator: int, denominator: int) -
 
 static func _policy(policy_override: Variant) -> Dictionary:
 	if policy_override is Dictionary and not (policy_override as Dictionary).is_empty():
-		return (policy_override as Dictionary).duplicate(true)
+		return _import_category_policy(policy_override)
 	return policy()
 
 
@@ -446,7 +447,22 @@ static func _load_policy() -> Dictionary:
 		push_error("正式价格策略无效：%s" % POLICY_PATH)
 		return {}
 	_cached_policy_hash = policy_text.sha256_text()
-	return (parsed as Dictionary).duplicate(true)
+	return _import_category_policy(parsed)
+
+
+static func _import_category_policy(source: Dictionary) -> Dictionary:
+	var result := source.duplicate(true)
+	var modifiers: Variant = result.get("modifiers", {})
+	if not modifiers is Dictionary: return {}
+	var old: Variant = modifiers.get("categoryBps", {})
+	if not old is Dictionary: return {}
+	var formal := {}
+	for key: Variant in old:
+		var category := ItemCategories.import_legacy_category(key)
+		if category.is_empty() or formal.has(category): return {}
+		formal[category] = old[key]
+	modifiers["categoryBps"] = formal
+	return result
 
 
 static func _policy_hash(active: Dictionary) -> String:

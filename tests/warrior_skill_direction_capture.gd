@@ -25,9 +25,9 @@ func _capture() -> void:
 	PlayerState.test_mode = true
 	PlayerState.reset_progress()
 	PlayerState.select_profession("战士")
-	PlayerState.equipment["武器"] = {"name": "裁决之杖", "durability": 30}
-	PlayerState.equipment["衣服"] = {"name": "重盔甲(男)", "durability": 30}
-	PlayerState.equipment["头盔"] = {"name": "黑铁头盔", "durability": 30}
+	PlayerState.equipment["hc.slot.weapon"] = {"name": "裁决之杖", "durability": 30}
+	PlayerState.equipment["hc.slot.armor"] = {"name": "重盔甲(男)", "durability": 30}
+	PlayerState.equipment["hc.slot.helmet"] = {"name": "黑铁头盔", "durability": 30}
 	var background := ColorRect.new()
 	background.size = Vector2(1280, 720)
 	background.color = Color("15120f")

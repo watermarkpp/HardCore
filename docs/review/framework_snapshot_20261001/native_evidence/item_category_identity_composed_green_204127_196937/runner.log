@@ -1,0 +1,31 @@
+[PASS] item_category_identity_test
+[PASS] equipment_enhancement_rules_test
+[PASS] equipment_enhancement_grade_test
+[PASS] equipment_enhancement_display_test
+[PASS] equipment_enhancement_transaction_test
+[PASS] workbench_any_slot_test
+[PASS] equipment_enhancement_panel_flow_test
+[PASS] equipment_inventory_slot_swap_test
+[PASS] equipment_durability_policy_test
+[PASS] item_drop_instance_rules_test
+[FAIL] item_drop_instance_persistence_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+SCRIPT ERROR: Invalid access to property or key '姝﹀櫒' on a base object of type 'Dictionary'.
+   at: _run (res://tests/item_drop_instance_persistence_test.gd:97)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/item_drop_instance_persistence_test.gd:97)
+[PASS] pricing_authority_test
+[PASS] equipment_identity_test
+[PASS] ordinary_item_identity_test
+[PASS] socket_gem_identity_test
+[PASS] socket_transaction_test
+[PASS] relic_identity_relation_test
+[PASS] empty_extension_behavior_test
+[PASS] skill_book_identity_test
+[PASS] temporary_item_buff_identity_test
+[PASS] item_use_action_identity_test
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261001_204413_526_6344.json
+TEST_SUMMARY suite=adhoc passed=20 failed=1 engine_log_errors=1
+FAILED_TESTS=item_drop_instance_persistence_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_1;engine_log_failures_1)

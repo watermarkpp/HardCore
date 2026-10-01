@@ -2,6 +2,7 @@ class_name RelicSynthesisService
 extends RefCounted
 
 const Rules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
+const Professions := preload("res://scripts/profession_rules.gd")
 
 var _player: Node
 var _rng := RandomNumberGenerator.new()
@@ -47,7 +48,7 @@ func commit_synthesis(quote: Dictionary, save_in_background := false) -> Diction
 	var indices: Array[int] = []
 	for raw: Variant in quote.get("material_indices", []):
 		indices.append(int(raw))
-	var refreshed := _build_quote(int(quote.get("item_id", -1)), indices, str(quote.get("skill_profession", "")))
+	var refreshed := _build_quote(int(quote.get("item_id", -1)), indices, str(quote.get("profession_id", "")))
 	if not bool(refreshed.get("valid", false)):
 		return refreshed
 	var expected := quote.duplicate(true)
@@ -63,7 +64,7 @@ func commit_synthesis(quote: Dictionary, save_in_background := false) -> Diction
 		next_tray[index] = {}
 	var catalog := Rules.record_for_id(int(quote.item_id))
 	var output: Dictionary = _player.call("_make_item_instance", str(catalog.name), catalog, -1, false)
-	var rolled := Rules.roll_instance(int(quote.item_id), str(quote.skill_profession), _rng)
+	var rolled := Rules.roll_instance(int(quote.item_id), str(quote.profession_id), _rng)
 	if rolled.is_empty():
 		_busy = false
 		return _failure("圣物属性生成失败，材料未消耗。")
@@ -90,7 +91,9 @@ func _build_quote(item_id: int, material_indices: Array[int], profession := "") 
 	if catalog.is_empty() or material_indices.size() != Rules.FRAGMENT_COUNT:
 		return _failure("请选择合成配方并放入4个远古圣物碎片。")
 	if profession.is_empty():
-		profession = str(_player.profession) if Rules.is_relic(item_id) else str(catalog.get("skillProfession", ""))
+		profession = str(_player.profession_id) if Rules.is_relic(item_id) else str(catalog.get("skillProfessionId", ""))
+	else:
+		profession = Professions.import_profession_identity(profession)
 	if profession not in Rules.recipe_professions(item_id):
 		return _failure("该配方的技能职业无效。")
 	# All nine cells accept input. After consuming exactly four fragments,
@@ -115,7 +118,7 @@ func _build_quote(item_id: int, material_indices: Array[int], profession := "") 
 		"valid": true,
 		"profile_id": str(_player.active_profile_id),
 		"item_id": item_id,
-		"skill_profession": profession,
+		"profession_id": profession,
 		"material_indices": material_indices.duplicate(),
 		"gold_cost": Rules.GOLD_COST,
 		"success_percent": 100,

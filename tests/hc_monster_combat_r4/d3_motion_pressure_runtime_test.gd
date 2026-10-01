@@ -50,6 +50,11 @@ func _motion_pressure(mid: int) -> void:
 	actor.set_physics_process(true)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+	# Establish one real reachable action before the faster player motion and
+	# sustained DIRECT pressure. No clock/cadence/cooldown rewrite.
+	var initial_admission_deadline := actor._combat_action_time_s + 4.0
+	while actor._hc_starts==0 and actor._combat_action_time_s<initial_admission_deadline:
+		await get_tree().physics_frame
 	var motion_gu := 0.0
 	var pressure_debits := 0
 	var actual_struck_requests := 0
@@ -128,15 +133,10 @@ func _real_pause_and_late_draw() -> void:
 	# target (docs/02 E L-inf box).
 	await get_tree().physics_frame
 	player.global_position = actor.global_position + (
-		_ground_to_screen(CENTER + Vector2(0.6, 0.0)) - _ground_to_screen(CENTER)
+		_ground_to_screen(CENTER + Vector2(0.98, 0.0)) - _ground_to_screen(CENTER)
 	)
-	# Task 2 (docs/02 D): the first real admission now waits out the walk
-	# interval, which exceeds this scenario's real-time window. Anchor the
-	# cadence phase at an elapsed interval so the next tick can grant.
-	actor._movement_cadence.walk_tick_ms = (
-		Time.get_ticks_msec() - int(actor._movement_cadence.walk_interval_ms) - 1
-	)
-	var deadline := Time.get_ticks_msec() + 1500
+	# The legitimate first source interval is paid by native actor ticks.
+	var deadline := Time.get_ticks_msec() + 4000
 	while actor._hc_starts == 0 and Time.get_ticks_msec() < deadline:
 		await get_tree().physics_frame
 	_check(actor._hc_starts > 0, "pause:no_real_admission")

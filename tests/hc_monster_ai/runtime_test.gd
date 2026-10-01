@@ -106,6 +106,7 @@ func _run() -> void:
 	actor._attack_timer=0.0
 	actor._movement_step_active=true
 	actor._movement_step_reason=&"pursuit"
+	ready_cadence(actor)
 	var before:=actor._hc_starts
 	actor._physics_process_internal(1.0/60.0)
 	check(actor._hc_starts==before+1,"T01","Real EnemyActor movement branch starts in this tick")
@@ -113,7 +114,7 @@ func _run() -> void:
 	check(actor._hc_settlements>0,"T-hit","Accepted attack reaches the existing damage pipeline")
 	# Post-movement opportunity; the motor's real physical displacement is tested.
 	await get_tree().physics_frame
-	actor.set_combat_position(ground_to_screen(Vector2(21.501,20)),&"hc_test_position")
+	actor.set_combat_position(ground_to_screen(Vector2(21.01,20)),&"hc_test_position")
 	actor._clear_autonomous_step_state()
 	actor._attack_timer=0.0
 	actor._hc_pursuit_session=false
@@ -351,7 +352,9 @@ func _run() -> void:
 		await get_tree().physics_frame
 		detour_actor._physics_process_internal(1.0/60.0)
 	var detour_dist:=screen_to_ground(detour_actor.global_position).distance_to(Vector2(20,20))
-	check(detour_dist<=detour_actor._hc_preferred(player)+0.003,"C05-reach","HC actor detours around the wall to the legal contact position (%.3f)"%detour_dist)
+	var detour_relative:=screen_to_ground(detour_actor.global_position)-Vector2(20,20)
+	var detour_extent:=maxf(absf(detour_relative.x),absf(detour_relative.y))
+	check(detour_extent<=1.000001 and detour_actor._hc_access(player)=="CLEAR","C05-reach","HC actor detours to the formal source box with clear access (extent=%.3f; euclidean=%.3f)"%[detour_extent,detour_dist])
 	check(screen_to_ground(detour_actor.global_position).floor()!=Vector2(22,20),"C05-final-cell","HC actor final cell is outside the blocked navigation cell")
 	index.unregister(detour_actor.spatial_actor_runtime_id)
 	detour_actor.queue_free()
@@ -367,23 +370,37 @@ func _assert_approach_real_cadence(monster_id: int,start_distance: float) -> voi
 	var settlements_before:=cadence_actor._hc_settlements
 	var hp_before:=player.current_hp
 	var last_starts:=cadence_actor._hc_starts
-	var release_distances:Array[float]=[]
+	var release_extents:Array[float]=[]
 	var trace:Array[float]=[]
-	for frame in range(240):
+	# Observe two real admissions using the actor's resolved timing, rather
+	# than assuming every ordinary monster can attack twice in four seconds.
+	# This changes only the bounded fixture window: no state is rewritten
+	# after observation begins and the repeated-start assertion is retained.
+	var source_gate_s:=float(cadence_actor._movement_cadence.walk_interval_ms+cadence_actor._movement_cadence.walk_wait_ms)/1000.0+1.0/60.0
+	var approach_gu:=maxf(0.0,start_distance-cadence_actor._hc_preferred(player))
+	var approach_s:=approach_gu/maxf(cadence_actor.move_speed_gu_per_sec,GU.EPSILON_GU)
+	var approach_grants:=ceili(approach_gu)+1
+	var repeat_s:=maxf(cadence_actor._current_attack_interval(),cadence_actor._attack_animation_duration)
+	var window_s:=approach_s+float(approach_grants+2)*source_gate_s+repeat_s+cadence_actor._attack_hit_delay+2.0/60.0
+	var window_frames:=ceili(window_s*60.0)
+	for frame in range(window_frames):
 		await get_tree().physics_frame
 		cadence_actor._physics_process_internal(1.0/60.0)
-		var distance:=screen_to_ground(cadence_actor.global_position).distance_to(Vector2(20,20))
+		var relative:=screen_to_ground(cadence_actor.global_position)-Vector2(20,20)
+		var distance:=relative.length()
 		trace.append(distance)
 		if cadence_actor._hc_starts>last_starts:
-			release_distances.append(distance)
+			release_extents.append(maxf(absf(relative.x),absf(relative.y)))
 			last_starts=cadence_actor._hc_starts
+		if cadence_actor._hc_starts-starts_before>=2 and cadence_actor._hc_settlements-settlements_before>=1 and distance<=cadence_actor._hc_preferred(player)+0.003:
+			break
 	var starts_delta:=cadence_actor._hc_starts-starts_before
 	var settlements_delta:=cadence_actor._hc_settlements-settlements_before
 	var preferred:=cadence_actor._hc_preferred(player)
 	var final_distance:=trace[-1] if not trace.is_empty() else INF
 	check(starts_delta>=2,"C02-starts-%d-%.2f"%[monster_id,start_distance],"Real timer produces repeated starts (got %d)"%starts_delta)
 	check(settlements_delta>=1 and player.current_hp<hp_before,"C02-damage-%d-%.2f"%[monster_id,start_distance],"Real releases settle and change HP")
-	check(not release_distances.is_empty() and release_distances.all(func(value: float)->bool:return value<=1.5+GU.EPSILON_GU),"C02-range-%d-%.2f"%[monster_id,start_distance],"Every real attack waits until inside 1.5 GU")
+	check(not release_extents.is_empty() and release_extents.all(func(value: float)->bool:return value<=1.0+GU.EPSILON_GU),"C02-range-%d-%.2f"%[monster_id,start_distance],"Every real attack waits until inside the formal source box")
 	check(final_distance<=preferred+0.003,"C02-converge-%d-%.2f"%[monster_id,start_distance],"Real cadence closes %.2f GU to effective preferred %.3f (final %.3f)"%[start_distance,preferred,final_distance])
 	# docs/02 E1: the ordinary stop contract is the L-inf box. The legacy
 	# PLAYER_MELEE_CONTACT_GAP_GU dwell band was a circle-contract adaptation

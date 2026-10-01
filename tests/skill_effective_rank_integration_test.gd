@@ -51,10 +51,10 @@ func _run() -> void:
 
 	# Instance modifiers are authoritative; erasing them falls back to the
 	# catalog base (木剑 has none) without any double counting.
-	PlayerState.equipment["武器"].erase("modifiers")
+	PlayerState.equipment["hc.slot.weapon"].erase("modifiers")
 	PlayerState.recalculate_stats()
 	assert(PlayerState.effective_skill_level("火球术") == 1, "移除实例词条后应只剩布衣 all+1")
-	PlayerState.equipment["武器"]["modifiers"] = wood_modifiers.duplicate(true)
+	PlayerState.equipment["hc.slot.weapon"]["modifiers"] = wood_modifiers.duplicate(true)
 	PlayerState.recalculate_stats()
 	assert(PlayerState.effective_skill_level("火球术") == 5, "恢复实例词条后应为 rank5")
 
@@ -82,7 +82,7 @@ func _run() -> void:
 	assert(not player.can_request_skill("火球术"), "MP 低于 rank5 报价时应拒绝预检")
 
 	# rank4 after removing one affix item.
-	PlayerState.unequip_slot("衣服")
+	PlayerState.unequip_slot("hc.slot.armor")
 	assert(PlayerState.effective_skill_level("火球术") == 4, "卸下布衣后应为 rank4")
 	var rank4_quote := SkillResourceService.quote(
 		definition,
@@ -98,12 +98,12 @@ func _run() -> void:
 	assert(not player.can_request_skill("火球术"), "rank4 MP 低于报价时应拒绝预检")
 
 	# Unequip and durability-zero both invalidate affixes.
-	PlayerState.unequip_slot("武器")
+	PlayerState.unequip_slot("hc.slot.weapon")
 	assert(PlayerState.effective_skill_level("火球术") == 0, "卸装后加成应失效")
 	assert(PlayerState.equip_inventory_index(_inventory_index("木剑")).begins_with("已装备"), "重新穿装备失败")
 	assert(PlayerState.effective_skill_level("火球术") == 4, "重新穿装备后应恢复 rank4")
-	var weapon: Dictionary = PlayerState.equipment["武器"]
-	PlayerState.damage_equipment_durability("武器", int(weapon.get("max_durability", 1)))
+	var weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
+	PlayerState.damage_equipment_durability("hc.slot.weapon", int(weapon.get("max_durability", 1)))
 	assert(PlayerState.effective_skill_level("火球术") == 0, "零耐久装备不得提供技能等级加成")
 
 	# Proficiency is a no-op: snapshot and the stable save fields are unchanged.

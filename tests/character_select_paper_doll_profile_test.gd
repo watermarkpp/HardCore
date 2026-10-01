@@ -6,6 +6,8 @@ const TEST_INDEX := "user://character_select_paper_doll_index.json"
 var _old_directory := ""
 var _old_index := ""
 var _old_test_mode := false
+var _test_directory := TEST_DIRECTORY + "_%d" % Time.get_ticks_usec()
+var _test_index := TEST_INDEX.get_basename() + "_%d.json" % Time.get_ticks_usec()
 
 
 func _ready() -> void:
@@ -31,7 +33,7 @@ func _run() -> void:
 	assert(not paper_doll.uses_original_client_stage(), "人物选择页错误加载完整Prguse装备页")
 	_assert_classic_avatar_only(paper_doll, "战士人物选择页")
 	assert(
-		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
+		str(paper_doll._equipment_snapshot.get("hc.slot.armor", {}).get("name", ""))
 		== "战神盔甲(男)",
 		"人物选择页没有读取选中人物档案的衣服"
 	)
@@ -39,11 +41,11 @@ func _run() -> void:
 	# Deliberately poison the global runtime equipment. Rebuilding the preview
 	# must still use the selected archive rather than whichever profile happens
 	# to be resident in PlayerState.
-	PlayerState.equipment["衣服"] = {"name": "布衣(男)"}
+	PlayerState.equipment["hc.slot.armor"] = {"name": "布衣(男)"}
 	launcher._refresh_character_preview()
 	paper_doll = preview_root.get_child(0)
 	assert(
-		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
+		str(paper_doll._equipment_snapshot.get("hc.slot.armor", {}).get("name", ""))
 		== "战神盔甲(男)",
 		"人物选择页错误使用了 PlayerState.equipment 代替选中档案"
 	)
@@ -61,7 +63,7 @@ func _run() -> void:
 	assert(paper_doll.presentation_mode == "classic_avatar", "切换人物后没有保持透明原客户端纸娃娃")
 	_assert_classic_avatar_only(paper_doll, "法师人物选择页")
 	assert(
-		str(paper_doll._equipment_snapshot.get("衣服", {}).get("name", ""))
+		str(paper_doll._equipment_snapshot.get("hc.slot.armor", {}).get("name", ""))
 		== "恶魔长袍(男)",
 		"切换人物后纸娃娃没有立即切换到该档案装备"
 	)
@@ -86,10 +88,10 @@ func _prepare_profiles() -> void:
 	_old_directory = PlayerState.profile_directory
 	_old_index = PlayerState.profile_index_path
 	_old_test_mode = PlayerState.test_mode
-	PlayerState.profile_directory = TEST_DIRECTORY
-	PlayerState.profile_index_path = TEST_INDEX
+	PlayerState.profile_directory = _test_directory
+	PlayerState.profile_index_path = _test_index
 	PlayerState.test_mode = false
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(TEST_DIRECTORY))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(_test_directory))
 	var profiles := [
 		{
 			"id": "warrior_equipped",
@@ -109,7 +111,7 @@ func _prepare_profiles() -> void:
 		},
 	]
 	_write_json(
-		TEST_DIRECTORY + "/warrior_equipped.json",
+		_test_directory + "/warrior_equipped.json",
 		_profile_payload(profiles[0], {
 			"衣服": {"name": "战神盔甲(男)"},
 			"武器": {"name": "裁决之杖"},
@@ -117,16 +119,16 @@ func _prepare_profiles() -> void:
 		})
 	)
 	_write_json(
-		TEST_DIRECTORY + "/wizard_equipped.json",
+		_test_directory + "/wizard_equipped.json",
 		_profile_payload(profiles[1], {
 			"衣服": {"name": "恶魔长袍(男)"},
 			"武器": {"name": "骨玉权杖"},
 			"头盔": {"name": "法神头盔"},
 		})
 	)
-	_write_json(TEST_INDEX, {"version": 1, "profiles": profiles})
+	_write_json(_test_index, {"version": 1, "profiles": profiles})
 	PlayerState.active_profile_id = "warrior_equipped"
-	assert(PlayerState.select_character("warrior_equipped"))
+	assert(PlayerState.select_character("warrior_equipped"), str(PlayerState.last_load_result))
 
 
 func _profile_payload(profile: Dictionary, equipment: Dictionary) -> Dictionary:
@@ -172,12 +174,12 @@ func _restore_profiles() -> void:
 
 func _cleanup() -> void:
 	for suffix: String in ["", ".tmp", ".bak"]:
-		var index_path := TEST_INDEX + suffix
+		var index_path := _test_index + suffix
 		if FileAccess.file_exists(index_path):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(index_path))
-	var absolute_directory := ProjectSettings.globalize_path(TEST_DIRECTORY)
+	var absolute_directory := ProjectSettings.globalize_path(_test_directory)
 	if DirAccess.dir_exists_absolute(absolute_directory):
-		var directory := DirAccess.open(TEST_DIRECTORY)
+		var directory := DirAccess.open(_test_directory)
 		if directory != null:
 			for file_name: String in directory.get_files():
 				DirAccess.remove_absolute(absolute_directory.path_join(file_name))

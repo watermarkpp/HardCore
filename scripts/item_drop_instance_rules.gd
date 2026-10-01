@@ -1,6 +1,8 @@
 class_name ItemDropInstanceRules
 extends RefCounted
 
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+
 const AffixV3 := preload("res://scripts/item_drop_affix_v3_rules.gd")
 const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 
@@ -128,7 +130,7 @@ static func create_legacy_instance(catalog_item: Dictionary, stable_drop_key: St
 		"modifiers": modifiers,
 		"drop_affix": affix,
 	}
-	if str(catalog_item.get("category", "")) == "武器":
+	if ItemCategories.category_for_record(catalog_item) == "hc.item_category.weapon":
 		instance["weapon_luck"] = 0
 		instance["weapon_curse"] = 0
 	return instance if validate_instance(instance, catalog_item) else {}
@@ -141,7 +143,7 @@ static func validate_instance(instance: Dictionary, catalog_item: Dictionary) ->
 	# durability, luck, modifier, unknown field or identity always revalidates.
 	var key := str(instance.get("instance_id", "")) + ":" + str(hash(instance))
 	var catalog_signature: Array = []
-	for field: String in ["itemId", "kind", "name", "category", "maxDurability"]:
+	for field: String in ["itemId", "kind", "name", "category", "category_id", "maxDurability"]:
 		catalog_signature.append(catalog_item.get(field, null))
 	var cached: Dictionary = _validated_snapshots.get(key, {})
 	if not cached.is_empty() and cached.instance == instance and cached.catalog == catalog_signature:
@@ -156,6 +158,8 @@ static func validate_instance(instance: Dictionary, catalog_item: Dictionary) ->
 
 static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dictionary) -> bool:
 	if not _ensure_loaded():
+		return false
+	if ItemCategories.category_for_record(catalog_item).is_empty():
 		return false
 	var item_id := _exact_positive_integer(instance.get("item_id", null))
 	var catalog_id := _exact_positive_integer(catalog_item.get("itemId", null))
@@ -199,7 +203,7 @@ static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dict
 	for raw_field: Variant in instance.keys():
 		if not allowed_fields.has(str(raw_field)):
 			return false
-	if instance.has("enhancement") and not EnhancementRules.validate_enhancement(instance.enhancement, str(catalog_item.get("category", ""))):
+	if instance.has("enhancement") and not EnhancementRules.validate_enhancement(instance.enhancement, ItemCategories.category_for_record(catalog_item)):
 		return false
 	var digest := str(instance.get("drop_key_digest", ""))
 	var instance_id := str(instance.get("instance_id", ""))
@@ -211,7 +215,7 @@ static func _validate_instance_uncached(instance: Dictionary, catalog_item: Dict
 		or not _valid_durability(instance, catalog_item)
 	):
 		return false
-	var is_weapon := str(catalog_item.get("category", "")) == "武器"
+	var is_weapon := ItemCategories.category_for_record(catalog_item) == "hc.item_category.weapon"
 	if is_weapon:
 		var weapon_luck := _exact_nonnegative_integer(instance.get("weapon_luck", null))
 		var weapon_curse := _exact_nonnegative_integer(instance.get("weapon_curse", null))

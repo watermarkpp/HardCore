@@ -48,7 +48,7 @@ func _run() -> void:
 	assert(PlayerState.gold == gold_before + 100 and PlayerState.has_item("布衣(男)"), "任务金币或布衣奖励缺失")
 	var cloth_index := _inventory_index("布衣(男)")
 	assert(cloth_index >= 0 and PlayerState.equip_inventory_index(cloth_index).begins_with("已装备"), "任务布衣无法穿戴")
-	assert(str(PlayerState.equipment["衣服"].get("name", "")) == "布衣(男)", "布衣没有进入衣服装备槽")
+	assert(str(PlayerState.equipment["hc.slot.armor"].get("name", "")) == "布衣(男)", "布衣没有进入衣服装备槽")
 
 	await _run_reentry_stability(game)
 	print("VERTICAL_SLICE_LOOP_PASS：任务、三怪、三层门点、实碰撞、回城、装备与重复进图正常")

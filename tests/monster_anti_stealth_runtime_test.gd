@@ -212,7 +212,7 @@ func _make_enemy(
 func _force_cadence_ready(enemy: EnemyActor) -> void:
 	var cadence = enemy._movement_cadence
 	assert(cadence != null, "canonical enemy must own a movement cadence")
-	var now_ms := Time.get_ticks_msec()
+	var now_ms := int(enemy._combat_action_time_s * 1000.0)
 	cadence.walk_wait_locked = false
 	cadence.walk_tick_ms = now_ms - cadence.walk_interval_ms - 1
 	cadence.walk_wait_tick_ms = now_ms

@@ -147,7 +147,7 @@ func _run() -> void:
 	for attempt in range(2):
 		panel._on_context_action(_next_action_id({"action": "equip", "index": 0, "slot": "武器"}))
 		await settle()
-		context_ok = str((PlayerState.equipment.get("武器", {}) as Dictionary).get("name", "")) == "井中月"
+		context_ok = str((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).get("name", "")) == "井中月"
 		if context_ok:
 			break
 		reset_fixture_state()
@@ -166,14 +166,14 @@ func _run() -> void:
 	# weapon occupies slot 0.
 	panel._on_context_action(_next_action_id({"action": "equip", "index": 0, "slot": "武器"}))
 	await settle()
-	expect(str((PlayerState.equipment.get("武器", {}) as Dictionary).get("name", "")) == "裁决之杖", "replace commits the new weapon")
+	expect(str((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).get("name", "")) == "裁决之杖", "replace commits the new weapon")
 	expect(hud.notice_presenter.full_text() == "已装备 裁决之杖", "replace reports only the new equip")
 	expect(hud.notice_presenter.queue_size() == 0, "replace never shows an extra unequip notice")
 
 	# --- Context-action unequip reports once with the official style ---------
 	panel._on_context_action(_next_action_id({"action": "unequip", "slot": "武器"}))
 	await settle()
-	expect((PlayerState.equipment.get("武器", {}) as Dictionary).is_empty(), "unequip commits: weapon slot empty")
+	expect((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).is_empty(), "unequip commits: weapon slot empty")
 	expect(hud.notice_presenter.full_text() == "已卸下 裁决之杖", "unequip shows one central notice")
 	expect(hud.notice_presenter.queue_size() == 0, "unequip never queues a second notice")
 
@@ -184,7 +184,7 @@ func _run() -> void:
 	await settle()
 	panel._activate_inventory_index(0)
 	await settle()
-	expect(str((PlayerState.equipment.get("武器", {}) as Dictionary).get("name", "")) == "井中月", "activation equip commits")
+	expect(str((PlayerState.equipment.get("hc.slot.weapon", {}) as Dictionary).get("name", "")) == "井中月", "activation equip commits")
 	expect(hud.notice_presenter.full_text() == "已装备 井中月", "activation equip shows one central notice")
 
 	hud.queue_free()

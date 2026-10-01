@@ -21,7 +21,7 @@ func _equip_only(item_name: String) -> Dictionary:
 	PlayerState.recalculate_stats()
 	PlayerState.add_item(item_name)
 	assert(PlayerState.equip_inventory_index(_inventory_index(item_name)).begins_with("已装备"), "%s穿戴失败" % item_name)
-	return PlayerState.equipment["左戒指"]
+	return PlayerState.equipment["hc.slot.ring_left"]
 
 
 func _run() -> void:
@@ -41,7 +41,7 @@ func _run() -> void:
 	var normal_wear := EquipmentRulesScript.max_wear_weight("战士", 50)
 	assert(PlayerState.has_special_effect("double_weight"), "超负载戒指没有注册运行效果")
 	assert(int(PlayerState.computed_stats.get("max_wear_weight", 0)) == normal_wear * 2, "超负载戒指没有翻倍穿戴负重")
-	PlayerState.damage_equipment_durability("左戒指", int(overload.get("max_durability", 1)))
+	PlayerState.damage_equipment_durability("hc.slot.ring_left", int(overload.get("max_durability", 1)))
 	assert(not PlayerState.has_special_effect("double_weight") and int(PlayerState.computed_stats.get("max_wear_weight", 0)) == normal_wear, "零耐久超负载戒指仍然生效")
 
 	var stealth_ring := _equip_only("隐身戒指")
@@ -51,7 +51,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	var player: PlayerCharacter = game.player
 	assert(player.is_stealthed(), "隐身戒指没有让怪物识别为隐身")
-	PlayerState.damage_equipment_durability("左戒指", int(stealth_ring.get("max_durability", 1)))
+	PlayerState.damage_equipment_durability("hc.slot.ring_left", int(stealth_ring.get("max_durability", 1)))
 	assert(not player.is_stealthed(), "零耐久隐身戒指仍然生效")
 
 	var shield_ring := _equip_only("护身戒指")
@@ -59,7 +59,7 @@ func _run() -> void:
 	player.current_mp = 100
 	player.take_damage(20)
 	assert(player.current_hp == 100 and player.current_mp < 100, "护身戒指没有按1.5倍魔法值抵伤")
-	PlayerState.damage_equipment_durability("左戒指", int(shield_ring.get("max_durability", 1)))
+	PlayerState.damage_equipment_durability("hc.slot.ring_left", int(shield_ring.get("max_durability", 1)))
 	var hp_before := player.current_hp
 	player.take_damage(20)
 	assert(player.current_hp < hp_before, "零耐久护身戒指仍在抵伤")

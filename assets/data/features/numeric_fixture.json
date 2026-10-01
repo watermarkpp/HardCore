@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "module_id": "hc.numeric_fixture",
+  "module_version": 1,
+  "core_api_version": 1,
+  "requires": [],
+  "conflicts": [],
+  "capabilities": [
+    "stats.contribute",
+    "skills.modify"
+  ],
+  "handlers": [],
+  "resource_dependencies": [],
+  "cost": {
+    "commands_per_event": 0,
+    "states_per_target": 0
+  },
+  "default_enabled": false,
+  "scope": "character",
+  "activation_boundary": "world_ready",
+  "mechanics": [
+    {
+      "mechanic_id": "hc.fixture_accuracy",
+      "kind": "stat",
+      "tags": [
+        "hc.numeric"
+      ],
+      "operations": [
+        {
+          "stat": "accuracy",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "mechanic_id": "hc.fixture_lightning",
+      "kind": "skill",
+      "tags": [
+        "hc.numeric"
+      ],
+      "operations": [
+        {
+          "skill_id": "hc.skill.wizard.lightning",
+          "field": "geometry.maximum_range_gu",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "skill_id": "hc.skill.wizard.lightning",
+          "field": "mp_cost_by_rank.0",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "skill_id": "hc.skill.wizard.lightning",
+          "field": "mp_cost_by_rank.1",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "skill_id": "hc.skill.wizard.lightning",
+          "field": "mp_cost_by_rank.2",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "skill_id": "hc.skill.wizard.lightning",
+          "field": "mp_cost_by_rank.3",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "tests": [
+    "tests/framework/feature_compiler_test.tscn",
+    "tests/framework/feature_production_loadout_test.tscn"
+  ]
+}

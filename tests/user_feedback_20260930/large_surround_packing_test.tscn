@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/user_feedback_20260930/large_surround_packing_test.gd" type="Script" id="1"]
+
+[node name="LargeSurroundPackingTest" type="Node"]
+script = ExtResource("1")

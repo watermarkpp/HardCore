@@ -80,7 +80,9 @@ func _test_b_direction_invariant_movement() -> void:
 
 func _test_c_euclidean_lock_and_stable_order() -> void:
 	assert(LockPolicy.CONTRACT_ID == "combat.spell_lock.euclidean_gu.v2")
-	assert(LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(7.2, 9.6)))
+	assert(LockPolicy.LOCK_RANGE_GU == 10.0)
+	assert(LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(6.0, 8.0)))
+	assert(not LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(6.0002, 8.0002)))
 	assert(not LockPolicy.is_within_lock_range(Vector2.ZERO, Vector2(8.0, 9.0)))
 	var ordered := LockPolicy.ordered_candidates([
 		{"origin_ground_gu": Vector2.ZERO, "target_ground_gu": Vector2(3, 4), "instance_id": 9},

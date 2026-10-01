@@ -70,8 +70,8 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var visual: Node2D = game.player.get_node("PlayerVisual")
-	PlayerState.equipment["武器"] = {"name": "炼狱", "durability": 0, "max_durability": 28}
-	PlayerState.equipment["衣服"] = {"name": "重盔甲(男)", "durability": 0, "max_durability": 22}
+	PlayerState.equipment["hc.slot.weapon"] = {"name": "炼狱", "durability": 0, "max_durability": 28}
+	PlayerState.equipment["hc.slot.armor"] = {"name": "重盔甲(男)", "durability": 0, "max_durability": 22}
 	PlayerState.recalculate_stats()
 	PlayerState.equipment_changed.emit()
 	visual._process(0.01)

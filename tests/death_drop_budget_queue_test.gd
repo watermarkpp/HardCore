@@ -42,6 +42,11 @@ func _run() -> void:
 	_test_time_budget_without_diagnostics()
 	_test_save_failure_is_no_reward()
 	_test_generation_guards()
+	# These are separate scenarios. The real shared allowance is replenished
+	# by a process iteration, rather than reset per fixture or per service.
+	var previous_epoch := Engine.get_process_frames()
+	while Engine.get_process_frames() == previous_epoch:
+		await get_tree().process_frame
 	_test_materialization_failure_is_terminal()
 	_test_terminal_ledger_is_bounded()
 	_finish()

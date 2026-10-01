@@ -29,7 +29,7 @@ func _ready() -> void:
 	player.apply_mac_buff(120,4)
 	for id in range(910001,910007):
 		var water := GameData.get_item_record(id)
-		PlayerState.apply_temporary_item_buff(water.name, water.effectProfile)
+		PlayerState.apply_temporary_item_buff(GameData.item_entity_id(water), water.effectProfile)
 	player.apply_ac_buff(150,4)
 	game.call("_update_taoist_buff_hints")
 	for i in range(15):

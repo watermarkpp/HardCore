@@ -53,7 +53,7 @@ func _run() -> void:
 	)
 	assert(PlayerState.save_game())
 	var first_path := TEST_DIRECTORY + "/" + first_id + ".json"
-	var weapon_before := int((PlayerState.equipment["武器"] as Dictionary).get("durability_raw", 0))
+	var weapon_before := int((PlayerState.equipment["hc.slot.weapon"] as Dictionary).get("durability_raw", 0))
 	assert(weapon_before > 4)
 	var wear_context := {"confirmed_hit": true, "damage": 1, "weapon_roll": 0, "weapon_strong": 0}
 	assert(PlayerState.apply_durability_event(PlayerState.DURABILITY_EVENT_WEAPON_PHYSICAL_HIT, wear_context).applied)
@@ -121,6 +121,9 @@ func _run() -> void:
 
 	# Migrate the faulty short-lived APK's singular key into its typed slot.
 	var legacy_payload := (missing_field_payload as Dictionary).duplicate(true)
+	# This sample predates the formal character identity container. A changed
+	# display name must not conflict with a newer authoritative profession ID.
+	legacy_payload.erase("character_identity")
 	legacy_payload["profession"] = PlayerState.profession
 	legacy_payload["taoist_main_pet_runtime_state"] = skeleton_snapshot
 	_write_json(second_path, legacy_payload)
@@ -160,8 +163,8 @@ func _run() -> void:
 		and PlayerState.gold == 3456
 	)
 	assert(_no_main_pets_saved())
-	assert(PlayerState.attack_ring_slots[2] == wild_rush_name)
-	assert(PlayerState.quick_slots[2] == wild_rush_name)
+	assert(PlayerState.attack_ring_slots[2] == "hc.skill.warrior.wild_rush")
+	assert(PlayerState.quick_slots[2] == "hc.skill.warrior.wild_rush")
 	var restored_runtime := PlayerState.warrior_runtime_state_for_restore()
 	assert(bool(restored_runtime.toggles["warrior.fire_sword.auto_enabled"]))
 	assert(not restored_runtime.cooldowns.has("warrior.fire_sword.ready_remaining_ms"))

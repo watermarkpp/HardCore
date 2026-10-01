@@ -76,6 +76,13 @@ class StaticGoalField:
 	var registered_starts: Dictionary = {}
 	var active_start := Vector2i(-2147483648, -2147483648)
 	var active_start_expansions := 0
+	var distance_order: Array[Vector2i] = []
+	var _rebuild_requested := false
+	var _rebuild_start := Vector2i(-2147483648, -2147483648)
+	var _rebuild_cursor := 0
+	var _rebuild_heap: Array = []
+	var _retired_heap: Array = []
+	var maximum_frontier_work_per_advance := 0
 
 	func _init(ctx: Dictionary, r: float, destinations: Dictionary, shared_walkable: Dictionary) -> void:
 		context = ctx
@@ -90,6 +97,7 @@ class StaticGoalField:
 			if not _cell_walkable(goal):
 				continue
 			distance[goal] = 0.0
+			distance_order.append(goal)
 			_push([0.0, 0.0, goal.y, goal.x, goal])
 		if heap.is_empty():
 			state = "NO_ROUTE_FOR_CURRENT_GRAPH"
@@ -116,9 +124,13 @@ class StaticGoalField:
 		if state != "SEARCHING":
 			return state
 		var used := 0
+		if _rebuild_requested or not _retired_heap.is_empty():
+			used = _advance_frontier_work(limit, deadline_usec)
+			if _rebuild_requested or used >= limit:
+				return "SEARCHING"
 		var pops := 0
 		while not heap.is_empty() and used < limit and pops < limit * 4:
-			if deadline_usec > 0 and used > 0 and (used & 7) == 0 and Time.get_ticks_usec() >= deadline_usec:
+			if deadline_usec > 0 and used > 0 and Time.get_ticks_usec() >= deadline_usec:
 				break
 			pops += 1
 			var item: Array = _pop()
@@ -140,6 +152,8 @@ class StaticGoalField:
 				if not distance.has(neighbor) and distance.size() >= MAX_RECORDS:
 					state = "SEARCH_CAPACITY_LIMIT"
 					return state
+				if not distance.has(neighbor):
+					distance_order.append(neighbor)
 				distance[neighbor] = score
 				next_toward_goal[neighbor] = cell
 				_push([score + _active_heuristic(neighbor), score, neighbor.y, neighbor.x, neighbor])
@@ -147,11 +161,13 @@ class StaticGoalField:
 				_rotate_active_start()
 				if closed.has(target):
 					return "FOUND"
+				break
 			elif registered_starts.size() > 1 and active_start_expansions >= Terrain.MAX_PATH_EXPANSIONS:
 				# One difficult or unreachable start gets at most one formal expansion
 				# quantum before another live registered start owns the heuristic.
 				_rotate_active_start()
-		if heap.is_empty():
+				break
+		if heap.is_empty() and not _rebuild_requested:
 			state = "NO_ROUTE_FOR_CURRENT_GRAPH"
 		return "FOUND" if closed.has(target) else state
 
@@ -182,17 +198,59 @@ class StaticGoalField:
 		return float(maxi(delta.x, delta.y)) + (DIAGONAL_COST - 1.0) * float(mini(delta.x, delta.y))
 
 	func _rebuild_frontier_priorities() -> void:
-		var m30_started: int = Time.get_ticks_usec()
-		heap.clear()
-		for raw_cell: Variant in distance:
-			var cell: Vector2i = raw_cell
+		# Rotation only invalidates unpublished work. The distance insertion
+		# order is maintained while searching, avoiding a full keys() snapshot.
+		_rebuild_requested = true
+
+	func _advance_frontier_work(limit: int, deadline_usec: int) -> int:
+		var started_usec := Time.get_ticks_usec()
+		var used := 0
+		# Reclaim old heap entries in the same bounded quantum. Replacing a
+		# large Array must not merely hide an immediate foreground deallocation.
+		while not _retired_heap.is_empty() and used < limit:
+			if deadline_usec > 0 and Time.get_ticks_usec() >= deadline_usec:
+				break
+			_retired_heap.pop_back()
+			used += 1
+		if not _retired_heap.is_empty() or not _rebuild_requested:
+			maximum_frontier_work_per_advance = maxi(maximum_frontier_work_per_advance, used)
+			return used
+		if _rebuild_start != active_start:
+			# A detached/replaced owner can supersede a partially built heap.
+			# Dispose that private candidate incrementally; never publish it.
+			while not _rebuild_heap.is_empty() and used < limit:
+				if deadline_usec > 0 and Time.get_ticks_usec() >= deadline_usec:
+					break
+				_rebuild_heap.pop_back()
+				used += 1
+			if not _rebuild_heap.is_empty():
+				maximum_frontier_work_per_advance = maxi(maximum_frontier_work_per_advance, used)
+				return used
+			_rebuild_start = active_start
+			_rebuild_cursor = 0
+		while _rebuild_cursor < distance_order.size() and used < limit:
+			if deadline_usec > 0 and Time.get_ticks_usec() >= deadline_usec:
+				break
+			var cell: Vector2i = distance_order[_rebuild_cursor]
+			_rebuild_cursor += 1
+			used += 1 # Closed records count too; traversal is bounded.
 			if closed.has(cell):
 				continue
 			var score := float(distance[cell])
-			_push([score + _active_heuristic(cell), score, cell.y, cell.x, cell])
-		HCMonsterPathSearch.diagnostic_frontier_rebuilds += 1
-		HCMonsterPathSearch.diagnostic_frontier_rebuild_usec += Time.get_ticks_usec() - m30_started
-		HCMonsterPathSearch.diagnostic_frontier_rebuild_max_cells = maxi(HCMonsterPathSearch.diagnostic_frontier_rebuild_max_cells, distance.size())
+			_push_heap(_rebuild_heap, [score + _active_heuristic(cell), score, cell.y, cell.x, cell])
+		if _rebuild_cursor == distance_order.size():
+			assert(_retired_heap.is_empty())
+			_retired_heap = heap
+			heap = _rebuild_heap
+			_rebuild_heap = []
+			_rebuild_requested = false
+			_rebuild_start = Vector2i(-2147483648, -2147483648)
+			HCMonsterPathSearch.diagnostic_frontier_rebuilds += 1
+		HCMonsterPathSearch.diagnostic_frontier_rebuild_usec += Time.get_ticks_usec() - started_usec
+		HCMonsterPathSearch.diagnostic_frontier_rebuild_max_cells = maxi(
+			HCMonsterPathSearch.diagnostic_frontier_rebuild_max_cells, distance.size())
+		maximum_frontier_work_per_advance = maxi(maximum_frontier_work_per_advance, used)
+		return used
 
 
 	func path_from(from_cell: Vector2i) -> PackedVector2Array:
@@ -239,14 +297,17 @@ class StaticGoalField:
 		return a[3] < b[3]
 
 	func _push(item: Array) -> void:
-		heap.append(item)
-		var index := heap.size() - 1
+		_push_heap(heap, item)
+
+	static func _push_heap(destination: Array, item: Array) -> void:
+		destination.append(item)
+		var index := destination.size() - 1
 		while index > 0:
 			var up: int = (index - 1) >> 1
-			if not _less(item, heap[up]): break
-			heap[index] = heap[up]
+			if not _less(item, destination[up]): break
+			destination[index] = destination[up]
 			index = up
-		heap[index] = item
+		destination[index] = item
 
 	func _pop() -> Array:
 		var first: Array = heap[0]

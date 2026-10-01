@@ -11,8 +11,10 @@ func _run() -> void:
 	PlayerState.select_profession("战士")
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var ready_deadline := Time.get_ticks_msec() + 20000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec() < ready_deadline:
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "formal world did not finish bootstrap")
 	var visual: Node2D = game.player.get_node("PlayerVisual")
 	var sprite: Sprite2D = visual.get_node("BodySprite")
 	var weapon_layer: Sprite2D = visual.get_node("ClientWeaponLayer")
@@ -26,9 +28,9 @@ func _run() -> void:
 		assert(visual.has_node(marker_name), "warrior marker missing: %s" % marker_name)
 	for layer_name in ["ClientHairLayer", "ClientWeaponLayer", "ClientHelmetBackLayer", "ClientHelmetLayer", "HeadOcclusionMaskLayer", "WeaponAccent", "ArmorAccent", "HelmetAccent", "SkillEffect", "ClientSkillEffect", "WeaponAudio"]:
 		assert(visual.has_node(layer_name), "warrior visual layer missing: %s" % layer_name)
-	PlayerState.equipment["武器"] = {"name": "炼狱", "durability": 10}
-	PlayerState.equipment["衣服"] = {"name": "重盔甲(男)", "durability": 10}
-	PlayerState.equipment["头盔"] = {"name": "黑铁头盔", "durability": 10}
+	PlayerState.equipment["hc.slot.weapon"] = {"name": "炼狱", "durability": 10}
+	PlayerState.equipment["hc.slot.armor"] = {"name": "重盔甲(男)", "durability": 10}
+	PlayerState.equipment["hc.slot.helmet"] = {"name": "黑铁头盔", "durability": 10}
 	PlayerState.equipment_changed.emit()
 	visual._process(0.01)
 	# A durability/XP profile signal must not discard unchanged appearance art.
@@ -86,6 +88,7 @@ func _run() -> void:
 	var walk_weapon_texture: Texture2D = visual._weapon_action_textures.get("walk", null)
 	var run_body_texture: Texture2D = visual._dress_action_textures.get("run", null)
 	game.player.actual_motion_facing = Vector2.RIGHT
+	game.player.movement_facing = Vector2.RIGHT
 	game.player.velocity = Vector2.RIGHT * 80.0
 	visual._process(0.12)
 	assert(visual.current_state == "run", "warrior should switch to run state")
@@ -100,6 +103,7 @@ func _run() -> void:
 	assert(hair_layer.region_rect == sprite.region_rect and hair_layer.position == sprite.position, "run hair and body regions must share one foot-anchored cell")
 	assert(health_bar.position == fixed_health_bar_position, "running must not move the health bar")
 	assert(sprite.texture.get_size() == Vector2(1152, 1280), "warrior run atlas must contain MIR2 six-frame directions")
+	game.player.movement_input_active = false
 	game.player.velocity = Vector2.ZERO
 	visual._process(0.01)
 	assert(visual.current_state == "idle" and visual.current_animation_name() == "idle", "stopping must return the warrior to idle")
@@ -109,7 +113,7 @@ func _run() -> void:
 	var attack_emitted := [false]
 	game.player.attack_requested.connect(func(_origin: Vector2, _direction: Vector2, _damage: int) -> void: attack_emitted[0] = true)
 	game.player._attack_timer = 0.0
-	game.player.request_attack()
+	assert(game.player.request_attack(), "formal warrior attack was not accepted")
 	assert(not attack_emitted[0], "warrior damage must not occur before the attack hit frame")
 	await get_tree().create_timer(0.19).timeout
 	assert(attack_emitted[0], "warrior damage was not emitted at the configured windup")

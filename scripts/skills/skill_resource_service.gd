@@ -245,7 +245,10 @@ static func _quote_dual_defense(
 		return _invalid_dual_quote("invalid_combined_defense_partner")
 	if not DEFENSE_SKILL_IDS.has(partner_skill_id):
 		return _invalid_dual_quote("unknown_skill")
-	var partner_definition := SkillDataLoaderScript.skill(partner_skill_id)
+	var partner_definition: Dictionary = (resource_context.action_partner_definition
+		if resource_context.has("action_partner_definition") else SkillDataLoaderScript.skill(partner_skill_id))
+	if str(partner_definition.get("skill_id", "")) != partner_skill_id:
+		return _invalid_dual_quote("invalid_combined_defense_partner")
 	if partner_definition.is_empty():
 		return _invalid_dual_quote("unknown_skill")
 	var primary_quote := _quote_single(

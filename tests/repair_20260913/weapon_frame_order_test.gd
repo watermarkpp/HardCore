@@ -29,7 +29,7 @@ func _run() -> void:
 			weapons += 1
 			var catalog := GameData.get_item_record({"item_id": int(record.itemId)})
 			wand_seen = wand_seen or str(catalog.name) == "魔杖"
-			PlayerState.equipment["武器"] = PlayerState._make_item_instance(str(catalog.name), catalog, 800000 + int(record.itemId))
+			PlayerState.equipment["hc.slot.weapon"] = PlayerState._make_item_instance(str(catalog.name), catalog, 800000 + int(record.itemId))
 			visual._refresh_equipment_visuals()
 			for row in range(8):
 				for frame in range(6):

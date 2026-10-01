@@ -344,7 +344,7 @@ func _run() -> void:
 			counts.get(
 				"catalog_runtime_allowed_count", 0
 			)
-		) == 153
+		) == 156
 	)
 
 	assert(
@@ -352,7 +352,7 @@ func _run() -> void:
 			counts.get(
 				"runtime_spawnable_count", 0
 			)
-		) == 153
+		) == 156
 	)
 
 	assert(
@@ -464,7 +464,7 @@ func _run() -> void:
 	# --------------------------------------------------
 
 	var buff_result := PlayerState.apply_temporary_item_buff(
-		"测试药水",
+		"hc.item.910001",
 		{
 			"contractId": "item.temporary_stat_buff.v1",
 			"buffGroup": "max_hp",
@@ -485,7 +485,7 @@ func _run() -> void:
 	)
 
 	var buff_entry: Dictionary = PlayerState.temporary_item_buffs.get(
-		"测试药水", {}
+		"hc.item.910001", {}
 	)
 
 	assert(
@@ -515,7 +515,7 @@ func _run() -> void:
 	var hp_before := int(stats_before.get("max_hp", 120))
 
 	PlayerState.apply_temporary_item_buff(
-		"HP测试",
+		"hc.item.910001",
 		{
 			"contractId": "item.temporary_stat_buff.v1",
 			"buffGroup": "max_hp",

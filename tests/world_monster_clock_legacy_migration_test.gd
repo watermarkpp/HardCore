@@ -1,6 +1,7 @@
 extends Node
 
 const WorldState := preload("res://scripts/world_monster_respawn_state.gd")
+const SlotIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
 
 
 func _ready() -> void:
@@ -18,6 +19,14 @@ func _ready() -> void:
 	)
 	old_profile.erase("death_event_sequence")
 	old_profile.erase("world_clock_generation")
+	# This is an actual old writer document, before either identity header.
+	old_profile.erase("item_identity")
+	old_profile.erase(SlotIdentity.FIELD)
+	var old_slots := {}
+	for slot: String in old_profile.equipment:
+		old_slots[SlotIdentity.display_name(slot)] = old_profile.equipment[slot]
+	old_profile.equipment = old_slots
+	old_profile.equip_cycle_cursor = {"戒指": "左戒指", "手镯": "左手镯"}
 	old_profile["level"] = 22
 	old_profile["experience"] = 345
 	old_profile["gold"] = 12345
@@ -56,8 +65,8 @@ func _ready() -> void:
 	assert(new_profile.inventory.size() == 1)
 	assert(str(new_profile.inventory[0].name) == "太阳水")
 	assert(int(new_profile.inventory[0].count) == 10)
-	assert(str(new_profile.equipment["武器"].name) == "木剑")
-	assert(str(new_profile.equipment["武器"].instance_id) == "legacy_weapon")
+	assert(str(new_profile.equipment["hc.slot.weapon"].name) == "木剑")
+	assert(str(new_profile.equipment["hc.slot.weapon"].instance_id) == "legacy_weapon")
 	var backup: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(profile_path + ".bak"))
 	assert(backup.has("death_event_sequence") and backup.world_clock_generation == migrated.world_clock_generation)
 	assert(backup.level == old_profile.level)
@@ -66,7 +75,7 @@ func _ready() -> void:
 	assert(backup.inventory.size() == 1)
 	assert(str(backup.inventory[0].name) == "太阳水")
 	assert(int(backup.inventory[0].count) == 10)
-	assert(str(backup.equipment["武器"].instance_id) == "legacy_weapon")
+	assert(str(backup.equipment["hc.slot.weapon"].instance_id) == "legacy_weapon")
 	assert(backup.quest_states == old_profile.quest_states)
 	PlayerState.reset_progress(false)
 	PlayerState.load_save()

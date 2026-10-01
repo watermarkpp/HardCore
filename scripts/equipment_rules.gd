@@ -1,6 +1,8 @@
 class_name EquipmentRules
 extends RefCounted
 
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+
 const NEED_LEVEL := 0
 const NEED_ATTACK := 1
 const NEED_MAGIC := 2
@@ -430,7 +432,7 @@ static func weight_requirement_for(item: Dictionary) -> Dictionary:
 			"value": maxi(0, int(item.get("weightRequirementValue", 0))),
 			"source": attribute_source_distribution(item),
 		}
-	var legacy_type := "hand" if str(item.get("category", "")) == "武器" else "wear"
+	var legacy_type := "hand" if ItemCategories.category_for_record(item) == "hc.item_category.weapon" else "wear"
 	return {
 		"type": legacy_type,
 		"value": maxi(0, int(item.get("weight", 0))),

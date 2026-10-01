@@ -2,10 +2,19 @@ extends Node
 
 const Rules := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 const Service := preload("res://scripts/layers/runtime/relic_synthesis_service.gd")
+const SkillData := preload("res://scripts/skills/skill_data_loader.gd")
 
 
 func _ready() -> void:
 	_run.call_deferred()
+
+
+func _learn_skill_for_fixture(skill_ref: String, rank: int) -> void:
+	var progress: Dictionary = PlayerState.learned_skills.duplicate(true)
+	var skill_id := SkillData.entity_skill_id(skill_ref)
+	progress[skill_id] = rank
+	PlayerState.learned_skills = progress
+	assert(not skill_id.is_empty() and PlayerState.learned_skills.get(skill_id) == rank)
 
 
 func _run() -> void:
@@ -34,9 +43,10 @@ func _run() -> void:
 		var preview := preload("res://scripts/item_detail_presenter.gd").format_item(item)
 		assert(preview.contains("随机") and preview.contains("技能等级 +1"))
 	for profession: String in ["战士", "法师", "道士"]:
-		var names: Array = Rules.SKILL_NAMES[profession]
+		var authoring: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(Rules.DATA_PATH))
+		var declared: Array = authoring.skill_pools[ProfessionRules.import_profession_identity(profession)]
 		var ids := Rules.skill_ids_for(profession)
-		assert(ids.size() == names.size())
+		assert(ids.size() == declared.size())
 		var rng := RandomNumberGenerator.new()
 		rng.seed = 4816
 		for item_id: int in [950101, 950102, 950103]:
@@ -167,7 +177,7 @@ func _test_class_choice_and_badge_recovery() -> void:
 	var service := Service.new(PlayerState)
 	var slots: Array[int] = [1, 2, 3, 4]
 	var quote := service.quote_synthesis(950102, slots, "法师")
-	assert(bool(quote.get("valid", false)) and str(quote.skill_profession) == "法师")
+	assert(bool(quote.get("valid", false)) and str(quote.profession_id) == "hc.profession.wizard")
 	assert(not bool(service.quote_synthesis(950102, slots, "未知职业").get("valid", false)))
 	var result := service.commit_synthesis(quote)
 	assert(bool(result.get("committed", false)), str(result.get("message", "")))
@@ -178,7 +188,7 @@ func _test_class_choice_and_badge_recovery() -> void:
 	assert(bool(PlayerState.take_workbench_item("synthesis", 0).get("success", false)))
 	var heart: Dictionary = PlayerState.inventory[_item_index(950102)]
 	var heart_skill_name := preload("res://scripts/skills/skill_data_loader.gd").display_name(str(heart.relic_roll.skill_id))
-	PlayerState.learned_skills[heart_skill_name] = 1
+	_learn_skill_for_fixture(heart_skill_name, 1)
 	assert(PlayerState.equip_inventory_index(_item_index(950102)).begins_with("已装备"))
 	assert(PlayerState.effective_skill_level(heart_skill_name) == 1, "cross-profession relic skill bonus became active")
 	PlayerState.reset_progress(false)
@@ -195,11 +205,11 @@ func _test_class_choice_and_badge_recovery() -> void:
 	assert(PlayerState.equip_inventory_index(_item_index(950201)).begins_with("已装备"))
 	assert(int(PlayerState.computed_stats.get("defense_max", 0)) == defense_before)
 	assert(int(PlayerState.computed_stats.get("magic_defense_max", 0)) == magic_defense_before)
-	var badge_durability := int(PlayerState.equipment["徽章"].durability_raw)
-	PlayerState.damage_equipment_durability("徽章", 100)
-	assert(int(PlayerState.equipment["徽章"].durability_raw) == badge_durability)
+	var badge_durability := int(PlayerState.equipment["hc.slot.badge"].durability_raw)
+	PlayerState.damage_equipment_durability("hc.slot.badge", 100)
+	assert(int(PlayerState.equipment["hc.slot.badge"].durability_raw) == badge_durability)
 	var badge_skill_name := preload("res://scripts/skills/skill_data_loader.gd").display_name(str(badge.relic_roll.skill_id))
-	PlayerState.learned_skills[badge_skill_name] = 1
+	_learn_skill_for_fixture(badge_skill_name, 1)
 	assert(PlayerState.effective_skill_level(badge_skill_name) == 1, "cross-profession badge skill bonus became active")
 	var actor := preload("res://scripts/player.gd").new()
 	actor.max_hp = 150
@@ -212,15 +222,15 @@ func _test_class_choice_and_badge_recovery() -> void:
 	assert(actor.current_hp == 102, "badge recovery must round each one-second tick")
 	actor._tick_badge_recovery(2.0)
 	assert(actor.current_hp == 106)
-	PlayerState.equipment["徽章"] = {}
+	PlayerState.equipment["hc.slot.badge"] = {}
 	actor._tick_badge_recovery(0.6)
-	PlayerState.equipment["徽章"] = badge
+	PlayerState.equipment["hc.slot.badge"] = badge
 	actor._tick_badge_recovery(0.5)
 	assert(actor.current_hp == 106, "badge timer carried across unequip")
 	actor._tick_badge_recovery(0.5)
 	assert(actor.current_hp == 108)
 	var wisdom := Rules.roll_instance(950202, "战士", rng)
-	PlayerState.equipment["徽章"] = wisdom
+	PlayerState.equipment["hc.slot.badge"] = wisdom
 	actor._tick_badge_recovery(1.0)
 	assert(actor.current_mp == 101 and actor.current_hp == 108, "mana badge recovery used wrong resource or rounding")
 	actor.max_mp = 49
@@ -228,14 +238,14 @@ func _test_class_choice_and_badge_recovery() -> void:
 	actor._tick_badge_recovery(1.0)
 	assert(actor.current_mp == 1, "sub-unit badge recovery must not accumulate")
 	actor.current_hp = 100
-	PlayerState.equipment["徽章"] = badge
+	PlayerState.equipment["hc.slot.badge"] = badge
 	actor._tick_badge_recovery(0.6)
 	var invalid_badge := badge.duplicate(true)
 	invalid_badge["count"] = "1"
-	PlayerState.equipment["徽章"] = invalid_badge
+	PlayerState.equipment["hc.slot.badge"] = invalid_badge
 	actor._tick_badge_recovery(0.5)
 	assert(actor.current_hp == 100, "coerced badge count continued recovery")
-	PlayerState.equipment["徽章"] = badge
+	PlayerState.equipment["hc.slot.badge"] = badge
 	actor._tick_badge_recovery(0.5)
 	assert(actor.current_hp == 100, "invalid badge kept its previous timer")
 	actor._tick_badge_recovery(0.5)
@@ -333,23 +343,23 @@ func _test_relic_stats_and_proc() -> void:
 	assert(PlayerState.computed_stats == stats_before)
 	PlayerState.advance_relic_proc(15.0)
 	assert(is_zero_approx(float(PlayerState.relic_proc_status().get("cooldown", -1.0))))
-	var before_durability := int(PlayerState.equipment["圣物"].durability_raw)
-	PlayerState.damage_equipment_durability("圣物", 100)
-	assert(int(PlayerState.equipment["圣物"].durability_raw) == before_durability)
+	var before_durability := int(PlayerState.equipment["hc.slot.relic"].durability_raw)
+	PlayerState.damage_equipment_durability("hc.slot.relic", 100)
+	assert(int(PlayerState.equipment["hc.slot.relic"].durability_raw) == before_durability)
 	for _attempt in 100:
 		if PlayerState.try_trigger_relic_proc():
 			break
 	assert(float(PlayerState.relic_proc_status().get("remaining", 0.0)) > 0.0)
-	var valid_relic: Dictionary = PlayerState.equipment["圣物"].duplicate(true)
+	var valid_relic: Dictionary = PlayerState.equipment["hc.slot.relic"].duplicate(true)
 	var corrupt_relic := valid_relic.duplicate(true)
 	corrupt_relic["count"] = "1"
-	PlayerState.equipment["圣物"] = corrupt_relic
+	PlayerState.equipment["hc.slot.relic"] = corrupt_relic
 	PlayerState.advance_relic_proc(0.1)
 	assert(int(PlayerState.relic_proc_status().get("item_id", -1)) == -1,
 		"same-instance invalid relic retained its active proc")
 	assert(PlayerState.computed_stats == stats_before,
 		"invalid relic retained active combat attributes")
-	PlayerState.equipment["圣物"] = valid_relic
+	PlayerState.equipment["hc.slot.relic"] = valid_relic
 
 
 func _test_relic_ground_drop_and_tray_identity() -> void:
@@ -407,7 +417,7 @@ func _test_eye_guardian_and_unlearned_skill() -> void:
 		assert(bool(PlayerState.receive_record(instance, false).get("success", false)))
 		assert(PlayerState.equip_inventory_index(_item_index(item_id)).begins_with("已装备"))
 		assert(PlayerState.effective_skill_level(skill_name) == 0, "unlearned relic skill became usable")
-		PlayerState.learned_skills[skill_name] = 1
+		_learn_skill_for_fixture(skill_name, 1)
 		assert(PlayerState.effective_skill_level(skill_name) == 2, "learned relic skill did not gain +1")
 		var passive := int(PlayerState.computed_stats.get(stat, 0))
 		assert(passive >= 1)

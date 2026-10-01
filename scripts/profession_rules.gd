@@ -2,6 +2,7 @@ class_name ProfessionRules
 extends RefCounted
 
 const SkillInputPolicyScript := preload("res://scripts/skill_input_policy.gd")
+const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 const CombatUnitLegacyAdapterScript := preload(
 	"res://scripts/skills/combat_unit_legacy_adapter.gd"
 )
@@ -170,6 +171,8 @@ const COMBAT_REACTION_POLICY := {
 static var _runtime_data: Dictionary = {}
 static var _base_growth_cache: Dictionary = {}
 static var _skill_ids_by_name: Dictionary = {}
+static var _profiles_by_id: Dictionary = {}
+static var _timing_by_id: Dictionary = {}
 
 
 static func _data() -> Dictionary:
@@ -183,11 +186,41 @@ static func _data() -> Dictionary:
 		"castDefaults": CAST_DEFAULTS, "skillTimingOverrides": SKILL_TIMING_OVERRIDES,
 		"combatReactionPolicy": COMBAT_REACTION_POLICY,
 	}
+	# Legacy authoring names enter only at this dataset boundary. Runtime
+	# profile and timing queries use the source's exact stable skill identity.
+	for name: String in _runtime_data.get("skillProfiles", {}):
+		var id := skill_id(name)
+		if id.is_empty() or _profiles_by_id.has(id):
+			push_error("Invalid profession skill profile identity: " + name)
+			_runtime_data = {}; _profiles_by_id.clear(); _timing_by_id.clear()
+			return {}
+		var profile: Dictionary = _runtime_data.skillProfiles[name].duplicate(true)
+		profile["profession_entity_id"] = import_profession_identity(str(profile.get("profession", "")))
+		if profile.profession_entity_id.is_empty():
+			push_error("Invalid profession profile owner: " + id)
+			_runtime_data = {}; _profiles_by_id.clear(); _timing_by_id.clear()
+			return {}
+		_profiles_by_id[id] = profile
+	for name: String in _runtime_data.get("skillTimingOverrides", {}):
+		var id := skill_id(name)
+		if id.is_empty() or _timing_by_id.has(id):
+			push_error("Invalid profession timing identity: " + name)
+			_runtime_data = {}; _profiles_by_id.clear(); _timing_by_id.clear()
+			return {}
+		_timing_by_id[id] = _runtime_data.skillTimingOverrides[name].duplicate(true)
 	return _runtime_data
 
 
 static func is_valid_profession(value: String) -> bool:
-	return value in PROFESSIONS
+	return not import_profession_identity(value).is_empty()
+
+
+static func import_profession_identity(value: String) -> String:
+	# Explicit compatibility entry for old names and the source class enum.
+	if not EntityRegistry.resolve(value,"profession").is_empty(): return value
+	if PROFESSION_CATALOG.has(value):
+		return EntityRegistry.from_legacy("profession",PROFESSION_CATALOG[value])
+	return EntityRegistry.from_legacy("profession",value)
 
 
 static func is_valid_profession_id(value: String) -> bool:
@@ -195,19 +228,16 @@ static func is_valid_profession_id(value: String) -> bool:
 
 
 static func profession_id(value: String) -> String:
-	if PROFESSION_CATALOG.has(value):
-		return value
-	for stable_id: String in PROFESSION_CATALOG:
-		if PROFESSION_CATALOG[stable_id] == value:
-			return stable_id
-	return ""
+	return import_profession_identity(value).trim_prefix("hc.profession.")
 
 
 static func profession_display_name(value: String) -> String:
-	return str(PROFESSION_CATALOG.get(value, value if value in PROFESSIONS else ""))
+	return str(EntityRegistry.resolve(import_profession_identity(value),"profession").get("display_name",""))
 
 
 static func skill_id(value: String) -> String:
+	if value.begins_with("hc.skill."):
+		return str(EntityRegistry.resolve(value,"skill").get("legacy_id",""))
 	if SKILL_CATALOG.has(value):
 		return value
 	if _skill_ids_by_name.is_empty():
@@ -217,7 +247,7 @@ static func skill_id(value: String) -> String:
 
 
 static func skill_display_name(value: String) -> String:
-	return str(SKILL_CATALOG.get(value, value if skill_id(value) != "" else ""))
+	return str(SKILL_CATALOG.get(skill_id(value), ""))
 
 
 static func skill_input_metadata(skill_name_or_id: String) -> Dictionary:
@@ -229,15 +259,15 @@ static func stats_for_level(profession: String, level: int) -> Dictionary:
 
 
 static func base_stat_for_level(profession: String, level: int, stat: String) -> int:
-	return int(_base_growth_row(profession, level)[stat])
+	return int(_base_growth_row(profession, level).get(stat,0))
 
 
 static func _base_growth_row(profession: String, level: int) -> Dictionary:
-	var display := profession_display_name(profession)
-	if display not in PROFESSIONS:
-		display = "战士"
+	var identity := import_profession_identity(profession)
+	if identity.is_empty(): return {}
+	var display: String = EntityRegistry.resolve(identity,"profession").display_name
 	var normalized_level := maxi(1, level)
-	var key := "%s:%d" % [display, normalized_level]
+	var key := "%s:%d" % [identity, normalized_level]
 	if not _base_growth_cache.has(key):
 		var row := preload("res://scripts/generated/character_base_growth_v1.gd").stats_for_level(display, normalized_level)
 		row.make_read_only()
@@ -246,17 +276,19 @@ static func _base_growth_row(profession: String, level: int) -> Dictionary:
 
 
 static func skill_profile(skill_name_or_id: String) -> Dictionary:
-	var display_name := skill_display_name(skill_name_or_id)
-	var profile: Dictionary = _data().get("skillProfiles", SKILL_PROFILES).get(display_name, {}).duplicate(true)
+	_data()
+	var stable_id := skill_id(skill_name_or_id)
+	var display_name := skill_display_name(stable_id)
+	var profile: Dictionary = _profiles_by_id.get(stable_id, {}).duplicate(true)
 	if profile.is_empty():
 		return profile
-	var stable_id := skill_id(display_name)
 	profile["skill_id"] = stable_id
 	profile["display_name"] = display_name
 	profile["profession_id"] = profession_id(str(profile.get("profession", "")))
 	profile = _formalize_spatial_profile(profile, false)
 	var input_metadata := skill_input_metadata(stable_id)
 	profile.merge(input_metadata, true)
+	profile["profession_entity_id"] = import_profession_identity(str(profile.get("profession_id","")))
 	# UI interaction names remain an explicit presentation adapter; spatial
 	# values above already use the formal GU/PX contract.
 	var interaction_mode := str(input_metadata.get("interaction_mode", "click_release"))
@@ -277,9 +309,8 @@ static func skill_combat_profile(skill_name: String, learned_level := -1) -> Dic
 	var stable_id := str(profile.get("skill_id", skill_id(display_name)))
 	var cast_type := str(profile.get("cast_type", "melee"))
 	var cast_defaults: Dictionary = _data().get("castDefaults", CAST_DEFAULTS)
-	var timing_overrides: Dictionary = _data().get("skillTimingOverrides", SKILL_TIMING_OVERRIDES)
 	profile.merge(cast_defaults.get(cast_type, cast_defaults["melee"]), false)
-	profile.merge(timing_overrides.get(display_name, {}), true)
+	profile.merge(_timing_by_id.get(stable_id, {}), true)
 	var stable_profession_id := str(profile.get("profession_id", profession_id(str(profile.get("profession", "")))))
 	if stable_profession_id == "warrior":
 		var level := WarriorCombatMath.clamp_skill_level(maxi(0, learned_level))

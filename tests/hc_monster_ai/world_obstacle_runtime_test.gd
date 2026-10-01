@@ -131,10 +131,11 @@ func make_enemy(position:Vector2,context:Dictionary)->EnemyActor:
 
 func ready_cadence(actor:EnemyActor)->void:
 	var cadence=actor._movement_cadence
-	var now:=Time.get_ticks_msec()
+	actor._combat_action_time_s=(float(int(cadence.walk_interval_ms))+1.0)/1000.0
+	var now:=int(actor._combat_action_time_s*1000.0)
 	cadence.walk_wait_locked=false
-	cadence.walk_tick_ms=now-cadence.walk_interval_ms-1
-	cadence.walk_wait_tick_ms=now
+	cadence.walk_tick_ms=now-int(cadence.walk_interval_ms)-1
+	cadence.walk_wait_tick_ms=0
 	cadence.last_evaluated_ms=now-1
 
 
@@ -222,13 +223,17 @@ func _test_u_detour_last_known()->void:
 		var ground:=screen_to_ground(actor.global_position)
 		farthest_distance=maxf(farthest_distance,ground.distance_to(screen_to_ground(player.global_position)))
 		clipped=clipped or not Terrain.cell_walkable(u_context,Vector2i(ground.floor()),actor.combat_radius_gu)
-		if actor._hc_starts>0 and ground.distance_to(screen_to_ground(player.global_position))<=actor._hc_preferred(player)+0.05:
+		if _legal_live_engagement(actor):
 			break
-	var final_distance:=screen_to_ground(actor.global_position).distance_to(screen_to_ground(player.global_position))
 	check(not clipped,"C05-continuous-no-clip","Every sampled footprint remains outside the U/L WORLD cells")
 	check(farthest_distance>initial_distance+0.05,"C05-away-first","The valid U detour temporarily moves away from the hidden target")
-	check(actor._hc_starts>0 and final_distance<=actor._hc_preferred(player)+0.05,"C05-reach","The open U route reaches a legal live engagement position")
+	check(_legal_live_engagement(actor),"C05-reach","The open U route reaches a legal live engagement position")
 	await _free_enemy(actor)
+
+
+func _legal_live_engagement(actor: EnemyActor) -> bool:
+	var offset := screen_to_ground(actor.global_position) - screen_to_ground(player.global_position)
+	return actor._hc_starts > 0 and maxf(absf(offset.x), absf(offset.y)) <= 1.0 + GU.EPSILON_GU and actor._hc_access(player) == "CLEAR"
 
 
 func _test_closed_then_revision_open()->void:

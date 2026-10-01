@@ -173,7 +173,7 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 			return _with_slaying_layer(charged_fire, context, learned, has_target)
 		elif int(context.get("fire_cooldown_remaining_ms", 0)) > 0:
 			trace.append(_blocked("warrior.fire_sword", "cooldown"))
-		elif current_mp < _mana_cost("warrior.fire_sword", int(context.get("fire_rank", 0))):
+		elif current_mp < _mana_cost("warrior.fire_sword", int(context.get("fire_rank", 0)), context.get("action_config_lease")):
 			trace.append(_blocked("warrior.fire_sword", "insufficient_mana"))
 		else:
 			var direct_fire := _selection(
@@ -190,7 +190,7 @@ static func resolve_warrior_attack(context: Dictionary) -> Dictionary:
 			trace.append(_blocked("warrior.half_moon", "not_learned"))
 		elif current_mp < _mana_cost(
 			"warrior.half_moon",
-			int(context.get("half_moon_rank", 0))
+			int(context.get("half_moon_rank", 0)), context.get("action_config_lease")
 		):
 			# Resource state is already authoritative at input time, so do not start
 			# a half-moon body/visual that can never legally resolve. Continue the
@@ -249,7 +249,7 @@ static func resolve_warrior_hit_effect(
 			if charged_fire
 			else _mana_cost(
 				"warrior.fire_sword",
-				int(runtime_context.get("fire_rank", 0))
+				int(runtime_context.get("fire_rank", 0)), runtime_context.get("action_config_lease")
 			)
 		)
 		if current_mp >= fire_cost:
@@ -269,7 +269,7 @@ static func resolve_warrior_hit_effect(
 		):
 			var half_cost := _mana_cost(
 				"warrior.half_moon",
-				int(runtime_context.get("half_moon_rank", 0))
+				int(runtime_context.get("half_moon_rank", 0)), runtime_context.get("action_config_lease")
 			)
 			if current_mp >= half_cost:
 				return _effect_selection(
@@ -414,12 +414,13 @@ static func _blocked(skill_id: String, reason: String) -> Dictionary:
 
 
 static func _is_learned(learned: Dictionary, skill_id: String) -> bool:
-	var display_name := SkillDataLoaderScript.display_name(skill_id)
-	return learned.has(skill_id) or learned.has(display_name)
+	return learned.has(SkillDataLoaderScript.entity_skill_id(skill_id))
 
 
-static func _mana_cost(skill_id: String, rank: int) -> int:
-	var definition := SkillDataLoaderScript.skill(skill_id)
+static func _mana_cost(skill_id: String, rank: int, configuration: RefCounted = null) -> int:
+	# Input selection runs before acceptance; its caller already checks that
+	# this candidate belongs to the current actor/configuration versions.
+	var definition: Dictionary = configuration.definition_for(skill_id) if configuration != null else SkillDataLoaderScript.skill(skill_id)
 	var costs: Array = definition.get("mp_cost_by_rank", [])
 	if costs.is_empty():
 		return 0

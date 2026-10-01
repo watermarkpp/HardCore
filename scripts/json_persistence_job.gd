@@ -72,17 +72,23 @@ func configure_snapshot(snapshot: Dictionary) -> void:
 
 
 func stage_result(wait := false) -> Dictionary:
-	if wait and _task_id >= 0:
+	# A published result is not proof that the worker has returned. Normal
+	# frame polling never waits for an unfinished task; explicit lifecycle
+	# barriers may wait and every completed task is still reclaimed.
+	if _task_id >= 0:
+		if not wait and not WorkerThreadPool.is_task_completed(_task_id):
+			return {"finished": false, "result": {}}
 		WorkerThreadPool.wait_for_task_completion(_task_id)
 		_task_id = -1
 	_mutex.lock()
 	var finished := _stage_finished
 	var result := _stage_result if finished else {}
 	_mutex.unlock()
-	if finished and _task_id >= 0:
-		WorkerThreadPool.wait_for_task_completion(_task_id)
-		_task_id = -1
 	return {"finished": finished, "result": result}
+
+
+func is_stage_complete() -> bool:
+	return _task_id < 0 or WorkerThreadPool.is_task_completed(_task_id)
 
 
 func request_cancel() -> bool:
@@ -134,6 +140,7 @@ func _perform(stage: String) -> void:
 	_stage_usec[stage] = Time.get_ticks_usec() - stage_started_usec
 	result["worker_stage_usec"] = _stage_usec.duplicate()
 	result["worker_thread_ids"] = _worker_thread_ids.duplicate()
+	_freeze_transfer_graph(result)
 	_mutex.lock()
 	_stage_result = result
 	_stage_finished = true
@@ -319,3 +326,27 @@ func _prune_checkpointed_events() -> Dictionary:
 		name = directory.get_next()
 	directory.list_dir_end()
 	return {"success": true, "removed": removed}
+
+
+static func _freeze_transfer_graph(value: Variant) -> void:
+	# Parsed JSON has no cycles or Objects. Freeze its independently owned
+	# graph on the worker before publishing; no main-thread document traversal.
+	assert(OS.get_thread_caller_id() != OS.get_main_thread_id())
+	var pending: Array = [value]
+	while not pending.is_empty():
+		var current: Variant = pending.pop_back()
+		if current is Dictionary:
+			if current.is_read_only():
+				continue
+			for key: Variant in current:
+				var child: Variant = current[key]
+				if child is Array or child is Dictionary:
+					pending.append(child)
+			current.make_read_only()
+		elif current is Array:
+			if current.is_read_only():
+				continue
+			for child: Variant in current:
+				if child is Array or child is Dictionary:
+					pending.append(child)
+			current.make_read_only()

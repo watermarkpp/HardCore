@@ -185,7 +185,7 @@ func _check_full_map_scroll_sampler(game: Node) -> void:
 	game._rng.seed = far_seed
 	var scroll := GameData.get_item_record("随机传送卷")
 	if _check(str(scroll.get("useEffect", "")) == "random_teleport", "scroll fixture must resolve the formal item"):
-		game._on_scroll_used(str(scroll.get("name", "")))
+		game._on_scroll_used(GameData.item_entity_id(scroll))
 		_check(game.player.global_position.is_equal_approx(sampled), "scroll must apply its full-map sampler's exact checked point")
 		_check(int(game._rng.state) == sampled_rng_state, "scroll must preserve the sampling RNG sequence")
 

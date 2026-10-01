@@ -46,14 +46,14 @@ func _run() -> void:
 	player.global_position = Vector2(900, 700)
 	player.defense_min = 0
 	player.defense_max = 0
-	var armor_before := int(PlayerState.equipment.get("衣服", {}).get("durability_raw", 0))
+	var armor_before := int(PlayerState.equipment.get("hc.slot.armor", {}).get("durability_raw", 0))
 	var death_signal_count: Array[int] = [0]
 	var on_death := func() -> void: death_signal_count[0] += 1
 	player.death_requested.connect(on_death)
 	player.take_damage(999999)
 	assert(
 		armor_before > 0
-		and int(PlayerState.equipment.get("衣服", {}).get("durability_raw", 0)) < armor_before,
+		and int(PlayerState.equipment.get("hc.slot.armor", {}).get("durability_raw", 0)) < armor_before,
 		"致死物理伤害没有先触发布衣耐久变更"
 	)
 	assert(

@@ -35,7 +35,7 @@ func _run() -> void:
 	assert(PlayerState.select_character(PROFILE_ID), "必须能通过稳定 profileId 选择战士赤月测试角色")
 	assert(PlayerState.profession == "战士")
 	assert(PlayerState.gender == "男")
-	var saved_armor: Dictionary = PlayerState.equipment.get("衣服", {})
+	var saved_armor: Dictionary = PlayerState.equipment.get("hc.slot.armor", {})
 	assert(str(saved_armor.get("name", "")) == ITEM_NAME, "真实赤月测试角色必须穿天魔神甲")
 
 	var item := GameData.get_item(ITEM_NAME)
@@ -91,7 +91,7 @@ func _run() -> void:
 		{"label": "itemName_only", "record": {"itemName": ITEM_NAME, "durability": 35}},
 	]
 	for fixture: Dictionary in compatibility_records:
-		PlayerState.equipment["衣服"] = fixture.record
+		PlayerState.equipment["hc.slot.armor"] = fixture.record
 		var compatibility_player := PlayerCharacter.new()
 		add_child(compatibility_player)
 		await get_tree().process_frame

@@ -1,0 +1,190 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "the actual relic recipe exposes the three existing formal profession owners in original order",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual badge affinity is the registered wizard ID",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal profession selects the exact original ordered primary skill pool",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "original native seed 4816 keeps the exact primary roll and RNG state",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "formal and explicit legacy-import entrances preserve the existing entire roll and RNG sequence",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual relic validation is owned by its ID, roll and modifiers rather than display text",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "a matching display cannot override the explicit relic item ID",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "invalid profession rejects before real random draws: 未知职业",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "invalid profession rejects before real random draws: hc.profession.missing",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "invalid profession rejects before real random draws: hc.skill.wizard.lightning",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "the existing authoring source declares the profession-to-skill ID relations",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "declared primary relation has registered endpoints: hc.profession.warrior/hc.skill.warrior.basic_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "declared primary relation has registered endpoints: hc.profession.warrior/hc.skill.warrior.slaying_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "declared primary relation has registered endpoints: hc.profession.warrior/hc.skill.warrior.thrusting",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "declared primary relation has registered endpoints: hc.profession.warrior/hc.skill.warrior.half_moon",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "declared primary relation has registered endpoints: hc.profession.warrior/hc.skill.warrior.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "declared primary relation has registered endpoints: hc.profession.wizard/hc.skill.wizard.lightning",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "declared primary relation has registered endpoints: hc.profession.wizard/hc.skill.wizard.hell_lightning",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "declared primary relation has registered endpoints: hc.profession.wizard/hc.skill.wizard.laser",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "declared primary relation has registered endpoints: hc.profession.wizard/hc.skill.wizard.fire_wall",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "declared primary relation has registered endpoints: hc.profession.wizard/hc.skill.wizard.ice_storm",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "declared primary relation has registered endpoints: hc.profession.wizard/hc.skill.wizard.exploding_flame",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "declared primary relation has registered endpoints: hc.profession.taoist/hc.skill.taoist.soul_fire_talisman",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "declared primary relation has registered endpoints: hc.profession.taoist/hc.skill.taoist.poison",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "declared primary relation has registered endpoints: hc.profession.taoist/hc.skill.taoist.summon_skeleton",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "declared primary relation has registered endpoints: hc.profession.taoist/hc.skill.taoist.summon_divine_beast",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "declared primary relation has registered endpoints: hc.profession.taoist/hc.skill.taoist.healing",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "declared primary relation has registered endpoints: hc.profession.taoist/hc.skill.taoist.mass_healing",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "all original seventeen skill choices have explicit stable endpoints",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "the actual default recipe quote reads the sole player profession ID",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "explicit formal recipe selection is kept as a typed quote owner",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "cross-kind recipe identity cannot change materials, gold or randomness",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "actual typed quote reaches the real synthesis transaction exactly once",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "the real output roll belongs to the selected formal skill pool",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "a completed typed quote cannot consume or reroll again",
+      "passed": true
+    }
+  ],
+  "count": 35,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 35,
+  "reported_checks": 35,
+  "reported_failures": 0,
+  "run_id": "9569cfc8-96c0-4310-aa00-9ab53c147c54",
+  "scene_id": "relic_identity_relation_test",
+  "schema_version": 1,
+  "source_content_sha256": "758c10cfdfb094a7a532e15e5fe3735c0d793b86b2c79b9c87ac405434883fee",
+  "status": "PASS"
+}

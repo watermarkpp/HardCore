@@ -88,6 +88,7 @@ func apply_enemy_direct_spell_damage(
 	anti_magic_roll := -1,
 	target_stats_scratch: Dictionary = {},
 	delivery_kind: EnemyMagicDeliveryKind = EnemyMagicDeliveryKind.DIRECT_MAGSTRUCK,
+	damage_context: Dictionary = {},
 ) -> Dictionary:
 	if (
 		not is_instance_valid(target)
@@ -164,7 +165,8 @@ func apply_enemy_direct_spell_damage(
 				&"monster_magic_mine_struck_count"
 			)
 		var damage_started_usec := RuntimeDiagnostics.timing_start()
-		target.call("take_damage", final_damage, source_actor)
+		if damage_context.is_empty(): target.call("take_damage", final_damage, source_actor)
+		else: target.call("take_damage", final_damage, source_actor, damage_context)
 		RuntimeDiagnostics.record_timing_usec(&"take_damage_usec", damage_started_usec)
 	RuntimeDiagnostics.record_timing_usec(
 		&"direct_spell_resolution_usec",
@@ -173,6 +175,27 @@ func apply_enemy_direct_spell_damage(
 	var result: Dictionary = resolution
 	result["success"] = final_damage > 0
 	return result
+
+
+func apply_feature_periodic_damage(target: Node, raw_damage: int, source_actor: Node2D,
+	tick_rng: RandomNumberGenerator, historical_credit: Dictionary) -> Dictionary:
+	if not is_instance_valid(target) or _target_rejects_damage(target) or not target.has_method("take_feature_periodic_damage") \
+		or not target.has_method("has_actor_capability") or tick_rng == null:
+		return {"success":false,"reason":"periodic_target_contract","actual_loss":0}
+	if raw_damage <= 0 or bool(target.call("has_actor_capability","hc.immune.periodic")):
+		return {"success":true,"reason":"zero_or_immune","actual_loss":0}
+	var stats: Dictionary = {}
+	if not _target_stats_with_runtime_buffs_into(target,stats):
+		return {"success":false,"reason":"periodic_target_stats","actual_loss":0}
+	var low := int(stats.get("magic_defense_min",-1))
+	var high := int(stats.get("magic_defense_max",-1))
+	if low < 0 or high < low:
+		return {"success":false,"reason":"periodic_mac_bounds","actual_loss":0}
+	var resolved := maxi(0,raw_damage-tick_rng.randi_range(low,high))
+	var receipt := {"hp_before":0,"hp_after":0,"actual_loss":0}
+	if resolved > 0:
+		target.call("take_feature_periodic_damage",resolved,source_actor,historical_credit,receipt)
+	return {"success":true,"reason":"","actual_loss":receipt.actual_loss,"resolved_damage":resolved}
 
 
 ## source176 docs/02 C1: resolve/validate the delivery stage of the current

@@ -7,6 +7,16 @@ extends RefCounted
 ## never decides actions, directions, frames, timing or combat.
 
 const MonsterVisualScript := preload("res://scripts/monster_visual.gd")
+const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+var _budget_category := "resource_completion:%d" % get_instance_id()
+var _process_owner := WeakRef.new()
+
+func configure_process_owner(owner: Node) -> void:
+	_process_owner = weakref(owner)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		FrameBudget.mark_pending(_budget_category, false)
 
 const CONTRACT_ID := "hardcore.monster.visual_streaming_coordinator.v1"
 const CLIENT_RESOURCE_CACHE_CAPACITY := 12
@@ -56,6 +66,8 @@ var _bootstrap_handoff_hold_keys: Dictionary = {}
 var _bootstrap_handoff_hold_generation := -1
 var _last_streaming_poll_frame := -1
 var _request_sequence := 0
+var maximum_completion_latency_usec := 0
+var maximum_action_get_usec := 0
 
 var _visual_subscriptions: Dictionary = {}
 var _visual_cleanup_order: Array[int] = []
@@ -208,6 +220,7 @@ func request_client_profile(
 	_request_order.append(cache_key)
 	_threaded_profile_requests[cache_key] = {
 		"state": "queued",
+		"queued_at_usec": Time.get_ticks_usec(),
 		"mapping": client_mapping.duplicate(true),
 		"paths": paths,
 		"expected_sizes": expected_sizes,
@@ -222,14 +235,26 @@ func request_client_profile(
 
 
 func _pump_threaded_profile_queue() -> void:
+	FrameBudget.mark_pending(_budget_category, not _threaded_profile_requests.is_empty()
+		or not _visual_subscriptions.is_empty(), true, false, _process_owner.get_ref() as Node)
+	var token := FrameBudget.begin(_budget_category)
+	if token == 0:
+		return
+	_start_threaded_profile_jobs()
+	FrameBudget.end(token)
+
+
+func _start_threaded_profile_jobs() -> void:
 	var active_count := 0
 	for job: Dictionary in _threaded_profile_requests.values():
-		if str(job.get("state", "")) == "loading":
+		if str(job.get("state", "")) in ["loading", "collecting"]:
 			active_count += 1
 	while (
 		active_count < MAX_CONCURRENT_PROFILE_LOADS
 		and not _threaded_profile_queue.is_empty()
 	):
+		if FrameBudget.remaining_usec() <= 0:
+			break
 		var cache_key: String = _threaded_profile_queue.pop_front()
 		if not _threaded_profile_requests.has(cache_key):
 			continue
@@ -266,6 +291,9 @@ func _pump_threaded_profile_queue() -> void:
 ## record its real action/path. Transient failures get a bounded backoff
 ## retry while demand remains; exhausted attempts become permanent.
 func _mark_job_failed(cache_key: String, job: Dictionary, failed_path: String) -> void:
+	job.erase("partial_resources")
+	job.erase("action_cursor")
+	_loaded_pending_keys.erase(cache_key)
 	var failure_count := int(job.get("failure_count", 0)) + 1
 	job["failure_count"] = failure_count
 	job["failed_path"] = failed_path
@@ -403,20 +431,37 @@ func _retire_stale_loaded_jobs() -> void:
 func poll_once(frame_id: int) -> Dictionary:
 	if frame_id == _last_streaming_poll_frame:
 		return map_prefetch_status()
+	FrameBudget.mark_pending(_budget_category, not _threaded_profile_requests.is_empty()
+		or not _visual_subscriptions.is_empty(), true, false, _process_owner.get_ref() as Node)
+	var token := FrameBudget.begin(_budget_category)
+	if token == 0:
+		return map_prefetch_status()
+	var result := _poll_admitted(frame_id)
+	FrameBudget.end(token)
+	FrameBudget.mark_pending(_budget_category, not _threaded_profile_requests.is_empty()
+		or not _visual_subscriptions.is_empty(), true, false, _process_owner.get_ref() as Node)
+	return result
+
+
+func _poll_admitted(frame_id: int) -> Dictionary:
 	var profile_started_usec := RuntimeDiagnostics.timing_start()
 	_last_streaming_poll_frame = frame_id
 	coordinator_poll_count += 1
 	heavy_poll_execution_count += 1
 	var helper: MonsterVisual
 	for cache_key: String in _threaded_profile_requests.keys():
+		if FrameBudget.remaining_usec() <= 0:
+			break
 		var job: Dictionary = _threaded_profile_requests[cache_key]
-		if str(job.get("state", "")) != "loading":
+		if str(job.get("state", "")) not in ["loading", "collecting"]:
 			continue
 		var ready := true
 		var failed := false
 		var failed_path := ""
 		var paths: Dictionary = job.get("paths", {})
 		for action_name: String in ACTIONS:
+			if ACTIONS.find(action_name) < int(job.get("action_cursor", 0)):
+				continue # A consumed threaded request is no longer polled.
 			var action_path := str(paths.get(action_name, ""))
 			status_poll_count += 1
 			var status := ResourceLoader.load_threaded_get_status(action_path)
@@ -441,11 +486,19 @@ func poll_once(frame_id: int) -> Dictionary:
 		var mapping: Dictionary = job.get("mapping", {})
 		var result := helper._client_profile_shell(mapping)
 		var expected_sizes: Dictionary = job.get("expected_sizes", {})
-		for action_name: String in ACTIONS:
+		if job.has("partial_resources"):
+			result = job.partial_resources
+		var action_cursor := int(job.get("action_cursor", 0))
+		while action_cursor < ACTIONS.size():
+			if FrameBudget.remaining_usec() <= 0:
+				break
+			var action_name: String = ACTIONS[action_cursor]
 			var action_path := str(paths[action_name])
+			var get_started_usec := Time.get_ticks_usec()
 			var texture := ResourceLoader.load_threaded_get(
 				action_path
 			) as Texture2D
+			maximum_action_get_usec = maxi(maximum_action_get_usec, Time.get_ticks_usec() - get_started_usec)
 			_threaded_texture_get_count += 1
 			if (
 				texture == null
@@ -461,6 +514,14 @@ func poll_once(frame_id: int) -> Dictionary:
 					"framesPerDirection", 1
 				)
 			)
+			action_cursor += 1
+		if not failed and action_cursor < ACTIONS.size():
+			job["state"] = "collecting"
+			job["partial_resources"] = result
+			job["action_cursor"] = action_cursor
+			_threaded_profile_requests[cache_key] = job
+			_loaded_pending_keys[cache_key] = _decoded_rgba8_profile_bytes(result)
+			continue
 		var validation_errors: Array = []
 		if not failed:
 			validation_errors = MonsterAnimationPolicy.validate(result)
@@ -468,20 +529,28 @@ func poll_once(frame_id: int) -> Dictionary:
 			_mark_job_failed(cache_key, job, failed_path)
 			continue
 		job["state"] = "loaded"
+		job.erase("partial_resources")
+		job.erase("action_cursor")
 		job["resources"] = result
 		_threaded_profile_requests[cache_key] = job
 		# Loaded-not-admitted accounting (audit PERF-05): the finished job's
 		# textures are residency until the dispatch enters the bounded cache.
 		var pending_bytes := _decoded_rgba8_profile_bytes(result)
 		_loaded_pending_keys[cache_key] = pending_bytes
-	_retry_eligible_failed_jobs()
-	_commit_loaded_profiles()
-	_retire_stale_loaded_jobs()
-	_pump_threaded_profile_queue()
+	if FrameBudget.remaining_usec() > 0:
+		_retry_eligible_failed_jobs()
+	if FrameBudget.remaining_usec() > 0:
+		_commit_loaded_profiles()
+	if FrameBudget.remaining_usec() > 0:
+		_retire_stale_loaded_jobs()
+	if FrameBudget.remaining_usec() > 0:
+		_pump_threaded_profile_queue()
 	if helper != null:
 		helper.free()
-	_poll_visual_residency()
-	_cleanup_invalid_subscribers()
+	if FrameBudget.remaining_usec() > 0:
+		_poll_visual_residency()
+	if FrameBudget.remaining_usec() > 0:
+		_cleanup_invalid_subscribers()
 	var elapsed_usec := RuntimeDiagnostics.timing_elapsed_usec(profile_started_usec)
 	if elapsed_usec > 0:
 		RuntimeDiagnostics.record_performance_max(&"monster_streaming_poll_max_ms", float(elapsed_usec) / 1000.0)
@@ -491,6 +560,8 @@ func poll_once(frame_id: int) -> Dictionary:
 func _commit_loaded_profiles() -> void:
 	# Prefetch jobs commit strictly in caller order (stable pin priority).
 	for cache_key: String in _map_prefetch_keys:
+		if FrameBudget.remaining_usec() <= 0:
+			break
 		if _map_prefetch_completed_keys.has(cache_key):
 			continue
 		var job: Dictionary = _threaded_profile_requests.get(cache_key, {})
@@ -528,6 +599,8 @@ func _commit_loaded_profiles() -> void:
 	# loaded later requests - one slow early atlas must not stall profiles a
 	# waiter can use now. Sequence order still keeps delivery deterministic.
 	for cache_key: String in runtime_keys:
+		if FrameBudget.remaining_usec() <= 0:
+			break
 		var job: Dictionary = _threaded_profile_requests[cache_key]
 		var state := str(job.get("state", ""))
 		if state == "failed" or state == "permanent_failed":
@@ -566,6 +639,9 @@ func _dispatch_loaded_job(
 	_resource_delivery_keys.erase(cache_key)
 	_threaded_profile_requests.erase(cache_key)
 	_apply_order.append(cache_key)
+	if job.has("queued_at_usec"):
+		maximum_completion_latency_usec = maxi(maximum_completion_latency_usec,
+			Time.get_ticks_usec() - int(job.queued_at_usec))
 	ready_resource_count = _client_resource_profiles.size()
 	active_request_count = _threaded_profile_requests.size()
 
@@ -1410,6 +1486,8 @@ func current_world_generation() -> int:
 
 
 func reset_for_tests() -> void:
+	maximum_completion_latency_usec = 0
+	maximum_action_get_usec = 0
 	_threaded_profile_requests.clear()
 	_threaded_profile_queue.clear()
 	_client_resource_profiles.clear()
@@ -1469,6 +1547,10 @@ func reset_for_tests() -> void:
 
 
 func monster_streaming_diagnostics() -> Dictionary:
+	var oldest_age_usec := 0
+	for job: Dictionary in _threaded_profile_requests.values():
+		if job.has("queued_at_usec"):
+			oldest_age_usec = maxi(oldest_age_usec, Time.get_ticks_usec() - int(job.queued_at_usec))
 	var request_state_counts := {
 		"queued": 0,
 		"loading": 0,
@@ -1479,10 +1561,15 @@ func monster_streaming_diagnostics() -> Dictionary:
 		if not raw_job is Dictionary:
 			continue
 		var state := str((raw_job as Dictionary).get("state", ""))
+		if state == "collecting":
+			state = "loading"
 		if request_state_counts.has(state):
 			request_state_counts[state] = int(request_state_counts[state]) + 1
 	return {
 		"contract_id": CONTRACT_ID,
+		"oldest_age_usec": oldest_age_usec,
+		"maximum_completion_latency_usec": maximum_completion_latency_usec,
+		"maximum_action_get_usec": maximum_action_get_usec,
 		"registered_visual_count": _visual_subscriptions.size(),
 		"per_instance_poll_call_count": per_instance_poll_call_count,
 		"coordinator_poll_count": coordinator_poll_count,

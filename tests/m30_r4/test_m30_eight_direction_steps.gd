@@ -7,6 +7,7 @@ const Sampler := preload("res://tests/m30_r4_r2/lab_sampler.gd")
 const ArtWaitFreeze := preload("res://tests/m30_r3_closure/art_wait_freeze.gd")
 const MIN_ART_FREEZE_MS: int = 650
 const MONSTER_ID: int = 64
+const SourceReach := preload("res://scripts/monster_source176/source_melee_geometry.gd")
 const BASE_SHA := "cfe1b81f892ba6dd8ebe82012c9b700b65e5314f"
 var _sampler: Node
 var _game: Node
@@ -20,6 +21,7 @@ var _cases: Array[Dictionary] = []
 var _previous_starts := 0
 var _first_attack_distance := -1.0
 var _first_attack_tick := -1
+var _first_attack_offset := Vector2.INF
 var _before_ground := Vector2.INF
 var _failures: Array[String] = []
 
@@ -35,6 +37,7 @@ func _physics_sample() -> void:
 	if _actor._hc_starts > _previous_starts:
 		if _first_attack_tick < 0:
 			_first_attack_distance = p.distance_to(_center)
+			_first_attack_offset = p - _center
 			_first_attack_tick = Engine.get_physics_frames()
 		check(_actor._hc_starts == _previous_starts + 1, "no double start within one observed physics tick")
 	_previous_starts = _actor._hc_starts
@@ -128,6 +131,7 @@ func _run_case(d: int) -> bool:
 	_previous_starts = 0
 	_first_attack_tick = -1
 	_first_attack_distance = -1.0
+	_first_attack_offset = Vector2.INF
 	_before_ground = start
 	var walks := 0
 	var attacks := 0
@@ -157,19 +161,24 @@ func _run_case(d: int) -> bool:
 		if str(snap["state"]) == "walk":
 			walks += 1
 			var count := MonsterAnimationPolicy.frame_count(_actor.visual.active_resources, &"walk")
-			check(count > 0 and int(snap["frame"]) == mini(count - 1, int(floor(phase * float(count)))), "dir %d atlas frame mapping" % d)
+			# User feedback: blocked pursuit owns a separate physics-driven pose
+			# phase; the distance phase above still never advances without motion.
+			var pose_phase := fposmod(phase + float(snap["blocked_walk_phase"]), 1.0)
+			check(count > 0 and int(snap["frame"]) == mini(count - 1, int(floor(pose_phase * float(count)))), "dir %d atlas frame mapping" % d)
 		elif str(snap["state"]) == "attack":
 			attacks += 1
 		var p := _actor.spatial_index_position()
 		check(_game._canonical_screen_px_to_ground_gu(_game.player.global_position).distance_to(_center) < 0.015, "dir %d target remained stationary" % d)
-		if p.distance_to(_center) <= preferred + 0.015:
+		# R3 E1: ordinary attack access is the relative one-cell box. A legacy
+		# 1.5-GU preferred circle could end this test before the first admission.
+		if SourceReach.continuous_adjacent(p - _center) and _first_attack_tick >= 0 and attacks > 0:
 			reached = true
 			break
 	_armed = false
-	check(reached, "dir %d reached preferred" % d)
+	check(reached, "dir %d reached source attack access" % d)
 	check(walks >= 2, "dir %d at least two actual walk samples" % d)
 	check(attacks >= 1, "dir %d readable attack samples" % d)
-	check(_first_attack_tick >= 0 and _first_attack_distance > preferred + 0.05 and _first_attack_distance <= 2.0 + 0.001, "dir %d first accepted attack was in outer band" % d)
+	check(_first_attack_tick >= 0 and SourceReach.continuous_adjacent(_first_attack_offset), "dir %d first accepted attack satisfies source box" % d)
 	var passed := _failures.size() == case_failures and reached and walks >= 2 and attacks >= 1
 	_cases.append({"dir": d, "requested_start": [start.x, start.y], "spawned_point": [spawned.x, spawned.y], "reached": reached, "walk_samples": walks, "attack_pose_samples": attacks, "accepted_attack_count": _previous_starts, "first_attack_distance": _first_attack_distance, "first_attack_tick": _first_attack_tick, "actual_distance_gu": last_distance, "status": "PASS" if passed else "FAIL", "physics_trace": _trace, "corridor_recheck": Geometry.corridor(_game, _actor, _center, d) if is_instance_valid(_actor) else {}})
 	if is_instance_valid(_actor):

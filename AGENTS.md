@@ -1,13 +1,14 @@
 # HardCore 项目协作规则
 
-## 1. 核心执行模型：Astra 单主控
+## 1. 核心执行模型：Astra / Sol 单主控
 
-HardCore 采用单主控、串行工程模式。
+HardCore 采用单主控、单线程串行工程模式。
 
-- 当前 Astra/Codex 是任务唯一工程负责人，端到端负责范围、权威源、生产路径、根因、架构、实现、测试、失败分类、自审、集成和最终验收。
-- 优先使用 `gpt-6-astra`，保留用户当前 `high` 或更高推理设置；仅在具体难点需要时提高推理强度。`AGENTS.md` 不能切换实际模型，目标模型不可用时必须如实说明。
-- 禁止创建并行工程代理、agent swarm 或 reviewer agent；禁止把根因、架构、实现、测试裁决或最终审查交给其他模型。
-- 唯一外部模型例外是通过浏览器操作的 Volcengine Ark Agent Plan `GLM-5.3-Flash`。用户已授权 Astra 自主使用 DeepSeek Harness Web UI；这里的 DeepSeek 是 Harness 界面名称，实际模型必须是 `GLM-5.3-Flash`，不等于授权 DeepSeek 模型。GLM 只能执行高工作量、低推理、只读、可复核的机械任务，不是第二工程负责人。
+- 当前任务可由 `gpt-6-astra` 或 `gpt-6-sol` 担任唯一工程主控，端到端负责范围、权威源、生产路径、根因、架构、实现、测试、失败分类、自审、集成和最终验收。
+- 允许使用 `gpt-6-astra` 和 `gpt-6-sol` 完成工程任务；保留用户当前 `high` 或更高推理设置，仅在具体难点需要时提高推理强度。`AGENTS.md` 不能切换实际模型，目标模型不可用时必须如实说明。
+- 一个任务只保留一个工程主线程，串行完成工程闭环。禁止创建并行工程代理、agent swarm 或 reviewer agent；禁止把根因、架构、实现方案、测试裁决或最终审查交给子代理独立决定。
+- 扫描、清单、结构化数据比对、日志归集等明显消耗大量主控使用量、但只需低推理或无需推理的机械任务，允许使用 `gpt-6-luna` 作为子代理。同一时间最多运行一个机械辅助任务（Luna 或 GLM）；主控须给出精确范围、排除项、执行规则和输出格式。Luna 默认只读；如需机械写入，主控必须先指定精确目标与变换规则，再逐项复核差异。Luna 的输出只是待复核候选，工程决策、测试和验收仍由主控完成。
+- 唯一外部模型例外是由工程主控通过 Codex CLI 的既有 `glm` profile 调用火山方舟 `GLM-5.3-Flash`（模型 ID `glm-5.3-flash`）。用户已授权主控自主派发本文件第 4 节限定的四类机械任务，无需逐次确认。GLM 只能执行高工作量、低推理、只读、可复核的机械任务，不是第二工程负责人。
 - 未经用户明确授权，不新增第三方模型 provider、worker、直连脚本或凭据。DeepSeek 模型、worker、直连脚本及凭据仍然禁止。
 
 完整工程闭环：
@@ -41,32 +42,33 @@ HardCore 采用单主控、串行工程模式。
 
 补充规则：
 
-- 当前主树为 `codex/integration`。`docs/CODEX_CONTEXT_SNAPSHOT.md` 仅作基线和历史验收补充；实际变更、合并、构建或删除对象必须以当前 Git、文件和专项测试为准。
+- 工程入口与隔离工作区按第 7 节执行，动态现况见 `docs/WORKSPACE_CURRENT_STATUS.md`；`docs/CODEX_CONTEXT_SNAPSHOT.md` 仅作历史补充，实际对象必须以当前 Git、文件和专项测试为准。
 - bootstrap 若仅因分支名不在旧白名单而失败，记录错误、基线和适用的 `docs/agent_rules/<domain>.md` 后继续等价预检；不得跳过保护检查或修改 bootstrap 规避门禁。
 - 保留所有无关 tracked/untracked 用户改动；发现 dirty 现场时绕开或隔离，不覆盖、不清理、不归零。
 - Godot 测试优先使用 `tools/run_godot_tests.ps1`。禁止 GUI Godot，禁止直接启动未指定项目内日志和用户数据目录的 Godot；使用 console/headless、`outputs/test_logs` 和本工作树 `.godot/runtime_appdata`。
 
-## 4. 浏览器 GLM 机械任务例外
+## 4. Codex CLI GLM 机械任务例外
 
 ### 4.1 调用方式
 
-- 仅由 Astra 主控通过浏览器打开项目已授权的 GLM 工作台或 DeepSeek Harness Web UI，并核实实际连接模型为 `GLM-5.3-Flash`、任务为只读模式；满足本节条件时无需逐次请求用户授权。
-- 不再使用 GLM CLI、`codex exec --profile arkcli`、直连 API 或自建 worker 作为本项目默认入口。
-- 同一时间只运行一个 GLM 任务；禁止并行 GLM worker 或扫描 swarm。
+- 正式入口为 Codex CLI `--profile glm`，复用用户已配置的 `$CODEX_HOME/glm.config.toml` 地址与凭据。不得输出 key、把凭据复制进项目或让 GLM 读取凭据文件。
+- 不再使用 DeepSeek Harness、浏览器 GLM 工作台或旧 `arkcli` profile；不新增 provider、凭据、直连 API 脚本或自建 worker。
+- 默认用有界非交互任务：`codex exec --profile glm --sandbox read-only -c 'approval_policy="never"' -c 'model_reasoning_effort="low"' -C <PROJECT_ROOT> --json -o <PROJECT_ROOT>/outputs/glm_cli/<TASK_ID>.json "<TASK>"`。主控保存 JSONL 执行记录、退出码和最终答复；这些覆盖仅作用于机械任务，不降低主控推理设置或修改用户配置。
+- 复用已运行的 CLI 会话时，使用 `codex queue --profile glm --thread <SESSION_ID> --message "<TASK>"`。`queue` 只投递消息，不改变接收会话的模型、sandbox 或推理设置；只有已核实为 GLM、只读机械模式且上一任务已结束的会话才能派活，否则串行使用上述有界 `exec`。
+- 同一时间只运行一个机械辅助任务（Luna 或 GLM）；禁止并行 GLM worker 或扫描 swarm。已有 GLM 任务未结束时，不启动另一任务，也不重启、接管或改变其施工现场。
 - 每次任务必须给出精确范围、只读限制、排除路径、期望字段和输出格式。优先精确搜索，其次有界扫描，确有必要才全仓扫描。
-- 浏览器或 Harness 无法证明模型身份、只读范围或任务上下文时，不执行；Astra 改为自行完成或报告 `BLOCKED`。
+- 模型身份和权限以 profile、实际会话配置及执行记录核实，不以代理自称 Astra/Sol 或口头声明只读为证据。无法证明连接、模型身份、只读范围或任务上下文时，不执行；主控自行完成或报告 `BLOCKED`，不回退到 Harness。
 
 ### 4.2 允许范围
 
-GLM 适合承担会大量消耗上下文、但结论可机械复核的工作，例如：
+GLM 仅承担以下四类高工作量、低推理、只读机械工作：
 
-- 文件数量、类型、大小、哈希、重复项、空文件和生成物清单；
-- 全仓字符串、符号、API、ID、路径、TODO/FIXME 和废弃用法搜索；
-- JSON、CSV、manifest、catalog 的缺失、重复、孤儿记录、字段和枚举比对；
-- 地图、怪物、装备目录的大规模 ID 或元数据比对；
-- 数据库 schema、表、列、索引、行数、聚合和一致性检查，只允许只读查询；
-- 大量日志、测试报告、构建报告、崩溃报告和基准输出的机械归集；
-- 返回路径、行号、符号、记录 ID、计数、哈希和简短原因的候选清单。
+1. 大量文件的数量、大小、哈希、重复项和缺失项清单。
+2. 指定目录内的字符串、符号、ID、路径及调用点搜索。
+3. JSON、CSV、catalog、manifest 的重复 ID、孤儿记录、字段和枚举比对。
+4. 大批测试日志、构建日志和报告的计数、分类与证据路径归集。
+
+输出必须包含任务 ID，以及可复核的路径、行号、符号、记录 ID、计数、哈希和简短候选原因；不扩大为工程分析或施工。
 
 数据库写入、迁移、修复及状态不明的命令一律禁止，包括 `INSERT`、`UPDATE`、`DELETE`、`DROP`、`ALTER`、`CREATE`、`REPLACE` 和 `VACUUM`。
 
@@ -97,9 +99,11 @@ EVIDENCE PATHS
 UNCERTAINTIES
 ```
 
-Astra 必须回到本地权威文件、生产消费者、调用点、合同和相关测试复核关键发现，然后独立作出修改与验收决定。
+`Queued message`、握手回复、`idle`、`notLoaded` 或单个 PASS marker 不代表机械任务完成。主控须核对匹配任务 ID 的最终答复、真实工具执行记录、成功退出或完成状态，并在本地复核关键结果。需要读取本地文件的任务未执行工具、返回猜测值或与本地证据不符时，判为 `FAIL`，不得接受。
 
-混合任务遵循：`GLM 找候选 → Astra 理解 → Astra 决策 → Astra 修改 → Astra 证明`。
+工程主控必须回到本地权威文件、生产消费者、调用点、合同和相关测试复核关键发现，然后独立作出修改与验收决定。
+
+混合任务遵循：`GLM 找候选 → 工程主控理解 → 工程主控决策 → 工程主控修改 → 工程主控证明`。
 
 ## 5. 工程决策硬规则
 
@@ -122,6 +126,7 @@ RUNTIME LOADER → GAMEPLAY
 - 权威源与生成输出并存时修改权威源并通过正式流程再生成；除非仓库明确规定，否则禁止手改生成物或创建第二权威。
 - 地图永久改动必须进入 editor/authoring 数据，再由 build service 生成 runtime 数据；不得直接补 runtime 地图结果。
 - 结构化数据不得猜测缺失身份、模糊映射或覆盖 canonical 字段。未知/冲突身份应显式失败，除非正式合同明确允许 fallback。
+- 新业务身份使用登记过的稳定 ID；显示名称只作展示字段，旧名称或数字身份仅在明确 schema 和精确映射的导入/兼容边界转换一次。未知、冲突或重复身份不得部分迁移；不得在资格查询、命中或热循环扫描名称修补状态。身份变更必须同步生成链、消费者、存档兼容和相应回归。
 
 ### 5.3 最小完整改动和行为保持
 
@@ -137,23 +142,29 @@ RUNTIME LOADER → GAMEPLAY
 - 最新人工保存数据高于旧合同、旧生成结果、编辑器缓存和历史基线。加载链可能回退时修复加载链并保留人工数据，禁止用旧数据覆盖后要求用户重做。
 - 生成器和校准工具必须支持精确单目标更新；不能证明冻结对象像素和数据零差异时，不运行批量重建。
 
-## 7. 分支、所有权与工作树
+## 7. 当前工程入口与工作树
 
-| 分支 | 主要所有权 | 关键限制 |
-|---|---|---|
-| `codex/integration` | 基线、跨系统接口、合并、冲突、完整验收；独占 `project.godot`、`AGENTS.md`、`scripts/game_root.gd`、`scripts/game_data.gd`、`scripts/region_content.gd`、存档格式、全局服务和跨系统测试入口 | 地图刷新、怪物掉落、任务到地图/怪物/装备映射只在此最终接入 |
-| `codex/ui-art` | `assets/ui/**`、`scripts/hud.gd`、`scripts/*_panel.gd`、`scripts/equipment_character_preview.gd`、UI 素材和测试 | 只读玩法数据；不得改装备属性、怪物数值、地图、掉落或存档 |
-| `codex/maps` | `assets/art/maps/**`、`assets/maps/**`、`map_editor_workspace/**`、`scripts/map_*.gd`、`scripts/map_assets/**`、`scripts/map_editor/**` | 地图只定义位置、碰撞、门点、区域和 `spawn_group_id`；不得改怪物属性或掉落 |
-| `codex/monsters` | `assets/art/monsters/**`、怪物/Boss 数据、`scripts/enemy.gd`、`scripts/monster_visual.gd`、AI/动画/战斗测试 | 用稳定 `monster_id`；不得改地图几何、装备定义或 UI |
-| `codex/equipment` | `assets/art/items/**`、物品/装备数据、`scripts/equipment_rules.gd`、装备美术和测试 | 用稳定 `item_id`；不得改背包布局、地图或怪物刷新 |
-| `codex/professions-skills` | 职业成长、玩家技能、投射物、召唤物、职业公式、技能状态机/特效及测试 | 不得改怪物 AI、地图刷新、装备定义、UI 布局或全局存档；共享 combat runtime 由 integration 最终接入 |
+- 正式开发基线、跨系统接入和最终验收使用主仓库 `codex/integration`。远端默认分支或 `main` 的名字不代表最新生产基线，不因此自动切换或从旧默认分支创建候选树。
+- 采用单主控集中施工：UI、地图、怪物、装备、技能及共享服务由同一主控按授权范围串行处理。不再按旧专业分支表划分文件所有权，也不要求为每个系统另开工作树或等待其他所有者。
+- 现有独立施工镜像作为候选树保护和复审，不因目录存在、分支名或测试通过而视为已合入主树。当前登记清单、提交关系和现场记录见 `docs/WORKSPACE_CURRENT_STATUS.md`；开工仍须执行 `git worktree list --porcelain` 并核对实际状态。
 
-跨工作树规则：
+系统边界继续保留：
 
-- integration 先指定并记录集成基线或固定裁决版本。专业树开工前核对分支、HEAD、merge-base、任务文件差异、依赖合同和 dirty 现场。
-- 专业树只修改本领域文件。需要其他所有权文件时只提交接口、字段/ID、原因和验收要求，由所有者串行处理。
-- 一次只审查/合并一个专业提交；专项未通过不得集成，每次合并后先做必要冒烟。旧树证据不得覆盖当前基线失败。
-- `dev_art_sources`、本地 Godot 工具和 DepotDownloader 不入 Git，通过本地联接共享且只读；`.godot` 和 `outputs` 每树独立。
+| 系统 | 任务边界 |
+|---|---|
+| UI / 美术 | 只改已授权的展示与交互，不连带改玩法数值、掉落或存档 |
+| 地图 | 永久改动进入 authoring 与正式生成链；几何和刷新位置不定义怪物属性或掉落 |
+| 怪物 | 使用稳定 `monster_id`，保持任务范围外的地图、装备和 UI 合同 |
+| 物品 / 装备 | 使用稳定 `item_id` 和装备属性主源，不连带改布局或怪物刷新 |
+| 职业 / 技能 | 核验职业公式、时序和技能状态机，保持任务范围外的 AI、地图、装备与存档合同 |
+| 共享系统 | 主控处理全局入口、服务、存档及跨系统接口，并补齐相应回归 |
+
+隔离与接入规则：
+
+- 默认在任务指定的现有工作区施工；只有任务要求隔离或现场保护需要时才创建候选树，明确起点 ref、范围和固定基线，不沿用历史目录或分支假设。
+- 进入候选树前核对分支、HEAD、merge-base、依赖合同和 dirty/untracked 现场；不同树不得覆盖彼此人工数据、未提交内容或验证记录。
+- 一次审查一个候选提交或明确差异，专项通过且已获集成授权后再接入主树，并在主树做必要冒烟和相关回归。候选树证据不能覆盖主树当前失败或代替主树、APK、设备验收。
+- `dev_art_sources`、本地 Godot 工具和 DepotDownloader 不入 Git，共享联接保持只读；`.godot`、用户数据和 `outputs` 各工作区独立。
 
 ## 8. 品牌与数据源
 
@@ -169,7 +180,7 @@ RUNTIME LOADER → GAMEPLAY
 - 装备属性、需求、职业/性别限制和负重的唯一主源为 `assets/data/equipment_attribute_master.json`；Crystal `server_data` 对这些字段不得反向覆盖。
 - 每个字段、记录、贴图、动作、坐标、规则或映射必须 `primary` 优先。只有精确目标被证明 `missing`，才能按 `auxiliary_1` → `auxiliary_2` → `auxiliary_3` 逐级查找。
 - 主源难解析、暂不可用、表现不兼容或结果不符时修复解析/映射/兼容层，不得用 `unusable` 或 `incompatible` 绕过主源。
-- 进入低级源前记录更高来源的路径、版本/哈希、查询结果和逐项缺失证据。同级遵守 `order`；跨发行版组合须由 integration 裁决并逐字段/逐帧留证。
+- 进入低级源前记录更高来源的路径、版本/哈希、查询结果和逐项缺失证据。同级遵守 `order`；跨发行版组合须由工程主控裁决并逐字段/逐帧留证。
 - `mirror` 只用于哈希复核，`quarantine` 永不进入运行时。正式数据与生成器须保存可机检的来源等级、distribution、原始路径、哈希和 fallback 证据。
 
 ## 9. 测试、失败与证据
@@ -182,7 +193,7 @@ RUNTIME LOADER → GAMEPLAY
 
 - 普通 Godot 场景显式使用 `-TimeoutSeconds 30`，已知重场景最多 `60`。新场景遵守 runner tracked-path 门禁。
 - 先跑最窄直接路径，稳定后再扩到最相关回归；同代码和依赖下已通过的昂贵测试不无意义重复。
-- 测试失败必须由同一 Astra 主控继续 `FAIL → CLASSIFY → TRACE → FIX → RETEST`。区分生产缺陷、过时预期、环境、fixture、导入/用户数据污染和既有基线失败。
+- 测试失败必须由同一工程主控继续 `FAIL → CLASSIFY → TRACE → FIX → RETEST`。区分生产缺陷、过时预期、环境、fixture、导入/用户数据污染和既有基线失败。
 - 不得删除或弱化断言、跳过不报告、mock 掉真实生产行为，或只认中途 PASS marker。测试预期只有在权威合同已明确改变时才能修改，并说明原因。
 - 性能任务必须有可比场景和数据：定位热路径、规模增长、分配/更新/查询频率，建立基线后再比较。不得通过减少怪物、玩法频率、碰撞或内容合同制造提升。
 - 自动测试、静态检查、微基准、导出成功、APK 验证和用户实机确认分别记录，不互相替代。
@@ -194,7 +205,7 @@ RUNTIME LOADER → GAMEPLAY
 - 禁止破坏或丢弃未知用户改动。未经明确授权，不执行 `git reset --hard`、`git clean -fd[x]`、`git checkout -- .`、`git restore .`、强制删分支或 force push。
 - 不因完成代码而自动 merge、push、tag、改版本或发布；只有用户请求或仓库正式工作流要求时执行。
 - 精确删除已在明确任务范围内授权，但删除前必须只读解析目标并确认位于本项目或用户明确指定位置；不得对宽泛路径、未解析变量、工作区根目录或联接目标递归删除。
-- 归并后清理前，先核对主树与远端身份，再逐个验证旧工作树、构建和缓存的精确路径、独有提交及未跟踪内容。保留人工数据、源素材、存档、最终包、验收证据和必要备份；识别联接且不沿联接删除共享源。
+- 删除分支、工作树、构建或缓存前，核对主树与远端身份，并逐个验证精确路径、独有提交、dirty/untracked 内容及使用状态。保留人工数据、源素材、存档、最终包、验收证据和必要备份；识别联接且不沿联接删除共享源。
 
 ## 11. 最终自审、交付与 APK
 
@@ -215,7 +226,7 @@ git diff --check
 - 修改文件/系统；
 - 测试命令、结果及失败分类；
 - 新增或变更的稳定 ID；
-- integration 所需跨系统接入；
+- 跨系统接入、依赖和尚未完成的验收（如有）；
 - 当前 HEAD/提交；若有产物，再列版本、路径、大小和哈希。
 
 APK 门禁：
@@ -232,6 +243,7 @@ APK 门禁：
 - 修改本文件时先保留仍有效的长期规则，再删除重复、冲突和失效内容；只做最小必要修正，不因规则维护修改无关源码。
 - 仓库若出现子目录 `AGENTS.md`，必须检查其作用域、authority 和流程是否与根规则冲突。
 - 当前 HEAD、临时工作树路径、某次 APK、临时 bug、任务编号、一次性测试数量和临时分支不得写入长期 `AGENTS.md`；这些信息属于 handoff、状态文档、实现报告或提交记录。
+- 分支或工作树布局调整后更新 `docs/WORKSPACE_CURRENT_STATUS.md`；该文档必须标明核验时间，不能替代下次开工的实时 Git 核对。
 
 ## Prime Directive
 
@@ -242,6 +254,6 @@ HardCore 是长期生产项目。目标不是多改代码，而是：
 修改最小完整系统 → 证明结果 → 保留其余一切
 ```
 
-Astra 一人负责到底。不要用虚假并行换上下文断裂，不要用快速 PASS 换架构破坏，不要用信心代替证据，也不要用方便的 fallback 替代正式合同。
+Astra 或 Sol 主控在单线程中负责到底；Luna 和 GLM 的机械辅助不形成第二工程负责人。不要用虚假并行换上下文断裂，不要用快速 PASS 换架构破坏，不要用信心代替证据，也不要用方便的 fallback 代替正式合同。
 
 优先级：正确性 → 回归安全 → 可维护性 → 速度。

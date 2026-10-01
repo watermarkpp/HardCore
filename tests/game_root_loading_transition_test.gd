@@ -75,7 +75,7 @@ func _run() -> void:
 	game.travel_to_service_home(false, false, "比奇省")
 	assert(game.current_map_id == 911003, "return-home loaded before Loading covered the scene")
 	var return_home_transition_id: String = game._active_map_transition_id
-	game._on_scroll_used("回城卷")
+	game._on_scroll_used(GameData.item_entity_id("hc.service_item.000719"))
 	assert(
 		game._active_map_transition_id == return_home_transition_id,
 		"duplicate return-home scroll replaced the active transition"

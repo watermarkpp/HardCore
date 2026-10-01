@@ -17,7 +17,7 @@ func _new_state(tag: String, count := 25) -> Node:
 	state.active_profile_id = "owner"
 	state.reset_progress(false)
 	state.inventory = [{"name": POTION, "count": count}]
-	state.quick_item_slots[0] = POTION
+	state.quick_item_slots[0] = GameData.item_entity_id(POTION)
 	assert(state.save_game(false))
 	state.consumable_requested.connect(func(_name: String) -> void: effects += 1)
 	return state
@@ -40,7 +40,10 @@ func _settle(state: Node) -> void:
 	var deadline := Time.get_ticks_msec() + 5000
 	while Time.get_ticks_msec() < deadline:
 		state._process(0.0)
-		if _count(_read(state).inventory) == _count(state.inventory) and state._json_persistence.pending_count() == 0:
+		# The worker briefly rotates the primary before promoting its candidate.
+		# Observe disk only after the actual ordered completion boundary; live
+		# effect/consumption assertions above remain immediate and independent.
+		if state._json_persistence.pending_count() == 0 and _count(_read(state).inventory) == _count(state.inventory):
 			return
 		await get_tree().process_frame
 	assert(false, "latest accepted item use did not reach disk")
@@ -111,13 +114,14 @@ func _mixed_items() -> void:
 	state.profession = "战士"
 	state.level = 50
 	var weapon := GameData.get_item_record({"item_id": 81})
-	state.equipment["武器"] = state._make_item_instance(str(weapon.name), weapon)
-	state.equipment["武器"]["durability_raw"] = 1000
-	state._sync_durability_compatibility_fields(state.equipment["武器"])
+	state.equipment["hc.slot.weapon"] = state._make_item_instance(str(weapon.name), weapon)
+	state.equipment["hc.slot.weapon"]["durability_raw"] = 1000
+	state._sync_durability_compatibility_fields(state.equipment["hc.slot.weapon"])
 	state.inventory = []
 	for item_name in ["修复油", "祝福油", "随机传送卷", "基本剑术"]:
-		assert(not GameData.get_item_record(item_name).is_empty(), item_name)
-		state.inventory.append({"name": item_name, "count": 1})
+		var item := GameData.get_item_record(item_name)
+		assert(not item.is_empty(), item_name)
+		state.inventory.append(state._make_item_instance(item_name, item))
 	var water := GameData.get_item_record(910001)
 	state.inventory.append({"name": water.name, "item_id": 910001, "count": 1})
 	var rng := RandomNumberGenerator.new()
@@ -130,11 +134,11 @@ func _mixed_items() -> void:
 	for i in 5:
 		var result: Dictionary = state.use_inventory_index_result(i, true)
 		assert(result.success, str(result))
-	assert(int(state.equipment["武器"].durability_raw) > 1000)
+	assert(int(state.equipment["hc.slot.weapon"].durability_raw) > 1000)
 	assert(state.is_skill_learned("基本剑术") and not state.temporary_item_buffs.is_empty())
 	assert(FileAccess.get_file_as_bytes(path) == bytes, "a non-potion use blocked on save")
 	await _settle(state)
-	assert(_read(state).learned_skills.has("基本剑术"))
+	assert(_read(state).learned_skills.has("hc.skill.warrior.basic_swordsmanship"))
 	state.free()
 
 

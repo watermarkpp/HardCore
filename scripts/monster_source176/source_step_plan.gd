@@ -3,14 +3,19 @@ extends RefCounted
 ## adapter. It does not authorize movement or spend another cadence grant.
 const EPSILON: float = 0.000001
 
-static func next_leg(origin: Vector2, stable_waypoint: Vector2, component_budget: float = 1.0) -> Vector2:
+static func next_leg(origin: Vector2, stable_waypoint: Vector2, component_budget: float = 1.0, alignment_epsilon: float = EPSILON) -> Vector2:
     if not origin.is_finite() or not stable_waypoint.is_finite():
         return Vector2.INF
     if not is_finite(component_budget) or component_budget <= 0.0:
         return Vector2.INF
+    if not is_finite(alignment_epsilon) or alignment_epsilon < 0.0:
+        return Vector2.INF
     var d: Vector2 = stable_waypoint - origin
-    var sx: float = 0.0 if absf(d.x) <= EPSILON else signf(d.x)
-    var sy: float = 0.0 if absf(d.y) <= EPSILON else signf(d.y)
+    # The pure source oracle retains its exact default. Runtime projections
+    # use the existing movement precision: an already-arrived component must
+    # not emit a prefix smaller than the locomotion admission boundary.
+    var sx: float = 0.0 if absf(d.x) <= alignment_epsilon else signf(d.x)
+    var sy: float = 0.0 if absf(d.y) <= alignment_epsilon else signf(d.y)
     if sx != 0.0 and sy != 0.0:
         var extent: float = minf(component_budget, minf(absf(d.x), absf(d.y)))
         return origin + Vector2(sx, sy) * extent

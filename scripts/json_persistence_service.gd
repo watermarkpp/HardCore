@@ -3,8 +3,42 @@ extends RefCounted
 ## Ordered coordinator: all methods execute on main; workers own detached jobs.
 ## Domain callbacks stay here and are never given to a worker object.
 const Job := preload("res://scripts/json_persistence_job.gd")
+const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 const MAX_PENDING_REQUESTS := 64
 var _queue: Array[Dictionary] = []
+var _pump_active := false
+var _budget_category := "persistence:%d" % get_instance_id()
+var _process_owner := WeakRef.new()
+var completed_count := 0
+var maximum_completion_latency_usec := 0
+
+func work_snapshot() -> Dictionary:
+	var oldest_age_usec := 0
+	if not _queue.is_empty():
+		oldest_age_usec = maxi(0, Time.get_ticks_usec() - int(_queue[0].get("queued_at_usec", Time.get_ticks_usec())))
+	return {"pending": _queue.size(), "completed": completed_count,
+		"oldest_age_usec": oldest_age_usec, "maximum_completion_latency_usec": maximum_completion_latency_usec}
+
+func configure_process_owner(owner: Node) -> void:
+	_process_owner = weakref(owner)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		FrameBudget.mark_pending(_budget_category, false)
+
+
+func _refresh_budget_owner() -> bool:
+	var runnable := not _queue.is_empty()
+	if runnable:
+		var entry: Dictionary = _queue[0]
+		var phase := str(entry.phase)
+		if phase == "PREPARED":
+			runnable = bool(entry.allow_promotion) or entry.job.cancellation_requested()
+		elif phase not in ["NEW", "NEW_UPDATE", "NEW_CLEANUP"]:
+			runnable = entry.job.is_stage_complete()
+	FrameBudget.mark_pending(_budget_category, not _queue.is_empty(), runnable, true, _process_owner.get_ref() as Node)
+	return runnable
 
 
 func submit(target: String, identity: Dictionary, snapshot: Dictionary, validator: Callable, guard := Callable(), create_only := false, known_previous_bytes: Variant = null, on_complete := Callable(), prepare_only := false, prepared_bytes: Variant = null, temporary := "", require_known_previous := false, document_update := Callable()) -> RefCounted:
@@ -19,6 +53,7 @@ func submit(target: String, identity: Dictionary, snapshot: Dictionary, validato
 		job.configure_temporary(ProjectSettings.globalize_path(temporary))
 	_queue.append({
 		"job": job,
+		"queued_at_usec": Time.get_ticks_usec(),
 		"identity": identity.duplicate(true),
 		"validator": validator,
 		"guard": guard,
@@ -61,12 +96,33 @@ func submit_cleanup(directory: String, identity: Dictionary, through_sequence: i
 	var job := Job.new()
 	job.cleanup_directory = ProjectSettings.globalize_path(directory)
 	job.cleanup_through_sequence = through_sequence
-	_queue.append({"job": job, "identity": identity.duplicate(true), "phase": "NEW_CLEANUP", "on_complete": Callable()})
+	_queue.append({"job": job, "identity": identity.duplicate(true), "phase": "NEW_CLEANUP", "on_complete": Callable(), "queued_at_usec": Time.get_ticks_usec()})
 	pump()
 	return job
 
 
 func pump(wait := false) -> bool:
+	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain approval and completion stay on main")
+	if _pump_active:
+		return false
+	var runnable := _refresh_budget_owner()
+	if not wait and not runnable:
+		return false
+	var necessary := wait
+	if runnable and str(_queue[0].phase) in ["PROMOTING", "DISPOSING", "PRUNING"]:
+		necessary = true # Accepted durable completion/cleanup cannot be discarded.
+	var token := FrameBudget.begin(_budget_category, necessary)
+	if token == 0:
+		return false
+	_pump_active = true
+	var progressed := _pump_once(wait)
+	_pump_active = false
+	FrameBudget.end(token)
+	_refresh_budget_owner()
+	return progressed
+
+
+func _pump_once(wait: bool) -> bool:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "domain approval and completion stay on main")
 	if _queue.is_empty():
 		return false
@@ -149,7 +205,8 @@ func pump(wait := false) -> bool:
 			_fail(entry, {"success": false, "reason": "candidate_business_invalid", "validation": validation})
 			return true
 		entry.candidate = result
-		job.preparation = result.duplicate(true)
+		assert(result.document.is_read_only(), "worker candidate freezes before transfer")
+		job.preparation = result.duplicate(false)
 		job.preparation["finished"] = true
 		entry.phase = "PREPARED"
 		return true
@@ -192,6 +249,8 @@ func pump(wait := false) -> bool:
 
 
 func finish(job: RefCounted, wait := false) -> Dictionary:
+	if wait and _pump_active:
+		return {"finished": false, "success": false, "reason": "writer_reentrant_barrier"}
 	authorize(job)
 	if wait:
 		while not bool(job.response.get("finished", false)):
@@ -204,11 +263,14 @@ func finish(job: RefCounted, wait := false) -> Dictionary:
 	return job.response
 
 
-func drain() -> void:
+func drain() -> bool:
+	if _pump_active:
+		return false
 	while not _queue.is_empty():
 		if str(_queue[0].phase) == "PREPARED" and not bool(_queue[0].allow_promotion):
 			_fail(_queue[0], {"success": false, "reason": "unapproved_preparation_cancelled_at_barrier"})
 		pump(true)
+	return true
 
 
 func authorize(job: RefCounted) -> void:
@@ -220,6 +282,8 @@ func authorize(job: RefCounted) -> void:
 
 
 func finish_preparation(job: RefCounted, wait := false) -> Dictionary:
+	if wait and _pump_active:
+		return {"finished": false, "success": false, "reason": "writer_reentrant_barrier"}
 	if wait:
 		while not bool(job.preparation.get("finished", false)) and not bool(job.response.get("finished", false)):
 			if not pump(true):
@@ -239,17 +303,24 @@ func _guard_allows(entry: Dictionary) -> bool:
 
 
 func _fail(entry: Dictionary, result: Dictionary) -> void:
-	entry.failure = result
+	entry.failure = result.duplicate(false)
 	entry.job.run_stage("DISCARD")
 	entry.phase = "DISPOSING"
 
 
 func _complete(entry: Dictionary, result: Dictionary) -> void:
 	assert(entry == _queue[0])
-	var response := result.duplicate(true)
+	var owned_document := bool(result.get("success", false)) and result.has("document")
+	if owned_document:
+		assert(result.document.is_read_only(), "completed candidate is immutable")
+	var response := result.duplicate(not owned_document)
 	response["finished"] = true
 	response["identity"] = entry.identity.duplicate(true)
-	entry.job.response = response.duplicate(true)
+	entry.job.response = response.duplicate(not owned_document)
+	if owned_document:
+		# Callback root/identity remain separate; nested documents are already
+		# immutable and PackedByteArray retains its copy-on-write semantics.
+		entry.job.response["identity"] = entry.identity.duplicate(true)
 	if not bool(entry.job.preparation.get("finished", false)):
 		entry.job.preparation = response
 	_queue.pop_front()
@@ -259,6 +330,9 @@ func _complete(entry: Dictionary, result: Dictionary) -> void:
 	var on_complete: Callable = entry.on_complete
 	if on_complete.is_valid():
 		on_complete.call(response)
+	completed_count += 1
+	maximum_completion_latency_usec = maxi(maximum_completion_latency_usec,
+		Time.get_ticks_usec() - int(entry.get("queued_at_usec", Time.get_ticks_usec())))
 
 
 func _validate(validator: Callable, document: Dictionary) -> Dictionary:

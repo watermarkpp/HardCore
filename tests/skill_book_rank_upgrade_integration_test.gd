@@ -28,8 +28,8 @@ func _run() -> void:
 	result = PlayerState.learn_skill("火球术")
 	assert(result.begins_with("已学会"), "第一本书未学习：%s" % result)
 	assert(PlayerState.item_count("火球术") == books_before - 1, "第一本书未消费")
-	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("wizard.fireball", {}).get("base_rank", -1) == 1, "首学 rank 应为 1")
-	assert(PlayerState.attack_ring_slots[0] == "火球术", "首学未自动填入空技能槽")
+	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("hc.skill.wizard.fireball", {}).get("base_rank", -1) == 1, "首学 rank 应为 1")
+	assert(PlayerState.attack_ring_slots[0] == "hc.skill.wizard.fireball", "首学未自动填入空技能槽")
 	assert(PlayerState.attack_ring_slots[1].is_empty(), "首学不应占用多个技能槽")
 
 	PlayerState.level = 10
@@ -40,8 +40,8 @@ func _run() -> void:
 	PlayerState.level = 11
 	result = PlayerState.learn_skill("火球术")
 	assert(result.begins_with("技能提升"), "第二本书未升级到 rank2：%s" % result)
-	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("wizard.fireball", {}).get("base_rank", -1) == 2, "第二本应为 rank2")
-	assert(PlayerState.attack_ring_slots[0] == "火球术" and PlayerState.attack_ring_slots[1].is_empty(), "升级重复绑定了技能槽")
+	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("hc.skill.wizard.fireball", {}).get("base_rank", -1) == 2, "第二本应为 rank2")
+	assert(PlayerState.attack_ring_slots[0] == "hc.skill.wizard.fireball" and PlayerState.attack_ring_slots[1].is_empty(), "升级重复绑定了技能槽")
 
 	PlayerState.level = 15
 	books_before = PlayerState.item_count("火球术")
@@ -66,7 +66,7 @@ func _run() -> void:
 	assert(signal_count[0] == 0, "Failed learning emitted a success event")
 	result = PlayerState.learn_skill("火球术")
 	assert(result.begins_with("技能提升"), "第三本书未升级到 rank3：%s" % result)
-	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("wizard.fireball", {}).get("base_rank", -1) == 3, "第三本应为 rank3")
+	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("hc.skill.wizard.fireball", {}).get("base_rank", -1) == 3, "第三本应为 rank3")
 	assert(signal_count[0] == 1)
 	PlayerState.skills_changed.disconnect(counter)
 
@@ -74,7 +74,7 @@ func _run() -> void:
 	result = PlayerState.learn_skill("火球术")
 	assert(result.contains("最高等级"), "满级后未拒绝：%s" % result)
 	assert(PlayerState.item_count("火球术") == books_before, "满级拒绝时错误消费")
-	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("wizard.fireball", {}).get("base_rank", -1) == 3, "满级拒绝不应改变 rank")
+	assert(PlayerState.skill_progression_snapshot().get("skills", {}).get("hc.skill.wizard.fireball", {}).get("base_rank", -1) == 3, "满级拒绝不应改变 rank")
 
 	# Wrong profession rejects without consuming.
 	PlayerState.profession = "战士"
@@ -97,7 +97,7 @@ func _run() -> void:
 	# SkillDataLoader identity used by legacy names must be stable.
 	assert(SkillDataLoader.stable_skill_id("火球术") == "wizard.fireball", "技能书中文名映射不稳定")
 	assert(
-		not PlayerState.skill_progression_snapshot().get("skills", {}).get("wizard.fireball", {}).has("current_proficiency"),
+		not PlayerState.skill_progression_snapshot().get("skills", {}).get("hc.skill.wizard.fireball", {}).has("current_proficiency"),
 		"技能书升级不应产生熟练度"
 	)
 

@@ -2,6 +2,18 @@ extends Node
 
 signal expansion_state_changed(package_id: String, enabled: bool)
 signal initial_load_finished(success: bool)
+signal feature_catalog_changed
+
+const FeatureCatalog := preload("res://scripts/features/compilation/feature_catalog.gd")
+const FeatureAuthority := preload("res://scripts/features/adapters/feature_authority.gd")
+const PlainGraph := preload("res://scripts/features/contracts/plain_graph.gd")
+const FEATURE_REGISTRY := "res://assets/data/features/module_registry.json"
+const FEATURE_MODULE_PATHS := ["res://assets/data/features/numeric_fixture.json", "res://assets/data/features/ignite.json", "res://assets/data/features/socketing_fixture.json"]
+var _feature_catalog := FeatureCatalog.new()
+var _feature_authority: Dictionary = {}
+var _feature_bindings: Array = []
+var _enabled_feature_modules: Array = []
+var feature_load_errors: Array = []
 
 const MANIFESTS := {
 	"vanilla_core": "res://assets/data/layers/vanilla_core.json",
@@ -64,6 +76,109 @@ func reload_manifests() -> bool:
 
 func manifest(layer_id: String) -> Dictionary:
 	return manifests.get(layer_id, {})
+
+
+# The feature directory is another explicit authoring lane in ContentLayers.
+# It is loaded after autoload initialization, never by arbitrary script paths.
+func ensure_feature_catalog() -> bool:
+	if not _feature_catalog.catalog().is_empty():
+		return true
+	return reload_feature_catalog()
+
+
+func reload_feature_catalog() -> bool:
+	var registry := _read_json(FEATURE_REGISTRY)
+	var errors: Array[String] = []
+	var compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
+	if not compiler._keys(registry, ["schema_version", "modules", "bindings"], [], errors, "feature_registry") \
+		or registry.get("schema_version") != 1 or not registry.get("modules") is Array or not registry.get("bindings") is Array:
+		feature_load_errors = ["invalid_feature_registry"]
+		return false
+	var authority := FeatureAuthority.build()
+	var modules: Array = []
+	for entry: Variant in registry.modules:
+		if not entry is Dictionary or not compiler._keys(entry, ["module_id", "path"], [], errors, "feature_module_entry"):
+			continue
+		if entry.path not in FEATURE_MODULE_PATHS:
+			errors.append("untrusted_feature_module_path:" + str(entry.path))
+			continue
+		var module := _read_json(entry.path)
+		if module.get("module_id") != entry.module_id:
+			errors.append("feature_module_identity:" + str(entry.module_id))
+		modules.append(module)
+	var candidate := FeatureCatalog.new()
+	if not errors.is_empty() or not candidate.publish(modules, [], authority):
+		feature_load_errors = errors + candidate.last_errors
+		return false
+	var bindings := PlainGraph.capture(registry.bindings)
+	if not bool(bindings.success):
+		feature_load_errors = bindings.errors
+		return false
+	var seen := {}
+	for binding: Variant in bindings.value:
+		if not binding is Dictionary:
+			errors.append("feature_binding_not_dictionary")
+			continue
+		var kind: Variant = binding.get("kind")
+		var key: String = "item_id" if kind in ["item", "embedded_item"] else ("skill_id" if kind == "skill" else "rule_id")
+		if kind not in ["item", "embedded_item", "skill", "rule"] or not compiler._keys(binding, ["module_id", "kind", "mechanic_id", key], [], errors, "feature_binding"):
+			continue
+		var mechanic: Variant = candidate.catalog().mechanics.get(binding.mechanic_id)
+		if not mechanic is Dictionary or mechanic.module_id != binding.module_id:
+			errors.append("feature_binding_unknown_mechanic")
+		if kind in ["item", "embedded_item"] and (not binding.item_id is String \
+			or preload("res://scripts/identity/entity_registry.gd").resolve(binding.item_id, "item").is_empty() \
+			or GameData.get_entity_record(binding.item_id).is_empty()):
+			errors.append("feature_binding_unknown_item")
+		if kind == "skill" and binding.skill_id not in authority.skill_ids:
+			errors.append("feature_binding_unknown_skill")
+		if kind == "rule" and (not binding.rule_id is String or not compiler._stable_id(binding.rule_id)):
+			errors.append("feature_binding_unknown_rule")
+		var handle := JSON.stringify(binding)
+		if seen.has(handle):
+			errors.append("duplicate_feature_binding")
+		seen[handle] = true
+	if not errors.is_empty():
+		feature_load_errors = errors
+		return false
+	var enabled: Array = []
+	for id: String in candidate.catalog().modules:
+		if bool(candidate.catalog().modules[id].get("default_enabled", false)):
+			enabled.append(id)
+	_feature_catalog = candidate
+	_feature_authority = authority
+	_feature_bindings = bindings.value
+	_enabled_feature_modules = enabled
+	feature_load_errors = []
+	feature_catalog_changed.emit()
+	return true
+
+
+func set_feature_module_enabled(id: String, enabled: bool) -> bool:
+	if not ensure_feature_catalog() or not _feature_catalog.catalog().modules.has(id):
+		return false
+	var candidate := _enabled_feature_modules.duplicate()
+	if enabled == candidate.has(id):
+		return false
+	if enabled:
+		candidate.append(id)
+	else:
+		candidate.erase(id)
+	for selected: String in candidate:
+		for dependency: String in _feature_catalog.catalog().modules[selected].requires:
+			if dependency not in candidate:
+				return false
+	candidate.sort()
+	_enabled_feature_modules = candidate
+	feature_catalog_changed.emit()
+	return true
+
+
+func feature_configuration() -> Dictionary:
+	if not ensure_feature_catalog():
+		return {}
+	return {"catalog":_feature_catalog.catalog(), "authority":_feature_authority,
+		"bindings":_feature_bindings, "enabled_modules":_enabled_feature_modules.duplicate()}
 
 
 func vanilla_dataset(dataset_id: String) -> String:

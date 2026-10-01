@@ -144,9 +144,9 @@ func setup_ground_unit_projectile(
 	)
 	skill_id = resolution_skill_id
 	if skill_id.is_empty() and PlayerState != null:
-		if PlayerState.profession == "法师":
+		if PlayerState.profession_id == "hc.profession.wizard":
 			skill_id = "wizard.fireball"
-		elif PlayerState.profession == "道士":
+		elif PlayerState.profession_id == "hc.profession.taoist":
 			skill_id = "taoist.soul_fire_talisman"
 	configure_maximum_travel_distance_gu(maximum_distance_gu)
 	release_id = (

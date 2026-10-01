@@ -71,8 +71,12 @@ func _run() -> void:
 		var enemy := EnemyActor.new()
 		enemy.setup(canonical_data, player, false)
 		add_child(enemy)
+		# This manual atlas probe owns movement; stop the independent sleep timer.
+		enemy._leave_background_deep_sleep()
 		enemy.set_physics_process(false)
 		await get_tree().process_frame
+		assert(not enemy.is_physics_processing(), "manual art fixture unexpectedly resumed physics")
+		assert(enemy._background_wakeup_timer == null or enemy._background_wakeup_timer.is_stopped(), "manual art fixture left a wakeup timer active")
 		player.global_position = enemy.global_position + Vector2(200, 0)
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
 		var sprite: Sprite2D = visual.get_node("BodySprite")

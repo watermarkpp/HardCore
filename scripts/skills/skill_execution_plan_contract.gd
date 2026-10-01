@@ -133,7 +133,7 @@ static func build_canonical_plan(
 	var skill_id := SkillDataLoaderScript.stable_skill_id(
 		str(request.get("skill_id", ""))
 	)
-	var definition := SkillDataLoaderScript.skill(skill_id)
+	var definition := preload("res://scripts/features/contracts/action_config_lease.gd").resolve_definition(skill_id, request.get("action_config_lease"))
 	var accepted := bool(legacy_result.get("accepted", false))
 	var reason := normalize_reason(str(legacy_result.get("reason", "")))
 	var release_id := str(
@@ -588,7 +588,7 @@ static func build_release_snapshot(
 		):
 			direction_ground_gu = Vector2(1.0, -1.0).normalized()
 		var projectile_geometry: Dictionary = (
-			SkillDataLoaderScript.skill(skill_id).get("geometry", {})
+			preload("res://scripts/features/contracts/action_config_lease.gd").resolve_definition(skill_id, context.get("action_config_lease")).get("geometry", {})
 		)
 		var maximum_distance_gu := maxf(
 			0.0,

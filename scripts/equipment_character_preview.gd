@@ -29,7 +29,8 @@ const PROFESSION_IDS := {
 	"法师": "wizard",
 	"道士": "taoist",
 }
-const PAPER_LAYER_SLOTS := ["衣服", "武器", "头盔"]
+const PAPER_LAYER_SLOTS := ["hc.slot.armor", "hc.slot.weapon", "hc.slot.helmet"]
+const SlotIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
 const ORIGINAL_CANVAS_SIZE := Vector2(168.0, 199.0)
 const DEFAULT_PREVIEW_SCALE := 1.22
 const FOOT_STAGE_CENTER := Vector2(84.0, 186.0)
@@ -168,16 +169,16 @@ func refresh() -> void:
 		layer["equipmentSlot"] = slot
 		layer["layerKind"] = _slot_layer_kind(slot)
 		_paper_layers.append(layer)
-		if slot == "衣服":
+		if slot == "hc.slot.armor":
 			_body_layer = layer
 			_body_texture = texture
 			_foot_stage_center = _vector_from_value(
 				layer.get(BODY_FOOT_CONTACT_FIELD, _manifest_foot_anchor),
 				_manifest_foot_anchor
 			)
-		elif slot == "武器":
+		elif slot == "hc.slot.weapon":
 			_weapon_texture = texture
-		elif slot == "头盔":
+		elif slot == "hc.slot.helmet":
 			_helmet_texture = texture
 	_apply_classic_head_erase_mask()
 	_recalculate_composition_opaque_bounds()
@@ -473,7 +474,7 @@ func _world_avatar_mappings(document: Dictionary) -> Dictionary:
 		var item_value: Variant = items_value[item_key]
 		if not item_value is Dictionary:
 			continue
-		var slot := str(item_value.get("slot", ""))
+		var slot := SlotIdentity.import_slot(item_value.get("slot", ""))
 		if not (slot in PAPER_LAYER_SLOTS):
 			continue
 		var action := _world_item_idle_action(item_value, slot)
@@ -503,7 +504,7 @@ func _world_item_idle_action(item: Dictionary, slot: String) -> Dictionary:
 	if not world_wear is Dictionary:
 		return {}
 	var appearance: Dictionary = {}
-	if slot == "头盔":
+	if slot == "hc.slot.helmet":
 		var helmet_value: Variant = world_wear.get("helmetAppearance", {})
 		if helmet_value is Dictionary:
 			appearance = helmet_value
@@ -778,7 +779,7 @@ func _classic_head_patch_for_equipped(equipped: Dictionary) -> Dictionary:
 		return {}
 	if str(patch.get("contractId", "")) != CLASSIC_HEAD_PATCHES_CONTRACT_ID:
 		return {}
-	if str(patch.get("slot", "")) != str(PAPER_LAYER_SLOTS[2]):
+	if SlotIdentity.import_slot(patch.get("slot", "")) != str(PAPER_LAYER_SLOTS[2]):
 		return {}
 	var result: Dictionary = patch.duplicate(true)
 	result["layerAssetKind"] = "classic_flattened_head_patch"

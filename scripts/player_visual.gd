@@ -23,7 +23,7 @@ const CLIENT_EFFECTS := {
 	},
 }
 const CLIENT_EFFECT_ACTOR_OFFSET := Vector2(ArtSpec.WARRIOR_SOURCE_FOOT_ANCHOR - ArtSpec.WARRIOR_FOOT_ANCHOR)
-const SUPPORTED_PROFESSIONS := ["战士", "法师", "道士"]
+const SUPPORTED_PROFESSIONS := ["hc.profession.warrior", "hc.profession.wizard", "hc.profession.taoist"]
 ## Keep the legacy local player silent: audited cues are dispatched to the
 ## shared AudioRuntimeService pool so simultaneous actors do not restart one
 ## another and source identity remains event-ID based.
@@ -200,7 +200,9 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	_action_remaining = maxf(0.0, _action_remaining - delta)
-	var moving := actor.velocity.length_squared() > 0.01
+	# Collision stops displacement, while a held and unlocked movement input
+	# still owns locomotion presentation. Distance/run admission stays in Player.
+	var moving := actor.movement_input_active or actor.velocity.length_squared() > 0.01
 	var locomotion := str(actor.get("locomotion_state"))
 	if locomotion != "walk" and locomotion != "run":
 		locomotion = "run" if actor.velocity.length_squared() > 25.0 else "walk"
@@ -357,9 +359,11 @@ func play_passive_proc_effect(effect_name: String, duration := 0.24) -> void:
 
 
 func _resolved_direction_row() -> int:
-	# Locomotion must use real screen displacement. Actions use the combat-facing
-	# vector captured from the selected target at action start.
-	var direction := actor.actual_motion_facing if current_state in ["walk", "run"] else actor.facing
+	# Player updates movement_facing from accepted motion or the blocked input.
+	# Direct presentation fixtures without input retain their motion-facing path.
+	var direction := actor.facing
+	if current_state in ["walk", "run"]:
+		direction = actor.movement_facing if actor.movement_input_active else actor.actual_motion_facing
 	return ArtSpec.mir2_client_direction_row(direction)
 
 
@@ -392,7 +396,7 @@ func refresh_profession() -> void:
 
 
 func _update_visibility() -> void:
-	visible = PlayerState.profession in SUPPORTED_PROFESSIONS and _formal_base_loaded
+	visible = PlayerState.profession_id in SUPPORTED_PROFESSIONS and _formal_base_loaded
 
 
 func _marker(marker_name: String) -> Marker2D:
@@ -736,8 +740,8 @@ func _refresh_equipment_visuals(force := false) -> void:
 		return
 	# Durability changes keep the worn items and their art. Avoid re-resolving
 	# every layer and clearing the texture cache on each confirmed physical hit.
-	var signature: Array = [PlayerState.profession, PlayerState.gender]
-	for slot: String in ["武器", "衣服", "头盔"]:
+	var signature: Array = [PlayerState.profession_id, PlayerState.gender]
+	for slot: String in ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet"]:
 		var record := _equipped_record(slot)
 		signature.append(record.get("item_id", -1))
 		signature.append(record.get("itemId", -1))
@@ -746,12 +750,12 @@ func _refresh_equipment_visuals(force := false) -> void:
 	if not force and signature == _equipment_visual_signature:
 		return
 	_equipment_visual_signature = signature
-	var base_appearance := GameData.player_base_appearance(PlayerState.profession, PlayerState.gender)
+	var base_appearance := GameData.player_base_appearance(PlayerState.profession_id, PlayerState.gender)
 	_base_action_textures = _load_appearance_actions(base_appearance)
 	_formal_base_loaded = not _base_action_textures.is_empty()
-	var weapon := _equipped_record("武器")
-	var armor := _equipped_record("衣服")
-	var helmet := _equipped_record("头盔")
+	var weapon := _equipped_record("hc.slot.weapon")
+	var armor := _equipped_record("hc.slot.armor")
+	var helmet := _equipped_record("hc.slot.helmet")
 	var weapon_item := _item_record_for_equipped(weapon)
 	var armor_item := _item_record_for_equipped(armor)
 	var helmet_item := _item_record_for_equipped(helmet)
@@ -1060,7 +1064,7 @@ func _dispatch_audited_action_audio() -> void:
 
 
 func audio_classic_weapon_shape() -> int:
-	var weapon := _equipped_record("武器")
+	var weapon := _equipped_record("hc.slot.weapon")
 	if weapon.is_empty():
 		return 0
 	return _audio_classic_weapon_shape_for_record(weapon)
@@ -1083,7 +1087,7 @@ func _audio_classic_weapon_shape_for_record(weapon: Dictionary) -> int:
 
 
 func _weapon_audio_event_id() -> String:
-	var weapon := _equipped_record("武器")
+	var weapon := _equipped_record("hc.slot.weapon")
 	if weapon.is_empty():
 		return "player.weapon.fist.swing"
 	# MirClient selects the attack sample from (m_btWeapon div 2), not from
@@ -1124,7 +1128,7 @@ func _audio_stable_equipped_item_id(record: Dictionary) -> int:
 
 
 func _weapon_swing_stream() -> AudioStream:
-	var weapon := _equipped_record("武器")
+	var weapon := _equipped_record("hc.slot.weapon")
 	if weapon.is_empty():
 		return PresentationAssets.audio("fist")
 	if "木剑" in str(weapon.get("name", "")):

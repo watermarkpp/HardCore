@@ -1,5 +1,7 @@
 extends Node
 
+const StageFixture := preload("res://tests/helpers/ordered_json_stage_fixture.gd")
+
 func _ready() -> void:
 	_run.call_deferred()
 
@@ -30,7 +32,7 @@ func _run() -> void:
 	var anchor: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(38.5, 13.5))
 	game._set_player_world_position(anchor)
 	var first := _prepare(game, anchor, 7)
-	_start_committing(game, first)
+	await _start_committing(game, first)
 	assert(PlayerState.gold == 0)
 	# Fault at actual generation boundary; preserve an already-approved durable
 	# transaction instead of falsely cancelling it after the worker committed.
@@ -40,7 +42,7 @@ func _run() -> void:
 	assert(game._prepared_loot_collection.is_empty())
 	game._zone_generation -= 1 # Restore this identity-only fault fixture.
 	var second := _prepare(game, anchor, 11)
-	_start_committing(game, second)
+	await _start_committing(game, second)
 	assert(PlayerState.gold == 7)
 	game.free() # Native GameRoot._exit_tree must consume its committing receipt.
 	assert(PlayerState.gold == 18 and second.completed and second.completion.success)
@@ -72,8 +74,6 @@ func _prepare(game: Node, anchor: Vector2, amount: int) -> Dictionary:
 	return plan
 
 func _start_committing(game: Node, plan: Dictionary) -> void:
-	assert(game._poll_prepared_loot_collection().get("pending", false))
-	assert(plan.writer.job.stage_result(true).result.success)
-	assert(game._poll_prepared_loot_collection().get("pending", false))
-	assert(plan.writer.job.stage_result(true).result.success)
+	await StageFixture.await_durable_promotion(PlayerState._json_persistence, plan.writer.job,
+		game._poll_prepared_loot_collection, get_tree())
 	assert(not plan.completed)

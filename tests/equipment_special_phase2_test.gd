@@ -35,8 +35,8 @@ func _run() -> void:
 	assert(PlayerState.has_special_effect("magic_blood"), "魔血三件套没有形成运行效果")
 	assert(int(PlayerState.computed_stats.get("max_hp", 0)) == base_hp + expected_magic_power, "魔血三件套没有按75+50将MP转为HP")
 	assert(int(PlayerState.computed_stats.get("max_mp", 0)) == base_mp - expected_magic_power, "魔血套装MP扣减错误")
-	var magic_necklace: Dictionary = PlayerState.equipment["项链"]
-	PlayerState.damage_equipment_durability("项链", int(magic_necklace.get("max_durability", 1)))
+	var magic_necklace: Dictionary = PlayerState.equipment["hc.slot.necklace"]
+	PlayerState.damage_equipment_durability("hc.slot.necklace", int(magic_necklace.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("max_hp", 0)) == base_hp + 50, "零耐久魔血组件仍计入三件套或没有撤销全套奖励")
 
 	_reset_level_50()
@@ -56,8 +56,8 @@ func _run() -> void:
 	var hp_before: int = int(game.player.current_hp)
 	assert(game._apply_physical_hit(enemies[0], 100), "虹魔近战测试攻击失败")
 	assert(game.player.current_hp == hp_before + 9, "虹魔近战吸血没有按9%恢复")
-	var rainbow_necklace: Dictionary = PlayerState.equipment["项链"]
-	PlayerState.damage_equipment_durability("项链", int(rainbow_necklace.get("max_durability", 1)))
+	var rainbow_necklace: Dictionary = PlayerState.equipment["hc.slot.necklace"]
+	PlayerState.damage_equipment_durability("hc.slot.necklace", int(rainbow_necklace.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("life_steal_percent", 0)) == 5, "零耐久虹魔项链没有撤销4%吸血")
 	assert(int(PlayerState.computed_stats.get("accuracy", 0)) == base_accuracy, "虹魔组件破损后仍保留全套准确奖励")
 
@@ -82,8 +82,8 @@ func _run() -> void:
 	hp_before = game.player.current_hp
 	game._on_special_action_pressed("recovery_skill")
 	assert(game.player.current_hp > hp_before and game.player.current_mp == 5, "防御戒指没有消耗5MP并治疗")
-	var recovery_ring: Dictionary = PlayerState.equipment["左戒指"]
-	PlayerState.damage_equipment_durability("左戒指", int(recovery_ring.get("max_durability", 1)))
+	var recovery_ring: Dictionary = PlayerState.equipment["hc.slot.ring_left"]
+	PlayerState.damage_equipment_durability("hc.slot.ring_left", int(recovery_ring.get("max_durability", 1)))
 	assert(PlayerState.available_special_actions().is_empty() and not game.hud.special_action_button.visible, "主动戒指零耐久后手机入口仍然存在")
 
 	assert(not PlayerState.has_special_effect("memory") and not PlayerState.has_special_effect("prayer"), "记忆/祈祷多人效果被擅自启用")

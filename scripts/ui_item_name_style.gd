@@ -62,6 +62,7 @@ static func canonical_id(record: Dictionary) -> int:
 static func display_name(item: Dictionary, instance: Dictionary = {}) -> String:
 	var plain := _plain_display_name(item, instance)
 	var actual := instance if not instance.is_empty() else item
+	actual = preload("res://scripts/items/item_extension_codec.gd").base_record(actual)
 	if actual.has("drop_instance_contract_id"):
 		var catalog := GameData.get_item_rules_record({"item_id": canonical_id(actual)})
 		if preload("res://scripts/item_drop_instance_rules.gd").is_affixed_instance(actual, catalog):

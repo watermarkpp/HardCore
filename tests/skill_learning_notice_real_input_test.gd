@@ -60,7 +60,9 @@ func find_warrior_skill_book() -> String:
 		var book_name := str(item.get("name", ""))
 		if book_name.is_empty():
 			continue
-		var skill := GameData.get_skill(book_name, 0)
+		var skill_id := str(item.get("learnSkillId", ""))
+		var skill := GameData.get_skill(skill_id, 0)
+		if skill.is_empty(): continue
 		var profession := str(skill.get("profession", ""))
 		if profession in ["", "战士"]:
 			return book_name
@@ -68,7 +70,10 @@ func find_warrior_skill_book() -> String:
 
 
 func place_books(book_name: String, copies: int) -> void:
-	var record := GameData.get_item(book_name)
+	var skill_id := preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(book_name)
+	var book_id: String = GameData.skill_book_entity_id(skill_id)
+	var record := GameData.get_entity_record(book_id)
+	expect(not book_id.is_empty() and not record.is_empty(), "fixture uses the actual registered book catalog")
 	for _index in range(copies):
 		var instance := PlayerState._make_item_instance(book_name, record)
 		if not instance.is_empty():
@@ -139,8 +144,8 @@ func _run() -> void:
 	# --- Quick-slot entry reports the SAME central text ------------------------
 	reset_fixture_state()
 	place_books(book_name, 1)
-	PlayerState.quick_item_slots[0] = book_name
-	var quick_result := PlayerState.use_quick_item_slot(0, book_name)
+	PlayerState.quick_item_slots[0] = GameData.item_entity_id(book_name)
+	var quick_result := PlayerState.use_quick_item_slot(0, GameData.item_entity_id(book_name))
 	expect(bool(quick_result.get("ok", false)), "quick-slot learn succeeds")
 	expect(str(quick_result.get("kind", "")) == "skill_book", "quick-slot learn classifies as skill_book")
 	var quick_message := str(quick_result.get("message", ""))

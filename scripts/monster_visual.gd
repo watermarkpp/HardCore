@@ -530,7 +530,10 @@ func _update_animation_frame(delta: float) -> void:
 		_elapsed = 0.0
 		_last_state = current_state
 	_elapsed += delta
-	var frame_count: int = maxi(1, MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state)))
+	var frame_count: int = (
+		actor._canonical_attack_frame_count(1) if current_state == "attack"
+		else maxi(1, MonsterAnimationPolicy.frame_count(active_resources, StringName(current_state)))
+	)
 	if _death_pose_held and current_state == "death":
 		current_frame = frame_count - 1
 	elif current_state == "attack":
@@ -540,7 +543,7 @@ func _update_animation_frame(delta: float) -> void:
 	elif current_state == "death":
 		current_frame = HCM30WalkPhaseScript.action_frame_index(_death_remaining, _hc_m30_death_duration, frame_count)
 	elif current_state == "walk" and _hc_m30_melee_tick == Engine.get_physics_frames():
-		current_frame = _hc_m30_walk.frame_index(frame_count)
+		current_frame = mini(frame_count - 1, int(floor(fposmod(_hc_m30_walk.phase + _blocked_walk_phase, 1.0) * float(frame_count))))
 	else:
 		var fps: float = MonsterAnimationPolicy.loop_fps(StringName(current_state))
 		current_frame = int(floor(_elapsed * fps)) % frame_count
@@ -1222,10 +1225,7 @@ func _start_attack_visual(duration: float) -> void:
 	# the canonical frame metadata. Hot/cold resource residency can never
 	# move the phase boundary mid-action; residency only decides whether the
 	# overlay is drawn, never when the phase becomes true.
-	var frame_count_for_phase := maxi(
-		1,
-		MonsterAnimationPolicy.frame_count(active_resources, &"attack")
-	)
+	var frame_count_for_phase := actor._canonical_attack_frame_count(1)
 	_attack_strike_threshold_s = duration * 2.0 / float(maxi(frame_count_for_phase, 4))
 	if visible and not SourceFrames.profile_for_id(actor.monster_id).is_empty() and actor.monster_id != 224:
 		var overlay := AttackOverlay.new()
@@ -1500,6 +1500,22 @@ var _hc_m30_walk: HCM30WalkPhase = HCM30WalkPhaseScript.new()
 var _hc_m30_melee_tick: int = -1
 var _hc_m30_last_visual_process_frame: int = -1
 var _hc_m30_stride_configured: bool = false
+var _locomotion_intent_tick := -1
+var _locomotion_intent := false
+var _blocked_walk_phase := 0.0
+
+func hc_m30_finish_locomotion_tick(intent: bool, physics_delta: float) -> void:
+	_locomotion_intent_tick = Engine.get_physics_frames()
+	_locomotion_intent = intent
+	if not intent or actor.actual_ground_motion_gu.length_squared() > 0.00000001:
+		return
+	if _death_remaining > 0.0 or _death_pose_held or _hit_remaining > 0.0 or _attack_logic_active():
+		return
+	var count := maxi(1, MonsterAnimationPolicy.frame_count(active_resources, &"walk"))
+	# Blocked locomotion is presentation intent, never manufactured distance.
+	# Its phase advances once on the owner's native physics tick, so engine
+	# pause freezes it and control/attack holds leave this phase untouched.
+	_blocked_walk_phase = fposmod(_blocked_walk_phase + maxf(0.0, physics_delta) * MonsterAnimationPolicy.loop_fps(&"walk") / float(count), 1.0)
 
 func hc_m30_begin_melee_tick() -> void:
 	_hc_m30_melee_tick = Engine.get_physics_frames()
@@ -1525,6 +1541,8 @@ func hc_m30_accept_ground_motion(distance_gu: float) -> void:
 		_attack_remaining = 0.0
 
 func _hc_m30_is_walking() -> bool:
+	if _locomotion_intent_tick == Engine.get_physics_frames() and _locomotion_intent:
+		return true
 	if _hc_m30_melee_tick == Engine.get_physics_frames():
 		return _hc_m30_walk.moving_on(Engine.get_physics_frames())
 	# Charmed/special/legacy movement did not enter the new ordinary-melee tick.
@@ -1542,6 +1560,9 @@ func hc_m30_motion_snapshot() -> Dictionary:
 		"melee_tick": _hc_m30_melee_tick,
 		"last_motion_tick": _hc_m30_walk.last_motion_tick,
 		"walk_phase": _hc_m30_walk.phase,
+		"locomotion_intent": _locomotion_intent,
+		"locomotion_intent_tick": _locomotion_intent_tick,
+		"blocked_walk_phase": _blocked_walk_phase,
 		"reference_cycle_gu": _hc_m30_walk.cycle_gu,
 		"actual_distance_gu": _hc_m30_walk.total_ground_distance_gu,
 		"state": current_state, "frame": current_frame,

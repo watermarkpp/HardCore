@@ -1,6 +1,8 @@
 class_name EquipmentEnhancementRules
 extends RefCounted
 
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+
 const CONTRACT_ID := "equipment.enhancement.instance.v1"
 const RULES_CONTRACT_ID := "equipment.enhancement.rules.v1"
 const RULES_PATH := "res://assets/data/equipment_enhancement_rules_v1.json"
@@ -30,9 +32,9 @@ static func _config() -> Dictionary:
 
 
 static func max_stage(category: String) -> int:
-	match category:
-		"武器": return 7
-		"盔甲", "衣服", "头盔": return 3
+	match ItemCategories.import_legacy_category(category):
+		"hc.item_category.weapon": return 7
+		"hc.item_category.armor", "hc.item_category.helmet": return 3
 	return 0
 
 
@@ -48,7 +50,7 @@ static func accessory_grade_penalty_bps(category: String, next_stage: int, targe
 	var cap := max_stage(category)
 	if config.is_empty() or next_stage < 1 or next_stage > cap or target_grade < 0 or target_grade > 3 or accessory_grade < 0 or accessory_grade > 3:
 		return -1
-	var rates: Array = config.weapon_accessory_penalty_by_stage_bps if category == "武器" else config.armor_accessory_penalty_by_stage_bps
+	var rates: Array = config.weapon_accessory_penalty_by_stage_bps if ItemCategories.import_legacy_category(category) == "hc.item_category.weapon" else config.armor_accessory_penalty_by_stage_bps
 	return maxi(0, target_grade - accessory_grade) * int(rates[next_stage - 1])
 
 
@@ -60,8 +62,8 @@ static func quote_probability(category: String, next_stage: int, purity: int, ta
 	var penalty_b := accessory_grade_penalty_bps(category, next_stage, target_grade, accessory_b_grade)
 	if config.is_empty() or next_stage < 1 or next_stage > cap or iron_bonus < 0 or penalty_a < 0 or penalty_b < 0:
 		return {}
-	var bases: Array = config.weapon_stage_base_bps if category == "武器" else config.armor_stage_base_bps
-	var scale := int(config.weapon_difficulty_scale_bps) if category == "武器" else int(config.armor_difficulty_scale_bps)
+	var bases: Array = config.weapon_stage_base_bps if ItemCategories.import_legacy_category(category) == "hc.item_category.weapon" else config.armor_stage_base_bps
+	var scale := int(config.weapon_difficulty_scale_bps) if ItemCategories.import_legacy_category(category) == "hc.item_category.weapon" else int(config.armor_difficulty_scale_bps)
 	var base := int(bases[next_stage - 1])
 	var raw := base + iron_bonus - penalty_a - penalty_b
 	var scaled := (raw * scale + 5000) / 10000
@@ -80,7 +82,7 @@ static func forge_gold_cost(category: String, next_stage: int) -> int:
 	var config := _config()
 	if config.is_empty() or next_stage < 1 or next_stage > max_stage(category):
 		return -1
-	var costs: Array = config.weapon_gold_cost if category == "武器" else config.armor_gold_cost
+	var costs: Array = config.weapon_gold_cost if ItemCategories.import_legacy_category(category) == "hc.item_category.weapon" else config.armor_gold_cost
 	return int(costs[next_stage - 1])
 
 
@@ -107,7 +109,7 @@ static func forge_stage(instance: Dictionary) -> int:
 
 
 static func validate_enhancement(enhancement: Variant, category: String) -> bool:
-	if not enhancement is Dictionary or enhancement.size() != 2 or str(enhancement.get("contract_id", "")) != CONTRACT_ID:
+	if max_stage(category) <= 0 or not enhancement is Dictionary or enhancement.size() != 2 or str(enhancement.get("contract_id", "")) != CONTRACT_ID:
 		return false
 	var forge: Variant = enhancement.get("forge", null)
 	if not forge is Dictionary or forge.size() != 3:
@@ -124,7 +126,7 @@ static func validate_enhancement(enhancement: Variant, category: String) -> bool
 		return false
 	var totals := {}
 	for stat: Variant in history:
-		if category == "武器":
+		if ItemCategories.import_legacy_category(category) == "hc.item_category.weapon":
 			if str(stat) not in WEAPON_STATS:
 				return false
 			totals[str(stat)] = int(totals.get(str(stat), 0)) + 1

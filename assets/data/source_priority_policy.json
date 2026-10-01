@@ -25,6 +25,7 @@
     "quarantineCannotEnterRuntime": true
   },
   "routing": {
+    "item_category_identity_and_slot_relations": "item_categories",
     "pixels_frames_maps_audio": "client_assets",
     "client_animation_offsets_rendering_protocol": "client_rules",
     "equipment_attributes_requirements_weights_affinity": "equipment_attributes",
@@ -33,9 +34,48 @@
     "monster_attributes_timing_life_flags": "monster_attributes_21cq",
     "combat_movement_ai_timing_protocol": "server_rules",
     "combat_movement_ai_projectile_distance_units": "combat_units",
-    "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability"
+    "monster_drop_probability_and_post_rng_overflow": "monster_drop_probability",
+    "framework_default_off_test_item_identity_and_rules": "framework_fixture_items"
   },
   "lanes": {
+    "item_categories": {
+      "description": "Project category identity metadata and exact equipment slot relations; existing item attributes remain in their original authorities",
+      "sources": [
+        {
+          "distribution": "hardcore.identity.categories",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/identity/item_categories_v1.json",
+          "contractId": "hardcore.item_categories.v1",
+          "authority": "project_master",
+          "sourceKind": "tracked_authoring_source",
+          "originalPath": "assets/data/identity/item_categories_v1.json",
+          "evidenceSha256": "6DD144266AA3F0EC91338C0C3F8A4D8D41788B8DB81BE1AE83C2FD29834CAF04"
+        }
+      ]
+    },
+    "framework_fixture_items": {
+      "description": "User-authorized default-off framework fixture identity and rules; no production loot or commercial balance",
+      "sources": [
+        {
+          "distribution": "hardcore.framework.fixture",
+          "tier": "primary",
+          "order": 0,
+          "weight": 100,
+          "eligible": true,
+          "catalogRequired": false,
+          "rootPrefix": "assets/data/features/socketing_fixture_items.json",
+          "contractId": "hc.socketing.fixture.items.v1",
+          "authority": "project_master",
+          "sourceKind": "tracked_authoring_source",
+          "originalPath": "assets/data/features/socketing_fixture_items.json",
+          "evidenceSha256": "AE2C7ADBCF0EE9ED8E88F4E2DD8D4C4E2C55AF6B49A7BCFFC0828C8A29E23043"
+        }
+      ]
+    },
     "monster_attributes_21cq": {
       "description": "User-authoritative 21CQ monster attributes, timing and life flags only",
       "scopeExclusions": {

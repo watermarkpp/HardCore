@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_category_identity_test.tscn','tests/equipment_enhancement_rules_test.tscn','tests/equipment_enhancement_grade_test.tscn','tests/equipment_enhancement_display_test.tscn','tests/equipment_enhancement_transaction_test.tscn','tests/workbench_any_slot_test.tscn','tests/equipment_enhancement_panel_flow_test.tscn','tests/equipment_inventory_slot_swap_test.tscn','tests/equipment_durability_policy_test.tscn','tests/item_drop_instance_rules_test.tscn','tests/item_drop_instance_persistence_test.tscn','tests/pricing_authority_test.tscn','tests/framework/equipment_identity_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/socket_gem_identity_test.tscn','tests/framework/socket_transaction_test.tscn','tests/framework/relic_identity_relation_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/skill_book_identity_test.tscn','tests/framework/temporary_item_buff_identity_test.tscn','tests/framework/item_use_action_identity_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 20,
+  "failed": 1,
+  "status": "FAIL"
+}

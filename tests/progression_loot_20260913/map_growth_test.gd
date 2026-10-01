@@ -27,7 +27,7 @@ func _run() -> void:
 		var base := PlayerState.base_stats.duplicate()
 		game.player.current_hp = 10
 		var water := GameData.get_item_record(910001)
-		assert(PlayerState.apply_temporary_item_buff(water.name, water.effectProfile).ok)
+		assert(PlayerState.apply_temporary_item_buff(GameData.item_entity_id(water), water.effectProfile).ok)
 		assert(game.player.max_hp == base.max_hp+50 and game.player.current_hp == 10)
 		# Current authored runtime maps; retired service-only 217 is not playable.
 		var destination := 911001 if index % 2 == 0 else 910004

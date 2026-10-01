@@ -38,37 +38,37 @@ func _run() -> void:
 
 	# 绑定校验
 	assert(PlayerState.quick_item_slots == ["", "", "", ""], "初始快捷物品槽不是四空槽")
-	var bad_index := PlayerState.assign_quick_item_slot(4, "太阳水")
+	var bad_index := PlayerState.assign_quick_item_slot(4, GameData.item_entity_id("太阳水"))
 	assert(not bool(bad_index.get("ok", false)), "越界槽位不应绑定成功")
 	PlayerState.add_item("太阳水", 2)
-	var assigned := PlayerState.assign_quick_item_slot(0, "太阳水")
+	var assigned := PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("太阳水"))
 	assert(bool(assigned.get("ok", false)), "合法绑定失败")
-	assert(PlayerState.quick_item_slots[0] == "太阳水", "绑定未写入槽位")
+	assert(PlayerState.quick_item_slots[0] == GameData.item_entity_id("太阳水"), "绑定未写入槽位")
 	assert(
 		str(assigned.get("change", {}).get("contract_id", ""))
 		== PlayerState.QUICK_ITEM_SLOTS_CONTRACT_ID,
 		"change 合同 ID 不稳定"
 	)
-	assert(not bool(PlayerState.assign_quick_item_slot(1, "木剑").get("ok", false)), "非候选物品绑定未被拒绝")
+	assert(not bool(PlayerState.assign_quick_item_slot(1, GameData.item_entity_id("木剑")).get("ok", false)), "非候选物品绑定未被拒绝")
 	assert(PlayerState.quick_item_slots[1].is_empty(), "被拒绑定污染了槽位")
 	assert(bool(PlayerState.assign_quick_item_slot(0, "").get("ok", false)), "清空槽位失败")
 	assert(PlayerState.quick_item_slots[0].is_empty(), "清空槽位未生效")
 
 	# 背包必须确有至少一件；库存耗尽不自动清绑定
 	PlayerState.reset_progress(false)
-	assert(not bool(PlayerState.assign_quick_item_slot(0, "太阳水").get("ok", false)), "背包无货时不应绑定")
+	assert(not bool(PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("太阳水")).get("ok", false)), "背包无货时不应绑定")
 	PlayerState.add_item("金创药(小量)", 1)
 	PlayerState.add_item("太阳水", 1)
-	assert(bool(PlayerState.assign_quick_item_slot(0, "太阳水").get("ok", false)), "有货时绑定失败")
-	var first_use := PlayerState.use_quick_item_slot(0, "太阳水")
+	assert(bool(PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("太阳水")).get("ok", false)), "有货时绑定失败")
+	var first_use := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("太阳水"))
 	assert(bool(first_use.get("ok", false)), "快捷使用失败：%s" % str(first_use.get("message", "")))
 	assert(str(first_use.get("kind", "")) == "consumable", "使用结果未报告消耗品类型")
 	assert(PlayerState.item_count("太阳水") == 0, "快捷使用未消耗")
-	assert(PlayerState.quick_item_slots[0] == "太阳水", "库存耗尽后绑定被错误清空")
-	var depleted := PlayerState.use_quick_item_slot(0, "太阳水")
+	assert(PlayerState.quick_item_slots[0] == GameData.item_entity_id("太阳水"), "库存耗尽后绑定被错误清空")
+	var depleted := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("太阳水"))
 	assert(not bool(depleted.get("ok", false)), "耗尽后仍应失败")
 	assert(str(depleted.get("reason", "")) == "no_inventory", "耗尽失败原因不正确")
-	assert(PlayerState.quick_item_slots[0] == "太阳水", "耗尽失败后绑定被错误清空")
+	assert(PlayerState.quick_item_slots[0] == GameData.item_entity_id("太阳水"), "耗尽失败后绑定被错误清空")
 
 	# 每次按绑定名字重新扫描 inventory 索引，绝不复用旧 index
 	PlayerState.add_item("太阳水", 1)
@@ -79,10 +79,10 @@ func _run() -> void:
 
 	# expected 不匹配防误用
 	PlayerState.add_item("太阳水", 1)
-	assert(bool(PlayerState.assign_quick_item_slot(0, "太阳水").get("ok", false)), "重绑定失败")
-	var mismatch := PlayerState.use_quick_item_slot(0, "回城卷")
+	assert(bool(PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("太阳水")).get("ok", false)), "重绑定失败")
+	var mismatch := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("回城卷"))
 	assert(not bool(mismatch.get("ok", false)), "expected 不匹配不应放行")
-	assert(str(mismatch.get("reason", "")) == "expected_name_mismatch", "mismatch 原因不正确")
+	assert(str(mismatch.get("reason", "")) == "expected_identity_mismatch", "mismatch 原因不正确")
 	assert(PlayerState.item_count("太阳水") == 1, "mismatch 不应消耗物品")
 
 	# 技能书走单一物品规则：消费一本并学习
@@ -90,8 +90,8 @@ func _run() -> void:
 	PlayerState.profession = "战士"
 	PlayerState.recalculate_stats()
 	PlayerState.add_item("基本剑术", 1)
-	assert(bool(PlayerState.assign_quick_item_slot(1, "基本剑术").get("ok", false)), "技能书绑定失败")
-	var book_use := PlayerState.use_quick_item_slot(1, "基本剑术")
+	assert(bool(PlayerState.assign_quick_item_slot(1, GameData.item_entity_id("基本剑术")).get("ok", false)), "技能书绑定失败")
+	var book_use := PlayerState.use_quick_item_slot(1, GameData.item_entity_id("基本剑术"))
 	assert(bool(book_use.get("ok", false)), "技能书快捷使用失败：%s" % str(book_use.get("message", "")))
 	assert(str(book_use.get("kind", "")) == "skill_book", "技能书类型报告错误")
 	assert(PlayerState.item_count("基本剑术") == 0, "技能书未消耗")
@@ -103,8 +103,8 @@ func _run() -> void:
 	PlayerState.profession = "战士"
 	PlayerState.recalculate_stats()
 	PlayerState.add_item("基本剑术", 1)
-	assert(bool(PlayerState.assign_quick_item_slot(0, "基本剑术").get("ok", false)), "等级不足样本绑定失败")
-	var level_gated := PlayerState.use_quick_item_slot(0, "基本剑术")
+	assert(bool(PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("基本剑术")).get("ok", false)), "等级不足样本绑定失败")
+	var level_gated := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("基本剑术"))
 	assert(not bool(level_gated.get("ok", false)), "等级不足不应使用成功")
 	assert(PlayerState.item_count("基本剑术") == 1, "等级不足时错误消耗技能书")
 	assert(not PlayerState.is_skill_learned("基本剑术"), "等级不足时不应学习技能")
@@ -114,13 +114,13 @@ func _run() -> void:
 	# Skill progression v2: the first book learns rank1, the third reaches rank3.
 	PlayerState.add_item("基本剑术", 3)
 	for used_count in range(3):
-		var rank_use := PlayerState.use_quick_item_slot(0, "基本剑术")
+		var rank_use := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("基本剑术"))
 		assert(
 			bool(rank_use.get("ok", false)),
 			"第%d本升级使用失败：%s" % [used_count + 1, str(rank_use.get("message", ""))]
 		)
 	assert(PlayerState.item_count("基本剑术") == 1, "满级前技能书数量错误")
-	var max_use := PlayerState.use_quick_item_slot(0, "基本剑术")
+	var max_use := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("基本剑术"))
 	assert(not bool(max_use.get("ok", false)), "满级后仍应使用失败")
 	assert(str(max_use.get("message", "")).contains("最高等级"), "满级拒绝提示不正确")
 	assert(PlayerState.item_count("基本剑术") == 1, "满级拒绝时错误消耗技能书")
@@ -131,14 +131,14 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 	PlayerState.add_item("太阳水", 3)
 	PlayerState.add_item("回城卷", 2)
-	PlayerState.assign_quick_item_slot(0, "太阳水")
-	PlayerState.assign_quick_item_slot(2, "回城卷")
+	PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("太阳水"))
+	PlayerState.assign_quick_item_slot(2, GameData.item_entity_id("回城卷"))
 	PlayerState.save_game()
 	var save_path := PlayerState._profile_path(PlayerState.active_profile_id)
 	var saved: Dictionary = PlayerState._read_json(save_path)
 	assert(int(saved.get("save_version", 0)) == PlayerState.SAVE_VERSION, "SAVE_VERSION 未升级到 v9")
 	assert(Array(saved.get("quick_item_slots", [])).size() == 4, "存档缺少 4 格快捷物品绑定")
-	assert(saved.get("quick_item_slots", []) == ["太阳水", "", "回城卷", ""], "存档快捷物品绑定错误")
+	assert(saved.get("quick_item_slots", []) == [GameData.item_entity_id("太阳水"), "", GameData.item_entity_id("回城卷"), ""], "存档快捷物品绑定错误")
 	assert(
 		saved.get("equip_cycle_cursor", {}) == {"戒指": "左戒指", "手镯": "左手镯"},
 		"存档缺少轮换 cursor 默认"
@@ -146,8 +146,9 @@ func _run() -> void:
 	PlayerState.test_mode = false
 	PlayerState.load_save()
 	PlayerState.test_mode = true
-	assert(PlayerState.quick_item_slots == ["太阳水", "", "回城卷", ""], "v9 重载丢失快捷物品绑定")
+	assert(PlayerState.quick_item_slots == [GameData.item_entity_id("太阳水"), "", GameData.item_entity_id("回城卷"), ""], "v9 重载丢失快捷物品绑定")
 
+	saved.erase("item_button_assignments")
 	saved["quick_item_slots"] = ["太阳水", 123, null, "未知物品"]
 	saved["inventory"] = []
 	saved["save_version"] = 8
@@ -156,7 +157,7 @@ func _run() -> void:
 	PlayerState.test_mode = false
 	PlayerState.load_save()
 	PlayerState.test_mode = true
-	assert(PlayerState.quick_item_slots == ["太阳水", "", "", ""], "数字/null/未知字符串未归一为空")
+	assert(PlayerState.quick_item_slots == [GameData.item_entity_id("太阳水"), "", "", ""], "数字/null/未知字符串未归一为空")
 	assert(PlayerState.item_count("太阳水") == 0, "畸形样本背包应清空")
 	assert(
 		PlayerState.equip_cycle_cursor == {"戒指": "左戒指", "手镯": "左手镯"},
@@ -170,7 +171,7 @@ func _run() -> void:
 	PlayerState.load_save()
 	PlayerState.test_mode = true
 	assert(
-		PlayerState.quick_item_slots == ["回城卷", "太阳水", "", ""],
+		PlayerState.quick_item_slots == [GameData.item_entity_id("回城卷"), GameData.item_entity_id("太阳水"), "", ""],
 		"合法候选零库存未保留或未知/数字未清空"
 	)
 	var rewritten: Dictionary = PlayerState._read_json(save_path)

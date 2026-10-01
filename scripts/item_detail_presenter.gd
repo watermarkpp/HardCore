@@ -1,5 +1,6 @@
 class_name ItemDetailPresenter
 extends PanelContainer
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
 
 ## Shared, read-only item detail view used by inventory, warehouse and shop
 ## panels.  The owner supplies the selected item and global layout anchors; this
@@ -12,6 +13,7 @@ const AncientRelicFragmentScript := preload("res://scripts/layers/rules/ancient_
 const RelicSynthesisRulesScript := preload("res://scripts/layers/rules/relic_synthesis_rules.gd")
 const EnhancementRules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const AttributeHelp := preload("res://scripts/item_attribute_help.gd")
+const ItemCodec := preload("res://scripts/items/item_extension_codec.gd")
 var attribute_help: Node
 
 const MAX_OUTER_WIDTH := 340.0
@@ -396,6 +398,8 @@ func _strip_bbcode(value: String) -> String:
 
 
 static func format_item(item: Dictionary, instance: Dictionary = {}, context: Dictionary = {}) -> String:
+	var sockets: Array = ItemCodec.extensions(instance).get(ItemCodec.SOCKET_NAMESPACE, {}).get("sockets", [])
+	instance = ItemCodec.base_record(instance)
 	var black_iron_purity := EnhancementBlackIron.purity_for(item)
 	if black_iron_purity >= 0:
 		return "类别：矿石\n纯度：%d\n[color=#b58a45]乌黑色的矿石，天外陨石的碎片[/color]" % black_iron_purity
@@ -403,7 +407,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		return "类别：材料\n重量：1\n[color=#b58a45]%s[/color]" % str(item.get("description", ""))
 	var relic_id := int(item.get("itemId", -1))
 	if RelicSynthesisRulesScript.is_synthesis_item(relic_id):
-		return _format_relic_item(relic_id, instance, context)
+		return "\n".join([_format_relic_item(relic_id, instance, context)] + _socket_detail_lines(sockets))
 	var kind := str(item.get("kind", ""))
 	var lines: Array[String] = []
 	var category := str(item.get("category", item.get("type", "")))
@@ -414,7 +418,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 	if kind == "equipment":
 		var slot := str(context.get("slot", ""))
 		if not slot.is_empty():
-			lines.append("部位：%s" % slot)
+			lines.append("部位：%s" % preload("res://scripts/identity/equipment_identity_codec.gd").display_name(slot))
 		var current_durability := int(instance.get("durability", item.get("maxDurability", item.get("max_durability", 0))))
 		var maximum_durability := int(instance.get("max_durability", item.get("maxDurability", item.get("max_durability", 0))))
 		if maximum_durability > 0:
@@ -428,7 +432,7 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		var requirement := _requirement_label(item)
 		if not requirement.is_empty():
 			lines.append("穿戴要求：%s" % requirement)
-		var net_luck := EquipmentRulesScript.equipment_luck_contribution(item, instance, str(item.get("category", "")) == "武器")
+		var net_luck := EquipmentRulesScript.equipment_luck_contribution(item, instance, ItemCategories.category_for_record(item) == "hc.item_category.weapon")
 		if net_luck != 0:
 			lines.append("幸运 +%d" % net_luck if net_luck > 0 else "诅咒 +%d" % -net_luck)
 		var modifier_parts := _instance_modifier_lines(instance)
@@ -444,7 +448,16 @@ static func format_item(item: Dictionary, instance: Dictionary = {}, context: Di
 		lines.append(description)
 	if lines.is_empty():
 		lines.append("暂无可显示属性")
+	lines.append_array(_socket_detail_lines(sockets))
 	return "\n".join(lines)
+
+
+static func _socket_detail_lines(sockets: Array) -> Array[String]:
+	var lines: Array[String] = []
+	for socket: Dictionary in sockets:
+		var gem := GameData.get_item_record(socket.item)
+		lines.append("镶嵌：%s" % str(gem.get("name", "")))
+	return lines
 
 
 static func _format_relic_item(item_id: int, instance: Dictionary, context: Dictionary = {}) -> String:
@@ -459,7 +472,8 @@ static func _format_relic_item(item_id: int, instance: Dictionary, context: Dict
 		var skill_name := SkillDataLoader.display_name(str(roll.get("skill_id", "")))
 		lines.append("%s等级 +1" % skill_name)
 	else:
-		var skill_pool := str(context.get("recipe_profession", RelicSynthesisRulesScript.record_for_id(item_id).get("skillProfession", "")))
+		var skill_pool_id := str(context.get("recipe_profession", RelicSynthesisRulesScript.record_for_id(item_id).get("skillProfessionId", "")))
+		var skill_pool := ProfessionRules.profession_display_name(skill_pool_id)
 		lines.append("随机%s技能等级 +1" % skill_pool)
 	match item_id:
 		950101:
@@ -492,7 +506,7 @@ static func _stat_line(item: Dictionary, instance: Dictionary = {}) -> String:
 	if instance.has("drop_instance_contract_id"):
 		containers = [item.get("modifiers", []), instance.get("modifiers", [])]
 	var enhancement: Variant = instance.get("enhancement", null)
-	if EnhancementRules.validate_enhancement(enhancement, str(item.get("category", ""))):
+	if EnhancementRules.validate_enhancement(enhancement, ItemCategories.category_for_record(item)):
 		containers.append((enhancement as Dictionary).get("forge", {}).get("modifiers", []))
 	for container: Variant in containers:
 		if not container is Array:

@@ -1,5 +1,7 @@
 extends Node
 
+const OrderedStageFixture := preload("res://tests/helpers/ordered_json_stage_fixture.gd")
+
 class FixtureState extends "res://scripts/player_state.gd":
 	var blocking_boundaries := 0
 	func _before_state_transaction(include_world := false) -> void:
@@ -62,10 +64,8 @@ func _case(operation: String, prepared: bool) -> void:
 	assert(plan.has("writer") and plan.writer.result(true).success)
 	# Real worker promotion is durable, but the main coordinator has not yet
 	# consumed the completion. No observation filtering or synthetic receipt.
-	state.finish_prepared_loot_save(plan)
-	assert(plan.writer.job.stage_result(true).result.success)
-	state.finish_prepared_loot_save(plan)
-	assert(plan.writer.job.stage_result(true).result.success)
+	await OrderedStageFixture.await_durable_promotion(state._json_persistence, plan.writer.job,
+		state.finish_prepared_loot_save.bind(plan), get_tree())
 	assert(not plan.writer.job.response.finished and state.gold == 0)
 	assert(int(_read(profile_path).gold) == 17)
 	var result: Dictionary

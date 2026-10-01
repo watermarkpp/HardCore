@@ -1,6 +1,7 @@
 extends Node
 
 const Fixture := preload("res://tests/f05_settlement_display_separation_test.gd")
+const StageFixture := preload("res://tests/helpers/ordered_json_stage_fixture.gd")
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -32,7 +33,7 @@ func _run() -> void:
 	var reward: int = int(game._build_enemy_death_runtime_snapshot(canonical).experience)
 	var rng_before: int = game._rng.state
 	_queue(game, canonical, "cancelled")
-	game._pump_enemy_death_work_queue()
+	await _await_prepared_settlement(game)
 	assert(game._pending_enemy_deaths[0].state == "PERSISTING")
 	assert(PlayerState._death_event_sequence == 0 and PlayerState.experience == 0)
 	assert(PlayerState.world_monster_respawn_state.entries.is_empty())
@@ -43,9 +44,9 @@ func _run() -> void:
 	assert(game._pending_enemy_deaths.is_empty() and cancelled.completed and not cancelled.completion.success)
 	assert(PlayerState._death_event_sequence == 0 and PlayerState.experience == 0 and game._rng.state == rng_before)
 	_queue(game, canonical, "committing")
-	game._pump_enemy_death_work_queue()
+	await _await_prepared_settlement(game)
 	var committing: Dictionary = game._prepared_enemy_death_settlement.plan
-	_start_promotion(committing)
+	await _start_promotion(committing)
 	assert(PlayerState.experience == 0 and PlayerState.world_monster_respawn_state.entries.is_empty())
 	game._zone_generation += 1
 	game._cancel_pending_enemy_deaths_for_generation_change()
@@ -55,7 +56,7 @@ func _run() -> void:
 	# A real root exit consumes an accepted request. It must not mark a future
 	# as "no progress" or leave its worker/callback holding a deleted root.
 	_queue(game, canonical, "exiting")
-	game._pump_enemy_death_work_queue()
+	await _await_prepared_settlement(game)
 	var exiting: Dictionary = game._prepared_enemy_death_settlement.plan
 	assert(exiting.writer.result(true).success)
 	game.free()
@@ -76,11 +77,21 @@ func _run() -> void:
 
 func _start_promotion(plan: Dictionary) -> void:
 	assert(plan.writer.result(true).success)
-	assert(PlayerState.finish_prepared_death_settlement(plan).get("pending", false))
-	assert(plan.writer.job.stage_result(true).result.success)
-	assert(PlayerState.finish_prepared_death_settlement(plan).get("pending", false))
-	assert(plan.writer.job.stage_result(true).result.success)
+	await StageFixture.await_durable_promotion(PlayerState._json_persistence, plan.writer.job,
+		PlayerState.finish_prepared_death_settlement.bind(plan), get_tree())
 	assert(not plan.completed)
+
+func _await_prepared_settlement(game: Node) -> void:
+	var deadline := Time.get_ticks_msec() + 5000
+	# The preceding real save can consume this outer iteration's whole budget.
+	# Observe admission across native frames rather than assuming the first poll.
+	while game._prepared_enemy_death_settlement.is_empty():
+		assert(Time.get_ticks_msec() < deadline, "death preparation did not receive an actual fair turn")
+		assert(not game._pending_enemy_deaths.is_empty())
+		game._pump_enemy_death_work_queue()
+		if game._prepared_enemy_death_settlement.is_empty():
+			await get_tree().process_frame
+	assert(game._pending_enemy_deaths[0].state == "PERSISTING")
 
 func _queue(game: Node, canonical: Dictionary, slot: String) -> void:
 	var enemy := EnemyActor.new()

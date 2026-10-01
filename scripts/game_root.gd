@@ -1,5 +1,13 @@
 extends Node2D
 
+const FrameBudget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
+const WorldContext := preload("res://scripts/layers/runtime/execution/world_context.gd")
+const TimeDomains := preload("res://scripts/layers/runtime/execution/time_domains.gd")
+var _death_budget_category := "death_work:%d" % get_instance_id()
+var _world_context := WorldContext.new()
+var _time_domains := TimeDomains.new()
+var _feature_effect_runtime: RefCounted
+
 const BICH_RUNTIME_MAP_ID := 910001
 const ActorBodyPolicyScript := preload("res://scripts/actor_body_policy.gd")
 const ORC_TOMB_F3_RUNTIME_MAP_ID := 911003
@@ -1484,6 +1492,8 @@ func _loading_profile_mark(
 
 
 func _ready() -> void:
+	_world_context.configure(self, PlayerState)
+	_time_domains.configure(self)
 	var loading_profile_enabled := OS.is_debug_build()
 	var ready_started_usec := 0
 	if loading_profile_enabled:
@@ -1533,6 +1543,7 @@ func _ready() -> void:
 	# Q2-D: one MonsterVisual streaming coordinator; MonsterVisual instances
 	# register needs and the coordinator owns the single global streaming poll.
 	_streaming_coordinator = MonsterVisualStreamingCoordinatorScript.new()
+	_streaming_coordinator.configure_process_owner(self)
 	MonsterVisualScript.set_streaming_coordinator(_streaming_coordinator)
 	# Q0-B: make the window close request interceptable so a failed safe logout
 	# can cancel the normal shutdown instead of silently quitting.
@@ -1577,6 +1588,9 @@ func _ready() -> void:
 	player.environment_blocker = background
 	player.skill_requested.connect(_on_player_skill)
 	player.hc_world_skill_preflight = Callable(self, "_hc_skill_preflight")
+	player.hc_action_configuration_provider = Callable(self, "_capture_action_configuration")
+	player.hc_melee_configuration_provider = Callable(self, "_capture_melee_configuration")
+	player.hc_action_configuration_identity = Callable(self, "_action_configuration_identity")
 	player.skill_cast_started.connect(_on_skill_cast_audio_started)
 	player.skill_cast_started.connect(_on_first_fire_wall_cast_probe)
 	player.warrior_skill_state_changed.connect(_on_warrior_skill_state_changed)
@@ -1745,7 +1759,10 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	if _feature_effect_runtime != null:
+		_feature_effect_runtime.clear()
 	_poll_prepared_enemy_death_settlement(true)
+	FrameBudget.mark_pending(_death_budget_category, false)
 	if PlayerState.skills_changed.is_connected(_synchronize_main_pet_skill_ranks):
 		PlayerState.skills_changed.disconnect(_synchronize_main_pet_skill_ranks)
 	if PlayerState.equipment_changed.is_connected(_synchronize_main_pet_skill_ranks):
@@ -1798,6 +1815,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _feature_effect_runtime != null and _feature_effect_runtime.has_work():
+		_time_domains.advance_simulation(delta)
+		_feature_effect_runtime.pump()
 	var physics_started_usec := RuntimeDiagnostics.timing_start()
 	if not _pending_main_pet_arrivals.is_empty() and not _map_transition_in_progress:
 		_retry_pending_main_pet_arrivals()
@@ -2091,7 +2111,10 @@ func _active_skill_workset_candidates() -> Array[String]:
 			PlayerState.SKILL_SLOT_GROUP_ATTACK_RING
 		)
 	)
-	return CasterSkillVisualRegistry.workset_skill_order(raw, 7)
+	var display_names: Array = []
+	for identity: Variant in raw:
+		display_names.append(SkillDataLoaderScript.display_name(str(identity)))
+	return CasterSkillVisualRegistry.workset_skill_order(display_names, 7)
 
 
 ## PERF-R2 R8: thread-pump texture paths with a REAL absolute deadline.
@@ -2553,11 +2576,13 @@ func _cancel_player_input_boundary(reason: StringName) -> void:
 
 
 ## R2: timed 神水 (temporary stat buff) expiry reports once through the
-## central notice layer, using the authoritative item name.
-func _on_temporary_item_buff_expired(item_name: String) -> void:
+## central notice layer, projecting display text from the formal item owner.
+func _on_temporary_item_buff_expired(entity_id: String) -> void:
 	if not is_instance_valid(hud):
 		return
-	hud.show_message("%s效果结束" % item_name)
+	var item := GameData.get_entity_record(entity_id)
+	if not item.is_empty():
+		hud.show_message("%s效果结束" % str(item.get("name", "")))
 
 
 ## R2: legacy potion combat buffs (ac/mac) report their end the same way.
@@ -4502,7 +4527,7 @@ func _spawn_editor_runtime_content(content: Dictionary) -> void:
 			"general": stock = _general_shop_stock()
 			"starter_gear": stock = _starter_gear_stock()
 			"medicine": stock = _medicine_shop_stock()
-			"books": stock = _build_skill_book_stock(PlayerState.profession)
+			"books": stock = _build_skill_book_stock(PlayerState.profession_id)
 		_spawn_npc(npc_data.get("screen_position_px", Vector2.ZERO), name, role, stock, stock_key, int(npc_data.get("appearance", -1)), content.get("map_center_screen_position_px", _current_map_center_screen_position_px()))
 	for portal: Dictionary in content.get("portals", []):
 		_spawn_map_portal(
@@ -4610,7 +4635,7 @@ func _spawn_authored_map_content(content: Dictionary) -> void:
 			"starter_gear": stock = _starter_gear_stock()
 			"mid_gear": stock = _mid_gear_stock()
 			"medicine": stock = _medicine_shop_stock()
-			"books": stock = _build_skill_book_stock(PlayerState.profession)
+			"books": stock = _build_skill_book_stock(PlayerState.profession_id)
 		var npc_name := str(npc_data.get("name", "NPC"))
 		var npc_position: Vector2 = npc_data.get("position", Vector2.ZERO)
 		if (
@@ -4777,7 +4802,7 @@ func _spawn_outskirts_content() -> void:
 
 func _spawn_city_content() -> void:
 	var general_stock := _general_shop_stock()
-	var book_stock := _build_skill_book_stock(PlayerState.profession)
+	var book_stock := _build_skill_book_stock(PlayerState.profession_id)
 	_spawn_npc(Vector2(-250, -60), "杂货商", "shop", general_stock, "general")
 	_spawn_npc(Vector2(250, -60), "书店老板", "shop", book_stock, "books")
 	_spawn_npc(Vector2(0, -255), "武馆教头", "trainer")
@@ -5917,7 +5942,7 @@ func _attack_lock_candidates(excluded: EnemyActor = null) -> Array[EnemyActor]:
 
 
 func _uses_magic_lock_domain() -> bool:
-	return ProfessionRules.profession_id(PlayerState.profession) in [
+	return ProfessionRules.profession_id(PlayerState.profession_id) in [
 		"wizard",
 		"taoist",
 	]
@@ -6874,12 +6899,15 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 			hud.show_error_message("技能尚未学习")
 		return &"rejected"
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	var configuration := _capture_action_configuration(stable_skill_id)
+	if configuration == null:
+		return &"rejected"
+	var definition: Dictionary = configuration.definition_for(stable_skill_id)
 	if definition.is_empty():
 		return &"rejected"
 	var input_metadata := SkillInputPolicyScript.metadata(stable_skill_id)
 	var warrior_toggle := (
-		PlayerState.profession == "战士"
+		PlayerState.profession_id == "hc.profession.warrior"
 		and stable_skill_id.begins_with("warrior.")
 		and bool(input_metadata.get("toggle", false))
 	)
@@ -6898,7 +6926,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		# Warrior toggles only configure the next melee mode. They do not cast,
 		# spend MP, select a target, or commit cooldown/action state here. Keep
 		# Player.request_skill as the authority for dead/control/struck locks.
-		if not player.request_skill(skill_name):
+		if not player.request_skill(skill_name, 0, configuration):
 			if show_failure:
 				hud.show_error_message("技能动作或冷却尚未结束")
 			return &"busy"
@@ -6920,9 +6948,9 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		_selected_friendly_instance_id = int(
 			heal_selection.get("selected", {}).get("instance_id", 0)
 		)
-	var learned_level := PlayerState.effective_skill_level(skill_name)
+	var learned_level: int = configuration.rank()
 	var profile := ProfessionRules.skill_combat_profile(skill_name, learned_level)
-	var resource_context := _canonical_resource_context(stable_skill_id)
+	var resource_context := _canonical_resource_context(stable_skill_id, configuration)
 	var resource_quote := SkillResourceServiceScript.quote(
 		definition,
 		learned_level,
@@ -6936,7 +6964,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 		if show_failure:
 			hud.show_error_message("魔法不足")
 		return &"rejected"
-	if not player.can_request_skill(skill_name):
+	if not player.can_request_skill(skill_name, configuration):
 		if TAOIST_HEAL_SKILL_IDS.has(stable_skill_id):
 			_selected_friendly_instance_id = 0
 		if show_failure:
@@ -6972,7 +7000,7 @@ func _try_release_skill(skill_name: String, show_failure := true) -> StringName:
 			if is_instance_valid(_skill_cast_target)
 			else 0
 		)
-	if not player.request_skill(skill_name, locked_skill_target_id):
+	if not player.request_skill(skill_name, locked_skill_target_id, configuration):
 		_selected_friendly_instance_id = 0
 		if show_failure:
 			hud.show_error_message("技能动作或冷却尚未结束")
@@ -7070,9 +7098,9 @@ func _sync_item_quick_slots_to_hud(_change: Dictionary = {}) -> void:
 
 func _on_item_quick_slot_assignment_requested(
 	slot_index: int,
-	item_name: String
+	item_id: String
 ) -> void:
-	var result := PlayerState.assign_quick_item_slot(slot_index, item_name)
+	var result := PlayerState.assign_quick_item_slot(slot_index, item_id)
 	if not bool(result.get("ok", false)):
 		_sync_item_quick_slots_to_hud()
 		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品绑定失败"))))
@@ -7083,18 +7111,18 @@ func _on_item_quick_slot_assignment_requested(
 
 func _on_item_quick_slot_use_requested(
 	slot_index: int,
-	item_name: String
+	item_id: String
 ) -> void:
 	if not gameplay_input_is_enabled():
 		return
-	var result := PlayerState.use_quick_item_slot(slot_index, item_name)
+	var result := PlayerState.use_quick_item_slot(slot_index, item_id)
 	if not bool(result.get("ok", false)):
 		hud.show_error_message(UIErrorFeedbackScript.user_message(str(result.get("message", "快捷物品使用失败"))))
 		return
 	# One player action owns one central result notice (R2). Only the
 	# contract-approved uses report (skill books, blessing/repair oils,
 	# timed 神水); instant potions stay silent by design.
-	var used_item := GameData.get_item_record(str(result.get("item_name", "")))
+	var used_item := GameData.get_entity_record(str(result.get("entity_id", "")))
 	if UIPlayerNoticeScript.should_report_item_use(used_item):
 		hud.show_success_message(str(result.get("message", "")))
 
@@ -7155,6 +7183,10 @@ func _on_skill_button_assignment_requested(request: Dictionary) -> void:
 func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void:
 	if not gameplay_input_is_enabled(): return
 	var context := player.consume_attack_context()
+	var configuration: RefCounted = context.get("action_config_lease")
+	if configuration != null and not configuration.valid_for_release(_action_configuration_identity()):
+		return
+	var accepted_melee: Dictionary = configuration.melee_context() if configuration != null else {}
 	PlayerState.try_trigger_relic_proc()
 	var diagnostic := _pending_melee_diagnostic.duplicate(true)
 	_pending_melee_diagnostic.clear()
@@ -7247,23 +7279,24 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		body_selection["mode"] = "fire"
 		body_selection["selected_body_mode"] = "fire"
 		body_selection["skill_name"] = "烈火剑法"
-		body_selection["skill_level"] = PlayerState.effective_skill_level("烈火剑法")
+		body_selection["skill_level"] = configuration.rank_for("warrior.fire_sword") if configuration != null else PlayerState.effective_skill_level("warrior.fire_sword")
 		body_selection["direct_toggle_release"] = false
 		consumes_armed_fire = true
 
 	var hit_effect := SkillInputPolicyScript.resolve_warrior_hit_effect(
 		body_selection,
 		{
-			"learned_skills": PlayerState.learned_skills,
-			"toggles": {
+			"learned_skills": accepted_melee.learned_skills if not accepted_melee.is_empty() else PlayerState.learned_skills,
+			"toggles": accepted_melee.toggles if not accepted_melee.is_empty() else {
 				"warrior.fire_sword": player.fire_sword_enabled,
 				"warrior.half_moon": player.half_moon_enabled,
 				"warrior.thrusting": player.thrusting_enabled,
 			},
 			"has_combat_target": has_eligible_target,
 			"current_mp": player.current_mp,
-			"fire_rank": PlayerState.effective_skill_level("烈火剑法"),
-			"half_moon_rank": PlayerState.effective_skill_level("半月弯刀"),
+			"fire_rank": configuration.rank_for("warrior.fire_sword") if configuration != null else PlayerState.effective_skill_level("warrior.fire_sword"),
+			"half_moon_rank": configuration.rank_for("warrior.half_moon") if configuration != null else PlayerState.effective_skill_level("warrior.half_moon"),
+			"action_config_lease": configuration,
 		}
 	)
 	var effect_mode := str(hit_effect.get("effect_mode", ""))
@@ -7342,12 +7375,15 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		has_eligible_target = eligible_target_count > 0
 	if consumes_armed_fire and effect_mode == "fire":
 		_set_canonical_fire_charge_expires_at(0)
+	var feature_batch := _begin_feature_damage_batch({"fire":"warrior.fire_sword","half_moon":"warrior.half_moon",
+		"thrust":"warrior.thrusting"}.get(effect_mode,""),str(release_geometry.get("release_id","")),configuration)
 	var melee_modifiers := SkillRuntimeRouterScript.resolve_warrior_melee_modifiers({
 		"body_mode": effect_mode,
-		"basic_sword_learned": PlayerState.is_skill_learned("基本剑术"),
-		"basic_sword_rank": PlayerState.effective_skill_level("基本剑术"),
-		"slaying_learned": PlayerState.is_skill_learned("攻杀剑术"),
-		"slaying_rank": PlayerState.effective_skill_level("攻杀剑术"),
+		"basic_sword_learned": accepted_melee.learned_skills.has("hc.skill.warrior.basic_swordsmanship") if not accepted_melee.is_empty() else PlayerState.is_skill_learned("warrior.basic_swordsmanship"),
+		"basic_sword_rank": configuration.rank_for("warrior.basic_swordsmanship") if configuration != null else PlayerState.effective_skill_level("warrior.basic_swordsmanship"),
+		"slaying_learned": accepted_melee.learned_skills.has("hc.skill.warrior.slaying_swordsmanship") if not accepted_melee.is_empty() else PlayerState.is_skill_learned("warrior.slaying_swordsmanship"),
+		"slaying_rank": configuration.rank_for("warrior.slaying_swordsmanship") if configuration != null else PlayerState.effective_skill_level("warrior.slaying_swordsmanship"),
+		"action_config_lease": configuration,
 		"valid_melee_swing": has_eligible_target,
 		"seed": _next_canonical_seed(),
 	})
@@ -7359,9 +7395,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		melee_modifiers.get("flat_damage_bonus_after_body_formula", 0)
 	)
 	var accuracy_bonus := int(melee_modifiers.get("flat_accuracy_bonus", 0))
-	if PlayerState.is_skill_learned("精神力战法"):
+	if (accepted_melee.learned_skills.has("hc.skill.taoist.spiritual_warfare") if not accepted_melee.is_empty() else PlayerState.is_skill_learned("taoist.spiritual_warfare")):
 		accuracy_bonus += SkillRuntimeRouterScript.taoist_melee_accuracy_bonus(
-			PlayerState.effective_skill_level("精神力战法")
+			configuration.rank_for("taoist.spiritual_warfare") if configuration != null else PlayerState.effective_skill_level("taoist.spiritual_warfare"), configuration
 		)
 	var hit_any := false
 	var primary_hit := false
@@ -7382,7 +7418,9 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			primary_targets,
 			thrust_secondary_targets,
 			half_moon_secondary_targets,
-			true
+			true,
+			configuration,
+			feature_batch
 		)
 		hit_any = bool(melee_resolution.get("hit_any", false))
 		primary_hit = bool(melee_resolution.get("primary_hit", false))
@@ -7393,10 +7431,11 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			hit_any = _apply_physical_hit(
 				target,
 				modified_base_damage + post_body_damage_bonus,
-				accuracy_bonus
+				accuracy_bonus, false, configuration, feature_batch
 			)
 			primary_hit = hit_any
 			canonical_resolution = "hit" if hit_any else "miss"
+	_finish_feature_damage_batch(feature_batch)
 	# Weapon wear belongs to the physical swing, not to each target struck by
 	# that swing. Besides matching the original server, this prevents Half Moon,
 	# Thrusting and any future multi-target melee release from performing one
@@ -7838,7 +7877,8 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 		damage,
 		{"release_id": release_id},
 		true,
-		not release_geometry.is_empty()
+		not release_geometry.is_empty(),
+		skill_context.get("action_config_lease")
 	)
 	var hit_any := bool(execution.get("effect_success", false))
 	if not bool(execution.get("accepted", false)):
@@ -7850,7 +7890,7 @@ func _on_player_skill(skill_name: String, origin: Vector2, direction: Vector2, d
 		return
 	if hit_any:
 		_play_skill_audio_phase(stable_skill_id, "effect")
-	var effect_color := Color(1.0, 0.22, 0.05) if PlayerState.profession == "战士" else (Color(0.28, 0.62, 1.0) if PlayerState.profession == "法师" else Color(0.45, 0.92, 0.55))
+	var effect_color := Color(1.0, 0.22, 0.05) if PlayerState.profession_id == "hc.profession.warrior" else (Color(0.28, 0.62, 1.0) if PlayerState.profession_id == "hc.profession.wizard" else Color(0.45, 0.92, 0.55))
 	_show_attack_flash(origin, direction, hit_any, effect_color)
 	if skill_name == "烈火剑法":
 		hud.update_warrior_states(player.warrior_state_snapshot())
@@ -7864,10 +7904,14 @@ func _execute_canonical_skill(
 	client_damage: int,
 	extra_target_context: Dictionary = {},
 	apply_effects := true,
-	authoritative_cast_target := false
+	authoritative_cast_target := false,
+	configuration: RefCounted = null
 ) -> Dictionary:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	if configuration != null and not configuration.valid_for_release(_action_configuration_identity()):
+		return {"accepted":false,"effect_success":false,"reason":"stale_action_configuration"}
+	var definition: Dictionary = (configuration.definition_for(stable_skill_id)
+		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
 	if definition.is_empty():
 		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "unknown_skill"}
@@ -7879,7 +7923,7 @@ func _execute_canonical_skill(
 	if _hostile_skill_blocked_by_safe_zone(definition):
 		_skill_cast_target = null
 		return {"accepted": false, "effect_success": false, "reason": "caster_in_safe_zone"}
-	var rank := PlayerState.effective_skill_level(skill_name)
+	var rank: int = configuration.rank_for(stable_skill_id) if configuration != null else PlayerState.effective_skill_level(stable_skill_id)
 	var release_context := (extra_target_context as Dictionary).duplicate(true)
 	var support_center_ground_gu := _canonical_screen_px_to_ground_gu(
 		player.global_position
@@ -7946,7 +7990,7 @@ func _execute_canonical_skill(
 			## floor tile so canonical cells stay centred on the caster.
 			release_context["origin_tile"] = self_center_tile
 		var support_resource_context := _canonical_resource_context(
-			stable_skill_id
+			stable_skill_id, configuration
 		)
 		if support_resource_context.has("dual_defense_context"):
 			release_context["dual_defense_context"] = (
@@ -7958,7 +8002,8 @@ func _execute_canonical_skill(
 		direction,
 		not authoritative_cast_target,
 		str(extra_target_context.get("release_id", "")),
-		release_context
+		release_context,
+		configuration
 	)
 	var cast_target := _skill_cast_target
 	if stable_skill_id == "wizard.lightning" and not _hc_lightning_clear(cast_target, origin):
@@ -7975,11 +8020,11 @@ func _execute_canonical_skill(
 		if bool(rush_plan.get("eligible", false)):
 			target_context.merge(rush_plan, true)
 			request_facing = rush_plan.get("direction_step", request_facing)
-	var resource_context := _canonical_resource_context(stable_skill_id)
+	var resource_context := _canonical_resource_context(stable_skill_id, configuration)
 	var request := SkillCastRequestScript.create(
 		stable_skill_id,
 		rank,
-		PlayerState.level,
+		configuration.actor_level() if configuration != null else PlayerState.level,
 		(
 			release_context.get("origin_tile", Vector2i(-99, -99))
 			if release_context.has("origin_tile")
@@ -7991,6 +8036,8 @@ func _execute_canonical_skill(
 		_next_canonical_seed()
 	)
 	request["client_claimed_damage"] = client_damage
+	if configuration != null:
+		request["action_config_lease"] = configuration
 	# Q3-B: the single canonical plan comes from the router's formal planner
 	# entry. No second plan object is ever built by GameRoot or the runtime.
 	SkillExecutionPlanContractScript.release_id_generation_count += 1
@@ -8000,8 +8047,11 @@ func _execute_canonical_skill(
 		direction,
 		target_context,
 		cast_target,
-		str(target_context.get("release_id", ""))
+		str(target_context.get("release_id", "")),
+		definition
 	)
+	if configuration != null:
+		canonical_context["action_config_lease"] = configuration
 	var plan := SkillRuntimeRouterScript.build_canonical_plan(
 		request,
 		canonical_context
@@ -8060,7 +8110,8 @@ func _execute_canonical_skill(
 			origin,
 			direction,
 			target_context,
-			cast_target
+			cast_target,
+			configuration
 		)
 	var execution_result := SkillExecutionPlanScript.build_result(
 		plan,
@@ -8092,7 +8143,8 @@ func _canonical_execution_context(
 	direction: Vector2,
 	target_context: Dictionary,
 	target: EnemyActor,
-	release_id: String
+	release_id: String,
+	definition: Dictionary = {}
 ) -> Dictionary:
 	## Q3-B: frozen inputs for the canonical planner. GameRoot only prepares
 	## world/projection context; the planner builds the single plan/snapshot.
@@ -8147,12 +8199,13 @@ func _canonical_execution_context(
 			Callable(self, "_q3b_build_line_strip").bind(
 				stable_skill_id,
 				origin,
-				direction
+				direction,
+				definition
 			)
 		),
 		"effective_cells_builder": (
 			Callable(self, "_q3b_build_effective_cells").bind(
-				stable_skill_id
+				stable_skill_id, definition
 			)
 		),
 	}
@@ -8164,26 +8217,28 @@ func _q3b_build_line_strip(
 	release_id: String,
 	stable_skill_id: String,
 	origin: Vector2,
-	direction: Vector2
+	direction: Vector2,
+	definition: Dictionary = {}
 ) -> Dictionary:
 	return _canonical_continuous_line_strip_ground_gu(
 		stable_skill_id,
 		effect,
 		origin,
 		direction,
-		release_id
+		release_id, definition
 	)
 
 
 func _q3b_build_effective_cells(
 	raw_geometry_cells: Variant,
 	effect: Dictionary,
-	stable_skill_id: String
+	stable_skill_id: String,
+	definition: Dictionary = {}
 ) -> Array[Vector2i]:
 	return _canonical_effective_spell_geometry_cells(
 		stable_skill_id,
 		raw_geometry_cells,
-		effect
+		effect, definition
 	)
 
 
@@ -8240,7 +8295,9 @@ func _execute_canonical_melee(
 	resolved_primary_targets: Array[EnemyActor] = [],
 	resolved_thrust_secondaries: Array[EnemyActor] = [],
 	resolved_half_moon_secondaries: Array[EnemyActor] = [],
-	targets_resolved_at_release := false
+	targets_resolved_at_release := false,
+	configuration: RefCounted = null,
+	damage_batch: RefCounted = null
 ) -> Dictionary:
 	var skill_name: String = {
 		"thrust": "刺杀剑术",
@@ -8334,7 +8391,7 @@ func _execute_canonical_melee(
 		)
 		if not melee_release_id.is_empty():
 			extra["release_id"] = melee_release_id
-	var result := _execute_canonical_skill(skill_name, origin, direction, base_damage, extra, false)
+	var result := _execute_canonical_skill(skill_name, origin, direction, base_damage, extra, false, false, configuration)
 	if not bool(result.get("accepted", false)):
 		return {"accepted": false, "hit_any": false, "resolution": "rejected"}
 	var hit_any := false
@@ -8362,6 +8419,8 @@ func _execute_canonical_melee(
 						mode == "thrust" and WarriorCombatMath.thrust_segment_ignores_ac(
 							int(effect.get("cell", 1))
 						),
+						configuration,
+						damage_batch,
 					)
 					hit_any = target_hit or hit_any
 					if int(effect.get("cell", 1)) == 1:
@@ -8372,7 +8431,7 @@ func _execute_canonical_melee(
 						primary,
 						roundi(float(base_damage) * float(effect.get("primary_multiplier", 1.0)))
 						+ post_body_damage_bonus,
-						accuracy_bonus
+						accuracy_bonus, false, configuration, damage_batch
 					)
 					primary_hit = target_hit or primary_hit
 					hit_any = target_hit or hit_any
@@ -8381,7 +8440,7 @@ func _execute_canonical_melee(
 						secondary,
 						roundi(float(base_damage) * float(effect.get("side_multiplier", 1.0)))
 						+ post_body_damage_bonus,
-						accuracy_bonus
+						accuracy_bonus, false, configuration, damage_batch
 					) or hit_any
 			"next_melee_charge":
 				if not primary_targets.is_empty():
@@ -8390,7 +8449,7 @@ func _execute_canonical_melee(
 						target,
 						roundi(float(base_damage) * float(effect.get("damage_multiplier", 1.0)))
 						+ post_body_damage_bonus,
-						accuracy_bonus
+						accuracy_bonus, false, configuration, damage_batch
 					)
 					hit_any = primary_hit
 	return {
@@ -8423,7 +8482,8 @@ func _canonical_target_context(
 	direction: Vector2,
 	allow_auto_target := true,
 	release_id := "",
-	context_overrides: Dictionary = {}
+	context_overrides: Dictionary = {},
+	configuration: RefCounted = null
 ) -> Dictionary:
 	var target_contract: Dictionary = definition.get("target", {})
 	var stable_skill_id := str(definition.get("skill_id", ""))
@@ -8502,7 +8562,7 @@ func _canonical_target_context(
 			if usable_target
 			else _canonical_grid_cell_to_screen_px(fallback_target_tile)
 		),
-		"primary_stat_roll": _canonical_primary_stat_roll(str(definition.get("class", ""))),
+		"primary_stat_roll": _canonical_primary_stat_roll(str(definition.get("class", "")), _canonical_action_primary_stats(configuration)),
 		"actual_hp_missing": player.max_hp - player.current_hp,
 		"friendly_missing_hp": [player.max_hp - player.current_hp],
 		"affected_friendly_count": 1,
@@ -8811,11 +8871,13 @@ func _canonical_target_context(
 	return context
 
 
-func _canonical_resource_context(stable_skill_id: String) -> Dictionary:
+func _canonical_resource_context(stable_skill_id: String, configuration: RefCounted = null) -> Dictionary:
 	var result := PlayerState.canonical_skill_resource_context(
 		stable_skill_id,
 		player.current_mp
 	)
+	if configuration != null:
+		player._freeze_partner_resource_context(result, configuration)
 	var requested_summon_id := _summon_id_for_skill(stable_skill_id)
 	if not requested_summon_id.is_empty():
 		# Live actors are authoritative during play. PlayerState supplies the same
@@ -8859,7 +8921,8 @@ func _apply_canonical_effects_from_plan(
 	origin: Vector2,
 	direction: Vector2,
 	target_context: Dictionary,
-	target: EnemyActor = null
+	target: EnemyActor = null,
+	configuration: RefCounted = null
 ) -> Dictionary:
 	## Q3-B: commits the canonical plan's gameplay actions. Node creation
 	## (projectile/ground/summon/visual) comes from the plan's descriptors via
@@ -8891,7 +8954,8 @@ func _apply_canonical_effects_from_plan(
 		origin,
 		direction,
 		target,
-		target_position
+		target_position,
+		configuration
 	)
 	var spawned_projectiles: Array[int] = []
 	var spawned_ground_effects: Array[int] = []
@@ -8908,6 +8972,7 @@ func _apply_canonical_effects_from_plan(
 		else:
 			created_visuals.append(node.get_instance_id())
 	var friendly_effect_index := 0
+	var feature_batch := _begin_feature_damage_batch(stable_skill_id,release_id,configuration)
 	for raw_effect: Variant in plan.get("gameplay_actions", []):
 		if not raw_effect is Dictionary:
 			continue
@@ -8945,6 +9010,7 @@ func _apply_canonical_effects_from_plan(
 					skill_release_snapshot,
 					{},
 					aoe_release_cache,
+					feature_batch,
 				)
 			"dedicated_heal":
 				var heal_target_id := int(
@@ -9253,6 +9319,7 @@ func _apply_canonical_effects_from_plan(
 					Time.get_ticks_msec()
 					+ maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
 				)
+	_finish_feature_damage_batch(feature_batch)
 	return {
 		"spawned_projectile_ids": spawned_projectiles,
 		"status_results": applied_status_results,
@@ -9273,7 +9340,8 @@ func _spawn_canonical_cast_nodes_from_plan(
 	origin: Vector2,
 	direction: Vector2,
 	target: EnemyActor,
-	target_position: Vector2
+	target_position: Vector2,
+	configuration: RefCounted = null
 ) -> Array[Node2D]:
 	## Q3-B: the ONLY formal node creation entry - CasterSkillRuntime consumes
 	## the canonical plan (no legacy presentation plan or cast-node entry).
@@ -9309,10 +9377,11 @@ func _spawn_canonical_cast_nodes_from_plan(
 			Color.WHITE,
 			target,
 			player,
-			_canonical_primary_stat_roll("taoist"),
-			PlayerState.level,
+			_canonical_primary_stat_roll("taoist", _canonical_action_primary_stats(configuration)),
+			configuration.actor_level() if configuration != null else PlayerState.level,
 			Callable(self, "_apply_canonical_main_pet_from_descriptor"),
 			{
+				"action_definition": configuration.definition_for(stable_skill_id) if configuration != null else PlayerState.effective_skill_definition(stable_skill_id),
 				"combat_spatial_index": _combat_spatial_index,
 				"runtime_map_id": current_map_id,
 				"ground_gu_to_screen_position_px": (
@@ -9398,6 +9467,7 @@ func _apply_canonical_spell_damage(
 	skill_release_snapshot: Dictionary = {},
 	query_plan: Dictionary = {},
 	release_cache: Dictionary = {},
+	damage_batch: RefCounted = null,
 ) -> bool:
 	var resolved_snapshot := _aoe_spell_snapshot(
 		skill_release_snapshot,
@@ -9555,6 +9625,7 @@ func _apply_canonical_spell_damage(
 			# source176 Task 1: generic canonical-AoE applier - registry-resolved
 			# delivery family; unknown ids fail closed.
 			CombatRuntimeServiceScript.EnemyMagicDeliveryKind.AUTO,
+			{"feature_damage_batch":damage_batch,"source_class":"direct","damage_channel":"magic_defense"} if damage_batch != null else {},
 		)
 		hit_any = bool(resolution.get("success", false)) or hit_any
 	RuntimeDiagnostics.record_timing_usec(&"aoe_exact_phase_usec", aoe_exact_started_usec)
@@ -9673,9 +9744,11 @@ func _skill_snapshot_intersects_enemy(
 func _canonical_effective_spell_geometry_cells(
 	stable_skill_id: String,
 	raw_geometry_cells: Variant,
-	effect: Dictionary
+	effect: Dictionary,
+	definition: Dictionary = {}
 ) -> Array[Vector2i]:
-	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	if definition.is_empty():
+		definition = SkillDataLoaderScript.skill(stable_skill_id)
 	var geometry: Dictionary = definition.get("geometry", {}).duplicate(true)
 	if effect.has("stops_on_terrain"):
 		geometry["stops_on_terrain"] = bool(effect.stops_on_terrain)
@@ -9701,7 +9774,8 @@ func _canonical_continuous_line_strip_ground_gu(
 	effect: Dictionary,
 	origin_screen_px: Vector2,
 	direction_screen_px: Vector2,
-	release_id := ""
+	release_id := "",
+	definition: Dictionary = {}
 ) -> Dictionary:
 	if (
 		stable_skill_id not in CONTINUOUS_WIZARD_LINE_SKILLS
@@ -9710,7 +9784,8 @@ func _canonical_continuous_line_strip_ground_gu(
 		)
 	):
 		return {}
-	var definition := SkillDataLoaderScript.skill(stable_skill_id)
+	if definition.is_empty():
+		definition = SkillDataLoaderScript.skill(stable_skill_id)
 	var geometry: Dictionary = definition.get("geometry", {})
 	var effect_length_gu := maxf(
 		0.0,
@@ -10920,7 +10995,7 @@ func _wire_canonical_main_pet_persistence(summon: SummonActor) -> void:
 
 
 func _restore_persisted_taoist_main_pet_if_needed(allow_deferred_arrival: bool = false) -> bool:
-	if ProfessionRules.profession_id(PlayerState.profession) != "taoist":
+	if ProfessionRules.profession_id(PlayerState.profession_id) != "taoist":
 		return false
 	var restored_any := false
 	var saved_groups: Dictionary = (
@@ -11145,7 +11220,7 @@ func _status_buff_entries() -> Array:
 		entries.append({"id":"heal", "skill":"治愈术", "remaining":heal_remaining, "started_at":heal_started})
 	for buff: Dictionary in PlayerState.temporary_item_buffs.values():
 		if float(buff.remaining) <= 0.0: continue
-		entries.append({"id":"item:" + str(buff.buffGroup), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
+		entries.append({"id":"item:" + str(buff.buffGroup), "entity_id":str(buff.get("entity_id", "")), "item_id":int(buff.get("item_id", -1)), "remaining":float(buff.remaining), "started_at":int(buff.get("started_at_usec", 0))})
 	var relic_proc := PlayerState.relic_proc_status()
 	if float(relic_proc.get("remaining", 0.0)) > 0.0:
 		entries.append({"id": "relic:%d" % int(relic_proc.get("item_id", -1)), "item_id": int(relic_proc.get("item_id", -1)), "remaining": float(relic_proc.remaining), "started_at": int(relic_proc.get("started_at_usec", 0))})
@@ -12052,12 +12127,13 @@ func _canonical_facing_for_skill(skill_id: String, direction: Vector2) -> Vector
 	return _canonical_facing(direction)
 
 
-func _canonical_primary_stat_roll(profession_id: String) -> int:
+func _canonical_primary_stat_roll(profession_id: String, stats: Dictionary = {}) -> int:
 	var minimum_key := "tao_min" if profession_id == "taoist" else ("magic_min" if profession_id == "wizard" else "attack_min")
 	var maximum_key := "tao_max" if profession_id == "taoist" else ("magic_max" if profession_id == "wizard" else "attack_max")
-	var minimum := int(PlayerState.computed_stats.get(minimum_key, 0))
-	var maximum := maxi(minimum, int(PlayerState.computed_stats.get(maximum_key, minimum)))
-	return WarriorCombatMath.roll_primary_stat(minimum, maximum, int(PlayerState.computed_stats.get("luck", 0)), _rng)
+	var snapshot: Dictionary = PlayerState.computed_stats if stats.is_empty() else stats
+	var minimum := int(snapshot.get(minimum_key, 0))
+	var maximum := maxi(minimum, int(snapshot.get(maximum_key, minimum)))
+	return WarriorCombatMath.roll_primary_stat(minimum, maximum, int(snapshot.get("luck", 0)), _rng)
 
 
 func _next_canonical_seed() -> int:
@@ -12535,7 +12611,7 @@ func _is_primary_melee_candidate(
 
 
 func _apply_physical_hit(
-	enemy: EnemyActor, damage: int, accuracy_bonus := 0, ignore_ac := false
+	enemy: EnemyActor, damage: int, accuracy_bonus := 0, ignore_ac := false, configuration: RefCounted = null, damage_batch: RefCounted = null
 ) -> bool:
 	if (
 		enemy == null
@@ -12544,7 +12620,7 @@ func _apply_physical_hit(
 	):
 		return false
 	var accuracy := int(
-		PlayerState.computed_stats.get("accuracy", WarriorCombatMath.BASE_HIT)
+		_canonical_action_primary_stats(configuration).get("accuracy", WarriorCombatMath.BASE_HIT)
 	) + accuracy_bonus
 	var target_agility := maxi(1, enemy.agility)
 	var diagnostics_enabled := CombatDiagnosticLogScript.capture_enabled()
@@ -12575,15 +12651,16 @@ func _apply_physical_hit(
 	var physical_resolution := WarriorCombatMath.resolve_enemy_physical_damage(
 		damage, enemy.effective_physical_defense(), ignore_ac
 	)
+	var damage_context := {"damage_kind":"player_physical","confirmed_hit":true,"source":"game_root._apply_physical_hit"}
+	if damage_batch != null:
+		damage_context["feature_damage_batch"] = damage_batch
+		damage_context["source_class"] = "direct"
+		damage_context["damage_channel"] = "physical"
 	if not _combat_runtime.apply_enemy_physical_damage(
 		enemy,
 		int(physical_resolution.get("final_damage", 0)),
 		player,
-		{
-			"damage_kind": "player_physical",
-			"confirmed_hit": true,
-			"source": "game_root._apply_physical_hit",
-		},
+		damage_context,
 	):
 		if diagnostics_enabled:
 			_active_physical_hit_diagnostics.append({
@@ -12899,7 +12976,7 @@ func _show_attack_flash(origin: Vector2, direction: Vector2, hit: bool, color: C
 
 
 func _on_enemy_died(enemy: EnemyActor, monster_data: Dictionary) -> void:
-	var queued_at_usec := RuntimeDiagnostics.timing_start()
+	var queued_at_usec := Time.get_ticks_usec()
 	if _combat_spatial_index != null:
 		_combat_spatial_index.unregister(
 			int(enemy.get_meta("spawn_serial", 0))
@@ -13090,20 +13167,10 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	if _enemy_death_pipeline_running:
 		return false
 	_enemy_death_pipeline_running = true
-	# Scheduling is production behavior, independent of diagnostic sampling.
-	# Diagnostic timers return zero when disabled (the normal gameplay case).
-	var slice_started_usec := Time.get_ticks_usec()
+	# Already accepted settlement receipts and reference cleanup are necessary.
+	# They share accounting, but cannot be rejected by optional-work exhaustion.
+	var receipt_token := FrameBudget.begin("death_receipt", true)
 	var progressed := _poll_prepared_enemy_death_settlement(force_synchronous)
-	var budget_usec := _death_drop_work_budget_usec()
-	var jobs_limit := _death_jobs_max_per_frame()
-	var nodes_limit := _drop_nodes_max_per_frame()
-	if not force_synchronous and not PlayerState.test_mode:
-		# Keep large reward bursts off one render frame, even if a project override is higher.
-		nodes_limit = mini(nodes_limit, 1)
-	if force_synchronous:
-		budget_usec = 2147483647
-		jobs_limit = 2147483647
-		nodes_limit = 2147483647
 	if _enemy_death_target_refresh_pending:
 		_enemy_death_target_refresh_pending = false
 		RuntimeDiagnostics.increment_performance_counter(&"death_target_refresh_count")
@@ -13113,8 +13180,45 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 				_update_target_hud()
 		progressed = true
 	_compact_enemy_death_queue()
+	FrameBudget.end(receipt_token)
+	_refresh_death_budget_owner()
+	if not _pending_enemy_deaths.is_empty():
+		var token := FrameBudget.begin(_death_budget_category, force_synchronous)
+		if token > 0:
+			progressed = _advance_enemy_death_work_slice(force_synchronous, progressed)
+			FrameBudget.end(token)
+	_enemy_death_pipeline_running = false
+	_refresh_death_budget_owner()
+	return progressed
+
+
+func _refresh_death_budget_owner() -> void:
+	var runnable := not _pending_enemy_deaths.is_empty()
+	if runnable:
+		var head: Dictionary = _pending_enemy_deaths[0]
+		runnable = str(head.get("state", "")) != DEATH_STATE_PERSISTING
+		if str(head.get("state", "")) == DEATH_STATE_RETRY:
+			runnable = _death_retry_ready(head)
+	FrameBudget.mark_pending(_death_budget_category, not _pending_enemy_deaths.is_empty(), runnable, false, self)
+
+
+func _advance_enemy_death_work_slice(force_synchronous: bool, progressed: bool) -> bool:
+	# Scheduling is production behavior, independent of diagnostic sampling.
+	# Diagnostic timers return zero when disabled (the normal gameplay case).
+	var slice_started_usec := Time.get_ticks_usec()
+	var budget_usec := _death_drop_work_budget_usec()
+	if not force_synchronous:
+		budget_usec = mini(budget_usec, FrameBudget.remaining_usec())
+	var jobs_limit := _death_jobs_max_per_frame()
+	var nodes_limit := _drop_nodes_max_per_frame()
+	if not force_synchronous and not PlayerState.test_mode:
+		# Keep large reward bursts off one render frame, even if a project override is higher.
+		nodes_limit = mini(nodes_limit, 1)
+	if force_synchronous:
+		budget_usec = 2147483647
+		jobs_limit = 2147483647
+		nodes_limit = 2147483647
 	if _pending_enemy_deaths.is_empty():
-		_enemy_death_pipeline_running = false
 		return progressed
 	var jobs_processed := _death_settled_jobs_last_batch
 	var nodes_processed := 0
@@ -13130,7 +13234,6 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 			(force_synchronous or _death_retry_ready(_pending_enemy_deaths[unsettled_index]))
 			and (
 				force_synchronous
-				or jobs_processed == 0
 				or Time.get_ticks_usec() - slice_started_usec < budget_usec
 			)
 		):
@@ -13144,7 +13247,6 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	while not _pending_enemy_deaths.is_empty():
 		if (
 			not force_synchronous
-			and progressed
 			and Time.get_ticks_usec() - slice_started_usec >= budget_usec
 		):
 			break
@@ -13232,7 +13334,6 @@ func _pump_enemy_death_work_queue(force_synchronous := false) -> bool:
 	RuntimeDiagnostics.record_performance_max(
 		&"drop_nodes_per_frame_max", float(nodes_processed)
 	)
-	_enemy_death_pipeline_running = false
 	return progressed
 
 
@@ -13306,7 +13407,16 @@ func set_loot_legacy_reference_fallback_for_test(enabled: bool) -> bool:
 
 
 func death_work_queue_snapshot() -> Dictionary:
+	var oldest_age_usec := 0
+	var maximum_completion_latency_usec := 0
+	for death: Dictionary in _pending_enemy_deaths:
+		oldest_age_usec = maxi(oldest_age_usec, Time.get_ticks_usec() - int(death.get("queued_at_usec", Time.get_ticks_usec())))
+	for death: Dictionary in _enemy_death_terminal_jobs:
+		maximum_completion_latency_usec = maxi(maximum_completion_latency_usec,
+			int(death.get("completion_latency_usec", 0)))
 	return {
+		"oldest_age_usec": oldest_age_usec,
+		"maximum_completion_latency_usec": maximum_completion_latency_usec,
 		"pending": _pending_enemy_deaths.duplicate(true),
 		"terminal": _enemy_death_terminal_jobs.duplicate(true),
 		"terminal_count": _enemy_death_terminal_total_count,
@@ -13335,6 +13445,8 @@ func _compact_enemy_death_queue() -> void:
 	for death: Dictionary in _pending_enemy_deaths:
 		var state := str(death.get("state", ""))
 		if state in [DEATH_STATE_FAILED, DEATH_STATE_CANCELLED, DEATH_STATE_COMMITTED]:
+			death["completion_latency_usec"] = maxi(0,
+				Time.get_ticks_usec() - int(death.get("queued_at_usec", Time.get_ticks_usec())))
 			if state == DEATH_STATE_FAILED and _last_death_logout_failure.is_empty():
 				_last_death_logout_failure = {
 					"success": false,
@@ -14400,9 +14512,10 @@ func _on_background_item_save_failed() -> void:
 		hud.show_error_message("最近的进度尚未保存，请检查存储空间")
 
 
-func _on_consumable_used(item_name: String) -> void:
+func _on_consumable_used(entity_id: String) -> void:
 	if not gameplay_input_is_enabled(): return
-	var item := GameData.get_item_record(item_name)
+	var item := GameData.get_entity_record(entity_id)
+	if item.get("kind") != "consumable" or not item.get("usable", true): return
 	var effect := str(item.get("useEffect", ""))
 	var restored_hp := int(item.get("restoreHealth", 0))
 	var restored_mp := int(item.get("restoreMana", 0))
@@ -14415,20 +14528,9 @@ func _on_consumable_used(item_name: String) -> void:
 		var duration := maxf(1.0, float(item.get("durationMinutes", 1)) * 60.0)
 		var stats: Dictionary = item.get("stats", {})
 		player.apply_defense_buff(duration, maxi(int(stats.get("MaxAC", 0)), int(stats.get("MaxMAC", 0))))
-	elif "金创药" in item_name:
-		player.restore_health(80 if "强效" in item_name else (35 if "中量" in item_name else 20))
-	elif "魔法药" in item_name:
-		player.restore_mana(100 if "强效" in item_name else (45 if "中量" in item_name else 30))
-	elif "太阳水" in item_name:
-		var amount := 100 if "强效" in item_name else 50
-		player.restore_health(amount)
-		player.restore_mana(amount)
-	elif item_name == "疗伤药":
-		player.restore_health(120)
-	elif item_name == "万年雪霜":
-		player.restore_health(150)
-		player.restore_mana(150)
-	elif "神水" in item_name:
+	elif entity_id == "hc.service_item.000123":
+		# Preserve this exact pre-ID compatibility behavior. Its source curse
+		# rule is a separate gameplay decision, not an identity migration.
 		player.restore_health(30)
 		player.restore_mana(30)
 		player.apply_defense_buff(60.0, 2)
@@ -14437,13 +14539,14 @@ func _on_consumable_used(item_name: String) -> void:
 	# this legacy signal lane must not add a second one. Effects stay.
 
 
-func _on_scroll_used(item_name: String) -> void:
+func _on_scroll_used(entity_id: String) -> void:
 	if not gameplay_input_is_enabled(): return
-	var item := GameData.get_item_record(item_name)
+	var item := GameData.get_entity_record(entity_id)
+	if item.get("kind") != "scroll" or not item.get("usable", true): return
 	var effect := str(item.get("useEffect", ""))
-	if effect in ["town_teleport", "dungeon_escape"] or item_name == "回城卷":
+	if effect in ["town_teleport", "dungeon_escape"]:
 		travel_to_service_home(false, false, "比奇省")
-	elif effect == "random_teleport" or "随机" in item_name:
+	elif effect == "random_teleport":
 		var destination := _find_valid_random_teleport_position(player.global_position)
 		if destination == player.global_position:
 			hud.show_error_message("附近没有可用传送落点")
@@ -14638,7 +14741,9 @@ func _combat_target_world_clear(victim: EnemyActor, caster_origin: Vector2, allo
 	return victim._world_attack_path_is_clear(a, b, caster_origin, victim.global_position, allow_cache)
 
 func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
-	if _hostile_skill_blocked_by_safe_zone(SkillDataLoaderScript.skill(stable_skill_id)):
+	var configuration := player.current_preflight_action_configuration()
+	var definition: Dictionary = configuration.definition_for(stable_skill_id) if configuration != null else PlayerState.effective_skill_definition(stable_skill_id)
+	if _hostile_skill_blocked_by_safe_zone(definition):
 		if hud != null:
 			hud.show_error_message("安全区内无法对敌人释放技能")
 		return false
@@ -14651,6 +14756,88 @@ func _hc_skill_preflight(stable_skill_id: String, target_id: int) -> bool:
 		_hc_lightning_hint_ms = Time.get_ticks_msec()
 		hud.show_error_message("目标被遮挡或已失效", 1.5)
 	return clear
+
+
+func _action_configuration_identity() -> Dictionary:
+	return {"world_generation":_zone_generation,"runtime_id":player.get_instance_id() if is_instance_valid(player) else 0,
+		"life_generation":player.combat_epoch if is_instance_valid(player) else 0}
+
+
+func _capture_action_configuration(stable_skill_id: String, melee: Dictionary = {}) -> RefCounted:
+	stable_skill_id = SkillDataLoaderScript.stable_skill_id(stable_skill_id)
+	var definition := PlayerState.effective_skill_definition(stable_skill_id)
+	if definition.is_empty() or not is_instance_valid(player):
+		return null
+	var partner: Dictionary = {}
+	var partner_rank := 0
+	if stable_skill_id in ["taoist.defense", "taoist.magic_defense"]:
+		var partner_id := "taoist.magic_defense" if stable_skill_id == "taoist.defense" else "taoist.defense"
+		if PlayerState.is_skill_learned(partner_id):
+			partner = PlayerState.effective_skill_definition(partner_id)
+			partner_rank = PlayerState.effective_skill_level(partner_id)
+	var contract := preload("res://scripts/features/contracts/action_config_lease.gd")
+	var bundle := PlayerState.feature_bundle()
+	var has_numeric_configuration: bool = not bundle.get("stat_operations", []).is_empty() \
+		or not bundle.get("skill_operations", {}).is_empty()
+	var primary_policy: String = (contract.ACCEPTED_PRIMARY_STATS if has_numeric_configuration \
+		else contract.LEGACY_RELEASE_PRIMARY_STATS)
+	var captured := contract.create(
+		definition, PlayerState.effective_skill_level(stable_skill_id), PlayerState.level, PlayerState.computed_stats,
+		PlayerState.action_configuration_versions(), _action_configuration_identity(), partner, partner_rank, primary_policy, melee,bundle.get("event_index",{}))
+	return captured.lease if bool(captured.success) else null
+
+
+func _capture_melee_configuration() -> RefCounted:
+	var melee := {"definitions":{},"ranks":{},"learned_skills":{},"toggles":{
+		"warrior.fire_sword":player.fire_sword_enabled,"warrior.half_moon":player.half_moon_enabled,
+		"warrior.thrusting":player.thrusting_enabled}}
+	for id: String in ["warrior.basic_swordsmanship","warrior.slaying_swordsmanship","warrior.thrusting",
+		"warrior.half_moon","warrior.fire_sword","taoist.spiritual_warfare"]:
+		var entity_id := SkillDataLoaderScript.entity_skill_id(id)
+		melee.definitions[entity_id] = PlayerState.effective_skill_definition(id)
+		melee.ranks[entity_id] = PlayerState.effective_skill_level(id)
+		if PlayerState.is_skill_learned(id):
+			melee.learned_skills[entity_id] = melee.ranks[entity_id]
+	return _capture_action_configuration("warrior.basic_swordsmanship", melee)
+
+
+func _canonical_action_primary_stats(configuration: RefCounted) -> Dictionary:
+	var contract := preload("res://scripts/features/contracts/action_config_lease.gd")
+	# Original release-time combat additions retain their original owner when
+	# no numeric extension participated at acceptance. This is an explicit
+	# policy, not an empty-value guess or a second calculator.
+	if configuration == null or configuration.primary_stat_policy() == contract.LEGACY_RELEASE_PRIMARY_STATS:
+		return PlayerState.computed_stats
+	return configuration.primary_stats()
+
+
+func _begin_feature_damage_batch(skill_id: String, release_id: String, configuration: RefCounted = null) -> RefCounted:
+	var bindings: Array = []
+	if configuration != null:
+		bindings = configuration.event_bindings_for(skill_id)
+	else:
+		var index: Dictionary = PlayerState.feature_bundle().get("event_index",{})
+		if index.is_empty(): return null
+		bindings = index.get("damage_committed:" + SkillDataLoaderScript.entity_skill_id(skill_id),[])
+	if bindings.is_empty(): return null
+	var entity_id := SkillDataLoaderScript.entity_skill_id(skill_id)
+	if _feature_effect_runtime == null:
+		_feature_effect_runtime = preload("res://scripts/features/runtime/effect_runtime.gd").new()
+		_feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime)
+	var created := preload("res://scripts/features/runtime/damage_batch.gd").create(_world_context,release_id,entity_id,
+		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec())
+	if not bool(created.success):
+		push_error("Feature damage batch rejected: " + str(created.reason)); return null
+	var batch: RefCounted = created.batch
+	if not batch.begin_base_scope(): return null
+	return batch
+
+
+func _finish_feature_damage_batch(batch: RefCounted) -> void:
+	if batch == null: return
+	if not batch.finish_base_scope() or not batch.errors.is_empty():
+		push_error("Feature damage fact rejected: " + str(batch.errors)); return
+	_feature_effect_runtime.submit_batch(batch)
 
 
 func _ordinary_attack_owner_matches(

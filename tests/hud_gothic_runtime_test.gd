@@ -428,9 +428,9 @@ func _run() -> void:
 	hud.item_quick_slot_assignment_requested.connect(func(slot_index: int, item_name: String) -> void: assignment_signals.append([slot_index, item_name]))
 	hud.item_quick_slot_use_requested.connect(func(slot_index: int, item_name: String) -> void: use_signals.append([slot_index, item_name]))
 
-	hud._assign_item_quick_slot(0, "太阳水")
-	assert(hud.item_quick_slots[0] == "太阳水", "选择后本地镜像未更新")
-	assert(assignment_signals == [[0, "太阳水"]], "assignment 信号参数应为 slot_index/item_name")
+	hud._assign_item_quick_slot(0, GameData.item_entity_id("太阳水"))
+	assert(hud.item_quick_slots[0] == GameData.item_entity_id("太阳水"), "选择后本地镜像未更新")
+	assert(assignment_signals == [[0, GameData.item_entity_id("太阳水")]], "assignment 信号参数应为 slot_index/item_name")
 	var bound_button := hud.hud_item_buttons[0] as Button
 	var bound_icon := hud.item_quick_slot_icons[0] as TextureRect
 	var bound_count := hud.item_quick_slot_count_labels[0] as Label
@@ -457,14 +457,14 @@ func _run() -> void:
 		)
 	hud.set_item_quick_slots(["", "", "", ""])
 	assert(bound_button.text == "1", "清空绑定后应恢复空槽号")
-	hud.set_item_quick_slots(["太阳水", "", "", ""])
+	hud.set_item_quick_slots([GameData.item_entity_id("太阳水"), "", "", ""])
 	assert(bound_button.text.is_empty(), "恢复绑定后槽号文字应再次清空")
 
 	var slot_center := hud.hud_item_buttons[0].size * 0.5
 	hud._begin_item_slot_press(0, slot_center, -1)
 	hud._finish_item_slot_press(0, slot_center)
-	assert(use_signals == [[0, "太阳水"]], "单击已绑定槽应发出 use 请求")
-	assert(hud.item_quick_slots[0] == "太阳水", "use 不应清除绑定")
+	assert(use_signals == [[0, GameData.item_entity_id("太阳水")]], "单击已绑定槽应发出 use 请求")
+	assert(hud.item_quick_slots[0] == GameData.item_entity_id("太阳水"), "use 不应清除绑定")
 
 	hud._begin_item_slot_press(1, slot_center, -1)
 	hud._finish_item_slot_press(1, slot_center)
@@ -535,13 +535,13 @@ func _run() -> void:
 	assert(use_signals.size() == before_menu_use_count, "长按后释放不应触发 use")
 	var repair_id := -1
 	for id_value: Variant in hud._item_quick_slot_menu_candidates.keys():
-		if str(hud._item_quick_slot_menu_candidates[id_value]) == "修复油":
+		if str(hud._item_quick_slot_menu_candidates[id_value]) == GameData.item_entity_id("修复油"):
 			repair_id = int(id_value)
 	assert(repair_id > 0, "菜单候选缺少修复油")
 	var repair_button := hud.item_quick_slot_candidate_buttons[repair_id - 1] as Button
 	repair_button.pressed.emit()
-	assert(hud.item_quick_slots[2] == "修复油", "菜单选择后本地镜像未更新")
-	assert(assignment_signals.size() == 2 and assignment_signals[1] == [2, "修复油"], "菜单选择应发出 assignment 信号")
+	assert(hud.item_quick_slots[2] == GameData.item_entity_id("修复油"), "菜单选择后本地镜像未更新")
+	assert(assignment_signals.size() == 2 and assignment_signals[1] == [2, GameData.item_entity_id("修复油")], "菜单选择应发出 assignment 信号")
 
 	hud._begin_item_slot_press(3, slot_center, 8)
 	await get_tree().create_timer(0.55).timeout
@@ -603,8 +603,8 @@ func _run() -> void:
 		"后续候选滚动后仍不可见",
 	)
 	later_candidate.pressed.emit()
-	assert(hud.item_quick_slots[3] == "体力强效神水", "后续候选点击没有更新快捷槽")
-	assert(assignment_signals.size() == 3 and assignment_signals[2] == [3, "体力强效神水"], "后续候选点击未保持 assignment 语义")
+	assert(hud.item_quick_slots[3] == "hc.item.910001", "后续候选点击没有更新快捷槽")
+	assert(assignment_signals.size() == 3 and assignment_signals[2] == [3, "hc.item.910001"], "后续候选点击未保持 assignment 语义")
 	hud._finish_item_slot_press(3, slot_center, 8)
 	assert(use_signals.size() == before_menu_use_count, "触摸长按释放不应触发 use")
 	hud.item_quick_slot_menu.hide()
@@ -636,14 +636,14 @@ func _run() -> void:
 	hud.call("_item_slot_input", emulated_mouse_up, 2)
 	assert(use_signals.size() == emulation_use_before + 1, "原生触摸加模拟鼠标只能发出一次快捷物品 use")
 
-	hud.set_item_quick_slots(["太阳水", "修复油", {"item_name": "强效太阳水"}, "基本剑术"])
+	hud.set_item_quick_slots([GameData.item_entity_id("太阳水"), GameData.item_entity_id("修复油"), {"entity_id": GameData.item_entity_id("强效太阳水")}, GameData.item_entity_id("基本剑术")])
 	assert(hud.item_quick_slots.size() == 4, "set_item_quick_slots 应规范化为四项")
-	assert(hud.item_quick_slots == ["太阳水", "修复油", "强效太阳水", "基本剑术"], "set_item_quick_slots 镜像顺序错误")
+	assert(hud.item_quick_slots == [GameData.item_entity_id("太阳水"), GameData.item_entity_id("修复油"), GameData.item_entity_id("强效太阳水"), GameData.item_entity_id("基本剑术")], "set_item_quick_slots 镜像顺序错误")
 	assert(int(hud.hud_item_buttons[0].get_meta("item_quick_slot_count", 0)) == 2, "图标数量层未刷新")
 
 	PlayerState.remove_item("太阳水", 2)
 	await get_tree().process_frame
-	assert(hud.item_quick_slots[0] == "太阳水", "库存耗尽不应清除绑定")
+	assert(hud.item_quick_slots[0] == GameData.item_entity_id("太阳水"), "库存耗尽不应清除绑定")
 	assert(int(hud.hud_item_buttons[0].get_meta("item_quick_slot_count", -1)) == 0, "耗尽后数量应显示 0")
 	assert(not bool(hud.hud_item_buttons[0].get_meta("item_quick_slot_available", true)), "耗尽后应标记不可用")
 	assert((hud.item_quick_slot_icons[0] as TextureRect).visible, "耗尽后仍应保留绑定图标显示")

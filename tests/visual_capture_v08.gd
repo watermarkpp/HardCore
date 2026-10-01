@@ -8,7 +8,7 @@ func _ready() -> void:
 	PlayerState.add_gold(1800)
 	PlayerState.add_item("木剑")
 	PlayerState.equip_inventory_index(0)
-	var weapon: Dictionary = PlayerState.equipment["武器"]
+	var weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
 	weapon["durability"] = maxi(1, int(weapon.get("max_durability", 2)) - 2)
 	PlayerState.add_item("金创药(小量)", 5)
 	PlayerState.add_item("基本剑术")

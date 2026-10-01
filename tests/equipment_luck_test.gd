@@ -6,6 +6,7 @@ const TEST_INDEX := "user://equipment_luck_test_index.json"
 
 var _oil_unlucky_roll := 0
 var _oil_success_roll := 0
+var _oil_requests: Array[String] = []
 
 
 func _ready() -> void:
@@ -19,9 +20,10 @@ func _inventory_index(item_name: String) -> int:
 	return -1
 
 
-func _on_consumable_requested(item_name: String) -> void:
-	if item_name == "祝福油":
-		PlayerState.apply_blessing_oil_with_rolls(_oil_unlucky_roll, _oil_success_roll)
+func _on_consumable_requested(entity_id: String) -> void:
+	# The real oil transaction already owns its outcome; the event is a
+	# completion notice, never a second chance to apply the same oil.
+	_oil_requests.append(entity_id)
 
 
 func _run() -> void:
@@ -109,7 +111,7 @@ func _run() -> void:
 	PlayerState.recalculate_stats()
 	PlayerState.add_item("逍遥扇")
 	assert(PlayerState.equip_inventory_index(_inventory_index("逍遥扇")).begins_with("已装备"), "基础幸运武器穿戴失败")
-	var base_luck_weapon: Dictionary = PlayerState.equipment["武器"]
+	var base_luck_weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
 	base_luck_weapon["weapon_luck"] = 2
 	base_luck_weapon["weapon_curse"] = 1
 	PlayerState.recalculate_stats()
@@ -125,9 +127,10 @@ func _run() -> void:
 	var oil_index := _inventory_index("祝福油")
 	assert(PlayerState.use_inventory_index(oil_index) == "需要先装备武器", "未装备武器时祝福油提示错误")
 	assert(PlayerState.has_item("祝福油", 3), "未装备武器却消耗了祝福油")
+	assert(_oil_requests.is_empty(), "被拒绝的祝福油不应派发已完成事件")
 	PlayerState.add_item("命运之刃")
 	assert(PlayerState.equip_inventory_index(_inventory_index("命运之刃")).begins_with("已装备"), "祝福油测试武器穿戴失败")
-	var weapon: Dictionary = PlayerState.equipment["武器"]
+	var weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
 	assert(weapon.has("weapon_luck") and weapon.has("weapon_curse"), "武器实例没有幸运/诅咒字段")
 	weapon["weapon_luck"] = 3
 	weapon["weapon_curse"] = 0
@@ -165,14 +168,14 @@ func _run() -> void:
 	PlayerState.add_item("古铜戒指")
 	assert(PlayerState.equip_inventory_index(_inventory_index("古铜戒指")).begins_with("已装备"), "总幸运测试戒指穿戴失败")
 	# A successful equipment transaction publishes a new immutable snapshot.
-	weapon = PlayerState.equipment["武器"]
+	weapon = PlayerState.equipment["hc.slot.weapon"]
 	weapon["weapon_curse"] = 1
 	PlayerState.recalculate_stats()
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "总幸运没有按全部装备luck-curse和武器实例差值计算: %s / %s" % [PlayerState.computed_stats.get("luck", 0), weapon])
-	var ring: Dictionary = PlayerState.equipment["左戒指"]
-	PlayerState.damage_equipment_durability("左戒指", int(ring.get("max_durability", 1)))
+	var ring: Dictionary = PlayerState.equipment["hc.slot.ring_left"]
+	PlayerState.damage_equipment_durability("hc.slot.ring_left", int(ring.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 3, "零耐久非武器仍贡献luck/curse")
-	PlayerState.damage_equipment_durability("武器", int(weapon.get("max_durability", 1)))
+	PlayerState.damage_equipment_durability("hc.slot.weapon", int(weapon.get("max_durability", 1)))
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 0 and int(weapon.get("weapon_luck", 0)) == 4, "零耐久未禁用幸运或错误清除实例幸运")
 	# 当前正式价格权威已经包含命运之刃；付费维修后武器与戒指都应
 	# 恢复贡献，但持久幸运/诅咒数值不得重掷。
@@ -181,8 +184,8 @@ func _run() -> void:
 	assert(PlayerState.gold > 0, "正式维修报价必须大于零")
 	PlayerState.repair_all_equipment(blacksmith_context)
 	assert(PlayerState.gold == 0, "维修未按报价准确扣费")
-	assert(int(PlayerState.equipment["武器"].get("durability", -1)) == int(PlayerState.equipment["武器"].get("max_durability", 0)), "正式报价的武器没有修复")
-	assert(int(PlayerState.equipment["左戒指"].get("durability", -1)) == int(PlayerState.equipment["左戒指"].get("max_durability", 0)), "有正式报价的戒指没有完成维修")
+	assert(int(PlayerState.equipment["hc.slot.weapon"].get("durability", -1)) == int(PlayerState.equipment["hc.slot.weapon"].get("max_durability", 0)), "正式报价的武器没有修复")
+	assert(int(PlayerState.equipment["hc.slot.ring_left"].get("durability", -1)) == int(PlayerState.equipment["hc.slot.ring_left"].get("max_durability", 0)), "有正式报价的戒指没有完成维修")
 	assert(int(PlayerState.computed_stats.get("luck", 0)) == 4, "维修后武器与戒指的幸运/诅咒没有恢复参与结算")
 
 	PlayerState.profile_directory = TEST_DIRECTORY
@@ -195,12 +198,12 @@ func _run() -> void:
 	assert(saved_file != null, "祝福/诅咒存档没有写入")
 	var saved: Variant = JSON.parse_string(saved_file.get_as_text())
 	assert(saved is Dictionary)
-	assert(int(saved.get("equipment", {}).get("武器", {}).get("weapon_luck", -1)) == 4)
-	assert(int(saved.get("equipment", {}).get("武器", {}).get("weapon_curse", -1)) == 1)
+	assert(int(saved.get("equipment", {}).get("hc.slot.weapon", {}).get("weapon_luck", -1)) == 4)
+	assert(int(saved.get("equipment", {}).get("hc.slot.weapon", {}).get("weapon_curse", -1)) == 1)
 	weapon["weapon_luck"] = 0
 	weapon["weapon_curse"] = 0
 	PlayerState.load_save()
-	weapon = PlayerState.equipment["武器"]
+	weapon = PlayerState.equipment["hc.slot.weapon"]
 	assert(int(weapon.get("weapon_luck", -1)) == 4 and int(weapon.get("weapon_curse", -1)) == 1, "存档没有恢复武器实例幸运/诅咒")
 
 	var panel := InventoryPanel.new()

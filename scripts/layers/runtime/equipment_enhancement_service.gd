@@ -1,6 +1,8 @@
 class_name EquipmentEnhancementService
 extends RefCounted
 
+const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+
 const Rules := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
 const Grade := preload("res://scripts/layers/rules/equipment_enhancement_grade.gd")
 const BlackIron := preload("res://scripts/layers/rules/equipment_enhancement_black_iron.gd")
@@ -44,7 +46,7 @@ func quote_forge_tray() -> Dictionary:
 		if stack.is_empty():
 			continue
 		var item := GameData.get_item_record(stack)
-		if str(item.get("kind", "")) == "equipment" and str(item.get("category", "")) in ["武器", "盔甲", "头盔"]:
+		if str(item.get("kind", "")) == "equipment" and ItemCategories.category_for_record(item) in ["hc.item_category.weapon", "hc.item_category.armor", "hc.item_category.helmet"]:
 			if target >= 0:
 				return _failure("只能放入一件待锻造装备。")
 			target = index
@@ -122,7 +124,7 @@ func commit_forge(quote: Dictionary, save_in_background := false) -> Dictionary:
 		"contract_id": Rules.CONTRACT_ID,
 		"forge": {"stage": history.size(), "modifiers": modifiers, "history": history},
 	}
-	if not Rules.validate_enhancement(target.enhancement, str(catalog.get("category", ""))) or (target.has("drop_instance_contract_id") and not GameData.validate_item_drop_instance(target)):
+	if not Rules.validate_enhancement(target.enhancement, ItemCategories.category_for_record(catalog)) or (target.has("drop_instance_contract_id") and not GameData.validate_item_drop_instance(target)):
 		_enhancement_transaction_in_progress = false
 		return _failure("装备锻造数据校验失败，物品未改变。")
 	next_inventory[target_index] = target
@@ -182,10 +184,10 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 		records.append(value)
 	var target_item := GameData.get_item_record(records[0])
 	var target_id := int(target_item.get("itemId", -1))
-	var category := str(target_item.get("category", ""))
+	var category := ItemCategories.category_for_record(target_item)
 	var stage_before := Rules.forge_stage(records[0])
 	var target_grade := Grade.grade_for_id(target_id)
-	if str(target_item.get("kind", "")) != "equipment" or category not in ["武器", "盔甲", "头盔"] or target_grade < 0 or stage_before < 0:
+	if str(target_item.get("kind", "")) != "equipment" or category not in ["hc.item_category.weapon", "hc.item_category.armor", "hc.item_category.helmet"] or target_grade < 0 or stage_before < 0:
 		return _failure("只能锻造武器、衣服或头盔。")
 	if records[0].has("enhancement") and not Rules.validate_enhancement(records[0].enhancement, category):
 		return _failure("装备锻造数据无效。")
@@ -197,6 +199,8 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 	var accessories: Array[Dictionary] = []
 	var grades: Array[int] = []
 	for record: Dictionary in [records[2], records[3]]:
+		if not preload("res://scripts/items/item_extension_codec.gd").can_release_ownership(record):
+			return _failure("请先取出材料装备中的镶嵌物品。")
 		var accessory := GameData.get_item_record(record)
 		var accessory_id := int(accessory.get("itemId", -1))
 		if not Grade.can_use_as_accessory_material(accessory_id):
@@ -237,7 +241,7 @@ func _build_quote(target_index: int, iron_index: int, accessory_a_index: int, ac
 
 func _success_stat(quote: Dictionary, inventory: Array) -> String:
 	var target := GameData.get_item_record(inventory[int(quote.target_index)])
-	if str(target.get("category", "")) != "武器":
+	if ItemCategories.category_for_record(target) != "hc.item_category.weapon":
 		return "defense_max"
 	var accessory_a := GameData.get_item_record(inventory[int(quote.accessory_a_index)])
 	var accessory_b := GameData.get_item_record(inventory[int(quote.accessory_b_index)])

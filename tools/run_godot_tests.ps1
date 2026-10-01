@@ -1,5 +1,5 @@
-param(
-    [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical')]
+﻿param(
+    [ValidateSet('critical', 'audit_upgrade_critical', 'warrior', 'bich', 'equipment', 'monster', 'pricing_authority', 'taoist_critical', 'snapshot_coordinate_critical', 'snapshot_production_critical', 'projectile_spatial_critical', 'safe_logout_critical', 'persistent_ground_effect_critical', 'fire_wall_controller_critical', 'monster_streaming_critical', 'skill_execution_plan_critical', 'skill_production_migration_critical', 'skill_runtime_cleanup_critical', 'wizard_line_geometry_critical', 'combat_absolute_ground_critical', 'combat_projection_fail_closed_critical', 'formal_map_projection_critical', 'map_runtime_release_critical', 'map_runtime_release_transaction_critical', 'player_visual_contract_critical', 'skill_panel_layout_critical', 'device_lab_critical', 'source176_r3', 'user_feedback_20260930')]
     [string]$Suite = 'critical',
     [ValidateRange(1, 60)]
     [int]$TimeoutSeconds = 30,
@@ -17,6 +17,7 @@ $RunnerMutexKey = [BitConverter]::ToString($RunnerHashAlgorithm.ComputeHash(
 $RunnerHashAlgorithm.Dispose()
 $RunnerMutex = New-Object Threading.Mutex($false, "Local\HardCoreGodotRunner_$RunnerMutexKey")
 $RunnerLockHeld = $false
+$FrameworkEnvironmentCaptured = $false
 try {
     try { $RunnerLockHeld = $RunnerMutex.WaitOne(0) }
     catch [Threading.AbandonedMutexException] { $RunnerLockHeld = $true }
@@ -30,6 +31,9 @@ $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
 [Environment]::SetEnvironmentVariable('PATH', $null, 'Process')
 [Environment]::SetEnvironmentVariable('Path', $ProcessPath, 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'test_framework_receipt.ps1')
+$PreviousFrameworkRunId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', 'Process')
+$FrameworkEnvironmentCaptured = $true
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $GodotDirectory = Split-Path -Parent $Godot
 $LogRoot = if ($env:HARDCORE_AUDIT_LOG_ROOT) { $env:HARDCORE_AUDIT_LOG_ROOT } else { Join-Path $ProjectRoot 'outputs\test_logs' }
@@ -130,8 +134,10 @@ $Suites = @{
 		'tests/enemy_mass_death_batch_pipeline_test.tscn',
 		'tests/death_drop_budget_queue_test.tscn',
 		'tests/death_queue_lifecycle_rework_test.tscn',
-		'tests/placeholder_attack_animation_test.tscn'
+		'tests/placeholder_attack_animation_test.tscn',
+		'tests/source176_r2/natural_approach_runtime_test.tscn'
 	)
+
     warrior = @(
 		'tests/complete_client_resource_catalog_test.tscn',
 		'tests/player_movement_respawn_test.tscn',
@@ -225,6 +231,29 @@ $Suites = @{
         'tests/android_layout_test.tscn'
     )
 }
+
+# R31 formalizes every natural-frame approach fixture in the checked-in
+# manifest. Fail closed on count, identity, duplication, or missing scenes
+# so an accidentally generated subset cannot masquerade as full coverage.
+$Source176R3ManifestPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'tests/source176_r3/native_scene_manifest.json'
+$Source176R3Manifest = Get-Content -LiteralPath $Source176R3ManifestPath -Raw | ConvertFrom-Json
+$Source176R3Scenes = @($Source176R3Manifest.scenes)
+if ($Source176R3Scenes.Count -ne 48) {
+    throw "source176_r3 manifest must contain exactly 48 scenes, found $($Source176R3Scenes.Count)"
+}
+if (($Source176R3Scenes | Sort-Object -Unique).Count -ne 48) {
+    throw 'source176_r3 manifest contains duplicate scene paths'
+}
+$Source176R3PathPattern = '^(?:tests/source176_r3/natural_(?:64|89)_p[0-2]_d[0-7]\.tscn)$'
+foreach ($scenePath in $Source176R3Scenes) {
+    if ($scenePath -notmatch $Source176R3PathPattern) {
+        throw "source176_r3 manifest contains an unexpected scene path: $scenePath"
+    }
+    if (-not (Test-Path -LiteralPath (Join-Path (Split-Path $PSScriptRoot -Parent) $scenePath))) {
+        throw "source176_r3 manifest scene is missing on disk: $scenePath"
+    }
+}
+$Suites.monster = @($Suites.monster + $Source176R3Scenes | Select-Object -Unique)
 
 $Suites.caster_visual_critical = @(
     'tests/caster_skill_visual_factory_entry_test.tscn',
@@ -584,7 +613,7 @@ $Suites.critical = @(
 # 2026-09-06 gameplay/audio integration regressions. Keep these production
 # boundaries in the formal suite instead of relying on one-off adhoc evidence.
 $Suites.critical = @($Suites.critical + @(
-    'tests/random_teleport_map_extent_test.tscn',
+	'tests/random_teleport_map_extent_test.tscn',
     'tests/loot_stable_identity_save_test.tscn',
     'tests/loot_inventory_transaction_batch_test.tscn',
     'tests/loot_runtime_item_policy_test.tscn',
@@ -895,6 +924,117 @@ $Suites.critical = @($Suites.critical + @(
     'tests/skill_panel_combat_unit_test.tscn'
 ) | Select-Object -Unique)
 
+# R3 takeover: keep the three R2 runtime fixtures and every stable R3 gate.
+# Mutation scenes intentionally fail and belong only to the negative battery.
+$Source176R3StableGates = @(
+    'tests/source176_r2/shared_permission_runtime_test.tscn',
+    'tests/source176_r2/exact_leg_runtime_test.tscn',
+    'tests/source176_r2/natural_approach_runtime_test.tscn',
+    'tests/source176_r3/exact_leg_and_corridor_test.tscn',
+    'tests/source176_r3/eight_direction_admission_test.tscn',
+    'tests/source176_r3/box_snapshot_consumer_test.tscn',
+    'tests/source176_r3/source_permission_lifecycle_test.tscn',
+    'tests/source176_r3/source_game_clock_trace_test.tscn',
+    'tests/source176_r3/source_idle_wake_phase_test.tscn',
+    'tests/source176_r3/source_idle_3_test.tscn',
+    'tests/source176_r3/source_idle_10_test.tscn',
+    'tests/source176_r3/source_direct_phase_trace_test.tscn',
+    'tests/source176_r3/cold_hot_action_phase_test.tscn',
+    'tests/source176_r3/body_action_owner_matrix_test.tscn',
+    'tests/source176_r3/area_parent_admission_test.tscn',
+    'tests/source176_r3/movement_frame_budget_test.tscn',
+    'tests/source176_r3/published_map_approach_test.tscn',
+    'tests/source176_r3/all_skill_reaction_paths_test.tscn',
+    'tests/source176_r3/identity_export_test.tscn'
+    'tests/source176_r3/target_magic_admission_test.tscn',
+    'tests/source176_r3/direct_reception_edges_test.tscn',
+    'tests/source176_r3/release_lifecycle_test.tscn',
+    'tests/source176_r3/render_sequence_test.tscn',
+    'tests/source176_r3/ordinary_body_clearance_test.tscn',
+    'tests/source176_r3/point_motor_path_test.tscn',
+    'tests/source176_r3/cadence_fast_path_test.tscn',
+    'tests/source176_r3/c05_native_detour_test.tscn'
+)
+$Suites.monster = @($Suites.monster + $Source176R3StableGates | Select-Object -Unique)
+$Suites.critical = @($Suites.critical + $Source176R3StableGates | Select-Object -Unique)
+$Source176R3GateMembership = @($Suites.critical | Where-Object { $_ -in $Source176R3StableGates })
+if ($Source176R3GateMembership.Count -ne $Source176R3StableGates.Count -or
+    @($Source176R3GateMembership | Group-Object | Where-Object { $_.Count -ne 1 }).Count -ne 0) {
+    throw 'R3 stable critical membership is incomplete or duplicated'
+}
+
+# User additions are stable gates, with exact membership; no mutation cases.
+$UserFeedbackGates = @(
+    'tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn',
+    'tests/user_feedback_20260930/corner_wait_requirement_test.tscn',
+    'tests/user_feedback_20260930/crowd_fractional_escape_test.tscn',
+    'tests/user_feedback_20260930/crowd_position_candidates_test.tscn',
+    'tests/user_feedback_20260930/crowd_recovery_30_test.tscn',
+    'tests/user_feedback_20260930/crowd_recovery_4_test.tscn',
+    'tests/user_feedback_20260930/crowd_recovery_8_test.tscn',
+    'tests/user_feedback_20260930/crowd_recovery_test.tscn',
+    'tests/user_feedback_20260930/flank_committed_segment_test.tscn',
+    'tests/user_feedback_20260930/flank_projection_residual_test.tscn',
+    'tests/user_feedback_20260930/full_surround_24_fractional_test.tscn',
+    'tests/user_feedback_20260930/full_surround_64_test.tscn',
+    'tests/user_feedback_20260930/full_surround_89_fractional_test.tscn',
+    'tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn',
+    'tests/user_feedback_20260930/full_surround_89_test.tscn',
+    'tests/user_feedback_20260930/full_surround_mixed_test.tscn',
+    'tests/user_feedback_20260930/full_surround_moving_test.tscn',
+    'tests/user_feedback_20260930/full_surround_native_test.tscn',
+    'tests/user_feedback_20260930/full_surround_prefilled_test.tscn',
+    'tests/user_feedback_20260930/full_surround_west_wall_test.tscn',
+    'tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn',
+    'tests/user_feedback_20260930/large_surround_packing_test.tscn',
+    'tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn',
+    'tests/user_feedback_20260930/motion_candidate_reuse_test.tscn',
+    'tests/user_feedback_20260930/player_blocked_locomotion_test.tscn',
+    'tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn',
+    'tests/user_feedback_20260930/surround_target_body_route_test.tscn',
+    'tests/user_feedback_20260930/surround_vacancy_refill_test.tscn',
+    'tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn'
+)
+if ($UserFeedbackGates.Count -ne 29 -or ($UserFeedbackGates | Sort-Object -Unique).Count -ne 29) {
+    throw 'User feedback gate membership must contain exactly 29 unique scenes'
+}
+$Suites.user_feedback_20260930 = $UserFeedbackGates
+$Suites.source176_r3 = @($Source176R3StableGates + $Source176R3Scenes | Select-Object -Unique)
+$Suites.monster = @($Suites.monster + $UserFeedbackGates | Select-Object -Unique)
+$Suites.critical = @($Suites.critical + $UserFeedbackGates | Select-Object -Unique)
+
+# Re-audit the fully assembled critical suite for the R31 contract after all
+# later domain extensions have run. This catches accidental removal, shadowing
+# by another block, or duplicate registration.
+$Source176R3CriticalMembers = @($Suites.critical | Where-Object { $_ -match $Source176R3PathPattern })
+if ($Source176R3CriticalMembers.Count -ne 48) {
+	throw "source176_r3 critical registration must contain exactly 48 members, found $($Source176R3CriticalMembers.Count)"
+}
+$Source176R3MemberCounts = $Source176R3CriticalMembers | Group-Object
+$Source176R3Duplicates = @($Source176R3MemberCounts | Where-Object { $_.Count -ne 1 })
+if ($Source176R3Duplicates.Count -ne 0) {
+	throw "source176_r3 critical registration contains duplicates: $(($Source176R3Duplicates | ForEach-Object { $_.Name }) -join ', ')"
+}
+$Source176R3MissingFromCritical = @($Source176R3Scenes | Where-Object { $_ -notin $Source176R3CriticalMembers })
+if ($Source176R3MissingFromCritical.Count -ne 0) {
+	throw "source176_r3 critical registration is missing scenes: $(($Source176R3MissingFromCritical) -join ', ')"
+}
+$Source176R3CriticalEvidence = [ordered]@{
+	contract = 'source176.r3.critical_membership.v1'
+	count = $Source176R3CriticalMembers.Count
+	unique_count = ($Source176R3CriticalMembers | Sort-Object -Unique).Count
+	manifest_count = $Source176R3Scenes.Count
+	missing = @($Source176R3MissingFromCritical)
+	duplicates = @($Source176R3Duplicates | ForEach-Object { $_.Name })
+	members = @($Source176R3CriticalMembers | Sort-Object)
+	stable_gates = @($Source176R3GateMembership | Sort-Object)
+	user_feedback_gates = @($UserFeedbackGates | Sort-Object)
+	full_critical_members = @($Suites.critical | Sort-Object)
+}
+$Source176R3EvidenceDir = Join-Path (Split-Path $PSScriptRoot -Parent) 'outputs/test_logs/source176_r3'
+New-Item -ItemType Directory -Force -Path $Source176R3EvidenceDir | Out-Null
+$Source176R3CriticalEvidence | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $Source176R3EvidenceDir 'critical_members.json') -Encoding UTF8
+
 # PASS is granted only when every gate below is satisfied. A PASS marker never
 # exempts timeout, non-zero exit, or engine-log failures.
 $FailurePattern = 'SCRIPT ERROR:|Parse Error:|Assertion failed:|FATAL:|Unhandled exception|Crash|Segmentation fault'
@@ -1039,6 +1179,9 @@ if ($SelectedIncludesStreaming -and $TimeoutSeconds -lt $MonsterStreamingBudgetF
 $StructuredResults = @()
 foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
+    $isFramework = $testPath.Replace('\', '/') -match '^tests/framework/(?:[^/]+/)*[^/]+\.tscn$'
+    $frameworkRunId = if ($isFramework) { [Guid]::NewGuid().ToString() } else { '' }
+    [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', $frameworkRunId, 'Process')
     $stdout = Join-Path $LogRoot "$testName.stdout.log"
     $stderr = Join-Path $LogRoot "$testName.stderr.log"
     $engineLog = Join-Path $LogRoot "$testName.godot.log"
@@ -1181,6 +1324,13 @@ foreach ($testPath in $SelectedTests) {
     if ($stderrFailureCount -gt 0) { $reasons += "stderr_failures_$stderrFailureCount" }
     if ($engineLogFailureCount -gt 0) { $reasons += "engine_log_failures_$engineLogFailureCount" }
 
+    $frameworkReceipt = $null
+    if ($isFramework) {
+        $frameworkReceiptPath = Join-Path $ProjectReportRoot ('framework\' + $testName + '.result.json')
+        $frameworkReceipt = Test-FrameworkReceipt -Path $frameworkReceiptPath -ExpectedRunId $frameworkRunId `
+            -ExpectedSceneId $testName -ExpectedContentSha256 $env:HARDCORE_R3_CONTENT_SHA256
+        if (-not $frameworkReceipt.valid) { $reasons += $frameworkReceipt.reasons }
+    }
     $result = 'PASS'
     if ($reasons.Count -gt 0) {
         $result = 'FAIL'
@@ -1199,6 +1349,8 @@ foreach ($testPath in $SelectedTests) {
         stdout_failure_count = $stdoutFailureCount
         stderr_failure_count = $stderrFailureCount
         engine_log_failure_count = $engineLogFailureCount
+        framework_run_id = $frameworkRunId
+        framework_receipt_valid = if ($isFramework) { $frameworkReceipt.valid } else { $null }
         result = $result
         reason = ($reasons -join ';')
     }
@@ -1239,6 +1391,9 @@ if ($failedCount -gt 0) {
 }
 exit 0
 } finally {
+    if ($FrameworkEnvironmentCaptured) {
+        [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', $PreviousFrameworkRunId, 'Process')
+    }
     if ($RunnerLockHeld) { $RunnerMutex.ReleaseMutex() }
     $RunnerMutex.Dispose()
 }

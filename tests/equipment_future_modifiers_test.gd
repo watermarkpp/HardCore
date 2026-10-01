@@ -49,8 +49,8 @@ func _run() -> void:
 	assert(is_equal_approx(player._attack_timer, expected_attack_interval), "旧百分比攻速不应再次缩放物理攻击间隔")
 	assert(is_equal_approx(player._attack_action_timer, 0.51), "物理攻速档位不应缩放攻击动作时长")
 
-	var weapon: Dictionary = PlayerState.equipment["武器"]
-	PlayerState.damage_equipment_durability("武器", int(weapon.get("max_durability", 1)))
+	var weapon: Dictionary = PlayerState.equipment["hc.slot.weapon"]
+	PlayerState.damage_equipment_durability("hc.slot.weapon", int(weapon.get("max_durability", 1)))
 	assert(float(PlayerState.computed_stats.get("critical_chance", 1.0)) == 0.0, "零耐久装备仍提供扩展词条")
 	assert(int(PlayerState.computed_stats.get("attack_speed_tier", -1)) == 0, "零耐久后物理攻速档位没有撤销")
 	assert(is_equal_approx(float(PlayerState.computed_stats.get("attack_speed_percent", -1.0)), 0.0), "零耐久后旧百分比攻速字段没有撤销")

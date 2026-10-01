@@ -1,6 +1,7 @@
 extends Node
 
 const State := preload("res://scripts/player_state.gd")
+const StageFixture := preload("res://tests/helpers/ordered_json_stage_fixture.gd")
 var observed_signals := 0
 var owned_plan: Dictionary = {}
 var owned_state: Node
@@ -84,10 +85,8 @@ func _run() -> void:
 	get_tree().quit(0)
 
 func _start_promotion(state: Node, plan: Dictionary) -> void:
-	state.finish_prepared_loot_save(plan)
-	assert(plan.writer.job.stage_result(true).result.success)
-	state.finish_prepared_loot_save(plan)
-	assert(plan.writer.job.stage_result(true).result.success)
+	await StageFixture.await_durable_promotion(state._json_persistence, plan.writer.job,
+		state.finish_prepared_loot_save.bind(plan), get_tree())
 	assert(not bool(plan.writer.job.response.finished))
 
 func _finish(state: Node, plan: Dictionary) -> Dictionary:

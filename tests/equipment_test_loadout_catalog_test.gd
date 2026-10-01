@@ -4,16 +4,16 @@ const LoadoutCatalog = preload("res://scripts/equipment_test_loadout_catalog.gd"
 const EquipmentRulesScript = preload("res://scripts/equipment_rules.gd")
 const PAPER_DOLL_PATH := "res://assets/data/warrior_paper_doll_sources.json"
 const CATEGORY_BY_SLOT := {
-	"武器": "武器",
-	"衣服": "盔甲",
-	"头盔": "头盔",
-	"项链": "项链",
-	"左手镯": "手镯",
-	"右手镯": "手镯",
-	"左戒指": "戒指",
-	"右戒指": "戒指",
+	"hc.slot.weapon": "武器",
+	"hc.slot.armor": "盔甲",
+	"hc.slot.helmet": "头盔",
+	"hc.slot.necklace": "项链",
+	"hc.slot.bracelet_left": "手镯",
+	"hc.slot.bracelet_right": "手镯",
+	"hc.slot.ring_left": "戒指",
+	"hc.slot.ring_right": "戒指",
 }
-const VISUAL_SLOTS := ["武器", "衣服", "头盔"]
+const VISUAL_SLOTS := ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet"]
 
 
 func _ready() -> void:

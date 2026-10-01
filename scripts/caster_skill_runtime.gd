@@ -25,7 +25,8 @@ static func create_visual(
 	position: Vector2,
 	direction := Vector2.DOWN,
 	follow_node: Node2D = null,
-	phase_id := ""
+	phase_id := "",
+	definition: Dictionary = {}
 ) -> CasterSkillVisualEffect:
 	var skill_id := str(plan.get("skill_id", ""))
 	if not CasterSkillVisualRegistry.is_runtime_ready(skill_id):
@@ -79,9 +80,7 @@ static func create_visual(
 						geometry_offset.length()
 					)
 		else:
-			var geometry: Dictionary = SkillDataLoaderScript.skill(
-				skill_id
-			).get("geometry", {})
+			var geometry: Dictionary = (SkillDataLoaderScript.skill(skill_id) if definition.is_empty() else definition).get("geometry", {})
 			var effect_length_gu := float(geometry.get("effect_length_gu", 0.0))
 			var direction_ground_gu := (
 				GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(
@@ -121,7 +120,7 @@ static func create_visual(
 	return effect
 
 
-static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vector2, color := Color.WHITE) -> SkillProjectile:
+static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vector2, color := Color.WHITE, definition: Dictionary = {}) -> SkillProjectile:
 	if (
 		str(plan.get("operation", "")) != "projectile_damage"
 		or str(plan.get("visual", {}).get("role", ""))
@@ -134,9 +133,7 @@ static func create_projectile(plan: Dictionary, origin: Vector2, direction: Vect
 		GroundUnitSpaceScript.screen_delta_px_to_ground_delta_gu(direction)
 		.normalized()
 	)
-	var formal_geometry: Dictionary = SkillDataLoaderScript.skill(
-		str(plan.get("skill_id", ""))
-	).get("geometry", {})
+	var formal_geometry: Dictionary = (SkillDataLoaderScript.skill(str(plan.get("skill_id", ""))) if definition.is_empty() else definition).get("geometry", {})
 	projectile.setup_ground_unit_projectile(
 		origin,
 		direction_ground_gu,
@@ -341,7 +338,8 @@ static func create_cast_nodes_from_canonical_plan(
 			node_plan,
 			origin,
 			direction,
-			color
+			color,
+			runtime_context.get("action_definition", {})
 		)
 		if projectile != null:
 			_configure_projectile_runtime(projectile, runtime_context)
@@ -522,7 +520,8 @@ static func create_cast_nodes_from_canonical_plan(
 			visual_position,
 			direction,
 			follow_node,
-			""
+			"",
+			runtime_context.get("action_definition", {})
 		)
 		if visual != null:
 			nodes.append(visual)

@@ -43,7 +43,7 @@ func _run() -> void:
 	assert(proc_count == 1 and float(PlayerState.relic_proc_status().remaining) > 0.0, "released attack did not trigger relic")
 	assert(game._player_relic_proc_effect.visible, "proc signal did not reach its presentation")
 	await get_tree().create_timer(0.8).timeout
-	assert(PlayerState.unequip_slot("圣物").begins_with("已卸下"))
+	assert(PlayerState.unequip_slot("hc.slot.relic").begins_with("已卸下"))
 	_equip(950102, "法师")
 	PlayerState.learned_skills = {"魔法盾": 3}
 	game.player.current_mp = game.player.max_mp

@@ -144,7 +144,7 @@ func _test_catalog_modifier_preservation(catalog: Dictionary, affixed_instance: 
 	GameData._items_by_name[item_name] = no_catalog_modifier
 	PlayerState.test_mode = true
 	PlayerState.reset_progress(false)
-	PlayerState.equipment["武器"] = affixed_instance.duplicate(true)
+	PlayerState.equipment["hc.slot.weapon"] = affixed_instance.duplicate(true)
 	PlayerState.recalculate_stats(false)
 	var affix_only_attack_max := float(PlayerState.computed_stats.attack_max)
 

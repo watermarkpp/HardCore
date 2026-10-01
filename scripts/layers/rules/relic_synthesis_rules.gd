@@ -11,13 +11,11 @@ const PROC_DURATION_SECONDS := 10.0
 const PROC_COOLDOWN_SECONDS := 15.0
 const SkillData := preload("res://scripts/skills/skill_data_loader.gd")
 const SkillRankPolicy := preload("res://scripts/skills/skill_rank_extension_policy.gd")
-const SKILL_NAMES := {
-	"战士": ["基本剑术", "攻杀剑术", "刺杀剑术", "半月弯刀", "烈火剑法"],
-	"法师": ["雷电术", "地狱雷光", "疾光电影", "火墙", "冰咆哮", "爆裂火焰"],
-	"道士": ["灵魂火符", "施毒术", "召唤骷髅", "召唤神兽", "治愈术", "群体治疗术"],
-}
+const Registry := preload("res://scripts/identity/entity_registry.gd")
+const Professions := preload("res://scripts/profession_rules.gd")
 
 static var _records_by_id: Dictionary = {}
+static var _skill_ids_by_profession: Dictionary = {}
 static var _loaded := false
 
 
@@ -53,11 +51,11 @@ static func is_synthesis_item(item_id: int) -> bool:
 static func recipe_professions(item_id: int) -> Array[String]:
 	var result: Array[String] = []
 	if is_relic(item_id):
-		result.assign(["战士", "法师", "道士"])
+		result.assign(["hc.profession.warrior", "hc.profession.wizard", "hc.profession.taoist"])
 		return result
 	var record := record_for_id(item_id)
 	if not record.is_empty():
-		result.append(str(record.get("skillProfession", "")))
+		result.append(str(record.get("skillProfessionId", "")))
 	return result
 
 
@@ -66,20 +64,20 @@ static func effect_for(item_id: int) -> String:
 
 
 static func skill_ids_for(profession: String) -> Array[String]:
+	_ensure_loaded()
+	# Exact legacy UI/import translation only. The source pool and runtime
+	# lookup are owned by registered profession IDs, never display strings.
+	var profession_id := Professions.import_profession_identity(profession)
 	var result: Array[String] = []
-	var seen := {}
-	for raw_name: String in SKILL_NAMES.get(profession, []):
-		var stable_id := SkillData.stable_skill_id(raw_name)
-		if stable_id.is_empty() or not SkillRankPolicy.can_extend(stable_id) or seen.has(stable_id):
-			push_error("圣物随机技能清单无效：%s/%s" % [profession, raw_name])
-			return []
-		seen[stable_id] = true
-		result.append(stable_id)
+	result.assign(_skill_ids_by_profession.get(profession_id, []))
 	return result
 
 
 static func roll_instance(item_id: int, profession: String, rng: RandomNumberGenerator) -> Dictionary:
 	var record := record_for_id(item_id)
+	if not profession.is_empty():
+		profession = Professions.import_profession_identity(profession)
+		if profession.is_empty(): return {}
 	var allowed_professions := recipe_professions(item_id)
 	var skill_ids: Array[String] = []
 	if profession.is_empty() and is_relic(item_id):
@@ -111,7 +109,7 @@ static func roll_instance(item_id: int, profession: String, rng: RandomNumberGen
 static func valid_instance(instance: Dictionary, item_id: int) -> bool:
 	if (not is_synthesis_item(item_id)
 		or not _exact_integral_value(instance.get("item_id", null), item_id)
-		or str(instance.get("name", "")) != str(record_for_id(item_id).get("name", ""))
+		or (instance.has("name") and not instance.name is String)
 		or not _exact_integral_value(instance.get("count", null), 1)):
 		return false
 	var roll: Variant = instance.get("relic_roll", {})
@@ -184,9 +182,33 @@ static func _ensure_loaded() -> void:
 	if not raw_items is Array or raw_items.size() != 6:
 		push_error("圣物合成配方数量不正确")
 		return
-	var expected_names := {950101: "魔龙之眼", 950102: "魔龙之心", 950103: "幸运守护", 950201: "勇气徽章", 950202: "智慧徽章", 950203: "信仰徽章"}
+	var known_ids := [950101, 950102, 950103, 950201, 950202, 950203]
 	var expected_effects := {950101: "speed", 950102: "damage", 950103: "luck", 950201: "hp_regen", 950202: "mp_regen", 950203: "mp_regen"}
-	var badge_professions := {950201: "战士", 950202: "法师", 950203: "道士"}
+	var badge_ids := [950201, 950202, 950203]
+	var pools: Variant = parsed.get("skill_pools")
+	if not pools is Dictionary or pools.size() != 3:
+		push_error("圣物职业技能身份关系无效")
+		return
+	var candidate_pools := {}
+	for profession_id: String in ["hc.profession.warrior", "hc.profession.wizard", "hc.profession.taoist"]:
+		var pool: Variant = pools.get(profession_id)
+		if not pool is Array or pool.is_empty():
+			push_error("圣物职业技能身份关系无效")
+			return
+		var stable_ids: Array[String] = []
+		for target: Variant in pool:
+			if not target is String or Registry.resolve(target, "skill").is_empty():
+				push_error("圣物技能身份无效")
+				return
+			var stable_id: String = str(Registry.legacy(target, "skill"))
+			if not SkillData.is_canonical_skill_id(stable_id) or not SkillRankPolicy.can_extend(stable_id) \
+				or stable_ids.has(stable_id) or SkillData.skill(stable_id).get("class") != profession_id.trim_prefix("hc.profession."):
+				push_error("圣物技能身份关系冲突")
+				return
+			stable_ids.append(stable_id)
+		stable_ids.make_read_only()
+		candidate_pools[profession_id] = stable_ids
+	var candidate_records := {}
 	for raw: Variant in raw_items:
 		if not raw is Dictionary:
 			_records_by_id.clear()
@@ -194,20 +216,22 @@ static func _ensure_loaded() -> void:
 		var item_id := int(raw.get("item_id", -1))
 		var inventory_icon := str(raw.get("inventory_icon", ""))
 		var ground_icon := str(raw.get("ground_icon", ""))
-		if (not expected_names.has(item_id) or _records_by_id.has(item_id)
-			or str(raw.get("name", "")) != str(expected_names[item_id])
+		var profession_id: Variant = raw.get("skill_profession_id", "")
+		if (item_id not in known_ids or candidate_records.has(item_id)
+			or not raw.get("name") is String or str(raw.name).is_empty()
 			or str(raw.get("effect", "")) != str(expected_effects.get(item_id, ""))
-			or str(raw.get("skill_profession", "")) != str(badge_professions.get(item_id, ""))
+			or (item_id in badge_ids and (not profession_id is String or not candidate_pools.has(profession_id)))
 			or not ResourceLoader.exists(inventory_icon) or not ResourceLoader.exists(ground_icon)):
 			_records_by_id.clear()
 			push_error("圣物身份或图标无效：%d" % item_id)
 			return
 		var record := {
-			"itemId": item_id, "name": str(raw.name), "kind": "equipment", "category": "徽章" if badge_professions.has(item_id) else "圣物",
+			"itemId": item_id, "name": str(raw.name), "kind": "equipment", "category": "徽章" if item_id in badge_ids else "圣物",
 			"weight": 0, "stackable": false, "maxStack": 1, "maxDurability": 1,
 			"requirementType": "level", "requirementValue": 35,
 			"relicEffect": str(raw.effect), "relicNoWear": true,
-			"skillProfession": str(badge_professions.get(item_id, "")),
+			"skillProfession": Professions.profession_display_name(profession_id),
+			"skillProfessionId": profession_id,
 			"art": {
 				"inventoryIcon": {"path": inventory_icon, "displaySize": [32, 32]},
 				"groundIcon": {"path": ground_icon, "displaySize": [36, 36]},
@@ -218,4 +242,8 @@ static func _ensure_loaded() -> void:
 			record["attackSpeedTier"] = 1
 		elif item_id == 950103:
 			record["luck"] = 1
-		_records_by_id[item_id] = record
+		candidate_records[item_id] = record
+	candidate_pools.make_read_only()
+	candidate_records.make_read_only()
+	_skill_ids_by_profession = candidate_pools
+	_records_by_id = candidate_records

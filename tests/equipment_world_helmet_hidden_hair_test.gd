@@ -124,7 +124,7 @@ func _run() -> void:
 	for item_id: int in ITEM_IDS:
 		var item: Dictionary = items.get(str(item_id), {})
 		assert(not item.is_empty(), "missing helmet item %d" % item_id)
-		PlayerState.equipment["头盔"] = {
+		PlayerState.equipment["hc.slot.helmet"] = {
 			"item_id": item_id,
 			"name": str(item.get("itemName", "")),
 			"instance_id": "world_hidden_helmet_%d" % item_id,

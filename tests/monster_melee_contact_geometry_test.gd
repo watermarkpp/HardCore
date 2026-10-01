@@ -4,6 +4,9 @@ const GroundUnitSpaceScript := preload("res://scripts/ground_unit_space.gd")
 const SkillFootprintSnapshotScript := preload(
 	"res://scripts/skills/skill_footprint_snapshot.gd"
 )
+const Source176Melee := preload(
+	"res://scripts/monster_source176/source_melee_geometry.gd"
+)
 const OpenTerrainFixture := preload(
 	"res://tests/helpers/monster_open_terrain_test_fixture.gd"
 )
@@ -36,7 +39,7 @@ func _configure_enemy_map(enemy: EnemyActor) -> void:
 func _force_enemy_cadence_ready(enemy: EnemyActor) -> void:
 	var cadence = enemy._movement_cadence
 	assert(cadence != null, "contact probe must own cadence")
-	var now_ms := Time.get_ticks_msec()
+	var now_ms := int(enemy._combat_action_time_s * 1000.0)
 	cadence.walk_wait_locked = false
 	cadence.walk_tick_ms = now_ms - cadence.walk_interval_ms - 1
 	cadence.walk_wait_tick_ms = now_ms
@@ -166,10 +169,15 @@ func _run() -> void:
 					player.global_position - enemy.global_position
 				)
 			)
-			var engagement_distance_gu := enemy._hc_preferred(player)
+			# source176 Task 3 (docs/02 E): settlement is the ordinary stop
+			# contract: the L-inf contact box, not a Euclidean circle.  The
+			# small tolerance absorbs only float interpolation residue.
+			var contact_extent_gu := maxf(
+				absf(delta_ground_gu.x),
+				absf(delta_ground_gu.y),
+			)
 			if (
-				delta_ground_gu.length()
-				<= engagement_distance_gu + 0.002
+				contact_extent_gu <= Source176Melee.HALF_EXTENT_GU + 0.002
 				and not enemy._movement_step_active
 				and enemy.actual_ground_motion_gu.length()
 				<= SETTLED_POSITION_EPSILON_GU
@@ -197,13 +205,16 @@ func _run() -> void:
 			player.global_position - enemy.global_position
 		)
 		final_distances_gu.append(final_delta_ground_gu.length())
-		# source176 Task 3 (docs/02 E): the ordinary stop contract is the L-inf
-		# box, so the source-faithful isotropy measure is the box extent, not
-		# the Euclidean length (the box is direction-dependent in Euclidean
-		# terms by design: doc 01 §4 stop-distance dwell).
+		# Report the formal L-inf box extent and Euclidean length separately.
+		# Physical axis stations and box corners have different legal extents.
 		final_extents_gu.append(
 			maxf(absf(final_delta_ground_gu.x), absf(final_delta_ground_gu.y))
 		)
+		# Axis stations leave the existing body recovery gap; corner stations
+		# occupy the formal L-inf box edge. Verify both from physical inputs.
+		var recovery_margin_gu := enemy.safe_margin / (minf(GroundUnitSpaceScript.HALF_TILE_SIZE_PX.x, GroundUnitSpaceScript.HALF_TILE_SIZE_PX.y) * sqrt(2.0))
+		var expected_extent := minf(1.0, enemy.combat_radius_gu + WorldSpatialRules.actor_combat_radius_gu_from_screen_radius_px(ArtSpec.PLAYER_COLLISION_RADIUS_PX) + 2.0 * recovery_margin_gu + GroundUnitSpaceScript.EPSILON_GU) if direction_index % 2 == 0 else 1.0
+		assert(absf(final_extents_gu[-1] - expected_extent) <= GroundUnitSpaceScript.EPSILON_GU, "direction %d station extent differs from body/box contract: %s != %s" % [direction_index, final_extents_gu[-1], expected_extent])
 		var hp_before := player.current_hp
 		enemy._deal_melee_hit(player, 5)
 		assert(player.current_hp < hp_before, "direction %d footprint contact did not deal damage" % direction_index)
@@ -215,8 +226,8 @@ func _run() -> void:
 		)
 		assert(
 			str(enemy._last_attack_footprint_snapshot.shape_type)
-			== SkillFootprintSnapshotScript.SHAPE_CIRCLE,
-			"direction %d ordinary attack is not target-footprint geometry" % direction_index,
+			== SkillFootprintSnapshotScript.SHAPE_DIRECTED_RECTANGLE,
+			"direction %d ordinary attack did not publish the source L-inf box" % direction_index,
 		)
 		assert(
 			str(enemy._last_attack_footprint_snapshot.projection_relationship_id)
@@ -231,13 +242,6 @@ func _run() -> void:
 		)
 		enemy.queue_free()
 	await get_tree().physics_frame
-
-	var minimum: float = float(final_extents_gu.min())
-	var maximum: float = float(final_extents_gu.max())
-	assert(
-		maximum - minimum <= 0.025,
-		"GU melee contact L-inf extent is direction dependent: %s" % [final_extents_gu],
-	)
 
 	player.queue_free()
 	print(

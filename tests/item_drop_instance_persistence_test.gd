@@ -83,21 +83,21 @@ func _run() -> void:
 	_assert_same_instance(PlayerState.inventory[0], frozen_instance, "cross-profile withdrawal changed the instance")
 
 	var base_instance := PlayerState._make_item_instance("木剑", catalog, 7001)
-	PlayerState.equipment["武器"] = base_instance
+	PlayerState.equipment["hc.slot.weapon"] = base_instance
 	PlayerState.recalculate_stats(false)
 	var catalog_only_attack_max := float(PlayerState.computed_stats.attack_max)
-	PlayerState.equipment["武器"] = {}
+	PlayerState.equipment["hc.slot.weapon"] = {}
 	PlayerState.recalculate_stats(false)
-	var equipped := PlayerState.equip_inventory_index_result(0, "武器", instance_id)
+	var equipped := PlayerState.equip_inventory_index_result(0, "hc.slot.weapon", instance_id)
 	assert(equipped.success, str(equipped))
-	_assert_same_instance(PlayerState.equipment["武器"], frozen_instance, "equip changed the instance")
+	_assert_same_instance(PlayerState.equipment["hc.slot.weapon"], frozen_instance, "equip changed the instance")
 	assert(float(PlayerState.computed_stats.attack_max) == catalog_only_attack_max + expected_attack_bonus,
 		"the frozen modifiers Array was not consumed by real equipment aggregation")
 	var saved_q := PlayerState._read_json(PlayerState._profile_path("q"))
-	_assert_same_instance(saved_q.equipment["武器"], frozen_instance, "equipped save changed the instance")
+	_assert_same_instance(saved_q.equipment["hc.slot.weapon"], frozen_instance, "equipped save changed the instance")
 	PlayerState.load_save()
 	assert(PlayerState.last_load_result.success)
-	_assert_same_instance(PlayerState.equipment["武器"], frozen_instance, "equipped instance changed after reload")
+	_assert_same_instance(PlayerState.equipment["hc.slot.weapon"], frozen_instance, "equipped instance changed after reload")
 	assert(float(PlayerState.computed_stats.attack_max) == catalog_only_attack_max + expected_attack_bonus)
 
 	var duplicate_document := PlayerState._read_json(PlayerState._profile_path("q"))

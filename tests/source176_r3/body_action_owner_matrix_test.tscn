@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/source176_r3/body_action_owner_matrix_test.gd" id="1"]
+
+[node name="BodyActionOwnerMatrix" type="Node2D"]
+script = ExtResource("1")

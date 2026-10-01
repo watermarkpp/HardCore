@@ -131,7 +131,7 @@ static func affix_is_valid(identity_record: Dictionary) -> bool:
 	# Reuse the formal W7 validator and its exact primary attribute mappings;
 	# visual code never creates or widens an instance contract.
 	return ItemDropInstanceRulesScript.is_affixed_instance(
-		instance_value as Dictionary,
+		preload("res://scripts/items/item_extension_codec.gd").base_record(instance_value as Dictionary),
 		presentation,
 	)
 

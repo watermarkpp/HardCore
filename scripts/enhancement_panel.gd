@@ -77,7 +77,7 @@ func _ready() -> void:
 	var recipe_entries: Array[Dictionary] = []
 	for item: Dictionary in RelicRules.records():
 		for profession: String in RelicRules.recipe_professions(int(item.itemId)):
-			recipe_entries.append({"item_id": int(item.itemId), "profession": profession, "title": "%s · %s技能" % [str(item.name), profession], "icon": UIItemTextureCacheScript.texture_for(item)})
+			recipe_entries.append({"item_id": int(item.itemId), "profession": profession, "title": "%s · %s技能" % [str(item.name), ProfessionRules.profession_display_name(profession)], "icon": UIItemTextureCacheScript.texture_for(item)})
 	set_synthesis_recipe_previews(recipe_entries)
 	ForgeLayoutScript.apply_profile(self, "forge")
 	_show_forge_artwork("initial")
@@ -255,7 +255,7 @@ func set_synthesis_recipe_previews(entries: Array[Dictionary]) -> void:
 		_set_button_texture(slot, icon, Vector2(32, 32) if not entry.is_empty() else Vector2.ZERO)
 		slot.disabled = entry.is_empty()
 		slot.tooltip_text = str(entry.get("title", "暂无合成配方"))
-		(slot.get_node("RecipeProfession") as Label).text = str(entry.get("profession", "")).left(1)
+		(slot.get_node("RecipeProfession") as Label).text = ProfessionRules.profession_display_name(str(entry.get("profession", ""))).left(1)
 		UIItemSelectionVisualScript.apply(slot, false, &"GothicComponentSlotButton", &"GothicComponentSelectedSlotButton")
 	if _mode == "synthesis":
 		_refresh_forge_information()
@@ -476,7 +476,7 @@ func _refresh_forge_information() -> void:
 		return
 	var has_target := false
 	for stack: Dictionary in tray:
-		if str(GameData.get_item_record(stack).get("category", "")) in ["武器", "盔甲", "头盔"]:
+		if GameData.item_category_id(stack) in ["hc.item_category.weapon", "hc.item_category.armor", "hc.item_category.helmet"]:
 			has_target = true
 	rules_label.text = "材料需求：黑铁矿 ×1\n首饰 ×2" if has_target else "请在上方放入需要锻造的装备"
 	chance_label.text = "[center]—[/center]"

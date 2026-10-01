@@ -5,6 +5,14 @@ const IDLE_INTERVAL := 0.5
 
 class ProbeEnemy extends EnemyActor:
 	var wake_count := 0
+	var native_delta_sum := 0.0
+	var retarget_calls := 0
+	func _physics_process(delta: float) -> void:
+		native_delta_sum += delta
+		super._physics_process(delta)
+	func _retarget(delta := 0.0, safe_checked_player: Node2D = null) -> void:
+		retarget_calls += 1
+		super._retarget(delta, safe_checked_player)
 	func _on_background_wakeup_timeout() -> void:
 		wake_count += 1
 		super._on_background_wakeup_timeout()
@@ -26,14 +34,24 @@ func _run() -> void:
 	enemy.set_meta("spawn_position", Vector2.ZERO)
 	enemy.set_meta("safe_zone_context", {"valid": true, "zones": [], "revision": 1})
 	add_child(enemy)
+	# _ready owns a jittered initial sleep. Begin the deliberately full-period
+	# test through the matching lifecycle exit, rather than re-entering it.
+	enemy._leave_background_deep_sleep()
 	enemy._enter_background_deep_sleep(false)
 	assert(enemy._background_deep_sleeping)
 	assert(is_equal_approx(enemy._background_wakeup_timer.wait_time, IDLE_INTERVAL),
 		"a resting idle actor should schedule one local scan every 0.5 seconds")
 	enemy.wake_count = 0
+	var clock_before := enemy._combat_action_time_s
+	var delta_before := enemy.native_delta_sum
+	var queries_before := enemy.retarget_calls
 	await get_tree().create_timer(1.1).timeout
 	assert(enemy.wake_count == 2, "idle wakeups must be 2 Hz, actual=%d" % enemy.wake_count)
-	assert(enemy.target == null and not enemy.is_physics_processing())
+	assert(enemy.target == null and enemy.is_physics_processing(), "idle actor retains its lightweight source clock")
+	assert(absf(enemy._combat_action_time_s-clock_before-(enemy.native_delta_sum-delta_before))<.00001,
+		"idle source clock must advance by exactly the native physics delta, without timer double counting")
+	assert(enemy.retarget_calls-queries_before==enemy.wake_count,
+		"heavy acquisition runs only at the two timer wakeups")
 
 	# A fresh complete interval is the worst phase for entering view. Observe
 	# the actual Timer signal, target setter and physics wake, not just constants.

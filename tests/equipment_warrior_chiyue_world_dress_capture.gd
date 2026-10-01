@@ -56,7 +56,7 @@ func _capture() -> void:
 	PlayerState.profile_index_path = "user://equipment_warrior_chiyue_world_dress_capture/%s/character_profiles.json" % sandbox_id
 	PlayerState.ensure_equipment_skill_test_roster()
 	assert(PlayerState.select_character(PROFILE_ID))
-	assert(str(PlayerState.equipment.get("衣服", {}).get("name", "")) == "天魔神甲")
+	assert(str(PlayerState.equipment.get("hc.slot.armor", {}).get("name", "")) == "天魔神甲")
 
 	var player := PlayerCharacter.new()
 	player.position = Vector2(480, 340)

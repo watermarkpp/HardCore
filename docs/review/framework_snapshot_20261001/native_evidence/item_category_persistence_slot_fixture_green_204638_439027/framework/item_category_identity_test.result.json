@@ -1,0 +1,260 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual production catalog is available: ",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "mechanical category census has an owned local evidence path",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual primary equipment has the declared category identity: 武器",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "category identity is formally registered: hc.item_category.weapon",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual primary equipment has the declared category identity: 盔甲",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "category identity is formally registered: hc.item_category.armor",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual primary equipment has the declared category identity: 头盔",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "category identity is formally registered: hc.item_category.helmet",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual primary equipment has the declared category identity: 项链",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "category identity is formally registered: hc.item_category.necklace",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual primary equipment has the declared category identity: 手镯",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "category identity is formally registered: hc.item_category.bracelet",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "actual primary equipment has the declared category identity: 戒指",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "category identity is formally registered: hc.item_category.ring",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual consumers have a strict typed category query",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "typed item query resolves its primary category owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "category query rejects display strings and cross-kind references",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "invalid numeric item identity cannot select a category through its display",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "source-shaped malformed identity also cannot fall through to display",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "changing presentation metadata leaves the typed category owner unchanged",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "unknown explicit category cannot be repaired through legacy display",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "every actual runtime catalog member carries a known category ID",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "primary equipment API carries all 175 formal categories without replacing attributes",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "default-off socket fixture has the same formal category metadata boundary",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "exact legacy armor aliases share one formal category",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "category import does not infer names prefixes or cross-kind symbols",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "paired slot ordering and cycle ownership are explicitly retained",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "formal slot lookup rejects legacy and wrong kind references",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/1",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/2",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/3",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/4",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/5",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/6",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.weapon/7",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.armor/1",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.armor/2",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.armor/3",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.helmet/1",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.helmet/2",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "formal forge probabilities and costs preserve the exact legacy stage: hc.item_category.helmet/3",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "forge rejects unknown category identities",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "price modifier uses formal category despite changed display metadata",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "old policy enums enter through the one declared import boundary",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "invalid slot relation cannot partially replace the accepted table",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "duplicate legacy ownership fails atomically",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "future category contract is terminal",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "display rename cannot move a registered category or legacy relation",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "authoritative runtime category table restored after candidate checks",
+      "passed": true
+    }
+  ],
+  "count": 49,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 49,
+  "reported_checks": 49,
+  "reported_failures": 0,
+  "run_id": "8bde8d16-e10f-4362-b22a-922a95a81347",
+  "scene_id": "item_category_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "5b864af12061f457648a84e9de8bafed888568097d87cf1b7fb92b01305f68fb",
+  "status": "PASS"
+}

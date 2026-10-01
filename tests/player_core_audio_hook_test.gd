@@ -83,7 +83,7 @@ func _run() -> void:
 
 	# A noncanonical/unknown equipped record is not empty-handed. It must stay
 	# fail-closed instead of borrowing fist contact or a neighboring shape.
-	PlayerState.equipment["武器"] = {"item_id": 999999, "name": "unknown-audio-fixture"}
+	PlayerState.equipment["hc.slot.weapon"] = {"item_id": 999999, "name": "unknown-audio-fixture"}
 	assert(game.player.visual.audio_classic_weapon_shape() == -1, "unknown equipped shape did not fail closed")
 	_events.clear()
 	var rejected_contact: Dictionary = service.play_player_physical_contact(-1, {"source": "test"})
@@ -93,7 +93,7 @@ func _run() -> void:
 	# Item 81 is the exact formal classic shape 6. The source's struck-weapon
 	# second division resolves it to 64, while the body layer resolves to 70.
 	PlayerState.gender = "男"
-	PlayerState.equipment["武器"] = {"item_id": 81, "name": "匕首"}
+	PlayerState.equipment["hc.slot.weapon"] = {"item_id": 81, "name": "匕首"}
 	game.player.visual._refresh_equipment_visuals()
 	assert(game.player.visual.audio_classic_weapon_shape() == 6, "fixture weapon shape drift")
 	var target: EnemyActor = game._spawn_enemy(

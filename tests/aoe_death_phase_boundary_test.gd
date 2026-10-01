@@ -46,7 +46,7 @@ func _run() -> void:
 	primary._refresh_overhead_health()
 	var survivor_hp_before := survivor.current_hp
 	PlayerState.equipment = PlayerState._empty_equipment()
-	PlayerState.equipment["武器"] = {
+	PlayerState.equipment["hc.slot.weapon"] = {
 		"name": "木剑",
 		"count": 1,
 		"instance_id": "aoe-death-boundary-weapon",

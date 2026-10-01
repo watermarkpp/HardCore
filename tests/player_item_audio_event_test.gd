@@ -53,9 +53,9 @@ func _test_temporary_buff_item_identity() -> void:
 
 func _test_quick_use_emits_once() -> void:
 	PlayerState.inventory = [{"name": "太阳水", "count": 1}]
-	PlayerState.quick_item_slots = ["太阳水", "", "", ""]
+	PlayerState.quick_item_slots = [GameData.item_entity_id("太阳水"), "", "", ""]
 	_events.clear()
-	var result := PlayerState.use_quick_item_slot(0, "太阳水")
+	var result := PlayerState.use_quick_item_slot(0, GameData.item_entity_id("太阳水"))
 	assert(bool(result.get("ok", false)), "快捷栏使用失败：%s" % str(result))
 	assert(_events.size() == 1, "快捷栏一次使用不得重复物品音效事件")
 	assert(str(_events[0].get("semantic_event", "")) == "use_success")
@@ -68,12 +68,12 @@ func _test_equip_and_unequip_item_identity() -> void:
 	PlayerState.inventory = [{"name": "木剑", "count": 1}]
 	PlayerState.equipment = PlayerState._empty_equipment()
 	_events.clear()
-	var equip_message := PlayerState.equip_inventory_index(0, "武器")
+	var equip_message := PlayerState.equip_inventory_index(0, "hc.slot.weapon")
 	assert(equip_message == "已装备：木剑", "装备失败：%s" % equip_message)
 	_assert_single_event(expected, "equip_success")
 
 	_events.clear()
-	var unequip_message := PlayerState.unequip_slot("武器")
+	var unequip_message := PlayerState.unequip_slot("hc.slot.weapon")
 	assert(unequip_message == "已卸下：木剑", "卸下失败：%s" % unequip_message)
 	_assert_single_event(expected, "unequip_success")
 
@@ -104,7 +104,7 @@ func _test_failure_and_rollback_emit_nothing() -> void:
 	oil_weapon["weapon_curse"] = 0
 	PlayerState.inventory = [{"name": "祝福油", "count": 1}]
 	PlayerState.equipment = PlayerState._empty_equipment()
-	PlayerState.equipment["武器"] = oil_weapon
+	PlayerState.equipment["hc.slot.weapon"] = oil_weapon
 	var oil_inventory_before := PlayerState.inventory.duplicate(true)
 	var oil_equipment_before := PlayerState.equipment.duplicate(true)
 	PlayerState._test_force_atomic_write_failure = true
@@ -123,7 +123,7 @@ func _test_failure_and_rollback_emit_nothing() -> void:
 	var equip_inventory_before := PlayerState.inventory.duplicate(true)
 	var equip_equipment_before := PlayerState.equipment.duplicate(true)
 	_events.clear()
-	var equip_result := PlayerState.equip_inventory_index(0, "武器")
+	var equip_result := PlayerState.equip_inventory_index(0, "hc.slot.weapon")
 	assert(equip_result == "装备存档失败，装备和背包均未改变")
 	assert(PlayerState.inventory == equip_inventory_before)
 	assert(PlayerState.equipment == equip_equipment_before)
@@ -131,13 +131,13 @@ func _test_failure_and_rollback_emit_nothing() -> void:
 
 	PlayerState._test_force_atomic_write_failure = false
 	PlayerState.equipment = PlayerState._empty_equipment()
-	PlayerState.equipment["武器"] = equip_record.duplicate(true)
+	PlayerState.equipment["hc.slot.weapon"] = equip_record.duplicate(true)
 	PlayerState.inventory = []
 	var unequip_inventory_before := PlayerState.inventory.duplicate(true)
 	var unequip_equipment_before := PlayerState.equipment.duplicate(true)
 	PlayerState._test_force_atomic_write_failure = true
 	_events.clear()
-	var unequip_result := PlayerState.unequip_slot("武器")
+	var unequip_result := PlayerState.unequip_slot("hc.slot.weapon")
 	assert(unequip_result == "卸装存档失败，装备和背包均未改变")
 	assert(PlayerState.inventory == unequip_inventory_before)
 	assert(PlayerState.equipment == unequip_equipment_before)

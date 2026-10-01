@@ -53,7 +53,7 @@ func _ready() -> void:
 	assert(not noop.accepted and noop.gain == 0)
 	assert(noop.reason == "proficiency_disabled")
 	assert(service.state("wizard.fireball").base_rank == 3)
-	assert(not service.snapshot().skills["wizard.fireball"].has("current_proficiency"))
+	assert(not service.snapshot().skills["hc.skill.wizard.fireball"].has("current_proficiency"))
 
 	# v2 snapshot roundtrip persists base_rank and never persists proficiency.
 	var snapshot := service.snapshot()
@@ -61,7 +61,7 @@ func _ready() -> void:
 	var restored := Progression.new()
 	assert(restored.load_snapshot(snapshot).loaded_count == 1)
 	assert(restored.state("wizard.fireball").base_rank == 3)
-	assert(not restored.snapshot().skills["wizard.fireball"].has("current_proficiency"))
+	assert(not restored.snapshot().skills["hc.skill.wizard.fireball"].has("current_proficiency"))
 
 	# v1 -> v2 load keeps rank as base_rank and discards proficiency; v1 is
 	# canonical (stable IDs), so no legacy Chinese-name sync is flagged.
@@ -74,13 +74,15 @@ func _ready() -> void:
 	})
 	assert(not migration.migrated_legacy and migration.loaded_count == 1)
 	assert(migrated.state("wizard.fireball").base_rank == 2)
-	assert(not migrated.snapshot().skills["wizard.fireball"].has("current_proficiency"))
+	assert(not migrated.snapshot().skills["hc.skill.wizard.fireball"].has("current_proficiency"))
 
 	# Bare legacy dictionary (Chinese names + int ranks) still migrates.
 	var bare := Progression.new()
 	var bare_migration := bare.load_snapshot({"火球术": 2, "未知技能": 3})
-	assert(bare_migration.migrated_legacy and bare_migration.loaded_count == 1)
+	assert(bare_migration.migrated_legacy and not bare_migration.success and bare_migration.loaded_count == 0)
 	assert(bare_migration.rejected == ["未知技能"])
+	assert(bare.snapshot().skills.is_empty(), "unknown legacy ID cannot partially migrate")
+	assert(bare.load_snapshot({"火球术":2}).success)
 	assert(bare.state("wizard.fireball") == {"base_rank": 2, "rank": 2})
 
 	# Base-rank boundary: persisted base ranks clamp to the 0..3 contract.

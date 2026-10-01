@@ -2,6 +2,7 @@ class_name SkillProgressionService
 extends RefCounted
 
 const SkillDataLoaderScript := preload("res://scripts/skills/skill_data_loader.gd")
+const EntityRegistry := preload("res://scripts/identity/entity_registry.gd")
 const SkillRankResolverScript := preload(
 	"res://scripts/skills/skill_rank_resolver.gd"
 )
@@ -11,14 +12,15 @@ const SkillRankResolverScript := preload(
 ## equipment bonus. Proficiency is fully removed: it is never produced,
 ## upgraded, persisted or converted. v1 snapshots still load (rank kept as
 ## base_rank, current_proficiency discarded).
-const STATE_CONTRACT_ID := "skills.progression.hardcore.v2"
+const STATE_CONTRACT_ID := "skills.progression.hardcore.v3"
+const PREVIOUS_STATE_CONTRACT_ID := "skills.progression.hardcore.v2"
 const LEGACY_STATE_CONTRACT_ID := "skills.progression.cn_mir2_176.v1"
 
 var _progress: Dictionary = {}
 
 
 func learn(skill_name_or_id: String, player_level: int) -> Dictionary:
-	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
 	var rank_zero := SkillDataLoaderScript.rank_record(skill_id, 0)
 	if rank_zero.is_empty():
 		return _learn_result(false, "unknown_skill", skill_id, 0, 0, "")
@@ -78,7 +80,7 @@ func learn(skill_name_or_id: String, player_level: int) -> Dictionary:
 
 
 func effective_rank(skill_name_or_id: String, equipment_bonus := 0) -> int:
-	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
 	if not _progress.has(skill_id):
 		## Equipment can never enable an unlearned skill.
 		return 0
@@ -88,11 +90,11 @@ func effective_rank(skill_name_or_id: String, equipment_bonus := 0) -> int:
 
 
 func is_learned(skill_name_or_id: String) -> bool:
-	return _progress.has(SkillDataLoaderScript.stable_skill_id(skill_name_or_id))
+	return _progress.has(SkillDataLoaderScript.entity_skill_id(skill_name_or_id))
 
 
 func state(skill_name_or_id: String) -> Dictionary:
-	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
 	return _progress.get(skill_id, {}).duplicate(true)
 
 
@@ -105,48 +107,74 @@ func apply_proficiency_event(
 	_player_level: int,
 	_rng: RefCounted
 ) -> Dictionary:
-	var skill_id := SkillDataLoaderScript.stable_skill_id(skill_name_or_id)
+	var skill_id := SkillDataLoaderScript.entity_skill_id(skill_name_or_id)
 	if not _progress.has(skill_id):
 		return _no_op_result(skill_id, "skill_not_learned")
 	return _no_op_result(skill_id, "proficiency_disabled")
 
 
 func load_snapshot(value: Variant) -> Dictionary:
-	_progress.clear()
 	var source: Dictionary = {}
 	var migrated_legacy := false
+	var canonical := false
+	var previous_canonical := false
+	var rejected: Array[String] = []
 	if value is Dictionary:
 		var contract_id := str(value.get("contract_id", ""))
 		if contract_id == STATE_CONTRACT_ID:
-			source = value.get("skills", {})
-		elif contract_id == LEGACY_STATE_CONTRACT_ID:
-			source = value.get("skills", {})
+			canonical = true
+			if value.get("skills") is Dictionary:
+				source = value.skills
+			else:
+				rejected.append("invalid_skills_container")
+		elif contract_id in [LEGACY_STATE_CONTRACT_ID, PREVIOUS_STATE_CONTRACT_ID]:
+			previous_canonical = true
+			if value.get("skills") is Dictionary:
+				source = value.skills
+			else:
+				rejected.append("invalid_skills_container")
 			## v1 snapshots are already canonical (stable skill IDs): keep
 			## base_rank and discard proficiency, but do NOT flag legacy sync
 			## that would repopulate the Chinese-name dictionary.
 			migrated_legacy = false
-		else:
+		elif contract_id.is_empty():
 			source = value
 			migrated_legacy = true
-	var rejected: Array[String] = []
+		else:
+			rejected.append("unsupported_progression_contract:" + contract_id)
+	else:
+		rejected.append("snapshot_not_dictionary")
+	var candidate := {}
 	for raw_key: Variant in source:
-		var skill_id := SkillDataLoaderScript.stable_skill_id(str(raw_key))
-		if skill_id.is_empty():
+		var skill_id := ""
+		if canonical:
+			if not EntityRegistry.resolve(str(raw_key), "skill").is_empty():
+				skill_id = str(raw_key)
+		elif previous_canonical:
+			if SkillDataLoaderScript.is_canonical_skill_id(str(raw_key)):
+				skill_id = EntityRegistry.from_legacy("skill", str(raw_key))
+		else:
+			skill_id = SkillDataLoaderScript.entity_skill_id(str(raw_key))
+		if not raw_key is String or skill_id.is_empty():
 			rejected.append(str(raw_key))
 			continue
+		if candidate.has(skill_id):
+			rejected.append("duplicate_skill_identity:" + skill_id)
+			continue
 		var raw_entry: Variant = source[raw_key]
-		var base_rank := 0
+		var rank_value: Variant = raw_entry
 		if raw_entry is Dictionary:
-			base_rank = clampi(
-				int(raw_entry.get("base_rank", raw_entry.get("rank", 0))),
-				0,
-				3
-			)
-		else:
-			base_rank = clampi(int(raw_entry), 0, 3)
-		_set_base_rank(skill_id, base_rank)
+			rank_value = raw_entry.get("base_rank", raw_entry.get("rank"))
+		if not (rank_value is int or rank_value is float) or not is_finite(float(rank_value)) or float(rank_value) != floor(float(rank_value)):
+			rejected.append("invalid_skill_rank:" + skill_id)
+			continue
+		var base_rank := clampi(int(rank_value), 0, 3)
+		candidate[skill_id] = {"base_rank":base_rank,"rank":base_rank}
+	if rejected.is_empty():
+		_progress = candidate
 	return {
-		"loaded_count": _progress.size(),
+		"success":rejected.is_empty(),
+		"loaded_count": candidate.size() if rejected.is_empty() else 0,
 		"rejected": rejected,
 		"migrated_legacy": migrated_legacy,
 	}

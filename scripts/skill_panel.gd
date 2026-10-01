@@ -482,7 +482,7 @@ func refresh() -> void:
 	for entry: Variant in skill_entries:
 		var skill_name := str(entry.get("skillName", "技能"))
 		var learned := PlayerState.is_skill_learned(skill_name)
-		var has_book := PlayerState.has_item(skill_name)
+		var has_book := PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", "")))))
 		var marker := "已学会" if learned else ("可学习" if has_book else "缺少技能书")
 		skill_list.add_item("%s（%s）　Lv%d" % [skill_name, marker, int(entry.get("requiredCharacterLevel", 1))])
 	_rebuild_skill_cards()
@@ -545,7 +545,7 @@ func _rebuild_skill_cards() -> void:
 		var entry: Dictionary = skill_entries[index]
 		var skill_name := str(entry.get("skillName", "技能"))
 		var learned := PlayerState.is_skill_learned(skill_name)
-		var has_book := PlayerState.has_item(skill_name)
+		var has_book := PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", "")))))
 		var level := PlayerState.effective_skill_level(skill_name)
 		var interaction_label := _skill_presentation_label(skill_name)
 		var status := "已学会" if learned else "未学会"
@@ -615,7 +615,7 @@ func _show_skill_detail(index: int) -> void:
 	var skill_name := str(entry.get("skillName", ""))
 	var learned := PlayerState.is_skill_learned(skill_name)
 	var learned_level := PlayerState.effective_skill_level(skill_name) if learned else -1
-	var base_level := int(PlayerState.learned_skills.get(skill_name, 0)) if learned else -1
+	var base_level := int(PlayerState.learned_skills.get(preload("res://scripts/skills/skill_data_loader.gd").entity_skill_id(skill_name), 0)) if learned else -1
 	var row := GameData.get_skill(skill_name, maxi(0, base_level))
 	if row.is_empty():
 		row = entry
@@ -633,7 +633,7 @@ func _show_skill_detail(index: int) -> void:
 			partner_rank = PlayerState.effective_skill_level(partner)
 	var mana_cost := SkillDescription.mana_cost(stable_id, preview_rank, partner_rank)
 	var upgrade_text := "基础已满级，装备可继续提升有效等级" if base_level >= 3 else "使用对应技能书提升，基础最高 3 级"
-	var state_text := "已学会" if learned else ("可学习" if PlayerState.has_item(skill_name) else "缺少技能书")
+	var state_text := "已学会" if learned else ("可学习" if PlayerState.has_item(GameData.skill_book_entity_id(CanonicalSkillData.entity_skill_id(str(entry.get("skill_id", ""))))) else "缺少技能书")
 	skill_name_label.text = "%s（%s）" % [skill_name, state_text]
 	skill_icon.texture = _skill_texture(skill_name)
 	skill_icon.set_meta("skill_id", ProfessionRules.skill_id(skill_name))
@@ -707,7 +707,7 @@ func _assignment_skill_name(slot_group: String, slot_index: int) -> String:
 
 func _assignment_value_skill_name(value: Variant) -> String:
 	if not value is Dictionary:
-		return str(value)
+		return ProfessionRules.skill_display_name(str(value)) if not str(value).is_empty() else ""
 	return str(
 		value.get(
 			"skill_name",
@@ -835,7 +835,7 @@ func _assign_selected_to_target(slot_group: String, slot_index: int) -> void:
 	var interaction_mode := _skill_interaction_mode(skill_name)
 	var request := {
 		"contract_id": "ui.skill.button_assignment.v3",
-		"profession_id": ProfessionRules.profession_id(PlayerState.profession),
+		"profession_id": ProfessionRules.profession_id(PlayerState.profession_id),
 		"skill_id": ProfessionRules.skill_id(skill_name),
 		"skill_name": skill_name,
 		"slot_group": slot_group,
@@ -863,7 +863,7 @@ func _request_clear_target(slot_group: String, slot_index: int) -> void:
 	)
 	skill_button_assignment_requested.emit({
 		"contract_id": "ui.skill.button_assignment.v3",
-		"profession_id": ProfessionRules.profession_id(PlayerState.profession),
+		"profession_id": ProfessionRules.profession_id(PlayerState.profession_id),
 		"skill_id": "",
 		"skill_name": "",
 		"slot_group": slot_group,

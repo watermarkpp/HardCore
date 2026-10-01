@@ -29,6 +29,10 @@ var _max_actor_bounds_gu := 0.0
 var _max_actor_bounds_dirty := false
 var _bucket_size_gu := DEFAULT_BUCKET_SIZE_GU
 
+## Every registration/removal/bucket crossing invalidates conservative
+## bucket identity pools. Positions inside a bucket are read live.
+var bucket_membership_revision := 0
+
 var index_register_count := 0
 var index_unregister_count := 0
 var index_update_check_count := 0
@@ -99,6 +103,7 @@ func register(
 	_bucket_set(runtime_map_id, _entries[actor_runtime_id]["bucket_key"])[
 		actor_runtime_id
 	] = weakref(node)
+	bucket_membership_revision += 1
 	index_register_count += 1
 
 
@@ -121,6 +126,7 @@ func unregister(actor_runtime_id: int) -> void:
 	if map_buckets.is_empty():
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
+	bucket_membership_revision += 1
 	index_unregister_count += 1
 
 
@@ -144,6 +150,7 @@ func update_actor(actor_runtime_id: int, absolute_ground_gu: Vector2) -> void:
 	)
 	entry["bucket_key"] = new_bucket
 	_bucket_set(runtime_map_id, new_bucket)[actor_runtime_id] = node_ref
+	bucket_membership_revision += 1
 	index_bucket_change_count += 1
 
 
@@ -160,6 +167,8 @@ func clear_map(runtime_map_id: int) -> void:
 				_stable_order_by_node_instance_id.erase(node_instance_id)
 			_entries.erase(raw_id)
 			removed += 1
+	if removed > 0:
+		bucket_membership_revision += 1
 	index_unregister_count += removed
 
 
@@ -318,12 +327,32 @@ func query_enemy_nodes_segment_unsorted_into(
 	)
 
 
+## Complete identities in the segment envelope's coarse buckets. Unlike
+## the ordinary tight query, nodes outside its exact AABB are retained so
+## later motion inside an unchanged bucket cannot create a false negative.
+## Callers must rerun the live narrow phase and invalidate on membership.
+func query_enemy_nodes_bucket_segment_into(runtime_map_id: int, a: Vector2, b: Vector2, expansion_gu: float, output: Array) -> void:
+	output.clear()
+	_neighbor_stale_actor_ids.clear()
+	index_query_count += 1
+	index_enemy_node_segment_query_count += 1
+	_maybe_refresh_max_actor_bounds()
+	if runtime_map_id < 0 or not a.is_finite() or not b.is_finite() or not is_finite(expansion_gu):
+		return
+	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
+	var low := Vector2(minf(a.x, b.x), minf(a.y, b.y)) - Vector2.ONE * expansion
+	var high := Vector2(maxf(a.x, b.x), maxf(a.y, b.y)) + Vector2.ONE * expansion
+	_query_enemy_nodes_in_aabb(runtime_map_id, Rect2(low, high - low), output, _next_enemy_query_stamp(), false, true)
+	_finish_enemy_node_query(output)
+
+
 func _query_enemy_nodes_in_aabb(
 	runtime_map_id: int,
 	bounds_ground_gu: Rect2,
 	output: Array,
 	query_stamp: int,
 	stable_order := true,
+	coarse_bucket_pool := false,
 ) -> void:
 	var map_buckets: Dictionary = _buckets.get(runtime_map_id, {})
 	if map_buckets.is_empty():
@@ -346,7 +375,7 @@ func _query_enemy_nodes_in_aabb(
 				# not every actor in its coarse 4-GU buckets. Position transactions
 				# update this value synchronously, including forced moves. The caller
 				# still performs its live, exact body/segment narrow phase.
-				if not stable_order:
+				if not stable_order and not coarse_bucket_pool:
 					var indexed_position: Vector2 = entry.get("absolute_ground_gu", Vector2.INF)
 					if not _point_in_inclusive_bounds(indexed_position, bounds_ground_gu.position, bounds_ground_gu.end):
 						continue
@@ -674,6 +703,7 @@ func _move_entry_to(actor_runtime_id: int, new_bucket: Vector2i) -> void:
 	)
 	entry["bucket_key"] = new_bucket
 	_bucket_set(runtime_map_id, new_bucket)[actor_runtime_id] = node_ref
+	bucket_membership_revision += 1
 	index_bucket_change_count += 1
 
 
@@ -696,6 +726,7 @@ func _erase_entry(actor_runtime_id: int) -> void:
 	if map_buckets.is_empty():
 		_buckets.erase(runtime_map_id)
 	_entries.erase(actor_runtime_id)
+	bucket_membership_revision += 1
 	index_unregister_count += 1
 
 

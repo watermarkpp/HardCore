@@ -63,12 +63,16 @@ func _prepare(contract_id: String, profile_id: String, operation_kind: String) -
 	_mutex.unlock()
 
 func result() -> Dictionary:
+	# Publishing flags happens inside the task. A frame poll must not join
+	# until the actual WorkerThreadPool task has returned.
+	if task_id >= 0:
+		if not WorkerThreadPool.is_task_completed(task_id):
+			return {"finished": false, "success": false}
+		WorkerThreadPool.wait_for_task_completion(task_id)
+		task_id = -1
 	_mutex.lock()
 	var value := {"finished": _finished, "success": _success and not _cancelled}
 	_mutex.unlock()
-	if bool(value.finished) and task_id >= 0:
-		WorkerThreadPool.wait_for_task_completion(task_id)
-		task_id = -1
 	return value
 
 func cancel() -> void:

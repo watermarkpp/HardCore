@@ -381,6 +381,33 @@ static func create_directed_rectangle(
 	return snapshot
 
 
+## Centered rectangle using the same strict polygon/rectangle contract.
+## The release footpoint stays at the centre; the rectangle start is a
+## separate geometric endpoint, as with every directed rectangle.
+static func create_centered_rectangle(
+	skill_id: String,
+	release_id: String,
+	center_ground_gu: Vector2,
+	half_extents_gu: Vector2,
+	coordinate_context := {},
+) -> Dictionary:
+	if not center_ground_gu.is_finite() or not half_extents_gu.is_finite() or half_extents_gu.x <= 0.0 or half_extents_gu.y <= 0.0:
+		return {}
+	var start := center_ground_gu - Vector2(half_extents_gu.x, 0.0)
+	var end := center_ground_gu + Vector2(half_extents_gu.x, 0.0)
+	var polygon := PackedVector2Array([
+		start + Vector2(0.0, half_extents_gu.y), end + Vector2(0.0, half_extents_gu.y),
+		end - Vector2(0.0, half_extents_gu.y), start - Vector2(0.0, half_extents_gu.y),
+	])
+	return _create_polygon_snapshot(skill_id, release_id, SHAPE_DIRECTED_RECTANGLE,
+		DIRECTED_RECTANGLE_CONTRACT_ID, center_ground_gu, polygon, {
+		"start_ground_gu": start, "end_ground_gu": end,
+		"direction_ground_gu": Vector2.RIGHT, "perpendicular_ground_gu": Vector2.DOWN,
+		"half_width_gu": half_extents_gu.y,
+		"effect_length_gu": half_extents_gu.x * 2.0, "effect_width_gu": half_extents_gu.y * 2.0,
+	}, coordinate_context)
+
+
 static func create_sector_arc(
 	skill_id: String,
 	release_id: String,

@@ -21,7 +21,7 @@ func _run() -> void:
 		PlayerState.reset_progress(false)
 		PlayerState.profession = profession
 		PlayerState.level = 60
-		PlayerState.equipment["左戒指"] = {"item_id":222,"name":"狂风戒指","count":1}
+		PlayerState.equipment["hc.slot.ring_left"] = {"item_id":222,"name":"狂风戒指","count":1}
 		PlayerState.recalculate_stats(false)
 		for id: String in ProfessionRules.SKILL_CATALOG:
 			var profile := ProfessionRules.skill_combat_profile(id,0)
@@ -69,7 +69,7 @@ func _cast_pair(profession: String, skill: String) -> void:
 		PlayerState.learned_skills = {skill:0}
 		if equipped:
 			var ring := GameData.get_item_rules_record({"item_id":222})
-			PlayerState.equipment["左戒指"] = PlayerState._make_item_instance(str(ring.name),ring,88212)
+			PlayerState.equipment["hc.slot.ring_left"] = PlayerState._make_item_instance(str(ring.name),ring,88212)
 		PlayerState.recalculate_stats(false)
 		assert(int(PlayerState.computed_stats.attack_speed_tier) == (1 if equipped else 0))
 		var player := PlayerCharacter.new()

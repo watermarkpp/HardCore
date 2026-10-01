@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "contract_id": "hc.socketing.fixture.items.v1",
+  "module_id": "hc.socketing_fixture",
+  "default_enabled": false,
+  "records": [
+    {
+      "itemId": 990001,
+      "name": "测试宝石",
+      "kind": "socket_gem",
+      "category": "测试宝石",
+      "stackable": false,
+      "weight": 0,
+      "usable": false,
+      "sellable": false,
+      "fixtureOnly": true
+    }
+  ]
+}

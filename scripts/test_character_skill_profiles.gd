@@ -2,6 +2,7 @@ class_name TestCharacterSkillProfiles
 extends RefCounted
 
 const SkillLoadoutRulesScript := preload("res://scripts/skill_loadout_rules.gd")
+const SkillData := preload("res://scripts/skills/skill_data_loader.gd")
 const DATA_PATH := "res://assets/data/vanilla_176/test_character_skill_profiles.json"
 const CONTRACT_ID := "test.characters.full_skills.v1"
 const QA_V2_DATA_PATH := "res://assets/data/vanilla_176/qa_test_character_skill_profiles_v2.json"
@@ -26,7 +27,7 @@ static func profile_for_profession(profession_name_or_id: String) -> Dictionary:
 		var display_name := ProfessionRules.skill_display_name(stable_id)
 		if display_name.is_empty():
 			return {}
-		learned_skills[display_name] = skill_level
+		learned_skills[SkillData.entity_skill_id(stable_id)] = skill_level
 		learned_skill_ids[stable_id] = skill_level
 	var quick_slots: Array[String] = []
 	var quick_slot_ids: Array[String] = []
@@ -78,7 +79,7 @@ static func qa_v2_profile_for_profession(profession_name_or_id: String) -> Dicti
 		var display_name := ProfessionRules.skill_display_name(stable_id)
 		if display_name.is_empty():
 			return {}
-		learned_skills[display_name] = skill_level
+		learned_skills[SkillData.entity_skill_id(stable_id)] = skill_level
 		learned_skill_ids[stable_id] = skill_level
 	var center_slots: Array[String] = []
 	var center_slot_ids: Array[String] = []

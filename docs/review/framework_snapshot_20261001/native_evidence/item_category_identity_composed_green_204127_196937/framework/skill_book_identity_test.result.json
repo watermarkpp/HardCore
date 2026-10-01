@@ -1,0 +1,280 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual rank query accepts the registered skill identity",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "legacy UI entrance consumes a real book by item ID despite changed display",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real book consumption and actual progression commit exactly once",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual progression has only formal skill ownership",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real inventory-use entry routes the book ID into the same skill owner",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "formal learning command uses the same real book identity",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "a potion forged with the book display name cannot consume or learn",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "stale requested index relocates the actual book without consuming a similarly named potion",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "fixture enters the actual registered wizard owner",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual writer rejection restores the same typed book and original progression",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "production publishes an explicit ID relation for book queries",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "actual source relation returns the hand-verified canonical fireball book",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "the existing service alias reaches the same registered skill",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "cross-kind, forged-name and unsupported later books cannot enter the relation",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.defense",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.entrapment",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.healing",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.invisibility",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.magic_defense",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.mass_healing",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.mass_invisibility",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.poison",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.revelation",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.soul_fire_talisman",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.spiritual_warfare",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.summon_divine_beast",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.taoist.summon_skeleton",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.warrior.basic_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.warrior.fire_sword",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.warrior.half_moon",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.warrior.slaying_swordsmanship",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.warrior.thrusting",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.warrior.wild_rush",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.exploding_flame",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.fire_wall",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.fireball",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.great_fireball",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.hell_lightning",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.hellfire",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.holy_word",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.ice_storm",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.laser",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.lightning",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.magic_shield",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.repulsion_ring",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.teleport",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "actual registered skill has one unambiguous book relation: hc.skill.wizard.temptation_light",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "all current 33 skill/book relations are complete and distinct",
+      "passed": true
+    }
+  ],
+  "count": 53,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 53,
+  "reported_checks": 53,
+  "reported_failures": 0,
+  "run_id": "a0d3ace7-01ca-42d5-b3c0-20fd8bb3cec1",
+  "scene_id": "skill_book_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "758c10cfdfb094a7a532e15e5fe3735c0d793b86b2c79b9c87ac405434883fee",
+  "status": "PASS"
+}

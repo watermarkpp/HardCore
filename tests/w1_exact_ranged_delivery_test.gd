@@ -422,6 +422,7 @@ func _assert_physical_world_wall(
 		"ID50 launch-blocked WORLD path must deal no damage",
 	)
 	launch_wall.queue_free()
+	await get_tree().process_frame
 	await get_tree().physics_frame
 
 	# Launch through an open corridor, then insert the same kind of WORLD body
@@ -450,6 +451,7 @@ func _assert_physical_world_wall(
 		"ID50 release-blocked path must clear pending damage",
 	)
 	release_wall.queue_free()
+	await get_tree().process_frame
 	await get_tree().physics_frame
 
 
@@ -477,10 +479,15 @@ func _assert_target_magic_world_wall(
 	attacker._physics_process(0.21)
 	assert(player.current_hp == hp_before)
 	launch_wall.queue_free()
+	await get_tree().process_frame
 	await get_tree().physics_frame
 
 	# An open cast is valid; inserting a real WORLD body before the 200 ms
 	# release must cancel damage and clear the pending transaction.
+	# The prior blocked-wall case can legitimately start a locomotion leg.
+	# This independent launch fixture begins after cancelling that old leg.
+	attacker._cancel_autonomous_step(true)
+	attacker.set_combat_position(Vector2.ZERO, &"w1_next_world_fixture")
 	player.current_hp = hp_before
 	_target_magic_descriptors.clear()
 	attacker._attack_timer = 0.0
@@ -493,6 +500,7 @@ func _assert_target_magic_world_wall(
 	assert(player.current_hp == hp_before)
 	assert(attacker._pending_attack_release_record.is_empty())
 	release_wall.queue_free()
+	await get_tree().process_frame
 	await get_tree().physics_frame
 
 

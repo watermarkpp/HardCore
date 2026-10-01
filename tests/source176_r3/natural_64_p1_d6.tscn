@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/source176_r3/real_frame_case_test.gd" id="1"]
+
+[node name="Source176R3RealFrameCase" type="Node2D"]
+script = ExtResource("1")
+case_path = "res://tests/source176_r3/cases/natural_64_p1_d6.json"

@@ -9,30 +9,35 @@ func _ready()->void:
 	assert(not found.is_empty() and int(found.level)==30)
 	assert(PlayerState.select_character("developer_warrior_30"))
 	assert(PlayerState.level==30 and PlayerState.profession=="战士")
-	for slot:String in ["武器", "衣服", "头盔", "项链", "左手镯", "右手镯", "左戒指", "右戒指"]:assert(not PlayerState.equipment[slot].is_empty())
-	assert(PlayerState.equipment["圣物"].is_empty() and PlayerState.equipment["徽章"].is_empty())
-	assert(PlayerState.learned_skills.size()>=6 and PlayerState.quick_slots==["","刺杀剑术","半月弯刀","烈火剑法"])
+	for slot:String in ["hc.slot.weapon", "hc.slot.armor", "hc.slot.helmet", "hc.slot.necklace", "hc.slot.bracelet_left", "hc.slot.bracelet_right", "hc.slot.ring_left", "hc.slot.ring_right"]:assert(not PlayerState.equipment[slot].is_empty())
+	assert(PlayerState.equipment["hc.slot.relic"].is_empty() and PlayerState.equipment["hc.slot.badge"].is_empty())
+	assert(PlayerState.learned_skills.size()>=6 and PlayerState.quick_slots==["","hc.skill.warrior.thrusting","hc.skill.warrior.half_moon","hc.skill.warrior.fire_sword"])
 	assert(PlayerState.saved_map_id==910001 and PlayerState.saved_position==Vector2.ZERO)
 	var zuma_found:Dictionary={}
 	for profile:Dictionary in PlayerState.list_characters():
 		if str(profile.id)=="developer_zuma_warrior_40":zuma_found=profile;break
 	assert(not zuma_found.is_empty() and int(zuma_found.level)==40)
 	assert(PlayerState.select_character("developer_zuma_warrior_40"))
-	assert(str(PlayerState.equipment["武器"].get("name",""))=="裁决之杖")
-	assert(str(PlayerState.equipment["衣服"].get("name",""))=="战神盔甲(男)")
-	assert(str(PlayerState.equipment["头盔"].get("name",""))=="黑铁头盔")
-	assert(str(PlayerState.equipment["项链"].get("name",""))=="绿色项链")
-	assert(str(PlayerState.equipment["左手镯"].get("name",""))=="骑士手镯" and str(PlayerState.equipment["右手镯"].get("name",""))=="骑士手镯")
-	assert(str(PlayerState.equipment["左戒指"].get("name",""))=="力量戒指" and str(PlayerState.equipment["右戒指"].get("name",""))=="力量戒指")
+	assert(str(PlayerState.equipment["hc.slot.weapon"].get("name",""))=="裁决之杖")
+	assert(str(PlayerState.equipment["hc.slot.armor"].get("name",""))=="战神盔甲(男)")
+	assert(str(PlayerState.equipment["hc.slot.helmet"].get("name",""))=="黑铁头盔")
+	assert(str(PlayerState.equipment["hc.slot.necklace"].get("name",""))=="绿色项链")
+	assert(str(PlayerState.equipment["hc.slot.bracelet_left"].get("name",""))=="骑士手镯" and str(PlayerState.equipment["hc.slot.bracelet_right"].get("name",""))=="骑士手镯")
+	assert(str(PlayerState.equipment["hc.slot.ring_left"].get("name",""))=="力量戒指" and str(PlayerState.equipment["hc.slot.ring_right"].get("name",""))=="力量戒指")
 	var game:Node=load("res://scenes/main.tscn").instantiate();add_child(game)
 	await get_tree().process_frame;await get_tree().process_frame
 	var visual:Node2D=game.player.get_node("PlayerVisual");visual._process(0.01)
 	assert(visual.get_node("BodySprite").texture.resource_path.ends_with("dress_006_idle.png"),"祖玛测试号战神盔甲未联动人物外观")
 	assert(visual.get_node("ClientWeaponLayer").texture.resource_path.ends_with("weapon_048_idle.png"),"祖玛测试号裁决未联动正确的人物外观")
 	var weapon_layer:Sprite2D=visual.get_node("ClientWeaponLayer")
-	var behind_rows:=[7,0,1]
+	var frame_order: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/equipment_weapon_frame_order.json"))
+	assert(frame_order.contract_id == "equipment.weapon.primary_frame_order.v1")
+	# Primary per-action/per-frame order replaced the historical fixed three
+	# directions. Check all eight rows against its immutable source table.
 	for row in range(8):
-		assert(visual.weapon_draws_behind(row)==(row in behind_rows),"裁决八方向前后遮挡错误：row=%d"%row)
+		var source_frame: int = int(frame_order.action_starts[visual._visual_action_key()]) + row * int(frame_order.direction_stride) + int(visual.current_frame)
+		var expected_behind := int(frame_order.genders[0][source_frame]) == int(frame_order.behind_value)
+		assert(visual.weapon_draws_behind(row)==expected_behind,"裁决八方向逐帧遮挡错误：row=%d"%row)
 	var directions:=[Vector2.UP,Vector2(1,-1),Vector2.RIGHT,Vector2(1,1),Vector2.DOWN,Vector2(-1,1),Vector2.LEFT,Vector2(-1,-1)]
 	for row in range(8):
 		game.player.facing=directions[row];visual._process(0.01)
@@ -47,9 +52,9 @@ func _ready()->void:
 	var preview:=EquipmentCharacterPreview.new();preview.configure_presentation_mode("classic_avatar");preview.size=Vector2(230,286);add_child(preview);await get_tree().process_frame
 	assert(preview._direction_row==4,"装备预览不是固定正面")
 	assert(preview._base_source_texture!=null and preview._base_source_texture.resource_path.ends_with("base_male_00376_anatomy.png"),"装备预览没有绑定原客户端男性平面底图源")
-	assert(preview.paper_layer_source_index("衣服")==62,"装备预览战神盔甲没有使用原客户端 StateItem 62")
-	assert(preview.paper_layer_source_index("武器")==55,"装备预览裁决没有使用原客户端 StateItem 55")
-	assert(preview.paper_layer_source_index("头盔")==151,"装备预览黑铁头盔没有使用人工冻结的最终头盔校准151")
+	assert(preview.paper_layer_source_index("hc.slot.armor")==62,"装备预览战神盔甲没有使用原客户端 StateItem 62")
+	assert(preview.paper_layer_source_index("hc.slot.weapon")==55,"装备预览裁决没有使用原客户端 StateItem 55")
+	assert(preview.paper_layer_source_index("hc.slot.helmet")==151,"装备预览黑铁头盔没有使用人工冻结的最终头盔校准151")
 	assert(preview._helmet_texture!=null and preview._helmet_texture.resource_path.ends_with("item_00151_paper_doll.png"),"装备预览未显示最终黑铁头盔校准层")
 	var bar_anchor:Vector2=visual.health_bar_anchor()
 	assert(bar_anchor==ArtSpec.PLAYER_HEALTH_BAR_OFFSET and game.player.get_node("HealthBar").position==bar_anchor,"人物血条没有使用独立固定锚点")

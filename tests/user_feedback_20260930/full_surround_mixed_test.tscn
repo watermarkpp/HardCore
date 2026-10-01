@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/user_feedback_20260930/full_surround_native_test.gd" id="1"]
+
+[node name="FullSurroundTest" type="Node"]
+script = ExtResource("1")
+case_body_ids = Array[int]([24, 64, 89])
+target_phase = Vector2(0.25, -0.125)

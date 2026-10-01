@@ -84,13 +84,13 @@ func _test_blessing_oil_success_persists_one_complete_state() -> void:
 	assert(actual_rng.randi() == expected_rng.randi(), "祝福油改变了既有 RNG 抽样顺序")
 	assert(PlayerState.item_count("祝福油") == 1)
 	assert(
-		int(PlayerState.equipment["武器"].get("weapon_luck", -1))
+		int(PlayerState.equipment["hc.slot.weapon"].get("weapon_luck", -1))
 		== int(expected_outcome.get("luck", -1))
 	)
 	var stored := PlayerState._read_json(_profile_path)
 	assert(int((stored.get("inventory", []) as Array)[0].get("count", -1)) == 1)
 	assert(
-		int(stored.get("equipment", {}).get("武器", {}).get("weapon_luck", -1))
+		int(stored.get("equipment", {}).get("hc.slot.weapon", {}).get("weapon_luck", -1))
 		== int(expected_outcome.get("luck", -1))
 	)
 
@@ -124,7 +124,7 @@ func _test_persistence_failures_restore_runtime_and_files() -> void:
 
 	PlayerState.quick_item_slots = ["", "", "", ""]
 	_reset_counters()
-	var quick_item_result := PlayerState.assign_quick_item_slot(0, "祝福油")
+	var quick_item_result := PlayerState.assign_quick_item_slot(0, GameData.item_entity_id("祝福油"))
 	assert(not bool(quick_item_result.get("ok", false)), str(quick_item_result))
 	assert(str(quick_item_result.get("reason", "")) == "save_failed")
 	assert(PlayerState.quick_item_slots == ["", "", "", ""])
@@ -171,7 +171,7 @@ func _test_persistence_failures_restore_runtime_and_files() -> void:
 func _set_blessing_fixture(oil_count: int, weapon_luck: int) -> void:
 	PlayerState.inventory = [{"name": "祝福油", "count": oil_count}]
 	PlayerState.equipment = PlayerState._empty_equipment()
-	PlayerState.equipment["武器"] = {
+	PlayerState.equipment["hc.slot.weapon"] = {
 		"name": "命运之刃",
 		"count": 1,
 		"instance_id": "atomic-blessing-weapon",

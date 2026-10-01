@@ -31,13 +31,13 @@ func _run() -> void:
 	assert(above_one > 850 and above_one < 1450, str(above_one))
 	for stat: String in counts: assert(int(counts[stat]) > 520 and int(counts[stat]) < 820)
 	assert(not sample.is_empty())
-	PlayerState.equipment["武器"] = {}
+	PlayerState.equipment["hc.slot.weapon"] = {}
 	PlayerState.recalculate_stats(false)
 	var bare: Dictionary = PlayerState.computed_stats.duplicate(true)
-	PlayerState.equipment["武器"] = PlayerState._make_item_instance(str(catalog.name), catalog, 982345)
+	PlayerState.equipment["hc.slot.weapon"] = PlayerState._make_item_instance(str(catalog.name), catalog, 982345)
 	PlayerState.recalculate_stats(false)
 	var ordinary: Dictionary = PlayerState.computed_stats.duplicate(true)
-	PlayerState.equipment["武器"] = sample
+	PlayerState.equipment["hc.slot.weapon"] = sample
 	PlayerState.recalculate_stats(false)
 	for modifier: Dictionary in sample.modifiers:
 		assert(float(PlayerState.computed_stats[modifier.stat]) == float(ordinary[modifier.stat]) + int(modifier.value))

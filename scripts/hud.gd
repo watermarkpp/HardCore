@@ -1063,31 +1063,29 @@ func set_item_quick_slots(assignments: Array) -> void:
 	item_quick_slots.clear()
 	for index in range(ITEM_QUICK_SLOT_COUNT):
 		var value: Variant = assignments[index] if index < assignments.size() else ""
-		item_quick_slots.append(_item_slot_assignment_name(value))
+		item_quick_slots.append(_item_slot_assignment_id(value))
 	update_item_quick_slots()
 
 
-func _item_slot_assignment_name(value: Variant) -> String:
+func _item_slot_assignment_id(value: Variant) -> String:
 	if value is Dictionary:
-		return str(
-			value.get(
-				"item_name",
-				value.get("name", value.get("display_name", value.get("displayName", "")))
-			)
-		)
-	return str(value)
+		return str(value.get("entity_id", ""))
+	return str(value) if value is String and value.begins_with("hc.") else ""
 
 
 func update_item_quick_slots() -> void:
 	for index in range(ITEM_QUICK_SLOT_COUNT):
-		var item_name := item_quick_slots[index] if index < item_quick_slots.size() else ""
-		var count := PlayerState.item_count(item_name) if not item_name.is_empty() else 0
+		var item_id := item_quick_slots[index] if index < item_quick_slots.size() else ""
+		var record := GameData.get_entity_record(item_id)
+		var item_name := str(record.get("name", ""))
+		var count := PlayerState.item_count_by_entity_id(item_id) if not item_id.is_empty() else 0
 		var button: Button = hud_item_buttons[index] if index < hud_item_buttons.size() else null
 		var icon: TextureRect = item_quick_slot_icons[index] if index < item_quick_slot_icons.size() else null
 		var count_label: Label = item_quick_slot_count_labels[index] if index < item_quick_slot_count_labels.size() else null
 		if button == null:
 			continue
 		button.set_meta("item_quick_slot_name", item_name)
+		button.set_meta("item_quick_slot_entity_id", item_id)
 		button.set_meta("item_quick_slot_count", count)
 		button.set_meta("item_quick_slot_available", count > 0)
 		if item_name.is_empty():
@@ -1101,7 +1099,6 @@ func update_item_quick_slots() -> void:
 				count_label.visible = false
 			button.tooltip_text = "快捷物品 %d：长按从背包选择" % (index + 1)
 			continue
-		var record := GameData.get_item_record(item_name)
 		var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
 		button.text = ""
 		if icon != null:
@@ -1165,16 +1162,20 @@ func _finish_item_slot_press(slot_index: int, release_position: Vector2, touch_i
 	_item_slot_press_touch_index = -1
 	if long_press_opened or cancelled or moved_away:
 		return
-	var item_name := _item_slot_bound_name(slot_index)
-	if item_name.is_empty():
+	var item_id := _item_slot_bound_id(slot_index)
+	if item_id.is_empty():
 		# Tapping an empty quick slot is a failed action: it belongs to the
 		# dedicated error channel, not the general notice lane.
 		show_error_message("快捷物品 %d 为空：长按槽位可从背包选择" % (slot_index + 1))
 		return
-	item_quick_slot_use_requested.emit(slot_index, item_name)
+	item_quick_slot_use_requested.emit(slot_index, item_id)
 
 
 func _item_slot_bound_name(slot_index: int) -> String:
+	return str(GameData.get_entity_record(_item_slot_bound_id(slot_index)).get("name", ""))
+
+
+func _item_slot_bound_id(slot_index: int) -> String:
 	if slot_index >= 0 and slot_index < item_quick_slots.size():
 		return item_quick_slots[slot_index]
 	return ""
@@ -1192,7 +1193,7 @@ func _open_item_quick_slot_menu() -> void:
 	for index in range(candidates.size()):
 		var candidate: Dictionary = candidates[index]
 		var id := index + 1
-		_item_quick_slot_menu_candidates[id] = str(candidate.get("item_name", ""))
+		_item_quick_slot_menu_candidates[id] = str(candidate.get("entity_id", ""))
 		_add_item_quick_slot_candidate(candidate, id, candidates.size() - 1 - index)
 	var content_size := _item_quick_slot_picker_content_size(candidates.size())
 	if candidates.is_empty():
@@ -1211,14 +1212,14 @@ func _item_quick_slot_candidates() -> Array[Dictionary]:
 	for stack: Variant in PlayerState.inventory:
 		if not stack is Dictionary:
 			continue
-		var item_name := str(stack.get("name", ""))
-		if item_name.is_empty() or seen.has(item_name):
+		var item_id := GameData.item_entity_id(stack)
+		if item_id.is_empty() or seen.has(item_id):
 			continue
-		var record := GameData.get_item_record(item_name)
+		var record := GameData.get_entity_record(item_id)
 		if not _is_quick_slot_candidate(record):
 			continue
-		seen[item_name] = true
-		result.append({"item_name": item_name, "count": PlayerState.item_count(item_name)})
+		seen[item_id] = true
+		result.append({"entity_id": item_id, "item_name": str(record.get("name", "")), "count": PlayerState.item_count_by_entity_id(item_id)})
 	return result
 
 
@@ -1300,11 +1301,12 @@ func _add_item_quick_slot_candidate(candidate: Dictionary, id: int, visual_row: 
 	card.set_meta("accessibility_text", card.tooltip_text)
 	card.set_meta("candidate_id", id)
 	card.set_meta("item_name", item_name)
+	card.set_meta("entity_id", str(candidate.get("entity_id", "")))
 	card.set_meta("count", count)
 	card.pressed.connect(_on_item_quick_slot_menu_pressed.bind(id))
 	_item_quick_slot_menu_list.add_child(card)
 	item_quick_slot_candidate_buttons.append(card)
-	var record := GameData.get_item_record(item_name)
+	var record := GameData.get_entity_record(str(candidate.get("entity_id", "")))
 	var texture := UIItemTextureCacheScript.texture_for(record, "inventoryIcon")
 	var icon := TextureRect.new()
 	icon.name = "InventoryIcon"
@@ -1408,12 +1410,12 @@ func _scroll_item_quick_slot_menu_to_bottom() -> void:
 	))
 
 
-func _assign_item_quick_slot(slot_index: int, item_name: String) -> void:
-	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT or item_name.is_empty():
+func _assign_item_quick_slot(slot_index: int, item_id: String) -> void:
+	if slot_index < 0 or slot_index >= ITEM_QUICK_SLOT_COUNT or item_id.is_empty():
 		return
-	item_quick_slots[slot_index] = item_name
+	item_quick_slots[slot_index] = item_id
 	update_item_quick_slots()
-	item_quick_slot_assignment_requested.emit(slot_index, item_name)
+	item_quick_slot_assignment_requested.emit(slot_index, item_id)
 
 
 func _build_combat_controls(root: Control) -> void:
@@ -2411,12 +2413,21 @@ func update_status_buffs(entries: Array) -> void:
 			icon = _build_taoist_defence_buff_icon(taoist_buff_icon_strip, "StatusBuff_%d" % _status_buff_icons.size(), "hud.buff." + id, null, Vector2.ZERO)
 			_status_buff_icons[id] = icon
 		var item_id := int(entry.get("item_id", -1))
-		if item_id > 0:
-			if int(icon.get_meta("item_id", -1)) != item_id:
+		var item_entity_id := str(entry.get("entity_id", ""))
+		if not item_entity_id.is_empty():
+			if str(icon.get_meta("item_entity_id", "")) != item_entity_id:
+				icon.texture = UIItemTextureCacheScript.texture_at_path(GameData.get_item_art_path(item_entity_id))
+				icon.set_meta("item_entity_id", item_entity_id)
+				icon.set_meta("item_id", item_id)
+		elif item_id > 0:
+			if int(icon.get_meta("item_id", -1)) != item_id or not str(icon.get_meta("item_entity_id", "")).is_empty():
 				icon.texture = UIItemTextureCacheScript.texture_at_path(GameData.get_item_art_path({"item_id":item_id}))
 				icon.set_meta("item_id", item_id)
+				icon.set_meta("item_entity_id", "")
 		elif entry.has("skill"):
 			icon.texture = HUDSkillIconCatalogScript.SKILL_TEXTURES.get(str(entry.skill))
+			icon.set_meta("item_entity_id", "")
+			icon.set_meta("item_id", -1)
 		icon.position = Vector2(index * (TAOIST_BUFF_ICON_SIZE.x + 6.0), 0)
 		icon.show()
 		var seconds := icon.get_node("Seconds") as Label
@@ -2883,7 +2894,7 @@ func _skill_name_from_group(group_value: Variant, slot_index: int) -> String:
 
 func _skill_name_from_assignment_value(value: Variant) -> String:
 	if not value is Dictionary:
-		return str(value)
+		return ProfessionRules.skill_display_name(str(value)) if not str(value).is_empty() else ""
 	return str(
 		value.get(
 			"skill_name",
@@ -2904,7 +2915,7 @@ func update_warrior_states(snapshot: Dictionary) -> void:
 	_warrior_snapshot = snapshot.duplicate(true)
 	if warrior_state_label == null:
 		return
-	warrior_state_label.visible = PlayerState.profession == "战士"
+	warrior_state_label.visible = PlayerState.profession_id == "hc.profession.warrior"
 	if not warrior_state_label.visible:
 		return
 	var fire_text := _fire_sword_charge_label(snapshot)

@@ -36,6 +36,9 @@ func _run() -> void:
 		enemy.setup(canonical_data, player)
 		enemy.global_position = Vector2(index * 180, 0)
 		add_child(enemy)
+		# This is an isolated presentation fixture. Stop the initial idle timer
+		# before disabling physics so it cannot wake combat during atlas loading.
+		enemy._leave_background_deep_sleep()
 		enemy.set_physics_process(false)
 		await get_tree().process_frame
 		var visual: MonsterVisual = enemy.get_node("MonsterVisual")
