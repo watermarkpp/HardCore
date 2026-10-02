@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real runtime configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "default-off module explicitly enabled for fixture",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual compiled binding used",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "complete real HP facts fill one legal batch 0",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real queue accepts legal full batch 0",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "complete real HP facts fill one legal batch 1",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real queue accepts legal full batch 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "real pending queue reaches its exact bound",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "full queue rejects submission explicitly",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "rejected fact remains valid and sealed",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "capacity rejection never reverses committed HP",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual occupied queue drains through production budget",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "capacity rejection leaves batch unconsumed for an exact later submission",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "retry enqueues its complete fact once",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "accepted retry cannot submit twice",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "retry transports the existing fact without applying base damage again",
+      "passed": true
+    }
+  ],
+  "count": 16,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "passed": 14,
+  "reported_checks": 16,
+  "reported_failures": 2,
+  "run_id": "8eb4ff31-85a3-4cca-8692-a22728267a50",
+  "scene_id": "feature_capacity_atomic_test",
+  "schema_version": 1,
+  "source_content_sha256": "a8487fcca6d5a632d55c9ae1cdf69547d2b802e99bfdf689c0c1249f28b58123",
+  "status": "FAIL"
+}

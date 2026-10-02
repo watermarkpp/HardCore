@@ -1,0 +1,49 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "feature_capacity_atomic_test",
+                        "test_path":  "tests/framework/feature_capacity_atomic_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T01:16:40.9890900Z",
+                        "native_exit_observed_utc":  "2026-10-02T01:15:49.6660202Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "8eb4ff31-85a3-4cca-8692-a22728267a50",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    },
+                    {
+                        "test_name":  "feature_capacity_admission_test",
+                        "test_path":  "tests/framework/feature_capacity_admission_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T01:16:50.7773963Z",
+                        "native_exit_observed_utc":  "2026-10-02T01:16:07.1174438Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "d3121459-f026-4768-bfe1-b42163d6c5cb",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T09:16:08.1751391+08:00",
+    "total":  2,
+    "failed":  2
+}

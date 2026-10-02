@@ -116,6 +116,11 @@ func facts() -> Array:
 	result.make_read_only()
 	return result
 
+# A rejected queue submission must not spend this batch's one-shot right.
+# Only complete, valid, unconsumed batches advertise transferable facts.
+func pending_fact_count() -> int:
+	return _entries.size() if _sealed and not _consumed and errors.is_empty() else 0
+
 func consume() -> Array:
 	if not _sealed or _consumed or not errors.is_empty():
 		return []

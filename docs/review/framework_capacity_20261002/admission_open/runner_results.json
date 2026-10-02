@@ -1,0 +1,30 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "feature_capacity_admission_test",
+                        "test_path":  "tests/framework/feature_capacity_admission_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T01:25:10.2674613Z",
+                        "native_exit_observed_utc":  "2026-10-02T01:24:54.6609857Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "b5ba9e00-e178-4dbf-994b-51cd29aca20c",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T09:24:55.7771029+08:00",
+    "total":  1,
+    "failed":  1
+}

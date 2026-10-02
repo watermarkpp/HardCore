@@ -60,10 +60,13 @@ func _sync_world() -> bool:
 func submit_batch(batch: RefCounted) -> bool:
 	if batch == null or batch.get_script() != preload("res://scripts/features/runtime/damage_batch.gd") or not _sync_world():
 		return false
-	var entries: Array = batch.consume()
-	if entries.is_empty(): return false
-	if _pending+entries.size() > MAX_PENDING_FACTS:
+	var count: int = batch.pending_fact_count()
+	if count == 0: return false
+	if _pending+count > MAX_PENDING_FACTS:
 		_error("feature_pending_capacity"); return false
+	# Main-thread admission and the one-shot transfer are synchronous. Nothing
+	# consumes the batch before its entire fact buffer has a queue destination.
+	var entries: Array = batch.consume()
 	_batches.append({"entries":entries,"cursor":0})
 	_pending += entries.size()
 	_stats.peak_pending = maxi(int(_stats.peak_pending),_pending)

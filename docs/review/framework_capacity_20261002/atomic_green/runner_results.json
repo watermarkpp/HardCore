@@ -1,0 +1,30 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  1,
+    "results":  [
+                    {
+                        "test_name":  "feature_capacity_atomic_test",
+                        "test_path":  "tests/framework/feature_capacity_atomic_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T01:23:30.5514632Z",
+                        "native_exit_observed_utc":  "2026-10-02T01:22:38.9981740Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "5559c027-fd48-4bfc-a752-c64daf1ed939",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T09:22:40.4296024+08:00",
+    "total":  1,
+    "failed":  0
+}

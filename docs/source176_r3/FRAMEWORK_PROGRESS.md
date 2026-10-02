@@ -236,3 +236,12 @@ GameData 正式 rank 查询按已有 skill_id，名称仅是明确旧UI入口和
 - 历史307项“PASS”标记同时存在2次脚本错误并漏20项，主控已明确判FAIL保留；首次资源准备超时及不完整掉落fixture失败也保留。新launcher同时核对真实退出、全部receipt、脚本错误和前后生产/fixture指纹。
 - **用户报告的旧B角色整个背包故障仍未结案**：新建三职业场景未复现，具体历史B状态MISSING，v97修复状态NOT_RUN；不能用本专项PASS或架构升级替代该故障验收。
 - 范围证据：`outputs/framework_v2/V97_MULTI_PROFILE_BASELINE_SCOPED_EVIDENCE.json`；所有userdata、缓存、原始trace及诊断导出位于本树忽略outputs中，不上传真实存档。
+
+
+### 2026-10-02 容量施工检查点：原子转移 PASS，完整准入 FAIL
+
++唯一主控在第三树完成两个原生因果 RED：真实 pending8192 满后消费权丢失（16检查/2失败）；三个 AOE 目标各有16个合法历史状态时，新源仍接受动作并提交基础HP，随后拒绝状态（19检查/3失败）。源码在每次运行前后保持一致。
+
++本段仅修复 damage_batch 非消费计数、effect_runtime 整批容量先检查后 consume、GameRoot 对非空提交失败的明确诊断；基础HP不回滚，合法miss/空扩展路径保持。最终队列容量-1/满/+1、双目标整批拒绝与精确重试等25检查 PASS；八个直接相关原生回归147检查 PASS。完整接受前容量仍 FAIL，最终19检查仍3失败，不以局部GREEN关闭P3/P6。源码内容指纹 `6d5ca9e1540f99dae93ec6a8e11569d71bc4d80c6ab333196287dc0bce7d4970`；证据 `outputs/framework_v2/CAPACITY_SCOPED_EVIDENCE.json` 和 `docs/review/framework_capacity_20261002/`。
+
++架构待讨论：在释放时仍按all-intersecting选目标且windup中可出生/换代的合同下，准入所需fanout上界必须有权威来源；不能以30目标测试规模设新玩法上限，不能增加魔法常量或丢合法目标。候选是由现有EffectRuntime拥有、随ActionConfigLease转移的容量许可及producer/consumer结束协议，尚未实施。完整容量、死亡credit切profile窄时序、receipt安全退休与P6组合/公平性/P95/P99继续保留。已闭环的烈火、future保护、宝石纵向及身份范围不重做，不开放正式玩法；journal64不淘汰。v97精确B输入 MISSING、故障修复 NOT_RUN，APK/GPU/设备 NOT_RUN。

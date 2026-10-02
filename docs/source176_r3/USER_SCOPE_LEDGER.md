@@ -276,3 +276,12 @@ v97 真实故障必须单独复现：A 角色圣物/徽章正常，B 合成入�
 原生 live 523 项、独立 cold 74 项，共 597 项 PASS；进程均 exit 0，无脚本错误，完整逐项回执和原始文件/固定生产源码不变检查 PASS。真实工作台合成与入包后，普通装备、圣物和对应职业徽章的装备/销毁、异步持久化、冷重启角色定向加载均通过。旧实例在冷重启及后续测试变更后仍保留，冷进程只销毁明确注入的普通测试装备。证据：`outputs/framework_v2/V97_ARCHIVED_MULTI_PROFILE_SCOPED_EVIDENCE.json`。
 
 **用户报告的 v97 B 角色整个背包故障仍未复现；具体故障输入 MISSING，修复状态 NOT_RUN。不得以这 597 项或此前新角色 549 项 PASS 关闭此故障。主树 v97、真实用户存档、APK及设备均未更改。**
+
+
+### 2026-10-02 容量施工检查点：原子转移 PASS，完整准入 FAIL
+
++唯一主控在第三树完成两个原生因果 RED：真实 pending8192 满后消费权丢失（16检查/2失败）；三个 AOE 目标各有16个合法历史状态时，新源仍接受动作并提交基础HP，随后拒绝状态（19检查/3失败）。源码在每次运行前后保持一致。
+
++本段仅修复 damage_batch 非消费计数、effect_runtime 整批容量先检查后 consume、GameRoot 对非空提交失败的明确诊断；基础HP不回滚，合法miss/空扩展路径保持。最终队列容量-1/满/+1、双目标整批拒绝与精确重试等25检查 PASS；八个直接相关原生回归147检查 PASS。完整接受前容量仍 FAIL，最终19检查仍3失败，不以局部GREEN关闭P3/P6。源码内容指纹 `6d5ca9e1540f99dae93ec6a8e11569d71bc4d80c6ab333196287dc0bce7d4970`；证据 `outputs/framework_v2/CAPACITY_SCOPED_EVIDENCE.json` 和 `docs/review/framework_capacity_20261002/`。
+
++架构待讨论：在释放时仍按all-intersecting选目标且windup中可出生/换代的合同下，准入所需fanout上界必须有权威来源；不能以30目标测试规模设新玩法上限，不能增加魔法常量或丢合法目标。候选是由现有EffectRuntime拥有、随ActionConfigLease转移的容量许可及producer/consumer结束协议，尚未实施。完整容量、死亡credit切profile窄时序、receipt安全退休与P6组合/公平性/P95/P99继续保留。已闭环的烈火、future保护、宝石纵向及身份范围不重做，不开放正式玩法；journal64不淘汰。v97精确B输入 MISSING、故障修复 NOT_RUN，APK/GPU/设备 NOT_RUN。

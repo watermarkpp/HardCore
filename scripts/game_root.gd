@@ -14837,7 +14837,11 @@ func _finish_feature_damage_batch(batch: RefCounted) -> void:
 	if batch == null: return
 	if not batch.finish_base_scope() or not batch.errors.is_empty():
 		push_error("Feature damage fact rejected: " + str(batch.errors)); return
-	_feature_effect_runtime.submit_batch(batch)
+	# A valid miss/empty release owns no post-hit work. Nonempty rejected
+	# transfers remain intact and must be visible as failures, never successes.
+	if batch.pending_fact_count() == 0: return
+	if not _feature_effect_runtime.submit_batch(batch):
+		push_error("Feature damage batch submission rejected: " + str(_feature_effect_runtime.errors))
 
 
 func _ordinary_attack_owner_matches(

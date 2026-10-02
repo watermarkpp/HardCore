@@ -1,0 +1,216 @@
+{
+  "atomic_transfer_status": "PASS",
+  "whole_capacity_admission_status": "FAIL",
+  "full_framework_status": "NOT_RUN",
+  "production_files_changed": [
+    "scripts/features/runtime/damage_batch.gd",
+    "scripts/features/runtime/effect_runtime.gd",
+    "scripts/game_root.gd"
+  ],
+  "stable_entity_ids_added": [],
+  "native_source_content_sha256": "6d5ca9e1540f99dae93ec6a8e11569d71bc4d80c6ab333196287dc0bce7d4970",
+  "native_files": 3460,
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "tests": {
+    "red": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\capacity_red_091538_449481",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_capacity_admission_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 2,
+        "status": "FAIL"
+      },
+      "receipts": {
+        "feature_capacity_admission_test": {
+          "checks": 19,
+          "failed": 3,
+          "status": "FAIL",
+          "failed_labels": [
+            "state capacity refuses a new distinct source before action acceptance",
+            "capacity rejection leaves MP and cooldown untouched",
+            "no capacity refusal remains after an already accepted damage commit"
+          ]
+        },
+        "feature_capacity_atomic_test": {
+          "checks": 16,
+          "failed": 2,
+          "status": "FAIL",
+          "failed_labels": [
+            "capacity rejection leaves batch unconsumed for an exact later submission",
+            "retry enqueues its complete fact once"
+          ]
+        }
+      },
+      "current_source_differences": [
+        "scripts/features/runtime/damage_batch.gd",
+        "scripts/features/runtime/effect_runtime.gd",
+        "scripts/game_root.gd",
+        "tests/framework/feature_capacity_atomic_test.gd"
+      ]
+    },
+    "atomic_green": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\capacity_atomic_boundary_092228_267494",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_capacity_atomic_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 1,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "receipts": {
+        "feature_capacity_atomic_test": {
+          "checks": 25,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        }
+      },
+      "current_source_differences": []
+    },
+    "regression": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\capacity_atomic_regression_092026_577549",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/action_config_lease_test.tscn','tests/framework/damage_commit_fact_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/feature_effect_production_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/periodic_effect_death_production_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 8,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "receipts": {
+        "action_config_lease_test": {
+          "checks": 13,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "damage_commit_fact_test": {
+          "checks": 13,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "feature_effect_production_test": {
+          "checks": 33,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "feature_fire_effect_production_test": {
+          "checks": 19,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "periodic_effect_boundaries_test": {
+          "checks": 22,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "periodic_effect_death_production_test": {
+          "checks": 16,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "periodic_effect_lifecycle_test": {
+          "checks": 18,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        },
+        "periodic_effect_runtime_test": {
+          "checks": 13,
+          "failed": 0,
+          "status": "PASS",
+          "failed_labels": []
+        }
+      },
+      "current_source_differences": [
+        "tests/framework/feature_capacity_atomic_test.gd"
+      ]
+    },
+    "admission_open": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\capacity_admission_open_092438_001821",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_capacity_admission_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 1,
+        "status": "FAIL"
+      },
+      "receipts": {
+        "feature_capacity_admission_test": {
+          "checks": 19,
+          "failed": 3,
+          "status": "FAIL",
+          "failed_labels": [
+            "state capacity refuses a new distinct source before action acceptance",
+            "capacity rejection leaves MP and cooldown untouched",
+            "no capacity refusal remains after an already accepted damage commit"
+          ]
+        }
+      },
+      "current_source_differences": []
+    }
+  },
+  "successful_checks": 172,
+  "admission_open_checks": 19,
+  "admission_open_failed_checks": 3,
+  "preexisting_unexecuted_tests": [
+    "tests/framework/periodic_credit_profile_switch_test.gd",
+    "tests/framework/periodic_credit_profile_switch_test.tscn"
+  ],
+  "reason": "A complete preaccept capacity reservation is still missing. Three real AOE receivers retained sixteen valid historical states each; a new distinct source was accepted and base HP committed before state refusal.",
+  "architecture_questions": [
+    "How should an explicit legal maximum fanout be established before acceptance while canonical AOE keeps all-intersecting targets sampled at release, including births and life replacements during windup? Checking only currently visible targets cannot establish that bound.",
+    "Should the accepted ActionConfigLease carry an EffectRuntime-owned capacity permit whose producer closes at batch seal and whose consumer closes after complete dispatch, allowing a proved receipt retirement protocol without TTL/LRU or journal eviction? This is a proposal, not implemented."
+  ],
+  "remaining": [
+    "preaccept pending/receipt/state reservation",
+    "post-HP fact capacity bound",
+    "profile switch after lethal HP before reward callback",
+    "receipt lifecycle retirement",
+    "P6 90 states/360 deliveries/concurrent death-drop-resource-persistence/fairness/P95/P99",
+    "exact historical B triggering input MISSING",
+    "APK/GPU/device NOT_RUN"
+  ]
+}
