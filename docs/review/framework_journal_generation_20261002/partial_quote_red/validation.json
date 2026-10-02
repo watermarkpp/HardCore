@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn' -TimeoutSeconds 60"
+  ],
+  "timeout_seconds": 60,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 0,
+  "failed": 2,
+  "status": "FAIL"
+}

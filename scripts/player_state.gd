@@ -394,6 +394,12 @@ func quote_item_transaction(request: Dictionary) -> Dictionary:
 	return _item_transaction_port.quote(request)
 
 
+func quote_new_item_transaction(request: Dictionary) -> Dictionary:
+	if _item_transaction_port == null:
+		_item_transaction_port = ItemTransactionPort.new(self)
+	return _item_transaction_port.quote_new(request)
+
+
 func commit_item_transaction(quote: Dictionary) -> Dictionary:
 	if _item_transaction_port == null:
 		return {"success": false, "pending": false, "reason": "item_quote_required"}

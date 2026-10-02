@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production persistence without test_mode bypass",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "official startup upgrade gate completes in isolated production user data { \"success\": false, \"reason\": \"invalid_shared_warehouse\", \"path\": \"user://shared_warehouse.json\" }",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "123f97f9-dbff-42f3-94b5-3384a33202fe",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "263cd4e7-ae8d-45e6-9f4a-995ae5218b9f",
+  "scene_id": "periodic_credit_safe_logout_test",
+  "schema_version": 1,
+  "source_content_sha256": "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+  "status": "FAIL"
+}

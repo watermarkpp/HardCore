@@ -6,9 +6,33 @@ const Journal := preload("res://scripts/items/item_transaction_journal.gd")
 const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
 var _owner: WeakRef
 var _active: Dictionary = {}
+var _issued_context := ""
+var _issued_epoch := ""
 
 func _init(owner: Node) -> void:
 	_owner = weakref(owner)
+
+func quote_new(request: Dictionary) -> Dictionary:
+	var player: Node = _owner.get_ref()
+	if player == null or request.size() != 3 or request.has("operation_id"):
+		return _failure("invalid_item_command")
+	var issued := request.duplicate(true)
+	var journal: Dictionary = player._item_transaction_journal
+	var last := int(journal.get("last_sequence",0)) if journal.get("contract_id") == Journal.SEQUENCE_CONTRACT else 0
+	if last >= Journal.MAX_SEQUENCE: return _failure("item_operation_sequence_exhausted")
+	# Dot insertion on a new dictionary key can create a StringName; the plain
+	# boundary deliberately accepts String keys only.
+	issued["operation_id"] = Journal.sequence_id(_epoch_for(player),last+1)
+	return quote(issued)
+
+func _epoch_for(player: Node) -> String:
+	if player._item_transaction_journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
+		_issued_epoch = ""; _issued_context = ""
+		return player._item_transaction_journal.epoch
+	var context := JSON.stringify([player.active_profile_id,player._world_clock_generation])
+	if _issued_context != context or _issued_epoch.is_empty():
+		_issued_context = context; _issued_epoch = Crypto.new().generate_random_bytes(16).hex_encode()
+	return _issued_epoch
 
 func quote(request: Dictionary) -> Dictionary:
 	var player: Node = _owner.get_ref()
@@ -18,12 +42,14 @@ func quote(request: Dictionary) -> Dictionary:
 	if not recorded.is_empty():
 		if recorded.request_digest != digest: return _failure("operation_identity_conflict")
 		return {"success": true, "replay": true, "request": request.duplicate(true), "outcome": recorded}
+	var epoch := _epoch_for(player) if request.operation_id.begins_with(Journal.SEQUENCE_PREFIX) else ""
+	var admission := Journal.admission(player._item_transaction_journal,request.operation_id,epoch)
+	if not bool(admission.success): return _failure(admission.reason)
 	var config := ContentLayers.feature_configuration()
 	if Gem.MODULE not in config.get("enabled_modules", []): return _failure("socket_fixture_disabled")
 	if "items.transact" not in config.catalog.modules[Gem.MODULE].capabilities: return _failure("missing_item_transaction_permission")
 	if not player._valid_profile_storage_id(player.active_profile_id) or player.active_profile_id == player._save_blocked_profile_id \
-		or not player._can_accept_immediate_item_use() or player._world_clock_snapshot_sequence < 0 \
-		or player._item_transaction_journal.get("entries", []).size() >= Journal.LIMIT:
+		or not player._can_accept_immediate_item_use() or player._world_clock_snapshot_sequence < 0:
 		return _failure("item_transaction_unavailable")
 	if not player._validate_extended_item_ownership({"inventory": player.inventory, "equipment": player.equipment,
 		"forge_tray": player.forge_tray, "synthesis_tray": player.synthesis_tray, "warehouse_inventory": player.warehouse_inventory}):
@@ -50,11 +76,13 @@ func quote(request: Dictionary) -> Dictionary:
 	var output := Codec.with_extensions(base, extension)
 	if output.status != Codec.KNOWN_VALID: return _failure(output.reason)
 	var result := {"success": true, "replay": false, "request": request.duplicate(true),
+		"protocol_epoch":epoch,
 		"profile_id": player.active_profile_id, "world_clock_generation": player._world_clock_generation,
 		"rules_revision": config.catalog.revision, "request_digest": digest,
 		"target_digest": _target_digest(target.record), "gem_digest": _item_digest(gem),
 		"target_entity_id": GameData.item_entity_id(base), "gem_instance_id": gem.instance_id}
-	return Graph.capture(result).value
+	var captured := Graph.capture(result)
+	return captured.value if bool(captured.success) else _failure("non_plain_item_quote")
 
 func commit(quoted: Dictionary) -> Dictionary:
 	var player: Node = _owner.get_ref()
@@ -133,7 +161,7 @@ func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionar
 	var entry := {"operation_id": identity.operation_id, "request_digest": plan.quote.request_digest,
 		"action": plan.quote.request.action, "target_instance_id": plan.quote.request.target_instance_id,
 		"gem_instance_id": plan.quote.gem_instance_id, "rules_revision": plan.quote.rules_revision}
-	plan.journal = Journal.appended(player._item_transaction_journal, player.active_profile_id, entry)
+	plan.journal = Journal.appended(player._item_transaction_journal, player.active_profile_id, entry,plan.quote.protocol_epoch)
 	if plan.journal.is_empty(): return null
 	var document: Dictionary = player._prepare_character_save_payload(false).duplicate(true)
 	if document.is_empty(): return null
@@ -146,6 +174,9 @@ func _build_document(previous: Dictionary, identity: Dictionary, plan: Dictionar
 	return encoded.document if encoded.status == Codec.KNOWN_VALID else null
 
 func _complete(receipt: Dictionary, plan: Dictionary) -> void:
+	# A retained asynchronous callback loses publication rights with its job.
+	# It must not restore an old journal/frontier after a later operation finishes.
+	if _active.is_empty() or _active.get("job") != plan.get("job"): return
 	var player: Node = _owner.get_ref()
 	if bool(receipt.get("success", false)):
 		# Receipt consumption precedes pumping any next character save. Publish
@@ -162,6 +193,11 @@ func _complete(receipt: Dictionary, plan: Dictionary) -> void:
 			var target := _find(plan.quote.request.target_instance_id)
 			_apply_item_delta(player.inventory, player.equipment, target, plan)
 			player._item_transaction_journal = plan.journal.duplicate(true)
+			# A completed provisional epoch belongs only to its durable document.
+			# If supported recovery later restores a pre-sequence backup, this port
+			# must issue a fresh epoch instead of reopening the lost old stream.
+			if plan.journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
+				_issued_epoch = ""; _issued_context = ""
 			player._record_background_json_receipt(receipt)
 			var sequence := int(receipt.document.death_event_sequence)
 			player._profile_backup_death_event_sequence = player._backup_sequence_after_promotion(

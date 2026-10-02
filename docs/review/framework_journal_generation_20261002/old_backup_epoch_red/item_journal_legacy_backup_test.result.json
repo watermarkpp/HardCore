@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real load and writer run only in the prelaunch isolated account",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "production startup and profile creation succeed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "initial unsequenced checkpoint is durable",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "default-off test module enabled explicitly",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "first sequenced operation commits through the actual sole writer",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "owned corrupt primary has the exact original unsequenced recovery checkpoint",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "production loader recovers the valid older checkpoint, not the lost newer frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "recovered document owns its original loose gem exactly once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "same-process old issuer cannot resurrect a completed epoch after recovery to an unsequenced checkpoint",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "fresh recovery intent uses a different epoch instead of reusing a lost operation identity",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "recovered profile remains usable through one newly issued actual transaction",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "798b9b8c-5771-4e8b-b27b-48e14a3d2040",
+  "passed": 9,
+  "reported_checks": 11,
+  "reported_failures": 2,
+  "run_id": "c85dd13a-4f81-4137-8d62-3fcad6661a0b",
+  "scene_id": "item_journal_legacy_backup_test",
+  "schema_version": 1,
+  "source_content_sha256": "75c9ba05e1cc14702114cd9833162621df18862c894a9f23436d068f7057aa7b",
+  "status": "FAIL"
+}

@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing transaction owner can issue a recoverable sequence instead of stopping permanently at journal64",
+      "passed": false
+    }
+  ],
+  "count": 1,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "27b037c4-442f-4c1e-a510-f42363f55c12",
+  "passed": 0,
+  "reported_checks": 1,
+  "reported_failures": 1,
+  "run_id": "0835fd9b-d852-4586-932d-c89478e26a49",
+  "scene_id": "item_journal_sequence_test",
+  "schema_version": 1,
+  "source_content_sha256": "ba2b37d7cdb1d3120977ebe5c5a8e5b7e532203a408329931675c4117372ac89",
+  "status": "FAIL"
+}

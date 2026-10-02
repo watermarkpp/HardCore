@@ -1,0 +1,712 @@
+--- old/scripts/items/item_transaction_journal.gd
++++ new/scripts/items/item_transaction_journal.gd
+@@ -3,0 +4,3 @@
++const SEQUENCE_CONTRACT := "hc.item.transactions.v2"
++const SEQUENCE_PREFIX := "hc:itemtx:"
++const MAX_SEQUENCE := 9007199254740991
+@@ -8,3 +11,2 @@
+-# Durable outcomes belong to the character document and its existing writer.
+-# Never evict outcomes: a full journal refuses new fixture operations so an
+-# old operation ID cannot silently become eligible for a second consumption.
++# Legacy opaque outcomes are never retired. The separate sequenced protocol
++# retains a contiguous durable watermark: an omitted old ID remains terminal.
+@@ -15 +17 @@
+-	if journal.get("contract_id") is String and journal.contract_id != CONTRACT:
++	if journal.get("contract_id") is String and journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT]:
+@@ -17 +19,3 @@
+-	if _integer(journal.get("schema_version")) and journal.schema_version > 1:
++	var sequenced: bool = journal.get("contract_id") == SEQUENCE_CONTRACT
++	var supported := 2 if sequenced else 1
++	if _integer(journal.get("schema_version")) and journal.schema_version > supported:
+@@ -19,6 +23,9 @@
+-	if journal.get("entries") is Array:
+-		for entry: Variant in journal.entries:
+-			if entry is Dictionary and entry.get("action") is String and entry.action not in ACTIONS:
+-				return _status(false, true)
+-	if not _keys(journal, ["contract_id", "schema_version", "profile_id", "entries"]) \
+-		or journal.contract_id != CONTRACT or not _integer(journal.schema_version) or journal.schema_version != 1 \
++	for field: String in ["entries","legacy_entries"]:
++		if journal.get(field) is Array:
++			for entry: Variant in journal[field]:
++				if entry is Dictionary and entry.get("action") is String and entry.action not in ACTIONS:
++					return _status(false, true)
++	var keys: Array = ["contract_id","schema_version","profile_id","entries"]
++	if sequenced: keys.append_array(["epoch","last_sequence","retired_through","legacy_entries"])
++	if not _keys(journal, keys) or not _integer(journal.schema_version) or journal.schema_version != supported \
++		or journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT] \
+@@ -29 +36,15 @@
+-	for raw: Variant in journal.entries:
++	if sequenced:
++		if not _epoch_valid(journal.epoch) or not _sequence_valid(journal.last_sequence) \
++			or not _integer(journal.retired_through) or journal.retired_through != maxi(0,int(journal.last_sequence)-LIMIT) \
++			or not journal.legacy_entries is Array or journal.legacy_entries.size() > LIMIT \
++			or journal.entries.size() != int(journal.last_sequence)-int(journal.retired_through): return _status(false)
++		var legacy_status := _entries_valid(journal.legacy_entries,seen)
++		if not legacy_status.valid: return legacy_status
++		for index in journal.entries.size():
++			var raw: Variant = journal.entries[index]
++			if not raw is Dictionary or raw.get("operation_id") != sequence_id(journal.epoch,int(journal.retired_through)+index+1):
++				return _status(false)
++	return _entries_valid(journal.entries,seen)
++
++static func _entries_valid(entries: Array, seen: Dictionary) -> Dictionary:
++	for raw: Variant in entries:
+@@ -42,2 +63,3 @@
+-	for entry: Dictionary in journal.get("entries", []):
+-		if entry.operation_id == operation_id: return entry.duplicate(true)
++	for field: String in ["entries","legacy_entries"]:
++		for entry: Dictionary in journal.get(field, []):
++			if entry.operation_id == operation_id: return entry.duplicate(true)
+@@ -46 +68,32 @@
+-static func appended(journal: Dictionary, profile_id: String, entry: Dictionary) -> Dictionary:
++static func sequence_id(epoch: String, sequence: int) -> String:
++	return SEQUENCE_PREFIX+epoch+":"+str(sequence) if _epoch_valid(epoch) and _sequence_valid(sequence) else ""
++
++static func parse_sequence(value: String) -> Dictionary:
++	if not value.begins_with(SEQUENCE_PREFIX): return {}
++	var fields := value.trim_prefix(SEQUENCE_PREFIX).split(":")
++	if fields.size() != 2 or not _epoch_valid(fields[0]) or not fields[1].is_valid_int(): return {}
++	var sequence := fields[1].to_int()
++	if value != sequence_id(fields[0],sequence): return {}
++	return {"epoch":fields[0],"sequence":sequence}
++
++static func admission(journal: Dictionary, operation_id: String, issued_epoch := "") -> Dictionary:
++	if not journal.is_empty() and not validate_document({"profile_id":journal.get("profile_id"),FIELD:journal}).valid:
++		return {"success":false,"reason":"invalid_item_transaction_journal"}
++	if not operation_id.begins_with(SEQUENCE_PREFIX):
++		var field := "legacy_entries" if journal.get("contract_id") == SEQUENCE_CONTRACT else "entries"
++		return {"success":journal.get(field,[]).size() < LIMIT,"reason":"item_transaction_unavailable"}
++	var id := parse_sequence(operation_id)
++	if id.is_empty(): return {"success":false,"reason":"invalid_item_operation_sequence"}
++	var sequenced: bool = journal.get("contract_id") == SEQUENCE_CONTRACT
++	var epoch: String = journal.epoch if sequenced else issued_epoch
++	if epoch.is_empty() or id.epoch != epoch: return {"success":false,"reason":"item_operation_epoch_mismatch"}
++	var last := int(journal.last_sequence) if sequenced else 0
++	if sequenced and int(id.sequence) <= int(journal.retired_through):
++		return {"success":false,"reason":"item_operation_retired"}
++	if last == MAX_SEQUENCE or int(id.sequence) != last+1:
++		return {"success":false,"reason":"item_operation_sequence_mismatch"}
++	return {"success":true,"reason":""}
++
++static func appended(journal: Dictionary, profile_id: String, entry: Dictionary, issued_epoch := "") -> Dictionary:
++	if not entry.get("operation_id") is String or not bool(admission(journal,entry.operation_id,issued_epoch).success): return {}
++	var id := parse_sequence(entry.operation_id)
+@@ -49,2 +102,10 @@
+-	if candidate.get("entries", []).size() >= LIMIT: return {}
+-	candidate.entries.append(entry.duplicate(true))
++	if not id.is_empty():
++		if candidate.contract_id == CONTRACT:
++			candidate = {"contract_id":SEQUENCE_CONTRACT,"schema_version":2,"profile_id":profile_id,
++				"epoch":id.epoch,"last_sequence":0,"retired_through":0,"legacy_entries":candidate.entries,"entries":[]}
++		candidate.entries.append(entry.duplicate(true)); candidate.last_sequence = int(id.sequence)
++		candidate.retired_through = maxi(0,int(id.sequence)-LIMIT)
++		if candidate.entries.size() > LIMIT: candidate.entries.pop_front()
++	else:
++		var field := "legacy_entries" if candidate.contract_id == SEQUENCE_CONTRACT else "entries"
++		candidate[field].append(entry.duplicate(true))
+@@ -51,0 +113,9 @@
++
++static func _epoch_valid(value: Variant) -> bool:
++	if not value is String or value.length() != 32: return false
++	for character in value:
++		if character not in "0123456789abcdef": return false
++	return true
++
++static func _sequence_valid(value: Variant) -> bool:
++	return _integer(value) and value >= 1 and value <= MAX_SEQUENCE
+--- old/scripts/items/item_transaction_port.gd
++++ new/scripts/items/item_transaction_port.gd
+@@ -8,0 +9,2 @@
++var _issued_context := ""
++var _issued_epoch := ""
+@@ -11,0 +14,22 @@
++
++func quote_new(request: Dictionary) -> Dictionary:
++	var player: Node = _owner.get_ref()
++	if player == null or request.size() != 3 or request.has("operation_id"):
++		return _failure("invalid_item_command")
++	var issued := request.duplicate(true)
++	var journal: Dictionary = player._item_transaction_journal
++	var last := int(journal.get("last_sequence",0)) if journal.get("contract_id") == Journal.SEQUENCE_CONTRACT else 0
++	if last >= Journal.MAX_SEQUENCE: return _failure("item_operation_sequence_exhausted")
++	# Dot insertion on a new dictionary key can create a StringName; the plain
++	# boundary deliberately accepts String keys only.
++	issued["operation_id"] = Journal.sequence_id(_epoch_for(player),last+1)
++	return quote(issued)
++
++func _epoch_for(player: Node) -> String:
++	if player._item_transaction_journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
++		_issued_epoch = ""; _issued_context = ""
++		return player._item_transaction_journal.epoch
++	var context := JSON.stringify([player.active_profile_id,player._world_clock_generation])
++	if _issued_context != context or _issued_epoch.is_empty():
++		_issued_context = context; _issued_epoch = Crypto.new().generate_random_bytes(16).hex_encode()
++	return _issued_epoch
+@@ -20,0 +45,3 @@
++	var epoch := _epoch_for(player) if request.operation_id.begins_with(Journal.SEQUENCE_PREFIX) else ""
++	var admission := Journal.admission(player._item_transaction_journal,request.operation_id,epoch)
++	if not bool(admission.success): return _failure(admission.reason)
+@@ -25,2 +52 @@
+-		or not player._can_accept_immediate_item_use() or player._world_clock_snapshot_sequence < 0 \
+-		or player._item_transaction_journal.get("entries", []).size() >= Journal.LIMIT:
++		or not player._can_accept_immediate_item_use() or player._world_clock_snapshot_sequence < 0:
+@@ -52,0 +79 @@
++		"protocol_epoch":epoch,
+@@ -57 +84,2 @@
+-	return Graph.capture(result).value
++	var captured := Graph.capture(result)
++	return captured.value if bool(captured.success) else _failure("non_plain_item_quote")
+@@ -136 +164 @@
+-	plan.journal = Journal.appended(player._item_transaction_journal, player.active_profile_id, entry)
++	plan.journal = Journal.appended(player._item_transaction_journal, player.active_profile_id, entry,plan.quote.protocol_epoch)
+@@ -148,0 +177,3 @@
++	# A retained asynchronous callback loses publication rights with its job.
++	# It must not restore an old journal/frontier after a later operation finishes.
++	if _active.is_empty() or _active.get("job") != plan.get("job"): return
+@@ -164,0 +196,5 @@
++			# A completed provisional epoch belongs only to its durable document.
++			# If supported recovery later restores a pre-sequence backup, this port
++			# must issue a fresh epoch instead of reopening the lost old stream.
++			if plan.journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
++				_issued_epoch = ""; _issued_context = ""
+--- old/scripts/player_state.gd
++++ new/scripts/player_state.gd
+@@ -394,0 +395,6 @@
++
++
++func quote_new_item_transaction(request: Dictionary) -> Dictionary:
++	if _item_transaction_port == null:
++		_item_transaction_port = ItemTransactionPort.new(self)
++	return _item_transaction_port.quote_new(request)
+--- old/tests/framework/item_journal_legacy_backup_test.gd
++++ new/tests/framework/item_journal_legacy_backup_test.gd
+@@ -0,0 +1,87 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"real load and writer run only in the prelaunch isolated account")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade() and PlayerState.create_character("旧备份事务验证","hc.profession.warrior").is_empty(),"production startup and profile creation succeed")
++	PlayerState.set_process(false)
++	var base := Drop.create_instance(GameData.get_item_record({"item_id":80}),"backup:gear")
++	var gem := Gem.create_instance("backup:gem",true)
++	PlayerState.inventory = [base,gem]
++	check(PlayerState.save_game(true,true,true),"initial unsequenced checkpoint is durable")
++	var path: String = PlayerState._profile_path(PlayerState.active_profile_id)
++	var original := FileAccess.get_file_as_bytes(path)
++	check(ContentLayers.set_feature_module_enabled(Gem.MODULE,true),"default-off test module enabled explicitly")
++	var request := {"action":"hc.socketing.insert","target_instance_id":base.instance_id,"gem_instance_id":gem.instance_id}
++	var quote: Dictionary = PlayerState.quote_new_item_transaction(request)
++	var pending: Dictionary = PlayerState.commit_item_transaction(quote)
++	check(bool((await _wait(pending.get("job"))).get("success",false)),"first sequenced operation commits through the actual sole writer")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	# Simulate supported backup recovery on this newly created profile only.
++	# No original user save or unrelated profile is read or overwritten.
++	check(_write(path+".bak",original) and _write(path,"{broken".to_utf8_buffer()),"owned corrupt primary has the exact original unsequenced recovery checkpoint")
++	PlayerState.load_save()
++	check(bool(PlayerState.last_load_result.get("success",false)) and PlayerState._item_transaction_journal.is_empty(),"production loader recovers the valid older checkpoint, not the lost newer frontier")
++	check(Codec.extensions(PlayerState.inventory[0]).is_empty() and PlayerState.inventory[1].instance_id == gem.instance_id,"recovered document owns its original loose gem exactly once")
++	var stale: Dictionary = PlayerState.quote_item_transaction(quote.request)
++	check(not bool(stale.success) and stale.get("reason") == "item_operation_epoch_mismatch","same-process old issuer cannot resurrect a completed epoch after recovery to an unsequenced checkpoint")
++	var next: Dictionary = PlayerState.quote_new_item_transaction(request)
++	check(bool(next.get("success",false)) and next.get("request",{}).get("operation_id") != quote.request.operation_id,"fresh recovery intent uses a different epoch instead of reusing a lost operation identity")
++	if bool(next.get("success",false)):
++		var continued: Dictionary = PlayerState.commit_item_transaction(next)
++		check(bool((await _wait(continued.get("job"))).get("success",false)),"recovered profile remains usable through one newly issued actual transaction")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	var prior: Dictionary = PlayerState.quote_new_item_transaction({"action":"hc.socketing.remove","target_instance_id":base.instance_id,"gem_instance_id":""})
++	check(bool(prior.get("success",false)),"an uncommitted next quote captures the current profile generation")
++	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
++	source.erase("death_event_sequence"); source.erase("world_clock_generation"); source.erase("world_clock_import_source")
++	source["world_monster_respawn_state"] = PlayerState.world_monster_respawn_state.duplicate(true)
++	var old_writer := JSON.stringify(source).to_utf8_buffer()
++	check(_write(path,old_writer) and _write(path+".bak",old_writer),"owned legacy-clock fixture preserves the sequenced item journal and embedded gem")
++	PlayerState.load_save()
++	check(bool(PlayerState.last_load_result.get("success",false)) and not PlayerState._world_clock_generation.is_empty(),"actual legacy-clock import creates a new generation around the unchanged item transaction stream")
++	var before: Array = PlayerState.inventory.duplicate(true)
++	var stale_generation: Dictionary = PlayerState.commit_item_transaction(prior)
++	check(not bool(stale_generation.success) and stale_generation.reason == "stale_item_quote" and PlayerState.inventory == before,"a previous-generation uncommitted quote cannot cross the real import boundary")
++	check(bool(PlayerState.commit_item_transaction(next).get("durable",false)),"a completed persistent economic outcome remains replayable across world-clock generation changes")
++	var current: Dictionary = PlayerState.quote_new_item_transaction({"action":"hc.socketing.remove","target_instance_id":base.instance_id,"gem_instance_id":""})
++	var continuation: Dictionary = PlayerState.commit_item_transaction(current)
++	check(bool((await _wait(continuation.get("job"))).get("success",false)),"current-generation quote continues the same durable sequence through its actual writer")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	var known := FileAccess.get_file_as_bytes(path)
++	var future: Dictionary = JSON.parse_string(known.get_string_from_utf8())
++	future.item_transactions.schema_version = 3
++	future.inventory = [{"contract_id":Codec.CONTRACT,"format_version":2,"entity_id":123,"base":{},"extensions":{}}]
++	var future_bytes := JSON.stringify(future).to_utf8_buffer()
++	check(_write(path+".bak",known) and _write(path,future_bytes),"owned future sequenced journal is paired with a valid prior backup and a malformed known item sibling")
++	var live: Array = PlayerState.inventory.duplicate(true)
++	PlayerState.load_save()
++	check(not bool(PlayerState.last_load_result.get("success",false)) and PlayerState.inventory == live,"future sequenced aggregate blocks known-corruption recovery before replacing live ownership")
++	check(not PlayerState.save_game(false,false,false) and FileAccess.get_file_as_bytes(path) == future_bytes and FileAccess.get_file_as_bytes(path+".bak") == known,"future journal keeps exact primary and backup bytes under the existing write lock")
++	_finish()
++func _write(path: String,value: PackedByteArray) -> bool:
++	var file := FileAccess.open(path,FileAccess.WRITE)
++	if file == null: return false
++	file.store_buffer(value); file.flush(); var okay := file.get_error() == OK; file.close(); return okay
++func _wait(job: Variant) -> Dictionary:
++	if job == null: return {"success":false}
++	var deadline := Time.get_ticks_msec()+5000
++	while not bool(job.response.get("finished",false)) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await get_tree().process_frame
++	return job.response
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_legacy_backup_test",checks,failures.size()): failures.append("receipt")
++	print("ITEM_JOURNAL_LEGACY_BACKUP_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_legacy_backup_test.tscn
++++ new/tests/framework/item_journal_legacy_backup_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_legacy_backup_test.gd" id="1"]
++
++[node name="ItemJournalLegacyBackupTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/item_journal_recovery_cold_test.gd
++++ new/tests/framework/item_journal_recovery_cold_test.gd
+@@ -0,0 +1,52 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++const Journal := preload("res://scripts/items/item_transaction_journal.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode,"independent native process uses real persistence")
++	var expected: Variant = Gate.read_json("res://outputs/test_logs/framework/item_journal_recovery_expected.json")
++	check(Gate.accepts(expected,"item_journal_recovery_test"),"successful live producer is confirmed by this runner invocation before cold selection")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade() and PlayerState.select_character(expected.profile_id),"actual independent startup and profile load recover the sequenced journal")
++	PlayerState.set_process(false)
++	var journal: Dictionary = PlayerState._item_transaction_journal
++	check(Journal.validate_document({"profile_id":expected.profile_id,Journal.FIELD:journal}).valid and journal.get("epoch") == expected.epoch and journal.get("retired_through") == expected.retired_through and journal.get("last_sequence") == expected.last_sequence,"cold aggregate recovers the exact durable epoch, contiguous frontier and recent results")
++	check(journal.get("legacy_entries") == expected.legacy,"all 64 original opaque outcomes survive independent cold recovery")
++	var before: Array = PlayerState.inventory.duplicate(true)
++	check(PlayerState.quote_item_transaction(expected.first_request).get("reason") == "item_operation_retired","old retired identity remains terminal across process restart before module activation")
++	check(bool(PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(expected.last_request)).get("durable",false)),"recent exact outcome replays after restart without another writer job")
++	check(bool(PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(expected.legacy_request)).get("durable",false)),"legacy exact outcome replays after restart without another writer job")
++	check(PlayerState.inventory == before and PlayerState._json_persistence.pending_count() == 0,"all replay/refusal paths preserve current item ownership and perform no writes")
++	check(ContentLayers.set_feature_module_enabled(Gem.MODULE,true),"new transaction explicitly enables the original default-off module")
++	var quote: Dictionary = PlayerState.quote_new_item_transaction({"action":"hc.socketing.insert","target_instance_id":expected.target_instance_id,"gem_instance_id":expected.gem_instance_id})
++	check(bool(quote.get("success",false)) and quote.get("request",{}).get("operation_id") == Journal.sequence_id(expected.epoch,131),"independent process issues the next original epoch serial rather than recycling a retired identity")
++	var pending: Dictionary = PlayerState.commit_item_transaction(quote)
++	var response := await _wait(pending.get("job"))
++	check(bool(response.get("success",false)) and int(PlayerState._item_transaction_journal.get("last_sequence",0)) == 131,"the next real ownership operation commits after independent recovery")
++	var owned: Array[String] = []
++	for item: Dictionary in PlayerState.inventory: owned.append_array(Codec.ownership_ids(item))
++	check(owned.count(expected.target_instance_id) == 1 and owned.count(expected.gem_instance_id) == 1,"cold continuation preserves one exact gear and one original gem")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"cold continuation consumes every actual persistence receipt")
++	_finish()
++func _wait(job: Variant) -> Dictionary:
++	if job == null: return {"success":false}
++	var deadline := Time.get_ticks_msec()+5000
++	while not bool(job.response.get("finished",false)) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await get_tree().process_frame
++	return job.response
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_recovery_cold_test",checks,failures.size()): failures.append("receipt")
++	print("ITEM_JOURNAL_RECOVERY_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_recovery_cold_test.tscn
++++ new/tests/framework/item_journal_recovery_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_recovery_cold_test.gd" id="1"]
++
++[node name="ItemJournalRecoveryColdTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/item_journal_recovery_test.gd
++++ new/tests/framework/item_journal_recovery_test.gd
+@@ -0,0 +1,123 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Journal := preload("res://scripts/items/item_transaction_journal.gd")
++const Codec := preload("res://scripts/items/item_extension_codec.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const EXPECTED := "res://outputs/test_logs/framework/item_journal_recovery_expected.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"real persistence uses the runner's prelaunch isolated account")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"actual startup upgrade gate completes")
++	check(PlayerState.create_character("事务序列验证","hc.profession.warrior").is_empty(),"actual profile service creates the owned character")
++	PlayerState.set_process(false)
++	var profile: String = PlayerState.active_profile_id
++	var base := Drop.create_instance(GameData.get_item_record({"item_id":80}),"journal:gear")
++	var gem := Gem.create_instance("journal:gem",true)
++	PlayerState.inventory = [base,gem]
++	# A valid legacy document fixture represents unretirable opaque history.
++	# The following 130 sequenced operations themselves use real commits.
++	var legacy := {}
++	var legacy_request := {"operation_id":"legacy:1","action":"hc.socketing.insert","target_instance_id":"historical:gear","gem_instance_id":"historical:gem"}
++	for index in 64:
++		var entry := {"operation_id":"legacy:"+str(index+1),"action":legacy_request.action,
++			"target_instance_id":legacy_request.target_instance_id,"gem_instance_id":legacy_request.gem_instance_id,
++			"request_digest":JSON.stringify([profile,legacy_request.action,legacy_request.target_instance_id,legacy_request.gem_instance_id]).sha256_text(),"rules_revision":"legacy-rules".sha256_text()}
++		legacy = Journal.appended(legacy,profile,entry)
++	PlayerState._item_transaction_journal = legacy.duplicate(true)
++	check(PlayerState.save_game(true,true,true),"sole writer persists valid full v1 history and test-owned inputs")
++	check(ContentLayers.set_feature_module_enabled(Gem.MODULE,true),"default-off fixture enabled through its real module service")
++	if not failures.is_empty(): _finish(); return
++	var first_quote := {}
++	var last_quote := {}
++	var first_plan := {}
++	var first_receipt := {}
++	var completed := 0
++	for sequence in range(1,131):
++		var request := {"action":"hc.socketing.insert" if sequence%2 == 1 else "hc.socketing.remove",
++			"target_instance_id":base.instance_id,"gem_instance_id":gem.instance_id if sequence%2 == 1 else ""}
++		var quote: Dictionary = PlayerState.quote_new_item_transaction(request)
++		if not bool(quote.get("success",false)): check(false,"real next quote "+str(sequence)+": "+str(quote)); break
++		if sequence == 1:
++			first_quote = quote
++			check(quote.request.has("operation_id") and quote.has("request_digest") and quote.has("protocol_epoch"),"issued identity crosses the strict plain-String boundary with a complete quote, never a partial success")
++		last_quote = quote
++		var pending: Dictionary = PlayerState.commit_item_transaction(quote)
++		if not bool(pending.get("pending",false)):
++			print("ITEM_JOURNAL_QUOTE_FAILURE_TRACE "+JSON.stringify({"original":quote,"refreshed":PlayerState.quote_item_transaction(quote.request),"response":pending}))
++			check(false,"real commit "+str(sequence)+": "+str(pending)); break
++		if sequence == 1:
++			first_plan = PlayerState._item_transaction_port._active
++			check(PlayerState.commit_item_transaction(quote).get("job") == pending.job,"duplicate click owns one pending writer job")
++		if sequence == 65:
++			var owned_before: Array = PlayerState.inventory.duplicate(true)
++			PlayerState._item_transaction_port._complete(first_receipt,first_plan)
++			check(PlayerState.inventory == owned_before and PlayerState._item_transaction_port._active.job == pending.job,"delayed old callback cannot publish or clear another accepted writer job at the retirement boundary")
++		var response := await _wait(pending.get("job"))
++		if not bool(response.get("success",false)): check(false,"durable receipt "+str(sequence)+": "+str(response.get("reason"))); break
++		if sequence == 1: first_receipt = response.duplicate(true)
++		completed += 1
++		PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++		if sequence in [64,65,130]:
++			var current: Dictionary = PlayerState._item_transaction_journal
++			check(current.entries.size() == mini(sequence,64) and int(current.retired_through) == maxi(0,sequence-64) and current.legacy_entries == legacy.entries,"actual durable sequence boundary "+str(sequence)+" retains its bounded recent window and all opaque history")
++	check(completed == 130,"all 130 real ownership transactions complete beyond journal64 without losing a gem")
++	if completed != 130: _finish(); return
++	var journal: Dictionary = PlayerState._item_transaction_journal.duplicate(true)
++	var snapshot: Array = PlayerState.inventory.duplicate(true)
++	var retired: Dictionary = PlayerState.quote_item_transaction(first_quote.request)
++	check(not bool(retired.success) and retired.reason == "item_operation_retired","old sequence is explicitly retired and can never consume again")
++	var conflict: Dictionary = first_quote.request.duplicate(true); conflict.target_instance_id = "different:target"
++	check(PlayerState.quote_item_transaction(conflict).get("reason") == "item_operation_retired","changing a retired request cannot reopen its old identity")
++	check(bool(PlayerState.commit_item_transaction(last_quote).get("durable",false)),"retained recent result still replays its exact durable outcome")
++	check(bool(PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(legacy_request)).get("durable",false)),"v1 opaque result remains exactly replayable after sequenced retirement")
++	await get_tree().create_timer(0.01).timeout
++	PlayerState._item_transaction_port._complete(first_receipt,first_plan)
++	check(PlayerState.inventory == snapshot and PlayerState._item_transaction_journal == journal,"terminal old callback cannot roll back inventory or durable retirement watermark")
++	check(_owned(base.instance_id,gem.instance_id),"one gear and original gem remain singly owned after all insert/remove cycles")
++	# A new sequence that fails before promotion must leave the old frontier and
++	# inputs intact. The same issued quote may be retried after explicit re-enable.
++	var retry_quote: Dictionary = PlayerState.quote_new_item_transaction({"action":"hc.socketing.insert","target_instance_id":base.instance_id,"gem_instance_id":gem.instance_id})
++	var pending: Dictionary = PlayerState.commit_item_transaction(retry_quote)
++	check(bool(pending.get("pending",false)),"next sequence enters the actual writer before a controlled prepromotion cancellation")
++	var bytes_before := FileAccess.get_file_as_bytes(PlayerState._profile_path(profile))
++	ContentLayers.set_feature_module_enabled(Gem.MODULE,false)
++	var cancelled := await _wait(pending.get("job"))
++	check(not bool(cancelled.get("success",false)) and PlayerState.inventory == snapshot and PlayerState._item_transaction_journal == journal and FileAccess.get_file_as_bytes(PlayerState._profile_path(profile)) == bytes_before,"prepromotion failure does not advance frontier or mutate owned inputs/primary bytes")
++	ContentLayers.set_feature_module_enabled(Gem.MODULE,true)
++	check(PlayerState.quote_item_transaction(retry_quote.request) == retry_quote,"uncommitted next serial remains retryable after its producer regains permission")
++	check(PlayerState.save_game(true,true,true),"final ordinary checkpoint uses the existing character writer")
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"all owned writer jobs and callbacks drain before cold handoff")
++	if failures.is_empty():
++		var expected := {"profile_id":profile,"epoch":journal.epoch,"last_sequence":130,"retired_through":66,
++			"first_request":first_quote.request,"last_request":last_quote.request,"legacy_request":legacy_request,
++			"target_instance_id":base.instance_id,"gem_instance_id":gem.instance_id,"legacy":legacy.entries,
++			"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")}
++		var file := FileAccess.open(EXPECTED,FileAccess.WRITE)
++		check(file != null,"successful live producer opens its cold handoff expectation")
++		if file != null:
++			file.store_string(JSON.stringify(expected)); file.flush(); check(file.get_error() == OK,"complete cold expectation reaches its test-owned file"); file.close()
++	_finish()
++func _owned(target: String,gem: String) -> bool:
++	var ids: Array[String] = []
++	for record: Dictionary in PlayerState.inventory: ids.append_array(Codec.ownership_ids(record))
++	return ids.count(target) == 1 and ids.count(gem) == 1 and PlayerState._validate_extended_item_ownership({"inventory":PlayerState.inventory})
++func _wait(job: Variant) -> Dictionary:
++	if job == null: return {"success":false}
++	var deadline := Time.get_ticks_msec()+5000
++	while not bool(job.response.get("finished",false)) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await get_tree().process_frame
++	return job.response
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_recovery_test",checks,failures.size()): failures.append("receipt")
++	print("ITEM_JOURNAL_RECOVERY_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_recovery_test.tscn
++++ new/tests/framework/item_journal_recovery_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_recovery_test.gd" id="1"]
++
++[node name="ItemJournalRecoveryTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/item_journal_sequence_test.gd
++++ new/tests/framework/item_journal_sequence_test.gd
+@@ -0,0 +1,58 @@
++extends Node
++
++const Journal := preload("res://scripts/items/item_transaction_journal.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(PlayerState.has_method("quote_new_item_transaction"),"existing transaction owner can issue a recoverable sequence instead of stopping permanently at journal64")
++	if not failures.is_empty(): _finish(); return
++	var api: Variant = Journal
++	var epoch := "1234567890abcdef1234567890abcdef"
++	var profile := "journal-sequence-unit"
++	var entry := {"operation_id":"legacy:1","request_digest":"request".sha256_text(),"action":"hc.socketing.insert",
++		"target_instance_id":"sequence:gear","gem_instance_id":"sequence:gem","rules_revision":"rules".sha256_text()}
++	var legacy := {}
++	for index in 64:
++		entry.operation_id = "legacy:"+str(index+1)
++		legacy = Journal.appended(legacy,profile,entry)
++	check(legacy.get("entries",[]).size() == 64 and Journal.validate_document({"profile_id":profile,Journal.FIELD:legacy}).valid,"original opaque-ID journal reaches its unchanged valid boundary")
++	check(Journal.appended(legacy,profile,entry).is_empty(),"old protocol still refuses over-capacity instead of deleting historical outcomes")
++	var value := legacy.duplicate(true)
++	for sequence in range(1,131):
++		entry.operation_id = api.sequence_id(epoch,sequence)
++		value = api.appended(value,profile,entry,epoch)
++		if value.is_empty(): break
++	check(not value.is_empty(),"new durable sequence completes 130 operations while retaining all 64 legacy outcomes")
++	if value.is_empty(): _finish(); return
++	check(value.get("contract_id") == "hc.item.transactions.v2" and value.get("schema_version") == 2,"new protocol has an explicit versioned identity")
++	check(value.entries.size() == 64 and value.legacy_entries == legacy.entries and int(value.retired_through) == 66 and int(value.last_sequence) == 130,"bounded recent results plus contiguous durable retirement watermark preserve legacy data")
++	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:value}).valid,"sole production validator accepts the complete sequenced aggregate")
++	check(not Journal.lookup(value,"legacy:1").is_empty() and not Journal.lookup(value,api.sequence_id(epoch,130)).is_empty(),"legacy and retained recent retries still return exact stored outcomes")
++	var retired: Dictionary = api.admission(value,api.sequence_id(epoch,1),epoch)
++	check(not bool(retired.success) and retired.reason == "item_operation_retired","retired identity has a permanent explicit refusal despite removal of its detailed outcome")
++	check(not bool(api.admission(value,api.sequence_id("abcdef1234567890abcdef1234567890",131),epoch).success),"another epoch cannot borrow the same next serial")
++	check(not bool(api.admission(value,api.sequence_id(epoch,132),epoch).success),"future serial cannot skip a required contiguous result")
++	check(bool(api.admission(value,api.sequence_id(epoch,131),epoch).success),"only the exact next operation is eligible")
++	var bad := value.duplicate(true); bad.entries.remove_at(0)
++	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"a gap in retained sequence outcomes invalidates the aggregate")
++	bad = value.duplicate(true); bad.retired_through = 65
++	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"a mismatched retirement watermark cannot silently reopen history")
++	bad = value.duplicate(true); bad.entries[1].operation_id = bad.entries[0].operation_id
++	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"duplicate sequenced identities invalidate the whole aggregate")
++	bad = value.duplicate(true); bad.schema_version = 3; bad.entries = "malformed"
++	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).terminal,"future v2-container version remains terminal before known-schema structure validation")
++	bad = value.duplicate(true); bad.legacy_entries[0].action = "hc.future.action"
++	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).terminal,"unknown preserved legacy action remains terminal in a v2 aggregate")
++	check(api.sequence_id(epoch,9007199254740992).is_empty(),"operation serials outside exact JSON integer range cannot be issued")
++	check(not bool(api.admission({},"hc:itemtx:malformed:1",epoch).success),"malformed reserved-prefix ID cannot fall back to the legacy protocol")
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_sequence_test",checks,failures.size()): failures.append("receipt")
++	print("ITEM_JOURNAL_SEQUENCE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_sequence_test.tscn
++++ new/tests/framework/item_journal_sequence_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_sequence_test.gd" id="1"]
++
++[node name="ItemJournalSequenceTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/world_generation_persistence_cold_test.gd
++++ new/tests/framework/world_generation_persistence_cold_test.gd
+@@ -0,0 +1,43 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
++const EXPECTED := "res://outputs/test_logs/framework/world_generation_persistence_expected.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	check(not PlayerState.test_mode,"independent native process uses production persistence")
++	var expected: Variant = Gate.read_json(EXPECTED)
++	check(Gate.accepts(expected,"world_generation_persistence_test"),"runner confirms this invocation's successful live producer before profile loading")
++	if not failures.is_empty(): _finish(); return
++	check(expected.get("generation") is String and not str(expected.generation).is_empty() and Ledger.valid_generation(expected.generation),"producer expectation requires a nonempty canonical generation")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"actual independent startup upgrade gate completes")
++	check(PlayerState.select_character(expected.profile_id),"actual profile service loads the producer's durable character")
++	check(PlayerState._world_clock_generation == expected.generation,"independent cold process restores the nonempty production generation exactly")
++	check(PlayerState.level == int(expected.level) and PlayerState.experience == int(expected.experience) and PlayerState.gold == int(expected.gold),"cold progress is exact without repeated migration or reward")
++	check(PlayerState.monster_respawn_entry(913203,"group:0").get("respawn_at_unix") == expected.deadline,"independent world ledger replay retains the real imported deadline")
++	var primary: Variant = Gate.read_json(PlayerState._profile_path(expected.profile_id))
++	var backup: Variant = Gate.read_json(PlayerState._profile_path(expected.profile_id)+".bak")
++	var clock: Variant = Gate.read_json(PlayerState._world_clock_path(expected.profile_id,expected.generation))
++	check(primary is Dictionary and primary.get("world_clock_generation") == expected.generation,"cold primary retains the same nonempty namespace")
++	check(backup is Dictionary and backup.get("world_clock_generation") == expected.generation,"cold recovery backup retains the same nonempty namespace")
++	check(Ledger.valid_snapshot(clock,expected.profile_id,expected.generation),"cold world snapshot validates against the expected nonempty namespace")
++	check(FileAccess.get_sha256(expected.archive) == expected.archive_sha256,"cold load leaves the original legacy archive bytes unchanged")
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"cold load drains both actual persistence services")
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("world_generation_persistence_cold_test",checks,failures.size()): failures.append("receipt")
++	print("WORLD_GENERATION_PERSISTENCE_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/world_generation_persistence_cold_test.tscn
++++ new/tests/framework/world_generation_persistence_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/world_generation_persistence_cold_test.gd" id="1"]
++
++[node name="WorldGenerationPersistenceColdTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/world_generation_persistence_test.gd
++++ new/tests/framework/world_generation_persistence_test.gd
+@@ -0,0 +1,97 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Ledger := preload("res://scripts/world_monster_clock_ledger.gd")
++const WorldState := preload("res://scripts/world_monster_respawn_state.gd")
++const EXPECTED := "res://outputs/test_logs/framework/world_generation_persistence_expected.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	check(not PlayerState.test_mode,"actual persistence is enabled before test setup")
++	check(OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"native runner isolated user data before autoload initialization")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"production startup migration gate completes")
++	check(PlayerState.create_character("世界代次验证","hc.profession.wizard").is_empty(),"production profile service creates the test-owned character")
++	if not failures.is_empty(): _finish(); return
++	var profile: String = PlayerState.active_profile_id
++	check(PlayerState.save_game(true,true,true),"existing sole writer saves the starting profile")
++	var path: String = PlayerState._profile_path(profile)
++	var legacy: Dictionary = _read(path)
++	check(not legacy.is_empty() and legacy.profile_id == profile,"starting durable document belongs to the newly created profile")
++	if not failures.is_empty(): _finish(); return
++	# Only fixture preparation writes a sequence-less legacy before-image. Never
++	# assign a fabricated generation: the production import must generate it.
++	legacy.erase("death_event_sequence"); legacy.erase("world_clock_generation")
++	legacy.erase("world_clock_import_source")
++	legacy.level = 22; legacy.experience = 345; legacy.gold = 12345
++	var deadline := Time.get_unix_time_from_system()+3600.0
++	legacy.world_monster_respawn_state = WorldState.with_deadline(WorldState.empty_snapshot(),913203,"group:0",64,"normal_cave",deadline)
++	var seed := JSON.stringify(legacy)
++	check(_write(path,seed) and _write(path+".bak",seed),"only owned primary and matching backup receive the same legacy before-image")
++	if not failures.is_empty(): _finish(); return
++	var before_digest: String = PlayerState._shared_digest(legacy)
++	PlayerState.load_save()
++	check(bool(PlayerState.last_load_result.get("success",false)),"production load imports the real legacy document: "+str(PlayerState.last_load_result))
++	var generation: String = PlayerState._world_clock_generation
++	check(not generation.is_empty() and Ledger.valid_generation(generation),"production legacy importer generated a nonempty canonical namespace")
++	if not failures.is_empty(): _finish(); return
++	var archive: String = PlayerState.last_load_result.get("world_clock_migration_archive","")
++	check(not archive.is_empty() and FileAccess.file_exists(archive),"production migration keeps its before-image archive")
++	check(PlayerState._shared_digest(_read(archive)) == before_digest,"archived original content matches the owned legacy input")
++	var archive_hash := FileAccess.get_sha256(archive)
++	check(PlayerState.level == 22 and PlayerState.experience == 345 and PlayerState.gold == 12345,"actual imported progress remains exact")
++	check(PlayerState.monster_respawn_entry(913203,"group:0").get("respawn_at_unix") == deadline,"actual world deadline survives the production import")
++	var clock_path: String = PlayerState._world_clock_path(profile,generation)
++	var clock := _read(clock_path)
++	check(Ledger.valid_snapshot(clock,profile,generation),"production world snapshot uses the same nonempty profile namespace")
++	var primary := _read(path)
++	var backup := _read(path+".bak")
++	check(primary.get("world_clock_generation") == generation and backup.get("world_clock_generation") == generation,"production import promoted primary and matching recovery backup into the generated namespace")
++	check(primary.get("world_clock_import_source") == before_digest,"durable import identifies the preserved source digest")
++	# Test the real ledger validator/replay with a copied wrong namespace. No
++	# runtime or durable generation is overwritten by this negative example.
++	var wrong := ("1" if generation.begins_with("0") else "0")+generation.substr(1)
++	check(not Ledger.valid_snapshot(clock,profile,wrong),"different nonempty namespace is rejected by the production snapshot validator")
++	var wrong_profile := primary.duplicate(true); wrong_profile.world_clock_generation = wrong
++	var rejected := Ledger.replay(wrong_profile,clock,[])
++	check(not bool(rejected.get("ok",false)) and rejected.get("reason") == "invalid_world_snapshot","actual ledger replay refuses a mismatched generation")
++	check(PlayerState.save_game(true,true,true),"existing writer checkpoints imported progress without replacing the generated namespace")
++	check(PlayerState.save_game(true,true,true),"existing backup path can checkpoint the same imported namespace again")
++	primary = _read(path); backup = _read(path+".bak"); clock = _read(clock_path)
++	check(primary.get("world_clock_generation") == generation and backup.get("world_clock_generation") == generation and clock.get("world_clock_generation") == generation,"live, durable primary, backup and world snapshot retain the same nonempty generation")
++	check(FileAccess.get_sha256(archive) == archive_hash,"normal checkpoints preserve the original import archive bytes")
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"all real persistence callbacks have completed before native handoff")
++	if failures.is_empty():
++		var expected := {"profile_id":profile,"generation":generation,"experience":345,"level":22,"gold":12345,
++			"deadline":deadline,"archive":archive,"archive_sha256":archive_hash,"source_digest":before_digest,
++			"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),
++			"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
++			"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")}
++		check(_write(EXPECTED,JSON.stringify(expected)),"this successful producer writes a checked cold expectation")
++	_finish()
++
++func _read(path: String) -> Dictionary:
++	if path.is_empty() or not FileAccess.file_exists(path): return {}
++	var value: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
++	return value if value is Dictionary else {}
++
++func _write(path: String,value: String) -> bool:
++	var file := FileAccess.open(path,FileAccess.WRITE)
++	if file == null: return false
++	file.store_string(value); file.flush()
++	var result := file.get_error() == OK; file.close()
++	return result
++
++func _finish() -> void:
++	if not proof.write_receipt("world_generation_persistence_test",checks,failures.size()): failures.append("receipt")
++	print("WORLD_GENERATION_PERSISTENCE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/world_generation_persistence_test.tscn
++++ new/tests/framework/world_generation_persistence_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/world_generation_persistence_test.gd" id="1"]
++
++[node name="WorldGenerationPersistenceTest" type="Node"]
++script = ExtResource("1")

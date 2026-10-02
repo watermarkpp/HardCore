@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent native process uses production persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "runner confirms this invocation's successful live producer before profile loading",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "123f97f9-dbff-42f3-94b5-3384a33202fe",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "848a1827-c595-4b85-9e72-9c591b8c12df",
+  "scene_id": "world_generation_persistence_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+  "status": "FAIL"
+}

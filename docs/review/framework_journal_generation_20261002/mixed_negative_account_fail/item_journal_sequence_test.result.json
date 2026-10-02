@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing transaction owner can issue a recoverable sequence instead of stopping permanently at journal64",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "original opaque-ID journal reaches its unchanged valid boundary",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "old protocol still refuses over-capacity instead of deleting historical outcomes",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "new durable sequence completes 130 operations while retaining all 64 legacy outcomes",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "new protocol has an explicit versioned identity",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "bounded recent results plus contiguous durable retirement watermark preserve legacy data",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "sole production validator accepts the complete sequenced aggregate",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "legacy and retained recent retries still return exact stored outcomes",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "retired identity has a permanent explicit refusal despite removal of its detailed outcome",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "another epoch cannot borrow the same next serial",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "future serial cannot skip a required contiguous result",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "only the exact next operation is eligible",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "a gap in retained sequence outcomes invalidates the aggregate",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "a mismatched retirement watermark cannot silently reopen history",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "duplicate sequenced identities invalidate the whole aggregate",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "future v2-container version remains terminal before known-schema structure validation",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "unknown preserved legacy action remains terminal in a v2 aggregate",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "operation serials outside exact JSON integer range cannot be issued",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "malformed reserved-prefix ID cannot fall back to the legacy protocol",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "123f97f9-dbff-42f3-94b5-3384a33202fe",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "88f983fe-7492-4204-bcbf-84e4e0399d41",
+  "scene_id": "item_journal_sequence_test",
+  "schema_version": 1,
+  "source_content_sha256": "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+  "status": "PASS"
+}

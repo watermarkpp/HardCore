@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual persistence is enabled before test setup",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "native runner isolated user data before autoload initialization",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "production startup migration gate completes",
+      "passed": false
+    },
+    {
+      "id": 4,
+      "label": "production profile service creates the test-owned character",
+      "passed": false
+    }
+  ],
+  "count": 4,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "123f97f9-dbff-42f3-94b5-3384a33202fe",
+  "passed": 2,
+  "reported_checks": 4,
+  "reported_failures": 2,
+  "run_id": "85dd55ca-29e2-4270-814e-1875408a1a67",
+  "scene_id": "world_generation_persistence_test",
+  "schema_version": 1,
+  "source_content_sha256": "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+  "status": "FAIL"
+}

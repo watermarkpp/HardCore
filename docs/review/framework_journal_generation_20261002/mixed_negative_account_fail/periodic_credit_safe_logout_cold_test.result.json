@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "new native process uses actual production persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cold expectation and producer receipt exist",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold expectation binds the successful live producer and this exact source set",
+      "passed": false
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "123f97f9-dbff-42f3-94b5-3384a33202fe",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "c2f40ca3-a47f-47bb-aa43-3865f3f36daf",
+  "scene_id": "periodic_credit_safe_logout_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+  "status": "FAIL"
+}

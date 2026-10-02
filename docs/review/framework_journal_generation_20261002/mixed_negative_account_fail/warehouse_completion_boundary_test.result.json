@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent finite releaser starts",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "warehouse poll returns before worker release",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "published warehouse flags are pending until task returns",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "completed worker result succeeds and its task is reclaimed",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cancelled preparation cannot be consumed again",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real worker owns an isolated directory",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual private-file worker completes without a synchronous polling barrier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "private prepared bytes are exact profile",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "preparation never promotes authority profile",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "private prepared bytes are exact shared",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "preparation never promotes authority shared",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "private prepared bytes are exact journal",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "preparation never promotes authority journal",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "cancel removes only its owned private file",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "cancel removes only its owned private file",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cancel removes only its owned private file",
+      "passed": true
+    }
+  ],
+  "count": 16,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "123f97f9-dbff-42f3-94b5-3384a33202fe",
+  "passed": 16,
+  "reported_checks": 16,
+  "reported_failures": 0,
+  "run_id": "d4a283b5-f869-44a2-a810-2e6fd9cf2c53",
+  "scene_id": "warehouse_completion_boundary_test",
+  "schema_version": 1,
+  "source_content_sha256": "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+  "status": "PASS"
+}

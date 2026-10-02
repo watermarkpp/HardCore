@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/framework/world_generation_persistence_cold_test.gd" id="1"]
+
+[node name="WorldGenerationPersistenceColdTest" type="Node"]
+script = ExtResource("1")

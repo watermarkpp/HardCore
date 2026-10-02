@@ -1,0 +1,154 @@
+{
+  "missing_sequence_red": {
+    "local_run": "item_journal_sequence_red_160100_846863",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "partial_quote_red": {
+    "local_run": "item_journal_recovery_first_160859_679484",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    }
+  },
+  "partial_quote_diagnostic": {
+    "local_run": "item_journal_recovery_quote_diagnostic_161024_057268",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_recovery_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "old_backup_epoch_red": {
+    "local_run": "item_journal_legacy_backup_red_161544_693139",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_legacy_backup_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "mixed_negative_account_fail": {
+    "local_run": "item_journal_final_related_161926_737449",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/item_journal_legacy_backup_test.tscn','tests/framework/socket_transaction_test.tscn','tests/framework/socket_gem_identity_test.tscn','tests/framework/item_extension_codec_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/warehouse_completion_boundary_test.tscn','tests/framework/world_generation_persistence_test.tscn','tests/framework/world_generation_persistence_cold_test.tscn','tests/world_monster_clock_legacy_migration_test.tscn','tests/framework/mobile_save_upgrade_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 9,
+      "failed": 4,
+      "status": "FAIL"
+    }
+  },
+  "final_positive": {
+    "local_run": "item_journal_final_positive_162151_642421",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_sequence_test.tscn','tests/framework/socket_transaction_test.tscn','tests/framework/socket_gem_identity_test.tscn','tests/framework/item_extension_codec_test.tscn','tests/framework/future_item_ownership_terminal_test.tscn','tests/framework/warehouse_completion_boundary_test.tscn','tests/framework/world_generation_persistence_test.tscn','tests/framework/world_generation_persistence_cold_test.tscn','tests/world_monster_clock_legacy_migration_test.tscn','tests/framework/mobile_save_upgrade_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 12,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_livecold": {
+    "local_run": "item_journal_final_livecold_162501_673297",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_recovery_test.tscn','tests/framework/item_journal_recovery_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_negative": {
+    "local_run": "item_journal_final_negative_163114_970753",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_legacy_backup_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    }
+  }
+}

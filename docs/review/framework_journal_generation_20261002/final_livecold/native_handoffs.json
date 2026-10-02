@@ -1,0 +1,25 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "bd29a8d5-351a-4e6c-8086-42971e248565",
+    "source_content_sha256":  "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+    "producers":  {
+                      "item_journal_recovery_test":  {
+                                                         "scene_id":  "item_journal_recovery_test",
+                                                         "run_id":  "7cdd87a6-e3a6-493d-be7d-573cd93e9035",
+                                                         "source_content_sha256":  "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+                                                         "process_exited":  true,
+                                                         "effective_exit_code":  0,
+                                                         "result":  "PASS",
+                                                         "receipt_sha256":  "242833a214e7ee140b4f8d8d2b10f2ee5869aa9cf131b3491bf960de30004e28"
+                                                     },
+                      "item_journal_recovery_cold_test":  {
+                                                              "scene_id":  "item_journal_recovery_cold_test",
+                                                              "run_id":  "e0d536e9-cd44-4994-b024-40838f3e8be3",
+                                                              "source_content_sha256":  "d9cf182d1b295a0c8d4472fa096f3554d46f98ffc1787d01247338977c92dd6b",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "dcd6a0465a6f5dfa47d2f2768ba61a82928f8d8cec209fe65de3587ed50adedd"
+                                                          }
+                  }
+}

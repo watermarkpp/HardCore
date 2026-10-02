@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real persistence uses the runner's prelaunch isolated account",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual startup upgrade gate completes",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual profile service creates the owned character",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "sole writer persists valid full v1 history and test-owned inputs",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "default-off fixture enabled through its real module service",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "real commit 1: { \"success\": false, \"pending\": false, \"durable\": false, \"applied_in_memory\": false, \"reason\": \"stale_item_quote\" }",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "all 130 real ownership transactions complete beyond journal64 without losing a gem",
+      "passed": false
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "cc6972cb-a2c5-4982-a881-e5d176fe805b",
+  "passed": 5,
+  "reported_checks": 7,
+  "reported_failures": 2,
+  "run_id": "b2f1f8e2-8233-4afc-a5cd-3e7d0f55bd5d",
+  "scene_id": "item_journal_recovery_test",
+  "schema_version": 1,
+  "source_content_sha256": "a285fe6e4039598bb46d304c6e99d2106e4dc86343217a461dc846e671ee8144",
+  "status": "FAIL"
+}
