@@ -1,0 +1,926 @@
+--- old/scripts/game_root.gd
++++ new/scripts/game_root.gd
+@@ -249,0 +250 @@
++var _respawn_wakeups: Dictionary = {}
+@@ -1762,0 +1764 @@
++	_cancel_respawn_wakeups()
+@@ -1786,0 +1789,5 @@
++	# Child visuals have already unregistered at this boundary. The static
++	# access path must not prolong this world's coordinator/cache lifetime,
++	# and an older exiting world must never detach a newer world's owner.
++	if MonsterVisualScript.streaming_coordinator() == _streaming_coordinator:
++		MonsterVisualScript.set_streaming_coordinator(null)
+@@ -4323,0 +4331 @@
++	_cancel_respawn_wakeups()
+@@ -14738 +14746,8 @@
+-	await get_tree().create_timer(seconds).timeout
++	var wakeup := get_tree().create_timer(seconds)
++	var identity := wakeup.get_instance_id()
++	_respawn_wakeups[identity] = wakeup
++	await wakeup.timeout
++	# A retired owner may have re-entered the tree before the cancelled timer
++	# is reclaimed. Only a still-owned wakeup can attempt the original spawn.
++	if not _respawn_wakeups.erase(identity):
++		return
+@@ -14750,0 +14766,10 @@
++
++
++func _cancel_respawn_wakeups() -> void:
++	# Preserve the original SceneTreeTimer clock while this world is live.
++	# Retirement revokes dispatch first, then lets SceneTree reclaim timers on
++	# its next idle pass instead of retaining dead-world wakeups for 5-60 min.
++	var retiring: Array = _respawn_wakeups.values()
++	_respawn_wakeups.clear()
++	for wakeup: SceneTreeTimer in retiring:
++		wakeup.time_left = 0.0
+--- old/scripts/touch_scroll_support.gd
++++ new/scripts/touch_scroll_support.gd
+@@ -15,0 +16,21 @@
++var _registry_cleanup_queued := false
++
++
++func _ready() -> void:
++	get_tree().node_removed.connect(_on_registered_tree_removal)
++
++
++func _on_registered_tree_removal(node: Node) -> void:
++	if not (node is ScrollContainer or node is RichTextLabel) or _registry_cleanup_queued:
++		return
++	_registry_cleanup_queued = true
++	_prune_destroyed_registrations.call_deferred()
++
++
++func _prune_destroyed_registrations() -> void:
++	_registry_cleanup_queued = false
++	# Keep still-live detached/reparented controls and their registration meta.
++	# Only destroyed identities cease to own a slot; no input is consumed.
++	for index in range(_registered_controls.size()-1,-1,-1):
++		if _registered_controls[index].get_ref() == null:
++			_registered_controls.remove_at(index)
+--- old/scripts/ui_runtime_layout_overrides.gd
++++ new/scripts/ui_runtime_layout_overrides.gd
+@@ -42 +42,13 @@
+-static var _target_tokens: Dictionary = {}
++const TARGET_TOKEN_META := &"_hc_layout_application_token"
++
++
++static func _target_token(target: Control) -> int:
++	return int(target.get_meta(TARGET_TOKEN_META,0)) if is_instance_valid(target) else 0
++
++
++static func _next_target_token(target: Control) -> int:
++	# The application generation belongs to this exact live Control. It
++	# survives reparenting and is destroyed with its owner, not kept globally.
++	var token := _target_token(target)+1
++	target.set_meta(TARGET_TOKEN_META,token)
++	return token
+@@ -114,3 +126 @@
+-	var target_id := target.get_instance_id()
+-	var token := int(_target_tokens.get(target_id, 0)) + 1
+-	_target_tokens[target_id] = token
++	var token := _next_target_token(target)
+@@ -230 +240 @@
+-	if int(_target_tokens.get(target.get_instance_id(), 0)) != token:
++	if _target_token(target) != token:
+@@ -327,3 +337 @@
+-	var target_id := target.get_instance_id()
+-	var token := int(_target_tokens.get(target_id, 0)) + 1
+-	_target_tokens[target_id] = token
++	var token := _next_target_token(target)
+@@ -353 +361 @@
+-			if int(_target_tokens.get(target_id, 0)) != token:
++			if _target_token(target) != token:
+@@ -364 +372 @@
+-			if int(_target_tokens.get(target_id, 0)) != token:
++			if _target_token(target) != token:
+@@ -369 +377 @@
+-		if int(_target_tokens.get(target_id, 0)) != token:
++		if _target_token(target) != token:
+@@ -373 +381 @@
+-		if int(_target_tokens.get(target_id, 0)) != token:
++		if _target_token(target) != token:
+@@ -392 +400 @@
+-	if int(_target_tokens.get(target_id, 0)) != token:
++	if _target_token(target) != token:
+@@ -396 +404 @@
+-		if int(_target_tokens.get(target_id, 0)) != token:
++		if _target_token(target) != token:
+@@ -404 +412 @@
+-	if int(_target_tokens.get(target_id, 0)) == token and _can_write(target, target):
++	if _target_token(target) == token and _can_write(target, target):
+--- old/scripts/ui_selection_dismiss_guard.gd
++++ new/scripts/ui_selection_dismiss_guard.gd
+@@ -21,0 +22 @@
++var _registry_cleanup_queued := false
+@@ -71,0 +73 @@
++	get_tree().node_removed.connect(_on_registered_tree_removal)
+@@ -72,0 +75,15 @@
++
++func _on_registered_tree_removal(node: Node) -> void:
++	if not (node is Control or node is Window) or _registry_cleanup_queued:
++		return
++	# Coalesce an entire UI teardown. Removal is signalled before destruction;
++	# inspect weak targets after that transaction, without waiting for a tap.
++	_registry_cleanup_queued = true
++	_prune_destroyed_registrations.call_deferred()
++
++func _prune_destroyed_registrations() -> void:
++	_registry_cleanup_queued = false
++	for refs: Array in [_scopes,_functional,_modals]:
++		for index in range(refs.size()-1,-1,-1):
++			if (refs[index] as WeakRef).get_ref() == null:
++				refs.remove_at(index)
+--- old/tests/device_lab_layout_regression_test.gd
++++ new/tests/device_lab_layout_regression_test.gd
+@@ -0,0 +1,12 @@
++extends "res://tests/device_lab_runtime_test.gd"
++
++
++# Reuse the existing Device Lab layout assertions unchanged. This entry covers
++# only layout guards/competing application/real panel checkpoint rollback;
++# it does not claim the unrelated legacy character roster fixture passes.
++func _run() -> void:
++	await _test_external_profile_guards()
++	await _test_transaction_rollback()
++	await _test_ui_checkpoint_rollback()
++	print("DEVICE_LAB_LAYOUT_REGRESSION_PASS external_guards competing_transaction checkpoint_rollback")
++	get_tree().quit(0)
+--- old/tests/device_lab_layout_regression_test.tscn
++++ new/tests/device_lab_layout_regression_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/device_lab_layout_regression_test.gd" id="1"]
++
++[node name="DeviceLabLayoutRegressionTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/helpers/journal_backup_fixture.gd
++++ new/tests/framework/helpers/journal_backup_fixture.gd
+@@ -75 +75 @@
+-	host.check(not bool(result.get("success",false)) and not result.has("job") and PlayerState._json_persistence.pending_count() == 0,label+": old complete quote cannot create another writer")
++	host.check(not bool(result.get("success",false)) and not result.has("job") and PlayerState._json_persistence.pending_count() == 0,label+": refreshed rejected request cannot create another writer")
+@@ -76,0 +77,3 @@
++	var cached: Dictionary = PlayerState.commit_item_transaction(data.old_quote)
++	host.check(not bool(cached.get("success",false)) and cached.get("reason") == "stale_item_quote" and not cached.has("job"),label+": original cached successful quote is revalidated and cannot create a writer")
++	if cached.has("job"): await wait_job(host,cached.job)
+--- old/tests/framework/item_journal_v2_backup_test.gd
++++ new/tests/framework/item_journal_v2_backup_test.gd
+@@ -24 +24,5 @@
+-		if not continued.is_empty(): await _recovery_failure_and_repeat(continued)
++		if not continued.is_empty():
++			await _recovery_failure_and_repeat(continued)
++			check(Fixture.write(data.path+".bak",data.bytes) and DirAccess.remove_absolute(ProjectSettings.globalize_path(data.path)) == OK,"only this fixture's primary is removed for a separate missing-v2-primary case")
++			PlayerState.load_save()
++			await Fixture.probe(self,data)
+@@ -53,0 +58,7 @@
++	check(Fixture.write(path+".bak",checkpoint) and DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK,"owned missing-v3-primary case retains the original valid checkpoint")
++	PlayerState.load_save()
++	check(bool(PlayerState.last_load_result.get("success",false)) and PlayerState._item_transaction_journal.epoch != data.epoch and FileAccess.file_exists(path),"missing v3 primary restores through durable fresh-epoch promotion")
++	var restored_before: Array = PlayerState.inventory.duplicate(true)
++	var stale: Dictionary = PlayerState.commit_item_transaction(quote)
++	check(not bool(stale.get("success",false)) and not stale.has("job") and PlayerState.inventory == restored_before and PlayerState._json_persistence.pending_count() == 0,"missing-primary recovery also rejects the original cached lost v3 command without a writer")
++
+--- old/tests/framework/natural_effect_lifecycle_cold_test.gd
++++ new/tests/framework/natural_effect_lifecycle_cold_test.gd
+@@ -0,0 +1,34 @@
++extends Node
++
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
++const PRODUCER := "res://outputs/test_logs/framework/natural_effect_lifecycle_test.result.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode,"cold process uses actual persistence")
++	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXPECTED)) if FileAccess.file_exists(EXPECTED) else null
++	check(expected is Dictionary,"successful live producer supplied explicit expectation")
++	if not expected is Dictionary: _finish(); return
++	var valid := Gate.accepts(expected,"natural_effect_lifecycle_test")
++	check(valid,"cold expectation binds the runner-confirmed successful native producer in this invocation")
++	if not valid: _finish(); return
++	check(expected.source_content_sha256 == OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"cold source matches the producing test source")
++	check(expected.producer_run_id != OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"independent native process has a distinct execution receipt")
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"actual cold startup migration succeeds")
++	check(PlayerState.select_character(expected.profile_id),"actual combined-workload profile loads")
++	check(PlayerState.experience == int(expected.experience),"exact world and thirty fixture kill rewards survive native cold restart without extra credit")
++	check(PlayerState._world_clock_generation == expected.generation,"cold replay retains the saved generation marker; this fixture permits the legacy empty namespace")
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"cold replay consumes all persistence receipts")
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("natural_effect_lifecycle_cold_test",checks,failures.size()): failures.append("receipt")
++	print("NATURAL_EFFECT_LIFECYCLE_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/natural_effect_lifecycle_cold_test.tscn
++++ new/tests/framework/natural_effect_lifecycle_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/natural_effect_lifecycle_cold_test.gd" id="1"]
++
++[node name="NaturalEffectTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/natural_effect_lifecycle_test.gd
++++ new/tests/framework/natural_effect_lifecycle_test.gd
+@@ -0,0 +1,307 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://scripts/game_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
++const REPORT := "res://outputs/test_logs/framework/natural_effect_lifecycle_trace.json"
++const EXPECTED := "res://outputs/test_logs/framework/natural_effect_lifecycle_expected.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++var game: Node
++var runtime: RefCounted
++var targets: Array[EnemyActor] = []
++var deaths := 0
++var death_started_usec := 0
++var death_finished_usec := 0
++var stream_started_usec := 0
++var stream_finished_usec := 0
++var resource_mapping: Dictionary = {}
++var resource_key := ""
++var resource_monster_id := -1
++var resource_get_before := 0
++var resource_request_before := 0
++var concurrent_queues := false
++var observing := false
++var previous_frame_usec := 0
++var samples: Array[Dictionary] = []
++var category_scopes: Dictionary = {}
++var maximum_pending_age: Dictionary = {}
++var maximum_service_age: Dictionary = {}
++var scopes_closed := true
++var peak_states := 0
++var peak_deaths := 0
++var peak_persistence := 0
++var maximum_remaining_due_backlog_usec := 0
++var movement_gu := 0.0
++var monster_movement_gu := 0.0
++var previous_player := Vector2.ZERO
++var previous_actors: Dictionary = {}
++var accepted_casts := 0
++var rejected_inputs: Dictionary = {}
++var memory_checkpoints: Array = []
++var cast_targets: Dictionary = {}
++var observed_deaths: Dictionary = {}
++
++func check(value: bool, label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void:
++	process_priority = 10000
++	_run.call_deferred()
++
++func _process(_delta: float) -> void:
++	if not observing or not is_instance_valid(game): return
++	var ground: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
++	movement_gu += ground.distance_to(previous_player); previous_player = ground
++	for actor: EnemyActor in targets:
++		if not is_instance_valid(actor): continue
++		var id := actor.get_instance_id()
++		var location: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
++		monster_movement_gu += location.distance_to(previous_actors.get(id,location))
++		previous_actors[id] = location
++	var now := Time.get_ticks_usec()
++	if previous_frame_usec > 0 and samples.size() < 12000:
++		samples.append({"wall_usec":now-previous_frame_usec,"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"object_count":int(Performance.get_monitor(Performance.OBJECT_COUNT)),
++			"simulation_usec":game._time_domains.simulation_usec(),"ticks":runtime.metrics().ticks,
++			"effects":runtime.active_count(),"deaths":game._pending_enemy_deaths.size(),
++			"persistence":PlayerState._json_persistence.pending_count()+PlayerState._world_json_persistence.pending_count(),
++			"resources":game._streaming_coordinator.pending_request_count()})
++	previous_frame_usec = now
++	var ledger := Budget.snapshot()
++	scopes_closed = scopes_closed and int(ledger.open_scopes) == 0
++	for category: String in ledger.categories:
++		category_scopes[category] = int(category_scopes.get(category,0))+int(ledger.categories[category].scopes)
++	for category: String in ledger.pending:
++		maximum_pending_age[category] = maxi(int(maximum_pending_age.get(category,0)),int(ledger.pending[category].oldest_age_frames))
++		if bool(ledger.pending[category].runnable):
++			maximum_service_age[category] = maxi(int(maximum_service_age.get(category,0)),int(ledger.pending[category].service_age_frames))
++	peak_states = maxi(peak_states,runtime.active_count())
++	peak_deaths = maxi(peak_deaths,game._pending_enemy_deaths.size())
++	peak_persistence = maxi(peak_persistence,PlayerState._json_persistence.pending_count()+PlayerState._world_json_persistence.pending_count())
++	if runtime.has_due():
++		maximum_remaining_due_backlog_usec = maxi(maximum_remaining_due_backlog_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
++	if stream_started_usec > 0 and stream_finished_usec == 0 and game._streaming_coordinator.pending_request_count() == 0:
++		stream_finished_usec = now
++	if deaths == 30 and death_finished_usec == 0 and _settlement_drained(): death_finished_usec = now
++
++func _run() -> void:
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"natural production run owns an isolated account")
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade() and PlayerState.create_character("自然战斗压力","hc.profession.wizard").is_empty(),"real startup and profile creation")
++	PlayerState.level = 50; PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}
++	PlayerState.equipment["hc.slot.weapon"] = Drop.create_instance(GameData.get_item_record({"item_id":85}),"natural:weapon")
++	PlayerState.recalculate_stats(false)
++	check(PlayerState.save_game(true,true,true),"production profile and equipment baseline saved")
++	var profile: String = PlayerState.active_profile_id
++	var xp_before: int = PlayerState.experience
++	get_tree().node_added.connect(_observe_spawn)
++	game = Root.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"real mapped world reaches READY")
++	if not game.gameplay_input_is_enabled(): _finish(); return
++	# Test-owned source authoring input goes through real qualification and
++	# compiler. The mechanic, period, geometry and action timing are unchanged.
++	var bindings: Array = ContentLayers.feature_configuration().bindings.duplicate(true)
++	bindings.append({"module_id":"hc.ignite","kind":"item","item_id":"hc.item.000085","mechanic_id":"hc.ignite.ice_storm"})
++	bindings.append({"module_id":"hc.ignite","kind":"skill","skill_id":"hc.skill.wizard.ice_storm","mechanic_id":"hc.ignite.ice_storm"})
++	var captured := Graph.capture(bindings)
++	check(bool(captured.success),"three legal sources are plain authoring inputs")
++	if not bool(captured.success): _finish(); return
++	ContentLayers._feature_bindings = captured.value
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"default-off module enabled through real service")
++	var event: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	check(PlayerState.feature_errors.is_empty() and event.size() == 3,"equipment, learned skill and rule compile to three actual qualified sources")
++	if event.size() != 3: _finish(); return
++	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
++	# Declared stress-health/stat inputs keep actual AI, damage and death paths
++	# active long enough to exercise recurring work. No per-frame heal/refund.
++	PlayerState.computed_stats.magic_min = 180; PlayerState.computed_stats.magic_max = 180
++	game.player.max_hp = 100000; game.player.current_hp = 100000
++	game.player.max_mp = 5000; game.player.current_mp = 5000
++	var mp_before: int = game.player.current_mp
++	var hp_before: int = game.player.current_hp
++	for index in 30:
++		var point := Vector2(40.5+float(index%6)*0.72+(0.36 if int(index/6)%2 else 0.0),12.2+float(index/6)*0.64)
++		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(point),false,-1.0,
++			{"respawn_enabled":false,"spawn_slot_id":"test:natural:"+str(index)})
++		if actor != null:
++			actor.max_hp = 1500; actor.current_hp = 1500
++			actor.died.connect(_on_target_died); targets.append(actor)
++			check(actor._hc_point_walkable(point) and actor.is_physics_processing(),"natural receiver born on walkable authored ground with AI active: "+str(index))
++	check(targets.size() == 30,"all thirty real receivers exist without a gameplay cap")
++	var nonoverlap := true
++	for i in targets.size():
++		for j in range(i):
++			var a: Vector2 = game._canonical_screen_px_to_ground_gu(targets[i].global_position)
++			var b: Vector2 = game._canonical_screen_px_to_ground_gu(targets[j].global_position)
++			nonoverlap = nonoverlap and a.distance_to(b) >= targets[i].combat_radius_gu+targets[j].combat_radius_gu
++	check(nonoverlap,"all initial receiver footprints are disjoint under the real body policy")
++	if targets.size() != 30 or not nonoverlap: _finish(); return
++	var visual := MonsterVisual.new()
++	for id: int in [64,89,34,19]:
++		var mapping: Dictionary = visual._client_mapping_for(GameData.get_monster_by_id(id))
++		var key: String = visual._client_resource_cache_key(mapping)
++		if not mapping.is_empty() and game._streaming_coordinator.client_resources(key).is_empty() and not game._streaming_coordinator._threaded_profile_requests.has(key):
++			resource_mapping = mapping; resource_key = key; resource_monster_id = id; break
++	visual.free()
++	check(not resource_mapping.is_empty(),"actual uncached resource work selected")
++	if resource_mapping.is_empty(): _finish(); return
++	game._streaming_coordinator.register_visual(self,get_instance_id(),game.current_map_id,game._zone_generation,resource_key,{},0)
++	# Capture/accept happens only inside the normal skill input entry below.
++	var start := Time.get_ticks_msec()
++	var next_input := start
++	var next_memory := start
++	previous_player = game._canonical_screen_px_to_ground_gu(game.player.global_position)
++	deadline = start+35000
++	while Time.get_ticks_msec()<deadline:
++		var now := Time.get_ticks_msec()
++		game._on_gameplay_movement(Vector2(0.5,-0.25).normalized() if int((now-start)/1200)%2 == 0 else Vector2(-0.5,0.25).normalized())
++		if now >= next_input and deaths < 30:
++			next_input = now+250
++			# Scripted aiming uses current visible positions and coverage. It does
++			# not supply a target list to the release planner, alter its geometry,
++			# or freeze receivers while the normal cast animation runs.
++			var active_targets := {}
++			if runtime != null:
++				for state: Dictionary in runtime._states.values():
++					var receiver: Node = state.target.resolve()
++					if is_instance_valid(receiver): active_targets[receiver.get_instance_id()] = true
++			var chosen: EnemyActor = null
++			var best_score := -1
++			for actor: EnemyActor in targets:
++				if not is_instance_valid(actor) or actor.current_hp <= 0: continue
++				var center: Vector2 = game._canonical_screen_px_to_ground_gu(actor.global_position)
++				var score := 0
++				for receiver: EnemyActor in targets:
++					if not is_instance_valid(receiver) or receiver.current_hp <= 0: continue
++					var offset: Vector2 = game._canonical_screen_px_to_ground_gu(receiver.global_position)-center
++					if absf(offset.x) <= 1.5 and absf(offset.y) <= 1.5:
++						score += 100 if peak_states < 90 and not active_targets.has(receiver.get_instance_id()) else 1
++				if score > best_score: chosen = actor; best_score = score
++			if chosen != null:
++				game._set_magic_locked_target(chosen,true)
++				var result: StringName = game._try_release_skill("hc.skill.wizard.ice_storm",false)
++				if result == &"accepted":
++					accepted_casts += 1; cast_targets[chosen.get_instance_id()] = int(cast_targets.get(chosen.get_instance_id(),0))+1
++				else: rejected_inputs[str(result)] = int(rejected_inputs.get(str(result),0))+1
++		if runtime == null and game._feature_effect_runtime != null:
++			runtime = game._feature_effect_runtime; observing = true
++		if now >= next_memory:
++			next_memory = now+5000
++			memory_checkpoints.append({"elapsed_ms":now-start,"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"objects":int(Performance.get_monitor(Performance.OBJECT_COUNT)),"states":runtime.active_count() if runtime != null else 0,"samples":samples.size()})
++		await get_tree().process_frame
++		if runtime != null and deaths == 30 and not runtime.has_work() and _settlement_drained() and stream_finished_usec > 0: break
++	game._on_gameplay_movement(Vector2.ZERO)
++	observing = false
++	check(runtime != null,"natural input created the real admitted effect runtime")
++	if runtime == null: _finish(); return
++	check(accepted_casts > 1 and movement_gu > 1.0 and monster_movement_gu > 1.0,"actual repeated skill input, Player motion and monster pursuit all ran")
++	check(game.player.current_mp < mp_before and game.player.current_hp < hp_before,"natural casts spend MP and live monsters attack the Player")
++	check(peak_states == 90 and int(runtime.metrics().started) >= 90,"all thirty moving receivers participate in ninety concurrent qualified states")
++	check(int(runtime.metrics().ticks) >= 360 and int(runtime.metrics().tick_delivery_count) == int(runtime.metrics().ticks),"at least360 actual periodic deliveries complete without a rejected damage-port attempt")
++	check(int(runtime.metrics().maximum_tick_delivery_lateness_usec) < 1000000,"actual consumption latency stays strictly below one existing period: "+str(runtime.metrics().maximum_tick_delivery_lateness_usec))
++	check(deaths == 30 and not runtime.has_work() and runtime.heap_count() == 0 and runtime.errors.is_empty(),"all thirty real deaths finish and effect work drains without capacity refusal")
++	check(_settlement_drained() and int(runtime.reservation_snapshot().actions) == 0 and runtime._receipts.is_empty(),"death/persistence queues, accepted producers and managed receipts drain")
++	check(concurrent_queues and stream_finished_usec > 0,"real resource completion overlaps necessary settlement work and drains")
++	var minimum_xp := xp_before+30*int(game._build_enemy_death_runtime_snapshot(GameData.get_monster_by_id(19)).experience)
++	var expected_xp := xp_before
++	var fixture_deaths := 0
++	for death: Dictionary in observed_deaths.values():
++		expected_xp += int(death.experience)
++		if str(death.spawn_slot_id).begins_with("test:natural:"): fixture_deaths += 1
++	check(fixture_deaths == 30 and expected_xp >= minimum_xp,"independent death signals contain all thirty fixture identities plus any unmodified world victims")
++	check(game._enemy_death_terminal_total_count == observed_deaths.size(),"every observed death has exactly one completed production job")
++	check(PlayerState.experience == expected_xp,"canonical rewards equal the exact sum of unique observed world and fixture deaths: actual=%d expected=%d fixture_only=%d" % [PlayerState.experience,expected_xp,minimum_xp])
++	check(scopes_closed and samples.size() >= 120 and samples.size()<12000,"bounded raw frame observation includes no open budget scopes")
++	_write(REPORT,{"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
++		"scope":"PC headless natural Player/Root input, original cooldown/geometry, moving AI and formal world; declared initial stress HP/stats; single sustained cohort; not Android/GPU or infinite-memory proof",
++		"phase":"before final save and cold handoff","phase_status":"PASS" if failures.is_empty() else "FAIL","phase_failures":failures,
++		"accepted_casts":accepted_casts,"rejected_inputs":rejected_inputs,"player_movement_gu":movement_gu,"monster_movement_gu":monster_movement_gu,
++		"deaths":deaths,"peak_states":peak_states,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,"metrics":runtime.metrics(),
++		"xp_before":xp_before,"xp_after":PlayerState.experience,"expected_xp":expected_xp,"fixture_only_xp":minimum_xp,"observed_deaths":observed_deaths.values(),
++		"terminal_death_jobs":game._enemy_death_terminal_jobs,
++		"wall_frame_usec":_percentiles("wall_usec"),"samples":samples,"memory_checkpoints":memory_checkpoints,
++		"maximum_pending_age_frames":maximum_pending_age,"maximum_service_age_frames":maximum_service_age})
++	game._streaming_coordinator.unregister_visual(get_instance_id())
++	var xp: int = PlayerState.experience
++	check(PlayerState.save_game(true,true,true),"natural workload final save uses the real writer")
++	var generation: String = PlayerState._world_clock_generation
++	game.queue_free(); await get_tree().process_frame
++	check(not runtime.has_work() and runtime._receipts.is_empty(),"world teardown drops final owners")
++	check(PlayerState.select_character(profile) and PlayerState.experience == xp,"production reload retains exact final rewards")
++	if failures.is_empty(): _write(EXPECTED,{"profile_id":profile,"experience":xp,"generation":generation,"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")})
++	var cleanup := {"sample_count":samples.size(),"memory_before_observation_clear":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"objects_before_clear":int(Performance.get_monitor(Performance.OBJECT_COUNT))}
++	samples.clear(); targets.clear(); previous_actors.clear(); cast_targets.clear(); runtime = null
++	for frame in 4: await get_tree().process_frame
++	cleanup["memory_after_observation_clear"] = int(Performance.get_monitor(Performance.MEMORY_STATIC))
++	cleanup["objects_after_clear"] = int(Performance.get_monitor(Performance.OBJECT_COUNT))
++	cleanup["orphan_nodes_after_clear"] = int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
++	# Measure after releasing bounded observation arrays. Reopen the already
++	# saved phase trace only after measurement; its allocation is not gameplay.
++	var phase_trace: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(REPORT))
++	phase_trace["cleanup"] = cleanup
++	phase_trace["final_checks_before_trace_write"] = checks
++	phase_trace["final_status_before_trace_write"] = "PASS" if failures.is_empty() else "FAIL"
++	_write(REPORT,phase_trace)
++	_finish()
++
++func _observe_spawn(node: Node) -> void:
++	if node is EnemyActor:
++		node.died.connect(_on_world_died)
++
++func _on_world_died(enemy: EnemyActor, data: Dictionary) -> void:
++	var identity := enemy.get_instance_id()
++	check(not observed_deaths.has(identity),"world death signal is unique: "+str(identity))
++	check(observed_deaths.size() < 512,"test death observation stays within its explicit bound")
++	if observed_deaths.has(identity) or observed_deaths.size() >= 512: return
++	var monster_id := int(data.get("monster_id",-1))
++	var canonical: Dictionary = game._build_enemy_death_runtime_snapshot(GameData.get_monster_by_id(monster_id))
++	observed_deaths[identity] = {"instance_id":identity,"monster_id":monster_id,
++		"spawn_slot_id":str(enemy.get_meta("spawn_context",{}).get("spawn_slot_id","")),
++		"experience":int(canonical.get("experience",0)),"position":str(enemy.global_position)}
++
++func _on_target_died(_enemy: EnemyActor, _data: Dictionary) -> void:
++	deaths += 1
++	if deaths != 1: return
++	death_started_usec = Time.get_ticks_usec()
++	stream_started_usec = death_started_usec
++	resource_get_before = game._streaming_coordinator.threaded_texture_get_count()
++	resource_request_before = game._streaming_coordinator.threaded_texture_request_count()
++	game._streaming_coordinator.request_visual_resources(self,resource_mapping,resource_monster_id)
++	concurrent_queues = game._streaming_coordinator.pending_request_count() > 0 and (not game._pending_enemy_deaths.is_empty()
++		or not game._prepared_enemy_death_settlement.is_empty() or PlayerState._json_persistence.pending_count() > 0)
++
++func _settlement_drained() -> bool:
++	return game._pending_enemy_deaths.is_empty() and game._prepared_enemy_death_settlement.is_empty() \
++		and PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0
++
++func _percentiles(field: String) -> Dictionary:
++	var values: Array[int] = []
++	for sample: Dictionary in samples: values.append(int(sample[field]))
++	values.sort()
++	if values.is_empty(): return {}
++	return {"p50":values[ceili(values.size()*0.50)-1],"p95":values[ceili(values.size()*0.95)-1],
++		"p99":values[ceili(values.size()*0.99)-1],"max":values.back()}
++
++func _write(path: String, value: Dictionary) -> void:
++	var output := FileAccess.open(path,FileAccess.WRITE)
++	check(output != null,"write owned evidence "+path.get_file())
++	if output != null:
++		output.store_string(JSON.stringify(value)); output.flush()
++		check(output.get_error() == OK,"owned evidence write completed "+path.get_file())
++		output.close()
++
++func _finish() -> void:
++	observing = false
++	if is_instance_valid(game): game.queue_free()
++	if not proof.write_receipt("natural_effect_lifecycle_test",checks,failures.size()): failures.append("receipt")
++	print("NATURAL_EFFECT_LIFECYCLE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/natural_effect_lifecycle_test.tscn
++++ new/tests/framework/natural_effect_lifecycle_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/natural_effect_lifecycle_test.gd" id="1"]
++
++[node name="NaturalEffectTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/natural_effect_recovery_cycles_test.gd
++++ new/tests/framework/natural_effect_recovery_cycles_test.gd
+@@ -0,0 +1,191 @@
++extends Node
++
++const Root := preload("res://scripts/game_root.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++const Graph := preload("res://scripts/features/contracts/plain_graph.gd")
++const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
++const ContextTokens := preload("res://scripts/monster_ai_package/m30/context_token.gd")
++const PolygonRuntime := preload("res://scripts/map_editor/polygon/poly_runtime.gd")
++const REPORT := "res://outputs/test_logs/framework/natural_effect_recovery_cycles_trace.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++var rounds: Array[Dictionary] = []
++
++class TransitionProbe extends Root:
++	var transitions := 0
++	func _perform_character_select_transition() -> void:
++		# Replace only the final scene navigation. The original logout/save and
++		# Root exit run; no HP, input, planner, AI or queue consumer is replaced.
++		transitions += 1
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"recovery cycles own isolated production account")
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade() and PlayerState.create_character("持续恢复","hc.profession.wizard").is_empty(),"production startup and character creation")
++	PlayerState.level = 50; PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}
++	PlayerState.equipment["hc.slot.weapon"] = Drop.create_instance(GameData.get_item_record({"item_id":85}),"recovery:weapon")
++	PlayerState.recalculate_stats(false)
++	check(PlayerState.save_game(true,true,true),"initial equipment and skill saved")
++	var profile: String = PlayerState.active_profile_id
++	var bindings: Array = ContentLayers.feature_configuration().bindings.duplicate(true)
++	bindings.append({"module_id":"hc.ignite","kind":"item","item_id":"hc.item.000085","mechanic_id":"hc.ignite.ice_storm"})
++	bindings.append({"module_id":"hc.ignite","kind":"skill","skill_id":"hc.skill.wizard.ice_storm","mechanic_id":"hc.ignite.ice_storm"})
++	ContentLayers._feature_bindings = Graph.capture(bindings).value
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"three qualified sources use existing module service")
++	for cycle in 4:
++		await _cycle(profile,cycle)
++		if rounds.size() != cycle+1: break
++	check(rounds.size() == 4,"four complete same-process moving combat and saved recovery lifecycles")
++	if rounds.size() == 4:
++		check(int(rounds[3].objects) <= int(rounds[1].objects),"post-warmup ObjectDB count does not accumulate across recovered worlds")
++		check(int(rounds[3].resources) <= int(rounds[1].resources),"post-warmup resource count does not accumulate across recovered worlds")
++	var file := FileAccess.open(REPORT,FileAccess.WRITE)
++	check(file != null,"open owned bounded cycle evidence")
++	if file != null:
++		file.store_string(JSON.stringify({"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),
++			"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"rounds":rounds,
++			"scope":"PC headless four same-process real input/AI worlds; 30 receivers each, 1500 initial HP; original cooldown/geometry; intentional live-effect world retirement and real logout/save/reload, not four full kill cohorts or unlimited-duration memory proof",
++			"memory_scope":"static allocation includes bounded receipt/trace growth and shared caches; exact owner weakrefs plus ObjectDB/resource counts are separate gates",
++			"phase_status":"PASS" if failures.is_empty() else "FAIL"})); file.flush()
++		check(file.get_error() == OK,"cycle evidence write completes"); file.close()
++	if not proof.write_receipt("natural_effect_recovery_cycles_test",checks,failures.size()): failures.append("receipt")
++	print("NATURAL_EFFECT_RECOVERY_CYCLES_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
++
++func _cycle(profile: String,cycle: int) -> void:
++	var label := "cycle "+str(cycle)+": "
++	check(PlayerState.select_character(profile),label+"official saved profile selected")
++	var game := TransitionProbe.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+15000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),label+"real authored world READY")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); await get_tree().process_frame; return
++	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
++	PlayerState.computed_stats.magic_min = 180; PlayerState.computed_stats.magic_max = 180
++	game.player.max_hp = 100000; game.player.current_hp = 100000
++	game.player.max_mp = 5000; game.player.current_mp = 5000
++	var targets: Array[EnemyActor] = []
++	for index in 30:
++		var point := Vector2(40.5+float(index%6)*0.72+(0.36 if int(index/6)%2 else 0.0),12.2+float(index/6)*0.64)
++		var actor: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(19),game._canonical_ground_gu_to_screen_px(point),false,-1.0,
++			{"respawn_enabled":false,"spawn_slot_id":"test:recovery:"+str(cycle)+":"+str(index)})
++		if actor != null: actor.max_hp = 1500; actor.current_hp = 1500; targets.append(actor)
++	check(targets.size() == 30,label+"thirty active AI receivers spawned")
++	if targets.size() != 30: game.queue_free(); await get_tree().process_frame; return
++	var start := Time.get_ticks_msec()
++	var next_input := start
++	var accepted := 0
++	var previous: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
++	var motion := 0.0
++	while Time.get_ticks_msec()-start < 4000:
++		var now := Time.get_ticks_msec()
++		game._on_gameplay_movement(Vector2(0.5,-0.25).normalized() if int((now-start)/1200)%2 == 0 else Vector2(-0.5,0.25).normalized())
++		if now >= next_input:
++			next_input = now+250
++			var target: EnemyActor = targets[14]
++			if is_instance_valid(target) and target.current_hp > 0:
++				game._set_magic_locked_target(target,true)
++				if game._try_release_skill("hc.skill.wizard.ice_storm",false) == &"accepted": accepted += 1
++		await get_tree().process_frame
++		var current: Vector2 = game._canonical_screen_px_to_ground_gu(game.player.global_position)
++		motion += current.distance_to(previous); previous = current
++	game._on_gameplay_movement(Vector2.ZERO)
++	var runtime: RefCounted = game._feature_effect_runtime
++	check(runtime != null and accepted >= 2 and motion > 1.0,label+"multiple actual accepted casts and Player movement")
++	if runtime == null: game.queue_free(); await get_tree().process_frame; return
++	var metrics: Dictionary = runtime.metrics()
++	check(int(metrics.ticks)>0 and runtime.active_count()>0 and runtime.errors.is_empty(),label+"live recurring work exists at legitimate world retirement")
++	check(int(metrics.maximum_tick_delivery_lateness_usec)<1000000,label+"actual delivered ticks below original period")
++	var owners := {"root":weakref(game),"effects":weakref(runtime),"world":weakref(game._world_context),"clock":weakref(game._time_domains),"streaming":weakref(game._streaming_coordinator)}
++	var owned_category: String = runtime._category
++	game._return_to_character_select()
++	check(game.transitions == 1 and bool(PlayerState.last_save_result.get("success",false)),label+"real guarded logout saves before visual transition")
++	game.queue_free(); await get_tree().process_frame
++	check(not runtime.has_work() and runtime._receipts.is_empty() and runtime.heap_count() == 0,label+"Root exit retires all effects, producers, facts and receipts")
++	runtime = null; targets.clear()
++	for frame in 4: await get_tree().process_frame
++	var recovery_samples: Array[Dictionary] = []
++	var recovery_start := Time.get_ticks_msec()
++	for sample in 3:
++		while Time.get_ticks_msec()-recovery_start < sample*500: await get_tree().process_frame
++		recovery_samples.append({"elapsed_ms":Time.get_ticks_msec()-recovery_start,
++			"objects":int(Performance.get_monitor(Performance.OBJECT_COUNT)),"nodes":int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
++			"tweens":get_tree().get_processed_tweens().size(),"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC))})
++	var all_released := true
++	for owner: WeakRef in owners.values(): all_released = all_released and owner.get_ref() == null
++	var owner_state := _owner_state(owners)
++	check(all_released,label+"old Root/runtime/world/clock/streaming owners are released")
++	check(not Budget.snapshot().pending.has(owned_category),label+"no retired effect category remains runnable")
++	check(PlayerState.select_character(profile) and PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,label+"actual saved profile reload and both writer queues drained")
++	var orphan_count := int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT))
++	check(orphan_count == 0,label+"no orphan scene nodes")
++	var ui_refs := _ui_registrations()
++	var no_dead_ui_refs := true
++	for counts: Dictionary in ui_refs.values(): no_dead_ui_refs = no_dead_ui_refs and int(counts.dead) == 0
++	check(no_dead_ui_refs,label+"persistent UI observers contain no destroyed-control registrations")
++	var map_cache_objects := {}
++	for context: Dictionary in ContextTokens._contexts: _collect_map_objects(context,map_cache_objects)
++	for entry: Dictionary in PolygonRuntime._loaded: _collect_map_objects(entry.get("snapshot",{}),map_cache_objects)
++	_collect_map_objects(PolygonRuntime._pending.get("snapshot",{}),map_cache_objects)
++	check(ContextTokens.retained_count() <= ContextTokens.MAX_CONTEXTS and PolygonRuntime._loaded.size() <= PolygonRuntime.MAX_LOADED_RELEASES,label+"existing monotonic context-token and loaded-map caches keep their declared bounds")
++	rounds.append({"cycle":cycle,"accepted":accepted,"motion_gu":motion,"ticks":metrics.ticks,"peak_states":metrics.peak_states,
++		"maximum_tick_delivery_lateness_usec":metrics.maximum_tick_delivery_lateness_usec,"all_owners_released":all_released,"owner_state":owner_state,"recovery_samples":recovery_samples,
++		"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),"objects":int(Performance.get_monitor(Performance.OBJECT_COUNT)),
++		"resources":int(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)),"orphans":orphan_count,"ui_refs":ui_refs,
++		"map_cache_objects":map_cache_objects,"context_cache_count":ContextTokens.retained_count(),"context_cache_limit":ContextTokens.MAX_CONTEXTS,
++		"persistent_observers":_persistent_observers()})
++
++func _persistent_observers() -> Dictionary:
++	var pending := {}
++	for key: String in Budget._pending:
++		var entry: Dictionary = Budget._pending[key]
++		pending[key] = {"runnable":entry.get("runnable",false),"has_owner":entry.has("process_owner"),
++			"owner_alive":entry.process_owner.get_ref() != null if entry.has("process_owner") else false}
++	var context_fields := {}
++	if not ContextTokens._contexts.is_empty():
++		for key: Variant in ContextTokens._contexts[-1]:
++			var value: Variant = ContextTokens._contexts[-1][key]
++			context_fields[str(key)] = value.get_class() if value is Object else type_string(typeof(value))
++	return {"budget_pending":pending,"audio_refs":AudioPreferences._sfx_services.size(),"profile_owners":PlayerState._profile_gameplay_owners.size(),
++		"layout_token_owner":"individual Control metadata","context_fields":context_fields,
++		"process_frame_connections":get_tree().get_signal_connection_list("process_frame").size(),"physics_frame_connections":get_tree().get_signal_connection_list("physics_frame").size()}
++
++func _collect_map_objects(context: Dictionary, output: Dictionary) -> void:
++	if context.get("poly_index") is RefCounted:
++		var index: RefCounted = context.poly_index
++		output[str(index.get_instance_id())] = index.get_script().resource_path
++	for graph: RefCounted in context.get("poly_graphs",{}).values():
++		output[str(graph.get_instance_id())] = graph.get_script().resource_path
++
++func _ui_registrations() -> Dictionary:
++	var result := {}
++	for name: String in ["UISelectionDismissGuard","TouchScrollSupport"]:
++		var owner := get_tree().root.get_node_or_null(name)
++		if owner == null: continue
++		var fields: Array = ["_scopes","_functional","_modals"] if name == "UISelectionDismissGuard" else ["_registered_controls"]
++		for field: String in fields:
++			var refs: Array = owner.get(field)
++			var dead := 0
++			for reference: WeakRef in refs:
++				if reference.get_ref() == null: dead += 1
++			result[name+field] = {"total":refs.size(),"dead":dead}
++	return result
++
++func _owner_state(owners: Dictionary) -> Dictionary:
++	var result := {}
++	for key: String in owners:
++		var object: Object = owners[key].get_ref()
++		result[key] = {"released":object == null}
++		if object != null:
++			result[key]["instance_id"] = object.get_instance_id()
++			result[key]["references_in_probe"] = object.get_reference_count() if object is RefCounted else -1
++			result[key]["script"] = object.get_script().resource_path if object.get_script() != null else ""
++	return result
+--- old/tests/framework/natural_effect_recovery_cycles_test.tscn
++++ new/tests/framework/natural_effect_recovery_cycles_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/natural_effect_recovery_cycles_test.gd" id="1"]
++
++[node name="NaturalEffectRecoveryCycles" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/ui_registry_retirement_test.gd
++++ new/tests/framework/ui_registry_retirement_test.gd
+@@ -0,0 +1,89 @@
++extends Node
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Guard := preload("res://scripts/ui_selection_dismiss_guard.gd")
++const Scroll := preload("res://scripts/touch_scroll_support.gd")
++const Layout := preload("res://scripts/ui_runtime_layout_overrides.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++class Scope extends Panel:
++	func _ui_selection_token() -> Array: return [0]
++	func _ui_dismiss_selection() -> void: pass
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	var survivor := Scope.new(); add_child(survivor)
++	var survivor_button := Button.new(); survivor.add_child(survivor_button)
++	var survivor_scroll := ScrollContainer.new(); survivor.add_child(survivor_scroll)
++	Guard.attach(survivor)
++	var support: Node = Scroll.attach_tree(survivor)
++	for frame in 3: await get_tree().process_frame
++	var guard: Node = get_tree().root.get_node(Guard.NAME)
++	for cycle in 3:
++		var scope := Scope.new(); add_child(scope)
++		Guard.attach(scope); Scroll.attach_tree(scope)
++		for count in 50: scope.add_child(Button.new())
++		for count in 5: scope.add_child(ScrollContainer.new())
++		var modal := Window.new(); modal.visible = false; scope.add_child(modal)
++		for frame in 2: await get_tree().process_frame
++		check(guard._functional.size() >= 50 and support._registered_controls.size() >= 6,"real dynamic controls register in cycle "+str(cycle))
++		scope.queue_free()
++		for frame in 4: await get_tree().process_frame
++		check(_dead(guard._functional) == 0 and _dead(guard._modals) == 0 and _dead(guard._scopes) == 0,"dismiss registry retires destroyed nodes without any synthetic tap: "+str(cycle))
++		check(_dead(support._registered_controls) == 0,"scroll registry retires destroyed nodes without drag: "+str(cycle))
++		check(_contains(guard._functional,survivor_button) and _contains(guard._scopes,survivor) and _contains(support._registered_controls,survivor_scroll),"live control/scoping identities remain registered: "+str(cycle))
++	# A removal may be a reparent rather than destruction. Cleanup must not
++	# retire a live weak target or make its existing metadata block re-entry.
++	remove_child(survivor)
++	for frame in 3: await get_tree().process_frame
++	check(_contains(support._registered_controls,survivor_scroll) and _contains(guard._scopes,survivor),"temporarily detached live controls retain registration")
++	add_child(survivor)
++	for frame in 3: await get_tree().process_frame
++	check(_contains(support._registered_controls,survivor_scroll) and _contains(guard._functional,survivor_button),"re-entered controls keep their actual observer membership")
++	survivor.queue_free()
++	for frame in 4: await get_tree().process_frame
++	check(guard._functional.is_empty() and guard._modals.is_empty() and guard._scopes.is_empty() and support._registered_controls.is_empty(),"all owned registration containers drain after final destruction")
++	await _layout_lifetimes()
++	if not proof.write_receipt("ui_registry_retirement_test",checks,failures.size()): failures.append("receipt")
++	print("UI_REGISTRY_RETIREMENT_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
++
++func _layout_lifetimes() -> void:
++	var observer := Layout.new()
++	var original_registry: Variant = observer.get("_target_tokens")
++	var original_size: int = original_registry.size() if original_registry is Dictionary else 0
++	var contract := {"schemaVersion":Layout.SCHEMA_VERSION,"profiles":{"inventory":{"logicalDesignSize":[100.0,100.0],
++		"nodes":{"BagPanel":{"logicalRect":[20.0,20.0,30.0,30.0],"visible":true}}}}}
++	for cycle in 3:
++		var owners: Array[Control] = []
++		for index in 10:
++			var owner := Control.new(); owner.size = Vector2(100,100); add_child(owner)
++			var bag := Control.new(); bag.name = "BagPanel"; owner.add_child(bag)
++			Layout.apply_profile(owner,"inventory",contract)
++			owners.append(owner)
++		for frame in 4: await get_tree().process_frame
++		var applied := true
++		for owner: Control in owners:
++			applied = applied and Layout.profile_is_ready(owner,"inventory")
++			owner.queue_free()
++		check(applied,"real layout applications complete before owner deletion: "+str(cycle))
++		owners.clear()
++		for frame in 4: await get_tree().process_frame
++		var registry: Variant = observer.get("_target_tokens")
++		check(not registry is Dictionary or registry.size() <= original_size,"destroyed layout targets leave no process-lifetime token entries: "+str(cycle))
++
++func _dead(refs: Array) -> int:
++	var count := 0
++	for reference: WeakRef in refs:
++		if reference.get_ref() == null: count += 1
++	return count
++
++func _contains(refs: Array,target: Node) -> bool:
++	for reference: WeakRef in refs:
++		if reference.get_ref() == target: return true
++	return false
+--- old/tests/framework/ui_registry_retirement_test.tscn
++++ new/tests/framework/ui_registry_retirement_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/ui_registry_retirement_test.gd" id="1"]
++
++[node name="UIRegistryRetirement" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/world_retirement_test.gd
++++ new/tests/framework/world_retirement_test.gd
+@@ -0,0 +1,63 @@
++extends Node
++const Root := preload("res://scripts/game_root.gd")
++const Coordinator := preload("res://scripts/monster_visual_streaming_coordinator.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++class ExitProbe extends Root:
++	var spawn_attempts := 0
++	# This focused lifecycle fixture observes the real Root exit and wakeup,
++	# without loading a second playable world. Natural cycles test full setup.
++	func _ready() -> void: pass
++	func _process(_delta: float) -> void: pass
++	func _physics_process(_delta: float) -> void: pass
++	func _spawn_enemy(_data: Dictionary,_position: Vector2,_boss: bool,_seconds := -1.0,_context: Dictionary = {}) -> EnemyActor:
++		spawn_attempts += 1
++		return null
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++func _frames() -> void:
++	for frame in 4: await get_tree().process_frame
++
++func _run() -> void:
++	var old := ExitProbe.new(); add_child(old)
++	old._streaming_coordinator = Coordinator.new()
++	MonsterVisual.set_streaming_coordinator(old._streaming_coordinator)
++	var newer := Coordinator.new()
++	MonsterVisual.set_streaming_coordinator(newer)
++	old.queue_free(); await _frames()
++	check(MonsterVisual.streaming_coordinator() == newer,"older world's real exit preserves the newer global coordinator")
++	MonsterVisual.set_streaming_coordinator(null); newer = null
++	var live := ExitProbe.new(); add_child(live)
++	live._respawn_later(GameData.get_monster_by_id(19),Vector2.ZERO,false,0.04,live._zone_generation)
++	await get_tree().create_timer(0.10).timeout
++	check(live.spawn_attempts == 1,"live world keeps original timer and performs one due spawn attempt")
++	live.queue_free(); await _frames()
++	var reentered := ExitProbe.new(); add_child(reentered)
++	reentered._respawn_later(GameData.get_monster_by_id(19),Vector2.ZERO,false,300.0,reentered._zone_generation)
++	remove_child(reentered); add_child(reentered)
++	reentered._respawn_later(GameData.get_monster_by_id(19),Vector2.ZERO,false,0.04,reentered._zone_generation)
++	await get_tree().create_timer(0.10).timeout
++	check(reentered.spawn_attempts == 1,"cancelled old callback cannot spawn early or consume a new live wakeup after re-entry")
++	reentered.queue_free(); await _frames()
++	var baseline := int(Performance.get_monitor(Performance.OBJECT_COUNT))
++	var counts: Array[int] = []
++	for cycle in 3:
++		var game := ExitProbe.new(); add_child(game)
++		game._respawn_later(GameData.get_monster_by_id(19),Vector2.ZERO,false,300.0,game._zone_generation)
++		game._respawn_later(GameData.get_monster_by_id(19),Vector2.ZERO,false,3600.0,game._zone_generation)
++		check(game.spawn_attempts == 0,"future wakeups do not spawn early: "+str(cycle))
++		game.queue_free(); await _frames()
++		var count := int(Performance.get_monitor(Performance.OBJECT_COUNT))
++		counts.append(count)
++		check(count <= baseline,"retired world releases both long-delay wakeups instead of retaining them until their deadlines: "+str(cycle))
++	print("WORLD_RETIREMENT_TRACE ",JSON.stringify({"baseline_objects":baseline,"after_retirement_objects":counts}))
++	if not proof.write_receipt("world_retirement_test",checks,failures.size()): failures.append("receipt")
++	print("WORLD_RETIREMENT_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/world_retirement_test.tscn
++++ new/tests/framework/world_retirement_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/world_retirement_test.gd" id="1"]
++
++[node name="WorldRetirement" type="Node"]
++script = ExtResource("1")

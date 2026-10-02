@@ -21,7 +21,11 @@ func _run() -> void:
 		Fixture.corrupt(self,data)
 		PlayerState.load_save()
 		var continued := await Fixture.probe(self,data)
-		if not continued.is_empty(): await _recovery_failure_and_repeat(continued)
+		if not continued.is_empty():
+			await _recovery_failure_and_repeat(continued)
+			check(Fixture.write(data.path+".bak",data.bytes) and DirAccess.remove_absolute(ProjectSettings.globalize_path(data.path)) == OK,"only this fixture's primary is removed for a separate missing-v2-primary case")
+			PlayerState.load_save()
+			await Fixture.probe(self,data)
 	_finish()
 func _recovery_failure_and_repeat(data: Dictionary) -> void:
 	var path: String = data.path
@@ -50,6 +54,13 @@ func _recovery_failure_and_repeat(data: Dictionary) -> void:
 	check(PlayerState.inventory == current and PlayerState._json_persistence.pending_count() == 0 and PlayerState._json_persistence.completed_count == completed,"repeated recovery refusal creates no writer or ownership delta")
 	check(bool(PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(data.new_request)).get("durable",false)),"preserved prior-epoch result remains a read-only replay after v3 recovery")
 	check(PlayerState.save_game(true,true,true),"successful recovery clears the failed-restore write lock through the existing loader")
+
+	check(Fixture.write(path+".bak",checkpoint) and DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK,"owned missing-v3-primary case retains the original valid checkpoint")
+	PlayerState.load_save()
+	check(bool(PlayerState.last_load_result.get("success",false)) and PlayerState._item_transaction_journal.epoch != data.epoch and FileAccess.file_exists(path),"missing v3 primary restores through durable fresh-epoch promotion")
+	var restored_before: Array = PlayerState.inventory.duplicate(true)
+	var stale: Dictionary = PlayerState.commit_item_transaction(quote)
+	check(not bool(stale.get("success",false)) and not stale.has("job") and PlayerState.inventory == restored_before and PlayerState._json_persistence.pending_count() == 0,"missing-primary recovery also rejects the original cached lost v3 command without a writer")
 
 func _finish() -> void:
 	if not proof.write_receipt("item_journal_v2_backup_test",proof.records.size(),failures.size()): failures.append("receipt")

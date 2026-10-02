@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "cbfd7184-6c5a-4b3d-929d-63dfe0dd2adc",
+    "source_content_sha256":  "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+    "producers":  {
+                      "item_journal_v2_backup_seed_test":  {
+                                                               "scene_id":  "item_journal_v2_backup_seed_test",
+                                                               "run_id":  "24cd8b99-379c-4ec3-ae7b-3586b3411de3",
+                                                               "source_content_sha256":  "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "4830b8f33e63ea14a964f33cd89fc0329dce26d27ddd027d05421008bd1f154c"
+                                                           },
+                      "item_journal_v2_backup_cold_test":  {
+                                                               "scene_id":  "item_journal_v2_backup_cold_test",
+                                                               "run_id":  "d7f061d3-0302-4325-a604-286e6c001c52",
+                                                               "source_content_sha256":  "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "b039ddc4df069a75e0d819ccdeba637e0972b87c08e1f7e09c7392947062ce67"
+                                                           },
+                      "item_journal_v2_backup_restart_test":  {
+                                                                  "scene_id":  "item_journal_v2_backup_restart_test",
+                                                                  "run_id":  "8c157cc9-54bf-4272-95d2-ffe95067c77f",
+                                                                  "source_content_sha256":  "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "b17cbb506b306c62176e08046bf4fbae4e1f54a4fd793d7f8962ec776866e221"
+                                                              }
+                  }
+}

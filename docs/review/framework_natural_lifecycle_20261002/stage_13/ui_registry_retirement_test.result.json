@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real dynamic controls register in cycle 0",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 0",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "scroll registry retires destroyed nodes without drag: 0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "live control/scoping identities remain registered: 0",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real dynamic controls register in cycle 1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 1",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "scroll registry retires destroyed nodes without drag: 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "live control/scoping identities remain registered: 1",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real dynamic controls register in cycle 2",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 2",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "scroll registry retires destroyed nodes without drag: 2",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "live control/scoping identities remain registered: 2",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "temporarily detached live controls retain registration",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "re-entered controls keep their actual observer membership",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "all owned registration containers drain after final destruction",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "a44efd5e-f3a9-4c5c-8cae-324d1e2ecd02",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "ea5091fd-3e5a-41b3-b2ad-eb53cea24048",
+  "scene_id": "ui_registry_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "9759166541c1e077c46780cffc427aee66866d5848de106db789e783e01e5de8",
+  "status": "PASS"
+}

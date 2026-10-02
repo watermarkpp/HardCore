@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "ui_registry_retirement_test",
+                        "test_path":  "tests/framework/ui_registry_retirement_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-02T10:38:20.2917302Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  3,
+                        "engine_log_failure_count":  3,
+                        "framework_run_id":  "f652d9f3-4bdf-46a7-b090-f70d56b17dbb",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_3;engine_log_failures_3;framework_receipt_wrong_run;framework_receipt_wrong_source"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "28e51f54-9bb4-4963-88bf-44cfb9199bcc",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  3,
+    "generated_at":  "2026-10-02T18:37:52.9227366+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

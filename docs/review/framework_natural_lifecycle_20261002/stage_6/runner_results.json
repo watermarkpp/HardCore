@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "natural_effect_recovery_cycles_test",
+                        "test_path":  "tests/framework/natural_effect_recovery_cycles_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T10:20:15.8959914Z",
+                        "native_exit_observed_utc":  "2026-10-02T10:19:52.2763152Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "92f19d9a-1614-47e6-8eb4-59d17f86a548",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "047342ec-76c6-4b79-8609-58d3c729dd41",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-02T18:19:53.4046496+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

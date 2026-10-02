@@ -247,6 +247,7 @@ var current_zone := ""
 var current_map_id := -1
 var current_map_data: Dictionary = {}
 var _zone_generation := 0
+var _respawn_wakeups: Dictionary = {}
 var _ready_world_map_id := -1
 var _ready_world_zone_generation := -1
 var _monster_terrain_navigation_context: Dictionary = {}
@@ -1760,6 +1761,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	_cancel_respawn_wakeups()
 	if _feature_effect_runtime != null:
 		_feature_effect_runtime.clear()
 	_poll_prepared_enemy_death_settlement(true)
@@ -1784,6 +1786,11 @@ func _exit_tree() -> void:
 		_town_music_controller.cancel("world_exited")
 	PlayerState.clear_taoist_main_pets_persistence_provider()
 	PlayerState.unregister_profile_gameplay_owner(self)
+	# Child visuals have already unregistered at this boundary. The static
+	# access path must not prolong this world's coordinator/cache lifetime,
+	# and an older exiting world must never detach a newer world's owner.
+	if MonsterVisualScript.streaming_coordinator() == _streaming_coordinator:
+		MonsterVisualScript.set_streaming_coordinator(null)
 
 
 func _notification(what: int) -> void:
@@ -4321,6 +4328,7 @@ func _load_zone(zone_name: String, initial: bool, map_data: Dictionary) -> void:
 		if map_data.is_empty() or int(map_data.get("mapId", -1)) == current_map_id:
 			return
 	_zone_generation += 1
+	_cancel_respawn_wakeups()
 	_cancel_pending_enemy_deaths_for_generation_change()
 	if _loot_pickup_runtime_manager != null:
 		_loot_pickup_runtime_manager.clear_map(current_map_id)
@@ -14735,7 +14743,14 @@ func _respawn_later(
 	generation: int,
 	spawn_context: Dictionary = {}
 ) -> void:
-	await get_tree().create_timer(seconds).timeout
+	var wakeup := get_tree().create_timer(seconds)
+	var identity := wakeup.get_instance_id()
+	_respawn_wakeups[identity] = wakeup
+	await wakeup.timeout
+	# A retired owner may have re-entered the tree before the cancelled timer
+	# is reclaimed. Only a still-owned wakeup can attempt the original spawn.
+	if not _respawn_wakeups.erase(identity):
+		return
 	if not is_inside_tree() or generation != _zone_generation:
 		return
 	var slot_id := str(spawn_context.get("spawn_slot_id", ""))
@@ -14748,6 +14763,16 @@ func _respawn_later(
 		float(spawn_context.get("respawn_base_seconds", seconds)),
 		spawn_context
 	)
+
+
+func _cancel_respawn_wakeups() -> void:
+	# Preserve the original SceneTreeTimer clock while this world is live.
+	# Retirement revokes dispatch first, then lets SceneTree reclaim timers on
+	# its next idle pass instead of retaining dead-world wakeups for 5-60 min.
+	var retiring: Array = _respawn_wakeups.values()
+	_respawn_wakeups.clear()
+	for wakeup: SceneTreeTimer in retiring:
+		wakeup.time_left = 0.0
 
 
 func _spawn_slot_is_alive(slot_id: String, generation: int) -> bool:

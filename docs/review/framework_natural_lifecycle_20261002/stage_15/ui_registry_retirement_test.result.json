@@ -1,0 +1,121 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real dynamic controls register in cycle 0",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 0",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "scroll registry retires destroyed nodes without drag: 0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "live control/scoping identities remain registered: 0",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real dynamic controls register in cycle 1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 1",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "scroll registry retires destroyed nodes without drag: 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "live control/scoping identities remain registered: 1",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real dynamic controls register in cycle 2",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 2",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "scroll registry retires destroyed nodes without drag: 2",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "live control/scoping identities remain registered: 2",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "temporarily detached live controls retain registration",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "re-entered controls keep their actual observer membership",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "all owned registration containers drain after final destruction",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real layout applications complete before owner deletion: 0",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "destroyed layout targets leave no process-lifetime token entries: 0",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "real layout applications complete before owner deletion: 1",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "destroyed layout targets leave no process-lifetime token entries: 1",
+      "passed": false
+    },
+    {
+      "id": 20,
+      "label": "real layout applications complete before owner deletion: 2",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "destroyed layout targets leave no process-lifetime token entries: 2",
+      "passed": false
+    }
+  ],
+  "count": 21,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "d6b95f42-6c1c-438d-b219-93ecd12f2c37",
+  "passed": 18,
+  "reported_checks": 21,
+  "reported_failures": 3,
+  "run_id": "ec850248-a471-47d9-96c4-aa613b58dfa5",
+  "scene_id": "ui_registry_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "6ed96c8e007bab9a52df9c8efdd041fe1bb8a3eab8c1ad8f454cf3ed9507ede2",
+  "status": "FAIL"
+}

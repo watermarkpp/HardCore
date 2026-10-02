@@ -13,6 +13,27 @@ var _active_touch_index := -1
 var _press_position := Vector2.ZERO
 var _dragging := false
 var _button_states_before_gesture: Array[Dictionary] = []
+var _registry_cleanup_queued := false
+
+
+func _ready() -> void:
+	get_tree().node_removed.connect(_on_registered_tree_removal)
+
+
+func _on_registered_tree_removal(node: Node) -> void:
+	if not (node is ScrollContainer or node is RichTextLabel) or _registry_cleanup_queued:
+		return
+	_registry_cleanup_queued = true
+	_prune_destroyed_registrations.call_deferred()
+
+
+func _prune_destroyed_registrations() -> void:
+	_registry_cleanup_queued = false
+	# Keep still-live detached/reparented controls and their registration meta.
+	# Only destroyed identities cease to own a slot; no input is consumed.
+	for index in range(_registered_controls.size()-1,-1,-1):
+		if _registered_controls[index].get_ref() == null:
+			_registered_controls.remove_at(index)
 
 
 static func attach_tree(root: Node) -> Node:

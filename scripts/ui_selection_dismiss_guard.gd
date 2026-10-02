@@ -19,6 +19,7 @@ var _modals: Array[WeakRef] = []
 var _pointers: Dictionary = {}
 var _generation := 0
 var _order_refresh_queued := false
+var _registry_cleanup_queued := false
 
 static func attach(scope: Control) -> void:
 	if scope == null or scope.get_tree() == null:
@@ -69,7 +70,23 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_scan_existing(get_tree().root)
 	get_tree().node_added.connect(_register_node)
+	get_tree().node_removed.connect(_on_registered_tree_removal)
 	_queue_observer_order_refresh()
+
+func _on_registered_tree_removal(node: Node) -> void:
+	if not (node is Control or node is Window) or _registry_cleanup_queued:
+		return
+	# Coalesce an entire UI teardown. Removal is signalled before destruction;
+	# inspect weak targets after that transaction, without waiting for a tap.
+	_registry_cleanup_queued = true
+	_prune_destroyed_registrations.call_deferred()
+
+func _prune_destroyed_registrations() -> void:
+	_registry_cleanup_queued = false
+	for refs: Array in [_scopes,_functional,_modals]:
+		for index in range(refs.size()-1,-1,-1):
+			if (refs[index] as WeakRef).get_ref() == null:
+				refs.remove_at(index)
 
 func _scan_existing(node: Node) -> void:
 	_register_node(node)

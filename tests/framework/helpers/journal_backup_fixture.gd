@@ -72,8 +72,11 @@ static func probe(host: Node, data: Dictionary) -> Dictionary:
 	var conflict: Dictionary = PlayerState.quote_item_transaction(changed)
 	host.check(not bool(conflict.get("success",false)) and conflict.get("reason") == "item_operation_epoch_mismatch",label+": changing request contents cannot recycle the old ID")
 	var result: Dictionary = PlayerState.commit_item_transaction(stale)
-	host.check(not bool(result.get("success",false)) and not result.has("job") and PlayerState._json_persistence.pending_count() == 0,label+": old complete quote cannot create another writer")
+	host.check(not bool(result.get("success",false)) and not result.has("job") and PlayerState._json_persistence.pending_count() == 0,label+": refreshed rejected request cannot create another writer")
 	if result.has("job"): await wait_job(host,result.job)
+	var cached: Dictionary = PlayerState.commit_item_transaction(data.old_quote)
+	host.check(not bool(cached.get("success",false)) and cached.get("reason") == "stale_item_quote" and not cached.has("job"),label+": original cached successful quote is revalidated and cannot create a writer")
+	if cached.has("job"): await wait_job(host,cached.job)
 	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
 	host.check(PlayerState.inventory == before and PlayerState.gold == gold and PlayerState.experience == xp and PlayerState._item_transaction_journal == journal and FileAccess.get_file_as_bytes(data.path) == bytes and PlayerState._json_persistence.completed_count == completed,label+": refusals cause zero ownership/resource/journal/file/completion changes")
 	if journal.get("epoch") == data.epoch: return {}

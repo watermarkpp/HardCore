@@ -1,0 +1,496 @@
+{
+  "final_natural": {
+    "local_run": "p6_final_heavy_185552_084552",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_related": {
+    "local_run": "p6_final_related_185722_111728",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/item_journal_v2_backup_test.tscn','tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/framework/profile_gameplay_owner_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/feature_melee_ticket_paths_test.tscn','tests/framework/feature_batch_failure_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/ui_r5_dismiss_guard_input_order_test.tscn','tests/touch_scroll_support_test.tscn','tests/character_select_touch_scroll_test.tscn','tests/boss_respawn_map_reentry_test.tscn','tests/monster_respawn_policy_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 19,
+      "failed": 3,
+      "status": "FAIL"
+    }
+  },
+  "final_layout": {
+    "local_run": "layout_transaction_scope_185436_344385",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/device_lab_layout_regression_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_journal_cold": {
+    "local_run": "p6_final_journal_cold_190249_987286",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_seed_test.tscn','tests/framework/item_journal_v2_backup_cold_test.tscn','tests/framework/item_journal_v2_backup_restart_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_0": {
+    "local_run": "natural_effect_baseline_174731_246524",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_1": {
+    "local_run": "natural_effect_first_runtime_175025_940842",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_2": {
+    "local_run": "natural_effect_coverage_175324_765753",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_3": {
+    "local_run": "natural_effect_complete_input_180033_288167",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    }
+  },
+  "stage_4": {
+    "local_run": "natural_exact_rewards_181115_020770",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_5": {
+    "local_run": "natural_recovery_cycles_181731_656591",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_6": {
+    "local_run": "natural_recovery_owners_181913_706382",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_7": {
+    "local_run": "natural_recovery_idle_182134_757800",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_8": {
+    "local_run": "natural_recovery_detach_182416_495961",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_9": {
+    "local_run": "natural_recovery_green_182855_159493",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_10": {
+    "local_run": "natural_recovery_cache_183222_708061",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_11": {
+    "local_run": "natural_recovery_observers_183536_025312",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_12": {
+    "local_run": "ui_retirement_red_182644_983802",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_13": {
+    "local_run": "ui_retirement_green_182755_902185",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn','tests/ui_r5_dismiss_guard_input_order_test.tscn','tests/touch_scroll_support_test.tscn','tests/character_select_touch_scroll_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_14": {
+    "local_run": "layout_retirement_red_183748_090772",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_15": {
+    "local_run": "layout_retirement_red_native_183821_151082",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_16": {
+    "local_run": "layout_retirement_green_184100_732359",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn','tests/device_lab_runtime_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_17": {
+    "local_run": "world_retirement_red_184246_925681",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/world_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "stage_18": {
+    "local_run": "world_retirement_green_184430_189592",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/world_retirement_test.tscn','tests/boss_respawn_map_reentry_test.tscn','tests/monster_respawn_policy_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_19": {
+    "local_run": "p6_natural_final_184617_593376",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_20": {
+    "local_run": "journal_cached_missing_175419_693156",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/item_journal_v2_backup_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "stage_21": {
+    "local_run": "device_lab_baseline_93_185350_638968",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/device_lab_runtime_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  }
+}

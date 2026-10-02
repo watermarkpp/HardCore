@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "device_lab_layout_regression_test",
+                        "test_path":  "tests/device_lab_layout_regression_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T10:55:08.5719703Z",
+                        "native_exit_observed_utc":  "2026-10-02T10:54:45.8210298Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "76bd5219-1722-468f-9089-ebc630829e9f",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-02T18:54:47.2362575+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "older world's real exit preserves the newer global coordinator",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "live world keeps original timer and performs one due spawn attempt",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "future wakeups do not spawn early: 0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "retired world releases both long-delay wakeups instead of retaining them until their deadlines: 0",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "future wakeups do not spawn early: 1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "retired world releases both long-delay wakeups instead of retaining them until their deadlines: 1",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "future wakeups do not spawn early: 2",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "retired world releases both long-delay wakeups instead of retaining them until their deadlines: 2",
+      "passed": false
+    }
+  ],
+  "count": 8,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "68769a8e-516a-4800-ac38-cf4b3e03be7c",
+  "passed": 5,
+  "reported_checks": 8,
+  "reported_failures": 3,
+  "run_id": "73217dd7-3c85-429f-a046-4a319be32660",
+  "scene_id": "world_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "67403d6d74cd11fb74292ba4f280c5746b3fde50734a7daee9e3d0cf63a0dd7b",
+  "status": "FAIL"
+}

@@ -1,0 +1,12 @@
+{
+  "scope": "all four production changes restored to exact 93b75ae Git blobs for this test only",
+  "exit_code": 1,
+  "output": "{\"evidence\": \"C:\\\\Users\\\\Administrator\\\\.codex\\\\worktrees\\\\pluggable-framework-v2\\\\HardCore\\\\outputs\\\\r3_takeover\\\\20260930\\\\validation\\\\device_lab_baseline_93_185350_638968\", \"command\": [\"powershell\", \"-NoProfile\", \"-ExecutionPolicy\", \"Bypass\", \"-Command\", \"& './tools/run_godot_tests.ps1' -TestPaths 'tests/device_lab_runtime_test.tscn' -TimeoutSeconds 30\"], \"timeout_seconds\": 30, \"exit_code\": 1, \"source_stable_during_run\": true, \"passed\": 0, \"failed\": 1, \"status\": \"FAIL\"}\r\n",
+  "restored_exact_hashes": {
+    "scripts/game_root.gd": "000abbb0308ab6a809ceec80a32a8684cd6253f949e25589e75c2943c20c39b0",
+    "scripts/ui_selection_dismiss_guard.gd": "5d327cb26562d567e259df6dab8337bd438c78ed7652bfeab10b3db8d547ea07",
+    "scripts/touch_scroll_support.gd": "779c2479c071ec4c42f0682b228cc58b197620c43df910e0550260af6f173d7f",
+    "scripts/ui_runtime_layout_overrides.gd": "17c8ecace877c12844f0faa0ecc7b4e20a868a45150c8ef2d1ba6c6ba37f0de1"
+  },
+  "restored_exact": true
+}

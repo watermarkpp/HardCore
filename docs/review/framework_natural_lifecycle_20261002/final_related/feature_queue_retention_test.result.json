@@ -1,0 +1,106 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual effect runtime configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "qualified test source enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real compiled binding used",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "continuous producers preserve exactly one necessary pending fact",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "fully consumed batches release their ActorRef objects even while queue remains nonempty: 0",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "retained batch containers are bounded by necessary pending facts",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "production budget pump drains the remaining fact and every queue container",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "every real fact is dispatched exactly once in the 257 two-receiver batches",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "queue retirement preserves all historical deduplication receipts",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "final fully consumed batch releases its own target handle",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "final fully consumed batch releases its own target handle",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "final drain processes precisely the sole pending fact",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "old release replay remains deduplicated after its queue container is reclaimed",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "replay neither loses nor adds an old receipt",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "all queue operations complete without hidden capacity or identity errors",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "world teardown resets the queue",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "explicitly cleared owner can accept and drain a new queue",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "test source withdrawn",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b4add2e3-0322-419f-89c1-03239f19b29d",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "e6ef7db1-1146-467f-af05-426f21c68b42",
+  "scene_id": "feature_queue_retention_test",
+  "schema_version": 1,
+  "source_content_sha256": "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+  "status": "PASS"
+}

@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "recovery cycles own isolated production account",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "production startup and character creation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "initial equipment and skill saved",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "three qualified sources use existing module service",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cycle 0: official saved profile selected",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cycle 0: real authored world READY",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cycle 0: thirty active AI receivers spawned",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cycle 0: multiple actual accepted casts and Player movement",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cycle 0: live recurring work exists at legitimate world retirement",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cycle 0: actual delivered ticks below original period",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cycle 0: real guarded logout saves before visual transition",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cycle 0: Root exit retires all effects, producers, facts and receipts",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cycle 0: old Root/runtime/world/clock/streaming owners are released",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "cycle 0: no retired effect category remains runnable",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "cycle 0: actual saved profile reload and both writer queues drained",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cycle 0: no orphan scene nodes",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "four complete same-process moving combat and saved recovery lifecycles",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "open owned bounded cycle evidence",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "cycle evidence write completes",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "7d182aa9-1298-426f-b34d-d5463e1ece0c",
+  "passed": 17,
+  "reported_checks": 19,
+  "reported_failures": 2,
+  "run_id": "264aa262-87fa-4408-9b31-f6d201a12815",
+  "scene_id": "natural_effect_recovery_cycles_test",
+  "schema_version": 1,
+  "source_content_sha256": "51e4cdfea3d353e539145cdd31c3e023368d74219cf18cb3144e8783a8012e15",
+  "status": "FAIL"
+}

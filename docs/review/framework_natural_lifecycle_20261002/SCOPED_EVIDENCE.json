@@ -1,0 +1,199 @@
+{
+  "parent": "93b75aef8d05ff6277b8495e63f1d8fb501c25ff",
+  "content_sha256": "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+  "source_files": 3538,
+  "production_delta": [
+    "scripts/game_root.gd",
+    "scripts/touch_scroll_support.gd",
+    "scripts/ui_runtime_layout_overrides.gd",
+    "scripts/ui_selection_dismiss_guard.gd"
+  ],
+  "native_attempts_final_bytes": 29,
+  "final_unique_native_pass": 26,
+  "framework_checks": 591,
+  "framework_scene_count": 18,
+  "preserved_fixture_failures": 3,
+  "frame_samples": 2966,
+  "wall_usec_recomputed": {
+    "p50": 5770,
+    "p95": 16383,
+    "p99": 20794,
+    "max": 33488
+  },
+  "frames_gt_33333": 1,
+  "frames_gt_50000": 0,
+  "natural": {
+    "accepted_casts": 14.0,
+    "peak_states": 90.0,
+    "deaths": 30.0,
+    "expected_xp": 512.0,
+    "xp_after": 512.0,
+    "peak_deaths": 16.0,
+    "peak_persistence": 2.0,
+    "metrics": {
+      "actual_loss": 8985.0,
+      "admitted_facts": 180.0,
+      "expired": 45.0,
+      "failed": 0.0,
+      "invalidated": 78.0,
+      "maximum_tick_delivery_lateness_usec": 733333.0,
+      "optional_cue_missing": 123.0,
+      "peak_pending": 26.0,
+      "peak_receipts": 75.0,
+      "peak_reservations": 1.0,
+      "peak_states": 90.0,
+      "refreshed": 417.0,
+      "retired_receipts": 540.0,
+      "started": 123.0,
+      "tick_delivery_count": 899.0,
+      "ticks": 899.0
+    },
+    "maximum_pending_age_frames": {
+      "death_work:317072606804": 38.0,
+      "feature_effects:317072606804": 111.0,
+      "persistence:-9223371967212550676": 6.0,
+      "persistence:-9223371967246105112": 6.0,
+      "resource_completion:-9223371719496956290": 3283.0
+    },
+    "maximum_service_age_frames": {
+      "death_work:317072606804": 5.0,
+      "feature_effects:317072606804": 2.0,
+      "persistence:-9223371967212550676": 0.0,
+      "persistence:-9223371967246105112": 2.0,
+      "resource_completion:-9223371719496956290": 2.0
+    },
+    "cleanup": {
+      "memory_after_observation_clear": 920790822,
+      "memory_before_observation_clear": 924367622,
+      "objects_after_clear": 3966,
+      "objects_before_clear": 3980,
+      "orphan_nodes_after_clear": 0,
+      "sample_count": 2966
+    }
+  },
+  "cycles": [
+    {
+      "cycle": 0,
+      "objects": 3953,
+      "resources": 935,
+      "memory_static": 919579957,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ticks": 194,
+      "motion_gu": 5.11118125915527,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "objects": 3957,
+      "resources": 935,
+      "memory_static": 919758097,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ticks": 195,
+      "motion_gu": 5.08340454101563,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "objects": 3957,
+      "resources": 935,
+      "memory_static": 919790801,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ticks": 197,
+      "motion_gu": 5.1667366027832,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "cycle": 3,
+      "objects": 3957,
+      "resources": 935,
+      "memory_static": 920068749,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ticks": 195,
+      "motion_gu": 5.08340263366699,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    }
+  ],
+  "source_zip_sha256": "26f1ef945a7c6018a736dad15af8db641f8d971bf18de1f625d812eca378ef62",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "open": [
+    "R3 V4 performance regression",
+    "Android/GPU/device NOT_RUN",
+    "exact v97 B MISSING",
+    "main integration and APK NOT_RUN",
+    "physical power loss/forced termination and external healthy old-primary replacement NOT_RUN",
+    "infinite-duration memory bound not claimed"
+  ],
+  "warnings": "Existing ObjectDB shutdown warnings remain in some natural/combined/safe-logout/boss processes; zero engine errors is not warning-free."
+}

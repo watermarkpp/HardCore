@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "2->1: actual profile creation",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "2->1: actual initial save",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "2->1: actual transaction 1 failed { \"success\": false }",
+      "passed": false
+    }
+  ],
+  "count": 6,
+  "engine_version": "4.7-stable (official)",
+  "failed": 3,
+  "invocation_id": "b4add2e3-0322-419f-89c1-03239f19b29d",
+  "passed": 3,
+  "reported_checks": 6,
+  "reported_failures": 3,
+  "run_id": "e78c0684-ee61-4f55-ab30-dffb513b3324",
+  "scene_id": "item_journal_v2_backup_seed_test",
+  "schema_version": 1,
+  "source_content_sha256": "ddedfaffe7671f31c3d5b05ed446a2af1644f0265cde4f677dc54a6b3f8ae510",
+  "status": "FAIL"
+}

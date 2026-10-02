@@ -39,7 +39,19 @@ const EXTERNAL_PROFILE_ALLOWED_ENTRY_KEYS := {
 
 static var _contract: Dictionary = {}
 static var _loaded := false
-static var _target_tokens: Dictionary = {}
+const TARGET_TOKEN_META := &"_hc_layout_application_token"
+
+
+static func _target_token(target: Control) -> int:
+	return int(target.get_meta(TARGET_TOKEN_META,0)) if is_instance_valid(target) else 0
+
+
+static func _next_target_token(target: Control) -> int:
+	# The application generation belongs to this exact live Control. It
+	# survives reparenting and is destroyed with its owner, not kept globally.
+	var token := _target_token(target)+1
+	target.set_meta(TARGET_TOKEN_META,token)
+	return token
 
 
 ## Captures only the static controls addressed by an incoming patch.  The
@@ -111,9 +123,7 @@ static func apply_external_profile_transaction(
 		failure["error"] = str(plan_result.get("error", "plan_failed"))
 		return failure
 	var plan: Array = plan_result.get("plan", [])
-	var target_id := target.get_instance_id()
-	var token := int(_target_tokens.get(target_id, 0)) + 1
-	_target_tokens[target_id] = token
+	var token := _next_target_token(target)
 	var backups: Array = []
 	for item: Dictionary in plan:
 		var control: Control = item.get("control") as Control
@@ -227,7 +237,7 @@ static func _build_external_plan(target: Control, entries: Dictionary) -> Dictio
 static func _transaction_valid(target: Control, plan: Array, token: int) -> bool:
 	if not _can_write(target, target):
 		return false
-	if int(_target_tokens.get(target.get_instance_id(), 0)) != token:
+	if _target_token(target) != token:
 		return false
 	for item: Dictionary in plan:
 		if not _can_write(target, item.get("control") as Control):
@@ -324,9 +334,7 @@ static func apply_profile(
 	if entries.is_empty():
 		return
 	target.set_meta(_ready_meta_key(profile_id), false)
-	var target_id := target.get_instance_id()
-	var token := int(_target_tokens.get(target_id, 0)) + 1
-	_target_tokens[target_id] = token
+	var token := _next_target_token(target)
 	var resolved: Array[Dictionary] = []
 	var inventory_map := _legacy_inventory_map(target, entries)
 	var quest_map := _legacy_quest_map(target, entries)
@@ -350,7 +358,7 @@ static func apply_profile(
 	# anchors and minimum sizes may settle after the parent has changed.
 	for pass_index in 2:
 		for item in resolved:
-			if int(_target_tokens.get(target_id, 0)) != token:
+			if _target_token(target) != token:
 				return
 			var raw_control: Variant = item["control"]
 			if not is_instance_valid(raw_control):
@@ -361,16 +369,16 @@ static func apply_profile(
 			if not _can_write(target, control):
 				return
 			_apply_geometry(control, item["entry"] as Dictionary, profile, target, str(item["path"]))
-			if int(_target_tokens.get(target_id, 0)) != token:
+			if _target_token(target) != token:
 				return
 		await tree.process_frame
 		if not _can_write(target, target):
 			return
-		if int(_target_tokens.get(target_id, 0)) != token:
+		if _target_token(target) != token:
 			return
 		# Font and visibility are deliberately applied without saved text content.
 	for item in resolved:
-		if int(_target_tokens.get(target_id, 0)) != token:
+		if _target_token(target) != token:
 			return
 		var raw_control: Variant = item["control"]
 		if not _can_write(target, raw_control):
@@ -389,11 +397,11 @@ static func apply_profile(
 	await tree.process_frame
 	if not _can_write(target, target):
 		return
-	if int(_target_tokens.get(target_id, 0)) != token:
+	if _target_token(target) != token:
 		return
 	# Reassert geometry after font/minimum-size changes.
 	for item in resolved:
-		if int(_target_tokens.get(target_id, 0)) != token:
+		if _target_token(target) != token:
 			return
 		var raw_control: Variant = item["control"]
 		if not is_instance_valid(raw_control):
@@ -401,7 +409,7 @@ static func apply_profile(
 		var control := raw_control as Control
 		if _can_write(target, control):
 			_apply_geometry(control, item["entry"] as Dictionary, profile, target, str(item["path"]))
-	if int(_target_tokens.get(target_id, 0)) == token and _can_write(target, target):
+	if _target_token(target) == token and _can_write(target, target):
 		target.set_meta(_ready_meta_key(profile_id), true)
 		if target.has_method("_on_runtime_layout_profile_applied"):
 			target.call("_on_runtime_layout_profile_applied", profile_id)
