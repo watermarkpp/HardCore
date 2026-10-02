@@ -28,6 +28,17 @@ func _run() -> void:
 	target.max_hp = 100000; target.current_hp = 100000; target.agility = 0
 	game.player.attack_min = 100; game.player.attack_max = 100
 	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"real default-off ignite module enabled")
+	var plan_lease: RefCounted = game._capture_melee_configuration()
+	var actor: Dictionary = game._action_configuration_identity()
+	check(plan_lease.accept(PlayerState.action_configuration_versions(),actor) and plan_lease.effect_reservation() != null,"internal planning fixture owns a real accepted melee reservation")
+	var release_id := "player:%d:action:%d" % [game.player.get_instance_id(),game.player._combat_action_sequence+1]
+	check(plan_lease.begin_release(actor,release_id),"outer owner claims the pending release once")
+	check(not plan_lease.begin_plan(actor,"wrong:release",true) and not plan_lease._producer_closed,"wrong delegated identity cannot consume an open producer's plan")
+	check(plan_lease.begin_plan(actor,release_id,true),"same open producer enters its delegated planner once")
+	check(not plan_lease._producer_closed and not plan_lease.begin_plan(actor,release_id,true),"second internal plan is rejected while producer is still explicitly open")
+	check(not plan_lease.begin_release(actor,release_id),"outer release remains one-shot before producer close")
+	plan_lease.finish_producer()
+	check(int(game._feature_effect_runtime.reservation_snapshot().actions) == 0,"unused open-plan fixture returns its real capacity at explicit producer end")
 	await _swing(game,target,"armed_fire",true,false)
 	await _swing(game,target,"half_moon",false,false)
 	await _swing(game,target,"thrust",false,true)

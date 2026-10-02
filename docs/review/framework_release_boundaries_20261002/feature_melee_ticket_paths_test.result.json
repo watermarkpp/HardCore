@@ -1,0 +1,206 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal melee world ready",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual mapped receiver exists",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real default-off ignite module enabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "internal planning fixture owns a real accepted melee reservation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "outer owner claims the pending release once",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "wrong delegated identity cannot consume an open producer's plan",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "same open producer enters its delegated planner once",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "second internal plan is rejected while producer is still explicitly open",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "outer release remains one-shot before producer close",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "unused open-plan fixture returns its real capacity at explicit producer end",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "armed_fire: actual input accepts",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "armed_fire: potential fire outcome owns a real nonempty reservation",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "armed_fire: same accepted lease reaches canonical planner exactly once",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "armed_fire: hit-frame body choice remains authoritative",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "armed_fire: actual base HP commit occurs",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "armed_fire: original resource contract is charged exactly once",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "armed_fire: old armed charge is consumed by this valid next swing",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "armed_fire: only the actual fire outcome creates the promised derived work",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "armed_fire: spent or unused capacity returns after the real producer finishes",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "armed_fire: internal-plan route cannot reopen a completed release",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "half_moon: actual input accepts",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "half_moon: potential fire outcome owns a real nonempty reservation",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "half_moon: same accepted lease reaches canonical planner exactly once",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "half_moon: hit-frame body choice remains authoritative",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "half_moon: actual base HP commit occurs",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "half_moon: original resource contract is charged exactly once",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "half_moon: only the actual fire outcome creates the promised derived work",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "half_moon: spent or unused capacity returns after the real producer finishes",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "half_moon: internal-plan route cannot reopen a completed release",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "thrust: actual input accepts",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "thrust: potential fire outcome owns a real nonempty reservation",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "thrust: same accepted lease reaches canonical planner exactly once",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "thrust: hit-frame body choice remains authoritative",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "thrust: actual base HP commit occurs",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "thrust: original resource contract is charged exactly once",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "thrust: only the actual fire outcome creates the promised derived work",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "thrust: spent or unused capacity returns after the real producer finishes",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "thrust: internal-plan route cannot reopen a completed release",
+      "passed": true
+    }
+  ],
+  "count": 38,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "68613773-947e-476d-9bb3-565f70bfeefb",
+  "passed": 38,
+  "reported_checks": 38,
+  "reported_failures": 0,
+  "run_id": "7e03dc16-3457-4bc5-9094-c250a89ba99e",
+  "scene_id": "feature_melee_ticket_paths_test",
+  "schema_version": 1,
+  "source_content_sha256": "d1a98f38a0c1e9566ac870ab45ab9ad26a5e7b8f3f45126952be088f90fdeff4",
+  "status": "PASS"
+}
