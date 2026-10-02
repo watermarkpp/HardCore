@@ -1,0 +1,161 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real default-off module enabled explicitly",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual compiled trigger is used",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "runtime can promise capacity before any damage fact exists",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one action can reserve the exact existing global state capacity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "an accepted producer already owns its clock and port before its first fact",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "another action cannot consume already promised global capacity",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "reservation rejection precedes HP and fact creation",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "unreleased cancelled action returns its entire reservation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "producer capability has no hidden strong owner in the runtime",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "last producer reference releases unused capacity without a timer or TTL",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "negative/oversized bounds reject before accepting an action",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "proved empty world retains a legal empty release without inventing a target",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "sixteen distinct future sources fit each possible receiver",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "seventeenth source rejects even when global space is plentiful",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "seventeen concurrent refresh promises share one source slot rather than imposing an action-count limit",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "fresh real action receives a reservation",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "a new reservation cannot attach itself to another action's release identity",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "live producer capability cannot enter persisted or imported plain data",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "accepted ticket transfers once to its real base producer",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "same ticket cannot create another producer under a different release label",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "complete damage fact transfers into its reserved queue space",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "producer closure retains capacity while the consumer still owns work",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "accepted work creates its promised real state without a late capacity rejection",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "sealed one-shot producer plus exhausted consumer retires only its own receipt",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "retained sealed batch cannot reenter after receipt retirement",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "retained retired ticket cannot recreate the old producer",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "new world can reserve independently",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "old ticket cannot borrow a new world's open reservation",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "old-world callbacks cannot leak or release another action's reservation",
+      "passed": true
+    }
+  ],
+  "count": 29,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "4dc4f368-d8bf-46b8-bb65-098dfef79c15",
+  "passed": 29,
+  "reported_checks": 29,
+  "reported_failures": 0,
+  "run_id": "e4807a68-1cd6-4e1b-8fcf-3198cd0de3c1",
+  "scene_id": "feature_reservation_test",
+  "schema_version": 1,
+  "source_content_sha256": "207c4fc49a77725b80d14c28c4b9b3d2224a9efdb74faacca4d8644463760976",
+  "status": "PASS"
+}

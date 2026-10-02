@@ -18,6 +18,10 @@ func claim(world: Dictionary, release_id: String, skill_id: String, bindings: Ar
 func belongs_to(owner: RefCounted) -> bool:
 	return _owner != null and _owner.get_ref() == owner
 
+func can_begin_release(release_id: String) -> bool:
+	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
+	return not _closed and owner != null and owner.call("_reservation_release_is_valid",_sequence,release_id)
+
 func sequence() -> int: return _sequence
 
 func close() -> void:

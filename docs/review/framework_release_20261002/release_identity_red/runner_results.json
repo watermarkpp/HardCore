@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_release_identity_test",
+                        "test_path":  "tests/framework/feature_release_identity_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T08:41:28.4724380Z",
+                        "native_exit_observed_utc":  "2026-10-02T08:41:15.4060887Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  1,
+                        "engine_log_failure_count":  1,
+                        "framework_run_id":  "dfd8507c-a0a3-42f4-9fbf-3561a3618d40",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1;framework_checks_failed"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "f03b0d82-2cd7-41c8-91a0-a3d9681fba25",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  1,
+    "generated_at":  "2026-10-02T16:41:16.5184583+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

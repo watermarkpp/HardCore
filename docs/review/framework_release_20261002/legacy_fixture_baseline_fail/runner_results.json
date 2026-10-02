@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "warrior_melee_entry_runtime_test",
+                        "test_path":  "tests/skills/warrior_melee_entry_runtime_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-02T08:54:13.5663482Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "b546f64d-bf49-47aa-bbb0-314eaabfc21a",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-02T16:53:55.5078794+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

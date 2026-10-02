@@ -1,0 +1,171 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal melee world ready",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual mapped receiver exists",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real default-off ignite module enabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "armed_fire: actual input accepts",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "armed_fire: potential fire outcome owns a real nonempty reservation",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "armed_fire: same accepted lease reaches canonical planner exactly once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "armed_fire: hit-frame body choice remains authoritative",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "armed_fire: actual base HP commit occurs",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "armed_fire: original resource contract is charged exactly once",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "armed_fire: old armed charge is consumed by this valid next swing",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "armed_fire: only the actual fire outcome creates the promised derived work",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "armed_fire: spent or unused capacity returns after the real producer finishes",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "armed_fire: internal-plan route cannot reopen a completed release",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "half_moon: actual input accepts",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "half_moon: potential fire outcome owns a real nonempty reservation",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "half_moon: same accepted lease reaches canonical planner exactly once",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "half_moon: hit-frame body choice remains authoritative",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "half_moon: actual base HP commit occurs",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "half_moon: original resource contract is charged exactly once",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "half_moon: only the actual fire outcome creates the promised derived work",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "half_moon: spent or unused capacity returns after the real producer finishes",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "half_moon: internal-plan route cannot reopen a completed release",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "thrust: actual input accepts",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "thrust: potential fire outcome owns a real nonempty reservation",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "thrust: same accepted lease reaches canonical planner exactly once",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "thrust: hit-frame body choice remains authoritative",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "thrust: actual base HP commit occurs",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "thrust: original resource contract is charged exactly once",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "thrust: only the actual fire outcome creates the promised derived work",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "thrust: spent or unused capacity returns after the real producer finishes",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "thrust: internal-plan route cannot reopen a completed release",
+      "passed": true
+    }
+  ],
+  "count": 31,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "4dc4f368-d8bf-46b8-bb65-098dfef79c15",
+  "passed": 31,
+  "reported_checks": 31,
+  "reported_failures": 0,
+  "run_id": "fc64482b-407e-453e-a5d9-619c51f86327",
+  "scene_id": "feature_melee_ticket_paths_test",
+  "schema_version": 1,
+  "source_content_sha256": "207c4fc49a77725b80d14c28c4b9b3d2224a9efdb74faacca4d8644463760976",
+  "status": "PASS"
+}

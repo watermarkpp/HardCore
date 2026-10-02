@@ -23,13 +23,17 @@ func _run() -> void:
 	PlayerState.reset_progress(false)
 	PlayerState.level = 50
 	PlayerState.profession = "战士"
-	PlayerState.learned_skills = {"烈火剑法": 3}
+	PlayerState.learned_skills = {"hc.skill.warrior.fire_sword": 3}
 	PlayerState.recalculate_stats()
 
 	var game: Node = load("res://scenes/main.tscn").instantiate()
 	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	var deadline := Time.get_ticks_msec()+20000
+	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline:
+		await get_tree().process_frame
+	assert(game.gameplay_input_is_enabled(), "melee entry fixture requires the actual mapped world READY boundary")
+	# Use the same authored non-safe corridor as the formal skill fixtures.
+	game._set_player_world_position(game._canonical_ground_gu_to_screen_px(Vector2(38.5,13.5)))
 	for value: Variant in get_tree().get_nodes_in_group("enemies"):
 		if value is EnemyActor:
 			(value as EnemyActor).set_combat_position(
@@ -69,7 +73,7 @@ func _run() -> void:
 
 func _verify_fire_no_target_preserves_normal_fallback(game: Node) -> void:
 	PlayerState.profession = "战士"
-	PlayerState.learned_skills = {"烈火剑法": 3}
+	PlayerState.learned_skills = {"hc.skill.warrior.fire_sword": 3}
 	PlayerState.recalculate_stats()
 	game.player.current_mp = 999
 	game.player.fire_sword_enabled = false

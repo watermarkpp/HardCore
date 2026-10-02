@@ -52,6 +52,7 @@ func _run() -> void:
 	var accepted := game.player.request_attack_toward(Vector2.RIGHT,true,first.get_instance_id(),lease) if melee \
 		else game.player.request_skill("hc.skill.wizard.ice_storm",first.get_instance_id(),lease)
 	check(accepted and lease.is_accepted(),"natural player input accepts the same action configuration")
+	check(lease.effect_reservation() != null,"real ignite action owns a nonempty capacity reservation")
 	check(ContentLayers.set_feature_module_enabled("hc.ignite",false),"remove source during accepted windup")
 	deadline = Time.get_ticks_msec()+3000
 	while game.observed_releases == 0 and Time.get_ticks_msec() < deadline: await get_tree().process_frame

@@ -1,6 +1,6 @@
 # 第三工作树架构升级实际进展
 
-核验时间：2026-10-01。本文记录当前受测结果；完整目标仍是 P0—P6，阶段证据不能替代整体验收。主树 v97 和第二树修复现场保留，未集成、提交、推送或打包。
+核验时间：2026-10-02。本文按时间保留阶段记录；完整目标仍是 P0—P6。第三树审查快照已独立提交并推送，主树 v97 和第二树现场保留，未合入主树或打包。旧段落中的 NOT_RUN 是当时状态，以后续同主题记录及固定证据为准。
 
 ## 已有基线
 
@@ -252,3 +252,82 @@ GameData 正式 rank 查询按已有 skill_id，名称仅是明确旧UI入口和
 真实默认路径启动 RED（2检查/1失败）证明 SaveUpgradeBackup 把 user:// 截为 user:/；本段只修正该备份组件的 scheme 根及对应 containment 前缀，未改 PlayerState 加载、存档格式或业务权威。真实周期HP致死但deferred回调未执行时，经实际Root返回选角菜单守卫排空死亡/掉落/任务/经验/存档；A一次入账、B原档字节不变，合法切换及独立冷进程37+13检查 PASS。先前B任务全字典断言因int/JSON float类型不等 FAIL，保留证据并按完整JSON持久化表示建立预期；未删除业务断言。三个保存升级直接回归248检查 PASS，绿色运行源码稳定、引擎/脚本错误0。源码3464文件 SHA256 `be07efff6ce3e3fba9ea246068bbc9138235adf72d549db8292abf28c8671f06`，证据 docs/review/framework_credit_20261002/。旧profile-switch fixture只读未变、NOT_RUN。
 
 此处只闭合法UI生命周期窄时序，不证明越过Root守卫的直接选角调用，也不宣称v97背包根因。完整容量 FAIL；pending消费前缀回收、receipt退休、完整P6/公平性/P95/P99继续施工。精确历史B输入 MISSING，用户背包故障因果修复 NOT_RUN；主树整合/APK/GPU/设备 NOT_RUN。默认新玩法仍关闭，地图、权威源、第二树和主树v97保持。
+
+
+## 2026-10-02 v97 固定源码历史存档生产链检查点
+
+本检查点在第三树忽略的输出目录内，用 v97 固定 APK 源码 `a945e921e849b4aa81439183f60cec95e63d725c` 和同一 Godot console 引擎，接入 v90 原始备份的 13 个逐字节核验副本。真实三角色旧装备、实例身份及历史字段保留，实际全局 PlayerState、test_mode=false、默认生产保存路径均使用专属 APPDATA。为合法合成，在实际历史加载后显式补足等级、金币和测试材料；并非用户报告的准确 B 角色故障输入。
+
+原生 live 523 项、独立 cold 74 项，共 597 项 PASS；进程均 exit 0，无脚本错误，完整逐项回执和原始文件/固定生产源码不变检查 PASS。真实工作台合成与入包后，普通装备、圣物和对应职业徽章的装备/销毁、异步持久化、冷重启角色定向加载均通过。旧实例在冷重启及后续测试变更后仍保留，冷进程只销毁明确注入的普通测试装备。证据：`outputs/framework_v2/V97_ARCHIVED_MULTI_PROFILE_SCOPED_EVIDENCE.json`。
+
+**用户报告的 v97 B 角色整个背包故障仍未复现；具体故障输入 MISSING，修复状态 NOT_RUN。不得以这 597 项或此前新角色 549 项 PASS 关闭此故障。主树 v97、真实用户存档、APK及设备均未更改。**
+
+
+### 2026-10-02 活动游戏世界的角色服务所有权
+
+修正旧 profile-switch fixture 的独立共享仓库初始化后，原生因果 RED 24 检查中两项业务失败：A 的周期致死已提交、deferred 回调尚未执行时，直接 select_character(B) 成功，A 经验仍 0，B 错获 1。合法菜单退出链此前已通过，本反例不冒充正常 UI 复现。原无效 fixture FAIL 与真实 RED 均保留。
+
+PlayerState 在正式角色选择、同角色重载、新建及删除入口核验活动游戏世界所有权；GameRoot ready 注册、exit 完成清理后精确注销，queued deletion 仍受保护，弱引用避免已销毁世界永久阻塞。拒绝先于持久化或角色状态替换，无第二收益/存档权威。两个直接场景 46 检查 PASS，另 9/9 原生回归 PASS（正常返回选角、独立冷进程、角色删除、多角色保存、死亡和资源生命周期）；退出 0、receipt 有效、引擎错误 0、受测源码/引擎前后一致。证据 `outputs/framework_v2/PROFILE_GAMEPLAY_OWNER_SCOPED_EVIDENCE.json`；受测内容 SHA256 `ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6`。
+
+无新增稳定 ID；本条只关闭该服务入口的角色替换漏洞。未保护任意私有字段直接写入，不替代精确 v97 B 背包故障验收（故障输入 MISSING、因果修复 NOT_RUN）。完整容量仍 FAIL，receipt 安全退休、P6、主树整合、APK/设备门禁仍未完成。
+
+
+### 2026-10-02 非空效果队列的完成批次回收
+
+原生因果 RED：持续保持 1 条必要待处理事实，257 个真实双目标批次产生 514 个事实，旧容器仍持有 510 个已完成事实的 ActorRef；18 检查/2 业务失败、引擎错误 0。EffectRuntime 改为有首尾索引的队列，整批消费完成即移除其容器，保持原顺序且不搬移存活队列；没有清除历史 receipt 或 journal。弱引用证明已完成批次释放，514 个历史 receipt 全保留，旧 release 再入依然去重，清空重建也验证。
+
+18 个直接检查及合计 7/7 原生专项/相关回归 PASS，共 145 检查；真实退出 0、receipt 有效、源码/引擎稳定。证据 `outputs/framework_v2/FEATURE_QUEUE_RETENTION_SCOPED_EVIDENCE.json`，受测内容 SHA256 `fcba8efa90f1ca9a74c42714d58238133f3facc1a02be737fe0db2fd520066f2`。本条仅关闭完成队列前缀滞留，不声明 receipt 长期退休或完整容量闭环；P6/性能/主树/APK/设备仍待验收，无新增稳定 ID。
+
+
+### 2026-10-02 组合效果、真实死亡与资源/保存并发检查点
+
+固定 30 个真实映射目标，3 个合法独立来源的既有点燃机制组成 90 状态；保留 Root 自然物理/普通帧与共享 1200us 账本、实际 HP/死亡/奖励/保存、真实五动作线程资源请求。初始固定目标 fixture 会被受击唤醒重新开启自动更新，资源请求未声明等待者也允许淘汰，按真实合同修正夹具；原 FAIL 保留。低频 TIME_PROCESS 监视值不当作逐帧 CPU 样本，改只报告实际墙钟帧间隔。
+
+同一最终夹具在旧生产源码得到 33 检查/1 个时效 FAIL：360 ticks 完整但最大到期延迟 3066667us。根因是效果只有 physics 消费入口，无法利用同帧 process 资源/死亡消费者释放的公平轮次。Root process 在原资源轮次后额外调用同一个 EffectRuntime.pump；仅 physics 推进原模拟钟，预算不重置，不少算任何目标或 tick。相同夹具 GREEN 最大延迟 750000us，P95/P99 墙钟帧间隔 7529/9035us，30 死亡/360 ticks/1800 HP/收益全回执排空，冷重启通过。
+
+增加只读 service-age 观测后最终 14/14 原生回归、293 检查 PASS，exit 0、有效 receipt、引擎错误 0、源码/引擎稳定；最终性能和业务时效原始样本见 `outputs/framework_v2/EFFECT_FRAME_SERVICE_SCOPED_EVIDENCE.json` 及指向 trace。当前受测内容 `be3e6596fe28f73f6cec59123957494cc2749477c6620502d2db64c2170b5001`。本条是 P6 有界组合闭环，不代表三种新效果、全游戏/Android 性能或全部 P6 发布验收；完整容量仍 FAIL，receipt 安全退休和 journal 协议、精确 v97 B 故障、主树/APK/设备门禁保留。无新增稳定 ID。
+
+
+### 2026-10-02 默认 root 既有存档的启动前验证
+
+在 native 引擎和 autoload 启动前，将输入写入每次新建的本树专属 APPDATA/Godot/app_userdata/HardCore；真实默认 user:// 路径、test_mode=false。既有 v7 合成旧格式角色/索引的 before-image、实际转换与独立 cold、损坏归档阻止选角且不改主文件，共 37 检查 PASS。此前 5 个遗留夹具本段已单独执行；固定审查 4d1efdc45897ace1be64fe0050c977c47f703ad0 的排除清单保持原样。
+
+另外将 v90 原始归档的13文件逐字节复制到独立默认 root，再实际升级3角色、共享仓库、配置与备份；before-image/manifest逐项哈希、账户经济和进度、仓库银行账本、独立cold与回执排空，共 84 检查 PASS。原始tar和13参考文件运行前后哈希均相同。两个范围共4原生场景、121 检查PASS，退出0、有效receipt、源码/引擎稳定、无引擎脚本错误；没有生产代码变更。证据 `outputs/framework_v2/DEFAULT_ROOT_EXISTING_SAVE_SCOPED_EVIDENCE.json`；预启动重放工具 `tools/run_default_root_upgrade_tests.py`。真实用户手机文件未触及。
+
+本条补默认根已有文件覆盖，不代表所有历史存档、v97准确B故障或APK/设备验收；这些边界仍保留。
+
+
+## 2026-10-02 价格身份增量
+
+31条既有价格候选按精确现有登记补齐 entity_id；原价格、类别和来源证据逐项不变，未知/重复/冲突声明拒绝。装备估值与维修传实际物品身份；价格策略按正式登记/明确旧数字来源键导入，不在报价时退回中文名，未知和冲突策略对买卖、维修及材料估值整体拒绝。材料估值API按 entity_id 取价，名称只显示；正式商店出售原已按ID缓存，本次未为旧变量名称增加重复改动。新增实体ID为零。
+
+因果RED为52检查45业务FAIL；补实现与边界后93身份检查PASS，最终9项原生专项/相关回归全PASS，退出0、源码/引擎稳定、无引擎错误。179条既有物品价格及provenance完全相同，疗伤药 hc.item.910007 新增ID索引通路，沿用原仅名称可达的5000价格。旧UI报价测试的3项失败在原源码复跑一致，夹具改为正式已登记记录、冲突ID前置拒绝，保留逐项报价、来源、单行报价和按需维护断言（现2922检查PASS）。所有原FAIL保留。证据 outputs/framework_v2/PRICING_IDENTITY_SCOPED_EVIDENCE.json。
+
+旧server catalog名称转换仅保留于明确导入边界；没有声称所有中文兼容入口删除。容量/receipt/journal64、完整P6/R3、精确v97 B故障、主树/APK/设备门禁不因此结案。
+
+
+## 2026-10-02 P6证据门禁补强
+
+复核原Pro对固定4d1efdc源码的反馈后，分别先复现再补证。已归档750000us准确含义为“帧末仍在堆中的最大到期积压”，不能等同于逐次实际投递最大迟到；旧不可变快照不改写。新增真实750ms迟到tick在pump内消费完毕、帧末已无due的反例，12检查原2FAIL；EffectRuntime仅增加投递前只读计数/最大迟到统计，未改时钟、调度、伤害、RNG或TTL，直接与两项生命周期回归PASS。
+
+原cold入口在当前producer FAIL、旧invocation PASS、producer run不匹配三种输入下均继续select并改变内存，10检查原6FAIL。正式runner每次串行调用生成唯一invocation ID，receipt/expectation记录它；cold验证同轮、同源码、匹配producer、成功逐项回执，在任何恢复前拒绝无效证据。10检查GREEN通过且拒绝不改变内存/文件，真实正向live/cold也PASS。
+
+最终9项原生、206检查PASS，包含同一最终源码下合法退出live/cold、预算和生命周期/队列回归。90状态、360次实际投递/周期结算、1800HP、30死亡收益及资源/回执排空保留；新逐次最大迟到783333us，剩余堆积压766667us，688墙钟样本P95/P99=7679/9190us，死亡排空814714us、资源35036us。证据 outputs/framework_v2/P6_EVIDENCE_GATE_SCOPED_EVIDENCE.json。仅PC headless固定目标限定范围PASS，完整容量、长期receipt/journal协议、完整P6/R3、精确v97及APK/设备未结案。
+
+
+## 2026-10-02 双审计A—D最终补证
+
+完整读取用户提供的第二独立报告，按当前源码映射后继续施工。A以实际damage-port尝试计数/最大迟到区分成功ticks、失败、失效和自然过期；恰好一周期1000000us会被严格小于门禁拒绝，同epoch双pump与暂停不重复计数。B新反例36检查原14FAIL，正式runner仅在原生退出0及完整receipt验证成功后签发本轮producer关联和receipt哈希，组合/合法退出cold共用门禁；最终16类负例及真实证据写入失败38检查PASS。
+
+C trace明确阶段命名、phase_status/phase_checks，最终以完整receipt和native结果裁决。真实save/teardown/reload故障的六个原生FAIL全部保留，cold均在加载前拒绝；save实际reason=world_clock_checkpoint_failed，精确拥有路径I/O错误留证，初次过窄故障分类FAIL也保留。D按审计允许选项A澄清：当前空generation保持有效，但非空生产代次覆盖NOT_RUN，不据此闭合。
+
+最终同一源码17原生/384检查PASS，加独立门禁1原生/38检查PASS，零普通回归引擎错误，原生退出及完整receipt/源码引擎稳定。最终内容dfff3bb9ca79bb93c9480f7186acd5c48a73d27c54fdf6bd798983db62312e4d，3488文件；全量原生源码和补充工具保存在docs/review/framework_audit_closure_20261002。未新增稳定ID。容量FAIL、receipt安全退休、journal64独立协议、准确v97 B输入MISSING、完整P6/R3、主树/APK/设备门禁仍开放。
+
+## 2026-10-02 释放审计增量与当前剩余项
+
+- 1687798：A 实际消费迟到、B 本轮成功 producer 绑定、C 阶段/最终结果区分，双审支持有界关闭。
+- a41a655：接受前容量与受管 receipt 退休有界证据保留；后发现两项释放链缺陷。
+- 6eb2d7f：健康序列 journal 和真实非空 generation/cold 通过。归档原始输入与 archive 比对为语义相等；archive 创建后的保存/cold 阶段证明字节保持。旧 v2 回退重开身份缺口仍开放，不以健康序列 PASS 覆盖。
+- 当前释放修正最终内容 d32929f13c76c9387d033ae59ab46ad614bf70e8c7bb24e5a5fdea960c53bb53，25 原生场景 PASS、508 framework 检查；另 5 个既有 assert 场景不计入508。旧错误回调是受控原生接口反例，不称自然 UI 故障。详见 framework_release_20261002 审查包。
+- 下一项：v2→v2 旧备份同进程及独立 cold 反例、旧 ID 换内容、拒绝无新 writer/资源变化；先 RED 后修复。
+- 后续继续自然输入、移动战斗、持续与恢复的 P6/R3，第二树 V4 性能 FAIL 仍开放。原 v97 角色 B 输入 MISSING；Android/GPU/设备 NOT_RUN。

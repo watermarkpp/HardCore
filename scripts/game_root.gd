@@ -7196,15 +7196,15 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	if not gameplay_input_is_enabled(): return
 	var context := player.consume_attack_context()
 	var configuration: RefCounted = context.get("action_config_lease")
+	var release_geometry: Dictionary = context.get("release_geometry", {})
 	if configuration == null and not PlayerState.feature_bundle().get("event_index",{}).is_empty(): return
-	if configuration != null and not configuration.begin_release(_action_configuration_identity()):
+	if configuration != null and not configuration.begin_release(_action_configuration_identity(),str(release_geometry.get("release_id",""))):
 		return
 	var accepted_melee: Dictionary = configuration.melee_context() if configuration != null else {}
 	PlayerState.try_trigger_relic_proc()
 	var diagnostic := _pending_melee_diagnostic.duplicate(true)
 	_pending_melee_diagnostic.clear()
 	_active_physical_hit_diagnostics.clear()
-	var release_geometry: Dictionary = context.get("release_geometry", {})
 	if not release_geometry.is_empty():
 		origin = release_geometry.get("origin_screen_px", origin)
 		direction = release_geometry.get("direction_screen_px", direction)
@@ -7386,10 +7386,13 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 			)
 			eligible_target_count += half_moon_secondary_targets.size()
 		has_eligible_target = eligible_target_count > 0
+	var feature_skill: String = {"fire":"warrior.fire_sword","half_moon":"warrior.half_moon",
+		"thrust":"warrior.thrusting"}.get(effect_mode,"")
+	var feature_batch := _begin_feature_damage_batch(feature_skill,str(release_geometry.get("release_id","")),configuration)
+	if configuration != null and not configuration.event_bindings_for(feature_skill).is_empty() and feature_batch == null:
+		return
 	if consumes_armed_fire and effect_mode == "fire":
 		_set_canonical_fire_charge_expires_at(0)
-	var feature_batch := _begin_feature_damage_batch({"fire":"warrior.fire_sword","half_moon":"warrior.half_moon",
-		"thrust":"warrior.thrusting"}.get(effect_mode,""),str(release_geometry.get("release_id","")),configuration)
 	var melee_modifiers := SkillRuntimeRouterScript.resolve_warrior_melee_modifiers({
 		"body_mode": effect_mode,
 		"basic_sword_learned": accepted_melee.learned_skills.has("hc.skill.warrior.basic_swordsmanship") if not accepted_melee.is_empty() else PlayerState.is_skill_learned("warrior.basic_swordsmanship"),
@@ -7925,8 +7928,28 @@ func _execute_canonical_skill(
 	# Reject a direct unaccepted caller before planner RNG or resource/HP writes.
 	if configuration == null and not PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:"+SkillDataLoaderScript.entity_skill_id(stable_skill_id),[]).is_empty():
 		return {"accepted":false,"effect_success":false,"reason":"missing_accepted_feature_configuration"}
-	if configuration != null and not configuration.begin_release(_action_configuration_identity()):
+	if configuration != null and not configuration.begin_plan(_action_configuration_identity(),
+		str(extra_target_context.get("release_id","")),not apply_effects and not configuration.melee_context().is_empty()):
 		return {"accepted":false,"effect_success":false,"reason":"stale_action_configuration"}
+	# A promised batch is acquired before planner RNG or resource commits.
+	# Null means no extension only when this accepted definition has no binding.
+	var feature_batch: RefCounted = null
+	if apply_effects:
+		feature_batch = _begin_feature_damage_batch(stable_skill_id,str(extra_target_context.get("release_id","")),configuration)
+		if configuration != null and not configuration.event_bindings_for(stable_skill_id).is_empty() and feature_batch == null:
+			return {"accepted":false,"effect_success":false,"reason":"feature_batch_unavailable"}
+	var result := _execute_canonical_skill_plan(skill_name,origin,direction,client_damage,extra_target_context,
+		apply_effects,authoritative_cast_target,configuration,feature_batch)
+	_finish_feature_damage_batch(feature_batch)
+	return result
+
+
+func _execute_canonical_skill_plan(
+	skill_name: String, origin: Vector2, direction: Vector2, client_damage: int,
+	extra_target_context: Dictionary, apply_effects: bool, authoritative_cast_target: bool,
+	configuration: RefCounted, feature_batch: RefCounted
+) -> Dictionary:
+	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
 	var definition: Dictionary = (configuration.definition_for(stable_skill_id)
 		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
 	if definition.is_empty():
@@ -8128,7 +8151,8 @@ func _execute_canonical_skill(
 			direction,
 			target_context,
 			cast_target,
-			configuration
+			configuration,
+			feature_batch
 		)
 	var execution_result := SkillExecutionPlanScript.build_result(
 		plan,
@@ -8383,6 +8407,7 @@ func _execute_canonical_melee(
 		+ half_moon_secondaries.size()
 	)
 	var extra := {
+		"release_id": str(release_geometry.get("release_id","")),
 		"has_target": eligible_target_count > 0,
 		"line_of_sight": eligible_target_count > 0,
 		"valid_melee_swing": eligible_target_count > 0,
@@ -8939,7 +8964,8 @@ func _apply_canonical_effects_from_plan(
 	direction: Vector2,
 	target_context: Dictionary,
 	target: EnemyActor = null,
-	configuration: RefCounted = null
+	configuration: RefCounted = null,
+	feature_batch: RefCounted = null
 ) -> Dictionary:
 	## Q3-B: commits the canonical plan's gameplay actions. Node creation
 	## (projectile/ground/summon/visual) comes from the plan's descriptors via
@@ -8989,7 +9015,6 @@ func _apply_canonical_effects_from_plan(
 		else:
 			created_visuals.append(node.get_instance_id())
 	var friendly_effect_index := 0
-	var feature_batch := _begin_feature_damage_batch(stable_skill_id,release_id,configuration)
 	for raw_effect: Variant in plan.get("gameplay_actions", []):
 		if not raw_effect is Dictionary:
 			continue
@@ -9336,7 +9361,6 @@ func _apply_canonical_effects_from_plan(
 					Time.get_ticks_msec()
 					+ maxi(1, int(effect.get("charge_lifetime_ms", 10000)))
 				)
-	_finish_feature_damage_batch(feature_batch)
 	return {
 		"spawned_projectile_ids": spawned_projectiles,
 		"status_results": applied_status_results,

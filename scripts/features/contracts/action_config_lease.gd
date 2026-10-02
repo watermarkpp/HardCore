@@ -10,6 +10,8 @@ var _admission: Callable
 var _admission_configured := false
 var _reservation: RefCounted
 var _release_started := false
+var _release_id := ""
+var _plan_started := false
 var _producer_closed := false
 
 # Configuration is accepted separately from live target/facing sampling. The
@@ -57,10 +59,26 @@ func configure_admission(callback: Callable) -> bool:
 	_admission = callback; _admission_configured = true
 	return true
 
-func begin_release(actor_identity: Dictionary) -> bool:
+func begin_release(actor_identity: Dictionary, release_id := "") -> bool:
 	if not valid_for_release(actor_identity): return false
 	# Only ticketed producers acquire the new one-shot dispatch boundary.
-	if _reservation != null: _release_started = true
+	if _reservation != null:
+		if not _reservation.can_begin_release(release_id): return false
+		_release_started = true
+		_release_id = release_id
+	return true
+
+func begin_plan(actor_identity: Dictionary, release_id: String, from_melee_release := false) -> bool:
+	if _reservation == null: return begin_release(actor_identity,release_id)
+	if from_melee_release:
+		# The synchronous melee owner already acquired this release. Its inner
+		# canonical planner may consume that context once, never reacquire it.
+		if not _release_started or _producer_closed or _snapshot.actor_identity != actor_identity \
+			or _release_id != release_id or melee_context().is_empty(): return false
+	elif not begin_release(actor_identity,release_id):
+		return false
+	if _plan_started: return false
+	_plan_started = true
 	return true
 
 func effect_reservation() -> RefCounted: return _reservation

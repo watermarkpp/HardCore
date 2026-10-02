@@ -1,0 +1,39 @@
+{
+  "parent": "6eb2d7f52f484ed084da88b6b84ee99d0f73f787",
+  "source_files": 3514,
+  "content_sha256": "d32929f13c76c9387d033ae59ab46ad614bf70e8c7bb24e5a5fdea960c53bb53",
+  "native_scenes": 25,
+  "framework_checks": 508,
+  "check_counts": {
+    "action_configuration_production_test.result": 21,
+    "action_config_lease_test.result": 13,
+    "empty_extension_behavior_test.result": 30,
+    "feature_admission_release_test.result": 27,
+    "feature_capacity_admission_test.result": 15,
+    "feature_effect_production_test.result": 34,
+    "feature_fire_effect_production_test.result": 20,
+    "feature_melee_ticket_paths_test.result": 31,
+    "feature_release_identity_test.result": 11,
+    "feature_reservation_test.result": 29,
+    "feature_world_capacity_bound_test.result": 13,
+    "fire_cooldown_configuration_test.result": 33,
+    "frame_epoch_test.result": 71,
+    "melee_configuration_production_test.result": 15,
+    "periodic_delivery_lateness_test.result": 36,
+    "combined_effect_lifecycle_cold_test.result": 10,
+    "combined_effect_lifecycle_test.result": 38,
+    "periodic_credit_safe_logout_cold_test.result": 13,
+    "periodic_credit_safe_logout_test.result": 37,
+    "feature_receipt_retirement_test.result": 11
+  },
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "release_identity": "PASS controlled Root counterexample; not asserted as natural UI fault",
+  "ticketed_melee": "PASS real accepted nonempty ticket, fire and armed next swing, thrust and half moon",
+  "open": [
+    "older v2 backup operation identity reopening",
+    "full P6/R3 natural sustained movement/combat",
+    "original v97 B input MISSING",
+    "Android/GPU NOT_RUN",
+    "main integration and APK NOT_RUN"
+  ]
+}

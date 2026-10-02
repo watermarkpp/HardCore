@@ -1,0 +1,135 @@
+{
+  "ticketed_fire_red": {
+    "local_run": "ticketed_fire_existing_red_163744_975192",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_fire_effect_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "release_identity_red": {
+    "local_run": "feature_release_identity_red_164056_007087",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_release_identity_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "legacy_fixture_fail": {
+    "local_run": "feature_release_final_related_164816_534244",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_release_identity_test.tscn','tests/framework/feature_melee_ticket_paths_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/feature_effect_production_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/feature_reservation_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/action_configuration_production_test.tscn','tests/framework/melee_configuration_production_test.tscn','tests/framework/fire_cooldown_configuration_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/frame_epoch_test.tscn','tests/skills/warrior_canonical_runtime_test.tscn','tests/skills/warrior_melee_entry_runtime_test.tscn','tests/skills/wizard_canonical_runtime_test.tscn','tests/skills/taoist_canonical_runtime_test.tscn','tests/skills/taoist_entrapment_boundary_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 19,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "legacy_fixture_baseline_fail": {
+    "local_run": "release_legacy_fixture_baseline_165340_712194",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/skills/warrior_melee_entry_runtime_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "final_positive": {
+    "local_run": "feature_release_final_green_165602_829698",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_release_identity_test.tscn','tests/framework/feature_melee_ticket_paths_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/feature_effect_production_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/feature_reservation_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/action_configuration_production_test.tscn','tests/framework/melee_configuration_production_test.tscn','tests/framework/fire_cooldown_configuration_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/frame_epoch_test.tscn','tests/skills/warrior_canonical_runtime_test.tscn','tests/skills/warrior_melee_entry_runtime_test.tscn','tests/skills/wizard_canonical_runtime_test.tscn','tests/skills/taoist_canonical_runtime_test.tscn','tests/skills/taoist_entrapment_boundary_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 20,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_livecold": {
+    "local_run": "feature_release_final_cold_170020_109801",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_negative": {
+    "local_run": "feature_release_final_retirement_170115_228293",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_receipt_retirement_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    }
+  }
+}

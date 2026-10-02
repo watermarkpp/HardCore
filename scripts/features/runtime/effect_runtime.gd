@@ -95,6 +95,12 @@ func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, e
 	_stats.peak_reservations = maxi(int(_stats.peak_reservations),_reservations.size())
 	return Reservation.create(self,_next_reservation)
 
+func _reservation_release_is_valid(sequence: int, release_id: String) -> bool:
+	if _world == null or not _reservations.has(sequence): return false
+	var value: Dictionary = _reservations[sequence]
+	return value.stage == "reserved" and _world.matches_world(value.world) and not release_id.is_empty() \
+		and (str(value.expected_release_id).is_empty() or value.expected_release_id == release_id)
+
 func _claim_reservation(sequence: int, identity: Dictionary, release_id: String, skill_id: String, bindings: Array) -> Dictionary:
 	if not _sync_world() or not _reservations.has(sequence): return {"success":false}
 	var value: Dictionary = _reservations[sequence]
