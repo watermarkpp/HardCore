@@ -10,7 +10,10 @@ var manifest: Dictionary = {}
 var reason := ""
 
 func prepare(account_root: String, sources: Array[String]) -> bool:
-	root = account_root.trim_suffix("/")
+	# A scheme root's two slashes are identity, not a trailing separator.
+	# Trimming user:// would turn the real account root into invalid user:/.
+	root = account_root if account_root.ends_with("://") else account_root.trim_suffix("/")
+	var source_prefix := root if root.ends_with("://") else root + "/"
 	archive = root.path_join(DIRECTORY)
 	reason = ""
 	var manifest_path := archive.path_join("manifest.json")
@@ -26,8 +29,8 @@ func prepare(account_root: String, sources: Array[String]) -> bool:
 	files.sort()
 	var entries: Dictionary = {}
 	for source: String in files:
-		if not source.begins_with(root + "/"): return _fail("upgrade_backup_outside_account")
-		var relative := source.trim_prefix(root + "/")
+		if not source.begins_with(source_prefix): return _fail("upgrade_backup_outside_account")
+		var relative := source.trim_prefix(source_prefix)
 		if not _safe_relative(relative): return _fail("upgrade_backup_invalid_path")
 		var target := archive.path_join("original").path_join(relative)
 		if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(target.get_base_dir())) != OK:

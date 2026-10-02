@@ -1,0 +1,182 @@
+{
+  "startup_root_fix_status": "PASS",
+  "legitimate_safe_logout_credit_status": "PASS",
+  "full_framework_status": "NOT_RUN",
+  "whole_capacity_admission_status": "FAIL",
+  "v97_exact_reported_defect_status": "NOT_RUN",
+  "historical_B_input": "MISSING",
+  "source_content_sha256": "be07efff6ce3e3fba9ea246068bbc9138235adf72d549db8292abf28c8671f06",
+  "native_files": 3464,
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "production_files_changed": [
+    "scripts/save_upgrade_backup.gd"
+  ],
+  "stable_ids_added": [],
+  "tests": {
+    "default_root_red": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\credit_default_root_red_100856_215626",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_safe_logout_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 1,
+        "status": "FAIL"
+      },
+      "engine_log_errors": 1,
+      "receipts": {
+        "periodic_credit_safe_logout_test": {
+          "checks": 2,
+          "failed": 1,
+          "status": "FAIL",
+          "run_id": "fe982de0-44b3-42c2-b734-a2f850e139e3",
+          "failed_labels": [
+            "official startup upgrade gate completes in isolated production user data { \"success\": false, \"reason\": \"upgrade_backup_directory_failed\", \"path\": \"user:/save_upgrades/framework_identity_v1\" }"
+          ]
+        }
+      },
+      "current_source_differences": [
+        "scripts/save_upgrade_backup.gd",
+        "tests/framework/periodic_credit_safe_logout_test.gd"
+      ]
+    },
+    "json_type_fixture_red": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\credit_quest_owner_red_102215_743467",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_safe_logout_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 1,
+        "status": "FAIL"
+      },
+      "engine_log_errors": 0,
+      "receipts": {
+        "periodic_credit_safe_logout_test": {
+          "checks": 36,
+          "failed": 1,
+          "status": "FAIL",
+          "run_id": "2d3fd5b7-e16c-4b6e-800c-e761071a1685",
+          "failed_labels": [
+            "B quests are not contaminated by A"
+          ]
+        }
+      },
+      "current_source_differences": [
+        "tests/framework/periodic_credit_safe_logout_test.gd"
+      ]
+    },
+    "live_and_cold_green": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\credit_safe_logout_green_102458_334200",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 60"
+        ],
+        "timeout_seconds": 60,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "engine_log_errors": 0,
+      "receipts": {
+        "periodic_credit_safe_logout_cold_test": {
+          "checks": 13,
+          "failed": 0,
+          "status": "PASS",
+          "run_id": "c6018423-b7ac-41f8-a7e4-e47304f687c9",
+          "failed_labels": []
+        },
+        "periodic_credit_safe_logout_test": {
+          "checks": 37,
+          "failed": 0,
+          "status": "PASS",
+          "run_id": "8cde8395-fa3c-4700-8dc8-6823c789ca24",
+          "failed_labels": []
+        }
+      },
+      "current_source_differences": []
+    },
+    "upgrade_regression": {
+      "run": "outputs\\r3_takeover\\20260930\\validation\\credit_upgrade_regression_102656_302586",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/mobile_save_upgrade_test.tscn','tests/framework/mobile_save_upgrade_restart_test.tscn','tests/framework/mobile_save_upgrade_startup_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 3,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "engine_log_errors": 0,
+      "receipts": {
+        "mobile_save_upgrade_restart_test": {
+          "checks": 13,
+          "failed": 0,
+          "status": "PASS",
+          "run_id": "76606f60-c966-45eb-a6a6-3df98eec748f",
+          "failed_labels": []
+        },
+        "mobile_save_upgrade_startup_test": {
+          "checks": 20,
+          "failed": 0,
+          "status": "PASS",
+          "run_id": "21cb05f3-e52e-4e9e-a92c-8beccadd48fc",
+          "failed_labels": []
+        },
+        "mobile_save_upgrade_test": {
+          "checks": 215,
+          "failed": 0,
+          "status": "PASS",
+          "run_id": "ee3a61a8-4247-4c10-977c-b5396f93cd94",
+          "failed_labels": []
+        }
+      },
+      "current_source_differences": []
+    }
+  },
+  "successful_checks": 298,
+  "original_profile_switch_fixture": {
+    "status": "NOT_RUN",
+    "files": {
+      "tests/framework/periodic_credit_profile_switch_test.gd": "e15f46196a268baadfa8146f10b995eaf63f4082a3be50936d10637e853b4787",
+      "tests/framework/periodic_credit_profile_switch_test.tscn": "63c75f5d7fc26c36ca8d39d4494f4eeecf783eec0df36df71a971a895e552bea"
+    }
+  },
+  "scope": "Actual default startup and lawful Root return-to-character-select path, including lethal periodic HP committed before deferred actor death callback. B profile bytes unchanged; A canonical death/drop/quest/save settles once; independent cold process verifies A/B.",
+  "limits": [
+    "Not a proof for direct in-world select_character calls outside the guarded UI lifecycle.",
+    "Not the v97 backpack root cause or exact reported defect reproduction.",
+    "Capacity reservations, pending-prefix bounded storage, receipt retirement and full P6 remain open.",
+    "Main integration, APK, GPU and DEVICE TEST: NOT_RUN."
+  ]
+}

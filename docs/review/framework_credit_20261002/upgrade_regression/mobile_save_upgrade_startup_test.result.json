@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned startup fixture directory",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "owned startup fixture file",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "owned startup fixture directory",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "owned startup fixture file",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "owned startup fixture directory",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "owned startup fixture file",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real startup exposes failed save upgrade",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "save boundary failure classified",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "no CharacterSelect instance before aggregate admission",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "phone has retry UI",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "unknown primary remains intact and unplayable despite old backup",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "owned startup fixture directory",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "owned startup fixture file",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "retry re-enters real authority and migration boundaries",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "real retry commits automatic save conversion",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real CharacterSelect admitted exactly once",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "successful retry removes failure overlay",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "real CharacterSelect sees upgraded profile",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "real destination can load retained progress",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "startup writes and accepted receipts ended before gameplay",
+      "passed": true
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 20,
+  "reported_checks": 20,
+  "reported_failures": 0,
+  "run_id": "21cb05f3-e52e-4e9e-a92c-8beccadd48fc",
+  "scene_id": "mobile_save_upgrade_startup_test",
+  "schema_version": 1,
+  "source_content_sha256": "be07efff6ce3e3fba9ea246068bbc9138235adf72d549db8292abf28c8671f06",
+  "status": "PASS"
+}

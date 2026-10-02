@@ -1,0 +1,30 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  1,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "periodic_credit_safe_logout_test",
+                        "test_path":  "tests/framework/periodic_credit_safe_logout_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T02:09:28.5059605Z",
+                        "native_exit_observed_utc":  "2026-10-02T02:09:07.4190364Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  1,
+                        "engine_log_failure_count":  1,
+                        "framework_run_id":  "fe982de0-44b3-42c2-b734-a2f850e139e3",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;stderr_failures_1;engine_log_failures_1;framework_checks_failed"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T10:09:08.5297907+08:00",
+    "total":  1,
+    "failed":  1
+}

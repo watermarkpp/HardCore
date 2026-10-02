@@ -1,0 +1,80 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process receives previous actual-upgrade fixture",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cold native process verifies completion and reopens real persistence",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold restart does not repeat conversion",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold restart keeps immutable source manifest",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cold upgrade changes no completed profile bytes A",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cold process loads actual profile A",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold progress and economy unchanged A",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold gear roll retained A",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold upgrade changes no completed profile bytes B",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold process loads actual profile B",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold progress and economy unchanged B",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold gear roll retained B",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cold load persistence receipts drained",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "76606f60-c966-45eb-a6a6-3df98eec748f",
+  "scene_id": "mobile_save_upgrade_restart_test",
+  "schema_version": 1,
+  "source_content_sha256": "be07efff6ce3e3fba9ea246068bbc9138235adf72d549db8292abf28c8671f06",
+  "status": "PASS"
+}

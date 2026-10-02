@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real production persistence without test_mode bypass",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "official startup upgrade gate completes in isolated production user data { \"success\": false, \"reason\": \"upgrade_backup_directory_failed\", \"path\": \"user:/save_upgrades/framework_identity_v1\" }",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "fe982de0-44b3-42c2-b734-a2f850e139e3",
+  "scene_id": "periodic_credit_safe_logout_test",
+  "schema_version": 1,
+  "source_content_sha256": "628e8979ce49e04bd59763e88095ab93100dc1d5dc46318a29dfc566b89b5ecd",
+  "status": "FAIL"
+}

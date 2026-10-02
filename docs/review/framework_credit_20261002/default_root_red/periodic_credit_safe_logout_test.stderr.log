@@ -1,0 +1,6 @@
+ERROR: Could not create directory: 'user:/save_upgrades'.
+   at: make_dir_recursive (core/io/dir_access.cpp:179)
+   GDScript backtrace (most recent call first):
+       [0] prepare (res://scripts/save_upgrade_backup.gd:33)
+       [1] finish_startup_save_upgrade (res://scripts/player_state.gd:552)
+       [2] _run (res://tests/framework/periodic_credit_safe_logout_test.gd:37)

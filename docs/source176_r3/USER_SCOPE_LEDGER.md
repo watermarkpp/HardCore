@@ -285,3 +285,10 @@ v97 真实故障必须单独复现：A 角色圣物/徽章正常，B 合成入�
 +本段仅修复 damage_batch 非消费计数、effect_runtime 整批容量先检查后 consume、GameRoot 对非空提交失败的明确诊断；基础HP不回滚，合法miss/空扩展路径保持。最终队列容量-1/满/+1、双目标整批拒绝与精确重试等25检查 PASS；八个直接相关原生回归147检查 PASS。完整接受前容量仍 FAIL，最终19检查仍3失败，不以局部GREEN关闭P3/P6。源码内容指纹 `6d5ca9e1540f99dae93ec6a8e11569d71bc4d80c6ab333196287dc0bce7d4970`；证据 `outputs/framework_v2/CAPACITY_SCOPED_EVIDENCE.json` 和 `docs/review/framework_capacity_20261002/`。
 
 +架构待讨论：在释放时仍按all-intersecting选目标且windup中可出生/换代的合同下，准入所需fanout上界必须有权威来源；不能以30目标测试规模设新玩法上限，不能增加魔法常量或丢合法目标。候选是由现有EffectRuntime拥有、随ActionConfigLease转移的容量许可及producer/consumer结束协议，尚未实施。完整容量、死亡credit切profile窄时序、receipt安全退休与P6组合/公平性/P95/P99继续保留。已闭环的烈火、future保护、宝石纵向及身份范围不重做，不开放正式玩法；journal64不淘汰。v97精确B输入 MISSING、故障修复 NOT_RUN，APK/GPU/设备 NOT_RUN。
+
+
+### 2026-10-02 默认启动根修复与合法周期致死退出检查点
+
+真实默认路径启动 RED（2检查/1失败）证明 SaveUpgradeBackup 把 user:// 截为 user:/；本段只修正该备份组件的 scheme 根及对应 containment 前缀，未改 PlayerState 加载、存档格式或业务权威。真实周期HP致死但deferred回调未执行时，经实际Root返回选角菜单守卫排空死亡/掉落/任务/经验/存档；A一次入账、B原档字节不变，合法切换及独立冷进程37+13检查 PASS。先前B任务全字典断言因int/JSON float类型不等 FAIL，保留证据并按完整JSON持久化表示建立预期；未删除业务断言。三个保存升级直接回归248检查 PASS，绿色运行源码稳定、引擎/脚本错误0。源码3464文件 SHA256 `be07efff6ce3e3fba9ea246068bbc9138235adf72d549db8292abf28c8671f06`，证据 docs/review/framework_credit_20261002/。旧profile-switch fixture只读未变、NOT_RUN。
+
+此处只闭合法UI生命周期窄时序，不证明越过Root守卫的直接选角调用，也不宣称v97背包根因。完整容量 FAIL；pending消费前缀回收、receipt退休、完整P6/公平性/P95/P99继续施工。精确历史B输入 MISSING，用户背包故障因果修复 NOT_RUN；主树整合/APK/GPU/设备 NOT_RUN。默认新玩法仍关闭，地图、权威源、第二树和主树v97保持。

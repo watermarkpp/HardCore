@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/mobile_save_upgrade_test.tscn','tests/framework/mobile_save_upgrade_restart_test.tscn','tests/framework/mobile_save_upgrade_startup_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 3,
+  "failed": 0,
+  "status": "PASS"
+}
