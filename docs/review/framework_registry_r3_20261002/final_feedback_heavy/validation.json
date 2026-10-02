@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/full_surround_24_fractional_test.tscn','tests/user_feedback_20260930/full_surround_64_test.tscn','tests/user_feedback_20260930/full_surround_89_fractional_test.tscn','tests/user_feedback_20260930/full_surround_89_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_89_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_native_test.tscn','tests/user_feedback_20260930/full_surround_prefilled_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_test.tscn' -TimeoutSeconds 60"
+  ],
+  "timeout_seconds": 60,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 12,
+  "failed": 0,
+  "status": "PASS"
+}

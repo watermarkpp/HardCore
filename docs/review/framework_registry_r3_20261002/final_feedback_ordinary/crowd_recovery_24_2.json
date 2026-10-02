@@ -1,0 +1,3613 @@
+{
+  "failures": [],
+  "rows": [
+    {
+      "count": 2,
+      "monster_id": 24,
+      "moved": 2,
+      "player_damage": 15,
+      "samples": [
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": -1,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 0,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 0.0,
+              "id": 175623898908,
+              "known": "(inf, inf)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": false,
+              "permission": false,
+              "physics": true,
+              "position": [
+                19.5,
+                16.5
+              ],
+              "pursuit": false,
+              "radius": 0.353553390593274,
+              "reason": "IDLE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 0.0,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.22,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": -1,
+                "melee_tick": -1,
+                "pending_impact": -1.0,
+                "physics_tick": 2,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 1.0,
+                "state": "idle",
+                "visual_process_frame": -1,
+                "walk_phase": 0.0
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": -1,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 0,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 0.0,
+              "id": 177771382586,
+              "known": "(inf, inf)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": false,
+              "permission": false,
+              "physics": true,
+              "position": [
+                20.5999984741211,
+                16.5
+              ],
+              "pursuit": false,
+              "radius": 0.353553390593274,
+              "reason": "IDLE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 0.0,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.22,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": -1,
+                "melee_tick": -1,
+                "pending_impact": -1.0,
+                "physics_tick": 2,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 1.0,
+                "state": "idle",
+                "visual_process_frame": -1,
+                "walk_phase": 0.0
+              }
+            }
+          ],
+          "frame": 0,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 1000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 0,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 1.0,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                19.5,
+                16.5
+              ],
+              "pursuit": false,
+              "radius": 0.353553390593274,
+              "reason": "IDLE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 0.0,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 2,
+                "hit_duration": 0.22,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 61,
+                "melee_tick": 61,
+                "pending_impact": -1.0,
+                "physics_tick": 62,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 1.0,
+                "state": "idle",
+                "visual_process_frame": 114,
+                "walk_phase": 0.0
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 1000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 0,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 1.0,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                20.5999984741211,
+                16.5
+              ],
+              "pursuit": false,
+              "radius": 0.353553390593274,
+              "reason": "IDLE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 0.0,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 2,
+                "hit_duration": 0.22,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 61,
+                "melee_tick": 61,
+                "pending_impact": -1.0,
+                "physics_tick": 62,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 1.0,
+                "state": "idle",
+                "visual_process_frame": 114,
+                "walk_phase": 0.0
+              }
+            }
+          ],
+          "frame": 60,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 1999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 1516,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 2.0,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(18.5, 16.5)",
+              "motion": "(-0.011112, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                19.1666488647461,
+                16.4999847412109
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 0.333351135253906,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 121,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 121,
+                "melee_tick": 121,
+                "pending_impact": -1.0,
+                "physics_tick": 122,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 258,
+                "walk_phase": 0.0000529057352653961
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 1999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 1516,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 2.0,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(19.6, 17.5)",
+              "motion": "(-0.007858, 0.007858)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                20.3642959594727,
+                16.7357025146484
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 0.333333687856793,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 121,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 121,
+                "melee_tick": 121,
+                "pending_impact": -1.0,
+                "physics_tick": 122,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 258,
+                "walk_phase": 0.000000563570098144339
+              }
+            }
+          ],
+          "frame": 120,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 2999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 1516,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 2.99999999999999,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(-0.01111, 0.000002)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                18.4999580383301,
+                16.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "MOTION_BLOCKED",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 1.00004196260124,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 181,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 181,
+                "melee_tick": 181,
+                "pending_impact": -1.0,
+                "physics_tick": 182,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 403,
+                "walk_phase": 0.000124387741538223
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 2999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 1516,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 0
+              },
+              "clock": 2.99999999999999,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(19.6, 17.5)",
+              "motion": "(-0.007856, 0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                19.8928928375244,
+                17.2071056365967
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 0.999998365528882,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 5,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 181,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 181,
+                "melee_tick": 181,
+                "pending_impact": -1.0,
+                "physics_tick": 182,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 403,
+                "walk_phase": 0.999993596589846
+              }
+            }
+          ],
+          "frame": 180,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 3999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 3033,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 3033
+              },
+              "clock": 3.99999999999999,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(17.6888, 16.5)",
+              "motion": "(-0.01111, 0.000002)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.8332576751709,
+                16.4999904632568
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 1.66674232576042,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 241,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 241,
+                "melee_tick": 241,
+                "pending_impact": -1.0,
+                "physics_tick": 242,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 548,
+                "walk_phase": 0.000224477169031623
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 3999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 3033,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 3033
+              },
+              "clock": 3.99999999999999,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(18.5, 17.5)",
+              "motion": "(-0.011112, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                19.3475360870361,
+                17.4999942779541
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "FRONTLINE_BLOCKED",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 1.66667592874728,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 241,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 241,
+                "melee_tick": 241,
+                "pending_impact": -1.0,
+                "physics_tick": 242,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 548,
+                "walk_phase": 0.000025286229199839
+              }
+            }
+          ],
+          "frame": 240,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 4999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 4549,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 3033
+              },
+              "clock": 4.99999999999999,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.4776763916016,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "ATTACK_POSE_COMMIT",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 1,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.02232360932976,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.170000000000002,
+                "blocked_walk_phase": 0.0,
+                "frame": 4,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 301,
+                "melee_tick": 301,
+                "pending_impact": -1.0,
+                "physics_tick": 302,
+                "pose_remaining": 0.17,
+                "reference_cycle_gu": 0.3333335,
+                "state": "attack",
+                "visual_process_frame": 693,
+                "walk_phase": 0.0669677945053804
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 4999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 4549,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 3033
+              },
+              "clock": 4.99999999999999,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(18.5, 17.5)",
+              "motion": "(-0.01111, -0.000002)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                18.680835723877,
+                17.4999847412109
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 2.33337629190646,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 301,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 301,
+                "melee_tick": 301,
+                "pending_impact": -1.0,
+                "physics_tick": 302,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 693,
+                "walk_phase": 0.000125375656693238
+              }
+            }
+          ],
+          "frame": 300,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 5999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 4549,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 3033
+              },
+              "clock": 5.99999999999998,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 1,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 329,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 361,
+                "melee_tick": 361,
+                "pending_impact": -1.0,
+                "physics_tick": 362,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 838,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 5999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 4549,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 3033
+              },
+              "clock": 5.99999999999998,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(17.5, 17.5)",
+              "motion": "(-0.011112, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                18.0141410827637,
+                17.4999809265137
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "FRONTLINE_BLOCKED",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 3.00007093464956,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 361,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 361,
+                "melee_tick": 361,
+                "pending_impact": -1.0,
+                "physics_tick": 362,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 838,
+                "walk_phase": 0.000208303844515534
+              }
+            }
+          ],
+          "frame": 360,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 6999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 6066,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 6066
+              },
+              "clock": 6.99999999999998,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 1,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 1,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 329,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 421,
+                "melee_tick": 421,
+                "pending_impact": -1.0,
+                "physics_tick": 422,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 983,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 6999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 6066,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 6066
+              },
+              "clock": 6.99999999999998,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.5,
+                17.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "SOURCE_DECISION_WAIT",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 0,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 3.53040180285461,
+                "attack_duration": 0.46,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 1,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 409,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 421,
+                "melee_tick": 421,
+                "pending_impact": -1.0,
+                "physics_tick": 422,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 983,
+                "walk_phase": 0.591200112963777
+              }
+            }
+          ],
+          "frame": 420,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 7999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 7583,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 6066
+              },
+              "clock": 7.99999999999998,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "ATTACK_POSE_COMMIT",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.203333333333335,
+                "blocked_walk_phase": 0.0,
+                "frame": 4,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 481,
+                "melee_tick": 481,
+                "pending_impact": -1.0,
+                "physics_tick": 482,
+                "pose_remaining": 0.203333333333333,
+                "reference_cycle_gu": 0.3333335,
+                "state": "attack",
+                "visual_process_frame": 1128,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 7999,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 7583,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 6066
+              },
+              "clock": 7.99999999999998,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.5,
+                17.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "ATTACK_POSE_COMMIT",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 1,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 3.53040180285461,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.203333333333335,
+                "blocked_walk_phase": 0.0,
+                "frame": 4,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 481,
+                "melee_tick": 481,
+                "pending_impact": -1.0,
+                "physics_tick": 482,
+                "pose_remaining": 0.203333333333333,
+                "reference_cycle_gu": 0.3333335,
+                "state": "attack",
+                "visual_process_frame": 1128,
+                "walk_phase": 0.591200112963777
+              }
+            }
+          ],
+          "frame": 480,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 9000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 7583,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 6066
+              },
+              "clock": 9.00000000000003,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 541,
+                "melee_tick": 541,
+                "pending_impact": -1.0,
+                "physics_tick": 542,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 1272,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 9000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 7583,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 6066
+              },
+              "clock": 9.00000000000003,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.5,
+                17.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 1,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 3.53040180285461,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 541,
+                "melee_tick": 541,
+                "pending_impact": -1.0,
+                "physics_tick": 542,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 1272,
+                "walk_phase": 0.591200112963777
+              }
+            }
+          ],
+          "frame": 540,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 10000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 9100,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 9100
+              },
+              "clock": 10.0000000000001,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 2,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 601,
+                "melee_tick": 601,
+                "pending_impact": -1.0,
+                "physics_tick": 602,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 1418,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 10000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 9100,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 9100
+              },
+              "clock": 10.0000000000001,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.5,
+                17.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 1,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 3.53040180285461,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 2,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 601,
+                "melee_tick": 601,
+                "pending_impact": -1.0,
+                "physics_tick": 602,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 1418,
+                "walk_phase": 0.591200112963777
+              }
+            }
+          ],
+          "frame": 600,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 11000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 10616,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 9100
+              },
+              "clock": 11.0000000000001,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "ATTACK_POSE_COMMIT",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 3,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.236666666666648,
+                "blocked_walk_phase": 0.0,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 661,
+                "melee_tick": 661,
+                "pending_impact": -1.0,
+                "physics_tick": 662,
+                "pose_remaining": 0.236666666666666,
+                "reference_cycle_gu": 0.3333335,
+                "state": "attack",
+                "visual_process_frame": 1563,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 11000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 10616,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 9100
+              },
+              "clock": 11.0000000000001,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.5,
+                17.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "ATTACK_POSE_COMMIT",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 3.53040180285461,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.236666666666648,
+                "blocked_walk_phase": 0.0,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 661,
+                "melee_tick": 661,
+                "pending_impact": -1.0,
+                "physics_tick": 662,
+                "pose_remaining": 0.236666666666666,
+                "reference_cycle_gu": 0.3333335,
+                "state": "attack",
+                "visual_process_frame": 1563,
+                "walk_phase": 0.591200112963777
+              }
+            }
+          ],
+          "frame": 660,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 12000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 10616,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 9100
+              },
+              "clock": 12.0000000000002,
+              "id": 175623898908,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.2823371887207,
+                16.4999923706055
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 3,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 2.21766281221062,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 721,
+                "melee_tick": 721,
+                "pending_impact": -1.0,
+                "physics_tick": 722,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 1708,
+                "walk_phase": 0.652985110139301
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 12000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 10616,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 9100
+              },
+              "clock": 12.0000000000002,
+              "id": 177771382586,
+              "known": "(16.5, 16.5)",
+              "leg_target": "(inf, inf)",
+              "motion": "(0.0, 0.0)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.5,
+                17.5
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "COOLDOWN_HOLD",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": false,
+              "visual": {
+                "actual_distance_gu": 3.53040180285461,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0,
+                "frame": 0,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": -1,
+                "locomotion_intent": false,
+                "locomotion_intent_tick": 721,
+                "melee_tick": 721,
+                "pending_impact": -1.0,
+                "physics_tick": 722,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "idle",
+                "visual_process_frame": 1708,
+                "walk_phase": 0.591200112963777
+              }
+            }
+          ],
+          "frame": 720,
+          "player": "(16.5, 16.5)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 13000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 12133,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 12133
+              },
+              "clock": 13.0000000000002,
+              "id": 175623898908,
+              "known": "(15.12507, 17.87493)",
+              "leg_target": "(16.96807, 16.5)",
+              "motion": "(-0.007856, -0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                16.9837875366211,
+                16.5157127380371
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "FRONTLINE_BLOCKED",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 3,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 2.63987577147782,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.733333333333333,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 781,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 781,
+                "melee_tick": 781,
+                "pending_impact": -1.0,
+                "physics_tick": 782,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 1853,
+                "walk_phase": 0.919623354621775
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 13000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 0,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 12133,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 12133
+              },
+              "clock": 13.0000000000002,
+              "id": 177771382586,
+              "known": "(15.2822, 17.71779)",
+              "leg_target": "(16.90058, 17.75374)",
+              "motion": "(-0.007856, 0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                17.0363845825195,
+                17.6179351806641
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "FRONTLINE_BLOCKED",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 4.18605300062336,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0333333333333333,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 781,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 781,
+                "melee_tick": 781,
+                "pending_impact": -1.0,
+                "physics_tick": 782,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 1853,
+                "walk_phase": 0.558152722793715
+              }
+            }
+          ],
+          "frame": 780,
+          "player": "(14.85008, 18.14992)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 14000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 13650,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 12133
+              },
+              "clock": 14.0000000000003,
+              "id": 175623898908,
+              "known": "(12.61091, 20.38909)",
+              "leg_target": "(15.96807, 17.5)",
+              "motion": "(-0.007856, 0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                16.5123844146729,
+                16.9556903839111
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 3,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 3.30654044914991,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.733333333333333,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 841,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 841,
+                "melee_tick": 841,
+                "pending_impact": -1.0,
+                "physics_tick": 842,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 1998,
+                "walk_phase": 0.919616387641522
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 14000,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 13650,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 12133
+              },
+              "clock": 14.0000000000003,
+              "id": 177771382586,
+              "known": "(12.92518, 20.07482)",
+              "leg_target": "(15.99372, 18.6606)",
+              "motion": "(-0.007856, 0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                16.5649795532227,
+                18.0893402099609
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 4.85272037680261,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0333333333333333,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 841,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 841,
+                "melee_tick": 841,
+                "pending_impact": -1.0,
+                "physics_tick": 842,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 1998,
+                "walk_phase": 0.558153851330895
+              }
+            }
+          ],
+          "frame": 840,
+          "player": "(12.49306, 20.50694)"
+        },
+        {
+          "actors": [
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 14983,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 13650,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 12133
+              },
+              "clock": 14.9833333333337,
+              "id": 175623898908,
+              "known": "(10.60744, 22.39256)",
+              "leg_target": "(15.96807, 17.5)",
+              "motion": "(-0.007856, 0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                16.0488357543945,
+                17.4192390441895
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 3,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 3.96209724154323,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.733333333333333,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 900,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 900,
+                "melee_tick": 900,
+                "pending_impact": -1.0,
+                "physics_tick": 901,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 2140,
+                "walk_phase": 0.886285781486805
+              }
+            },
+            {
+              "cadence": {
+                "authority_violation": false,
+                "configured": true,
+                "contract_id": "monster.movement.cadence.m01a.v1",
+                "failed_closed": false,
+                "last_error_code": "",
+                "last_error_reason": "",
+                "last_evaluated_ms": 14983,
+                "monster_id": 24,
+                "movement_enabled": true,
+                "runtime_allowed": true,
+                "source_status": "ACCEPTED_CANDIDATE",
+                "walk_count": 1,
+                "walk_interval_ms": 1500,
+                "walk_step": 1,
+                "walk_tick_ms": 13650,
+                "walk_wait_locked": false,
+                "walk_wait_ms": 0,
+                "walk_wait_tick_ms": 12133
+              },
+              "clock": 14.9833333333337,
+              "id": 177771382586,
+              "known": "(10.56816, 22.43184)",
+              "leg_target": "(15.99372, 18.6606)",
+              "motion": "(-0.007856, 0.007856)",
+              "observed": true,
+              "permission": false,
+              "physics": true,
+              "position": [
+                16.101432800293,
+                18.5528869628906
+              ],
+              "pursuit": true,
+              "radius": 0.353553390593274,
+              "reason": "OUT_OF_RANGE",
+              "route": "[]",
+              "route_index": 0,
+              "safe_margin": 0.349999994039536,
+              "starts": 2,
+              "step_active": true,
+              "visual": {
+                "actual_distance_gu": 5.50827447115444,
+                "attack_duration": 0.62,
+                "attack_visual_remaining": 0.0,
+                "blocked_walk_phase": 0.0333333333333333,
+                "frame": 3,
+                "hit_duration": 0.270000010728836,
+                "last_motion_tick": 900,
+                "locomotion_intent": true,
+                "locomotion_intent_tick": 900,
+                "melee_tick": 900,
+                "pending_impact": -1.0,
+                "physics_tick": 901,
+                "pose_remaining": 0.0,
+                "reference_cycle_gu": 0.3333335,
+                "state": "walk",
+                "visual_process_frame": 2140,
+                "walk_phase": 0.524815151055728
+              }
+            }
+          ],
+          "frame": 899,
+          "player": "(10.17532, 22.82468)"
+        }
+      ],
+      "starts": 5,
+      "starts_before_kite": 5,
+      "sweeps": [
+        {
+          "id": 175623898908,
+          "moves": [
+            {
+              "collisions": [],
+              "end": "(19.48889, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33334, -10.66667)",
+              "start": "(19.5, 16.5)",
+              "tick": 92
+            },
+            {
+              "collisions": [],
+              "end": "(19.47778, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33334, -10.66667)",
+              "start": "(19.48889, 16.5)",
+              "tick": 93
+            },
+            {
+              "collisions": [],
+              "end": "(19.46667, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33339, -10.66665)",
+              "start": "(19.47778, 16.5)",
+              "tick": 94
+            },
+            {
+              "collisions": [],
+              "end": "(19.45555, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33339, -10.66665)",
+              "start": "(19.46667, 16.5)",
+              "tick": 95
+            },
+            {
+              "collisions": [],
+              "end": "(19.44444, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33339, -10.66665)",
+              "start": "(19.45555, 16.5)",
+              "tick": 96
+            },
+            {
+              "collisions": [],
+              "end": "(19.43333, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33343, -10.66663)",
+              "start": "(19.44444, 16.5)",
+              "tick": 97
+            },
+            {
+              "collisions": [],
+              "end": "(19.42222, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33343, -10.66663)",
+              "start": "(19.43333, 16.5)",
+              "tick": 98
+            },
+            {
+              "collisions": [],
+              "end": "(19.41111, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33343, -10.66663)",
+              "start": "(19.42222, 16.5)",
+              "tick": 99
+            },
+            {
+              "collisions": [],
+              "end": "(19.4, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33343, -10.66663)",
+              "start": "(19.41111, 16.5)",
+              "tick": 100
+            },
+            {
+              "collisions": [],
+              "end": "(19.38888, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33348, -10.6666)",
+              "start": "(19.4, 16.49999)",
+              "tick": 101
+            },
+            {
+              "collisions": [],
+              "end": "(19.37777, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33348, -10.6666)",
+              "start": "(19.38888, 16.49999)",
+              "tick": 102
+            },
+            {
+              "collisions": [],
+              "end": "(19.36666, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33348, -10.6666)",
+              "start": "(19.37777, 16.49999)",
+              "tick": 103
+            },
+            {
+              "collisions": [],
+              "end": "(19.35555, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33348, -10.6666)",
+              "start": "(19.36666, 16.49999)",
+              "tick": 104
+            },
+            {
+              "collisions": [],
+              "end": "(19.34444, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33353, -10.66658)",
+              "start": "(19.35555, 16.49999)",
+              "tick": 105
+            },
+            {
+              "collisions": [],
+              "end": "(19.33332, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33354, -10.66658)",
+              "start": "(19.34444, 16.49999)",
+              "tick": 106
+            },
+            {
+              "collisions": [],
+              "end": "(19.32221, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33354, -10.66657)",
+              "start": "(19.33332, 16.49999)",
+              "tick": 107
+            },
+            {
+              "collisions": [],
+              "end": "(19.3111, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33354, -10.66657)",
+              "start": "(19.32221, 16.49999)",
+              "tick": 108
+            },
+            {
+              "collisions": [],
+              "end": "(19.29999, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3336, -10.66655)",
+              "start": "(19.3111, 16.49999)",
+              "tick": 109
+            },
+            {
+              "collisions": [],
+              "end": "(19.28888, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3336, -10.66654)",
+              "start": "(19.29999, 16.49999)",
+              "tick": 110
+            },
+            {
+              "collisions": [],
+              "end": "(19.27777, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3336, -10.66654)",
+              "start": "(19.28888, 16.49999)",
+              "tick": 111
+            },
+            {
+              "collisions": [],
+              "end": "(19.26665, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3336, -10.66654)",
+              "start": "(19.27777, 16.49999)",
+              "tick": 112
+            },
+            {
+              "collisions": [],
+              "end": "(19.25554, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33366, -10.66651)",
+              "start": "(19.26665, 16.49999)",
+              "tick": 113
+            },
+            {
+              "collisions": [],
+              "end": "(19.24443, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33367, -10.66651)",
+              "start": "(19.25554, 16.49999)",
+              "tick": 114
+            },
+            {
+              "collisions": [],
+              "end": "(19.23332, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33367, -10.66651)",
+              "start": "(19.24443, 16.49999)",
+              "tick": 115
+            },
+            {
+              "collisions": [],
+              "end": "(19.22221, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33368, -10.6665)",
+              "start": "(19.23332, 16.49999)",
+              "tick": 116
+            },
+            {
+              "collisions": [],
+              "end": "(19.2111, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33374, -10.66647)",
+              "start": "(19.22221, 16.49999)",
+              "tick": 117
+            },
+            {
+              "collisions": [],
+              "end": "(19.19998, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33374, -10.66647)",
+              "start": "(19.2111, 16.49999)",
+              "tick": 118
+            },
+            {
+              "collisions": [],
+              "end": "(19.18887, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33375, -10.66647)",
+              "start": "(19.19998, 16.49999)",
+              "tick": 119
+            },
+            {
+              "collisions": [],
+              "end": "(19.17776, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33376, -10.66646)",
+              "start": "(19.18887, 16.49999)",
+              "tick": 120
+            },
+            {
+              "collisions": [],
+              "end": "(19.16665, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33382, -10.66643)",
+              "start": "(19.17776, 16.49998)",
+              "tick": 121
+            },
+            {
+              "collisions": [],
+              "end": "(19.15554, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33383, -10.66643)",
+              "start": "(19.16665, 16.49998)",
+              "tick": 122
+            },
+            {
+              "collisions": [],
+              "end": "(19.14442, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33384, -10.66642)",
+              "start": "(19.15554, 16.49998)",
+              "tick": 123
+            },
+            {
+              "collisions": [],
+              "end": "(19.13331, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33385, -10.66642)",
+              "start": "(19.14442, 16.49998)",
+              "tick": 124
+            },
+            {
+              "collisions": [],
+              "end": "(19.1222, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33386, -10.66642)",
+              "start": "(19.13331, 16.49998)",
+              "tick": 125
+            },
+            {
+              "collisions": [],
+              "end": "(19.11109, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33393, -10.66638)",
+              "start": "(19.1222, 16.49998)",
+              "tick": 126
+            },
+            {
+              "collisions": [],
+              "end": "(19.09998, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33394, -10.66637)",
+              "start": "(19.11109, 16.49998)",
+              "tick": 127
+            },
+            {
+              "collisions": [],
+              "end": "(19.08887, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33395, -10.66637)",
+              "start": "(19.09998, 16.49998)",
+              "tick": 128
+            },
+            {
+              "collisions": [],
+              "end": "(19.07775, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33397, -10.66636)",
+              "start": "(19.08887, 16.49998)",
+              "tick": 129
+            },
+            {
+              "collisions": [],
+              "end": "(19.06664, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33398, -10.66636)",
+              "start": "(19.07775, 16.49998)",
+              "tick": 130
+            },
+            {
+              "collisions": [],
+              "end": "(19.05553, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33406, -10.66631)",
+              "start": "(19.06664, 16.49998)",
+              "tick": 131
+            },
+            {
+              "collisions": [],
+              "end": "(19.04442, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33408, -10.66631)",
+              "start": "(19.05553, 16.49998)",
+              "tick": 132
+            },
+            {
+              "collisions": [],
+              "end": "(19.03331, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33409, -10.6663)",
+              "start": "(19.04442, 16.49998)",
+              "tick": 133
+            },
+            {
+              "collisions": [],
+              "end": "(19.02219, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33411, -10.66629)",
+              "start": "(19.03331, 16.49998)",
+              "tick": 134
+            },
+            {
+              "collisions": [],
+              "end": "(19.01108, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33412, -10.66628)",
+              "start": "(19.02219, 16.49998)",
+              "tick": 135
+            },
+            {
+              "collisions": [],
+              "end": "(18.99997, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33422, -10.66623)",
+              "start": "(19.01108, 16.49998)",
+              "tick": 136
+            },
+            {
+              "collisions": [],
+              "end": "(18.98886, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33424, -10.66622)",
+              "start": "(18.99997, 16.49998)",
+              "tick": 137
+            },
+            {
+              "collisions": [],
+              "end": "(18.97775, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33426, -10.66621)",
+              "start": "(18.98886, 16.49998)",
+              "tick": 138
+            },
+            {
+              "collisions": [],
+              "end": "(18.96663, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33428, -10.6662)",
+              "start": "(18.97775, 16.49998)",
+              "tick": 139
+            },
+            {
+              "collisions": [],
+              "end": "(18.95552, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3343, -10.66619)",
+              "start": "(18.96663, 16.49998)",
+              "tick": 140
+            },
+            {
+              "collisions": [],
+              "end": "(18.94441, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33442, -10.66614)",
+              "start": "(18.95552, 16.49998)",
+              "tick": 141
+            },
+            {
+              "collisions": [],
+              "end": "(18.9333, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33444, -10.66612)",
+              "start": "(18.94441, 16.49998)",
+              "tick": 142
+            },
+            {
+              "collisions": [],
+              "end": "(18.92219, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33447, -10.66611)",
+              "start": "(18.9333, 16.49998)",
+              "tick": 143
+            },
+            {
+              "collisions": [],
+              "end": "(18.91108, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3345, -10.66609)",
+              "start": "(18.92219, 16.49998)",
+              "tick": 144
+            },
+            {
+              "collisions": [],
+              "end": "(18.89996, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33453, -10.66608)",
+              "start": "(18.91108, 16.49998)",
+              "tick": 145
+            },
+            {
+              "collisions": [],
+              "end": "(18.88885, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33456, -10.66606)",
+              "start": "(18.89996, 16.49998)",
+              "tick": 146
+            },
+            {
+              "collisions": [],
+              "end": "(18.87774, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.3346, -10.66604)",
+              "start": "(18.88885, 16.49998)",
+              "tick": 147
+            },
+            {
+              "collisions": [],
+              "end": "(18.86663, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33464, -10.66603)",
+              "start": "(18.87774, 16.49998)",
+              "tick": 148
+            },
+            {
+              "collisions": [],
+              "end": "(18.85552, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33467, -10.66601)",
+              "start": "(18.86663, 16.49998)",
+              "tick": 149
+            },
+            {
+              "collisions": [],
+              "end": "(18.8444, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33483, -10.66593)",
+              "start": "(18.85552, 16.49998)",
+              "tick": 150
+            },
+            {
+              "collisions": [],
+              "end": "(18.83329, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33488, -10.6659)",
+              "start": "(18.8444, 16.49998)",
+              "tick": 151
+            },
+            {
+              "collisions": [],
+              "end": "(18.82218, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33493, -10.66588)",
+              "start": "(18.83329, 16.49998)",
+              "tick": 152
+            },
+            {
+              "collisions": [],
+              "end": "(18.81107, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33486, -10.66591)",
+              "start": "(18.82218, 16.49998)",
+              "tick": 153
+            },
+            {
+              "collisions": [],
+              "end": "(18.79996, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33491, -10.66589)",
+              "start": "(18.81107, 16.49998)",
+              "tick": 154
+            },
+            {
+              "collisions": [],
+              "end": "(18.78885, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33484, -10.66593)",
+              "start": "(18.79996, 16.49998)",
+              "tick": 155
+            },
+            {
+              "collisions": [],
+              "end": "(18.77773, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33489, -10.6659)",
+              "start": "(18.78885, 16.49998)",
+              "tick": 156
+            },
+            {
+              "collisions": [],
+              "end": "(18.76662, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33496, -10.66587)",
+              "start": "(18.77773, 16.49998)",
+              "tick": 157
+            },
+            {
+              "collisions": [],
+              "end": "(18.75551, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33487, -10.66591)",
+              "start": "(18.76662, 16.49998)",
+              "tick": 158
+            },
+            {
+              "collisions": [],
+              "end": "(18.7444, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33494, -10.66588)",
+              "start": "(18.75551, 16.49998)",
+              "tick": 159
+            },
+            {
+              "collisions": [],
+              "end": "(18.73329, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33484, -10.66592)",
+              "start": "(18.7444, 16.49998)",
+              "tick": 160
+            },
+            {
+              "collisions": [],
+              "end": "(18.72218, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33491, -10.66589)",
+              "start": "(18.73329, 16.49998)",
+              "tick": 161
+            },
+            {
+              "collisions": [],
+              "end": "(18.71107, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33481, -10.66594)",
+              "start": "(18.72218, 16.49998)",
+              "tick": 162
+            },
+            {
+              "collisions": [],
+              "end": "(18.69995, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33489, -10.6659)",
+              "start": "(18.71107, 16.49998)",
+              "tick": 163
+            },
+            {
+              "collisions": [],
+              "end": "(18.68885, 16.49998)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33497, -10.66586)",
+              "start": "(18.69995, 16.49998)",
+              "tick": 164
+            },
+            {
+              "collisions": [],
+              "end": "(18.67774, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33507, -10.66581)",
+              "start": "(18.68885, 16.49998)",
+              "tick": 165
+            },
+            {
+              "collisions": [],
+              "end": "(18.66663, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33495, -10.66587)",
+              "start": "(18.67774, 16.49999)",
+              "tick": 166
+            },
+            {
+              "collisions": [],
+              "end": "(18.65551, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33481, -10.66594)",
+              "start": "(18.66663, 16.49999)",
+              "tick": 167
+            },
+            {
+              "collisions": [],
+              "end": "(18.6444, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33491, -10.66589)",
+              "start": "(18.65551, 16.49999)",
+              "tick": 168
+            },
+            {
+              "collisions": [],
+              "end": "(18.63329, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33475, -10.66597)",
+              "start": "(18.6444, 16.49999)",
+              "tick": 169
+            },
+            {
+              "collisions": [],
+              "end": "(18.62218, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33487, -10.66591)",
+              "start": "(18.63329, 16.49999)",
+              "tick": 170
+            },
+            {
+              "collisions": [],
+              "end": "(18.61107, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33501, -10.66584)",
+              "start": "(18.62218, 16.49999)",
+              "tick": 171
+            },
+            {
+              "collisions": [],
+              "end": "(18.59996, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33481, -10.66594)",
+              "start": "(18.61107, 16.49999)",
+              "tick": 172
+            },
+            {
+              "collisions": [],
+              "end": "(18.58885, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33497, -10.66586)",
+              "start": "(18.59996, 16.49999)",
+              "tick": 173
+            },
+            {
+              "collisions": [],
+              "end": "(18.57773, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33472, -10.66599)",
+              "start": "(18.58885, 16.49999)",
+              "tick": 174
+            },
+            {
+              "collisions": [],
+              "end": "(18.56662, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33491, -10.66589)",
+              "start": "(18.57773, 16.49999)",
+              "tick": 175
+            },
+            {
+              "collisions": [],
+              "end": "(18.55551, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33456, -10.66606)",
+              "start": "(18.56662, 16.5)",
+              "tick": 176
+            },
+            {
+              "collisions": [],
+              "end": "(18.5444, 16.49999)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33481, -10.66594)",
+              "start": "(18.55551, 16.5)",
+              "tick": 177
+            },
+            {
+              "collisions": [],
+              "end": "(18.53329, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33609, -10.6653)",
+              "start": "(18.5444, 16.49999)",
+              "tick": 178
+            },
+            {
+              "collisions": [],
+              "end": "(18.52218, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33579, -10.66545)",
+              "start": "(18.53329, 16.5)",
+              "tick": 179
+            },
+            {
+              "collisions": [],
+              "end": "(18.51107, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.33334, -10.66667)",
+              "start": "(18.52218, 16.5)",
+              "tick": 180
+            },
+            {
+              "collisions": [],
+              "end": "(18.5, 16.5)",
+              "legs": "[(18.5, 16.5)]",
+              "requested": "(-21.25488, -10.62378)",
+              "start": "(18.51107, 16.5)",
+              "tick": 181
+            },
+            {
+              "collisions": [],
+              "end": "(18.49996, 16.5)",
+              "legs": "[(17.6888, 16.5)]",
+              "requested": "(-0.082123, -0.041062)",
+              "start": "(18.5, 16.5)",
+              "tick": 181
+            },
+            {
+              "collisions": [],
+              "end": "(18.48885, 16.5)",
+              "legs": "[(17.6888, 16.5)]",
+              "requested": "(-21.33334, -10.66667)",
+              "start": "(18.49996, 16.5)",
+              "tick": 182
+            },
+            {
+              "collisions": [],
+              "end": "(18.47773, 16.5)",
+              "legs": "[(17.6888, 16.5)]",
+              "requested": "(-21.33334, -10.66667)",
+              "start": "(18.48885, 16.5)",
+              "tick": 183
+            },
+            {
+              "collisions": [],
+              "end": "(18.46662, 16.5)",
+              "legs": "[(17.6888, 16.5)]",
+              "requested": "(-21.33334, -10.66667)",
+              "start": "(18.47773, 16.5)",
+              "tick": 184
+            },
+            {
+              "collisions": [],
+              "end": "(18.45551, 16.5)",
+              "legs": "[(17.6888, 16.5)]",
+              "requested": "(-21.3334, -10.66665)",
+              "start": "(18.46662, 16.5)",
+              "tick": 185
+            },
+            {
+              "collisions": [],
+              "end": "(18.4444, 16.5)",
+              "legs": "[(17.6888, 16.5)]",
+              "requested": "(-21.3334, -10.66665)",
+              "start": "(18.45551, 16.5)",
+              "tick": 186
+            }
+          ],
+          "relocations": []
+        },
+        {
+          "id": 177771382586,
+          "moves": [
+            {
+              "collisions": [],
+              "end": "(20.59214, 16.50786)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.6, 16.5)",
+              "tick": 92
+            },
+            {
+              "collisions": [],
+              "end": "(20.58429, 16.51571)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.59214, 16.50786)",
+              "tick": 93
+            },
+            {
+              "collisions": [],
+              "end": "(20.57643, 16.52357)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.58429, 16.51571)",
+              "tick": 94
+            },
+            {
+              "collisions": [],
+              "end": "(20.56857, 16.53143)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.57643, 16.52357)",
+              "tick": 95
+            },
+            {
+              "collisions": [],
+              "end": "(20.56071, 16.53928)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.56857, 16.53143)",
+              "tick": 96
+            },
+            {
+              "collisions": [],
+              "end": "(20.55286, 16.54714)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.56071, 16.53928)",
+              "tick": 97
+            },
+            {
+              "collisions": [],
+              "end": "(20.545, 16.555)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.55286, 16.54714)",
+              "tick": 98
+            },
+            {
+              "collisions": [],
+              "end": "(20.53715, 16.56285)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.545, 16.555)",
+              "tick": 99
+            },
+            {
+              "collisions": [],
+              "end": "(20.52929, 16.57071)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.53715, 16.56285)",
+              "tick": 100
+            },
+            {
+              "collisions": [],
+              "end": "(20.52143, 16.57857)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.52929, 16.57071)",
+              "tick": 101
+            },
+            {
+              "collisions": [],
+              "end": "(20.51357, 16.58642)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.52143, 16.57857)",
+              "tick": 102
+            },
+            {
+              "collisions": [],
+              "end": "(20.50572, 16.59428)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.51357, 16.58642)",
+              "tick": 103
+            },
+            {
+              "collisions": [],
+              "end": "(20.49786, 16.60214)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.50572, 16.59428)",
+              "tick": 104
+            },
+            {
+              "collisions": [],
+              "end": "(20.49001, 16.60999)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.49786, 16.60214)",
+              "tick": 105
+            },
+            {
+              "collisions": [],
+              "end": "(20.48215, 16.61785)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.49001, 16.60999)",
+              "tick": 106
+            },
+            {
+              "collisions": [],
+              "end": "(20.47429, 16.62571)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.48215, 16.61785)",
+              "tick": 107
+            },
+            {
+              "collisions": [],
+              "end": "(20.46643, 16.63356)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.47429, 16.62571)",
+              "tick": 108
+            },
+            {
+              "collisions": [],
+              "end": "(20.45858, 16.64142)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.46643, 16.63356)",
+              "tick": 109
+            },
+            {
+              "collisions": [],
+              "end": "(20.45072, 16.64928)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.1699, 0.0)",
+              "start": "(20.45858, 16.64142)",
+              "tick": 110
+            },
+            {
+              "collisions": [],
+              "end": "(20.44286, 16.65714)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.45072, 16.64928)",
+              "tick": 111
+            },
+            {
+              "collisions": [],
+              "end": "(20.43501, 16.66499)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.44286, 16.65714)",
+              "tick": 112
+            },
+            {
+              "collisions": [],
+              "end": "(20.42715, 16.67285)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.43501, 16.66499)",
+              "tick": 113
+            },
+            {
+              "collisions": [],
+              "end": "(20.41929, 16.6807)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.42715, 16.67285)",
+              "tick": 114
+            },
+            {
+              "collisions": [],
+              "end": "(20.41144, 16.68856)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.41929, 16.6807)",
+              "tick": 115
+            },
+            {
+              "collisions": [],
+              "end": "(20.40358, 16.69642)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.41144, 16.68856)",
+              "tick": 116
+            },
+            {
+              "collisions": [],
+              "end": "(20.39572, 16.70428)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.40358, 16.69642)",
+              "tick": 117
+            },
+            {
+              "collisions": [],
+              "end": "(20.38787, 16.71213)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.39572, 16.70428)",
+              "tick": 118
+            },
+            {
+              "collisions": [],
+              "end": "(20.38001, 16.71999)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.38787, 16.71213)",
+              "tick": 119
+            },
+            {
+              "collisions": [],
+              "end": "(20.37215, 16.72784)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.38001, 16.71999)",
+              "tick": 120
+            },
+            {
+              "collisions": [],
+              "end": "(20.3643, 16.7357)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.37215, 16.72784)",
+              "tick": 121
+            },
+            {
+              "collisions": [],
+              "end": "(20.35644, 16.74356)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.3643, 16.7357)",
+              "tick": 122
+            },
+            {
+              "collisions": [],
+              "end": "(20.34858, 16.75142)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.35644, 16.74356)",
+              "tick": 123
+            },
+            {
+              "collisions": [],
+              "end": "(20.34073, 16.75927)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.34858, 16.75142)",
+              "tick": 124
+            },
+            {
+              "collisions": [],
+              "end": "(20.33287, 16.76713)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.34073, 16.75927)",
+              "tick": 125
+            },
+            {
+              "collisions": [],
+              "end": "(20.32501, 16.77498)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.33287, 16.76713)",
+              "tick": 126
+            },
+            {
+              "collisions": [],
+              "end": "(20.31716, 16.78284)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.32501, 16.77498)",
+              "tick": 127
+            },
+            {
+              "collisions": [],
+              "end": "(20.3093, 16.7907)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.31716, 16.78284)",
+              "tick": 128
+            },
+            {
+              "collisions": [],
+              "end": "(20.30144, 16.79856)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.3093, 16.7907)",
+              "tick": 129
+            },
+            {
+              "collisions": [],
+              "end": "(20.29359, 16.80641)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.30144, 16.79856)",
+              "tick": 130
+            },
+            {
+              "collisions": [],
+              "end": "(20.28573, 16.81427)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.29359, 16.80641)",
+              "tick": 131
+            },
+            {
+              "collisions": [],
+              "end": "(20.27787, 16.82213)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.28573, 16.81427)",
+              "tick": 132
+            },
+            {
+              "collisions": [],
+              "end": "(20.27002, 16.82998)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.27787, 16.82213)",
+              "tick": 133
+            },
+            {
+              "collisions": [],
+              "end": "(20.26216, 16.83784)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.27002, 16.82998)",
+              "tick": 134
+            },
+            {
+              "collisions": [],
+              "end": "(20.2543, 16.8457)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.26216, 16.83784)",
+              "tick": 135
+            },
+            {
+              "collisions": [],
+              "end": "(20.24645, 16.85355)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.2543, 16.8457)",
+              "tick": 136
+            },
+            {
+              "collisions": [],
+              "end": "(20.23859, 16.86141)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.24645, 16.85355)",
+              "tick": 137
+            },
+            {
+              "collisions": [],
+              "end": "(20.23073, 16.86927)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.23859, 16.86141)",
+              "tick": 138
+            },
+            {
+              "collisions": [],
+              "end": "(20.22288, 16.87712)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.23073, 16.86927)",
+              "tick": 139
+            },
+            {
+              "collisions": [],
+              "end": "(20.21502, 16.88498)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.22288, 16.87712)",
+              "tick": 140
+            },
+            {
+              "collisions": [],
+              "end": "(20.20716, 16.89284)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.21502, 16.88498)",
+              "tick": 141
+            },
+            {
+              "collisions": [],
+              "end": "(20.19931, 16.90069)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.20716, 16.89284)",
+              "tick": 142
+            },
+            {
+              "collisions": [],
+              "end": "(20.19145, 16.90855)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.19931, 16.90069)",
+              "tick": 143
+            },
+            {
+              "collisions": [],
+              "end": "(20.18359, 16.91641)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.19145, 16.90855)",
+              "tick": 144
+            },
+            {
+              "collisions": [],
+              "end": "(20.17574, 16.92426)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.18359, 16.91641)",
+              "tick": 145
+            },
+            {
+              "collisions": [],
+              "end": "(20.16788, 16.93212)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.17574, 16.92426)",
+              "tick": 146
+            },
+            {
+              "collisions": [],
+              "end": "(20.16002, 16.93998)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.16788, 16.93212)",
+              "tick": 147
+            },
+            {
+              "collisions": [],
+              "end": "(20.15216, 16.94783)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.16002, 16.93998)",
+              "tick": 148
+            },
+            {
+              "collisions": [],
+              "end": "(20.14431, 16.95569)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.15216, 16.94783)",
+              "tick": 149
+            },
+            {
+              "collisions": [],
+              "end": "(20.13645, 16.96355)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.14431, 16.95569)",
+              "tick": 150
+            },
+            {
+              "collisions": [],
+              "end": "(20.1286, 16.9714)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.13645, 16.96355)",
+              "tick": 151
+            },
+            {
+              "collisions": [],
+              "end": "(20.12074, 16.97926)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.1286, 16.9714)",
+              "tick": 152
+            },
+            {
+              "collisions": [],
+              "end": "(20.11288, 16.98712)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.12074, 16.97926)",
+              "tick": 153
+            },
+            {
+              "collisions": [],
+              "end": "(20.10502, 16.99497)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.11288, 16.98712)",
+              "tick": 154
+            },
+            {
+              "collisions": [],
+              "end": "(20.09717, 17.00283)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.10502, 16.99497)",
+              "tick": 155
+            },
+            {
+              "collisions": [],
+              "end": "(20.08931, 17.01069)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.09717, 17.00283)",
+              "tick": 156
+            },
+            {
+              "collisions": [],
+              "end": "(20.08146, 17.01854)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.08931, 17.01069)",
+              "tick": 157
+            },
+            {
+              "collisions": [],
+              "end": "(20.0736, 17.0264)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.08146, 17.01854)",
+              "tick": 158
+            },
+            {
+              "collisions": [],
+              "end": "(20.06574, 17.03426)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.0736, 17.0264)",
+              "tick": 159
+            },
+            {
+              "collisions": [],
+              "end": "(20.05788, 17.04211)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.06574, 17.03426)",
+              "tick": 160
+            },
+            {
+              "collisions": [],
+              "end": "(20.05003, 17.04997)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.05788, 17.04211)",
+              "tick": 161
+            },
+            {
+              "collisions": [],
+              "end": "(20.04217, 17.05783)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.05003, 17.04997)",
+              "tick": 162
+            },
+            {
+              "collisions": [],
+              "end": "(20.03432, 17.06568)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.04217, 17.05783)",
+              "tick": 163
+            },
+            {
+              "collisions": [],
+              "end": "(20.02646, 17.07354)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.03432, 17.06568)",
+              "tick": 164
+            },
+            {
+              "collisions": [],
+              "end": "(20.0186, 17.0814)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.02646, 17.07354)",
+              "tick": 165
+            },
+            {
+              "collisions": [],
+              "end": "(20.01074, 17.08925)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.0186, 17.0814)",
+              "tick": 166
+            },
+            {
+              "collisions": [],
+              "end": "(20.00289, 17.09711)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.01074, 17.08925)",
+              "tick": 167
+            },
+            {
+              "collisions": [],
+              "end": "(19.99503, 17.10497)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(20.00289, 17.09711)",
+              "tick": 168
+            },
+            {
+              "collisions": [],
+              "end": "(19.98717, 17.11282)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.99503, 17.10497)",
+              "tick": 169
+            },
+            {
+              "collisions": [],
+              "end": "(19.97932, 17.12068)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.98717, 17.11282)",
+              "tick": 170
+            },
+            {
+              "collisions": [],
+              "end": "(19.97146, 17.12854)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.97932, 17.12068)",
+              "tick": 171
+            },
+            {
+              "collisions": [],
+              "end": "(19.9636, 17.13639)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.97146, 17.12854)",
+              "tick": 172
+            },
+            {
+              "collisions": [],
+              "end": "(19.95575, 17.14425)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.9636, 17.13639)",
+              "tick": 173
+            },
+            {
+              "collisions": [],
+              "end": "(19.94789, 17.15211)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.95575, 17.14425)",
+              "tick": 174
+            },
+            {
+              "collisions": [],
+              "end": "(19.94003, 17.15997)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.94789, 17.15211)",
+              "tick": 175
+            },
+            {
+              "collisions": [],
+              "end": "(19.93218, 17.16782)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.94003, 17.15997)",
+              "tick": 176
+            },
+            {
+              "collisions": [],
+              "end": "(19.92432, 17.17568)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.93218, 17.16782)",
+              "tick": 177
+            },
+            {
+              "collisions": [],
+              "end": "(19.91646, 17.18353)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.92432, 17.17568)",
+              "tick": 178
+            },
+            {
+              "collisions": [],
+              "end": "(19.90861, 17.19139)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.91646, 17.18353)",
+              "tick": 179
+            },
+            {
+              "collisions": [],
+              "end": "(19.90075, 17.19925)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.90861, 17.19139)",
+              "tick": 180
+            },
+            {
+              "collisions": [],
+              "end": "(19.89289, 17.20711)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.90075, 17.19925)",
+              "tick": 181
+            },
+            {
+              "collisions": [],
+              "end": "(19.88504, 17.21496)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.89289, 17.20711)",
+              "tick": 182
+            },
+            {
+              "collisions": [],
+              "end": "(19.87718, 17.22282)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.88504, 17.21496)",
+              "tick": 183
+            },
+            {
+              "collisions": [],
+              "end": "(19.86932, 17.23067)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.87718, 17.22282)",
+              "tick": 184
+            },
+            {
+              "collisions": [],
+              "end": "(19.86147, 17.23853)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.86932, 17.23067)",
+              "tick": 185
+            },
+            {
+              "collisions": [],
+              "end": "(19.85361, 17.24639)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.86147, 17.23853)",
+              "tick": 186
+            },
+            {
+              "collisions": [],
+              "end": "(19.84575, 17.25425)",
+              "legs": "[(19.6, 17.5)]",
+              "requested": "(-30.16991, 0.0)",
+              "start": "(19.85361, 17.24639)",
+              "tick": 187
+            }
+          ],
+          "relocations": []
+        }
+      ]
+    }
+  ]
+}

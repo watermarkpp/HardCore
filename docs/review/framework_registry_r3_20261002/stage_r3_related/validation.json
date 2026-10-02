@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/motion_candidate_reuse_test.tscn','tests/hc_monster_combat_r4/body_radius_bucket_boundary_test.tscn','tests/hc_monster_combat_r4/body_radius_index_consistency_test.tscn','tests/shared_spatial_index_absolute_contract_test.tscn','tests/user_feedback_20260930/full_surround_moving_test.tscn','tests/user_feedback_20260930/full_surround_west_wall_test.tscn','tests/user_feedback_20260930/full_surround_mixed_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/surround_vacancy_refill_89_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 1,
+  "source_stable_during_run": true,
+  "passed": 6,
+  "failed": 3,
+  "status": "FAIL"
+}

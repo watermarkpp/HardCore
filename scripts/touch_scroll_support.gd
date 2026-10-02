@@ -2,6 +2,7 @@ class_name TouchScrollSupport
 extends Node
 
 const STABLE_ID := "ui.touch_content_scroll.v1"
+const RegistrationLifetime := preload("res://scripts/ui_registration_lifetime.gd")
 const DRAG_THRESHOLD := 8.0
 const DRAG_ACTIVE_META := "touch_scroll_drag_active"
 const DRAG_RELEASE_GUARD_META := "touch_scroll_drag_release_guard_until_msec"
@@ -16,12 +17,8 @@ var _button_states_before_gesture: Array[Dictionary] = []
 var _registry_cleanup_queued := false
 
 
-func _ready() -> void:
-	get_tree().node_removed.connect(_on_registered_tree_removal)
-
-
-func _on_registered_tree_removal(node: Node) -> void:
-	if not (node is ScrollContainer or node is RichTextLabel) or _registry_cleanup_queued:
+func _queue_registry_cleanup() -> void:
+	if _registry_cleanup_queued or is_queued_for_deletion():
 		return
 	_registry_cleanup_queued = true
 	_prune_destroyed_registrations.call_deferred()
@@ -102,7 +99,7 @@ func _on_child_entered_tree(child: Node) -> void:
 
 
 func register_control(control: Control) -> void:
-	if control == null or bool(control.get_meta("touch_content_scroll_registered", false)):
+	if control == null or not RegistrationLifetime.claim(control,self,&"scroll",_queue_registry_cleanup):
 		return
 	control.set_meta("touch_content_scroll_registered", true)
 	control.set_meta("touch_scroll_policy", STABLE_ID)

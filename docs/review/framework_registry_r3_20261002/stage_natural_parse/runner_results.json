@@ -1,0 +1,50 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "natural_effect_lifecycle_test",
+                        "test_path":  "tests/framework/natural_effect_lifecycle_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-02T11:52:04.9241173Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "57ab55f5-8b22-404a-8e86-e168bf7b60fc",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source"
+                    },
+                    {
+                        "test_name":  "natural_effect_lifecycle_cold_test",
+                        "test_path":  "tests/framework/natural_effect_lifecycle_cold_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T11:52:08.5988854Z",
+                        "native_exit_observed_utc":  "2026-10-02T11:51:13.5441793Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "fd9c150a-5a29-479d-bad7-a0ea7f2b5bba",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "5475e5c5-42ab-448c-b570-3355eafd434f",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-02T19:51:14.5998053+08:00",
+    "failed":  2,
+    "suite":  "adhoc"
+}

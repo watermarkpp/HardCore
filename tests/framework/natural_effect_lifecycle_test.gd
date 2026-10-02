@@ -26,6 +26,7 @@ var resource_key := ""
 var resource_monster_id := -1
 var resource_get_before := 0
 var resource_request_before := 0
+var resource_evidence: Dictionary = {}
 var concurrent_queues := false
 var observing := false
 var previous_frame_usec := 0
@@ -35,6 +36,7 @@ var maximum_pending_age: Dictionary = {}
 var maximum_service_age: Dictionary = {}
 var scopes_closed := true
 var peak_states := 0
+var peak_state_evidence: Dictionary = {}
 var peak_deaths := 0
 var peak_persistence := 0
 var maximum_remaining_due_backlog_usec := 0
@@ -82,13 +84,15 @@ func _process(_delta: float) -> void:
 		maximum_pending_age[category] = maxi(int(maximum_pending_age.get(category,0)),int(ledger.pending[category].oldest_age_frames))
 		if bool(ledger.pending[category].runnable):
 			maximum_service_age[category] = maxi(int(maximum_service_age.get(category,0)),int(ledger.pending[category].service_age_frames))
-	peak_states = maxi(peak_states,runtime.active_count())
+	if runtime.active_count() > peak_states:
+		peak_states = runtime.active_count()
+		peak_state_evidence = _capture_state_cohort()
 	peak_deaths = maxi(peak_deaths,game._pending_enemy_deaths.size())
 	peak_persistence = maxi(peak_persistence,PlayerState._json_persistence.pending_count()+PlayerState._world_json_persistence.pending_count())
 	if runtime.has_due():
 		maximum_remaining_due_backlog_usec = maxi(maximum_remaining_due_backlog_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
-	if stream_started_usec > 0 and stream_finished_usec == 0 and game._streaming_coordinator.pending_request_count() == 0:
-		stream_finished_usec = now
+	if stream_started_usec > 0 and stream_finished_usec == 0:
+		_observe_resource_completion(now)
 	if deaths == 30 and death_finished_usec == 0 and _settlement_drained(): death_finished_usec = now
 
 func _run() -> void:
@@ -145,16 +149,8 @@ func _run() -> void:
 			nonoverlap = nonoverlap and a.distance_to(b) >= targets[i].combat_radius_gu+targets[j].combat_radius_gu
 	check(nonoverlap,"all initial receiver footprints are disjoint under the real body policy")
 	if targets.size() != 30 or not nonoverlap: _finish(); return
-	var visual := MonsterVisual.new()
-	for id: int in [64,89,34,19]:
-		var mapping: Dictionary = visual._client_mapping_for(GameData.get_monster_by_id(id))
-		var key: String = visual._client_resource_cache_key(mapping)
-		if not mapping.is_empty() and game._streaming_coordinator.client_resources(key).is_empty() and not game._streaming_coordinator._threaded_profile_requests.has(key):
-			resource_mapping = mapping; resource_key = key; resource_monster_id = id; break
-	visual.free()
-	check(not resource_mapping.is_empty(),"actual uncached resource work selected")
-	if resource_mapping.is_empty(): _finish(); return
-	game._streaming_coordinator.register_visual(self,get_instance_id(),game.current_map_id,game._zone_generation,resource_key,{},0)
+	# Select/inspect the requested key at the first actual death demand below,
+	# not before combat when another visual could populate it in the meantime.
 	# Capture/accept happens only inside the normal skill input entry below.
 	var start := Time.get_ticks_msec()
 	var next_input := start
@@ -205,12 +201,16 @@ func _run() -> void:
 	if runtime == null: _finish(); return
 	check(accepted_casts > 1 and movement_gu > 1.0 and monster_movement_gu > 1.0,"actual repeated skill input, Player motion and monster pursuit all ran")
 	check(game.player.current_mp < mp_before and game.player.current_hp < hp_before,"natural casts spend MP and live monsters attack the Player")
-	check(peak_states == 90 and int(runtime.metrics().started) >= 90,"all thirty moving receivers participate in ninety concurrent qualified states")
+	check(peak_states == 90 and int(runtime.metrics().started) >= 90,"whole runtime reaches ninety concurrent states; named fixture coverage is recorded separately")
+	check(int(peak_state_evidence.get("state_count",0)) == peak_states and bool(peak_state_evidence.get("identities_match",false)),"peak observation binds every state to its actual ActorRef identity and source")
+	check(bool(peak_state_evidence.get("all_named_thirty_fixture_targets_have_three_sources",false)),"peak identity snapshot proves all thirty named fixture targets simultaneously have three distinct sources")
 	check(int(runtime.metrics().ticks) >= 360 and int(runtime.metrics().tick_delivery_count) == int(runtime.metrics().ticks),"at least360 actual periodic deliveries complete without a rejected damage-port attempt")
 	check(int(runtime.metrics().maximum_tick_delivery_lateness_usec) < 1000000,"actual consumption latency stays strictly below one existing period: "+str(runtime.metrics().maximum_tick_delivery_lateness_usec))
 	check(deaths == 30 and not runtime.has_work() and runtime.heap_count() == 0 and runtime.errors.is_empty(),"all thirty real deaths finish and effect work drains without capacity refusal")
 	check(_settlement_drained() and int(runtime.reservation_snapshot().actions) == 0 and runtime._receipts.is_empty(),"death/persistence queues, accepted producers and managed receipts drain")
-	check(concurrent_queues and stream_finished_usec > 0,"real resource completion overlaps necessary settlement work and drains")
+	check(concurrent_queues and stream_finished_usec > 0 and bool(resource_evidence.get("five_textures_available",false)),"specified runtime-demand key completes five usable textures while settlement work overlaps")
+	check(str(resource_evidence.get("request_kind","")) == "threaded_new_job" and int(resource_evidence.get("request_delta",0)) >= 5 and int(resource_evidence.get("get_delta",0)) >= 5,"chosen key was uncached at demand and finished its queued threaded profile; aggregate counts are supplementary")
+	check(game._streaming_coordinator.pending_request_count() == 0,"global resource backlog also drains independently of per-key completion")
 	var minimum_xp := xp_before+30*int(game._build_enemy_death_runtime_snapshot(GameData.get_monster_by_id(19)).experience)
 	var expected_xp := xp_before
 	var fixture_deaths := 0
@@ -225,7 +225,7 @@ func _run() -> void:
 		"scope":"PC headless natural Player/Root input, original cooldown/geometry, moving AI and formal world; declared initial stress HP/stats; single sustained cohort; not Android/GPU or infinite-memory proof",
 		"phase":"before final save and cold handoff","phase_status":"PASS" if failures.is_empty() else "FAIL","phase_failures":failures,
 		"accepted_casts":accepted_casts,"rejected_inputs":rejected_inputs,"player_movement_gu":movement_gu,"monster_movement_gu":monster_movement_gu,
-		"deaths":deaths,"peak_states":peak_states,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,"metrics":runtime.metrics(),
+		"deaths":deaths,"peak_states":peak_states,"peak_state_evidence":peak_state_evidence,"resource_evidence":resource_evidence,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,"metrics":runtime.metrics(),
 		"xp_before":xp_before,"xp_after":PlayerState.experience,"expected_xp":expected_xp,"fixture_only_xp":minimum_xp,"observed_deaths":observed_deaths.values(),
 		"terminal_death_jobs":game._enemy_death_terminal_jobs,
 		"wall_frame_usec":_percentiles("wall_usec"),"samples":samples,"memory_checkpoints":memory_checkpoints,
@@ -272,12 +272,90 @@ func _on_target_died(_enemy: EnemyActor, _data: Dictionary) -> void:
 	deaths += 1
 	if deaths != 1: return
 	death_started_usec = Time.get_ticks_usec()
+	var coordinator: RefCounted = game._streaming_coordinator
+	var visual := MonsterVisual.new()
+	for id: int in [64,89,34,19]:
+		var mapping: Dictionary = visual._client_mapping_for(GameData.get_monster_by_id(id))
+		var key: String = visual._client_resource_cache_key(mapping)
+		if not mapping.is_empty() and coordinator.client_resources(key).is_empty() and not coordinator._threaded_profile_requests.has(key):
+			resource_mapping = mapping; resource_key = key; resource_monster_id = id; break
+	visual.free()
+	check(not resource_mapping.is_empty(),"resource key is genuinely uncached at the actual first-death demand")
+	if resource_mapping.is_empty(): return
+	coordinator.register_visual(self,get_instance_id(),game.current_map_id,game._zone_generation,resource_key,{},0)
 	stream_started_usec = death_started_usec
-	resource_get_before = game._streaming_coordinator.threaded_texture_get_count()
-	resource_request_before = game._streaming_coordinator.threaded_texture_request_count()
-	game._streaming_coordinator.request_visual_resources(self,resource_mapping,resource_monster_id)
-	concurrent_queues = game._streaming_coordinator.pending_request_count() > 0 and (not game._pending_enemy_deaths.is_empty()
+	resource_get_before = coordinator.threaded_texture_get_count()
+	resource_request_before = coordinator.threaded_texture_request_count()
+	var immediate: Dictionary = coordinator.request_visual_resources(self,resource_mapping,resource_monster_id)
+	var job: Dictionary = coordinator._threaded_profile_requests.get(resource_key,{})
+	resource_evidence = {"key":resource_key,"monster_id":resource_monster_id,"demand_death_identity":_enemy.get_instance_id(),
+		"cache_empty_at_demand":true,"request_kind":"cache_hit" if not immediate.is_empty() else "threaded_new_job",
+		"job_state_after_request":str(job.get("state","")),"request_sequence":int(job.get("request_sequence",-1)),
+		"job_map_generation":int(job.get("map_generation",-1)),"paths":job.get("paths",{}).duplicate(),
+		"failure_seen":coordinator._failure_details.has(resource_key),"five_textures_available":false}
+	check(immediate.is_empty() and str(job.get("state","")) in ["queued","loading"] and job.get("paths",{}).size() == 5,"specified key owns a new five-action threaded request, rather than an unrelated queue or cache hit")
+	concurrent_queues = coordinator._threaded_profile_requests.has(resource_key) and (not game._pending_enemy_deaths.is_empty()
 		or not game._prepared_enemy_death_settlement.is_empty() or PlayerState._json_persistence.pending_count() > 0)
+
+func _observe_resource_completion(now: int) -> void:
+	var coordinator: RefCounted = game._streaming_coordinator
+	resource_evidence.failure_seen = bool(resource_evidence.failure_seen) or coordinator._failure_details.has(resource_key)
+	var profile: Dictionary = coordinator.client_resources(resource_key)
+	if profile.is_empty(): return
+	var textures := {}
+	var valid: bool = not bool(resource_evidence.failure_seen) and not coordinator._threaded_profile_requests.has(resource_key)
+	var dimensions: Array = resource_mapping.get("frameSize",[])
+	for action: String in ["idle","walk","attack","hit","death"]:
+		var texture: Texture2D = profile.get(action) as Texture2D
+		var definition: Dictionary = resource_mapping.actions.get(action,{})
+		var expected := Vector2i(int(dimensions[0])*int(definition.get("framesPerDirection",1)),int(dimensions[1])*8)
+		var actual := Vector2i(texture.get_size()) if texture != null else Vector2i.ZERO
+		var path := texture.resource_path if texture != null else ""
+		var available := texture != null and actual == expected and path == str(resource_evidence.paths.get(action,""))
+		valid = valid and available
+		textures[action] = {"available":available,"path":path,"expected_size":[expected.x,expected.y],"actual_size":[actual.x,actual.y]}
+	resource_evidence["textures"] = textures
+	resource_evidence["five_textures_available"] = valid
+	resource_evidence["request_delta"] = coordinator.threaded_texture_request_count()-resource_request_before
+	resource_evidence["get_delta"] = coordinator.threaded_texture_get_count()-resource_get_before
+	resource_evidence["completion_usec"] = now
+	resource_evidence["latency_usec"] = now-stream_started_usec
+	resource_evidence["global_pending_at_completion"] = coordinator.pending_request_count()
+	stream_finished_usec = now
+
+func _capture_state_cohort() -> Dictionary:
+	var grouped := {}
+	var identity_ok := true
+	var fixture_slots := {}
+	for actor: EnemyActor in targets:
+		if is_instance_valid(actor): fixture_slots[actor.get_instance_id()] = str(actor.get_meta("spawn_context",{}).get("spawn_slot_id",""))
+	for state: Dictionary in runtime._states.values():
+		var identity: Dictionary = state.target.identity()
+		var receiver: Node = state.target.resolve(false)
+		var key := JSON.stringify(identity)
+		var command: Dictionary = state.command
+		identity_ok = identity_ok and identity == command.target and is_instance_valid(receiver) and receiver.get_instance_id() == int(identity.runtime_id)
+		if not grouped.has(key):
+			grouped[key] = {"identity":identity.duplicate(true),"fixture":fixture_slots.has(int(identity.runtime_id)),
+				"slot":str(receiver.get_meta("spawn_context",{}).get("spawn_slot_id","")) if is_instance_valid(receiver) else "", "sources":{},"state_count":0}
+		grouped[key].sources[str(command.source_handle)] = true
+		grouped[key].state_count += 1
+	var fixture_complete := 0
+	var world_complete := 0
+	var observed_slots := {}
+	for entry: Dictionary in grouped.values():
+		entry.sources = entry.sources.keys()
+		if entry.sources.size() == 3 and int(entry.state_count) == 3:
+			if bool(entry.fixture): fixture_complete += 1; observed_slots[entry.slot] = true
+			else: world_complete += 1
+	var missing_slots: Array = []
+	for slot: String in fixture_slots.values():
+		if not observed_slots.has(slot): missing_slots.append(slot)
+	missing_slots.sort()
+	return {"state_count":runtime._states.size(),"identities_match":identity_ok,"target_count":grouped.size(),
+		"fixture_three_source_targets":fixture_complete,"world_three_source_targets":world_complete,
+		"all_named_thirty_fixture_targets_have_three_sources":fixture_complete == 30,
+		"missing_three_source_fixture_slots":missing_slots,"targets":grouped.values()}
 
 func _settlement_drained() -> bool:
 	return game._pending_enemy_deaths.is_empty() and game._prepared_enemy_death_settlement.is_empty() \

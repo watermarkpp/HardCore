@@ -53,12 +53,38 @@ func _run() -> void:
 	_check(index.index_enemy_node_segment_query_count == queries, "unchanged bucket membership repeated its identity query")
 	index.clear_map(MAP_ID)
 	_check(actor._hc_motion_clear(origin, origin + Vector2(-0.025, 0)), "map teardown reused removed candidate identities")
+	_advancing_bucket_case(Vector2(18,18))
+	_advancing_bucket_case(Vector2(-18,-18))
 	_motion_envelope_prefilter_case(actor, origin)
 	_station_envelope_prefilter_case(actor, origin)
 	for item in [actor, peer, born, second, same_bucket]: item.free()
 	player.free()
 	print("MOTION_CANDIDATE_REUSE_", "PASS" if failures.is_empty() else "FAIL", " ", failures)
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _advancing_bucket_case(center: Vector2) -> void:
+	index.clear_map(MAP_ID)
+	var mover := _spawn(24,center)
+	# This receiver exists before the cached query, outside its coarse pool.
+	# A later segment must expand the query even without a membership change.
+	var blocker := _spawn(24,center+Vector2(2.9,0))
+	_check(mover._hc_motion_clear(center,center+Vector2(0.025,0)),"initial advancing leg blocked")
+	var queries := index.index_enemy_node_segment_query_count
+	var revision := index.bucket_membership_revision
+	for step in range(1,9):
+		var point := center+Vector2(step*0.025,0)
+		mover.set_combat_position(_ground_to_screen(point),&"candidate_advancing_same_bucket")
+		_check(mover._hc_motion_clear(point,point+Vector2(0.025,0)),"live advancing subleg blocked")
+	_check(index.bucket_membership_revision == revision,"advancing fixture must keep exact bucket membership")
+	_check(index.index_enemy_node_segment_query_count == queries,"advancing disjoint legs in an already complete bucket pool must not repeat identity queries: "+str(center))
+	_check(not mover._hc_motion_clear(center+Vector2(0.2,0),center+Vector2(2.8,0)),"newly intersected bucket's pre-existing blocker must be found")
+	_check(index.index_enemy_node_segment_query_count == queries+1,"escaping the covered bucket range must perform a fresh query")
+	queries = index.index_enemy_node_segment_query_count
+	mover.set_meta("zone_generation",2)
+	_check(not mover._hc_motion_clear(center+Vector2(0.2,0),center+Vector2(2.8,0)),"new generation preserves actual blocking")
+	_check(index.index_enemy_node_segment_query_count == queries+1,"world generation still invalidates the identity pool")
+	mover.free(); blocker.free()
+	index.clear_map(MAP_ID)
 
 func _motion_envelope_prefilter_case(actor: EnemyActor, origin: Vector2) -> void:
 	# A complete coarse-bucket pool deliberately includes distant bodies.

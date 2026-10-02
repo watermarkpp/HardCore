@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/user_feedback_20260930/consumable_icon_surfaces_test.tscn','tests/user_feedback_20260930/corner_wait_requirement_test.tscn','tests/user_feedback_20260930/crowd_fractional_escape_test.tscn','tests/user_feedback_20260930/crowd_position_candidates_test.tscn','tests/user_feedback_20260930/crowd_recovery_30_test.tscn','tests/user_feedback_20260930/crowd_recovery_4_test.tscn','tests/user_feedback_20260930/crowd_recovery_8_test.tscn','tests/user_feedback_20260930/crowd_recovery_test.tscn','tests/user_feedback_20260930/flank_committed_segment_test.tscn','tests/user_feedback_20260930/flank_projection_residual_test.tscn','tests/user_feedback_20260930/immediate_warrior_toggle_save_test.tscn','tests/user_feedback_20260930/large_surround_packing_test.tscn','tests/user_feedback_20260930/monster_blocked_locomotion_test.tscn','tests/user_feedback_20260930/motion_candidate_reuse_test.tscn','tests/user_feedback_20260930/player_blocked_locomotion_test.tscn','tests/user_feedback_20260930/surround_target_body_route_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 17,
+  "failed": 0,
+  "status": "PASS"
+}

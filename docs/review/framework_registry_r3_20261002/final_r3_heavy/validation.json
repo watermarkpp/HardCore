@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/eight_direction_admission_test.tscn','tests/source176_r3/source_idle_wake_phase_test.tscn','tests/source176_r3/published_map_approach_test.tscn' -TimeoutSeconds 60"
+  ],
+  "timeout_seconds": 60,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 3,
+  "failed": 0,
+  "status": "PASS"
+}

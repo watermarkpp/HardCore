@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual profile writers used",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "A creation has no gameplay owner",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "B creation has no gameplay owner",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "character selection works before world attachment",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "running world rejects replacing current role",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "rejection has specific load reason",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "same-role reload cannot reset active world state",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "new character cannot bypass the active world owner",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "active role cannot be deleted under live world",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "character management remains outside live gameplay",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "all rejected operations preserve active identity",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "rejected operations preserve both profiles and index byte for byte",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "queued world deletion still owns deferred callbacks",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "freed weak owner cannot permanently block character selection",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "one world cannot release another live owner's protection",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "explicit lifecycle retirement releases the exact remaining owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "new character creation remains legal after retirement",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "ordinary inactive role deletion remains legal after retirement",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "real character and world receipts drained",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "3286c7ab-5e2c-49c0-a06c-33f9c9b203ce",
+  "passed": 19,
+  "reported_checks": 19,
+  "reported_failures": 0,
+  "run_id": "1dae000c-2b16-4fe3-a13a-3c7e6c38bd96",
+  "scene_id": "profile_gameplay_owner_test",
+  "schema_version": 1,
+  "source_content_sha256": "740a0e034bde969129a86aeb84b35f0fe06785edc6cb3bc70dfcd0d0a28a913e",
+  "status": "PASS"
+}

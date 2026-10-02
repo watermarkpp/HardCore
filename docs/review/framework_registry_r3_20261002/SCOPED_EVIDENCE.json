@@ -1,0 +1,23 @@
+{
+  "parent": "29d460cf677695bf786404e01c45e1368df195f5",
+  "source_files": 3539,
+  "content_sha256": "740a0e034bde969129a86aeb84b35f0fe06785edc6cb3bc70dfcd0d0a28a913e",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "source_delta": [
+    "scripts/enemy.gd",
+    "scripts/runtime_combat_spatial_index.gd",
+    "scripts/touch_scroll_support.gd",
+    "scripts/ui_registration_lifetime.gd",
+    "scripts/ui_selection_dismiss_guard.gd",
+    "tests/framework/natural_effect_lifecycle_test.gd",
+    "tests/framework/ui_registry_retirement_test.gd",
+    "tests/user_feedback_20260930/motion_candidate_reuse_test.gd"
+  ],
+  "native_attempts": 135,
+  "unique_native_pass": 132,
+  "framework_scene_count": 14,
+  "framework_checks": 646,
+  "preserved_final_failures": 3,
+  "source_zip_bytes": 15103720,
+  "source_zip_sha256": "ad5b544779e54ad65c3d602a8426871ce80ed956303689bc9e812c86a017f0d3"
+}

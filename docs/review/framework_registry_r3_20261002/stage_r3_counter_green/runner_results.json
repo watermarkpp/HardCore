@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "motion_candidate_reuse_test",
+                        "test_path":  "tests/user_feedback_20260930/motion_candidate_reuse_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T11:17:33.4394831Z",
+                        "native_exit_observed_utc":  "2026-10-02T11:17:10.5315312Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "",
+                        "framework_receipt_valid":  null,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "9d663159-4fb2-483c-94b5-fbce952987b0",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-02T19:17:11.9794047+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

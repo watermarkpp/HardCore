@@ -1,0 +1,14 @@
+{
+  "scope": "read-only path/ancestry compatibility; not merge/runtime/main acceptance",
+  "common_base": "8181f197b09b0aafc8ed8de0c5604c5edacbed7f",
+  "protected_main_head": "27bf669fdd5293f8657e28e1ecd7976c39e8d983",
+  "review_parent": "29d460cf677695bf786404e01c45e1368df195f5",
+  "current_construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "main_only_paths": [
+    "tests/zombie_lightning_pursuit_timing_test.gd",
+    "tests/zombie_lightning_pursuit_timing_test.tscn"
+  ],
+  "current_delta_overlaps_main_only_paths": [],
+  "main_runtime_validation": "NOT_RUN",
+  "integration": "NOT_RUN"
+}

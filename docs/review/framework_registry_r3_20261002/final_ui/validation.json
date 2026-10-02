@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn','tests/ui_r5_dismiss_guard_input_order_test.tscn','tests/touch_scroll_support_test.tscn','tests/character_select_touch_scroll_test.tscn','tests/device_lab_layout_regression_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 5,
+  "failed": 0,
+  "status": "PASS"
+}

@@ -331,19 +331,41 @@ func query_enemy_nodes_segment_unsorted_into(
 ## the ordinary tight query, nodes outside its exact AABB are retained so
 ## later motion inside an unchanged bucket cannot create a false negative.
 ## Callers must rerun the live narrow phase and invalidate on membership.
-func query_enemy_nodes_bucket_segment_into(runtime_map_id: int, a: Vector2, b: Vector2, expansion_gu: float, output: Array) -> void:
+func query_enemy_nodes_bucket_segment_into(runtime_map_id: int, a: Vector2, b: Vector2, expansion_gu: float, output: Array) -> Rect2i:
 	output.clear()
 	_neighbor_stale_actor_ids.clear()
 	index_query_count += 1
 	index_enemy_node_segment_query_count += 1
 	_maybe_refresh_max_actor_bounds()
 	if runtime_map_id < 0 or not a.is_finite() or not b.is_finite() or not is_finite(expansion_gu):
-		return
-	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
-	var low := Vector2(minf(a.x, b.x), minf(a.y, b.y)) - Vector2.ONE * expansion
-	var high := Vector2(maxf(a.x, b.x), maxf(a.y, b.y)) + Vector2.ONE * expansion
-	_query_enemy_nodes_in_aabb(runtime_map_id, Rect2(low, high - low), output, _next_enemy_query_stamp(), false, true)
+		return Rect2i()
+	var bounds := _enemy_node_bucket_segment_envelope(a,b,expansion_gu)
+	var covered := _enemy_node_bucket_range(bounds)
+	_query_enemy_nodes_in_aabb(runtime_map_id, bounds, output, _next_enemy_query_stamp(), false, true)
 	_finish_enemy_node_query(output)
+	return covered
+
+
+## Exact integer range used by the coarse query, including both edge cells.
+## No inverse float envelope: rounding at a cell boundary must be identical
+## to the original AABB query, including negative ground coordinates.
+func enemy_node_segment_bucket_bounds(a: Vector2,b: Vector2,expansion_gu: float) -> Rect2i:
+	if not a.is_finite() or not b.is_finite() or not is_finite(expansion_gu):
+		return Rect2i()
+	_maybe_refresh_max_actor_bounds()
+	return _enemy_node_bucket_range(_enemy_node_bucket_segment_envelope(a,b,expansion_gu))
+
+
+func _enemy_node_bucket_segment_envelope(a: Vector2,b: Vector2,expansion_gu: float) -> Rect2:
+	var expansion := maxf(0.0, expansion_gu) + _max_actor_bounds_gu
+	var low := Vector2(minf(a.x,b.x),minf(a.y,b.y))-Vector2.ONE*expansion
+	var high := Vector2(maxf(a.x,b.x),maxf(a.y,b.y))+Vector2.ONE*expansion
+	return Rect2(low,high-low)
+
+
+func _enemy_node_bucket_range(bounds: Rect2) -> Rect2i:
+	var first := _bucket_key(bounds.position)
+	return Rect2i(first,_bucket_key(bounds.end)-first+Vector2i.ONE)
 
 
 func _query_enemy_nodes_in_aabb(

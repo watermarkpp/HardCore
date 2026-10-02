@@ -8756,6 +8756,7 @@ var _hc_motion_candidate_life := -1
 var _hc_motion_candidate_radius := -1.0
 var _hc_motion_candidate_low := Vector2.INF
 var _hc_motion_candidate_high := Vector2.INF
+var _hc_motion_candidate_buckets := Rect2i()
 
 func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
 	if combat_spatial_index == null or runtime_map_id < 0 or not a.is_finite() or not b.is_finite():
@@ -8769,17 +8770,28 @@ func _hc_motion_clear(a: Vector2, b: Vector2) -> bool:
 	# the same life/world owns them and this envelope is contained. Moving
 	# within a bucket cannot add an omitted identity. Every invocation still
 	# reads current positions/eligibility and reruns the exact body core test.
-	if not (
+	var same_scope := (
 		_hc_motion_candidate_index == combat_spatial_index.get_instance_id()
 		and _hc_motion_candidate_revision == revision
 		and _hc_motion_candidate_map == runtime_map_id
 		and _hc_motion_candidate_generation == generation
 		and _hc_motion_candidate_life == life
 		and _hc_motion_candidate_radius == combat_radius_gu
-		and low.x >= _hc_motion_candidate_low.x and low.y >= _hc_motion_candidate_low.y
-		and high.x <= _hc_motion_candidate_high.x and high.y <= _hc_motion_candidate_high.y
-	):
-		combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, a, b, combat_radius_gu, _hc_motion_scratch)
+	)
+	var contained := (low.x >= _hc_motion_candidate_low.x and low.y >= _hc_motion_candidate_low.y
+		and high.x <= _hc_motion_candidate_high.x and high.y <= _hc_motion_candidate_high.y)
+	if same_scope and not contained:
+		var cells := combat_spatial_index.enemy_node_segment_bucket_bounds(a,b,combat_radius_gu)
+		contained = (cells.size.x > 0 and cells.size.y > 0
+			and cells.position.x >= _hc_motion_candidate_buckets.position.x and cells.position.y >= _hc_motion_candidate_buckets.position.y
+			and cells.end.x <= _hc_motion_candidate_buckets.end.x and cells.end.y <= _hc_motion_candidate_buckets.end.y)
+		if contained:
+			# The same complete bucket pool also covers the union of these raw
+			# envelopes. Keep the cheap subsegment path for following prefixes.
+			_hc_motion_candidate_low = Vector2(minf(low.x,_hc_motion_candidate_low.x),minf(low.y,_hc_motion_candidate_low.y))
+			_hc_motion_candidate_high = Vector2(maxf(high.x,_hc_motion_candidate_high.x),maxf(high.y,_hc_motion_candidate_high.y))
+	if not same_scope or not contained:
+		_hc_motion_candidate_buckets = combat_spatial_index.query_enemy_nodes_bucket_segment_into(runtime_map_id, a, b, combat_radius_gu, _hc_motion_scratch)
 		_hc_motion_candidate_index = combat_spatial_index.get_instance_id()
 		_hc_motion_candidate_revision = combat_spatial_index.bucket_membership_revision
 		_hc_motion_candidate_map = runtime_map_id

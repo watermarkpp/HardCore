@@ -1,0 +1,161 @@
+{
+  "frames": 4271,
+  "wall_usec_recomputed": {
+    "p50": 6779,
+    "p95": 15002,
+    "p99": 19716,
+    "max": 40430
+  },
+  "frames_gt_33333": 5,
+  "frames_gt_50000": 0,
+  "natural": {
+    "accepted_casts": 20.0,
+    "peak_states": 90.0,
+    "deaths": 30.0,
+    "peak_deaths": 15.0,
+    "peak_persistence": 2.0,
+    "expected_xp": 512.0,
+    "xp_after": 512.0,
+    "cleanup": {
+      "memory_after_observation_clear": 920787848,
+      "memory_before_observation_clear": 925930048,
+      "objects_after_clear": 3959,
+      "objects_before_clear": 3977,
+      "orphan_nodes_after_clear": 0,
+      "sample_count": 4271
+    }
+  },
+  "ticks": 888.0,
+  "max_lateness": 700000.0,
+  "cohort": {
+    "all_named_thirty_fixture_targets_have_three_sources": true,
+    "fixture_three_source_targets": 30.0,
+    "identities_match": true,
+    "missing_three_source_fixture_slots": [],
+    "state_count": 90.0,
+    "target_count": 30.0,
+    "world_three_source_targets": 0.0
+  },
+  "resource": {
+    "cache_empty_at_demand": true,
+    "completion_usec": 23652341.0,
+    "demand_death_identity": 875049270180.0,
+    "failure_seen": false,
+    "five_textures_available": true,
+    "get_delta": 5.0,
+    "global_pending_at_completion": 0.0,
+    "job_map_generation": 1.0,
+    "job_state_after_request": "loading",
+    "latency_usec": 60586.0,
+    "monster_id": 64.0,
+    "request_delta": 5.0,
+    "request_kind": "threaded_new_job",
+    "request_sequence": 9.0
+  },
+  "cycles": [
+    {
+      "cycle": 0,
+      "objects": 3957,
+      "resources": 937,
+      "memory_static": 919850064,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "cycle": 1,
+      "objects": 3961,
+      "resources": 937,
+      "memory_static": 920029604,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "cycle": 2,
+      "objects": 3961,
+      "resources": 937,
+      "memory_static": 920062448,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "cycle": 3,
+      "objects": 3961,
+      "resources": 937,
+      "memory_static": 920341296,
+      "orphans": 0,
+      "all_owners_released": true,
+      "ui_refs": {
+        "TouchScrollSupport_registered_controls": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_functional": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_modals": {
+          "dead": 0,
+          "total": 0
+        },
+        "UISelectionDismissGuard_scopes": {
+          "dead": 0,
+          "total": 0
+        }
+      }
+    }
+  ]
+}

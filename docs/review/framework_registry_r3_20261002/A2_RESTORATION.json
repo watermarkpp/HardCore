@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "output": "{\"evidence\": \"C:\\\\Users\\\\Administrator\\\\.codex\\\\worktrees\\\\pluggable-framework-v2\\\\HardCore\\\\outputs\\\\r3_takeover\\\\20260930\\\\validation\\\\r3_bucket_A2_192229_435847\", \"command\": [\"powershell\", \"-NoProfile\", \"-ExecutionPolicy\", \"Bypass\", \"-Command\", \"& './tools/run_godot_tests.ps1' -TestPaths 'tests/source176_r3/native_performance_10.tscn','tests/source176_r3/native_performance_20.tscn','tests/source176_r3/native_performance_30.tscn' -TimeoutSeconds 60\"], \"timeout_seconds\": 60, \"exit_code\": 0, \"source_stable_during_run\": true, \"passed\": 3, \"failed\": 0, \"status\": \"PASS\"}\r\n",
+  "restored_candidate_exact": true,
+  "restored_sha256": {
+    "scripts/enemy.gd": "05f02a1ac556247ab3ed765e7c25fb9a72c02d1e634e64d6c210e616f405dfb7",
+    "scripts/runtime_combat_spatial_index.gd": "cdce62065caea6b169d19b0946dc3e72f84de6b73983bbe7fe8a8b742463a9cf"
+  }
+}

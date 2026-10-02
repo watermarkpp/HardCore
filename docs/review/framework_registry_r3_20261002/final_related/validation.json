@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/world_retirement_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/framework/profile_gameplay_owner_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/feature_melee_ticket_paths_test.tscn','tests/framework/feature_batch_failure_test.tscn','tests/framework/feature_release_identity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/boss_respawn_map_reentry_test.tscn','tests/monster_respawn_policy_test.tscn','tests/hc_monster_combat_r4/body_radius_bucket_boundary_test.tscn','tests/hc_monster_combat_r4/body_radius_index_consistency_test.tscn','tests/shared_spatial_index_absolute_contract_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 17,
+  "failed": 0,
+  "status": "PASS"
+}

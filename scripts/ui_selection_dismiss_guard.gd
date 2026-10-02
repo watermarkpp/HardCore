@@ -4,6 +4,7 @@ extends Node
 ## A passive tap observer. It NEVER accepts/consumes/injects input and NEVER
 ## edits combat, joystick, touch-scroll, transaction or inventory authority.
 const ScrollSupport := preload("res://scripts/touch_scroll_support.gd")
+const RegistrationLifetime := preload("res://scripts/ui_registration_lifetime.gd")
 const NAME := "UISelectionDismissGuard"
 const MAX_TAP_MSEC := 450
 const MOVE_LIMIT := 8.0
@@ -38,16 +39,7 @@ static func attach(scope: Control) -> void:
 func register_scope(scope: Control) -> void:
 	if not is_instance_valid(scope):
 		return
-	var registered := false
-	# Prune dead scopes while checking so the list cannot grow across world
-	# re-entries; surviving order maintenance runs deferred below.
-	for index in range(_scopes.size() - 1, -1, -1):
-		var existing := _scopes[index].get_ref() as Control
-		if not is_instance_valid(existing):
-			_scopes.remove_at(index)
-		elif existing == scope:
-			registered = true
-	if not registered:
+	if RegistrationLifetime.claim(scope,self,&"scope",_queue_registry_cleanup):
 		_scopes.append(weakref(scope))
 	_queue_observer_order_refresh()
 
@@ -70,14 +62,13 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_scan_existing(get_tree().root)
 	get_tree().node_added.connect(_register_node)
-	get_tree().node_removed.connect(_on_registered_tree_removal)
 	_queue_observer_order_refresh()
 
-func _on_registered_tree_removal(node: Node) -> void:
-	if not (node is Control or node is Window) or _registry_cleanup_queued:
+func _queue_registry_cleanup() -> void:
+	if _registry_cleanup_queued or is_queued_for_deletion():
 		return
-	# Coalesce an entire UI teardown. Removal is signalled before destruction;
-	# inspect weak targets after that transaction, without waiting for a tap.
+	# The node-owned lifetime token signals actual destruction, including
+	# remove_child followed by queue_free or later destruction outside the tree.
 	_registry_cleanup_queued = true
 	_prune_destroyed_registrations.call_deferred()
 
@@ -106,15 +97,17 @@ func _register_node(node: Node) -> void:
 	if node != self and node.get_parent() == get_tree().root:
 		_queue_observer_order_refresh()
 	if node is Window and node != get_tree().root:
-		_modals.append(weakref(node))
+		if RegistrationLifetime.claim(node,self,&"modal",_queue_registry_cleanup):
+			_modals.append(weakref(node))
 		return
 	if not node is Control:
 		return
 	var path := _script_name(node)
-	if path in MODAL_SCRIPTS:
+	if path in MODAL_SCRIPTS and RegistrationLifetime.claim(node,self,&"modal",_queue_registry_cleanup):
 		_modals.append(weakref(node))
 	if node is BaseButton or node is Range or node is LineEdit or node is TextEdit or node is ItemList or node is Tree or node is TabBar or path in CUSTOM_INPUT_SCRIPTS or bool(node.get_meta("ui_dismiss_protected", false)):
-		_functional.append(weakref(node))
+		if RegistrationLifetime.claim(node,self,&"functional",_queue_registry_cleanup):
+			_functional.append(weakref(node))
 
 func _top_scope() -> Control:
 	var result: Control = null

@@ -3,6 +3,7 @@ const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const Guard := preload("res://scripts/ui_selection_dismiss_guard.gd")
 const Scroll := preload("res://scripts/touch_scroll_support.gd")
 const Layout := preload("res://scripts/ui_runtime_layout_overrides.gd")
+const HUDScript := preload("res://scripts/hud.gd")
 var proof := Proof.new()
 var checks := 0
 var failures: Array[String] = []
@@ -17,9 +18,10 @@ func check(value: bool,label: String) -> void:
 
 func _ready() -> void: _run.call_deferred()
 func _run() -> void:
-	var survivor := Scope.new(); add_child(survivor)
-	var survivor_button := Button.new(); survivor.add_child(survivor_button)
+	var survivor := Scope.new(); survivor.size = Vector2(640,480); add_child(survivor)
+	var survivor_button := Button.new(); survivor_button.position = Vector2(20,20); survivor_button.size = Vector2(100,50); survivor.add_child(survivor_button)
 	var survivor_scroll := ScrollContainer.new(); survivor.add_child(survivor_scroll)
+	var survivor_modal := Window.new(); survivor_modal.visible = false; survivor.add_child(survivor_modal)
 	Guard.attach(survivor)
 	var support: Node = Scroll.attach_tree(survivor)
 	for frame in 3: await get_tree().process_frame
@@ -45,13 +47,62 @@ func _run() -> void:
 	add_child(survivor)
 	for frame in 3: await get_tree().process_frame
 	check(_contains(support._registered_controls,survivor_scroll) and _contains(guard._functional,survivor_button),"re-entered controls keep their actual observer membership")
+	for cycle in 50:
+		remove_child(survivor)
+		for frame in 2: await get_tree().process_frame
+		check(_identity_count(guard._functional,survivor_button) == 1 and _identity_count(guard._modals,survivor_modal) == 1,"detached live button/window keep exactly one identity: "+str(cycle))
+		add_child(survivor)
+		for frame in 2: await get_tree().process_frame
+		check(_identity_count(guard._functional,survivor_button) == 1 and _identity_count(guard._modals,survivor_modal) == 1,"reattached button/window registration is idempotent: "+str(cycle))
+		check(_identity_count(guard._scopes,survivor) == 1 and _identity_count(support._registered_controls,survivor_scroll) == 1,"scope and scroll ownership stays singular: "+str(cycle))
+		check(guard._protected_at(survivor,Vector2(30,30)) and not guard._blocked_by_modal(),"live button protection and hidden-window behavior survive reattachment: "+str(cycle))
+	var copied_button := survivor_button.duplicate() as Button
+	var copied_scroll := survivor_scroll.duplicate() as ScrollContainer
+	survivor.add_child(copied_button); survivor.add_child(copied_scroll)
+	for frame in 3: await get_tree().process_frame
+	check(_identity_count(guard._functional,copied_button) == 1 and _identity_count(support._registered_controls,copied_scroll) == 1,"copied metadata cannot transfer the original control's registration identity")
+	copied_button.queue_free(); copied_scroll.queue_free()
+	for frame in 4: await get_tree().process_frame
+	check(_dead(guard._functional) == 0 and _dead(support._registered_controls) == 0,"copied controls retire independently while originals remain alive")
 	survivor.queue_free()
 	for frame in 4: await get_tree().process_frame
 	check(guard._functional.is_empty() and guard._modals.is_empty() and guard._scopes.is_empty() and support._registered_controls.is_empty(),"all owned registration containers drain after final destruction")
+	await _detached_destruction(guard,support,false)
+	await _detached_destruction(guard,support,true)
 	await _layout_lifetimes()
 	if not proof.write_receipt("ui_registry_retirement_test",checks,failures.size()): failures.append("receipt")
 	print("UI_REGISTRY_RETIREMENT_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _detached_destruction(guard: Node,support: Node,delayed: bool) -> void:
+	var holder := Control.new(); add_child(holder)
+	var scope := Scope.new(); holder.add_child(scope)
+	var button := Button.new(); scope.add_child(button)
+	var scroll := ScrollContainer.new(); scope.add_child(scroll)
+	var modal := Window.new(); modal.visible = false; scope.add_child(modal)
+	Guard.attach(scope); Scroll.attach_tree(scope)
+	for frame in 3: await get_tree().process_frame
+	var owned: WeakRef = weakref(scope)
+	if delayed:
+		holder.remove_child(scope)
+		for frame in 4: await get_tree().process_frame
+		check(_identity_count(guard._scopes,scope) == 1 and _identity_count(support._registered_controls,scroll) == 1,"delayed destruction preserves still-live detached ownership")
+		scope.free()
+	else:
+		# Invoke the actual HUD clear method, including its remove_child then
+		# queue_free ordering; do not synthesize a later tree-removal event.
+		var hud := HUDScript.new()
+		hud._item_quick_slot_menu_list = holder
+		hud.item_quick_slot_candidate_buttons.append(button)
+		hud._clear_item_quick_slot_picker()
+		check(hud.item_quick_slot_candidate_buttons.is_empty() and holder.get_child_count() == 0,"real HUD clear removes candidates before queued destruction")
+		hud.free()
+	for frame in 4: await get_tree().process_frame
+	check(owned.get_ref() == null,"detached subtree actually destroyed: "+str(delayed))
+	check(_dead(guard._functional) == 0 and _dead(guard._modals) == 0 and _dead(guard._scopes) == 0,"dismiss dead identities retire without later input/removal: "+str(delayed))
+	check(_dead(support._registered_controls) == 0,"scroll dead identities retire without later input/removal: "+str(delayed))
+	holder.queue_free()
+	for frame in 3: await get_tree().process_frame
 
 func _layout_lifetimes() -> void:
 	var observer := Layout.new()
@@ -87,3 +138,9 @@ func _contains(refs: Array,target: Node) -> bool:
 	for reference: WeakRef in refs:
 		if reference.get_ref() == target: return true
 	return false
+
+func _identity_count(refs: Array,target: Node) -> int:
+	var count := 0
+	for reference: WeakRef in refs:
+		if reference.get_ref() == target: count += 1
+	return count
