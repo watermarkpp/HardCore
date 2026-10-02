@@ -1,0 +1,222 @@
+{
+  "final_related": {
+    "local_run": "pro1d20_final_213719_114429",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn','tests/ui_r5_dismiss_guard_input_order_test.tscn','tests/touch_scroll_support_test.tscn','tests/character_select_touch_scroll_test.tscn','tests/device_lab_layout_regression_test.tscn','tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 18,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": []
+  },
+  "final_natural": {
+    "local_run": "pro1d20_natural_214105_218965",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": []
+  },
+  "stage_burst_first": {
+    "local_run": "death_burst_first_211307_200647",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "owned_traces": []
+  },
+  "stage_burst_geometry": {
+    "local_run": "death_burst_geometry_211529_446638",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "owned_traces": []
+  },
+  "stage_burst_center": {
+    "local_run": "death_burst_center_211729_882375",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": []
+  },
+  "stage_overlap_missing_timing": {
+    "local_run": "death_expiry_first_212049_640628",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    },
+    "owned_traces": []
+  },
+  "stage_overlap_timing": {
+    "local_run": "death_expiry_timing_212313_828721",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": []
+  },
+  "stage_burst_old_ui_regression": {
+    "local_run": "p6_burst_final_212508_698038",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 13,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": []
+  },
+  "stage_ui_combined_red": {
+    "local_run": "ui_unclaimed_copy_red_212958_606768",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": []
+  },
+  "stage_ui_isolated_red": {
+    "local_run": "ui_unclaimed_copy_isolated_red_213400_930347",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "owned_traces": []
+  },
+  "stage_ui_green": {
+    "local_run": "ui_unclaimed_copy_green_213511_979100",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/ui_registry_retirement_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "owned_traces": []
+  }
+}

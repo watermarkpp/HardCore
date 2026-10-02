@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 13,
+  "failed": 0,
+  "status": "PASS"
+}

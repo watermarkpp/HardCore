@@ -1,0 +1,24 @@
+{
+  "parent": "1d20d266936623a5a6c8925426f2f2063a518d70",
+  "source_files": 3546,
+  "content_sha256": "98f09b09b3f8048285571ff5524b6ace1711c99d0f2c80347d20e8acb1fcbe01",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "source_delta": [
+    "scripts/ui_registration_lifetime.gd",
+    "tests/framework/death_burst_lifecycle_cold_test.gd",
+    "tests/framework/death_burst_lifecycle_cold_test.tscn",
+    "tests/framework/death_burst_lifecycle_test.gd",
+    "tests/framework/death_burst_lifecycle_test.tscn",
+    "tests/framework/death_expiry_overlap_cold_test.gd",
+    "tests/framework/death_expiry_overlap_cold_test.tscn",
+    "tests/framework/death_expiry_overlap_test.tscn",
+    "tests/framework/ui_registry_retirement_test.gd"
+  ],
+  "native_attempts": 21,
+  "unique_native_pass": 21,
+  "framework_scene_count": 17,
+  "framework_checks": 1064,
+  "preserved_final_failures": 0,
+  "source_zip_bytes": 15113699,
+  "source_zip_sha256": "55f9a571dd7c9d3ff19ecf3d1b3102444e940bb9aec3e6f9a16358e7dbd88bc7"
+}

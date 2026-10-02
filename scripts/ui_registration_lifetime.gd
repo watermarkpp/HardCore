@@ -1,30 +1,32 @@
 extends RefCounted
 
-## The registered node owns this token. Its release is observable even when
-## the node was detached earlier, without polling or retaining the node.
+## The registered node owns an internal child. Its destruction is observable
+## even outside the tree; copied metadata cannot prolong that ownership.
 const META := &"_ui_registration_lifetime"
 
-class Lifetime extends RefCounted:
+class Lifetime extends Node:
 	var target_id := 0
 	var registrations: Dictionary = {}
 
 	func _notification(what: int) -> void:
 		if what == NOTIFICATION_PREDELETE:
-			# RefCounted self is already null at this notification in Godot.
-			# Invoke the surviving observer directly, never a method/signal on self.
+			# The parent destroys this child regardless of outside references.
+			# Notify only surviving observers; they coalesce deferred weak cleanup.
 			for registration: Dictionary in registrations.values():
 				var callback: Callable = registration.retired
 				if callback.is_valid():
 					callback.call()
 
 static func claim(target: Node, observer: Node, role: StringName, on_retired: Callable) -> bool:
-	var token: Lifetime = target.get_meta(META) as Lifetime if target.has_meta(META) else null
-	# Node.duplicate can copy metadata references; a copied node owns a new
-	# registration lifetime even when its metadata points at the original token.
+	var reference: WeakRef = target.get_meta(META) as WeakRef if target.has_meta(META) else null
+	var token: Lifetime = reference.get_ref() as Lifetime if reference != null else null
+	# Internal children are not duplicated. Metadata holds only a weak handle,
+	# so an unclaimed copy cannot retain the original target's lifetime.
 	if token == null or token.target_id != target.get_instance_id():
 		token = Lifetime.new()
 		token.target_id = target.get_instance_id()
-		target.set_meta(META,token)
+		target.set_meta(META,weakref(token))
+		target.add_child(token,false,Node.INTERNAL_MODE_BACK)
 	# A live detached control can outlive an observer. Do not retain retired
 	# observer identities or confuse a replacement observer with its predecessor.
 	for key: Variant in token.registrations.keys():

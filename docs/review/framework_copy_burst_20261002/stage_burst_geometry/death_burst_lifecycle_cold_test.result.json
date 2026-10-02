@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process uses actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer supplied explicit expectation",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "2a6dbf5b-981c-447e-b29e-9a738c7cd180",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "551c5db4-f140-4da6-8dbb-406811012b96",
+  "scene_id": "death_burst_lifecycle_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "561b691b1c08fb5e51e57c7b5fbf73f96b6040c9bffd675fcdaf84bd7eab810d",
+  "status": "FAIL"
+}

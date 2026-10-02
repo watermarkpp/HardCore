@@ -1,0 +1,196 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual effect service configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real qualified binding enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real post-HP fact queued",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one accepted periodic state waits for its original due time",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "existing simulation clock advances to 750ms after the first due time",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual heap reports the overdue work before service",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual production tick commits exactly five HP",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "post-pump observer sees no remaining due work",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "consumption-boundary metrics retain the 750ms late tick after heap sampling can no longer see it",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "later on-time delivery preserves maximum lateness without duplicating or rescheduling ticks",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "no mutation or delivery error",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "fresh real runtime for on-time",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "real fact accepted for on-time",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "one real state installed for on-time",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "on-time consumption records zero simulated lateness",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "two pumps in one process epoch neither recount nor resubmit an already consumed phase",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "paused wall time creates no simulated tick debt, count or lateness",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "fresh real runtime for exact-period",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "real fact accepted for exact-period",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "one real state installed for exact-period",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "late first phase and on-time second phase each commit exactly once",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "exactly one full period late fails the strict gate even when post-service heap is empty",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "fresh real runtime for natural-expiry",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "real fact accepted for natural-expiry",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "one real state installed for natural-expiry",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "natural expiry records four successful attempts and a separate terminal outcome",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "expired states cannot be counted as further attempted deliveries",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "fresh real runtime for port-rejection",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "real fact accepted for port-rejection",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "one real state installed for port-rejection",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "explicit stats fault reaches the actual damage port: rejected attempt is separate from successful delivery and writes no HP",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "fresh real runtime for invalid-target",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "real fact accepted for invalid-target",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "one real state installed for invalid-target",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "invalidated target is cancelled before delivery and never reported as a successful tick",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "default-off module restored",
+      "passed": true
+    }
+  ],
+  "count": 36,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "42c1f039-b189-4918-9eef-5ec7df26235a",
+  "passed": 36,
+  "reported_checks": 36,
+  "reported_failures": 0,
+  "run_id": "fadaf1b2-4f1c-49b5-9ff9-e76fb72cc588",
+  "scene_id": "periodic_delivery_lateness_test",
+  "schema_version": 1,
+  "source_content_sha256": "8f49e4b717da4d84753bc5424ef10014c9744b86bf83cc0987c1f1a346a8b966",
+  "status": "PASS"
+}

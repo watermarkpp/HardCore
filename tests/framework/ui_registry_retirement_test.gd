@@ -69,10 +69,38 @@ func _run() -> void:
 	check(guard._functional.is_empty() and guard._modals.is_empty() and guard._scopes.is_empty() and support._registered_controls.is_empty(),"all owned registration containers drain after final destruction")
 	await _detached_destruction(guard,support,false)
 	await _detached_destruction(guard,support,true)
+	await _unclaimed_copy_retention(guard,support)
 	await _layout_lifetimes()
 	if not proof.write_receipt("ui_registry_retirement_test",checks,failures.size()): failures.append("receipt")
 	print("UI_REGISTRY_RETIREMENT_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
 	get_tree().quit(0 if failures.is_empty() else 1)
+
+func _unclaimed_copy_retention(guard: Node,support: Node) -> void:
+	# Run each owner separately: destroying a ScrollContainer also destroys
+	# internal Range controls, whose guard cleanup would mask a Button leak.
+	for scrolling in [false,true]:
+		var original: Control = ScrollContainer.new() if scrolling else Button.new()
+		add_child(original)
+		if scrolling: Scroll.attach_tree(original)
+		for frame in 3: await get_tree().process_frame
+		var refs: Array = support._registered_controls if scrolling else guard._functional
+		check(_identity_count(refs,original) == 1,"original registers before its unclaimed copy exists: "+str(scrolling))
+		var copied := original.duplicate() as Control
+		check(not copied.is_inside_tree(),"copy stays outside the tree without any registration claim: "+str(scrolling))
+		var original_ref: WeakRef = weakref(original)
+		original.queue_free()
+		for frame in 4: await get_tree().process_frame
+		check(original_ref.get_ref() == null and is_instance_valid(copied),"original is destroyed while its unclaimed copy survives: "+str(scrolling))
+		check(_dead(refs) == 0,"unclaimed copied metadata cannot delay original identity retirement: "+str(scrolling))
+		# No other registered target in this service is destroyed before the
+		# assertion. A later claim must also accept the surviving copied node.
+		add_child(copied)
+		if scrolling: Scroll.attach_tree(copied)
+		for frame in 3: await get_tree().process_frame
+		check(_identity_count(refs,copied) == 1,"orphaned copied metadata does not block new registration: "+str(scrolling))
+		copied.queue_free()
+		for frame in 4: await get_tree().process_frame
+		check(_dead(refs) == 0,"copy retirement finishes without another input event: "+str(scrolling))
 
 func _detached_destruction(guard: Node,support: Node,delayed: bool) -> void:
 	var holder := Control.new(); add_child(holder)

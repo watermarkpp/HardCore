@@ -1,0 +1,1231 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real dynamic controls register in cycle 0",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 0",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "scroll registry retires destroyed nodes without drag: 0",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "live control/scoping identities remain registered: 0",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real dynamic controls register in cycle 1",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 1",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "scroll registry retires destroyed nodes without drag: 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "live control/scoping identities remain registered: 1",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "real dynamic controls register in cycle 2",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "dismiss registry retires destroyed nodes without any synthetic tap: 2",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "scroll registry retires destroyed nodes without drag: 2",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "live control/scoping identities remain registered: 2",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "temporarily detached live controls retain registration",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "re-entered controls keep their actual observer membership",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "detached live button/window keep exactly one identity: 0",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "reattached button/window registration is idempotent: 0",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "scope and scroll ownership stays singular: 0",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "live button protection and hidden-window behavior survive reattachment: 0",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "detached live button/window keep exactly one identity: 1",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "reattached button/window registration is idempotent: 1",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "scope and scroll ownership stays singular: 1",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "live button protection and hidden-window behavior survive reattachment: 1",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "detached live button/window keep exactly one identity: 2",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "reattached button/window registration is idempotent: 2",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "scope and scroll ownership stays singular: 2",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "live button protection and hidden-window behavior survive reattachment: 2",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "detached live button/window keep exactly one identity: 3",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "reattached button/window registration is idempotent: 3",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "scope and scroll ownership stays singular: 3",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "live button protection and hidden-window behavior survive reattachment: 3",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "detached live button/window keep exactly one identity: 4",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "reattached button/window registration is idempotent: 4",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "scope and scroll ownership stays singular: 4",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "live button protection and hidden-window behavior survive reattachment: 4",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "detached live button/window keep exactly one identity: 5",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "reattached button/window registration is idempotent: 5",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "scope and scroll ownership stays singular: 5",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "live button protection and hidden-window behavior survive reattachment: 5",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "detached live button/window keep exactly one identity: 6",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "reattached button/window registration is idempotent: 6",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "scope and scroll ownership stays singular: 6",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "live button protection and hidden-window behavior survive reattachment: 6",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "detached live button/window keep exactly one identity: 7",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "reattached button/window registration is idempotent: 7",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "scope and scroll ownership stays singular: 7",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "live button protection and hidden-window behavior survive reattachment: 7",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "detached live button/window keep exactly one identity: 8",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "reattached button/window registration is idempotent: 8",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "scope and scroll ownership stays singular: 8",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "live button protection and hidden-window behavior survive reattachment: 8",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "detached live button/window keep exactly one identity: 9",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "reattached button/window registration is idempotent: 9",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "scope and scroll ownership stays singular: 9",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "live button protection and hidden-window behavior survive reattachment: 9",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "detached live button/window keep exactly one identity: 10",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "reattached button/window registration is idempotent: 10",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "scope and scroll ownership stays singular: 10",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "live button protection and hidden-window behavior survive reattachment: 10",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "detached live button/window keep exactly one identity: 11",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "reattached button/window registration is idempotent: 11",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "scope and scroll ownership stays singular: 11",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "live button protection and hidden-window behavior survive reattachment: 11",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "detached live button/window keep exactly one identity: 12",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "reattached button/window registration is idempotent: 12",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "scope and scroll ownership stays singular: 12",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "live button protection and hidden-window behavior survive reattachment: 12",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "detached live button/window keep exactly one identity: 13",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "reattached button/window registration is idempotent: 13",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "scope and scroll ownership stays singular: 13",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "live button protection and hidden-window behavior survive reattachment: 13",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "detached live button/window keep exactly one identity: 14",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "reattached button/window registration is idempotent: 14",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "scope and scroll ownership stays singular: 14",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "live button protection and hidden-window behavior survive reattachment: 14",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "detached live button/window keep exactly one identity: 15",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "reattached button/window registration is idempotent: 15",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "scope and scroll ownership stays singular: 15",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "live button protection and hidden-window behavior survive reattachment: 15",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "detached live button/window keep exactly one identity: 16",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "reattached button/window registration is idempotent: 16",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "scope and scroll ownership stays singular: 16",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "live button protection and hidden-window behavior survive reattachment: 16",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "detached live button/window keep exactly one identity: 17",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "reattached button/window registration is idempotent: 17",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "scope and scroll ownership stays singular: 17",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "live button protection and hidden-window behavior survive reattachment: 17",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "detached live button/window keep exactly one identity: 18",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "reattached button/window registration is idempotent: 18",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "scope and scroll ownership stays singular: 18",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "live button protection and hidden-window behavior survive reattachment: 18",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "detached live button/window keep exactly one identity: 19",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "reattached button/window registration is idempotent: 19",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "scope and scroll ownership stays singular: 19",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "live button protection and hidden-window behavior survive reattachment: 19",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "detached live button/window keep exactly one identity: 20",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "reattached button/window registration is idempotent: 20",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "scope and scroll ownership stays singular: 20",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "live button protection and hidden-window behavior survive reattachment: 20",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "detached live button/window keep exactly one identity: 21",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "reattached button/window registration is idempotent: 21",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "scope and scroll ownership stays singular: 21",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "live button protection and hidden-window behavior survive reattachment: 21",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "detached live button/window keep exactly one identity: 22",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "reattached button/window registration is idempotent: 22",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "scope and scroll ownership stays singular: 22",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "live button protection and hidden-window behavior survive reattachment: 22",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "detached live button/window keep exactly one identity: 23",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "reattached button/window registration is idempotent: 23",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "scope and scroll ownership stays singular: 23",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "live button protection and hidden-window behavior survive reattachment: 23",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "detached live button/window keep exactly one identity: 24",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "reattached button/window registration is idempotent: 24",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "scope and scroll ownership stays singular: 24",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "live button protection and hidden-window behavior survive reattachment: 24",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "detached live button/window keep exactly one identity: 25",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "reattached button/window registration is idempotent: 25",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "scope and scroll ownership stays singular: 25",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "live button protection and hidden-window behavior survive reattachment: 25",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "detached live button/window keep exactly one identity: 26",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "reattached button/window registration is idempotent: 26",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "scope and scroll ownership stays singular: 26",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "live button protection and hidden-window behavior survive reattachment: 26",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "detached live button/window keep exactly one identity: 27",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "reattached button/window registration is idempotent: 27",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "scope and scroll ownership stays singular: 27",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "live button protection and hidden-window behavior survive reattachment: 27",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "detached live button/window keep exactly one identity: 28",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "reattached button/window registration is idempotent: 28",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "scope and scroll ownership stays singular: 28",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "live button protection and hidden-window behavior survive reattachment: 28",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "detached live button/window keep exactly one identity: 29",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "reattached button/window registration is idempotent: 29",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "scope and scroll ownership stays singular: 29",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "live button protection and hidden-window behavior survive reattachment: 29",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "detached live button/window keep exactly one identity: 30",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "reattached button/window registration is idempotent: 30",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "scope and scroll ownership stays singular: 30",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "live button protection and hidden-window behavior survive reattachment: 30",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "detached live button/window keep exactly one identity: 31",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "reattached button/window registration is idempotent: 31",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "scope and scroll ownership stays singular: 31",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "live button protection and hidden-window behavior survive reattachment: 31",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "detached live button/window keep exactly one identity: 32",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "reattached button/window registration is idempotent: 32",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "scope and scroll ownership stays singular: 32",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "live button protection and hidden-window behavior survive reattachment: 32",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "detached live button/window keep exactly one identity: 33",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "reattached button/window registration is idempotent: 33",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "scope and scroll ownership stays singular: 33",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "live button protection and hidden-window behavior survive reattachment: 33",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "detached live button/window keep exactly one identity: 34",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "reattached button/window registration is idempotent: 34",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "scope and scroll ownership stays singular: 34",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "live button protection and hidden-window behavior survive reattachment: 34",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "detached live button/window keep exactly one identity: 35",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "reattached button/window registration is idempotent: 35",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "scope and scroll ownership stays singular: 35",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "live button protection and hidden-window behavior survive reattachment: 35",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "detached live button/window keep exactly one identity: 36",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "reattached button/window registration is idempotent: 36",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "scope and scroll ownership stays singular: 36",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "live button protection and hidden-window behavior survive reattachment: 36",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "detached live button/window keep exactly one identity: 37",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "reattached button/window registration is idempotent: 37",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "scope and scroll ownership stays singular: 37",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "live button protection and hidden-window behavior survive reattachment: 37",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "detached live button/window keep exactly one identity: 38",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "reattached button/window registration is idempotent: 38",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "scope and scroll ownership stays singular: 38",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "live button protection and hidden-window behavior survive reattachment: 38",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "detached live button/window keep exactly one identity: 39",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "reattached button/window registration is idempotent: 39",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "scope and scroll ownership stays singular: 39",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "live button protection and hidden-window behavior survive reattachment: 39",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "detached live button/window keep exactly one identity: 40",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "reattached button/window registration is idempotent: 40",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "scope and scroll ownership stays singular: 40",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "live button protection and hidden-window behavior survive reattachment: 40",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "detached live button/window keep exactly one identity: 41",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "reattached button/window registration is idempotent: 41",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "scope and scroll ownership stays singular: 41",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "live button protection and hidden-window behavior survive reattachment: 41",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "detached live button/window keep exactly one identity: 42",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "reattached button/window registration is idempotent: 42",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "scope and scroll ownership stays singular: 42",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "live button protection and hidden-window behavior survive reattachment: 42",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "detached live button/window keep exactly one identity: 43",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "reattached button/window registration is idempotent: 43",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "scope and scroll ownership stays singular: 43",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "live button protection and hidden-window behavior survive reattachment: 43",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "detached live button/window keep exactly one identity: 44",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "reattached button/window registration is idempotent: 44",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "scope and scroll ownership stays singular: 44",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "live button protection and hidden-window behavior survive reattachment: 44",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "detached live button/window keep exactly one identity: 45",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "reattached button/window registration is idempotent: 45",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "scope and scroll ownership stays singular: 45",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "live button protection and hidden-window behavior survive reattachment: 45",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "detached live button/window keep exactly one identity: 46",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "reattached button/window registration is idempotent: 46",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "scope and scroll ownership stays singular: 46",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "live button protection and hidden-window behavior survive reattachment: 46",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "detached live button/window keep exactly one identity: 47",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "reattached button/window registration is idempotent: 47",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "scope and scroll ownership stays singular: 47",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "live button protection and hidden-window behavior survive reattachment: 47",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "detached live button/window keep exactly one identity: 48",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "reattached button/window registration is idempotent: 48",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "scope and scroll ownership stays singular: 48",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "live button protection and hidden-window behavior survive reattachment: 48",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "detached live button/window keep exactly one identity: 49",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "reattached button/window registration is idempotent: 49",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "scope and scroll ownership stays singular: 49",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "live button protection and hidden-window behavior survive reattachment: 49",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "copied metadata cannot transfer the original control's registration identity",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "copied controls retire independently while originals remain alive",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "all owned registration containers drain after final destruction",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "real HUD clear removes candidates before queued destruction",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "detached subtree actually destroyed: false",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "dismiss dead identities retire without later input/removal: false",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "scroll dead identities retire without later input/removal: false",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "delayed destruction preserves still-live detached ownership",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "detached subtree actually destroyed: true",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "dismiss dead identities retire without later input/removal: true",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "scroll dead identities retire without later input/removal: true",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "original registers before its unclaimed copy exists: false",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "copy stays outside the tree without any registration claim: false",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "original is destroyed while its unclaimed copy survives: false",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "unclaimed copied metadata cannot delay original identity retirement: false",
+      "passed": false
+    },
+    {
+      "id": 230,
+      "label": "orphaned copied metadata does not block new registration: false",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "copy retirement finishes without another input event: false",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "original registers before its unclaimed copy exists: true",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "copy stays outside the tree without any registration claim: true",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "original is destroyed while its unclaimed copy survives: true",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "unclaimed copied metadata cannot delay original identity retirement: true",
+      "passed": false
+    },
+    {
+      "id": 236,
+      "label": "orphaned copied metadata does not block new registration: true",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "copy retirement finishes without another input event: true",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "real layout applications complete before owner deletion: 0",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "destroyed layout targets leave no process-lifetime token entries: 0",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "real layout applications complete before owner deletion: 1",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "destroyed layout targets leave no process-lifetime token entries: 1",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "real layout applications complete before owner deletion: 2",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "destroyed layout targets leave no process-lifetime token entries: 2",
+      "passed": true
+    }
+  ],
+  "count": 243,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "12b5b458-1d8a-4af0-b58b-3fe8052351ba",
+  "passed": 241,
+  "reported_checks": 243,
+  "reported_failures": 2,
+  "run_id": "6911259e-ed89-4f47-b11e-713d0f84dbd7",
+  "scene_id": "ui_registry_retirement_test",
+  "schema_version": 1,
+  "source_content_sha256": "a2b7dba623c9dbd7dbf6db2f2b9b597442106a68594c553c3a9f3b4969d757cf",
+  "status": "FAIL"
+}
