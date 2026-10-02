@@ -1,0 +1,25 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "938111a6-cb77-4db9-84f3-28b30c4b87f2",
+    "source_content_sha256":  "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+    "producers":  {
+                      "default_root_upgrade_archived_test":  {
+                                                                 "scene_id":  "default_root_upgrade_archived_test",
+                                                                 "run_id":  "9fc024d8-0aed-4f62-aeb7-d7728130f3eb",
+                                                                 "source_content_sha256":  "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+                                                                 "process_exited":  true,
+                                                                 "effective_exit_code":  0,
+                                                                 "result":  "PASS",
+                                                                 "receipt_sha256":  "9684cc6ed59f806dab863099606f3c598e52de28b53d5a326e27495111673e08"
+                                                             },
+                      "default_root_upgrade_archived_cold_test":  {
+                                                                      "scene_id":  "default_root_upgrade_archived_cold_test",
+                                                                      "run_id":  "3011b23c-2eee-4d7b-ac81-ae06ccea75b7",
+                                                                      "source_content_sha256":  "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+                                                                      "process_exited":  true,
+                                                                      "effective_exit_code":  0,
+                                                                      "result":  "PASS",
+                                                                      "receipt_sha256":  "e95a88f6de249908407e2144c697ac4e9d6323935fe7551df59e342af90f36a3"
+                                                                  }
+                  }
+}

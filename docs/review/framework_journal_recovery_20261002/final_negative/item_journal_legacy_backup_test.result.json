@@ -1,0 +1,116 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real load and writer run only in the prelaunch isolated account",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "production startup and profile creation succeed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "initial unsequenced checkpoint is durable",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "default-off test module enabled explicitly",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "first sequenced operation commits through the actual sole writer",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "owned corrupt primary has the exact original unsequenced recovery checkpoint",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "production loader recovers the valid older checkpoint, not the lost newer frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "recovered document owns its original loose gem exactly once",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "same-process old issuer cannot resurrect a completed epoch after recovery to an unsequenced checkpoint",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "fresh recovery intent uses a different epoch instead of reusing a lost operation identity",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "recovered profile remains usable through one newly issued actual transaction",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "an uncommitted next quote captures the current profile generation",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "owned legacy-clock fixture preserves the sequenced item journal and embedded gem",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "actual legacy-clock import creates a new generation around the unchanged item transaction stream",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "a previous-generation uncommitted quote cannot cross the real import boundary",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "a completed persistent economic outcome remains replayable across world-clock generation changes",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "current-generation quote continues the same durable sequence through its actual writer",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "owned future sequenced journal is paired with a valid prior backup and a malformed known item sibling",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "future sequenced aggregate blocks known-corruption recovery before replacing live ownership",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "future journal keeps exact primary and backup bytes under the existing write lock",
+      "passed": true
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "8d4cd6b6-9cb3-46fc-989e-4951c6847eda",
+  "passed": 20,
+  "reported_checks": 20,
+  "reported_failures": 0,
+  "run_id": "1767e2de-1846-44b9-a561-8118c37a324e",
+  "scene_id": "item_journal_legacy_backup_test",
+  "schema_version": 1,
+  "source_content_sha256": "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+  "status": "PASS"
+}

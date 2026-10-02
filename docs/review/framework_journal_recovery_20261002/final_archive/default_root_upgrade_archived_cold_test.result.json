@@ -1,0 +1,146 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process receives the successful archive migration expectation",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cold global owner uses actual default persistence paths",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "independent cold receipt binds the exact same source",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real cold startup validates completed default-root archive",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cold startup preserves immutable backup/completion metadata",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cold original archived bytes audio_preferences_v2.cfg",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold original archived bytes audio_preferences_v2.cfg.bak",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold original archived bytes character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold original archived bytes character_profiles.json.bak",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold original archived bytes characters/1788687153_5980.json",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold original archived bytes characters/1788687153_5980.json.bak",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold original archived bytes characters/1788959322_7970.json",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cold original archived bytes characters/1788959322_7970.json.bak",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "cold original archived bytes characters/1789987860_4393.json",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "cold original archived bytes characters/1789987860_4393.json.bak",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cold original archived bytes loot_preferences_v1.cfg",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "cold original archived bytes shared_warehouse.json",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "cold original archived bytes shared_warehouse.json.bak",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "independent process selects historical role 1788687153_5980",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "cold historical economy and progression 1788687153_5980",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "independent process selects historical role 1788959322_7970",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "cold historical economy and progression 1788959322_7970",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "independent process selects historical role 1789987860_4393",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "cold historical economy and progression 1789987860_4393",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "cold shared bank balance preserved",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "cold startup and role loads leave no writer receipt",
+      "passed": true
+    }
+  ],
+  "count": 26,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "938111a6-cb77-4db9-84f3-28b30c4b87f2",
+  "passed": 26,
+  "reported_checks": 26,
+  "reported_failures": 0,
+  "run_id": "3011b23c-2eee-4d7b-ac81-ae06ccea75b7",
+  "scene_id": "default_root_upgrade_archived_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+  "status": "PASS"
+}

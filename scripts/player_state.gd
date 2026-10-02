@@ -5605,16 +5605,31 @@ func _restore_json_backup(path: String, validator := Callable()) -> Dictionary:
 			"terminal": bool(backup_validation.get("terminal", false)),
 			"data": {},
 		}
+	var restored: Dictionary = backup_document.get("data", {}).duplicate(true)
+	var profile_document := path in [SAVE_PATH,LEGACY_SAVE_PATH] or (path.get_base_dir() == profile_directory and path.ends_with(".json"))
+	if profile_document and ItemTransactionJournal.is_sequenced(restored.get(ItemTransactionJournal.FIELD,{})):
+		var journal := ItemTransactionJournal.recovered(restored[ItemTransactionJournal.FIELD])
+		if journal.is_empty():
+			return {"success":false,"reason":"backup_item_epoch_recovery_failed","data":{}}
+		restored[ItemTransactionJournal.FIELD] = journal
+		if not bool(_validate_json_candidate(restored,validator).get("valid",false)):
+			return {"success":false,"reason":"backup_item_epoch_recovery_invalid","data":{}}
 	var temporary := path + ".tmp"
 	var file := FileAccess.open(temporary, FileAccess.WRITE)
 	if file == null:
 		return {"success": false, "reason": "backup_restore_temp_open_failed", "data": {}}
-	file.store_string(JSON.stringify(backup_document.get("data", {}), "\t"))
+	var serialized := JSON.stringify(restored, "\t")
+	file.store_string(serialized)
 	file.flush()
+	var write_error := file.get_error()
 	file.close()
+	if write_error != OK:
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
+		return {"success":false,"reason":"backup_restore_temp_write_failed","data":{}}
 	var temporary_document := _read_json_document(temporary)
 	if (
 		not bool(temporary_document.get("valid", false))
+		or FileAccess.get_file_as_string(temporary) != serialized
 		or not bool(_validate_json_candidate(temporary_document.get("data", {}), validator).get("valid", false))
 	):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
@@ -5634,7 +5649,7 @@ func _restore_json_backup(path: String, validator := Callable()) -> Dictionary:
 	return {
 		"success": true,
 		"reason": "recovered_from_backup",
-		"data": backup_document.get("data", {}).duplicate(true),
+		"data": temporary_document.get("data", {}).duplicate(true),
 		"quarantine_path": quarantine_path,
 	}
 

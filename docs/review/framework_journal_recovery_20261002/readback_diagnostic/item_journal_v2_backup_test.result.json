@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "2->1: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "2->1: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2->1: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2->1: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "2: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "2->1: actual loader restores the older sequenced ownership checkpoint: { \"contract_id\": \"player_state.save_result.v1\", \"success\": false, \"reason\": \"backup_restore_temp_invalid\", \"path\": \"user://characters/1790932910_9007.json\" }",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "130->65: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "130->65: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "130->65: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "130->65: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "130: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "130->65: actual loader restores the older sequenced ownership checkpoint: { \"contract_id\": \"player_state.save_result.v1\", \"success\": false, \"reason\": \"backup_restore_temp_invalid\", \"path\": \"user://characters/1790932911_7175.json\" }",
+      "passed": false
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "5e42d345-db43-4a09-b801-e125b9df8c96",
+  "passed": 13,
+  "reported_checks": 15,
+  "reported_failures": 2,
+  "run_id": "be99c144-6ddb-4420-bd26-32ab018fd855",
+  "scene_id": "item_journal_v2_backup_test",
+  "schema_version": 1,
+  "source_content_sha256": "216008776ece0e3adafa2f1a6cd80c4a4d52eb6ab9580a3257a61544c035fb98",
+  "status": "FAIL"
+}

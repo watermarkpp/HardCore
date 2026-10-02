@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "item_journal_legacy_backup_test",
+                        "test_path":  "tests/framework/item_journal_legacy_backup_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T09:29:12.7479588Z",
+                        "native_exit_observed_utc":  "2026-10-02T09:28:48.3317017Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "1767e2de-1846-44b9-a561-8118c37a324e",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "8d4cd6b6-9cb3-46fc-989e-4951c6847eda",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-02T17:28:49.8217063+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "2->1: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "2->1: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2->1: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2->1: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "2: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "2->1: actual loader restores the older sequenced ownership checkpoint",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "130->65: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "130->65: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "130->65: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "130->65: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "130: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "130->65: actual loader restores the older sequenced ownership checkpoint",
+      "passed": false
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "invocation_id": "4229d0ff-5960-424b-92c6-80ca916dc4c2",
+  "passed": 13,
+  "reported_checks": 15,
+  "reported_failures": 2,
+  "run_id": "574a44f9-27e7-4247-b416-d55d5af2e528",
+  "scene_id": "item_journal_v2_backup_test",
+  "schema_version": 1,
+  "source_content_sha256": "756747b1a0caa019536a0837708f1ed836f7d1d16d7cb22acde81f42167975c0",
+  "status": "FAIL"
+}

@@ -1,0 +1,42 @@
+{
+  "parent": "4f65e01f09bfcaaaaa0b497bc72b85e182b00f90",
+  "source_files": 3523,
+  "content_sha256": "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+  "native_scenes": 23,
+  "framework_checks": 1018,
+  "check_counts": {
+    "item_journal_sequence_test.result": 31,
+    "item_journal_v2_backup_test.result": 61,
+    "item_journal_v2_backup_cold_test.result": 31,
+    "item_journal_v2_backup_restart_test.result": 14,
+    "item_journal_v2_backup_seed_test.result": 14,
+    "item_journal_recovery_cold_test.result": 14,
+    "item_journal_recovery_test.result": 25,
+    "item_journal_legacy_backup_test.result": 20,
+    "future_item_ownership_terminal_test.result": 209,
+    "item_extension_codec_test.result": 87,
+    "mobile_save_upgrade_test.result": 215,
+    "periodic_credit_safe_logout_cold_test.result": 13,
+    "periodic_credit_safe_logout_test.result": 37,
+    "socket_gem_identity_test.result": 22,
+    "socket_transaction_test.result": 51,
+    "warehouse_completion_boundary_test.result": 16,
+    "world_generation_persistence_cold_test.result": 13,
+    "world_generation_persistence_test.result": 24,
+    "default_root_upgrade_existing_cold_test.result": 15,
+    "default_root_upgrade_existing_test.result": 22,
+    "default_root_upgrade_archived_cold_test.result": 26,
+    "default_root_upgrade_archived_test.result": 58
+  },
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "journal_backup_recovery": "PASS v2/v3 supported backup promotion; same process, cold, restart and failed temp open",
+  "new_contract": "hc.item.transactions.v3",
+  "open": [
+    "release coverage: open producer duplicate plan and injected batch failure",
+    "full P6/R3 natural sustained movement/combat",
+    "original v97 B input MISSING",
+    "Android/GPU NOT_RUN",
+    "main integration and APK NOT_RUN",
+    "physical power loss or forced process death during recovery NOT_RUN"
+  ]
+}

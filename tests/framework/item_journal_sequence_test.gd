@@ -51,6 +51,30 @@ func _run() -> void:
 	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).terminal,"unknown preserved legacy action remains terminal in a v2 aggregate")
 	check(api.sequence_id(epoch,9007199254740992).is_empty(),"operation serials outside exact JSON integer range cannot be issued")
 	check(not bool(api.admission({},"hc:itemtx:malformed:1",epoch).success),"malformed reserved-prefix ID cannot fall back to the legacy protocol")
+	var restored := Journal.recovered(value)
+	check(restored.get("contract_id") == "hc.item.transactions.v3" and restored.get("schema_version") == 3 and restored.get("epoch") != epoch,"backup recovery has an explicit new durable epoch contract")
+	check(restored.get("entries") == value.entries and restored.get("legacy_entries") == legacy.entries and restored.get("retired_through") == value.retired_through,"recovery preserves every bounded old outcome and logical watermark")
+	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:JSON.parse_string(JSON.stringify(restored))}).valid,"mixed-epoch recovery is valid after actual JSON numeric conversion")
+	check(Journal.admission(restored,Journal.sequence_id(epoch,131)).reason == "item_operation_epoch_mismatch","an old issuer cannot claim the next recovered sequence")
+	var recovery_epoch: String = restored.epoch
+	for sequence in range(131,199):
+		entry.operation_id = Journal.sequence_id(recovery_epoch,sequence)
+		restored = Journal.appended(restored,profile,entry,recovery_epoch)
+		if restored.is_empty(): break
+	check(not restored.is_empty() and restored.entries.size() == 64 and restored.legacy_entries == legacy.entries and int(restored.retired_through) == 134,"68 recovered operations cross the mixed window without losing opaque history or growing results")
+	if restored.is_empty(): _finish(); return
+	check(Journal.admission(restored,Journal.sequence_id(recovery_epoch,131)).reason == "item_operation_retired","new recovery stream also permanently refuses its own retired detailed results")
+	var again := Journal.recovered(restored)
+	check(again.get("epoch") not in [epoch,recovery_epoch] and again.entries == restored.entries,"repeated v3 recovery closes its prior producer while retaining outcomes")
+	check(Journal.admission(again,Journal.sequence_id(recovery_epoch,199)).reason == "item_operation_epoch_mismatch","recovery of recovery cannot reuse old next identity")
+	bad = again.duplicate(true); bad.entries[0].operation_id = Journal.sequence_id(epoch,1)
+	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"mixed epochs never permit sequence gaps or wrong positions")
+	bad = again.duplicate(true); bad.entries[0].operation_id = "opaque:wrong"
+	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"v3 recent outcomes still require canonical sequenced IDs")
+	bad = again.duplicate(true); bad.schema_version = 4; bad.entries = "malformed"
+	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).terminal,"future recovery schema is terminal before malformed known fields")
+	check(Journal.recovered(legacy).is_empty(),"recovery helper cannot reinterpret opaque history as a sequenced stream")
+
 	_finish()
 func _finish() -> void:
 	if not proof.write_receipt("item_journal_sequence_test",checks,failures.size()): failures.append("receipt")

@@ -1,0 +1,136 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual persistence is enabled before test setup",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "native runner isolated user data before autoload initialization",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "production startup migration gate completes",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "production profile service creates the test-owned character",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "existing sole writer saves the starting profile",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "starting durable document belongs to the newly created profile",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "only owned primary and matching backup receive the same legacy before-image",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "production load imports the real legacy document: { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://characters/1790933373_5986.json\", \"world_clock_migration_archive\": \"user://characters/clock_import_backups/1790933373_5986-3f076429c36c43235deddd88e695e07322e58bed5eeec6de86bc805f00560577.json\" }",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "production legacy importer generated a nonempty canonical namespace",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "production migration keeps its before-image archive",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "archived original content matches the owned legacy input",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "actual imported progress remains exact",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "actual world deadline survives the production import",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "production world snapshot uses the same nonempty profile namespace",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "production import promoted primary and matching recovery backup into the generated namespace",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "durable import identifies the preserved source digest",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "different nonempty namespace is rejected by the production snapshot validator",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "actual ledger replay refuses a mismatched generation",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "existing writer checkpoints imported progress without replacing the generated namespace",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "existing backup path can checkpoint the same imported namespace again",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "live, durable primary, backup and world snapshot retain the same nonempty generation",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "normal checkpoints preserve the original import archive bytes",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "all real persistence callbacks have completed before native handoff",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "this successful producer writes a checked cold expectation",
+      "passed": true
+    }
+  ],
+  "count": 24,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "62a6b820-9c41-4e65-ba13-6ba98f248f12",
+  "passed": 24,
+  "reported_checks": 24,
+  "reported_failures": 0,
+  "run_id": "25aed131-249f-4687-b500-493e6f0569ad",
+  "scene_id": "world_generation_persistence_test",
+  "schema_version": 1,
+  "source_content_sha256": "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+  "status": "PASS"
+}

@@ -1,0 +1,151 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "2->1: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "2->1: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2->1: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2->1: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "2: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "2->1: actual loader restores the older sequenced ownership checkpoint",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "2->1: old producer epoch is closed durably with the restored inventory before accepting commands",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "2->1: every retained old outcome is preserved exactly",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "2->1: original lost completed ID is refused before rules or inputs",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "2->1: changing request contents cannot recycle the old ID",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "2->1: old complete quote cannot create another writer",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "2->1: refusals cause zero ownership/resource/journal/file/completion changes",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "130->65: actual profile creation",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "130->65: actual initial save",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "130->65: all real transactions and receipts complete",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "130->65: healthy v2 stream reaches its real frontier",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "130: owned v2 checkpoint and corrupt primary installed",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "130->65: actual loader restores the older sequenced ownership checkpoint",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "130->65: old producer epoch is closed durably with the restored inventory before accepting commands",
+      "passed": false
+    },
+    {
+      "id": 23,
+      "label": "130->65: every retained old outcome is preserved exactly",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "130->65: original lost completed ID is refused before rules or inputs",
+      "passed": false
+    },
+    {
+      "id": 25,
+      "label": "130->65: changing request contents cannot recycle the old ID",
+      "passed": false
+    },
+    {
+      "id": 26,
+      "label": "130->65: old complete quote cannot create another writer",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "130->65: refusals cause zero ownership/resource/journal/file/completion changes",
+      "passed": true
+    }
+  ],
+  "count": 27,
+  "engine_version": "4.7-stable (official)",
+  "failed": 6,
+  "invocation_id": "d00bff5f-b198-4736-9dee-10e2b5f8fb36",
+  "passed": 21,
+  "reported_checks": 27,
+  "reported_failures": 6,
+  "run_id": "11dc5f54-080f-49c6-9416-47eb4f06f2bc",
+  "scene_id": "item_journal_v2_backup_test",
+  "schema_version": 1,
+  "source_content_sha256": "0fccd1bb274873f01b83aa2e290ae1574b8cd2eadbb881b6d382b149c59464f5",
+  "status": "FAIL"
+}

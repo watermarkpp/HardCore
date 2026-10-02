@@ -1,0 +1,116 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "this native successful producer owns the corrupt-primary/old-v2 inputs",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "owned isolated account and production persistence only",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real startup migration gate",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "explicit default-off module activation",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual cold selection recovers the requested owned profile",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "2.0->1.0: actual loader restores the older sequenced ownership checkpoint",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "2.0->1.0: old producer epoch is closed durably with the restored inventory before accepting commands",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "2.0->1.0: every retained old outcome is preserved exactly",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "2.0->1.0: original lost completed ID is refused before rules or inputs",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "2.0->1.0: changing request contents cannot recycle the old ID",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "2.0->1.0: old complete quote cannot create another writer",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "2.0->1.0: refusals cause zero ownership/resource/journal/file/completion changes",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "actual cold selection recovers the requested owned profile",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "130.0->65.0: actual loader restores the older sequenced ownership checkpoint",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "130.0->65.0: old producer epoch is closed durably with the restored inventory before accepting commands",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "130.0->65.0: every retained old outcome is preserved exactly",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "130.0->65.0: original lost completed ID is refused before rules or inputs",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "130.0->65.0: changing request contents cannot recycle the old ID",
+      "passed": false
+    },
+    {
+      "id": 19,
+      "label": "130.0->65.0: old complete quote cannot create another writer",
+      "passed": false
+    },
+    {
+      "id": 20,
+      "label": "130.0->65.0: refusals cause zero ownership/resource/journal/file/completion changes",
+      "passed": false
+    }
+  ],
+  "count": 20,
+  "engine_version": "4.7-stable (official)",
+  "failed": 10,
+  "invocation_id": "9ded83e7-b6db-467b-8efd-28c7c2c1a21c",
+  "passed": 10,
+  "reported_checks": 20,
+  "reported_failures": 10,
+  "run_id": "83f58ca3-e773-4fe2-b94b-f122ef44c078",
+  "scene_id": "item_journal_v2_backup_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "51d227e2c4d964f9c9ed0c24e803fd598192b9f633f2e06c5b63908b845e5351",
+  "status": "FAIL"
+}

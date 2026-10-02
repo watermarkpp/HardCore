@@ -1,0 +1,126 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "prelaunch-isolated default production paths, test_mode=false",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "old default files predate native startup and have no previous upgrade archive",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "prelaunch existing files bind the tracked seed fixture",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "autoload leaves both prelaunch original file hashes intact",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "real old profile is still unconverted at upgrade entry",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new real owner keeps stock default root",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "real write/admission gate precedes conversion",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "blocked background save preserves upgrade-before bytes",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "nonempty default root upgrades through real owner { \"success\": true, \"reason\": \"upgraded\", \"backup_path\": \"user://save_upgrades/framework_identity_v1\", \"profiles\": [\"default_root_A\"] }",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "exact archive-relative identity characters/default_root_A.json",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "manifest binds before-image characters/default_root_A.json",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "default source_prefix copies original bytes characters/default_root_A.json",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "exact archive-relative identity character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "manifest binds before-image character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "default source_prefix copies original bytes character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "actual default legacy profile converted by canonical owner",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "conversion retains economy and progression",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "real default completion receipt durable",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "default upgraded profile loads through actual service",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "actual profile/world receipts ended",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "owned default fixture parent",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "owned default fixture file",
+      "passed": true
+    }
+  ],
+  "count": 22,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "934402c9-fe00-4991-9340-9190c269bdbb",
+  "passed": 22,
+  "reported_checks": 22,
+  "reported_failures": 0,
+  "run_id": "f5b4adb6-61c5-491f-a299-ddd1034f0443",
+  "scene_id": "default_root_upgrade_existing_test",
+  "schema_version": 1,
+  "source_content_sha256": "95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01",
+  "status": "PASS"
+}

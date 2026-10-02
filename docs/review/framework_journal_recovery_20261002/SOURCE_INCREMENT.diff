@@ -1,0 +1,422 @@
+--- old/scripts/items/item_transaction_journal.gd
++++ new/scripts/items/item_transaction_journal.gd
+@@ -4,0 +5 @@
++const RECOVERY_CONTRACT := "hc.item.transactions.v3"
+@@ -17 +18 @@
+-	if journal.get("contract_id") is String and journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT]:
++	if journal.get("contract_id") is String and journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT,RECOVERY_CONTRACT]:
+@@ -19,2 +20,3 @@
+-	var sequenced: bool = journal.get("contract_id") == SEQUENCE_CONTRACT
+-	var supported := 2 if sequenced else 1
++	var sequenced := is_sequenced(journal)
++	var recovered: bool = journal.get("contract_id") == RECOVERY_CONTRACT
++	var supported := 3 if recovered else (2 if sequenced else 1)
+@@ -31 +33 @@
+-		or journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT] \
++		or journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT,RECOVERY_CONTRACT] \
+@@ -45,2 +47,4 @@
+-			if not raw is Dictionary or raw.get("operation_id") != sequence_id(journal.epoch,int(journal.retired_through)+index+1):
+-				return _status(false)
++			if not raw is Dictionary or not raw.get("operation_id") is String: return _status(false)
++			var id := parse_sequence(raw.operation_id)
++			if id.is_empty() or int(id.sequence) != int(journal.retired_through)+index+1 \
++				or (not recovered and id.epoch != journal.epoch): return _status(false)
+@@ -47,0 +52,18 @@
++
++static func is_sequenced(journal: Dictionary) -> bool:
++	return journal.get("contract_id") in [SEQUENCE_CONTRACT,RECOVERY_CONTRACT]
++
++# Only the existing profile backup promotion calls this transition. It preserves
++# the recovered ownership and bounded results, but closes every old producer's
++# missing IDs. The new epoch must be durable before any new quote can use it.
++static func recovered(journal: Dictionary) -> Dictionary:
++	if not is_sequenced(journal) or not validate_document({"profile_id":journal.get("profile_id"),FIELD:journal}).valid: return {}
++	var epoch := Crypto.new().generate_random_bytes(16).hex_encode()
++	if not _epoch_valid(epoch) or epoch == journal.epoch: return {}
++	for field: String in ["entries","legacy_entries"]:
++		for entry: Dictionary in journal[field]:
++			if parse_sequence(entry.operation_id).get("epoch") == epoch: return {}
++	var candidate := journal.duplicate(true)
++	candidate.contract_id = RECOVERY_CONTRACT; candidate.schema_version = 3
++	candidate.epoch = epoch
++	return candidate if validate_document({"profile_id":candidate.profile_id,FIELD:candidate}).valid else {}
+@@ -83 +105 @@
+-		var field := "legacy_entries" if journal.get("contract_id") == SEQUENCE_CONTRACT else "entries"
++		var field := "legacy_entries" if is_sequenced(journal) else "entries"
+@@ -87 +109 @@
+-	var sequenced: bool = journal.get("contract_id") == SEQUENCE_CONTRACT
++	var sequenced := is_sequenced(journal)
+@@ -110 +132 @@
+-		var field := "legacy_entries" if candidate.contract_id == SEQUENCE_CONTRACT else "entries"
++		var field := "legacy_entries" if is_sequenced(candidate) else "entries"
+--- old/scripts/items/item_transaction_port.gd
++++ new/scripts/items/item_transaction_port.gd
+@@ -21 +21 @@
+-	var last := int(journal.get("last_sequence",0)) if journal.get("contract_id") == Journal.SEQUENCE_CONTRACT else 0
++	var last := int(journal.get("last_sequence",0)) if Journal.is_sequenced(journal) else 0
+@@ -29 +29 @@
+-	if player._item_transaction_journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
++	if Journal.is_sequenced(player._item_transaction_journal):
+@@ -199 +199 @@
+-			if plan.journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
++			if Journal.is_sequenced(plan.journal):
+--- old/scripts/player_state.gd
++++ new/scripts/player_state.gd
+@@ -5607,0 +5608,9 @@
++	var restored: Dictionary = backup_document.get("data", {}).duplicate(true)
++	var profile_document := path in [SAVE_PATH,LEGACY_SAVE_PATH] or (path.get_base_dir() == profile_directory and path.ends_with(".json"))
++	if profile_document and ItemTransactionJournal.is_sequenced(restored.get(ItemTransactionJournal.FIELD,{})):
++		var journal := ItemTransactionJournal.recovered(restored[ItemTransactionJournal.FIELD])
++		if journal.is_empty():
++			return {"success":false,"reason":"backup_item_epoch_recovery_failed","data":{}}
++		restored[ItemTransactionJournal.FIELD] = journal
++		if not bool(_validate_json_candidate(restored,validator).get("valid",false)):
++			return {"success":false,"reason":"backup_item_epoch_recovery_invalid","data":{}}
+@@ -5612 +5621,2 @@
+-	file.store_string(JSON.stringify(backup_document.get("data", {}), "\t"))
++	var serialized := JSON.stringify(restored, "\t")
++	file.store_string(serialized)
+@@ -5613,0 +5624 @@
++	var write_error := file.get_error()
+@@ -5614,0 +5626,3 @@
++	if write_error != OK:
++		DirAccess.remove_absolute(ProjectSettings.globalize_path(temporary))
++		return {"success":false,"reason":"backup_restore_temp_write_failed","data":{}}
+@@ -5617,0 +5632 @@
++		or FileAccess.get_file_as_string(temporary) != serialized
+@@ -5637 +5652 @@
+-		"data": backup_document.get("data", {}).duplicate(true),
++		"data": temporary_document.get("data", {}).duplicate(true),
+--- old/tests/framework/helpers/journal_backup_fixture.gd
++++ new/tests/framework/helpers/journal_backup_fixture.gd
+@@ -0,0 +1,96 @@
++extends RefCounted
++
++const Journal := preload("res://scripts/items/item_transaction_journal.gd")
++const Gem := preload("res://scripts/items/socket_gem_rules.gd")
++const Drop := preload("res://scripts/item_drop_instance_rules.gd")
++
++static func write(path: String, bytes: PackedByteArray) -> bool:
++	var file := FileAccess.open(path,FileAccess.WRITE)
++	if file == null: return false
++	file.store_buffer(bytes); file.flush(); var okay := file.get_error() == OK; file.close(); return okay
++
++static func wait_job(host: Node, job: Variant) -> Dictionary:
++	if job == null: return {"success":false}
++	var deadline := Time.get_ticks_msec()+5000
++	while not bool(job.response.get("finished",false)) and Time.get_ticks_msec()<deadline:
++		PlayerState._json_persistence.pump(); await host.get_tree().process_frame
++	return job.response
++
++static func create_case(host: Node, checkpoint: int, total: int, retain_callback := false) -> Dictionary:
++	var label := str(total)+"->"+str(checkpoint)
++	host.check(PlayerState.create_character("事务回退"+str(total),"hc.profession.warrior").is_empty(),label+": actual profile creation")
++	PlayerState.set_process(false)
++	var base := Drop.create_instance(GameData.get_item_record({"item_id":80}),"rollback:"+str(total)+":gear")
++	var gem := Gem.create_instance("rollback:"+str(total)+":gem",true)
++	PlayerState.inventory = [base,gem]
++	host.check(PlayerState.save_game(true,true,true),label+": actual initial save")
++	var data := {"profile_id":PlayerState.active_profile_id,"path":PlayerState._profile_path(PlayerState.active_profile_id),
++		"checkpoint":checkpoint,"total":total,"target":base.instance_id,"gem":gem.instance_id}
++	var count := 0
++	for sequence in range(1,total+1):
++		var request := {"action":"hc.socketing.insert" if sequence%2 == 1 else "hc.socketing.remove",
++			"target_instance_id":base.instance_id,"gem_instance_id":gem.instance_id if sequence%2 == 1 else ""}
++		var quote: Dictionary = PlayerState.quote_new_item_transaction(request)
++		var pending: Dictionary = PlayerState.commit_item_transaction(quote)
++		var held: Dictionary = PlayerState._item_transaction_port._active if retain_callback and sequence == checkpoint+1 else {}
++		var done := await wait_job(host,pending.get("job"))
++		if not held.is_empty():
++			data["old_plan"] = held; data["old_receipt"] = done.duplicate(true)
++		if not bool(done.get("success",false)):
++			host.check(false,label+": actual transaction "+str(sequence)+" failed "+str(done)); return {}
++		PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++		count += 1
++		if sequence == checkpoint:
++			data["bytes"] = FileAccess.get_file_as_bytes(data.path)
++			data["retained_request"] = quote.request.duplicate(true)
++			data["checkpoint_journal"] = PlayerState._item_transaction_journal.duplicate(true)
++		if sequence == checkpoint+1: data["old_quote"] = quote.duplicate(true)
++	host.check(count == total and PlayerState._json_persistence.pending_count() == 0,label+": all real transactions and receipts complete")
++	data["epoch"] = PlayerState._item_transaction_journal.epoch
++	host.check(PlayerState._item_transaction_journal.contract_id == Journal.SEQUENCE_CONTRACT and int(PlayerState._item_transaction_journal.retired_through) == maxi(0,total-64),label+": healthy v2 stream reaches its real frontier")
++	return data
++
++static func corrupt(host: Node, data: Dictionary) -> void:
++	host.check(write(data.path+".bak",data.bytes) and write(data.path,"{broken-owned-primary".to_utf8_buffer()),str(data.total)+": owned v2 checkpoint and corrupt primary installed")
++
++static func probe(host: Node, data: Dictionary) -> Dictionary:
++	var label := str(data.total)+"->"+str(data.checkpoint)
++	var journal: Dictionary = PlayerState._item_transaction_journal.duplicate(true)
++	host.check(bool(PlayerState.last_load_result.get("success",false)) and int(journal.get("last_sequence",0)) == int(data.checkpoint),label+": actual loader restores the older sequenced ownership checkpoint: "+str(PlayerState.last_load_result))
++	if not bool(PlayerState.last_load_result.get("success",false)): return {}
++	var disk: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(data.path))
++	host.check(journal.get("epoch") != data.epoch and disk.get(Journal.FIELD) == journal,label+": old producer epoch is closed durably with the restored inventory before accepting commands")
++	host.check(journal.get("entries") == data.checkpoint_journal.entries and journal.get("legacy_entries") == data.checkpoint_journal.legacy_entries,label+": every retained old outcome is preserved exactly")
++	var before: Array = PlayerState.inventory.duplicate(true)
++	var gold: int = PlayerState.gold
++	var xp: int = PlayerState.experience
++	var bytes := FileAccess.get_file_as_bytes(data.path)
++	var completed: int = PlayerState._json_persistence.completed_count
++	var stale: Dictionary = PlayerState.quote_item_transaction(data.old_quote.request)
++	host.check(not bool(stale.get("success",false)) and stale.get("reason") == "item_operation_epoch_mismatch",label+": original lost completed ID is refused before rules or inputs")
++	var changed: Dictionary = data.old_quote.request.duplicate(true); changed.target_instance_id = "changed:target"
++	var conflict: Dictionary = PlayerState.quote_item_transaction(changed)
++	host.check(not bool(conflict.get("success",false)) and conflict.get("reason") == "item_operation_epoch_mismatch",label+": changing request contents cannot recycle the old ID")
++	var result: Dictionary = PlayerState.commit_item_transaction(stale)
++	host.check(not bool(result.get("success",false)) and not result.has("job") and PlayerState._json_persistence.pending_count() == 0,label+": old complete quote cannot create another writer")
++	if result.has("job"): await wait_job(host,result.job)
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	host.check(PlayerState.inventory == before and PlayerState.gold == gold and PlayerState.experience == xp and PlayerState._item_transaction_journal == journal and FileAccess.get_file_as_bytes(data.path) == bytes and PlayerState._json_persistence.completed_count == completed,label+": refusals cause zero ownership/resource/journal/file/completion changes")
++	if journal.get("epoch") == data.epoch: return {}
++	var replay: Dictionary = PlayerState.quote_item_transaction(data.retained_request)
++	host.check(bool(replay.get("replay",false)) and bool(PlayerState.commit_item_transaction(replay).get("durable",false)),label+": retained old result is read-only replayable")
++	changed = data.retained_request.duplicate(true); changed.target_instance_id = "changed:target"
++	host.check(PlayerState.quote_item_transaction(changed).get("reason") == "operation_identity_conflict",label+": retained ID still detects changed request")
++	var fresh_request: Dictionary = data.old_quote.request.duplicate(true); fresh_request.erase("operation_id")
++	var fresh: Dictionary = PlayerState.quote_new_item_transaction(fresh_request)
++	host.check(bool(fresh.get("success",false)) and fresh.get("request",{}).get("operation_id") == Journal.sequence_id(journal.epoch,int(data.checkpoint)+1),label+": new user intent has a distinct durable epoch and next logical serial")
++	var pending: Dictionary = PlayerState.commit_item_transaction(fresh)
++	if data.has("old_plan"):
++		var live_before: Array = PlayerState.inventory.duplicate(true)
++		PlayerState._item_transaction_port._complete(data.old_receipt,data.old_plan)
++		host.check(PlayerState.inventory == live_before and PlayerState._item_transaction_port._active.get("job") == pending.get("job"),label+": retained pre-recovery callback cannot publish or clear the newly accepted writer")
++	var done := await wait_job(host,pending.get("job"))
++	host.check(bool(done.get("success",false)),label+": actual sole writer continues the recovered stream")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	host.check(Journal.validate_document({"profile_id":data.profile_id,Journal.FIELD:PlayerState._item_transaction_journal}).valid and PlayerState._item_transaction_journal.entries.size() <= 64,label+": mixed retained history remains validated and bounded")
++	return {"profile_id":data.profile_id,"path":data.path,"epoch":PlayerState._item_transaction_journal.epoch,"last_sequence":PlayerState._item_transaction_journal.last_sequence,"old_request":data.old_quote.request,"new_request":fresh.request}
+--- old/tests/framework/item_journal_sequence_test.gd
++++ new/tests/framework/item_journal_sequence_test.gd
+@@ -53,0 +54,24 @@
++	var restored := Journal.recovered(value)
++	check(restored.get("contract_id") == "hc.item.transactions.v3" and restored.get("schema_version") == 3 and restored.get("epoch") != epoch,"backup recovery has an explicit new durable epoch contract")
++	check(restored.get("entries") == value.entries and restored.get("legacy_entries") == legacy.entries and restored.get("retired_through") == value.retired_through,"recovery preserves every bounded old outcome and logical watermark")
++	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:JSON.parse_string(JSON.stringify(restored))}).valid,"mixed-epoch recovery is valid after actual JSON numeric conversion")
++	check(Journal.admission(restored,Journal.sequence_id(epoch,131)).reason == "item_operation_epoch_mismatch","an old issuer cannot claim the next recovered sequence")
++	var recovery_epoch: String = restored.epoch
++	for sequence in range(131,199):
++		entry.operation_id = Journal.sequence_id(recovery_epoch,sequence)
++		restored = Journal.appended(restored,profile,entry,recovery_epoch)
++		if restored.is_empty(): break
++	check(not restored.is_empty() and restored.entries.size() == 64 and restored.legacy_entries == legacy.entries and int(restored.retired_through) == 134,"68 recovered operations cross the mixed window without losing opaque history or growing results")
++	if restored.is_empty(): _finish(); return
++	check(Journal.admission(restored,Journal.sequence_id(recovery_epoch,131)).reason == "item_operation_retired","new recovery stream also permanently refuses its own retired detailed results")
++	var again := Journal.recovered(restored)
++	check(again.get("epoch") not in [epoch,recovery_epoch] and again.entries == restored.entries,"repeated v3 recovery closes its prior producer while retaining outcomes")
++	check(Journal.admission(again,Journal.sequence_id(recovery_epoch,199)).reason == "item_operation_epoch_mismatch","recovery of recovery cannot reuse old next identity")
++	bad = again.duplicate(true); bad.entries[0].operation_id = Journal.sequence_id(epoch,1)
++	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"mixed epochs never permit sequence gaps or wrong positions")
++	bad = again.duplicate(true); bad.entries[0].operation_id = "opaque:wrong"
++	check(not Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).valid,"v3 recent outcomes still require canonical sequenced IDs")
++	bad = again.duplicate(true); bad.schema_version = 4; bad.entries = "malformed"
++	check(Journal.validate_document({"profile_id":profile,Journal.FIELD:bad}).terminal,"future recovery schema is terminal before malformed known fields")
++	check(Journal.recovered(legacy).is_empty(),"recovery helper cannot reinterpret opaque history as a sequenced stream")
++
+--- old/tests/framework/item_journal_v2_backup_cold_test.gd
++++ new/tests/framework/item_journal_v2_backup_cold_test.gd
+@@ -0,0 +1,34 @@
++extends Node
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Fixture := preload("res://tests/framework/helpers/journal_backup_fixture.gd")
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++var proof := Proof.new()
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	var expected: Variant = Gate.read_json("res://outputs/test_logs/framework/item_journal_v2_backup_seed_expected.json")
++	check(Gate.accepts(expected,"item_journal_v2_backup_seed_test"),"this native successful producer owns the corrupt-primary/old-v2 inputs")
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"owned isolated account and production persistence only")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	var startup_ok := PlayerState.finish_startup_save_upgrade()
++	check(startup_ok,"real startup migration gate: "+str(PlayerState.startup_save_upgrade_result))
++	check(ContentLayers.set_feature_module_enabled(Fixture.Gem.MODULE,true),"explicit default-off module activation")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.set_process(false)
++	var cases: Array = []
++	for data: Dictionary in expected.cases:
++		check(PlayerState.select_character(data.profile_id),"actual cold selection recovers the requested owned profile")
++		var result := await Fixture.probe(self,data)
++		if not result.is_empty(): cases.append(result)
++	if failures.is_empty():
++		var outgoing := {"cases":cases,"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")}
++		check(Fixture.write("res://outputs/test_logs/framework/item_journal_v2_backup_cold_expected.json",JSON.stringify(outgoing).to_utf8_buffer()),"complete owned handoff written")
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_v2_backup_cold_test",proof.records.size(),failures.size()): failures.append("receipt")
++	print("item_journal_v2_backup_cold_test_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",proof.records.size(),str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_v2_backup_cold_test.tscn
++++ new/tests/framework/item_journal_v2_backup_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_v2_backup_cold_test.gd" id="1"]
++
++[node name="JournalBackupTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/item_journal_v2_backup_restart_test.gd
++++ new/tests/framework/item_journal_v2_backup_restart_test.gd
+@@ -0,0 +1,35 @@
++extends Node
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Fixture := preload("res://tests/framework/helpers/journal_backup_fixture.gd")
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++var proof := Proof.new()
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	var expected: Variant = Gate.read_json("res://outputs/test_logs/framework/item_journal_v2_backup_cold_expected.json")
++	check(Gate.accepts(expected,"item_journal_v2_backup_cold_test"),"this native successful cold producer owns the recovered epochs")
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"owned isolated account and production persistence only")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"real startup migration gate")
++	check(ContentLayers.set_feature_module_enabled(Fixture.Gem.MODULE,true),"explicit default-off module activation")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.set_process(false)
++	for data: Dictionary in expected.cases:
++		check(PlayerState.select_character(data.profile_id),"independent restart loads recovered profile")
++		var journal: Dictionary = PlayerState._item_transaction_journal
++		check(journal.get("epoch") == data.epoch and journal.get("last_sequence") == data.last_sequence,"recovery epoch is durable rather than a temporary issuer cache")
++		var before: Array = PlayerState.inventory.duplicate(true)
++		var completed: int = PlayerState._json_persistence.completed_count
++		var bytes := FileAccess.get_file_as_bytes(data.path)
++		check(PlayerState.quote_item_transaction(data.old_request).get("reason") == "item_operation_epoch_mismatch","old missing result never regains eligibility across another restart")
++		check(bool(PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(data.new_request)).get("durable",false)),"new epoch completed result stays exactly replayable")
++		check(PlayerState.inventory == before and PlayerState._json_persistence.pending_count() == 0 and PlayerState._json_persistence.completed_count == completed and FileAccess.get_file_as_bytes(data.path) == bytes,"restart replay/refusal creates no writer and changes no resources or file")
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_v2_backup_restart_test",proof.records.size(),failures.size()): failures.append("receipt")
++	print("item_journal_v2_backup_restart_test_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",proof.records.size(),str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_v2_backup_restart_test.tscn
++++ new/tests/framework/item_journal_v2_backup_restart_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_v2_backup_restart_test.gd" id="1"]
++
++[node name="JournalBackupTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/item_journal_v2_backup_seed_test.gd
++++ new/tests/framework/item_journal_v2_backup_seed_test.gd
+@@ -0,0 +1,33 @@
++extends Node
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Fixture := preload("res://tests/framework/helpers/journal_backup_fixture.gd")
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++var proof := Proof.new()
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"owned isolated account and production persistence only")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"real startup migration gate")
++	check(ContentLayers.set_feature_module_enabled(Fixture.Gem.MODULE,true),"explicit default-off module activation")
++	if not failures.is_empty(): _finish(); return
++	var cases: Array = []
++	for pair: Array in [[1,2],[65,130]]:
++		var data := await Fixture.create_case(self,pair[0],pair[1])
++		if data.is_empty(): _finish(); return
++		cases.append(data)
++	# All profile changes and writers finish before corrupting the owned files.
++	for data: Dictionary in cases:
++		Fixture.corrupt(self,data); data.erase("bytes")
++	if failures.is_empty():
++		var expected := {"cases":cases,"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")}
++		check(Fixture.write("res://outputs/test_logs/framework/item_journal_v2_backup_seed_expected.json",JSON.stringify(expected).to_utf8_buffer()),"complete owned handoff written")
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_v2_backup_seed_test",proof.records.size(),failures.size()): failures.append("receipt")
++	print("item_journal_v2_backup_seed_test_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",proof.records.size(),str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_v2_backup_seed_test.tscn
++++ new/tests/framework/item_journal_v2_backup_seed_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_v2_backup_seed_test.gd" id="1"]
++
++[node name="JournalBackupTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/item_journal_v2_backup_test.gd
++++ new/tests/framework/item_journal_v2_backup_test.gd
+@@ -0,0 +1,57 @@
++extends Node
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Fixture := preload("res://tests/framework/helpers/journal_backup_fixture.gd")
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
++var proof := Proof.new()
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label)
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode and OS.get_environment("APPDATA").replace("\\","/").contains("/.godot/runtime_appdata/"),"owned isolated account and production persistence only")
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"real startup migration gate")
++	check(ContentLayers.set_feature_module_enabled(Fixture.Gem.MODULE,true),"explicit default-off module activation")
++	if not failures.is_empty(): _finish(); return
++	for pair: Array in [[1,2],[65,130]]:
++		var data := await Fixture.create_case(self,pair[0],pair[1],true)
++		if data.is_empty(): _finish(); return
++		Fixture.corrupt(self,data)
++		PlayerState.load_save()
++		var continued := await Fixture.probe(self,data)
++		if not continued.is_empty(): await _recovery_failure_and_repeat(continued)
++	_finish()
++func _recovery_failure_and_repeat(data: Dictionary) -> void:
++	var path: String = data.path
++	var checkpoint := FileAccess.get_file_as_bytes(path)
++	# Both checkpoint+1 operations removed the gem. Its exact ownership is
++	# obtained from the preserved result; remove requests intentionally omit it.
++	var gem_id: String = PlayerState._item_transaction_journal.entries.back().gem_instance_id
++	var quote: Dictionary = PlayerState.quote_new_item_transaction({"action":"hc.socketing.insert","target_instance_id":data.new_request.target_instance_id,"gem_instance_id":gem_id})
++	var pending: Dictionary = PlayerState.commit_item_transaction(quote)
++	check(bool((await Fixture.wait_job(self,pending.get("job"))).get("success",false)),"v3 stream has another real completed command before repeated recovery")
++	PlayerState._start_item_save(); PlayerState._json_persistence.drain()
++	check(Fixture.write(path+".bak",checkpoint) and Fixture.write(path,"{owned-v3-primary".to_utf8_buffer()),"owned v3 rollback inputs prepared")
++	var before: Array = PlayerState.inventory.duplicate(true)
++	var primary := FileAccess.get_file_as_bytes(path)
++	var absolute_temp := ProjectSettings.globalize_path(path+".tmp")
++	check(DirAccess.make_dir_absolute(absolute_temp) == OK,"owned empty directory injects temporary-file open failure")
++	PlayerState.load_save()
++	check(not bool(PlayerState.last_load_result.get("success",false)) and PlayerState.last_load_result.get("reason") == "backup_restore_temp_open_failed","failed recovery cannot publish an in-memory-only epoch")
++	check(PlayerState.inventory == before and FileAccess.get_file_as_bytes(path) == primary and FileAccess.get_file_as_bytes(path+".bak") == checkpoint and not PlayerState.save_game(false,false,false),"failed promotion preserves both owned inputs and locks ordinary writes")
++	check(DirAccess.remove_absolute(absolute_temp) == OK,"only the test-owned empty fault directory is removed")
++	PlayerState.load_save()
++	check(bool(PlayerState.last_load_result.get("success",false)) and PlayerState._item_transaction_journal.epoch != data.epoch,"actual v3 backup recovery rotates epoch again after the write barrier is available")
++	var completed: int = PlayerState._json_persistence.completed_count
++	var current: Array = PlayerState.inventory.duplicate(true)
++	check(PlayerState.quote_item_transaction(quote.request).get("reason") == "item_operation_epoch_mismatch","previous v3 producer cannot replay a lost completed operation")
++	check(PlayerState.inventory == current and PlayerState._json_persistence.pending_count() == 0 and PlayerState._json_persistence.completed_count == completed,"repeated recovery refusal creates no writer or ownership delta")
++	check(bool(PlayerState.commit_item_transaction(PlayerState.quote_item_transaction(data.new_request)).get("durable",false)),"preserved prior-epoch result remains a read-only replay after v3 recovery")
++	check(PlayerState.save_game(true,true,true),"successful recovery clears the failed-restore write lock through the existing loader")
++
++func _finish() -> void:
++	if not proof.write_receipt("item_journal_v2_backup_test",proof.records.size(),failures.size()): failures.append("receipt")
++	print("item_journal_v2_backup_test_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",proof.records.size(),str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/item_journal_v2_backup_test.tscn
++++ new/tests/framework/item_journal_v2_backup_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/item_journal_v2_backup_test.gd" id="1"]
++
++[node name="JournalBackupTest" type="Node"]
++script = ExtResource("1")

@@ -2,6 +2,7 @@ extends RefCounted
 
 const CONTRACT := "hc.item.transactions.v1"
 const SEQUENCE_CONTRACT := "hc.item.transactions.v2"
+const RECOVERY_CONTRACT := "hc.item.transactions.v3"
 const SEQUENCE_PREFIX := "hc:itemtx:"
 const MAX_SEQUENCE := 9007199254740991
 const FIELD := "item_transactions"
@@ -14,10 +15,11 @@ static func validate_document(document: Dictionary) -> Dictionary:
 	if not document.has(FIELD): return _status(true)
 	var journal: Variant = document[FIELD]
 	if not journal is Dictionary: return _status(false)
-	if journal.get("contract_id") is String and journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT]:
+	if journal.get("contract_id") is String and journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT,RECOVERY_CONTRACT]:
 		return _status(false, true)
-	var sequenced: bool = journal.get("contract_id") == SEQUENCE_CONTRACT
-	var supported := 2 if sequenced else 1
+	var sequenced := is_sequenced(journal)
+	var recovered: bool = journal.get("contract_id") == RECOVERY_CONTRACT
+	var supported := 3 if recovered else (2 if sequenced else 1)
 	if _integer(journal.get("schema_version")) and journal.schema_version > supported:
 		return _status(false, true)
 	for field: String in ["entries","legacy_entries"]:
@@ -28,7 +30,7 @@ static func validate_document(document: Dictionary) -> Dictionary:
 	var keys: Array = ["contract_id","schema_version","profile_id","entries"]
 	if sequenced: keys.append_array(["epoch","last_sequence","retired_through","legacy_entries"])
 	if not _keys(journal, keys) or not _integer(journal.schema_version) or journal.schema_version != supported \
-		or journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT] \
+		or journal.contract_id not in [CONTRACT,SEQUENCE_CONTRACT,RECOVERY_CONTRACT] \
 		or not journal.profile_id is String or journal.profile_id != document.get("profile_id") \
 		or not journal.entries is Array or journal.entries.size() > LIMIT:
 		return _status(false)
@@ -42,9 +44,29 @@ static func validate_document(document: Dictionary) -> Dictionary:
 		if not legacy_status.valid: return legacy_status
 		for index in journal.entries.size():
 			var raw: Variant = journal.entries[index]
-			if not raw is Dictionary or raw.get("operation_id") != sequence_id(journal.epoch,int(journal.retired_through)+index+1):
-				return _status(false)
+			if not raw is Dictionary or not raw.get("operation_id") is String: return _status(false)
+			var id := parse_sequence(raw.operation_id)
+			if id.is_empty() or int(id.sequence) != int(journal.retired_through)+index+1 \
+				or (not recovered and id.epoch != journal.epoch): return _status(false)
 	return _entries_valid(journal.entries,seen)
+
+static func is_sequenced(journal: Dictionary) -> bool:
+	return journal.get("contract_id") in [SEQUENCE_CONTRACT,RECOVERY_CONTRACT]
+
+# Only the existing profile backup promotion calls this transition. It preserves
+# the recovered ownership and bounded results, but closes every old producer's
+# missing IDs. The new epoch must be durable before any new quote can use it.
+static func recovered(journal: Dictionary) -> Dictionary:
+	if not is_sequenced(journal) or not validate_document({"profile_id":journal.get("profile_id"),FIELD:journal}).valid: return {}
+	var epoch := Crypto.new().generate_random_bytes(16).hex_encode()
+	if not _epoch_valid(epoch) or epoch == journal.epoch: return {}
+	for field: String in ["entries","legacy_entries"]:
+		for entry: Dictionary in journal[field]:
+			if parse_sequence(entry.operation_id).get("epoch") == epoch: return {}
+	var candidate := journal.duplicate(true)
+	candidate.contract_id = RECOVERY_CONTRACT; candidate.schema_version = 3
+	candidate.epoch = epoch
+	return candidate if validate_document({"profile_id":candidate.profile_id,FIELD:candidate}).valid else {}
 
 static func _entries_valid(entries: Array, seen: Dictionary) -> Dictionary:
 	for raw: Variant in entries:
@@ -80,11 +102,11 @@ static func admission(journal: Dictionary, operation_id: String, issued_epoch :=
 	if not journal.is_empty() and not validate_document({"profile_id":journal.get("profile_id"),FIELD:journal}).valid:
 		return {"success":false,"reason":"invalid_item_transaction_journal"}
 	if not operation_id.begins_with(SEQUENCE_PREFIX):
-		var field := "legacy_entries" if journal.get("contract_id") == SEQUENCE_CONTRACT else "entries"
+		var field := "legacy_entries" if is_sequenced(journal) else "entries"
 		return {"success":journal.get(field,[]).size() < LIMIT,"reason":"item_transaction_unavailable"}
 	var id := parse_sequence(operation_id)
 	if id.is_empty(): return {"success":false,"reason":"invalid_item_operation_sequence"}
-	var sequenced: bool = journal.get("contract_id") == SEQUENCE_CONTRACT
+	var sequenced := is_sequenced(journal)
 	var epoch: String = journal.epoch if sequenced else issued_epoch
 	if epoch.is_empty() or id.epoch != epoch: return {"success":false,"reason":"item_operation_epoch_mismatch"}
 	var last := int(journal.last_sequence) if sequenced else 0
@@ -107,7 +129,7 @@ static func appended(journal: Dictionary, profile_id: String, entry: Dictionary,
 		candidate.retired_through = maxi(0,int(id.sequence)-LIMIT)
 		if candidate.entries.size() > LIMIT: candidate.entries.pop_front()
 	else:
-		var field := "legacy_entries" if candidate.contract_id == SEQUENCE_CONTRACT else "entries"
+		var field := "legacy_entries" if is_sequenced(candidate) else "entries"
 		candidate[field].append(entry.duplicate(true))
 	return candidate if validate_document({"profile_id": profile_id, FIELD: candidate}).valid else {}
 

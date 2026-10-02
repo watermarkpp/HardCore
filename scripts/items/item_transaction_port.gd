@@ -18,7 +18,7 @@ func quote_new(request: Dictionary) -> Dictionary:
 		return _failure("invalid_item_command")
 	var issued := request.duplicate(true)
 	var journal: Dictionary = player._item_transaction_journal
-	var last := int(journal.get("last_sequence",0)) if journal.get("contract_id") == Journal.SEQUENCE_CONTRACT else 0
+	var last := int(journal.get("last_sequence",0)) if Journal.is_sequenced(journal) else 0
 	if last >= Journal.MAX_SEQUENCE: return _failure("item_operation_sequence_exhausted")
 	# Dot insertion on a new dictionary key can create a StringName; the plain
 	# boundary deliberately accepts String keys only.
@@ -26,7 +26,7 @@ func quote_new(request: Dictionary) -> Dictionary:
 	return quote(issued)
 
 func _epoch_for(player: Node) -> String:
-	if player._item_transaction_journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
+	if Journal.is_sequenced(player._item_transaction_journal):
 		_issued_epoch = ""; _issued_context = ""
 		return player._item_transaction_journal.epoch
 	var context := JSON.stringify([player.active_profile_id,player._world_clock_generation])
@@ -196,7 +196,7 @@ func _complete(receipt: Dictionary, plan: Dictionary) -> void:
 			# A completed provisional epoch belongs only to its durable document.
 			# If supported recovery later restores a pre-sequence backup, this port
 			# must issue a fresh epoch instead of reopening the lost old stream.
-			if plan.journal.get("contract_id") == Journal.SEQUENCE_CONTRACT:
+			if Journal.is_sequenced(plan.journal):
 				_issued_epoch = ""; _issued_context = ""
 			player._record_background_json_receipt(receipt)
 			var sequence := int(receipt.document.death_event_sequence)

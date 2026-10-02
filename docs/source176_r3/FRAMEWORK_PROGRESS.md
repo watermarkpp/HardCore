@@ -331,3 +331,9 @@ C trace明确阶段命名、phase_status/phase_checks，最终以完整receipt�
 - 当前释放修正最终内容 d32929f13c76c9387d033ae59ab46ad614bf70e8c7bb24e5a5fdea960c53bb53，25 原生场景 PASS、508 framework 检查；另 5 个既有 assert 场景不计入508。旧错误回调是受控原生接口反例，不称自然 UI 故障。详见 framework_release_20261002 审查包。
 - 下一项：v2→v2 旧备份同进程及独立 cold 反例、旧 ID 换内容、拒绝无新 writer/资源变化；先 RED 后修复。
 - 后续继续自然输入、移动战斗、持续与恢复的 P6/R3，第二树 V4 性能 FAIL 仍开放。原 v97 角色 B 输入 MISSING；Android/GPU/设备 NOT_RUN。
+
+## 2026-10-02 旧v2备份恢复修正
+
+释放固定4f65e01f09bfcaaaaa0b497bc72b85e182b00f90已由Pro支持关闭两项原缺陷；未关闭producer下重复内部规划及batch建立失败分支作为小型覆盖补强，待下一增量。
+旧v2回退原生同进程/cold各10项业务FAIL已修正；采用明确v3恢复epoch与同一角色原子提升，保留原物品与所有有界历史结果。最终同内容95ff6265376ec96656b09f6c13141782c6eb7dc58f22134f9d529e3aad490b01：23原生PASS、1018framework检查；报告framework_journal_recovery_20261002。
+下一项继续释放两条覆盖补强及自然输入、移动战斗、持续恢复P6/R3。主树v97、第二树、真实存档保护继续；原B输入MISSING，Android/GPU/设备与主树集成/APK NOT_RUN。
