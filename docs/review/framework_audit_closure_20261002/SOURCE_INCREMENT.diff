@@ -1,0 +1,1241 @@
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/assets/data/equipment_price_candidates_v1.json
++++ assets/data/equipment_price_candidates_v1.json
+@@ -8,0 +9 @@
++      "entity_id": "hc.item.000140",
+@@ -22,0 +24 @@
++      "entity_id": "hc.item.000232",
+@@ -36,0 +39 @@
++      "entity_id": "hc.item.000233",
+@@ -50,0 +54 @@
++      "entity_id": "hc.item.000234",
+@@ -64,0 +69 @@
++      "entity_id": "hc.item.000235",
+@@ -78,0 +84 @@
++      "entity_id": "hc.item.000088",
+@@ -92,0 +99 @@
++      "entity_id": "hc.item.000110",
+@@ -106,0 +114 @@
++      "entity_id": "hc.item.000111",
+@@ -120,0 +129 @@
++      "entity_id": "hc.item.000112",
+@@ -134,0 +144 @@
++      "entity_id": "hc.item.000223",
+@@ -148,0 +159 @@
++      "entity_id": "hc.item.000109",
+@@ -162,0 +174 @@
++      "entity_id": "hc.item.000142",
+@@ -176,0 +189 @@
++      "entity_id": "hc.item.000143",
+@@ -190,0 +204 @@
++      "entity_id": "hc.item.000144",
+@@ -204,0 +219 @@
++      "entity_id": "hc.item.000145",
+@@ -218,0 +234 @@
++      "entity_id": "hc.item.000237",
+@@ -232,0 +249 @@
++      "entity_id": "hc.item.000241",
+@@ -246,0 +264 @@
++      "entity_id": "hc.item.000219",
+@@ -260,0 +279 @@
++      "entity_id": "hc.item.000186",
+@@ -274,0 +294 @@
++      "entity_id": "hc.item.000196",
+@@ -288,0 +309 @@
++      "entity_id": "hc.item.000238",
+@@ -302,0 +324 @@
++      "entity_id": "hc.item.000242",
+@@ -316,0 +339 @@
++      "entity_id": "hc.item.000255",
+@@ -330,0 +354 @@
++      "entity_id": "hc.item.000260",
+@@ -344,0 +369 @@
++      "entity_id": "hc.item.000239",
+@@ -358,0 +384 @@
++      "entity_id": "hc.item.000243",
+@@ -372,0 +399 @@
++      "entity_id": "hc.item.000146",
+@@ -386,0 +414 @@
++      "entity_id": "hc.item.000236",
+@@ -400,0 +429 @@
++      "entity_id": "hc.item.000240",
+@@ -414,0 +444 @@
++      "entity_id": "hc.service_item.000674",
+@@ -428,0 +459 @@
++      "entity_id": "hc.item.910007",
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/assets/data/pricing_policy_v1.json
++++ assets/data/pricing_policy_v1.json
+@@ -22 +22 @@
+-      "service:493": 17520
++      "hc.item.000190": 17520
+@@ -25 +25 @@
+-      "service:493": {
++      "hc.item.000190": {
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/scripts/equipment_rules.gd
++++ scripts/equipment_rules.gd
+@@ -231 +231 @@
+-	return GameData.get_item_shop_price(str(item.get("name", "")))
++	return GameData.get_item_shop_price(item)
+@@ -238 +238 @@
+-		GameData.get_item_price_record(str(item.get("name", ""))),
++		GameData.get_item_price_record(item),
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/scripts/features/runtime/effect_runtime.gd
++++ scripts/features/runtime/effect_runtime.gd
+@@ -26 +26,2 @@
+-var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0}
++var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
++	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0}
+@@ -164,0 +166,7 @@
++	# Count valid damage-port delivery attempts, including a rejected port call.
++	# `ticks` counts successful returns, `failed` rejected returns; invalidated
++	# and expired states never reach this boundary. Heap sampling after service
++	# misses late work that has already been consumed in this frame.
++	_stats.tick_delivery_count += 1
++	_stats.maximum_tick_delivery_lateness_usec = maxi(int(_stats.maximum_tick_delivery_lateness_usec),
++		maxi(0,_clock.simulation_usec()-int(state.next_due)))
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/scripts/game_data.gd
++++ scripts/game_data.gd
+@@ -1892,0 +1893,7 @@
++		var owners := {}
++		for row: Variant in parsed.get("records", []):
++			var owner := _price_candidate_owner(row)
++			if owner.is_empty() or owners.has(owner.id):
++				push_error("Price candidate identity is unknown, conflicting or repeated")
++				return
++			owners[owner.id] = true
+@@ -2669 +2676 @@
+-	if canonical_name.is_empty() or base_price <= 0 or _price_by_name.has(canonical_name):
++	if canonical_name.is_empty() or base_price <= 0:
+@@ -2673,5 +2680,8 @@
+-	# Candidate equipment records intentionally omit itemId because their source
+-	# only carries the official item name. Resolve that identity against the
+-	# already-loaded primary runtime item table; the candidate still supplies
+-	# only the missing price and never replaces an existing primary record.
+-	if item_id < 0:
++	if source_record.has("entity_id"):
++		var owner := _price_candidate_owner(source_record)
++		if owner.is_empty(): return
++		item_id = int(owner.legacy_id) if owner.kind == "item" else -1
++		service_index = int(owner.legacy_id) if owner.kind == "service_item" else -1
++	elif item_id < 0 and service_index >= 0:
++		# Explicit old server-catalog import boundary. Candidate authoring carries
++		# a registered identity and never enters this historical name translation.
+@@ -2679 +2689 @@
+-	if service_index < 0 and str(source_record.get("kind", "")) == "equipment" and item_id < 0:
++	if service_index < 0 and item_id < 0:
+@@ -2690,2 +2699,0 @@
+-			if item_id >= 0
+-			else "name:%s" % canonical_name
+@@ -2692,0 +2701,2 @@
++		"entity_id": EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_id)) if item_id >= 0
++			else EntityRegistry.canonical(EntityRegistry.from_legacy("service_item", service_index)),
+@@ -2706 +2716,2 @@
+-	_price_by_name[canonical_name] = price_record
++	if not _price_by_name.has(canonical_name):
++		_price_by_name[canonical_name] = price_record
+@@ -2710,0 +2722,13 @@
++
++
++func _price_candidate_owner(row: Variant) -> Dictionary:
++	if not row is Dictionary or not row.get("entity_id") is String: return {}
++	var owner := EntityRegistry.resolve(EntityRegistry.canonical(row.entity_id))
++	if owner.get("kind") not in ["item", "service_item"]: return {}
++	for key: String in ["item_id", "itemId", "stableItemId", "id", "service_index", "serviceIndex"]:
++		if not row.has(key): continue
++		var value: Variant = row[key]
++		var kind := "service_item" if key in ["service_index", "serviceIndex"] else "item"
++		var declared := EntityRegistry.from_legacy(kind, value)
++		if declared.is_empty() or EntityRegistry.canonical(declared) != owner.id: return {}
++	return owner
+@@ -3758,2 +3782,2 @@
+-func get_item_shop_price(item_name: String) -> int:
+-	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_name))
++func get_item_shop_price(item_ref: Variant) -> int:
++	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_ref))
+@@ -3789,0 +3814,7 @@
++	if item_ref is Dictionary:
++		item_ref = item_ref.duplicate()
++		for source_key: String in ["itemId", "serviceIndex"]:
++			if not item_ref.has(source_key): continue
++			var runtime_key := "item_id" if source_key == "itemId" else "service_index"
++			if item_ref.has(runtime_key) and item_ref[runtime_key] != item_ref[source_key]: return {}
++			item_ref[runtime_key] = item_ref[source_key]
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/scripts/pricing_service.gd
++++ scripts/pricing_service.gd
+@@ -6,0 +7 @@
++const EntityIds := preload("res://scripts/identity/entity_registry.gd")
+@@ -33 +34 @@
+-	if base_price <= 0:
++	if base_price <= 0 or active.is_empty():
+@@ -41,2 +42 @@
+-	var item_name := str(price_record.get("item_name", ""))
+-	value = _apply_bps(value, int(item_bps.get(item_key, item_bps.get(item_name, BPS_DENOMINATOR))))
++	value = _apply_bps(value, int(item_bps.get(item_key, BPS_DENOMINATOR)))
+@@ -215,0 +216 @@
++	if active.is_empty(): return _quote_base("repair", price_record, 1, active)
+@@ -238,0 +240,2 @@
++	var active := _policy(policy_override)
++	if active.is_empty(): return _quote_base("repair", price_record, 1, active)
+@@ -243 +245,0 @@
+-		var active := _policy(policy_override)
+@@ -272,0 +275 @@
++	if active.is_empty(): return result
+@@ -335,0 +339 @@
++	if active.is_empty(): return {"valid": false, "reason": "价格策略无效。", "total_value": 0}
+@@ -341,0 +346,3 @@
++		var entity_id := str(material.get("entity_id", ""))
++		if EntityIds.resolve(entity_id).get("kind") not in ["item", "service_item"]:
++			return {"valid": false, "reason": "锻造材料身份无效。", "total_value": 0}
+@@ -344,2 +351,4 @@
+-		var record: Dictionary = price_records.get(item_name, {})
+-		var unit_value := adjusted_database_price(record, active)
++		var record: Dictionary = price_records.get(entity_id, {})
++		if str(record.get("entity_id", "")) != EntityIds.canonical(entity_id):
++			return {"valid": false, "reason": "锻造材料价格身份不一致。", "total_value": 0}
++		var unit_value := _adjusted_database_price_resolved(record, active)
+@@ -349 +358 @@
+-		lines.append({"item_name": item_name, "quantity": quantity, "unit_value": unit_value})
++		lines.append({"entity_id": entity_id, "item_name": item_name, "quantity": quantity, "unit_value": unit_value})
+@@ -402,0 +412 @@
++		"entity_id": str(price_record.get("entity_id", "")),
+@@ -464,0 +475,20 @@
++	var old_items: Variant = modifiers.get("itemBps", {})
++	if not old_items is Dictionary: return {}
++	var item_modifiers := {}
++	for key: Variant in old_items:
++		if not key is String: return {}
++		# Stable legacy source keys are accepted only at policy import; a display
++		# name never selects a price. Actual runtime modifiers use the source key.
++		if key.begins_with("hc."):
++			if EntityIds.resolve(key).get("kind") not in ["item", "service_item"]: return {}
++		else:
++			var parts: PackedStringArray = key.split(":")
++			if parts.size() != 2 or parts[0] not in ["service", "item"] or not parts[1].is_valid_int() \
++				or str(int(parts[1])) != parts[1] or int(parts[1]) < 0: return {}
++		var record: Dictionary = GameData.get_item_price_record(key)
++		var source_key := str(record.get("item_key", ""))
++		if source_key.is_empty() or item_modifiers.has(source_key): return {}
++		var bps: Variant = old_items[key]
++		if not (bps is int or bps is float) or not is_finite(float(bps)) or float(bps) != floor(float(bps)) or bps < 0: return {}
++		item_modifiers[source_key] = int(bps)
++	modifiers["itemBps"] = item_modifiers
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/combined_cold_receipt_gate_test.gd
++++ tests/framework/combined_cold_receipt_gate_test.gd
+@@ -0,0 +1,103 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const EXPECTED_PATH := "res://outputs/test_logs/framework/combined_effect_lifecycle_expected.json"
++const PRODUCER_PATH := "res://outputs/test_logs/framework/combined_effect_lifecycle_test.result.json"
++const HANDOFF_PATH := "res://outputs/test_logs/framework/native_handoffs.json"
++var proof := Proof.new()
++var failures: Array[String] = []
++class ColdProbe extends "res://tests/framework/combined_effect_lifecycle_cold_test.gd":
++	var completed := false
++	func _ready() -> void: pass
++	func _finish() -> void: completed = true
++class LiveProofProbe extends "res://tests/framework/combined_effect_lifecycle_test.gd":
++	func _ready() -> void: pass
++
++func check(value: bool, label: String) -> void:
++	proof.record(value,label)
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	check(not PlayerState.test_mode,"real persistence enabled inside dedicated prelaunch APPDATA")
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"startup gate completed")
++	check(PlayerState.create_character("冷启动回执门禁","hc.profession.wizard").is_empty(),"real disposable profile created")
++	check(PlayerState.save_game(true,true,true),"real profile persisted before evidence failure")
++	var saved_files := {}
++	for path: String in [EXPECTED_PATH,PRODUCER_PATH,HANDOFF_PATH]:
++		saved_files[path] = {"exists":FileAccess.file_exists(path),"bytes":FileAccess.get_file_as_bytes(path) if FileAccess.file_exists(path) else PackedByteArray()}
++	var expected := {"profile_id":PlayerState.active_profile_id,"experience":PlayerState.experience,
++		"generation":PlayerState._world_clock_generation,"producer_run_id":"gate-fixture-producer",
++		"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
++		"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID")}
++	var profile_path: String = PlayerState._profile_path(PlayerState.active_profile_id)
++	var profile_sha := FileAccess.get_sha256(profile_path)
++	for scenario: String in ["current_failed","old_invocation","wrong_run","wrong_source","wrong_scene",
++		"same_consumer_run","missing_receipt","truncated_receipt","failed_count","missing_handoff",
++		"native_failed","native_not_exited","handoff_wrong_run","handoff_wrong_source","handoff_wrong_scene","handoff_wrong_hash"]:
++		var e := expected.duplicate(true)
++		var producer := {"schema_version":1,"status":"PASS","run_id":e.producer_run_id,"scene_id":"combined_effect_lifecycle_test",
++			"source_content_sha256":e.source_content_sha256,"invocation_id":e.invocation_id,
++			"count":1,"passed":1,"failed":0,"reported_checks":1,"reported_failures":0,
++			"checks":[{"id":1,"label":"owned fixture evidence","passed":true}]}
++		if scenario == "current_failed":
++			producer.status = "FAIL"; producer.passed = 0; producer.failed = 1; producer.reported_failures = 1
++			producer.checks[0].passed = false
++		elif scenario == "old_invocation":
++			e.invocation_id = "previous-native-invocation"; producer.invocation_id = e.invocation_id
++		elif scenario == "wrong_run": producer.run_id = "different-current-producer"
++		elif scenario == "wrong_source": producer.source_content_sha256 = "different-source"
++		elif scenario == "wrong_scene": producer.scene_id = "different_scene"
++		elif scenario == "same_consumer_run":
++			e.producer_run_id = OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"); producer.run_id = e.producer_run_id
++		elif scenario == "failed_count": producer.failed = 1
++		_write(EXPECTED_PATH,e); _write(PRODUCER_PATH,producer)
++		var entry := {"scene_id":"combined_effect_lifecycle_test","run_id":e.producer_run_id,
++			"source_content_sha256":e.source_content_sha256,"process_exited":true,"effective_exit_code":0,
++			"result":"PASS","receipt_sha256":FileAccess.get_sha256(PRODUCER_PATH)}
++		var handoff := {"schema_version":1,"invocation_id":e.invocation_id,"source_content_sha256":e.source_content_sha256,
++			"producers":{"combined_effect_lifecycle_test":entry}}
++		if scenario == "native_failed": entry.effective_exit_code = 1; entry.result = "FAIL"
++		elif scenario == "native_not_exited": entry.process_exited = false
++		elif scenario == "handoff_wrong_run": entry.run_id = "old-successful-producer"
++		elif scenario == "handoff_wrong_source": entry.source_content_sha256 = "different-source"
++		elif scenario == "handoff_wrong_scene": entry.scene_id = "different_scene"
++		elif scenario == "handoff_wrong_hash": entry.receipt_sha256 = "different-receipt"
++		_write(HANDOFF_PATH,handoff)
++		if scenario == "missing_receipt": DirAccess.remove_absolute(ProjectSettings.globalize_path(PRODUCER_PATH))
++		elif scenario == "truncated_receipt":
++			var truncated := FileAccess.open(PRODUCER_PATH,FileAccess.WRITE)
++			truncated.store_string("{\"status\":\"PASS\""); truncated.close()
++		elif scenario == "missing_handoff": DirAccess.remove_absolute(ProjectSettings.globalize_path(HANDOFF_PATH))
++		PlayerState.experience = 733
++		var probe := ColdProbe.new()
++		probe._run()
++		check(probe.completed and not probe.failures.is_empty(),"actual cold entry rejects stale or failed producer before recovery: "+scenario)
++		check(PlayerState.experience == 733 and FileAccess.get_sha256(profile_path) == profile_sha,
++			"rejected evidence cannot select a profile or mutate its in-memory/durable state: "+scenario)
++		probe.free()
++	# Exercise the actual evidence writer against an owned directory: opening
++	# it as a file must fail and cannot turn an older expectation into success.
++	var before_write := FileAccess.get_file_as_bytes(EXPECTED_PATH)
++	var blocked_output := "user://combined-owned-evidence-write-failure"
++	check(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(blocked_output)) == OK,"owned evidence-write fault directory exists")
++	var live_probe := LiveProofProbe.new()
++	live_probe._write(blocked_output,expected)
++	check(live_probe.failures.size() == 1 and not live_probe.proof.records[0].passed
++		and FileAccess.get_file_as_bytes(EXPECTED_PATH) == before_write,"actual evidence write failure is recorded and never promotes an older expectation")
++	live_probe.free()
++	for path: String in saved_files:
++		if saved_files[path].exists:
++			var file := FileAccess.open(path,FileAccess.WRITE)
++			file.store_buffer(saved_files[path].bytes); file.close()
++		else: DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
++	PlayerState.test_mode = true
++	proof.write_receipt("combined_cold_receipt_gate_test",proof.records.size(),failures.size())
++	print("COMBINED_COLD_RECEIPT_GATE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",proof.records.size(),str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
++
++func _write(path: String,value: Dictionary) -> void:
++	var file := FileAccess.open(path,FileAccess.WRITE)
++	file.store_string(JSON.stringify(value)); file.close()
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/combined_cold_receipt_gate_test.tscn
++++ tests/framework/combined_cold_receipt_gate_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/combined_cold_receipt_gate_test.gd" id="1"]
++
++[node name="CombinedColdReceiptGateTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/combined_effect_lifecycle_cold_test.gd
++++ tests/framework/combined_effect_lifecycle_cold_test.gd
+@@ -2,0 +3 @@
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
+@@ -4,0 +6 @@
++const PRODUCER := "res://outputs/test_logs/framework/combined_effect_lifecycle_test.result.json"
+@@ -16,0 +19,3 @@
++	var valid := Gate.accepts(expected,"combined_effect_lifecycle_test")
++	check(valid,"cold expectation binds the runner-confirmed successful native producer in this invocation")
++	if not valid: _finish(); return
+@@ -23 +28 @@
+-	check(PlayerState._world_clock_generation == expected.generation,"cold replay keeps the exact saved world ledger generation")
++	check(PlayerState._world_clock_generation == expected.generation,"cold replay retains the saved generation marker; this fixture permits the legacy empty namespace")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/combined_effect_lifecycle_test.gd
++++ tests/framework/combined_effect_lifecycle_test.gd
+@@ -39 +39 @@
+-var maximum_due_lateness_usec := 0
++var maximum_remaining_due_backlog_usec := 0
+@@ -71 +71 @@
+-		maximum_due_lateness_usec = maxi(maximum_due_lateness_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
++		maximum_remaining_due_backlog_usec = maxi(maximum_remaining_due_backlog_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
+@@ -171 +171,2 @@
+-	check(maximum_due_lateness_usec < 1000000,"this bounded headless cohort delivers due work before it falls one complete configured period behind: "+str(maximum_due_lateness_usec))
++	check(runtime.metrics().tick_delivery_count == 360,"every actual periodic delivery is included in the consumption-boundary latency metric")
++	check(runtime.metrics().maximum_tick_delivery_lateness_usec < 1000000,"this bounded headless cohort delivers every tick before it falls one complete configured period behind: "+str(runtime.metrics().maximum_tick_delivery_lateness_usec))
+@@ -174,2 +175,7 @@
+-		"status":"PASS" if failures.is_empty() else "FAIL","checks":checks,"failures":failures,"metrics":runtime.metrics(),"sample_count":samples.size(),
+-		"elapsed_usec":Time.get_ticks_usec()-started_usec,"wall_frame_usec":_percentiles("wall_usec"),"maximum_due_lateness_usec":maximum_due_lateness_usec,
++		"phase":"workload_observation_before_final_save_teardown_reload",
++		"phase_status":"PASS" if failures.is_empty() else "FAIL","phase_checks":checks,"phase_failures":failures.duplicate(),
++		"final_result_authority":"complete receipt plus native runner exit and source fingerprint",
++		"generation_scope":"saved marker retention; legacy empty namespace allowed; nonempty generation NOT_RUN in this fixture",
++		"delivery_metric_scope":"tick_delivery_count counts valid damage-port attempts; ticks counts successful returns; failed/invalidated/expired are separate outcomes",
++		"metrics":runtime.metrics(),"sample_count":samples.size(),
++		"elapsed_usec":Time.get_ticks_usec()-started_usec,"wall_frame_usec":_percentiles("wall_usec"),"maximum_remaining_due_backlog_usec":maximum_remaining_due_backlog_usec,
+@@ -183 +189,14 @@
+-	check(PlayerState.save_game(true,true,true),"final production durability checkpoint succeeds")
++	# Explicit fixture faults exercise the real final operations only in this
++	# test's prelaunch-isolated user directory. Production code has no fault hook.
++	var fault := OS.get_environment("HARDCORE_COMBINED_FAILURE_STAGE")
++	check(fault in ["","save","teardown","reload"],"known explicit final-stage fixture fault")
++	var original_directory: String = PlayerState.profile_directory
++	if fault == "save":
++		var blocker_path := "user://combined-save-blocker-"+OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID")
++		var blocker := FileAccess.open(blocker_path,FileAccess.WRITE)
++		check(blocker != null,"owned file blocks the injected profile directory")
++		if blocker != null: blocker.store_string("owned test write-failure boundary"); blocker.close()
++		PlayerState.profile_directory = blocker_path.path_join("profiles")
++	var saved: bool = PlayerState.save_game(true,true,true)
++	PlayerState.profile_directory = original_directory
++	check(saved,"final production durability checkpoint succeeds: "+str(PlayerState.last_save_result.get("reason","")))
+@@ -185 +204,2 @@
+-	game.queue_free(); await get_tree().process_frame
++	if fault != "teardown": game.queue_free()
++	await get_tree().process_frame
+@@ -187 +207,2 @@
+-	check(PlayerState.select_character(profile_id) and PlayerState.experience == expected_xp,"official reload retains exactly the combined reward")
++	var reload_id := "missing-owned-fixture-profile" if fault == "reload" else profile_id
++	check(PlayerState.select_character(reload_id) and PlayerState.experience == expected_xp,"official reload retains exactly the combined reward")
+@@ -189,0 +211 @@
++			"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
+@@ -219 +241,4 @@
+-	if output != null: output.store_string(JSON.stringify(value)); output.close()
++	if output != null:
++		output.store_string(JSON.stringify(value)); output.flush()
++		check(output.get_error() == OK,"owned evidence write completed "+path.get_file())
++		output.close()
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_archived_cold_test.gd
++++ tests/framework/default_root_upgrade_archived_cold_test.gd
+@@ -0,0 +1,34 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const ARCHIVE := "user://save_upgrades/framework_identity_v1"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://default_root_archived_expected.json")) if FileAccess.file_exists("user://default_root_archived_expected.json") else null
++	check(expected is Dictionary,"cold process receives the successful archive migration expectation")
++	if not expected is Dictionary: _finish(); return
++	check(not PlayerState.test_mode and PlayerState.profile_directory == "user://characters","cold global owner uses actual default persistence paths")
++	check(expected.source_content_sha256 == OS.get_environment("HARDCORE_R3_CONTENT_SHA256") and expected.producer_run_id != OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"independent cold receipt binds the exact same source")
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade() and PlayerState.startup_save_upgrade_result.get("reason") == "already_completed","real cold startup validates completed default-root archive")
++	check(FileAccess.get_sha256(ARCHIVE.path_join("manifest.json")) == expected.manifest_sha256 and FileAccess.get_sha256(ARCHIVE.path_join("completed.json")) == expected.completed_sha256,"cold startup preserves immutable backup/completion metadata")
++	for relative: String in expected.originals:
++		check(FileAccess.get_sha256(ARCHIVE.path_join("original").path_join(relative)) == expected.originals[relative],"cold original archived bytes "+relative)
++	for id: String in expected.profiles:
++		check(PlayerState.select_character(id),"independent process selects historical role "+id)
++		check(PlayerState.level == int(expected.profiles[id].level) and PlayerState.gold == int(expected.profiles[id].gold) and PlayerState.experience == int(expected.profiles[id].experience),"cold historical economy and progression "+id)
++	var warehouse: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PlayerState.shared_warehouse_path))
++	check(warehouse.bank_gold == expected.bank_gold,"cold shared bank balance preserved")
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"cold startup and role loads leave no writer receipt")
++	PlayerState.active_profile_id = ""
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("default_root_upgrade_archived_cold_test",checks,failures.size()): failures.append("receipt")
++	print("DEFAULT_ROOT_UPGRADE_ARCHIVED_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_archived_cold_test.tscn
++++ tests/framework/default_root_upgrade_archived_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/default_root_upgrade_archived_cold_test.gd" id="1"]
++
++[node name="DefaultRootUpgradeArchivedColdTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_archived_test.gd
++++ tests/framework/default_root_upgrade_archived_test.gd
+@@ -0,0 +1,55 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const ARCHIVE := "user://save_upgrades/framework_identity_v1"
++const EXPECTED := "user://default_root_archived_expected.json"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode and PlayerState.profile_directory == "user://characters","actual global owner keeps isolated stock user root")
++	var seed: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://default_root_upgrade_seed_fingerprint.json"))
++	check(seed is Dictionary and seed.get("archive_sha256") == "18989f8b6d0f672b653cb0237ebeb33913f46885a508b716fe8c2b1ae5ffd7de","prelaunch copy is bound to the known archived device source")
++	if not seed is Dictionary: _finish(); return
++	check(seed.files.size() == 13 and not FileAccess.file_exists(ARCHIVE.path_join("manifest.json")),"all thirteen archived files predate the first upgrade")
++	var profiles := {}
++	for relative: String in seed.files:
++		check(FileAccess.get_sha256("user://"+relative) == seed.files[relative],"autoload preserves exact prelaunch archive bytes "+relative)
++		if relative.begins_with("characters/") and relative.ends_with(".json"):
++			var original: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("user://"+relative))
++			profiles[original.profile_id] = {"level":original.level,"gold":original.gold,"experience":original.experience}
++	check(profiles.size() == 3,"actual archive contains all three prior characters")
++	var warehouse_before: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PlayerState.shared_warehouse_path))
++	if not failures.is_empty(): _finish(); return
++	PlayerState.begin_startup_save_upgrade()
++	check(PlayerState.finish_startup_save_upgrade(),"nonempty default root completes real migration "+str(PlayerState.startup_save_upgrade_result))
++	if not bool(PlayerState.startup_save_upgrade_result.get("success",false)): _finish(); return
++	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ARCHIVE.path_join("manifest.json")))
++	check(manifest.files.size() == 13,"default-root archive contains every original and no injected marker")
++	for relative: String in seed.files:
++		check(manifest.files.get(relative,{}).get("sha256") == seed.files[relative],"manifest owns exact historical relative path "+relative)
++		check(FileAccess.get_sha256(ARCHIVE.path_join("original").path_join(relative)) == seed.files[relative],"original device bytes preserved under default source prefix "+relative)
++	var warehouse_after: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PlayerState.shared_warehouse_path))
++	for field: String in ["bank_gold","bank_transaction_high_water","bank_transactions","revision","legacy_migration"]:
++		check(warehouse_after.get(field) == warehouse_before.get(field),"real bank/warehouse ownership field preserved "+field)
++	for id: String in profiles:
++		check(PlayerState.select_character(id),"canonical service loads migrated archive role "+id)
++		check(PlayerState.level == int(profiles[id].level) and PlayerState.gold == int(profiles[id].gold) and PlayerState.experience == int(profiles[id].experience),"historical economy and progression preserved "+id)
++	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0,"migration and official role loads consume all writer receipts")
++	var expected := {"originals":seed.files,"profiles":profiles,"bank_gold":warehouse_before.bank_gold,
++		"manifest_sha256":FileAccess.get_sha256(ARCHIVE.path_join("manifest.json")),"completed_sha256":FileAccess.get_sha256(ARCHIVE.path_join("completed.json")),
++		"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID")}
++	if failures.is_empty():
++		var file := FileAccess.open(EXPECTED,FileAccess.WRITE)
++		check(file != null,"write cold expectation only after successful live migration")
++		if file != null: file.store_string(JSON.stringify(expected)); file.close()
++	PlayerState.active_profile_id = ""
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("default_root_upgrade_archived_test",checks,failures.size()): failures.append("receipt")
++	print("DEFAULT_ROOT_UPGRADE_ARCHIVED_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_archived_test.tscn
++++ tests/framework/default_root_upgrade_archived_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/default_root_upgrade_archived_test.gd" id="1"]
++
++[node name="DefaultRootUpgradeArchivedTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_existing_cold_test.gd
++++ tests/framework/default_root_upgrade_existing_cold_test.gd
+@@ -0,0 +1,51 @@
++extends Node
++const State := preload("res://scripts/player_state.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const PROFILE := "user://characters/default_root_A.json"
++const INDEX := "user://character_profiles.json"
++const ARCHIVE := "user://save_upgrades/framework_identity_v1"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	var exists := FileAccess.file_exists("user://default_root_upgrade_expected.json") and FileAccess.file_exists("res://outputs/test_logs/framework/default_root_upgrade_existing_test.result.json")
++	check(exists,"independent process receives real default upgrade expectation and receipt")
++	if not exists: _finish(); return
++	var expected: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("user://default_root_upgrade_expected.json"))
++	var producer: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://outputs/test_logs/framework/default_root_upgrade_existing_test.result.json"))
++	check(producer.get("status") == "PASS" and producer.get("run_id") == expected.producer_run_id and expected.source_content_sha256 == OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"cold expectation binds successful producer and exact source")
++	if not failures.is_empty(): _finish(); return
++	var state := State.new()
++	check(not state.test_mode and state.profile_directory == "user://characters","cold owner retains default production authority")
++	state.begin_startup_save_upgrade(); add_child(state)
++	check(state.finish_startup_save_upgrade() and state.startup_save_upgrade_result.get("reason") == "already_completed","cold default startup verifies completed archive without reconversion")
++	check(FileAccess.get_sha256(PROFILE) == expected.profile_sha256 and FileAccess.get_sha256(INDEX) == expected.index_sha256,"cold gate preserves completed primary bytes")
++	for relative: String in expected.originals:
++		check(FileAccess.get_sha256(ARCHIVE.path_join("original").path_join(relative)) == expected.originals[relative],"cold original before-image hash "+relative)
++	check(FileAccess.get_sha256(ARCHIVE.path_join("manifest.json")) == expected.manifest_sha256 and FileAccess.get_sha256(ARCHIVE.path_join("completed.json")) == expected.completed_sha256,"cold immutable manifest and completion receipt")
++	check(state.select_character(expected.profile) and state.gold == 456789 and state.experience == 1234,"independent process loads preserved default progress")
++	var primary_hash := FileAccess.get_sha256(PROFILE)
++	var index_hash := FileAccess.get_sha256(INDEX)
++	var warehouse_hash := FileAccess.get_sha256(state.shared_warehouse_path)
++	var archived := ARCHIVE.path_join("original/characters/default_root_A.json")
++	var file := FileAccess.open(archived,FileAccess.WRITE)
++	check(file != null,"owned synthetic archive fault is exact and writable")
++	if file == null: state.active_profile_id = ""; state.queue_free(); _finish(); return
++	file.store_string("synthetic owned before-image damage"); file.close()
++	state.begin_startup_save_upgrade()
++	check(not state.finish_startup_save_upgrade() and state.startup_save_upgrade_result.get("reason") == "upgrade_backup_hash_mismatch","damaged default archive closes actual admission despite completion marker")
++	check(not state.select_character(expected.profile),"damaged before-image cannot admit profile or recover an old primary")
++	check(FileAccess.get_sha256(PROFILE) == primary_hash and FileAccess.get_sha256(INDEX) == index_hash and FileAccess.get_sha256(state.shared_warehouse_path) == warehouse_hash,"failed default backup verification changes no account primary bytes")
++	check(FileAccess.get_sha256(ARCHIVE.path_join("manifest.json")) == expected.manifest_sha256 and FileAccess.get_sha256(ARCHIVE.path_join("completed.json")) == expected.completed_sha256,"failed gate does not replace original manifest or completion receipt")
++	check(state._json_persistence.pending_count() == 0 and state._world_json_persistence.pending_count() == 0,"cold verification and failure leave no accepted writer receipt")
++	print("DEFAULT_ROOT_UPGRADE_EXISTING_COLD_TRACE "+JSON.stringify({"originals":expected.originals,"failure":state.startup_save_upgrade_result,"profile_sha256":FileAccess.get_sha256(PROFILE)}))
++	state.active_profile_id = ""; state.queue_free(); await get_tree().process_frame
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("default_root_upgrade_existing_cold_test",checks,failures.size()): failures.append("receipt")
++	print("DEFAULT_ROOT_UPGRADE_EXISTING_COLD_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_existing_cold_test.tscn
++++ tests/framework/default_root_upgrade_existing_cold_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/default_root_upgrade_existing_cold_test.gd" id="1"]
++
++[node name="DefaultRootUpgradeTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_existing_test.gd
++++ tests/framework/default_root_upgrade_existing_test.gd
+@@ -0,0 +1,62 @@
++extends Node
++const State := preload("res://scripts/player_state.gd")
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const PROFILE := "user://characters/default_root_A.json"
++const INDEX := "user://character_profiles.json"
++const ARCHIVE := "user://save_upgrades/framework_identity_v1"
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++func check(value: bool, label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++func put(path: String, value: Variant) -> void:
++	check(DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir())) == OK,"owned default fixture parent")
++	var file := FileAccess.open(path,FileAccess.WRITE)
++	check(file != null,"owned default fixture file")
++	if file != null: file.store_string(JSON.stringify(value,"\t")+"\n"); file.close()
++func _ready() -> void: _run.call_deferred()
++func _run() -> void:
++	check(not PlayerState.test_mode and PlayerState.profile_directory == "user://characters","prelaunch-isolated default production paths, test_mode=false")
++	check(not FileAccess.file_exists(ARCHIVE.path_join("manifest.json")) and FileAccess.file_exists(PROFILE) and FileAccess.file_exists("user://default_root_upgrade_seed_fingerprint.json"),"old default files predate native startup and have no previous upgrade archive")
++	if not failures.is_empty(): _finish(); return
++	var seed: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("user://default_root_upgrade_seed_fingerprint.json"))
++	var originals: Dictionary = seed.files
++	check(seed.fixture_sha256 == FileAccess.get_sha256("res://tests/framework/fixtures/default_root_upgrade_seed.json"),"prelaunch existing files bind the tracked seed fixture")
++	check(FileAccess.get_sha256(PROFILE) == originals["characters/default_root_A.json"] and FileAccess.get_sha256(INDEX) == originals["character_profiles.json"],"autoload leaves both prelaunch original file hashes intact")
++	var before: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PROFILE))
++	check(before.save_version == 7 and before.profession == "战士","real old profile is still unconverted at upgrade entry")
++	if not failures.is_empty(): _finish(); return
++	var state := State.new()
++	check(state.profile_directory == "user://characters" and state.profile_index_path == INDEX,"new real owner keeps stock default root")
++	state.begin_startup_save_upgrade(); add_child(state)
++	check(not state.test_mode and not state.select_character("default_root_A"),"real write/admission gate precedes conversion")
++	state._notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
++	check(FileAccess.get_sha256(PROFILE) == originals["characters/default_root_A.json"] and FileAccess.get_sha256(INDEX) == originals["character_profiles.json"],"blocked background save preserves upgrade-before bytes")
++	check(state.finish_startup_save_upgrade(),"nonempty default root upgrades through real owner "+str(state.startup_save_upgrade_result))
++	if not bool(state.startup_save_upgrade_result.get("success",false)): state.queue_free(); _finish(); return
++	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ARCHIVE.path_join("manifest.json")))
++	for relative: String in originals:
++		check(manifest.files.has(relative),"exact archive-relative identity "+relative)
++		check(manifest.files.get(relative,{}).get("sha256") == originals[relative],"manifest binds before-image "+relative)
++		check(FileAccess.get_sha256(ARCHIVE.path_join("original").path_join(relative)) == originals[relative],"default source_prefix copies original bytes "+relative)
++	var converted: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PROFILE))
++	check(converted.get("save_version") == 10 and converted.get("character_identity",{}).get("profession_id") == "hc.profession.warrior","actual default legacy profile converted by canonical owner")
++	check(converted.gold == 456789 and converted.experience == 1234,"conversion retains economy and progression")
++	check(FileAccess.file_exists(ARCHIVE.path_join("completed.json")),"real default completion receipt durable")
++	check(state.select_character("default_root_A") and state.gold == 456789 and state.experience == 1234,"default upgraded profile loads through actual service")
++	check(state._json_persistence.pending_count() == 0 and state._world_json_persistence.pending_count() == 0,"actual profile/world receipts ended")
++	var expected := {"profile":"default_root_A","originals":originals,
++		"profile_sha256":FileAccess.get_sha256(PROFILE),"index_sha256":FileAccess.get_sha256(INDEX),
++		"manifest_sha256":FileAccess.get_sha256(ARCHIVE.path_join("manifest.json")),
++		"completed_sha256":FileAccess.get_sha256(ARCHIVE.path_join("completed.json")),
++		"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),
++		"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")}
++	if failures.is_empty(): put("user://default_root_upgrade_expected.json",expected)
++	print("DEFAULT_ROOT_UPGRADE_EXISTING_TRACE "+JSON.stringify({"originals":originals,"result":state.startup_save_upgrade_result,"expected":expected}))
++	state.active_profile_id = ""; state.queue_free(); await get_tree().process_frame
++	_finish()
++func _finish() -> void:
++	if not proof.write_receipt("default_root_upgrade_existing_test",checks,failures.size()): failures.append("receipt")
++	print("DEFAULT_ROOT_UPGRADE_EXISTING_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/default_root_upgrade_existing_test.tscn
++++ tests/framework/default_root_upgrade_existing_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/default_root_upgrade_existing_test.gd" id="1"]
++
++[node name="DefaultRootUpgradeTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/fixtures/default_root_upgrade_seed.json
++++ tests/framework/fixtures/default_root_upgrade_seed.json
+@@ -0,0 +1,22 @@
++{
++  "schema_version": 1,
++  "files": {
++    "characters/default_root_A.json": {
++      "save_version": 7,
++      "profile_id": "default_root_A",
++      "character_name": "DefaultRoot",
++      "profession": "战士",
++      "gender": "男",
++      "level": 25,
++      "experience": 1234,
++      "gold": 456789,
++      "inventory": [],
++      "equipment": {},
++      "learned_skills": {"基本剑术": 2},
++      "quick_slots": ["", "", "", ""],
++      "quest_states": {},
++      "warehouse_inventory": []
++    },
++    "character_profiles.json": {"version": 1, "profiles": [{"id": "default_root_A"}]}
++  }
++}
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/helpers/check_receipt.gd
++++ tests/framework/helpers/check_receipt.gd
+@@ -16,0 +17 @@
++		"invocation_id": OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/helpers/native_producer_gate.gd
++++ tests/framework/helpers/native_producer_gate.gd
+@@ -0,0 +1,40 @@
++extends RefCounted
++
++## Test evidence only: the native runner owns this invocation's successful
++## producer association. Neither an expectation nor a receipt can select it.
++const HANDOFF := "res://outputs/test_logs/framework/native_handoffs.json"
++
++static func read_json(path: String) -> Variant:
++	if not FileAccess.file_exists(path): return null
++	var parser := JSON.new()
++	if parser.parse(FileAccess.get_file_as_string(path)) != OK: return null
++	return parser.data
++
++static func accepts(expected: Variant, scene_id: String) -> bool:
++	var handoff: Variant = read_json(HANDOFF)
++	var invocation := OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID")
++	var source := OS.get_environment("HARDCORE_R3_CONTENT_SHA256")
++	if not expected is Dictionary or not handoff is Dictionary or invocation.is_empty() or source.is_empty(): return false
++	if handoff.get("schema_version") != 1 or handoff.get("invocation_id") != invocation \
++		or handoff.get("source_content_sha256") != source or not handoff.get("producers") is Dictionary: return false
++	var native: Variant = handoff.producers.get(scene_id)
++	if not native is Dictionary or native.get("scene_id") != scene_id or native.get("result") != "PASS" \
++		or native.get("process_exited") != true or native.get("effective_exit_code") != 0 \
++		or native.get("source_content_sha256") != source: return false
++	var run: Variant = native.get("run_id")
++	if not run is String or run.is_empty() or run == OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID") \
++		or expected.get("producer_run_id") != run or expected.get("invocation_id") != invocation \
++		or expected.get("source_content_sha256") != source: return false
++	var path := "res://outputs/test_logs/framework/"+scene_id+".result.json"
++	var receipt: Variant = read_json(path)
++	if not receipt is Dictionary or native.get("receipt_sha256") != FileAccess.get_sha256(path): return false
++	if receipt.get("schema_version") != 1 or receipt.get("status") != "PASS" or receipt.get("run_id") != run \
++		or receipt.get("scene_id") != scene_id or receipt.get("source_content_sha256") != source \
++		or receipt.get("invocation_id") != invocation or receipt.get("failed") != 0 \
++		or receipt.get("reported_failures") != 0 or not receipt.get("checks") is Array: return false
++	var count: int = receipt.checks.size()
++	if count == 0 or receipt.get("count") != count or receipt.get("passed") != count or receipt.get("reported_checks") != count: return false
++	for index in count:
++		var row: Variant = receipt.checks[index]
++		if not row is Dictionary or row.get("id") != index+1 or row.get("passed") != true or not row.get("label") is String: return false
++	return true
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/periodic_credit_safe_logout_cold_test.gd
++++ tests/framework/periodic_credit_safe_logout_cold_test.gd
+@@ -1,0 +2 @@
++const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
+@@ -17,4 +18 @@
+-	var producer: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://outputs/test_logs/framework/periodic_credit_safe_logout_test.result.json"))
+-	var valid: bool = expected is Dictionary and producer is Dictionary and producer.get("status") == "PASS" \
+-		and producer.get("run_id") == expected.get("producer_run_id") \
+-		and expected.get("source_content_sha256") == OS.get_environment("HARDCORE_R3_CONTENT_SHA256")
++	var valid := Gate.accepts(expected,"periodic_credit_safe_logout_test")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/periodic_credit_safe_logout_test.gd
++++ tests/framework/periodic_credit_safe_logout_test.gd
+@@ -141,0 +142 @@
++		"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/periodic_delivery_lateness_test.gd
++++ tests/framework/periodic_delivery_lateness_test.gd
+@@ -0,0 +1,121 @@
++extends "res://tests/framework/feature_capacity_atomic_test.gd"
++
++class FaultStatsEnemy extends Enemy:
++	var reject_stats := false
++	func direct_spell_runtime_stats_into(output: Dictionary) -> bool:
++		if reject_stats: return false
++		return super.direct_spell_runtime_stats_into(output)
++
++func _run() -> void:
++	process_mode = Node.PROCESS_MODE_ALWAYS
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	world = World.new(); world.configure(self,PlayerState)
++	var clock := Clock.new(); clock.configure(self)
++	var combat := Combat.new(); add_child(combat)
++	target = FaultStatsEnemy.new(); target.setup(GameData.get_monster_by_id(19),null); add_child(target)
++	target.process_mode = Node.PROCESS_MODE_DISABLED
++	target.max_hp = 10000; target.current_hp = 10000
++	target.direct_spell_magic_defense_min = 0; target.direct_spell_magic_defense_max = 0
++	runtime = Runtime.new(); check(runtime.configure(world,clock,combat),"actual effect service configured")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"real qualified binding enabled")
++	bindings = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	var batch: RefCounted = Batch.create(world,"late-delivery:once","hc.skill.wizard.ice_storm",bindings,{}).batch
++	batch.begin_base_scope()
++	target.take_damage(100,null,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense"})
++	batch.finish_base_scope()
++	check(runtime.submit_batch(batch),"real post-HP fact queued")
++	for iteration in 120:
++		runtime.pump()
++		if runtime.pending_count() == 0: break
++		await get_tree().process_frame
++	check(runtime.active_count() == 1 and runtime.metrics().ticks == 0,"one accepted periodic state waits for its original due time")
++	check(clock.advance_simulation(1.75),"existing simulation clock advances to 750ms after the first due time")
++	check(runtime.has_due(),"actual heap reports the overdue work before service")
++	var hp := target.current_hp
++	for iteration in 120:
++		runtime.pump()
++		if not runtime.has_due(): break
++		await get_tree().process_frame
++	check(runtime.metrics().ticks == 1 and target.current_hp == hp-5,"actual production tick commits exactly five HP")
++	check(not runtime.has_due(),"post-pump observer sees no remaining due work")
++	check(runtime.metrics().get("tick_delivery_count",-1) == 1
++		and runtime.metrics().get("maximum_tick_delivery_lateness_usec",-1) == 750000,
++		"consumption-boundary metrics retain the 750ms late tick after heap sampling can no longer see it")
++	clock.advance_simulation(0.25)
++	for iteration in 120:
++		runtime.pump()
++		if not runtime.has_due(): break
++		await get_tree().process_frame
++	check(runtime.metrics().ticks == 2 and runtime.metrics().get("tick_delivery_count",-1) == 2
++		and runtime.metrics().get("maximum_tick_delivery_lateness_usec",-1) == 750000,
++		"later on-time delivery preserves maximum lateness without duplicating or rescheduling ticks")
++	check(runtime.errors.is_empty(),"no mutation or delivery error")
++	runtime.clear()
++	clock = await _seed(combat,"on-time")
++	clock.advance_simulation(1.0); await _drain()
++	check(runtime.metrics().ticks == 1 and runtime.metrics().tick_delivery_count == 1
++		and runtime.metrics().maximum_tick_delivery_lateness_usec == 0,"on-time consumption records zero simulated lateness")
++	var before: Dictionary = runtime.metrics(); hp = target.current_hp
++	var epoch := Engine.get_process_frames()
++	runtime.pump(); runtime.pump()
++	check(Engine.get_process_frames() == epoch and runtime.metrics() == before and target.current_hp == hp,
++		"two pumps in one process epoch neither recount nor resubmit an already consumed phase")
++	get_tree().paused = true
++	var paused_at: int = clock.simulation_usec()
++	await get_tree().create_timer(0.025,true).timeout
++	check(not clock.advance_simulation(2.0) and runtime.pump() == 0 and clock.simulation_usec() == paused_at
++		and runtime.metrics() == before,"paused wall time creates no simulated tick debt, count or lateness")
++	get_tree().paused = false
++	runtime.clear()
++	clock = await _seed(combat,"exact-period")
++	clock.advance_simulation(2.0); hp = target.current_hp; await _drain()
++	check(runtime.metrics().ticks == 2 and runtime.metrics().tick_delivery_count == 2 and target.current_hp == hp-10,
++		"late first phase and on-time second phase each commit exactly once")
++	check(not runtime.has_due() and runtime.metrics().maximum_tick_delivery_lateness_usec == 1000000
++		and not (runtime.metrics().maximum_tick_delivery_lateness_usec < 1000000),
++		"exactly one full period late fails the strict gate even when post-service heap is empty")
++	runtime.clear()
++	clock = await _seed(combat,"natural-expiry")
++	for phase in 4:
++		clock.advance_simulation(1.0); await _drain()
++	check(runtime.metrics().ticks == 4 and runtime.metrics().tick_delivery_count == 4 and runtime.metrics().expired == 1
++		and runtime.metrics().invalidated == 0 and runtime.active_count() == 0,"natural expiry records four successful attempts and a separate terminal outcome")
++	before = runtime.metrics(); clock.advance_simulation(2.0); await _drain()
++	check(runtime.metrics() == before,"expired states cannot be counted as further attempted deliveries")
++	runtime.clear()
++	clock = await _seed(combat,"port-rejection")
++	(target as FaultStatsEnemy).reject_stats = true
++	clock.advance_simulation(1.0); hp = target.current_hp; await _drain()
++	check(runtime.metrics().tick_delivery_count == 1 and runtime.metrics().ticks == 0 and runtime.metrics().failed == 1
++		and runtime.errors == ["periodic_target_stats"] and target.current_hp == hp,
++		"explicit stats fault reaches the actual damage port: rejected attempt is separate from successful delivery and writes no HP")
++	(target as FaultStatsEnemy).reject_stats = false
++	runtime.clear()
++	clock = await _seed(combat,"invalid-target")
++	target.queue_free(); clock.advance_simulation(1.0); await _drain()
++	check(runtime.metrics().tick_delivery_count == 0 and runtime.metrics().ticks == 0 and runtime.metrics().invalidated == 1
++		and runtime.metrics().expired == 0 and runtime.active_count() == 0,"invalidated target is cancelled before delivery and never reported as a successful tick")
++	runtime.clear(); combat.queue_free()
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false),"default-off module restored")
++	await get_tree().process_frame
++	proof.write_receipt("periodic_delivery_lateness_test",checks,errors.size())
++	print("PERIODIC_DELIVERY_LATENESS_%s checks=%d errors=%s" % ["PASS" if errors.is_empty() else "FAIL",checks,str(errors)])
++	get_tree().quit(0 if errors.is_empty() else 1)
++
++func _seed(combat: Node, identity: String) -> RefCounted:
++	var clock := Clock.new(); clock.configure(self)
++	runtime = Runtime.new(); check(runtime.configure(world,clock,combat),"fresh real runtime for "+identity)
++	var batch: RefCounted = Batch.create(world,"audit-a:"+identity,"hc.skill.wizard.ice_storm",bindings,{}).batch
++	batch.begin_base_scope()
++	target.take_damage(100,null,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense"})
++	batch.finish_base_scope(); check(runtime.submit_batch(batch),"real fact accepted for "+identity)
++	await _drain()
++	check(runtime.active_count() == 1,"one real state installed for "+identity)
++	return clock
++
++func _drain() -> void:
++	for iteration in 120:
++		runtime.pump()
++		if runtime.pending_count() == 0 and not runtime.has_due(): return
++		await get_tree().process_frame
++	check(false,"bounded test workload drains")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/periodic_delivery_lateness_test.tscn
++++ tests/framework/periodic_delivery_lateness_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/periodic_delivery_lateness_test.gd" id="1"]
++
++[node name="PeriodicDeliveryLatenessTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/pricing_identity_test.gd
++++ tests/framework/pricing_identity_test.gd
+@@ -0,0 +1,113 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Pricing := preload("res://scripts/pricing_service.gd")
++const Equipment := preload("res://scripts/equipment_rules.gd")
++const Ids := preload("res://scripts/identity/entity_registry.gd")
++var proof := Proof.new()
++var failures: Array[String] = []
++
++func check(value: bool, label: String) -> void:
++	proof.record(value, label)
++	if not value: failures.append(label)
++
++func _ready() -> void:
++	PlayerState.test_mode = true
++	_run.call_deferred()
++
++func _run() -> void:
++	check(GameData.ensure_loaded(), "actual catalogs are loaded")
++	var wood := GameData.get_item_price_record("hc.item.000080")
++	var bracelet := GameData.get_item_price_record("hc.item.000190")
++	check(Pricing.adjusted_database_price(wood) == 50 and Pricing.adjusted_database_price(bracelet) == 17520,
++		"existing base price and user-authorized bracelet price remain exact")
++	var before := {}
++	for id: Variant in GameData._price_by_item_id:
++		var row: Dictionary = GameData._price_by_item_id[id]
++		before[str(id)] = {"base_price": row.base_price, "adjusted": Pricing.adjusted_database_price(row), "source": row.source}
++	var file := FileAccess.open("res://outputs/test_logs/pricing_identity_census.json", FileAccess.WRITE)
++	check(file != null, "price/provenance census has an owned evidence path")
++	if file != null:
++		file.store_string(JSON.stringify(before, "  "))
++		file.close()
++	var gear := GameData.get_entity_record("hc.item.000080")
++	var repair := Equipment.repair_cost(gear, 0, 4)
++	gear.name = "展示文字已更改"
++	check(Equipment.reference_price(gear) == 50, "equipment reference valuation does not use display name")
++	check(repair > 0 and Equipment.repair_cost(gear, 0, 4) == repair, "equipment repair valuation does not use display name")
++	check(Equipment.reference_price({"name": "木剑", "itemId": 999999}) == 0,
++		"unknown explicit equipment identity cannot use a familiar display name")
++	check(Equipment.reference_price({"name": "木剑", "itemId": 80.5}) == 0
++		and Equipment.reference_price({"name": "木剑", "itemId": "80"}) == 0,
++		"authoring-shaped price identities cannot truncate or coerce types")
++	check(GameData.get_item_price_record({"itemId": 80, "item_id": 81, "name": "木剑"}).is_empty(),
++		"conflicting source/runtime numeric identities cannot select either owner")
++	var formal := Pricing.policy()
++	formal.modifiers.itemBps = {"hc.item.000080": 7000}
++	check(Pricing.adjusted_database_price(wood, formal) == 35, "policy accepts the registered item identity")
++	var renamed := wood.duplicate(true)
++	renamed.item_name = "显示文字不同"
++	check(Pricing.adjusted_database_price(renamed, formal) == 35, "policy adjustment follows identity after display rename")
++	for bad: String in ["木剑", "hc.item.999999", "hc.skill.warrior.thrusting"]:
++		var invalid := Pricing.policy()
++		invalid.modifiers.itemBps = {bad: 7000}
++		check(Pricing.adjusted_database_price(wood, invalid) == 0 and not Pricing.quote_buy(wood, 1, {}, invalid).valid,
++			"invalid policy identity rejects the whole quote: " + bad)
++		check(not Pricing.quote_repair(wood, gear, {"durability": 0, "max_durability": 4}, {}, invalid).valid,
++			"nested repair cannot reload default policy after invalid identity: " + bad)
++		check(not Pricing.quote_repair_delta(wood, gear, {"durability": 4, "max_durability": 4}, 0, {}, invalid).valid
++			and not Pricing.quote_repair_raw_delta(wood, gear, {"durability_raw": 0, "max_durability_raw": 4000}, 1, {}, invalid).valid
++			and not Pricing.estimate_forge_materials([], {}, invalid).valid,
++			"full-durability, raw repair and empty forge still reject invalid policy: " + bad)
++	var duplicate := Pricing.policy()
++	duplicate.modifiers.itemBps = {"hc.item.000080": 7000, "service:221": 9000}
++	check(Pricing.adjusted_database_price(wood, duplicate) == 0, "two policy keys cannot own the same price source")
++	var forged := Pricing.estimate_forge_materials(
++		[{"entity_id": "hc.item.000080", "item_name": "改显示", "quantity": 2}],
++		{"hc.item.000080": wood}, formal)
++	check(forged.get("valid", false) and forged.get("total_value", 0) == 70,
++		"forge valuation keys supplied records by registered identity")
++	check(not Pricing.estimate_forge_materials([{"item_name": "木剑", "quantity": 2}], {"木剑": wood}).get("valid", false),
++		"forge valuation rejects a display-only material")
++	var wrong := Pricing.estimate_forge_materials([{"entity_id": "hc.item.000080", "quantity": 2}], {"hc.item.000080": bracelet})
++	check(not wrong.get("valid", false), "forge record owner must match the requested identity")
++	var saved := {}
++	for key: String in ["_price_by_name", "_price_by_item_id", "_price_by_service_index"]:
++		saved[key] = GameData.get(key).duplicate(true)
++	var candidates: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/equipment_price_candidates_v1.json"))
++	check(candidates.records.size() == 31, "all 31 existing candidates remain present")
++	for candidate: Dictionary in candidates.records:
++		var entity_id := str(candidate.get("entity_id", ""))
++		check(Ids.resolve(entity_id).get("kind") in ["item", "service_item"], "candidate has a registered owner: " + str(candidate.name))
++		if entity_id.is_empty(): continue
++		for key: String in saved: GameData.set(key, {})
++		var renamed_candidate := candidate.duplicate(true)
++		renamed_candidate.name = "与任何正式名称均不相同"
++		GameData._register_price_record(renamed_candidate)
++		var resolved := GameData.get_item_price_record(entity_id)
++		check(resolved.get("entity_id", "") == Ids.canonical(entity_id) and resolved.get("base_price", 0) == candidate.price,
++			"candidate imports by identity with unrelated display: " + entity_id)
++	for key: String in saved: GameData.set(key, {})
++	for n in 2:
++		var row: Dictionary = candidates.records[n].duplicate(true)
++		row.name = "两个不同物品共享展示"
++		GameData._register_price_record(row)
++	check(GameData.get_item_price_record("hc.item.000140").get("base_price", 0) == 50000
++		and GameData.get_item_price_record("hc.item.000232").get("base_price", 0) == 35000,
++		"identical display text never hides another registered price owner")
++	for key: String in saved: GameData.set(key, saved[key])
++	var primary := wood.duplicate(true)
++	GameData._register_price_record({"entity_id": "hc.item.000080", "name": "新展示", "kind": "equipment", "category": "武器", "price": 9999})
++	check(GameData.get_item_price_record("hc.item.000080") == primary, "candidate cannot replace primary by changing its display")
++	var invalid_candidate: Dictionary = candidates.records[0].duplicate(true)
++	for numeric: Variant in [140.5, "140", 232, false]:
++		invalid_candidate.itemId = numeric
++		check(GameData._price_candidate_owner(invalid_candidate).is_empty(), "candidate cannot coerce or contradict explicit legacy identity: " + str(numeric))
++	invalid_candidate.erase("itemId")
++	invalid_candidate.entity_id = "hc.item.999999"
++	invalid_candidate.name = "木剑"
++	GameData._register_price_record(invalid_candidate)
++	check(GameData.get_item_price_record("hc.item.000080") == primary, "unknown explicit candidate cannot claim a known display")
++	proof.write_receipt("pricing_identity_test", proof.records.size(), failures.size())
++	print("PRICING_IDENTITY_%s checks=%d errors=%s" % ["PASS" if failures.is_empty() else "FAIL", proof.records.size(), str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/framework/pricing_identity_test.tscn
++++ tests/framework/pricing_identity_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/pricing_identity_test.gd" id="1"]
++
++[node name="PricingIdentityTest" type="Node"]
++script = ExtResource("1")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/pricing_authority_test.gd
++++ tests/pricing_authority_test.gd
+@@ -379 +379 @@
+-		[{"item_name": "木剑", "quantity": 2}], {"木剑": wood}, custom
++		[{"entity_id": "hc.item.000080", "item_name": "木剑", "quantity": 2}], {"hc.item.000080": wood}, custom
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tests/ui_l1/price_quote_parity_test.gd
++++ tests/ui_l1/price_quote_parity_test.gd
+@@ -39 +39,2 @@
+-	# Missing stronger service ID may NOT reuse a weaker existing item hit.
++	# Conflicting formal identities are rejected before any lookup; a missing
++	# service-only reference still takes the real overlay maintenance path.
+@@ -41,2 +42,4 @@
+-	GameData.get_item_price_record({"service_index": 2147483646, "item_id": chosen_id})
+-	expect(GameData._ui_l1_price_maintenance_count == maintenance_before + 1, "missing stronger identity executes original maintenance")
++	var conflict := GameData.get_item_price_record({"service_index": 2147483646, "item_id": chosen_id})
++	expect(conflict.is_empty() and GameData._ui_l1_price_maintenance_count == maintenance_before, "conflicting identity rejects before maintenance")
++	var missing := GameData.get_item_price_record({"service_index": 2147483646})
++	expect(missing.is_empty() and GameData._ui_l1_price_maintenance_count == maintenance_before + 1, "missing service-only identity executes maintenance without item fallback")
+@@ -48,6 +51,13 @@
+-	# A newly introduced row uses the original first-wins overlay path.
+-	GameData.equipment_price_candidates = {"records": [{"name": "UIL1_SYNTHETIC_PRICE", "price": 123, "kind": "consumable", "serviceIndex": 2147483000}]}
+-	var newly_loaded: Dictionary = GameData.get_item_price_record({"service_index": 2147483000})
+-	expect(not newly_loaded.is_empty() and int(newly_loaded.get("base_price", 0)) == 123, "new candidate remains discoverable")
+-	GameData.equipment_price_candidates = {"records": [{"name": "UIL1_SYNTHETIC_PRICE_2", "price": 124, "kind": "consumable", "serviceIndex": 2147483001}]}
+-	expect(not GameData.get_item_price_record({"service_index": 2147483001}).is_empty(), "same-size candidate replacement remains discoverable")
++	# Use actual registered source rows. Old fabricated IDs without categories
++	# violate the identity contract before the overlay behavior can be tested.
++	var candidate_source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/equipment_price_candidates_v1.json"))
++	var first: Dictionary = candidate_source.records[0].duplicate(true)
++	var second: Dictionary = candidate_source.records[1].duplicate(true)
++	for item_id: int in [140, 232]: GameData._price_by_item_id.erase(item_id)
++	for item_name: String in [first.name, second.name]: GameData._price_by_name.erase(item_name)
++	GameData.equipment_price_candidates = {"records": [first]}
++	var newly_loaded: Dictionary = GameData.get_item_price_record("hc.item.000140")
++	expect(not newly_loaded.is_empty() and int(newly_loaded.get("base_price", 0)) == 50000, "new candidate remains discoverable")
++	GameData.equipment_price_candidates = {"records": [second]}
++	var replaced: Dictionary = GameData.get_item_price_record("hc.item.000232")
++	expect(not replaced.is_empty() and int(replaced.get("base_price", 0)) == 35000, "same-size candidate replacement remains discoverable")
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tools/run_combined_evidence_fault_tests.py
++++ tools/run_combined_evidence_fault_tests.py
+@@ -0,0 +1,81 @@
++"""Retain native FAIL evidence for isolated final save/teardown/reload faults."""
++from pathlib import Path
++from datetime import datetime, timezone
++import hashlib
++import json
++import os
++import subprocess
++import sys
++import uuid
++
++ROOT = Path(__file__).resolve().parents[1]
++SCENE = "combined_effect_lifecycle_test"
++COLD = "combined_effect_lifecycle_cold_test"
++
++
++def read(path):
++    return json.loads(path.read_text(encoding="utf-8-sig"))
++
++
++def main():
++    output = ROOT / "outputs/framework_v2" / ("final_stage_faults_" + datetime.now().strftime("%H%M%S_%f"))
++    output.mkdir(parents=True, exist_ok=False)
++    matrix = []
++    expected_path = ROOT / "outputs/test_logs/framework/combined_effect_lifecycle_expected.json"
++    for fault in ("save", "teardown", "reload"):
++        before = expected_path.read_bytes() if expected_path.is_file() else b""
++        (output / (fault + "_prior_expectation.json")).write_bytes(before)
++        env = os.environ.copy()
++        env["HARDCORE_AUDIT_RUNTIME_APPDATA"] = str(ROOT / ".godot/runtime_appdata" / ("combined_fault_" + uuid.uuid4().hex))
++        env["HARDCORE_COMBINED_FAILURE_STAGE"] = fault
++        command = [sys.executable, "-X", "utf8", "tools/source176_r3_validation.py", "audit_c_fault_" + fault,
++                   "--tests", "tests/framework/" + SCENE + ".tscn", "tests/framework/" + COLD + ".tscn", "--timeout", "30"]
++        native = subprocess.run(command, cwd=ROOT, env=env, capture_output=True, text=True, encoding="utf-8")
++        (output / (fault + "_wrapper.log")).write_text(native.stdout + native.stderr, encoding="utf-8")
++        summary = json.loads(native.stdout.splitlines()[-1])
++        directory = Path(summary["evidence"])
++        live = read(directory / "framework" / (SCENE + ".result.json"))
++        cold = read(directory / "framework" / (COLD + ".result.json"))
++        trace = read(directory / "framework/combined_effect_lifecycle_trace.json")
++        handoff = read(directory / "framework/native_handoffs.json")
++        runner = read(directory / "runner_results.json")
++        failed_labels = [row["label"] for row in live["checks"] if not row["passed"]]
++        required = {"save": ["final production durability checkpoint succeeds: world_clock_checkpoint_failed"],
++                    "teardown": ["explicit world teardown releases final receipt ownership", "official reload retains exactly the combined reward"],
++                    "reload": ["official reload retains exactly the combined reward"]}[fault]
++        # The intentional blocked directory fails in the production world
++        # checkpoint before profile promotion. Preserve that exact I/O error;
++        # do not turn an arbitrary engine error into an accepted fault result.
++        error_lines = (directory / "raw" / (SCENE + ".stderr.log")).read_text(encoding="utf-8-sig").splitlines()
++        actual_errors = [line for line in error_lines if line.startswith("ERROR:") or "SCRIPT ERROR:" in line]
++        expected_error = ("ERROR: Could not create directory: '" + env["HARDCORE_AUDIT_RUNTIME_APPDATA"].replace("\\", "/")
++                          + "/Godot/app_userdata/HardCore/combined-save-blocker-" + live["run_id"] + "/profiles'.")
++        expected_errors = [expected_error] if fault == "save" else []
++        verified = (native.returncode == 1 and summary["status"] == "FAIL" and summary["source_stable_during_run"]
++                    and runner["failed"] == 2 and runner["engine_log_errors"] == len(expected_errors) and actual_errors == expected_errors
++                    and all(row["process_exited"] and row["effective_exit_code"] == 1 for row in runner["results"])
++                    and live["status"] == "FAIL" and failed_labels == required
++                    and live["count"] == len(live["checks"]) == live["reported_checks"]
++                    and cold["status"] == "FAIL" and cold["count"] <= 3
++                    and "status" not in trace and "checks" not in trace and trace["phase_status"] == "PASS"
++                    and trace["phase"] == "workload_observation_before_final_save_teardown_reload"
++                    and trace["phase_checks"] < live["count"] and SCENE not in handoff["producers"]
++                    and before == expected_path.read_bytes())
++        row = {"fault": fault, "evidence": str(directory), "command": command,
++               "isolated_appdata": env["HARDCORE_AUDIT_RUNTIME_APPDATA"],
++               "prior_expectation_sha256": hashlib.sha256(before).hexdigest(),
++               "native_scene_status": "FAIL", "failed_labels": failed_labels,
++               "expected_injected_engine_errors": expected_errors,
++               "negative_case_verification": "PASS" if verified else "FAIL"}
++        matrix.append(row)
++        print(json.dumps(row, ensure_ascii=False), flush=True)
++    report = {"time_utc": datetime.now(timezone.utc).isoformat(), "cases": matrix,
++              "status": "PASS" if all(row["negative_case_verification"] == "PASS" for row in matrix) else "FAIL",
++              "scope": "Negative test verification only; the six original native FAIL results remain FAIL."}
++    (output / "matrix.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
++    print(json.dumps({"evidence": str(output), "status": report["status"]}), flush=True)
++    return 0 if report["status"] == "PASS" else 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tools/run_default_root_upgrade_tests.py
++++ tools/run_default_root_upgrade_tests.py
+@@ -0,0 +1,49 @@
++"""Seed owned user data before native autoload, then execute live/cold tests."""
++from pathlib import Path
++import argparse, hashlib, json, os, subprocess, uuid
++
++root = Path(__file__).resolve().parents[1]
++fixture = root/'tests/framework/fixtures/default_root_upgrade_seed.json'
++source = json.loads(fixture.read_text(encoding='utf-8-sig'))
++assert source['schema_version'] == 1
++parser = argparse.ArgumentParser()
++parser.add_argument('--archived',action='store_true')
++args = parser.parse_args()
++reference = root/'outputs/framework_v2/mobile_v90_reference'
++archive_path = Path('D:/HardCoreAudit/hardcore_save_backup_v90_20260922.tar')
++if args.archived:
++    source = json.loads((root/'outputs/framework_v2/mobile_v90_reference.json').read_text(encoding='utf-8-sig'))
++    assert hashlib.sha256(archive_path.read_bytes()).hexdigest() == source['archive_sha256']
++case = root/'.godot/runtime_appdata'/('default_root_existing_'+uuid.uuid4().hex)
++case.mkdir(exist_ok=False)
++user = case/'Godot/app_userdata/HardCore'
++user.mkdir(parents=True)
++originals = {}
++for relative,document in source['files'].items():
++    target = (user/relative).resolve()
++    assert target.is_relative_to(user.resolve()) and not target.exists()
++    target.parent.mkdir(parents=True,exist_ok=True)
++    if args.archived:
++        original = (reference/relative).resolve()
++        assert original.is_relative_to(reference.resolve())
++        raw = original.read_bytes()
++        assert hashlib.sha256(raw).hexdigest() == document
++    else:
++        raw = (json.dumps(document,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
++    target.write_bytes(raw)
++    originals[relative] = hashlib.sha256(raw).hexdigest()
++fingerprint = {'fixture_sha256':hashlib.sha256(fixture.read_bytes()).hexdigest(),'files':originals}
++if args.archived:
++    fingerprint['archive_sha256'] = source['archive_sha256']
++(user/'default_root_upgrade_seed_fingerprint.json').write_text(json.dumps(fingerprint,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
++env = os.environ.copy()
++env['HARDCORE_AUDIT_RUNTIME_APPDATA'] = str(case)
++print(json.dumps({'isolated_appdata':str(case),'files':originals,'fixture_sha256':fingerprint['fixture_sha256']},ensure_ascii=False),flush=True)
++kind = 'archived' if args.archived else 'existing'
++result = subprocess.run(['py','-3.12','-X','utf8','tools/source176_r3_validation.py','default_root_'+kind+'_prelaunch',
++    '--tests','tests/framework/default_root_upgrade_'+kind+'_test.tscn','tests/framework/default_root_upgrade_'+kind+'_cold_test.tscn','--timeout','30'],cwd=root,env=env)
++if args.archived:
++    assert hashlib.sha256(archive_path.read_bytes()).hexdigest() == source['archive_sha256']
++    for relative,digest in source['files'].items(): assert hashlib.sha256((reference/relative).read_bytes()).hexdigest() == digest
++    print('ORIGINAL_ARCHIVE_AND_13_REFERENCE_FILES_UNCHANGED',flush=True)
++raise SystemExit(result.returncode)
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tools/run_godot_tests.ps1
++++ tools/run_godot_tests.ps1
+@@ -35,0 +36 @@
++$PreviousFrameworkInvocationId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', 'Process')
+@@ -1179,0 +1181,13 @@
++# One native invocation owns its live/cold evidence pair. A source hash alone
++# cannot distinguish a successful prior invocation from the current failed one.
++[Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', [Guid]::NewGuid().ToString(), 'Process')
++$NativeHandoffPath = Join-Path $ProjectReportRoot 'framework\native_handoffs.json'
++New-Item -ItemType Directory -Path (Split-Path -Parent $NativeHandoffPath) -Force | Out-Null
++$NativeHandoffs = [ordered]@{
++    schema_version = 1
++    invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
++    source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
++    producers = [ordered]@{}
++}
++# Reset before any child can fail early and leave a prior receipt untouched.
++[IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
+@@ -1182,0 +1197,6 @@
++    if ($isFramework) {
++        # An explicit test list may repeat a scene. Its second failed producer
++        # must not inherit the first successful producer in this invocation.
++        $NativeHandoffs.producers.Remove($testName)
++        [IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
++    }
+@@ -1332,0 +1353,3 @@
++        elseif ((Get-Content -LiteralPath $frameworkReceiptPath -Raw | ConvertFrom-Json).invocation_id -ne $env:HARDCORE_FRAMEWORK_INVOCATION_ID) {
++            $reasons += 'framework_invocation_mismatch'
++        }
+@@ -1356,0 +1380,17 @@
++    if ($isFramework -and $result -eq 'PASS') {
++        # The child cannot attest to its own native exit. Only this validated
++        # runner result makes its exact receipt eligible for a later cold test.
++        $ReceiptHasher = [Security.Cryptography.SHA256]::Create()
++        try { $ReceiptHash = [BitConverter]::ToString($ReceiptHasher.ComputeHash([IO.File]::ReadAllBytes($frameworkReceiptPath))).Replace('-', '').ToLowerInvariant() }
++        finally { $ReceiptHasher.Dispose() }
++        $NativeHandoffs.producers[$testName] = [ordered]@{
++            scene_id = $testName
++            run_id = $frameworkRunId
++            source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
++            process_exited = $processExited
++            effective_exit_code = $finalEffectiveExitCode
++            result = $result
++            receipt_sha256 = $ReceiptHash
++        }
++        [IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
++    }
+@@ -1375,0 +1416 @@
++    invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
+@@ -1395,0 +1437 @@
++        [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', $PreviousFrameworkInvocationId, 'Process')
+--- 4d1efdc45897ace1be64fe0050c977c47f703ad0/tools/source176_r3_validation.py
++++ tools/source176_r3_validation.py
+@@ -108,0 +109,17 @@
++    # Archive only this invocation's runner-owned association and producer
++    # artifacts. A failed live run may leave older files, which are not proof.
++    owned = ROOT / "outputs/test_logs/framework"
++    handoff_path = owned / "native_handoffs.json"
++    if handoff_path.is_file():
++        handoff = json.loads(handoff_path.read_text(encoding="utf-8-sig"))
++        if handoff.get("invocation_id") == report.get("invocation_id"):
++            (dest / "framework").mkdir(exist_ok=True)
++            shutil.copy2(handoff_path, dest / "framework" / handoff_path.name)
++    for row in report.get("results", []):
++        for suffix, id_field in (("_trace.json", "run_id"), ("_expected.json", "producer_run_id")):
++            source = owned / (row["test_name"].removesuffix("_test") + suffix)
++            if source.is_file():
++                artifact = json.loads(source.read_text(encoding="utf-8-sig"))
++                if artifact.get(id_field) == row.get("framework_run_id"):
++                    (dest / "framework").mkdir(exist_ok=True)
++                    shutil.copy2(source, dest / "framework" / source.name)

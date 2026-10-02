@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "combined_cold_receipt_gate_test",
+                        "test_path":  "tests/framework/combined_cold_receipt_gate_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T04:55:25.8257761Z",
+                        "native_exit_observed_utc":  "2026-10-02T04:55:04.7299155Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "1ca7870a-6b96-49d9-896d-5e91d7a5e6c6",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "95f76fb9-12b8-46c0-aa77-f49698745d6e",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  1,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-02T12:55:06.1869529+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

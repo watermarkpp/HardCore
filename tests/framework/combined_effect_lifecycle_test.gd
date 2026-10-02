@@ -36,7 +36,7 @@ var scopes_closed := true
 var peak_states := 0
 var peak_deaths := 0
 var peak_persistence := 0
-var maximum_due_lateness_usec := 0
+var maximum_remaining_due_backlog_usec := 0
 
 func check(value: bool, label: String) -> void:
 	proof.record(value,label); checks += 1
@@ -68,7 +68,7 @@ func _process(_delta: float) -> void:
 	peak_deaths = maxi(peak_deaths,game._pending_enemy_deaths.size())
 	peak_persistence = maxi(peak_persistence,PlayerState._json_persistence.pending_count()+PlayerState._world_json_persistence.pending_count())
 	if runtime.has_due():
-		maximum_due_lateness_usec = maxi(maximum_due_lateness_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
+		maximum_remaining_due_backlog_usec = maxi(maximum_remaining_due_backlog_usec,game._time_domains.simulation_usec()-runtime._heap.due_usec())
 	if stream_started_usec > 0 and stream_finished_usec == 0 and game._streaming_coordinator.pending_request_count() == 0:
 		stream_finished_usec = now
 	if deaths == 30 and death_finished_usec == 0 and _settlement_drained(): death_finished_usec = now
@@ -168,11 +168,17 @@ func _run() -> void:
 	check(PlayerState.experience == expected_xp,"sole production reward owner grants exactly thirty canonical rewards")
 	check(scopes_closed and samples.size() >= 120,"real frame samples span the workload without open budget scopes")
 	check(death_finished_usec > 0 and stream_finished_usec > 0,"necessary death and resource completion latencies are observed")
-	check(maximum_due_lateness_usec < 1000000,"this bounded headless cohort delivers due work before it falls one complete configured period behind: "+str(maximum_due_lateness_usec))
+	check(runtime.metrics().tick_delivery_count == 360,"every actual periodic delivery is included in the consumption-boundary latency metric")
+	check(runtime.metrics().maximum_tick_delivery_lateness_usec < 1000000,"this bounded headless cohort delivers every tick before it falls one complete configured period behind: "+str(runtime.metrics().maximum_tick_delivery_lateness_usec))
 	var report := {"run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),
 		"scope":"PC headless; 30 fixed receivers, 3 independent sources of the existing ignite handler; natural Root clock/pumps; no GPU/device or whole-game performance claim",
-		"status":"PASS" if failures.is_empty() else "FAIL","checks":checks,"failures":failures,"metrics":runtime.metrics(),"sample_count":samples.size(),
-		"elapsed_usec":Time.get_ticks_usec()-started_usec,"wall_frame_usec":_percentiles("wall_usec"),"maximum_due_lateness_usec":maximum_due_lateness_usec,
+		"phase":"workload_observation_before_final_save_teardown_reload",
+		"phase_status":"PASS" if failures.is_empty() else "FAIL","phase_checks":checks,"phase_failures":failures.duplicate(),
+		"final_result_authority":"complete receipt plus native runner exit and source fingerprint",
+		"generation_scope":"saved marker retention; legacy empty namespace allowed; nonempty generation NOT_RUN in this fixture",
+		"delivery_metric_scope":"tick_delivery_count counts valid damage-port attempts; ticks counts successful returns; failed/invalidated/expired are separate outcomes",
+		"metrics":runtime.metrics(),"sample_count":samples.size(),
+		"elapsed_usec":Time.get_ticks_usec()-started_usec,"wall_frame_usec":_percentiles("wall_usec"),"maximum_remaining_due_backlog_usec":maximum_remaining_due_backlog_usec,
 		"death_latency_usec":death_finished_usec-death_started_usec if death_finished_usec > 0 else -1,
 		"resource_latency_usec":stream_finished_usec-stream_started_usec if stream_finished_usec > 0 else -1,
 		"peak_states":peak_states,"peak_deaths":peak_deaths,"peak_persistence":peak_persistence,
@@ -180,13 +186,29 @@ func _run() -> void:
 		"profile_writer":PlayerState._json_persistence.work_snapshot(),"world_writer":PlayerState._world_json_persistence.work_snapshot(),"samples":samples}
 	_write(REPORT,report)
 	game._streaming_coordinator.unregister_visual(get_instance_id())
-	check(PlayerState.save_game(true,true,true),"final production durability checkpoint succeeds")
+	# Explicit fixture faults exercise the real final operations only in this
+	# test's prelaunch-isolated user directory. Production code has no fault hook.
+	var fault := OS.get_environment("HARDCORE_COMBINED_FAILURE_STAGE")
+	check(fault in ["","save","teardown","reload"],"known explicit final-stage fixture fault")
+	var original_directory: String = PlayerState.profile_directory
+	if fault == "save":
+		var blocker_path := "user://combined-save-blocker-"+OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID")
+		var blocker := FileAccess.open(blocker_path,FileAccess.WRITE)
+		check(blocker != null,"owned file blocks the injected profile directory")
+		if blocker != null: blocker.store_string("owned test write-failure boundary"); blocker.close()
+		PlayerState.profile_directory = blocker_path.path_join("profiles")
+	var saved: bool = PlayerState.save_game(true,true,true)
+	PlayerState.profile_directory = original_directory
+	check(saved,"final production durability checkpoint succeeds: "+str(PlayerState.last_save_result.get("reason","")))
 	var generation: String = PlayerState._world_clock_generation
-	game.queue_free(); await get_tree().process_frame
+	if fault != "teardown": game.queue_free()
+	await get_tree().process_frame
 	check(runtime._receipts.is_empty() and not runtime.has_work(),"explicit world teardown releases final receipt ownership")
-	check(PlayerState.select_character(profile_id) and PlayerState.experience == expected_xp,"official reload retains exactly the combined reward")
+	var reload_id := "missing-owned-fixture-profile" if fault == "reload" else profile_id
+	check(PlayerState.select_character(reload_id) and PlayerState.experience == expected_xp,"official reload retains exactly the combined reward")
 	if failures.is_empty():
 		_write(EXPECTED,{"profile_id":profile_id,"experience":expected_xp,"generation":generation,
+			"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
 			"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256"),"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID")})
 	_finish()
 
@@ -216,7 +238,10 @@ func _percentiles(field: String) -> Dictionary:
 func _write(path: String, value: Dictionary) -> void:
 	var output := FileAccess.open(path,FileAccess.WRITE)
 	check(output != null,"write owned evidence "+path.get_file())
-	if output != null: output.store_string(JSON.stringify(value)); output.close()
+	if output != null:
+		output.store_string(JSON.stringify(value)); output.flush()
+		check(output.get_error() == OK,"owned evidence write completed "+path.get_file())
+		output.close()
 
 func _finish() -> void:
 	observing = false

@@ -1,0 +1,209 @@
+{
+  "status": "PASS",
+  "recorded_utc": "2026-10-02T03:52:41.278688+00:00",
+  "scope": "nonempty production-default user root seeded before engine autoload; synthetic old-format account and exact existing v90 archive; live/cold",
+  "runs": [
+    {
+      "directory": "outputs/r3_takeover/20260930/validation/default_root_existing_prelaunch_114500_448906",
+      "checks": 37,
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_existing_test.tscn','tests/framework/default_root_upgrade_existing_cold_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "results": [
+        {
+          "test_name": "default_root_upgrade_existing_test",
+          "test_path": "tests/framework/default_root_upgrade_existing_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:45:33.1417134Z",
+          "native_exit_observed_utc": "2026-10-02T03:45:08.3946941Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "19262713-0eee-4c07-8b7f-71b95a72bde5",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "default_root_upgrade_existing_cold_test",
+          "test_path": "tests/framework/default_root_upgrade_existing_cold_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:45:39.8863448Z",
+          "native_exit_observed_utc": "2026-10-02T03:45:14.7866032Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "729d7fa8-d091-4596-bb58-b93fb672a8fa",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "content_sha256": "be3e6596fe28f73f6cec59123957494cc2749477c6620502d2db64c2170b5001",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    },
+    {
+      "directory": "outputs/r3_takeover/20260930/validation/default_root_archived_prelaunch_115009_652265",
+      "checks": 84,
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_archived_test.tscn','tests/framework/default_root_upgrade_archived_cold_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "results": [
+        {
+          "test_name": "default_root_upgrade_archived_test",
+          "test_path": "tests/framework/default_root_upgrade_archived_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:50:42.3521467Z",
+          "native_exit_observed_utc": "2026-10-02T03:50:18.2288693Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "2cf40315-9608-4cea-a864-db43faaffa40",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "default_root_upgrade_archived_cold_test",
+          "test_path": "tests/framework/default_root_upgrade_archived_cold_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:50:49.6684638Z",
+          "native_exit_observed_utc": "2026-10-02T03:50:24.8627089Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "9b445c5c-f8c2-4728-9aef-fb48feb67fb1",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "content_sha256": "78ebf4fc319caad98931a2b71eb681e38edc2cdb1f7d50c30e2da3dc232d5569",
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    }
+  ],
+  "production_edits": [],
+  "checks": 121,
+  "original_archive_sha256": "18989f8b6d0f672b653cb0237ebeb33913f46885a508b716fe8c2b1ae5ffd7de",
+  "original_archive_and_13_reference_files_before_after": "PASS",
+  "replay_driver": "tools/run_default_root_upgrade_tests.py",
+  "replay_driver_sha256": "0695d245cf591d3b2f9ff079bbc385395889a8133b7b9577b3b97eb2abf259aa",
+  "replay_commands": [
+    "py -3.12 -X utf8 tools/run_default_root_upgrade_tests.py",
+    "py -3.12 -X utf8 tools/run_default_root_upgrade_tests.py --archived"
+  ],
+  "limits": [
+    "Archive/reference data are local owned copies and are not uploaded to review.",
+    "Actual phone installation and new APK NOT_RUN.",
+    "Exact v97 B-profile defect input MISSING; these migration checks are not its causal repair.",
+    "Five previously excluded standalone synthetic migration fixtures now executed separately; immutable lifecycle review 4d1efdc is unchanged."
+  ],
+  "formal_replay_entry_verification": {
+    "directory": "outputs/r3_takeover/20260930/validation/default_root_archived_prelaunch_115334_320917",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_archived_test.tscn','tests/framework/default_root_upgrade_archived_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "archive_and_reference_preserved": true
+  },
+  "final_source_replay": {
+    "synthetic": {
+      "directory": "outputs/r3_takeover/20260930/validation/default_root_existing_prelaunch_122803_214284",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_existing_test.tscn','tests/framework/default_root_upgrade_existing_cold_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "source_content_sha256": "9fff72ada3a421ae379685b1b2ac9d80e12fbb2ddeeb846cd72960a275972c7b"
+    },
+    "archived": {
+      "directory": "outputs/r3_takeover/20260930/validation/default_root_archived_prelaunch_122854_159534",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_archived_test.tscn','tests/framework/default_root_upgrade_archived_cold_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "source_content_sha256": "9fff72ada3a421ae379685b1b2ac9d80e12fbb2ddeeb846cd72960a275972c7b"
+    }
+  }
+}

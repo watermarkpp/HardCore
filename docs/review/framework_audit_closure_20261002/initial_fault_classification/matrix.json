@@ -1,0 +1,77 @@
+{
+  "time_utc": "2026-10-02T04:53:50.556800+00:00",
+  "cases": [
+    {
+      "fault": "save",
+      "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audit_c_fault_save_125218_923910",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "tools/source176_r3_validation.py",
+        "audit_c_fault_save",
+        "--tests",
+        "tests/framework/combined_effect_lifecycle_test.tscn",
+        "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "--timeout",
+        "30"
+      ],
+      "isolated_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\combined_fault_251584fc47d4409dbc609d209fa14370",
+      "prior_expectation_sha256": "3ae285b98f321176ca43bb9f38c798419abe0c99a419a5f52b48c698b3ae3754",
+      "native_scene_status": "FAIL",
+      "failed_labels": [
+        "final production durability checkpoint succeeds: world_clock_checkpoint_failed"
+      ],
+      "negative_case_verification": "FAIL"
+    },
+    {
+      "fault": "teardown",
+      "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audit_c_fault_teardown_125250_454753",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "tools/source176_r3_validation.py",
+        "audit_c_fault_teardown",
+        "--tests",
+        "tests/framework/combined_effect_lifecycle_test.tscn",
+        "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "--timeout",
+        "30"
+      ],
+      "isolated_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\combined_fault_32f3efd31a6142a29761c2d43e9be645",
+      "prior_expectation_sha256": "3ae285b98f321176ca43bb9f38c798419abe0c99a419a5f52b48c698b3ae3754",
+      "native_scene_status": "FAIL",
+      "failed_labels": [
+        "explicit world teardown releases final receipt ownership",
+        "official reload retains exactly the combined reward"
+      ],
+      "negative_case_verification": "PASS"
+    },
+    {
+      "fault": "reload",
+      "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audit_c_fault_reload_125320_222028",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "tools/source176_r3_validation.py",
+        "audit_c_fault_reload",
+        "--tests",
+        "tests/framework/combined_effect_lifecycle_test.tscn",
+        "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "--timeout",
+        "30"
+      ],
+      "isolated_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\combined_fault_5878c0a4d720478e88b2eac1fcd8c53c",
+      "prior_expectation_sha256": "3ae285b98f321176ca43bb9f38c798419abe0c99a419a5f52b48c698b3ae3754",
+      "native_scene_status": "FAIL",
+      "failed_labels": [
+        "official reload retains exactly the combined reward"
+      ],
+      "negative_case_verification": "PASS"
+    }
+  ],
+  "status": "FAIL",
+  "scope": "Negative test verification only; the six original native FAIL results remain FAIL."
+}

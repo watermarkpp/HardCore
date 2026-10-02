@@ -1,0 +1,306 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual global owner keeps isolated stock user root",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "prelaunch copy is bound to the known archived device source",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "all thirteen archived files predate the first upgrade",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "autoload preserves exact prelaunch archive bytes audio_preferences_v2.cfg",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "autoload preserves exact prelaunch archive bytes audio_preferences_v2.cfg.bak",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "autoload preserves exact prelaunch archive bytes character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "autoload preserves exact prelaunch archive bytes character_profiles.json.bak",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "autoload preserves exact prelaunch archive bytes loot_preferences_v1.cfg",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "autoload preserves exact prelaunch archive bytes shared_warehouse.json",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "autoload preserves exact prelaunch archive bytes shared_warehouse.json.bak",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "autoload preserves exact prelaunch archive bytes characters/1788687153_5980.json",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "autoload preserves exact prelaunch archive bytes characters/1788687153_5980.json.bak",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "autoload preserves exact prelaunch archive bytes characters/1788959322_7970.json",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "autoload preserves exact prelaunch archive bytes characters/1788959322_7970.json.bak",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "autoload preserves exact prelaunch archive bytes characters/1789987860_4393.json",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "autoload preserves exact prelaunch archive bytes characters/1789987860_4393.json.bak",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "actual archive contains all three prior characters",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "nonempty default root completes real migration { \"success\": true, \"reason\": \"upgraded\", \"backup_path\": \"user://save_upgrades/framework_identity_v1\", \"profiles\": [\"1788687153_5980\", \"1788959322_7970\", \"1789987860_4393\"] }",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "default-root archive contains every original and no injected marker",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "manifest owns exact historical relative path audio_preferences_v2.cfg",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "original device bytes preserved under default source prefix audio_preferences_v2.cfg",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "manifest owns exact historical relative path audio_preferences_v2.cfg.bak",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "original device bytes preserved under default source prefix audio_preferences_v2.cfg.bak",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "manifest owns exact historical relative path character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "original device bytes preserved under default source prefix character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "manifest owns exact historical relative path character_profiles.json.bak",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "original device bytes preserved under default source prefix character_profiles.json.bak",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "manifest owns exact historical relative path loot_preferences_v1.cfg",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "original device bytes preserved under default source prefix loot_preferences_v1.cfg",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "manifest owns exact historical relative path shared_warehouse.json",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "original device bytes preserved under default source prefix shared_warehouse.json",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "manifest owns exact historical relative path shared_warehouse.json.bak",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "original device bytes preserved under default source prefix shared_warehouse.json.bak",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "manifest owns exact historical relative path characters/1788687153_5980.json",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "original device bytes preserved under default source prefix characters/1788687153_5980.json",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "manifest owns exact historical relative path characters/1788687153_5980.json.bak",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "original device bytes preserved under default source prefix characters/1788687153_5980.json.bak",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "manifest owns exact historical relative path characters/1788959322_7970.json",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "original device bytes preserved under default source prefix characters/1788959322_7970.json",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "manifest owns exact historical relative path characters/1788959322_7970.json.bak",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "original device bytes preserved under default source prefix characters/1788959322_7970.json.bak",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "manifest owns exact historical relative path characters/1789987860_4393.json",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "original device bytes preserved under default source prefix characters/1789987860_4393.json",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "manifest owns exact historical relative path characters/1789987860_4393.json.bak",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "original device bytes preserved under default source prefix characters/1789987860_4393.json.bak",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "real bank/warehouse ownership field preserved bank_gold",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "real bank/warehouse ownership field preserved bank_transaction_high_water",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "real bank/warehouse ownership field preserved bank_transactions",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "real bank/warehouse ownership field preserved revision",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "real bank/warehouse ownership field preserved legacy_migration",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "canonical service loads migrated archive role 1788687153_5980",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "historical economy and progression preserved 1788687153_5980",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "canonical service loads migrated archive role 1788959322_7970",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "historical economy and progression preserved 1788959322_7970",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "canonical service loads migrated archive role 1789987860_4393",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "historical economy and progression preserved 1789987860_4393",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "migration and official role loads consume all writer receipts",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "write cold expectation only after successful live migration",
+      "passed": true
+    }
+  ],
+  "count": 58,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "409e572d-0691-48a2-a22b-36bed06977ee",
+  "passed": 58,
+  "reported_checks": 58,
+  "reported_failures": 0,
+  "run_id": "f5c74a3d-19b5-4cb4-b5ee-d4b79f39c7f6",
+  "scene_id": "default_root_upgrade_archived_test",
+  "schema_version": 1,
+  "source_content_sha256": "9fff72ada3a421ae379685b1b2ac9d80e12fbb2ddeeb846cd72960a275972c7b",
+  "status": "PASS"
+}

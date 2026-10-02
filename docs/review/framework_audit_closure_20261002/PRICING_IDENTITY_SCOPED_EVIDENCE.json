@@ -1,0 +1,403 @@
+{
+  "status": "PASS",
+  "recorded_utc": "2026-10-02T04:16:27.143136+00:00",
+  "scope": "declared existing candidate price ownership, typed equipment valuation, policy identity validation and forge valuation",
+  "final_run": "outputs/r3_takeover/20260930/validation/pricing_identity_final_regression_121352_596627",
+  "validation": {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-Command",
+      "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/pricing_identity_test.tscn','tests/pricing_authority_test.tscn','tests/equipment_durability_policy_test.tscn','tests/hud_authority_integration_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/item_category_identity_test.tscn','tests/ui_l1/price_quote_parity_test.tscn','tests/item_catalog_test.tscn','tests/equipment_slot_migration_test.tscn' -TimeoutSeconds 30"
+    ],
+    "timeout_seconds": 30,
+    "exit_code": 0,
+    "source_stable_during_run": true,
+    "passed": 9,
+    "failed": 0,
+    "status": "PASS"
+  },
+  "results": [
+    {
+      "test_name": "pricing_identity_test",
+      "test_path": "tests/framework/pricing_identity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:14:25.5408881Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:00.7570060Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "c62afe25-a0e0-49b2-b412-6c518df28068",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "pricing_authority_test",
+      "test_path": "tests/pricing_authority_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:14:32.2000648Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:07.7241889Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "equipment_durability_policy_test",
+      "test_path": "tests/equipment_durability_policy_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:14:39.1492878Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:15.0210931Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "hud_authority_integration_test",
+      "test_path": "tests/hud_authority_integration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:14:46.4437455Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:30.5003971Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ordinary_item_identity_test",
+      "test_path": "tests/framework/ordinary_item_identity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:15:01.9329097Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:37.4855400Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "97cf0225-207f-4d9c-ac68-721445a11ddf",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "item_category_identity_test",
+      "test_path": "tests/framework/item_category_identity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:15:08.9079792Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:44.2873852Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "a3a6caf5-a159-404e-9b02-10331e0edbb2",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "price_quote_parity_test",
+      "test_path": "tests/ui_l1/price_quote_parity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:15:15.6972813Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:51.7233287Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "item_catalog_test",
+      "test_path": "tests/item_catalog_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:15:23.2529797Z",
+      "native_exit_observed_utc": "2026-10-02T04:14:58.1624592Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "equipment_slot_migration_test",
+      "test_path": "tests/equipment_slot_migration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-02T04:15:29.5710324Z",
+      "native_exit_observed_utc": "2026-10-02T04:15:05.7243619Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "checks": {
+    "item_category_identity_test.result.json": {
+      "count": 49,
+      "passed": 49,
+      "failed": 0
+    },
+    "ordinary_item_identity_test.result.json": {
+      "count": 128,
+      "passed": 128,
+      "failed": 0
+    },
+    "pricing_identity_test.result.json": {
+      "count": 93,
+      "passed": 93,
+      "failed": 0
+    }
+  },
+  "source_file_count": 3483,
+  "source_content_sha256": "6fd987ccb4c977051ce6f5f048ffe0588c3b6224c218605e24d08de2a39a3374",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "causal_red": "pricing_identity_causal_red_120335_055775:52 checks,45 business failures,no engine errors",
+  "fixture_parse_fail": "pricing_identity_red_120226_068259:test local type inference; fixed before causal proof",
+  "implementation_parse_fail": "pricing_identity_green_120607_615700:policy local type inference; fixed before green",
+  "old_parity_fixture_baseline": "pricing_parity_prior_source_121053_484522:identical 3 failures on original production/data bytes; current source restored exactly",
+  "price_parity": {
+    "old_item_prices": 179,
+    "unchanged_old_price_source_rows": 179,
+    "newly_id_addressable": {
+      "hc.item.910007": {
+        "adjusted": 5000,
+        "base_price": 5000,
+        "source": {
+          "distribution": "reference.21cq.classic_176",
+          "evidenceSha256": "337CF21733570031A686E3CA8BE38DA9089EF02085647438BEF98E566B168328",
+          "field": "出售价格",
+          "originalPath": "https://www.21cq.com/mir/View.aspx?id=48",
+          "reviewDate": "2026-09-20",
+          "tier": "project_candidate"
+        }
+      }
+    },
+    "candidate_values_and_provenance_unchanged": true
+  },
+  "candidate_owners": [
+    {
+      "display": "天魔神甲",
+      "entity_id": "hc.item.000140",
+      "price": 50000
+    },
+    {
+      "display": "圣战头盔",
+      "entity_id": "hc.item.000232",
+      "price": 35000
+    },
+    {
+      "display": "圣战项链",
+      "entity_id": "hc.item.000233",
+      "price": 35000
+    },
+    {
+      "display": "圣战手镯",
+      "entity_id": "hc.item.000234",
+      "price": 35000
+    },
+    {
+      "display": "圣战戒指",
+      "entity_id": "hc.item.000235",
+      "price": 35000
+    },
+    {
+      "display": "罗刹",
+      "entity_id": "hc.item.000088",
+      "price": 10000
+    },
+    {
+      "display": "命运之刃",
+      "entity_id": "hc.item.000110",
+      "price": 20000
+    },
+    {
+      "display": "落魄神兵",
+      "entity_id": "hc.item.000111",
+      "price": 100000
+    },
+    {
+      "display": "赤血魔剑",
+      "entity_id": "hc.item.000112",
+      "price": 20000
+    },
+    {
+      "display": "祈祷之刃",
+      "entity_id": "hc.item.000223",
+      "price": 25000
+    },
+    {
+      "display": "嗜魂法杖",
+      "entity_id": "hc.item.000109",
+      "price": 38000
+    },
+    {
+      "display": "法神披风",
+      "entity_id": "hc.item.000142",
+      "price": 50000
+    },
+    {
+      "display": "霓裳羽衣",
+      "entity_id": "hc.item.000143",
+      "price": 50000
+    },
+    {
+      "display": "天尊道袍",
+      "entity_id": "hc.item.000144",
+      "price": 50000
+    },
+    {
+      "display": "天师长袍",
+      "entity_id": "hc.item.000145",
+      "price": 50000
+    },
+    {
+      "display": "法神项链",
+      "entity_id": "hc.item.000237",
+      "price": 35000
+    },
+    {
+      "display": "天尊项链",
+      "entity_id": "hc.item.000241",
+      "price": 35000
+    },
+    {
+      "display": "神秘腰带",
+      "entity_id": "hc.item.000219",
+      "price": 100
+    },
+    {
+      "display": "魔力手镯",
+      "entity_id": "hc.item.000186",
+      "price": 8000
+    },
+    {
+      "display": "黑铁手套",
+      "entity_id": "hc.item.000196",
+      "price": 15000
+    },
+    {
+      "display": "法神手镯",
+      "entity_id": "hc.item.000238",
+      "price": 35000
+    },
+    {
+      "display": "天尊手镯",
+      "entity_id": "hc.item.000242",
+      "price": 35000
+    },
+    {
+      "display": "防御戒指",
+      "entity_id": "hc.item.000255",
+      "price": 20000
+    },
+    {
+      "display": "求婚戒指",
+      "entity_id": "hc.item.000260",
+      "price": 1000
+    },
+    {
+      "display": "法神戒指",
+      "entity_id": "hc.item.000239",
+      "price": 35000
+    },
+    {
+      "display": "天尊戒指",
+      "entity_id": "hc.item.000243",
+      "price": 35000
+    },
+    {
+      "display": "精灵头盔",
+      "entity_id": "hc.item.000146",
+      "price": 10
+    },
+    {
+      "display": "法神头盔",
+      "entity_id": "hc.item.000236",
+      "price": 35000
+    },
+    {
+      "display": "天尊头盔",
+      "entity_id": "hc.item.000240",
+      "price": 35000
+    },
+    {
+      "display": "苹果",
+      "entity_id": "hc.service_item.000674",
+      "price": 500
+    },
+    {
+      "display": "疗伤药",
+      "entity_id": "hc.item.910007",
+      "price": 5000
+    }
+  ],
+  "new_entity_ids": [],
+  "registry_unchanged": true,
+  "limits": [
+    "Legacy service-catalog names remain only in the explicit old catalog import boundary; compatibility/UI lookup APIs remain.",
+    "Forge valuation is a utility API; this is not a new recipe or a claim of natural forge UI execution.",
+    "Prior capacity/receipt/P6/v97/device gates remain independent and open."
+  ]
+}

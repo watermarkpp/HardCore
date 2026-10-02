@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process uses actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer supplied explicit expectation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold expectation binds the runner-confirmed successful native producer in this invocation",
+      "passed": false
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "f462bc53-9cd9-4ef3-9853-d974f2d9323f",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "22c25ff1-98b4-40ef-977f-7091b0af6680",
+  "scene_id": "combined_effect_lifecycle_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "dfff3bb9ca79bb93c9480f7186acd5c48a73d27c54fdf6bd798983db62312e4d",
+  "status": "FAIL"
+}

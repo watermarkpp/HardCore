@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/pricing_identity_test.tscn','tests/pricing_authority_test.tscn','tests/equipment_durability_policy_test.tscn','tests/hud_authority_integration_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/item_category_identity_test.tscn','tests/ui_l1/price_quote_parity_test.tscn','tests/item_catalog_test.tscn','tests/equipment_slot_migration_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 9,
+  "failed": 0,
+  "status": "PASS"
+}

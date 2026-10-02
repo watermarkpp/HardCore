@@ -1,0 +1,65 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real persistence enabled inside dedicated prelaunch APPDATA",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "startup gate completed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real disposable profile created",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real profile persisted before evidence failure",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual cold entry rejects stale or failed producer before recovery: current_failed",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: current_failed",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "actual cold entry rejects stale or failed producer before recovery: old_invocation",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: old_invocation",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "actual cold entry rejects stale or failed producer before recovery: wrong_run",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: wrong_run",
+      "passed": false
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 6,
+  "passed": 4,
+  "reported_checks": 10,
+  "reported_failures": 6,
+  "run_id": "dcdbde69-4831-45ab-8d35-9dd59795c6e6",
+  "scene_id": "combined_cold_receipt_gate_test",
+  "schema_version": 1,
+  "source_content_sha256": "4a505c241bafc2e7260c7065031454fa6f9a636b4689b5571960cfcee6ea1f5e",
+  "status": "FAIL"
+}

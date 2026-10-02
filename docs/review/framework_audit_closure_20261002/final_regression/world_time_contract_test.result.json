@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "identity views are immutable accepted values",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "views read the actual Root and PlayerState authorities",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "old world identity is invalidated by the existing zone generation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "a map change does not invalidate the character ledger identity",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "world replacement cannot replenish the application frame budget",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "240 fractional physics deltas retain exactly four seconds at microsecond precision",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "paused time cannot create simulation catch-up debt",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "empty extension physics callbacks do not advance an unused new simulation domain",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "switching character invalidates the former receipt identity",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "context holds no strong world reference after owner destruction",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "d0bd8db2-91ce-49a2-bc50-1360bdd71b04",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "4d11593b-11ec-4a14-b488-1e8d069fc9a3",
+  "scene_id": "world_time_contract_test",
+  "schema_version": 1,
+  "source_content_sha256": "dfff3bb9ca79bb93c9480f7186acd5c48a73d27c54fdf6bd798983db62312e4d",
+  "status": "PASS"
+}

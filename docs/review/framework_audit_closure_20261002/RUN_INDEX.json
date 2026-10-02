@@ -1,0 +1,287 @@
+{
+  "delivery_causal_red": {
+    "local_run": "periodic_delivery_lateness_red_121828_702843",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_delivery_lateness_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "cold_receipt_causal_red": {
+    "local_run": "combined_cold_receipt_gate_red_122121_924681",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_cold_receipt_gate_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "native_handoff_causal_red": {
+    "local_run": "audit_b_native_handoff_red_124403_860452",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_cold_receipt_gate_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "handoff_environment_failure": {
+    "local_run": "audit_b_native_handoff_green_124609_412895",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_cold_receipt_gate_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": null,
+      "failed": null,
+      "status": "FAIL"
+    }
+  },
+  "delivery_fixture_parse_failure": {
+    "local_run": "audit_a_boundary_matrix_124904_832466",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_delivery_lateness_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "cold_gate_final": {
+    "local_run": "audit_b_final_matrix_125453_421079",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_cold_receipt_gate_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_regression": {
+    "local_run": "audit_abcd_final_regression_125539_313381",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/world_time_contract_test.tscn','tests/framework/resource_completion_cursor_test.tscn','tests/framework/paused_persistence_receipt_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/profile_gameplay_owner_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 17,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "pricing_causal_red": {
+    "local_run": "pricing_identity_causal_red_120335_055775",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/pricing_identity_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "pricing_final": {
+    "local_run": "pricing_identity_final_regression_121352_596627",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/pricing_identity_test.tscn','tests/pricing_authority_test.tscn','tests/equipment_durability_policy_test.tscn','tests/hud_authority_integration_test.tscn','tests/framework/ordinary_item_identity_test.tscn','tests/framework/item_category_identity_test.tscn','tests/ui_l1/price_quote_parity_test.tscn','tests/item_catalog_test.tscn','tests/equipment_slot_migration_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 9,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "pricing_prior_fixture_baseline": {
+    "local_run": "pricing_parity_prior_source_121053_484522",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/ui_l1/price_quote_parity_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "default_root_synthetic": {
+    "local_run": "default_root_existing_prelaunch_122803_214284",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_existing_test.tscn','tests/framework/default_root_upgrade_existing_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "default_root_archived": {
+    "local_run": "default_root_archived_prelaunch_122854_159534",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/default_root_upgrade_archived_test.tscn','tests/framework/default_root_upgrade_archived_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "fault_save": {
+    "local_run": "audit_c_fault_save_125842_763617",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    }
+  },
+  "fault_teardown": {
+    "local_run": "audit_c_fault_teardown_125913_900647",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    }
+  },
+  "fault_reload": {
+    "local_run": "audit_c_fault_reload_125943_830364",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    }
+  }
+}

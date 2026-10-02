@@ -1890,6 +1890,13 @@ func _load_equipment_price_candidates() -> void:
 	var file := FileAccess.open(EQUIPMENT_PRICE_CANDIDATES_PATH, FileAccess.READ)
 	var parsed: Variant = JSON.parse_string(file.get_as_text()) if file != null else null
 	if parsed is Dictionary:
+		var owners := {}
+		for row: Variant in parsed.get("records", []):
+			var owner := _price_candidate_owner(row)
+			if owner.is_empty() or owners.has(owner.id):
+				push_error("Price candidate identity is unknown, conflicting or repeated")
+				return
+			owners[owner.id] = true
 		equipment_price_candidates = parsed
 	else:
 		push_warning("装备价格候选文件不是有效JSON：%s" % EQUIPMENT_PRICE_CANDIDATES_PATH)
@@ -2666,17 +2673,20 @@ func _register_price_record(raw: Variant) -> void:
 	var source_name := str(source_record.get("name", source_record.get("serviceName", "")))
 	var canonical_name := _canonical_item_name(source_name)
 	var base_price := maxi(0, int(source_record.get("price", 0)))
-	if canonical_name.is_empty() or base_price <= 0 or _price_by_name.has(canonical_name):
+	if canonical_name.is_empty() or base_price <= 0:
 		return
 	var service_index := _service_index(source_record)
 	var item_id := _stable_item_id(source_record)
-	# Candidate equipment records intentionally omit itemId because their source
-	# only carries the official item name. Resolve that identity against the
-	# already-loaded primary runtime item table; the candidate still supplies
-	# only the missing price and never replaces an existing primary record.
-	if item_id < 0:
+	if source_record.has("entity_id"):
+		var owner := _price_candidate_owner(source_record)
+		if owner.is_empty(): return
+		item_id = int(owner.legacy_id) if owner.kind == "item" else -1
+		service_index = int(owner.legacy_id) if owner.kind == "service_item" else -1
+	elif item_id < 0 and service_index >= 0:
+		# Explicit old server-catalog import boundary. Candidate authoring carries
+		# a registered identity and never enters this historical name translation.
 		item_id = _item_id_for_name(canonical_name)
-	if service_index < 0 and str(source_record.get("kind", "")) == "equipment" and item_id < 0:
+	if service_index < 0 and item_id < 0:
 		return
 	if service_index >= 0 and _price_by_service_index.has(service_index):
 		return
@@ -2687,9 +2697,9 @@ func _register_price_record(raw: Variant) -> void:
 			"service:%d" % service_index
 			if service_index >= 0
 			else "item:%d" % item_id
-			if item_id >= 0
-			else "name:%s" % canonical_name
 		),
+		"entity_id": EntityRegistry.canonical(EntityRegistry.from_legacy("item", item_id)) if item_id >= 0
+			else EntityRegistry.canonical(EntityRegistry.from_legacy("service_item", service_index)),
 		"item_name": canonical_name,
 		"item_id": item_id,
 		"service_index": service_index,
@@ -2703,11 +2713,25 @@ func _register_price_record(raw: Variant) -> void:
 	if not ItemCategories.attach_source_category(price_record):
 		_item_category_error = "unknown_price_category"
 		return
-	_price_by_name[canonical_name] = price_record
+	if not _price_by_name.has(canonical_name):
+		_price_by_name[canonical_name] = price_record
 	if service_index >= 0:
 		_price_by_service_index[service_index] = price_record
 	if item_id >= 0:
 		_price_by_item_id[item_id] = price_record
+
+
+func _price_candidate_owner(row: Variant) -> Dictionary:
+	if not row is Dictionary or not row.get("entity_id") is String: return {}
+	var owner := EntityRegistry.resolve(EntityRegistry.canonical(row.entity_id))
+	if owner.get("kind") not in ["item", "service_item"]: return {}
+	for key: String in ["item_id", "itemId", "stableItemId", "id", "service_index", "serviceIndex"]:
+		if not row.has(key): continue
+		var value: Variant = row[key]
+		var kind := "service_item" if key in ["service_index", "serviceIndex"] else "item"
+		var declared := EntityRegistry.from_legacy(kind, value)
+		if declared.is_empty() or EntityRegistry.canonical(declared) != owner.id: return {}
+	return owner
 
 
 func _register_catalog_item(record: Dictionary) -> void:
@@ -3755,8 +3779,8 @@ func validate_item_drop_instance(instance: Dictionary) -> bool:
 		_item_record_for_read({"item_id": base.get("item_id", -1)}))
 
 
-func get_item_shop_price(item_name: String) -> int:
-	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_name))
+func get_item_shop_price(item_ref: Variant) -> int:
+	return PricingServiceScript.adjusted_database_price(get_item_price_record(item_ref))
 
 
 func get_item_price_records_by_name(item_names: Array) -> Dictionary:
@@ -3787,6 +3811,13 @@ func get_item_price_record(item_ref: Variant) -> Dictionary:
 
 
 func _get_item_price_record(item_ref: Variant, name_id_snapshot: Dictionary = {}) -> Dictionary:
+	if item_ref is Dictionary:
+		item_ref = item_ref.duplicate()
+		for source_key: String in ["itemId", "serviceIndex"]:
+			if not item_ref.has(source_key): continue
+			var runtime_key := "item_id" if source_key == "itemId" else "service_index"
+			if item_ref.has(runtime_key) and item_ref[runtime_key] != item_ref[source_key]: return {}
+			item_ref[runtime_key] = item_ref[source_key]
 	# Price-only service SKUs also include the existing equipment source lane;
 	# their numeric source identity need not be an inventory-ownable service item.
 	if not _valid_explicit_item_reference(item_ref, false):

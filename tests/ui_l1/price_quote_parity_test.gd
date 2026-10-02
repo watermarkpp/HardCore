@@ -36,21 +36,31 @@ func _run() -> void:
 	for i in 100:
 		GameData.get_item_price_record({"item_id": chosen_id})
 	expect(GameData._ui_l1_price_maintenance_count == maintenance_before, "100 resolved ID reads must do zero overlay maintenance")
-	# Missing stronger service ID may NOT reuse a weaker existing item hit.
+	# Conflicting formal identities are rejected before any lookup; a missing
+	# service-only reference still takes the real overlay maintenance path.
 	maintenance_before = GameData._ui_l1_price_maintenance_count
-	GameData.get_item_price_record({"service_index": 2147483646, "item_id": chosen_id})
-	expect(GameData._ui_l1_price_maintenance_count == maintenance_before + 1, "missing stronger identity executes original maintenance")
+	var conflict := GameData.get_item_price_record({"service_index": 2147483646, "item_id": chosen_id})
+	expect(conflict.is_empty() and GameData._ui_l1_price_maintenance_count == maintenance_before, "conflicting identity rejects before maintenance")
+	var missing := GameData.get_item_price_record({"service_index": 2147483646})
+	expect(missing.is_empty() and GameData._ui_l1_price_maintenance_count == maintenance_before + 1, "missing service-only identity executes maintenance without item fallback")
 	# Clearing/rebuilding the index is observed immediately; no independent cache.
 	GameData._price_by_name.clear()
 	maintenance_before = GameData._ui_l1_price_maintenance_count
 	GameData.get_item_price_record({"item_id": chosen_id})
 	expect(GameData._ui_l1_price_maintenance_count == maintenance_before + 1, "cleared index rebuild is not hidden by cache")
-	# A newly introduced row uses the original first-wins overlay path.
-	GameData.equipment_price_candidates = {"records": [{"name": "UIL1_SYNTHETIC_PRICE", "price": 123, "kind": "consumable", "serviceIndex": 2147483000}]}
-	var newly_loaded: Dictionary = GameData.get_item_price_record({"service_index": 2147483000})
-	expect(not newly_loaded.is_empty() and int(newly_loaded.get("base_price", 0)) == 123, "new candidate remains discoverable")
-	GameData.equipment_price_candidates = {"records": [{"name": "UIL1_SYNTHETIC_PRICE_2", "price": 124, "kind": "consumable", "serviceIndex": 2147483001}]}
-	expect(not GameData.get_item_price_record({"service_index": 2147483001}).is_empty(), "same-size candidate replacement remains discoverable")
+	# Use actual registered source rows. Old fabricated IDs without categories
+	# violate the identity contract before the overlay behavior can be tested.
+	var candidate_source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/data/equipment_price_candidates_v1.json"))
+	var first: Dictionary = candidate_source.records[0].duplicate(true)
+	var second: Dictionary = candidate_source.records[1].duplicate(true)
+	for item_id: int in [140, 232]: GameData._price_by_item_id.erase(item_id)
+	for item_name: String in [first.name, second.name]: GameData._price_by_name.erase(item_name)
+	GameData.equipment_price_candidates = {"records": [first]}
+	var newly_loaded: Dictionary = GameData.get_item_price_record("hc.item.000140")
+	expect(not newly_loaded.is_empty() and int(newly_loaded.get("base_price", 0)) == 50000, "new candidate remains discoverable")
+	GameData.equipment_price_candidates = {"records": [second]}
+	var replaced: Dictionary = GameData.get_item_price_record("hc.item.000232")
+	expect(not replaced.is_empty() and int(replaced.get("base_price", 0)) == 35000, "same-size candidate replacement remains discoverable")
 	for key: String in saved:
 		GameData.set(key, saved[key])
 	var quote_rows_checked := 0

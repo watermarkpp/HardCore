@@ -376,7 +376,7 @@ func _run() -> void:
 	custom["modifiers"]["itemBps"] = {"service:221": 7000}
 	assert(PricingServiceScript.adjusted_database_price(wood, custom) == 32)
 	var forge := PricingServiceScript.estimate_forge_materials(
-		[{"item_name": "木剑", "quantity": 2}], {"木剑": wood}, custom
+		[{"entity_id": "hc.item.000080", "item_name": "木剑", "quantity": 2}], {"hc.item.000080": wood}, custom
 	)
 	assert(bool(forge.get("valid", false)) and int(forge.get("total_value", 0)) == 64)
 

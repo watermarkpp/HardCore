@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "independent process receives real default upgrade expectation and receipt",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cold expectation binds successful producer and exact source",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold owner retains default production authority",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold default startup verifies completed archive without reconversion",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cold gate preserves completed primary bytes",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cold original before-image hash character_profiles.json",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold original before-image hash characters/default_root_A.json",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold immutable manifest and completion receipt",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "independent process loads preserved default progress",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "owned synthetic archive fault is exact and writable",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "damaged default archive closes actual admission despite completion marker",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "damaged before-image cannot admit profile or recover an old primary",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "failed default backup verification changes no account primary bytes",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "failed gate does not replace original manifest or completion receipt",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "cold verification and failure leave no accepted writer receipt",
+      "passed": true
+    }
+  ],
+  "count": 15,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "60c286c3-3d96-45dc-9121-50b79d25d215",
+  "passed": 15,
+  "reported_checks": 15,
+  "reported_failures": 0,
+  "run_id": "d2e4a4f4-c12e-443d-86e4-85add2fd5165",
+  "scene_id": "default_root_upgrade_existing_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "9fff72ada3a421ae379685b1b2ac9d80e12fbb2ddeeb846cd72960a275972c7b",
+  "status": "PASS"
+}

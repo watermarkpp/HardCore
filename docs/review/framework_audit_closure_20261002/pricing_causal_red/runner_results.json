@@ -1,0 +1,30 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "pricing_identity_test",
+                        "test_path":  "tests/framework/pricing_identity_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T04:04:07.5365021Z",
+                        "native_exit_observed_utc":  "2026-10-02T04:03:42.7726668Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "411e35e4-eff9-406e-b80c-cb911b5cd7a0",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T12:03:43.8843154+08:00",
+    "total":  1,
+    "failed":  1
+}

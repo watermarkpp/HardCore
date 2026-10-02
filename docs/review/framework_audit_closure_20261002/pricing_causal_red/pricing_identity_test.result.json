@@ -1,0 +1,275 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual catalogs are loaded",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "existing base price and user-authorized bracelet price remain exact",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "price/provenance census has an owned evidence path",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "equipment reference valuation does not use display name",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "equipment repair valuation does not use display name",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "unknown explicit equipment identity cannot use a familiar display name",
+      "passed": false
+    },
+    {
+      "id": 7,
+      "label": "policy accepts the registered item identity",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "policy adjustment follows identity after display rename",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "invalid policy identity rejects the whole quote: 木剑",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "nested repair cannot reload default policy after invalid identity: 木剑",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "invalid policy identity rejects the whole quote: hc.item.999999",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "nested repair cannot reload default policy after invalid identity: hc.item.999999",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "invalid policy identity rejects the whole quote: hc.skill.warrior.thrusting",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "nested repair cannot reload default policy after invalid identity: hc.skill.warrior.thrusting",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "two policy keys cannot own the same price source",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "forge valuation keys supplied records by registered identity",
+      "passed": false
+    },
+    {
+      "id": 17,
+      "label": "forge valuation rejects a display-only material",
+      "passed": false
+    },
+    {
+      "id": 18,
+      "label": "forge record owner must match the requested identity",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "all 31 existing candidates remain present",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "candidate has a registered owner: 天魔神甲",
+      "passed": false
+    },
+    {
+      "id": 21,
+      "label": "candidate has a registered owner: 圣战头盔",
+      "passed": false
+    },
+    {
+      "id": 22,
+      "label": "candidate has a registered owner: 圣战项链",
+      "passed": false
+    },
+    {
+      "id": 23,
+      "label": "candidate has a registered owner: 圣战手镯",
+      "passed": false
+    },
+    {
+      "id": 24,
+      "label": "candidate has a registered owner: 圣战戒指",
+      "passed": false
+    },
+    {
+      "id": 25,
+      "label": "candidate has a registered owner: 罗刹",
+      "passed": false
+    },
+    {
+      "id": 26,
+      "label": "candidate has a registered owner: 命运之刃",
+      "passed": false
+    },
+    {
+      "id": 27,
+      "label": "candidate has a registered owner: 落魄神兵",
+      "passed": false
+    },
+    {
+      "id": 28,
+      "label": "candidate has a registered owner: 赤血魔剑",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "label": "candidate has a registered owner: 祈祷之刃",
+      "passed": false
+    },
+    {
+      "id": 30,
+      "label": "candidate has a registered owner: 嗜魂法杖",
+      "passed": false
+    },
+    {
+      "id": 31,
+      "label": "candidate has a registered owner: 法神披风",
+      "passed": false
+    },
+    {
+      "id": 32,
+      "label": "candidate has a registered owner: 霓裳羽衣",
+      "passed": false
+    },
+    {
+      "id": 33,
+      "label": "candidate has a registered owner: 天尊道袍",
+      "passed": false
+    },
+    {
+      "id": 34,
+      "label": "candidate has a registered owner: 天师长袍",
+      "passed": false
+    },
+    {
+      "id": 35,
+      "label": "candidate has a registered owner: 法神项链",
+      "passed": false
+    },
+    {
+      "id": 36,
+      "label": "candidate has a registered owner: 天尊项链",
+      "passed": false
+    },
+    {
+      "id": 37,
+      "label": "candidate has a registered owner: 神秘腰带",
+      "passed": false
+    },
+    {
+      "id": 38,
+      "label": "candidate has a registered owner: 魔力手镯",
+      "passed": false
+    },
+    {
+      "id": 39,
+      "label": "candidate has a registered owner: 黑铁手套",
+      "passed": false
+    },
+    {
+      "id": 40,
+      "label": "candidate has a registered owner: 法神手镯",
+      "passed": false
+    },
+    {
+      "id": 41,
+      "label": "candidate has a registered owner: 天尊手镯",
+      "passed": false
+    },
+    {
+      "id": 42,
+      "label": "candidate has a registered owner: 防御戒指",
+      "passed": false
+    },
+    {
+      "id": 43,
+      "label": "candidate has a registered owner: 求婚戒指",
+      "passed": false
+    },
+    {
+      "id": 44,
+      "label": "candidate has a registered owner: 法神戒指",
+      "passed": false
+    },
+    {
+      "id": 45,
+      "label": "candidate has a registered owner: 天尊戒指",
+      "passed": false
+    },
+    {
+      "id": 46,
+      "label": "candidate has a registered owner: 精灵头盔",
+      "passed": false
+    },
+    {
+      "id": 47,
+      "label": "candidate has a registered owner: 法神头盔",
+      "passed": false
+    },
+    {
+      "id": 48,
+      "label": "candidate has a registered owner: 天尊头盔",
+      "passed": false
+    },
+    {
+      "id": 49,
+      "label": "candidate has a registered owner: 苹果",
+      "passed": false
+    },
+    {
+      "id": 50,
+      "label": "candidate has a registered owner: 疗伤药",
+      "passed": false
+    },
+    {
+      "id": 51,
+      "label": "candidate cannot replace primary by changing its display",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "unknown explicit candidate cannot claim a known display",
+      "passed": true
+    }
+  ],
+  "count": 52,
+  "engine_version": "4.7-stable (official)",
+  "failed": 45,
+  "passed": 7,
+  "reported_checks": 52,
+  "reported_failures": 45,
+  "run_id": "411e35e4-eff9-406e-b80c-cb911b5cd7a0",
+  "scene_id": "pricing_identity_test",
+  "schema_version": 1,
+  "source_content_sha256": "7797a0fc9af9a41edfe8db9e7e1c47a2f95ff5e584b33afb8936e8afc59da900",
+  "status": "FAIL"
+}

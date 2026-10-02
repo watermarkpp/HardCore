@@ -23,7 +23,8 @@ var _receipts: Dictionary = {}
 var _heap := Heap.new()
 var _presentation: RefCounted
 var _prefer_due := true
-var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0}
+var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
+	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0}
 var errors: Array[String] = []
 
 func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation: RefCounted = null) -> bool:
@@ -162,6 +163,13 @@ func _tick_one() -> void:
 	var source: Node2D = state.source.resolve(false) as Node2D if state.source != null else null
 	var rng := RandomNumberGenerator.new()
 	rng.seed = JSON.stringify(["hc.rng.periodic.v1",handle,int(state.next_due)]).sha256_text().substr(0,15).hex_to_int()
+	# Count valid damage-port delivery attempts, including a rejected port call.
+	# `ticks` counts successful returns, `failed` rejected returns; invalidated
+	# and expired states never reach this boundary. Heap sampling after service
+	# misses late work that has already been consumed in this frame.
+	_stats.tick_delivery_count += 1
+	_stats.maximum_tick_delivery_lateness_usec = maxi(int(_stats.maximum_tick_delivery_lateness_usec),
+		maxi(0,_clock.simulation_usec()-int(state.next_due)))
 	var result: Dictionary = combat.apply_feature_periodic_damage(target,int(state.raw_per_tick),source,rng,state.command.historical_credit)
 	if not bool(result.success):
 		_error(str(result.reason)); _stats.failed += 1; _stop(handle); return

@@ -33,6 +33,7 @@ $ProcessPath = [Environment]::GetEnvironmentVariable('Path', 'Process')
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'test_framework_receipt.ps1')
 $PreviousFrameworkRunId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', 'Process')
+$PreviousFrameworkInvocationId = [Environment]::GetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', 'Process')
 $FrameworkEnvironmentCaptured = $true
 $Godot = Join-Path $ProjectRoot 'tools\godot-4.7\Godot_v4.7-stable_win64_console.exe'
 $GodotDirectory = Split-Path -Parent $Godot
@@ -1177,9 +1178,28 @@ if ($SelectedIncludesStreaming -and $TimeoutSeconds -lt $MonsterStreamingBudgetF
     )
 }
 $StructuredResults = @()
+# One native invocation owns its live/cold evidence pair. A source hash alone
+# cannot distinguish a successful prior invocation from the current failed one.
+[Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', [Guid]::NewGuid().ToString(), 'Process')
+$NativeHandoffPath = Join-Path $ProjectReportRoot 'framework\native_handoffs.json'
+New-Item -ItemType Directory -Path (Split-Path -Parent $NativeHandoffPath) -Force | Out-Null
+$NativeHandoffs = [ordered]@{
+    schema_version = 1
+    invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
+    source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
+    producers = [ordered]@{}
+}
+# Reset before any child can fail early and leave a prior receipt untouched.
+[IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
 foreach ($testPath in $SelectedTests) {
     $testName = [IO.Path]::GetFileNameWithoutExtension($testPath)
     $isFramework = $testPath.Replace('\', '/') -match '^tests/framework/(?:[^/]+/)*[^/]+\.tscn$'
+    if ($isFramework) {
+        # An explicit test list may repeat a scene. Its second failed producer
+        # must not inherit the first successful producer in this invocation.
+        $NativeHandoffs.producers.Remove($testName)
+        [IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
+    }
     $frameworkRunId = if ($isFramework) { [Guid]::NewGuid().ToString() } else { '' }
     [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', $frameworkRunId, 'Process')
     $stdout = Join-Path $LogRoot "$testName.stdout.log"
@@ -1330,6 +1350,9 @@ foreach ($testPath in $SelectedTests) {
         $frameworkReceipt = Test-FrameworkReceipt -Path $frameworkReceiptPath -ExpectedRunId $frameworkRunId `
             -ExpectedSceneId $testName -ExpectedContentSha256 $env:HARDCORE_R3_CONTENT_SHA256
         if (-not $frameworkReceipt.valid) { $reasons += $frameworkReceipt.reasons }
+        elseif ((Get-Content -LiteralPath $frameworkReceiptPath -Raw | ConvertFrom-Json).invocation_id -ne $env:HARDCORE_FRAMEWORK_INVOCATION_ID) {
+            $reasons += 'framework_invocation_mismatch'
+        }
     }
     $result = 'PASS'
     if ($reasons.Count -gt 0) {
@@ -1354,6 +1377,23 @@ foreach ($testPath in $SelectedTests) {
         result = $result
         reason = ($reasons -join ';')
     }
+    if ($isFramework -and $result -eq 'PASS') {
+        # The child cannot attest to its own native exit. Only this validated
+        # runner result makes its exact receipt eligible for a later cold test.
+        $ReceiptHasher = [Security.Cryptography.SHA256]::Create()
+        try { $ReceiptHash = [BitConverter]::ToString($ReceiptHasher.ComputeHash([IO.File]::ReadAllBytes($frameworkReceiptPath))).Replace('-', '').ToLowerInvariant() }
+        finally { $ReceiptHasher.Dispose() }
+        $NativeHandoffs.producers[$testName] = [ordered]@{
+            scene_id = $testName
+            run_id = $frameworkRunId
+            source_content_sha256 = $env:HARDCORE_R3_CONTENT_SHA256
+            process_exited = $processExited
+            effective_exit_code = $finalEffectiveExitCode
+            result = $result
+            receipt_sha256 = $ReceiptHash
+        }
+        [IO.File]::WriteAllText($NativeHandoffPath, ($NativeHandoffs | ConvertTo-Json -Depth 8), (New-Object Text.UTF8Encoding($false)))
+    }
     if ($result -eq 'FAIL') {
         $reason = if ($reasons.Count -gt 0) { $reasons -join ';' } else { 'unknown' }
         Write-Host "[FAIL] $testName - $reason" -ForegroundColor Red
@@ -1373,6 +1413,7 @@ foreach ($resultEntry in $StructuredResults) {
 $resultsFilePath = Join-Path $LogRoot ("runner_results_{0}_{1}_{2}.json" -f $EffectiveSuite, (Get-Date -Format 'yyyyMMdd_HHmmss_fff'), $PID)
 @{
     suite = $EffectiveSuite
+    invocation_id = $env:HARDCORE_FRAMEWORK_INVOCATION_ID
     generated_at = (Get-Date -Format o)
     git_head = (& git -C $ProjectRoot rev-parse HEAD 2>$null | Out-String).Trim()
     total = $StructuredResults.Count
@@ -1393,6 +1434,7 @@ exit 0
 } finally {
     if ($FrameworkEnvironmentCaptured) {
         [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_RUN_ID', $PreviousFrameworkRunId, 'Process')
+        [Environment]::SetEnvironmentVariable('HARDCORE_FRAMEWORK_INVOCATION_ID', $PreviousFrameworkInvocationId, 'Process')
     }
     if ($RunnerLockHeld) { $RunnerMutex.ReleaseMutex() }
     $RunnerMutex.Dispose()

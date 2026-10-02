@@ -1,4 +1,5 @@
 extends Node
+const Gate := preload("res://tests/framework/helpers/native_producer_gate.gd")
 const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
 const EXPECTED_PATH := "res://outputs/test_logs/framework/periodic_credit_safe_logout_expected.json"
 var proof := Proof.new()
@@ -14,10 +15,7 @@ func _run() -> void:
 	check(exists,"cold expectation and producer receipt exist")
 	if not exists: _finish(); return
 	var expected: Variant = JSON.parse_string(FileAccess.get_file_as_string(EXPECTED_PATH))
-	var producer: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://outputs/test_logs/framework/periodic_credit_safe_logout_test.result.json"))
-	var valid: bool = expected is Dictionary and producer is Dictionary and producer.get("status") == "PASS" \
-		and producer.get("run_id") == expected.get("producer_run_id") \
-		and expected.get("source_content_sha256") == OS.get_environment("HARDCORE_R3_CONTENT_SHA256")
+	var valid := Gate.accepts(expected,"periodic_credit_safe_logout_test")
 	check(valid,"cold expectation binds the successful live producer and this exact source set")
 	if not valid: _finish(); return
 	check(PlayerState.profile_directory == expected.profile_directory and PlayerState.shared_warehouse_path == expected.shared_warehouse_path,"cold process retains the same actual production storage authority")

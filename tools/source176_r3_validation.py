@@ -106,6 +106,23 @@ def main():
         if source.is_file() and source.stat().st_mtime >= invocation_start:
             (dest / "framework").mkdir(exist_ok=True)
             shutil.copy2(source, dest / "framework" / source.name)
+    # Archive only this invocation's runner-owned association and producer
+    # artifacts. A failed live run may leave older files, which are not proof.
+    owned = ROOT / "outputs/test_logs/framework"
+    handoff_path = owned / "native_handoffs.json"
+    if handoff_path.is_file():
+        handoff = json.loads(handoff_path.read_text(encoding="utf-8-sig"))
+        if handoff.get("invocation_id") == report.get("invocation_id"):
+            (dest / "framework").mkdir(exist_ok=True)
+            shutil.copy2(handoff_path, dest / "framework" / handoff_path.name)
+    for row in report.get("results", []):
+        for suffix, id_field in (("_trace.json", "run_id"), ("_expected.json", "producer_run_id")):
+            source = owned / (row["test_name"].removesuffix("_test") + suffix)
+            if source.is_file():
+                artifact = json.loads(source.read_text(encoding="utf-8-sig"))
+                if artifact.get(id_field) == row.get("framework_run_id"):
+                    (dest / "framework").mkdir(exist_ok=True)
+                    shutil.copy2(source, dest / "framework" / source.name)
     after = fingerprint()
     write(dest / "after.json", after)
     stable = before["files"] == after["files"] and before["engine_sha256"] == after["engine_sha256"]

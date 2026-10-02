@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "files": {
+    "characters/default_root_A.json": {
+      "save_version": 7,
+      "profile_id": "default_root_A",
+      "character_name": "DefaultRoot",
+      "profession": "战士",
+      "gender": "男",
+      "level": 25,
+      "experience": 1234,
+      "gold": 456789,
+      "inventory": [],
+      "equipment": {},
+      "learned_skills": {"基本剑术": 2},
+      "quick_slots": ["", "", "", ""],
+      "quest_states": {},
+      "warehouse_inventory": []
+    },
+    "character_profiles.json": {"version": 1, "profiles": [{"id": "default_root_A"}]}
+  }
+}

@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "periodic_delivery_lateness_test",
+                        "test_path":  "tests/framework/periodic_delivery_lateness_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-02T04:49:37.2320820Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  2,
+                        "engine_log_failure_count":  2,
+                        "framework_run_id":  "6b136d92-7218-4fa8-b0a4-17f3fc0a4952",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_2;engine_log_failures_2;framework_receipt_wrong_run;framework_receipt_wrong_source"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "c084befb-2bfc-49a1-91b3-7305063ba541",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  2,
+    "generated_at":  "2026-10-02T12:49:10.9516819+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

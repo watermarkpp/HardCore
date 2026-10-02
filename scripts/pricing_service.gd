@@ -4,6 +4,7 @@ extends RefCounted
 const CONTRACT_ID := "gameplay.pricing.authority.v1"
 const POLICY_PATH := "res://assets/data/pricing_policy_v1.json"
 const ItemCategories := preload("res://scripts/identity/item_category_identity.gd")
+const EntityIds := preload("res://scripts/identity/entity_registry.gd")
 const BPS_DENOMINATOR := 10000
 
 static var _cached_policy: Dictionary = {}
@@ -30,7 +31,7 @@ static func _adjusted_database_price_resolved(
 	price_record: Dictionary, active: Dictionary
 ) -> int:
 	var base_price := maxi(0, int(price_record.get("base_price", 0)))
-	if base_price <= 0:
+	if base_price <= 0 or active.is_empty():
 		return 0
 	var modifiers: Dictionary = active.get("modifiers", {})
 	var value := _apply_bps(base_price, int(modifiers.get("globalBps", BPS_DENOMINATOR)))
@@ -38,8 +39,7 @@ static func _adjusted_database_price_resolved(
 	value = _apply_bps(value, int((modifiers.get("categoryBps", {}) as Dictionary).get(category, BPS_DENOMINATOR)))
 	var item_bps: Dictionary = modifiers.get("itemBps", {})
 	var item_key := str(price_record.get("item_key", ""))
-	var item_name := str(price_record.get("item_name", ""))
-	value = _apply_bps(value, int(item_bps.get(item_key, item_bps.get(item_name, BPS_DENOMINATOR))))
+	value = _apply_bps(value, int(item_bps.get(item_key, BPS_DENOMINATOR)))
 	return maxi(0, value)
 
 
@@ -213,6 +213,7 @@ static func quote_repair(
 	policy_override := {}
 ) -> Dictionary:
 	var active := _policy(policy_override)
+	if active.is_empty(): return _quote_base("repair", price_record, 1, active)
 	if instance.has("durability_raw") or instance.has("max_durability_raw"):
 		var maximum_raw := maxi(1, int(instance.get(
 			"max_durability_raw",
@@ -236,11 +237,12 @@ static func quote_repair_delta(
 	context := {},
 	policy_override := {}
 ) -> Dictionary:
+	var active := _policy(policy_override)
+	if active.is_empty(): return _quote_base("repair", price_record, 1, active)
 	var maximum := maxi(1, int(instance.get("max_durability", catalog.get("maxDurability", 1))))
 	var current := clampi(int(instance.get("durability", 0)), 0, maximum)
 	var missing := maximum - current
 	if missing <= 0:
-		var active := _policy(policy_override)
 		return _complete_quote(
 			_quote_base("repair", price_record, 1, active), 0, 1,
 			{"missing_durability": 0, "missing_durability_raw": 0}
@@ -270,6 +272,7 @@ static func quote_repair_raw_delta(
 ) -> Dictionary:
 	var active := _policy(policy_override)
 	var result := _quote_base("repair", price_record, 1, active)
+	if active.is_empty(): return result
 	if not bool(context.get("supports_repair", true)):
 		result["reason"] = "该商人不提供维修服务。"
 		return result
@@ -333,20 +336,26 @@ static func estimate_forge_materials(
 	policy_override := {}
 ) -> Dictionary:
 	var active := _policy(policy_override)
+	if active.is_empty(): return {"valid": false, "reason": "价格策略无效。", "total_value": 0}
 	var total := 0
 	var lines: Array = []
 	for raw_material: Variant in materials:
 		if not raw_material is Dictionary:
 			return {"valid": false, "reason": "锻造材料格式无效。", "total_value": 0}
 		var material: Dictionary = raw_material
+		var entity_id := str(material.get("entity_id", ""))
+		if EntityIds.resolve(entity_id).get("kind") not in ["item", "service_item"]:
+			return {"valid": false, "reason": "锻造材料身份无效。", "total_value": 0}
 		var item_name := str(material.get("item_name", ""))
 		var quantity := int(material.get("quantity", 0))
-		var record: Dictionary = price_records.get(item_name, {})
-		var unit_value := adjusted_database_price(record, active)
+		var record: Dictionary = price_records.get(entity_id, {})
+		if str(record.get("entity_id", "")) != EntityIds.canonical(entity_id):
+			return {"valid": false, "reason": "锻造材料价格身份不一致。", "total_value": 0}
+		var unit_value := _adjusted_database_price_resolved(record, active)
 		if quantity <= 0 or unit_value <= 0:
 			return {"valid": false, "reason": "锻造材料缺少有效价格：%s" % item_name, "total_value": 0}
 		total += unit_value * quantity
-		lines.append({"item_name": item_name, "quantity": quantity, "unit_value": unit_value})
+		lines.append({"entity_id": entity_id, "item_name": item_name, "quantity": quantity, "unit_value": unit_value})
 	return {
 		"valid": true,
 		"contract_id": CONTRACT_ID,
@@ -400,6 +409,7 @@ static func _quote_base(action: String, price_record: Dictionary, quantity: int,
 		"policy_hash": _policy_hash(active),
 		"action": action,
 		"item_key": str(price_record.get("item_key", "")),
+		"entity_id": str(price_record.get("entity_id", "")),
 		"item_name": str(price_record.get("item_name", "")),
 		"quantity": quantity,
 		"currency_id": str(active.get("currencyId", "gold")),
@@ -462,6 +472,26 @@ static func _import_category_policy(source: Dictionary) -> Dictionary:
 		if category.is_empty() or formal.has(category): return {}
 		formal[category] = old[key]
 	modifiers["categoryBps"] = formal
+	var old_items: Variant = modifiers.get("itemBps", {})
+	if not old_items is Dictionary: return {}
+	var item_modifiers := {}
+	for key: Variant in old_items:
+		if not key is String: return {}
+		# Stable legacy source keys are accepted only at policy import; a display
+		# name never selects a price. Actual runtime modifiers use the source key.
+		if key.begins_with("hc."):
+			if EntityIds.resolve(key).get("kind") not in ["item", "service_item"]: return {}
+		else:
+			var parts: PackedStringArray = key.split(":")
+			if parts.size() != 2 or parts[0] not in ["service", "item"] or not parts[1].is_valid_int() \
+				or str(int(parts[1])) != parts[1] or int(parts[1]) < 0: return {}
+		var record: Dictionary = GameData.get_item_price_record(key)
+		var source_key := str(record.get("item_key", ""))
+		if source_key.is_empty() or item_modifiers.has(source_key): return {}
+		var bps: Variant = old_items[key]
+		if not (bps is int or bps is float) or not is_finite(float(bps)) or float(bps) != floor(float(bps)) or bps < 0: return {}
+		item_modifiers[source_key] = int(bps)
+	modifiers["itemBps"] = item_modifiers
 	return result
 
 

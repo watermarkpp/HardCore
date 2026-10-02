@@ -228,14 +228,14 @@ static func requirement_label(item: Dictionary) -> String:
 
 
 static func reference_price(item: Dictionary) -> int:
-	return GameData.get_item_shop_price(str(item.get("name", "")))
+	return GameData.get_item_shop_price(item)
 
 
 static func repair_cost(item: Dictionary, durability: int, max_durability: int) -> int:
 	var equipment_catalog := item.duplicate(true)
 	equipment_catalog["kind"] = "equipment"
 	var quote := preload("res://scripts/pricing_service.gd").quote_repair(
-		GameData.get_item_price_record(str(item.get("name", ""))),
+		GameData.get_item_price_record(item),
 		equipment_catalog,
 		{
 			"name": str(item.get("name", "")),

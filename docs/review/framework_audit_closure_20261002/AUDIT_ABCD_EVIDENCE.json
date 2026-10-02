@@ -1,0 +1,101 @@
+{
+  "read_at_utc": "2026-10-02T05:01:17.929960+00:00",
+  "audited_parent": "4d1efdc45897ace1be64fe0050c977c47f703ad0",
+  "tested_content_sha256": "dfff3bb9ca79bb93c9480f7186acd5c48a73d27c54fdf6bd798983db62312e4d",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "native_final_pass": 17,
+  "native_gate_pass": 1,
+  "final_checks": 384,
+  "gate_checks": 38,
+  "native_fault_results": "Six native scenes remain FAIL; three negative-case verification results PASS.",
+  "A": {
+    "status": "PASS",
+    "files": [
+      "scripts/features/runtime/effect_runtime.gd",
+      "tests/framework/periodic_delivery_lateness_test.gd",
+      "tests/framework/combined_effect_lifecycle_test.gd"
+    ],
+    "old_result": "750ms tick disappears before heap observer; original two metric assertions FAIL.",
+    "new_result": "Consumption-boundary statistics cover every valid damage-port attempt; successful ticks, rejected attempts, invalidation and natural expiry are distinguished. Exact 1000000us rejects strict <period; pause and same-epoch pumps do not double count.",
+    "cohort": {
+      "actual_loss": 1800,
+      "admitted_facts": 30,
+      "expired": 60,
+      "failed": 0,
+      "invalidated": 30,
+      "maximum_tick_delivery_lateness_usec": 733333,
+      "optional_cue_missing": 90,
+      "peak_pending": 30,
+      "peak_states": 90,
+      "refreshed": 0,
+      "started": 90,
+      "tick_delivery_count": 360,
+      "ticks": 360
+    },
+    "remaining_backlog_usec": 733333,
+    "raw_wall_samples": 683,
+    "percentiles_usec": {
+      "p50": 6906,
+      "p95": 7556,
+      "p99": 8297,
+      "max": 9430
+    },
+    "evidence": [
+      "delivery_causal_red",
+      "final_regression"
+    ]
+  },
+  "B": {
+    "status": "PASS",
+    "files": [
+      "tools/run_godot_tests.ps1",
+      "tools/source176_r3_validation.py",
+      "tests/framework/helpers/native_producer_gate.gd",
+      "tests/framework/combined_cold_receipt_gate_test.gd",
+      "tests/framework/combined_effect_lifecycle_cold_test.gd",
+      "tests/framework/periodic_credit_safe_logout_cold_test.gd"
+    ],
+    "old_result": "Native proof absent/failed/wrong: 14 of 36 checks FAIL; actual cold entry reloads state.",
+    "new_result": "38 checks PASS, including sixteen negative associations and actual evidence write failure. Runner alone records successful native producer and complete receipt hash; both cold consumers require it.",
+    "evidence": [
+      "native_handoff_causal_red",
+      "cold_gate_final",
+      "final_regression",
+      "final_stage_fault_matrix"
+    ]
+  },
+  "C": {
+    "status": "PASS",
+    "files": [
+      "tests/framework/combined_effect_lifecycle_test.gd",
+      "tools/run_combined_evidence_fault_tests.py"
+    ],
+    "old_result": "Archived unscoped trace PASS preceded final operations; no false failure alleged for the original successful run.",
+    "new_result": "Trace labels only the workload phase. Save/teardown/reload injection produces final FAIL and no native handoff; cold refuses before selection. Complete normal receipt is the final count authority.",
+    "save_failure_reason": "world_clock_checkpoint_failed",
+    "evidence": [
+      "final_stage_fault_matrix",
+      "final_regression"
+    ],
+    "classification": "Initial harness expected atomic_profile_write_failed/zero engine errors; actual owned blocked-directory checkpoint fails earlier with exactly one expected directory I/O error. Initial FAIL evidence retained; final classifier requires its exact path/error and all remaining gates."
+  },
+  "D": {
+    "status": "NOT_RUN",
+    "files": [
+      "tests/framework/combined_effect_lifecycle_cold_test.gd",
+      "tests/framework/combined_effect_lifecycle_test.gd"
+    ],
+    "scope_decision": "Audit option A: generation marker retention is tested, including the legacy empty namespace. Nonempty production generation persistence remains NOT_RUN in this fixture and is not closed by safe-logout empty equality.",
+    "observed_generation": "",
+    "xp_proof_preserved": 450
+  },
+  "open": [
+    "Full pre-action capacity FAIL",
+    "Receipt retirement protocol unresolved",
+    "Journal64 compression/recovery separate",
+    "Exact v97 B input MISSING",
+    "Full P6/R3 and Android NOT_RUN",
+    "Main integration/APK/install/device NOT_RUN"
+  ],
+  "new_stable_ids": []
+}

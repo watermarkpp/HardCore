@@ -1,0 +1,196 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real persistence enabled inside dedicated prelaunch APPDATA",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "startup gate completed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real disposable profile created",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real profile persisted before evidence failure",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual cold entry rejects stale or failed producer before recovery: current_failed",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: current_failed",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual cold entry rejects stale or failed producer before recovery: old_invocation",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: old_invocation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "actual cold entry rejects stale or failed producer before recovery: wrong_run",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: wrong_run",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "actual cold entry rejects stale or failed producer before recovery: wrong_source",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: wrong_source",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "actual cold entry rejects stale or failed producer before recovery: wrong_scene",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: wrong_scene",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "actual cold entry rejects stale or failed producer before recovery: same_consumer_run",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: same_consumer_run",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "actual cold entry rejects stale or failed producer before recovery: missing_receipt",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: missing_receipt",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "actual cold entry rejects stale or failed producer before recovery: truncated_receipt",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: truncated_receipt",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual cold entry rejects stale or failed producer before recovery: failed_count",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: failed_count",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "actual cold entry rejects stale or failed producer before recovery: missing_handoff",
+      "passed": false
+    },
+    {
+      "id": 24,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: missing_handoff",
+      "passed": false
+    },
+    {
+      "id": 25,
+      "label": "actual cold entry rejects stale or failed producer before recovery: native_failed",
+      "passed": false
+    },
+    {
+      "id": 26,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: native_failed",
+      "passed": false
+    },
+    {
+      "id": 27,
+      "label": "actual cold entry rejects stale or failed producer before recovery: native_not_exited",
+      "passed": false
+    },
+    {
+      "id": 28,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: native_not_exited",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "label": "actual cold entry rejects stale or failed producer before recovery: handoff_wrong_run",
+      "passed": false
+    },
+    {
+      "id": 30,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: handoff_wrong_run",
+      "passed": false
+    },
+    {
+      "id": 31,
+      "label": "actual cold entry rejects stale or failed producer before recovery: handoff_wrong_source",
+      "passed": false
+    },
+    {
+      "id": 32,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: handoff_wrong_source",
+      "passed": false
+    },
+    {
+      "id": 33,
+      "label": "actual cold entry rejects stale or failed producer before recovery: handoff_wrong_scene",
+      "passed": false
+    },
+    {
+      "id": 34,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: handoff_wrong_scene",
+      "passed": false
+    },
+    {
+      "id": 35,
+      "label": "actual cold entry rejects stale or failed producer before recovery: handoff_wrong_hash",
+      "passed": false
+    },
+    {
+      "id": 36,
+      "label": "rejected evidence cannot select a profile or mutate its in-memory/durable state: handoff_wrong_hash",
+      "passed": false
+    }
+  ],
+  "count": 36,
+  "engine_version": "4.7-stable (official)",
+  "failed": 14,
+  "invocation_id": "4eda48f5-a7a6-4b18-846d-63d37eaf0c81",
+  "passed": 22,
+  "reported_checks": 36,
+  "reported_failures": 14,
+  "run_id": "e52af3a3-0b92-4cd8-992a-b0e97017b1f3",
+  "scene_id": "combined_cold_receipt_gate_test",
+  "schema_version": 1,
+  "source_content_sha256": "f8cccea7320f6933c127a4ce04e072145681fbeaf4c85366d1bfb43031d60f26",
+  "status": "FAIL"
+}

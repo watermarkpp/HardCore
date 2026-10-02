@@ -1,0 +1,82 @@
+{
+  "time_utc": "2026-10-02T05:00:13.677227+00:00",
+  "cases": [
+    {
+      "fault": "save",
+      "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audit_c_fault_save_125842_763617",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "tools/source176_r3_validation.py",
+        "audit_c_fault_save",
+        "--tests",
+        "tests/framework/combined_effect_lifecycle_test.tscn",
+        "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "--timeout",
+        "30"
+      ],
+      "isolated_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\combined_fault_77e5e910bd1b48aea78813cb7f87a978",
+      "prior_expectation_sha256": "31f578e39f2e8a4f1bc85102266020dc7a7201cbc4647b09bb266b97099e7030",
+      "native_scene_status": "FAIL",
+      "failed_labels": [
+        "final production durability checkpoint succeeds: world_clock_checkpoint_failed"
+      ],
+      "expected_injected_engine_errors": [
+        "ERROR: Could not create directory: 'C:/Users/Administrator/.codex/worktrees/pluggable-framework-v2/HardCore/.godot/runtime_appdata/combined_fault_77e5e910bd1b48aea78813cb7f87a978/Godot/app_userdata/HardCore/combined-save-blocker-aecf4883-cbe5-4415-91c8-033c420e5d36/profiles'."
+      ],
+      "negative_case_verification": "PASS"
+    },
+    {
+      "fault": "teardown",
+      "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audit_c_fault_teardown_125913_900647",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "tools/source176_r3_validation.py",
+        "audit_c_fault_teardown",
+        "--tests",
+        "tests/framework/combined_effect_lifecycle_test.tscn",
+        "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "--timeout",
+        "30"
+      ],
+      "isolated_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\combined_fault_07f4ded742964891862ff0b59f3d833e",
+      "prior_expectation_sha256": "31f578e39f2e8a4f1bc85102266020dc7a7201cbc4647b09bb266b97099e7030",
+      "native_scene_status": "FAIL",
+      "failed_labels": [
+        "explicit world teardown releases final receipt ownership",
+        "official reload retains exactly the combined reward"
+      ],
+      "expected_injected_engine_errors": [],
+      "negative_case_verification": "PASS"
+    },
+    {
+      "fault": "reload",
+      "evidence": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\outputs\\r3_takeover\\20260930\\validation\\audit_c_fault_reload_125943_830364",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-X",
+        "utf8",
+        "tools/source176_r3_validation.py",
+        "audit_c_fault_reload",
+        "--tests",
+        "tests/framework/combined_effect_lifecycle_test.tscn",
+        "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+        "--timeout",
+        "30"
+      ],
+      "isolated_appdata": "C:\\Users\\Administrator\\.codex\\worktrees\\pluggable-framework-v2\\HardCore\\.godot\\runtime_appdata\\combined_fault_acadda0a07d4440f871afd8fa0d8df6b",
+      "prior_expectation_sha256": "31f578e39f2e8a4f1bc85102266020dc7a7201cbc4647b09bb266b97099e7030",
+      "native_scene_status": "FAIL",
+      "failed_labels": [
+        "official reload retains exactly the combined reward"
+      ],
+      "expected_injected_engine_errors": [],
+      "negative_case_verification": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "scope": "Negative test verification only; the six original native FAIL results remain FAIL."
+}

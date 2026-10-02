@@ -139,6 +139,7 @@ func _run() -> void:
 		"profile_a":profile_a,"profile_b":profile_b,"xp_a":xp_a+expected_xp,"xp_b":xp_b,
 		"quests_b":quests_b,"generation_a":generation_a,"generation_b":generation_b,
 		"producer_run_id":OS.get_environment("HARDCORE_FRAMEWORK_RUN_ID"),
+		"invocation_id":OS.get_environment("HARDCORE_FRAMEWORK_INVOCATION_ID"),
 		"source_content_sha256":OS.get_environment("HARDCORE_R3_CONTENT_SHA256")}
 	if failures.is_empty():
 		var output := FileAccess.open(EXPECTED_PATH,FileAccess.WRITE)

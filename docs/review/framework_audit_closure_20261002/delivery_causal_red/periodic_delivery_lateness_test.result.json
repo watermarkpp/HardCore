@@ -1,0 +1,75 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual effect service configured",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real qualified binding enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real post-HP fact queued",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "one accepted periodic state waits for its original due time",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "existing simulation clock advances to 750ms after the first due time",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual heap reports the overdue work before service",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual production tick commits exactly five HP",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "post-pump observer sees no remaining due work",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "consumption-boundary metrics retain the 750ms late tick after heap sampling can no longer see it",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "later on-time delivery preserves maximum lateness without duplicating or rescheduling ticks",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "no mutation or delivery error",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "default-off module restored",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "engine_version": "4.7-stable (official)",
+  "failed": 2,
+  "passed": 10,
+  "reported_checks": 12,
+  "reported_failures": 2,
+  "run_id": "8e61154c-52d5-4ef8-8680-0e197f7d0976",
+  "scene_id": "periodic_delivery_lateness_test",
+  "schema_version": 1,
+  "source_content_sha256": "ecfdef565c0388e1c6e3b48e857e35c57263df957d991aec846ba03a3d5b4e73",
+  "status": "FAIL"
+}
