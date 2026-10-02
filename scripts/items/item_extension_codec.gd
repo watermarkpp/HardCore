@@ -20,9 +20,22 @@ const SOCKET_ID := "hc.socketing.primary"
 # flat item record; this private field owns extensions only, never attributes.
 # Old records retain their exact wire shape and old strict validators.
 static func decode_wire(record: Dictionary) -> Dictionary:
+	var is_container := _is_wire_container(record)
+	# An unsupported owner defines its own graph and field limits. Recognize
+	# that shallow header before applying today's corruption/recovery rules.
+	if is_container:
+		if (_integer(record.get("format_version")) and record.format_version > VERSION) \
+			or (record.get("contract_id") is String and record.contract_id != CONTRACT):
+			return _failure(OPAQUE_UNSUPPORTED, "unsupported_item_container")
+		if _integer(record.get("format_version")) and record.format_version == VERSION \
+			and record.get("contract_id") is String and record.contract_id == CONTRACT \
+			and record.get("extensions") is Dictionary:
+			var support := _extension_support_status(record.extensions)
+			if support.status != KNOWN_VALID:
+				return support
 	if record.has(RUNTIME_EXTENSION):
 		return _failure(INVALID, "private_runtime_item_field_on_wire")
-	if not _is_wire_container(record):
+	if not is_container:
 		if record.has("gem_instance_contract_id"):
 			if not record.gem_instance_contract_id is String:
 				return _failure(INVALID, "invalid_gem_instance_contract")
@@ -37,15 +50,10 @@ static func decode_wire(record: Dictionary) -> Dictionary:
 		return _failure(INVALID, "item_extension_graph_capacity_or_type")
 	if not _integer(record.get("format_version")) or not record.get("contract_id") is String:
 		return _failure(INVALID, "invalid_item_container_version")
-	if record.format_version > VERSION or record.contract_id != CONTRACT:
-		return _failure(OPAQUE_UNSUPPORTED, "unsupported_item_container")
 	if record.format_version != VERSION or not _keys(record, ["contract_id", "format_version", "entity_id", "base", "extensions"]) \
 		or not record.base is Dictionary or not record.extensions is Dictionary or not record.entity_id is String:
 		return _failure(INVALID, "invalid_item_container")
 	var base: Dictionary = record.base
-	var support := _extension_support_status(record.extensions)
-	if support.status != KNOWN_VALID:
-		return support
 	if base.has(RUNTIME_EXTENSION) or _is_wire_container(base) or not _valid_extended_base(base, record.entity_id):
 		return _failure(INVALID, "invalid_item_container_base")
 	var extensions := _validate_extensions(base, record.extensions)
@@ -147,8 +155,13 @@ static func _map_document(document: Dictionary, encode: bool) -> Dictionary:
 		for slot: Variant in document.equipment:
 			var raw: Variant = document.equipment[slot]
 			if not raw is Dictionary:
-				if encode or bool(identity.formal):
+				if encode or bool(identity.formal) or document.has(EquipmentIdentity.FIELD) or not raw is String:
 					return _failure(OPAQUE_UNSUPPORTED, "non_record_formal_equipment")
+				# Only the explicit old equipment import may carry a display
+				# string. Validate its exact registered owner now; runtime's
+				# existing importer still owns instance/durability creation.
+				if not raw.is_empty() and Identity.normalize({"name": raw}, true).status != KNOWN_VALID:
+					return _failure(OPAQUE_UNSUPPORTED, "unknown_legacy_equipment_identity")
 				continue
 			var result := _map_document_item(raw, encode, encode or not bool(identity.formal))
 			if result.status != KNOWN_VALID:

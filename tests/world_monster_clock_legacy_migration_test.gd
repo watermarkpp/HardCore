@@ -2,6 +2,7 @@ extends Node
 
 const WorldState := preload("res://scripts/world_monster_respawn_state.gd")
 const SlotIdentity := preload("res://scripts/identity/equipment_identity_codec.gd")
+const ItemCodec := preload("res://scripts/items/item_extension_codec.gd")
 
 
 func _ready() -> void:
@@ -75,7 +76,9 @@ func _ready() -> void:
 	assert(backup.inventory.size() == 1)
 	assert(str(backup.inventory[0].name) == "太阳水")
 	assert(int(backup.inventory[0].count) == 10)
-	assert(str(backup.equipment["hc.slot.weapon"].instance_id) == "legacy_weapon")
+	var decoded_backup := ItemCodec.decode_document(backup)
+	assert(decoded_backup.status == ItemCodec.KNOWN_VALID)
+	assert(str(decoded_backup.document.equipment["hc.slot.weapon"].instance_id) == "legacy_weapon")
 	assert(backup.quest_states == old_profile.quest_states)
 	PlayerState.reset_progress(false)
 	PlayerState.load_save()

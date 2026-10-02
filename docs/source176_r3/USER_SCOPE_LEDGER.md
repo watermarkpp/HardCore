@@ -202,3 +202,77 @@ GameData 正式 rank 查询按已有 skill_id，名称仅是明确旧UI入口和
 49项类别原生检查与21项唯一直接/相关回归PASS（真实退出0、各场景前后源码与引擎不变、receipt核对），生成器27项及 --check PASS。首次组合20PASS/1FAIL，掉落实例保存fixture仍读取旧中文槽位；唯一后续变更为saved_q.equipment["hc.slot.weapon"]，原断言全部保留，精确2项复测PASS。两轮生产/引擎字节完全一致，旧FAIL不重标。当前受测3439文件内容集合 5b864af12061f457648a84e9de8bafed888568097d87cf1b7fb92b01305f68fb。旧类别缺失RED、实现中的解析/遗漏类别/详情面板preload失败保留并修复。旧价格候选名称身份及itemBps名称fallback属于下一身份范围，未声明已完成。证据 outputs/framework_v2/ITEM_CATEGORY_IDENTITY_SCOPED_EVIDENCE.json。
 
 用户新提供六项独立审查风险保留为施工中候选，需自然检查点固定受测版本后逐项反例复核。P6、完整架构/性能/主树/APK/设备验收未完成；R3性能FAIL不被本范围PASS覆盖。
+
+
+## 2026-10-01 独立审查增量1：烈火已接受配置的最终冷却
+
+33项真实检查因果RED为3项FAIL：合法timing.cooldown_ms×0.5在起手定义为4000ms，最终却8000ms；起手后模块OFF仍8000ms；起手后实际profile消费者把速度变成3，最终被改成2667ms。Root最终冷却调用没有传递已接受lease，Player重读基础定义和实时速度；主控据实确认根因。
+
+仅修改scripts/game_root.gd和scripts/player.gd：Root传递同一已接受配置；Player通过正式lease definition resolver取烈火定义，有数值扩展时使用已接受主属性中的施法速度，空扩展保持原release owner的速度合同。未改基础技能/authority/lease合同、冷却提交时刻、MP、几何、旧开关状态机或存档版本。没有新增登记实体。
+
+33直接检查及8/8相关原生回归PASS，合法配置三例均4000ms，空扩展8000ms；每次真实接收者HP下降且MP仍93（原耗7）。回归包含近战/法术lease、战士状态机、开关镜头、烈火派生效果与空扩展基线。前后受测源码固定，真实退出0、receipt核对；当前源码指纹 4ced9bda2a234c22e5c69e55d49e16fa5476fe607369041125e7973a43853da5。模块fixture只替换内存内容输入，走实际编译/资格/激活/输入/lease/单planner/HP/冷却；本用例不声称覆盖磁盘模块路径信任入口。原RED与既有退出ObjectDB警告保留。证据 outputs/framework_v2/FIRE_COOLDOWN_CONFIGURATION_SCOPED_EVIDENCE.json。
+
+固定远端审查提交723972322b837da1a287172c85412076df0e118d不变。增量2-6、P6与总目标继续；R3性能FAIL，主树/APK/设备NOT_RUN不被本范围PASS覆盖。
+
+
+## 2026-10-01 独立审查增量3：未来所有权与真实旧备份恢复
+
+主控原生复现：145项反例76项FAIL，未来大/深容器、未知namespace、未来socket schema、未来仓库+已知损坏物品均被旧备份恢复覆盖。修复后145项PASS；新增未来合同版本编码变化、缺失旧合同字段及超int64未来仓库版本反例188项中27项FAIL，补齐浅层所有权识别后188项PASS。浅层检查中一次缺失String守卫的真实回归失败已修复，所有原失败证据保留。
+
+仅修改ItemExtensionCodec与PlayerState实际验证/迁移边界：未知所有权在当前图容量/深度/私有字段/物品解码之前识别为OPAQUE，已知版本仍保留4096节点/16深度与字段校验。仓库只提前识别可确认未来版本，未知物品+畸形仓库schema仍terminal，不恢复旧备份。没有TTL/LRU/journal清理或缺失ID猜测。
+
+相关回归发现真实旧字符串装备在世界时钟导入时提前进入正式编码器；补21项检查（总209），原生8项因果FAIL。中间时钟导入主档/匹配备份按已验证legacy wire保存，旧运行时入口仍负责正式实例/耐久创建与正常正式保存；显式legacy String入口先验证精确已登记物品，未知String整档只读。原始迁移archive字段/源digest保持，当前正式encoder仍拒绝字符串装备。
+
+209直接检查与16项唯一相关原生场景PASS；真实退出0、固定源码/引擎、receipt核对。16项由最终三轮组合，只有旧clock备份fixture变化：真实backup通过codec消费后核验同一instance，原断言保留并新增known断言。其他旧fixture仅为已知备份明确item_id=80、默认cycle断言改正式槽位；未知身份未恢复fallback。authoring/registry/project全部冻结，本范围无新增实体。
+
+当前源码集合 b72a5e92505b7cf1ac766a74216225305eb5efbf8848e61a1bfc30c36a8f2708（3443文件），引擎 4.7.stable.official.5b4e0cb0f / d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c。证据 outputs/framework_v2/FUTURE_ITEM_OWNERSHIP_SCOPED_EVIDENCE.json。固定远端审查提交723972322b837da1a287172c85412076df0e118d不变。
+
+增量2/4/5/6、P6、价格名称身份、完整目标验收仍继续，R3性能FAIL与主树/APK/设备NOT_RUN不被此范围PASS覆盖。用户后续手机独立覆盖升级/自动迁移作为新增交付范围记录。
+
+## 2026-10-01 最新连续施工与 v97 多角色故障验收
+
+用户确认由本任务唯一主控继续，新接管任务已停止。后续仅 xhigh，max 仅用户点名。GLM MCP 离线工具尚未在本机安装，用户手动安装前不可用；不使用旧 codex glm profile、旧 Harness 或替代 provider。允许恢复既有授权排队沟通，不新增本地工程/审计代理。
+
+v97 真实故障必须单独复现：A 角色圣物/徽章正常，B 合成入包后整个背包不能装备或销毁。NOT_RUN，不能以旧单角色 relic PASS 或架构升级结案。须隔离临时 user 数据、test_mode=false，实际 A→B→生产工作台圣物与徽章合成→入包→装备/销毁→持久化回执→冷重启 A/B；记录 validator/save reason、实例身份、profile/revision，只据证据修复，不接触手机真实存档。
+
+手机独立升级为同包名同签名覆盖安装、首次启动备份/预检/自动转换；此前并行默认方案已替换。见 MOBILE_UPGRADE_MIGRATION_HANDOFF.md，APK/设备仍 NOT_RUN。
+
+六项审查清单不得遗漏：烈火已接受 cooldown lease 及空扩展保持；伤害后容量拒绝；未来图/仓库与已知损坏混合时的恢复顺序；credit 致死提交到异步回调的窄时序；receipt 长期去重与 journal64 的不同安全边界；P6 同时证明 90 状态、360 周期结算、死亡/资源/回执/队列排空、业务时效及 P95/P99。固定审查 723972322b837da1a287172c85412076df0e118d 不动，后续经验证增量另固定 SHA push GitHub 并交原 Pro，不盲采未覆盖场景的乐观结论。
+
+
+## 2026-10-01 手机覆盖升级存档接入检查点
+
+启动在CharacterSelect前完成原始整账户备份和已知身份转换。原始文件按字节保留并登记哈希；所有profile、共享仓库、WAL和引用世界时钟先只读核验。未知所有者关闭门禁，不以旧备份覆盖；失败可重试，完成回执必须持久化，冷进程不重复转换。既有显式debug QA开关延后到原始备份及转换完成后。
+
+真实v90归档SHA 18989f8b6d0f672b653cb0237ebeb33913f46885a508b716fe8c2b1ae5ffd7de 的3角色/13文件在隔离user数据、test_mode=false生产保存链完成转换。进度、背包和共享仓库所有已占格的位置、数量、实例、耐久和增强属性及银行/仓库幂等记录均核对保留。两个实际遗漏药品通过authoring源和正式生成器登记hc.item.920017/hc.item.920042，精确服务别名666/667；未新增玩法数值。
+
+17项因果RED复现超大future save_version整数收窄漏判及未来snapshot/world_state/schema/death_event被旧备份恢复。修复后215直接、13冷重启、20真实Startup检查PASS；13/13相关原生场景真实退出0、receipt有效、受测源码稳定。此后仅增加5条真实库存/银行记录断言，2/2直接及冷重启再次PASS，运行时代码与13场景受测版本完全一致。multi_character测试3处中文武器字段按既定规范改为hc.slot.weapon，原耐久断言不变。证据outputs/framework_v2/MOBILE_SAVE_UPGRADE_SCOPED_EVIDENCE.json；内容指纹8d2cc049ef9cac447d9ff7340d57f6417746cd6ac401868d5e952fdc4c7998b7。
+
+手机APK/签名/安装/设备仍NOT_RUN；A→B圣物与徽章故障定向回归仍NOT_RUN，不以迁移PASS结案。六风险余项、P6、R3性能FAIL与整体集成继续。固定审查SHA723972322b837da1a287172c85412076df0e118d不变。
+
+
+## 2026-10-02 多角色圣物/徽章生产链检查点
+
+第三树以真实State、test_mode=false、新隔离账户，通过实际create_character执行A→B。每角色4次工作台合成/4次入包，首对圣物和徽章各真实装备、卸下并销毁，再合成一对装备保留；两产物同时入包时验证无关武器装备及药品销毁。实际异步worker回执、revision保存完成和每步磁盘validator均记录；新原生进程冷重启A/B验证原实例/roll、已销毁实例不复活、无关背包装备/销毁继续可用和两队列排空。327热流程+32冷进程检查PASS，两场景真实退出0。
+
+首轮71检查/32FAIL来自fixture使用了接口未支持的通用entity_id记录键；仅改为现有receive稳定ID入口，工程源码未因该fixture失败改动。全部原断言保留。受测源码a70edc8917c07b87bd3ccaf60c522076ca8c85044e37fac43590918a1d5e0af8，证据outputs/framework_v2/RELIC_MULTI_PROFILE_PRODUCTION_SCOPED_EVIDENCE.json。
+
+这证明第三树指定新账户生产路径；尚未在固定v97生产基线及用户所报触发数据复现，v97故障修复仍NOT_RUN，不以本PASS或架构升级结案。下一步独立临时导出固定v97生产代码，保持主树、第二树、实际手机存档及固定审查SHA不变，补基线/历史数据反例。
+
+### 2026-10-02 v97 固定源码三职业生产链检查点
+
+- 固定源码提交 `a945e921e849b4aa81439183f60cec95e63d725c`；隔离导出11954个运行时文件，内容集合SHA256 `0dc8947ce5978c049e8a6700a7f1bdcf63cf6a099d0ab1f8c642086944245aa8`，引擎4.7/既有固定console SHA。逐文件核对Git blob，资源准备和原生测试前后生产字节均一致；主树v97及真实用户存档未写入。
+- 使用实际全局PlayerState、test_mode=false、隔离APPDATA及默认生产存档路径；A战士/B法师/C道士，各自真实合成950101与职业徽章950201/950202/950203→入包→普通武器及合成物装备/卸下/销毁→真实保存回执；500项PASS。新原生进程定向加载三角色、实例/roll/删除/金币/普通背包装备销毁及队列排空，49项PASS；均退出0、无SCRIPT ERROR、harness字节稳定。
+- 适配仅在测试边界按v97数字物品ID与中文槽位schema执行。普通装备测试种子使用已核对的数字身份解析包→真实掉落实例factory→item_instance→receive_record；不修改旧版生产代码，不恢复新系统名称fallback。
+- 历史307项“PASS”标记同时存在2次脚本错误并漏20项，主控已明确判FAIL保留；首次资源准备超时及不完整掉落fixture失败也保留。新launcher同时核对真实退出、全部receipt、脚本错误和前后生产/fixture指纹。
+- **用户报告的旧B角色整个背包故障仍未结案**：新建三职业场景未复现，具体历史B状态MISSING，v97修复状态NOT_RUN；不能用本专项PASS或架构升级替代该故障验收。
+- 范围证据：`outputs/framework_v2/V97_MULTI_PROFILE_BASELINE_SCOPED_EVIDENCE.json`；所有userdata、缓存、原始trace及诊断导出位于本树忽略outputs中，不上传真实存档。
+
+
+## 2026-10-02 v97 固定源码历史存档生产链检查点
+
+本检查点在第三树忽略的输出目录内，用 v97 固定 APK 源码 `a945e921e849b4aa81439183f60cec95e63d725c` 和同一 Godot console 引擎，接入 v90 原始备份的 13 个逐字节核验副本。真实三角色旧装备、实例身份及历史字段保留，实际全局 PlayerState、test_mode=false、默认生产保存路径均使用专属 APPDATA。为合法合成，在实际历史加载后显式补足等级、金币和测试材料；并非用户报告的准确 B 角色故障输入。
+
+原生 live 523 项、独立 cold 74 项，共 597 项 PASS；进程均 exit 0，无脚本错误，完整逐项回执和原始文件/固定生产源码不变检查 PASS。真实工作台合成与入包后，普通装备、圣物和对应职业徽章的装备/销毁、异步持久化、冷重启角色定向加载均通过。旧实例在冷重启及后续测试变更后仍保留，冷进程只销毁明确注入的普通测试装备。证据：`outputs/framework_v2/V97_ARCHIVED_MULTI_PROFILE_SCOPED_EVIDENCE.json`。
+
+**用户报告的 v97 B 角色整个背包故障仍未复现；具体故障输入 MISSING，修复状态 NOT_RUN。不得以这 597 项或此前新角色 549 项 PASS 关闭此故障。主树 v97、真实用户存档、APK及设备均未更改。**

@@ -5,10 +5,10 @@
 HardCore 采用单主控、单线程串行工程模式。
 
 - 当前任务可由 `gpt-6-astra` 或 `gpt-6-sol` 担任唯一工程主控，端到端负责范围、权威源、生产路径、根因、架构、实现、测试、失败分类、自审、集成和最终验收。
-- 允许使用 `gpt-6-astra` 和 `gpt-6-sol` 完成工程任务；保留用户当前 `high` 或更高推理设置，仅在具体难点需要时提高推理强度。`AGENTS.md` 不能切换实际模型，目标模型不可用时必须如实说明。
+- 允许使用 `gpt-6-astra` 和 `gpt-6-sol` 完成工程任务；工程推理统一使用 `xhigh`，仅在用户明确要求时使用 `max`。`AGENTS.md` 不能切换实际模型，目标模型或推理设置不可用时必须如实说明。
 - 一个任务只保留一个工程主线程，串行完成工程闭环。禁止创建并行工程代理、agent swarm 或 reviewer agent；禁止把根因、架构、实现方案、测试裁决或最终审查交给子代理独立决定。
 - 扫描、清单、结构化数据比对、日志归集等明显消耗大量主控使用量、但只需低推理或无需推理的机械任务，允许使用 `gpt-6-luna` 作为子代理。同一时间最多运行一个机械辅助任务（Luna 或 GLM）；主控须给出精确范围、排除项、执行规则和输出格式。Luna 默认只读；如需机械写入，主控必须先指定精确目标与变换规则，再逐项复核差异。Luna 的输出只是待复核候选，工程决策、测试和验收仍由主控完成。
-- 唯一外部模型例外是由工程主控通过 Codex CLI 的既有 `glm` profile 调用火山方舟 `GLM-5.3-Flash`（模型 ID `glm-5.3-flash`）。用户已授权主控自主派发本文件第 4 节限定的四类机械任务，无需逐次确认。GLM 只能执行高工作量、低推理、只读、可复核的机械任务，不是第二工程负责人。
+- 唯一外部模型例外是由工程主控通过用户级 MCP `glm_readonly` 调用火山方舟 `GLM-5.3-Flash`（请求模型 ID `glm-5.3-flash`）。用户已授权主控自主派发本文件第 4 节限定的四类机械任务，无需逐次确认。GLM 只能执行高工作量、低推理、只读、可复核的机械任务，不是第二工程负责人。
 - 未经用户明确授权，不新增第三方模型 provider、worker、直连脚本或凭据。DeepSeek 模型、worker、直连脚本及凭据仍然禁止。
 
 完整工程闭环：
@@ -47,17 +47,18 @@ HardCore 采用单主控、单线程串行工程模式。
 - 保留所有无关 tracked/untracked 用户改动；发现 dirty 现场时绕开或隔离，不覆盖、不清理、不归零。
 - Godot 测试优先使用 `tools/run_godot_tests.ps1`。禁止 GUI Godot，禁止直接启动未指定项目内日志和用户数据目录的 Godot；使用 console/headless、`outputs/test_logs` 和本工作树 `.godot/runtime_appdata`。
 
-## 4. Codex CLI GLM 机械任务例外
+## 4. 用户级 GLM MCP 机械任务例外
 
 ### 4.1 调用方式
 
-- 正式入口为 Codex CLI `--profile glm`，复用用户已配置的 `$CODEX_HOME/glm.config.toml` 地址与凭据。不得输出 key、把凭据复制进项目或让 GLM 读取凭据文件。
-- 不再使用 DeepSeek Harness、浏览器 GLM 工作台或旧 `arkcli` profile；不新增 provider、凭据、直连 API 脚本或自建 worker。
-- 默认用有界非交互任务：`codex exec --profile glm --sandbox read-only -c 'approval_policy="never"' -c 'model_reasoning_effort="low"' -C <PROJECT_ROOT> --json -o <PROJECT_ROOT>/outputs/glm_cli/<TASK_ID>.json "<TASK>"`。主控保存 JSONL 执行记录、退出码和最终答复；这些覆盖仅作用于机械任务，不降低主控推理设置或修改用户配置。
-- 复用已运行的 CLI 会话时，使用 `codex queue --profile glm --thread <SESSION_ID> --message "<TASK>"`。`queue` 只投递消息，不改变接收会话的模型、sandbox 或推理设置；只有已核实为 GLM、只读机械模式且上一任务已结束的会话才能派活，否则串行使用上述有界 `exec`。
+- 正式入口为用户级 MCP `glm_readonly`：`glm_health` 检查本机状态，`glm_analyze` 执行有界只读机械任务；也可使用 `C:\Users\Administrator\.codex\tools\glm-mcp\server.py --once` 的授权本机执行入口，复用安装虚拟环境与同一 `settings.json`。工具仅原位读取已有 `glm.config.toml` 凭据；不得输出 key、把凭据复制进项目或注册配置，或把凭据文件送给 GLM。
+- 不再使用旧 Codex CLI GLM profile、GLM exec/queue 入口、DeepSeek Harness、浏览器 GLM 工作台或旧 `arkcli` profile；不新增 provider、凭据、直连 API 脚本或自建 worker，不改变主控模型及账号 provider。MCP 调用不用于向施工主控投递或排队消息。
+- 每次只发送显式文本或主控逐项指定的文件与起止行。文件白名单仅为 `C:\Users\Administrator\Documents\HardCore`、`C:\Users\Administrator\Documents\HardCore-worktrees\glm53-r1-20260929`、`C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore`；不得扩大到整个用户目录，敏感文件和凭据始终排除。
+- 每次最多 16 个文件、32 KiB 总输入；默认 16384 输出 tokens，可通过 `max_output_tokens` 选择最高 32768（本地上限，不宣称官方最大值）。总超时默认 900 秒、设置最高 1200 秒，MCP 外层 1260 秒；响应上限 8 MiB、答案上限 1 MiB，达到截断或未完成状态须明确 `complete=false`；只用现有套餐 `/api/coding/v3/responses`。禁止自动重试、切换普通计费 `/api/v3` 接口或伪装客户端；平台拒绝时停止并如实报告。主控保存任务 ID、所发文本或文件行段、MCP/本机执行结果、请求 endpoint/模型、耗时、usage 和完成或错误状态；不记录秘密。
 - 同一时间只运行一个机械辅助任务（Luna 或 GLM）；禁止并行 GLM worker 或扫描 swarm。已有 GLM 任务未结束时，不启动另一任务，也不重启、接管或改变其施工现场。
-- 每次任务必须给出精确范围、只读限制、排除路径、期望字段和输出格式。优先精确搜索，其次有界扫描，确有必要才全仓扫描。
-- 模型身份和权限以 profile、实际会话配置及执行记录核实，不以代理自称 Astra/Sol 或口头声明只读为证据。无法证明连接、模型身份、只读范围或任务上下文时，不执行；主控自行完成或报告 `BLOCKED`，不回退到 Harness。
+- 每次任务必须给出精确范围、只读限制、排除路径、期望字段和输出格式。主控先在本地精确搜索或有界筛选，只发送必要片段，不让 GLM 自行扩大文件范围。
+- 连接与权限以实际工具配置、白名单和执行记录核验，记录请求模型及返回的模型字段；无法验证的返回身份如实标记 `unverified`，不得以模型自称证明身份。连接、只读范围或任务上下文无法核实时，主控自行完成或报告 `BLOCKED`，不回退旧 CLI 或 Harness。
+- 用户级注册共享本机桌面工具配置；实际工具可见性须按会话核验，已有会话可能需要受支持的工具刷新。云端不会自动获得本机 MCP，不得声称所有旧对话已刷新。
 
 ### 4.2 允许范围
 
@@ -99,7 +100,7 @@ EVIDENCE PATHS
 UNCERTAINTIES
 ```
 
-`Queued message`、握手回复、`idle`、`notLoaded` 或单个 PASS marker 不代表机械任务完成。主控须核对匹配任务 ID 的最终答复、真实工具执行记录、成功退出或完成状态，并在本地复核关键结果。需要读取本地文件的任务未执行工具、返回猜测值或与本地证据不符时，判为 `FAIL`，不得接受。
+`glm_health`、MCP 握手、HTTP 200、`ok` 或单个 PASS marker 不代表机械任务完成。主控须核对匹配任务 ID 的最终答复、真实 MCP/本机执行记录、usage 和完成状态，并在本地复核关键结果。文件任务未提供对应的 `sources` 与文件行段、返回猜测值或与本地证据不符时，判为 `FAIL`，不得接受；不执行模型输出的命令。
 
 工程主控必须回到本地权威文件、生产消费者、调用点、合同和相关测试复核关键发现，然后独立作出修改与验收决定。
 
@@ -219,6 +220,8 @@ git diff --check
 ```
 
 检查无关编辑、临时日志、debug 代码、注释掉的生产代码、重复逻辑、新增陈旧 TODO、手改生成物、遗漏 fixture、弱化测试、路径错误、版本变化和格式噪声。
+
+- 独立审计固定待审提交 SHA，推送 GitHub 后交给用户指定的 Pro；不新增本地独立审计或 reviewer agent。工程主控仍负责上述最终差异自审、证据复核和整合；审计结果不得替代主控的工程裁决。
 
 交付至少列出：
 

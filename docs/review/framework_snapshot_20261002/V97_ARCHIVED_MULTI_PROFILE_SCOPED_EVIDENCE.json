@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "scope": "exact v97 production runtime on isolated v90 archived profiles, real synthesis/backpack/durable receipts and independent cold process",
+  "created_at": "2026-10-02T08:35:51.756128+08:00",
+  "source_commit": "a945e921e849b4aa81439183f60cec95e63d725c",
+  "source_content_sha256": "0dc8947ce5978c049e8a6700a7f1bdcf63cf6a099d0ab1f8c642086944245aa8",
+  "archive_sha256": "18989f8b6d0f672b653cb0237ebeb33913f46885a508b716fe8c2b1ae5ffd7de",
+  "original_reference_files": 13,
+  "original_archive_and_reference_unchanged": true,
+  "native_runs": [
+    {
+      "phase": "live",
+      "checks": 523,
+      "run": "outputs\\v97_backpack_baseline\\test_logs\\v97_archived_live_ef5fbfc655384b2b8de0ae55250c0388",
+      "execution_sha256": "66783bfdecdfeeda70275a43972a37a20069026d4f53fb0c02a28aa26102ace3",
+      "receipt_sha256": "29139d493445e04732e103e8ae8ef26972df212001489d25a7b09acd59f94c66",
+      "elapsed_seconds": 8.061999999976251
+    },
+    {
+      "phase": "cold",
+      "checks": 74,
+      "run": "outputs\\v97_backpack_baseline\\test_logs\\v97_archived_cold_0c0663120095450f9593c7d8c83f1280",
+      "execution_sha256": "f3d129fa6d28f65499ead179acbf4f979e54a79237ca7176183097286aee0102",
+      "receipt_sha256": "466bcdb18b7c3d9a4c22b1028386474eb831a0010ed831e5077715d82890fb92",
+      "elapsed_seconds": 4.782000000006519
+    }
+  ],
+  "total_checks": 597,
+  "production_changes": [],
+  "test_mode": false,
+  "actual_global_player_state": true,
+  "production_source_bytes_unchanged": true,
+  "real_user_saves_touched": false,
+  "archived_profiles_loaded": 3,
+  "durable_checkpoints": 60,
+  "all_durable_validators_passed": true,
+  "trace_sha256": "a2425bece3e6c99d9b9fbe6922d26c7b2cb3b3991a9ffae18361249e19d53848",
+  "v97_bug_fix_status": "NOT_RUN",
+  "reported_fault_specific_input": "MISSING",
+  "reported_v97_B_fault_reproduced": false,
+  "fixture_adjustments": [
+    "after actual archived load, level=35 and gold=2500000 for legal synthesis",
+    "explicit numeric material, potion and real drop factory weapons 80/81 intake",
+    "all archive equipment and original instance identities retained; operations occur only in isolated copy"
+  ],
+  "limitations": [
+    "v90 archive, not the exact reported v97 B-role prestate",
+    "fresh fixture levels/gold/materials after archived load; no APK or device acceptance"
+  ],
+  "cold_probe_adapter": "only injected item 80 is destroyed; all pre-existing equipment identities checked again after cold mutations"
+}

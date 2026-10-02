@@ -129,6 +129,8 @@ func _prepare_authoritative_data(attempt_generation: int) -> void:
 		success = _ensure_authoritative_step("presentation_assets")
 	if success:
 		success = _ensure_authoritative_step("game_data")
+	if success:
+		success = _ensure_authoritative_step("save_upgrade")
 	if not success:
 		_finish_authoritative_data_attempt(attempt_generation, false, _authoritative_data_step)
 		return
@@ -148,6 +150,8 @@ func _ensure_authoritative_step(step_id: String) -> bool:
 			success = PresentationAssets.reload_skin()
 		"game_data":
 			success = GameData.ensure_loaded()
+		"save_upgrade":
+			success = PlayerState.finish_startup_save_upgrade()
 	if (
 		force_authoritative_data_failure_for_test == step_id
 		and not _authoritative_data_failure_injected
@@ -193,6 +197,8 @@ func _authoritative_failure_message(step_id: String) -> String:
 			return "正式表现资源未准备完成，请检查安装后重试。"
 		"game_data":
 			return "正式游戏数据未准备完成，请检查安装后重试。"
+		"save_upgrade":
+			return "存档升级未完成，原始存档已保留。可重试，若仍失败请勿卸载或清除应用数据。"
 		"intro_missing":
 			return "启动画面初始化失败，请退出并重新启动。"
 	return "启动权威数据准备失败，请检查安装后重试。"

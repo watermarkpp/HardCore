@@ -7457,7 +7457,7 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 		canonical_resolution
 	):
 		SkillExecutionPlanContractScript.cooldown_commit_count += 1
-		player.commit_fire_sword_cooldown()
+		player.commit_fire_sword_cooldown(configuration)
 	_commit_warrior_melee_modifier_events(melee_modifiers)
 	if (
 		bool(melee_modifiers.get("slaying_proc", false))

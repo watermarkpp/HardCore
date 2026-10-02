@@ -1,0 +1,66 @@
+{
+  "third_tree_scenario_status": "PASS",
+  "v97_bug_fix_status": "NOT_RUN",
+  "reason": "fresh A/B production chain now covered; exact v97 baseline and user-reported triggering data have not been reproduced, no causal fix claim",
+  "scope": "A then B, test_mode=false, actual create/switch/workbench/background receipts/equip/destroy/new native process, temporary data only",
+  "source_content_sha256": "a70edc8917c07b87bd3ccaf60c522076ca8c85044e37fac43590918a1d5e0af8",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "direct_checks": {
+    "relic_multi_profile_live_persistence_test": 327,
+    "relic_multi_profile_cold_persistence_test": 32
+  },
+  "native_tests": [
+    {
+      "test_name": "relic_multi_profile_live_persistence_test",
+      "test_path": "tests/framework/relic_multi_profile_live_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T16:10:28.6044844Z",
+      "native_exit_observed_utc": "2026-10-01T16:10:05.3822400Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "12d3b8f0-d9d9-4dd7-b183-16163a2d4b56",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "relic_multi_profile_cold_persistence_test",
+      "test_path": "tests/framework/relic_multi_profile_cold_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T16:10:36.9142508Z",
+      "native_exit_observed_utc": "2026-10-01T16:10:12.2602391Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "6c4bac7c-fb93-4edb-ac81-18c8abc93a45",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "run": "outputs\\r3_takeover\\20260930\\validation\\relic_multi_profile_live_and_cold_000955_817201",
+  "operations_per_profile": {
+    "craft": 4,
+    "claim": 4,
+    "crafted_equip_unequip_destroy": 2,
+    "retained_equipped": 2,
+    "ordinary_equip_unequip_destroy": true
+  },
+  "trace_logs": [
+    "outputs\\r3_takeover\\20260930\\validation\\relic_multi_profile_live_and_cold_000955_817201\\raw\\relic_multi_profile_live_persistence_test.stdout.log",
+    "outputs\\r3_takeover\\20260930\\validation\\relic_multi_profile_live_and_cold_000955_817201\\raw\\relic_multi_profile_cold_persistence_test.stdout.log"
+  ],
+  "first_failure_classification": "fixture used unsupported generic entity_id record key; switched to existing stable-ID receive entry, no source change or weakened assertion"
+}

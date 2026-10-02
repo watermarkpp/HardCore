@@ -1,0 +1,175 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "new native process loads precise isolated production fixture",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "cold process uses actual production save/load",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold directed select A { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\" }",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold synthesis costs and role gold retained A",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "cold exact role-specific relic/badge roll and identity A/hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "cold relic/badge still business-valid A/hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "cold exact role-specific relic/badge roll and identity A/hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold relic/badge still business-valid A/hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold crafted deletion did not resurrect A",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold crafted deletion did not resurrect A",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "cold unrelated weapon remains in backpack A",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "cold entire backpack still equipable A { \"success\": true, \"reason\": \"\", \"revision\": 1, \"instance_id\": \"4760527_3\", \"source\": { \"container\": \"inventory\", \"slot\": 2 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.weapon\" }, \"message\": \"已装备：匕首\" }",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "cold unrelated starter available for destruction",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "cold entire backpack still destroyable A { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "cold mutation actual durable checkpoint A",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "cold disk business validator A { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "cold resource and persistence receipt queues drained A",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "cold directed select B { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\" }",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "cold synthesis costs and role gold retained B",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "cold exact role-specific relic/badge roll and identity B/hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "cold relic/badge still business-valid B/hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "cold exact role-specific relic/badge roll and identity B/hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "cold relic/badge still business-valid B/hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "cold crafted deletion did not resurrect B",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "cold crafted deletion did not resurrect B",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "cold unrelated weapon remains in backpack B",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "cold entire backpack still equipable B { \"success\": true, \"reason\": \"\", \"revision\": 2, \"instance_id\": \"5514882_10\", \"source\": { \"container\": \"inventory\", \"slot\": 2 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.weapon\" }, \"message\": \"已装备：匕首\" }",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "cold unrelated starter available for destruction",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "cold entire backpack still destroyable B { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "cold mutation actual durable checkpoint B",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "cold disk business validator B { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "cold resource and persistence receipt queues drained B",
+      "passed": true
+    }
+  ],
+  "count": 32,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 32,
+  "reported_checks": 32,
+  "reported_failures": 0,
+  "run_id": "6c4bac7c-fb93-4edb-ac81-18c8abc93a45",
+  "scene_id": "relic_multi_profile_cold_persistence_test",
+  "schema_version": 1,
+  "source_content_sha256": "a70edc8917c07b87bd3ccaf60c522076ca8c85044e37fac43590918a1d5e0af8",
+  "status": "PASS"
+}

@@ -1,0 +1,1650 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "A/B use actual production persistence, test_mode=false",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "production create/switch A ",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "registered fixture item intake { \"contract_id\": \"gameplay.inventory.weight_authority.v1\", \"success\": true, \"reason\": \"\", \"inventory\": [{ \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }], \"inventory_changed\": true, \"gold_delta\": 0, \"weight_before\": 0, \"weight_after\": 16, \"max_weight\": 458 }",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "registered fixture item intake { \"contract_id\": \"gameplay.inventory.weight_authority.v1\", \"success\": true, \"reason\": \"\", \"inventory\": [{ \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"匕首\", \"count\": 1, \"item_id\": 81, \"durability\": 10, \"max_durability\": 10, \"durability_raw\": 10000, \"max_durability_raw\": 10000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"4760527_3\", \"weapon_luck\": 0, \"weapon_curse\": 0 }], \"inventory_changed\": true, \"gold_delta\": 0, \"weight_before\": 16, \"weight_after\": 21, \"max_weight\": 458 }",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "registered fixture item intake { \"contract_id\": \"gameplay.inventory.weight_authority.v1\", \"success\": true, \"reason\": \"\", \"inventory\": [{ \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"匕首\", \"count\": 1, \"item_id\": 81, \"durability\": 10, \"max_durability\": 10, \"durability_raw\": 10000, \"max_durability_raw\": 10000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"4760527_3\", \"weapon_luck\": 0, \"weapon_curse\": 0 }, { \"name\": \"超级金创药\", \"count\": 2, \"item_id\": 920017 }], \"inventory_changed\": true, \"gold_delta\": 0, \"weight_before\": 21, \"weight_after\": 23, \"max_weight\": 458 }",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "fixture uses real profile/world/index writers { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.814, \"atomic_write_ms\": 12.599, \"atomic_detail\": { \"worker_prepare_ms\": 8.322, \"worker_previous_read_ms\": 0.371, \"worker_promote_ms\": 1.639 } } }",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871003_3967\", \"item_id\": 950101, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"d5a46038ee1ed65e5483d8653062dc0c0f3bf7634c3eabeb5c22b55e8f8b67c1\", \"quote_id\": \"relic:4795278:123656485:1\" }",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950101, \"output\": { \"name\": \"魔龙之眼\", \"count\": 1, \"item_id\": 950101, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"4795601_4\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.thrusting\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.thrusting\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "real receipt queues drained synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "accepted item revision has durable receipt synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "actual save success synthesize:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "saved business validator synthesize:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "real receipt queues drained claim:950101",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "accepted item revision has durable receipt claim:950101",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "actual save success claim:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "saved business validator claim:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871003_3967\", \"item_id\": 950201, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"d5a46038ee1ed65e5483d8653062dc0c0f3bf7634c3eabeb5c22b55e8f8b67c1\", \"quote_id\": \"relic:4795278:123656485:2\" }",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950201, \"output\": { \"name\": \"勇气徽章\", \"count\": 1, \"item_id\": 950201, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"4897344_5\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.slaying_swordsmanship\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.slaying_swordsmanship\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "real receipt queues drained synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "accepted item revision has durable receipt synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "actual save success synthesize:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "saved business validator synthesize:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "label": "real receipt queues drained claim:950201",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "label": "accepted item revision has durable receipt claim:950201",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "label": "actual save success claim:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "label": "saved business validator claim:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "label": "equip input present hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "label": "real equip publishes new revision hc.item.000081 { \"success\": true, \"reason\": \"\", \"revision\": 1, \"instance_id\": \"4760527_3\", \"source\": { \"container\": \"inventory\", \"slot\": 16 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.weapon\" }, \"message\": \"已装备：匕首\" }",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "label": "real receipt queues drained equip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "label": "accepted item revision has durable receipt equip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "label": "actual save success equip:hc.item.000081 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.664, \"atomic_write_ms\": 13.961, \"atomic_detail\": { \"worker_prepare_ms\": 8.742, \"worker_previous_read_ms\": 0.628, \"worker_promote_ms\": 2.351 } } }",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "label": "saved business validator equip:hc.item.000081 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "label": "real unequip hc.item.000081 { \"success\": true, \"reason\": \"\", \"revision\": 2, \"instance_id\": \"4760527_3\", \"source\": { \"container\": \"equipment\", \"slot\": \"hc.slot.weapon\" }, \"destination\": { \"container\": \"inventory\", \"slot\": 2 }, \"message\": \"已卸下：匕首\" }",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "label": "real receipt queues drained unequip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "label": "accepted item revision has durable receipt unequip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "label": "actual save success unequip:hc.item.000081 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.677, \"atomic_write_ms\": 12.614, \"atomic_detail\": { \"worker_prepare_ms\": 7.443, \"worker_previous_read_ms\": 0.625, \"worker_promote_ms\": 2.435 } } }",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "label": "saved business validator unequip:hc.item.000081 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "label": "destroy input present hc.item.920017",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "label": "real destruction hc.item.920017 { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "label": "real receipt queues drained destroy:hc.item.920017",
+      "passed": true
+    },
+    {
+      "id": 63,
+      "label": "accepted item revision has durable receipt destroy:hc.item.920017",
+      "passed": true
+    },
+    {
+      "id": 64,
+      "label": "actual save success destroy:hc.item.920017 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.615, \"atomic_write_ms\": 15.481, \"atomic_detail\": { \"worker_prepare_ms\": 10.162, \"worker_previous_read_ms\": 0.669, \"worker_promote_ms\": 2.498 } } }",
+      "passed": true
+    },
+    {
+      "id": 65,
+      "label": "saved business validator destroy:hc.item.920017 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 66,
+      "label": "destroyed instance no longer owned",
+      "passed": true
+    },
+    {
+      "id": 67,
+      "label": "equip input present hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "label": "real equip publishes new revision hc.item.950101 { \"success\": true, \"reason\": \"\", \"revision\": 3, \"instance_id\": \"4795601_4\", \"source\": { \"container\": \"inventory\", \"slot\": 0 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.relic\" }, \"message\": \"已装备：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "label": "real receipt queues drained equip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "label": "accepted item revision has durable receipt equip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "label": "actual save success equip:hc.item.950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.643, \"atomic_write_ms\": 13.114, \"atomic_detail\": { \"worker_prepare_ms\": 7.493, \"worker_previous_read_ms\": 0.626, \"worker_promote_ms\": 2.916 } } }",
+      "passed": true
+    },
+    {
+      "id": 72,
+      "label": "saved business validator equip:hc.item.950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 73,
+      "label": "real unequip hc.item.950101 { \"success\": true, \"reason\": \"\", \"revision\": 4, \"instance_id\": \"4795601_4\", \"source\": { \"container\": \"equipment\", \"slot\": \"hc.slot.relic\" }, \"destination\": { \"container\": \"inventory\", \"slot\": 0 }, \"message\": \"已卸下：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 74,
+      "label": "real receipt queues drained unequip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 75,
+      "label": "accepted item revision has durable receipt unequip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 76,
+      "label": "actual save success unequip:hc.item.950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.621, \"atomic_write_ms\": 7.835, \"atomic_detail\": { \"worker_prepare_ms\": 2.729, \"worker_previous_read_ms\": 0.594, \"worker_promote_ms\": 2.513 } } }",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "label": "saved business validator unequip:hc.item.950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "label": "destroy input present hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "label": "real destruction hc.item.950101 { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 80,
+      "label": "real receipt queues drained destroy:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "label": "accepted item revision has durable receipt destroy:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "label": "actual save success destroy:hc.item.950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.601, \"atomic_write_ms\": 13.092, \"atomic_detail\": { \"worker_prepare_ms\": 8.121, \"worker_previous_read_ms\": 0.662, \"worker_promote_ms\": 2.379 } } }",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "label": "saved business validator destroy:hc.item.950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "label": "destroyed instance no longer owned",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "label": "equip input present hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "label": "real equip publishes new revision hc.item.950201 { \"success\": true, \"reason\": \"\", \"revision\": 5, \"instance_id\": \"4897344_5\", \"source\": { \"container\": \"inventory\", \"slot\": 1 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.badge\" }, \"message\": \"已装备：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "label": "real receipt queues drained equip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "label": "accepted item revision has durable receipt equip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 89,
+      "label": "actual save success equip:hc.item.950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.79, \"atomic_write_ms\": 12.027, \"atomic_detail\": { \"worker_prepare_ms\": 7.245, \"worker_previous_read_ms\": 0.598, \"worker_promote_ms\": 2.212 } } }",
+      "passed": true
+    },
+    {
+      "id": 90,
+      "label": "saved business validator equip:hc.item.950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "label": "real unequip hc.item.950201 { \"success\": true, \"reason\": \"\", \"revision\": 6, \"instance_id\": \"4897344_5\", \"source\": { \"container\": \"equipment\", \"slot\": \"hc.slot.badge\" }, \"destination\": { \"container\": \"inventory\", \"slot\": 0 }, \"message\": \"已卸下：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "label": "real receipt queues drained unequip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "label": "accepted item revision has durable receipt unequip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 94,
+      "label": "actual save success unequip:hc.item.950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.616, \"atomic_write_ms\": 13.775, \"atomic_detail\": { \"worker_prepare_ms\": 8.027, \"worker_previous_read_ms\": 0.735, \"worker_promote_ms\": 2.751 } } }",
+      "passed": true
+    },
+    {
+      "id": 95,
+      "label": "saved business validator unequip:hc.item.950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "label": "destroy input present hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 97,
+      "label": "real destruction hc.item.950201 { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "label": "real receipt queues drained destroy:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "label": "accepted item revision has durable receipt destroy:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "label": "actual save success destroy:hc.item.950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.666, \"atomic_write_ms\": 12.934, \"atomic_detail\": { \"worker_prepare_ms\": 7.918, \"worker_previous_read_ms\": 0.607, \"worker_promote_ms\": 2.261 } } }",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "label": "saved business validator destroy:hc.item.950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "label": "destroyed instance no longer owned",
+      "passed": true
+    },
+    {
+      "id": 103,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 104,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 105,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 106,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 107,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 111,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871003_3967\", \"item_id\": 950101, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"4925d777d0ef1572dab4163b8c1efb623cdddf32cdadd0b7ef14d1eb6dcb9c5c\", \"quote_id\": \"relic:4795278:123656485:3\" }",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950101, \"output\": { \"name\": \"魔龙之眼\", \"count\": 1, \"item_id\": 950101, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5219464_6\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.slaying_swordsmanship\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.slaying_swordsmanship\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 113,
+      "label": "real receipt queues drained synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 114,
+      "label": "accepted item revision has durable receipt synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 115,
+      "label": "actual save success synthesize:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 116,
+      "label": "saved business validator synthesize:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 117,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 118,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "label": "real receipt queues drained claim:950101",
+      "passed": true
+    },
+    {
+      "id": 120,
+      "label": "accepted item revision has durable receipt claim:950101",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "label": "actual save success claim:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "label": "saved business validator claim:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 124,
+      "label": "keep exact crafted equipment { \"success\": true, \"reason\": \"\", \"revision\": 7, \"instance_id\": \"5219464_6\", \"source\": { \"container\": \"inventory\", \"slot\": 0 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.relic\" }, \"message\": \"已装备：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 125,
+      "label": "real receipt queues drained keep_equipped:950101",
+      "passed": true
+    },
+    {
+      "id": 126,
+      "label": "accepted item revision has durable receipt keep_equipped:950101",
+      "passed": true
+    },
+    {
+      "id": 127,
+      "label": "actual save success keep_equipped:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.556, \"atomic_write_ms\": 12.916, \"atomic_detail\": { \"worker_prepare_ms\": 8.095, \"worker_previous_read_ms\": 0.676, \"worker_promote_ms\": 2.278 } } }",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "label": "saved business validator keep_equipped:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 129,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 131,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 132,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 133,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 134,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 135,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 136,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 137,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871003_3967\", \"item_id\": 950201, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"e559f9a6bfd2475a57a98d07c971e8f475720518c061afc96a55b2e3abbd69a7\", \"quote_id\": \"relic:4795278:123656485:4\" }",
+      "passed": true
+    },
+    {
+      "id": 138,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950201, \"output\": { \"name\": \"勇气徽章\", \"count\": 1, \"item_id\": 950201, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5343492_7\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.slaying_swordsmanship\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.slaying_swordsmanship\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 139,
+      "label": "real receipt queues drained synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 140,
+      "label": "accepted item revision has durable receipt synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 141,
+      "label": "actual save success synthesize:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 142,
+      "label": "saved business validator synthesize:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 143,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 144,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 145,
+      "label": "real receipt queues drained claim:950201",
+      "passed": true
+    },
+    {
+      "id": 146,
+      "label": "accepted item revision has durable receipt claim:950201",
+      "passed": true
+    },
+    {
+      "id": 147,
+      "label": "actual save success claim:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 148,
+      "label": "saved business validator claim:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 149,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 150,
+      "label": "keep exact crafted equipment { \"success\": true, \"reason\": \"\", \"revision\": 8, \"instance_id\": \"5343492_7\", \"source\": { \"container\": \"inventory\", \"slot\": 0 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.badge\" }, \"message\": \"已装备：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 151,
+      "label": "real receipt queues drained keep_equipped:950201",
+      "passed": true
+    },
+    {
+      "id": 152,
+      "label": "accepted item revision has durable receipt keep_equipped:950201",
+      "passed": true
+    },
+    {
+      "id": 153,
+      "label": "actual save success keep_equipped:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.514, \"atomic_write_ms\": 13.312, \"atomic_detail\": { \"worker_prepare_ms\": 8.174, \"worker_previous_read_ms\": 0.591, \"worker_promote_ms\": 2.604 } } }",
+      "passed": true
+    },
+    {
+      "id": 154,
+      "label": "saved business validator keep_equipped:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 155,
+      "label": "four actual synthesis costs applied once A",
+      "passed": true
+    },
+    {
+      "id": 156,
+      "label": "final production checkpoint A",
+      "passed": true
+    },
+    {
+      "id": 157,
+      "label": "real receipt queues drained final:A",
+      "passed": true
+    },
+    {
+      "id": 158,
+      "label": "accepted item revision has durable receipt final:A",
+      "passed": true
+    },
+    {
+      "id": 159,
+      "label": "actual save success final:A { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.515, \"atomic_write_ms\": 7.522, \"atomic_detail\": { \"worker_prepare_ms\": 2.841, \"worker_previous_read_ms\": 0.578, \"worker_promote_ms\": 2.349 } } }",
+      "passed": true
+    },
+    {
+      "id": 160,
+      "label": "saved business validator final:A { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 161,
+      "label": "production create/switch B ",
+      "passed": true
+    },
+    {
+      "id": 162,
+      "label": "registered fixture item intake { \"contract_id\": \"gameplay.inventory.weight_authority.v1\", \"success\": true, \"reason\": \"\", \"inventory\": [{ \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }], \"inventory_changed\": true, \"gold_delta\": 0, \"weight_before\": 0, \"weight_after\": 16, \"max_weight\": 458 }",
+      "passed": true
+    },
+    {
+      "id": 163,
+      "label": "registered fixture item intake { \"contract_id\": \"gameplay.inventory.weight_authority.v1\", \"success\": true, \"reason\": \"\", \"inventory\": [{ \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"匕首\", \"count\": 1, \"item_id\": 81, \"durability\": 10, \"max_durability\": 10, \"durability_raw\": 10000, \"max_durability_raw\": 10000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5514882_10\", \"weapon_luck\": 0, \"weapon_curse\": 0 }], \"inventory_changed\": true, \"gold_delta\": 0, \"weight_before\": 16, \"weight_after\": 21, \"max_weight\": 458 }",
+      "passed": true
+    },
+    {
+      "id": 164,
+      "label": "registered fixture item intake { \"contract_id\": \"gameplay.inventory.weight_authority.v1\", \"success\": true, \"reason\": \"\", \"inventory\": [{ \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"远古圣物碎片\", \"count\": 1, \"item_id\": 950001 }, { \"name\": \"匕首\", \"count\": 1, \"item_id\": 81, \"durability\": 10, \"max_durability\": 10, \"durability_raw\": 10000, \"max_durability_raw\": 10000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5514882_10\", \"weapon_luck\": 0, \"weapon_curse\": 0 }, { \"name\": \"超级金创药\", \"count\": 2, \"item_id\": 920017 }], \"inventory_changed\": true, \"gold_delta\": 0, \"weight_before\": 21, \"weight_after\": 23, \"max_weight\": 458 }",
+      "passed": true
+    },
+    {
+      "id": 165,
+      "label": "fixture uses real profile/world/index writers { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.764, \"atomic_write_ms\": 12.559, \"atomic_detail\": { \"worker_prepare_ms\": 8.37, \"worker_previous_read_ms\": 0.48, \"worker_promote_ms\": 1.524 } } }",
+      "passed": true
+    },
+    {
+      "id": 166,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 167,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 168,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 169,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 170,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 171,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 172,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 173,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 174,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871004_5012\", \"item_id\": 950101, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"f3856a5452fc8eb56b436c88700cc23adfb66ec7d7016f737f957ccedc9a940f\", \"quote_id\": \"relic:4795278:123656485:5\" }",
+      "passed": true
+    },
+    {
+      "id": 175,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950101, \"output\": { \"name\": \"魔龙之眼\", \"count\": 1, \"item_id\": 950101, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5549600_11\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.half_moon\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.half_moon\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 176,
+      "label": "real receipt queues drained synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 177,
+      "label": "accepted item revision has durable receipt synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 178,
+      "label": "actual save success synthesize:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 179,
+      "label": "saved business validator synthesize:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 180,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 181,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 182,
+      "label": "real receipt queues drained claim:950101",
+      "passed": true
+    },
+    {
+      "id": 183,
+      "label": "accepted item revision has durable receipt claim:950101",
+      "passed": true
+    },
+    {
+      "id": 184,
+      "label": "actual save success claim:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 185,
+      "label": "saved business validator claim:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 186,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 187,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 188,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 189,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 190,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 191,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 192,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 193,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 194,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 195,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871004_5012\", \"item_id\": 950201, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"f3856a5452fc8eb56b436c88700cc23adfb66ec7d7016f737f957ccedc9a940f\", \"quote_id\": \"relic:4795278:123656485:6\" }",
+      "passed": true
+    },
+    {
+      "id": 196,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950201, \"output\": { \"name\": \"勇气徽章\", \"count\": 1, \"item_id\": 950201, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5651909_12\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.thrusting\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.thrusting\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 197,
+      "label": "real receipt queues drained synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 198,
+      "label": "accepted item revision has durable receipt synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 199,
+      "label": "actual save success synthesize:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 200,
+      "label": "saved business validator synthesize:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 201,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 202,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 203,
+      "label": "real receipt queues drained claim:950201",
+      "passed": true
+    },
+    {
+      "id": 204,
+      "label": "accepted item revision has durable receipt claim:950201",
+      "passed": true
+    },
+    {
+      "id": 205,
+      "label": "actual save success claim:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 206,
+      "label": "saved business validator claim:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 207,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 208,
+      "label": "equip input present hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 209,
+      "label": "real equip publishes new revision hc.item.000081 { \"success\": true, \"reason\": \"\", \"revision\": 9, \"instance_id\": \"5514882_10\", \"source\": { \"container\": \"inventory\", \"slot\": 16 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.weapon\" }, \"message\": \"已装备：匕首\" }",
+      "passed": true
+    },
+    {
+      "id": 210,
+      "label": "real receipt queues drained equip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 211,
+      "label": "accepted item revision has durable receipt equip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 212,
+      "label": "actual save success equip:hc.item.000081 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.679, \"atomic_write_ms\": 14.123, \"atomic_detail\": { \"worker_prepare_ms\": 8.703, \"worker_previous_read_ms\": 0.66, \"worker_promote_ms\": 2.552 } } }",
+      "passed": true
+    },
+    {
+      "id": 213,
+      "label": "saved business validator equip:hc.item.000081 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 214,
+      "label": "real unequip hc.item.000081 { \"success\": true, \"reason\": \"\", \"revision\": 10, \"instance_id\": \"5514882_10\", \"source\": { \"container\": \"equipment\", \"slot\": \"hc.slot.weapon\" }, \"destination\": { \"container\": \"inventory\", \"slot\": 2 }, \"message\": \"已卸下：匕首\" }",
+      "passed": true
+    },
+    {
+      "id": 215,
+      "label": "real receipt queues drained unequip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 216,
+      "label": "accepted item revision has durable receipt unequip:hc.item.000081",
+      "passed": true
+    },
+    {
+      "id": 217,
+      "label": "actual save success unequip:hc.item.000081 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.686, \"atomic_write_ms\": 12.777, \"atomic_detail\": { \"worker_prepare_ms\": 7.625, \"worker_previous_read_ms\": 0.703, \"worker_promote_ms\": 2.297 } } }",
+      "passed": true
+    },
+    {
+      "id": 218,
+      "label": "saved business validator unequip:hc.item.000081 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 219,
+      "label": "destroy input present hc.item.920017",
+      "passed": true
+    },
+    {
+      "id": 220,
+      "label": "real destruction hc.item.920017 { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 221,
+      "label": "real receipt queues drained destroy:hc.item.920017",
+      "passed": true
+    },
+    {
+      "id": 222,
+      "label": "accepted item revision has durable receipt destroy:hc.item.920017",
+      "passed": true
+    },
+    {
+      "id": 223,
+      "label": "actual save success destroy:hc.item.920017 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.629, \"atomic_write_ms\": 13.411, \"atomic_detail\": { \"worker_prepare_ms\": 8.241, \"worker_previous_read_ms\": 0.65, \"worker_promote_ms\": 2.395 } } }",
+      "passed": true
+    },
+    {
+      "id": 224,
+      "label": "saved business validator destroy:hc.item.920017 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 225,
+      "label": "destroyed instance no longer owned",
+      "passed": true
+    },
+    {
+      "id": 226,
+      "label": "equip input present hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 227,
+      "label": "real equip publishes new revision hc.item.950101 { \"success\": true, \"reason\": \"\", \"revision\": 11, \"instance_id\": \"5549600_11\", \"source\": { \"container\": \"inventory\", \"slot\": 0 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.relic\" }, \"message\": \"已装备：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 228,
+      "label": "real receipt queues drained equip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 229,
+      "label": "accepted item revision has durable receipt equip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 230,
+      "label": "actual save success equip:hc.item.950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.641, \"atomic_write_ms\": 12.63, \"atomic_detail\": { \"worker_prepare_ms\": 7.581, \"worker_previous_read_ms\": 0.645, \"worker_promote_ms\": 2.347 } } }",
+      "passed": true
+    },
+    {
+      "id": 231,
+      "label": "saved business validator equip:hc.item.950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 232,
+      "label": "real unequip hc.item.950101 { \"success\": true, \"reason\": \"\", \"revision\": 12, \"instance_id\": \"5549600_11\", \"source\": { \"container\": \"equipment\", \"slot\": \"hc.slot.relic\" }, \"destination\": { \"container\": \"inventory\", \"slot\": 0 }, \"message\": \"已卸下：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 233,
+      "label": "real receipt queues drained unequip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 234,
+      "label": "accepted item revision has durable receipt unequip:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 235,
+      "label": "actual save success unequip:hc.item.950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.63, \"atomic_write_ms\": 8.201, \"atomic_detail\": { \"worker_prepare_ms\": 3.026, \"worker_previous_read_ms\": 0.652, \"worker_promote_ms\": 2.485 } } }",
+      "passed": true
+    },
+    {
+      "id": 236,
+      "label": "saved business validator unequip:hc.item.950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 237,
+      "label": "destroy input present hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 238,
+      "label": "real destruction hc.item.950101 { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 239,
+      "label": "real receipt queues drained destroy:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 240,
+      "label": "accepted item revision has durable receipt destroy:hc.item.950101",
+      "passed": true
+    },
+    {
+      "id": 241,
+      "label": "actual save success destroy:hc.item.950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.619, \"atomic_write_ms\": 13.354, \"atomic_detail\": { \"worker_prepare_ms\": 8.019, \"worker_previous_read_ms\": 0.644, \"worker_promote_ms\": 2.535 } } }",
+      "passed": true
+    },
+    {
+      "id": 242,
+      "label": "saved business validator destroy:hc.item.950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 243,
+      "label": "destroyed instance no longer owned",
+      "passed": true
+    },
+    {
+      "id": 244,
+      "label": "equip input present hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 245,
+      "label": "real equip publishes new revision hc.item.950201 { \"success\": true, \"reason\": \"\", \"revision\": 13, \"instance_id\": \"5651909_12\", \"source\": { \"container\": \"inventory\", \"slot\": 1 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.badge\" }, \"message\": \"已装备：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 246,
+      "label": "real receipt queues drained equip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 247,
+      "label": "accepted item revision has durable receipt equip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 248,
+      "label": "actual save success equip:hc.item.950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.606, \"atomic_write_ms\": 13.134, \"atomic_detail\": { \"worker_prepare_ms\": 7.913, \"worker_previous_read_ms\": 0.61, \"worker_promote_ms\": 2.5 } } }",
+      "passed": true
+    },
+    {
+      "id": 249,
+      "label": "saved business validator equip:hc.item.950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 250,
+      "label": "real unequip hc.item.950201 { \"success\": true, \"reason\": \"\", \"revision\": 14, \"instance_id\": \"5651909_12\", \"source\": { \"container\": \"equipment\", \"slot\": \"hc.slot.badge\" }, \"destination\": { \"container\": \"inventory\", \"slot\": 0 }, \"message\": \"已卸下：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 251,
+      "label": "real receipt queues drained unequip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 252,
+      "label": "accepted item revision has durable receipt unequip:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 253,
+      "label": "actual save success unequip:hc.item.950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.604, \"atomic_write_ms\": 13.56, \"atomic_detail\": { \"worker_prepare_ms\": 8.818, \"worker_previous_read_ms\": 0.595, \"worker_promote_ms\": 2.161 } } }",
+      "passed": true
+    },
+    {
+      "id": 254,
+      "label": "saved business validator unequip:hc.item.950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 255,
+      "label": "destroy input present hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 256,
+      "label": "real destruction hc.item.950201 { \"success\": true, \"destroyed\": 1, \"reason\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 257,
+      "label": "real receipt queues drained destroy:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 258,
+      "label": "accepted item revision has durable receipt destroy:hc.item.950201",
+      "passed": true
+    },
+    {
+      "id": 259,
+      "label": "actual save success destroy:hc.item.950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.672, \"atomic_write_ms\": 13.121, \"atomic_detail\": { \"worker_prepare_ms\": 7.92, \"worker_previous_read_ms\": 0.599, \"worker_promote_ms\": 2.587 } } }",
+      "passed": true
+    },
+    {
+      "id": 260,
+      "label": "saved business validator destroy:hc.item.950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 261,
+      "label": "destroyed instance no longer owned",
+      "passed": true
+    },
+    {
+      "id": 262,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 263,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 264,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 265,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 266,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 267,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 268,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 269,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 270,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871004_5012\", \"item_id\": 950101, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"434f5baeff2071af0f63ff36cb7150373efb6b26253904cf7fbe3762abf1a1ff\", \"quote_id\": \"relic:4795278:123656485:7\" }",
+      "passed": true
+    },
+    {
+      "id": 271,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950101, \"output\": { \"name\": \"魔龙之眼\", \"count\": 1, \"item_id\": 950101, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"5977512_13\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.half_moon\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.half_moon\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 272,
+      "label": "real receipt queues drained synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 273,
+      "label": "accepted item revision has durable receipt synthesize:950101",
+      "passed": true
+    },
+    {
+      "id": 274,
+      "label": "actual save success synthesize:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 275,
+      "label": "saved business validator synthesize:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 276,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 277,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 278,
+      "label": "real receipt queues drained claim:950101",
+      "passed": true
+    },
+    {
+      "id": 279,
+      "label": "accepted item revision has durable receipt claim:950101",
+      "passed": true
+    },
+    {
+      "id": 280,
+      "label": "actual save success claim:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 281,
+      "label": "saved business validator claim:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 282,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 283,
+      "label": "keep exact crafted equipment { \"success\": true, \"reason\": \"\", \"revision\": 15, \"instance_id\": \"5977512_13\", \"source\": { \"container\": \"inventory\", \"slot\": 0 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.relic\" }, \"message\": \"已装备：魔龙之眼\" }",
+      "passed": true
+    },
+    {
+      "id": 284,
+      "label": "real receipt queues drained keep_equipped:950101",
+      "passed": true
+    },
+    {
+      "id": 285,
+      "label": "accepted item revision has durable receipt keep_equipped:950101",
+      "passed": true
+    },
+    {
+      "id": 286,
+      "label": "actual save success keep_equipped:950101 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.556, \"atomic_write_ms\": 13.458, \"atomic_detail\": { \"worker_prepare_ms\": 8.405, \"worker_previous_read_ms\": 0.586, \"worker_promote_ms\": 2.61 } } }",
+      "passed": true
+    },
+    {
+      "id": 287,
+      "label": "saved business validator keep_equipped:950101 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 288,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 289,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 290,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 291,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 292,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 293,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 294,
+      "label": "registered fragment present",
+      "passed": true
+    },
+    {
+      "id": 295,
+      "label": "production fragment transfer { \"success\": true, \"message\": \"已放入远古圣物碎片\" }",
+      "passed": true
+    },
+    {
+      "id": 296,
+      "label": "real synthesis quote { \"valid\": true, \"profile_id\": \"1790871004_5012\", \"item_id\": 950201, \"profession_id\": \"hc.profession.warrior\", \"material_indices\": [2, 4, 6, 8], \"gold_cost\": 400000, \"success_percent\": 100, \"tray_snapshot_digest\": \"36c75cd16311c365e2d80955b6b2bec7f264819cc3f376cbc58c95fbc5fcb205\", \"equipment_snapshot_digest\": \"ab57ed236fa9701dc6b1b61736463aa2da2c84d4537efc259b521f1e471f5eba\", \"quote_id\": \"relic:4795278:123656485:8\" }",
+      "passed": true
+    },
+    {
+      "id": 297,
+      "label": "production synthesis accepted { \"valid\": true, \"committed\": true, \"item_id\": 950201, \"output\": { \"name\": \"勇气徽章\", \"count\": 1, \"item_id\": 950201, \"durability\": 1, \"max_durability\": 1, \"durability_raw\": 1000, \"max_durability_raw\": 1000, \"durability_contract_id\": \"equipment.durability.raw_authority.v1\", \"instance_id\": \"6096482_14\", \"modifiers\": [{ \"stat\": \"skill_level\", \"op\": \"add\", \"scope\": \"skill:warrior.basic_swordsmanship\", \"value\": 1 }], \"relic_roll\": { \"contract_id\": \"equipment.relic_synthesis.v1\", \"skill_id\": \"warrior.basic_swordsmanship\", \"heart_maxima\": {  } } }, \"message\": \"合成成功：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 298,
+      "label": "real receipt queues drained synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 299,
+      "label": "accepted item revision has durable receipt synthesize:950201",
+      "passed": true
+    },
+    {
+      "id": 300,
+      "label": "actual save success synthesize:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 301,
+      "label": "saved business validator synthesize:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 302,
+      "label": "actual produced relic/badge identity",
+      "passed": true
+    },
+    {
+      "id": 303,
+      "label": "production claim into backpack { \"success\": true, \"message\": \"已放入背包：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 304,
+      "label": "real receipt queues drained claim:950201",
+      "passed": true
+    },
+    {
+      "id": 305,
+      "label": "accepted item revision has durable receipt claim:950201",
+      "passed": true
+    },
+    {
+      "id": 306,
+      "label": "actual save success claim:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": true, \"profile_index_failure\": \"\" }",
+      "passed": true
+    },
+    {
+      "id": 307,
+      "label": "saved business validator claim:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 308,
+      "label": "claim retains exact synthesis instance",
+      "passed": true
+    },
+    {
+      "id": 309,
+      "label": "keep exact crafted equipment { \"success\": true, \"reason\": \"\", \"revision\": 16, \"instance_id\": \"6096482_14\", \"source\": { \"container\": \"inventory\", \"slot\": 0 }, \"destination\": { \"container\": \"equipment\", \"slot\": \"hc.slot.badge\" }, \"message\": \"已装备：勇气徽章\" }",
+      "passed": true
+    },
+    {
+      "id": 310,
+      "label": "real receipt queues drained keep_equipped:950201",
+      "passed": true
+    },
+    {
+      "id": 311,
+      "label": "accepted item revision has durable receipt keep_equipped:950201",
+      "passed": true
+    },
+    {
+      "id": 312,
+      "label": "actual save success keep_equipped:950201 { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.52, \"atomic_write_ms\": 12.905, \"atomic_detail\": { \"worker_prepare_ms\": 7.916, \"worker_previous_read_ms\": 0.616, \"worker_promote_ms\": 2.397 } } }",
+      "passed": true
+    },
+    {
+      "id": 313,
+      "label": "saved business validator keep_equipped:950201 { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 314,
+      "label": "four actual synthesis costs applied once B",
+      "passed": true
+    },
+    {
+      "id": 315,
+      "label": "final production checkpoint B",
+      "passed": true
+    },
+    {
+      "id": 316,
+      "label": "real receipt queues drained final:B",
+      "passed": true
+    },
+    {
+      "id": 317,
+      "label": "accepted item revision has durable receipt final:B",
+      "passed": true
+    },
+    {
+      "id": 318,
+      "label": "actual save success final:B { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\", \"profile_index_updated\": true, \"profile_index_skipped\": false, \"save_phases\": { \"runtime_snapshot_ms\": 0.524, \"atomic_write_ms\": 7.545, \"atomic_detail\": { \"worker_prepare_ms\": 2.862, \"worker_previous_read_ms\": 0.628, \"worker_promote_ms\": 2.295 } } }",
+      "passed": true
+    },
+    {
+      "id": 319,
+      "label": "saved business validator final:B { \"valid\": true, \"reason\": \"\", \"terminal\": false }",
+      "passed": true
+    },
+    {
+      "id": 320,
+      "label": "two actual separate profiles",
+      "passed": true
+    },
+    {
+      "id": 321,
+      "label": "production directed reload A { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871003_3967.json\" }",
+      "passed": true
+    },
+    {
+      "id": 322,
+      "label": "live reload keeps role-specific instance A/hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 323,
+      "label": "live reload keeps role-specific instance A/hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 324,
+      "label": "production directed reload B { \"contract_id\": \"player_state.save_result.v1\", \"success\": true, \"reason\": \"primary\", \"path\": \"user://relic_multi_profile_live_4713788/characters/1790871004_5012.json\" }",
+      "passed": true
+    },
+    {
+      "id": 325,
+      "label": "live reload keeps role-specific instance B/hc.slot.relic",
+      "passed": true
+    },
+    {
+      "id": 326,
+      "label": "live reload keeps role-specific instance B/hc.slot.badge",
+      "passed": true
+    },
+    {
+      "id": 327,
+      "label": "cold-process fixture pointer",
+      "passed": true
+    }
+  ],
+  "count": 327,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 327,
+  "reported_checks": 327,
+  "reported_failures": 0,
+  "run_id": "12d3b8f0-d9d9-4dd7-b183-16163a2d4b56",
+  "scene_id": "relic_multi_profile_live_persistence_test",
+  "schema_version": 1,
+  "source_content_sha256": "a70edc8917c07b87bd3ccaf60c522076ca8c85044e37fac43590918a1d5e0af8",
+  "status": "PASS"
+}

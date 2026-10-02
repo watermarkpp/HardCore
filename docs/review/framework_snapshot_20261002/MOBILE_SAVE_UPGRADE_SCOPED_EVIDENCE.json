@@ -1,0 +1,453 @@
+{
+  "status": "PASS",
+  "scope": "phone-only covering-update source/startup/cold-process; APK and device NOT_RUN",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "source_content_sha256": "8d2cc049ef9cac447d9ff7340d57f6417746cd6ac401868d5e952fdc4c7998b7",
+  "source_files": 3450,
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "native_tests": [
+    {
+      "test_name": "mobile_save_upgrade_test",
+      "test_path": "tests/framework/mobile_save_upgrade_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:02.9689699Z",
+      "native_exit_observed_utc": "2026-10-01T15:49:39.9407752Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "c409d373-7d8b-4976-a7a9-8a2484f049ec",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "mobile_save_upgrade_restart_test",
+      "test_path": "tests/framework/mobile_save_upgrade_restart_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:11.3940802Z",
+      "native_exit_observed_utc": "2026-10-01T15:49:46.3146467Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "3a4dbb36-3ec9-4f87-a6b0-c2877fd18c54",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "mobile_save_upgrade_startup_test",
+      "test_path": "tests/framework/mobile_save_upgrade_startup_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:17.8332079Z",
+      "native_exit_observed_utc": "2026-10-01T15:49:57.1452550Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "53f25418-10c6-4ada-ba5c-3c3d98a98c9f",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "startup_loading_failure_recovery_test",
+      "test_path": "tests/startup_loading_failure_recovery_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:28.6649891Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:06.4421604Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "multi_character_save_test",
+      "test_path": "tests/multi_character_save_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:37.8485609Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:13.9879007Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "shared_warehouse_migration_test",
+      "test_path": "tests/shared_warehouse_migration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:45.4935082Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:21.0294555Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "shared_warehouse_transaction_test",
+      "test_path": "tests/shared_warehouse_transaction_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:50:52.5380720Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:29.0191268Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "profile_business_validation_recovery_test",
+      "test_path": "tests/profile_business_validation_recovery_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:51:00.5133590Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:36.4181794Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "world_monster_clock_legacy_migration_test",
+      "test_path": "tests/world_monster_clock_legacy_migration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:51:07.7997788Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:43.5104586Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "world_monster_clock_persistence_test",
+      "test_path": "tests/world_monster_clock_persistence_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:51:15.0256461Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:50.5678288Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "world_monster_clock_ledger_test",
+      "test_path": "tests/world_monster_clock_ledger_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:51:22.1234498Z",
+      "native_exit_observed_utc": "2026-10-01T15:50:56.9191017Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "ordinary_item_identity_test",
+      "test_path": "tests/framework/ordinary_item_identity_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:51:28.2933722Z",
+      "native_exit_observed_utc": "2026-10-01T15:51:03.4034415Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "f291e57a-883f-4d26-8ee8-85e5a220ae5a",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "relic_identity_relation_test",
+      "test_path": "tests/framework/relic_identity_relation_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:51:34.7966395Z",
+      "native_exit_observed_utc": "2026-10-01T15:51:09.6839557Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "47b4ffb4-0a28-4406-98c9-f3c19439107c",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "latest_native_tests": [
+    {
+      "test_name": "mobile_save_upgrade_test",
+      "test_path": "tests/framework/mobile_save_upgrade_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:55:41.7996914Z",
+      "native_exit_observed_utc": "2026-10-01T15:55:20.2744025Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "7fba657e-3164-41fd-b634-73c011903ccf",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "mobile_save_upgrade_restart_test",
+      "test_path": "tests/framework/mobile_save_upgrade_restart_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T15:55:51.8927930Z",
+      "native_exit_observed_utc": "2026-10-01T15:55:27.1645665Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "72c27cbf-0f32-4c38-8414-596f3af88647",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "direct_checks": {
+    "mobile_save_upgrade_test": 215,
+    "mobile_save_upgrade_restart_test": 13,
+    "mobile_save_upgrade_startup_test": 20
+  },
+  "related_to_latest_changed_paths": [
+    "tests/framework/mobile_save_upgrade_test.gd"
+  ],
+  "causal_future_owner_red": {
+    "checks": 210,
+    "failed": 17,
+    "failed_checks": [
+      {
+        "id": 59,
+        "label": "one future profile blocks whole account",
+        "passed": false
+      },
+      {
+        "id": 60,
+        "label": "no partial migration or old-backup recovery on future owner",
+        "passed": false
+      },
+      {
+        "id": 61,
+        "label": "future failure creates no account authority",
+        "passed": false
+      },
+      {
+        "id": 62,
+        "label": "valid sibling still blocked",
+        "passed": false
+      },
+      {
+        "id": 63,
+        "label": "future failure cannot claim completion",
+        "passed": false
+      },
+      {
+        "id": 73,
+        "label": "future clock owner blocks upgrade snapshot",
+        "passed": false
+      },
+      {
+        "id": 74,
+        "label": "future clock cannot recover old backup or partially rewrite profile snapshot",
+        "passed": false
+      },
+      {
+        "id": 75,
+        "label": "future clock keeps admission and completion closed snapshot",
+        "passed": false
+      },
+      {
+        "id": 85,
+        "label": "future clock owner blocks upgrade world_state",
+        "passed": false
+      },
+      {
+        "id": 86,
+        "label": "future clock cannot recover old backup or partially rewrite profile world_state",
+        "passed": false
+      },
+      {
+        "id": 87,
+        "label": "future clock keeps admission and completion closed world_state",
+        "passed": false
+      },
+      {
+        "id": 97,
+        "label": "future clock owner blocks upgrade world_schema",
+        "passed": false
+      },
+      {
+        "id": 98,
+        "label": "future clock cannot recover old backup or partially rewrite profile world_schema",
+        "passed": false
+      },
+      {
+        "id": 99,
+        "label": "future clock keeps admission and completion closed world_schema",
+        "passed": false
+      },
+      {
+        "id": 111,
+        "label": "future clock owner blocks upgrade death_event",
+        "passed": false
+      },
+      {
+        "id": 112,
+        "label": "future clock cannot recover old backup or partially rewrite profile death_event",
+        "passed": false
+      },
+      {
+        "id": 113,
+        "label": "future clock keeps admission and completion closed death_event",
+        "passed": false
+      }
+    ]
+  },
+  "actual_old_device_archive": {
+    "path": "D:\\HardCoreAudit\\hardcore_save_backup_v90_20260922.tar",
+    "sha256": "18989f8b6d0f672b653cb0237ebeb33913f46885a508b716fe8c2b1ae5ffd7de",
+    "files": {
+      "audio_preferences_v2.cfg": "297a888af683d45e1ed38e39aaebb635c0527e8384956dbf52228e548be1bb2e",
+      "audio_preferences_v2.cfg.bak": "327004c3ded9c960a96984d415761fe7a5d9ef6784bab40bf207ac1fd60988d3",
+      "character_profiles.json": "4b9f7c857833827ab8e02a345d46e9f84a12f01b2df909323b8259e93543c280",
+      "character_profiles.json.bak": "885a6a2ca9c722aa9c8df27b5f9af7bcfc70fb56ba7f46ee877aff02e11a4b2e",
+      "loot_preferences_v1.cfg": "f8258f538c8294a57f475dd39d071325f3026a0588e1f6ca2b09372caa4a43a3",
+      "shared_warehouse.json": "a34d8ffa924eac08af79e3d1b460016f8a15020311c86965023450d251e1c397",
+      "shared_warehouse.json.bak": "07d35793964f8d2aba81d83b0a50d67c4822f5bab28e44b84d9912a851d32bbb",
+      "characters/1788687153_5980.json": "e65138f6637a74d6f7d5b5e989601e9a5dc6848538436f046ef23cd4f3cc8973",
+      "characters/1788687153_5980.json.bak": "efea71c3188cb90b2cedb33b78ba039bfa7999fbfe466d91f20aaa69d27a3445",
+      "characters/1788959322_7970.json": "cbf4de97ba145c09fca8c3398daccdf929bda0c7289597640d57fdda0d411a70",
+      "characters/1788959322_7970.json.bak": "848cd492d86a79c322912a72dc57807ec3217a962ffd9f6ce8b07daf62021f37",
+      "characters/1789987860_4393.json": "d18ec980746bee913ea3947a02b490063ca80e3c2edb6ba787c13af376e8f078",
+      "characters/1789987860_4393.json.bak": "6a1e888606b4c3aa1955ec2d60ad576f8a0f507054942ab93e673f04bb227f23"
+    }
+  },
+  "new_stable_ids": [
+    "hc.item.920017",
+    "hc.item.920042"
+  ],
+  "service_aliases": {
+    "hc.service_item.000666": "hc.item.920017",
+    "hc.service_item.000667": "hc.item.920042"
+  },
+  "registry_sha256": "4bb463b11af2ecef39278b7d7493f354936674d63311d51750464ebaf7077d3b",
+  "changed_source_paths": [
+    "scripts/player_state.gd",
+    "scripts/startup_loading.gd",
+    "assets/data/identity/entity_registry_source.json",
+    "assets/data/runtime/entity_registry_v1.json",
+    "scripts/save_upgrade_backup.gd",
+    "tests/framework/mobile_save_upgrade_test.gd",
+    "tests/framework/mobile_save_upgrade_test.tscn",
+    "tests/framework/mobile_save_upgrade_restart_test.gd",
+    "tests/framework/mobile_save_upgrade_restart_test.tscn",
+    "tests/framework/mobile_save_upgrade_startup_test.gd",
+    "tests/framework/mobile_save_upgrade_startup_test.tscn",
+    "tests/multi_character_save_test.gd"
+  ],
+  "test_expectation_fix": "three durability disk reads use canonical hc.slot.weapon; assertions and values unchanged",
+  "backup_contract": "hardcore.save.upgrade.framework_identity.v1",
+  "backup_policy": "copy original account bytes before writes; create-only manifest; verify originals on retry and cold startup",
+  "remaining": [
+    "A-to-B real relic/badge synthesis/equip/destroy/cold restart NOT_RUN",
+    "review risks 2/4/5 and P6 pending",
+    "R3 performance FAIL unchanged",
+    "main integration/APK/signature/device NOT_RUN"
+  ],
+  "tested_runs": [
+    "outputs\\r3_takeover\\20260930\\validation\\mobile_save_upgrade_final_related_234930_234825",
+    "outputs\\r3_takeover\\20260930\\validation\\mobile_save_upgrade_real_inventory_and_journal_235509_093817"
+  ],
+  "immutable_review_snapshot": "723972322b837da1a287172c85412076df0e118d"
+}

@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "scope": "fresh warrior/wizard/taoist production singleton synthesis/backpack/persistence and independent cold process on exact v97 runtime export",
+  "created_at": "2026-10-02T02:19:20.579379+08:00",
+  "source_commit": "a945e921e849b4aa81439183f60cec95e63d725c",
+  "source_content_sha256": "0dc8947ce5978c049e8a6700a7f1bdcf63cf6a099d0ab1f8c642086944245aa8",
+  "runtime_files": 11954,
+  "runtime_bytes": 1063572441,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "test_mode": false,
+  "actual_global_player_state": true,
+  "native_runs": [
+    {
+      "phase": "live",
+      "checks": 500,
+      "run": "outputs/v97_backpack_baseline/test_logs/v97_baseline_live_5b76f42137c34db8917a38186b6b6d32",
+      "execution_sha256": "07e555a06184bbb257a337385bd0282ad52670393d8f3262874d8e437281561e",
+      "receipt_sha256": "1d8549e31d43275b7e8c1421f64d765abca4024c2d2ada7ab8d49655893b9729"
+    },
+    {
+      "phase": "cold",
+      "checks": 49,
+      "run": "outputs/v97_backpack_baseline/test_logs/v97_baseline_cold_8256888825ac4df280f9a8dcd89f170f",
+      "execution_sha256": "48ad833952ebadf29c82f87eff846b73abef171d0a769b444cff8848ed4921aa",
+      "receipt_sha256": "9303846ac9d8ee2133fc52b558afc7d6903643a4b0211026c8c571b1a1d1137b"
+    }
+  ],
+  "total_checks": 549,
+  "source_bytes_unchanged": true,
+  "real_user_saves_touched": false,
+  "production_changes": [],
+  "reported_v97_B_fault_reproduced": false,
+  "v97_bug_fix_status": "NOT_RUN",
+  "reported_fault_specific_input": "MISSING",
+  "limitations": [
+    "fresh characters and controlled synthetic item intake; exact historical B role state is not available",
+    "no claim that framework upgrade fixes the reported old-save failure",
+    "main tree, APK installation and device acceptance not performed"
+  ],
+  "retained_failed_runs": [
+    "test_logs/v97_baseline_import_f4820fd346f14a298b25f07a0c20d967 (initial resource-preparation timeout)",
+    "test_logs/v97_baseline_live_659c6ea0f755453eac9c668f8de54c4d (controller FAIL despite marker/receipt; 2 fixture script errors omitted 20 checks)",
+    "test_logs/v97_baseline_live_9f68b9d864f545329363b179a1c98a2e (incomplete resolved-drop fixture envelope; 3 failures and script errors)"
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "status": "PASS",
+  "scope": "independent review risk 1, accepted fire cooldown configuration",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "immutable_review_snapshot": "723972322b837da1a287172c85412076df0e118d",
+  "source_content_sha256": "4ced9bda2a234c22e5c69e55d49e16fa5476fe607369041125e7973a43853da5",
+  "source_files": 3441,
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "causal_red_checks": 33,
+  "causal_red_failed": 3,
+  "green_checks": 33,
+  "native_tests": [
+    {
+      "test_name": "fire_cooldown_configuration_test",
+      "test_path": "tests/framework/fire_cooldown_configuration_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:10:02.0732616Z",
+      "native_exit_observed_utc": "2026-10-01T13:09:46.7921611Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "ebfabaa0-3317-449f-b512-758569d419de",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "melee_configuration_production_test",
+      "test_path": "tests/framework/melee_configuration_production_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:10:18.2369351Z",
+      "native_exit_observed_utc": "2026-10-01T13:10:02.7441247Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "5a718df3-4027-4452-9ef2-03728c913745",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "action_configuration_production_test",
+      "test_path": "tests/framework/action_configuration_production_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:10:34.1417018Z",
+      "native_exit_observed_utc": "2026-10-01T13:10:19.0423664Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "e0dc7973-b62d-4a6b-a2fa-bc0374aa5764",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "action_config_lease_test",
+      "test_path": "tests/framework/action_config_lease_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:10:50.4364438Z",
+      "native_exit_observed_utc": "2026-10-01T13:10:25.5615969Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "eab13180-f251-48be-9a00-1b3183ca6450",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "warrior_skill_state_machine_test",
+      "test_path": "tests/warrior_skill_state_machine_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:10:56.9529982Z",
+      "native_exit_observed_utc": "2026-10-01T13:10:44.0938757Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "warrior_toggle_camera_native_test",
+      "test_path": "tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:11:15.6571724Z",
+      "native_exit_observed_utc": "2026-10-01T13:11:04.6407106Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "",
+      "framework_receipt_valid": null,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "feature_fire_effect_production_test",
+      "test_path": "tests/framework/feature_fire_effect_production_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:11:36.0142448Z",
+      "native_exit_observed_utc": "2026-10-01T13:11:21.0526845Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "eecaeb9b-80e8-4a7d-8fb6-b960ffe0b99c",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    },
+    {
+      "test_name": "empty_extension_behavior_test",
+      "test_path": "tests/framework/empty_extension_behavior_test.tscn",
+      "pass_marker_found": true,
+      "process_exited": true,
+      "wrapper_exit_code": 0,
+      "child_process_exit_state": "exited",
+      "execution_deadline_utc": "2026-10-01T13:11:52.5629441Z",
+      "native_exit_observed_utc": "2026-10-01T13:11:37.0927658Z",
+      "effective_exit_code": 0,
+      "timeout": false,
+      "stdout_failure_count": 0,
+      "stderr_failure_count": 0,
+      "engine_log_failure_count": 0,
+      "framework_run_id": "81230882-eba0-49aa-98c6-6ed5c33b8dd9",
+      "framework_receipt_valid": true,
+      "result": "PASS",
+      "reason": ""
+    }
+  ],
+  "red_measurements": [
+    {
+      "accepted_cooldown_ms": 8000,
+      "actual_committed_ms": 8000,
+      "actual_hp_loss": 23,
+      "base_cooldown_ms": 8000,
+      "case": "empty extension",
+      "expected_committed_ms": 8000,
+      "remaining_mp": 93
+    },
+    {
+      "accepted_cooldown_ms": 4000,
+      "actual_committed_ms": 8000,
+      "actual_hp_loss": 26,
+      "base_cooldown_ms": 8000,
+      "case": "legal half cooldown",
+      "expected_committed_ms": 4000,
+      "remaining_mp": 93
+    },
+    {
+      "accepted_cooldown_ms": 4000,
+      "actual_committed_ms": 8000,
+      "actual_hp_loss": 26,
+      "base_cooldown_ms": 8000,
+      "case": "accepted half cooldown then module OFF",
+      "expected_committed_ms": 4000,
+      "remaining_mp": 93
+    },
+    {
+      "accepted_cooldown_ms": 4000,
+      "actual_committed_ms": 2667,
+      "actual_hp_loss": 23,
+      "base_cooldown_ms": 8000,
+      "case": "accepted half cooldown then cast speed changes",
+      "expected_committed_ms": 4000,
+      "remaining_mp": 93
+    }
+  ],
+  "green_measurements": [
+    {
+      "accepted_cooldown_ms": 8000,
+      "actual_committed_ms": 8000,
+      "actual_hp_loss": 26,
+      "base_cooldown_ms": 8000,
+      "case": "empty extension",
+      "expected_committed_ms": 8000,
+      "remaining_mp": 93
+    },
+    {
+      "accepted_cooldown_ms": 4000,
+      "actual_committed_ms": 4000,
+      "actual_hp_loss": 26,
+      "base_cooldown_ms": 8000,
+      "case": "legal half cooldown",
+      "expected_committed_ms": 4000,
+      "remaining_mp": 93
+    },
+    {
+      "accepted_cooldown_ms": 4000,
+      "actual_committed_ms": 4000,
+      "actual_hp_loss": 23,
+      "base_cooldown_ms": 8000,
+      "case": "accepted half cooldown then module OFF",
+      "expected_committed_ms": 4000,
+      "remaining_mp": 93
+    },
+    {
+      "accepted_cooldown_ms": 4000,
+      "actual_committed_ms": 4000,
+      "actual_hp_loss": 26,
+      "base_cooldown_ms": 8000,
+      "case": "accepted half cooldown then cast speed changes",
+      "expected_committed_ms": 4000,
+      "remaining_mp": 93
+    }
+  ],
+  "frozen_primary_paths": [
+    "scripts/features/contracts/action_config_lease.gd",
+    "scripts/features/adapters/feature_authority.gd",
+    "assets/data/vanilla_176/skills_source_of_truth_v1.json"
+  ],
+  "history": [
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\fire_cooldown_configuration_causal_red_210532_929246",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/fire_cooldown_configuration_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 1,
+        "source_stable_during_run": true,
+        "passed": 0,
+        "failed": 1,
+        "status": "FAIL"
+      }
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\fire_cooldown_configuration_green_210800_478594",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/fire_cooldown_configuration_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 1,
+        "failed": 0,
+        "status": "PASS"
+      }
+    },
+    {
+      "path": "outputs\\r3_takeover\\20260930\\validation\\fire_cooldown_configuration_final_related_210929_513633",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/fire_cooldown_configuration_test.tscn','tests/framework/melee_configuration_production_test.tscn','tests/framework/action_configuration_production_test.tscn','tests/framework/action_config_lease_test.tscn','tests/warrior_skill_state_machine_test.tscn','tests/user_feedback_20260930/warrior_toggle_camera_native_test.tscn','tests/framework/feature_fire_effect_production_test.tscn','tests/framework/empty_extension_behavior_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 8,
+        "failed": 0,
+        "status": "PASS"
+      }
+    }
+  ],
+  "fixture_boundary": "in-memory legal module compiled with actual authority; actual qualification/activation/lease/planner/HP/cooldown; trusted disk module-path ingress is covered separately, not claimed by this fixture",
+  "new_entity_ids": [],
+  "remaining": [
+    "review risks 2-6",
+    "price name identity scope",
+    "P6",
+    "R3 performance FAIL",
+    "integration/APK/device NOT_RUN"
+  ]
+}

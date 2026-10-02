@@ -7,7 +7,7 @@
     "res://assets/data/equipment_attribute_master.json": "223c96df954077aa8970a277efe229d9dbc16609d2503a0033e60197f7e00701",
     "res://assets/data/equipment_enhancement_black_iron_v1.json": "3ccd9e7e7d774dcc9655f2b6d5edf1eea2d97f50e77880ff07750012d0ba9732",
     "res://assets/data/features/socketing_fixture_items.json": "ae2c7adbcf0ee9ed8e88f4e2dd8d4c4e2c55af6b49a7bcffc0828c8a29e23043",
-    "res://assets/data/identity/entity_registry_source.json": "49d88d4feb570f2f2d7f9ab3acf2acd06e7071d4f7d69db0dac78b4aacc9dd34",
+    "res://assets/data/identity/entity_registry_source.json": "ef36ccd584e73f58d86fe793eb5b421721fe7db0153dfe41d809b90bc5e6b6c2",
     "res://assets/data/identity/item_categories_v1.json": "6dd144266aa3f0ec91338c0c3f8a4d8d41788b8db81be1ae83c2fd29834caf04",
     "res://assets/data/item_runtime_authority_v1.json": "4232baf42256fa1ef0e5ab6e53f9b4ae452a4614fc09ca51902e4220d908f1dc",
     "res://assets/data/map_design/map_identity_registry.json": "7e50073a4a20918e234587af284f009ff92b9d6d845ad46dfc997be60d9128d8",
@@ -3199,6 +3199,18 @@
       ]
     },
     {
+      "id": "hc.item.920017",
+      "kind": "item",
+      "legacy_id": 920017,
+      "display_name": "超级金创药",
+      "evidence": [
+        {
+          "path": "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+          "pointer": "/records/63"
+        }
+      ]
+    },
+    {
       "id": "hc.item.920018",
       "kind": "item",
       "legacy_id": 920018,
@@ -3459,6 +3471,18 @@
         {
           "path": "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json",
           "pointer": "/records/167"
+        }
+      ]
+    },
+    {
+      "id": "hc.item.920042",
+      "kind": "item",
+      "legacy_id": 920042,
+      "display_name": "超级魔法药",
+      "evidence": [
+        {
+          "path": "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json",
+          "pointer": "/records/64"
         }
       ]
     },
@@ -8735,8 +8759,13 @@
         {
           "path": "res://assets/data/service_item_catalog.json",
           "pointer": "/runtimeItems/9"
+        },
+        {
+          "path": "res://assets/data/identity/entity_registry_source.json",
+          "pointer": "/aliases/47"
         }
-      ]
+      ],
+      "canonical_id": "hc.item.920017"
     },
     {
       "id": "hc.service_item.000667",
@@ -8747,8 +8776,13 @@
         {
           "path": "res://assets/data/service_item_catalog.json",
           "pointer": "/runtimeItems/10"
+        },
+        {
+          "path": "res://assets/data/identity/entity_registry_source.json",
+          "pointer": "/aliases/48"
         }
-      ]
+      ],
+      "canonical_id": "hc.item.920042"
     },
     {
       "id": "hc.service_item.000668",
@@ -15832,7 +15866,7 @@
   ],
   "counts": {
     "currency": 1,
-    "item": 254,
+    "item": 256,
     "item_category": 32,
     "map": 209,
     "monster": 156,

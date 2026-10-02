@@ -332,7 +332,9 @@ func _test_invalid_profile_id_cannot_escape_profile_directory() -> void:
 
 func _test_shared_warehouse_validation_and_recovery() -> void:
 	_configure_case("shared_warehouse")
-	var good := _valid_shared([{"name": "未知但可保留的旧物品", "count": 1}])
+	# This is a known backup-recovery control. Display text cannot manufacture
+	# an unknown identity; the explicit registered ID owns this renamed record.
+	var good := _valid_shared([{"item_id": 80, "name": "未知但可保留的旧物品", "count": 1}])
 	var good_text := JSON.stringify(good)
 	_write_raw(PlayerState.shared_warehouse_path, "{}")
 	_write_raw(PlayerState.shared_warehouse_path + ".bak", good_text)
@@ -401,7 +403,7 @@ func _test_legacy_versions_and_shapes_migrate() -> void:
 		"手镯": {"name": "铁手镯", "durability": 2, "max_durability": 4},
 		"戒指": {"name": "古铜戒指", "durability": 3, "max_durability": 5},
 	}
-	v7["warehouse_inventory"] = [{"name": "旧库未知物品", "count": 1}]
+	v7["warehouse_inventory"] = [{"item_id": 80, "name": "旧库改名物品", "count": 1}]
 	v7["taoist_main_pet_runtime_state"] = _legacy_pet_snapshot()
 	_write_index([v7_id])
 	_load_fixture(v7_id, v7)
@@ -420,7 +422,8 @@ func _test_legacy_versions_and_shapes_migrate() -> void:
 	v8.erase("equip_cycle_cursor")
 	_load_fixture(v8_id, v8)
 	assert(PlayerState.quick_item_slots == [GameData.item_entity_id("回城卷"), "", "", ""])
-	assert(PlayerState.equip_cycle_cursor == {"戒指": "左戒指", "手镯": "左手镯"})
+	assert(PlayerState.equip_cycle_cursor == {"hc.slot.ring_left": "hc.slot.ring_left",
+		"hc.slot.bracelet_left": "hc.slot.bracelet_left"})
 
 	_configure_case("legacy_v9")
 	var v9_id := "legacy_v9"

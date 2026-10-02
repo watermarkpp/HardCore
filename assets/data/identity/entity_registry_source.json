@@ -8,6 +8,8 @@
     {"kind":"item","path":"assets/data/equipment_attribute_master.json","records":"records","id_field":"itemId","display_field":"name"},
     {"kind":"item","path":"assets/data/item_runtime_authority_v1.json","records":"newItems","id_field":"itemId","display_field":"name"},
     {"kind":"item","path":"assets/data/drop/dpv2_21cq_item_mapping_v1.json","records":"records","id_field":"canonical_item_id","display_field":"canonical_item_name","filter":{"reward_kind":"item","mapping_status":"EXACT"},"allow_repeated_identity":true},
+    {"kind":"item","path":"assets/data/drop/dpv2_21cq_item_mapping_v1.json","records":"records","id_field":"canonical_item_id","display_field":"canonical_item_name","filter":{"reward_kind":"item","mapping_status":"EXPLICIT_ALIAS","canonical_item_id":920017}},
+    {"kind":"item","path":"assets/data/drop/dpv2_21cq_item_mapping_v1.json","records":"records","id_field":"canonical_item_id","display_field":"canonical_item_name","filter":{"reward_kind":"item","mapping_status":"EXPLICIT_ALIAS","canonical_item_id":920042}},
     {"kind":"service_item","path":"assets/data/service_item_catalog.json","records":"runtimeItems","id_field":"serviceIndex","display_field":"name"},
     {"kind":"monster","path":"assets/data/runtime/canonical_monster_catalog.json","records":"entries","id_field":"monster_id","display_field":"canonical_name"},
     {"kind":"map","path":"assets/data/vanilla_176/maps.json","records":"records","id_field":"mapId","display_field":"name","mode":"legacy_map_runtime_id"},
@@ -691,6 +693,22 @@
         "path": "res://assets/data/drop/dpv2_21cq_item_mapping_v1.json",
         "pointer": "/records/25"
       }
+    ]
+  },
+  {
+    "alias_id":"hc.service_item.000666",
+    "canonical_id":"hc.item.920017",
+    "evidence":[
+      {"path":"res://assets/data/service_item_catalog.json","pointer":"/runtimeItems/9"},
+      {"path":"res://assets/data/drop/dpv2_21cq_item_mapping_v1.json","pointer":"/records/63"}
+    ]
+  },
+  {
+    "alias_id":"hc.service_item.000667",
+    "canonical_id":"hc.item.920042",
+    "evidence":[
+      {"path":"res://assets/data/service_item_catalog.json","pointer":"/runtimeItems/10"},
+      {"path":"res://assets/data/drop/dpv2_21cq_item_mapping_v1.json","pointer":"/records/64"}
     ]
   }
 ]

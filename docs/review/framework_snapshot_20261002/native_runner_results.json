@@ -1,0 +1,49 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  2,
+    "results":  [
+                    {
+                        "test_name":  "relic_multi_profile_live_persistence_test",
+                        "test_path":  "tests/framework/relic_multi_profile_live_persistence_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-01T16:10:28.6044844Z",
+                        "native_exit_observed_utc":  "2026-10-01T16:10:05.3822400Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "12d3b8f0-d9d9-4dd7-b183-16163a2d4b56",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "relic_multi_profile_cold_persistence_test",
+                        "test_path":  "tests/framework/relic_multi_profile_cold_persistence_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-01T16:10:36.9142508Z",
+                        "native_exit_observed_utc":  "2026-10-01T16:10:12.2602391Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "6c4bac7c-fb93-4edb-ac81-18c8abc93a45",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T00:10:13.8029216+08:00",
+    "total":  2,
+    "failed":  0
+}

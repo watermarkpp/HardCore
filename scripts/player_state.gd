@@ -23,6 +23,10 @@ const EquipmentIdentity := preload("res://scripts/identity/equipment_identity_co
 const ItemExtensionCodec := preload("res://scripts/items/item_extension_codec.gd")
 const ItemTransactionJournal := preload("res://scripts/items/item_transaction_journal.gd")
 const ItemTransactionPort := preload("res://scripts/items/item_transaction_port.gd")
+const SaveUpgradeBackup := preload("res://scripts/save_upgrade_backup.gd")
+var _startup_save_upgrade_pending := false
+var _startup_save_upgrade_in_progress := false
+var startup_save_upgrade_result: Dictionary = {}
 var _item_transaction_port: RefCounted
 var _item_transaction_journal: Dictionary = {}
 const EquipmentEnhancementRulesScript := preload("res://scripts/layers/rules/equipment_enhancement_rules.gd")
@@ -368,6 +372,8 @@ var temporary_item_buff_revision := 0
 
 
 func _notification(what: int) -> void:
+	if _startup_save_upgrade_pending:
+		return
 	if what == NOTIFICATION_PREDELETE:
 		_before_state_transaction(true)
 		return
@@ -395,6 +401,8 @@ func commit_item_transaction(quote: Dictionary) -> Dictionary:
 
 func _process(delta: float) -> void:
 	_pump_persistence_receipts()
+	if _startup_save_upgrade_pending:
+		return
 	_start_item_save()
 	_advance_world_clock_cleanup()
 	advance_temporary_item_buffs(delta)
@@ -443,16 +451,143 @@ func _ready() -> void:
 	_relic_instance_rng.randomize()
 	_relic_proc_rng.randomize()
 	_shop_pricing_session_nonce = "%d:%d" % [Time.get_ticks_usec(), randi()]
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(PROFILE_DIRECTORY))
-	_migrate_single_save_to_profile()
-	_recover_shared_warehouse_transaction()
-	_initialize_shared_warehouse()
-	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
-		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
-			prepare_qa_test_roster_v2()
+	if DisplayServer.get_name() != "headless":
+		begin_startup_save_upgrade()
+	if not _startup_save_upgrade_pending:
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory))
+		_migrate_single_save_to_profile()
+		_recover_shared_warehouse_transaction()
+		_initialize_shared_warehouse()
 	reset_progress(false)
 	recalculate_stats()
 	ContentLayers.feature_catalog_changed.connect(_on_feature_catalog_changed)
+
+
+func begin_startup_save_upgrade() -> void:
+	_startup_save_upgrade_pending = true
+	startup_save_upgrade_result = {"success":false, "reason":"upgrade_pending"}
+
+
+func _startup_upgrade_sources() -> Array[String]:
+	var root := profile_directory.get_base_dir()
+	var paths: Array[String] = [profile_directory, root.path_join("gold_migrations")]
+	for base: String in [profile_index_path, shared_warehouse_path, shared_warehouse_transaction_log_path,
+		root.path_join(SAVE_PATH.get_file()), root.path_join(LEGACY_SAVE_PATH.get_file()),
+		root.path_join("audio_preferences_v2.cfg"), root.path_join("loot_preferences_v1.cfg")]:
+		paths.append(base)
+		var directory := DirAccess.open(base.get_base_dir())
+		if directory == null: continue
+		for name: String in directory.get_files():
+			if name.begins_with(base.get_file() + "."): paths.append(base.get_base_dir().path_join(name))
+	return paths
+
+
+func _startup_upgrade_read(path: String, validator := Callable()) -> Dictionary:
+	if not validator.is_valid(): validator = _json_validator_for_path(path)
+	var primary := _read_json_document(path)
+	var validation := _validate_json_candidate(primary.data, validator) if bool(primary.valid) else _validation_result(false, "invalid_json")
+	if bool(validation.get("terminal", false)):
+		return {"success":false, "reason":validation.reason, "path":path}
+	var backup := _read_json_document(path + ".bak")
+	var backup_validation := _validate_json_candidate(backup.data, validator) if bool(backup.valid) else _validation_result(false, "invalid_json")
+	if bool(backup_validation.get("terminal", false)):
+		return {"success":false, "reason":backup_validation.reason, "path":path + ".bak"}
+	if bool(validation.valid): return {"success":true, "data":primary.data, "path":path}
+	if bool(backup_validation.valid): return {"success":true, "data":backup.data, "path":path}
+	return {"success":false, "reason":validation.reason, "path":path}
+
+
+func _startup_upgrade_preflight() -> Dictionary:
+	var ids: Dictionary = {}
+	var has_legacy := false
+	if FileAccess.file_exists(profile_index_path) or FileAccess.file_exists(profile_index_path + ".bak"):
+		var index := _startup_upgrade_read(profile_index_path)
+		if not bool(index.success): return index
+		for entry: Dictionary in index.data.profiles: ids[entry.id] = true
+	var directory := DirAccess.open(profile_directory)
+	if directory != null:
+		for name: String in directory.get_files():
+			if name.ends_with(".json") or name.ends_with(".json.bak"):
+				var id := name.trim_suffix(".bak").trim_suffix(".json")
+				if not _valid_profile_storage_id(id): return {"success":false, "reason":"invalid_profile_id"}
+				ids[id] = true
+	var shared: Dictionary = {}
+	if FileAccess.file_exists(shared_warehouse_path) or FileAccess.file_exists(shared_warehouse_path + ".bak"):
+		var warehouse := _startup_upgrade_read(shared_warehouse_path)
+		if not bool(warehouse.success): return warehouse
+		shared = warehouse.data
+	var all_profiles: Dictionary = {}
+	for id: String in ids:
+		var profile := _startup_upgrade_read(_profile_path(id))
+		if not bool(profile.success): return profile
+		all_profiles[id] = profile.data
+		if not shared.is_empty() and not _profile_and_shared_drop_instances_are_disjoint(profile.data, shared):
+			return {"success":false, "reason":"duplicate_drop_instance_across_shared", "path":profile.path}
+		if profile.data.has("death_event_sequence"):
+			var replay := _read_world_clock_replay(profile.data)
+			if not bool(replay.get("ok", false)): return {"success":false, "reason":replay.reason, "path":profile.path}
+	for legacy_path: String in [profile_directory.get_base_dir().path_join(SAVE_PATH.get_file()), profile_directory.get_base_dir().path_join(LEGACY_SAVE_PATH.get_file())]:
+		if FileAccess.file_exists(legacy_path) or FileAccess.file_exists(legacy_path + ".bak"):
+			var legacy := _startup_upgrade_read(legacy_path, Callable(self, "_validate_profile_document_status").bind("", true))
+			if not bool(legacy.success): return legacy
+			has_legacy = true
+	if FileAccess.file_exists(shared_warehouse_transaction_log_path):
+		var log := _read_json_document(shared_warehouse_transaction_log_path)
+		if not bool(log.valid) or not _warehouse_transaction_log_is_valid(log.data):
+			return {"success":false, "reason":"invalid_warehouse_transaction_log", "path":shared_warehouse_transaction_log_path}
+	return {"success":true, "ids":ids.keys(), "profiles":all_profiles, "legacy_pending":has_legacy and ids.is_empty()}
+
+
+func _startup_upgrade_fail(reason: String, path := "") -> bool:
+	_startup_save_upgrade_in_progress = false
+	active_profile_id = ""
+	startup_save_upgrade_result = {"success":false, "reason":reason, "path":path}
+	return false
+
+
+func finish_startup_save_upgrade() -> bool:
+	if not _startup_save_upgrade_pending: return true
+	if _startup_save_upgrade_in_progress: return false
+	var backup := SaveUpgradeBackup.new()
+	if not backup.prepare(profile_directory.get_base_dir(), _startup_upgrade_sources()):
+		return _startup_upgrade_fail(backup.reason, backup.archive)
+	var completion := backup.completion_status()
+	if not bool(completion.valid): return _startup_upgrade_fail("upgrade_completion_invalid", backup.archive)
+	var preflight := _startup_upgrade_preflight()
+	if not bool(preflight.success): return _startup_upgrade_fail(preflight.reason, str(preflight.get("path", "")))
+	_startup_save_upgrade_in_progress = true
+	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(profile_directory)) != OK:
+		return _startup_upgrade_fail("profile_directory_failed")
+	_migrate_single_save_to_profile()
+	_recover_shared_warehouse_transaction()
+	if _warehouse_transaction_locked or not _initialize_shared_warehouse():
+		return _startup_upgrade_fail("shared_warehouse_unavailable", shared_warehouse_path)
+	var profiles := _profile_ids_for_shared_warehouse()
+	if not bool(profiles.ok): return _startup_upgrade_fail("profile_index_unavailable", profile_index_path)
+	if bool(preflight.legacy_pending) and not profiles.ids.has("legacy_01"):
+		return _startup_upgrade_fail("legacy_profile_migration_failed")
+	if not bool(completion.completed):
+		var warehouse_document := _read_json(shared_warehouse_path)
+		if not _write_shared_warehouse_document_atomic(warehouse_document):
+			return _startup_upgrade_fail("shared_warehouse_identity_upgrade_failed", shared_warehouse_path)
+		for id: String in profiles.ids:
+			if not select_character(id):
+				return _startup_upgrade_fail(str(last_load_result.get("reason", "profile_load_failed")), _profile_path(id))
+			if not save_game(true, true, true):
+				return _startup_upgrade_fail(str(last_save_result.get("reason", "profile_save_failed")), _profile_path(id))
+			var final := _startup_upgrade_read(_profile_path(id))
+			if not bool(final.success): return _startup_upgrade_fail(final.reason, final.path)
+			_before_state_transaction(true)
+		if not backup.complete(profiles.ids): return _startup_upgrade_fail(backup.reason, backup.archive)
+	if OS.is_debug_build() and DisplayServer.get_name() != "headless":
+		if ProjectSettings.get_setting("hardcore/debug/enable_qa_test_roster", false):
+			prepare_qa_test_roster_v2()
+	active_profile_id = ""
+	reset_progress(false)
+	_startup_save_upgrade_in_progress = false
+	_startup_save_upgrade_pending = false
+	startup_save_upgrade_result = {"success":true, "reason":"already_completed" if bool(completion.completed) else "upgraded", "backup_path":backup.archive, "profiles":profiles.ids}
+	return true
 
 
 func reset_progress(emit_updates := true) -> void:
@@ -4806,8 +4941,10 @@ func _validate_profile_document_status(
 	# Recognize every aggregate owner before classifying known corruption.
 	# A malformed item sibling cannot authorize backup recovery over a future
 	# character, binding, outer profile or economic journal contract.
-	if _is_integral_json_number(document.get("save_version")) and int(document.save_version) > SAVE_VERSION:
+	if _is_integral_json_number(document.get("save_version")) and document.save_version > SAVE_VERSION:
 		return _validation_result(false, "future_save_version", true)
+	if _world_state_owner_is_unsupported(document.get("world_monster_respawn_state")):
+		return _validation_result(false, "unsupported_world_state", true)
 	var character_identity := CharacterIdentityCodec.decode(document)
 	if not bool(character_identity.success):
 		return _validation_result(false, character_identity.reason, true)
@@ -4989,15 +5126,17 @@ func _validate_profile_index_document_status(document: Dictionary) -> Dictionary
 
 
 func _validate_shared_warehouse_document_status(document: Dictionary) -> Dictionary:
+	var schema_value: Variant = document.get("schema_version", null)
+	# A future aggregate owns all its children, including ones today's item
+	# codec considers corrupt. Never recover a backup over that owner.
+	if _is_integral_json_number(schema_value) and schema_value > SHARED_WAREHOUSE_SCHEMA_VERSION:
+		return _validation_result(false, "future_shared_warehouse_version", true)
 	var item_document := ItemExtensionCodec.decode_document(document)
 	if item_document.status != ItemExtensionCodec.KNOWN_VALID:
 		return _validation_result(false, item_document.reason,
 			item_document.status == ItemExtensionCodec.OPAQUE_UNSUPPORTED)
-	var schema_value: Variant = document.get("schema_version", null)
 	if not _is_integral_json_number(schema_value) or int(schema_value) < 1:
 		return _validation_result(false, "invalid_shared_warehouse_version")
-	if int(schema_value) > SHARED_WAREHOUSE_SCHEMA_VERSION:
-		return _validation_result(false, "future_shared_warehouse_version", true)
 	if document.has("revision"):
 		var revision_value: Variant = document.get("revision")
 		if not _is_integral_json_number(revision_value) or int(revision_value) < 0:
@@ -5037,7 +5176,21 @@ func _json_validator_for_path(path: String) -> Callable:
 	return Callable()
 
 
+func _world_state_owner_is_unsupported(value: Variant) -> bool:
+	if not value is Dictionary: return false
+	var contract: Variant = value.get("contract_id")
+	if contract is String and not contract.is_empty() and contract != WorldMonsterRespawnStateScript.CONTRACT_ID:
+		return true
+	var version: Variant = value.get("schema_version")
+	return _is_integral_json_number(version) and version > WorldMonsterRespawnStateScript.SCHEMA_VERSION
+
+
 func _validate_world_clock_document_status(document: Dictionary, profile_id: String, generation := "") -> Dictionary:
+	var contract: Variant = document.get("contract_id")
+	if contract is String and not contract.is_empty() and contract != WorldMonsterClockLedgerScript.SNAPSHOT_CONTRACT_ID:
+		return _validation_result(false, "unsupported_world_clock_snapshot", true)
+	if _world_state_owner_is_unsupported(document.get("world_state")):
+		return _validation_result(false, "unsupported_world_state", true)
 	return _validation_result(
 		_valid_profile_storage_id(profile_id)
 		and WorldMonsterClockLedgerScript.valid_snapshot(document, profile_id, generation),
@@ -5051,6 +5204,11 @@ func _validate_death_event_document_status(
 	sequence_text: String,
 	generation := "",
 ) -> Dictionary:
+	var contract: Variant = document.get("contract_id")
+	if contract is String and not contract.is_empty() and contract not in [WorldMonsterClockLedgerScript.EVENT_CONTRACT_ID, WorldMonsterClockLedgerScript.DELTA_EVENT_CONTRACT_ID]:
+		return _validation_result(false, "unsupported_death_event", true)
+	if _world_state_owner_is_unsupported(document.get("world_state")):
+		return _validation_result(false, "unsupported_world_state", true)
 	return _validation_result(
 		_valid_profile_storage_id(profile_id)
 		and sequence_text.is_valid_int()
@@ -5201,7 +5359,9 @@ func _prepare_world_clock_profile(document: Dictionary) -> Dictionary:
 	converted["world_clock_import_source"] = digest
 	# World first, then primary, then matching recovery checkpoint. No gameplay
 	# runs until all three succeed. Original character data remains archived.
-	if not _write_json_atomic(_profile_path(profile_id), converted):
+	# This intermediate clock import retains validated legacy item shapes.
+	# Runtime equipment/identity import follows before the normal formal save.
+	if not _write_json_atomic(_profile_path(profile_id), converted, true):
 		return {"ok": false, "reason": "world_clock_import_profile_failed"}
 	if not _complete_world_clock_import_backup(converted):
 		return {"ok": false, "reason": "world_clock_import_backup_failed"}
@@ -5232,7 +5392,7 @@ func _complete_world_clock_import_backup(document: Dictionary) -> bool:
 	# an arbitrary older checkpoint to a later cleanup watermark.
 	if int(document.get("death_event_sequence", -1)) != 0:
 		return false
-	return _write_json_atomic(backup_path, document)
+	return _write_json_atomic(backup_path, document, true)
 
 
 func _checkpoint_world_clock() -> bool:
@@ -5473,6 +5633,8 @@ func _restore_json_backup(path: String, validator := Callable()) -> Dictionary:
 
 
 func _read_json_with_status(path: String, validator := Callable()) -> Dictionary:
+	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		return _startup_upgrade_read(path, validator)
 	if not validator.is_valid():
 		validator = _json_validator_for_path(path)
 	var primary := _read_json_document(path)
@@ -5507,6 +5669,8 @@ func _read_json(path: String) -> Dictionary:
 
 
 func _write_json_atomic(path: String, data: Dictionary, preserve_known_wire := false) -> bool:
+	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		return false
 	_atomic_write_phases = {}
 	_last_json_promotion = {}
 	# Rollback and migration before-images retain their source digest. Check
@@ -9513,6 +9677,8 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 
 
 func select_character(profile_id: String) -> bool:
+	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
+		return false
 	_before_state_transaction(true)
 	if _item_save_revision > _item_saved_revision:
 		return false
@@ -9578,11 +9744,8 @@ func _migrate_single_save_to_profile() -> void:
 			return
 	elif not list_characters().is_empty():
 		return
-	var legacy_path := (
-		SAVE_PATH
-		if FileAccess.file_exists(SAVE_PATH) or FileAccess.file_exists(SAVE_PATH + ".bak")
-		else LEGACY_SAVE_PATH
-	)
+	var current_legacy_path := profile_directory.get_base_dir().path_join(SAVE_PATH.get_file())
+	var legacy_path := current_legacy_path if FileAccess.file_exists(current_legacy_path) or FileAccess.file_exists(current_legacy_path + ".bak") else profile_directory.get_base_dir().path_join(LEGACY_SAVE_PATH.get_file())
 	if not FileAccess.file_exists(legacy_path) and not FileAccess.file_exists(legacy_path + ".bak"):
 		return
 	# Missing profile identity is accepted only at this explicit one-time seam;
@@ -9597,7 +9760,7 @@ func _migrate_single_save_to_profile() -> void:
 	old_data["profile_id"] = active_profile_id
 	old_data["character_name"] = character_name
 	old_data["updated_at"] = int(Time.get_unix_time_from_system())
-	if not _write_json_atomic(_profile_path(active_profile_id), old_data):
+	if not _write_json_atomic(_profile_path(active_profile_id), old_data, true):
 		active_profile_id = ""
 		character_name = ""
 		return

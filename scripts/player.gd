@@ -1483,14 +1483,19 @@ func skill_cooldown_remaining_ms(stable_skill_id: String) -> int:
 	) * 1000.0)
 
 
-func commit_fire_sword_cooldown() -> void:
-	var fire_definition := SkillDataLoaderScript.skill("warrior.fire_sword")
+func commit_fire_sword_cooldown(configuration: RefCounted = null) -> void:
+	var lease_contract := preload("res://scripts/features/contracts/action_config_lease.gd")
+	var fire_definition: Dictionary = lease_contract.resolve_definition("hc.skill.warrior.fire_sword", configuration)
+	if fire_definition.is_empty(): return
 	var fire_cooldown_ms := int(
 		fire_definition.get("timing", {}).get("cooldown_ms", 8000)
 	)
+	var cast_speed_multiplier := _cast_speed_multiplier
+	if configuration != null and configuration.primary_stat_policy() == lease_contract.ACCEPTED_PRIMARY_STATS:
+		cast_speed_multiplier = clampf(1.0 + float(configuration.primary_stats().get("cast_speed_percent", 0.0)), 0.2, 6.0)
 	_skill_cooldown_remaining["warrior.fire_sword"] = (
 		maxf(0.0, float(fire_cooldown_ms) / 1000.0)
-		/ _cast_speed_multiplier
+		/ cast_speed_multiplier
 	)
 
 
