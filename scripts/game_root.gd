@@ -4974,12 +4974,14 @@ func _spawn_enemy(
 	respawn_seconds := -1.0,
 	spawn_context: Dictionary = {}
 ) -> EnemyActor:
+	_feature_target_bound.sync_world(_world_context.capture_world())
 	if _collecting_staged_actor_plan:
 		var monster_id_for_plan := _strict_runtime_monster_id(monster_data)
 		var slot_id_for_plan := str(spawn_context.get(
 			"spawn_slot_id",
 			spawn_context.get("spawn_group_id", "")
 		))
+		_feature_target_bound.declare_base(slot_id_for_plan,monster_id_for_plan)
 		_submit_staged_actor_descriptor(
 			"enemy",
 			{
@@ -5024,6 +5026,9 @@ func _spawn_enemy(
 			return null
 		slot_id = "runtime:%d:%d" % [_zone_generation, _runtime_spawn_serial]
 	context["spawn_slot_id"] = slot_id
+	var summoner_slot := str(context.get("summoner_spawn_slot",""))
+	if summoner_slot.is_empty(): _feature_target_bound.declare_base(slot_id,monster_id)
+	else: _feature_target_bound.observe_child(summoner_slot,monster_id)
 	var classification := str(canonical_monster.get("classification", ""))
 	var spawn_classification := str(
 		canonical_monster.get("spawn_classification", "")
@@ -7191,7 +7196,8 @@ func _on_player_attack(origin: Vector2, direction: Vector2, damage: int) -> void
 	if not gameplay_input_is_enabled(): return
 	var context := player.consume_attack_context()
 	var configuration: RefCounted = context.get("action_config_lease")
-	if configuration != null and not configuration.valid_for_release(_action_configuration_identity()):
+	if configuration == null and not PlayerState.feature_bundle().get("event_index",{}).is_empty(): return
+	if configuration != null and not configuration.begin_release(_action_configuration_identity()):
 		return
 	var accepted_melee: Dictionary = configuration.melee_context() if configuration != null else {}
 	PlayerState.try_trigger_relic_proc()
@@ -7915,7 +7921,11 @@ func _execute_canonical_skill(
 	configuration: RefCounted = null
 ) -> Dictionary:
 	var stable_skill_id := SkillDataLoaderScript.stable_skill_id(skill_name)
-	if configuration != null and not configuration.valid_for_release(_action_configuration_identity()):
+	# A nonempty extension must enter through the accepted Player configuration.
+	# Reject a direct unaccepted caller before planner RNG or resource/HP writes.
+	if configuration == null and not PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:"+SkillDataLoaderScript.entity_skill_id(stable_skill_id),[]).is_empty():
+		return {"accepted":false,"effect_success":false,"reason":"missing_accepted_feature_configuration"}
+	if configuration != null and not configuration.begin_release(_action_configuration_identity()):
 		return {"accepted":false,"effect_success":false,"reason":"stale_action_configuration"}
 	var definition: Dictionary = (configuration.definition_for(stable_skill_id)
 		if configuration != null else PlayerState.effective_skill_definition(stable_skill_id))
@@ -14770,6 +14780,13 @@ func _action_configuration_identity() -> Dictionary:
 		"life_generation":player.combat_epoch if is_instance_valid(player) else 0}
 
 
+var _feature_target_bound := preload("res://scripts/features/adapters/world_target_bound.gd").new()
+
+func feature_world_capacity_bound() -> Dictionary:
+	_feature_target_bound.sync_world(_world_context.capture_world())
+	return _feature_target_bound.snapshot()
+
+
 func _capture_action_configuration(stable_skill_id: String, melee: Dictionary = {}) -> RefCounted:
 	stable_skill_id = SkillDataLoaderScript.stable_skill_id(stable_skill_id)
 	var definition := PlayerState.effective_skill_definition(stable_skill_id)
@@ -14791,7 +14808,42 @@ func _capture_action_configuration(stable_skill_id: String, melee: Dictionary = 
 	var captured := contract.create(
 		definition, PlayerState.effective_skill_level(stable_skill_id), PlayerState.level, PlayerState.computed_stats,
 		PlayerState.action_configuration_versions(), _action_configuration_identity(), partner, partner_rank, primary_policy, melee,bundle.get("event_index",{}))
+	if bool(captured.success): captured.lease.configure_admission(Callable(self,"_reserve_feature_action"))
 	return captured.lease if bool(captured.success) else null
+
+
+func _reserve_feature_action(configuration: RefCounted) -> Dictionary:
+	var skill_id: String = configuration.primary_skill_id()
+	if not configuration.melee_context().is_empty():
+		for candidate: String in configuration.melee_context().definitions:
+			if candidate != "hc.skill.warrior.fire_sword" and not configuration.event_bindings_for(candidate).is_empty():
+				return {"success":false,"reason":"unproved_melee_feature_producer"}
+		# The existing hit-frame owner can consume a previously armed fire charge.
+		# Reserve that possible outcome without freezing or changing its body choice.
+		skill_id = "warrior.fire_sword"
+	var bindings: Array = configuration.event_bindings_for(skill_id)
+	if bindings.is_empty(): return {"success":true,"reservation":null}
+	var ticket := _reserve_feature_bindings(skill_id,bindings)
+	return {"success":ticket != null,"reservation":ticket}
+
+
+func _reserve_feature_bindings(skill_id: String, bindings: Array) -> RefCounted:
+	if not gameplay_input_is_enabled(): return null
+	var bound := feature_world_capacity_bound()
+	if not bool(bound.proved): return null
+	var maximum := int(bound.maximum_receivers)
+	match SkillDataLoaderScript.stable_skill_id(skill_id):
+		"warrior.fire_sword": maximum = mini(maximum,1)
+		"wizard.ice_storm": pass
+		_: return null # New direct/delayed producer families need their own bound proof.
+	if _feature_effect_runtime == null:
+		_feature_effect_runtime = preload("res://scripts/features/runtime/effect_runtime.gd").new()
+		if not _feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime): return null
+	_feature_effect_runtime.require_reservations = true
+	# Player increments this existing serial synchronously after acceptance and
+	# before any release signal. A fresh ticket cannot be attached to an old label.
+	var release_id := "player:%d:action:%d" % [player.get_instance_id(),player._combat_action_sequence+1]
+	return _feature_effect_runtime.reserve_action(SkillDataLoaderScript.entity_skill_id(skill_id),bindings,maximum,release_id)
 
 
 func _capture_melee_configuration() -> RefCounted:
@@ -14828,11 +14880,16 @@ func _begin_feature_damage_batch(skill_id: String, release_id: String, configura
 		bindings = index.get("damage_committed:" + SkillDataLoaderScript.entity_skill_id(skill_id),[])
 	if bindings.is_empty(): return null
 	var entity_id := SkillDataLoaderScript.entity_skill_id(skill_id)
+	var reservation: RefCounted = configuration.effect_reservation() if configuration != null else null
+	if configuration != null and reservation == null:
+		push_error("Feature producer has no accepted capacity reservation"); return null
 	if _feature_effect_runtime == null:
 		_feature_effect_runtime = preload("res://scripts/features/runtime/effect_runtime.gd").new()
 		_feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime)
+	if configuration == null and _feature_effect_runtime.require_reservations:
+		push_error("Unticketed feature producer cannot enter an admitted action runtime"); return null
 	var created := preload("res://scripts/features/runtime/damage_batch.gd").create(_world_context,release_id,entity_id,
-		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec())
+		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec(),reservation)
 	if not bool(created.success):
 		push_error("Feature damage batch rejected: " + str(created.reason)); return null
 	var batch: RefCounted = created.batch
@@ -14843,12 +14900,16 @@ func _begin_feature_damage_batch(skill_id: String, release_id: String, configura
 func _finish_feature_damage_batch(batch: RefCounted) -> void:
 	if batch == null: return
 	if not batch.finish_base_scope() or not batch.errors.is_empty():
+		if batch.reservation() != null: batch.reservation().close()
 		push_error("Feature damage fact rejected: " + str(batch.errors)); return
 	# A valid miss/empty release owns no post-hit work. Nonempty rejected
 	# transfers remain intact and must be visible as failures, never successes.
-	if batch.pending_fact_count() == 0: return
+	if batch.pending_fact_count() == 0:
+		if batch.reservation() != null: batch.reservation().close()
+		return
 	if not _feature_effect_runtime.submit_batch(batch):
 		push_error("Feature damage batch submission rejected: " + str(_feature_effect_runtime.errors))
+	if batch.reservation() != null: batch.reservation().close()
 
 
 func _ordinary_attack_owner_matches(

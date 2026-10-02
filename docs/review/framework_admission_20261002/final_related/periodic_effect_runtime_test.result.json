@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "periodic runtime exists behind the production damage port",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual default-off declared module can be enabled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "production qualification compiles one declared source",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "post-base receipt is accepted exactly once",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "one active effect has one due node and no immediate tick",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "source withdrawal uses content owner",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "accepted 100 actual loss produces five damage at second 1",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "accepted 100 actual loss produces five damage at second 2",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "accepted 100 actual loss produces five damage at second 3",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "accepted 100 actual loss produces five damage at second 4",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "final due tick executes before expiry and queues drain",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "real actor RNG and direct-struck attack deadline remain unchanged across periodic ticks",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "closed handler, command and runtime report no hidden failure",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e3ec0048-4518-4ca5-8c88-0c695a9bb6ed",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "6b63166c-9cbc-4986-8b82-8c3f1b277ee3",
+  "scene_id": "periodic_effect_runtime_test",
+  "schema_version": 1,
+  "source_content_sha256": "494b76d28e19baed12822dca88b8c0da4aeea4f8882b833fe6e24345cf6c0bf6",
+  "status": "PASS"
+}

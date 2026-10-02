@@ -1,0 +1,31 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "feature_reservation_test",
+                        "test_path":  "tests/framework/feature_reservation_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  false,
+                        "wrapper_exit_code":  -1,
+                        "child_process_exit_state":  "forced_termination",
+                        "execution_deadline_utc":  "2026-10-02T06:51:52.4471145Z",
+                        "native_exit_observed_utc":  null,
+                        "effective_exit_code":  -1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  5,
+                        "engine_log_failure_count":  5,
+                        "framework_run_id":  "c906a449-28e2-4a39-9ec1-3e4ce2ee6e08",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_-1;stderr_failures_5;engine_log_failures_5;framework_receipt_missing"
+                    }
+                ],
+    "total":  1,
+    "invocation_id":  "27c712d8-8498-43ee-8bcf-e7b38b9a4d99",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  0,
+    "engine_log_errors":  5,
+    "generated_at":  "2026-10-02T14:51:25.2573249+08:00",
+    "failed":  1,
+    "suite":  "adhoc"
+}

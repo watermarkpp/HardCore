@@ -1,0 +1,164 @@
+{
+  "parent": "1687798348756846001eb6c27a14cf2f376f42cf",
+  "content_sha256": "494b76d28e19baed12822dca88b8c0da4aeea4f8882b833fe6e24345cf6c0bf6",
+  "source_files": 3498,
+  "native_scenes": 22,
+  "framework_checks": 429,
+  "check_counts": {
+    "action_configuration_production_test.result": 21,
+    "action_config_lease_test.result": 13,
+    "empty_extension_behavior_test.result": 30,
+    "feature_admission_release_test.result": 27,
+    "feature_capacity_admission_test.result": 15,
+    "feature_capacity_atomic_test.result": 25,
+    "feature_queue_retention_test.result": 18,
+    "feature_reservation_test.result": 29,
+    "feature_world_capacity_bound_test.result": 13,
+    "fire_cooldown_configuration_test.result": 33,
+    "periodic_credit_profile_switch_test.result": 27,
+    "periodic_effect_boundaries_test.result": 22,
+    "periodic_effect_death_production_test.result": 16,
+    "periodic_effect_lifecycle_test.result": 18,
+    "periodic_effect_runtime_test.result": 13,
+    "feature_receipt_retirement_test.result": 11,
+    "combined_effect_lifecycle_cold_test.result": 10,
+    "combined_effect_lifecycle_test.result": 38,
+    "periodic_credit_safe_logout_cold_test.result": 13,
+    "periodic_credit_safe_logout_test.result": 37
+  },
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "admission": "PASS within current formal IceStorm/FireSword producers and declared nonrecursive world closure",
+  "managed_receipt_retirement": "PASS; one-shot sealed producer plus terminal consumer; not legacy raw receipts",
+  "retirement": {
+    "completed": 2200,
+    "elapsed_usec": 14636538,
+    "facts": 66000,
+    "maximum_observed_receipts_after_dispatch": 29,
+    "maximum_records": 1,
+    "memory_observations_only": [
+      {
+        "memory_static": 602820905,
+        "objects": 2335,
+        "receipts": 0,
+        "release": 1,
+        "states": 30
+      },
+      {
+        "memory_static": 604255029,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 201,
+        "states": 30
+      },
+      {
+        "memory_static": 604256093,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 401,
+        "states": 30
+      },
+      {
+        "memory_static": 604255989,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 601,
+        "states": 30
+      },
+      {
+        "memory_static": 604256761,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 801,
+        "states": 30
+      },
+      {
+        "memory_static": 604257489,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 1001,
+        "states": 30
+      },
+      {
+        "memory_static": 604258285,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 1201,
+        "states": 30
+      },
+      {
+        "memory_static": 604259009,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 1401,
+        "states": 30
+      },
+      {
+        "memory_static": 604259733,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 1601,
+        "states": 30
+      },
+      {
+        "memory_static": 604260553,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 1801,
+        "states": 30
+      },
+      {
+        "memory_static": 604261277,
+        "objects": 2402,
+        "receipts": 0,
+        "release": 2001,
+        "states": 30
+      }
+    ],
+    "metrics": {
+      "actual_loss": 0,
+      "admitted_facts": 66000,
+      "expired": 0,
+      "failed": 0,
+      "invalidated": 0,
+      "maximum_tick_delivery_lateness_usec": 0,
+      "optional_cue_missing": 30,
+      "peak_pending": 30,
+      "peak_receipts": 30,
+      "peak_reservations": 1,
+      "peak_states": 30,
+      "refreshed": 65970,
+      "retired_receipts": 66000,
+      "started": 30,
+      "tick_delivery_count": 0,
+      "ticks": 0
+    },
+    "performance_acceptance": "NOT_RUN"
+  },
+  "combined_metrics": {
+    "actual_loss": 1800,
+    "admitted_facts": 30,
+    "expired": 60,
+    "failed": 0,
+    "invalidated": 30,
+    "maximum_tick_delivery_lateness_usec": 800000,
+    "optional_cue_missing": 90,
+    "peak_pending": 30,
+    "peak_receipts": 90,
+    "peak_reservations": 0,
+    "peak_states": 90,
+    "refreshed": 0,
+    "retired_receipts": 0,
+    "started": 90,
+    "tick_delivery_count": 360,
+    "ticks": 360
+  },
+  "open": [
+    "journal64 durable recovery",
+    "nonempty production generation cold test",
+    "full P6/R3 natural movement and sustained load",
+    "exact v97 B input MISSING",
+    "Android/GPU NOT_RUN",
+    "main integration and APK NOT_RUN"
+  ],
+  "new_stable_ids": []
+}

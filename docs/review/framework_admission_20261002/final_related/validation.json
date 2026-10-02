@@ -1,0 +1,16 @@
+{
+  "command": [
+    "powershell",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_reservation_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/action_configuration_production_test.tscn','tests/framework/fire_cooldown_configuration_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/m30_r4_r1/r1_core_test.tscn','tests/classic_boss_area_magic_outcomes_test.tscn' -TimeoutSeconds 30"
+  ],
+  "timeout_seconds": 30,
+  "exit_code": 0,
+  "source_stable_during_run": true,
+  "passed": 17,
+  "failed": 0,
+  "status": "PASS"
+}

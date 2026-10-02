@@ -1,0 +1,937 @@
+--- old/scripts/enemy.gd
++++ new/scripts/enemy.gd
+@@ -748,13 +748 @@
+-		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
+-		# The generated canonical catalog is rebuilt by integration. Until that
+-		# rebuild lands, the exact ID-keyed service rule remains the authoritative
+-		# runtime override for this newly split special delivery.
+-		if monster_id == 124:
+-			var configured_rules: Variant = GameData.boss_service_rules.get(
+-				"runtimeRulesByMonsterId",
+-				{},
+-			)
+-			if configured_rules is Dictionary:
+-				var configured_rule: Variant = (configured_rules as Dictionary).get("124", {})
+-				if configured_rule is Dictionary and not (configured_rule as Dictionary).is_empty():
+-					boss_rule = (configured_rule as Dictionary).duplicate(true)
++		boss_rule = MonsterIdentityScript.runtime_boss_rule(monster_data, GameData.boss_service_rules)
+--- old/scripts/features/adapters/feature_authority.gd
++++ new/scripts/features/adapters/feature_authority.gd
+@@ -4,0 +5 @@
++const MAX_STATES_PER_TARGET := 16
+@@ -21 +22 @@
+-		"max_commands_per_event":32,"max_states_per_target":16,"max_sources":64}).value
++		"max_commands_per_event":32,"max_states_per_target":MAX_STATES_PER_TARGET,"max_sources":64}).value
+--- old/scripts/features/adapters/world_target_bound.gd
++++ new/scripts/features/adapters/world_target_bound.gd
+@@ -0,0 +1,73 @@
++extends RefCounted
++
++## A view of declared factory slots, not a second spawner or geometry planner.
++## Keep dead/deferred slots: their next life can enter a release-time query.
++const Identity := preload("res://scripts/monster_identity.gd")
++const Summons := preload("res://scripts/monster_ai_package/m30/summon_queue.gd")
++var _world: Dictionary = {}
++var _slots: Dictionary = {}
++var _closures: Dictionary = {}
++var _maximum := 0
++var _reason := ""
++
++func sync_world(identity: Dictionary) -> void:
++	if identity == _world: return
++	_world = identity; _slots.clear(); _closures.clear(); _maximum = 0; _reason = ""
++
++func declare_base(slot: String, monster_id: int) -> void:
++	if slot.is_empty(): _reason = "unidentified_base_spawn"; return
++	if _slots.has(slot):
++		if int(_slots[slot]) != monster_id: _reason = "conflicting_base_spawn_identity"
++		return
++	var closure := _closure(monster_id)
++	_slots[slot] = monster_id
++	if not bool(closure.proved): _reason = str(closure.reason); return
++	_maximum += 1+int(closure.children)
++
++func observe_child(slot: String, monster_id: int) -> void:
++	if not _slots.has(slot): _reason = "undeclared_summon_owner"; return
++	var closure := _closure(int(_slots[slot]))
++	if not bool(closure.proved) or monster_id not in closure.ids:
++		_reason = "undeclared_summon_child"
++
++func snapshot() -> Dictionary:
++	return {"proved":not _world.is_empty() and _reason.is_empty(),"reason":_reason,
++		"base_slots":_slots.size(),"maximum_receivers":_maximum,"world":_world.duplicate()}
++
++func _closure(monster_id: int) -> Dictionary:
++	if _closures.has(monster_id): return _closures[monster_id]
++	var data: Dictionary = GameData.get_monster_by_id(monster_id)
++	if data.is_empty(): return {"proved":false,"reason":"unknown_spawn_monster"}
++	var rules := _summon_rules(data)
++	var count := 0
++	var ids: Array[int] = []
++	for rule: Dictionary in rules:
++		var maximum := int(rule.get("maxActive",5 if rule.get("kind") == "behavior" else 30))
++		if rule.get("kind") == "behavior": maximum = maxi(1,maximum)
++		maximum = Summons.effective_maximum(str(data.get("classification","")) == "boss",maximum)
++		# Both producers use the same per-owner queue; its greatest authored cap
++		# bounds their combined live/reserved children, not the sum of both caps.
++		count = maxi(count,maximum)
++		for raw: Variant in rule.get("monsterIds",[]):
++			var child_id := GameData.canonical_monster_id(raw)
++			var child: Dictionary = GameData.get_monster_by_id(child_id)
++			if child.is_empty(): return {"proved":false,"reason":"unknown_summon_child"}
++			# Descendants may outlive a replaced summoning child. Even an acyclic
++			# graph alone would not prove its lifetime bound, so do not multiply it.
++			if not _summon_rules(child).is_empty(): return {"proved":false,"reason":"nested_summon_lifetime_unproved"}
++			if child_id not in ids: ids.append(child_id)
++	var result := {"proved":true,"reason":"","children":count,"ids":ids}
++	_closures[monster_id] = result
++	return result
++
++static func _summon_rules(data: Dictionary) -> Array[Dictionary]:
++	var result: Array[Dictionary] = []
++	var behavior: Dictionary = Identity.behavior_profile(data).get("summonRule",{})
++	if bool(behavior.get("enabled",false)):
++		behavior["kind"] = "behavior"; result.append(behavior)
++	if str(data.get("classification","")) == "boss":
++		var boss := Identity.runtime_boss_rule(data,GameData.boss_service_rules)
++		var health: Dictionary = boss.get("mechanics",{}).get("healthStageSummon",{}).duplicate(true)
++		if bool(health.get("enabled",false)):
++			health["kind"] = "health"; result.append(health)
++	return result
+--- old/scripts/features/contracts/action_config_lease.gd
++++ new/scripts/features/contracts/action_config_lease.gd
+@@ -8,0 +9,5 @@
++var _admission: Callable
++var _admission_configured := false
++var _reservation: RefCounted
++var _release_started := false
++var _producer_closed := false
+@@ -37,0 +43,5 @@
++	if _admission_configured:
++		if not _admission.is_valid(): return false
++		var result: Dictionary = _admission.call(self)
++		if not bool(result.get("success",false)): return false
++		_reservation = result.get("reservation")
+@@ -42 +52,19 @@
+-	return _accepted and not _snapshot.is_empty() and _snapshot.actor_identity == actor_identity
++	return _accepted and not _producer_closed and not _release_started \
++		and not _snapshot.is_empty() and _snapshot.actor_identity == actor_identity
++
++func configure_admission(callback: Callable) -> bool:
++	if _accepted or _admission_configured or not callback.is_valid(): return false
++	_admission = callback; _admission_configured = true
++	return true
++
++func begin_release(actor_identity: Dictionary) -> bool:
++	if not valid_for_release(actor_identity): return false
++	# Only ticketed producers acquire the new one-shot dispatch boundary.
++	if _reservation != null: _release_started = true
++	return true
++
++func effect_reservation() -> RefCounted: return _reservation
++
++func finish_producer() -> void:
++	if _reservation != null: _reservation.close()
++	_producer_closed = true
+@@ -66,0 +95,3 @@
++
++func primary_skill_id() -> String:
++	return str(_snapshot.get("definition",{}).get("skill_id",""))
+--- old/scripts/features/contracts/effect_reservation.gd
++++ new/scripts/features/contracts/effect_reservation.gd
+@@ -0,0 +1,34 @@
++extends RefCounted
++
++## One runtime-issued, one-shot producer capability. The runtime never reuses
++## its sequence, including after clear/world change; no retired-ID list is needed.
++var _owner: WeakRef
++var _sequence := 0
++var _closed := false
++
++static func create(owner: RefCounted, sequence: int) -> RefCounted:
++	var result := new(); result._owner = weakref(owner); result._sequence = sequence
++	return result
++
++func claim(world: Dictionary, release_id: String, skill_id: String, bindings: Array) -> Dictionary:
++	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
++	if _closed or owner == null: return {"success":false}
++	return owner.call("_claim_reservation",_sequence,world,release_id,skill_id,bindings)
++
++func belongs_to(owner: RefCounted) -> bool:
++	return _owner != null and _owner.get_ref() == owner
++
++func sequence() -> int: return _sequence
++
++func close() -> void:
++	if _closed: return
++	_closed = true
++	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
++	if owner != null: owner.call("_close_reservation_producer",_sequence)
++
++func _notification(what: int) -> void:
++	# A zero-refcount GDScript instance cannot dispatch another method on self.
++	if what == NOTIFICATION_PREDELETE and not _closed:
++		_closed = true
++		var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
++		if owner != null: owner.call("_close_reservation_producer",_sequence)
+--- old/scripts/features/runtime/damage_batch.gd
++++ new/scripts/features/runtime/damage_batch.gd
+@@ -19,0 +20,2 @@
++var _reservation: RefCounted
++var _fact_limit := MAX_FACTS
+@@ -22 +24 @@
+-static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0) -> Dictionary:
++static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null) -> Dictionary:
+@@ -30,0 +33,8 @@
++	var limit := MAX_FACTS
++	if reservation != null:
++		if reservation.get_script() != preload("res://scripts/features/contracts/effect_reservation.gd"):
++			return {"success":false,"reason":"invalid_effect_reservation","batch":null}
++		var claimed: Dictionary = reservation.claim(world.capture_world(),release_id,skill_id,captured.value.bindings)
++		if not bool(claimed.get("success",false)):
++			return {"success":false,"reason":"closed_effect_reservation","batch":null}
++		limit = int(claimed.maximum_facts)
+@@ -31,0 +42 @@
++	result._reservation = reservation; result._fact_limit = limit
+@@ -82 +93 @@
+-	if _entries.size() >= MAX_FACTS:
++	if _entries.size() >= _fact_limit:
+@@ -107 +118,2 @@
+-	var entry := {"fact":fact.value,"target":target_ref,"source":source_ref,"bindings":_bindings}
++	var entry := {"fact":fact.value,"target":target_ref,"source":source_ref,"bindings":_bindings,
++		"admission_id":_reservation.sequence() if _reservation != null else 0}
+@@ -133,0 +146,6 @@
++
++func reservation() -> RefCounted: return _reservation
++
++func binding_count() -> int: return _bindings.size()
++
++func event_bindings() -> Array: return _bindings
+--- old/scripts/features/runtime/effect_runtime.gd
++++ new/scripts/features/runtime/effect_runtime.gd
+@@ -7,0 +8 @@
++const Reservation := preload("res://scripts/features/contracts/effect_reservation.gd")
+@@ -10,0 +12 @@
++const MAX_STATES_PER_TARGET := preload("res://scripts/features/adapters/feature_authority.gd").MAX_STATES_PER_TARGET
+@@ -25,0 +28,7 @@
++var _reservations: Dictionary = {}
++var _next_reservation := 0
++var _reserved_facts := 0
++var _reserved_states := 0
++var _reserved_receipts := 0
++var require_reservations := false
++var last_admission_reason := ""
+@@ -26,0 +36 @@
++	"peak_receipts":0,"retired_receipts":0,"peak_reservations":0,
+@@ -48 +58 @@
+-func has_work() -> bool: return _pending > 0 or not _states.is_empty()
++func has_work() -> bool: return _pending > 0 or not _states.is_empty() or not _reservations.is_empty()
+@@ -51,0 +62,95 @@
++
++func reservation_snapshot() -> Dictionary:
++	return {"actions":_reservations.size(),"facts":_reserved_facts,"states":_reserved_states,
++		"promised_receipts":_reserved_receipts,"receipts":_receipts.size()}
++
++func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, expected_release_id := "") -> RefCounted:
++	last_admission_reason = ""
++	if not _sync_world() or maximum_receivers < 0 or maximum_receivers > preload("res://scripts/features/runtime/damage_batch.gd").MAX_FACTS \
++		or bindings.is_empty() or not preload("res://scripts/features/runtime/damage_batch.gd").validate_bindings(skill_id,bindings):
++		last_admission_reason = "feature_action_bound_invalid"; return null
++	var cost := maximum_receivers*bindings.size()
++	var queued_cost := _unreserved_queued_cost()
++	# Empty legal casts still own a producer record. Bound those records by the
++	# existing queue capacity even when their proven fact/state bound is zero.
++	if _reservations.size() >= MAX_PENDING_FACTS:
++		last_admission_reason = "feature_action_producer_capacity"; return null
++	if _pending+_reserved_facts+maximum_receivers > MAX_PENDING_FACTS:
++		last_admission_reason = "feature_action_pending_capacity"; return null
++	if _states.size()+_reserved_states+queued_cost+cost > MAX_ACTIVE_STATES:
++		last_admission_reason = "feature_action_state_capacity"; return null
++	if _receipts.size()+_reserved_receipts+queued_cost+cost > MAX_RECEIPTS:
++		last_admission_reason = "feature_action_receipt_capacity"; return null
++	var sources := _binding_sources(bindings) if maximum_receivers > 0 else {}
++	if not _target_sources_fit(sources):
++		last_admission_reason = "feature_action_target_capacity"; return null
++	if _next_reservation == 9223372036854775807:
++		last_admission_reason = "feature_action_identity_exhausted"; return null
++	_next_reservation += 1
++	_reservations[_next_reservation] = {"stage":"reserved","world":_world_identity,"skill_id":skill_id,
++		"expected_release_id":expected_release_id,
++		"bindings":Graph.capture(bindings).value,"sources":sources,"facts":maximum_receivers,
++		"states":cost,"receipt_space":cost,"receipts":[]}
++	_reserved_facts += maximum_receivers; _reserved_states += cost; _reserved_receipts += cost
++	_stats.peak_reservations = maxi(int(_stats.peak_reservations),_reservations.size())
++	return Reservation.create(self,_next_reservation)
++
++func _claim_reservation(sequence: int, identity: Dictionary, release_id: String, skill_id: String, bindings: Array) -> Dictionary:
++	if not _sync_world() or not _reservations.has(sequence): return {"success":false}
++	var value: Dictionary = _reservations[sequence]
++	if value.stage != "reserved" or value.world != identity or value.skill_id != skill_id or value.bindings != bindings:
++		return {"success":false}
++	if not str(value.expected_release_id).is_empty() and value.expected_release_id != release_id: return {"success":false}
++	value.stage = "producing"
++	return {"success":true,"maximum_facts":int(value.facts)}
++
++func _close_reservation_producer(sequence: int) -> void:
++	if not _reservations.has(sequence): return
++	# Once queued, the sealed batch is the only producer and the consumer owns
++	# the remaining reservation. An old configuration's destruction cannot steal it.
++	if _reservations[sequence].stage != "queued": _retire_reservation(sequence)
++
++func _retire_reservation(sequence: int) -> void:
++	if not _reservations.has(sequence): return
++	var value: Dictionary = _reservations[sequence]
++	_reserved_facts -= int(value.facts); _reserved_states -= int(value.states)
++	_reserved_receipts -= int(value.receipt_space)
++	# Only a claimed, sealed, completely consumed one-shot producer retires
++	# these receipts. Unticketed historical receipts retain their old lifetime.
++	for receipt: String in value.receipts:
++		_receipts.erase(receipt); _stats.retired_receipts += 1
++	_reservations.erase(sequence)
++
++func _unreserved_queued_cost() -> int:
++	var result := 0
++	for work: Dictionary in _batches.values():
++		if int(work.get("admission_id",0)) != 0: continue
++		for index in range(int(work.cursor),work.entries.size()): result += work.entries[index].bindings.size()
++	return result
++
++static func _binding_sources(bindings: Array) -> Dictionary:
++	var result := {}
++	for binding: Dictionary in bindings:
++		result[JSON.stringify([binding.handle,binding.definition.mechanic_id,Handler.EFFECT_ID])] = true
++	return result
++
++func _target_sources_fit(additional: Dictionary) -> bool:
++	var promised := additional.duplicate()
++	for reservation: Dictionary in _reservations.values(): promised.merge(reservation.sources)
++	if promised.size() > MAX_STATES_PER_TARGET: return false
++	var targets := {}
++	for state: Dictionary in _states.values():
++		var command: Dictionary = state.command
++		var values: Dictionary = targets.get(state.target_key,{})
++		values[JSON.stringify([command.source_handle,command.mechanic_id,command.effect_id])] = true
++		targets[state.target_key] = values
++	for work: Dictionary in _batches.values():
++		for index in range(int(work.cursor),work.entries.size()):
++			var entry: Dictionary = work.entries[index]
++			var key := JSON.stringify(entry.fact.target)
++			var values: Dictionary = targets.get(key,{})
++			values.merge(_binding_sources(entry.bindings)); targets[key] = values
++	for values: Dictionary in targets.values():
++		values.merge(promised)
++		if values.size() > MAX_STATES_PER_TARGET: return false
++	return true
+@@ -67 +172,11 @@
+-	if _pending+count > MAX_PENDING_FACTS:
++	var ticket: RefCounted = batch.reservation()
++	var admission_id := 0
++	if ticket != null:
++		if not ticket.belongs_to(self): return false
++		admission_id = ticket.sequence()
++		if not _reservations.has(admission_id) or _reservations[admission_id].stage != "producing" \
++			or count > int(_reservations[admission_id].facts): return false
++	elif require_reservations:
++		_error("feature_unreserved_producer"); return false
++	var own_facts := int(_reservations[admission_id].facts) if admission_id > 0 else 0
++	if _pending+_reserved_facts-own_facts+count > MAX_PENDING_FACTS:
+@@ -68,0 +184,7 @@
++	if admission_id == 0 and not _reservations.is_empty():
++		var cost: int = count*batch.binding_count()+_unreserved_queued_cost()
++		if _states.size()+_reserved_states+cost > MAX_ACTIVE_STATES \
++			or _receipts.size()+_reserved_receipts+cost > MAX_RECEIPTS:
++			_error("feature_reserved_capacity_protected"); return false
++		if not _target_sources_fit(_binding_sources(batch.event_bindings())):
++			_error("feature_reserved_target_capacity_protected"); return false
+@@ -72 +194,4 @@
+-	_batches[_batch_tail] = {"entries":entries,"cursor":0}
++	if admission_id > 0:
++		_reserved_facts -= own_facts
++		_reservations[admission_id].facts = 0; _reservations[admission_id].stage = "queued"
++	_batches[_batch_tail] = {"entries":entries,"cursor":0,"admission_id":admission_id}
+@@ -100,0 +226 @@
++	var admission_id := int(work.admission_id)
+@@ -102 +228,2 @@
+-	if work.cursor == work.entries.size():
++	var complete: bool = work.cursor == work.entries.size()
++	if complete:
+@@ -108,0 +236,4 @@
++	_deliver_fact(entry,admission_id)
++	if complete and admission_id > 0: _retire_reservation(admission_id)
++
++func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
+@@ -114 +245,2 @@
+-		var receipt := JSON.stringify([fact.release_id,fact.target,binding.handle])
++		var producer: Variant = ["reservation",admission_id] if admission_id > 0 else fact.release_id
++		var receipt := JSON.stringify([producer,fact.target,binding.handle])
+@@ -118,0 +251,4 @@
++		_stats.peak_receipts = maxi(int(_stats.peak_receipts),_receipts.size())
++		if admission_id > 0:
++			_reservations[admission_id].receipts.append(receipt)
++			_reservations[admission_id].receipt_space -= 1; _reserved_receipts -= 1
+@@ -141 +277 @@
+-	if _states.size() >= MAX_ACTIVE_STATES or int(_states_per_target.get(target_key,0)) >= 16:
++	if _states.size() >= MAX_ACTIVE_STATES or int(_states_per_target.get(target_key,0)) >= MAX_STATES_PER_TARGET:
+@@ -142,0 +279,5 @@
++	var admission_id := int(entry.get("admission_id",0))
++	if admission_id > 0:
++		if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
++			_error("feature_state_reservation_missing"); return
++		_reservations[admission_id].states -= 1; _reserved_states -= 1
+@@ -199,0 +341 @@
++	_reservations.clear(); _reserved_facts = 0; _reserved_states = 0; _reserved_receipts = 0
+--- old/scripts/game_root.gd
++++ new/scripts/game_root.gd
+@@ -4976,0 +4977 @@
++	_feature_target_bound.sync_world(_world_context.capture_world())
+@@ -4982,0 +4984 @@
++		_feature_target_bound.declare_base(slot_id_for_plan,monster_id_for_plan)
+@@ -5026,0 +5029,3 @@
++	var summoner_slot := str(context.get("summoner_spawn_slot",""))
++	if summoner_slot.is_empty(): _feature_target_bound.declare_base(slot_id,monster_id)
++	else: _feature_target_bound.observe_child(summoner_slot,monster_id)
+@@ -7194 +7199,2 @@
+-	if configuration != null and not configuration.valid_for_release(_action_configuration_identity()):
++	if configuration == null and not PlayerState.feature_bundle().get("event_index",{}).is_empty(): return
++	if configuration != null and not configuration.begin_release(_action_configuration_identity()):
+@@ -7918 +7924,5 @@
+-	if configuration != null and not configuration.valid_for_release(_action_configuration_identity()):
++	# A nonempty extension must enter through the accepted Player configuration.
++	# Reject a direct unaccepted caller before planner RNG or resource/HP writes.
++	if configuration == null and not PlayerState.feature_bundle().get("event_index",{}).get("damage_committed:"+SkillDataLoaderScript.entity_skill_id(stable_skill_id),[]).is_empty():
++		return {"accepted":false,"effect_success":false,"reason":"missing_accepted_feature_configuration"}
++	if configuration != null and not configuration.begin_release(_action_configuration_identity()):
+@@ -14772,0 +14783,7 @@
++var _feature_target_bound := preload("res://scripts/features/adapters/world_target_bound.gd").new()
++
++func feature_world_capacity_bound() -> Dictionary:
++	_feature_target_bound.sync_world(_world_context.capture_world())
++	return _feature_target_bound.snapshot()
++
++
+@@ -14793,0 +14811 @@
++	if bool(captured.success): captured.lease.configure_admission(Callable(self,"_reserve_feature_action"))
+@@ -14794,0 +14813,34 @@
++
++
++func _reserve_feature_action(configuration: RefCounted) -> Dictionary:
++	var skill_id: String = configuration.primary_skill_id()
++	if not configuration.melee_context().is_empty():
++		for candidate: String in configuration.melee_context().definitions:
++			if candidate != "hc.skill.warrior.fire_sword" and not configuration.event_bindings_for(candidate).is_empty():
++				return {"success":false,"reason":"unproved_melee_feature_producer"}
++		# The existing hit-frame owner can consume a previously armed fire charge.
++		# Reserve that possible outcome without freezing or changing its body choice.
++		skill_id = "warrior.fire_sword"
++	var bindings: Array = configuration.event_bindings_for(skill_id)
++	if bindings.is_empty(): return {"success":true,"reservation":null}
++	var ticket := _reserve_feature_bindings(skill_id,bindings)
++	return {"success":ticket != null,"reservation":ticket}
++
++
++func _reserve_feature_bindings(skill_id: String, bindings: Array) -> RefCounted:
++	if not gameplay_input_is_enabled(): return null
++	var bound := feature_world_capacity_bound()
++	if not bool(bound.proved): return null
++	var maximum := int(bound.maximum_receivers)
++	match SkillDataLoaderScript.stable_skill_id(skill_id):
++		"warrior.fire_sword": maximum = mini(maximum,1)
++		"wizard.ice_storm": pass
++		_: return null # New direct/delayed producer families need their own bound proof.
++	if _feature_effect_runtime == null:
++		_feature_effect_runtime = preload("res://scripts/features/runtime/effect_runtime.gd").new()
++		if not _feature_effect_runtime.configure(_world_context,_time_domains,_combat_runtime): return null
++	_feature_effect_runtime.require_reservations = true
++	# Player increments this existing serial synchronously after acceptance and
++	# before any release signal. A fresh ticket cannot be attached to an old label.
++	var release_id := "player:%d:action:%d" % [player.get_instance_id(),player._combat_action_sequence+1]
++	return _feature_effect_runtime.reserve_action(SkillDataLoaderScript.entity_skill_id(skill_id),bindings,maximum,release_id)
+@@ -14830,0 +14883,3 @@
++	var reservation: RefCounted = configuration.effect_reservation() if configuration != null else null
++	if configuration != null and reservation == null:
++		push_error("Feature producer has no accepted capacity reservation"); return null
+@@ -14833,0 +14889,2 @@
++	if configuration == null and _feature_effect_runtime.require_reservations:
++		push_error("Unticketed feature producer cannot enter an admitted action runtime"); return null
+@@ -14835 +14892 @@
+-		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec())
++		bindings,{"profile_id":PlayerState.active_profile_id},_time_domains.simulation_usec(),reservation)
+@@ -14845,0 +14903 @@
++		if batch.reservation() != null: batch.reservation().close()
+@@ -14849 +14907,3 @@
+-	if batch.pending_fact_count() == 0: return
++	if batch.pending_fact_count() == 0:
++		if batch.reservation() != null: batch.reservation().close()
++		return
+@@ -14851,0 +14912 @@
++	if batch.reservation() != null: batch.reservation().close()
+--- old/scripts/monster_ai_package/m30/summon_queue.gd
++++ new/scripts/monster_ai_package/m30/summon_queue.gd
+@@ -38,0 +39,3 @@
++static func effective_maximum(is_boss: bool, maximum: int) -> int:
++	return maximum if is_boss else mini(maximum,MONSTER_SUMMON_HARD_CAP)
++
+@@ -147 +150 @@
+-	var effective_max_active := max_active if source.is_boss else mini(max_active, MONSTER_SUMMON_HARD_CAP)
++	var effective_max_active := effective_maximum(source.is_boss,max_active)
+--- old/scripts/monster_identity.gd
++++ new/scripts/monster_identity.gd
+@@ -190,0 +191,12 @@
++static func runtime_boss_rule(monster_data: Dictionary, rules: Dictionary) -> Dictionary:
++	var result := boss_rule(monster_data)
++	# Preserve EnemyActor's exact-ID source override in one shared authority
++	# boundary, so capacity compilation cannot drift from the actual producer.
++	if monster_id(monster_data) == 124:
++		var by_id: Variant = rules.get("runtimeRulesByMonsterId",{})
++		if by_id is Dictionary:
++			var configured: Variant = by_id.get("124",{})
++			if configured is Dictionary and not configured.is_empty(): return configured.duplicate(true)
++	return result
++
++
+--- old/scripts/player.gd
++++ new/scripts/player.gd
+@@ -1216,0 +1217 @@
++	var configuration: RefCounted = context.get("action_config_lease")
+@@ -1234 +1234,0 @@
+-		var configuration: RefCounted = context.get("action_config_lease")
+@@ -1236,0 +1237 @@
++			configuration.finish_producer()
+@@ -1260,0 +1262 @@
++	if configuration != null: configuration.finish_producer()
+@@ -1330,0 +1333 @@
++				configuration.finish_producer()
+@@ -1344,0 +1348 @@
++	if configuration != null: configuration.finish_producer()
+--- old/tests/framework/feature_admission_release_test.gd
++++ new/tests/framework/feature_admission_release_test.gd
+@@ -0,0 +1,122 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++const Fixture := preload("res://tests/helpers/formal_world_skill_fixture.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	check(PlayerState.set_profession_identity("hc.profession.wizard"),"registered wizard identity")
++	PlayerState.level = 50; PlayerState.learned_skills = {"hc.skill.wizard.ice_storm":3}; PlayerState.recalculate_stats(false)
++	var game := Root.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"actual formal world is ready")
++	if not game.gameplay_input_is_enabled(): game.queue_free(); _finish(); return
++	var selected := await Fixture.prepare_target(self,game,game.player,19,"feature_admission_release")
++	check(selected != null,"real selected receiver exists")
++	if selected == null: game.queue_free(); _finish(); return
++	var moving: EnemyActor = _spawn(game,64,Vector2(47,13.5),"fixture:admission:moving")
++	var replaced: EnemyActor = _spawn(game,89,Vector2(40.5,14.2),"fixture:admission:respawn")
++	var summoner: EnemyActor = _spawn(game,126,Vector2(44,13.5),"fixture:admission:summoner")
++	check(moving != null and replaced != null and summoner != null,"declared base slots use exact production monster factories")
++	if moving == null or replaced == null or summoner == null: game.queue_free(); _finish(); return
++	for actor: Node in get_tree().get_nodes_in_group("enemies"): actor.set_physics_process(false)
++	for actor: EnemyActor in [selected,moving,replaced,summoner]: _durable_target(actor)
++	game.set_process(false); game.set_physics_process(false); game.player.set_physics_process(false)
++	PlayerState.computed_stats.magic_min = 100; PlayerState.computed_stats.magic_max = 100
++	game.player.current_mp = 100; game._skill_cast_target = selected; game._set_magic_locked_target(selected,true)
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"actual default-off module enabled only for this test")
++	var bound: Dictionary = game.feature_world_capacity_bound()
++	var lease: RefCounted = game._capture_action_configuration("hc.skill.wizard.ice_storm")
++	check(game.player.request_skill("hc.skill.wizard.ice_storm",selected.get_instance_id(),lease),"real Player request accepts after acquiring capacity")
++	var runtime: RefCounted = game._feature_effect_runtime
++	check(runtime != null and int(runtime.reservation_snapshot().actions) == 1,"windup owns a real outstanding promise")
++	check(game.observed_releases == 0 and selected.current_hp == 10000,"acceptance has not prematurely committed damage")
++	# These changes occur after acceptance. Use the existing position transaction,
++	# delayed respawn path, and summon queue; never edit the planner's target list.
++	moving.set_combat_position(game._canonical_ground_gu_to_screen_px(Vector2(41.2,13.5)),&"test_move_during_windup")
++	var prior_instance := replaced.get_instance_id()
++	replaced.queue_free()
++	game._respawn_later(GameData.get_monster_by_id(89),game._canonical_ground_gu_to_screen_px(Vector2(40.5,14.2)),false,0.01,
++		game._zone_generation,{"respawn_enabled":false,"spawn_slot_id":"fixture:admission:respawn"})
++	summoner.control_time = 0; summoner.target = game.player
++	summoner.set_meta("m30_summon_release_serial",1)
++	game._on_boss_summon_requested(summoner,[127],1,5)
++	var child: EnemyActor
++	var replacement: EnemyActor
++	while game.observed_releases == 0 and (child == null or replacement == null):
++		for actor: EnemyActor in game._active_enemy_cache.values():
++			if not is_instance_valid(actor) or actor.is_queued_for_deletion(): continue
++			if actor.get_instance_id() != prior_instance and str(actor.get_meta("spawn_slot_id","")) == "fixture:admission:respawn":
++				replacement = actor; _durable_target(replacement)
++			if str(actor.get_meta("summoner_spawn_slot","")) == "fixture:admission:summoner":
++				child = actor; _durable_target(child)
++				child.set_combat_position(game._canonical_ground_gu_to_screen_px(Vector2(40.8,13.2)),&"test_summon_enters_release")
++		await get_tree().process_frame
++	check(child != null and replacement != null and game.observed_releases == 0,"formal summon and replacement life materialize during the accepted windup")
++	check(game.feature_world_capacity_bound() == bound,"birth, movement and replacement fit the previously declared count without freezing identities")
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",false),"source withdrawn after acceptance through its formal module service")
++	deadline = Time.get_ticks_msec()+3000
++	while game.observed_releases == 0 and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.observed_releases == 1 and bool(game.observed_execution.get("accepted",false)),"same accepted configuration reaches the real single planner exactly once")
++	var receivers: Array[EnemyActor] = [selected,moving]
++	if replacement != null: receivers.append(replacement)
++	if child != null: receivers.append(child)
++	for actor: EnemyActor in receivers: check(actor.current_hp < 10000,"release-time receiver receives actual base HP commit: "+str(actor.monster_id))
++	for index in 120:
++		runtime.pump()
++		if runtime.pending_count() == 0: break
++		await get_tree().process_frame
++	check(runtime.active_count() == 4 and runtime.pending_count() == 0 and runtime.errors.is_empty(),"all four promised derived effects survive motion, rebirth, new birth and source withdrawal")
++	check(int(runtime.reservation_snapshot().actions) == 0 and int(runtime.reservation_snapshot().receipts) == 0,"consumer completion retires the spent producer while its four effects remain alive")
++	var hp := selected.current_hp
++	var replay: Dictionary = game._execute_canonical_skill("冰咆哮",game.player.global_position,Vector2.RIGHT,0,{},true,false,lease)
++	check(not bool(replay.get("accepted",false)) and selected.current_hp == hp,"retained accepted configuration cannot replay HP after receipt retirement")
++	# Let the actual player timers recover before another actual request.
++	game.player.set_physics_process(true)
++	await get_tree().create_timer(1.7).timeout
++	game.player.set_physics_process(false)
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"module restored for the independent cancellation case")
++	var mp_before: int = game.player.current_mp
++	var rng_before: int = game._rng.state
++	var unaccepted: Dictionary = game._execute_canonical_skill("冰咆哮",game.player.global_position,Vector2.RIGHT,0)
++	check(not bool(unaccepted.get("accepted",false)) and unaccepted.get("reason") == "missing_accepted_feature_configuration",
++		"direct feature execution cannot bypass the action acceptance owner")
++	check(game.player.current_mp == mp_before and selected.current_hp == hp and game._rng.state == rng_before,
++		"unaccepted direct call is rejected before resources, HP and planner RNG")
++	var cancelled: RefCounted = game._capture_action_configuration("hc.skill.wizard.ice_storm")
++	game._skill_cast_target = selected; game._set_magic_locked_target(selected,true)
++	check(game.player.request_skill("hc.skill.wizard.ice_storm",selected.get_instance_id(),cancelled),"next request accepts after real cooldown recovery")
++	var releases_before: int = game.observed_releases
++	check(game.player.begin_combat_transition("feature_capacity_cancel"),"existing lifecycle owner cancels delayed release")
++	await get_tree().create_timer(0.7).timeout
++	check(game.observed_releases == releases_before and selected.current_hp == hp,"lifecycle cancellation prevents delayed HP submission")
++	check(int(runtime.reservation_snapshot().actions) == 0,"cancelled delayed callback returns its outstanding reservation")
++	check(game.player.finish_combat_transition("feature_capacity_cancel"),"existing lifecycle transition closes normally")
++	print("FEATURE_ADMISSION_RELEASE_TRACE "+JSON.stringify({"bound":bound,"metrics":runtime.metrics(),"reservation":runtime.reservation_snapshot()}))
++	game.queue_free(); await get_tree().process_frame
++	_finish()
++
++func _spawn(game: Node, id: int, ground: Vector2, slot: String) -> EnemyActor:
++	return game._spawn_enemy(GameData.get_monster_by_id(id),game._canonical_ground_gu_to_screen_px(ground),false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":slot})
++
++func _durable_target(actor: EnemyActor) -> void:
++	actor.set_physics_process(false); actor.max_hp = 10000; actor.current_hp = 10000
++	actor.direct_spell_anti_magic_points = 0; actor.direct_spell_magic_defense_min = 0; actor.direct_spell_magic_defense_max = 0
++	actor.direct_spell_stats_valid = true
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_admission_release_test",checks,failures.size()): failures.append("receipt")
++	print("FEATURE_ADMISSION_RELEASE_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/feature_admission_release_test.tscn
++++ new/tests/framework/feature_admission_release_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_admission_release_test.gd" id="1"]
++
++[node name="FeatureAdmissionReleaseTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/feature_receipt_retirement_test.gd
++++ new/tests/framework/feature_receipt_retirement_test.gd
+@@ -0,0 +1,94 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Clock := preload("res://scripts/layers/runtime/execution/time_domains.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++const RELEASES := 2200
++const TARGETS := 30
++var _zone_generation := 1
++var current_map_id := 910001
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	var world := World.new(); world.configure(self,PlayerState)
++	var clock := Clock.new(); clock.configure(self)
++	var combat := Combat.new(); add_child(combat)
++	var runtime := Runtime.new(); runtime.configure(world,clock,combat); runtime.require_reservations = true
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"actual compiled default-off module enabled for retirement proof")
++	var bindings: Array = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	check(bindings.size() == 1 and bindings[0].definition.config.chance == 1.0,"actual guaranteed source requires one receipt per delivered receiver")
++	var receivers: Array[EnemyActor] = []
++	for index in TARGETS:
++		var actor := preload("res://scripts/enemy.gd").new(); actor.setup(GameData.get_monster_by_id(19),null); add_child(actor)
++		actor.set_physics_process(false); actor.max_hp = 100000; actor.current_hp = 100000
++		receivers.append(actor)
++	var oldest_batch: RefCounted
++	var oldest_ticket: RefCounted
++	var completed := 0
++	var maximum_receipts := 0
++	var maximum_records := 0
++	var bounded := true
++	var samples: Array[Dictionary] = []
++	var started := Time.get_ticks_usec()
++	for index in RELEASES:
++		var release_id := "retirement:release:"+str(index)
++		var ticket: RefCounted = runtime.reserve_action("hc.skill.wizard.ice_storm",bindings,TARGETS,release_id)
++		if ticket == null: failures.append("preaccept capacity at release "+str(index)+": "+runtime.last_admission_reason); break
++		var created: Dictionary = Batch.create(world,release_id,"hc.skill.wizard.ice_storm",bindings,{},0,ticket)
++		if not bool(created.success): failures.append("producer creation at release "+str(index)); break
++		var batch: RefCounted = created.batch; batch.begin_base_scope()
++		for actor: EnemyActor in receivers:
++			actor.take_damage(10,null,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense"})
++		batch.finish_base_scope()
++		if not runtime.submit_batch(batch): failures.append("accepted transfer at release "+str(index)); break
++		ticket.close()
++		if index == 0: oldest_batch = batch; oldest_ticket = ticket
++		# Structural lifetime proof, not a frame/performance benchmark: drive the
++		# real consumer quantum explicitly; no fake HP, receipt or state counters.
++		while runtime.pending_count() > 0:
++			runtime._dispatch_one_fact()
++			maximum_receipts = maxi(maximum_receipts,runtime._receipts.size())
++			maximum_records = maxi(maximum_records,runtime._reservations.size())
++		bounded = bounded and runtime._receipts.is_empty() and runtime._reservations.is_empty() \
++			and runtime._batches.is_empty() and runtime.active_count() == TARGETS
++		if not runtime.errors.is_empty(): failures.append("consumer failure at release "+str(index)+": "+str(runtime.errors)); break
++		completed += 1
++		if index%200 == 0:
++			samples.append({"release":index+1,"memory_static":int(Performance.get_monitor(Performance.MEMORY_STATIC)),
++				"objects":int(Performance.get_monitor(Performance.OBJECT_COUNT)),"states":runtime.active_count(),"receipts":runtime._receipts.size()})
++			await get_tree().process_frame
++	check(completed == RELEASES,"all 2200 accepted thirty-receiver releases finish after crossing the old 65536-receipt lifetime bound")
++	check(int(runtime.metrics().admitted_facts) == RELEASES*TARGETS,"all 66000 real committed HP facts were consumed exactly once")
++	check(int(runtime.metrics().started) == TARGETS and int(runtime.metrics().refreshed) == RELEASES*TARGETS-TARGETS,
++		"thirty real states start and every subsequent accepted source refresh is retained")
++	var exact_hp := true
++	for actor: EnemyActor in receivers: exact_hp = exact_hp and actor.current_hp == 100000-10*RELEASES
++	check(exact_hp,"every target retains the exact completed base damage total")
++	check(bounded and maximum_receipts <= TARGETS and maximum_records <= 1,"receipt and producer storage remain bounded by active work, not historical release count")
++	check(int(runtime.metrics().peak_receipts) == TARGETS and int(runtime.metrics().retired_receipts) == RELEASES*TARGETS,
++		"write-boundary telemetry records the true thirty-receipt peak and all 66000 terminal retirements")
++	check(runtime.presentation().events.size() <= 256,"presentation telemetry retains its existing bounded storage")
++	await get_tree().create_timer(0.01).timeout
++	check(oldest_batch != null and not runtime.submit_batch(oldest_batch),"delayed retained old batch cannot submit again after thousands of retirements")
++	if oldest_ticket != null:
++		check(not bool(Batch.create(world,"retirement:release:0","hc.skill.wizard.ice_storm",bindings,{},0,oldest_ticket).success),
++			"delayed callback cannot reopen the retired producer identity")
++	print("FEATURE_RECEIPT_RETIREMENT_TRACE "+JSON.stringify({"completed":completed,"facts":runtime.metrics().admitted_facts,
++		"maximum_observed_receipts_after_dispatch":maximum_receipts,"maximum_records":maximum_records,"elapsed_usec":Time.get_ticks_usec()-started,
++		"metrics":runtime.metrics(),"memory_observations_only":samples,"performance_acceptance":"NOT_RUN"}))
++	runtime.clear()
++	if not proof.write_receipt("feature_receipt_retirement_test",checks,failures.size()): failures.append("receipt")
++	print("FEATURE_RECEIPT_RETIREMENT_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/feature_receipt_retirement_test.tscn
++++ new/tests/framework/feature_receipt_retirement_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_receipt_retirement_test.gd" id="1"]
++
++[node name="FeatureReceiptRetirementTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/feature_reservation_test.gd
++++ new/tests/framework/feature_reservation_test.gd
+@@ -0,0 +1,110 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const World := preload("res://scripts/layers/runtime/execution/world_context.gd")
++const Clock := preload("res://scripts/layers/runtime/execution/time_domains.gd")
++const Batch := preload("res://scripts/features/runtime/damage_batch.gd")
++const Runtime := preload("res://scripts/features/runtime/effect_runtime.gd")
++const Compiler := preload("res://scripts/features/compilation/feature_compiler.gd")
++const Combat := preload("res://scripts/layers/runtime/combat_runtime_service.gd")
++var _zone_generation := 1
++var current_map_id := 910001
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++var world: RefCounted
++var runtime: RefCounted
++var bindings: Array
++var target: EnemyActor
++
++func check(value: bool,label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	world = World.new(); world.configure(self,PlayerState)
++	var clock := Clock.new(); clock.configure(self)
++	var combat := Combat.new(); add_child(combat)
++	runtime = Runtime.new(); runtime.configure(world,clock,combat)
++	target = preload("res://scripts/enemy.gd").new(); target.setup(GameData.get_monster_by_id(19),null); add_child(target)
++	target.set_physics_process(false); target.max_hp = 10000; target.current_hp = 10000
++	check(ContentLayers.set_feature_module_enabled("hc.ignite",true),"real default-off module enabled explicitly")
++	bindings = PlayerState.feature_bundle().event_index.get("damage_committed:hc.skill.wizard.ice_storm",[])
++	check(bindings.size() == 1,"actual compiled trigger is used")
++	check(runtime.has_method("reserve_action"),"runtime can promise capacity before any damage fact exists")
++	if not runtime.has_method("reserve_action"): _finish(); return
++	var full: RefCounted = _reserve(bindings,Batch.MAX_FACTS)
++	check(full != null,"one action can reserve the exact existing global state capacity")
++	check(not runtime.configure(world,clock,combat),"an accepted producer already owns its clock and port before its first fact")
++	check(_reserve(bindings,1) == null,"another action cannot consume already promised global capacity")
++	check(target.current_hp == 10000 and runtime.pending_count() == 0,"reservation rejection precedes HP and fact creation")
++	if full != null: full.close()
++	check(int(runtime.reservation_snapshot().actions) == 0,"unreleased cancelled action returns its entire reservation")
++	var abandoned: RefCounted = _reserve(bindings,2)
++	check(abandoned != null and int(runtime.reservation_snapshot().actions) == 1,"producer capability has no hidden strong owner in the runtime")
++	abandoned = null
++	check(int(runtime.reservation_snapshot().actions) == 0,"last producer reference releases unused capacity without a timer or TTL")
++	check(_reserve(bindings,-1) == null and _reserve(bindings,Batch.MAX_FACTS+1) == null,"negative/oversized bounds reject before accepting an action")
++	var empty: RefCounted = _reserve(bindings,0)
++	check(empty != null,"proved empty world retains a legal empty release without inventing a target")
++	if empty != null: empty.close()
++	var distinct: Array[RefCounted] = []
++	for index in 16:
++		var candidate := bindings.duplicate(true)
++		candidate[0].source.instance_id = "reservation:source:"+str(index)
++		candidate[0].handle = Compiler.source_handle(candidate[0].source)
++		distinct.append(_reserve(candidate,2))
++	check(not distinct.has(null),"sixteen distinct future sources fit each possible receiver")
++	check(_reserve(bindings,2) == null,"seventeenth source rejects even when global space is plentiful")
++	for ticket: RefCounted in distinct:
++		if ticket != null: ticket.close()
++	var same: Array[RefCounted] = []
++	for index in 17: same.append(_reserve(bindings,2))
++	check(not same.has(null),"seventeen concurrent refresh promises share one source slot rather than imposing an action-count limit")
++	for ticket: RefCounted in same:
++		if ticket != null: ticket.close()
++	var ticket: RefCounted = _reserve(bindings,2,"reservation:release")
++	check(ticket != null,"fresh real action receives a reservation")
++	if ticket == null: _finish(); return
++	var factory: Variant = Batch
++	check(not bool(factory.create(world,"reservation:wrong-action","hc.skill.wizard.ice_storm",bindings,{},0,ticket).success),"a new reservation cannot attach itself to another action's release identity")
++	check(not bool(preload("res://scripts/features/contracts/plain_graph.gd").capture({"reservation":ticket}).success),"live producer capability cannot enter persisted or imported plain data")
++	var created: Dictionary = factory.create(world,"reservation:release","hc.skill.wizard.ice_storm",bindings,{},clock.simulation_usec(),ticket)
++	check(bool(created.success),"accepted ticket transfers once to its real base producer")
++	check(not bool(factory.create(world,"reservation:duplicate-producer","hc.skill.wizard.ice_storm",bindings,{},0,ticket).success),"same ticket cannot create another producer under a different release label")
++	if not bool(created.success): _finish(); return
++	var batch: RefCounted = created.batch; batch.begin_base_scope()
++	target.take_damage(100,null,{"feature_damage_batch":batch,"source_class":"direct","damage_channel":"magic_defense"})
++	batch.finish_base_scope()
++	check(runtime.submit_batch(batch),"complete damage fact transfers into its reserved queue space")
++	ticket.close()
++	check(int(runtime.reservation_snapshot().actions) == 1,"producer closure retains capacity while the consumer still owns work")
++	for index in 30:
++		runtime.pump()
++		if runtime.pending_count() == 0: break
++		await get_tree().process_frame
++	check(runtime.pending_count() == 0 and runtime.active_count() == 1 and runtime.errors.is_empty(),"accepted work creates its promised real state without a late capacity rejection")
++	check(int(runtime.reservation_snapshot().actions) == 0 and int(runtime.reservation_snapshot().receipts) == 0,"sealed one-shot producer plus exhausted consumer retires only its own receipt")
++	check(not runtime.submit_batch(batch),"retained sealed batch cannot reenter after receipt retirement")
++	check(not bool(factory.create(world,"reservation:release","hc.skill.wizard.ice_storm",bindings,{},0,ticket).success),"retained retired ticket cannot recreate the old producer")
++	var old: RefCounted = _reserve(bindings,2)
++	_zone_generation += 1
++	var fresh: RefCounted = _reserve(bindings,2)
++	check(fresh != null and old != null,"new world can reserve independently")
++	check(not bool(factory.create(world,"reservation:old-world","hc.skill.wizard.ice_storm",bindings,{},0,old).success),"old ticket cannot borrow a new world's open reservation")
++	if fresh != null: fresh.close()
++	if old != null: old.close()
++	check(int(runtime.reservation_snapshot().actions) == 0,"old-world callbacks cannot leak or release another action's reservation")
++	_finish()
++
++func _reserve(values: Array, count: int, release_id := "") -> RefCounted:
++	return runtime.call("reserve_action","hc.skill.wizard.ice_storm",values,count,release_id)
++
++func _finish() -> void:
++	if runtime != null: runtime.clear()
++	if not proof.write_receipt("feature_reservation_test",checks,failures.size()): failures.append("receipt")
++	print("FEATURE_RESERVATION_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/feature_reservation_test.tscn
++++ new/tests/framework/feature_reservation_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_reservation_test.gd" id="1"]
++
++[node name="FeatureReservationTest" type="Node"]
++script = ExtResource("1")
+--- old/tests/framework/feature_world_capacity_bound_test.gd
++++ new/tests/framework/feature_world_capacity_bound_test.gd
+@@ -0,0 +1,58 @@
++extends Node
++
++const Proof := preload("res://tests/framework/helpers/check_receipt.gd")
++const Root := preload("res://tests/framework/fixtures/lease_probe_root.gd")
++var proof := Proof.new()
++var checks := 0
++var failures: Array[String] = []
++
++func check(value: bool, label: String) -> void:
++	proof.record(value,label); checks += 1
++	if not value: failures.append(label)
++
++func _ready() -> void: _run.call_deferred()
++
++func _run() -> void:
++	PlayerState.test_mode = true; PlayerState.reset_progress(false)
++	var game := Root.new(); add_child(game)
++	var deadline := Time.get_ticks_msec()+20000
++	while not game.gameplay_input_is_enabled() and Time.get_ticks_msec()<deadline: await get_tree().process_frame
++	check(game.gameplay_input_is_enabled(),"formal mapped world reaches READY")
++	check(game.has_method("feature_world_capacity_bound"),"formal world exposes a declared birth closure before accepting feature work")
++	if not game.gameplay_input_is_enabled() or not game.has_method("feature_world_capacity_bound"):
++		game.queue_free(); await get_tree().process_frame; _finish(); return
++	game.set_process(false); game.set_physics_process(false)
++	var initial: Dictionary = game.call("feature_world_capacity_bound")
++	check(bool(initial.get("proved",false)) and int(initial.get("maximum_receivers",0)) > 0,"current formal content has a positive proved receiver bound")
++	check(int(initial.get("base_slots",0)) >= game._active_enemy_cache.size(),"declared slots cover the live formal enemy population")
++	var position: Vector2 = game._canonical_ground_gu_to_screen_px(Vector2(40.5,13.5))
++	var source: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(126),position,false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"fixture:world_bound:summoner"})
++	check(source != null,"exact canonical summoner uses the existing production factory")
++	var added: Dictionary = game.call("feature_world_capacity_bound")
++	check(int(added.maximum_receivers) == int(initial.maximum_receivers)+6,"one ordinary summoner slot reserves itself and its existing five child slots")
++	check(int(added.base_slots) == int(initial.base_slots)+1,"summon allowance is not miscounted as another base producer")
++	if source != null:
++		source.queue_free(); await get_tree().process_frame
++	var dead: Dictionary = game.call("feature_world_capacity_bound")
++	check(dead == added,"dead source does not erase future respawn or previous-life child allowance")
++	source = game._spawn_enemy(GameData.get_monster_by_id(126),position,false,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"fixture:world_bound:summoner"})
++	check(source != null and game.call("feature_world_capacity_bound") == added,"replacement life reuses the exact declared slot without freezing an actor identity")
++	var child: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(127),position,false,-1.0,
++		{"respawn_enabled":false,"summoner_spawn_slot":"fixture:world_bound:summoner"})
++	check(child != null and game.call("feature_world_capacity_bound") == added,"materialized summon transfers an existing child allowance rather than increasing the bound")
++	var boss: EnemyActor = game._spawn_enemy(GameData.get_monster_by_id(160),position,true,-1.0,
++		{"respawn_enabled":false,"spawn_slot_id":"fixture:world_bound:boss"})
++	check(boss != null,"exact canonical stage-summoning boss uses production factory")
++	var final: Dictionary = game.call("feature_world_capacity_bound")
++	check(int(final.maximum_receivers) == int(added.maximum_receivers)+16,"boss allowance comes from its fifteen authored children, not an arbitrary thirty-target limit")
++	check(int(final.maximum_receivers) > 30,"proof preserves worlds with more than thirty possible receivers")
++	print("FEATURE_WORLD_CAPACITY_BOUND_TRACE "+JSON.stringify({"initial":initial,"summoner":added,"boss":final}))
++	game.queue_free(); await get_tree().process_frame
++	_finish()
++
++func _finish() -> void:
++	if not proof.write_receipt("feature_world_capacity_bound_test",checks,failures.size()): failures.append("receipt")
++	print("FEATURE_WORLD_CAPACITY_BOUND_%s checks=%d failures=%s" % ["PASS" if failures.is_empty() else "FAIL",checks,str(failures)])
++	get_tree().quit(0 if failures.is_empty() else 1)
+--- old/tests/framework/feature_world_capacity_bound_test.tscn
++++ new/tests/framework/feature_world_capacity_bound_test.tscn
+@@ -0,0 +1,6 @@
++[gd_scene load_steps=2 format=3]
++
++[ext_resource type="Script" path="res://tests/framework/feature_world_capacity_bound_test.gd" id="1"]
++
++[node name="FeatureWorldCapacityBoundTest" type="Node"]
++script = ExtResource("1")

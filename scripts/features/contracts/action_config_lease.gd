@@ -6,6 +6,11 @@ const ACCEPTED_PRIMARY_STATS := "accepted_configuration"
 const LEGACY_RELEASE_PRIMARY_STATS := "legacy_release_owner"
 var _snapshot: Dictionary = {}
 var _accepted := false
+var _admission: Callable
+var _admission_configured := false
+var _reservation: RefCounted
+var _release_started := false
+var _producer_closed := false
 
 # Configuration is accepted separately from live target/facing sampling. The
 # old release boundary continues to own positions, receiver life and facing.
@@ -35,11 +40,34 @@ func current_before_accept(versions: Dictionary, actor_identity: Dictionary) -> 
 func accept(versions: Dictionary, actor_identity: Dictionary) -> bool:
 	if not current_before_accept(versions, actor_identity):
 		return false
+	if _admission_configured:
+		if not _admission.is_valid(): return false
+		var result: Dictionary = _admission.call(self)
+		if not bool(result.get("success",false)): return false
+		_reservation = result.get("reservation")
 	_accepted = true
 	return true
 
 func valid_for_release(actor_identity: Dictionary) -> bool:
-	return _accepted and not _snapshot.is_empty() and _snapshot.actor_identity == actor_identity
+	return _accepted and not _producer_closed and not _release_started \
+		and not _snapshot.is_empty() and _snapshot.actor_identity == actor_identity
+
+func configure_admission(callback: Callable) -> bool:
+	if _accepted or _admission_configured or not callback.is_valid(): return false
+	_admission = callback; _admission_configured = true
+	return true
+
+func begin_release(actor_identity: Dictionary) -> bool:
+	if not valid_for_release(actor_identity): return false
+	# Only ticketed producers acquire the new one-shot dispatch boundary.
+	if _reservation != null: _release_started = true
+	return true
+
+func effect_reservation() -> RefCounted: return _reservation
+
+func finish_producer() -> void:
+	if _reservation != null: _reservation.close()
+	_producer_closed = true
 
 func definition_for(skill_id: String) -> Dictionary:
 	var canonical_id := Loader.stable_skill_id(skill_id)
@@ -64,6 +92,9 @@ func event_bindings_for(skill_id: String) -> Array:
 
 func rank() -> int:
 	return int(_snapshot.get("rank", 0))
+
+func primary_skill_id() -> String:
+	return str(_snapshot.get("definition",{}).get("skill_id",""))
 
 func actor_level() -> int:
 	return int(_snapshot.get("actor_level", 0))

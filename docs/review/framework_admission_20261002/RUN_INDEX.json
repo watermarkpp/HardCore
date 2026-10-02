@@ -1,0 +1,173 @@
+{
+  "capacity_causal_red": {
+    "local_run": "capacity_accept_current_red_144042_545895",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_capacity_admission_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "bound_causal_red": {
+    "local_run": "feature_world_bound_red_144544_083124",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_world_capacity_bound_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "reservation_fixture_parse_fail": {
+    "local_run": "feature_reservation_red_145119_950219",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_reservation_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "reservation_causal_red": {
+    "local_run": "feature_reservation_contract_red_145219_754122",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_reservation_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "production_type_parse_fail": {
+    "local_run": "feature_reservation_green_145625_260361",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_reservation_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "predelete_engine_fail": {
+    "local_run": "feature_reservation_typed_green_145712_798457",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_reservation_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "final_related": {
+    "local_run": "feature_admission_final_related_152854_654252",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_reservation_test.tscn','tests/framework/feature_world_capacity_bound_test.tscn','tests/framework/feature_admission_release_test.tscn','tests/framework/feature_capacity_admission_test.tscn','tests/framework/action_config_lease_test.tscn','tests/framework/action_configuration_production_test.tscn','tests/framework/fire_cooldown_configuration_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn','tests/m30_r4_r1/r1_core_test.tscn','tests/classic_boss_area_magic_outcomes_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 17,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_retirement": {
+    "local_run": "feature_receipt_retirement_final_154116_145436",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_receipt_retirement_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_cold": {
+    "local_run": "feature_admission_final_cold_154201_956589",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    }
+  }
+}

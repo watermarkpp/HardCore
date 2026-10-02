@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real default-off module enabled explicitly",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "actual compiled trigger is used",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "runtime can promise capacity before any damage fact exists",
+      "passed": false
+    }
+  ],
+  "count": 3,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "452af666-65c7-4ffd-bb51-61c4454f6665",
+  "passed": 2,
+  "reported_checks": 3,
+  "reported_failures": 1,
+  "run_id": "c755cb10-937c-495e-86f5-eee7bc2e69d1",
+  "scene_id": "feature_reservation_test",
+  "schema_version": 1,
+  "source_content_sha256": "4359e69e6a1497153ddbe533c6456f726fdc67b3c2b40f0bfc7b8f42c3da8286",
+  "status": "FAIL"
+}

@@ -17,9 +17,11 @@ var _entries: Array = []
 var _depth := 0
 var _sealed := false
 var _consumed := false
+var _reservation: RefCounted
+var _fact_limit := MAX_FACTS
 var errors: Array[String] = []
 
-static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0) -> Dictionary:
+static func create(world: RefCounted, release_id: String, skill_id: String, bindings: Array, credit: Dictionary, accepted_usec: int = 0, reservation: RefCounted = null) -> Dictionary:
 	if world == null or world.capture_world().is_empty() or release_id.is_empty() or Ids.resolve(skill_id,"skill").is_empty() \
 		or bindings.size() > 32 or accepted_usec < 0:
 		return {"success":false,"reason":"invalid_damage_batch_identity","batch":null}
@@ -28,7 +30,16 @@ static func create(world: RefCounted, release_id: String, skill_id: String, bind
 		return {"success":false,"reason":"non_plain_damage_batch_configuration","batch":null}
 	if not validate_bindings(skill_id,captured.value.bindings):
 		return {"success":false,"reason":"invalid_event_binding","batch":null}
+	var limit := MAX_FACTS
+	if reservation != null:
+		if reservation.get_script() != preload("res://scripts/features/contracts/effect_reservation.gd"):
+			return {"success":false,"reason":"invalid_effect_reservation","batch":null}
+		var claimed: Dictionary = reservation.claim(world.capture_world(),release_id,skill_id,captured.value.bindings)
+		if not bool(claimed.get("success",false)):
+			return {"success":false,"reason":"closed_effect_reservation","batch":null}
+		limit = int(claimed.maximum_facts)
 	var result := new()
+	result._reservation = reservation; result._fact_limit = limit
 	result._world = world
 	result._world_identity = world.capture_world()
 	result._release_id = release_id
@@ -79,7 +90,7 @@ func finish_base_scope() -> bool:
 func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, requested: int, context: Dictionary) -> bool:
 	if _depth <= 0 or _sealed or _consumed or not errors.is_empty():
 		return false
-	if _entries.size() >= MAX_FACTS:
+	if _entries.size() >= _fact_limit:
 		errors.append("damage_batch_capacity")
 		return false
 	if not _world.matches_world(_world_identity) or context.get("source_class") != "direct" \
@@ -104,7 +115,8 @@ func capture_commit(target: Node, source: Node, hp_before: int, hp_after: int, r
 	if not bool(fact.success):
 		errors.append("non_plain_damage_fact")
 		return false
-	var entry := {"fact":fact.value,"target":target_ref,"source":source_ref,"bindings":_bindings}
+	var entry := {"fact":fact.value,"target":target_ref,"source":source_ref,"bindings":_bindings,
+		"admission_id":_reservation.sequence() if _reservation != null else 0}
 	entry.make_read_only()
 	_entries.append(entry)
 	return true
@@ -131,3 +143,9 @@ func consume() -> Array:
 
 func is_complete() -> bool:
 	return _sealed
+
+func reservation() -> RefCounted: return _reservation
+
+func binding_count() -> int: return _bindings.size()
+
+func event_bindings() -> Array: return _bindings

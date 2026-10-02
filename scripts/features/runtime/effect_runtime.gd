@@ -5,9 +5,11 @@ const Handler := preload("res://scripts/features/handlers/ignite_handler.gd")
 const Heap := preload("res://scripts/features/runtime/indexed_due_heap.gd")
 const Budget := preload("res://scripts/layers/runtime/execution/frame_budget.gd")
 const Presentation := preload("res://scripts/features/presentation/presentation_port.gd")
+const Reservation := preload("res://scripts/features/contracts/effect_reservation.gd")
 const MAX_PENDING_FACTS := 8192
 const MAX_ACTIVE_STATES := 4096
 const MAX_RECEIPTS := 65536
+const MAX_STATES_PER_TARGET := preload("res://scripts/features/adapters/feature_authority.gd").MAX_STATES_PER_TARGET
 var _world: RefCounted
 var _clock: RefCounted
 var _combat := WeakRef.new()
@@ -23,7 +25,15 @@ var _receipts: Dictionary = {}
 var _heap := Heap.new()
 var _presentation: RefCounted
 var _prefer_due := true
+var _reservations: Dictionary = {}
+var _next_reservation := 0
+var _reserved_facts := 0
+var _reserved_states := 0
+var _reserved_receipts := 0
+var require_reservations := false
+var last_admission_reason := ""
 var _stats := {"ticks":0,"actual_loss":0,"started":0,"refreshed":0,"expired":0,"invalidated":0,"failed":0,"admitted_facts":0,"peak_states":0,"peak_pending":0,"optional_cue_missing":0,
+	"peak_receipts":0,"retired_receipts":0,"peak_reservations":0,
 	"tick_delivery_count":0,"maximum_tick_delivery_lateness_usec":0}
 var errors: Array[String] = []
 
@@ -45,10 +55,105 @@ func configure(world: RefCounted, clock: RefCounted, combat: Node, presentation:
 func active_count() -> int: return _states.size()
 func heap_count() -> int: return _heap.size()
 func pending_count() -> int: return _pending
-func has_work() -> bool: return _pending > 0 or not _states.is_empty()
+func has_work() -> bool: return _pending > 0 or not _states.is_empty() or not _reservations.is_empty()
 func has_due() -> bool: return _clock != null and _heap.due_usec() <= _clock.simulation_usec()
 func metrics() -> Dictionary: return Graph.capture(_stats).value
 func presentation() -> RefCounted: return _presentation
+
+func reservation_snapshot() -> Dictionary:
+	return {"actions":_reservations.size(),"facts":_reserved_facts,"states":_reserved_states,
+		"promised_receipts":_reserved_receipts,"receipts":_receipts.size()}
+
+func reserve_action(skill_id: String, bindings: Array, maximum_receivers: int, expected_release_id := "") -> RefCounted:
+	last_admission_reason = ""
+	if not _sync_world() or maximum_receivers < 0 or maximum_receivers > preload("res://scripts/features/runtime/damage_batch.gd").MAX_FACTS \
+		or bindings.is_empty() or not preload("res://scripts/features/runtime/damage_batch.gd").validate_bindings(skill_id,bindings):
+		last_admission_reason = "feature_action_bound_invalid"; return null
+	var cost := maximum_receivers*bindings.size()
+	var queued_cost := _unreserved_queued_cost()
+	# Empty legal casts still own a producer record. Bound those records by the
+	# existing queue capacity even when their proven fact/state bound is zero.
+	if _reservations.size() >= MAX_PENDING_FACTS:
+		last_admission_reason = "feature_action_producer_capacity"; return null
+	if _pending+_reserved_facts+maximum_receivers > MAX_PENDING_FACTS:
+		last_admission_reason = "feature_action_pending_capacity"; return null
+	if _states.size()+_reserved_states+queued_cost+cost > MAX_ACTIVE_STATES:
+		last_admission_reason = "feature_action_state_capacity"; return null
+	if _receipts.size()+_reserved_receipts+queued_cost+cost > MAX_RECEIPTS:
+		last_admission_reason = "feature_action_receipt_capacity"; return null
+	var sources := _binding_sources(bindings) if maximum_receivers > 0 else {}
+	if not _target_sources_fit(sources):
+		last_admission_reason = "feature_action_target_capacity"; return null
+	if _next_reservation == 9223372036854775807:
+		last_admission_reason = "feature_action_identity_exhausted"; return null
+	_next_reservation += 1
+	_reservations[_next_reservation] = {"stage":"reserved","world":_world_identity,"skill_id":skill_id,
+		"expected_release_id":expected_release_id,
+		"bindings":Graph.capture(bindings).value,"sources":sources,"facts":maximum_receivers,
+		"states":cost,"receipt_space":cost,"receipts":[]}
+	_reserved_facts += maximum_receivers; _reserved_states += cost; _reserved_receipts += cost
+	_stats.peak_reservations = maxi(int(_stats.peak_reservations),_reservations.size())
+	return Reservation.create(self,_next_reservation)
+
+func _claim_reservation(sequence: int, identity: Dictionary, release_id: String, skill_id: String, bindings: Array) -> Dictionary:
+	if not _sync_world() or not _reservations.has(sequence): return {"success":false}
+	var value: Dictionary = _reservations[sequence]
+	if value.stage != "reserved" or value.world != identity or value.skill_id != skill_id or value.bindings != bindings:
+		return {"success":false}
+	if not str(value.expected_release_id).is_empty() and value.expected_release_id != release_id: return {"success":false}
+	value.stage = "producing"
+	return {"success":true,"maximum_facts":int(value.facts)}
+
+func _close_reservation_producer(sequence: int) -> void:
+	if not _reservations.has(sequence): return
+	# Once queued, the sealed batch is the only producer and the consumer owns
+	# the remaining reservation. An old configuration's destruction cannot steal it.
+	if _reservations[sequence].stage != "queued": _retire_reservation(sequence)
+
+func _retire_reservation(sequence: int) -> void:
+	if not _reservations.has(sequence): return
+	var value: Dictionary = _reservations[sequence]
+	_reserved_facts -= int(value.facts); _reserved_states -= int(value.states)
+	_reserved_receipts -= int(value.receipt_space)
+	# Only a claimed, sealed, completely consumed one-shot producer retires
+	# these receipts. Unticketed historical receipts retain their old lifetime.
+	for receipt: String in value.receipts:
+		_receipts.erase(receipt); _stats.retired_receipts += 1
+	_reservations.erase(sequence)
+
+func _unreserved_queued_cost() -> int:
+	var result := 0
+	for work: Dictionary in _batches.values():
+		if int(work.get("admission_id",0)) != 0: continue
+		for index in range(int(work.cursor),work.entries.size()): result += work.entries[index].bindings.size()
+	return result
+
+static func _binding_sources(bindings: Array) -> Dictionary:
+	var result := {}
+	for binding: Dictionary in bindings:
+		result[JSON.stringify([binding.handle,binding.definition.mechanic_id,Handler.EFFECT_ID])] = true
+	return result
+
+func _target_sources_fit(additional: Dictionary) -> bool:
+	var promised := additional.duplicate()
+	for reservation: Dictionary in _reservations.values(): promised.merge(reservation.sources)
+	if promised.size() > MAX_STATES_PER_TARGET: return false
+	var targets := {}
+	for state: Dictionary in _states.values():
+		var command: Dictionary = state.command
+		var values: Dictionary = targets.get(state.target_key,{})
+		values[JSON.stringify([command.source_handle,command.mechanic_id,command.effect_id])] = true
+		targets[state.target_key] = values
+	for work: Dictionary in _batches.values():
+		for index in range(int(work.cursor),work.entries.size()):
+			var entry: Dictionary = work.entries[index]
+			var key := JSON.stringify(entry.fact.target)
+			var values: Dictionary = targets.get(key,{})
+			values.merge(_binding_sources(entry.bindings)); targets[key] = values
+	for values: Dictionary in targets.values():
+		values.merge(promised)
+		if values.size() > MAX_STATES_PER_TARGET: return false
+	return true
 
 func _sync_world() -> bool:
 	if _world == null or _world.current_world_owner() == null:
@@ -64,12 +169,32 @@ func submit_batch(batch: RefCounted) -> bool:
 		return false
 	var count: int = batch.pending_fact_count()
 	if count == 0: return false
-	if _pending+count > MAX_PENDING_FACTS:
+	var ticket: RefCounted = batch.reservation()
+	var admission_id := 0
+	if ticket != null:
+		if not ticket.belongs_to(self): return false
+		admission_id = ticket.sequence()
+		if not _reservations.has(admission_id) or _reservations[admission_id].stage != "producing" \
+			or count > int(_reservations[admission_id].facts): return false
+	elif require_reservations:
+		_error("feature_unreserved_producer"); return false
+	var own_facts := int(_reservations[admission_id].facts) if admission_id > 0 else 0
+	if _pending+_reserved_facts-own_facts+count > MAX_PENDING_FACTS:
 		_error("feature_pending_capacity"); return false
+	if admission_id == 0 and not _reservations.is_empty():
+		var cost: int = count*batch.binding_count()+_unreserved_queued_cost()
+		if _states.size()+_reserved_states+cost > MAX_ACTIVE_STATES \
+			or _receipts.size()+_reserved_receipts+cost > MAX_RECEIPTS:
+			_error("feature_reserved_capacity_protected"); return false
+		if not _target_sources_fit(_binding_sources(batch.event_bindings())):
+			_error("feature_reserved_target_capacity_protected"); return false
 	# Main-thread admission and the one-shot transfer are synchronous. Nothing
 	# consumes the batch before its entire fact buffer has a queue destination.
 	var entries: Array = batch.consume()
-	_batches[_batch_tail] = {"entries":entries,"cursor":0}
+	if admission_id > 0:
+		_reserved_facts -= own_facts
+		_reservations[admission_id].facts = 0; _reservations[admission_id].stage = "queued"
+	_batches[_batch_tail] = {"entries":entries,"cursor":0,"admission_id":admission_id}
 	_batch_tail += 1
 	_pending += entries.size()
 	_stats.peak_pending = maxi(int(_stats.peak_pending),_pending)
@@ -98,24 +223,35 @@ func pump() -> int:
 func _dispatch_one_fact() -> void:
 	var work: Dictionary = _batches[_batch_head]
 	var entry: Dictionary = work.entries[work.cursor]
+	var admission_id := int(work.admission_id)
 	work.cursor += 1; _pending -= 1
-	if work.cursor == work.entries.size():
+	var complete: bool = work.cursor == work.entries.size()
+	if complete:
 		# A continuous producer need not let the queue become empty. Retire the
 		# completed buffer immediately without shifting or copying live work.
 		_batches.erase(_batch_head)
 		_batch_head += 1
 	if _pending == 0:
 		_batch_head = 0; _batch_tail = 0
+	_deliver_fact(entry,admission_id)
+	if complete and admission_id > 0: _retire_reservation(admission_id)
+
+func _deliver_fact(entry: Dictionary, admission_id: int) -> void:
 	var fact: Dictionary = entry.fact
 	if not bool(fact.target_survived_commit) or int(fact.actual_loss) <= 0 or entry.target.resolve() == null:
 		return
 	_stats.admitted_facts += 1
 	for binding: Dictionary in entry.bindings:
-		var receipt := JSON.stringify([fact.release_id,fact.target,binding.handle])
+		var producer: Variant = ["reservation",admission_id] if admission_id > 0 else fact.release_id
+		var receipt := JSON.stringify([producer,fact.target,binding.handle])
 		if _receipts.has(receipt): continue
 		if _receipts.size() >= MAX_RECEIPTS:
 			_error("feature_receipt_capacity"); return
 		_receipts[receipt] = true
+		_stats.peak_receipts = maxi(int(_stats.peak_receipts),_receipts.size())
+		if admission_id > 0:
+			_reservations[admission_id].receipts.append(receipt)
+			_reservations[admission_id].receipt_space -= 1; _reserved_receipts -= 1
 		for command: Dictionary in Handler.commands(fact,binding):
 			_apply_command(command,entry)
 
@@ -138,8 +274,13 @@ func _apply_command(command: Dictionary, entry: Dictionary) -> void:
 		_stats.refreshed += 1
 		_presentation.refresh(handle,int(state.raw_per_tick))
 		return
-	if _states.size() >= MAX_ACTIVE_STATES or int(_states_per_target.get(target_key,0)) >= 16:
+	if _states.size() >= MAX_ACTIVE_STATES or int(_states_per_target.get(target_key,0)) >= MAX_STATES_PER_TARGET:
 		_error("feature_state_capacity"); return
+	var admission_id := int(entry.get("admission_id",0))
+	if admission_id > 0:
+		if not _reservations.has(admission_id) or int(_reservations[admission_id].states) <= 0:
+			_error("feature_state_reservation_missing"); return
+		_reservations[admission_id].states -= 1; _reserved_states -= 1
 	var state := {"target":entry.target,"source":entry.source,"command":command,"target_key":target_key,
 		"raw_per_tick":int(command.raw_per_tick),"period":int(command.period_usec),
 		"next_due":accepted_at+int(command.period_usec),"expires":accepted_at+int(command.duration_usec),"ticks":0}
@@ -197,6 +338,7 @@ func clear() -> void:
 	for handle: String in _states.keys(): _stop(handle)
 	if _presentation != null: _presentation.clear()
 	_states.clear(); _states_per_target.clear(); _receipts.clear(); _batches.clear()
+	_reservations.clear(); _reserved_facts = 0; _reserved_states = 0; _reserved_receipts = 0
 	_heap.clear(); _batch_head = 0; _batch_tail = 0; _pending = 0
 	if not _category.is_empty(): Budget.mark_pending(_category,false)
 

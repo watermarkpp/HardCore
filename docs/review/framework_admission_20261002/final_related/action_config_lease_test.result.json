@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "additive then multiplicative skill calculation",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "plain configuration creates lease",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "accepted input graph owns immutable stats",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "current versions match before accept",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "stale preaccept has no committed lease",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "exact identity accepted once",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "second accept rejected",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "accepted lease retains config across later content changes",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "new actor life rejects old release",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "definition is exact registered identity and frozen",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "unregistered or mismatched definition identity cannot create lease",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "ungranted field fails",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "invalid effective numeric range fails",
+      "passed": true
+    }
+  ],
+  "count": 13,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e3ec0048-4518-4ca5-8c88-0c695a9bb6ed",
+  "passed": 13,
+  "reported_checks": 13,
+  "reported_failures": 0,
+  "run_id": "3dd338bd-d0cb-486e-98dd-e49cac0832a2",
+  "scene_id": "action_config_lease_test",
+  "schema_version": 1,
+  "source_content_sha256": "494b76d28e19baed12822dca88b8c0da4aeea4f8882b833fe6e24345cf6c0bf6",
+  "status": "PASS"
+}

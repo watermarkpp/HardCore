@@ -745,19 +745,7 @@ func setup(data: Dictionary, player_target: PlayerCharacter, caller_boss := fals
 	_apply_attack_range_policy()
 	_apply_source_locked_special_delivery_override()
 	if is_boss:
-		boss_rule = MonsterIdentityScript.boss_rule(monster_data, GameData.boss_service_rules)
-		# The generated canonical catalog is rebuilt by integration. Until that
-		# rebuild lands, the exact ID-keyed service rule remains the authoritative
-		# runtime override for this newly split special delivery.
-		if monster_id == 124:
-			var configured_rules: Variant = GameData.boss_service_rules.get(
-				"runtimeRulesByMonsterId",
-				{},
-			)
-			if configured_rules is Dictionary:
-				var configured_rule: Variant = (configured_rules as Dictionary).get("124", {})
-				if configured_rule is Dictionary and not (configured_rule as Dictionary).is_empty():
-					boss_rule = (configured_rule as Dictionary).duplicate(true)
+		boss_rule = MonsterIdentityScript.runtime_boss_rule(monster_data, GameData.boss_service_rules)
 		if not boss_rule.is_empty():
 			_apply_boss_rule()
 	if stationary:

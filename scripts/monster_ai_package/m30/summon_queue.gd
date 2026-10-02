@@ -36,6 +36,9 @@ var _stats: Dictionary = {
 	"last_materializations_in_tick": 0,
 }
 
+static func effective_maximum(is_boss: bool, maximum: int) -> int:
+	return maximum if is_boss else mini(maximum,MONSTER_SUMMON_HARD_CAP)
+
 func configure(host: Node) -> void:
 	_host_ref = weakref(host)
 	name = "M30SummonQueue"
@@ -144,7 +147,7 @@ func enqueue(source: EnemyActor, monster_ids: Array, count: int, max_active: int
 		return
 	# is_boss is compiled by EnemyActor.setup from the canonical ID classification.
 	# Bosses retain their authored cap; ordinary and elite summoners share cap 5.
-	var effective_max_active := max_active if source.is_boss else mini(max_active, MONSTER_SUMMON_HARD_CAP)
+	var effective_max_active := effective_maximum(source.is_boss,max_active)
 	var slot: String = str(source.get_meta("spawn_slot_id", ""))
 	if slot.is_empty():
 		return

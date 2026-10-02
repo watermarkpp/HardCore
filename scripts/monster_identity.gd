@@ -188,6 +188,18 @@ static func boss_rule(monster_data: Dictionary, _ignored_rules: Dictionary = {})
 	return rule.duplicate(true) if rule is Dictionary else {}
 
 
+static func runtime_boss_rule(monster_data: Dictionary, rules: Dictionary) -> Dictionary:
+	var result := boss_rule(monster_data)
+	# Preserve EnemyActor's exact-ID source override in one shared authority
+	# boundary, so capacity compilation cannot drift from the actual producer.
+	if monster_id(monster_data) == 124:
+		var by_id: Variant = rules.get("runtimeRulesByMonsterId",{})
+		if by_id is Dictionary:
+			var configured: Variant = by_id.get("124",{})
+			if configured is Dictionary and not configured.is_empty(): return configured.duplicate(true)
+	return result
+
+
 static func animation_lookup_name(monster_data: Dictionary) -> String:
 	# The return value is an opaque appearance profile token.  It is not a
 	# display-name lookup and deliberately has no fallback path.

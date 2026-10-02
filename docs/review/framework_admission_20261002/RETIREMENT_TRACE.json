@@ -1,0 +1,105 @@
+{
+  "completed": 2200,
+  "elapsed_usec": 14636538,
+  "facts": 66000,
+  "maximum_observed_receipts_after_dispatch": 29,
+  "maximum_records": 1,
+  "memory_observations_only": [
+    {
+      "memory_static": 602820905,
+      "objects": 2335,
+      "receipts": 0,
+      "release": 1,
+      "states": 30
+    },
+    {
+      "memory_static": 604255029,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 201,
+      "states": 30
+    },
+    {
+      "memory_static": 604256093,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 401,
+      "states": 30
+    },
+    {
+      "memory_static": 604255989,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 601,
+      "states": 30
+    },
+    {
+      "memory_static": 604256761,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 801,
+      "states": 30
+    },
+    {
+      "memory_static": 604257489,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 1001,
+      "states": 30
+    },
+    {
+      "memory_static": 604258285,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 1201,
+      "states": 30
+    },
+    {
+      "memory_static": 604259009,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 1401,
+      "states": 30
+    },
+    {
+      "memory_static": 604259733,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 1601,
+      "states": 30
+    },
+    {
+      "memory_static": 604260553,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 1801,
+      "states": 30
+    },
+    {
+      "memory_static": 604261277,
+      "objects": 2402,
+      "receipts": 0,
+      "release": 2001,
+      "states": 30
+    }
+  ],
+  "metrics": {
+    "actual_loss": 0,
+    "admitted_facts": 66000,
+    "expired": 0,
+    "failed": 0,
+    "invalidated": 0,
+    "maximum_tick_delivery_lateness_usec": 0,
+    "optional_cue_missing": 30,
+    "peak_pending": 30,
+    "peak_receipts": 30,
+    "peak_reservations": 1,
+    "peak_states": 30,
+    "refreshed": 65970,
+    "retired_receipts": 66000,
+    "started": 30,
+    "tick_delivery_count": 0,
+    "ticks": 0
+  },
+  "performance_acceptance": "NOT_RUN"
+}

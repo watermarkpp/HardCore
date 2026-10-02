@@ -1214,6 +1214,7 @@ func _emit_attack_after_windup(
 	input_direction: Vector2,
 	locked_target_instance_id: int
 ) -> void:
+	var configuration: RefCounted = context.get("action_config_lease")
 	if windup > 0.0:
 		await get_tree().create_timer(windup).timeout
 	# R2-W5: a begun action owns its delayed release. A superseding action
@@ -1231,9 +1232,9 @@ func _emit_attack_after_windup(
 		and not combat_transition_is_active()
 		and combat_epoch == action_epoch
 	):
-		var configuration: RefCounted = context.get("action_config_lease")
 		if configuration != null and (not hc_action_configuration_identity.is_valid() \
 			or not configuration.valid_for_release(hc_action_configuration_identity.call())):
+			configuration.finish_producer()
 			return
 		if action_id == _pending_combat_action_id and _pending_combat_action_active:
 			_pending_combat_action_committed = true
@@ -1258,6 +1259,7 @@ func _emit_attack_after_windup(
 			damage
 		)
 		_pending_attack_context.clear()
+	if configuration != null: configuration.finish_producer()
 
 
 func _emit_skill_after_windup(
@@ -1328,6 +1330,7 @@ func _emit_skill_after_windup(
 			)
 		if configuration != null:
 			if not hc_action_configuration_identity.is_valid() or not configuration.valid_for_release(hc_action_configuration_identity.call()):
+				configuration.finish_producer()
 				return
 		_pending_skill_context = {"release_geometry": release_geometry}
 		if configuration != null:
@@ -1342,6 +1345,7 @@ func _emit_skill_after_windup(
 			damage
 		)
 		_pending_skill_context.clear()
+	if configuration != null: configuration.finish_producer()
 
 
 static func combat_release_signal_payload(

@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "formal mapped world reaches READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal world exposes a declared birth closure before accepting feature work",
+      "passed": false
+    }
+  ],
+  "count": 2,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "7415f86e-cd35-4492-a1c7-972aca2d0497",
+  "passed": 1,
+  "reported_checks": 2,
+  "reported_failures": 1,
+  "run_id": "0f3759c3-e59c-449f-9f3f-af9abd684905",
+  "scene_id": "feature_world_capacity_bound_test",
+  "schema_version": 1,
+  "source_content_sha256": "a8aa2f0150769b8e2406380d2653385673dede8319a83568b065077d2c959f4f",
+  "status": "FAIL"
+}

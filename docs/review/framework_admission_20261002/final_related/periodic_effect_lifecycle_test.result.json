@@ -1,0 +1,106 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "known source is enabled",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "confirmed base receipt lifecycle:first",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "confirmed base receipt lifecycle:first",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "duplicate release across batches does not refresh an admitted state",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "active runtime refuses owner or presentation replacement atomically",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "new target life rejects old ticks before HP mutation",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "unsupported presentation still receives explicit life stop",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "confirmed base receipt lifecycle:second",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "world change drains every accepted state and queue",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "world cancellation conserves terminal state counts",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "world clear stops logical cue handles even with no native visual nodes",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "drained runtime can explicitly replace its presentation owner",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "confirmed base receipt lifecycle:third",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "new visual owner starts one cue after complete drain",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "explicit teardown releases logic and native cue ownership",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "explicit teardown also conserves terminal state counts",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "test source withdrawn",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "lifecycle and duplicate boundaries have no hidden failure",
+      "passed": true
+    }
+  ],
+  "count": 18,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "e3ec0048-4518-4ca5-8c88-0c695a9bb6ed",
+  "passed": 18,
+  "reported_checks": 18,
+  "reported_failures": 0,
+  "run_id": "c1b9cd9e-dc3b-42f6-b049-8d10a59235a0",
+  "scene_id": "periodic_effect_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "494b76d28e19baed12822dca88b8c0da4aeea4f8882b833fe6e24345cf6c0bf6",
+  "status": "PASS"
+}
