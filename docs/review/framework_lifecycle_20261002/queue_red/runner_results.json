@@ -1,0 +1,30 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "feature_queue_retention_test",
+                        "test_path":  "tests/framework/feature_queue_retention_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:17:28.8138698Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:17:05.7779182Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "2a24df08-ac0a-441e-82da-7db7681c0702",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T11:17:06.8890714+08:00",
+    "total":  1,
+    "failed":  1
+}

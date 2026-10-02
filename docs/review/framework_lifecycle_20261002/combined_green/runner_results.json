@@ -1,0 +1,49 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  2,
+    "results":  [
+                    {
+                        "test_name":  "combined_effect_lifecycle_test",
+                        "test_path":  "tests/framework/combined_effect_lifecycle_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:29:56.7662026Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:29:45.4136641Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "e6785570-b6c0-4c70-95b1-1c7756e24810",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "combined_effect_lifecycle_cold_test",
+                        "test_path":  "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:30:16.8750740Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:29:51.7777569Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "2c3b72bc-b10c-4a73-93b7-24c2402e9d64",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T11:29:53.1666086+08:00",
+    "total":  2,
+    "failed":  0
+}

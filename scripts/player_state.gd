@@ -281,6 +281,7 @@ var durability_event_commit_count := 0
 var _durability_rng := RandomNumberGenerator.new()
 var _blessing_oil_rng: RandomNumberGenerator
 var active_profile_id := ""
+var _profile_gameplay_owners: Dictionary = {}
 var character_name := ""
 var _autosave_elapsed := 0.0
 var _durability_save_pending := false
@@ -9242,7 +9243,31 @@ func _default_world_position_fields() -> Dictionary:
 	}
 
 
+func register_profile_gameplay_owner(owner: Node) -> void:
+	if is_instance_valid(owner) and owner.is_inside_tree() and not active_profile_id.is_empty():
+		_profile_gameplay_owners[owner.get_instance_id()] = weakref(owner)
+
+
+func unregister_profile_gameplay_owner(owner: Node) -> void:
+	if is_instance_valid(owner):
+		_profile_gameplay_owners.erase(owner.get_instance_id())
+
+
+func _profile_is_owned_by_gameplay() -> bool:
+	# CharacterSelect may replace profile state only after the old world has
+	# finished its logout barrier and left the tree. A queued deletion still
+	# owns deferred deaths and persistence completions until _exit_tree ends.
+	for runtime_id: int in _profile_gameplay_owners.keys():
+		var owner: Node = (_profile_gameplay_owners[runtime_id] as WeakRef).get_ref() as Node
+		if is_instance_valid(owner) and owner.is_inside_tree():
+			return true
+		_profile_gameplay_owners.erase(runtime_id)
+	return false
+
+
 func create_character(new_name: String, new_profession := "战士", new_gender := "男") -> String:
+	if _profile_is_owned_by_gameplay():
+		return "请先返回角色选择界面，再创建角色"
 	_before_state_transaction(true)
 	if _item_save_revision > _item_saved_revision:
 		return "当前角色尚未保存，请稍后重试"
@@ -9300,6 +9325,8 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 
 
 func delete_character_profile(profile_id: String) -> Dictionary:
+	if _profile_is_owned_by_gameplay():
+		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "profile_gameplay_owner_active", "profile_id": profile_id}
 	_before_state_transaction(true)
 	if _warehouse_transaction_locked:
 		return {"contract_id": CHARACTER_DELETE_CONTRACT_ID, "success": false, "reason": "warehouse_transaction_locked", "profile_id": profile_id}
@@ -9677,6 +9704,10 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 
 
 func select_character(profile_id: String) -> bool:
+	if _profile_is_owned_by_gameplay():
+		last_load_result = {"contract_id": SAVE_RESULT_CONTRACT_ID, "success": false,
+			"reason": "profile_gameplay_owner_active", "path": _profile_path(profile_id)}
+		return false
 	if _startup_save_upgrade_pending and not _startup_save_upgrade_in_progress:
 		return false
 	_before_state_transaction(true)

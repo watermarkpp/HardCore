@@ -13,8 +13,9 @@ var _clock: RefCounted
 var _combat := WeakRef.new()
 var _world_identity: Dictionary = {}
 var _category := ""
-var _batches: Array[Dictionary] = []
-var _batch_cursor := 0
+var _batches: Dictionary = {}
+var _batch_head := 0
+var _batch_tail := 0
 var _pending := 0
 var _states: Dictionary = {}
 var _states_per_target: Dictionary = {}
@@ -67,7 +68,8 @@ func submit_batch(batch: RefCounted) -> bool:
 	# Main-thread admission and the one-shot transfer are synchronous. Nothing
 	# consumes the batch before its entire fact buffer has a queue destination.
 	var entries: Array = batch.consume()
-	_batches.append({"entries":entries,"cursor":0})
+	_batches[_batch_tail] = {"entries":entries,"cursor":0}
+	_batch_tail += 1
 	_pending += entries.size()
 	_stats.peak_pending = maxi(int(_stats.peak_pending),_pending)
 	return true
@@ -93,12 +95,16 @@ func pump() -> int:
 	return served
 
 func _dispatch_one_fact() -> void:
-	var work: Dictionary = _batches[_batch_cursor]
+	var work: Dictionary = _batches[_batch_head]
 	var entry: Dictionary = work.entries[work.cursor]
 	work.cursor += 1; _pending -= 1
-	if work.cursor == work.entries.size(): _batch_cursor += 1
+	if work.cursor == work.entries.size():
+		# A continuous producer need not let the queue become empty. Retire the
+		# completed buffer immediately without shifting or copying live work.
+		_batches.erase(_batch_head)
+		_batch_head += 1
 	if _pending == 0:
-		_batches.clear(); _batch_cursor = 0
+		_batch_head = 0; _batch_tail = 0
 	var fact: Dictionary = entry.fact
 	if not bool(fact.target_survived_commit) or int(fact.actual_loss) <= 0 or entry.target.resolve() == null:
 		return
@@ -183,7 +189,7 @@ func clear() -> void:
 	for handle: String in _states.keys(): _stop(handle)
 	if _presentation != null: _presentation.clear()
 	_states.clear(); _states_per_target.clear(); _receipts.clear(); _batches.clear()
-	_heap.clear(); _batch_cursor = 0; _pending = 0
+	_heap.clear(); _batch_head = 0; _batch_tail = 0; _pending = 0
 	if not _category.is_empty(): Budget.mark_pending(_category,false)
 
 func _error(reason: String) -> void:

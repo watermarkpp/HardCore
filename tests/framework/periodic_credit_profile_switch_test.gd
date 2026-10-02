@@ -24,6 +24,9 @@ func _run() -> void:
 	PlayerState.shared_warehouse_path = root.path_join("shared_warehouse.json")
 	PlayerState.shared_warehouse_transaction_log_path = root.path_join("shared_warehouse.transaction.json")
 	check(not PlayerState.test_mode, "actual production persistence, test_mode=false")
+	# The autoload already initialized its default account before this scene.
+	# Initialize the new isolated account with the same production writer.
+	check(PlayerState._initialize_shared_warehouse(), "initialize actual isolated shared warehouse")
 	check(PlayerState.create_character("归属边界A", "法师").is_empty(), "create A through real profile service")
 	var profile_a: String = PlayerState.active_profile_id
 	PlayerState.level = 50
@@ -35,6 +38,7 @@ func _run() -> void:
 	var xp_b: int = PlayerState.experience
 	check(profile_a != profile_b and not profile_a.is_empty() and not profile_b.is_empty(), "two real distinct profile identities")
 	check(PlayerState.select_character(profile_a), "official select A before world boot")
+	if PlayerState.active_profile_id != profile_a: _finish(); return
 	var game := Root.new()
 	add_child(game)
 	var deadline := Time.get_ticks_msec() + 20000
@@ -79,6 +83,7 @@ func _run() -> void:
 		"world_generation":game._zone_generation,"historical_credit":batch.facts()[0].historical_credit,
 		"load_result":PlayerState.last_load_result.duplicate(true),"save_result":PlayerState.last_save_result.duplicate(true)})
 	check(not selected or PlayerState.active_profile_id == profile_b, "official switch result agrees with active identity")
+	check(not selected and PlayerState.active_profile_id == profile_a and PlayerState.last_load_result.get("reason") == "profile_gameplay_owner_active", "running world prevents profile replacement before its exit barrier")
 	await get_tree().process_frame
 	check(deaths == 1, "accepted lethal tick emits one actual death")
 	game._flush_enemy_deaths(false)
@@ -87,7 +92,6 @@ func _run() -> void:
 	check(PlayerState.save_game(true, true, true), "active role production checkpoint after settlement")
 	var document_b: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PlayerState._profile_path(profile_b)))
 	check(int(document_b.get("experience", -1)) == xp_b, "B receives no A kill experience " + str(document_b.get("experience")))
-	check(PlayerState.select_character(profile_a), "official reload A for owner receipt")
 	check(PlayerState.experience == xp_a + expected_xp, "A retains exactly one accepted kill experience " + str(PlayerState.experience))
 	check(PlayerState._json_persistence.pending_count() == 0 and PlayerState._world_json_persistence.pending_count() == 0, "real profile/world receipts drained")
 	trace.append({"operation":"final", "profile_a":profile_a,"profile_b":profile_b,
@@ -98,6 +102,9 @@ func _run() -> void:
 	check(ContentLayers.set_feature_module_enabled("hc.ignite", false), "source restored")
 	game.queue_free()
 	await get_tree().process_frame
+	check(PlayerState.select_character(profile_a), "official reload A for owner receipt after world retirement")
+	check(PlayerState.experience == xp_a + expected_xp, "A accepted kill remains durable after official reload")
+	check(PlayerState.select_character(profile_b) and PlayerState.experience == xp_b, "official B selection succeeds after old world retirement with no foreign gain")
 	print("PERIODIC_CREDIT_SWITCH_TRACE " + JSON.stringify(trace))
 	_finish()
 

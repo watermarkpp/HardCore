@@ -1,0 +1,49 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  0,
+    "results":  [
+                    {
+                        "test_name":  "combined_effect_lifecycle_test",
+                        "test_path":  "tests/framework/combined_effect_lifecycle_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:24:43.8208553Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:24:42.9683407Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "e7d01963-3a6f-4f1c-a6a2-37f41d742665",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    },
+                    {
+                        "test_name":  "combined_effect_lifecycle_cold_test",
+                        "test_path":  "tests/framework/combined_effect_lifecycle_cold_test.tscn",
+                        "pass_marker_found":  false,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  1,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:25:14.0823377Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:24:49.1568749Z",
+                        "effective_exit_code":  1,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "b355cefa-df06-4068-a76e-559b9a1d8b0d",
+                        "framework_receipt_valid":  false,
+                        "result":  "FAIL",
+                        "reason":  "missing_pass_marker;non_zero_exit_code_1;framework_checks_failed"
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T11:24:50.2105730+08:00",
+    "total":  2,
+    "failed":  2
+}

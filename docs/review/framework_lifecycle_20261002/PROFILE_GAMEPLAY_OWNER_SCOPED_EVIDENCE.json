@@ -1,0 +1,338 @@
+{
+  "recorded_utc": "2026-10-02T03:15:40.740506+00:00",
+  "status": "PASS",
+  "scope": "live gameplay owner prevents character service replacement before world retirement",
+  "head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "causal_red": {
+    "directory": "outputs/r3_takeover/20260930/validation/periodic_credit_profile_switch_causal_110218_647291",
+    "status": "FAIL",
+    "classification": "production defect: direct select_character(B) bypasses live Root retirement; A lethal deferred callback credited B XP=1 instead of A XP=15; official UI path independently passes",
+    "checks": 24,
+    "business_failures": 2,
+    "engine_errors": 0
+  },
+  "invalid_fixture_red": {
+    "directory": "outputs/r3_takeover/20260930/validation/periodic_credit_profile_switch_red_084045_655232",
+    "classification": "isolated shared warehouse was not initialized after overriding global paths; not causal production evidence"
+  },
+  "runs": [
+    {
+      "directory": "outputs/r3_takeover/20260930/validation/profile_gameplay_owner_direct_110812_420018",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/profile_gameplay_owner_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 2,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "results": [
+        {
+          "test_name": "profile_gameplay_owner_test",
+          "test_path": "tests/framework/profile_gameplay_owner_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:08:44.8917867Z",
+          "native_exit_observed_utc": "2026-10-02T03:08:20.1141008Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "d69577c3-5845-461b-8bfe-d0d0c1f25d3d",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "periodic_credit_profile_switch_test",
+          "test_path": "tests/framework/periodic_credit_profile_switch_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:08:51.5638083Z",
+          "native_exit_observed_utc": "2026-10-02T03:08:35.7058117Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "977dba59-fb1e-45b6-9b1c-58c75b609604",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "receipts": [
+        {
+          "scene_id": "periodic_credit_profile_switch_test",
+          "run_id": "977dba59-fb1e-45b6-9b1c-58c75b609604",
+          "count": 27,
+          "failed": 0,
+          "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6"
+        },
+        {
+          "scene_id": "profile_gameplay_owner_test",
+          "run_id": "d69577c3-5845-461b-8bfe-d0d0c1f25d3d",
+          "count": 19,
+          "failed": 0,
+          "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6"
+        }
+      ],
+      "content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6",
+      "source_file_count": 3471,
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    },
+    {
+      "directory": "outputs/r3_takeover/20260930/validation/profile_owner_logout_regression_111254_432595",
+      "validation": {
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-Command",
+          "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/character_delete_transaction_test.tscn','tests/multi_character_save_test.tscn','tests/safe_logout_character_select_guard_test.tscn','tests/safe_logout_exit_guard_test.tscn','tests/f03_native_death_lifecycle_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/character_launch_resource_lifecycle_test.tscn' -TimeoutSeconds 30"
+        ],
+        "timeout_seconds": 30,
+        "exit_code": 0,
+        "source_stable_during_run": true,
+        "passed": 9,
+        "failed": 0,
+        "status": "PASS"
+      },
+      "results": [
+        {
+          "test_name": "periodic_credit_safe_logout_test",
+          "test_path": "tests/framework/periodic_credit_safe_logout_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:13:27.3259355Z",
+          "native_exit_observed_utc": "2026-10-02T03:13:11.6325948Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "5946ab43-0f29-4fa5-bcfb-6d57df3371eb",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "periodic_credit_safe_logout_cold_test",
+          "test_path": "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:13:43.0928716Z",
+          "native_exit_observed_utc": "2026-10-02T03:13:18.1416390Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "c0d5f12f-513c-4d08-aa2b-4983ab75bc48",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "character_delete_transaction_test",
+          "test_path": "tests/character_delete_transaction_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:13:49.5731694Z",
+          "native_exit_observed_utc": "2026-10-02T03:13:25.7572058Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "multi_character_save_test",
+          "test_path": "tests/multi_character_save_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:13:57.1810259Z",
+          "native_exit_observed_utc": "2026-10-02T03:13:33.4210787Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "safe_logout_character_select_guard_test",
+          "test_path": "tests/safe_logout_character_select_guard_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:14:04.8101112Z",
+          "native_exit_observed_utc": "2026-10-02T03:13:47.4962133Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "safe_logout_exit_guard_test",
+          "test_path": "tests/safe_logout_exit_guard_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:14:18.9043302Z",
+          "native_exit_observed_utc": "2026-10-02T03:14:01.3148860Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "f03_native_death_lifecycle_test",
+          "test_path": "tests/f03_native_death_lifecycle_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:14:32.7565135Z",
+          "native_exit_observed_utc": "2026-10-02T03:14:12.1901396Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "",
+          "framework_receipt_valid": null,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "periodic_effect_death_production_test",
+          "test_path": "tests/framework/periodic_effect_death_production_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:14:43.6292661Z",
+          "native_exit_observed_utc": "2026-10-02T03:14:27.4225911Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "38e2f684-7379-469d-9ad1-33f8286efd0c",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        },
+        {
+          "test_name": "character_launch_resource_lifecycle_test",
+          "test_path": "tests/framework/character_launch_resource_lifecycle_test.tscn",
+          "pass_marker_found": true,
+          "process_exited": true,
+          "wrapper_exit_code": 0,
+          "child_process_exit_state": "exited",
+          "execution_deadline_utc": "2026-10-02T03:14:58.8512168Z",
+          "native_exit_observed_utc": "2026-10-02T03:14:37.7295266Z",
+          "effective_exit_code": 0,
+          "timeout": false,
+          "stdout_failure_count": 0,
+          "stderr_failure_count": 0,
+          "engine_log_failure_count": 0,
+          "framework_run_id": "c8e6ba5c-2abb-40c8-8813-847fe3bfc24d",
+          "framework_receipt_valid": true,
+          "result": "PASS",
+          "reason": ""
+        }
+      ],
+      "receipts": [
+        {
+          "scene_id": "character_launch_resource_lifecycle_test",
+          "run_id": "c8e6ba5c-2abb-40c8-8813-847fe3bfc24d",
+          "count": 7,
+          "failed": 0,
+          "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6"
+        },
+        {
+          "scene_id": "periodic_credit_safe_logout_cold_test",
+          "run_id": "c0d5f12f-513c-4d08-aa2b-4983ab75bc48",
+          "count": 13,
+          "failed": 0,
+          "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6"
+        },
+        {
+          "scene_id": "periodic_credit_safe_logout_test",
+          "run_id": "5946ab43-0f29-4fa5-bcfb-6d57df3371eb",
+          "count": 37,
+          "failed": 0,
+          "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6"
+        },
+        {
+          "scene_id": "periodic_effect_death_production_test",
+          "run_id": "38e2f684-7379-469d-9ad1-33f8286efd0c",
+          "count": 16,
+          "failed": 0,
+          "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6"
+        }
+      ],
+      "content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6",
+      "source_file_count": 3471,
+      "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c"
+    }
+  ],
+  "files": {
+    "scripts/player_state.gd": "c020e3991a38d75433884a39d0ec96b836870f07833d9467a67b8f81700e7ac6",
+    "scripts/game_root.gd": "395157491f4a258ebb52c3dabf16aeb8bd88a3ee4b8c2863bc6cea8e3446e16b",
+    "tests/framework/periodic_credit_profile_switch_test.gd": "0cbb8240d7df36289817b3a6fe278f22d6680d6a7dc7c4bbc1eeed7449f7ddff",
+    "tests/framework/periodic_credit_profile_switch_test.tscn": "63c75f5d7fc26c36ca8d39d4494f4eeecf783eec0df36df71a971a895e552bea",
+    "tests/framework/profile_gameplay_owner_test.gd": "db28d90c1330df702a4c06745b391de64369221b2d99d238450455d8539197bf",
+    "tests/framework/profile_gameplay_owner_test.tscn": "840891ebabe9593d527d2c752f1bcb4481655f08d129dc535fb37afef00e74ca"
+  },
+  "stable_ids_added": [],
+  "limits": [
+    "Direct service boundary fix; normal UI regression PASS.",
+    "V97 exact B fault input MISSING; causal backpack fix NOT_RUN.",
+    "Capacity admission FAIL, receipt retirement/P6 incomplete.",
+    "Main integration/APK/device NOT_RUN."
+  ]
+}

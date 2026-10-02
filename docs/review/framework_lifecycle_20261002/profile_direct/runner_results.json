@@ -1,0 +1,49 @@
+﻿{
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "engine_log_errors":  0,
+    "passed":  2,
+    "results":  [
+                    {
+                        "test_name":  "profile_gameplay_owner_test",
+                        "test_path":  "tests/framework/profile_gameplay_owner_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:08:44.8917867Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:08:20.1141008Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "d69577c3-5845-461b-8bfe-d0d0c1f25d3d",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "periodic_credit_profile_switch_test",
+                        "test_path":  "tests/framework/periodic_credit_profile_switch_test.tscn",
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-02T03:08:51.5638083Z",
+                        "native_exit_observed_utc":  "2026-10-02T03:08:35.7058117Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "977dba59-fb1e-45b6-9b1c-58c75b609604",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "suite":  "adhoc",
+    "generated_at":  "2026-10-02T11:08:37.0985196+08:00",
+    "total":  2,
+    "failed":  0
+}

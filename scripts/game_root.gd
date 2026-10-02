@@ -1494,6 +1494,7 @@ func _loading_profile_mark(
 func _ready() -> void:
 	_world_context.configure(self, PlayerState)
 	_time_domains.configure(self)
+	PlayerState.register_profile_gameplay_owner(self)
 	var loading_profile_enabled := OS.is_debug_build()
 	var ready_started_usec := 0
 	if loading_profile_enabled:
@@ -1782,6 +1783,7 @@ func _exit_tree() -> void:
 	if is_instance_valid(_town_music_controller):
 		_town_music_controller.cancel("world_exited")
 	PlayerState.clear_taoist_main_pets_persistence_provider()
+	PlayerState.unregister_profile_gameplay_owner(self)
 
 
 func _notification(what: int) -> void:
@@ -1874,6 +1876,11 @@ func _process(delta: float) -> void:
 	# Q2-D: the single formal MonsterVisual streaming poll (once per frame).
 	if _streaming_coordinator != null:
 		_streaming_coordinator.poll_once(Engine.get_process_frames())
+	# Effect work participates in the same frame rotation as resource/death
+	# consumers. Physics alone cannot use the turn they release later in this
+	# frame. Pumping here never advances simulation or grants another budget.
+	if _feature_effect_runtime != null and _feature_effect_runtime.has_work():
+		_feature_effect_runtime.pump()
 	_expire_canonical_fire_charge_if_needed()
 	_constrain_player_foot_to_runtime_ground()
 	_refresh_player_safe_zone_cache()

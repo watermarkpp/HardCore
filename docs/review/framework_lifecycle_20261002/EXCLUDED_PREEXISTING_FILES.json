@@ -1,0 +1,11 @@
+{
+  "status": "NOT_RUN",
+  "reason": "Predate this segment, unchanged across every run, not imported by selected production/tests. Preserve locally; exclude their bytes from this review.",
+  "files": {
+    "tests/framework/default_root_upgrade_existing_cold_test.gd": "c7ad3eb4df2bd88d85fe5544028e0b2f36fe3506fd1e4ae1720fd28da56a0360",
+    "tests/framework/default_root_upgrade_existing_cold_test.tscn": "ce74accb238ce2e7e3790f915ebbec8b30204883c837194b63ce3f3dade36dcf",
+    "tests/framework/default_root_upgrade_existing_test.gd": "8d6c07abb729d1d59a2261fc37e0cf2b24b8a089ed3b875f91970880d606976f",
+    "tests/framework/default_root_upgrade_existing_test.tscn": "5d25049355392cc1ab73602c6e64d0dbc6a448cf96ea484c29fd61333cb3b75f",
+    "tests/framework/fixtures/default_root_upgrade_seed.json": "526197e53beb9be8214ba5c03ad88fcbf64dc72f90d8ac0560adf1e5cd162542"
+  }
+}

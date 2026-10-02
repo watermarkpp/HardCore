@@ -1,0 +1,220 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "first path work is admitted",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "nested optional work can use remaining time",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "nested wall time is charged once to the shared total",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "parent inclusive and self costs remain distinguishable",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "nested category keeps its own inclusive cost",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "third optional owner cannot reset an exhausted iteration",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "fourth optional owner shares the same exhaustion",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "one new outer iteration restores one shared budget",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "in-flight root work counts before its token closes",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "nested entry cannot hide an already over-budget root",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "non-preemptible quantum overrun is measured exactly",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "diagnostics disabled cannot disable budget accounting",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "optional overrun exhausts all remaining allowance",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "already durable receipt remains admissible after exhaustion",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "necessary over-budget work remains visible in the same ledger",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "necessary work has its own measured receipt count",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "necessary work does not grant a second optional budget",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "four continuously runnable owners each receive service despite fixed callback order",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "target replacements preserve original backlog age",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "all owner callbacks close synchronous scopes",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "drained owner leaves fairness arbitration",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "next frame receives exactly one allowance without accumulated credit",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "same-epoch callbacks receive multiple fair rounds when allowance remains",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "fair rounds share the same allowance rather than resetting it per service",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "waiting worker does not block another runnable owner",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "paused simulation owner cannot starve an always-running receipt owner",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "suspending a pending owner preserves its continuous backlog age",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "inherited disabled hierarchy retains callback flags but cannot actually run",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "disabled child cannot reserve a turn ahead of a runnable receipt owner: false",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "disabled hierarchy is exposed as nonrunnable in the shared ledger",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "label": "reenabling the actual owner restores eligibility without losing backlog age",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "label": "restored oldest owner receives its preserved fair turn",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "label": "restored owner is admitted for its real callback",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "label": "explicit synchronous drive can still service a deliberately disabled owner",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "label": "inherited disabled hierarchy retains callback flags but cannot actually run",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "label": "disabled child cannot reserve a turn ahead of a runnable receipt owner: true",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "label": "disabled hierarchy is exposed as nonrunnable in the shared ledger",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "label": "reenabling the actual owner restores eligibility without losing backlog age",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "label": "restored oldest owner receives its preserved fair turn",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "label": "restored owner is admitted for its real callback",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "label": "explicit synchronous drive can still service a deliberately disabled owner",
+      "passed": true
+    }
+  ],
+  "count": 41,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 41,
+  "reported_checks": 41,
+  "reported_failures": 0,
+  "run_id": "3df83726-ee09-4b59-b4c4-7f1373861e96",
+  "scene_id": "frame_budget_test",
+  "schema_version": 1,
+  "source_content_sha256": "be3e6596fe28f73f6cec59123957494cc2749477c6620502d2db64c2170b5001",
+  "status": "PASS"
+}

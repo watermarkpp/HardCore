@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "actual hall requests the real production PackedScene before a native exit",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "native owner deletion has actually completed",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "native owner exit joins its actual outstanding scene load before resources can be unmounted",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "replaced real PackedScene path retains both accepted native requests",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual tree exit consumes the tracked native request: res://scenes/main.tscn",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual tree exit consumes the tracked native request: res://scenes/character_select.tscn",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "exit clears ownership and invalidates prior monitors without disabling future prewarm",
+      "passed": true
+    }
+  ],
+  "count": 7,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 7,
+  "reported_checks": 7,
+  "reported_failures": 0,
+  "run_id": "c8e6ba5c-2abb-40c8-8813-847fe3bfc24d",
+  "scene_id": "character_launch_resource_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "ac3e4ebe75d88a05ce40516e90be8d96feae3859a5f8e09d69ec2edd56130bc6",
+  "status": "PASS"
+}

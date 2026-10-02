@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process uses actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer supplied explicit expectation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold source matches the producing test source",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "independent native process has a distinct execution receipt",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "actual cold startup migration succeeds",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual combined-workload profile loads",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "all thirty kill rewards survive native cold restart exactly once",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "cold replay keeps the exact saved world ledger generation",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold replay consumes all persistence receipts",
+      "passed": true
+    }
+  ],
+  "count": 9,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "passed": 9,
+  "reported_checks": 9,
+  "reported_failures": 0,
+  "run_id": "71d24cca-34e6-461d-8c34-493141814740",
+  "scene_id": "combined_effect_lifecycle_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "be3e6596fe28f73f6cec59123957494cc2749477c6620502d2db64c2170b5001",
+  "status": "PASS"
+}

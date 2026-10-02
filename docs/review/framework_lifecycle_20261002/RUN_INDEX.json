@@ -1,0 +1,173 @@
+{
+  "profile_red": {
+    "local_run": "periodic_credit_profile_switch_causal_110218_647291",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_profile_switch_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "profile_direct": {
+    "local_run": "profile_gameplay_owner_direct_110812_420018",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/profile_gameplay_owner_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "profile_regression": {
+    "local_run": "profile_owner_logout_regression_111254_432595",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn','tests/character_delete_transaction_test.tscn','tests/multi_character_save_test.tscn','tests/safe_logout_character_select_guard_test.tscn','tests/safe_logout_exit_guard_test.tscn','tests/f03_native_death_lifecycle_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/character_launch_resource_lifecycle_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 9,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "queue_red": {
+    "local_run": "feature_queue_retention_red_111656_523257",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_queue_retention_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "queue_green": {
+    "local_run": "feature_queue_retention_green_111817_240294",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/feature_queue_retention_test.tscn','tests/framework/feature_capacity_atomic_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_runtime_test.tscn','tests/framework/feature_effect_production_test.tscn','tests/framework/periodic_effect_death_production_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 7,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "combined_fixture_fail": {
+    "local_run": "combined_effect_lifecycle_initial_112411_383316",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 2,
+      "status": "FAIL"
+    }
+  },
+  "combined_timing_red": {
+    "local_run": "combined_effect_lifecycle_timing_red_112818_916934",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    }
+  },
+  "combined_green": {
+    "local_run": "combined_effect_lifecycle_frame_service_green_112924_285093",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    }
+  },
+  "final_regression": {
+    "local_run": "effect_frame_service_final_regression_113047_511343",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/combined_effect_lifecycle_test.tscn','tests/framework/combined_effect_lifecycle_cold_test.tscn','tests/framework/frame_budget_test.tscn','tests/framework/budget_producer_admission_test.tscn','tests/framework/world_time_contract_test.tscn','tests/framework/resource_completion_cursor_test.tscn','tests/framework/paused_persistence_receipt_test.tscn','tests/framework/empty_extension_behavior_test.tscn','tests/framework/periodic_effect_lifecycle_test.tscn','tests/framework/periodic_effect_boundaries_test.tscn','tests/framework/periodic_effect_death_production_test.tscn','tests/framework/feature_queue_retention_test.tscn','tests/framework/profile_gameplay_owner_test.tscn','tests/framework/periodic_credit_profile_switch_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 14,
+      "failed": 0,
+      "status": "PASS"
+    }
+  }
+}
