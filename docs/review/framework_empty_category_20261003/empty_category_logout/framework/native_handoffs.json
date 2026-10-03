@@ -1,0 +1,25 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "4dcf5f96-2552-42ea-ab1b-cb9a8d781008",
+    "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "producers":  {
+                      "periodic_credit_safe_logout_test":  {
+                                                               "scene_id":  "periodic_credit_safe_logout_test",
+                                                               "run_id":  "1681d912-b6e7-4dd9-9b1a-c8b8a6c300e4",
+                                                               "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                               "process_exited":  true,
+                                                               "effective_exit_code":  0,
+                                                               "result":  "PASS",
+                                                               "receipt_sha256":  "33258a5223851a41de374ef1797a118bb269a1b7bc20ea365a51ec4912911a04"
+                                                           },
+                      "periodic_credit_safe_logout_cold_test":  {
+                                                                    "scene_id":  "periodic_credit_safe_logout_cold_test",
+                                                                    "run_id":  "bc072a24-3480-49ee-8634-9d52dc37e4bb",
+                                                                    "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                                    "process_exited":  true,
+                                                                    "effective_exit_code":  0,
+                                                                    "result":  "PASS",
+                                                                    "receipt_sha256":  "1bc887c153973b89e099df205558d3c112817754e63c62fe9ea91ee2dfb34179"
+                                                                }
+                  }
+}

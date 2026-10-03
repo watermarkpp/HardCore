@@ -1,0 +1,52 @@
+﻿{
+    "results":  [
+                    {
+                        "test_name":  "periodic_credit_safe_logout_test",
+                        "test_path":  "tests/framework/periodic_credit_safe_logout_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T13:08:33.7424646Z",
+                        "native_exit_observed_utc":  "2026-10-03T13:07:48.1560070Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "1681d912-b6e7-4dd9-9b1a-c8b8a6c300e4",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    },
+                    {
+                        "test_name":  "periodic_credit_safe_logout_cold_test",
+                        "test_path":  "tests/framework/periodic_credit_safe_logout_cold_test.tscn",
+                        "fixed_fps":  0,
+                        "pass_marker_found":  true,
+                        "process_exited":  true,
+                        "wrapper_exit_code":  0,
+                        "child_process_exit_state":  "exited",
+                        "execution_deadline_utc":  "2026-10-03T13:08:49.6228306Z",
+                        "native_exit_observed_utc":  "2026-10-03T13:07:54.4926955Z",
+                        "effective_exit_code":  0,
+                        "timeout":  false,
+                        "stdout_failure_count":  0,
+                        "stderr_failure_count":  0,
+                        "engine_log_failure_count":  0,
+                        "framework_run_id":  "bc072a24-3480-49ee-8634-9d52dc37e4bb",
+                        "framework_receipt_valid":  true,
+                        "result":  "PASS",
+                        "reason":  ""
+                    }
+                ],
+    "total":  2,
+    "invocation_id":  "4dcf5f96-2552-42ea-ab1b-cb9a8d781008",
+    "git_head":  "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+    "passed":  2,
+    "engine_log_errors":  0,
+    "generated_at":  "2026-10-03T21:07:56.0281695+08:00",
+    "failed":  0,
+    "suite":  "adhoc"
+}

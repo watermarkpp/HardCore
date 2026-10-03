@@ -1,0 +1,43 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "b60d7d08-cda3-4bfc-8c7c-d5eedd73ba7d",
+    "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "producers":  {
+                      "budget_producer_admission_test":  {
+                                                             "scene_id":  "budget_producer_admission_test",
+                                                             "run_id":  "d641fbb7-0275-479b-b6cb-4d2d06144aa9",
+                                                             "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                             "process_exited":  true,
+                                                             "effective_exit_code":  0,
+                                                             "result":  "PASS",
+                                                             "receipt_sha256":  "a846fb2eafabf26154706b500caa857e66d358a79f77fa6247f22168726dafad"
+                                                         },
+                      "periodic_delivery_lateness_test":  {
+                                                              "scene_id":  "periodic_delivery_lateness_test",
+                                                              "run_id":  "0c310ecf-587e-4b34-96a9-9358a197dc12",
+                                                              "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "79666b8380a90b05df338c202648607055bdc185974d71621b24dafcb4e23887"
+                                                          },
+                      "world_retirement_test":  {
+                                                    "scene_id":  "world_retirement_test",
+                                                    "run_id":  "2d60d85c-b196-4807-be93-e7482f3a865d",
+                                                    "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                    "process_exited":  true,
+                                                    "effective_exit_code":  0,
+                                                    "result":  "PASS",
+                                                    "receipt_sha256":  "d8a29fe168c05e9f74dfca6f5ac6fa202fa07d6950102be531aacb8c1fb9d4b3"
+                                                },
+                      "paused_persistence_receipt_test":  {
+                                                              "scene_id":  "paused_persistence_receipt_test",
+                                                              "run_id":  "4d613d4d-32ae-4251-856b-2ea254e762b7",
+                                                              "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                              "process_exited":  true,
+                                                              "effective_exit_code":  0,
+                                                              "result":  "PASS",
+                                                              "receipt_sha256":  "df2816bf136bc81b790463b19a6dccd95b44e67d67ae80c99f3a5526d5be2de8"
+                                                          }
+                  }
+}

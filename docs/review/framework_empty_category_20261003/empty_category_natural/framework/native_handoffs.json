@@ -1,0 +1,34 @@
+{
+    "schema_version":  1,
+    "invocation_id":  "4649c01a-769b-45ad-ba66-f5c69b170bc4",
+    "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "producers":  {
+                      "natural_effect_lifecycle_test":  {
+                                                            "scene_id":  "natural_effect_lifecycle_test",
+                                                            "run_id":  "8a4d3221-70bf-41c4-b6ba-84cb2bc218ef",
+                                                            "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                            "process_exited":  true,
+                                                            "effective_exit_code":  0,
+                                                            "result":  "PASS",
+                                                            "receipt_sha256":  "e9823be287a0d3c30c50b81615d80632bbe6b569c0f8f73297f4b8c22d22bd9b"
+                                                        },
+                      "natural_effect_lifecycle_cold_test":  {
+                                                                 "scene_id":  "natural_effect_lifecycle_cold_test",
+                                                                 "run_id":  "04269315-69c8-4db7-b6d6-a0531bb69d78",
+                                                                 "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                                 "process_exited":  true,
+                                                                 "effective_exit_code":  0,
+                                                                 "result":  "PASS",
+                                                                 "receipt_sha256":  "fe46d80b2c231494f1b24b40daef80221c3731d7dc99382e4b7a3aff97d4b3d8"
+                                                             },
+                      "natural_effect_recovery_cycles_test":  {
+                                                                  "scene_id":  "natural_effect_recovery_cycles_test",
+                                                                  "run_id":  "6affd138-d739-432d-bc30-810a778a1ed6",
+                                                                  "source_content_sha256":  "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+                                                                  "process_exited":  true,
+                                                                  "effective_exit_code":  0,
+                                                                  "result":  "PASS",
+                                                                  "receipt_sha256":  "edab97aea316233c8a8166d25adb035406827e9707eab6227e7c59b7c02bfc36"
+                                                              }
+                  }
+}

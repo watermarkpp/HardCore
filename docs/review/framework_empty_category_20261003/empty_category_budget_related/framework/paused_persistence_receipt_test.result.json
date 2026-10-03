@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing PlayerState ordered writer accepts the private request",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "paused receipt applies once on main after durable success",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "real queued JSON request completes while SceneTree is paused",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "pause permits receipts without waiting for gameplay resume",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "test observes actual paused process iterations",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "receipt processing does not advance temporary potion buffs",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "receipt processing does not advance relic duration or cooldown",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "private request and worker tasks drain",
+      "passed": true
+    }
+  ],
+  "count": 8,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b60d7d08-cda3-4bfc-8c7c-d5eedd73ba7d",
+  "passed": 8,
+  "reported_checks": 8,
+  "reported_failures": 0,
+  "run_id": "4d613d4d-32ae-4251-856b-2ea254e762b7",
+  "scene_id": "paused_persistence_receipt_test",
+  "schema_version": 1,
+  "source_content_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+  "status": "PASS"
+}

@@ -1,0 +1,156 @@
+{
+  "empty_category_native_green": {
+    "run": "empty_category_native_green_210001_168771",
+    "invocation_id": "19253b16-b962-4c4e-aab9-f339beb14b54",
+    "source_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 1,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "accepted": true
+  },
+  "empty_category_budget_related": {
+    "run": "empty_category_budget_related_210140_975985",
+    "invocation_id": "b60d7d08-cda3-4bfc-8c7c-d5eedd73ba7d",
+    "source_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/budget_producer_admission_test.tscn','tests/framework/periodic_delivery_lateness_test.tscn','tests/framework/world_retirement_test.tscn','tests/framework/paused_persistence_receipt_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "accepted": true
+  },
+  "empty_category_streaming": {
+    "run": "empty_category_streaming_210221_077085",
+    "invocation_id": "313d6f33-912e-4a6a-981a-6aac452612ff",
+    "source_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/monster_streaming_single_poll_per_frame_test.tscn','tests/monster_streaming_request_dedup_test.tscn','tests/monster_streaming_visual_parity_test.tscn','tests/monster_streaming_animation_continuity_test.tscn','tests/monster_streaming_registration_lifecycle_test.tscn','tests/monster_streaming_generation_guard_test.tscn','tests/monster_streaming_failure_contract_test.tscn','tests/monster_streaming_no_visual_queue_test.tscn','tests/monster_streaming_no_sync_load_test.tscn','tests/monster_streaming_spatial_index_non_regression_test.tscn','tests/monster_streaming_scaling_test.tscn','tests/monster_streaming_lifecycle_test.tscn','tests/monster_streaming_active_lease_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 13,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "accepted": true
+  },
+  "empty_category_production_boundaries": {
+    "run": "empty_category_production_boundaries_210450_678404",
+    "invocation_id": "5487c2e5-16c0-4aca-b86a-d51e62203623",
+    "source_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/death_burst_lifecycle_test.tscn','tests/framework/death_burst_lifecycle_cold_test.tscn','tests/framework/death_expiry_overlap_test.tscn','tests/framework/death_expiry_overlap_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 4,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "accepted": true
+  },
+  "empty_category_natural": {
+    "run": "empty_category_natural_210553_339918",
+    "invocation_id": "4649c01a-769b-45ad-ba66-f5c69b170bc4",
+    "source_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/natural_effect_lifecycle_test.tscn','tests/framework/natural_effect_lifecycle_cold_test.tscn','tests/framework/natural_effect_recovery_cycles_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 3,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "accepted": true
+  },
+  "empty_category_logout": {
+    "run": "empty_category_logout_210731_599115",
+    "invocation_id": "4dcf5f96-2552-42ea-ab1b-cb9a8d781008",
+    "source_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/periodic_credit_safe_logout_test.tscn','tests/framework/periodic_credit_safe_logout_cold_test.tscn' -TimeoutSeconds 60"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "source_stable_during_run": true,
+      "passed": 2,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "accepted": true
+  },
+  "empty_category_native_red": {
+    "run": "empty_category_native_red_205850_147403",
+    "invocation_id": "ab3beb7c-5ce6-42e7-8c82-27b7ec761956",
+    "source_sha256": "b926d5d2d883e3fad13781f48dac5dd0ff07fa055b1866bc10e691e1f6f130fd",
+    "validation": {
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "& './tools/run_godot_tests.ps1' -TestPaths 'tests/framework/frame_budget_test.tscn' -TimeoutSeconds 30"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "source_stable_during_run": true,
+      "passed": 0,
+      "failed": 1,
+      "status": "FAIL"
+    },
+    "accepted": false
+  }
+}

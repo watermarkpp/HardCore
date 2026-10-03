@@ -1,0 +1,23 @@
+{
+  "parent": "c2d3ac514e7d3f2015aff9bc19a5ef2c3aac3104",
+  "content_sha256": "b234e922a238898b34f44db910942e6bc73d991dea13994ffc0ff960d0f06b5d",
+  "engine_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "status": "PASS",
+  "delta": {
+    "scripts/layers/runtime/execution/frame_budget.gd": "f047dc1b9905b582aa0484b8009fe407489502f49c4ea4462510c170515b4114",
+    "tests/framework/frame_budget_test.gd": "de68344b09d59b87b3b7c7f9568043c0d5fa244635735aba48cc2f4a3ffab4fb"
+  },
+  "source_files": 3566,
+  "native_attempts": 27,
+  "unique_scenes": 27,
+  "framework_receipts": 14,
+  "framework_checks": 876,
+  "red_checks": 139,
+  "red_failed": 5,
+  "green_checks": 139,
+  "prior_stage_sha256": "a607400e0d745852ac41e8bbbfc5d169ecc916e71fe9c5e286a118a0673211ca",
+  "prior_stage_native_attempts": 239,
+  "prior_stage_unique_scenes": 215,
+  "prior_stage_framework_checks": 4221,
+  "scope": "Final two-file sentinel increment, directly related regression; previous239 attempts remain at their original source, not relabeled as this source."
+}

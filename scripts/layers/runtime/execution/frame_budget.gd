@@ -87,9 +87,9 @@ static func _eligible(item: Dictionary, is_calling_owner := false) -> bool:
 		return owner.is_processing()
 	return true
 
-static func _fair_blocker(category: String) -> String:
+static func _fair_blocker(category: String) -> Variant:
 	if not _pending.has(category) or not _stack.is_empty():
-		return ""
+		return null
 	var own: Dictionary = _pending[category]
 	if not _eligible(own, true):
 		return category
@@ -113,7 +113,7 @@ static func _fair_blocker(category: String) -> String:
 				int(item.last_service_sequence) == int(own.last_service_sequence)
 				and int(item.sequence) < int(own.sequence)):
 				return other
-	return ""
+	return null
 
 static func begin(category: String, necessary := false) -> int:
 	assert(OS.get_thread_caller_id() == OS.get_main_thread_id(), "frame budget belongs to main")
@@ -122,13 +122,13 @@ static func begin(category: String, necessary := false) -> int:
 	var counters := _category(category)
 	if not necessary:
 		var remaining := remaining_usec()
-		var blocker := "" if remaining <= 0 else _fair_blocker(category)
-		if remaining <= 0 or not blocker.is_empty():
+		var blocker: Variant = null if remaining <= 0 else _fair_blocker(category)
+		if remaining <= 0 or blocker != null:
 			var reason := "budget" if remaining <= 0 else ("unrunnable" if blocker == category else "fairness")
 			counters.denied += 1
 			counters["denied_" + reason] += 1
 			# One scalar record per category/epoch; never a per-quantum log.
-			counters.last_denial = {"reason": reason, "blocking_category": blocker,
+			counters.last_denial = {"reason": reason, "blocking_category": "" if blocker == null else str(blocker),
 				"epoch": _epoch, "remaining_usec": remaining, "spent_usec": _spent_usec,
 				"inflight_usec": 0 if _stack.is_empty() else maxi(0, _now_usec() - int(_stack[0].started_usec)),
 				"own_service_epoch": _pending.get(category, {}).get("last_service_epoch", -1),

@@ -77,6 +77,7 @@ func _run() -> void:
 	_verify_callback_order_permutations()
 	_verify_opportunity_is_not_equal_share()
 	_verify_detached_and_retired_owners()
+	_verify_empty_category_identity()
 	_verify_suspended_owners()
 	_verify_disabled_hierarchy()
 	B.reset_test_configuration()
@@ -371,3 +372,44 @@ func _verify_detached_and_retired_owners() -> void:
 	B.mark_pending("lifecycle_owner",true)
 	check(B.snapshot().pending.lifecycle_owner.pending_epoch == 222,
 		"a later new pending registration cannot inherit a drained identity's old queue age")
+
+func _verify_empty_category_identity() -> void:
+	outer_iteration = 240
+	now_us = 16000
+	B.configure_for_tests(100,func() -> int: return outer_iteration,func() -> int: return now_us)
+	B.mark_pending("",true,false)
+	var token := B.begin("")
+	check(token == 0,"empty category cannot bypass its explicit unrunnable state")
+	if token > 0: B.end(token)
+	check(B.snapshot().categories[""].denied_unrunnable == 1,
+		"empty unrunnable identity records the actual denial reason")
+	check(B.snapshot().spent_usec == 0 and B.snapshot().open_scopes == 0,
+		"empty unrunnable rejection leaves no scope or charged work")
+	B.mark_pending("",true,true)
+	B.mark_pending("named_peer",true)
+	token = B.begin("named_peer")
+	check(token == 0,"older unserved empty identity keeps its turn ahead of a named peer")
+	if token > 0: now_us += 10; B.end(token)
+	check(B.snapshot().categories.named_peer.denied_fairness == 1,
+		"named peer records fairness denial caused by the empty category")
+	token = B.begin("")
+	check(token > 0,"eligible empty category remains a valid ordinary owner")
+	if token > 0: now_us += 10; B.end(token)
+	token = B.begin("named_peer")
+	check(token > 0,"served empty owner does not keep unused allowance from its peer")
+	if token > 0: now_us += 10; B.end(token)
+	check(B.snapshot().spent_usec == 20 and B.snapshot().open_scopes == 0,
+		"both admitted owners retain exact shared accounting and closed scopes")
+	outer_iteration = 241
+	B.mark_pending("",true,false)
+	token = B.begin("named_peer")
+	check(token > 0,"unrunnable empty peer cannot block another owner's next epoch")
+	if token > 0: now_us += 10; B.end(token)
+	token = B.begin("",true)
+	check(token > 0,"necessary empty-category work retains the existing mandatory exception")
+	if token > 0: now_us += 110; B.end(token)
+	check(B.snapshot().spent_usec == 120 and B.snapshot().overrun_usec == 20,
+		"necessary empty-category work is fully charged without a second budget")
+	check(B.begin("") == 0,"empty category cannot bypass exhausted optional allowance")
+	B.mark_pending("",false)
+	check(not B.snapshot().pending.has(""),"empty identity drains through the same registration owner")
