@@ -6,7 +6,7 @@
 
 producer_prepared与producer_promoting各归档9个原文件：runner_results、validation、before/after指纹、runner日志、native_handoffs及Godot/stdout/stderr日志。MANIFEST记录原路径、大小和SHA256；ORIGINAL_PRODUCER_BYTES.zip另保留18文件原始字节，避免Git文本换行转换影响原始哈希核验；所有归档字节与现存源文件一致，未拷贝两个目录中无关旧traces。
 
-RUN_INDEX按nonce、source、invocation、run及PID/创建时间/命令哈希连接原controller和独立cold。PREPARED armed14项、cold28项；PROMOTING armed15项、cold27项。两个producer都保留native退出-1、wrapper退出1、FAIL、非timeout和无成功交接；不把缺失最终receipt伪造为成功。原控制器归档与原cold无需改写。
+RUN_INDEX按nonce、source、invocation、run及PID/创建时间/命令哈希连接原controller和独立cold。PREPARED armed14项、cold28项；PROMOTING armed15项、cold27项。两个producer都保留原生/effective与场景wrapper退出-1、外层验证命令退出1、FAIL、非timeout和无成功交接；不把缺失最终receipt伪造为成功。原控制器归档与原cold无需改写。
 
 这一补充闭合原始文件远端可读性，不新增强杀次数。仅覆盖已观察PREPARED与PROMOTING业务边界，不覆盖rename内部任意时刻、物理掉电或有效旧primary整体外部替换。
 

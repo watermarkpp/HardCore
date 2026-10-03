@@ -1,0 +1,21 @@
+# b538 双审计实际读取与有界收口
+
+主控于2026-10-03从两位审计者各自原对话实际读取固定b538ccdb4086f04e0a2c4b3703e75f44a6705086的完整结果。PRO_B538_REVIEW_ACTUALLY_READ.json与DOTS_B538_REVIEW_ACTUALLY_READ.json记录原文、来源身份和读取时间。两份所需结果均已读完，同一轮定时拉取已暂停；下次实际求助再启用。
+
+## 主控核验与裁决
+
+两位均支持关闭d701审计中缺少producer原始记录远端归档的问题，以及CPU P95/P99尾部、P50和帧间隔例外的措辞补充。没有新生产整改，也不重跑已通过游戏场景。
+
+小可爱独立复算原始字节ZIP的18个成员、远端可读文件的换行映射及每阶段20项身份关联：ZIP 734380字节，SHA256为549f62a9428d0174967e861e91f027a9b33a77e13f2dae90c7477b9c0178984e。Pro读取两组各9文件、原指纹相关字段、两份完整cold回执，并独立核算四个短stdout/Godot日志和P50数值；Pro没有逐项解压复算18项ZIP或全部3566源文件映射。两位都没有本轮重跑Godot，不把两人的核验范围混写。
+
+主控已在补证前验证18个本地原文件逐字节一致、原字节ZIP成员及两条producer/controller/cold身份链，且保持两个producer为FAIL、非timeout、无成功handoff。保留原a607内容的PREPARED armed14/cold28与PROMOTING armed15/cold27记录，不改成b234的新执行。
+
+## 退出码字段澄清
+
+Pro指出退出码应区分执行层。原runner_results场景内wrapper_exit_code与effective_exit_code均为-1；原validation命令exit_code为1。本次只将派生RUN_INDEX的producer_wrapper_exit改为实际场景值-1，并增加producer_validation_exit=1及层级说明，README同步澄清。原runner、日志、指纹、控制器、cold、MANIFEST和原字节ZIP保持不变。不是新的持久化故障或生产修复。
+
+## 保持的范围
+
+最终b234内容27场景/876检查与父a607内容239次成功/4221检查、121历史FAIL保持各自指纹与数量。本次没有新原生执行、没有运行内容变更。CPU P95/P99尾部无两轮分离仅适用于既有18种PC headless移动条件；P50两项和frame interval三项例外保留。
+
+原v97第二角色B原始输入仍MISSING；新角色或v90专项不能替代原故障因果验收。Android/GPU/热机、物理掉电、rename内部完整强杀矩阵和有效旧primary外部整体替换仍NOT_RUN。已补证仅覆盖PREPARED/PROMOTING两个既有可观测业务边界。主树合入、APK、签名、安装和设备不因双审计收口获得授权或验收。

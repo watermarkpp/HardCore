@@ -12,7 +12,7 @@
       "producer_invocation_id": "4a41c6b5-a00f-439b-ac44-eb9bd58a44f5",
       "producer_run_id": "a1870b9c-0bac-4f79-96dc-d5b930417ef6",
       "producer_native_exit": -1,
-      "producer_wrapper_exit": 1,
+      "producer_wrapper_exit": -1,
       "producer_status": "FAIL",
       "producer_timeout": false,
       "producer_reason": "missing_pass_marker;non_zero_exit_code_-1;stdout_failures_1;engine_log_failures_1;framework_receipt_missing",
@@ -27,7 +27,9 @@
       "cold_status": "PASS",
       "cold_native_exit": 0,
       "cold_evidence": "../framework_layered_critical_20261003/final_crash_cold_prepared",
-      "classification": "Expected forced termination retained as native FAIL; controller and independent cold are separate PASS."
+      "classification": "Expected forced termination retained as native FAIL; controller and independent cold are separate PASS.",
+      "producer_validation_exit": 1,
+      "exit_scope": "Scene wrapper/effective/native observed exit=-1; outer validation command exit=1."
     },
     {
       "phase": "PROMOTING",
@@ -38,7 +40,7 @@
       "producer_invocation_id": "36b990ed-6be0-48b3-ac2a-8617db9c7b61",
       "producer_run_id": "62aa7cdf-b4cc-4be1-9f40-3b2feef6e898",
       "producer_native_exit": -1,
-      "producer_wrapper_exit": 1,
+      "producer_wrapper_exit": -1,
       "producer_status": "FAIL",
       "producer_timeout": false,
       "producer_reason": "missing_pass_marker;non_zero_exit_code_-1;stdout_failures_1;engine_log_failures_1;framework_receipt_missing",
@@ -53,7 +55,9 @@
       "cold_status": "PASS",
       "cold_native_exit": 0,
       "cold_evidence": "../framework_layered_critical_20261003/final_crash_cold_promoting",
-      "classification": "Expected forced termination retained as native FAIL; controller and independent cold are separate PASS."
+      "classification": "Expected forced termination retained as native FAIL; controller and independent cold are separate PASS.",
+      "producer_validation_exit": 1,
+      "exit_scope": "Scene wrapper/effective/native observed exit=-1; outer validation command exit=1."
     }
   ],
   "accepted_success_counts_unchanged": {
