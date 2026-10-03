@@ -112,9 +112,15 @@ func _claim_reservation(sequence: int, identity: Dictionary, release_id: String,
 
 func _close_reservation_producer(sequence: int) -> void:
 	if not _reservations.has(sequence): return
-	# Once queued, the sealed batch is the only producer and the consumer owns
-	# the remaining reservation. An old configuration's destruction cannot steal it.
-	if _reservations[sequence].stage != "queued": _retire_reservation(sequence)
+	# A successful claim transfers production to the batch; queue admission
+	# then transfers it to the consumer. Old action cancellation owns neither.
+	if _reservations[sequence].stage == "reserved": _retire_reservation(sequence)
+
+func _close_reservation_batch(sequence: int) -> void:
+	if not _reservations.has(sequence): return
+	# Empty, rejected or abandoned synchronous work has reached its terminal
+	# boundary. A queued batch remains exclusively owned by its consumer.
+	if _reservations[sequence].stage == "producing": _retire_reservation(sequence)
 
 func _retire_reservation(sequence: int) -> void:
 	if not _reservations.has(sequence): return

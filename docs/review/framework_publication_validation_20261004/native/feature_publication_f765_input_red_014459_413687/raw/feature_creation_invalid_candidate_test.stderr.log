@@ -1,0 +1,19 @@
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] reset_progress (res://scripts/player_state.gd:662)
+       [2] create_character (res://scripts/player_state.gd:9381)
+       [3] _run (res://tests/framework/feature_creation_invalid_candidate_test.gd:48)
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] create_character (res://scripts/player_state.gd:9384)
+       [2] _run (res://tests/framework/feature_creation_invalid_candidate_test.gd:48)
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] create_character (res://scripts/player_state.gd:9396)
+       [2] _run (res://tests/framework/feature_creation_invalid_candidate_test.gd:48)

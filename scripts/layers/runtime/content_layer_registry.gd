@@ -135,8 +135,11 @@ func reload_feature_catalog(registry_path: String = FEATURE_REGISTRY) -> bool:
 			errors.append("feature_binding_not_dictionary")
 			continue
 		var kind: Variant = binding.get("kind")
+		if not kind is String or kind not in ["item", "embedded_item", "skill", "rule"]:
+			errors.append("feature_binding_unknown_kind")
+			continue
 		var key: String = "item_id" if kind in ["item", "embedded_item"] else ("skill_id" if kind == "skill" else "rule_id")
-		if kind not in ["item", "embedded_item", "skill", "rule"] or not compiler._keys(binding, ["module_id", "kind", "mechanic_id", key], [], errors, "feature_binding"):
+		if not compiler._keys(binding, ["module_id", "kind", "mechanic_id", key], [], errors, "feature_binding"):
 			continue
 		var mechanic: Variant = candidate.catalog().mechanics.get(binding.mechanic_id)
 		if not mechanic is Dictionary or mechanic.module_id != binding.module_id:

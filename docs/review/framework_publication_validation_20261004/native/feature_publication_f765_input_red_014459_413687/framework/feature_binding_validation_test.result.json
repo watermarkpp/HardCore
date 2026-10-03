@@ -1,0 +1,171 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "unknown: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "unknown: malformed binding kind rejects complete registry",
+      "passed": false
+    },
+    {
+      "id": 3,
+      "label": "unknown: explicit binding rejection reason",
+      "passed": false
+    },
+    {
+      "id": 4,
+      "label": "unknown: all published registry members remain unchanged",
+      "passed": false
+    },
+    {
+      "id": 5,
+      "label": "unknown: no partial contribution generation or observer notification",
+      "passed": false
+    },
+    {
+      "id": 6,
+      "label": "missing: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "missing: malformed binding kind rejects complete registry",
+      "passed": false
+    },
+    {
+      "id": 8,
+      "label": "missing: explicit binding rejection reason",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "missing: all published registry members remain unchanged",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "missing: no partial contribution generation or observer notification",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "null: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "null: malformed binding kind rejects complete registry",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "null: explicit binding rejection reason",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "null: all published registry members remain unchanged",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "null: no partial contribution generation or observer notification",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "number: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "number: malformed binding kind rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "number: explicit binding rejection reason",
+      "passed": false
+    },
+    {
+      "id": 19,
+      "label": "number: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "number: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "array: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "array: malformed binding kind rejects complete registry",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "array: explicit binding rejection reason",
+      "passed": false
+    },
+    {
+      "id": 24,
+      "label": "array: all published registry members remain unchanged",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "array: no partial contribution generation or observer notification",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "mixed: establish valid enabled source",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "mixed: malformed binding kind rejects complete registry",
+      "passed": false
+    },
+    {
+      "id": 28,
+      "label": "mixed: explicit binding rejection reason",
+      "passed": false
+    },
+    {
+      "id": 29,
+      "label": "mixed: all published registry members remain unchanged",
+      "passed": false
+    },
+    {
+      "id": 30,
+      "label": "mixed: no partial contribution generation or observer notification",
+      "passed": false
+    },
+    {
+      "id": 31,
+      "label": "baseline restored",
+      "passed": true
+    }
+  ],
+  "count": 31,
+  "engine_version": "4.7-stable (official)",
+  "failed": 18,
+  "invocation_id": "32f88c1d-a9fc-4336-a3f0-f7a4a4a668e9",
+  "passed": 13,
+  "reported_checks": 31,
+  "reported_failures": 18,
+  "run_id": "00aac93c-3575-4d43-82f6-851f995c60ac",
+  "scene_id": "feature_binding_validation_test",
+  "schema_version": 1,
+  "source_content_sha256": "5d5e4eddaf3effdb28dc52c063ef093a0a22df287e56e61305aa3a84ac428f56",
+  "status": "FAIL"
+}

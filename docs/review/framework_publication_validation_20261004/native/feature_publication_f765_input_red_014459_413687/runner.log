@@ -1,0 +1,43 @@
+[FAIL] feature_creation_invalid_candidate_test - missing_pass_marker;non_zero_exit_code_1;stderr_failures_3;engine_log_failures_3;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+INVALID_CREATION_OBSERVATION {"active_profile":"1791049507_3404","base_mp":15,"computed_mp":2,"error":"","feature_errors":["feature_stat_range:max_mp"],"save_reason":""}
+FEATURE_CREATION_INVALID_CANDIDATE_FAIL checks=17 failures=["invalid warrior candidate rejects before normal save", "caller reports explicit candidate validation failure", "rejection restores original profile and profession", "rejection restores original equipment and both primary stat snapshots", "rejection restores coherent pre-feature input", "rejection restores effective bundle identity compile generation and errors", "normal I/O invalid candidate changes no owned file and creates no profile or sidecar", "index still contains exactly A", "receipt"]
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] reset_progress (res://scripts/player_state.gd:662)
+       [2] create_character (res://scripts/player_state.gd:9381)
+       [3] _run (res://tests/framework/feature_creation_invalid_candidate_test.gd:48)
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] create_character (res://scripts/player_state.gd:9384)
+       [2] _run (res://tests/framework/feature_creation_invalid_candidate_test.gd:48)
+ERROR: Feature loadout rejected: ["feature_stat_range:max_mp"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] recalculate_stats (res://scripts/player_state.gd:3726)
+       [1] create_character (res://scripts/player_state.gd:9396)
+       [2] _run (res://tests/framework/feature_creation_invalid_candidate_test.gd:48)
+[FAIL] feature_binding_validation_test - missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_checks_failed
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+鏁版嵁搴撹浇鍏ュ畬鎴愶細鍦板浘209 鎬墿156 Boss20 瑁呭175 鎶€鑳界瓑绾?32 鎺夎惤妲?424 浠诲姟9
+FEATURE_BINDING_VALIDATION_FAIL checks=31 failures=["unknown: malformed binding kind rejects complete registry", "unknown: explicit binding rejection reason", "unknown: all published registry members remain unchanged", "unknown: no partial contribution generation or observer notification", "missing: malformed binding kind rejects complete registry", "missing: explicit binding rejection reason", "missing: all published registry members remain unchanged", "missing: no partial contribution generation or observer notification", "null: malformed binding kind rejects complete registry", "null: explicit binding rejection reason", "null: all published registry members remain unchanged", "null: no partial contribution generation or observer notification", "number: explicit binding rejection reason", "array: explicit binding rejection reason", "mixed: malformed binding kind rejects complete registry", "mixed: explicit binding rejection reason", "mixed: all published registry members remain unchanged", "mixed: no partial contribution generation or observer notification", "receipt"]
+SCRIPT ERROR: Invalid operands 'float' and 'String' in operator '=='.
+   at: reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+   GDScript backtrace (most recent call first):
+       [0] reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+       [1] _run (res://tests/framework/feature_binding_validation_test.gd:34)
+SCRIPT ERROR: Invalid operands 'Array' and 'String' in operator '=='.
+   at: reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+   GDScript backtrace (most recent call first):
+       [0] reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+       [1] _run (res://tests/framework/feature_binding_validation_test.gd:34)
+RUNNER_RESULTS_JSON=C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\outputs\test_logs\runner_results_adhoc_20261004_014514_248_22428.json
+TEST_SUMMARY suite=adhoc passed=0 failed=2 engine_log_errors=5
+FAILED_TESTS=feature_creation_invalid_candidate_test (missing_pass_marker;non_zero_exit_code_1;stderr_failures_3;engine_log_failures_3;framework_checks_failed); feature_binding_validation_test (missing_pass_marker;process_did_not_exit;early_script_error;non_zero_exit_code_1;stderr_failures_2;engine_log_failures_2;framework_checks_failed)

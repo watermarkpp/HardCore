@@ -1,0 +1,29 @@
+{
+  "parent": "f765d249f7f6128028ce882b13643302b8d75b75",
+  "construction_head": "5d9ceb0121980ca9636d9d1cc2e19982949fbf63",
+  "content_sha256": "73fdf0241ad837ab781efc802d73195917cc6076b219cdfe5a12312e7d5b96fc",
+  "source_files": 3626,
+  "delta_files": 20,
+  "engine_version": "4.7.stable.official.5b4e0cb0f",
+  "engine_console_sha256": "d8055fb8c7e7f5010d7439ec69be051554055dae55a265f8647bd7301c34161c",
+  "engine_child_file_sha256": "b2ca888d5115a6cedee564764a2ee494a625f2ec2edbabd010fe33c9a88a6bf8",
+  "engine_child_scope": "file hash declaration only; no new per-invocation mapped-binary witness",
+  "final_unique_scenes": 26,
+  "final_framework_receipts": 25,
+  "final_complete_framework_checks": 658,
+  "native_attempts": 35,
+  "preserved_failed_attempts": 8,
+  "resource_closure_status": "FAIL",
+  "whole_framework_status": "NOT_RUN",
+  "source_zip": {
+    "bytes": 15164923,
+    "sha256": "109ce84ea38dea8bc507659f07fe9e719bfa4ddab1efd7a7546121838f5b176d"
+  },
+  "native_zip": {
+    "bytes": 4384863,
+    "sha256": "93cde413e825a586f1589600e67c6088fce816d788785a672d14b639e7be4aab"
+  },
+  "preserved_prelaunch_failures": 1,
+  "status": "PASS",
+  "scope": "Three adjacent publication/production gaps and 26 selected regressions; nonempty resources, heterogeneous combinations and APK remain open."
+}

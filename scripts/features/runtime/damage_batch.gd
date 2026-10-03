@@ -146,6 +146,15 @@ func is_complete() -> bool:
 
 func reservation() -> RefCounted: return _reservation
 
+func finish_production() -> void:
+	if _reservation != null: _reservation.finish_batch()
+
+func _notification(what: int) -> void:
+	# A claimed batch can be abandoned before sealing. Its last reference is
+	# the exact terminal owner, even if an old action retains the closed ticket.
+	if what == NOTIFICATION_PREDELETE and _reservation != null:
+		_reservation.finish_batch()
+
 func binding_count() -> int: return _bindings.size()
 
 func event_bindings() -> Array: return _bindings

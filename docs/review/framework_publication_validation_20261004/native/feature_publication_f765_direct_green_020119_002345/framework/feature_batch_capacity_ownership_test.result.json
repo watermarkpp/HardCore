@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "existing runtime is sole reservation owner",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "real source compiled",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "actual producer receives one bounded promise",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real batch claims that exact promise",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "producer retirement cannot steal claimed batch capacity",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "closed old producer never starts a second batch",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "last batch owner releases an abandoned claim even while old ticket is retained",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "repeated old close cannot leak or reopen capacity",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "released capacity is available for new valid identity",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "unclaimed producer cancellation remains immediate",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "ownership transitions report no hidden errors",
+      "passed": true
+    }
+  ],
+  "count": 11,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "dc0534bd-af61-409f-8b5f-91f87a320282",
+  "passed": 11,
+  "reported_checks": 11,
+  "reported_failures": 0,
+  "run_id": "e40d0409-f5fa-44d2-b85e-a3d4d014d641",
+  "scene_id": "feature_batch_capacity_ownership_test",
+  "schema_version": 1,
+  "source_content_sha256": "73fdf0241ad837ab781efc802d73195917cc6076b219cdfe5a12312e7d5b96fc",
+  "status": "PASS"
+}

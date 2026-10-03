@@ -1,0 +1,101 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "normal I/O has no save failure injection",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal creation writes isolated wizard A",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "level one wizard independently has MP eighteen",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "trusted registry registers existing negative MP probe",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "minus sixteen is valid for wizard A",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "valid wizard feature result is MP two",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "formal writer persists A before new transaction",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "invalid warrior candidate rejects before normal save",
+      "passed": false
+    },
+    {
+      "id": 9,
+      "label": "caller reports explicit candidate validation failure",
+      "passed": false
+    },
+    {
+      "id": 10,
+      "label": "rejection restores original profile and profession",
+      "passed": false
+    },
+    {
+      "id": 11,
+      "label": "rejection restores original equipment and both primary stat snapshots",
+      "passed": false
+    },
+    {
+      "id": 12,
+      "label": "rejection restores coherent pre-feature input",
+      "passed": false
+    },
+    {
+      "id": 13,
+      "label": "rejection restores effective bundle identity compile generation and errors",
+      "passed": false
+    },
+    {
+      "id": 14,
+      "label": "normal I/O invalid candidate changes no owned file and creates no profile or sidecar",
+      "passed": false
+    },
+    {
+      "id": 15,
+      "label": "index still contains exactly A",
+      "passed": false
+    },
+    {
+      "id": 16,
+      "label": "remove probe through ordinary publication",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "baseline registry restores",
+      "passed": true
+    }
+  ],
+  "count": 17,
+  "engine_version": "4.7-stable (official)",
+  "failed": 8,
+  "invocation_id": "32f88c1d-a9fc-4336-a3f0-f7a4a4a668e9",
+  "passed": 9,
+  "reported_checks": 17,
+  "reported_failures": 8,
+  "run_id": "d144711c-2f30-4f80-9cb5-cfbfa41e186a",
+  "scene_id": "feature_creation_invalid_candidate_test",
+  "schema_version": 1,
+  "source_content_sha256": "5d5e4eddaf3effdb28dc52c063ef093a0a22df287e56e61305aa3a84ac428f56",
+  "status": "FAIL"
+}

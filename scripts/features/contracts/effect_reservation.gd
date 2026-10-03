@@ -5,6 +5,7 @@ extends RefCounted
 var _owner: WeakRef
 var _sequence := 0
 var _closed := false
+var _batch_open := false
 
 static func create(owner: RefCounted, sequence: int) -> RefCounted:
 	var result := new(); result._owner = weakref(owner); result._sequence = sequence
@@ -13,7 +14,9 @@ static func create(owner: RefCounted, sequence: int) -> RefCounted:
 func claim(world: Dictionary, release_id: String, skill_id: String, bindings: Array) -> Dictionary:
 	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
 	if _closed or owner == null: return {"success":false}
-	return owner.call("_claim_reservation",_sequence,world,release_id,skill_id,bindings)
+	var result: Dictionary = owner.call("_claim_reservation",_sequence,world,release_id,skill_id,bindings)
+	if bool(result.get("success", false)): _batch_open = true
+	return result
 
 func belongs_to(owner: RefCounted) -> bool:
 	return _owner != null and _owner.get_ref() == owner
@@ -30,9 +33,20 @@ func close() -> void:
 	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
 	if owner != null: owner.call("_close_reservation_producer",_sequence)
 
+func finish_batch() -> void:
+	# The successful claim handed synchronous production to DamageBatch.
+	# Closing the old action blocks new claims but cannot steal this handoff.
+	close()
+	if not _batch_open: return
+	_batch_open = false
+	var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
+	if owner != null: owner.call("_close_reservation_batch", _sequence)
+
 func _notification(what: int) -> void:
 	# A zero-refcount GDScript instance cannot dispatch another method on self.
-	if what == NOTIFICATION_PREDELETE and not _closed:
+	if what == NOTIFICATION_PREDELETE and (not _closed or _batch_open):
 		_closed = true
 		var owner: RefCounted = _owner.get_ref() as RefCounted if _owner != null else null
-		if owner != null: owner.call("_close_reservation_producer",_sequence)
+		if owner != null:
+			owner.call("_close_reservation_producer",_sequence)
+			if _batch_open: owner.call("_close_reservation_batch", _sequence)

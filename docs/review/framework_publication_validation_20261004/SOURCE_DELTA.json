@@ -1,0 +1,106 @@
+{
+  "parent": "f765d249f7f6128028ce882b13643302b8d75b75",
+  "content_sha256": "73fdf0241ad837ab781efc802d73195917cc6076b219cdfe5a12312e7d5b96fc",
+  "delta": {
+    "scripts/features/contracts/effect_reservation.gd": {
+      "raw_sha256": "62e724a990a974a6afc87ab23eb14667c9c8b8ac47c95400c48ef63095612a5f",
+      "git_blob": "c200797a94aecfc33f98039a6c8adc70024711b3",
+      "parent_blob": "054a6a51c40f7ab1f73adead77446f225bbbbf3b"
+    },
+    "scripts/features/runtime/damage_batch.gd": {
+      "raw_sha256": "17774587f74c51b3194e5862079022156ec7c7b333f8c3ca10eff592345e5a6c",
+      "git_blob": "f5a4b14519dfcfe346ea05e078659cb55e457303",
+      "parent_blob": "643e69e3f217b1a91ec7a49dc3a4edb35eaf0b3c"
+    },
+    "scripts/features/runtime/effect_runtime.gd": {
+      "raw_sha256": "840d4ec3fddaa469ddfd0e68e72034f633a63ab951a2daf23804a270befd774c",
+      "git_blob": "82f18ce78cee58a371e112b476ece2c49a51d9f8",
+      "parent_blob": "839ecdae78bc5c81323ba7801cca0ff709f6b937"
+    },
+    "scripts/game_root.gd": {
+      "raw_sha256": "22d2f05e763e51243e8638187cf42e668d324198a48c2a17da346b5c4b52e5ab",
+      "git_blob": "5f519227c34ee265770f4d76ac7275068944039f",
+      "parent_blob": "95ada164bbb0aa958b0ef5ccd8d6274c49ea1016"
+    },
+    "scripts/layers/runtime/content_layer_registry.gd": {
+      "raw_sha256": "cea70423171ee29ab4d6b3a114311634c7ab24f93bcc40974708d1322f5fdf08",
+      "git_blob": "d7f5df6cc24624ef23559d88d95176de3f0175ff",
+      "parent_blob": "c95b148b8cbcfe09bf6ffa57cc569f224d59fe41"
+    },
+    "scripts/player_state.gd": {
+      "raw_sha256": "ab0d17de3e0b1c05133660256917dcf740721fd7bf56674a4781f23ba3b5c1a5",
+      "git_blob": "357b5b5d42f82df8ea441aaa0dfab7ebf18c5212",
+      "parent_blob": "698720cc38e88ac584eb64627af1ede7d4c78283"
+    },
+    "tests/framework/feature_batch_capacity_ownership_test.gd": {
+      "raw_sha256": "f541d1f1b668d24c3564cf0bf420c16a1c797a7660f2a8eeb1830f77e04171f0",
+      "git_blob": "9c6093291c0203842fdf41683c9d52e86ab45397",
+      "parent_blob": null
+    },
+    "tests/framework/feature_batch_capacity_ownership_test.tscn": {
+      "raw_sha256": "148a43fe57279e38a345dc1b1eb44bde9eaac3cae171cc472e9d711c4cee2cbc",
+      "git_blob": "5d8240508b4ca42beb734c5d6dfb52daa1871fd7",
+      "parent_blob": null
+    },
+    "tests/framework/feature_binding_validation_test.gd": {
+      "raw_sha256": "787dd71b4c9a99b9b22190617c918b35c37b60bc7e28d6a8ccde421db9fa8b8c",
+      "git_blob": "ee86c4e50b6f0185d239270321deac2671cb75c7",
+      "parent_blob": null
+    },
+    "tests/framework/feature_binding_validation_test.tscn": {
+      "raw_sha256": "f8cf5263b93ec4b8677133d2cd1c927334461d626b3ad230f3ad08f16d887cfb",
+      "git_blob": "a18f083d295655056661d202a7b5b011130a8680",
+      "parent_blob": null
+    },
+    "tests/framework/feature_creation_invalid_candidate_test.gd": {
+      "raw_sha256": "6d8a0e652b509684063af157deb72c2794e262557f831f2109fd1a8477029d5a",
+      "git_blob": "e81bc2ecd2faf595e6cecdc3ac53ca324d85a97d",
+      "parent_blob": null
+    },
+    "tests/framework/feature_creation_invalid_candidate_test.tscn": {
+      "raw_sha256": "8af538d0d04297d459d7be0259ddffd26fde50d064d237553882b1dcb32d285f",
+      "git_blob": "e3335d64ad9232d2de5b0b354e8f59aea9b61bc3",
+      "parent_blob": null
+    },
+    "tests/framework/feature_producing_death_reentry_test.gd": {
+      "raw_sha256": "460ea585dac6a9dbee5e7eb1a3607bec2ed548711d0256251cc27bd362398e0a",
+      "git_blob": "0f6f011406ad9f94f1e644bbf120ef927bbb4011",
+      "parent_blob": null
+    },
+    "tests/framework/feature_producing_death_reentry_test.tscn": {
+      "raw_sha256": "29878b352e2323f219aca93b4f714e05bb72839624e4cb84a0725fd8d5b277f0",
+      "git_blob": "8d7a0f14fd49a7d71e78dbaaaedb3109fb9574e7",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/binding_array_registry.json": {
+      "raw_sha256": "bff6b0324e48ab637d9b2f82bbcf478f053fa5948618184fef0a95db786a2736",
+      "git_blob": "a32eba8c05841a8fcebfd2cca280ea5b75aeb0df",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/binding_missing_registry.json": {
+      "raw_sha256": "3030394536ca387141a386e40895dde94d8a2350bc2c75fbaef335ee587c4bef",
+      "git_blob": "a4b8a44ec1855f471d296c1d2677f41ed0c49431",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/binding_mixed_registry.json": {
+      "raw_sha256": "e2bd6920d4f7ca8b57509fb651eb950842480aa2dc3cfb6007e1c65a748e232b",
+      "git_blob": "d2d75baa374586e52baa917e567da593e5a61ff3",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/binding_null_registry.json": {
+      "raw_sha256": "a20960b8eaa9ddbbdd7eeadabfd587372a9fa95b6a001ad856461afdc483b4c1",
+      "git_blob": "94b60ea6b1afe62af48898cff19b0107d8d22471",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/binding_number_registry.json": {
+      "raw_sha256": "506e0dc3011620ed241f1fc79006c8b6dc9bbe09f05d636792a079d3e5752c02",
+      "git_blob": "ca73d070fd0b1242c4206036eed79fb639ff57ba",
+      "parent_blob": null
+    },
+    "assets/data/features/validation/binding_unknown_registry.json": {
+      "raw_sha256": "e5b115e7fa1a49420e8bbc1f36022f821aac9c8dd1bec97b7f216193ce16aa50",
+      "git_blob": "c22cee46ddc9ba79e1e5dcacd76cd7a5fdafc8cd",
+      "parent_blob": null
+    }
+  }
+}

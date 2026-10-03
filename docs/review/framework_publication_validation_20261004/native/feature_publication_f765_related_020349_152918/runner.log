@@ -1,0 +1,7 @@
+TestPaths entry does not exist: tests/framework/feature_empty_extension_test.tscn
+At C:\Users\Administrator\.codex\worktrees\pluggable-framework-v2\HardCore\tools\run_godot_tests.ps1:68 char:13
++             throw "TestPaths entry does not exist: $candidatePath"
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (TestPaths entry...nsion_test.tscn:String) [], RuntimeException
+    + FullyQualifiedErrorId : TestPaths entry does not exist: tests/framework/feature_empty_extension_test.tscn
+ 

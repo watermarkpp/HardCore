@@ -598,7 +598,7 @@ func finish_startup_save_upgrade() -> bool:
 	return true
 
 
-func reset_progress(emit_updates := true) -> void:
+func reset_progress(emit_updates := true, recompute_stats := true) -> void:
 	_before_state_transaction(true)
 	_clear_pending_durability_runtime()
 	level = 1
@@ -659,7 +659,8 @@ func reset_progress(emit_updates := true) -> void:
 	saved_position = Vector2.ZERO
 	saved_ground_position_gu = Vector2.ZERO
 	saved_ground_position_gu_valid = false
-	recalculate_stats()
+	if recompute_stats:
+		recalculate_stats()
 	if emit_updates:
 		profession_changed.emit(profession)
 		inventory_changed.emit()
@@ -3541,7 +3542,7 @@ func _migrate_quest_states() -> void:
 			state["status"] = "ready"
 
 
-func recalculate_stats(emit_profile_change := true) -> void:
+func recalculate_stats(emit_profile_change := true, report_failure := true) -> bool:
 	_sync_relic_proc_equipment()
 	var base := ProfessionRules.stats_for_level(profession_id, level)
 	base_stats = base.duplicate(true)
@@ -3723,17 +3724,20 @@ func recalculate_stats(emit_profile_change := true) -> void:
 	# through a second formula or expose a candidate to the current player.
 	_feature_base_stats = result.duplicate(true)
 	if not _synchronize_feature_loadout(result):
-		push_error("Feature loadout rejected: " + JSON.stringify(feature_errors))
-		return
+		if report_failure:
+			push_error("Feature loadout rejected: " + JSON.stringify(feature_errors))
+		return false
 	var feature_stats := _feature_loadout.apply_stats(result)
 	if not bool(feature_stats.success):
 		feature_errors = [feature_stats.reason]
-		push_error("Feature stats rejected: " + str(feature_stats.reason))
-		return
+		if report_failure:
+			push_error("Feature stats rejected: " + str(feature_stats.reason))
+		return false
 	result = feature_stats.stats
 	computed_stats = result
 	if emit_profile_change:
 		profile_changed.emit()
+	return true
 
 
 func _on_feature_catalog_changed() -> void:
@@ -9378,10 +9382,12 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	_feature_loadout = _feature_loadout.candidate_copy()
 	active_profile_id = new_profile_id
 	character_name = clean_name
-	reset_progress(false)
+	# Reset transaction data without publishing the intermediate default class.
+	reset_progress(false, false)
 	profession = new_profession
 	gender = new_gender
-	recalculate_stats(false)
+	if not recalculate_stats(false, false):
+		return _reject_character_creation_stats(previous_runtime)
 	var starter_result := _build_starter_loadout(new_profession, new_gender, new_profile_id)
 	if not bool(starter_result.get("ok", false)):
 		_restore_creation_runtime(previous_runtime)
@@ -9393,7 +9399,8 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 	if not equipment.has("hc.slot.relic") or not equipment.has("hc.slot.badge"):
 		_restore_creation_runtime(previous_runtime)
 		return "初始装备槽位数据不完整，角色创建失败"
-	recalculate_stats(false)
+	if not recalculate_stats(false, false):
+		return _reject_character_creation_stats(previous_runtime)
 	if not save_game() or not bool(last_save_result.get("profile_index_updated", false)):
 		_remove_new_profile_files(new_profile_id)
 		_restore_creation_runtime(previous_runtime)
@@ -9404,6 +9411,14 @@ func create_character(new_name: String, new_profession := "战士", new_gender :
 		}
 		return "角色存档失败，角色未创建"
 	return ""
+
+
+func _reject_character_creation_stats(previous_runtime: Dictionary) -> String:
+	var errors := feature_errors.duplicate()
+	_restore_creation_runtime(previous_runtime)
+	last_save_result = {"contract_id":SAVE_RESULT_CONTRACT_ID, "success":false,
+		"reason":"character_stats_rejected", "validation_errors":errors}
+	return "角色属性配置无效，角色未创建"
 
 
 func delete_character_profile(profile_id: String) -> Dictionary:
@@ -9694,6 +9709,7 @@ func _creation_runtime_snapshot() -> Dictionary:
 		"saved_position": saved_position,
 		"saved_ground_position_gu": saved_ground_position_gu,
 		"saved_ground_position_gu_valid": saved_ground_position_gu_valid,
+		"base_stats": base_stats.duplicate(true),
 		"computed_stats": computed_stats.duplicate(true),
 		"feature_base_stats": _feature_base_stats.duplicate(true),
 		"feature_loadout": _feature_loadout,
@@ -9780,6 +9796,7 @@ func _restore_creation_runtime(snapshot: Dictionary) -> void:
 	saved_position = snapshot.get("saved_position", Vector2.ZERO)
 	saved_ground_position_gu = snapshot.get("saved_ground_position_gu", Vector2.ZERO)
 	saved_ground_position_gu_valid = bool(snapshot.get("saved_ground_position_gu_valid", false))
+	base_stats = (snapshot.get("base_stats", {}) as Dictionary).duplicate(true)
 	computed_stats = (snapshot.get("computed_stats", {}) as Dictionary).duplicate(true)
 	_feature_base_stats = snapshot.feature_base_stats.duplicate(true)
 	_feature_loadout = feature_loadout

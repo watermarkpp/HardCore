@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "cold process uses actual persistence",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "successful live producer supplied explicit expectation",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "cold expectation binds the runner-confirmed successful native producer in this invocation",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "cold source matches the producing test source",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "independent native process has a distinct execution receipt",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "actual cold startup migration succeeds",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "actual combined-workload profile loads",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "exact world and thirty fixture kill rewards survive native cold restart without extra credit",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "cold replay retains the saved generation marker; this fixture permits the legacy empty namespace",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "cold replay consumes all persistence receipts",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "dd1cc412-350d-4b0e-92fd-aea6b3aec8d2",
+  "passed": 10,
+  "reported_checks": 10,
+  "reported_failures": 0,
+  "run_id": "e6114aca-08f0-458e-9bac-fadfc5cd2d2a",
+  "scene_id": "natural_effect_lifecycle_cold_test",
+  "schema_version": 1,
+  "source_content_sha256": "73fdf0241ad837ab781efc802d73195917cc6076b219cdfe5a12312e7d5b96fc",
+  "status": "PASS"
+}

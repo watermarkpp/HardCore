@@ -1,0 +1,10 @@
+SCRIPT ERROR: Invalid operands 'float' and 'String' in operator '=='.
+   at: reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+   GDScript backtrace (most recent call first):
+       [0] reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+       [1] _run (res://tests/framework/feature_binding_validation_test.gd:34)
+SCRIPT ERROR: Invalid operands 'Array' and 'String' in operator '=='.
+   at: reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+   GDScript backtrace (most recent call first):
+       [0] reload_feature_catalog (res://scripts/layers/runtime/content_layer_registry.gd:138)
+       [1] _run (res://tests/framework/feature_binding_validation_test.gd:34)

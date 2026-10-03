@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "real mapped world READY",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "formal mapped receiver",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "formal ignite source enabled",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "real melee configuration includes ignite",
+      "passed": false
+    }
+  ],
+  "count": 4,
+  "engine_version": "4.7-stable (official)",
+  "failed": 1,
+  "invocation_id": "27a41888-98b9-4a90-a92c-acb26e8a4524",
+  "passed": 3,
+  "reported_checks": 4,
+  "reported_failures": 1,
+  "run_id": "45327bf7-b816-46a7-8126-0a8fc4b70e2e",
+  "scene_id": "feature_producing_death_reentry_test",
+  "schema_version": 1,
+  "source_content_sha256": "ef08b9baa7450df778bd6202737d46b05950994fbc97479dc599b4011e66b6e2",
+  "status": "FAIL"
+}

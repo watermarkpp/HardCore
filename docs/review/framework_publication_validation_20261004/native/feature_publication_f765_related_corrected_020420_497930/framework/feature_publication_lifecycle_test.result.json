@@ -1,0 +1,166 @@
+{
+  "checks": [
+    {
+      "id": 1,
+      "label": "register startup and world-ready definitions before world attachment",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "label": "startup package may enable without a live world",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "label": "startup grant may withdraw before a world",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "label": "actual mapped world becomes READY even for an unsaved profile",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "label": "startup-only package cannot activate inside the live world",
+      "passed": true
+    },
+    {
+      "id": 6,
+      "label": "startup-only package cannot activate inside the live world: preserves directory and actual player",
+      "passed": true
+    },
+    {
+      "id": 7,
+      "label": "live world cannot replace its package directory through reload",
+      "passed": true
+    },
+    {
+      "id": 8,
+      "label": "rejected live directory replacement leaves the accepted configuration intact",
+      "passed": true
+    },
+    {
+      "id": 9,
+      "label": "world-ready activation refuses the actual locked input boundary",
+      "passed": true
+    },
+    {
+      "id": 10,
+      "label": "world-ready activation refuses the actual locked input boundary: preserves directory and actual player",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "label": "paused world cannot publish a new grant",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "label": "paused world cannot publish a new grant: preserves directory and actual player",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "label": "an additional owner without a READY contract cannot be bypassed",
+      "passed": true
+    },
+    {
+      "id": 14,
+      "label": "an additional owner without a READY contract cannot be bypassed: preserves directory and actual player",
+      "passed": true
+    },
+    {
+      "id": 15,
+      "label": "prepared world-ready package enables at a READY boundary",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "label": "real skill receiver is prepared through the formal fixture",
+      "passed": true
+    },
+    {
+      "id": 17,
+      "label": "real skill configuration is captured before acceptance",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "label": "actual player accepts the prepared skill",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "label": "accepted skill owns its nonempty extension reservation",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "label": "accepted action remains active during the real windup",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "label": "another world-ready grant cannot enter during the accepted action",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "label": "another world-ready grant cannot enter during the accepted action: preserves directory and actual player",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "label": "stopping future admissions remains legal during accepted work",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "label": "withdrawal preserves one real release and its committed base damage",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "label": "already accepted derived facts survive the package withdrawal",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "label": "queued world still owns its shutdown barrier",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "label": "queued world still owns its shutdown barrier: preserves directory and actual player",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "label": "finished world retirement releases the startup boundary",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "label": "startup grant can be stopped after retirement",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "label": "default publication is restored after world retirement",
+      "passed": true
+    }
+  ],
+  "count": 30,
+  "engine_version": "4.7-stable (official)",
+  "failed": 0,
+  "invocation_id": "b5b7de0d-2345-4a50-a735-ca611f30f711",
+  "passed": 30,
+  "reported_checks": 30,
+  "reported_failures": 0,
+  "run_id": "ef28ccd8-fe89-4bb6-bc25-f8af5101b2ee",
+  "scene_id": "feature_publication_lifecycle_test",
+  "schema_version": 1,
+  "source_content_sha256": "73fdf0241ad837ab781efc802d73195917cc6076b219cdfe5a12312e7d5b96fc",
+  "status": "PASS"
+}

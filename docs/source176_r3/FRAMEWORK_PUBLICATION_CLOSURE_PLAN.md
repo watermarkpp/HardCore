@@ -49,3 +49,5 @@ Task 3 诊断反例 feature_resource_publication_diagnostic_red_002004_334986：
 2026-10-04 续施工：8664两位完整报告已从原对话实际读取并保存，来源消息和正文在 outputs/framework_v2/publication_closure_20261003/audit_8664，旧双拉取任务已官方PAUSED。四项发布边界均先原生证伪再补修：隔离真实建角失败使旧角色base/bundle遗漏恢复（12检查/4 FAIL→12 PASS）；合法旧治疗A待释放、新攻击B已真实结束时仅查最新槽位（20/2 FAIL→含转场/退出31 PASS）；六类错误目录条目被静默跳过（25/18 FAIL→25 PASS）；默认启用依赖与手动路径不一致（16/3 FAIL→16 PASS）。来源是独立审计，根因及修复由单主控核验，保持原HP/planner/writer/动作时序。
 
 本轮最终同内容35场景分组回归及固定增量证据见 docs/review/framework_publication_followup_20261004。此处不预先宣称完整资源/异构组合、模板/整体验收或APK通过；Task 3仍有公开失败反例，Task 4—5继续施工。角色职业切换的临时属性预览也存在直接恢复computed_stats路径，后续需独立核验派生输入一致性，不能把此次建角反例外推为所有属性回滚证明。
+
+2026-10-04 后续检查点：f765两份完整独立报告已从原对话实际读取并保存，自动拉取官方PAUSED。新增正常I/O非法建角（17/8 FAIL→17 PASS）、未知/缺失/错误类型与混合binding（31/18 FAIL→31 PASS）、真实带票据烈火HP提交后同步死亡（19/7 FAIL→19 PASS）、最后批次所有者（11/1 FAIL→11 PASS）均已有原生反例与最小修复。成功claim把容量交给批次，消费者接收后独占queued；未claim取消仍即时，空/拒绝/销毁批次明确终态，无TTL/LRU。最终同73fdf024内容26唯一场景/25完整框架回执658检查PASS；35原生尝试8 FAIL和另1次wrapper启动前错误路径FAIL原样保留。资源诊断仍在同内容FAIL，Task 3—5未关闭。证据见 docs/review/framework_publication_validation_20261004，原生业务结果不外推普通UI自然触发、Android或所有属性回滚。
